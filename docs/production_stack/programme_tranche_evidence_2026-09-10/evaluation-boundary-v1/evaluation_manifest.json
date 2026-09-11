@@ -1,0 +1,26 @@
+{
+  "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+  "files": [
+    {
+      "bytes": 35505,
+      "path": "criterion_results.json",
+      "sha256": "b56c371d3c197afd6f99fdae146e5fc329a2a1fe6c074538e96eca5ea6e30d81"
+    },
+    {
+      "bytes": 686,
+      "path": "execution.json",
+      "sha256": "dfc977185f84df4577d8808b8b0e13d0befc883dd322e6ef52c8605816355745"
+    },
+    {
+      "bytes": 33551,
+      "path": "observations.json",
+      "sha256": "519d21a974e08ec413e83b2cb82fd43e62b56f516e80e94df9d91d619c562c22"
+    }
+  ],
+  "stages": {
+    "evidence": "f1a72405ec60e42698925244d0f9248379af25ee7f736fdab8679f8937f77e60",
+    "identity": "58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a",
+    "unified": "e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb"
+  },
+  "status": "stopped_result_inventory_only"
+}

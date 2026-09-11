@@ -1,0 +1,44 @@
+{
+  "accession": "0000950170-25-070658",
+  "cik": "0001916608",
+  "identity": [
+    2348284,
+    1774941977348670800
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1916608/000095017025070658.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "2b07ca035b975a06997cf471bd5b58f4b7bcf9a128fedfb3e3a31f24413bb599",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001916608:Segment\"]",
+      "unit_ref": "U_Segment"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "accession": "0001869453-26-000033",
+  "cik": "0001869453",
+  "identity": [
+    7824866,
+    1779876027086398800
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1869453/000186945326000033.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "b2e89701e5222cb5c1b3606bb14955ceda6ddf730db7eef920531d90fbd77464",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:investment_platform\"]",
+      "unit_ref": "investment_platform"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:segment\"]",
+      "unit_ref": "segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:component\"]",
+      "unit_ref": "component"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:installment\"]",
+      "unit_ref": "installment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:portfolio_company\"]",
+      "unit_ref": "portfolio_company"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ortic:industry\"]",
+      "unit_ref": "industry"
+    }
+  ]
+}

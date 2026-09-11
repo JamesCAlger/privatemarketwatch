@@ -1,0 +1,28 @@
+{
+  "affected_fund_quarters": 3,
+  "correctness": "Measured impact is not proof a rule is financially correct; source reconciliation remains required.",
+  "elapsed_seconds": 14.964541100001952,
+  "execution_errors": 0,
+  "net_row_delta": -1,
+  "observed_overlapping_rule_pairs": 1,
+  "order_sensitive_ciks": 0,
+  "recorded_applications": 22,
+  "replay_applications": 22,
+  "scope": "B2 admitted post-staging leaves only; frozen full population. Global, wrapper, cache and Layer C cross-layer order is not certified.",
+  "signed_fv_delta": 21297718.99984444,
+  "source_files": [
+    {
+      "path": "data\\programme\\candidates\\spec-close-20260909-v2\\attempts\\unified-01\\bundle\\before_b2.csv",
+      "sha256": "d094749c2bcbf6361d2de38dac4c586bd2a8d62dfdf3d5a169f5b0548a18ca5c"
+    },
+    {
+      "path": "data\\programme\\candidates\\spec-close-20260909-v2\\attempts\\unified-01\\bundle\\after_b2.csv",
+      "sha256": "cd39d8cdbd9ffd9fe47be7881756ea10c53ac176f4a8f3fe8b9c468e422ac3bc"
+    },
+    {
+      "path": "data\\programme\\candidates\\spec-close-20260909-v2\\attempts\\unified-01\\bundle\\rule_events.json",
+      "sha256": "7ce1ebb5ebf92960a4b758b897d6dbaae116cd644b62741e7683eb534d6d7a57"
+    }
+  ],
+  "sum_abs_fund_quarter_fv_delta": 78482281.00043115
+}

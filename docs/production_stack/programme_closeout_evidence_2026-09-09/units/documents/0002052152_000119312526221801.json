@@ -1,0 +1,56 @@
+{
+  "accession": "0001193125-26-221801",
+  "cik": "0002052152",
+  "identity": [
+    7119602,
+    1779876071478142100
+  ],
+  "path": "data/raw/filings/bdc_xbrl/2052152/000119312526221801.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "58cbf63d842ea11d9ed60c52f7c076051eb4647f96f5dadbf52468f5860af6cd",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "JPY",
+      "kind": "monetary",
+      "measures": "[\"iso4217:JPY\"]",
+      "unit_ref": "U_JPY"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"none:Segment\"]",
+      "unit_ref": "U_Segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "U_CAD"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "accession": "0001913724-26-000015",
+  "cik": "0001913724",
+  "identity": [
+    8125158,
+    1779876051913525200
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1913724/000191372426000015.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "d0f4245a26bb87b854c8f74cf018eb0fe4e038bed7704315b31c9aa8d2577cfe",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "cad"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"tcap:segment\"]",
+      "unit_ref": "segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"tcap:component\"]",
+      "unit_ref": "component"
+    }
+  ]
+}

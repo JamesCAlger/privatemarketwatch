@@ -1,0 +1,731 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_11ba1619-247d-4ed6-ac2f-1591be70a26f",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 952,451,230 and $ 885,470,822 , respectively)",
+        "",
+        "",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "876,197,259",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": "USD",
+      "fact_id": "F_11ba1619-247d-4ed6-ac2f-1591be70a26f",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "931,158,200",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/table[7]/tr[9]",
+      "table_xpath": "/html/body/table[7]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "931158200"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_ba5ec55e-5208-45cd-b3b3-6626f172adad",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": "USD",
+      "fact_id": "F_ba5ec55e-5208-45cd-b3b3-6626f172adad",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "931,158,200",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "931158200"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_0cad6e93-7974-435e-b526-29b49390ff1b",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": null,
+      "fact_id": "F_0cad6e93-7974-435e-b526-29b49390ff1b",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_e7a93dd0-1203-4d1d-bcbc-47c3bb31a5b4",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": "USD",
+      "fact_id": "F_e7a93dd0-1203-4d1d-bcbc-47c3bb31a5b4",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "931,158,200",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[38]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "931158200"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_10fe426f-9c57-4cc2-951b-0ead575445b3",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": null,
+      "fact_id": "F_10fe426f-9c57-4cc2-951b-0ead575445b3",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[38]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_6f6d4695-7315-4e6d-ac99-fb8ad55a4392",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": "USD",
+      "fact_id": "F_6f6d4695-7315-4e6d-ac99-fb8ad55a4392",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "931,158,200",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]/tr[14]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "931158200"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_a165288c-85e1-411f-9147-17cb8fbb35fa",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "952,451,230",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "885,470,822",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+      "currency": null,
+      "fact_id": "F_a165288c-85e1-411f-9147-17cb8fbb35fa",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]/tr[14]",
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    }
+  ],
+  "cik": "0001646614",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1646614/000095017024095339.html",
+  "reference_id": "REF-0001646614-2024-06-30",
+  "report_date": "2024-06-30",
+  "source_rows": 278,
+  "source_sha256": "0149a016cd39916fb201dae4fab90ad8e8913f2d4de717efa348a6572750c4ee",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 4,
+      "first": [
+        "Non-controlled, non-affiliated investments (amortized cost of $ 887,143,280 and $ 808,399,961 , respectively) | $ | 879,384,323 | $ | 808,932,858",
+        "Non-controlled, affiliated investments (amortized cost of $ 15,006,022 and 14,673,357 , respectively) | 14,628,922 | 14,315,483"
+      ],
+      "last": [
+        "Controlled investments (amortized cost of $ 50,301,928 and $ 62,397,504 , respectively) | 37,144,955 | 52,948,918",
+        "Total investments, at fair value (amortized cost of $ 952,451,230 and $ 885,470,822 , respectively) | 931,158,200 | 876,197,259"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2024 December 31, 2023",
+        "(Unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "PART I\u2014 CONSOLIDAT ED FINANCIAL INFORMATION",
+        "",
+        ""
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/table[7]"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "1440 Foods Topco, LLC\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Consumer Products | S+ 6.00 %, 1.00 % Floor | 11.34 % | 12/20/2023 | 12/20/2029 | $ | 7,809,893 | $ 7,628,361 | $ 7,707,866 | 1.42 %",
+        "48Forty Solutions LLC\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Industrial Products & Services | S+ 6.10 %, 1.00 % Floor | 11.43 | 4/8/2022 | 11/30/2026 | 6,462,039 | 6,389,606 | 5,932,643 | 1.09"
+      ],
+      "last": [
+        "BayMark Health Services Inc\u207d\u2077\u207e | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 5.26 %, 1.00 % Floor | 10.60 | 11/19/2021 | 6/11/2027 | 2,601,191 | 2,587,309 | 2,518,387 | 0.46",
+        "BEL USA LLC\u207d\u2077\u207e | 1st Lien Term Loan | E-Commerce | S+ 7.15 %, 2.50 % Floor | 12.49 | 12/13/2018 | 6/2/2026 | 9,088,864 | 8,900,529 | 8,227,693 | 1.52"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Non-Controlled/Non-Affiliated Investments",
+        "1st Lien/Secured Loans"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 4",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 32,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Circle Graphics Inc\u207d\u2077\u207e | 1st Lien Term Loan | E-Commerce | S+ 7.51 %, 2.25 % Floor | 12.86 % | 2/17/2021 | 3/31/2027 | $ | 22,765,456 | $ 22,436,074 | $ 20,717,703 | 3.82 %",
+        "Circle Graphics Inc\u207d\u2077\u207e | 1st Lien Delayed Draw Term Loan | E-Commerce | S+ 7.51 %, 2.25 % Floor | 12.86 | 7/12/2021 | 3/31/2027 | 531,708 | 520,244 | 483,881 | 0.09"
+      ],
+      "last": [
+        "KORE Wireless Group Inc\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Telecommunications | S+ 6.50 %, 1.00 % Floor | 11.82 | 12/20/2023 | 11/9/2028 | 4,613,744 | 4,530,979 | 4,530,898 | 0.83",
+        "KORE Wireless Group Inc\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2074\u207e\u207d\u00b2\u2075\u207e | 1st Lien Revolver | Telecommunications | S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) | 0.50 | 12/20/2023 | 11/9/2028 | 626,612 | ( 11,171 ) | ( 11,226 ) | ( 0.00 )"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Circle Graphics Inc\u207d\u2077\u207e 1st Lien Term Loan E-Commerce S+ 7.51 %, 2.25 % Floor 12.86 % 2/17/2021 3/31/2027 $ 22,765,456 $ 22,436,074 $ 20,717,703 3.82 %",
+        "Circle Graphics Inc\u207d\u2077\u207e 1st Lien Delayed Draw Term Loan E-Commerce S+ 7.51 %, 2.25 % Floor 12.86 7/12/2021 3/31/2027 531,708 520,244 483,881 0.09"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 5",
+        "",
+        " 3/19/2031 770,731 ( 11,091 ) ( 11,963 ) ( 0.00 ) Azurity Pharmaceuticals Inc\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Pharmaceuticals & Life Sciences S+ 6.73 %, 0.75 % Floor 12.08 9/28/2021 9/20/2027 16,196,529 15,730,699 15,772,579 2.91 BayMark Health Services Inc\u207d\u2077\u207e 1st Lien Term Loan Healthcare Providers & Services S+ 5.26 %, 1.00 % Floor 10.60 6/10/2021 6/11/2027 4,171,755 4,147,408 4,038,956 0.74 BayMark Health Services Inc\u207d\u2077\u207e 1st Lien Delayed Draw Term Loan Healthcare Providers & Services S+ 5.26 %, 1.00 % Floor 10.60 11/19/2021 6/11/2027 2,601,191 2,587,309 2,518,387 0.46 BEL USA LLC\u207d\u2077\u207e 1st Lien Term Loan E-Commerce S+ 7.15 %, 2.50 % Floor 12.49 12/13/2018 6/2/2026 9,088,864 8,900,529 8,227,693 1.52",
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)"
+      ],
+      "rows": 35,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b2\u00b2\u207e | 1st Lien Term Loan | Healthcare Providers & Services | S+ 11.15 %, 2.50 % Floor | 16.50 % | 7/23/2021 | 7/23/2027 | $ | 18,333,968 | $ 18,141,688 | $ 17,429,095 | 3.21 %",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2074\u207e | 1st Lien Revolver | Healthcare Providers & Services | S+ 11.15 %, 2.50 % Floor ( 0.50 % on unfunded) | 0.50 | 4/3/2024 | 7/23/2027 | 500,000 | \u2014 | ( 24,678 ) | ( 0.00 )"
+      ],
+      "last": [
+        "Sintec Media NYC Inc\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Media: Diversified & Production | S+ 7.00 %, 1.00 % Floor | 12.35 | 6/21/2023 | 6/21/2029 | 12,477,185 | 12,146,133 | 11,950,141 | 2.20",
+        "Sintec Media NYC Inc\u207d\u2076\u207e\u207d\u2077\u207e | 1st Lien Revolver | Media: Diversified & Production | S+ 7.00 %, 1.00 % Floor ( 0.50 % on unfunded) | 12.34 | 6/21/2023 | 6/21/2029 | 1,164,025 | 716,048 | 693,817 | 0.13"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b2\u00b2\u207e 1st Lien Term Loan Healthcare Providers & Services S+ 11.15 %, 2.50 % Floor 16.50 % 7/23/2021 7/23/2027 $ 18,333,968 $ 18,141,688 $ 17,429,095 3.21 %",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2074\u207e 1st Lien Revolver Healthcare Providers & Services S+ 11.15 %, 2.50 % Floor ( 0.50 % on unfunded) 0.50 4/3/2024 7/23/2027 500,000 \u2014 ( 24,678 ) ( 0.00 )"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 6",
+        "",
+        "tructure Holdings Inc\u207d\u2079\u207e\u207d\u00b9\u2070\u207e 1st Lien Term Loan Software & Services S+ 3.01 %, 0.50 % Floor 8.35 1/9/2024 10/30/2028 4,974,555 4,997,586 4,967,292 0.91 iPark Riverdale (aka Rising Ground Yonkers)\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u2078\u207e 1st Lien Delayed Draw Term Loan Real Estate Development & Management S+ 6.00 %, 3.75 % Floor 11.33 12/23/2022 12/31/2024 6,526,401 6,438,816 6,395,243 1.18 KORE Wireless Group Inc\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Telecommunications S+ 6.50 %, 1.00 % Floor 11.82 12/20/2023 11/9/2028 4,613,744 4,530,979 4,530,898 0.83 KORE Wireless Group Inc\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2074\u207e\u207d\u00b2\u2075\u207e 1st Lien Revolver Telecommunications S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 12/20/2023 11/9/2028 626,612 ( 11,171 ) ( 11,226 ) ( 0.00 )",
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)"
+      ],
+      "rows": 34,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 33,
+      "first": [
+        "Smarsh Inc\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Software & Services | S+ 5.75 %, 0.75 % Floor | 11.08 % | 2/18/2022 | 2/18/2029 | $ | 3,781,071 | $ 3,726,360 | $ 3,776,976 | 0.70 %",
+        "Smarsh Inc\u207d\u2076\u207e\u207d\u2077\u207e | 1st Lien Delayed Draw Term Loan | Software & Services | S+ 5.75 %, 0.75 % Floor ( 1.00 % on unfunded) | 11.08 | 2/18/2022 | 2/18/2029 | 945,268 | 461,599 | 471,610 | 0.09"
+      ],
+      "last": [
+        "JO ET Holdings Limited (Grindr HoldCo)\u207d\u2077\u207e\u207d\u00b9\u2070\u207e\u207d\u00b9\u00b9\u207e | 1st Lien Term Loan | Technology | S+ 13.00 %, 1.00 % Floor | 18.34 | 12/15/2021 | 12/15/2026 | 6,817,365 | 6,755,291 | 6,790,026 | 1.25",
+        "Total Cayman Islands 1st Lien/Secured Loans | 6,755,291 | 6,790,026 | 1.25"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Smarsh Inc\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Software & Services S+ 5.75 %, 0.75 % Floor 11.08 % 2/18/2022 2/18/2029 $ 3,781,071 $ 3,726,360 $ 3,776,976 0.70 %",
+        "Smarsh Inc\u207d\u2076\u207e\u207d\u2077\u207e 1st Lien Delayed Draw Term Loan Software & Services S+ 5.75 %, 0.75 % Floor ( 1.00 % on unfunded) 11.08 2/18/2022 2/18/2029 945,268 461,599 471,610 0.09"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 7",
+        "",
+        ",443 602,451 605,850 0.11 SBP Holdings LP\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Industrial Products & Services S+ 6.75 %, 1.00 % Floor 12.09 3/27/2023 3/27/2028 5,266,452 5,128,475 5,179,517 0.95 SBP Holdings LP\u207d\u2076\u207e\u207d\u2077\u207e 1st Lien Revolver Industrial Products & Services P+ 5.75 %, 1.00 % Floor ( 0.50 % on unfunded) 14.25 3/27/2023 3/27/2028 457,124 110,664 114,474 0.02 Sintec Media NYC Inc\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Media: Diversified & Production S+ 7.00 %, 1.00 % Floor 12.35 6/21/2023 6/21/2029 12,477,185 12,146,133 11,950,141 2.20 Sintec Media NYC Inc\u207d\u2076\u207e\u207d\u2077\u207e 1st Lien Revolver Media: Diversified & Production S+ 7.00 %, 1.00 % Floor ( 0.50 % on unfunded) 12.34 6/21/2023 6/21/2029 1,164,025 716,048 693,817 0.13",
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)"
+      ],
+      "rows": 33,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "OLA Netherlands BV (aka Olacabs / ANI Tech)\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b9\u2070\u207e | 1st Lien Term Loan | Technology | S+ 6.35 %, 0.75 % Floor | 11.69 % | 12/3/2021 | 12/15/2026 | $ | 4,049,903 | $ 4,005,486 | $ 4,008,624 | 0.74 %",
+        "Total Netherlands 1st Lien/Secured Loans | 4,005,486 | 4,008,624 | 0.74"
+      ],
+      "last": [
+        "Total Equities | 474,538 | 2,349,171 | 0.43",
+        "Total Non-Controlled/Non-Affiliated Investments | 887,143,280 | 879,384,323 | 162.01 %"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Netherlands",
+        "OLA Netherlands BV (aka Olacabs / ANI Tech)\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b9\u2070\u207e 1st Lien Term Loan Technology S+ 6.35 %, 0.75 % Floor 11.69 % 12/3/2021 12/15/2026 $ 4,049,903 $ 4,005,486 $ 4,008,624 0.74 %"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 8",
+        "",
+        "1 10/22/2027 13,942,631 13,797,090 14,026,287 2.58 Hootsuite Inc.\u207d\u2077\u207e\u207d\u2079\u207e\u207d\u00b9\u2070\u207e 1st Lien Term Loan Software & Services S+ 5.50 %, 0.75 % Floor 10.85 5/22/2024 5/22/2030 12,799,229 12,607,833 12,607,332 2.32 Hootsuite Inc.\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b9\u2070\u207e\u207d\u00b2\u2074\u207e\u207d\u00b2\u2075\u207e 1st Lien Revolver Software & Services S+ 5.50 %, 0.75 % Floor ( 0.50 % on unfunded) 0.50 5/22/2024 5/22/2030 1,422,136 ( 20,943 ) ( 21,235 ) ( 0.00 ) Total Canada 1st Lien/Secured Loans 32,791,029 32,834,377 6.04 Cayman Islands JO ET Holdings Limited (Grindr HoldCo)\u207d\u2077\u207e\u207d\u00b9\u2070\u207e\u207d\u00b9\u00b9\u207e 1st Lien Term Loan Technology S+ 13.00 %, 1.00 % Floor 18.34 12/15/2021 12/15/2026 6,817,365 6,755,291 6,790,026 1.25 Total Cayman Islands 1st Lien/Secured Loans 6,755,291 6,790,026 1.25",
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)"
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/table[15]"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Takko Fashion GmbH\u207d\u00b9\u2070\u207e\u207d\u00b3\u2070\u207e | 1st Lien Term Loan | Specialty Retail | 12.50 % | 12.50 % | 8/8/2023 | 11/9/2026 | \u20ac | 9,995,793 | $ 10,851,896 | $ 10,494,323 | 1.93 %",
+        "Total 1st Lien/Secured Loans | 10,851,896 | 10,494,323 | 1.93"
+      ],
+      "last": [
+        "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class\u207d\u2078\u207e\u207d\u2079\u207e | Money Market Fund | 47,089,692 | 47,089,692 | 47,089,692 | 8.67",
+        "Total Cash Equivalents and Restricted Cash Equivalents | $ 47,089,692 | $ 47,089,692 | 8.67 %"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Germany",
+        "Takko Fashion GmbH\u207d\u00b9\u2070\u207e\u207d\u00b3\u2070\u207e 1st Lien Term Loan Specialty Retail 12.50 % 12.50 % 8/8/2023 11/9/2026 \u20ac 9,995,793 $ 10,851,896 $ 10,494,323 1.93 %"
+      ],
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 9",
+        "",
+        "4,268,000 5,900,560 5,174,873 0.95 Total United Kingdom Senior Secured Bonds 5,900,560 5,174,873 0.95 Total Senior Secured Bonds 43,782,037 40,756,953 7.51 Equities United States of America Beauty Health Co\u207d\u00b2\u00b3\u207e Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 \u2014 1,736,305 0.32 Monomoy Capital Partners IV-Titan, L.P. (Waupaca Foundry)\u207d\u2077\u207e\u207d\u00b9\u2070\u207e\u207d\u00b2\u00b3\u207e Common Equities Industrial Products & Services N/A N/A 2/23/2024 N/A 474,538 474,538 612,866 0.11 Total United States of America Equities 474,538 2,349,171 0.43 Total Equities 474,538 2,349,171 0.43 Total Non-Controlled/Non-Affiliated Investments 887,143,280 879,384,323 162.01 % Non-Controlled/Affiliated Investments 1st Lien/Secured Loans",
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/table[16]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Takko Fashion GmbH | Secured Loans | $ | 10,592,982 | $ | 18,686 | $ | \u2014 | $ | ( 117,345 | ) | $ | \u2014 | $ | 10,494,323 | $ | 701,532 | $ | \u2014 | \u20ac | 9,995,793",
+        "Takko Fashion Sarl | Unsecured Bonds | \u0086 | $ | 3,722,501 | 313,979 | \u2014 | 98,119 | \u2014 | 4,134,599 | 313,979 | \u2014 | \u20ac | 3,859,422"
+      ],
+      "last": [
+        "Takko Fashion Sarl | Unsecured Bonds | \u0086 | $ | 3,722,501 | 313,979 | \u2014 | 98,119 | \u2014 | 4,134,599 | 313,979 | \u2014 | \u20ac | 3,859,422",
+        "Total | $ | 14,315,483 | $ | 332,665 | $ | \u2014 | $ | ( 19,226 | ) | $ | \u2014 | $ | 14,628,922 | $ | 1,015,511 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Type of Investment Fair Value at December 31, 2023 Gross additions* Gross reductions** Net change in unrealized appreciation (depreciation) Net realized gains (losses) Fair Value at June 30, 2024 Interest income Dividend income Par Amount ($) / Number Of Units/ Ownership %",
+        "Takko Fashion GmbH Secured Loans $ 10,592,982 $ 18,686 $ \u2014 $ ( 117,345 ) $ \u2014 $ 10,494,323 $ 701,532 $ \u2014 \u20ac 9,995,793",
+        "Takko Fashion Sarl Unsecured Bonds \u0086 $ 3,722,501 313,979 \u2014 98,119 \u2014 4,134,599 313,979 \u2014 \u20ac 3,859,422"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:continuation[1]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "1035 Mecklenburg Highway, Mooresville, North Carolina | Real Estate Properties | $ | 13,655,955 | $ | 75,597 | $ | \u2014 | $ | ( 706,109 | ) | $ | \u2014 | $ | 13,025,443 | $ | \u2014 | $ | \u2014 | 100 | %",
+        "SP-CREH 19 Highline LLC | Secured Loans | 14,004,900 | \u2014 | ( 2,187,805 | ) | ( 17,893 | ) | \u2014 | 11,799,202 | 425,903 | \u2014 | $ | 11,812,195"
+      ],
+      "last": [
+        "TH Liquidating Trust | Trust Interest | 466,903 | 46,647 | \u2014 | ( 99,146 | ) | \u2014 | 414,404 | 46,647 | \u2014 | $ | 520,412",
+        "Total | $ | 52,948,918 | $ | 185,043 | $ | ( 12,078,212 | ) | $ | ( 3,708,387 | ) | $ | ( 202,407 | ) | $ | 37,144,955 | $ | 692,150 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Type of Investment Fair Value at December 31, 2023 Gross additions* Gross reductions** Net change in unrealized appreciation (depreciation) Net realized gains (losses) Fair Value at June 30, 2024 Interest income Dividend income Par Amount ($) / Number Of Units/ Ownership %",
+        "1035 Mecklenburg Highway, Mooresville, North Carolina Real Estate Properties $ 13,655,955 $ 75,597 $ \u2014 $ ( 706,109 ) $ \u2014 $ 13,025,443 $ \u2014 $ \u2014 100 %",
+        "30 South Broadway, Irvington, New York Real Estate Properties 9,268,495 62,799 ( 9,890,407 ) 761,520 ( 202,407 ) \u2014 \u2014 \u2014 0 %"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/ix:continuation[2]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "First lien debt | $ | 909,611,782 | $ | 900,179,507 | 96.67 | % | $ | 832,459,172 | $ | 821,876,284 | 93.80 | %",
+        "Second lien debt | 5,846,051 | 5,254,876 | 0.56 | 5,841,524 | 5,737,355 | 0.65"
+      ],
+      "last": [
+        "Trust interest | 3,673,886 | 1,883,704 | 0.22 | 3,627,240 | 2,285,446 | 0.26",
+        "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2024 December 31, 2023",
+        "Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "First lien debt $ 909,611,782 $ 900,179,507 96.67 % $ 832,459,172 $ 821,876,284 93.80 %"
+      ],
+      "preceding": [
+        "",
+        "Investments consisted of the following at June 30, 2024 and December 31, 2023:"
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Aerospace & Defense | $ | 46,290,964 | $ | 45,987,916 | 4.94 | % | $ | 48,396,220 | $ | 48,099,240 | 5.49 | %",
+        "Airline & Airport Services | 23,101,028 | 22,723,072 | 2.44 | 30,389,326 | 28,796,535 | 3.29"
+      ],
+      "last": [
+        "Other | 3,673,886 | 1,883,704 | 0.22 | 3,627,240 | 2,285,446 | 0.23",
+        "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2024 December 31, 2023",
+        "Industry Classification Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "Aerospace & Defense $ 46,290,964 $ 45,987,916 4.94 % $ 48,396,220 $ 48,099,240 5.49 %"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the composition of the investment portfolio by industry classifications at amortized cost and fair value as of June 30, 2024 and December 31, 2023 with corresponding percentages of total fair value:"
+      ],
+      "rows": 35,
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 11,
+      "first": [
+        "Australia | $ | 12,812,166 | $ | 13,258,652 | 1.42 | % | $ | 13,976,874 | $ | 14,342,616 | 1.64 | %",
+        "Canada | 32,791,029 | 32,834,377 | 3.53 | 20,018,815 | 19,801,331 | 2.26"
+      ],
+      "last": [
+        "United States of America | 842,555,617 | 821,739,367 | 88.25 | 785,474,803 | 778,348,760 | 88.83",
+        "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2024 December 31, 2023",
+        "Geographic Dispersion (1) Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "Australia $ 12,812,166 $ 13,258,652 1.42 % $ 13,976,874 $ 14,342,616 1.64 %"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the composition of the investment portfolio by geographic dispersion at amortized cost and fair value as of June 30, 2024 and December 31, 2023 with corresponding percentages of total fair value:",
+        "",
+        "nagement 32,225,216 32,257,278 3.46 32,109,636 32,029,404 3.66 Restaurants 4,805,054 4,792,287 0.51 4,821,898 4,771,971 0.54 Software & Services 96,414,752 96,874,212 10.40 54,210,703 54,110,825 6.18 Specialty Chemicals 5,078,341 4,854,325 0.52 6,260,825 6,140,311 0.70 Specialty Retail 15,006,022 14,628,922 1.57 19,198,473 18,018,412 2.06 Technology 63,943,705 63,854,774 6.86 62,983,511 62,333,824 7.11 Technology Hardware & Equipment 19,072,466 18,996,556 2.04 19,496,461 19,509,535 2.23 Telecommunications 18,601,905 17,545,115 1.88 18,538,158 18,187,613 2.08 Other 3,673,886 1,883,704 0.22 3,627,240 2,285,446 0.23 Total $ 952,451,230 $ 931,158,200 100.00 % $ 885,470,822 $ 876,197,259 100.00 %",
+        "",
+        "The following table presents the composition of the investment portfolio by industry classifications at amortized cost and fair value as of June 30, 2024 and December 31, 2023 with corresponding percentages of total fair value:"
+      ],
+      "rows": 11,
+      "table_xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]"
+    },
+    {
+      "contexts": 28,
+      "first": [
+        "Secured loans | $ | \u2014 | $ | 118,178,676 | $ | 746,498,754 | $ | 864,677,430",
+        "Secured loans | $ | \u2014 | $ | 118,178,676 | $ | 746,498,754 | $ | 864,677,430"
+      ],
+      "last": [
+        "Total investments | $ | \u2014 | $ | 164,806,533 | $ | 766,351,667 | $ | 931,158,200",
+        "Total investments | $ | \u2014 | $ | 164,806,533 | $ | 766,351,667 | $ | 931,158,200"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2024",
+        "Level 1 Level 2 Level 3 Total",
+        "Investments:"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of June 30, 2024."
+      ],
+      "rows": 28,
+      "table_xpath": "/html/body/div[121]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "Secured Loans | $ | 688,878,462 | Income Approach | Yield | 6.5 % - 20.6 % ( 13.5 %) | Decrease",
+        "57,620,292 | Recent Transaction | N/A | N/A | N/A"
+      ],
+      "last": [
+        "Trust Interest | 1,883,704 | Asset Approach | Recovery Rate | 2.8 % | Increase",
+        "Total Level 3 Investments | $ | 766,351,667"
+      ],
+      "opening_rows": [
+        "",
+        "Quantitative Information about Level 3 Value Investments",
+        "Investment Type Fair Value at June 30, 2024 Valuation Technique(s) Unobservable Input(s) Range (Weighted Average) Impact to Valuation from an Increase in Input (1)",
+        "Secured Loans $ 688,878,462 Income Approach Yield 6.5 % - 20.6 % ( 13.5 %) Decrease"
+      ],
+      "preceding": [
+        "",
+        "The following tables provide quantitative information about the Fund\u2019s level 3 fair value measurements for the Fund\u2019s investments as of June 30, 2024 and December 31, 2023. In addition to the techniques and inputs noted in the tables below, the Fund may also use, in accordance with the valuation policy, other valuation techniques and methodologies when determining the Fund\u2019s fair value measurements. The below tables are not intended to be inclusive of all unobservable inputs, but rather provide information on the significant level 3 inputs as they relate to the Fund\u2019s fair value measurements."
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/div[121]/ix:nonnumeric/div[4]/ix:nonnumeric/table[1]"
+    }
+  ]
+}

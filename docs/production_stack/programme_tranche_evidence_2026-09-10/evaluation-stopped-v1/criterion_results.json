@@ -1,0 +1,813 @@
+{
+  "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+  "contract_sha256": "2f3c3a874e5e4763a9ead33f6dc93002dee8b9739ba1ae11a658aed126222328",
+  "contract_version": "working-v1",
+  "criteria": [
+    {
+      "criterion_id": "A1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "obligation_coverage",
+          "metric_version": 1,
+          "observation_sha256": "e619619b7460776832b00542b044df66a9de3badc58e1c80bb6bd5022e72d52c",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Whole-history coverage measurement requires the completed integrated candidate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "unknown_lifecycle_count",
+          "metric_version": 1,
+          "observation_sha256": "a6c67b1e2749a7868d75b479037786ca5fa71e31ec73a76c3e40eb2e66663f7d",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Whole-history coverage measurement requires the completed integrated candidate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Fund-quarter obligations"
+    },
+    {
+      "criterion_id": "A2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "roster_fv_recall",
+          "metric_version": 1,
+          "observation_sha256": "b835898e1e788a0791f5d0ffcee7a40f60cb0b3925060f6231d04c5dc5db4c98",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "roster_fv_precision",
+          "metric_version": 1,
+          "observation_sha256": "4f833e009e4ae71620059e6b8e880520125b27ddbbc108b139d5c98c5e213abf",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "roster_row_recall",
+          "metric_version": 1,
+          "observation_sha256": "e15e469a02e3cae03f1eedecd3ea8b304a26ddb217be0dd004df23c603a92bc9",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "roster_row_precision",
+          "metric_version": 1,
+          "observation_sha256": "a7a6f5c86bbacd14035a2d3ede9ae4e3fe933c6a02cc216e182b55eedcb3f5d6",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "fund_roster_fv_floor",
+          "metric_version": 1,
+          "observation_sha256": "223874a140f8e91082cf7fdec8b7d0c2c59fbf0cab38ab74a00a6e7c64b6d8fb",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "fund_roster_row_floor",
+          "metric_version": 1,
+          "observation_sha256": "cba85ef545d45656a953c5a7c2d105324f6888df5e91cb5b19d1b2c05825d599",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The four complete development schedules lack independent approval; the cohort roster frame remains incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.9
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position roster completeness and purity"
+    },
+    {
+      "criterion_id": "A3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "source_selection_errors",
+          "metric_version": 1,
+          "observation_sha256": "593f0c843717c0ec113c7016221b484dec423f85690bf8c9162fe43b77e2bd87",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The target source-selection plan has not been compiled and checked across the required history.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Source selection"
+    },
+    {
+      "criterion_id": "A4",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "supplemental_disposition_coverage",
+          "metric_version": 1,
+          "observation_sha256": "e85466bc7d5e6f93558dabbb96db5988529e4e6ef6a4a21bb7f3fe55f236bd46",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. A complete candidate-bound supplemental-source disposition ledger is not implemented.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Supplemental source disposition"
+    },
+    {
+      "criterion_id": "A5",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "accounting_scope_errors",
+          "metric_version": 1,
+          "observation_sha256": "0dfbd85169a2803cb2365fcd240395c5da414ac706d87acfe14e77bf758d06ed",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent accounting bridges for cash, parent interests and underlying schedules remain incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Accounting scope"
+    },
+    {
+      "criterion_id": "B1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "target_field_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "55c2b70eb18c8461c842d35f7404bb019743ca47b8591f1ee48c7cc1946815a3",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The target field/schema migration is a later package; this candidate deliberately preserves legacy semantics.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Target field semantics"
+    },
+    {
+      "criterion_id": "B2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "amount_field_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "fdce7d6db07648ce29fa10b0d9cd7262a88c860371d396fa1d49ddf1466d16ef",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent field references, eligibility and source-specific tolerances are not complete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "other_field_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "b75b0e5e56bdf370c6966850955508b80f60b52031b46cc82010ce7f551b3a27",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent field references, eligibility and source-specific tolerances are not complete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Field fidelity"
+    },
+    {
+      "criterion_id": "B3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "primary_absolute_error_ratio",
+          "metric_version": 1,
+          "observation_sha256": "48f7ed9a1642df5f96de79a6a82e8ac9720d1628b37fb0cc93575395c3949486",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Primary anchors and comparable accounting scopes have not been independently certified across the required history.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.0025
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "fund_primary_error_ratio",
+          "metric_version": 1,
+          "observation_sha256": "fe32f8dd60c3851e0955817361a2358a0458631171140400510ae796ee416945",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Primary anchors and comparable accounting scopes have not been independently certified across the required history.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.01
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "primary_fund_coverage",
+          "metric_version": 1,
+          "observation_sha256": "30af9a088faf02bfe494991f673919a8f45f0225afeb251c59060b5e073995c0",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Primary anchors and comparable accounting scopes have not been independently certified across the required history.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "primary_source_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "66bb29045a31d22d083a36d9ce7576fca18df301b85990bb292340b1b77fe6dd",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Primary anchors and comparable accounting scopes have not been independently certified across the required history.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Independent primary reconciliation"
+    },
+    {
+      "criterion_id": "B4",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "public_partition_errors",
+          "metric_version": 1,
+          "observation_sha256": "6cb0ba883d35a5cf94749c634225d3566ba52ccf50eeaeb96b1cb9dd562ce5c1",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The production frontend export and contributor-ID partition checks are outside this compatibility run.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Exact public holdings partitions"
+    },
+    {
+      "criterion_id": "B5",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "rate_pik_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "c606ddb74d097a31f55808b7072f2dbc337471fca77104d9451d29d30b3c1378",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Legacy cash-leg storage is retained. The atomic all-in-rate and income-formula migration remains required.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Rate and PIK meaning"
+    },
+    {
+      "criterion_id": "C1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "stable_entity_id_errors",
+          "metric_version": 1,
+          "observation_sha256": "c7946e4fe76b5ac6c10a6c1dbf38d0ab9710c799c00829501ca8a1862c8018b4",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Stable entity-identifier lifecycle acceptance scenarios are not implemented.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Stable entity identifiers"
+    },
+    {
+      "criterion_id": "C2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "entity_precision",
+          "metric_version": 1,
+          "observation_sha256": "5d60da856d779cabe2271b4f4713d03a22a789514cdd9e339e39f3c669c3b643",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Development entity regression is reported separately; independent precision/recall sampling is unavailable.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "entity_recall",
+          "metric_version": 1,
+          "observation_sha256": "c5ebf66d68f05d101f5703b3d84958fec7c04294e461b0a8b5c8c19e99d9bbf3",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Development entity regression is reported separately; independent precision/recall sampling is unavailable.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Entity resolution accuracy"
+    },
+    {
+      "criterion_id": "C3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "position_precision",
+          "metric_version": 1,
+          "observation_sha256": "10e6d831abddfe497c59df1d23ef28ba585dfb9c2f2197202d269a4d80e2ac0d",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Development pair regression is reported separately; independent full-chain and continuation references remain incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "position_recall",
+          "metric_version": 1,
+          "observation_sha256": "9281e3dd432ac665bf367f0a918a853a47593607b30fef0b5d764f2b0557c879",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Development pair regression is reported separately; independent full-chain and continuation references remain incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "complete_chain_rate",
+          "metric_version": 1,
+          "observation_sha256": "3098299f2dbfa17089cb10cc57a2940983f8e293e158b8ae242cc74b87a38f27",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Development pair regression is reported separately; independent full-chain and continuation references remain incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position continuation and full chains"
+    },
+    {
+      "criterion_id": "C4",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "position_lifecycle_errors",
+          "metric_version": 1,
+          "observation_sha256": "f8587252c0dcd3b664d127929870c280b38c15c412d78e4148eea6f9801da84e",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The registry remains opt-in and production-compatible IDs can renumber; target lifecycle scenarios are not implemented.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position identity lifecycle"
+    },
+    {
+      "criterion_id": "D1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "evidence_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "5d94652f998867520d35a0a2d074705f4359a2a723ba2b2196163b8cef77fc97",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Target field-level reported/calculated/inferred/default/proxy evidence contracts are not fully implemented.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Field and metric evidence categories"
+    },
+    {
+      "criterion_id": "D2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "enrichment_replay_errors",
+          "metric_version": 1,
+          "observation_sha256": "d3988c695c49ba8f2523caadcd4c6b61cc97bd780ede364e96227ce979a282b5",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The complete enrichment decision and replay ledger is a later implementation package.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Enrichment replay"
+    },
+    {
+      "criterion_id": "D3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "sector_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "c151e73f1b3805efb91942b277605a4c5d2acc9db80666e447639bfcb84a4dae",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent sector-assignment review is unavailable; populated codes establish availability only.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "sector_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "684a39d6373a4840a8f6ccfe58ee2d609729a20d8a323c2b59048e2ab4619192",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent sector-assignment review is unavailable; populated codes establish availability only.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "sector_row_coverage",
+          "metric_version": 1,
+          "observation_sha256": "cb8864f688491bd26cabc348707b7feab4eb57db9e9a397253009add2b6635eb",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Independent sector-assignment review is unavailable; populated codes establish availability only.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.9
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Sector quality and availability"
+    },
+    {
+      "criterion_id": "D4",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "citation_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "846c5b234f3c29830b2095f5dcb2758a6aed80888c66076d90f1507c5d7d8078",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The production PDF/source-citation viewer is not implemented by the local review briefing.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Citation scenarios"
+    },
+    {
+      "criterion_id": "D5",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "reported_amount_highlight_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "169b095028273d1875887cd7ff1569a5c601012d4895675b32005d8902ddd1f3",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Released numerical displays are not yet instrumented for a complete source-highlight/evidence-path census.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "reported_numeric_highlight_row_coverage",
+          "metric_version": 1,
+          "observation_sha256": "bdf12a7c21112dcbfd92980df7338bb102ff0d14e48300839ef0f46bc375461c",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Released numerical displays are not yet instrumented for a complete source-highlight/evidence-path census.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "evidence_path_or_unavailable",
+          "metric_version": 1,
+          "observation_sha256": "daf38988c37dcff2465d2380a16c3a2f7baeeff857d3318cb8b27871a3cdc9b5",
+          "operator": "min",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Released numerical displays are not yet instrumented for a complete source-highlight/evidence-path census.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1.0
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "misleading_links",
+          "metric_version": 1,
+          "observation_sha256": "a7833a7280070847159c699792e7beb6e8bb50229f7279b5a035ba4d90e77588",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Released numerical displays are not yet instrumented for a complete source-highlight/evidence-path census.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Evidence coverage"
+    },
+    {
+      "criterion_id": "E1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "accessible_holdings_difference",
+          "metric_version": 1,
+          "observation_sha256": "5778b1c0f6c487c8b0227eb8794050da0f5366e6502835cd1ae4bfe3f0cd8548",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The complete target holdings product interface has not been rebuilt and checked on this candidate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Complete product holdings access"
+    },
+    {
+      "criterion_id": "E2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "analytic_display_errors",
+          "metric_version": 1,
+          "observation_sha256": "c7cacff8d9d2dc5439afc05fc800d32174f269051e5765d9269765290b8810cc",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Target analytic definitions and denominator displays have not been evaluated on a candidate-bound public export.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Analytic definitions and denominators"
+    },
+    {
+      "criterion_id": "E3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "public_scope_errors",
+          "metric_version": 1,
+          "observation_sha256": "5e150bbb5ee0cdcd221ffb3de81e9ce36b1d73d84022747d70e4010f7a244d95",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. No fresh benchmark of the target public citation/holdings product was run; local review-page tests are separate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "product_workload_errors",
+          "metric_version": 1,
+          "observation_sha256": "7b593c520951bf79ce7e62f5450be4b95dd02105846de63eac5dc1335e9eaf1e",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. No fresh benchmark of the target public citation/holdings product was run; local review-page tests are separate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "local_citation_p95_ms",
+          "metric_version": 1,
+          "observation_sha256": "9f3040a13cc40191549e5b67ec5d9ec949828afaa5329e11a38f8fa359837a69",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. No fresh benchmark of the target public citation/holdings product was run; local review-page tests are separate.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 5000
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Public scope and performance"
+    },
+    {
+      "criterion_id": "F1",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "writer_authority_errors",
+          "metric_version": 1,
+          "observation_sha256": "8cf095f830afb772b507108430192a876a148f38bbf336468aa8fd2b81a9766f",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. The target authoritative-writer graph and dbt execution are subsequent migration work.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Authoritative writers and dbt execution"
+    },
+    {
+      "criterion_id": "F2",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "semantic_repeat_delta",
+          "metric_version": 1,
+          "observation_sha256": "d0c270ac90d9cfe68a884ebe669ba260e096ecf0d58d7354cff8ae918aadcd26",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Strict parity and starting-result comparisons cover the three compatibility stages; whole target-release repeatability remains unmeasured.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "companion_difference",
+          "metric_version": 1,
+          "observation_sha256": "b8c6b955895bcf5b3585d5e7c34819c5a2bbea3fb892a9773302308158ac0083",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Strict parity and starting-result comparisons cover the three compatibility stages; whole target-release repeatability remains unmeasured.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Repeatability and typed parity"
+    },
+    {
+      "criterion_id": "F3",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "release_failure_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "edf84b0de8d2fc5786e568bd1e9bb9ba10d06465ce719771a07a0fd5745af628",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Candidate failure isolation is tested separately; the complete production adoption transaction is not implemented.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Partial failure and adoption boundary"
+    },
+    {
+      "criterion_id": "F4",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "resume_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "c157f5e3ee22f3ba3b0ec8a8ae0643c62909c4dbe7e34e01d047139ac615b9cd",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Candidate stage recovery is tested separately; the entire future release workflow is not covered.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Recovery and idempotency"
+    },
+    {
+      "criterion_id": "F5",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "acceptance_control_errors",
+          "metric_version": 1,
+          "observation_sha256": "f4375db3607af989e0b43bcb8ddaae540102f1051519f220041494cd2948cd09",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. Worker protection is tested separately; independent reference-review authority and final acceptance controls remain incomplete.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Protected acceptance assets"
+    },
+    {
+      "criterion_id": "F6",
+      "results": [
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "unexplained_migration_delta",
+          "metric_version": 1,
+          "observation_sha256": "b6a2ef8ce0e50391f2cc2baf7bab921cb7814cfbfb422ec046e8ad58460dffca",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. No production migration or new signed-quarter attestation is performed in this tranche. Semantic preservation is reported separately.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+          "metric_id": "signed_quarter_regressions",
+          "metric_version": 1,
+          "observation_sha256": "647c6ffafe1d8d9aeef4b6410ad53f0801d981e91028bd24fda396f2d4619027",
+          "operator": "max",
+          "reason": "Candidate execution stopped before a supported stage was sealed. No production migration or new signed-quarter attestation is performed in this tranche. Semantic preservation is reported separately.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Migration deltas and regressions"
+    }
+  ],
+  "criterion_inventory_sha256": "117fce4272bdbe873e02fc5ae57c83d8ad20cd420ab9954cae7ac3460ca935d9",
+  "evaluated_utc": "2026-09-10T10:44:54.415720+00:00",
+  "evaluator_identity": {
+    "catalog.py": "a17ff58ed2e2530fecf451779acb511f59f254923c5f061fa6771b5bea88396c",
+    "core.py": "02d6f22c619693cb8727d4fa145a5d1dabab141a5879928cd80cfb703944e593",
+    "measurement.py": "93de2b55b7483461d2abfcde355ffc3f185d1b944b925177d6a789cecc003bd8"
+  },
+  "release_approval": "not_granted",
+  "schema_version": 1,
+  "verdict": "UNASSESSABLE"
+}

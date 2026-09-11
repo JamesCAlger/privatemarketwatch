@@ -1,0 +1,174 @@
+{
+  "position_labels": {
+    "records": 132,
+    "unique_keys": 128,
+    "funds": 10,
+    "label_status": {
+      "human_confirmed": 128
+    },
+    "strata": {
+      "tail_census": 128
+    },
+    "in_programme": 127,
+    "source_files_present": 128,
+    "context_locators": 0
+  },
+  "position_frame": {
+    "records": 562,
+    "units": {
+      "position": 336,
+      "cik_quarter": 25,
+      "flag": 201
+    },
+    "strata": {
+      "tail_census": 225,
+      "pps_body": 96,
+      "silent_bulk": 40,
+      "surfaced_flag": 40,
+      "suppressed_flag": 161
+    }
+  },
+  "match_batches": [
+    {
+      "batch": "mg1",
+      "packets": 577,
+      "gold_records": 4,
+      "units": {
+        "edge": 1,
+        "packet": 3
+      },
+      "strata": {
+        "chain/tier_random": 1,
+        "chain/interior_singleton": 1,
+        "entity/cross_fund_near_miss": 1
+      },
+      "missing_packet_or_verdict": 574,
+      "packets_with_evidence_entries": 3,
+      "packets_without_evidence_entries": 0,
+      "periods": [
+        "2023-12-31",
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2026-03-31"
+      ],
+      "owner_audit_rows": 3,
+      "owner_verdicts_recorded": 0
+    },
+    {
+      "batch": "mg3",
+      "packets": 535,
+      "gold_records": 1331,
+      "units": {
+        "edge": 796,
+        "packet": 535
+      },
+      "strata": {
+        "chain/tier_random": 240,
+        "entity/within_fund_name_cluster": 60,
+        "chain/drift_break": 40,
+        "entity/entity_merge_verify": 60,
+        "entity/cross_fund_near_miss": 55,
+        "chain/fv_jump": 40,
+        "chain/interior_singleton": 40
+      },
+      "missing_packet_or_verdict": 0,
+      "packets_with_evidence_entries": 518,
+      "packets_without_evidence_entries": 17,
+      "periods": [
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "owner_audit_rows": 52,
+      "owner_verdicts_recorded": 0
+    },
+    {
+      "batch": "mg4_contested",
+      "packets": 265,
+      "gold_records": 1403,
+      "units": {
+        "edge": 1138,
+        "packet": 265
+      },
+      "strata": {
+        "chain/tier_random": 225,
+        "chain/interior_singleton": 40
+      },
+      "missing_packet_or_verdict": 0,
+      "packets_with_evidence_entries": 256,
+      "packets_without_evidence_entries": 9,
+      "periods": [
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "owner_audit_rows": 29,
+      "owner_verdicts_recorded": 0
+    },
+    {
+      "batch": "mg5_recall",
+      "packets": 100,
+      "gold_records": 100,
+      "units": {
+        "packet": 100
+      },
+      "strata": {
+        "chain/interior_singleton": 100
+      },
+      "missing_packet_or_verdict": 0,
+      "packets_with_evidence_entries": 96,
+      "packets_without_evidence_entries": 4,
+      "periods": [
+        "2022-09-30",
+        "2022-12-31",
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "owner_audit_rows": 14,
+      "owner_verdicts_recorded": 0
+    }
+  ],
+  "shadow_flag_gold": {
+    "rows": 45,
+    "labeled": 24,
+    "funds": 29,
+    "scope": "flag-selected judgments; not full source roster"
+  },
+  "input_changes": []
+}

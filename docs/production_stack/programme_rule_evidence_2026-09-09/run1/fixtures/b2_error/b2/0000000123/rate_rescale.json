@@ -1,0 +1,28 @@
+{
+  "cik": "0000000123",
+  "mechanism": "fixture",
+  "fix_class": "rate_rescale",
+  "template": {
+    "field": "interest_rate",
+    "factor": 0.1,
+    "row_selector": {
+      "missing_column": "x"
+    }
+  },
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "source_review_ids": [
+    "FIXTURE"
+  ],
+  "evidence_citations": [
+    {
+      "quoted_text": "Synthetic fixture, not SEC evidence",
+      "table_index": 1,
+      "row_index": 1
+    }
+  ],
+  "confidence": 0.9
+}

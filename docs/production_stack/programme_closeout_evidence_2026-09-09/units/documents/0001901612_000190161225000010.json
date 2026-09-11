@@ -1,0 +1,50 @@
+{
+  "accession": "0001901612-25-000010",
+  "cik": "0001901612",
+  "identity": [
+    6781150,
+    1774941946015547400
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1901612/000190161225000010.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "8bf06acf5468c6560678d48b2abf63d971a543542e8b2c53717c7e9768bb010f",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gbdc4:component\"]",
+      "unit_ref": "component"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    }
+  ]
+}

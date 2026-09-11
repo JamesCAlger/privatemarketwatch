@@ -1,0 +1,50 @@
+{
+  "accession": "0001919369-24-000032",
+  "cik": "0001919369",
+  "identity": [
+    1500331,
+    1774941981976785200
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1919369/000191936924000032.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "3641cceb090817f5877ccc20b79c7689764e3d753e4c3599f6becc0eef5691ca",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"vcsl:transfer\"]",
+      "unit_ref": "transfer"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"vcsl:investment\"]",
+      "unit_ref": "investment"
+    }
+  ]
+}

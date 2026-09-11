@@ -1,0 +1,133 @@
+{
+  "case": 5,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001803498|2025-12-31|Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "DIRECT_REAL_ESTATE",
+      "cik": "0001803498",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001803498|2025-12-31|Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "REAL_ESTATE_FUND",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-38fc62da45590da2",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001803498|2025-12-31|Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+    "accession": "0001803498-26-000014",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001803498",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "12afab7",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "REAL_ESTATE_FUND",
+    "true_cost": 422500000.0,
+    "true_fair_value": 430975000.0,
+    "true_lien": null,
+    "unit_uid": "blackstone private real estate credit and income fund common shares"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification": "REAL_ESTATE_FUND",
+    "fair_value_usd": 430975000,
+    "strategy_evidence_xpath": "/html/body/div[1271]/ix:footnote/table/tr[3]"
+  },
+  "reason": "Investee-fund table explicitly says real estate credit and income; common shares are a fund interest, not directly held property.",
+  "row_xpath": "/html/body/div[1205]/table/tr[26]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+        "",
+        "(4)(6)(16)(21)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "6/1/2025",
+        "",
+        "",
+        "",
+        "16,525,117",
+        "",
+        "",
+        "422,500",
+        "",
+        "",
+        "430,975",
+        "",
+        "",
+        "0.91",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-1539",
+          "context_text": "0001803498 Blackstone Private Real Estate Credit and Income Fund - Common Shares | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "0",
+          "text": "16,525,117",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1539",
+          "context_text": "0001803498 Blackstone Private Real Estate Credit and Income Fund - Common Shares | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "422,500",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1539",
+          "context_text": "0001803498 Blackstone Private Real Estate Credit and Income Fund - Common Shares | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "430,975",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1539",
+          "context_text": "0001803498 Blackstone Private Real Estate Credit and Income Fund - Common Shares | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "-2",
+          "text": "0.91",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Investments (1)(19) Footnotes Reference Rate and Spread (2) Interest Rate (2)(15) Acquisition Date Maturity Date Par Amount/Units (1) Cost (3) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1205]/table",
+      "xpath": "/html/body/div[1205]/table/tr[26]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+  "source_sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c",
+  "status": "candidate_semantics_wrong",
+  "supplementary_evidence": null
+}

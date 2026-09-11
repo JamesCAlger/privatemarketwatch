@@ -1,0 +1,68 @@
+{
+  "accession": "0000950170-23-057140",
+  "cik": "0001786108",
+  "identity": [
+    16796755,
+    1774941629383071500
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1786108/000095017023057140.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "ccc6e51d7983e394dc954f266e7579649495d6c6e6822f50d424c8f3922538e7",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"trin:TradingDay\"]",
+      "unit_ref": "U_TradingDay"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"trin:Loan\"]",
+      "unit_ref": "U_Loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"trin:BusinessDays\"]",
+      "unit_ref": "U_BusinessDays"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"trin:Equipment\"]",
+      "unit_ref": "U_Equipment"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"utr:Y\"]",
+      "unit_ref": "U_Y"
+    }
+  ]
+}

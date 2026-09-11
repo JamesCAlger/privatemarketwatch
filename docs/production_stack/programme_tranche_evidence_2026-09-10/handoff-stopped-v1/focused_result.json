@@ -1,0 +1,22 @@
+{
+  "code_unchanged": true,
+  "consistently_unreadable_paths": [],
+  "elapsed_seconds": 251.3686674000055,
+  "exit_code": 0,
+  "log": {
+    "bytes": 316,
+    "path": "scratch/2026-09-10_programme_tranche/verification/runtime-fix-focused-v1/process.log",
+    "sha256": "5ceb6f76bdbbd9a04be4d71e11ab4bdd8f2a2f3e4f7778f9e6e31d54edcc7baa"
+  },
+  "mode": "focused",
+  "protected_changes": [],
+  "protected_readable_files": 237621,
+  "protected_unreadable_paths_changed": false,
+  "started_code": {
+    "bytes": 8915,
+    "path": "scripts/programme_tranche/run_verification.py",
+    "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+  },
+  "timed_out": false,
+  "worker_stopped": true
+}

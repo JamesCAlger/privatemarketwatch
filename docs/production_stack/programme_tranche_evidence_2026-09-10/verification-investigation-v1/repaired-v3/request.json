@@ -1,0 +1,21 @@
+{
+  "authority": "Owner requested investigation after the stopped tranche; bounded diagnostics only",
+  "code": {
+    "bytes": 17051,
+    "path": "scripts/programme_tranche/diagnose_tests.py",
+    "sha256": "c560f9f24e50082c1dffa0d0f2cdb4f48a9effefd48bf449804a41062c116c4d"
+  },
+  "mode": "profile",
+  "nodes": [
+    "tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup",
+    "tests/test_bdc_xbrl_wrapper.py::test_blackrock_direct_lending_flat_debt_leaf",
+    "tests/test_bdc_xbrl_wrapper.py::test_silver_point_specialty_credit_comma_leaf_and_total_rows",
+    "tests/test_agent_data_query.py",
+    "tests/test_investigation_orchestration.py",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_gsbd_multilevel_pct_hierarchy_extracts_issuer",
+    "tests/test_unified_holdings.py::TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien",
+    "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers"
+  ]
+}

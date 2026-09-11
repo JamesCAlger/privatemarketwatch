@@ -1,0 +1,191 @@
+{
+  "baseline_divergence_groups": {
+    "fund_financials": 0,
+    "holdings": 11,
+    "index_returns": 6,
+    "matches": 7,
+    "position_returns": 7
+  },
+  "code": {
+    "bytes": 7051,
+    "path": "scripts/programme_tranche/check_preservation.py",
+    "sha256": "5b2c0a20670b85b3d337a2ad2cced0392abe98b28c1cc57bad7a93f9d49fb262"
+  },
+  "current_baseline_manifest": {
+    "bytes": 25708533,
+    "path": "docs/refactoring/baseline_manifest.json",
+    "sha256": "5a9e76d2c9cf5c18e77262b7d04b864d590f17fdd368a81c2f7e9fc12909af00"
+  },
+  "derived_delta_roundoff": [
+    {
+      "change": 3.637978807091713e-12,
+      "new_delta": -1181.2205822721508,
+      "old_delta": -1181.2205822721544,
+      "path": "/position_returns/position_return/0/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -0.0001220703125,
+      "new_delta": -271163614.6602173,
+      "old_delta": -271163614.6600952,
+      "path": "/position_returns/position_return/0/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 4.589557647705078e-06,
+      "new_delta": -353908044.3096588,
+      "old_delta": -353908044.3096634,
+      "path": "/position_returns/position_return/1/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -0.005859375,
+      "new_delta": -9743223304.770508,
+      "old_delta": -9743223304.764648,
+      "path": "/position_returns/position_return/1/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 9.237055564881302e-14,
+      "new_delta": -9.251740571898235,
+      "old_delta": -9.251740571898328,
+      "path": "/position_returns/position_return/2/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 1.6370904631912708e-11,
+      "new_delta": -656.4379660223722,
+      "old_delta": -656.4379660223885,
+      "path": "/position_returns/position_return/3/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 3.0517578125e-05,
+      "new_delta": -202695199.09991455,
+      "old_delta": -202695199.09994507,
+      "path": "/position_returns/position_return/3/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -9.094947017729282e-13,
+      "new_delta": -0.1228552317793401,
+      "old_delta": -0.1228552317784306,
+      "path": "/position_returns/position_return/4/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 0.0001220703125,
+      "new_delta": -92874368.32995605,
+      "old_delta": -92874368.33007812,
+      "path": "/position_returns/position_return/4/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 9.313225746154785e-10,
+      "new_delta": 4334954.627437041,
+      "old_delta": 4334954.62743704,
+      "path": "/position_returns/position_return/5/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -1.52587890625e-05,
+      "new_delta": -1185865.5000305176,
+      "old_delta": -1185865.5000152588,
+      "path": "/position_returns/position_return/5/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 2.2737367544323206e-13,
+      "new_delta": -2.2737367544323206e-13,
+      "old_delta": -4.547473508864641e-13,
+      "path": "/position_returns/position_return/6/total_return_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 0.000213623046875,
+      "new_delta": 2908500.000213623,
+      "old_delta": 2908500.0,
+      "path": "/position_returns/position_return/6/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 1.52587890625e-05,
+      "new_delta": -45551112.99999237,
+      "old_delta": -45551113.00000763,
+      "path": "/holdings/holdings_class_fv/1/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -0.0003662109375,
+      "new_delta": 29327971.999816895,
+      "old_delta": 29327972.000183105,
+      "path": "/holdings/holdings_class_fv/2/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -0.015625,
+      "new_delta": -32474804.002929688,
+      "old_delta": -32474803.987304688,
+      "path": "/holdings/holdings_class_fv/3/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -1.52587890625e-05,
+      "new_delta": -48439072.0,
+      "old_delta": -48439071.99998474,
+      "path": "/holdings/holdings_class_fv/4/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -9.1552734375e-05,
+      "new_delta": 29504999.999969482,
+      "old_delta": 29505000.000061035,
+      "path": "/holdings/holdings_class_fv/5/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 1.52587890625e-05,
+      "new_delta": 3921854569.582794,
+      "old_delta": 3921854569.582779,
+      "path": "/holdings/holdings_class_fv/6/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": 6.103515625e-05,
+      "new_delta": -1643282630.659851,
+      "old_delta": -1643282630.659912,
+      "path": "/holdings/holdings_class_fv/7/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "change": -6.103515625e-05,
+      "new_delta": 2681492.529724121,
+      "old_delta": 2681492.5297851562,
+      "path": "/holdings/holdings_class_fv/8/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    }
+  ],
+  "elapsed_seconds": 128.92322630000126,
+  "numeric_rule": "Unchanged scripts.diff_outputs source-scale numeric-noise rule; each derived delta must equal its recorded subtraction",
+  "original_gold": {
+    "bytes": 112693,
+    "path": "data/gold/labels/position_labels.jsonl",
+    "sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7"
+  },
+  "original_input_files": 1117,
+  "original_match_reference_files": 1605,
+  "previous_report": {
+    "bytes": 13418,
+    "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/verification/semantic_diff_report.json",
+    "sha256": "da570a27ff78407c45bf26c059e0b596e78b495ef6d4e17c29596c80ce6c5594"
+  },
+  "scope": "Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.",
+  "semantic_changes_since_preparation": [],
+  "semantic_report": {
+    "bytes": 13411,
+    "path": "scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/semantic_diff_report.json",
+    "sha256": "3fddbb2b3ec049249979fb9715689c8f114c995e1cd35aa439325bde08750d80"
+  },
+  "source_reference_freezes_unchanged": true,
+  "status": "pass"
+}

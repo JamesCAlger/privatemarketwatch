@@ -1,0 +1,1059 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1920453",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001920453-2026-03-31.json",
+    "evidence_sha256": "f05c2ecd24d6777c7000f78fce218c07772452aeab688f312403c478ffed9312",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001920453-2026-03-31",
+    "report_date": "2026-03-31",
+    "review_note": "Primary candidates 531,466,625 (Dec 2023), 2,487,588,823 (Mar 2026); whole roster not certified.",
+    "saved_candidate_rows": "345",
+    "source_candidate_rows": "479"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1920453/000119312526214226.html",
+    "ref": "REF-0001920453-2026-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2026 December 31, 2025 | (unaudited) | Assets | Investments at fair value",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Fidelity Private Credit Fund",
+          "Item 1. Consolidated Financial Statements .",
+          "PART I\u2014FINANCIAL INFORMATION",
+          "",
+          "",
+          "1",
+          "le with the U.S. Securities and Exchange Commission ( \u201c SEC \u201d) including annual reports on Form 10-K, registration statements on Form N-2, quarterly reports on Form 10-Q and current reports on Form 8-K. Because we are an investment company, the forward-looking statements and projections contained in this report are excluded from the safe harbor protection provided by Section 21E of the Securities Exchange Act of 1934, as amended (the \u201c1934 Act\u201d).",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[12]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled / non-affiliate investments (amortized cost $ 2,329,512,102 and $ 2,135,060,196 as of March 31, 2026 and December 31, 2025, respectively)",
+          "",
+          "$",
+          "2,308,138,298",
+          "",
+          "",
+          "$",
+          "2,114,508,287",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_42000ec8-e9bf-4516-b219-5a8d8933882d",
+            "scale": null,
+            "text": "2,329,512,102",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_54062834-dab7-42bb-81fd-43021713d4d8",
+            "scale": null,
+            "text": "2,135,060,196",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_42000ec8-e9bf-4516-b219-5a8d8933882d",
+            "scale": null,
+            "text": "2,308,138,298",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_54062834-dab7-42bb-81fd-43021713d4d8",
+            "scale": null,
+            "text": "2,114,508,287",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2026 December 31, 2025 | (unaudited) | Assets | Investments at fair value",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Fidelity Private Credit Fund",
+          "Item 1. Consolidated Financial Statements .",
+          "PART I\u2014FINANCIAL INFORMATION",
+          "",
+          "",
+          "1",
+          "le with the U.S. Securities and Exchange Commission ( \u201c SEC \u201d) including annual reports on Form 10-K, registration statements on Form N-2, quarterly reports on Form 10-Q and current reports on Form 8-K. Because we are an investment company, the forward-looking statements and projections contained in this report are excluded from the safe harbor protection provided by Section 21E of the Securities Exchange Act of 1934, as amended (the \u201c1934 Act\u201d).",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[12]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Non-controlled / affiliate investments (amortized cost $ 184,021,376 and $ 179,607,284 as of March 31, 2026 and December 31, 2025, respectively)",
+          "",
+          "",
+          "179,450,525",
+          "",
+          "",
+          "",
+          "178,106,038",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_6d07252f-6f10-49a1-9396-06acb777fecc",
+            "scale": null,
+            "text": "184,021,376",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_cc27154b-baeb-453f-b850-e9d776fbfabd",
+            "scale": null,
+            "text": "179,607,284",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_6d07252f-6f10-49a1-9396-06acb777fecc",
+            "scale": null,
+            "text": "179,450,525",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_cc27154b-baeb-453f-b850-e9d776fbfabd",
+            "scale": null,
+            "text": "178,106,038",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2026 December 31, 2025 | (unaudited) | Assets | Investments at fair value",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Fidelity Private Credit Fund",
+          "Item 1. Consolidated Financial Statements .",
+          "PART I\u2014FINANCIAL INFORMATION",
+          "",
+          "",
+          "1",
+          "le with the U.S. Securities and Exchange Commission ( \u201c SEC \u201d) including annual reports on Form 10-K, registration statements on Form N-2, quarterly reports on Form 10-Q and current reports on Form 8-K. Because we are an investment company, the forward-looking statements and projections contained in this report are excluded from the safe harbor protection provided by Section 21E of the Securities Exchange Act of 1934, as amended (the \u201c1934 Act\u201d).",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[12]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "",
+          "58,790,768",
+          "",
+          "",
+          "",
+          "41,331,409",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_8812efce-9797-4b19-9702-3e28668596e3",
+            "scale": null,
+            "text": "58,790,768",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_10615b5e-b95a-4454-9c80-0817aafbf4ee",
+            "scale": null,
+            "text": "41,331,409",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, | 2026 2025 | Investment Income | From non-controlled / non-affiliate investments",
+        "preceding": [
+          "(unaudited)",
+          "C onsolidated Statements of Operations",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "3",
+          " outstanding ($ 0.01 par value, unlimited shares authorized) 112,485 105,728 Net asset value per share $ 24.93 $ 25.07 Class D Shares Net assets $ 12,289 $ 12,090 Common Shares outstanding ($ 0.01 par value, unlimited shares authorized) 493 481 Net asset value per share\u207d\u00b9\u207e $ 24.95 $ 25.10 (1) Net asset value per share may not calculate due to fractional shares. The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[18]/table/tr[11]"
+      },
+      {
+        "cells": [
+          "Total Investments -- non-controlled/ non-affiliate",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "2,329,512,102",
+          "",
+          "",
+          "",
+          "2,308,138,298",
+          "",
+          "",
+          "173.33 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_42000ec8-e9bf-4516-b219-5a8d8933882d",
+            "scale": null,
+            "text": "2,329,512,102",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_42000ec8-e9bf-4516-b219-5a8d8933882d",
+            "scale": null,
+            "text": "2,308,138,298",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_42000ec8-e9bf-4516-b219-5a8d8933882d",
+            "scale": "-2",
+            "text": "173.33",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Penta Fine Ingredients Parent, LLC (l)(p) Class A Common Units 821 $ 821 $ - | Penta Fine Ingredients Parent, LLC (l)(p) Preferred Units 528 528,131 536,760 | 528,952 536,760 0.04 %",
+        "preceding": [
+          "(unaudited)",
+          "March 31, 2026",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "28",
+          "Solutions Investment LLC (l)(p) Class A Units 529,186 529,186 481,559 Trutemp Holdings LLC (l)(p) Class A Interest 324,685 324,685 301,957 3,217,689 2,806,405 0.21 % Specialized Finance Lift Solutions Holdings LLC (p) Common Units 227 - 64,584 Lift Solutions Holdings LLC (p) Series A Preferred Units 227 325,938 326,199 325,938 390,783 0.02 % Specialty Chemicals The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[93]/table/tr[15]"
+      },
+      {
+        "cells": [
+          "Total Investments -- non-controlled/ affiliate",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "184,021,376",
+          "",
+          "",
+          "",
+          "179,450,525",
+          "",
+          "",
+          "13.47 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_6d07252f-6f10-49a1-9396-06acb777fecc",
+            "scale": null,
+            "text": "184,021,376",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_6d07252f-6f10-49a1-9396-06acb777fecc",
+            "scale": null,
+            "text": "179,450,525",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_6d07252f-6f10-49a1-9396-06acb777fecc",
+            "scale": "-2",
+            "text": "13.47",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Penta Fine Ingredients Parent, LLC (l)(p) Class A Common Units 821 $ 821 $ - | Penta Fine Ingredients Parent, LLC (l)(p) Preferred Units 528 528,131 536,760 | 528,952 536,760 0.04 %",
+        "preceding": [
+          "(unaudited)",
+          "March 31, 2026",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "28",
+          "Solutions Investment LLC (l)(p) Class A Units 529,186 529,186 481,559 Trutemp Holdings LLC (l)(p) Class A Interest 324,685 324,685 301,957 3,217,689 2,806,405 0.21 % Specialized Finance Lift Solutions Holdings LLC (p) Common Units 227 - 64,584 Lift Solutions Holdings LLC (p) Series A Preferred Units 227 325,938 326,199 325,938 390,783 0.02 % Specialty Chemicals The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[93]/table/tr[22]"
+      },
+      {
+        "cells": [
+          "Total Investment Portfolio",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,513,533,478",
+          "",
+          "",
+          "$",
+          "2,487,588,823",
+          "",
+          "",
+          "186.80 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": null,
+            "text": "2,513,533,478",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": null,
+            "text": "2,487,588,823",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": "-2",
+            "text": "186.80",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Penta Fine Ingredients Parent, LLC (l)(p) Class A Common Units 821 $ 821 $ - | Penta Fine Ingredients Parent, LLC (l)(p) Preferred Units 528 528,131 536,760 | 528,952 536,760 0.04 %",
+        "preceding": [
+          "(unaudited)",
+          "March 31, 2026",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "28",
+          "Solutions Investment LLC (l)(p) Class A Units 529,186 529,186 481,559 Trutemp Holdings LLC (l)(p) Class A Interest 324,685 324,685 301,957 3,217,689 2,806,405 0.21 % Specialized Finance Lift Solutions Holdings LLC (p) Common Units 227 - 64,584 Lift Solutions Holdings LLC (p) Series A Preferred Units 227 325,938 326,199 325,938 390,783 0.02 % Specialty Chemicals The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[93]/table/tr[23]"
+      },
+      {
+        "cells": [
+          "Total Investments -- non-controlled/ non-affiliate",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "2,135,060,196",
+          "",
+          "",
+          "",
+          "2,114,508,287",
+          "",
+          "",
+          "165.83 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_54062834-dab7-42bb-81fd-43021713d4d8",
+            "scale": null,
+            "text": "2,135,060,196",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_54062834-dab7-42bb-81fd-43021713d4d8",
+            "scale": null,
+            "text": "2,114,508,287",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_54062834-dab7-42bb-81fd-43021713d4d8",
+            "scale": "-2",
+            "text": "165.83",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Roofing Services Solutions Holdings, LLC (p) Series A Preferred Units 343 $ 400,510 $ 436,208 | Scp Mechanical Services Holdco, LLC (p) Common Units 1,703 8,513 7,134 | Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 167,448",
+        "preceding": [
+          "December 31, 2025",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "49",
+          "lized Consumer Services Acp Roofing Holdings, LLC (p) Common Units 528,201 528,201 5 Door Pro Holdings LLC (l)(p) Class A Units 497 483,566 131,427 NAM Group Holdings LLC (p) Class A Units 282,628 282,628 440,899 Quick Roofing Topco, LLC (l)(p) Class A Interest 426,230 426,230 1,444,918 Roofing Services Solutions Holdings, LLC (p) Common Units 343 35,632 22,454 The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[156]/table/tr[26]"
+      },
+      {
+        "cells": [
+          "Total Investments -- non-controlled/ affiliate",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "179,607,284",
+          "",
+          "",
+          "",
+          "178,106,038",
+          "",
+          "",
+          "13.96 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_cc27154b-baeb-453f-b850-e9d776fbfabd",
+            "scale": null,
+            "text": "179,607,284",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_cc27154b-baeb-453f-b850-e9d776fbfabd",
+            "scale": null,
+            "text": "178,106,038",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_cc27154b-baeb-453f-b850-e9d776fbfabd",
+            "scale": "-2",
+            "text": "13.96",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Fidelity Floating Rate Central Fund (g)(l)(m)(o) 1,863,034 $ 179,607,284 $ 178,106,038 | 179,607,284 178,106,038 13.96 % | Total Fixed Income Mutual Funds 179,607,284 178,106,038 13.96 %",
+        "preceding": [
+          "December 31, 2025",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "50",
+          " Treasury Plus Money Market Fund - 3.66 % (g)(n)(s) Investor Class Units 13,143,788 13,143,788 13,143,788 13,143,788 13,143,788 1.03 % Total Money Market Mutual Funds 13,143,788 13,143,788 1.03 % Total Investments -- non-controlled/ non-affiliate 2,135,060,196 2,114,508,287 165.83 % Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[159]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investment Portfolio",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,314,667,480",
+          "",
+          "",
+          "$",
+          "2,292,614,325",
+          "",
+          "",
+          "179.79 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": null,
+            "text": "2,314,667,480",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": null,
+            "text": "2,292,614,325",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": "-2",
+            "text": "179.79",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets | Fidelity Floating Rate Central Fund (g)(l)(m)(o) 1,863,034 $ 179,607,284 $ 178,106,038 | 179,607,284 178,106,038 13.96 % | Total Fixed Income Mutual Funds 179,607,284 178,106,038 13.96 %",
+        "preceding": [
+          "December 31, 2025",
+          "Consolidated Schedule of Investments",
+          "Fidelity Private Credit Fund",
+          "",
+          "",
+          "50",
+          " Treasury Plus Money Market Fund - 3.66 % (g)(n)(s) Investor Class Units 13,143,788 13,143,788 13,143,788 13,143,788 13,143,788 1.03 % Total Money Market Mutual Funds 13,143,788 13,143,788 1.03 % Total Investments -- non-controlled/ non-affiliate 2,135,060,196 2,114,508,287 165.83 % Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds The accompanying notes are an integral part of these consolidated financial statements",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[159]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "2,513,533,478",
+          "",
+          "",
+          "$",
+          "2,487,588,823",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "2,314,667,480",
+          "",
+          "",
+          "$",
+          "2,292,614,325",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": null,
+            "text": "2,513,533,478",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": null,
+            "text": "2,487,588,823",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001920453:InvestmentOwnedPercentOfTotalInvestments",
+            "context": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": null,
+            "text": "2,314,667,480",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": null,
+            "text": "2,292,614,325",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001920453:InvestmentOwnedPercentOfTotalInvestments",
+            "context": "C_b744e9b3-c916-4dad-8465-6c7b4248ead3",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | March 31, 2026 December 31, 2025 | Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value | First Lien Debt $ 2,269,175,571 $ 2,247,861,274 90.4 % $ 2,093,021,541 $ 2,071,775,012 90.4 % | Second Lien Debt \u2014 \u2014 0.0 % 4,838,840 4,900,000 0.2 %",
+        "preceding": [
+          "The composition of the F und\u2019s investment portfolio at cost and fair value was as follows:",
+          "Note 4. Investments"
+        ],
+        "xpath": "/html/body/div[198]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "196,401,848",
+          "",
+          "",
+          "$",
+          "68,942,636",
+          "",
+          "",
+          "$",
+          "2,222,244,339",
+          "",
+          "",
+          "$",
+          "2,487,588,823",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_67522565-e731-4491-991f-56c5f6b31dc3",
+            "scale": null,
+            "text": "196,401,848",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_d717f420-40b4-4561-ab78-a2a4b97cd57c",
+            "scale": null,
+            "text": "68,942,636",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fbe45995-cd7c-4cda-8b82-1b61c1f6606a",
+            "scale": null,
+            "text": "2,222,244,339",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_bfb68246-8e1e-4897-9f35-9333cddbb845",
+            "scale": null,
+            "text": "2,487,588,823",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2026 | Level 1 Level 2 Level 3 Total | Investments: | First Lien Debt $ \u2014 $ 61,418,985 $ 2,186,442,289 $ 2,247,861,274",
+        "preceding": [
+          "The following is a summary of the inputs used, as of March 31, 2026 and December 31, 2025, involving the Fund\u2019s assets and liabilities carried at fair value. The inputs or methodology used for valuing securities may not be an indication of the risk associated with investing in those securities.",
+          "Level 3 \u2014 unobservable inputs (including the Fund\u2019s own assumptions based on the best information available)",
+          "Level 2 \u2014 other significant observable inputs (including quoted prices for similar investments, interest rates, prepayment speeds, etc.)",
+          "Level 1 \u2014 unadjusted quoted prices in active markets for identical investments",
+          "The Fund categorizes the inputs to valuation techniques used to value its investments, including derivatives, into a disclosure hierarchy consisting of three levels as shown below:",
+          "Note 6. Fair Value Measurements"
+        ],
+        "xpath": "/html/body/div[207]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "191,249,826",
+          "",
+          "",
+          "$",
+          "80,534,379",
+          "",
+          "",
+          "$",
+          "2,020,830,120",
+          "",
+          "",
+          "$",
+          "2,292,614,325",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_722b13d7-394b-492d-926c-c9fbbbf4bbbb",
+            "scale": null,
+            "text": "191,249,826",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e765ba6e-30bd-422a-a732-fc4ba002a9e8",
+            "scale": null,
+            "text": "80,534,379",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_42b00b63-7896-4314-9d0d-ba0d949ba6fb",
+            "scale": null,
+            "text": "2,020,830,120",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_7e1f5428-3605-4601-86d1-515fa69b513c",
+            "scale": null,
+            "text": "2,292,614,325",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | December 31, 2025 | Level 1 Level 2 Level 3 Total | Investments: | First Lien Debt $ \u2014 $ 68,058,090 $ 2,003,716,922 $ 2,071,775,012",
+        "preceding": [],
+        "xpath": "/html/body/div[210]/div/ix:continuation/div[1]/ix:continuation/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled / non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled / non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | Ab Centers Acquisition Corporation Delayed Draw Term Loan 7/2/2031 $ 1,795,266 | Ab Centers Acquisition Corporation Revolving Credit Facility 7/2/2031 1,778,298 | ACP Avenu Midco LLC Delayed Draw Term Loan 10/2/2029 10,127,946",
+        "preceding": [
+          "The following table details the unfunded loan commitments as of March 31, 2026:"
+        ],
+        "xpath": "/html/body/div[219]/div/ix:continuation/div/ix:nonnumeric/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled / non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled / non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | Dynamic Connections, Ltd Delayed Draw Term Loan 11/27/2030 $ 450,254 | Ecir Intermediate II LLC Delayed Draw Term Loan 9/26/2031 7,058,701 | Ecir Intermediate II LLC Revolving Credit Facility 9/26/2031 1,764,675",
+        "preceding": [
+          "As of March 31, 2026 continued:"
+        ],
+        "xpath": "/html/body/div[222]/div/ix:continuation/div/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled / non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled / non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | NE Ortho Management Services, LLC Revolving Credit Facility 12/13/2030 $ 2,234,015 | Nutrail Acquisitionco, LLC Revolving Credit Facility 5/23/2030 6,469,708 | Nutrail Acquisitionco, LLC Delayed Draw Term Loan 5/23/2030 3,840,131",
+        "preceding": [
+          "As of March 31, 2026 continued:"
+        ],
+        "xpath": "/html/body/div[225]/div/ix:continuation/div/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled / non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled / non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | The Smilist Dso, LLC Delayed Draw Term Loan 4/4/2029 965,256 | The Smilist Dso, LLC Revolving Credit Facility 4/4/2029 926,306 | Tiger Healthcare Buyer, LLC Revolving Credit Facility 2/27/2030 500,000",
+        "preceding": [
+          "As of March 31, 2026 continued:"
+        ],
+        "xpath": "/html/body/div[228]/div/ix:continuation/div/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled/ non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled/ non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | Ab Centers Acquisition Corporation Delayed Draw Term Loan 7/2/2031 $ 2,274,221 | Ab Centers Acquisition Corporation Revolving Credit Facility 7/2/2031 1,778,298 | ACP Avenu Midco LLC Delayed Draw Term Loan 10/2/2029 10,127,946",
+        "preceding": [
+          "The following table details the unfunded loan commitments as of December 31, 2025:"
+        ],
+        "xpath": "/html/body/div[231]/div/ix:continuation/div/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled/ non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled/ non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | Eversmith Brands Intermediate Holding Company Delayed Draw Term Loan 6/17/2030 $ 3,121,167 | Eversmith Brands Intermediate Holding Company Revolving Credit Facility 6/17/2030 897,872 | Eversmith Brands Intermediate Holding Company Delayed Draw Term Loan 6/17/2030 384,802",
+        "preceding": [
+          "As of December 31, 2025 continued:"
+        ],
+        "xpath": "/html/body/div[234]/div/ix:continuation/div/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled/ non-affiliate",
+          "",
+          "Commitment Type",
+          "",
+          "Commitment Maturity Date",
+          "",
+          "Unfunded Commitment ($)",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled/ non-affiliate Commitment Type Commitment Maturity Date Unfunded Commitment ($) | Perimeter Solutions Group, LLC Delayed Draw Term Loan 10/2/2030 $ 2,971,351 | Perimeter Solutions Group, LLC Delayed Draw Term Loan 10/2/2030 1,854,047 | Pillr Health Intermediate II, LLC Delayed Draw Term Loan 12/31/2031 10,174,291",
+        "preceding": [
+          "As of December 31, 2025 continued:"
+        ],
+        "xpath": "/html/body/div[237]/div/ix:continuation/div[1]/ix:continuation/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Total investments, beginning of period",
+          "",
+          "$",
+          "2,314,667,480",
+          "",
+          "",
+          "$",
+          "1,363,206,046",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2026 2025 | Investments: | Total investments, beginning of period $ 2,314,667,480 $ 1,363,206,046",
+        "preceding": [
+          "Our investment activity is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+          "Portfolio and Investment Activity",
+          "",
+          "",
+          "89",
+          "e-year terms after the Initial Term. The Adviser may not terminate this Expense Limitation Agreement without the approval of the Fund\u2019s Board of Trustees. The Fund\u2019s Board of Trustees may terminate this Expense Limitation Agreement at any time without payment of any penalty. For additional information, see \u201c Item 1. Consolidated Financial Statements. Notes to Consolidated Financial Statements. Note 3. Related Party Agreements and Transactions . \u201d",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[276]/table[1]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total Investments, End of Period",
+          "",
+          "$",
+          "2,513,533,478",
+          "",
+          "",
+          "$",
+          "1,753,090,392",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2026 2025 | Investments: | Total investments, beginning of period $ 2,314,667,480 $ 1,363,206,046",
+        "preceding": [
+          "Our investment activity is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+          "Portfolio and Investment Activity",
+          "",
+          "",
+          "89",
+          "e-year terms after the Initial Term. The Adviser may not terminate this Expense Limitation Agreement without the approval of the Fund\u2019s Board of Trustees. The Fund\u2019s Board of Trustees may terminate this Expense Limitation Agreement at any time without payment of any penalty. For additional information, see \u201c Item 1. Consolidated Financial Statements. Notes to Consolidated Financial Statements. Note 3. Related Party Agreements and Transactions . \u201d",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[276]/table[1]/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "2,513,533,478",
+          "",
+          "",
+          "$",
+          "2,487,588,823",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "2,314,667,480",
+          "",
+          "",
+          "$",
+          "2,292,614,325",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | March 31, 2026 December 31, 2025 | Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value | First Lien Debt $ 2,269,175,571 $ 2,247,861,274 90.4 % $ 2,093,021,541 $ 2,071,775,012 90.4 % | Second Lien Debt \u2014 \u2014 0.0 % 4,838,840 4,900,000 0.2 %",
+        "preceding": [
+          "Our investments consisted of the following:",
+          "(2) Computed as the sum of, (a) the weighted average fair value multiplied by (b) the annual interest rate, for each income producing debt investment, excluding unfunded commitments. The weighted average fair value of an investment is computed by dividing the fair value by the sum of total fair value of debt investments, excluding unfunded commitments.",
+          "(1) Computed as the sum of, (a) the weighted average amortized cost multiplied by (b) the annual interest rate, for each income producing debt investment, excluding unfunded commitments. The weighted average amortized cost of an investment is computed by dividing the amortized cost by the sum of total amortized cost of debt investments, excluding unfunded commitments.",
+          "estments sold or repaid (68,031,953 ) (94,824,706 ) Total Investments, End of Period $ 2,513,533,478 $ 1,753,090,392 Number of portfolio companies 121 120 Weighted average yield on debt, at amortized cost (1) 9.06 % 9.71 % Weighted average yield on debt, at fair value (2) 9.05 % 9.71 % Percentage of debt investments bearing a floating rate, at fair value 99.6 % 100.0 % Percentage of debt investments bearing a fixed rate, at fair value 0.4 % 0.0 %",
+          "Our investment activity is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+          "",
+          "",
+          "89",
+          "e-year terms after the Initial Term. The Adviser may not terminate this Expense Limitation Agreement without the approval of the Fund\u2019s Board of Trustees. The Fund\u2019s Board of Trustees may terminate this Expense Limitation Agreement at any time without payment of any penalty. For additional information, see \u201c Item 1. Consolidated Financial Statements. Notes to Consolidated Financial Statements. Note 3. Related Party Agreements and Transactions . \u201d",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[276]/table[2]/tr[12]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "58,790,768",
+          "",
+          "",
+          "$",
+          "41,331,409",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2026 2025 | Total investment income $ 58,790,768 $ 41,331,409 | Net expenses 28,476,797 18,395,187",
+        "preceding": [
+          "The following table represents the Fund\u2019s operating results:",
+          "Results of Operations",
+          "",
+          "",
+          "",
+          "92",
+          "ntially. The company is in payment default and the principal and interest payments are not expected to be repaid in full. The following table shows the composition of our debt portfolio on the 1 to 5 rating scale as of March 31, 2026 and December 31, 2025: March 31, 2026 December 31, 2025 Rating Fair Value Fair Value 1 $ \u2014 $ \u2014 2 2,143,017,060 2,005,423,967 3 118,694,437 73,802,589 4 \u2014 5,024,745 5 10,867,178 \u2014 Total $ 2,272,578,675 $ 2,084,251,301",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[285]/table[1]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "$",
+          "58,790,768",
+          "",
+          "",
+          "$",
+          "41,331,409",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2026 2025 | Interest income $ 54,000,126 $ 39,424,416 | Dividend income 3,536,079 1,070,817",
+        "preceding": [
+          "Investment income was as follows:",
+          "Investment Income",
+          "Net increase (decrease) in net assets resulting from operations can vary from period to period as a result of various factors, including acquisitions, the level of new investment commitments, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio. As a result, comparisons may not be meaningful.",
+          "xpenses 28,476,797 18,395,187 Net investment income (loss) before taxes 30,313,971 22,936,222 Net change in provision (benefit) for income and excise taxes 1,181 (6,078 ) Net investment income (loss) after taxes 30,312,790 22,942,300 Net realized gain (loss) (2,174,649 ) (38,563 ) Net change in unrealized appreciation (depreciation) (5,409,313 ) (8,332,871 ) Net increase (decrease) in net assets resulting from operations $ 22,728,828 $ 14,570,866",
+          "The following table represents the Fund\u2019s operating results:",
+          "",
+          "",
+          "92",
+          "ntially. The company is in payment default and the principal and interest payments are not expected to be repaid in full. The following table shows the composition of our debt portfolio on the 1 to 5 rating scale as of March 31, 2026 and December 31, 2025: March 31, 2026 December 31, 2025 Rating Fair Value Fair Value 1 $ \u2014 $ \u2014 2 2,143,017,060 2,005,423,967 3 118,694,437 73,802,589 4 \u2014 5,024,745 5 10,867,178 \u2014 Total $ 2,272,578,675 $ 2,084,251,301",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[285]/table[2]/tr[7]"
+      }
+    ],
+    "sha256": "58667bff809f36b505e6e257e769148278664dd964063f11dc2ea7d5c0fc92d6",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -110,3 +110,16 @@ def test_describe_returns_schema_and_residual_context():
     assert "fair_value" in d["tables"]["holdings"]
     ctx = d["conservation_context"]
     assert ctx["ok"] and ctx["rows"][0][0] == "fv_conservation"   # the residual to drive to zero
+
+
+def test_file_backed_query_cache_is_temporary_and_keeps_cik_scope(tmp_path):
+    from pipeline import agent_data_query
+
+    source = tmp_path / "holdings.csv"
+    _sources()["holdings"].to_csv(source, index=False)
+    out = query("SELECT sum(fair_value) FROM holdings", cik="1377936",
+                sources={"holdings": source})
+    assert out["ok"] and out["rows"] == [[1376.0]]  # excludes the other CIK's 9,999
+    assert agent_data_query._CACHE_DIR == tmp_path / "agent_query_cache"
+    cached = list((agent_data_query._CACHE_DIR / "1377936").glob("holdings.*.parquet"))
+    assert len(cached) == 1 and cached[0].is_relative_to(tmp_path)

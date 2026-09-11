@@ -1,0 +1,403 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "3,117,391",
+        "",
+        "",
+        "$",
+        "10,593,317",
+        "",
+        "",
+        "$",
+        "34,476,314",
+        "",
+        "",
+        "$",
+        "48,187,022",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "48,187,022",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]/tr[33]",
+      "table_xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "48187022"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "3,117,391",
+        "",
+        "",
+        "$",
+        "10,593,317",
+        "",
+        "",
+        "$",
+        "34,476,314",
+        "",
+        "",
+        "$",
+        "48,187,022",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "48,187,022",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]/tr[35]",
+      "table_xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "48187022"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "48,187,022",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "48,187,022",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[19]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric/table[1]/tr[15]",
+      "table_xpath": "/html/body/div[19]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "48187022"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "47,099,829",
+        "",
+        "",
+        "$",
+        "48,187,022",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "48,187,022",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table[1]/tr[13]",
+      "table_xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "48187022"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "48,187,022",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "48,187,022",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[20]/div[1]/div/div/div/ix:continuation/ix:nonnumeric/table[1]/tr[8]",
+      "table_xpath": "/html/body/div[20]/div[1]/div/div/div/ix:continuation/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "48187022"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "cik0001588272:AffiliatedInvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total affiliated investments",
+        "",
+        "",
+        "956,291",
+        "",
+        "",
+        "$",
+        "10,273,001",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "7,911,399",
+        "",
+        "",
+        "$",
+        "( 7,448,085",
+        ")",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "436,517",
+        "",
+        "",
+        "$",
+        "11,172,832",
+        "",
+        "",
+        "",
+        "990,242",
+        "",
+        "",
+        "$",
+        "222,644",
+        ""
+      ],
+      "concept": "cik0001588272:AffiliatedInvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "11,172,832",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[26]/div[1]/div/div/div/ix:nonnumeric[1]/ix:continuation/table/tr[11]",
+      "table_xpath": "/html/body/div[26]/div[1]/div/div/div/ix:nonnumeric[1]/ix:continuation/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "11172832"
+    }
+  ],
+  "cik": "0001588272",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1588272/000119312523212420.html",
+  "reference_id": "REF-0001588272-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 80,
+  "source_sha256": "52e1b226212462ef4a95203cb2c6c38c4909e973ea6b373d035e0b042d0b9bf1",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 32,
+      "first": [
+        "Auris Luxembourg III S.a.r.l. (First Lien Term Loan) (5) (6) | L + 375 | 5.37 | % | 2/27/2026 | $ | 1,461,280 | $ | 1,458,055 | $ | 1,387,120",
+        "Carestream Health, Inc. (First Lien Term Loan) (7) | SOFR + 750 | 5.34 | % | 9/30/2027 | 658,467 | 574,046 | 481,998"
+      ],
+      "last": [
+        "NexPoint Residential Trust, Inc. (5) (10) | 23,409 | 698,189 | 1,064,662",
+        "Wayne Services Legacy Inc. (8) (9) (15) | 237 | 253,404 | 2,346"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1)(2) Interest Rate Base Rate Floor Maturity Date Principal Amount Amortized Cost (3) Fair Value",
+        "",
+        "Senior Secured Loans \u2013 19.3 % (4)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "As of June 30, 2023",
+        "Consolidated Schedule of Investments",
+        "NexPoint Capital, Inc."
+      ],
+      "rows": 32,
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "TerreStar Corp. (8) (9) (15) | 14,035 | $ | 1,599,990 | $ | 4,750,988",
+        "Total Common Stocks | 13,323,926"
+      ],
+      "last": [
+        "Cash Equivalents \u20133.7% (17) | $ | 1,810,506",
+        "Other Assets & Liabilities, net- (0.9%) | $ | ( 462,717 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Telecommunication Services \u2013 9.6%",
+        "TerreStar Corp. (8) (9) (15) 14,035 $ 1,599,990 $ 4,750,988",
+        ""
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "As of June 30, 2023",
+        "Consolidated Schedule of Investments (continued)",
+        "NexPoint Capital, Inc."
+      ],
+      "rows": 24,
+      "table_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]"
+    },
+    {
+      "contexts": 11,
+      "first": [
+        "Healthcare | $ | 20,988,819 | 43.6 | %",
+        "Real Estate | 12,467,170 | 25.9 | %"
+      ],
+      "last": [
+        "Service | 2,346 | 0.0 | %",
+        "Total Assets | $ | 48,187,022 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Fair value Percentage",
+        "Assets",
+        "Healthcare $ 20,988,819 43.6 %"
+      ],
+      "preceding": [
+        "",
+        "The following table shows the composition of the Company\u2019s invested assets by industry classification at fair value at June 30, 2023:"
+      ],
+      "rows": 11,
+      "table_xpath": "/html/body/div[19]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "Senior Secured Loans - First Lien | $ | 9,484,703 | $ | 8,713,771 | 18.1 | %",
+        "Senior Secured Loans - Second Lien | 1,490,723 | 840,000 | 1.7 | %"
+      ],
+      "last": [
+        "Warrants | 74,285 | 201,728 | 0.4 | %",
+        "Total Assets | $ | 47,099,829 | $ | 48,187,022 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Amortized Cost Fair value Percentage of Portfolio (at Fair Value)",
+        "Assets",
+        "Senior Secured Loans - First Lien $ 9,484,703 $ 8,713,771 18.1 %"
+      ],
+      "preceding": [
+        "",
+        "The following table summarizes the amortized cost and the fair value of the Company\u2019s invested assets by class of financial asset as of June 30, 2023:"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Cayman Islands (1) | $ | 3,352 | 0.0 | %",
+        "Luxembourg (1) | 1,387,120 | 2.9 | %"
+      ],
+      "last": [
+        "United States | 46,796,550 | 97.1 | %",
+        "Total Assets | $ | 48,187,022 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Geography Fair value Percentage",
+        "Assets",
+        "Cayman Islands (1) $ 3,352 0.0 %"
+      ],
+      "preceding": [
+        "",
+        "The following table shows the composition of the Company\u2019s invested assets by geographic classification at June 30, 2023:"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[20]/div[1]/div/div/div/ix:continuation/ix:nonnumeric/table[1]"
+    }
+  ]
+}

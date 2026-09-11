@@ -1,0 +1,4618 @@
+{
+  "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+  "sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6",
+  "rows": [
+    {
+      "xpath": "/html/body/table[13]/tr[1]",
+      "cells": [
+        "Investments (1)",
+        "",
+        "Reference Rate and Spread",
+        "",
+        "",
+        "Interest Rate (2)",
+        "",
+        "",
+        "Maturity Date",
+        "",
+        "",
+        "Par Amount/ Units",
+        "",
+        "",
+        "Cost (3)",
+        "",
+        "",
+        "Fair Value",
+        "",
+        "",
+        "% of Net Assets",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[2]",
+      "cells": [
+        "Investments\u2014non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[3]",
+      "cells": [
+        "First Lien Secured Debt\u2014 non-controlled/non-affiliated (4) (6)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[4]",
+      "cells": [
+        "Air Freight & Logistics",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[5]",
+      "cells": [
+        "RJW Logistics Group, Inc",
+        "",
+        "",
+        "3M S + 3.75%",
+        "",
+        "",
+        "",
+        "9.10",
+        "%",
+        "",
+        "",
+        "3/5/2027",
+        "",
+        "",
+        "$",
+        "2,880",
+        "",
+        "",
+        "$",
+        "2,882",
+        "",
+        "",
+        "$",
+        "2,880",
+        "",
+        "",
+        "",
+        "2.24",
+        "%"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c6",
+            "id": "ix_0_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 3.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_1_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.10"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_2_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "3/5/2027"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_3_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,880"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_4_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,882"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_5_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,880"
+        },
+        {
+          "attributes": {
+            "contextref": "c7",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_6_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "2.24"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[6]",
+      "cells": [
+        "RJW Logistics Group, Inc (Revolver) (8)",
+        "",
+        "",
+        "3M S + 3.75%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "3/5/2027",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c8",
+            "id": "ix_7_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 3.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c9",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_8_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "3/5/2027"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[7]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "2,882",
+        "",
+        "",
+        "",
+        "2,880",
+        "",
+        "",
+        "",
+        "2.24",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c10",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_9_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,882"
+        },
+        {
+          "attributes": {
+            "contextref": "c10",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_10_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,880"
+        },
+        {
+          "attributes": {
+            "contextref": "c10",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_11_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "2.24"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[8]",
+      "cells": [
+        "Commercial Services & Supplies",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[9]",
+      "cells": [
+        "Meridian Waste Acquisitions, LLC",
+        "",
+        "",
+        "3M S + 4.00%",
+        "",
+        "",
+        "",
+        "8.96",
+        "%",
+        "",
+        "",
+        "8/30/2029",
+        "",
+        "",
+        "",
+        "9,100",
+        "",
+        "",
+        "",
+        "9,078",
+        "",
+        "",
+        "",
+        "9,055",
+        "",
+        "",
+        "",
+        "7.05",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c11",
+            "id": "ix_12_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.00%"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_13_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "8.96"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_14_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/30/2029"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_15_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,100"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_16_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,078"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_17_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,055"
+        },
+        {
+          "attributes": {
+            "contextref": "c12",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_18_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "7.05"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[10]",
+      "cells": [
+        "Meridian Waste Acquisitions, LLC (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 3.50%",
+        "",
+        "",
+        "",
+        "8.43",
+        "%",
+        "",
+        "",
+        "8/30/2029",
+        "",
+        "",
+        "",
+        "927",
+        "",
+        "",
+        "",
+        "927",
+        "",
+        "",
+        "",
+        "907",
+        "",
+        "",
+        "",
+        "0.71",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c13",
+            "id": "ix_19_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 3.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_20_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "8.43"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_21_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/30/2029"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_22_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "927"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_23_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "927"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_24_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "907"
+        },
+        {
+          "attributes": {
+            "contextref": "c14",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_25_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "0.71"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[11]",
+      "cells": [
+        "Meridian Waste Acquisitions, LLC (Revolver) (8)",
+        "",
+        "",
+        "3M S + 3.50%",
+        "",
+        "",
+        "",
+        "8.43",
+        "%",
+        "",
+        "",
+        "8/30/2029",
+        "",
+        "",
+        "",
+        "195",
+        "",
+        "",
+        "",
+        "195",
+        "",
+        "",
+        "",
+        "186",
+        "",
+        "",
+        "",
+        "0.15",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c15",
+            "id": "ix_26_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 3.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_27_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "8.43"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_28_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/30/2029"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_29_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "195"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_30_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "195"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_31_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "186"
+        },
+        {
+          "attributes": {
+            "contextref": "c16",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_32_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "0.15"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[12]",
+      "cells": [
+        "United Flow Technologies Intermediate Holdco II, LLC",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "9.85",
+        "%",
+        "",
+        "",
+        "6/23/2031",
+        "",
+        "",
+        "",
+        "18,000",
+        "",
+        "",
+        "",
+        "17,738",
+        "",
+        "",
+        "",
+        "17,775",
+        "",
+        "",
+        "",
+        "13.86",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c17",
+            "id": "ix_33_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_34_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.85"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_35_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "6/23/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_36_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "18,000"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_37_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,738"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_38_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,775"
+        },
+        {
+          "attributes": {
+            "contextref": "c18",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_39_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "13.86"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[13]",
+      "cells": [
+        "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "10.54",
+        "%",
+        "",
+        "",
+        "6/23/2031",
+        "",
+        "",
+        "",
+        "100",
+        "",
+        "",
+        "",
+        "27",
+        "",
+        "",
+        "",
+        "( 25 )",
+        "",
+        "",
+        "",
+        "( 0.02",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c19",
+            "id": "ix_40_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_41_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "10.54"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_42_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "6/23/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_43_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "100"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_44_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_45_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "25"
+        },
+        {
+          "attributes": {
+            "contextref": "c20",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_46_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.02"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[14]",
+      "cells": [
+        "United Flow Technologies Intermediate Holdco II, LLC (Revolver) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "6/21/2030",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 28 )",
+        "",
+        "",
+        "",
+        "( 25 )",
+        "",
+        "",
+        "",
+        "( 0.02",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c21",
+            "id": "ix_47_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c22",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_48_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "6/21/2030"
+        },
+        {
+          "attributes": {
+            "contextref": "c22",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_49_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "28"
+        },
+        {
+          "attributes": {
+            "contextref": "c22",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_50_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "25"
+        },
+        {
+          "attributes": {
+            "contextref": "c22",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_51_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.02"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[15]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "27,937",
+        "",
+        "",
+        "",
+        "27,873",
+        "",
+        "",
+        "",
+        "21.73",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c23",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_52_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27,937"
+        },
+        {
+          "attributes": {
+            "contextref": "c23",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_53_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27,873"
+        },
+        {
+          "attributes": {
+            "contextref": "c23",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_54_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "21.73"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[16]",
+      "cells": [
+        "Containers & Packaging",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[17]",
+      "cells": [
+        "Schoeneck Containers, LLC",
+        "",
+        "",
+        "1M S + 4.75%",
+        "",
+        "",
+        "",
+        "9.71",
+        "%",
+        "",
+        "",
+        "5/7/2025",
+        "",
+        "",
+        "",
+        "9,347",
+        "",
+        "",
+        "",
+        "9,347",
+        "",
+        "",
+        "",
+        "9,324",
+        "",
+        "",
+        "",
+        "7.27",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c24",
+            "id": "ix_55_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_56_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.71"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_57_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/7/2025"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_58_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,347"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_59_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,347"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_60_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,324"
+        },
+        {
+          "attributes": {
+            "contextref": "c25",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_61_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "7.27"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[18]",
+      "cells": [
+        "Schoeneck Containers, LLC (Delayed Draw)",
+        "",
+        "",
+        "1M S + 4.75%",
+        "",
+        "",
+        "",
+        "9.71",
+        "%",
+        "",
+        "",
+        "5/7/2025",
+        "",
+        "",
+        "",
+        "4,765",
+        "",
+        "",
+        "",
+        "4,765",
+        "",
+        "",
+        "",
+        "4,753",
+        "",
+        "",
+        "",
+        "3.70",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c26",
+            "id": "ix_62_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_63_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.71"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_64_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/7/2025"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_65_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,765"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_66_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,765"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_67_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,753"
+        },
+        {
+          "attributes": {
+            "contextref": "c27",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_68_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "3.70"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[19]",
+      "cells": [
+        "Schoeneck Containers, LLC (Revolver) (8)",
+        "",
+        "",
+        "3M P + 3.75%",
+        "",
+        "",
+        "",
+        "11.75",
+        "%",
+        "",
+        "",
+        "5/7/2025",
+        "",
+        "",
+        "",
+        "341",
+        "",
+        "",
+        "",
+        "341",
+        "",
+        "",
+        "",
+        "332",
+        "",
+        "",
+        "",
+        "0.26",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c28",
+            "id": "ix_69_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M P + 3.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_70_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "11.75"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_71_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/7/2025"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_72_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "341"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_73_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "341"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_74_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "332"
+        },
+        {
+          "attributes": {
+            "contextref": "c29",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_75_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "0.26"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[20]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "14,453",
+        "",
+        "",
+        "",
+        "14,409",
+        "",
+        "",
+        "",
+        "11.23",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c30",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_76_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "14,453"
+        },
+        {
+          "attributes": {
+            "contextref": "c30",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_77_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "14,409"
+        },
+        {
+          "attributes": {
+            "contextref": "c30",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_78_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "11.23"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[21]",
+      "cells": [
+        "Health Care Equipment & Supplies",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[22]",
+      "cells": [
+        "MGS MFG. Group, Inc.",
+        "",
+        "",
+        "1M S + 4.50%",
+        "",
+        "",
+        "",
+        "9.45",
+        "%",
+        "",
+        "",
+        "5/31/2027",
+        "",
+        "",
+        "",
+        "9,193",
+        "",
+        "",
+        "",
+        "9,193",
+        "",
+        "",
+        "",
+        "9,193",
+        "",
+        "",
+        "",
+        "7.16",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c31",
+            "id": "ix_79_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_80_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.45"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_81_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/31/2027"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_82_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,193"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_83_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,193"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_84_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "9,193"
+        },
+        {
+          "attributes": {
+            "contextref": "c32",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_85_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "7.16"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[23]",
+      "cells": [
+        "MGS MFG. Group, Inc. (Delayed Draw)",
+        "",
+        "",
+        "1M S + 4.50%",
+        "",
+        "",
+        "",
+        "9.45",
+        "%",
+        "",
+        "",
+        "5/31/2027",
+        "",
+        "",
+        "",
+        "2,832",
+        "",
+        "",
+        "",
+        "2,832",
+        "",
+        "",
+        "",
+        "2,832",
+        "",
+        "",
+        "",
+        "2.21",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c33",
+            "id": "ix_86_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_87_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.45"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_88_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/31/2027"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_89_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,832"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_90_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,832"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_91_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "2,832"
+        },
+        {
+          "attributes": {
+            "contextref": "c34",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_92_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "2.21"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[24]",
+      "cells": [
+        "MGS MFG. Group, Inc. (Revolver) (8)",
+        "",
+        "",
+        "3M S + 4.50%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "5/31/2027",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c35",
+            "id": "ix_93_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c36",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_94_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "5/31/2027"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[25]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "12,025",
+        "",
+        "",
+        "",
+        "12,025",
+        "",
+        "",
+        "",
+        "9.37",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c37",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_95_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "12,025"
+        },
+        {
+          "attributes": {
+            "contextref": "c37",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_96_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "12,025"
+        },
+        {
+          "attributes": {
+            "contextref": "c37",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_97_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.37"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[26]",
+      "cells": [
+        "Health Care Providers & Services",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[27]",
+      "cells": [
+        "Continental Buyer Inc",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "9.85",
+        "%",
+        "",
+        "",
+        "4/2/2031",
+        "",
+        "",
+        "",
+        "32,484",
+        "",
+        "",
+        "",
+        "32,021",
+        "",
+        "",
+        "",
+        "32,484",
+        "",
+        "",
+        "",
+        "25.32",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c38",
+            "id": "ix_98_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_99_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.85"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_100_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "4/2/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_101_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "32,484"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_102_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "32,021"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_103_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "32,484"
+        },
+        {
+          "attributes": {
+            "contextref": "c39",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_104_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "25.32"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[28]",
+      "cells": [
+        "Continental Buyer Inc (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "4/2/2031",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 89 )",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c40",
+            "id": "ix_105_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c41",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_106_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "4/2/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c41",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_107_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "89"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[29]",
+      "cells": [
+        "Continental Buyer Inc (Revolver) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "4/2/2031",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 66 )",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c42",
+            "id": "ix_108_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c43",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_109_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "4/2/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c43",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_110_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "66"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[30]",
+      "cells": [
+        "Endo1 Partners - California, LLC",
+        "",
+        "",
+        "1M S + 5.25%",
+        "",
+        "",
+        "",
+        "10.35",
+        "%",
+        "",
+        "",
+        "3/24/2026",
+        "",
+        "",
+        "",
+        "16,875",
+        "",
+        "",
+        "",
+        "16,875",
+        "",
+        "",
+        "",
+        "16,875",
+        "",
+        "",
+        "",
+        "13.15",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c44",
+            "id": "ix_111_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_112_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "10.35"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_113_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "3/24/2026"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_114_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "16,875"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_115_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "16,875"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_116_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "16,875"
+        },
+        {
+          "attributes": {
+            "contextref": "c45",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_117_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "13.15"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[31]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "48,741",
+        "",
+        "",
+        "",
+        "49,359",
+        "",
+        "",
+        "",
+        "38.47",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c46",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_118_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "48,741"
+        },
+        {
+          "attributes": {
+            "contextref": "c46",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_119_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "49,359"
+        },
+        {
+          "attributes": {
+            "contextref": "c46",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_120_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "38.47"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[32]",
+      "cells": [
+        "Insurance",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[33]",
+      "cells": [
+        "Ardonagh Midco 3 PLC (5)(7)",
+        "",
+        "",
+        "6M S + 4.75%",
+        "",
+        "",
+        "",
+        "9.90",
+        "%",
+        "",
+        "",
+        "2/17/2031",
+        "",
+        "",
+        "",
+        "29,398",
+        "",
+        "",
+        "",
+        "28,983",
+        "",
+        "",
+        "",
+        "29,398",
+        "",
+        "",
+        "",
+        "22.92",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c47",
+            "id": "ix_121_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "6M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_122_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.90"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_123_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "2/17/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_124_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "29,398"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_125_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "28,983"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_126_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "29,398"
+        },
+        {
+          "attributes": {
+            "contextref": "c48",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_127_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "22.92"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[34]",
+      "cells": [
+        "RSC Acquisition, Inc. (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 4.75%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "11/1/2029",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 230 )",
+        "",
+        "",
+        "",
+        "( 230 )",
+        "",
+        "",
+        "",
+        "( 0.18",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c49",
+            "id": "ix_128_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c50",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_129_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "11/1/2029"
+        },
+        {
+          "attributes": {
+            "contextref": "c50",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_130_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "230"
+        },
+        {
+          "attributes": {
+            "contextref": "c50",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_131_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "230"
+        },
+        {
+          "attributes": {
+            "contextref": "c50",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_132_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.18"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[35]",
+      "cells": [
+        "RSC Acquisition, Inc. (Revolver) (8)",
+        "",
+        "",
+        "3M S + 4.75%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "10/30/2029",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 26 )",
+        "",
+        "",
+        "",
+        "( 26 )",
+        "",
+        "",
+        "",
+        "( 0.02",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c51",
+            "id": "ix_133_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c52",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_134_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "10/30/2029"
+        },
+        {
+          "attributes": {
+            "contextref": "c52",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_135_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "26"
+        },
+        {
+          "attributes": {
+            "contextref": "c52",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_136_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "26"
+        },
+        {
+          "attributes": {
+            "contextref": "c52",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_137_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.02"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[36]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "28,727",
+        "",
+        "",
+        "",
+        "29,142",
+        "",
+        "",
+        "",
+        "22.72",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c53",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_138_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "28,727"
+        },
+        {
+          "attributes": {
+            "contextref": "c53",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_139_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "29,142"
+        },
+        {
+          "attributes": {
+            "contextref": "c53",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_140_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "22.72"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[37]",
+      "cells": [
+        "IT Services",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[38]",
+      "cells": [
+        "BCM One, Inc.",
+        "",
+        "",
+        "6M S + 4.50%",
+        "",
+        "",
+        "",
+        "8.85",
+        "%",
+        "",
+        "",
+        "11/17/2027",
+        "",
+        "",
+        "",
+        "15,089",
+        "",
+        "",
+        "",
+        "15,089",
+        "",
+        "",
+        "",
+        "15,089",
+        "",
+        "",
+        "",
+        "11.77",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c54",
+            "id": "ix_141_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "6M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_142_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "8.85"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_143_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "11/17/2027"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_144_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "15,089"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_145_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "15,089"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_146_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "15,089"
+        },
+        {
+          "attributes": {
+            "contextref": "c55",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_147_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "11.77"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[39]",
+      "cells": [
+        "BCM One, Inc. (Delayed Draw)",
+        "",
+        "",
+        "1M S + 4.50%",
+        "",
+        "",
+        "",
+        "9.45",
+        "%",
+        "",
+        "",
+        "11/17/2027",
+        "",
+        "",
+        "",
+        "4,775",
+        "",
+        "",
+        "",
+        "4,775",
+        "",
+        "",
+        "",
+        "4,775",
+        "",
+        "",
+        "",
+        "3.72",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c56",
+            "id": "ix_148_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "1M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_149_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.45"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_150_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "11/17/2027"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_151_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,775"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_152_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,775"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_153_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "4,775"
+        },
+        {
+          "attributes": {
+            "contextref": "c57",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_154_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "3.72"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[40]",
+      "cells": [
+        "BCM One, Inc. (Revolver) (8)",
+        "",
+        "",
+        "3M S + 4.50%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "11/17/2027",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c58",
+            "id": "ix_155_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c59",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_156_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "11/17/2027"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[41]",
+      "cells": [
+        "GCOM",
+        "",
+        "",
+        "3M S + 7.50%",
+        "",
+        "",
+        "",
+        "12.89",
+        "%",
+        "",
+        "",
+        "8/1/2031",
+        "",
+        "",
+        "",
+        "39,899",
+        "",
+        "",
+        "",
+        "39,505",
+        "",
+        "",
+        "",
+        "39,505",
+        "",
+        "",
+        "",
+        "30.79",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c60",
+            "id": "ix_157_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 7.50%"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_158_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "12.89"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_159_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/1/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_160_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "39,899"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_161_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "39,505"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_162_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "39,505"
+        },
+        {
+          "attributes": {
+            "contextref": "c61",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_163_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "30.79"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[42]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "59,369",
+        "",
+        "",
+        "",
+        "59,369",
+        "",
+        "",
+        "",
+        "46.28",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c62",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_164_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "59,369"
+        },
+        {
+          "attributes": {
+            "contextref": "c62",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_165_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "59,369"
+        },
+        {
+          "attributes": {
+            "contextref": "c62",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_166_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "46.28"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[43]",
+      "cells": [
+        "Leisure Products",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[44]",
+      "cells": [
+        "Playpower, Inc.",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "9.85",
+        "%",
+        "",
+        "",
+        "8/28/2030",
+        "",
+        "",
+        "$",
+        "43,434",
+        "",
+        "",
+        "$",
+        "42,790",
+        "",
+        "",
+        "$",
+        "42,790",
+        "",
+        "",
+        "",
+        "33.36",
+        "%"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c63",
+            "id": "ix_167_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_168_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.85"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_169_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/28/2030"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_170_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "43,434"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_171_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "42,790"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_172_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "42,790"
+        },
+        {
+          "attributes": {
+            "contextref": "c64",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_173_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "33.36"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[45]",
+      "cells": [
+        "Playpower, Inc. (Revolver) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "8/28/2030",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 97 )",
+        "",
+        "",
+        "",
+        "( 97 )",
+        "",
+        "",
+        "",
+        "( 0.08",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c65",
+            "id": "ix_174_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c66",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_175_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "8/28/2030"
+        },
+        {
+          "attributes": {
+            "contextref": "c66",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_176_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "97"
+        },
+        {
+          "attributes": {
+            "contextref": "c66",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_177_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "97"
+        },
+        {
+          "attributes": {
+            "contextref": "c66",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_178_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.08"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[13]/tr[46]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "42,693",
+        "",
+        "",
+        "",
+        "42,693",
+        "",
+        "",
+        "",
+        "33.28",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c67",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_179_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "42,693"
+        },
+        {
+          "attributes": {
+            "contextref": "c67",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_180_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "42,693"
+        },
+        {
+          "attributes": {
+            "contextref": "c67",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_181_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "33.28"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[1]",
+      "cells": [
+        "Investments (1)",
+        "",
+        "Reference Rate and Spread",
+        "",
+        "",
+        "Interest Rate (2)",
+        "",
+        "",
+        "Maturity Date",
+        "",
+        "",
+        "Par Amount/ Units",
+        "",
+        "",
+        "Cost (3)",
+        "",
+        "",
+        "Fair Value",
+        "",
+        "",
+        "% of Net Assets",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[2]",
+      "cells": [
+        "Investments\u2014non-controlled/non-affiliated (continued)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[3]",
+      "cells": [
+        "First Lien Secured Debt\u2014non-controlled/non-affiliated (4) (6)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[4]",
+      "cells": [
+        "Life Sciences Tools & Services",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[5]",
+      "cells": [
+        "TransnetYX, Inc",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "10.05",
+        "%",
+        "",
+        "",
+        "4/13/2026",
+        "",
+        "",
+        "",
+        "17,740",
+        "",
+        "",
+        "",
+        "17,740",
+        "",
+        "",
+        "",
+        "17,740",
+        "",
+        "",
+        "",
+        "13.83",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c68",
+            "id": "ix_182_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_183_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "10.05"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_184_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "4/13/2026"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_185_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,740"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_186_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,740"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_187_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,740"
+        },
+        {
+          "attributes": {
+            "contextref": "c69",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_188_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "13.83"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[6]",
+      "cells": [
+        "TransnetYX, Inc (Revolver) (8)",
+        "",
+        "",
+        "3M S + 5.25%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "4/13/2026",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c70",
+            "id": "ix_189_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.25%"
+        },
+        {
+          "attributes": {
+            "contextref": "c71",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_190_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "4/13/2026"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[7]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "17,740",
+        "",
+        "",
+        "",
+        "17,740",
+        "",
+        "",
+        "",
+        "13.83",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c72",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_191_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,740"
+        },
+        {
+          "attributes": {
+            "contextref": "c72",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_192_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "17,740"
+        },
+        {
+          "attributes": {
+            "contextref": "c72",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_193_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "13.83"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[8]",
+      "cells": [
+        "Professional Services",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": []
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[9]",
+      "cells": [
+        "ComPsych Investment Corp.",
+        "",
+        "",
+        "3M S + 4.75%",
+        "",
+        "",
+        "",
+        "10.03",
+        "%",
+        "",
+        "",
+        "7/22/2031",
+        "",
+        "",
+        "",
+        "27,170",
+        "",
+        "",
+        "",
+        "27,104",
+        "",
+        "",
+        "",
+        "27,104",
+        "",
+        "",
+        "",
+        "21.13",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c73",
+            "id": "ix_194_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_195_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "10.03"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_196_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "7/22/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_197_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27,170"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_198_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27,104"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_199_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "27,104"
+        },
+        {
+          "attributes": {
+            "contextref": "c74",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_200_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "21.13"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[10]",
+      "cells": [
+        "ComPsych Investment Corp. (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 4.75%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "7/22/2031",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 9 )",
+        "",
+        "",
+        "",
+        "( 9 )",
+        "",
+        "",
+        "",
+        "( 0.01",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c75",
+            "id": "ix_201_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 4.75%"
+        },
+        {
+          "attributes": {
+            "contextref": "c76",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_202_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "7/22/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c76",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_203_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "9"
+        },
+        {
+          "attributes": {
+            "contextref": "c76",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_204_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "9"
+        },
+        {
+          "attributes": {
+            "contextref": "c76",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_205_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.01"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[11]",
+      "cells": [
+        "Vensure Employer Services Inc",
+        "",
+        "",
+        "3M S + 5.00%",
+        "",
+        "",
+        "",
+        "9.64",
+        "%",
+        "",
+        "",
+        "9/29/2031",
+        "",
+        "",
+        "",
+        "31,155",
+        "",
+        "",
+        "",
+        "30,999",
+        "",
+        "",
+        "",
+        "30,999",
+        "",
+        "",
+        "",
+        "24.16",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c77",
+            "id": "ix_206_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.00%"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_207_fact",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "9.64"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_208_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "9/29/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_209_fact",
+            "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "31,155"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_210_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "30,999"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_211_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "30,999"
+        },
+        {
+          "attributes": {
+            "contextref": "c78",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_212_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "24.16"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[12]",
+      "cells": [
+        "Vensure Employer Services Inc (Delayed Draw) (8)",
+        "",
+        "",
+        "3M S + 5.00%",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "9/29/2031",
+        "",
+        "",
+        "",
+        "\u2014",
+        "",
+        "",
+        "",
+        "( 22 )",
+        "",
+        "",
+        "",
+        "( 22 )",
+        "",
+        "",
+        "",
+        "( 0.02",
+        ")"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c79",
+            "id": "ix_213_fact",
+            "name": "us-gaap:DebtInstrumentDescriptionOfVariableRateBasis"
+          },
+          "text": "3M S + 5.00%"
+        },
+        {
+          "attributes": {
+            "contextref": "c80",
+            "format": "ixt:date-month-day-year",
+            "id": "ix_214_fact",
+            "name": "us-gaap:InvestmentMaturityDate"
+          },
+          "text": "9/29/2031"
+        },
+        {
+          "attributes": {
+            "contextref": "c80",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_215_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "22"
+        },
+        {
+          "attributes": {
+            "contextref": "c80",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_216_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "sign": "-",
+            "unitref": "usd"
+          },
+          "text": "22"
+        },
+        {
+          "attributes": {
+            "contextref": "c80",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_217_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "sign": "-",
+            "unitref": "pure"
+          },
+          "text": "0.02"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[13]",
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "58,072",
+        "",
+        "",
+        "",
+        "58,072",
+        "",
+        "",
+        "",
+        "45.26",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c81",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_218_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "58,072"
+        },
+        {
+          "attributes": {
+            "contextref": "c81",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_219_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "58,072"
+        },
+        {
+          "attributes": {
+            "contextref": "c81",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_220_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "45.26"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[14]",
+      "cells": [
+        "Total First Lien Secured Debt\u2014non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "312,639",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "",
+        "244.41",
+        "%"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_221_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "312,639"
+        },
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_222_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "313,562"
+        },
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_223_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "244.41"
+        }
+      ]
+    },
+    {
+      "xpath": "/html/body/table[14]/tr[15]",
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "312,639",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "",
+        "244.41",
+        "%"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_224_fact",
+            "name": "us-gaap:InvestmentOwnedAtCost",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "312,639"
+        },
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "-3",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_225_fact",
+            "name": "us-gaap:InvestmentOwnedAtFairValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "313,562"
+        },
+        {
+          "attributes": {
+            "contextref": "c2",
+            "decimals": "4",
+            "format": "ixt:num-dot-decimal",
+            "id": "ix_226_fact",
+            "name": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "pure"
+          },
+          "text": "244.41"
+        }
+      ]
+    }
+  ]
+}

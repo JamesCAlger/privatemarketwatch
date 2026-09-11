@@ -83,6 +83,13 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(autouse=True)
+def _isolate_agent_query_cache(monkeypatch, tmp_path):
+    """Keep native DuckDB query-cache writes inside the test's temporary tree."""
+    monkeypatch.setattr("pipeline.agent_data_query._CACHE_DIR",
+                        tmp_path / "agent_query_cache", raising=True)
+
+
+@pytest.fixture(autouse=True)
 def _isolate_gics_label_cache(monkeypatch, tmp_path):
     """Point the GICS label cache at a per-test path.
 

@@ -1,0 +1,554 @@
+{
+  "path": "data/raw/filings/bdc_html/1572694/000095017023060336.html",
+  "ref": "REF-0001572694-2023-09-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments, at fair value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 ) $ 3,397,985 $ 3,465,225",
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements o f Assets and Liabilities",
+        "Goldman Sachs BDC, Inc.",
+        "ITEM 1. FINANC IAL STATEMENTS",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[4]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 )",
+        "",
+        "$",
+        "3,397,985",
+        "",
+        "",
+        "$",
+        "3,465,225",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_678fcecd-6da1-40b8-947f-2411cf8fdbc8",
+          "scale": "3",
+          "text": "3,525,145",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_878e2bed-27b3-4fd6-bb87-821ba730c5a2",
+          "scale": "3",
+          "text": "3,598,963",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_678fcecd-6da1-40b8-947f-2411cf8fdbc8",
+          "scale": "3",
+          "text": "3,397,985",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_878e2bed-27b3-4fd6-bb87-821ba730c5a2",
+          "scale": "3",
+          "text": "3,465,225",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 ) $ 3,397,985 $ 3,465,225",
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements o f Assets and Liabilities",
+        "Goldman Sachs BDC, Inc.",
+        "ITEM 1. FINANC IAL STATEMENTS",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[5]"
+    },
+    {
+      "cells": [
+        "Non-controlled affiliated investments (cost of $ 71,344 and $ 69,712 )",
+        "",
+        "",
+        "40,711",
+        "",
+        "",
+        "",
+        "40,991",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_f949253e-e916-4552-a937-bad501b5daa5",
+          "scale": "3",
+          "text": "71,344",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_e1dd1149-4faf-43ff-a9aa-f95baef767cb",
+          "scale": "3",
+          "text": "69,712",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_f949253e-e916-4552-a937-bad501b5daa5",
+          "scale": "3",
+          "text": "40,711",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_e1dd1149-4faf-43ff-a9aa-f95baef767cb",
+          "scale": "3",
+          "text": "40,991",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 ) $ 3,397,985 $ 3,465,225",
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements o f Assets and Liabilities",
+        "Goldman Sachs BDC, Inc.",
+        "ITEM 1. FINANC IAL STATEMENTS",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total investments, at fair value (cost of $ 3,618,855 and $ 3,691,041 )",
+        "",
+        "$",
+        "3,438,696",
+        "",
+        "",
+        "$",
+        "3,506,216",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+          "scale": "3",
+          "text": "3,618,855",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_3a916db0-de73-4ab6-82fe-c6271d04e78b",
+          "scale": "3",
+          "text": "3,691,041",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+          "scale": "3",
+          "text": "3,438,696",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_3a916db0-de73-4ab6-82fe-c6271d04e78b",
+          "scale": "3",
+          "text": "3,506,216",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 ) $ 3,397,985 $ 3,465,225",
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements o f Assets and Liabilities",
+        "Goldman Sachs BDC, Inc.",
+        "ITEM 1. FINANC IAL STATEMENTS",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "120,056",
+        "",
+        "",
+        "$",
+        "95,218",
+        "",
+        "",
+        "$",
+        "339,543",
+        "",
+        "",
+        "$",
+        "250,976",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "C_23026601-cbbb-41da-ab07-fa0e5ce9c9e5",
+          "scale": "3",
+          "text": "120,056",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "C_2bae4afe-1946-4f0b-9bc3-1ec572036b58",
+          "scale": "3",
+          "text": "95,218",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "C_0edd335f-9b57-4ad2-8323-3eb1a295f0c0",
+          "scale": "3",
+          "text": "339,543",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "C_1f28fb1e-bb50-47ae-82cc-1343c68fe474",
+          "scale": "3",
+          "text": "250,976",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | Investment income: | From non-controlled/non-affiliated investments:",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Stateme nts of Operations",
+        "Goldman Sachs BDC, Inc.",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[6]/tr[17]"
+    },
+    {
+      "cells": [
+        "Total Investments - 214.84 %",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "3,618,855",
+        "",
+        "$",
+        "3,438,696",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_3878a1d6-91bf-4738-9ab2-1e21047eaef6",
+          "scale": "-2",
+          "text": "214.84",
+          "unit": "U_pure"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_3878a1d6-91bf-4738-9ab2-1e21047eaef6",
+          "scale": "3",
+          "text": "3,618,855",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_3878a1d6-91bf-4738-9ab2-1e21047eaef6",
+          "scale": "3",
+          "text": "3,438,696",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment (1)(4) Industry Interest Rate Initial Acquisition Date (14) Shares (3) Cost Fair Value Footnotes | Preferred Stock - 2.80 % | Broadway Parent, LLC Diversified Financial Services 01/25/21 4,000,000 $ 4,019 $ 8,000 (6) (7) (12) | CloudBees, Inc. Software 11/24/21 1,152,957 12,899 15,507 (6) (7) (12)",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[17]/tr[43]"
+    },
+    {
+      "cells": [
+        "Total Investments - 233.38 %",
+        "",
+        "",
+        "$",
+        "3,691,041",
+        "",
+        "$",
+        "3,506,216",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_b659658e-55d0-465c-a24f-ff287cfac567",
+          "scale": "-2",
+          "text": "233.38",
+          "unit": "U_pure"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ec454009-dfd9-4240-9b4a-aa2b28c70505",
+          "scale": "3",
+          "text": "3,691,041",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ec454009-dfd9-4240-9b4a-aa2b28c70505",
+          "scale": "3",
+          "text": "3,506,216",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment *# Industry Interest Rate Initial Acquisition Date (10) Par/Shares (++) Cost Fair Value Footnotes | Preferred Stock - 2.82 % | Broadway Parent, LLC Diversified Financial Services 01/25/21 4,000,000 $ 4,019 $ 5,429 (2) (3) (7) | CloudBees, Inc. Software 11/24/21 1,152,957 12,899 12,659 (2) (3) (7)",
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31 , 2022 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[26]/tr[44]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "3,618.86",
+        "",
+        "",
+        "$",
+        "3,438.70",
+        "",
+        "$",
+        "3,691.04",
+        "",
+        "",
+        "$",
+        "3,506.22",
+        ""
+      ],
+      "facts": [],
+      "opening": " | As of | September 30, 2023 December 31, 2022 | Amortized Cost Fair Value Amortized Cost Fair Value | (in millions) (in millions)",
+      "preceding": [
+        "",
+        "Our portfolio (excluding investments in money market funds, if any) consisted of the following:",
+        "PORTFOLIO AND INVESTMENT ACTIVITY",
+        "ot be considered borrowings for these purposes. Practices and investments that may involve leverage but are not considered borrowings are not subject to the Investment Company Act\u2019s asset coverage requirement. The amount of leverage that we employ will depend on the assessment by our Investment Adviser and our board of directors (the \"Board of Directors\" or the \u201cBoard\u201d) of market conditions and other factors at the time of any proposed borrowing.",
+        " our investment portfolio, subject to the limitations of the Investment Company Act, with the objective of increasing our yield. This is known as \u201cleverage\u201d and could increase or decrease returns to our stockholders. The use of leverage involves significant risks. We are permitted to borrow amounts such that our asset coverage ratio, as defined in the Investment Company Act, is at least 150% after such borrowing (if certain requirements are met).",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[28]/tr[13]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "3,438.70",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "3,506.22",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | As of | September 30, 2023 December 31, 2022 | Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total | (in millions) (in millions)",
+      "preceding": [
+        "",
+        "Our Investment Adviser grades the investments in our portfolio at least quarterly and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments graded 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio on the 1 to 4 grading scale:",
+        "tially increased since origination or acquisition, and the portfolio company likely has materially declining performance. For debt investments with an investment grade of 4, in most cases, most or all of the debt covenants are out of compliance and payments are substantially delinquent. For investments graded 4, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis upon exit.",
+        "\u2022 Grade 3 investments indicate that the risk to our ability to recoup the initial cost basis of such investment has increased materially since origination or acquisition, including as a result of factors such as declining performance and non-compliance with debt covenants; however, payments are generally not more than 120 days past due; and",
+        "\u2022 Grade 2 investments involve a level of risk to our initial cost basis that is similar to the risk to our initial cost basis at the time of origination or acquisition. This portfolio company is generally performing as expected and the risk factors to our ability to ultimately recoup the cost of our investment are neutral to favorable. All investments or acquired investments in new portfolio companies are initially assessed a grade of 2;",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[31]/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "3,618.86",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "3,691.04",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | As of | September 30, 2023 December 31, 2022 | Amortized Cost Percentage of Total Amortized Cost Percentage of Total | (in millions) (in millions)",
+      "preceding": [
+        "",
+        "The following table shows the amortized cost of our performing and non-accrual investments:",
+        "",
+        "Table of Contents",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[32]/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "120.05",
+        "",
+        "",
+        "$",
+        "95.22",
+        "",
+        "",
+        "$",
+        "339.54",
+        "",
+        "",
+        "$",
+        "250.98",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | ($ in millions) | Total investment income $ 120.05 $ 95.22 $ 339.54 $ 250.98",
+      "preceding": [
+        "Our operating results were as follows:",
+        "RESULTS OF OPERATIONS",
+        "",
+        "(7) Computed based on (a) the annual actual interest rate on investments sold or paid down, divided by (b) the total investments sold or paid down (including investments on non-accrual and non-income producing investments). The calculation includes incremental yield earned on the \u201clast-out\u201d portion of the unitranche loan investments and excludes prepayment premiums earned on exited investments.",
+        "(6) Computed based on (a) the annual actual interest rate on debt and income producing investments sold or paid down, divided by (b) the total debt and income producing investments sold or paid down. The calculation includes incremental yield earned on the \u201clast-out\u201d portion of the unitranche loan investments and excludes prepayment premiums earned on exited investments and investments that are on non-accrual.",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[34]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "",
+        "$",
+        "120.05",
+        "",
+        "",
+        "$",
+        "95.22",
+        "",
+        "",
+        "$",
+        "339.54",
+        "",
+        "",
+        "$",
+        "250.98",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | ($ in millions) | Interest $ 109.71 $ 88.45 $ 310.83 $ 232.09",
+      "preceding": [
+        "Our investment income was as follows:",
+        "Investment Income",
+        "djusted net investment income after taxes $ 69.70 $ 56.71 $ 179.83 $ 148.45 Net realized and unrealized gains (losses) $ (21.29 ) $ (68.82 ) $ (39.50 ) $ (109.63 ) Less: Net change in unrealized appreciation (depreciation) due to the Purchase Discount (3.28 ) (4.48 ) (6.15 ) (12.51 ) Less: Realized gain (loss) due to the Purchase Discount 0.03 \u2014 0.54 \u2014 Adjusted net realized and unrealized gains (losses) $ (18.04 ) $ (64.34 ) $ (33.89 ) $ (97.12 )",
+        "Table of Contents",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[36]/tr[9]"
+    }
+  ],
+  "sha256": "f84de85c7dcd837b1ca4969d6cb282cabd4adf8c785325f5924f470e70cdc9a9",
+  "status": "literal_primary_review_candidates"
+}

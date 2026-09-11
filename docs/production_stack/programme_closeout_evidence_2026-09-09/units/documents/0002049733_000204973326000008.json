@@ -1,0 +1,68 @@
+{
+  "accession": "0002049733-26-000008",
+  "cik": "0002049733",
+  "identity": [
+    1830319,
+    1774942113170754000
+  ],
+  "path": "data/raw/filings/bdc_xbrl/2049733/000204973326000008.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "3b94a8d0034dc806d77e2f5afeeddeb70c7e9857751a68db815d1e84d7a0c3f9",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:position\"]",
+      "unit_ref": "position"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:segment\"]",
+      "unit_ref": "segment"
+    }
+  ]
+}

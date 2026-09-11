@@ -1,0 +1,50 @@
+{
+  "accession": "0000950170-23-039902",
+  "cik": "0001772704",
+  "identity": [
+    9734054,
+    1774941575249585200
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1772704/000095017023039902.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "f0599d55f28098693cc68ec5b49433eb81f3312cc865fb8463d45d319c5fac9c",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "U_CAD"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "U_GBP"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    }
+  ]
+}

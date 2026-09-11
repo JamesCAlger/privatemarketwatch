@@ -1,0 +1,843 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV8xMy9mcmFnOjY0NDY1MjEzMjk0MjQ5OTY4YTg0MTI4ODIxZDczZDVhL3RhYmxlOmY5NzI0ODlkMDE1ZTQ4NWM5Njg1ZGFiMDhmZTAyODdjL3RhYmxlcmFuZ2U6Zjk3MjQ4OWQwMTVlNDg1Yzk2ODVkYWIwOGZlMDI4N2NfOC0xLTEtMS0yMDc5MA_2c2fed44-87d7-404c-8a21-86267f672c7a",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments at fair value",
+        "2,271,398",
+        "",
+        "",
+        "2,157,880",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV8xMy9mcmFnOjY0NDY1MjEzMjk0MjQ5OTY4YTg0MTI4ODIxZDczZDVhL3RhYmxlOmY5NzI0ODlkMDE1ZTQ4NWM5Njg1ZGFiMDhmZTAyODdjL3RhYmxlcmFuZ2U6Zjk3MjQ4OWQwMTVlNDg1Yzk2ODVkYWIwOGZlMDI4N2NfOC0xLTEtMS0yMDc5MA_2c2fed44-87d7-404c-8a21-86267f672c7a",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,271,398",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[51]/table/tr[10]",
+      "table_xpath": "/html/body/div[51]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2271398000"
+    },
+    {
+      "attributes": {
+        "contextref": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV8yNS9mcmFnOjU2ZjAyZDNhNTRhNDQ2Y2ZiNmFiZTFhODcwYmJjM2JiL3RhYmxlOmU3YmZiMTViZDRlMTQzOTRiMzViYmQ4ZmVjN2IxMGE3L3RhYmxlcmFuZ2U6ZTdiZmIxNWJkNGUxNDM5NGIzNWJiZDhmZWM3YjEwYTdfMjctMTYtMS0xLTE1OTc4_6e8096a5-c05d-438f-baaa-e4d07e6c4614",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments, March 31, 2023 ( 203.0 %)*",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,136,778",
+        "",
+        "",
+        "$",
+        "2,287,113",
+        "",
+        "",
+        "$",
+        "2,271,398",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV8yNS9mcmFnOjU2ZjAyZDNhNTRhNDQ2Y2ZiNmFiZTFhODcwYmJjM2JiL3RhYmxlOmU3YmZiMTViZDRlMTQzOTRiMzViYmQ4ZmVjN2IxMGE3L3RhYmxlcmFuZ2U6ZTdiZmIxNWJkNGUxNDM5NGIzNWJiZDhmZWM3YjEwYTdfMjctMTYtMS0xLTE1OTc4_6e8096a5-c05d-438f-baaa-e4d07e6c4614",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,271,398",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[161]/table/tr[33]",
+      "table_xpath": "/html/body/div[161]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2271398000"
+    },
+    {
+      "attributes": {
+        "contextref": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOjljNTUxMGE5NTIxNzQ3ODZiYzNiYjY2NGJkM2YyNTg1L3RhYmxlcmFuZ2U6OWM1NTEwYTk1MjE3NDc4NmJjM2JiNjY0YmQzZjI1ODVfOS01LTEtMS0yNTEwMQ_26150e2e-ec11-438c-bd65-b2eee11a70b1",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "",
+        "$",
+        "2,287,113",
+        "",
+        "",
+        "100",
+        "%",
+        "",
+        "$",
+        "2,271,398",
+        "",
+        "",
+        "100",
+        "%",
+        "",
+        "203",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOjljNTUxMGE5NTIxNzQ3ODZiYzNiYjY2NGJkM2YyNTg1L3RhYmxlcmFuZ2U6OWM1NTEwYTk1MjE3NDc4NmJjM2JiNjY0YmQzZjI1ODVfOS01LTEtMS0yNTEwMQ_26150e2e-ec11-438c-bd65-b2eee11a70b1",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,271,398",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[11]/ix:continuation/div[1]/table/tr[11]",
+      "table_xpath": "/html/body/ix:continuation[11]/ix:continuation/div[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2271398000"
+    },
+    {
+      "attributes": {
+        "contextref": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOmY5ZDk5NTE1Yjg2MDQ5ODQ5NTdlYmU2MjZjMzQ2ZmRlL3RhYmxlcmFuZ2U6ZjlkOTk1MTViODYwNDk4NDk1N2ViZTYyNmMzNDZmZGVfMzQtMS0xLTEtMjUxMjc_db4e940e-6fd0-4a2d-9977-74a85e74e1b2",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "$",
+        "2,271,398",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "2,157,880",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOmY5ZDk5NTE1Yjg2MDQ5ODQ5NTdlYmU2MjZjMzQ2ZmRlL3RhYmxlcmFuZ2U6ZjlkOTk1MTViODYwNDk4NDk1N2ViZTYyNmMzNDZmZGVfMzQtMS0xLTEtMjUxMjc_db4e940e-6fd0-4a2d-9977-74a85e74e1b2",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,271,398",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[12]/ix:continuation/div[2]/table/tr[36]",
+      "table_xpath": "/html/body/ix:continuation[12]/ix:continuation/div[2]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2271398000"
+    },
+    {
+      "attributes": {
+        "contextref": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOjQ4MTkwZmM3YzIxOTRhMWU4MWYwNDVkODllOTNhMWNkL3RhYmxlcmFuZ2U6NDgxOTBmYzdjMjE5NGExZTgxZjA0NWQ4OWU5M2ExY2RfMTAtNy0xLTEtMjgzODE_6f65c210-f590-4160-bf32-a5151a4a8b57",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,271,398",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOmY0OGY4Y2U3MmUwMTQzZGM4MzkwMmU4M2YxM2MzNjcxL3NlYzpmNDhmOGNlNzJlMDE0M2RjODM5MDJlODNmMTNjMzY3MV80My9mcmFnOmNjNGQ3MGExNzlhZjQwZTg4MWM2YjYyNjQxZGVhYjk5L3RhYmxlOjQ4MTkwZmM3YzIxOTRhMWU4MWYwNDVkODllOTNhMWNkL3RhYmxlcmFuZ2U6NDgxOTBmYzdjMjE5NGExZTgxZjA0NWQ4OWU5M2ExY2RfMTAtNy0xLTEtMjgzODE_6f65c210-f590-4160-bf32-a5151a4a8b57",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,271,398",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[19]/ix:nonnumeric/div[2]/table/tr[12]",
+      "table_xpath": "/html/body/ix:continuation[19]/ix:nonnumeric/div[2]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2271398000"
+    }
+  ],
+  "cik": "0001859919",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1859919/000185991923000018.html",
+  "reference_id": "REF-0001859919-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 881,
+  "source_sha256": "354dc1e156dca0a8ffd154746b9f020298ebf4d05b84348699c61360add0bcd9",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-Control / Non-Affiliate investments (cost of $ 2,164,913 and $ 2,073,049 as of March 31, 2023 and December 31, 2022, respectively) | $ | 2,124,324 | $ | 2,023,356",
+        "Affiliate investments (cost of $ 122,200 and $ 114,452 as of March 31, 2023 and December 31, 2022, respectively) | 147,074 | 134,524"
+      ],
+      "last": [
+        "Affiliate investments (cost of $ 122,200 and $ 114,452 as of March 31, 2023 and December 31, 2022, respectively) | 147,074 | 134,524",
+        "Total investments at fair value | 2,271,398 | 2,157,880"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "(Unaudited)",
+        "Assets:"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/div[51]/table"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "1WorldSync, Inc. | IT Consulting & Other Services | First Lien Senior Secured Term Loan | SOFR + 5.00 %, 9.8 % Cash | 05/21 | 07/25 | $ | 10,868 | $ | 10,814 | $ | 10,868 | 1.0 | % | (5) (6) (7) (19)",
+        "10,868 | 10,814 | 10,868"
+      ],
+      "last": [
+        "Revolver | LIBOR + 5.25 %, 9.9 % Cash | 11/21 | 11/27 | ( 7 ) | ( 5 ) | \u2014 | % | (6) (7) (8) (33)",
+        "2,693 | 2,615 | 2,640"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Non\u2013Control / Non\u2013Affiliate Investments:",
+        ""
+      ],
+      "preceding": [],
+      "rows": 32,
+      "table_xpath": "/html/body/div[92]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "AnalytiChem Holding GmbH | Chemicals | First Lien Senior Secured Term Loan | BBSY + 6.00 %, 9.6 % Cash | 11/21 | 10/28 | $ | 1,338 | $ | 1,424 | $ | 1,290 | 0.1 | % | (3) (5) (6) (7) (16)",
+        "First Lien Senior Secured Term Loan | EURIBOR + 6.00 %, 8.2 % Cash | 11/21 | 10/28 | 6,799 | 6,851 | 6,554 | 0.6 | % | (3) (5) (6) (7) (12)"
+      ],
+      "last": [
+        "Archimede | Consumer Services | First Lien Senior Secured Term Loan | EURIBOR + 5.75 %, 8.3 % Cash | 05/21 | 10/27 | 14,667 | 14,249 | 14,389 | 1.3 | % | (3) (5) (6) (7) (12)",
+        "14,667 | 14,249 | 14,389"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "AnalytiChem Holding GmbH Chemicals First Lien Senior Secured Term Loan BBSY + 6.00 %, 9.6 % Cash 11/21 10/28 $ 1,338 $ 1,424 $ 1,290 0.1 % (3) (5) (6) (7) (16)",
+        "First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 8.2 % Cash 11/21 10/28 6,799 6,851 6,554 0.6 % (3) (5) (6) (7) (12)"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[97]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Argus Bidco Limited | High Tech Industries | First Lien Senior Secured Term Loan | EURIBOR + 6.50 %, 9.5 % Cash | 07/22 | 07/29 | $ | 899 | $ | 832 | $ | 877 | 0.1 | % | (3) (5) (6) (7) (12)",
+        "First Lien Senior Secured Term Loan | EURIBOR + 6.50 %, 9.5 % Cash | 08/22 | 07/29 | 1,937 | 1,823 | 1,890 | 0.2 | % | (3) (5) (6) (7) (12)"
+      ],
+      "last": [
+        "AWP Group Holdings, Inc. | Business Services | First Lien Senior Secured Term Loan | SOFR + 4.75 %, 9.9 % Cash | 05/21 | 12/27 | 1,465 | 1,446 | 1,446 | 0.1 | % | (5) (6) (7) (19)",
+        "1,465 | 1,446 | 1,446"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Argus Bidco Limited High Tech Industries First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.5 % Cash 07/22 07/29 $ 899 $ 832 $ 877 0.1 % (3) (5) (6) (7) (12)",
+        "First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.5 % Cash 08/22 07/29 1,937 1,823 1,890 0.2 % (3) (5) (6) (7) (12)"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[100]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Azalea Buyer, Inc. | Technology | First Lien Senior Secured Term Loan | LIBOR + 5.25 %, 10.1 % Cash | 11/21 | 11/27 | $ | 4,548 | $ | 4,460 | $ | 4,487 | 0.4 | % | (5) (6) (7) (9)",
+        "Revolver | LIBOR + 5.25 %, 10.1 % Cash | 11/21 | 11/27 | \u2014 | ( 8 ) | ( 5 ) | \u2014 | % | (6) (7) (9) (33)"
+      ],
+      "last": [
+        "British Engineering Services Holdco Limited | Commercial Services & Supplies | First Lien Senior Secured Term Loan | SONIA + 7.00 %, 10.7 % Cash | 05/21 | 12/27 | 7,256 | 7,581 | 7,091 | 0.6 | % | (3) (5) (6) (7) (23)",
+        "7,256 | 7,581 | 7,091"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Azalea Buyer, Inc. Technology First Lien Senior Secured Term Loan LIBOR + 5.25 %, 10.1 % Cash 11/21 11/27 $ 4,548 $ 4,460 $ 4,487 0.4 % (5) (6) (7) (9)",
+        "Revolver LIBOR + 5.25 %, 10.1 % Cash 11/21 11/27 \u2014 ( 8 ) ( 5 ) \u2014 % (6) (7) (9) (33)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[103]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Bucharest Bidco Limited | Hotel, Gaming and Leisure | First Lien Senior Secured GBP Term Loan | SONIA + 7.00 %, 10.2 % Cash | 05/21 | 07/26 | $ | 813 | $ | 824 | $ | 709 | 0.1 | % | (3) (6) (23) (33)",
+        "First Lien Senior Secured USD Term Loan | LIBOR + 7.00 %, 12.1 % Cash | 05/21 | 07/26 | 175 | 157 | 152 | \u2014 | % | (3) (6) (10) (33)"
+      ],
+      "last": [
+        "Chambers Global Holdings Limited | Data Processing & Outsourced Services | First Lien Senior Secured Term Loan | SONIA + 5.50 %, 9.4 % Cash | 05/21 | 01/26 | 1,182 | 1,333 | 1,171 | 0.1 | % | (3) (5) (6) (7) (22)",
+        "1,182 | 1,333 | 1,171"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Bucharest Bidco Limited Hotel, Gaming and Leisure First Lien Senior Secured GBP Term Loan SONIA + 7.00 %, 10.2 % Cash 05/21 07/26 $ 813 $ 824 $ 709 0.1 % (3) (6) (23) (33)",
+        "First Lien Senior Secured USD Term Loan LIBOR + 7.00 %, 12.1 % Cash 05/21 07/26 175 157 152 \u2014 % (3) (6) (10) (33)"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[106]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Classic Collision (Summit Buyer, LLC) | Auto Collision Repair Centers | First Lien Senior Secured Term Loan | SOFR + 5.75 %, 10.7 % Cash | 05/21 | 01/26 | $ | 18,488 | $ | 18,249 | $ | 18,308 | 1.6 | % | (5) (6) (7) (19)",
+        "First Lien Senior Secured Term Loan | SOFR + 5.75 %, 10.7 % Cash | 05/21 | 04/26 | 1,065 | 1,049 | 1,053 | 0.1 | % | (5) (6) (7) (19)"
+      ],
+      "last": [
+        "First Lien Senior Secured Term Loan | SOFR + 5.50 %, 10.5 % Cash | 12/21 | 12/28 | 2,480 | 2,427 | 2,440 | 0.2 | % | (3) (5) (6) (7) (19)",
+        "6,609 | 6,625 | 6,502"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Classic Collision (Summit Buyer, LLC) Auto Collision Repair Centers First Lien Senior Secured Term Loan SOFR + 5.75 %, 10.7 % Cash 05/21 01/26 $ 18,488 $ 18,249 $ 18,308 1.6 % (5) (6) (7) (19)",
+        "First Lien Senior Secured Term Loan SOFR + 5.75 %, 10.7 % Cash 05/21 04/26 1,065 1,049 1,053 0.1 % (5) (6) (7) (19)"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[109]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "CW Group Holdings, LLC | High Tech Industries | First Lien Senior Secured Term Loan | LIBOR + 6.00 %, 10.9 % Cash | 05/21 | 01/27 | $ | 4,076 | $ | 4,011 | $ | 4,051 | 0.4 | % | (5) (6) (7) (8)",
+        "4,076 | 4,011 | 4,051"
+      ],
+      "last": [
+        "Ellkay, LLC | Healthcare and Pharmaceuticals | First Lien Senior Secured Term Loan | LIBOR + 6.25 %, 11.4 % Cash | 09/21 | 09/27 | 5,756 | 5,666 | 5,701 | 0.5 | % | (5) (6) (7) (9)",
+        "5,756 | 5,666 | 5,701"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "CW Group Holdings, LLC High Tech Industries First Lien Senior Secured Term Loan LIBOR + 6.00 %, 10.9 % Cash 05/21 01/27 $ 4,076 $ 4,011 $ 4,051 0.4 % (5) (6) (7) (8)",
+        "4,076 4,011 4,051"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[112]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "EMI Porta Holdco LLC | Diversified Manufacturing | First Lien Senior Secured Term Loan | LIBOR + 5.75 %, 11.1 % Cash | 12/21 | 12/27 | $ | 19,274 | $ | 18,831 | $ | 18,458 | 1.6 | % | (5) (6) (7) (9)",
+        "Revolver | LIBOR + 5.75 %, 11.1 % Cash | 12/21 | 12/27 | 1,607 | 1,567 | 1,530 | 0.1 | % | (6) (7) (9) (33)"
+      ],
+      "last": [
+        "Fitzmark, Inc. | Cargo & Transportation | First Lien Senior Secured Term Loan | LIBOR + 4.50 %, 9.5 % Cash | 05/21 | 12/26 | 4,249 | 4,195 | 4,197 | 0.4 | % | (5) (6) (7) (9)",
+        "4,249 | 4,195 | 4,197"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "EMI Porta Holdco LLC Diversified Manufacturing First Lien Senior Secured Term Loan LIBOR + 5.75 %, 11.1 % Cash 12/21 12/27 $ 19,274 $ 18,831 $ 18,458 1.6 % (5) (6) (7) (9)",
+        "Revolver LIBOR + 5.75 %, 11.1 % Cash 12/21 12/27 1,607 1,567 1,530 0.1 % (6) (7) (9) (33)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[115]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Five Star Holding LLC | Packaging | Second Lien Senior Secured Term Loan | SOFR + 7.25 %, 12.4 % Cash | 05/22 | 05/30 | $ | 7,152 | $ | 7,021 | $ | 7,052 | 0.6 | % | (5) (6) (7) (19)",
+        "LLC Units ( 505.1 units) | N/A | 05/22 | N/A | 505 | 502 | \u2014 | % | (6) (31) (33)"
+      ],
+      "last": [
+        "GPNZ II GmbH | Healthcare | First Lien Senior Secured Term Loan | EURIBOR + 6.00 %, 7.9 % Cash, 1.0 % PIK | 06/22 | 06/29 | 468 | 445 | 426 | \u2014 | % | (3) (5) (6) (7) (11)",
+        "468 | 445 | 426"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Five Star Holding LLC Packaging Second Lien Senior Secured Term Loan SOFR + 7.25 %, 12.4 % Cash 05/22 05/30 $ 7,152 $ 7,021 $ 7,052 0.6 % (5) (6) (7) (19)",
+        "LLC Units ( 505.1 units) N/A 05/22 N/A 505 502 \u2014 % (6) (31) (33)"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[118]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Graphpad Software, LLC | Internet Software & Services | First Lien Senior Secured Term Loan | LIBOR + 5.50 %, 10.6 % Cash | 11/21 | 04/27 | $ | 16,089 | $ | 15,943 | $ | 15,566 | 1.4 | % | (5) (6) (7) (9)",
+        "First Lien Senior Secured Term Loan | LIBOR + 6.00 %, 11.1 % Cash | 05/21 | 04/27 | 10,904 | 10,904 | 10,730 | 1.0 | % | (5) (6) (7) (9)"
+      ],
+      "last": [
+        "First Lien Senior Secured Term Loan | LIBOR + 5.00 %, 9.8 % Cash | 05/21 | 12/24 | 6,905 | 6,823 | 6,826 | 0.6 | % | (5) (6) (7) (8)",
+        "14,043 | 13,928 | 13,875"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Graphpad Software, LLC Internet Software & Services First Lien Senior Secured Term Loan LIBOR + 5.50 %, 10.6 % Cash 11/21 04/27 $ 16,089 $ 15,943 $ 15,566 1.4 % (5) (6) (7) (9)",
+        "First Lien Senior Secured Term Loan LIBOR + 6.00 %, 11.1 % Cash 05/21 04/27 10,904 10,904 10,730 1.0 % (5) (6) (7) (9)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[121]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Hygie 31 Holding | Pharmaceuticals | First Lien Senior Secured Term Loan | EURIBOR + 6.25 %, 7.4 % Cash | 09/22 | 09/29 | $ | 652 | $ | 562 | $ | 637 | 0.1 | % | (3) (5) (6) (7) (14)",
+        "652 | 562 | 637"
+      ],
+      "last": [
+        "LLC Units ( 974.68 units) | N/A | 02/22 | N/A | 97 | 162 | \u2014 | % | (6) (31) (33)",
+        "3,481 | 3,503 | 3,501"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Hygie 31 Holding Pharmaceuticals First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 7.4 % Cash 09/22 09/29 $ 652 $ 562 $ 637 0.1 % (3) (5) (6) (7) (14)",
+        "652 562 637"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[124]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Kano Laboratories LLC | Chemicals, Plastics & Rubber | First Lien Senior Secured Term Loan | LIBOR + 5.00 %, 10.1 % Cash | 05/21 | 11/26 | $ | 2,855 | $ | 2,821 | $ | 2,808 | 0.3 | % | (5) (6) (7) (10)",
+        "2,855 | 2,821 | 2,808"
+      ],
+      "last": [
+        "Revolver | EURIBOR + 5.00 %, 7.8 % Cash | 12/21 | 06/27 | 46 | 42 | 25 | \u2014 | % | (3) (6) (7) (12) (33)",
+        "2,267 | 2,263 | 1,938"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Kano Laboratories LLC Chemicals, Plastics & Rubber First Lien Senior Secured Term Loan LIBOR + 5.00 %, 10.1 % Cash 05/21 11/26 $ 2,855 $ 2,821 $ 2,808 0.3 % (5) (6) (7) (10)",
+        "2,855 2,821 2,808"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[127]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Marshall Excelsior Co. | Capital Goods | First Lien Senior Secured Term Loan | SOFR + 5.50 %, 10.5 % Cash | 02/22 | 02/28 | $ | 5,689 | $ | 5,610 | $ | 5,619 | 0.5 | % | (5) (6) (7) (19)",
+        "Revolver | Prime + 5.50 %, 13.5 % Cash | 02/22 | 02/28 | 835 | 822 | 824 | 0.1 | % | (6) (7) (30) (33)"
+      ],
+      "last": [
+        "Napa Bidco Pty Ltd | Healthcare | First Lien Senior Secured Term Loan | BBSY + 6.00 %, 9.6 % Cash | 03/22 | 03/28 | 13,139 | 13,783 | 12,035 | 1.1 | % | (3) (5) (6) (7) (17)",
+        "13,139 | 13,783 | 12,035"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Marshall Excelsior Co. Capital Goods First Lien Senior Secured Term Loan SOFR + 5.50 %, 10.5 % Cash 02/22 02/28 $ 5,689 $ 5,610 $ 5,619 0.5 % (5) (6) (7) (19)",
+        "Revolver Prime + 5.50 %, 13.5 % Cash 02/22 02/28 835 822 824 0.1 % (6) (7) (30) (33)"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[130]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Narda Acquisitionco., Inc. | Aerospace & Defense | First Lien Senior Secured Term Loan | LIBOR + 5.50 %, 10.7 % Cash | 12/21 | 12/27 | $ | 4,545 | $ | 4,481 | $ | 4,341 | 0.4 | % | (5) (6) (7) (8)",
+        "Revolver | LIBOR + 5.50 %, 10.3 % Cash | 12/21 | 12/27 | 106 | 91 | 58 | \u2014 | % | (6) (7) (9) (33)"
+      ],
+      "last": [
+        "OG III B.V. | Containers & Glass Products | First Lien Senior Secured Term Loan | EURIBOR + 5.50 %, 8.7 % Cash | 06/21 | 06/28 | 15,197 | 16,188 | 14,323 | 1.3 | % | (3) (5) (6) (7) (12)",
+        "15,197 | 16,188 | 14,323"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Narda Acquisitionco., Inc. Aerospace & Defense First Lien Senior Secured Term Loan LIBOR + 5.50 %, 10.7 % Cash 12/21 12/27 $ 4,545 $ 4,481 $ 4,341 0.4 % (5) (6) (7) (8)",
+        "Revolver LIBOR + 5.50 %, 10.3 % Cash 12/21 12/27 106 91 58 \u2014 % (6) (7) (9) (33)"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[133]/table"
+    },
+    {
+      "contexts": 33,
+      "first": [
+        "Omni Intermediate Holdings, LLC | Transportation | First Lien Senior Secured Term Loan | SOFR + 5.00 %, 9.9 % Cash | 05/21 | 12/26 | $ | 20,072 | $ | 19,878 | $ | 19,530 | 1.7 | % | (5) (6) (7) (19)",
+        "First Lien Senior Secured Term Loan | SOFR + 5.00 %, 9.9 % Cash | 06/22 | 12/26 | 4,988 | 4,891 | 4,831 | 0.4 | % | (5) (6) (7) (19)"
+      ],
+      "last": [
+        "Perforce Software, Inc. | Internet Software & Services | Second Lien Senior Secured Term Loan | LIBOR + 8.00 %, 12.8 % Cash | 05/21 | 07/27 | 6,497 | 6,437 | 6,335 | 0.6 | % | (5) (6) (7) (8)",
+        "6,497 | 6,437 | 6,335"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Omni Intermediate Holdings, LLC Transportation First Lien Senior Secured Term Loan SOFR + 5.00 %, 9.9 % Cash 05/21 12/26 $ 20,072 $ 19,878 $ 19,530 1.7 % (5) (6) (7) (19)",
+        "First Lien Senior Secured Term Loan SOFR + 5.00 %, 9.9 % Cash 06/22 12/26 4,988 4,891 4,831 0.4 % (5) (6) (7) (19)"
+      ],
+      "preceding": [],
+      "rows": 33,
+      "table_xpath": "/html/body/div[136]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Perimeter Master Note Business Trust | Credit Card ABS | Structured Secured Note - Class A | 4.7 % Cash | 05/22 | 05/27 | $ | 182 | $ | 182 | $ | 177 | \u2014 | % | (3) (6) (33)",
+        "Structured Secured Note - Class B | 5.4 % Cash | 05/22 | 05/27 | 182 | 182 | 172 | \u2014 | % | (3) (6) (33)"
+      ],
+      "last": [
+        "Revolver | EURIBOR + 5.25 %, 8.3 % Cash | 05/21 | 03/27 | 130 | 140 | 125 | \u2014 | % | (3) (6) (7) (13) (33)",
+        "606 | 650 | 577"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 \u2014 % (3) (6) (33)",
+        "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 \u2014 % (3) (6) (33)"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[139]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "PSP Intermediate 4, LLC | Technology | First Lien Senior Secured Term Loan | EURIBOR + 5.25 %, 8.2 % Cash | 05/22 | 05/29 | $ | 888 | $ | 826 | $ | 825 | 0.1 | % | (3) (5) (6) (7) (12)",
+        "First Lien Senior Secured Term Loan | LIBOR + 5.25 %, 10.3 % Cash | 05/22 | 05/29 | 866 | 844 | 832 | 0.1 | % | (3) (5) (6) (7) (9)"
+      ],
+      "last": [
+        "RevSpring, Inc. | Business Services | Second Lien Senior Secured Term Loan | LIBOR + 8.25 %, 13.4 % Cash | 05/21 | 10/26 | 2,556 | 2,518 | 2,556 | 0.2 | % | (5) (6) (7) (9)",
+        "2,556 | 2,518 | 2,556"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "PSP Intermediate 4, LLC Technology First Lien Senior Secured Term Loan EURIBOR + 5.25 %, 8.2 % Cash 05/22 05/29 $ 888 $ 826 $ 825 0.1 % (3) (5) (6) (7) (12)",
+        "First Lien Senior Secured Term Loan LIBOR + 5.25 %, 10.3 % Cash 05/22 05/29 866 844 832 0.1 % (3) (5) (6) (7) (9)"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[142]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Reward Gateway (UK) Ltd | Precious Metals & Minerals | First Lien Senior Secured Term Loan | SONIA + 6.25 %, 8.4 % Cash | 08/21 | 06/28 | $ | 12,421 | $ | 13,605 | $ | 12,259 | 1.1 | % | (3) (5) (6) (7) (23)",
+        "12,421 | 13,605 | 12,259"
+      ],
+      "last": [
+        "First Lien Senior Secured Term Loan | SOFR + 5.50 %, 10.4 % Cash | 05/21 | 08/25 | 958 | 941 | 941 | 0.1 | % | (3) (5) (6) (7) (19)",
+        "1,839 | 1,839 | 1,811"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Reward Gateway (UK) Ltd Precious Metals & Minerals First Lien Senior Secured Term Loan SONIA + 6.25 %, 8.4 % Cash 08/21 06/28 $ 12,421 $ 13,605 $ 12,259 1.1 % (3) (5) (6) (7) (23)",
+        "12,421 13,605 12,259"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[145]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "SISU ACQUISITIONCO, INC | Aerospace & Defense | First Lien Senior Secured Term Loan | LIBOR + 5.25 %, 10.4 % Cash | 05/21 | 12/26 | $ | 2,512 | $ | 2,480 | $ | 2,404 | 0.2 | % | (5) (6) (7) (9)",
+        "2,512 | 2,480 | 2,404"
+      ],
+      "last": [
+        "Syniverse Holdings, Inc. | Technology Distributors | Series A Preferred Equity ( 7,575,758 units) | 12.5 % PIK | 05/22 | N/A | 7,945 | 7,197 | 0.6 | % | (5) (6) (33)",
+        "7,945 | 7,197"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "",
+        "SISU ACQUISITIONCO, INC Aerospace & Defense First Lien Senior Secured Term Loan LIBOR + 5.25 %, 10.4 % Cash 05/21 12/26 $ 2,512 $ 2,480 $ 2,404 0.2 % (5) (6) (7) (9)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[148]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Syntax Systems Ltd | Technology | First Lien Senior Secured Term Loan | LIBOR + 5.75 %, 10.6 % Cash | 11/21 | 10/28 | $ | 6,362 | 6,305 | $ | 5,964 | 0.5 | % | (3) (5) (6) (7) (8)",
+        "Revolver | LIBOR + 5.75 %, 10.6 % Cash | 11/21 | 10/26 | 617 | 610 | 572 | 0.1 | % | (3) (6) (7) (8) (33)"
+      ],
+      "last": [
+        "Partnership Equity ( 353,584.39 units) | N/A | 04/22 | N/A | 354 | 497 | \u2014 | % | (6) (31) (33)",
+        "6,541 | 6,776 | 6,951"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "",
+        "Syntax Systems Ltd Technology First Lien Senior Secured Term Loan LIBOR + 5.75 %, 10.6 % Cash 11/21 10/28 $ 6,362 6,305 $ 5,964 0.5 % (3) (5) (6) (7) (8)"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[151]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Total Safety U.S. Inc | Diversified Support Services | First Lien Senior Secured Term Loan | LIBOR + 6.00 %, 11.0 % Cash, 5.0 % PIK | 07/22 | 08/25 | $ | 7,726 | $ | 7,726 | $ | 7,726 | 0.7 | % | (6) (7) (9) (33)",
+        "First Lien Senior Secured Term Loan | LIBOR + 6.00 %, 11.0 % Cash | 08/21 | 08/25 | 2,266 | 2,249 | 2,156 | 0.2 | % | (7) (9) (33)"
+      ],
+      "last": [
+        "Victoria Bidco Limited | Industrial Machinery | First Lien Senior Secured Term Loan | SONIA + 6.50 %, 9.9 % Cash | 03/22 | 01/29 | 5,227 | 5,509 | 4,945 | 0.4 | % | (3) (5) (6) (7) (23)",
+        "5,227 | 5,509 | 4,945"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Total Safety U.S. Inc Diversified Support Services First Lien Senior Secured Term Loan LIBOR + 6.00 %, 11.0 % Cash, 5.0 % PIK 07/22 08/25 $ 7,726 $ 7,726 $ 7,726 0.7 % (6) (7) (9) (33)",
+        "First Lien Senior Secured Term Loan LIBOR + 6.00 %, 11.0 % Cash 08/21 08/25 2,266 2,249 2,156 0.2 % (7) (9) (33)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[154]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "VistaJet Pass Through Trust 2021-1B | Airlines | Structured Secured Note - Class B | 6.3 % Cash | 11/21 | 02/29 | $ | 8,571 | $ | 8,571 | $ | 7,203 | 0.6 | % | (6) (33)",
+        "8,571 | 8,571 | 7,203"
+      ],
+      "last": [
+        "LLC Units ( 152.7 units) | N/A | 02/22 | N/A | 153 | 198 | \u2014 | % | (6) (31) (33)",
+        "4,030 | 4,113 | 4,167"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "VistaJet Pass Through Trust 2021-1B Airlines Structured Secured Note - Class B 6.3 % Cash 11/21 02/29 $ 8,571 $ 8,571 $ 7,203 0.6 % (6) (33)",
+        "8,571 8,571 7,203"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[157]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Zeppelin Bidco Limited | Services: Business | First Lien Senior Secured Term Loan | SONIA + 6.25 %, 10.4 % Cash | 03/22 | 03/29 | $ | 2,991 | $ | 3,080 | $ | 2,807 | 0.3 | % | (3) (5) (6) (7) (22)",
+        "2,991 | 3,080 | 2,807"
+      ],
+      "last": [
+        "2,991 | 3,080 | 2,807",
+        "Subtotal Non\u2013Control / Non\u2013Affiliate Investments ( 189.8 %) | 2,130,489 | 2,164,913 | 2,124,324"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+        "Zeppelin Bidco Limited Services: Business First Lien Senior Secured Term Loan SONIA + 6.25 %, 10.4 % Cash 03/22 03/29 $ 2,991 $ 3,080 $ 2,807 0.3 % (3) (5) (6) (7) (22)",
+        "2,991 3,080 2,807"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/div[160]/table"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Eclipse Business Capital, LLC | Banking, Finance, Insurance & Real Estate | Revolver | LIBOR + 7.25 % | 08/21 | 07/28 | 3,080 | 3,007 | 3,080 | 0.3 | % | (6) (8) (33)",
+        "Second Lien Senior Secured Term Loan | 7.5 % Cash | 08/21 | 07/28 | 3,209 | 3,183 | 3,209 | 0.3 | % | (6) (33)"
+      ],
+      "last": [
+        "Subtotal Affiliate Investments ( 13.1 %) | 6,289 | 122,200 | 147,074",
+        "Total Investments, March 31, 2023 ( 203.0 %)* | $ | 2,136,778 | $ | 2,287,113 | $ | 2,271,398"
+      ],
+      "opening_rows": [
+        "",
+        "",
+        "Eclipse Business Capital, LLC Banking, Finance, Insurance & Real Estate Revolver LIBOR + 7.25 % 08/21 07/28 3,080 3,007 3,080 0.3 % (6) (8) (33)",
+        "Second Lien Senior Secured Term Loan 7.5 % Cash 08/21 07/28 3,209 3,183 3,209 0.3 % (6) (33)"
+      ],
+      "preceding": [],
+      "rows": 13,
+      "table_xpath": "/html/body/div[161]/table"
+    },
+    {
+      "contexts": 12,
+      "first": [
+        "Eclipse Business Capital, LLC (d) | Second Lien Senior Secured Term Loan ( 7.5 % Cash) | $ | 3,209 | $ | 1 | $ | \u2014 | $ | \u2014 | $ | ( 1 ) | $ | 3,209 | $ | 61",
+        "Revolver (LIBOR + 7.25 %) | $ | 3,722 | $ | 3 | $ | ( 642 ) | $ | \u2014 | $ | ( 3 ) | $ | 3,080 | $ | 113"
+      ],
+      "last": [
+        "$ | 20,212 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | ( 1,191 ) | $ | 19,021 | $ | 720",
+        "Total Affiliate Investments | $ | 134,524 | $ | 12,004 | $ | ( 4,256 ) | $ | \u2014 | $ | 4,802 | $ | 147,074 | $ | 3,195"
+      ],
+      "opening_rows": [
+        "",
+        "December 31, 2022 Value Gross Additions (a) Gross Reductions (b) Amount of Realized Gain (Loss) Amount of Unrealized Gain (Loss) March 31, 2023 Value Amount of Interest or Dividends Credited to Income(c)",
+        "Portfolio Company Type of Investment",
+        "Eclipse Business Capital, LLC (d) Second Lien Senior Secured Term Loan ( 7.5 % Cash) $ 3,209 $ 1 $ \u2014 $ \u2014 $ ( 1 ) $ 3,209 $ 61"
+      ],
+      "preceding": [],
+      "rows": 12,
+      "table_xpath": "/html/body/div[176]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "Senior debt and 1 st lien notes | $ | 1,904,516 | 83 | % | $ | 1,872,391 | 83 | % | 168 | %",
+        "Subordinated debt and 2 nd lien notes | 170,578 | 8 | 165,123 | 7 | 15"
+      ],
+      "last": [
+        "Investment in joint ventures | 38,201 | 2 | 27,762 | 1 | 2",
+        "$ | 2,287,113 | 100 | % | $ | 2,271,398 | 100 | % | 203 | %"
+      ],
+      "opening_rows": [
+        "",
+        "($ in thousands) Cost Percentage of Total Portfolio Fair Value Percentage of Total Portfolio Percentage of Total Net Assets",
+        "March 31, 2023:",
+        "Senior debt and 1 st lien notes $ 1,904,516 83 % $ 1,872,391 83 % 168 %"
+      ],
+      "preceding": [],
+      "rows": 7,
+      "table_xpath": "/html/body/ix:continuation[11]/ix:continuation/div[1]/table"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Aerospace and Defense | $ | 130,589 | 5.8 | % | $ | 101,192 | 4.7 | %",
+        "Automotive | 55,052 | 2.4 | 54,357 | 2.5"
+      ],
+      "last": [
+        "Utilities: Electric | 10,092 | 0.4 | 10,347 | 0.5",
+        "Total | $ | 2,271,398 | 100.0 | % | $ | 2,157,880 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "($ in thousands) March 31, 2023 December 31, 2022",
+        "Aerospace and Defense $ 130,589 5.8 % $ 101,192 4.7 %",
+        "Automotive 55,052 2.4 54,357 2.5"
+      ],
+      "preceding": [],
+      "rows": 27,
+      "table_xpath": "/html/body/ix:continuation[12]/ix:continuation/div[2]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Federal Housing Administration (\u201cFHA\u201d) loans | $ | 634,664 | 91 | % | $ | 605,542 | 91 | %",
+        "Veterans Affairs (\u201cVA\u201d) loans | 61,344 | 9 | 58,569 | 9"
+      ],
+      "last": [
+        "Veterans Affairs (\u201cVA\u201d) loans | 61,344 | 9 | 58,569 | 9",
+        "$ | 696,008 | 100 | % | $ | 664,111 | 100 | %"
+      ],
+      "opening_rows": [
+        "",
+        "($ in thousands) Cost Percentage of Total Portfolio Fair Value Percentage of Total Portfolio",
+        "March 31, 2023:",
+        "Federal Housing Administration (\u201cFHA\u201d) loans $ 634,664 91 % $ 605,542 91 %"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:continuation[13]/ix:nonnumeric/div[2]/table"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Senior debt and 1 st lien notes (1) | $ | 1,660,200 | Yield Analysis | Market Yield | 7.4 % \u2013 28.8 % | 11.3 % | Decrease",
+        "21,612 | Discounted Cash Flow Analysis | Discount Rate | 12.6 % | 12.6 % | Decrease"
+      ],
+      "last": [
+        "13,261 | Recent Transaction | Transaction Price | $ 0.01 \u2013 $ 1,408.64 | $ 942.50 | Increase",
+        "Equity warrants | 1,073 | Market Approach | Adjusted EBITDA Multiple | 7.0 x \u2013 16.5 x | 7.6 x | Increase"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 ($ in thousands) (3) Fair Value Valuation Model Level 3 Input Range of Inputs Weighted Average Impact to Valuation from an Increase in Input",
+        "Senior debt and 1 st lien notes (1) $ 1,660,200 Yield Analysis Market Yield 7.4 % \u2013 28.8 % 11.3 % Decrease",
+        "21,612 Discounted Cash Flow Analysis Discount Rate 12.6 % 12.6 % Decrease"
+      ],
+      "preceding": [],
+      "rows": 13,
+      "table_xpath": "/html/body/ix:continuation[17]/ix:nonnumeric/div[2]/table"
+    },
+    {
+      "contexts": 26,
+      "first": [
+        "Senior debt and 1 st lien notes | $ | \u2014 | $ | 41,836 | $ | 1,830,555 | $ | 1,872,391",
+        "Senior debt and 1 st lien notes | $ | \u2014 | $ | 41,836 | $ | 1,830,555 | $ | 1,872,391"
+      ],
+      "last": [
+        "Investment in joint ventures(1) | $ | 27,762",
+        "$ | 2,271,398"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value as of March 31, 2023",
+        "($ in thousands) Level 1 Level 2 Level 3 Total",
+        "Senior debt and 1 st lien notes $ \u2014 $ 41,836 $ 1,830,555 $ 1,872,391"
+      ],
+      "preceding": [],
+      "rows": 26,
+      "table_xpath": "/html/body/ix:continuation[19]/ix:nonnumeric/div[2]/table"
+    }
+  ]
+}

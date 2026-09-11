@@ -1,0 +1,68 @@
+{
+  "accession": "0001901612-26-000020",
+  "cik": "0001901612",
+  "identity": [
+    9698797,
+    1779876047075774600
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1901612/000190161226000020.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "4bdd399fbb7eb39361371c3a6d0549b4147113c331430625464329f9293aaccf",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gbdc4:segment\"]",
+      "unit_ref": "segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gbdc4:component\"]",
+      "unit_ref": "component"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gbdc4:portfolioCompany\"]",
+      "unit_ref": "portfoliocompany"
+    }
+  ]
+}

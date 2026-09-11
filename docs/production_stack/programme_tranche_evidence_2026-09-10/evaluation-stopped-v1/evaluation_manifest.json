@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "bytes": 38842,
+      "path": "criterion_results.json",
+      "sha256": "1fab3d582b33acbd34913d7680db53a9db4234730f92b69bb115a00e3addfdc1"
+    },
+    {
+      "bytes": 1096,
+      "path": "execution.json",
+      "sha256": "69984ab20ea57ab95f2078e889ead6f1992ec01f0ab00c804e2c89d06d326957"
+    },
+    {
+      "bytes": 37588,
+      "path": "observations.json",
+      "sha256": "5073b83843da860c561d7bc945938fa1bafb0fb4e3f43a323c978732be06201b"
+    }
+  ],
+  "status": "stopped_result_inventory_only"
+}

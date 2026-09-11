@@ -1,0 +1,126 @@
+{
+  "changes": [
+    {
+      "after": [
+        312,
+        1789047804989722400
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/666/conservation.1788885037.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 312,
+        "path": "cache_files/666/conservation.1788885037.parquet",
+        "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+      },
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "after": [
+        2243,
+        1789047804824591400
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/666/fund_financials.1788877663.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 2243,
+        "path": "cache_files/666/fund_financials.1788877663.parquet",
+        "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+      },
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "after": [
+        2235,
+        1789047804630739600
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/666/holdings.1788882554.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 2235,
+        "path": "cache_files/666/holdings.1788882554.parquet",
+        "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+      },
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    },
+    {
+      "after": [
+        312,
+        1789047804192025000
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/999/conservation.1788885037.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 312,
+        "path": "cache_files/999/conservation.1788885037.parquet",
+        "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+      },
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "after": [
+        2243,
+        1789047804025218700
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/999/fund_financials.1788877663.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 2243,
+        "path": "cache_files/999/fund_financials.1788877663.parquet",
+        "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+      },
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "after": [
+        2235,
+        1789047803815397200
+      ],
+      "before": null,
+      "kind": "created",
+      "path": "data/output/agent_investigate/_qcache/999/holdings.1788882554.parquet",
+      "rows": 0,
+      "saved": {
+        "bytes": 2235,
+        "path": "cache_files/999/holdings.1788882554.parquet",
+        "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+      },
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    }
+  ],
+  "cleanup": "Not performed by this read-only diagnostic",
+  "deleted_files": [],
+  "mechanism": "agent_data_query._ensure_cik_cache uses DuckDB COPY TO before locking external access. Its module-level cache root was not isolated by pytest.",
+  "pipeline_candidate": "Three stages remain sealed; no integrated measurement or recovery claim",
+  "scope": "All reported changes are these cache files; no other protected file size/mtime changed. This is not a content-hash proof of every production file.",
+  "source_files": [
+    {
+      "bytes": 8077,
+      "path": "pipeline/agent_data_query.py",
+      "sha256": "31fb6b6c0ce26a7f0b6bae08b733e237ed2226cc65b1fe400ecfc372a7d052f1"
+    },
+    {
+      "bytes": 7214,
+      "path": "tests/conftest.py",
+      "sha256": "a63df2e461182984856b83944997e881f200ba47f57b0896e23ba6268495c15b"
+    },
+    {
+      "bytes": 8915,
+      "path": "scripts/programme_tranche/run_verification.py",
+      "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+    }
+  ],
+  "status": "tranche_stopped_protected_output_write",
+  "test_worker_stopped": true,
+  "tests_timed_out": true,
+  "unchanged_existing_files": 237621
+}

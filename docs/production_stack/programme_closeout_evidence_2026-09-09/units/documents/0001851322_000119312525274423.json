@@ -1,0 +1,74 @@
+{
+  "accession": "0001193125-25-274423",
+  "cik": "0001851322",
+  "identity": [
+    25145787,
+    1774941842993962400
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1851322/000119312525274423.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "b64983b7b2b3a3d5849494f9743dd1cd6b864ee90ad5cb413f90a4de375db4f3",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "U_EUR"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001851322:Investment\"]",
+      "unit_ref": "U_Investment"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "U_CAD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001851322:PortfolioCompany\"]",
+      "unit_ref": "U_PortfolioCompany"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "U_GBP"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001851322:Component\"]",
+      "unit_ref": "U_Component"
+    }
+  ]
+}

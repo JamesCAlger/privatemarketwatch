@@ -1,0 +1,74 @@
+{
+  "accession": "0000950170-24-126294",
+  "cik": "0001920145",
+  "identity": [
+    8865571,
+    1774941984892853100
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1920145/000095017024126294.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "17a84f4c6fe985e2a496b8fc11920faae8ffc1433f4f4191e06442d39c45bbff",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "U_EUR"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001920145:Component\"]",
+      "unit_ref": "U_Component"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "U_CAD"
+    },
+    {
+      "currency": "CHF",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CHF\"]",
+      "unit_ref": "U_CHF"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "U_GBP"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "U_NOK"
+    }
+  ]
+}

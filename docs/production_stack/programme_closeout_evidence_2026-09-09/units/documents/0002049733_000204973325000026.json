@@ -1,0 +1,56 @@
+{
+  "accession": "0002049733-25-000026",
+  "cik": "0002049733",
+  "identity": [
+    1218243,
+    1774942112489931900
+  ],
+  "path": "data/raw/filings/bdc_xbrl/2049733/000204973325000026.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "e5fa19815ff5aca9bfb08bd7c2a14cadeba5ebdc417338ad583d11b5622cc11f",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:position\"]",
+      "unit_ref": "position"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"brec:segment\"]",
+      "unit_ref": "segment"
+    }
+  ]
+}

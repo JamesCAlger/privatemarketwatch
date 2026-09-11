@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="60" time="517.576" timestamp="2026-09-10T18:32:18.712795+01:00" hostname="DESKTOP-438AL40"><testcase classname="tests.test_bdc_xbrl_wrapper" name="test_trinity_bare_debt_identifier_is_issuer_rollup" time="10.294"><failure message="AssertionError: assert 'TRINITY_DEBT...UER_ROLLUP_V5' == 'TRINITY_DEBT...UER_ROLLUP_V3'&#10;  &#10;  - TRINITY_DEBT_ISSUER_ROLLUP_V3&#10;  ?                             ^&#10;  + TRINITY_DEBT_ISSUER_ROLLUP_V5&#10;  ?                             ^">def test_trinity_bare_debt_identifier_is_issuer_rollup():
+        bare = "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+        leaf = (
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+    
+        rollup = classify_identifier("1786108", bare)
+        child = classify_identifier("0001786108", leaf)
+    
+        assert rollup["wrapper_family"] == "debt"
+        assert rollup["wrapper_disposition"] == "debt_issuer_rollup"
+&gt;       assert rollup["wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V3"
+E       AssertionError: assert 'TRINITY_DEBT...UER_ROLLUP_V5' == 'TRINITY_DEBT...UER_ROLLUP_V3'
+E         
+E         - TRINITY_DEBT_ISSUER_ROLLUP_V3
+E         ?                             ^
+E         + TRINITY_DEBT_ISSUER_ROLLUP_V5
+E         ?                             ^
+
+tests\test_bdc_xbrl_wrapper.py:26: AssertionError</failure></testcase><testcase classname="tests.test_bdc_xbrl_wrapper" name="test_blackrock_direct_lending_flat_debt_leaf" time="0.032"><failure message="AssertionError: assert 'BLACKROCK_DI..._DEBT_LEAF_V2' == 'BLACKROCK_DI..._DEBT_LEAF_V1'&#10;  &#10;  - BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1&#10;  ?                                     ^&#10;  + BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V2&#10;  ?                                     ^">def test_blackrock_direct_lending_flat_debt_leaf():
+        row = classify_identifier(
+            "0001834543",
+            "Debt Investments Diversified Financial Services GC Champion Acquisition LLC "
+            "(Numerix) Instrument First Lien Delayed Draw Term Loan Ref SOFR(Q) "
+            "Floor 1.00% Spread 5.00% Total Coupon 8.67% Maturity 8/21/2028",
+        )
+    
+        assert row["wrapper_family"] == "debt"
+        assert row["wrapper_disposition"] == "debt_position_leaf"
+&gt;       assert row["wrapper_rule_id"] == "BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1"
+E       AssertionError: assert 'BLACKROCK_DI..._DEBT_LEAF_V2' == 'BLACKROCK_DI..._DEBT_LEAF_V1'
+E         
+E         - BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1
+E         ?                                     ^
+E         + BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V2
+E         ?                                     ^
+
+tests\test_bdc_xbrl_wrapper.py:195: AssertionError</failure></testcase><testcase classname="tests.test_bdc_xbrl_wrapper" name="test_silver_point_specialty_credit_comma_leaf_and_total_rows" time="0.040"><failure message="AssertionError: assert 'SILVER_POINT..._DEBT_LEAF_V2' == 'SILVER_POINT..._DEBT_LEAF_V1'&#10;  &#10;  - SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1&#10;  ?                                          ^&#10;  + SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V2&#10;  ?                                          ^">def test_silver_point_specialty_credit_comma_leaf_and_total_rows():
+        leaf = classify_identifier(
+            "0001646614",
+            "Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien "
+            "Term Loan, Luxembourg, Mallinckrodt International Finance S.A., "
+            "Pharmaceuticals &amp; Life Sciences, Rate L+5.25%, 0.75% Floor, "
+            "Interest Rate 10.40%, Original Acquisition Date 10/13/2020, "
+            "Maturity Date 9/30/2027",
+        )
+        total_trust = classify_identifier(
+            "0001646614",
+            "Controlled Investments, Total Trust Interest",
+        )
+        bare_category = classify_identifier(
+            "0001646614",
+            "1st Lien/Secured Loans United States of America",
+        )
+        total_equity = classify_identifier(
+            "0001646614",
+            "Non-Controlled/Non-Affiliated Investments, Total Equities",
+        )
+    
+        assert leaf["wrapper_family"] == "debt"
+        assert leaf["wrapper_disposition"] == "debt_position_leaf"
+&gt;       assert leaf["wrapper_rule_id"] == "SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1"
+E       AssertionError: assert 'SILVER_POINT..._DEBT_LEAF_V2' == 'SILVER_POINT..._DEBT_LEAF_V1'
+E         
+E         - SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1
+E         ?                                          ^
+E         + SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V2
+E         ?                                          ^
+
+tests\test_bdc_xbrl_wrapper.py:786: AssertionError</failure></testcase><testcase classname="tests.test_bdc_xbrl_wrapper_oracle" name="test_coherence_passes_all_existing_wrappers" time="0.254"><failure message="AssertionError: data/overrides/bdc_xbrl_wrappers\0001572694.json: ['staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136']&#10;assert ['staging.hie...position 136'] == []&#10;  &#10;  Left contains one more item: 'staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136'&#10;  Use -v to get more diff">def test_coherence_passes_all_existing_wrappers():
+        """All committed wrapper JSONs should pass coherence with zero hard errors.
+    
+        Warnings (prefixed with 'warning:') are allowed.
+        """
+        import glob
+        wrapper_files = glob.glob(
+            "data/overrides/bdc_xbrl_wrappers/*.json"
+        )
+        for path in wrapper_files:
+            if "reference" in path:
+                continue
+            with open(path, encoding="utf-8") as f:
+                raw = json.load(f)
+            if raw.get("schema_version") not in (
+                "bdc-xbrl-wrapper.v2",
+                "bdc-xbrl-wrapper.v3",
+            ):
+                continue
+            issues = validate_wrapper_json_coherence(raw)
+            errors = [i for i in issues if not i.startswith("warning:")]
+&gt;           assert errors == [], f"{path}: {errors}"
+E           AssertionError: data/overrides/bdc_xbrl_wrappers\0001572694.json: ['staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136']
+E           assert ['staging.hie...position 136'] == []
+E             
+E             Left contains one more item: 'staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136'
+E             Use -v to get more diff
+
+tests\test_bdc_xbrl_wrapper_oracle.py:3084: AssertionError</failure></testcase><testcase classname="tests.test_agent_data_query" name="test_cik_scoping_excludes_other_filers" time="0.357" /><testcase classname="tests.test_agent_data_query" name="test_cross_cik_query_returns_nothing_for_absent_cik" time="0.203" /><testcase classname="tests.test_agent_data_query" name="test_groupby_aggregation_works" time="0.339" /><testcase classname="tests.test_agent_data_query" name="test_join_across_tables" time="0.230" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[DROP TABLE holdings]" time="0.032" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[INSERT INTO holdings VALUES (1)]" time="0.026" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[SELECT * FROM holdings; DROP TABLE holdings]" time="0.027" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[SELECT * FROM read_parquet('C:/secret.parquet')]" time="0.018" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[ATTACH 'other.db']" time="0.019" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[PRAGMA database_list]" time="0.025" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[UPDATE holdings SET fair_value = 0]" time="0.024" /><testcase classname="tests.test_agent_data_query" name="test_validate_rejects_unsafe[SELECT * FROM holdings -- sneaky]" time="0.021" /><testcase classname="tests.test_agent_data_query" name="test_validate_accepts_select[SELECT * FROM holdings]" time="0.034" /><testcase classname="tests.test_agent_data_query" name="test_validate_accepts_select[WITH t AS (SELECT * FROM holdings) SELECT count(*) FROM t]" time="0.043" /><testcase classname="tests.test_agent_data_query" name="test_validate_accepts_select[select report_date, sum(fair_value) from staging group by 1]" time="0.024" /><testcase classname="tests.test_agent_data_query" name="test_query_rejects_unsafe_at_runtime" time="0.312" /><testcase classname="tests.test_agent_data_query" name="test_file_access_blocked_even_if_validation_bypassed" time="0.205" /><testcase classname="tests.test_agent_data_query" name="test_row_cap_truncates" time="0.123" /><testcase classname="tests.test_agent_data_query" name="test_describe_returns_schema_and_residual_context" time="0.223" /><testcase classname="tests.test_agent_data_query" name="test_file_backed_query_cache_is_temporary_and_keeps_cik_scope" time="0.844" /><testcase classname="tests.test_investigation_orchestration" name="test_discover_selects_only_real_errors" time="0.197" /><testcase classname="tests.test_investigation_orchestration" name="test_discover_dedupes_multiple_verdicts_per_target" time="0.079" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_refuses_without_gate_pass" time="0.034" /><testcase classname="tests.test_investigation_orchestration" name="test_loop_decision_pass_noop_stops_successfully" time="0.047" /><testcase classname="tests.test_investigation_orchestration" name="test_noop_gate_verdict_requires_band_and_validated_tier" time="0.028" /><testcase classname="tests.test_investigation_orchestration" name="test_gate_passes_clean_zero_rule_investigation" time="0.185" /><testcase classname="tests.test_investigation_orchestration" name="test_gate_still_fails_over_band_zero_rule_investigation" time="0.171" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_pass_noop_promotes_nothing" time="0.023" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_refuses_invalid_rules" time="0.069" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_refuses_noop_rules" time="0.277" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_copies_valid_effective_rules" time="0.250" /><testcase classname="tests.test_investigation_orchestration" name="test_loop_decision_stops_on_escalation_after_iter1" time="0.029" /><testcase classname="tests.test_investigation_orchestration" name="test_loop_decision_iteration_one_still_iterates_despite_escalation" time="0.030" /><testcase classname="tests.test_investigation_orchestration" name="test_loop_decision_pass_beats_escalation" time="0.021" /><testcase classname="tests.test_investigation_orchestration" name="test_prep_prompt_lists_existing_escalations" time="0.798" /><testcase classname="tests.test_investigation_orchestration" name="test_prep_blocks_without_bundle" time="0.032" /><testcase classname="tests.test_investigation_orchestration" name="test_prep_allow_missing_bundle_overrides" time="0.515" /><testcase classname="tests.test_investigation_orchestration" name="test_apply_escalation_counts_deduped_vs_raw" time="0.243" /><testcase classname="tests.test_investigation_orchestration" name="test_apply_escalation_counts_no_duplicates" time="0.217" /><testcase classname="tests.test_investigation_orchestration" name="test_route_escalations_by_category" time="0.184" /><testcase classname="tests.test_investigation_orchestration" name="test_measure_escalation_count_scoped_to_target_quarter" time="0.166" /><testcase classname="tests.test_investigation_orchestration" name="test_gate_uses_production_band_not_default_1pct" time="0.112" /><testcase classname="tests.test_investigation_orchestration" name="test_measure_gate_uses_production_band" time="0.172" /><testcase classname="tests.test_investigation_orchestration" name="test_prep_prompt_excludes_stale_quarter_escalation" time="0.376" /><testcase classname="tests.test_investigation_orchestration" name="test_apply_records_rules_fingerprint" time="0.234" /><testcase classname="tests.test_investigation_orchestration" name="test_gate_is_stale_when_rules_change_after_apply" time="0.657" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_refuses_stale_gate" time="0.023" /><testcase classname="tests.test_investigation_orchestration" name="test_gate_stale_when_rules_deleted_after_apply" time="0.184" /><testcase classname="tests.test_investigation_orchestration" name="test_status_measurement_leaves_gate_non_stale" time="0.342" /><testcase classname="tests.test_investigation_orchestration" name="test_status_measurement_writes_fingerprint_contract_files" time="0.330" /><testcase classname="tests.test_investigation_orchestration" name="test_promote_refuses_pass_noop_when_rules_exist" time="0.027" /><testcase classname="tests.test_investigation_orchestration" name="test_anchor_candidates_use_basis" time="0.740" /><testcase classname="tests.test_investigation_orchestration" name="test_outlier_series_includes_plus_cash_quarters" time="0.231" /><testcase classname="tests.test_investigation_orchestration" name="test_ex_cash_override_does_not_displace_plus_cash" time="0.522" /><testcase classname="tests.test_unified_holdings.TestPrepareBdc" name="test_fidelity_central_type_keyword_does_not_leak_into_issuer" time="169.499" /><testcase classname="tests.test_unified_holdings.TestPrepareBdc" name="test_prefix_parent_with_two_children_summing_exactly_is_removed" time="169.620" /></testsuite></testsuites>

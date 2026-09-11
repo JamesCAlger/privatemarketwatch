@@ -1,0 +1,122 @@
+{
+  "accession": "0001838126-25-000017",
+  "cik": "0001838126",
+  "identity": [
+    11298694,
+    1774941783697265700
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1838126/000183812625000017.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "3bad60cc64ae5735155757f26d60421cc0d5c865197b22293d3ef7db8791a722",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "aud"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "SGD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SGD\"]",
+      "unit_ref": "sgd"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "cad"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "SEK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SEK\"]",
+      "unit_ref": "sek"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "nok"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:class\"]",
+      "unit_ref": "class"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:component\"]",
+      "unit_ref": "component"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:installment\"]",
+      "unit_ref": "installment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:financingFacility\"]",
+      "unit_ref": "financingfacility"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:entity\"]",
+      "unit_ref": "entity"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:guarantor\"]",
+      "unit_ref": "guarantor"
+    }
+  ]
+}

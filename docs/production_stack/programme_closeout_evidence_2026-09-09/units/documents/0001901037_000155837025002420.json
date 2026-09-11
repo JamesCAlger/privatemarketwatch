@@ -1,0 +1,68 @@
+{
+  "accession": "0001558370-25-002420",
+  "cik": "0001901037",
+  "identity": [
+    6663350,
+    1774941930844521800
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1901037/000155837025002420.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "59c3847fc9d9d290f34e5784a0ee8ec048a7b1acba95ed32c569ae14667bcc85",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "Unit_Standard_shares_Q7De8TFY_0eqZDkVzr7bDQ"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "Unit_Standard_USD_T4ATxcB5iUeP8mXI6r_UPg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "Unit_Standard_pure_vPqTqapec0mJe-MD-1wmpw"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "Unit_Divide_USD_shares_aba6KmILBkaEoGPnnDO7tw"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:company\"]",
+      "unit_ref": "Unit_Standard_company_aovQnTdcc0yQ9uAKDLSBbg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:item\"]",
+      "unit_ref": "Unit_Standard_item_y5tmQoDhuUikslHLSgIK0A"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:loan\"]",
+      "unit_ref": "Unit_Standard_loan_Ou4k3SXSf0OJnoddoPvcIg"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "Unit_Standard_EUR_jVHvPw4fVU-JMpI1lUf3SQ"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:segment\"]",
+      "unit_ref": "Unit_Standard_segment_Z2grzug6gku_qH8Wmjat5Q"
+    }
+  ]
+}

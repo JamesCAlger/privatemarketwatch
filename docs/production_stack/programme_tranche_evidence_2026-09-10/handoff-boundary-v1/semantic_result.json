@@ -1,0 +1,22 @@
+{
+  "code_unchanged": true,
+  "consistently_unreadable_paths": [],
+  "elapsed_seconds": 655.5189213999984,
+  "exit_code": 0,
+  "log": {
+    "bytes": 330,
+    "path": "scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/process.log",
+    "sha256": "261a646c6678aa1e08c2125c0f4ef1d3997e184ffd6699d7dce2876ec25c2e39"
+  },
+  "mode": "semantic-only",
+  "protected_changes": [],
+  "protected_readable_files": 237627,
+  "protected_unreadable_paths_changed": false,
+  "started_code": {
+    "bytes": 8915,
+    "path": "scripts/programme_tranche/run_verification.py",
+    "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+  },
+  "timed_out": false,
+  "worker_stopped": true
+}

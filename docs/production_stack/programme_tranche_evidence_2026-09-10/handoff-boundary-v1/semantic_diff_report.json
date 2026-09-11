@@ -1,0 +1,336 @@
+{
+  "artifacts": {
+    "holdings": {
+      "holdings_row_count": [
+        {
+          "row_count_current": 780425,
+          "row_count_baseline": 780455,
+          "row_count_delta": -30.0
+        }
+      ],
+      "holdings_class_fv": [
+        {
+          "index_classification": "",
+          "row_count_current": 177,
+          "row_count_baseline": 201,
+          "row_count_delta": -24.0,
+          "fair_value_sum_current": 2410853333.0,
+          "fair_value_sum_baseline": 3054791046.0,
+          "fair_value_sum_delta": -643937713.0
+        },
+        {
+          "index_classification": "CASH",
+          "row_count_current": 1223,
+          "row_count_baseline": 1226,
+          "row_count_delta": -3.0,
+          "fair_value_sum_current": 31568132625.563007,
+          "fair_value_sum_baseline": 31613683738.563,
+          "fair_value_sum_delta": -45551112.99999237
+        },
+        {
+          "index_classification": "COMMON_EQUITY",
+          "row_count_current": 73084,
+          "row_count_baseline": 72981,
+          "row_count_delta": 103.0,
+          "fair_value_sum_current": 416234524734.5339,
+          "fair_value_sum_baseline": 416205196762.53406,
+          "fair_value_sum_delta": 29327971.999816895
+        },
+        {
+          "index_classification": "DIRECT_LENDING",
+          "row_count_current": 621281,
+          "row_count_baseline": 621290,
+          "row_count_delta": -9.0,
+          "fair_value_sum_current": 5706826460524.823,
+          "fair_value_sum_baseline": 5706858935328.826,
+          "fair_value_sum_delta": -32474804.002929688
+        },
+        {
+          "index_classification": "DIRECT_REAL_ESTATE",
+          "row_count_current": 2381,
+          "row_count_baseline": 2545,
+          "row_count_delta": -164.0,
+          "fair_value_sum_current": 134983842458.29007,
+          "fair_value_sum_baseline": 135032281530.29007,
+          "fair_value_sum_delta": -48439072.0
+        },
+        {
+          "index_classification": "PREFERRED_EQUITY",
+          "row_count_current": 27560,
+          "row_count_baseline": 27504,
+          "row_count_delta": 56.0,
+          "fair_value_sum_current": 231288938449.59494,
+          "fair_value_sum_baseline": 231259433449.59497,
+          "fair_value_sum_delta": 29504999.999969482
+        },
+        {
+          "index_classification": "PRIVATE_CREDIT_FUND",
+          "row_count_current": 3881,
+          "row_count_baseline": 3381,
+          "row_count_delta": 500.0,
+          "fair_value_sum_current": 136408792523.908,
+          "fair_value_sum_baseline": 132486937954.32521,
+          "fair_value_sum_delta": 3921854569.582794
+        },
+        {
+          "index_classification": "PRIVATE_EQUITY_FUND",
+          "row_count_current": 17238,
+          "row_count_baseline": 17459,
+          "row_count_delta": -221.0,
+          "fair_value_sum_current": 207216399337.0787,
+          "fair_value_sum_baseline": 208859681967.73856,
+          "fair_value_sum_delta": -1643282630.659851
+        },
+        {
+          "index_classification": "REAL_ESTATE_FUND",
+          "row_count_current": 2898,
+          "row_count_baseline": 2894,
+          "row_count_delta": 4.0,
+          "fair_value_sum_current": 168451731212.0599,
+          "fair_value_sum_baseline": 168449049719.53018,
+          "fair_value_sum_delta": 2681492.529724121
+        },
+        {
+          "index_classification": "UNCLASSIFIED",
+          "row_count_current": 10930,
+          "row_count_baseline": 11202,
+          "row_count_delta": -272.0,
+          "fair_value_sum_current": 224283664464.49957,
+          "fair_value_sum_baseline": 226544432114.95242,
+          "fair_value_sum_delta": -2260767650.4528503
+        }
+      ]
+    },
+    "matches": {
+      "match_method": [
+        {
+          "match_method": "A_within_filing",
+          "row_count_current": 154922,
+          "row_count_baseline": 157422,
+          "row_count_delta": -2500.0
+        },
+        {
+          "match_method": "B1_cusip",
+          "row_count_current": 28762,
+          "row_count_baseline": 28494,
+          "row_count_delta": 268.0
+        },
+        {
+          "match_method": "B1b_position_key",
+          "row_count_current": 238657,
+          "row_count_baseline": 209891,
+          "row_count_delta": 28766.0
+        },
+        {
+          "match_method": "B2_exact_name",
+          "row_count_current": 55269,
+          "row_count_baseline": 47714,
+          "row_count_delta": 7555.0
+        },
+        {
+          "match_method": "C_normalized_name",
+          "row_count_current": 1602,
+          "row_count_baseline": 2158,
+          "row_count_delta": -556.0
+        },
+        {
+          "match_method": "D_fuzzy",
+          "row_count_current": 12897,
+          "row_count_baseline": 14429,
+          "row_count_delta": -1532.0
+        },
+        {
+          "match_method": "E_entity_fingerprint",
+          "row_count_current": 5347,
+          "row_count_baseline": 5190,
+          "row_count_delta": 157.0
+        }
+      ]
+    },
+    "position_returns": {
+      "position_return": [
+        {
+          "index_classification": "COMMON_EQUITY",
+          "row_count_current": 43741,
+          "row_count_baseline": 44298,
+          "row_count_delta": -557.0,
+          "begin_fv_sum_current": 312110676199.6769,
+          "begin_fv_sum_baseline": 312381839814.3371,
+          "begin_fv_sum_delta": -271163614.6602173,
+          "total_return_sum_current": 7619.9631926139,
+          "total_return_sum_baseline": 8801.18377488605,
+          "total_return_sum_delta": -1181.2205822721508
+        },
+        {
+          "index_classification": "DIRECT_LENDING",
+          "row_count_current": 367557,
+          "row_count_baseline": 369418,
+          "row_count_delta": -1861.0,
+          "begin_fv_sum_current": 4118609515957.349,
+          "begin_fv_sum_baseline": 4128352739262.1196,
+          "begin_fv_sum_delta": -9743223304.770508,
+          "total_return_sum_current": 40234560.365596,
+          "total_return_sum_baseline": 394142604.6752548,
+          "total_return_sum_delta": -353908044.3096588
+        },
+        {
+          "index_classification": "DIRECT_REAL_ESTATE",
+          "row_count_current": 1855,
+          "row_count_baseline": 1980,
+          "row_count_delta": -125.0,
+          "begin_fv_sum_current": 122083352914.64995,
+          "begin_fv_sum_baseline": 122115256213.64992,
+          "begin_fv_sum_delta": -31903298.999969482,
+          "total_return_sum_current": 20.238339583304423,
+          "total_return_sum_baseline": 29.49008015520266,
+          "total_return_sum_delta": -9.251740571898235
+        },
+        {
+          "index_classification": "PREFERRED_EQUITY",
+          "row_count_current": 17248,
+          "row_count_baseline": 17907,
+          "row_count_delta": -659.0,
+          "begin_fv_sum_current": 180495475468.84113,
+          "begin_fv_sum_baseline": 180698170667.94104,
+          "begin_fv_sum_delta": -202695199.09991455,
+          "total_return_sum_current": 2837.398243687193,
+          "total_return_sum_baseline": 3493.836209709565,
+          "total_return_sum_delta": -656.4379660223722
+        },
+        {
+          "index_classification": "PRIVATE_EQUITY_FUND",
+          "row_count_current": 13872,
+          "row_count_baseline": 13877,
+          "row_count_delta": -5.0,
+          "begin_fv_sum_current": 165132741982.51154,
+          "begin_fv_sum_baseline": 165225616350.8415,
+          "begin_fv_sum_delta": -92874368.32995605,
+          "total_return_sum_current": 1393.605580803166,
+          "total_return_sum_baseline": 1393.7284360349454,
+          "total_return_sum_delta": -0.1228552317793401
+        },
+        {
+          "index_classification": "STRUCTURED_CREDIT",
+          "row_count_current": 14792,
+          "row_count_baseline": 14768,
+          "row_count_delta": 24.0,
+          "begin_fv_sum_current": 105916565638.16997,
+          "begin_fv_sum_baseline": 105917751503.67,
+          "begin_fv_sum_delta": -1185865.5000305176,
+          "total_return_sum_current": 4334940.694669082,
+          "total_return_sum_baseline": -13.932767959417369,
+          "total_return_sum_delta": 4334954.627437041
+        },
+        {
+          "index_classification": "UNCLASSIFIED",
+          "row_count_current": 8966,
+          "row_count_baseline": 8963,
+          "row_count_delta": 3.0,
+          "begin_fv_sum_current": 193339101510.79675,
+          "begin_fv_sum_baseline": 193336193010.79654,
+          "begin_fv_sum_delta": 2908500.000213623,
+          "total_return_sum_current": 884.9315578543144,
+          "total_return_sum_baseline": 884.9315578543146,
+          "total_return_sum_delta": -2.2737367544323206e-13
+        }
+      ]
+    },
+    "index_returns": {
+      "index_return": [
+        {
+          "index_classification": "COMMON_EQUITY",
+          "row_count_current": 27,
+          "row_count_baseline": 27,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 34153.0,
+          "constituent_count_sum_baseline": 34510.0,
+          "constituent_count_sum_delta": -357.0,
+          "total_begin_fv_sum_current": 310273486899.16327,
+          "total_begin_fv_sum_baseline": 310534046077.1132,
+          "total_begin_fv_sum_delta": -260559177.94995117,
+          "fv_weighted_return_sum_current": 0.8609114690476902,
+          "fv_weighted_return_sum_baseline": 0.85940675864448,
+          "fv_weighted_return_sum_delta": 0.0015047104032102077
+        },
+        {
+          "index_classification": "DIRECT_LENDING",
+          "row_count_current": 27,
+          "row_count_baseline": 27,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 343386.0,
+          "constituent_count_sum_baseline": 344998.0,
+          "constituent_count_sum_delta": -1612.0,
+          "total_begin_fv_sum_current": 4113358039131.919,
+          "total_begin_fv_sum_baseline": 4123016219284.044,
+          "total_begin_fv_sum_delta": -9658180152.125,
+          "fv_weighted_return_sum_current": 0.31162735155778365,
+          "fv_weighted_return_sum_baseline": 0.31372902373001116,
+          "fv_weighted_return_sum_delta": -0.002101672172227509
+        },
+        {
+          "index_classification": "DIRECT_REAL_ESTATE",
+          "row_count_current": 26,
+          "row_count_baseline": 26,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 1823.0,
+          "constituent_count_sum_baseline": 1871.0,
+          "constituent_count_sum_delta": -48.0,
+          "total_begin_fv_sum_current": 122007307754.15999,
+          "total_begin_fv_sum_baseline": 122037506053.15999,
+          "total_begin_fv_sum_delta": -30198299.0,
+          "fv_weighted_return_sum_current": -0.040395657070718294,
+          "fv_weighted_return_sum_baseline": -0.04222480715344758,
+          "fv_weighted_return_sum_delta": 0.0018291500827292834
+        },
+        {
+          "index_classification": "PREFERRED_EQUITY",
+          "row_count_current": 27,
+          "row_count_baseline": 27,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 14773.0,
+          "constituent_count_sum_baseline": 15209.0,
+          "constituent_count_sum_delta": -436.0,
+          "total_begin_fv_sum_current": 179786487093.48343,
+          "total_begin_fv_sum_baseline": 179980988816.85342,
+          "total_begin_fv_sum_delta": -194501723.36999512,
+          "fv_weighted_return_sum_current": -0.05448651032251806,
+          "fv_weighted_return_sum_baseline": -0.05190322208793975,
+          "fv_weighted_return_sum_delta": -0.002583288234578311
+        },
+        {
+          "index_classification": "PRIVATE_EQUITY_FUND",
+          "row_count_current": 26,
+          "row_count_baseline": 26,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 12590.0,
+          "constituent_count_sum_baseline": 12595.0,
+          "constituent_count_sum_delta": -5.0,
+          "total_begin_fv_sum_current": 164968081382.79385,
+          "total_begin_fv_sum_baseline": 165060955751.12384,
+          "total_begin_fv_sum_delta": -92874368.32998657,
+          "fv_weighted_return_sum_current": 1.1688021886114264,
+          "fv_weighted_return_sum_baseline": 1.169450841916472,
+          "fv_weighted_return_sum_delta": -0.0006486533050455989
+        },
+        {
+          "index_classification": "STRUCTURED_CREDIT",
+          "row_count_current": 26,
+          "row_count_baseline": 26,
+          "row_count_delta": 0.0,
+          "constituent_count_sum_current": 14010.0,
+          "constituent_count_sum_baseline": 14004.0,
+          "constituent_count_sum_delta": 6.0,
+          "total_begin_fv_sum_current": 105737702070.78001,
+          "total_begin_fv_sum_baseline": 105737609730.20001,
+          "total_begin_fv_sum_delta": 92340.58000183105,
+          "fv_weighted_return_sum_current": 0.2117676934415891,
+          "fv_weighted_return_sum_baseline": 0.21425885276513562,
+          "fv_weighted_return_sum_delta": -0.0024911593235465157
+        }
+      ]
+    },
+    "fund_financials": {
+      "fund_financial_numeric": []
+    }
+  }
+}

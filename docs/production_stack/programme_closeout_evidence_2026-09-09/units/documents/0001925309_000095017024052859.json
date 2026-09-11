@@ -1,0 +1,62 @@
+{
+  "accession": "0000950170-24-052859",
+  "cik": "0001925309",
+  "identity": [
+    3975177,
+    1774941999732260900
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1925309/000095017024052859.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "2f0a0bb72dbaf63ceb7dc8270b77d1714aecc4f1ba29fb5628c79e1ea4152ea5",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "U_EUR"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "SEK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SEK\"]",
+      "unit_ref": "U_SEK"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "U_GBP"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "U_NOK"
+    }
+  ]
+}

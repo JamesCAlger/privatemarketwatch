@@ -1,0 +1,134 @@
+{
+  "accession": "0001628280-26-020206",
+  "cik": "0001838126",
+  "identity": [
+    15397877,
+    1774941784529683000
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1838126/000162828026020206.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "d901ecaa39613bf61c67b0fd225c75715b04ba8a6307d2fe488854445e12c9c2",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "aud"
+    },
+    {
+      "currency": "SGD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SGD\"]",
+      "unit_ref": "sgd"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "cad"
+    },
+    {
+      "currency": "JPY",
+      "kind": "monetary",
+      "measures": "[\"iso4217:JPY\"]",
+      "unit_ref": "jpy"
+    },
+    {
+      "currency": "SEK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SEK\"]",
+      "unit_ref": "sek"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "nok"
+    },
+    {
+      "currency": "NZD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NZD\"]",
+      "unit_ref": "nzd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:class\"]",
+      "unit_ref": "class"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:Segment\"]",
+      "unit_ref": "segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:component\"]",
+      "unit_ref": "component"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:installment\"]",
+      "unit_ref": "installment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:financingFacility\"]",
+      "unit_ref": "financingfacility"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"hps:tranche\"]",
+      "unit_ref": "tranche"
+    }
+  ]
+}

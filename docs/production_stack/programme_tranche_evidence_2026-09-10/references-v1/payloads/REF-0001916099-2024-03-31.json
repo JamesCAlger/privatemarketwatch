@@ -1,0 +1,362 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1916099",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001916099-2024-03-31.json",
+    "evidence_sha256": "d20b27c6d8351f936bdb7632cbbca21ace3f743ca737e454cba99f7f39c68be3",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001916099-2024-03-31",
+    "report_date": "2024-03-31",
+    "review_note": "March 2024 primary candidate 167,278,000; December primary unavailable.",
+    "saved_candidate_rows": "25",
+    "source_candidate_rows": "46"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1916099/000095017024058570.html",
+    "ref": "REF-0001916099-2024-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Amounts in thousands, except share and per share data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "Diameter Credit Company",
+          "Ite m 1. Consolidated Financial Statements.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (amortized cost $ 166,694 )",
+          "",
+          "",
+          "$",
+          "167,278",
+          "",
+          "",
+          "$",
+          "\u2014",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+            "scale": "3",
+            "text": "166,694",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_b93e91d4-2b88-4da8-872f-640b03e78118",
+            "scale": "3",
+            "text": "167,278",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Amounts in thousands, except share and per share data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "Diameter Credit Company",
+          "Ite m 1. Consolidated Financial Statements.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments, at fair value",
+          "",
+          "",
+          "",
+          "167,278",
+          "",
+          "",
+          "",
+          "\u2014",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+            "scale": "3",
+            "text": "167,278",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Amounts in thousands, except share and per share data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "Diameter Credit Company",
+          "Ite m 1. Consolidated Financial Statements.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "",
+          "",
+          "3,950",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_b1cbd2f1-7613-482c-a610-6358dc464c20",
+            "scale": "3",
+            "text": "3,950",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, | 2024 | Investment Income | From non-controlled/non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share data)",
+          "Consolidated Statement of Operations",
+          "Diameter Credit Company",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total Investments - Non-Controlled/Non-Affiliated",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "170,368",
+          "",
+          "",
+          "$",
+          "166,694",
+          "",
+          "",
+          "$",
+          "167,278",
+          "",
+          "",
+          "",
+          "136.42",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context": "C_57c99da9-8d9c-49fb-a1d4-7b5b33fafec4",
+            "scale": "3",
+            "text": "170,368",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_57c99da9-8d9c-49fb-a1d4-7b5b33fafec4",
+            "scale": "3",
+            "text": "166,694",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_57c99da9-8d9c-49fb-a1d4-7b5b33fafec4",
+            "scale": "3",
+            "text": "167,278",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_57c99da9-8d9c-49fb-a1d4-7b5b33fafec4",
+            "scale": "-2",
+            "text": "136.42",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Investments (1) Footnotes Investment Type Interest Rate (2) Reference Rate Spread Maturity Date Principal Amortized Cost Fair Value (3) % of Net Assets Applicable to Common Shares | Non-Controlled/Non-Affiliated | First Lien Debt | Automobiles",
+        "preceding": [
+          "",
+          "Diameter Credit Company Consolidated Schedule of Investments as of March 31, 2024 (Amounts in thousands) (Unaudited)",
+          "",
+          "5",
+          "The accompanying notes are an integral part of these consolidated financial statements.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[11]/tr[51]"
+      },
+      {
+        "cells": [
+          "Investments - non-controlled/non-affiliated",
+          "",
+          "Commitment Type",
+          "",
+          "Unfunded Commitment",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments - non-controlled/non-affiliated Commitment Type Unfunded Commitment | Accuserve Solutions, Inc. Delayed Draw Term Loan $ 18,852 | Accuserve Solutions, Inc. Revolving Line of Credit $ 543 | Amspec Parent LLC Delayed Draw Term Loan $ 1,127",
+        "preceding": [
+          "",
+          "(5) Position or portion thereof is an unfunded loan commitment, and no interest is being earned on the unfunded portion, although the investment may be subject to unused commitment fees. Negative cost and fair value results from unamortized fees, which are capitalized to the investment cost. See below for more information on the Company\u2019s unfunded commitments (all commitments are first lien, unless otherwise noted):",
+          "(4) These debt investments are not pledged as collateral under the Company's revolving credit facility or repurchase obligation. Any other debt investments listed above are pledged as collateral under our revolving credit facility or repurchase obligation and are not available to satisfy the other creditors of the Company.",
+          "",
+          "(3) Fair value is determined by or under the direction of our Board of Trustees. All of our investments are valued using significant unobservable inputs. In accordance with ASC Topic 820, Fair Value Measurement , such investments are classified as Level 3 within the fair value hierarchy. See Note 5 within the accompanying notes to consolidated financial statements for further discussion.",
+          "(2) Variable rate loans to the portfolio companies bear interest at a rate that is determined by reference to Secured Overnight Financing Rate (\"SOFR\"), which generally resets periodically. For each loan, we have indicated the reference rate used and provided the spread and the interest rate in effect as of March 31, 2024. Variable rate loans typically include an interest reference rate floor feature.",
+          "10-Q"
+        ],
+        "xpath": "/html/body/ix:continuation[2]/table/tr[2]"
+      },
+      {
+        "cells": [
+          "Total investments, beginning of period",
+          "",
+          "$",
+          "\u2014",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments: | Total investments, beginning of period $ \u2014 | New investments purchased including capitalized PIK interest 193,109 | Net accretion of discount on investments 89",
+        "preceding": [
+          "",
+          "Our investment activity is presented below for the three months ended March 31, 2024 (information herein is at amortized cost unless otherwise indicated):",
+          "Portfolio and Investment Activity",
+          "Costs and expenses of the Administrator and the Adviser that are eligible for reimbursement by us will be reasonably allocated on the basis of time spent, assets under management, usage rates, proportionate holdings, a combination thereof or other reasonable methods determined by the Administrator in accordance with policies adopted by the Board.",
+          "s may pay third-party providers of goods or services on our behalf. We will reimburse the Adviser, Administrator and their affiliates for any such amounts. The Administrator has elected to forgo any reimbursement for rent and other occupancy costs for the three months ended March 31, 2024. However, the Administrator may seek reimbursement for such costs in future periods. All of the foregoing expenses will ultimately be borne by our shareholders.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[12]/tr[3]"
+      },
+      {
+        "cells": [
+          "Total investments, end of period",
+          "",
+          "$",
+          "166,694",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Investments: | Total investments, beginning of period $ \u2014 | New investments purchased including capitalized PIK interest 193,109 | Net accretion of discount on investments 89",
+        "preceding": [
+          "",
+          "Our investment activity is presented below for the three months ended March 31, 2024 (information herein is at amortized cost unless otherwise indicated):",
+          "Portfolio and Investment Activity",
+          "Costs and expenses of the Administrator and the Adviser that are eligible for reimbursement by us will be reasonably allocated on the basis of time spent, assets under management, usage rates, proportionate holdings, a combination thereof or other reasonable methods determined by the Administrator in accordance with policies adopted by the Board.",
+          "s may pay third-party providers of goods or services on our behalf. We will reimburse the Adviser, Administrator and their affiliates for any such amounts. The Administrator has elected to forgo any reimbursement for rent and other occupancy costs for the three months ended March 31, 2024. However, the Administrator may seek reimbursement for such costs in future periods. All of the foregoing expenses will ultimately be borne by our shareholders.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[12]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "3,950",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, 2024 | Total investment income $ 3,950 | Net expenses 420 | Net investment income 3,530",
+        "preceding": [
+          "",
+          "The following table represents the operating results:",
+          "We were organized under the laws of the State of Delaware on February 24, 2022. The Adviser is a recently formed entity. As a result, we have no corresponding prior year periods with which to compare our operating results.",
+          "",
+          "Results of Operations",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[15]/tr[3]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "3,950",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, 2024 | Interest income $ 3,950 | Total investment income $ 3,950",
+        "preceding": [
+          "",
+          "Investment income was as follows:",
+          "Investment Income",
+          "",
+          "Three Months Ended March 31, 2024 Total investment income $ 3,950 Net expenses 420 Net investment income 3,530 Net unrealized gain 584 Net increase in net assets resulting from operations $ 4,114",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[16]/tr[4]"
+      }
+    ],
+    "sha256": "77ce45b0b723aff4a468b265fc6ad7609d9e453c2b75ed088e5e357559002561",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,70 @@
+{
+  "files": [
+    {
+      "bytes": 312,
+      "path": "cache_files/666/conservation.1788885037.parquet",
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "bytes": 2243,
+      "path": "cache_files/666/fund_financials.1788877663.parquet",
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "bytes": 2235,
+      "path": "cache_files/666/holdings.1788882554.parquet",
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    },
+    {
+      "bytes": 312,
+      "path": "cache_files/999/conservation.1788885037.parquet",
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "bytes": 2243,
+      "path": "cache_files/999/fund_financials.1788877663.parquet",
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "bytes": 2235,
+      "path": "cache_files/999/holdings.1788882554.parquet",
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    },
+    {
+      "bytes": 4306,
+      "path": "diagnosis.json",
+      "sha256": "4c5e20f178e01dc70fe966f4c4ef9b191fc68fc4abc5d4017c237ab96f060bb3"
+    },
+    {
+      "bytes": 765,
+      "path": "process.json",
+      "sha256": "45082052bca0897ffb59d1ab67d13ddeeccb714bcb45e3615f6bb1289e0f914a"
+    },
+    {
+      "bytes": 4597,
+      "path": "process.log",
+      "sha256": "a33962c7113d6504c2aed3c23ed39201fab0b04f70b9f6e1833d0262abc48cb5"
+    },
+    {
+      "bytes": 3301270,
+      "path": "protected_after.json.gz",
+      "sha256": "3b79af21a06c6aa0ec0ef9ab6361ce617c6386cef7db25feb922ddd96d291e33"
+    },
+    {
+      "bytes": 3301171,
+      "path": "protected_before.json.gz",
+      "sha256": "cd3c8b131f27ffcf9023a7feca328e311654ad38f71c540d87c0f35bb4c0f71e"
+    },
+    {
+      "bytes": 127,
+      "path": "resources.json",
+      "sha256": "6954f688cb8f99274316f1fc938d5955a8915b517b1b090727ae0cee75998bbe"
+    },
+    {
+      "bytes": 1185,
+      "path": "result.json",
+      "sha256": "3227088d3b0ac30dfb572a999017183ceac7749ac82486efd293f68caa6ac704"
+    }
+  ],
+  "status": "forensic_record_complete"
+}

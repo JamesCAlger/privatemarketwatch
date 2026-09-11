@@ -1,0 +1,86 @@
+{
+  "accession": "0000950170-25-072747",
+  "cik": "0001899017",
+  "identity": [
+    11401445,
+    1774941921424285300
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1899017/000095017025072747.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "047f8e837da3ad53c0d40d1f207006f531bd5a641f6fe90619aed7f11c76c506",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "U_AUD"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "U_EUR"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001899017:Segment\"]",
+      "unit_ref": "U_Segment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "NZD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NZD\"]",
+      "unit_ref": "U_NZD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001899017:Loan\"]",
+      "unit_ref": "U_Loan"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "U_GBP"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001899017:Borrower\"]",
+      "unit_ref": "U_Borrower"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001899017:Period\"]",
+      "unit_ref": "U_Period"
+    }
+  ]
+}

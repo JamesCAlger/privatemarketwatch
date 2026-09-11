@@ -1,0 +1,33 @@
+{
+  "candidate_hash_unchanged": true,
+  "pinned_input_stats_unchanged": true,
+  "source_documents_rehashed": 53,
+  "pilot_clusters": 61,
+  "legacy_labels": 127,
+  "programme_verdict": "NOT_ASSESSABLE",
+  "prior_pinned_input_stats_checked": 2083,
+  "prior_pinned_input_drift": [],
+  "current_candidate_and_evaluator_hashes_rechecked": 8,
+  "supplemental_source_inputs_hashed": 89,
+  "targeted_tests": {
+    "command": "python -m pytest tests/test_programme_reference.py -q",
+    "passed": 8,
+    "seconds": 51.31
+  },
+  "semantic_backstop": {
+    "full_manifest_scan": "stopped at 240-second bound; no result; 64537 manifest entries",
+    "five_artifact_semantic_comparison": "completed; 11 holdings, 7 matches, 7 position-return, 6 index-return delta rows; fund financials unchanged",
+    "assessment": "Existing baseline divergence, not a clean baseline result. Pytest protected-output guard passed; saved inputs unchanged."
+  },
+  "delivery_document_links_checked": 6,
+  "delivery_python_syntax_files": 14,
+  "compressed_table_row_counts": {
+    "source_rows.csv.gz": 15128,
+    "source_facts.csv.gz": 53277,
+    "tag_copy_fields.csv.gz": 47230
+  },
+  "all_61_packet_ids_unique": true,
+  "all_910_obligation_keys_unique": true,
+  "final_prior_pinned_input_stats_unchanged": true,
+  "final_candidate_evaluator_hashes_unchanged": true
+}

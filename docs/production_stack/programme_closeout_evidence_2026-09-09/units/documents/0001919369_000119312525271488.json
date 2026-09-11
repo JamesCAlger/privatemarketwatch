@@ -1,0 +1,56 @@
+{
+  "accession": "0001193125-25-271488",
+  "cik": "0001919369",
+  "identity": [
+    4996399,
+    1774941983170985100
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1919369/000119312525271488.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "320954fc7e3dce79f1186a93d8d3c91a5de102c9a48d4dce5e8b2f05979013a2",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001919369:Loan\"]",
+      "unit_ref": "U_Loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001919369:Transfer\"]",
+      "unit_ref": "U_Transfer"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001919369:Component\"]",
+      "unit_ref": "U_Component"
+    }
+  ]
+}

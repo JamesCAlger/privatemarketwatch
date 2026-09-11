@@ -1,0 +1,56 @@
+{
+  "accession": "0001558370-24-011725",
+  "cik": "0001901037",
+  "identity": [
+    4820358,
+    1774941929971642100
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1901037/000155837024011725.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "8bd1f81960c2e150ec6c2d8805bf48b97d425000db9ff9872e82c72ed8043184",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "Unit_Standard_shares_FcXc_ncHEkWSgnVG5Dl8xw"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "Unit_Standard_USD_EB_hRZXYB0uP6uqE2qKgtg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "Unit_Standard_pure_RpYG_dJSYky3ClCHHyLCHg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "Unit_Divide_USD_shares_h85ZHPTsyEq-EBX1JNuD_g"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:company\"]",
+      "unit_ref": "Unit_Standard_company__HOc0LFwh0qgFV-pZLlIBQ"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:item\"]",
+      "unit_ref": "Unit_Standard_item_EUG7uw7hZUiBebJ4Q6DwsA"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "Unit_Standard_EUR_vGxS-84Wj0mORFlRXHS5aQ"
+    }
+  ]
+}

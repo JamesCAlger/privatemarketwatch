@@ -1,0 +1,309 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_d6b520f5-4cfc-4152-b55d-d011f83e0ca6",
+        "name": "ck0001919369:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "",
+        "$",
+        "1,182,918",
+        "",
+        "",
+        "$",
+        "1,185,955",
+        "",
+        "",
+        "",
+        "203.4",
+        "%"
+      ],
+      "concept": "ck0001919369:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+      "context_id": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+      "currency": "USD",
+      "fact_id": "F_d6b520f5-4cfc-4152-b55d-d011f83e0ca6",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "1,182,918",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[56]/table/tr[22]",
+      "table_xpath": "/html/body/div[56]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "1182918000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_751d4a57-be91-4206-a6d1-d34c90a52ef8",
+        "name": "ck0001919369:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "",
+        "$",
+        "1,182,918",
+        "",
+        "",
+        "$",
+        "1,185,955",
+        "",
+        "",
+        "",
+        "203.4",
+        "%"
+      ],
+      "concept": "ck0001919369:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+      "context_id": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+      "currency": "USD",
+      "fact_id": "F_751d4a57-be91-4206-a6d1-d34c90a52ef8",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "1,185,955",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[56]/table/tr[22]",
+      "table_xpath": "/html/body/div[56]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "1185955000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_e5812f1f-7676-43da-854f-e58cd0d11ab7",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "1,147,559",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+      "currency": "USD",
+      "fact_id": "F_e5812f1f-7676-43da-854f-e58cd0d11ab7",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,147,559",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[112]/div/ix:continuation/div[1]/ix:nonnumeric/table[1]/tr[10]",
+      "table_xpath": "/html/body/div[112]/div/ix:continuation/div[1]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "1147559000"
+    }
+  ],
+  "cik": "0001919369",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1919369/000119312525271488.html",
+  "reference_id": "REF-0001919369-2025-09-30",
+  "report_date": "2025-09-30",
+  "source_rows": 98,
+  "source_sha256": "f9ca5b7892e7b6da304fe3cc1137119faf6b9b1ba6b280f88401e5bd5dec747c",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Investments \u2013 non-controlled/non-affiliated, at fair value (amortized cost of $ 1,144,522 and $ 504,119 , respectively) | $ | 1,147,559 | $ | 506,574"
+      ],
+      "last": [
+        "Investments \u2013 non-controlled/non-affiliated, at fair value (amortized cost of $ 1,144,522 and $ 504,119 , respectively) | $ | 1,147,559 | $ | 506,574"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2025 December 31, 2024",
+        "(unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "CONSOLIDATED STATEM ENTS OF ASSETS AND LIABILITIES",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "Item 1. Consolida ted Financial Statements",
+        "PART I. CONSOLI DATED FINANCIAL INFORMATION"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/div[20]/table"
+    },
+    {
+      "contexts": 28,
+      "first": [
+        "Central Parent, Inc. | (7) (21) | SOFR + 3.25 % | 7.25 | % | 7/6/2029 | 9,900 | $ | 9,918 | $ | 8,589 | 1.5 | %",
+        "LeadVenture Inc. | (4) (9) (21) (22) (23) | SOFR + 5.25 % | 9.25 | % | 6/23/2032 | 28,933 | 28,449 | 28,443 | 4.9"
+      ],
+      "last": [
+        "Athenahealth Group, Inc. | (8) (21) | SOFR + 2.75 % | 6.91 | % | 2/15/2029 | 5,448 | 5,431 | 5,444 | 0.9",
+        "85,500 | 85,504 | 14.7"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(24) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Investments \u2013 Non-controlled/non-affiliated",
+        "First-Lien Debt"
+      ],
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "September 30, 2025",
+        "CONSOLIDATED SC HEDULE OF INVESTMENTS (unaudited)",
+        "VISTA CREDIT STRATEGIC LENDING CORP."
+      ],
+      "rows": 28,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 28,
+      "first": [
+        "Mews Systems B.V. | (4) (5) (10) (19) (21) (22) (23) | SOFR + 9.00 % | 13.02 | % | 9/16/2029 | 17,840 | $ | 16,737 | $ | 17,614 | 3.0 | %",
+        "Passport Labs, Inc. | (4) (13) (21) | SOFR + 6.75 % | 10.92 | % | 4/24/2030 | 28,599 | 28,466 | 28,528 | 4.9"
+      ],
+      "last": [
+        "Enverus Holdings, Inc. | (9) (21) (22) (23) | SOFR + 5.50 % | 9.66 | % | 12/24/2029 | 17,064 | 16,860 | 17,088 | 2.9",
+        "Total First-Lien Debt | 1,133,079 | 1,135,522 | 194.8"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(24) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Hotels, Restaurants & Leisure",
+        "Mews Systems B.V. (4) (5) (10) (19) (21) (22) (23) SOFR + 9.00 % 13.02 % 9/16/2029 17,840 $ 16,737 $ 17,614 3.0 %"
+      ],
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "September 30, 2025",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (unaudited) - (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP."
+      ],
+      "rows": 28,
+      "table_xpath": "/html/body/div[52]/table"
+    },
+    {
+      "contexts": 11,
+      "first": [
+        "Metropolis Technologies, Inc. | (4) (22) | N/A | 16.00 | % | 5/16/2034 | 4,320 | $ | 4,277 | $ | 4,320 | 0.7 | %",
+        "Metropolis Technologies, Inc. | (4) (22) | N/A | 17.50 | % | 5/16/2034 | 480 | 456 | 480 | 0.1"
+      ],
+      "last": [
+        "Total Other Equity | 6,710 | 7,237 | 1.2",
+        "Total Investments - Non-controlled/non-affiliated | 1,144,522 | 1,147,559 | 196.8"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(24) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Preferred Equity",
+        "Transportation, Logistics & Supply Chain"
+      ],
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "September 30, 2025",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (unaudited) - (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP."
+      ],
+      "rows": 11,
+      "table_xpath": "/html/body/div[56]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "United States | $ | 1,038,958 | 90.8 | % | $ | 1,039,384 | 90.6 | %",
+        "Canada | 26,702 | 2.3 | 26,552 | 2.3"
+      ],
+      "last": [
+        "Switzerland | 20,136 | 1.7 | 20,309 | 1.7",
+        "Total | $ | 1,144,522 | 100.0 | % | $ | 1,147,559 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "As of September 30, 2025",
+        "Geography - % of Fair Value Amortized Cost Fair Value",
+        "United States $ 1,038,958 90.8 % $ 1,039,384 90.6 %"
+      ],
+      "preceding": [],
+      "rows": 6,
+      "table_xpath": "/html/body/div[68]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "First-lien debt | $ | - | $ | 345,060 | $ | 790,462 | $ | 1,135,522",
+        "First-lien debt | $ | - | $ | 345,060 | $ | 790,462 | $ | 1,135,522"
+      ],
+      "last": [
+        "Investments measured at net asset value (1) | $ | 979",
+        "Total Investments | $ | 1,147,559"
+      ],
+      "opening_rows": [
+        "",
+        "As of September 30, 2025",
+        "Level 1 Level 2 Level 3 Total",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "The following tables summarize the Company\u2019s investments measured at fair value on a recurring basis by the above fair value hierarchy levels as of September 30, 2025 and December 31, 2024."
+      ],
+      "rows": 18,
+      "table_xpath": "/html/body/div[112]/div/ix:continuation/div[1]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "First-lien debt | $ | 560,936 | Yield Analysis | Discount Rate | 8.37 | % | 16.09 | % | 10.50 | %",
+        "229,526 | Recent Transactions | Transaction Price | 94.83 | 100.00 | 98.45"
+      ],
+      "last": [
+        "5,973 | Market Approach | Revenue Multiple | 6.50 | x | 9.75 | x | 7.84 | x",
+        "Total Level 3 investments | $ | 801,520"
+      ],
+      "opening_rows": [
+        "",
+        "Range",
+        "Fair Value as of September 30, 2025 Valuation Techniques Significant Unobservable Inputs Low High Weighted Average",
+        "First-lien debt $ 560,936 Yield Analysis Discount Rate 8.37 % 16.09 % 10.50 %"
+      ],
+      "preceding": [
+        "",
+        "The following table summarizes the quantitative information related to the significant unobservable inputs for Level 3 instruments which are carried at fair value as of September 30, 2025:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[120]/div/ix:continuation/div/ix:nonnumeric/table[1]"
+    }
+  ]
+}

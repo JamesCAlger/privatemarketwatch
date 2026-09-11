@@ -1,0 +1,110 @@
+{
+  "accession": "0001628280-26-034133",
+  "cik": "0001918712",
+  "identity": [
+    14457834,
+    1779876053162922800
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1918712/000162828026034133.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "d1cfed638aa0133d12bae4f6e4f64b1d1896f5fda5c803a7cab10d7d484d0ece",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "nok"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "cad"
+    },
+    {
+      "currency": "DKK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:DKK\"]",
+      "unit_ref": "dkk"
+    },
+    {
+      "currency": "NZD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NZD\"]",
+      "unit_ref": "nzd"
+    },
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "aud"
+    },
+    {
+      "currency": "CHF",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CHF\"]",
+      "unit_ref": "chf"
+    },
+    {
+      "currency": "SEK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:SEK\"]",
+      "unit_ref": "sek"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "JPY",
+      "kind": "monetary",
+      "measures": "[\"iso4217:JPY\"]",
+      "unit_ref": "jpy"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:segment\"]",
+      "unit_ref": "segment"
+    }
+  ]
+}

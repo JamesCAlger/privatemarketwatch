@@ -1,0 +1,104 @@
+{
+  "accession": "0001918712-26-000018",
+  "cik": "0001918712",
+  "identity": [
+    14502833,
+    1774941980440577200
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1918712/000191871226000018.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "cd9c1ec7c988688cd675d0a002b10a02625c931808a2a514fd30048c5611c032",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "GBP",
+      "kind": "monetary",
+      "measures": "[\"iso4217:GBP\"]",
+      "unit_ref": "gbp"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "eur"
+    },
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "aud"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "cad"
+    },
+    {
+      "currency": "NOK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NOK\"]",
+      "unit_ref": "nok"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "JPY",
+      "kind": "monetary",
+      "measures": "[\"iso4217:JPY\"]",
+      "unit_ref": "jpy"
+    },
+    {
+      "currency": "DKK",
+      "kind": "monetary",
+      "measures": "[\"iso4217:DKK\"]",
+      "unit_ref": "dkk"
+    },
+    {
+      "currency": "NZD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:NZD\"]",
+      "unit_ref": "nzd"
+    },
+    {
+      "currency": "CHF",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CHF\"]",
+      "unit_ref": "chf"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:segment\"]",
+      "unit_ref": "segment"
+    }
+  ]
+}

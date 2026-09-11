@@ -1,0 +1,535 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_efe1bc38-7575-41a2-bbed-997facaa9bb0",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (cost of $ 3,618,855 and $ 3,691,041 )",
+        "",
+        "$",
+        "3,438,696",
+        "",
+        "",
+        "$",
+        "3,506,216",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+      "currency": "USD",
+      "fact_id": "F_efe1bc38-7575-41a2-bbed-997facaa9bb0",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "3,438,696",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[5]/tr[8]",
+      "table_xpath": "/html/body/table[5]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3438696000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_3dc2439f-418e-41a8-9662-729168094272",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "3,618,855",
+        "",
+        "",
+        "$",
+        "3,438,696",
+        "",
+        "$",
+        "3,691,041",
+        "",
+        "",
+        "$",
+        "3,506,216",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+      "currency": "USD",
+      "fact_id": "F_3dc2439f-418e-41a8-9662-729168094272",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "3,438,696",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[55]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[11]",
+      "table_xpath": "/html/body/div[55]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3438696000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_ca5554b2-341c-43bc-9661-4f57a2c784a3",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "291",
+        "",
+        "",
+        "$",
+        "105,622",
+        "",
+        "",
+        "$",
+        "3,332,783",
+        "",
+        "",
+        "$",
+        "3,438,696",
+        "",
+        "",
+        "$",
+        "993",
+        "",
+        "",
+        "$",
+        "163,376",
+        "",
+        "",
+        "$",
+        "3,341,847",
+        "",
+        "",
+        "$",
+        "3,506,216",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_b6f3d454-3449-4a2a-847c-cf222d01809d",
+      "currency": "USD",
+      "fact_id": "F_ca5554b2-341c-43bc-9661-4f57a2c784a3",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "3,438,696",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[56]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[11]",
+      "table_xpath": "/html/body/div[56]/ix:nonnumeric/div[3]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3438696000"
+    }
+  ],
+  "cik": "0001572694",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1572694/000095017023060336.html",
+  "reference_id": "REF-0001572694-2023-09-30",
+  "report_date": "2023-09-30",
+  "source_rows": 420,
+  "source_sha256": "f84de85c7dcd837b1ca4969d6cb282cabd4adf8c785325f5924f470e70cdc9a9",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost of $ 3,525,145 and $ 3,598,963 ) | $ | 3,397,985 | $ | 3,465,225",
+        "Non-controlled affiliated investments (cost of $ 71,344 and $ 69,712 ) | 40,711 | 40,991"
+      ],
+      "last": [
+        "Non-controlled affiliated investments (cost of $ 71,344 and $ 69,712 ) | 40,711 | 40,991",
+        "Total investments, at fair value (cost of $ 3,618,855 and $ 3,691,041 ) | $ | 3,438,696 | $ | 3,506,216"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 (Unaudited) December 31, 2022",
+        "Assets",
+        "Investments, at fair value"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements o f Assets and Liabilities",
+        "Goldman Sachs BDC, Inc.",
+        "ITEM 1. FINANC IAL STATEMENTS",
+        "",
+        "PART I. FINANCI AL INFORMATION",
+        "Table of Contents"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[5]"
+    },
+    {
+      "contexts": 48,
+      "first": [
+        "1272775 B.C. LTD. (dba Everest Clinical Research) | Professional Services | 11.54 % | S + 6.00 % | 11/06/26 | $ | 9,171 | $ | 9,092 | $ | 9,056 | (5) (6) (7)",
+        "1272775 B.C. LTD. (dba Everest Clinical Research) | Professional Services | 14.50 % | P + 6.00 % | 11/06/26 | 919 | 874 | 871 | (5) (6) (7) (8)"
+      ],
+      "last": [
+        "Bullhorn, Inc. | Professional Services | 11.24 % | S + 5.75 % | 09/30/26 | 431 | 420 | 425 | (6) (7)",
+        "Bullhorn, Inc. | Professional Services | S + 5.75 % | 09/30/26 | 1,344 | ( 11 | ) | ( 20 | ) | (6) (7) (8)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "1st Lien/Senior Secured Debt - 196.24 %",
+        "1272775 B.C. LTD. (dba Everest Clinical Research) Professional Services 11.54 % S + 6.00 % 11/06/26 $ 9,171 $ 9,092 $ 9,056 (5) (6) (7)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 48,
+      "table_xpath": "/html/body/table[9]"
+    },
+    {
+      "contexts": 48,
+      "first": [
+        "Businessolver.com, Inc. | Health Care Technology | 10.99 % | S + 5.50 % | 12/01/27 | $ | 18,389 | $ | 18,252 | $ | 18,205 | (6) (7)",
+        "Businessolver.com, Inc. | Health Care Technology | 10.99 % | S + 5.50 % | 12/01/27 | 5,022 | 407 | 376 | (6) (7) (8)"
+      ],
+      "last": [
+        "Elemica Parent, Inc. | Chemicals | 11.54 % | S + 6.00 % | 09/18/25 | 1,352 | 1,316 | 1,315 | (6) (7)",
+        "Elemica Parent, Inc. | Chemicals | 10.88 % | S + 5.50 % | 09/18/25 | 930 | 910 | 904 | (6) (7)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Businessolver.com, Inc. Health Care Technology 10.99 % S + 5.50 % 12/01/27 $ 18,389 $ 18,252 $ 18,205 (6) (7)",
+        "Businessolver.com, Inc. Health Care Technology 10.99 % S + 5.50 % 12/01/27 5,022 407 376 (6) (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 48,
+      "table_xpath": "/html/body/table[10]"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "Elemica Parent, Inc. | Chemicals | 11.54 % | S + 6.00 % | 09/18/25 | $ | 550 | $ | 543 | $ | 535 | (6) (7)",
+        "Eptam Plastics, Ltd. | Health Care Equipment & Supplies | 10.92 % | S + 5.50 % | 12/06/25 | 10,289 | 10,040 | 9,955 | (6) (7)"
+      ],
+      "last": [
+        "Highfive Dental Holdco, LLC | Health Care Providers & Services | S + 6.75 % | 06/13/28 | 313 | ( 9 | ) | ( 8 | ) | (6) (7) (8)",
+        "Highfive Dental Holdco, LLC | Health Care Providers & Services | S + 6.75 % | 06/13/28 | 1,875 | ( 53 | ) | ( 47 | ) | (6) (7) (8)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Elemica Parent, Inc. Chemicals 11.54 % S + 6.00 % 09/18/25 $ 550 $ 543 $ 535 (6) (7)",
+        "Eptam Plastics, Ltd. Health Care Equipment & Supplies 10.92 % S + 5.50 % 12/06/25 10,289 10,040 9,955 (6) (7)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 49,
+      "first": [
+        "Hollander Intermediate LLC (dba Bedding Acquisition, LLC) | Household Products | 14.18 % | S + 8.75 % | 09/21/26 | $ | 38,805 | $ | 37,966 | $ | 33,954 | (6) (7)",
+        "Honor HN Buyer, Inc | Health Care Providers & Services | 11.29 % | S + 5.75 % | 10/15/27 | 23,930 | 23,581 | 23,452 | (6) (7)"
+      ],
+      "last": [
+        "One GI LLC | Health Care Providers & Services | 12.17 % | S + 6.75 % | 12/22/25 | 6,626 | 6,493 | 6,184 | (6) (7) (8)",
+        "One GI LLC | Health Care Providers & Services | 12.17 % | S + 6.75 % | 12/22/25 | 3,610 | 3,574 | 3,393 | (6) (7)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Hollander Intermediate LLC (dba Bedding Acquisition, LLC) Household Products 14.18 % S + 8.75 % 09/21/26 $ 38,805 $ 37,966 $ 33,954 (6) (7)",
+        "Honor HN Buyer, Inc Health Care Providers & Services 11.29 % S + 5.75 % 10/15/27 23,930 23,581 23,452 (6) (7)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 49,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 43,
+      "first": [
+        "Ortholite, LLC | Textiles, Apparel & Luxury Goods | 11.65 % | S + 6.25 % | 09/29/27 | $ | 5,881 | $ | 5,822 | $ | 5,822 | (6)",
+        "Output Services Group, Inc. | Diversified Consumer Services | S + 6.75 % (Incl. 1.50 % PIK) | 06/29/26 | 3,890 | 3,857 | 758 | (9)"
+      ],
+      "last": [
+        "Rubrik, Inc. | Software | 12.53 % | S + 7.00 % | 08/17/28 | 34,387 | 34,049 | 34,043 | (6)",
+        "Rubrik, Inc. | Software | 12.37 % | S + 7.00 % | 08/17/28 | 4,806 | 439 | 437 | (6) (8)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Ortholite, LLC Textiles, Apparel & Luxury Goods 11.65 % S + 6.25 % 09/29/27 $ 5,881 $ 5,822 $ 5,822 (6)",
+        "Output Services Group, Inc. Diversified Consumer Services S + 6.75 % (Incl. 1.50 % PIK) 06/29/26 3,890 3,857 758 (9)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 43,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Singlewire Software, LLC | Software | 11.64 % | S + 6.25 % | 05/10/29 | $ | 869 | $ | 844 | $ | 847 | (6) (7)",
+        "Singlewire Software, LLC | Software | S + 6.25 % | 05/10/29 | 129 | ( 4 | ) | ( 3 | ) | (6) (7) (8)"
+      ],
+      "last": [
+        "Sweep Purchaser LLC | Commercial Services & Supplies | 11.22 % | S + 5.75 % | 11/30/26 | 7,100 | 7,012 | 6,745 | (6) (7)",
+        "Sweep Purchaser LLC | Commercial Services & Supplies | 11.22 % | S + 5.75 % | 11/30/26 | 4,932 | 4,863 | 4,686 | (6) (7)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Singlewire Software, LLC Software 11.64 % S + 6.25 % 05/10/29 $ 869 $ 844 $ 847 (6) (7)",
+        "Singlewire Software, LLC Software S + 6.25 % 05/10/29 129 ( 4 ) ( 3 ) (6) (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 39,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Sweep Purchaser LLC | Commercial Services & Supplies | 11.23 % | S + 5.75 % | 11/30/26 | $ | 4,541 | $ | 4,400 | $ | 4,223 | (6) (7) (8)",
+        "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) | Health Care Providers & Services | 11.52 % | S + 6.00 % | 08/15/25 | 25,856 | 25,154 | 25,403 | (6) (7)"
+      ],
+      "last": [
+        "Whitewater Holding Company LLC | Diversified Consumer Services | 11.22 % | S + 5.75 % | 12/21/27 | 2,340 | 200 | 164 | (6) (7) (8)",
+        "Wine.com, LLC | Beverages | 12.64 % | S + 7.00 % | 11/14/24 | 15,400 | 15,405 | 20,020 | (6) (7)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Sweep Purchaser LLC Commercial Services & Supplies 11.23 % S + 5.75 % 11/30/26 $ 4,541 $ 4,400 $ 4,223 (6) (7) (8)",
+        "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 11.52 % S + 6.00 % 08/15/25 25,856 25,154 25,403 (6) (7)"
+      ],
+      "preceding": [
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        "",
+        ""
+      ],
+      "rows": 39,
+      "table_xpath": "/html/body/table[15]"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Wine.com, LLC | Beverages | 12.64 % | S + 7.00 % | 11/14/24 | $ | 3,700 | $ | 3,703 | $ | 4,810 | (6) (7)",
+        "Wine.com, LLC | Beverages | 12.00 % PIK | 11/14/24 | 5,882 | 7,672 | 2,588 | (6) (7) (9) (10)"
+      ],
+      "last": [
+        "CivicPlus LLC | Software | 17.09 % | S + 11.75 % PIK | 06/09/34 | 7,312 | 7,133 | 7,129 | (6) (7)",
+        "Total Unsecured Debt | 10,158 | 9,011"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par (3) Cost Fair Value Footnotes",
+        "Wine.com, LLC Beverages 12.64 % S + 7.00 % 11/14/24 $ 3,700 $ 3,703 $ 4,810 (6) (7)",
+        "Wine.com, LLC Beverages 12.00 % PIK 11/14/24 5,882 7,672 2,588 (6) (7) (9) (10)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 39,
+      "table_xpath": "/html/body/table[16]"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Broadway Parent, LLC | Diversified Financial Services | 01/25/21 | 4,000,000 | $ | 4,019 | $ | 8,000 | (6) (7) (12)",
+        "CloudBees, Inc. | Software | 11/24/21 | 1,152,957 | 12,899 | 15,507 | (6) (7) (12)"
+      ],
+      "last": [
+        "Total Warrants | 1,849 | 327",
+        "Total Investments - 214.84 % | $ | 3,618,855 | $ | 3,438,696"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1)(4) Industry Interest Rate Initial Acquisition Date (14) Shares (3) Cost Fair Value Footnotes",
+        "Preferred Stock - 2.80 %",
+        "Broadway Parent, LLC Diversified Financial Services 01/25/21 4,000,000 $ 4,019 $ 8,000 (6) (7) (12)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs BDC, Inc.",
+        "Table of Contents",
+        "",
+        ""
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/table[17]"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "ATX Networks Corp. | 9,059 | 225 | ( 164 | ) | \u2014 | ( 1,732 | ) | 7,388 | 542",
+        "Collaborative Imaging, LLC (dba Texas Radiology Associates) | 4,926 | \u2014 | \u2014 | \u2014 | ( 971 | ) | 3,955 | 184"
+      ],
+      "last": [
+        "Total Non-Controlled Affiliates | $ | 40,991 | $ | 472,472 | $ | ( 470,840 | ) | $ | \u2014 | $ | ( 1,912 | ) | $ | 40,711 | $ | 2,316",
+        "Total Affiliates | $ | 40,991 | $ | 472,472 | $ | ( 470,840 | ) | $ | \u2014 | $ | ( 1,912 | ) | $ | 40,711 | $ | 2,316"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain(Loss) Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest, PIK and Other Income",
+        "For the Nine Months Ended September 30, 2023",
+        "Controlled Affiliates"
+      ],
+      "preceding": [
+        "",
+        ""
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[53]/ix:nonnumeric/div[5]/ix:continuation/table[1]"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 3,242,212 | $ | 3,141,036 | $ | 3,174,534 | $ | 3,129,552",
+        "1st Lien/Last-Out Unitranche | 127,342 | 123,176 | 120,253 | 116,230"
+      ],
+      "last": [
+        "Warrants | 1,849 | 327 | 1,849 | 611",
+        "Total | $ | 3,618,855 | $ | 3,438,696 | $ | 3,691,041 | $ | 3,506,216"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 December 31, 2022",
+        "Investment Type Cost Fair Value Cost Fair Value",
+        "1st Lien/Senior Secured Debt $ 3,242,212 $ 3,141,036 $ 3,174,534 $ 3,129,552"
+      ],
+      "preceding": [
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:"
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/div[55]/ix:nonnumeric/div[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 2,854,418 | Discounted cash flows | Discount Rate | 9.3 % - 27.4 % | 12.0 %",
+        "$ | 1,345 | Collateral analysis | Recovery Rate | 4.3 % - 27.5 % | 22.8 %"
+      ],
+      "last": [
+        "Unsecured Debt | $ | 8,812 | Discounted cash flows | Discount Rate | 15.0 % - 17.2 % | 16.8 %",
+        "$ | 199 | Comparable multiples | EV/EBITDA (6) | \u2014 | 8.5 x"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Instruments Fair Value (1)(2) Valuation Techniques (3) Significant Unobservable Inputs Range of Significant Unobservable Inputs (4) Weighted Average (5)",
+        "As of September 30, 2023",
+        "Bank Loans, Corporate Debt, and Other Debt Obligations"
+      ],
+      "preceding": [],
+      "rows": 8,
+      "table_xpath": "/html/body/div[56]/ix:nonnumeric/div[2]/ix:continuation/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 105,622 | $ | 3,035,414 | $ | 3,141,036 | $ | \u2014 | $ | 78,623 | $ | 3,050,929 | $ | 3,129,552",
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 105,622 | $ | 3,035,414 | $ | 3,141,036 | $ | \u2014 | $ | 78,623 | $ | 3,050,929 | $ | 3,129,552"
+      ],
+      "last": [
+        "Total Assets | $ | 291 | $ | 105,622 | $ | 3,332,783 | $ | 3,438,696 | $ | 993 | $ | 163,376 | $ | 3,341,847 | $ | 3,506,216",
+        "Total Assets | $ | 291 | $ | 105,622 | $ | 3,332,783 | $ | 3,438,696 | $ | 993 | $ | 163,376 | $ | 3,341,847 | $ | 3,506,216"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 December 31, 2022",
+        "Assets Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total",
+        "1st Lien/Senior Secured Debt $ \u2014 $ 105,622 $ 3,035,414 $ 3,141,036 $ \u2014 $ 78,623 $ 3,050,929 $ 3,129,552"
+      ],
+      "preceding": [
+        "",
+        "The following is a summary of the Company\u2019s assets categorized within the fair value hierarchy:"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[56]/ix:nonnumeric/div[3]/ix:nonnumeric/table"
+    }
+  ]
+}

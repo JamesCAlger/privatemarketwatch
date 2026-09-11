@@ -1,0 +1,127 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "name": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "Unit_pure"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": null,
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[11]/div[1]/div[1]/div[4]/div/table/tr[28]",
+      "table_xpath": "/html/body/div[11]/div[1]/div[1]/div[4]/div/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "Unit_pure",
+      "value": "1.000"
+    }
+  ],
+  "cik": "0001743415",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1743415/000119312523206204.html",
+  "reference_id": "REF-0001743415-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 68,
+  "source_sha256": "3849ccbe616ac855b6824cbf8859fbdb975ca7bf4c4c52f0956afb0b88bd8119",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 43,
+      "first": [
+        "ACRES Commercial Mortgage, LLC (2) | Diversified Financial Services | S+705 | 1.00 | % | 12.31 | % | 12/24/2021 | 8/21/2028 | $ | 12,660 | $ | 12,453 | $ | 12,660",
+        "Alimera Sciences, Inc. (2) | Pharmaceuticals | S+515 | 4.60 | % | 10.32 | % | 12/31/2019 | 5/1/2028 | 5,893 | 5,905 | 5,893"
+      ],
+      "last": [
+        "RSC Acquisition, Inc. (2) | Insurance | S+550 | 0.75 | % | 10.64 | % | 10/5/2020 | 11/1/2026 | 18,183 | 17,962 | 18,183",
+        "RxSense Holdings LLC (2) | Diversified Consumer Services | S+500 | 1.00 | % | 10.15 | % | 3/17/2020 | 3/13/2026 | 14,562 | 14,432 | 14,562"
+      ],
+      "opening_rows": [
+        "",
+        "Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value",
+        "Bank Debt/Senior Secured Loans \u2014 192.5%",
+        "ACRES Commercial Mortgage, LLC (2) Diversified Financial Services S+705 1.00 % 12.31 % 12/24/2021 8/21/2028 $ 12,660 $ 12,453 $ 12,660"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share/unit amounts)",
+        "June 30, 2023",
+        "Consolidated Schedule of Investments (unaudited)",
+        "SCP Private Credit Income BDC LLC"
+      ],
+      "rows": 43,
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Southern Orthodontic Partners Management, LLC (2) | Health Care Providers & Services | S+600 | 1.00 | % | 11.50 | % | 6/3/2022 | 1/27/2026 | $ | 3,791 | $ | 3,758 | $ | 3,791",
+        "Spectrum Pharmaceuticals, Inc. (2) | Biotechnology | S+570 | 2.30 | % | 10.87 | % | 9/21/2022 | 9/1/2027 | 3,559 | 3,776 | 3,835"
+      ],
+      "last": [
+        "Liabilities in Excess of Other Assets \u2014 (95.5%) | ( 255,243 | )",
+        "Net Assets \u2014 100.0% | $ | 267,226"
+      ],
+      "opening_rows": [
+        "",
+        "Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value",
+        "Bank Debt/Senior Secured Loans (continued)",
+        "Southern Orthodontic Partners Management, LLC (2) Health Care Providers & Services S+600 1.00 % 11.50 % 6/3/2022 1/27/2026 $ 3,791 $ 3,758 $ 3,791"
+      ],
+      "preceding": [
+        "",
+        "(in thousands)",
+        "June 30, 2023",
+        "Consolidated Schedule of Investments (unaudited) (continued)",
+        "SCP Private Credit Income BDC LLC"
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "AmeriMark Intermediate Holdings, LLC | $ | 8,243 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | ( 3,727 | ) | $ | \u2014 | $ | 4,516",
+        "AmeriMark Intermediate Holdings, LLC | \u2014 | 408 | \u2014 | \u2014 | \u2014 | \u2014 | 408"
+      ],
+      "last": [
+        "SLR-AMI Topco Blocker, LLC | 6,170 | \u2014 | \u2014 | \u2014 | 1,656 | \u2014 | 7,826",
+        "$ | 14,413 | $ | 408 | $ | \u2014 | $ | \u2014 | $ | ( 2,071 | ) | $ | \u2014 | $ | 12,750"
+      ],
+      "opening_rows": [
+        "",
+        "Name of Issuer Fair Value at June 16, 2023 Gross Additions Gross Reductions Realized Gain (Loss) Change in Unrealized Gain (Loss) Interest/ Dividend Income Fair Value at June 30, 2023",
+        "AmeriMark Intermediate Holdings, LLC $ 8,243 $ \u2014 $ \u2014 $ \u2014 $ ( 3,727 ) $ \u2014 $ 4,516",
+        "AmeriMark Intermediate Holdings, LLC \u2014 408 \u2014 \u2014 \u2014 \u2014 408"
+      ],
+      "preceding": [
+        "",
+        "(11) Denotes investments in which we are an \u201cAffiliated Person\u201d but not exercising a controlling influence, as defined in the Investment Company Act of 1940, as amended (the \u201c1940 Act\u201d), due to beneficially owning, either directly or through one or more controlled companies, more than 5% but less than 25% of the outstanding voting securities of the investment. Transactions during the period June 16, 2023 (date at which the Company became an Affiliated Person) through June 30, 2023 in these affiliated investments are as follows:",
+        "(10) Through this entity and other intermediate entities, the Company owns approximately 6.5 % of the underlying common units of ASC Holdco, LLC, a joint venture which owns certain assets of the former Amerimark Interactive, LLC.",
+        "",
+        "(in thousands)",
+        "June 30, 2023",
+        "Consolidated Schedule of Investments (unaudited) (continued)",
+        "SCP Private Credit Income BDC LLC"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[11]/div[1]/div[1]/div[1]/div/table[3]"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+INTERNALERROR> Traceback (most recent call last):
+INTERNALERROR>   File "C:\Users\alger\miniconda3\Lib\site-packages\_pytest\main.py", line 316, in wrap_session
+INTERNALERROR>     config.hook.pytest_sessionstart(session=session)
+INTERNALERROR>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+INTERNALERROR>   File "C:\Users\alger\AppData\Roaming\Python\Python313\site-packages\pluggy\_hooks.py", line 512, in __call__
+INTERNALERROR>     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+INTERNALERROR>            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+INTERNALERROR>   File "C:\Users\alger\AppData\Roaming\Python\Python313\site-packages\pluggy\_manager.py", line 120, in _hookexec
+INTERNALERROR>     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+INTERNALERROR>            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+INTERNALERROR>   File "C:\Users\alger\AppData\Roaming\Python\Python313\site-packages\pluggy\_callers.py", line 167, in _multicall
+INTERNALERROR>     raise exception
+INTERNALERROR>   File "C:\Users\alger\AppData\Roaming\Python\Python313\site-packages\pluggy\_callers.py", line 139, in _multicall
+INTERNALERROR>     teardown.throw(exception)
+INTERNALERROR>     ~~~~~~~~~~~~~~^^^^^^^^^^^
+INTERNALERROR>   File "C:\Users\alger\miniconda3\Lib\site-packages\_pytest\logging.py", line 780, in pytest_sessionstart
+INTERNALERROR>     return (yield)
+INTERNALERROR>             ^^^^^
+INTERNALERROR>   File "C:\Users\alger\AppData\Roaming\Python\Python313\site-packages\pluggy\_callers.py", line 121, in _multicall
+INTERNALERROR>     res = hook_impl.function(*args)
+INTERNALERROR>   File "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\tests\conftest.py", line 140, in pytest_sessionstart
+INTERNALERROR>     _FS_MANIFEST.update(_walk_protected())
+INTERNALERROR>                         ~~~~~~~~~~~~~~~^^
+INTERNALERROR>   File "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\scripts\programme_tranche\diagnose_tests.py", line 99, in walk
+INTERNALERROR>     raise ContractError('Unreadable protected files during diagnosis')
+INTERNALERROR> pipeline.programme.core.ContractError: Unreadable protected files during diagnosis

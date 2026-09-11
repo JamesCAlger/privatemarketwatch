@@ -1,0 +1,8 @@
+{
+  "excluded": "Full historical output tree outside the snapshot not freshly hashed; targeted pytest and semantic backstop provide separate evidence.",
+  "original_match_reference_files_checked": 1605,
+  "original_position_labels_sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7",
+  "result": "pass",
+  "scope": "All frozen pipeline code, data inputs/outputs/controls and AGENTS.md; all used mg3 packet/meta/verdict inputs. New programme scripts/docs intentionally changed.",
+  "snapshot_files_checked": 1117
+}

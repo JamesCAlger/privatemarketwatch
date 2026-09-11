@@ -1,0 +1,827 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_0afe0e4f-a235-4999-ae1c-21f7f034126d",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investment Portfolio",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,513,533,478",
+        "",
+        "",
+        "$",
+        "2,487,588,823",
+        "",
+        "",
+        "186.80 %"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+      "currency": "USD",
+      "fact_id": "F_0afe0e4f-a235-4999-ae1c-21f7f034126d",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,487,588,823",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[93]/table/tr[23]",
+      "table_xpath": "/html/body/div[93]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2487588823"
+    },
+    {
+      "attributes": {
+        "contextref": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_627d049d-3de2-447b-ab69-5b85198c55a5",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "2,513,533,478",
+        "",
+        "",
+        "$",
+        "2,487,588,823",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "2,314,667,480",
+        "",
+        "",
+        "$",
+        "2,292,614,325",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+      "currency": "USD",
+      "fact_id": "F_627d049d-3de2-447b-ab69-5b85198c55a5",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,487,588,823",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[198]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[12]",
+      "table_xpath": "/html/body/div[198]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2487588823"
+    },
+    {
+      "attributes": {
+        "contextref": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_83566da4-c06b-44c8-b5cf-c6e4ccd656f1",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "2,487,588,823",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "186.8",
+        "%",
+        "",
+        "$",
+        "2,292,614,325",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "179.8",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_fcc5b098-aecc-4acc-b12b-cb43f7b21ee9",
+      "currency": "USD",
+      "fact_id": "F_83566da4-c06b-44c8-b5cf-c6e4ccd656f1",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,487,588,823",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[204]/div[1]/ix:continuation/div/ix:continuation/table/tr[9]",
+      "table_xpath": "/html/body/div[204]/div[1]/ix:continuation/div/ix:continuation/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2487588823"
+    }
+  ],
+  "cik": "0001920453",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1920453/000119312526214226.html",
+  "reference_id": "REF-0001920453-2026-03-31",
+  "report_date": "2026-03-31",
+  "source_rows": 479,
+  "source_sha256": "58667bff809f36b505e6e257e769148278664dd964063f11dc2ea7d5c0fc92d6",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled / non-affiliate investments (amortized cost $ 2,329,512,102 and $ 2,135,060,196 as of March 31, 2026 and December 31, 2025, respectively) | $ | 2,308,138,298 | $ | 2,114,508,287",
+        "Non-controlled / affiliate investments (amortized cost $ 184,021,376 and $ 179,607,284 as of March 31, 2026 and December 31, 2025, respectively) | 179,450,525 | 178,106,038"
+      ],
+      "last": [
+        "Non-controlled / non-affiliate investments (amortized cost $ 2,329,512,102 and $ 2,135,060,196 as of March 31, 2026 and December 31, 2025, respectively) | $ | 2,308,138,298 | $ | 2,114,508,287",
+        "Non-controlled / affiliate investments (amortized cost $ 184,021,376 and $ 179,607,284 as of March 31, 2026 and December 31, 2025, respectively) | 179,450,525 | 178,106,038"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026 December 31, 2025",
+        "(unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Fidelity Private Credit Fund",
+        "Item 1. Consolidated Financial Statements .",
+        "PART I\u2014FINANCIAL INFORMATION"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[12]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "MMGY Global LLC (i)(l)(q)(r) | Term Loan | SOFR + 5.50 % | 9.20 % | 4/26/2029 | 7,408,002 | $ | 7,305,249 | $ | 7,230,210",
+        "MMGY Global LLC (f)(i)(l) | Revolving Credit Facility | SOFR + 5.50 % | 9.19 % | 4/26/2029 | 572,401 | 546,446 | 523,338"
+      ],
+      "last": [
+        "Tighitco Inc (i)(l)(q)(r) | Term Loan | SOFR + 6.00 % | 9.67 % | 2/28/2030 | 35,650,294 | 35,207,396 | 35,507,692",
+        "Tighitco Inc (f)(i)(l) | Revolving Credit Facility | SOFR + 6.00 % | 9.68 % | 2/28/2030 | 3,601,040 | 3,547,953 | 3,583,035"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Investments -- non-controlled/ non-affiliate",
+        "First Lien Debt"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[33]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "$ | 110,925,379 | $ | 112,017,172 | 8.41 %",
+        "Dynamic Connections, Ltd (i)(l)(m) | Term Loan | SOFR + 5.50 % | 9.17 % | 11/27/2030 | 3,067,919 | 3,030,354 | 3,040,308"
+      ],
+      "last": [
+        "ACP Falcon Buyer Inc (i)(l)(q)(r) | Term Loan | SOFR + 5.50 % | 9.16 % | 8/1/2029 | 20,746,025 | 20,344,838 | 20,746,025",
+        "Alegeus Technologies Holdings Corp (i)(l)(q)(r) | Term Loan | SOFR + 6.50 % | 10.17 % | 11/5/2029 | 31,965,058 | 31,388,581 | 31,869,163"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "$ 110,925,379 $ 112,017,172 8.41 %",
+        "Air Freight & Logistics"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Aptean Inc (j)(l)(q)(r) | Term Loan | SOFR + 4.75 % | 8.42 % | 1/30/2031 | 12,129,217 | $ | 12,049,856 | $ | 11,745,710",
+        "Aptean Inc (f)(j)(l) | Revolving Credit Facility | Prime + 3.75 % | 10.50 % | 1/30/2031 | 24,234 | 24,234 | 23,507"
+      ],
+      "last": [
+        "Vp Deliver Parent, Inc (f)(i)(l) | Revolving Credit Facility | - | - | 2/17/2031 | - | ( 16,814 | ) | ( 17,224 | )",
+        "40,646,609 | 41,063,877 | 3.08 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Aptean Inc (j)(l)(q)(r) Term Loan SOFR + 4.75 % 8.42 % 1/30/2031 12,129,217 $ 12,049,856 $ 11,745,710",
+        "Aptean Inc (f)(j)(l) Revolving Credit Facility Prime + 3.75 % 10.50 % 1/30/2031 24,234 24,234 23,507"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/div[39]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "BPCP Craftsman Buyer, LLC (i)(l)(q)(r) | Term Loan | SOFR + 5.50 % | 9.20 % | 4/9/2030 | 11,952,813 | $ | 11,801,922 | $ | 11,558,370",
+        "BPCP Craftsman Buyer, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 4/9/2030 | - | ( 96,386 | ) | ( 404,967 | )"
+      ],
+      "last": [
+        "Eversmith Brands Intermediate Holding Company (i)(l)(q) | Term Loan | SOFR + 5.00 % | 8.67 % | 6/17/2030 | 4,536,821 | 4,486,280 | 4,536,821",
+        "Eversmith Brands Intermediate Holding Company (f)(i)(l) | Delayed Draw Term Loan | SOFR + 5.00 % | 8.67 % | 6/17/2030 | 2,812,906 | 2,775,465 | 2,812,906"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "BPCP Craftsman Buyer, LLC (i)(l)(q)(r) Term Loan SOFR + 5.50 % 9.20 % 4/9/2030 11,952,813 $ 11,801,922 $ 11,558,370",
+        "BPCP Craftsman Buyer, LLC (f)(i)(l) Delayed Draw Term Loan - - 4/9/2030 - ( 96,386 ) ( 404,967 )"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[42]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Hy-Tek Opco, LLC (i)(l)(q)(r) | Term Loan | SOFR + 5.50 % | 9.20 % | 9/19/2028 | 26,764,439 | 26,548,756 | 26,657,381",
+        "Hy-Tek Opco, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 9/19/2028 | - | ( 41,687 | ) | ( 20,301 | )"
+      ],
+      "last": [
+        "Professional Education Holdco, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 2/26/2032 | - | ( 34,971 | ) | ( 35,542 | )",
+        "26,780,587 | 26,770,799 | 2.01 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Eversmith Brands Intermediate Holding Company (f)(i)(l) Delayed Draw Term Loan - - 6/17/2030 - $ ( 14,362 ) $ -",
+        "Hy-Tek Opco, LLC (i)(l)(q)(r) Term Loan SOFR + 5.50 % 9.20 % 9/19/2028 26,764,439 26,548,756 26,657,381"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 22,
+      "table_xpath": "/html/body/div[45]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Luminii LLC (i)(l)(q)(r) | Term Loan | SOFR + 6.00 % | 9.70 % | 3/21/2030 | 28,909,017 | $ | 28,548,507 | $ | 28,909,017",
+        "Luminii LLC (f)(i)(l) | Delayed Draw Term Loan | SOFR + 6.00 % | 9.70 % | 3/21/2030 | 7,117,750 | 7,003,133 | 7,117,750"
+      ],
+      "last": [
+        "Scp Mechanical Services Buyer, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 8/20/2031 | - | ( 67,271 | ) | ( 1,021,969 | )",
+        "35,435,460 | 33,660,183 | 2.52 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Luminii LLC (i)(l)(q)(r) Term Loan SOFR + 6.00 % 9.70 % 3/21/2030 28,909,017 $ 28,548,507 $ 28,909,017",
+        "Luminii LLC (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 9.70 % 3/21/2030 7,117,750 7,003,133 7,117,750"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 18,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Consolidated Energy Finance SA (g)(l)(m) | Term Loan | SOFR + 4.50 % | 8.20 % | 11/15/2030 | 2,476,183 | $ | 2,327,517 | $ | 2,366,092",
+        "Consolidated Energy Finance SA (g)(l)(m) | Term Loan | SOFR + 4.75 % | 8.41 % | 11/15/2030 | 1,000,000 | 890,725 | 951,880"
+      ],
+      "last": [
+        "Bebright Mso, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 6/3/2030 | - | ( 24,258 | ) | -",
+        "Bebright Mso, LLC (i)(r) | Term Loan | SOFR + 5.25 % | 8.95 % | 6/3/2030 | 1,413,472 | 1,401,029 | 1,402,165"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Consolidated Energy Finance SA (g)(l)(m) Term Loan SOFR + 4.50 % 8.20 % 11/15/2030 2,476,183 $ 2,327,517 $ 2,366,092",
+        "Consolidated Energy Finance SA (g)(l)(m) Term Loan SOFR + 4.75 % 8.41 % 11/15/2030 1,000,000 890,725 951,880"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/div[51]/table"
+    },
+    {
+      "contexts": 26,
+      "first": [
+        "Bebright Mso, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 6/3/2030 | - | $ | ( 55,936 | ) | $ | ( 38,743 | )",
+        "Behavioral Framework LLC (i)(l)(q)(r) | Term Loan | SOFR + 4.75 % | 8.41 % | 11/20/2031 | 19,072,999 | 18,896,197 | 19,072,999"
+      ],
+      "last": [
+        "NE Ortho Management Services, LLC (f)(i)(l) | Delayed Draw Term Loan | SOFR + 5.00 % | 8.70 % | 12/13/2030 | 1,207,260 | 1,178,444 | 1,177,078",
+        "The Smilist Dso, LLC (i)(l)(q)(r) | Term Loan | SOFR + 6.00 % | 9.70 % | 4/4/2029 | 16,836,776 | 16,586,232 | 16,836,776"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Bebright Mso, LLC (f)(i)(l) Delayed Draw Term Loan - - 6/3/2030 - $ ( 55,936 ) $ ( 38,743 )",
+        "Behavioral Framework LLC (i)(l)(q)(r) Term Loan SOFR + 4.75 % 8.41 % 11/20/2031 19,072,999 18,896,197 19,072,999"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 26,
+      "table_xpath": "/html/body/div[54]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "The Smilist Dso, LLC (i)(l) | Delayed Draw Term Loan | SOFR + 6.00 % | 9.70 % | 4/4/2029 | 3,655,566 | 3,605,413 | 3,655,566",
+        "The Smilist Dso, LLC (i)(l) | Delayed Draw Term Loan | SOFR + 6.00 % | 9.70 % | 4/4/2029 | 4,551,893 | 4,489,128 | 4,551,893"
+      ],
+      "last": [
+        "Andretti Buyer, LLC (j)(l)(q)(r) | Term Loan | SOFR + 4.50 % | 8.20 % | 1/30/2033 | 17,009,018 | 16,845,480 | 16,838,928",
+        "Andretti Buyer, LLC (f)(j)(l) | Delayed Draw Term Loan | - | - | 1/30/2033 | - | ( 6,898 | ) | ( 7,087 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "The Smilist Dso, LLC (f)(i)(l) Revolving Credit Facility - - 4/4/2029 - $ ( 12,653 ) $ -",
+        "The Smilist Dso, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.00 % 9.70 % 4/4/2029 3,655,566 3,605,413 3,655,566"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[57]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Andretti Buyer, LLC (f)(j)(l) | Revolving Credit Facility | - | - | 1/30/2033 | - | $ | ( 13,828 | ) | $ | ( 14,174 | )",
+        "Harmony Hit US Holdings Inc (i)(l)(q)(r) | Term Loan | SOFR + 5.00 % | 8.67 % | 12/3/2030 | 22,351,885 | 22,126,238 | 22,240,125"
+      ],
+      "last": [
+        "Precision I Buyer, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 3/12/2032 | - | ( 14,842 | ) | ( 14,973 | )",
+        "66,670,818 | 66,919,526 | 5.02 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Andretti Buyer, LLC (f)(j)(l) Revolving Credit Facility - - 1/30/2033 - $ ( 13,828 ) $ ( 14,174 )",
+        "Harmony Hit US Holdings Inc (i)(l)(q)(r) Term Loan SOFR + 5.00 % 8.67 % 12/3/2030 22,351,885 22,126,238 22,240,125"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[60]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Knight AcquireCo, LLC (k)(l)(q)(r) | Term Loan | SOFR + 4.50 % | 8.16 % | 11/7/2032 | 12,559,839 | $ | 12,507,942 | $ | 12,497,040",
+        "Knight AcquireCo, LLC (f)(k)(l) | Delayed Draw Term Loan | - | - | 11/7/2032 | - | ( 9,871 | ) | ( 10,467 | )"
+      ],
+      "last": [
+        "Woven Health Collective, LLC (i)(l)(q)(r) | Term Loan | SOFR + 4.75 % | 8.42 % | 10/23/2028 | 27,760,870 | 27,642,536 | 27,649,826",
+        "Woven Health Collective, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 10/23/2028 | - | ( 37,164 | ) | ( 34,783 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Knight AcquireCo, LLC (k)(l)(q)(r) Term Loan SOFR + 4.50 % 8.16 % 11/7/2032 12,559,839 $ 12,507,942 $ 12,497,040",
+        "Knight AcquireCo, LLC (f)(k)(l) Delayed Draw Term Loan - - 11/7/2032 - ( 9,871 ) ( 10,467 )"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[63]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Woven Health Collective, LLC (f)(i)(l) | Revolving Credit Facility | SOFR + 4.75 % | 8.42 % | 10/23/2028 | 1,391,304 | $ | 1,376,444 | $ | 1,377,391",
+        "80,085,498 | 80,287,895 | 6.02 %"
+      ],
+      "last": [
+        "Sabrosura Foods, LLC (f)(i)(l) | Revolving Credit Facility | SOFR + 5.00 % | 8.67 % | 8/22/2029 | 153,615 | 130,005 | 132,877",
+        "SCP Baked Goods Holdings, LLC (i)(l)(q)(r) | Term Loan | SOFR + 4.75 % | 8.45 % | 5/1/2031 | 22,929,093 | 22,679,675 | 22,929,093"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Woven Health Collective, LLC (f)(i)(l) Revolving Credit Facility SOFR + 4.75 % 8.42 % 10/23/2028 1,391,304 $ 1,376,444 $ 1,377,391",
+        "80,085,498 80,287,895 6.02 %"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[66]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Shf Holdings, Inc (i)(l)(q)(r) | Term Loan | SOFR + 5.50 % | 9.20 % | 1/22/2030 | 35,260,592 | $ | 34,843,036 | $ | 35,260,592",
+        "141,706,785 | 140,347,658 | 10.53 %"
+      ],
+      "last": [
+        "Alcami Corporation (i)(l)(q)(r) | Term Loan | SOFR + 7.00 % | 10.82 % | 12/21/2028 | 9,675,000 | 9,434,580 | 9,675,000",
+        "9,434,580 | 9,675,000 | 0.73 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Shf Holdings, Inc (i)(l)(q)(r) Term Loan SOFR + 5.50 % 9.20 % 1/22/2030 35,260,592 $ 34,843,036 $ 35,260,592",
+        "Shf Holdings, Inc (f)(i)(l) Revolving Credit Facility - - 1/22/2030 - ( 54,454 ) -"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 22,
+      "table_xpath": "/html/body/div[69]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "NAM Acquisition Co LLC (j)(l)(q)(r) | Term Loan | SOFR + 4.50 % | 8.20 % | 7/16/2030 | 12,368,777 | $ | 12,227,586 | $ | 12,368,777",
+        "NAM Acquisition Co LLC (f)(j)(l) | Delayed Draw Term Loan | SOFR + 4.50 % | 8.20 % | 7/16/2030 | 3,213,881 | 3,168,165 | 3,213,881"
+      ],
+      "last": [
+        "Quick Roofing Acquisition, LLC (i)(q)(r) | Term Loan | SOFR + 5.75 % | 9.55 % | 12/22/2029 | 10,925,593 | 10,803,244 | 10,707,081",
+        "Quick Roofing Acquisition, LLC (f)(i)(l) | Delayed Draw Term Loan | SOFR + 5.75 % | 9.55 % | 12/22/2029 | 449,329 | 364,665 | 277,766"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Research & Consulting Services",
+        "NAM Acquisition Co LLC (j)(l)(q)(r) Term Loan SOFR + 4.50 % 8.20 % 7/16/2030 12,368,777 $ 12,227,586 $ 12,368,777"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[72]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Roofing Services Solutions LLC (i)(l)(q)(r) | Term Loan | SOFR + 5.75 % | 9.42 % | 11/27/2029 | 18,015,850 | $ | 17,807,846 | $ | 17,565,454",
+        "Roofing Services Solutions LLC (i)(l) | Delayed Draw Term Loan | SOFR + 6.25 % ( 0.50 % PIK) | 9.95 % | 11/27/2029 | 10,844,412 | 10,724,518 | 10,573,302"
+      ],
+      "last": [
+        "11,841,744 | 11,831,525 | 0.88 %",
+        "Penta Fine Ingredients, Inc. (i)(l)(q)(r) | Term Loan | SOFR + 5.00 % | 8.67 % | 4/4/2031 | 27,361,366 | 27,005,220 | 27,361,366"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Roofing Services Solutions LLC (i)(l)(q)(r) Term Loan SOFR + 5.75 % 9.42 % 11/27/2029 18,015,850 $ 17,807,846 $ 17,565,454",
+        "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.25 % ( 0.50 % PIK) 9.95 % 11/27/2029 10,844,412 10,724,518 10,573,302"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 22,
+      "table_xpath": "/html/body/div[75]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "$ | 26,955,362 | $ | 27,361,366 | 2.05 %",
+        "Belt Power Holdings LLC (i)(l)(q) | Term Loan | SOFR + 5.00 % | 8.85 % | 8/22/2028 | 5,802,219 | 5,762,801 | 5,802,219"
+      ],
+      "last": [
+        "Benefit Street Partners Clo Vi-B Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 4.75 % | 8.42 % | 4/20/2038 | 100,000 | 100,000 | 96,027",
+        "100,000 | 96,027 | 0.01 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "$ 26,955,362 $ 27,361,366 2.05 %",
+        "Trading Companies & Distributors"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[78]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "CIFC Funding Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 7.25 % | 10.92 % | 7/21/2038 | 250,000 | $ | 250,000 | $ | 250,131",
+        "Flatiron RR CLO 30 Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 5.25 % | 8.92 % | 4/15/2038 | 200,000 | 200,000 | 193,804"
+      ],
+      "last": [
+        "BPCP Craftsman Holdings, LLC (l)(p) | Class A Units | 529 | 529,369 | 227,349",
+        "529,369 | 227,349 | 0.02 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Specialized Finance",
+        "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[81]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Hy-Tek Holdings, LLC (p) | Common Units | 98 | $ | 235,165 | $ | 261,740",
+        "Hy-Tek Holdings, LLC (p) | Series A Preferred Units | 98 | 97,900 | 97,878"
+      ],
+      "last": [
+        "Pillr Health Holdings, LP (l)(m)(p) | Common Units | 21,224 | - | 7,216",
+        "212,241 | 223,580 | 0.02 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Hy-Tek Holdings, LLC (p) Common Units 98 $ 235,165 $ 261,740",
+        "Hy-Tek Holdings, LLC (p) Series A Preferred Units 98 97,900 97,878"
+      ],
+      "preceding": [
+        "",
+        "March 31, 2026 (unaudited)",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[84]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Fca Partners LLC (m)(p) | Common Units | 200,000 | $ | 2 | $ | 2",
+        "Fca Partners LLC (m)(p) | Class A Preferred Units | 200,000 | 200,000 | 118,000"
+      ],
+      "last": [
+        "Mfi Group Holdings LLC (p) | Class A Units | 238 | 238,109 | 267,121",
+        "Sabrosura Super Holdings LLC (l)(p) | Class A Interests | 241,693 | 290,031 | 241,693"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Fca Partners LLC (m)(p) Common Units 200,000 $ 2 $ 2",
+        "Fca Partners LLC (m)(p) Class A Preferred Units 200,000 200,000 118,000"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[87]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Vp Deliver Holdings, LP (l)(m)(p) | Class A LP Units | 447,606 | $ | 447,606 | $ | 349,132",
+        "2,086,139 | 1,726,438 | 0.13 %"
+      ],
+      "last": [
+        "Lift Solutions Holdings LLC (p) | Series A Preferred Units | 227 | 325,938 | 326,199",
+        "325,938 | 390,783 | 0.02 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Vp Deliver Holdings, LP (l)(m)(p) Class A LP Units 447,606 $ 447,606 $ 349,132",
+        "2,086,139 1,726,438 0.13 %"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[90]/table"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Penta Fine Ingredients Parent, LLC (l)(p) | Preferred Units | 528 | 528,131 | 536,760",
+        "528,952 | 536,760 | 0.04 %"
+      ],
+      "last": [
+        "Total Investments -- non-controlled/ affiliate | 184,021,376 | 179,450,525 | 13.47 %",
+        "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (a) Type Reference Rate and Spread (b) Interest Rate (b) Maturity Date Par Amount/Units (c) Cost (d) Fair Value (e) Percentage of Net Assets",
+        "Penta Fine Ingredients Parent, LLC (l)(p) Class A Common Units 821 $ 821 $ -",
+        "Penta Fine Ingredients Parent, LLC (l)(p) Preferred Units 528 528,131 536,760"
+      ],
+      "preceding": [
+        "(unaudited)",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments",
+        "Fidelity Private Credit Fund"
+      ],
+      "rows": 14,
+      "table_xpath": "/html/body/div[93]/table"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "Fidelity Floating Rate Central Fund | $ | 178,106,038 | $ | 4,414,092 | $ | \u2014 | $ | ( 3,069,605 | ) | $ | \u2014 | $ | 179,450,525 | $ | 3,297,022",
+        "Total | $ | 178,106,038 | $ | 4,414,092 | $ | \u2014 | $ | ( 3,069,605 | ) | $ | \u2014 | $ | 179,450,525 | $ | 3,297,022"
+      ],
+      "last": [
+        "Fidelity Floating Rate Central Fund | $ | 178,106,038 | $ | 4,414,092 | $ | \u2014 | $ | ( 3,069,605 | ) | $ | \u2014 | $ | 179,450,525 | $ | 3,297,022",
+        "Total | $ | 178,106,038 | $ | 4,414,092 | $ | \u2014 | $ | ( 3,069,605 | ) | $ | \u2014 | $ | 179,450,525 | $ | 3,297,022"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value as of December 31, 2025 Gross Additions Gross Reductions Net Change in Unrealized Appreciation (Depreciation) Net Realized Gains (Losses) Fair Value as of March 31, 2026 Dividend and Interest Income",
+        "Non-controlled/ Affiliate Investments",
+        "Fidelity Floating Rate Central Fund $ 178,106,038 $ 4,414,092 $ \u2014 $ ( 3,069,605 ) $ \u2014 $ 179,450,525 $ 3,297,022"
+      ],
+      "preceding": [
+        "The table below presents the Fund\u2019s affiliated investments as of March 31, 2026:"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[198]/div[1]/ix:continuation/div/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "First Lien Debt | $ | 2,269,175,571 | $ | 2,247,861,274 | 90.4 | % | $ | 2,093,021,541 | $ | 2,071,775,012 | 90.4 | %",
+        "Second Lien Debt | \u2014 | \u2014 | 0.0 | % | 4,838,840 | 4,900,000 | 0.2 | %"
+      ],
+      "last": [
+        "Fixed Income Mutual Funds | 184,021,376 | 179,450,525 | 7.2 | % | 179,607,284 | 178,106,038 | 7.8 | %",
+        "Total Investments | $ | 2,513,533,478 | $ | 2,487,588,823 | 100.0 | % | $ | 2,314,667,480 | $ | 2,292,614,325 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026 December 31, 2025",
+        "Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value",
+        "First Lien Debt $ 2,269,175,571 $ 2,247,861,274 90.4 % $ 2,093,021,541 $ 2,071,775,012 90.4 %"
+      ],
+      "preceding": [
+        "The composition of the F und\u2019s investment portfolio at cost and fair value was as follows:"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[198]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "United States | $ | 2,435,326,225 | 97.9 | % | 182.9 | % | $ | 2,249,204,601 | 98.2 | % | 176.4 | %",
+        "Australia | 31,665,361 | 1.3 | % | 2.4 | % | 31,937,353 | 1.4 | % | 2.5 | %"
+      ],
+      "last": [
+        "Grand Cayman | 539,962 | 0.0 | % | 0.0 | % | 556,430 | 0.0 | % | 0.0 | %",
+        "Total | $ | 2,487,588,823 | 100.0 | % | 186.8 | % | $ | 2,292,614,325 | 100.0 | % | 179.8 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026 December 31, 2025",
+        "Fair Value % of Total Investments at Fair Value Fair Value as % of Net Assets Fair Value % of Total Investments at Fair Value Fair Value as % of Net Assets",
+        "United States $ 2,435,326,225 97.9 % 182.9 % $ 2,249,204,601 98.2 % 176.4 %"
+      ],
+      "preceding": [
+        "The geographic composition of investments at fair value was as follows:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[204]/div[1]/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "First Lien Debt | $ | \u2014 | $ | 61,418,985 | $ | 2,186,442,289 | $ | 2,247,861,274",
+        "First Lien Debt | $ | \u2014 | $ | 61,418,985 | $ | 2,186,442,289 | $ | 2,247,861,274"
+      ],
+      "last": [
+        "Total Investments | $ | 196,401,848 | $ | 68,942,636 | $ | 2,222,244,339 | $ | 2,487,588,823",
+        "Total Investments | $ | 196,401,848 | $ | 68,942,636 | $ | 2,222,244,339 | $ | 2,487,588,823"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026",
+        "Level 1 Level 2 Level 3 Total",
+        "Investments:"
+      ],
+      "preceding": [
+        "The following is a summary of the inputs used, as of March 31, 2026 and December 31, 2025, involving the Fund\u2019s assets and liabilities carried at fair value. The inputs or methodology used for valuing securities may not be an indication of the risk associated with investing in those securities."
+      ],
+      "rows": 32,
+      "table_xpath": "/html/body/div[207]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "First Lien Debt | $ | 2,186,442,289 | Market approach | Transaction price | $ | 98.00 | $ | 99.75 | $ | 98.94 | Increase",
+        "Unsecured Debt | 17,193,750 | Discounted cash flow | Yield | 15.2 | % | 15.2 | % | 15.2 | % | Decrease"
+      ],
+      "last": [
+        "Equity | 18,608,300 | Market comparable | Enterprise value/Revenue multiple (EV/R) | 0.6 | 0.6 | 0.6 | Increase",
+        "Total | $ | 2,222,244,339"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026",
+        "Range",
+        "Fair Value Valuation Technique Unobservable Input Low High Weighted Average Impact to Valuation from an Increase in Input*"
+      ],
+      "preceding": [
+        "The following provides information on Level 3 securities held by the Fund that were valued as of March 31, 2026 and December 31, 2025 based on unobservable inputs:"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[213]/div/ix:continuation/div/ix:nonnumeric/table[1]"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "development_basis_only",
+    "cik": "1899017",
+    "disposition": "complete_development_roster",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001899017-2023-06-30.json",
+    "evidence_sha256": "e01d47ba90df15d732817f574c015ed806e8fc561b726423574e6722f13d68d7",
+    "held_out": "False",
+    "next_action": "none_for_development_roster",
+    "reference_id": "REF-0001899017-2023-06-30",
+    "report_date": "2023-06-30",
+    "review_note": "June complete two-equity development roster; September candidate repeats affiliation evidence. March pre-investment disposition retained.",
+    "saved_candidate_rows": "2",
+    "source_candidate_rows": "10"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1899017/000095017023041723.html",
+    "ref": "REF-0001899017-2023-06-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value:",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of June 30, 2023 As of December 31, 2022 | (Unaudited) | Assets | Investments at fair value:",
+        "preceding": [
+          "",
+          "Statements of Assets and Liabilities",
+          "Bain Capital Private Credit",
+          "Item 1. Financial Statements",
+          "PART I FINANCIAL INFORMATION",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "\u2014",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended June 30, 2023 For the Three Months Ended June 30, 2022 | Total investment income $ \u2014 $ \u2014 | Total expenses, net of fee waivers 377 82 | Net investment income before taxes (377 ) (82 )",
+        "preceding": [
+          "",
+          "Our operating results for the three months ended June 30, 2023 and 2022 were as follows (dollars in thousands):",
+          "Results of Operations",
+          "As of June 30, 2023, the Company held one issuer with an investment rating of 2.",
+          "\u2022 An investment is rated 4 if, in the opinion of our Advisor, the investment is performing materially below underwriting expectations. For debt investments, most of or all of the debt covenants are out of compliance and payments are substantially delinquent. Investments rated 4 are not anticipated to be repaid in full, if applicable, and there is significant risk that we may realize a substantial loss on our investment.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[12]/tr[3]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "\u2014",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Six Months Ended June 30, 2023 For the Six Months Ended June 30, 2022 | Total investment income $ \u2014 $ \u2014 | Total expenses, net of fee waivers 1,098 264 | Net investment income before taxes (1,098 ) (264 )",
+        "preceding": [
+          "",
+          "Our operating results for the six months ended June 30, 2023 and 2022 were as follows (dollars in thousands):",
+          "",
+          "For the Three Months Ended June 30, 2023 For the Three Months Ended June 30, 2022 Total investment income $ \u2014 $ \u2014 Total expenses, net of fee waivers 377 82 Net investment income before taxes (377 ) (82 ) Less income taxes, including excise tax \u2014 \u2014 Net investment income (377 ) (82 ) Net realized gain (loss) \u2014 \u2014 Net change in unrealized appreciation \u2014 \u2014 Net decrease in net assets resulting from operations (377 ) (82 )",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[13]/tr[3]"
+      }
+    ],
+    "sha256": "a31ed3181befc59c13717b77194499d3a6707434b071144f886866ca57a52f08",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

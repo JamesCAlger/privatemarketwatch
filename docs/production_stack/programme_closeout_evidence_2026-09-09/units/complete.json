@@ -1,0 +1,21 @@
+{
+  "candidate_sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+  "cohort_sha256": "d79af461b67851aab238597d9eb37a8e1259bb0475375f6af3cd52ab5f251cce",
+  "document_states": {
+    "missing_xml": 17,
+    "units_read": 779
+  },
+  "documents": 796,
+  "elapsed_seconds": 205.27,
+  "field_states": {
+    "absent_unit_requires_default_or_source_decision": 7083,
+    "missing_value": 48476,
+    "reported_unit_USD": 285002,
+    "reported_unit_foreign": 3061,
+    "unresolved_unit_token": 441214
+  },
+  "holdings_rows": 261613,
+  "interpretation": "Actual XBRL unit definitions; printed/tagged conflicts still require source adjudication",
+  "script_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "status": "complete"
+}

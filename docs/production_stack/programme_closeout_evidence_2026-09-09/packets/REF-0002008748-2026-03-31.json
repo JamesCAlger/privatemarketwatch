@@ -1,0 +1,397 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-27358",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments at fair value (cost $ 1,423,993 and $ 1,312,388 , respectively)",
+        "",
+        "$",
+        "1,413,006",
+        "",
+        "",
+        "$",
+        "1,309,928",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c6",
+      "currency": "USD",
+      "fact_id": "ixv-27358",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,413,006",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[8]/tr[6]",
+      "table_xpath": "/html/body/table[8]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "1413006000"
+    },
+    {
+      "attributes": {
+        "contextref": "c6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-28955",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "1,413,006",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c6",
+      "currency": "USD",
+      "fact_id": "ixv-28955",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,413,006",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[23]/tr[4]",
+      "table_xpath": "/html/body/table[23]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "1413006000"
+    }
+  ],
+  "cik": "0002008748",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2008748/000093041326001612.html",
+  "reference_id": "REF-0002008748-2026-03-31",
+  "report_date": "2026-03-31",
+  "source_rows": 248,
+  "source_sha256": "8dae2d352dde6895afb4d05e1a158699e33bea1ed7eedb1dc80c4a2ab456c349",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost $ 1,359,368 and $ 1,250,796 , respectively) | $ | 1,348,797 | $ | 1,248,322",
+        "Controlled/affiliated investments (cost $ 64,625 and $ 61,592 , respectively) | 64,209 | 61,606"
+      ],
+      "last": [
+        "Controlled/affiliated investments (cost $ 64,625 and $ 61,592 , respectively) | 64,209 | 61,606",
+        "Total investments at fair value (cost $ 1,423,993 and $ 1,312,388 , respectively) | $ | 1,413,006 | $ | 1,309,928"
+      ],
+      "opening_rows": [
+        "March 31, 2026 December 31, 2025",
+        "ASSETS",
+        "Investments at fair value",
+        "Non-controlled/non-affiliated investments (cost $ 1,359,368 and $ 1,250,796 , respectively) $ 1,348,797 $ 1,248,322"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Item 1. Consolidated Financial Statements",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[8]"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "AA&D Midco Inc (Term Loan) | 3M S + 4.75 % | 8.45 % | 11/29/2030 | $ | 37,749 | $ | 37,453 | $ | 37,372 | 5.57 | %",
+        "AA&D Midco Inc (Delayed Draw 2024) | 3M S + 4.75 % | 8.40 % | 11/29/2030 | 15,986 | 15,862 | 15,826 | 2.35"
+      ],
+      "last": [
+        "Schoeneck Containers, LLC (Revolver) (7) | 1M S + 4.10 % | 7.89 % | 5/7/2028 | 426 | 426 | 418 | 0.06",
+        "426 | 418 | 0.06"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "First Lien Secured Debt (4)(6)",
+        ""
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "March 31, 2026",
+        "",
+        "Consolidated Schedules of Investments (Unaudited)"
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 60,
+      "first": [
+        "AMP Purchaser LLC (Term Loan) | 3M S + 4.50 % | 8.20 % | 4/1/2033 | $ | 21,478 | $ | 21,371 | $ | 21,371 | 3.18 | %",
+        "AMP Purchaser LLC (Revolver) (7) | 3M S + 4.50 % | N/A | 4/1/2033 | - | ( 14 | ) | ( 14 | ) | -"
+      ],
+      "last": [
+        "Uptime Institute (Revolver) (7) | 1M S + 5.00 % | N/A | 1/12/2027 | - | - | ( 5 | ) | -",
+        "95,098 | 95,086 | 14.15"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Electrical Equipment",
+        "AMP Purchaser LLC (Term Loan) 3M S + 4.50 % 8.20 % 4/1/2033 $ 21,478 $ 21,371 $ 21,371 3.18 %",
+        "AMP Purchaser LLC (Revolver) (7) 3M S + 4.50 % N/A 4/1/2033 - ( 14 ) ( 14 ) -"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "March 31, 2026",
+        "",
+        "Consolidated Schedules of Investments (Unaudited) (Continued)"
+      ],
+      "rows": 60,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 59,
+      "first": [
+        "TransnetYX, Inc (Term Loan) | 3M S + 4.75 % | 8.45 % | 4/13/2027 | $ | 11,495 | $ | 11,495 | $ | 11,495 | 1.71 | %",
+        "11,495 | 11,495 | 1.71"
+      ],
+      "last": [
+        "11,181 | 11,181 | 1.67",
+        "Total First Lien Secured Debt | $ | 1,328,502 | $ | 1,321,518 | 196.65 | %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Life Sciences Tools & Services",
+        "TransnetYX, Inc (Term Loan) 3M S + 4.75 % 8.45 % 4/13/2027 $ 11,495 $ 11,495 $ 11,495 1.71 %",
+        "11,495 11,495 1.71"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "March 31, 2026",
+        "",
+        "Consolidated Schedules of Investments (Unaudited) (Continued)"
+      ],
+      "rows": 59,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "SolarWinds Holdings, Inc. (Term Loan) | 3M S + 6.00 % | 9.67 % | 4/18/2033 | 31,000 | $ | 29,976 | $ | 26,389 | 3.93 | %",
+        "29,976 | 26,389 | 3.93"
+      ],
+      "last": [
+        "Total Investments in Joint Venture | $ | 64,625 | $ | 64,209 | 9.55",
+        "Total Investments (8) | $ | 1,423,993 | $ | 1,413,006 | 210.26 | %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Second Lien Secured Debt (4)(6)",
+        "Software",
+        "SolarWinds Holdings, Inc. (Term Loan) 3M S + 6.00 % 9.67 % 4/18/2033 31,000 $ 29,976 $ 26,389 3.93 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "March 31, 2026",
+        "",
+        "Consolidated Schedules of Investments (Unaudited) (Continued)"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/table[15]"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "SBLA Private Credit LLC | $ | 61,606 | $ | 3,033 | $ | - | $ | ( 430 | ) | $ | - | $ | 64,209 | $ | 1,816",
+        "Total | $ | 61,606 | $ | 3,033 | $ | - | $ | ( 430 | ) | $ | - | $ | 64,209 | $ | 1,816"
+      ],
+      "last": [
+        "SBLA Private Credit LLC | $ | 61,606 | $ | 3,033 | $ | - | $ | ( 430 | ) | $ | - | $ | 64,209 | $ | 1,816",
+        "Total | $ | 61,606 | $ | 3,033 | $ | - | $ | ( 430 | ) | $ | - | $ | 64,209 | $ | 1,816"
+      ],
+      "opening_rows": [
+        "Fair Value as of January 1, 2026 Gross Additions Gross Reductions Net Change in Unrealized appreciation/ (depreciation) Net Realized Gain (Loss) Fair Value as of March 31, 2026 Dividend Income",
+        "Controlled/Affiliated Investments",
+        "SBLA Private Credit LLC $ 61,606 $ 3,033 $ - $ ( 430 ) $ - $ 64,209 $ 1,816",
+        "Total $ 61,606 $ 3,033 $ - $ ( 430 ) $ - $ 64,209 $ 1,816"
+      ],
+      "preceding": [
+        "",
+        "s collateral to our general creditors. (9) Under the Investment Company Act of 1940, as amended (together with the rules and regulations promulgated thereunder, the \u201c1940 Act\u201d), the Company is deemed to \u201ccontrol\u201d a portfolio company if the Company owns more than 25% of its outstanding voting securities and/or held the power to exercise control over the management or policies of the portfolio company. Under the 1940 Act, the Company is deemed an \u201caffiliated person\u201d of a portfolio company if the Company owns 5% or more of the portfolio company\u2019s outstanding voting securities. As of March 31, 2026, the Company\u2019s controlled/affiliated investments, and their related transactions, were as follows:",
+        "",
+        "9 Schoeneck Containers, LLC (Revolver) 5/7/2028 2,983 SMG Operating CO LLC (Delayed Draw) 12/5/2030 5,900 SMG Operating CO LLC (Revolver) 12/5/2030 4,100 Solve Industrial Motion Group LLC (Delayed Draw) 6/30/2027 18,683 Spark Buyer, LLC (Delayed Draw) 10/15/2031 18,750 Spark Buyer, LLC (Revolver) 10/15/2031 5,156 Spotless Brands, LLC (Delayed Draw) 7/25/2028 17,721 TransnetYX, Inc (Revolver) 4/13/2027 2,167 Uptime Institute (Revolver) 1/12/2027 2,188 Vacation Rental Brands, LLC (Delayed Draw) 5/6/2032 9,060 Vacation Rental Brands, LLC (Revolver) 5/6/2032 5,462 World Insurance Associates, LLC (Delayed Draw) 4/3/2030 1,948 World Insurance Associates, LLC (Revolver) 4/3/2030 250 Total $ 461,978",
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[20]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "United States | $ | 1,383,814 | 97.9 | %",
+        "United Kingdom | 29,192 | 2.1"
+      ],
+      "last": [
+        "United Kingdom | 29,192 | 2.1",
+        "Total | $ | 1,413,006 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "Geography Fair Value Percentage of Total Investments at Fair Value",
+        "United States $ 1,383,814 97.9 %",
+        "United Kingdom 29,192 2.1",
+        "Total $ 1,413,006 100.0 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "int Venture - - - 64,209 64,209 4.54 % IT Services 95,086 - - - 95,086 6.73 % Life Sciences Tools & Services 11,495 - - - 11,495 0.81 % Machinery 88,857 - - - 88,857 6.29 % Personal Care Products 28,302 - 890 - 29,192 2.07 % Pharmaceuticals 52,713 - - - 52,713 3.73 % Professional Services 89,756 - - - 89,756 6.35 % Real Estate Management & Development 63,951 - - - 63,951 4.53 % Software 74,300 26,389 - - 100,689 7.13 % Specialty Retail 3,901 - - - 3,901 0.28 % Telecommunication Services 27,242 - - - 27,242 1.93 % Textiles, Apparel & Luxury Goods 25,877 - - - 25,877 1.83 % Trading Companies and Distributors 11,181 - - - 11,181 0.79 % Total $ 1,321,518 $ 26,389 $ 890 $ 64,209 $ 1,413,006 100 %",
+        "",
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[23]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Fair value, end of period | $ | 1,308,265 | $ | 26,389 | $ | 890",
+        "Fair value, end of period | $ | 1,308,265 | $ | 26,389 | $ | 890"
+      ],
+      "last": [
+        "Fair value, end of period | $ | 1,308,265 | $ | 26,389 | $ | 890",
+        "Fair value, end of period | $ | 1,308,265 | $ | 26,389 | $ | 890"
+      ],
+      "opening_rows": [
+        "For the three months ended March 31, 2026",
+        "First Lien Secured Debt Second Lien Secured Debt Equity",
+        "Fair value, beginning of period $ 1,203,429 $ 30,070 $ 890",
+        "Purchases 269,622 - -"
+      ],
+      "preceding": [
+        "",
+        "The following table presents changes in the fair value of the Company\u2019s investments for which Level 3 inputs were used to determine the fair value for the three months ended March 31, 2026:"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/table[1]"
+    },
+    {
+      "contexts": 5,
+      "first": [
+        "First Lien Secured Debt | $ | 967,670 | Income Approach | Discount Rate | 7.71 % - 11.94 % | 9.14 | %",
+        "First Lien Secured Debt | 340,595 | Market Approach | Transaction Price | n/a | n/a"
+      ],
+      "last": [
+        "Investments in Equity | 890 | Market Approach | Transaction Price | n/a | n/a",
+        "Total Level 3 Investments | $ | 1,335,544"
+      ],
+      "opening_rows": [
+        "Asset Category Fair Value Valuation Techniques/Methodologies Unobservable Input Range Weighted Average (1)",
+        "First Lien Secured Debt $ 967,670 Income Approach Discount Rate 7.71 % - 11.94 % 9.14 %",
+        "First Lien Secured Debt 340,595 Market Approach Transaction Price n/a n/a",
+        "Second Lien Secured Debt 26,389 Income Approach Discount Rate 12.47 % - 13.47 % 12.97 %"
+      ],
+      "preceding": [
+        "",
+        "The unobservable inputs used in the fair value measurement of our Level 3 investments as of March 31, 2026, were as follows:"
+      ],
+      "rows": 5,
+      "table_xpath": "/html/body/ix:continuation[9]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Accel International Holdings Inc (Term Loan) | 1M S + 4.50 % | 8.17 % | 4/26/2032 | $ | 12,000 | $ | 12,000 | $ | 12,000 | 16.35 | %",
+        "Unical Aviation Inc (Term Loan) | 1M S + 3.75 % | 7.42 % | 10/31/2029 | 7,841 | 7,771 | 7,802 | 10.63"
+      ],
+      "last": [
+        "Discovery Marketing And Distributing, LLC (Term Loan) | 3M S + 4.00 % | 7.94 % | 8/10/2027 | 16,697 | 16,590 | 16,655 | 22.70",
+        "16,590 | 16,655 | 22.70"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "First Lien Secured Debt (4)(5)",
+        "",
+        "Aerospace & Defense"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/ix:continuation[11]/ix:continuation/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Accord Buyer LLC (Term Loan) | 1M S + 4.50 % | 8.27 % | 5/19/2028 | $ | 8,597 | $ | 8,535 | $ | 8,361 | 11.39 | %",
+        "Accord Buyer LLC (Term Loan) (6) | 1M S + 4.50 % | 8.27 % | 5/19/2028 | 1,360 | 1,360 | 1,294 | 1.76"
+      ],
+      "last": [
+        "Royal Property Company Borrower LLC (Term Loan) | 1M S + 3.75 % | 7.42 % | 2/2/2028 | 13,886 | 13,787 | 13,834 | 18.85",
+        "13,787 | 13,834 | 18.85"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Containers & Packaging",
+        "Accord Buyer LLC (Term Loan) 1M S + 4.50 % 8.27 % 5/19/2028 $ 8,597 $ 8,535 $ 8,361 11.39 %",
+        "Accord Buyer LLC (Term Loan) (6) 1M S + 4.50 % 8.27 % 5/19/2028 1,360 1,360 1,294 1.76"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/ix:continuation[12]/ix:continuation/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "Alliance Mobile Inc (Term Loan) | 3M S + 3.50 % | 7.35 % | 8/1/2028 | 2,205 | 2,188 | 2,199 | 3.00",
+        "Alliance Mobile Inc (Term Loan) | 3M S + 3.50 % | 7.35 % | 8/1/2028 | 14,639 | 14,589 | 14,602 | 19.90"
+      ],
+      "last": [
+        "Total First Lien Secured Debt | $ | 310,412 | $ | 309,937 | 422.36 | %",
+        "Total Investments at Fair Value | $ | 310,412 | $ | 309,937 | 422.36 | %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "Specialty Retail",
+        "Alliance Mobile Inc (Term Loan) 3M S + 3.50 % 7.35 % 8/1/2028 2,205 2,188 2,199 3.00",
+        "Alliance Mobile Inc (Term Loan) 3M S + 3.50 % 7.35 % 8/1/2028 14,639 14,589 14,602 19.90"
+      ],
+      "preceding": [],
+      "rows": 9,
+      "table_xpath": "/html/body/ix:continuation[13]/ix:continuation/table[1]"
+    }
+  ]
+}

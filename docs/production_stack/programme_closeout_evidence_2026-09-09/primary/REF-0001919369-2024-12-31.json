@@ -1,0 +1,414 @@
+{
+  "path": "data/raw/filings/bdc_html/1919369/000191936925000009.html",
+  "ref": "REF-0001919369-2024-12-31",
+  "rows": [
+    {
+      "cells": [
+        "Total investments, beginning of period",
+        "",
+        "$",
+        "104,685",
+        "",
+        "",
+        "$",
+        "-",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 | Total investments, beginning of period $ 104,685 $ - | New investments purchased 431,805 104,734 | Net accretion of discount on investments 820 24",
+      "preceding": [
+        "Our investment activity for the years ended December 31, 2024 and 2023 is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+        "Table of Contents",
+        "",
+        "72",
+        "",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[975]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Total investments, end of period",
+        "",
+        "$",
+        "504,119",
+        "",
+        "",
+        "$",
+        "104,685",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 | Total investments, beginning of period $ 104,685 $ - | New investments purchased 431,805 104,734 | Net accretion of discount on investments 820 24",
+      "preceding": [
+        "Our investment activity for the years ended December 31, 2024 and 2023 is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+        "Table of Contents",
+        "",
+        "72",
+        "",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[975]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "$",
+        "29,857",
+        "",
+        "",
+        "$",
+        "780",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 | First-lien debt $ 29,370 $ 780 | Preferred stock dividends 487 - | Total Investment Income $ 29,857 $ 780",
+      "preceding": [
+        "Investment income for the years ended December 31, 2024 and 2023 was as follows:",
+        "Investment Income",
+        "",
+        "nt commitments, expenses, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio. In addition, as we have continued to raise and deploy capital, we have experienced significant growth in total assets, total liabilities and net assets since commencing operations in the fourth quarter of 2023. As a result, year-over-year comparisons of operating results may not be meaningful.",
+        "Consolidated Results of Operations",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1009]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "$",
+        "29,857",
+        "",
+        "",
+        "$",
+        "780",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 | Total investment income $ 29,857 $ 780 | Total expenses 22,970 3,875 | Expense support and waivers (1,371) (1,396)",
+      "preceding": [
+        "Net investment income after giving effect to any expense support and waivers of expenses for the years ended December 31, 2024 and 2023 was as follows:",
+        "",
+        "r 31, 2023 to $506.6 million as of December 31, 2024. Our weighted average investment income yield on total investments at amortized cost and fair value was 11.0% and 11.0%, respectively, for the year ended December 31, 2024, and 10.6% and 10.6%, respectively, for the year ended December 31, 2023. The increase in the weighted average yield on total investments was primarily due to the origination of investments with higher base rates during 2024.",
+        "",
+        "Interest income on our debt investments is dependent on the composition and credit quality of the portfolio. Generally, we expect the portfolio to generate predictable quarterly interest income based on the terms stated in each loan\u2019s credit agreement. As of December 31, 2024 and 2023, there were no debt investments on non-accrual status.",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1015]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Total investment income from non-controlled/non-affiliated investments",
+        "29,857",
+        "",
+        "",
+        "780",
+        "",
+        "",
+        "-",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-8",
+          "scale": "3",
+          "text": "29,857",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-9",
+          "scale": "3",
+          "text": "780",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-10",
+          "scale": "3",
+          "text": "-",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 Period from March 15, 2022 (inception) to December 31, 2022 | Investment income: | From non-controlled/non-affiliated investments: | Interest income $ 28,897 $ 720 $ -",
+      "preceding": [
+        "(dollars in thousands, except share and per share data)",
+        "CONSOLIDATED STATEMENTS OF OPERATIONS",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "Table of Contents",
+        "",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1214]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "29,857",
+        "",
+        "",
+        "780",
+        "",
+        "",
+        "-",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-1",
+          "scale": "3",
+          "text": "29,857",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-11",
+          "scale": "3",
+          "text": "780",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-12",
+          "scale": "3",
+          "text": "-",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | For the Year Ended December 31, 2024 For the Year Ended December 31, 2023 Period from March 15, 2022 (inception) to December 31, 2022 | Investment income: | From non-controlled/non-affiliated investments: | Interest income $ 28,897 $ 720 $ -",
+      "preceding": [
+        "(dollars in thousands, except share and per share data)",
+        "CONSOLIDATED STATEMENTS OF OPERATIONS",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "Table of Contents",
+        "",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1214]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments - non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "504,119",
+        "",
+        "506,574",
+        "190.7"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-4",
+          "scale": "3",
+          "text": "504,119",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-4",
+          "scale": "3",
+          "text": "506,574",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-4",
+          "scale": "-2",
+          "text": "190.7",
+          "unit": "number"
+        }
+      ],
+      "opening": " | Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/Units (1) Amortized Cost (3) Fair Value % of Net Assets | Other Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (15) 5/16/2034 280 $ 20 $ 20 0.0 %",
+      "preceding": [
+        "",
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2024",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (continued)",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1273]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "$ 537,454",
+        "",
+        "$ 539,909",
+        "203.2 %"
+      ],
+      "facts": [
+        {
+          "concept": "vcsl:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+          "context": "c-6",
+          "scale": "3",
+          "text": "537,454",
+          "unit": "usd"
+        },
+        {
+          "concept": "vcsl:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+          "context": "c-6",
+          "scale": "3",
+          "text": "539,909",
+          "unit": "usd"
+        },
+        {
+          "concept": "vcsl:InvestmentOwnedAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsNetAssetsPercentage",
+          "context": "c-6",
+          "scale": "-2",
+          "text": "203.2",
+          "unit": "number"
+        }
+      ],
+      "opening": " | Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/Units (1) Amortized Cost (3) Fair Value % of Net Assets | Other Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (15) 5/16/2034 280 $ 20 $ 20 0.0 %",
+      "preceding": [
+        "",
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2024",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (continued)",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1273]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Total Investments - non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "104,685",
+        "",
+        "",
+        "104,869",
+        "",
+        "140.4",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-5",
+          "scale": "3",
+          "text": "104,685",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-5",
+          "scale": "3",
+          "text": "104,869",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-5",
+          "scale": "-2",
+          "text": "140.4",
+          "unit": "number"
+        }
+      ],
+      "opening": " | Investments (1) (12) (15) Footnotes Reference Rate and Spread Interest Rate (2) (11) Maturity Date Par Amount/Units (1) AmortizedCost (3) Fair Value % of Net Assets | Investments \u2013 non-controlled/non-affiliated | First-Lien Debt | Health-Care Technology",
+      "preceding": [
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2023",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "Table of Contents",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1314]/table/tr[29]"
+    },
+    {
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "166,628",
+        "",
+        "",
+        "$",
+        "166,812",
+        "",
+        "223.3",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "vcsl:InvestmentOwnedCostAndCashAndCashEquivalentsAtCarryingValue",
+          "context": "c-7",
+          "scale": "3",
+          "text": "166,628",
+          "unit": "usd"
+        },
+        {
+          "concept": "vcsl:InvestmentOwnedFairValueAndCashAndCashEquivalentsFairValue",
+          "context": "c-7",
+          "scale": "3",
+          "text": "166,812",
+          "unit": "usd"
+        },
+        {
+          "concept": "vcsl:InvestmentOwnedAndCashAndCashEquivalentsNetAssetsPercentage",
+          "context": "c-7",
+          "scale": "-2",
+          "text": "223.3",
+          "unit": "number"
+        }
+      ],
+      "opening": " | Investments (1) (12) (15) Footnotes Reference Rate and Spread Interest Rate (2) (11) Maturity Date Par Amount/Units (1) AmortizedCost (3) Fair Value % of Net Assets | Investments \u2013 non-controlled/non-affiliated | First-Lien Debt | Health-Care Technology",
+      "preceding": [
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2023",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "Table of Contents",
+        "vcsl-20241231"
+      ],
+      "xpath": "/html/body/div[1314]/table/tr[31]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "$",
+        "271,077",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-191",
+          "scale": "3",
+          "text": "271,077",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | Range | Fair Value as of December 31, 2024 Valuation Techniques Significant Unobservable Inputs Low High Weighted Average | First-lien debt $ 187,455 Yield Analysis Discount Rate 9.70 % 15.80 % 12.20 % | 77,635 Recent Transactions Transaction Price 98.00 99.00 98.48",
+      "preceding": [
+        "",
+        "The following table summarizes the quantitative information related to the significant unobservable inputs for Level 3 instruments which are carried at fair value as of December 31, 2024 and 2023:"
+      ],
+      "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric[1]/div[3]/table/tr[9]"
+    }
+  ],
+  "sha256": "e1fc3f38f3cf9d7fb7d6235be9f5eb140406b8e38986a5455a36a427589709aa",
+  "status": "literal_primary_review_candidates"
+}

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Serif, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getFundList } from '@/lib/data';
+import { getFundList, getMetadata } from '@/lib/data';
+import { formatQuarter } from '@/lib/format';
 import './globals.css';
 
 const plexSerif = IBM_Plex_Serif({
@@ -51,6 +52,7 @@ export default function RootLayout({
 }) {
   const fundList = getFundList();
   const fundCount = fundList.length;
+  const asOfLabel = formatQuarter(getMetadata().asOfQuarter);
   const fundSearchItems = fundList.map((f) => ({
     cik: f.cik,
     name: f.name,
@@ -60,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${plexSerif.variable} ${plexSans.variable} ${plexMono.variable} bg-bg`}>
       <body className="font-body min-h-screen flex flex-col bg-bg text-ink">
-        <Header fundCount={fundCount} fundSearchItems={fundSearchItems} />
+        <Header fundCount={fundCount} fundSearchItems={fundSearchItems} asOfLabel={asOfLabel} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

@@ -1,0 +1,102 @@
+.............................................................F           [100%]
+================================== FAILURES ===================================
+_________________ test_coherence_passes_all_existing_wrappers _________________
+
+    def test_coherence_passes_all_existing_wrappers():
+        """All committed wrapper JSONs should pass coherence with zero hard errors.
+    
+        Warnings (prefixed with 'warning:') are allowed.
+        """
+        import glob
+        wrapper_files = glob.glob(
+            "data/overrides/bdc_xbrl_wrappers/*.json"
+        )
+        for path in wrapper_files:
+            if "reference" in path:
+                continue
+            with open(path, encoding="utf-8") as f:
+                raw = json.load(f)
+            if raw.get("schema_version") not in (
+                "bdc-xbrl-wrapper.v2",
+                "bdc-xbrl-wrapper.v3",
+            ):
+                continue
+            issues = validate_wrapper_json_coherence(raw)
+            errors = [i for i in issues if not i.startswith("warning:")]
+>           assert errors == [], f"{path}: {errors}"
+E           AssertionError: data/overrides/bdc_xbrl_wrappers\0001572694.json: ['staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136']
+E           assert ['staging.hie...position 136'] == []
+E             
+E             Left contains one more item: 'staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136'
+E             Use -v to get more diff
+
+tests\test_bdc_xbrl_wrapper_oracle.py:3084: AssertionError
+============================== warnings summary ===============================
+pipeline\staging_bdc.py:2183
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2183: SyntaxWarning: invalid escape sequence '\d'
+    _phase_b_count, time.time() - _t_phase)
+
+pipeline\staging_bdc.py:2181
+pipeline\staging_bdc.py:2181
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2181: SyntaxWarning: invalid escape sequence '\d'
+    ).fetchone()[0]
+
+pipeline\staging_bdc.py:2186
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2186: SyntaxWarning: invalid escape sequence '\d'
+    # Prefix-identifier dedup: remove subtotal/rollup rows where one
+
+pipeline\staging_bdc.py:2177
+pipeline\staging_bdc.py:2177
+pipeline\staging_bdc.py:2177
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2177: SyntaxWarning: invalid escape sequence '\d'
+    con.execute(sql_phase_b)
+
+pipeline\staging_bdc.py:2180
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2180: SyntaxWarning: invalid escape sequence '\d'
+    "SELECT COUNT(*) FROM _bdc_phase_b"
+
+pipeline\staging_bdc.py:2184
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2184: SyntaxWarning: invalid escape sequence '\d'
+
+pipeline\staging_bdc.py:2178
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\staging_bdc.py:2178: SyntaxWarning: invalid escape sequence '\d'
+
+pipeline\source_reconciliation.py:3410
+  C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\pipeline\source_reconciliation.py:3410: SyntaxWarning: invalid escape sequence '\s'
+    "hierarchy_parse_disagreement",
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================ slowest 30 durations =============================
+224.55s call     tests/test_unified_holdings.py::TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien
+80.68s call     tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer
+75.09s call     tests/test_unified_holdings.py::TestPrepareBdc::test_gsbd_multilevel_pct_hierarchy_extracts_issuer
+74.06s call     tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed
+6.33s setup    tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup
+0.81s call     tests/test_investigation_orchestration.py::test_ex_cash_override_does_not_displace_plus_cash
+0.77s call     tests/test_investigation_orchestration.py::test_anchor_candidates_use_basis
+0.47s call     tests/test_investigation_orchestration.py::test_gate_is_stale_when_rules_change_after_apply
+0.38s call     tests/test_investigation_orchestration.py::test_prep_prompt_excludes_stale_quarter_escalation
+0.35s call     tests/test_investigation_orchestration.py::test_prep_prompt_lists_existing_escalations
+0.30s call     tests/test_investigation_orchestration.py::test_status_measurement_leaves_gate_non_stale
+0.28s call     tests/test_investigation_orchestration.py::test_outlier_series_includes_plus_cash_quarters
+0.28s call     tests/test_investigation_orchestration.py::test_status_measurement_writes_fingerprint_contract_files
+0.23s call     tests/test_investigation_orchestration.py::test_measure_gate_uses_production_band
+0.22s call     tests/test_investigation_orchestration.py::test_prep_allow_missing_bundle_overrides
+0.21s call     tests/test_investigation_orchestration.py::test_apply_escalation_counts_deduped_vs_raw
+0.20s call     tests/test_agent_data_query.py::test_file_backed_query_cache_is_temporary_and_keeps_cik_scope
+0.20s call     tests/test_investigation_orchestration.py::test_apply_records_rules_fingerprint
+0.19s call     tests/test_agent_data_query.py::test_join_across_tables
+0.19s call     tests/test_agent_data_query.py::test_groupby_aggregation_works
+0.18s call     tests/test_investigation_orchestration.py::test_apply_escalation_counts_no_duplicates
+0.17s call     tests/test_investigation_orchestration.py::test_gate_stale_when_rules_deleted_after_apply
+0.16s call     tests/test_agent_data_query.py::test_describe_returns_schema_and_residual_context
+0.16s call     tests/test_agent_data_query.py::test_query_rejects_unsafe_at_runtime
+0.15s call     tests/test_agent_data_query.py::test_file_access_blocked_even_if_validation_bypassed
+0.14s call     tests/test_investigation_orchestration.py::test_promote_copies_valid_effective_rules
+0.14s call     tests/test_agent_data_query.py::test_cik_scoping_excludes_other_filers
+0.13s call     tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers
+0.13s call     tests/test_agent_data_query.py::test_cross_cik_query_returns_nothing_for_absent_cik
+0.11s call     tests/test_investigation_orchestration.py::test_promote_refuses_noop_rules
+=========================== short test summary info ===========================
+FAILED tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers
+1 failed, 61 passed, 11 warnings in 612.64s (0:10:12)

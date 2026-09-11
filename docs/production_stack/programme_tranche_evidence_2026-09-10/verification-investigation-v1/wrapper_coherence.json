@@ -1,0 +1,16 @@
+{
+  "checked": 77,
+  "elapsed_seconds": 2.0770359999878565,
+  "failures": [
+    {
+      "errors": [
+        "staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\x at position 136"
+      ],
+      "source": {
+        "bytes": 5450,
+        "path": "data/overrides/bdc_xbrl_wrappers/0001572694.json",
+        "sha256": "e30ede578328a895aaefa6b6eacc1a365bdf72abb116d9f7cf6d330732908659"
+      }
+    }
+  ]
+}

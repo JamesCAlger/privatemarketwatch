@@ -1,0 +1,56 @@
+{
+  "accession": "0001628280-25-024375",
+  "cik": "0001911066",
+  "identity": [
+    8334318,
+    1774941962230644000
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1911066/000162828025024375.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "b38174ca0c253df1aa189c1d3c5575e9e26227feb85a5251bd096fbed70b2157",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ncpif:investment\"]",
+      "unit_ref": "investment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ncpif:part\"]",
+      "unit_ref": "part"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ncpif:member\"]",
+      "unit_ref": "member"
+    }
+  ]
+}

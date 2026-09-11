@@ -1,0 +1,8 @@
+{
+  "cik": "0000000123",
+  "fix_class": "rate_rescale",
+  "template": {
+    "field": "interest_rate",
+    "factor": 0.1
+  }
+}

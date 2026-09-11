@@ -1,0 +1,50 @@
+{
+  "accession": "0000950170-23-061710",
+  "cik": "0001603480",
+  "identity": [
+    3490616,
+    1774940980099665400
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1603480/000095017023061710.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "417e90295bcd857398b49bdbe3a8bde5f2da64e825e2ebab6f4b7ce1fc4f7c04",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001603480:Agreement\"]",
+      "unit_ref": "U_Agreement"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001603480:Loan\"]",
+      "unit_ref": "U_Loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    }
+  ]
+}

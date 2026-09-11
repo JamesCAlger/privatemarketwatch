@@ -1,0 +1,23 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "unavailable",
+    "cik": "1916099",
+    "disposition": "primary_source_unavailable",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001916099-2023-12-31.json",
+    "evidence_sha256": "cd7526ef63a0cc1e4fea749154d6bfb9b076ae18d61d3df808da90311c49d7dd",
+    "held_out": "False",
+    "next_action": "obtain_primary_under_separate_authority",
+    "reference_id": "REF-0001916099-2023-12-31",
+    "report_date": "2023-12-31",
+    "review_note": "March 2024 primary candidate 167,278,000; December primary unavailable.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "",
+    "ref": "REF-0001916099-2023-12-31",
+    "status": "primary_HTML_unavailable"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,6 @@
+layer,status,drift,rules
+raw_bdc_staging,ok,,16
+unified_agent_rules,ok,,122
+unified_agent_rules,ok,row_drift,1
+unified_agent_rules,ok,scope_carryover,14
+unified_b2_corrections,ok,,22

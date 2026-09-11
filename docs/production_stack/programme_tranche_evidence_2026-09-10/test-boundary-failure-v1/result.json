@@ -1,0 +1,29 @@
+{
+  "code_unchanged": true,
+  "consistently_unreadable_paths": [],
+  "elapsed_seconds": 5789.302398400003,
+  "exit_code": 124,
+  "log": {
+    "bytes": 4597,
+    "path": "scratch/2026-09-10_programme_tranche/verification/full-suite-v1/process.log",
+    "sha256": "a33962c7113d6504c2aed3c23ed39201fab0b04f70b9f6e1833d0262abc48cb5"
+  },
+  "mode": "tests",
+  "protected_changes": [
+    "data/output/agent_investigate/_qcache/666/conservation.1788885037.parquet",
+    "data/output/agent_investigate/_qcache/666/fund_financials.1788877663.parquet",
+    "data/output/agent_investigate/_qcache/666/holdings.1788882554.parquet",
+    "data/output/agent_investigate/_qcache/999/conservation.1788885037.parquet",
+    "data/output/agent_investigate/_qcache/999/fund_financials.1788877663.parquet",
+    "data/output/agent_investigate/_qcache/999/holdings.1788882554.parquet"
+  ],
+  "protected_readable_files": 237621,
+  "protected_unreadable_paths_changed": false,
+  "started_code": {
+    "bytes": 8915,
+    "path": "scripts/programme_tranche/run_verification.py",
+    "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+  },
+  "timed_out": true,
+  "worker_stopped": true
+}

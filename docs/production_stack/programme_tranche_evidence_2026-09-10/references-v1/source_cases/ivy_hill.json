@@ -1,0 +1,70 @@
+{
+  "rows": [
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "Member interest",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "06/2009",
+        "",
+        "",
+        "",
+        "100.00 %",
+        "",
+        "",
+        "1,700.5",
+        "",
+        "",
+        "1,903.4",
+        "",
+        "(6)",
+        ""
+      ],
+      "text": "Member interest 06/2009 100.00 % 1,700.5 1,903.4 (6)",
+      "xpath": "/html/body/div[2390]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "Ivy Hill Asset Management, L.P. (5)",
+        "",
+        "Asset management services",
+        "",
+        "Subordinated revolving loan",
+        "",
+        "10.32 %",
+        "SOFR (Q)",
+        "6.50 %",
+        "",
+        "02/2018",
+        "",
+        "01/2030",
+        "",
+        "",
+        "530.5",
+        "",
+        "",
+        "530.5",
+        "",
+        "",
+        "530.5",
+        "",
+        "(6)(9)",
+        ""
+      ],
+      "text": "Ivy Hill Asset Management, L.P. (5) Asset management services Subordinated revolving loan 10.32 % SOFR (Q) 6.50 % 02/2018 01/2030 530.5 530.5 530.5 (6)(9)",
+      "xpath": "/html/body/div[2390]/table/tr[16]"
+    }
+  ],
+  "source": {
+    "bytes": 24506125,
+    "path": "data/raw/filings/bdc_html/1287750/000128775026000006.html",
+    "sha256": "ad71baf7a7214d6301ba8a431b40f34c081508999847273ab3add7bcb49f317f"
+  }
+}

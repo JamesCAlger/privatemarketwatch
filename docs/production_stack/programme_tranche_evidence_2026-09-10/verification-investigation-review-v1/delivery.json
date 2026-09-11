@@ -1,0 +1,224 @@
+{
+  "browser": {
+    "brackets_unicode_literal_newlines": true,
+    "comment_boxes": 32,
+    "desktop_mobile": true,
+    "download": true,
+    "elapsed_seconds": 8.711,
+    "errors": [],
+    "input_sha256": "6186343cf012ea6e35ed792fed066335b971752389cc60f2896613afad9ecadf",
+    "local_links": 39,
+    "native_save": "writer and cancellation stubs; OS dialog not automated",
+    "network": [],
+    "print": true,
+    "sections": 5,
+    "status": "pass",
+    "storage_failure_visible": true
+  },
+  "documents": 8,
+  "engineering_end_state_complete": false,
+  "files": [
+    {
+      "bytes": 12354,
+      "path": "docs/production_stack/programme_verification_investigation_2026-09-10.md",
+      "sha256": "d866aaa4402b2fd2a0375f80a6cf5f3f561fbbd181f6074953b2b516bb85a6e1"
+    },
+    {
+      "bytes": 7196,
+      "path": "docs/production_stack/programme_tranche_handoff_2026-09-10.md",
+      "sha256": "648efb669a366bdb165c406db925adcb519de91c9a10ee3121ee7eaf3b2de7e2"
+    },
+    {
+      "bytes": 10344,
+      "path": "docs/production_stack/programme_tranche_resume_proposal_2026-09-10.md",
+      "sha256": "3ea68e0d8ee7cedfb6e01dcbbe3a452237589e93ca05ba2c77375f0a9c30772a"
+    },
+    {
+      "bytes": 9077,
+      "path": "docs/production_stack/programme_runner.md",
+      "sha256": "01415e46664f022802c5cbdf1331163c271ada9275eff867070fc0c47639a308"
+    },
+    {
+      "bytes": 24827,
+      "path": "docs/production_stack/consolidation_readiness_plan.md",
+      "sha256": "5599681d7a3b5fd93c1e813436cb05eb4809a6aeaf7f4bf6f4e0eae39634fe57"
+    },
+    {
+      "bytes": 34980,
+      "path": "docs/production_stack/programme_implementation_plan.md",
+      "sha256": "69b3235f41eccac83c2f035e8c7d8aecfac40dc04c5e9e0bc9dd703aab5772df"
+    },
+    {
+      "bytes": 48858,
+      "path": "docs/production_stack/programme_tranche_2026-09-10_work_record.md",
+      "sha256": "56f7b2f1392784e8a6207f67a13e5b1db4bf5a65d1f0192ec34d0fda789d9119"
+    },
+    {
+      "bytes": 25376,
+      "path": "docs/reference/current_architecture.md",
+      "sha256": "7ce299836c75a3771f54e16bf790b023b02487a45c1abeccbde53507a08646c0"
+    },
+    {
+      "bytes": 67,
+      "path": "scripts/programme_tranche/__init__.py",
+      "sha256": "7602dec324f435e29611f5368d32c7fec063eebb6ef098ea4abd6de10dd74622"
+    },
+    {
+      "bytes": 1564,
+      "path": "scripts/programme_tranche/audit_wrapper_coherence.py",
+      "sha256": "41b819f42eab3f5a8c6d92340a9a604d33a36ff0f3ee32c8f8360a869f410d7d"
+    },
+    {
+      "bytes": 31973,
+      "path": "scripts/programme_tranche/build_review_document.py",
+      "sha256": "88db6d61eaa2b24ce0cdad0a311e8725d520ddba79dcda8abe4e9e7ccd5c3c25"
+    },
+    {
+      "bytes": 15240,
+      "path": "scripts/programme_tranche/build_review_pack.py",
+      "sha256": "70fbe6f70cc32de3ed32a6dc6cff29045060cfc7a726a669580e6fc80c120c69"
+    },
+    {
+      "bytes": 7051,
+      "path": "scripts/programme_tranche/check_preservation.py",
+      "sha256": "5b2c0a20670b85b3d337a2ad2cced0392abe98b28c1cc57bad7a93f9d49fb262"
+    },
+    {
+      "bytes": 3640,
+      "path": "scripts/programme_tranche/diagnose_runtime_closure.py",
+      "sha256": "ff88c29e1a467a6d27ba382f1027e05a1142c4662cacd5ecd4545ba78ca2b3f7"
+    },
+    {
+      "bytes": 17051,
+      "path": "scripts/programme_tranche/diagnose_tests.py",
+      "sha256": "c560f9f24e50082c1dffa0d0f2cdb4f48a9effefd48bf449804a41062c116c4d"
+    },
+    {
+      "bytes": 5058,
+      "path": "scripts/programme_tranche/exercise_recovery.py",
+      "sha256": "bd5c367b80a8cf7f2680f41b601225910085965e1326bbe72ee39fc597abbeee"
+    },
+    {
+      "bytes": 765,
+      "path": "scripts/programme_tranche/inspect_test_profile.py",
+      "sha256": "96f1349bd84790f4043b1ebbc078bd12facd2eaf27f63b16a58eb795c9228193"
+    },
+    {
+      "bytes": 1875,
+      "path": "scripts/programme_tranche/inventory_runtime_tree.py",
+      "sha256": "393c4015144f6ce21c5a60d9be8c8f2d8067cf5b16e8528b2c5633de99801703"
+    },
+    {
+      "bytes": 2253,
+      "path": "scripts/programme_tranche/map_test_failures.py",
+      "sha256": "26a6be103b3abab76ebf69bd3efbf5363ad993b69f132bdb4dc355d4c979e776"
+    },
+    {
+      "bytes": 24364,
+      "path": "scripts/programme_tranche/measure_candidate.py",
+      "sha256": "66e169670154c80c1097e717b32305254556031ab438211722c0c6815eb7149b"
+    },
+    {
+      "bytes": 4320,
+      "path": "scripts/programme_tranche/probe_regex_dialects.py",
+      "sha256": "c9db51099629002d3d57799ec65bce92e5b969d61601db5a60d351485cf12eee"
+    },
+    {
+      "bytes": 12471,
+      "path": "scripts/programme_tranche/record_boundary_handoff.py",
+      "sha256": "0bc1482ae0b1bffbb2c5cac6985e2fb27f1d36f670b6c6c3dcbb7a4a83b93b72"
+    },
+    {
+      "bytes": 7151,
+      "path": "scripts/programme_tranche/record_failure_handoff.py",
+      "sha256": "2d1c3a2b3801c68bf0ae3e60e28ac330527aa0923294151df10b2cd9128aeb54"
+    },
+    {
+      "bytes": 10861,
+      "path": "scripts/programme_tranche/record_integrated_handoff.py",
+      "sha256": "93f95c2a46ad27cd2deb1f4d0cc38a1321a2118b900c1530941c5dceae6fb4aa"
+    },
+    {
+      "bytes": 2494,
+      "path": "scripts/programme_tranche/record_stopped_evaluation.py",
+      "sha256": "df07a5540f2bf91b083e1a1ad91386185690845487b7a3067aa00d3e4f176376"
+    },
+    {
+      "bytes": 4486,
+      "path": "scripts/programme_tranche/record_test_boundary_failure.py",
+      "sha256": "7828bd4c591856facbd189f6f8fbb1e36ba879b6bbf5bfe49d6a9a89479eb7b5"
+    },
+    {
+      "bytes": 9435,
+      "path": "scripts/programme_tranche/record_verification_investigation.py",
+      "sha256": "6c308c73aca9388ecde57aa1b966842591a9894007afbf85199a2dceeaafcfe6"
+    },
+    {
+      "bytes": 8915,
+      "path": "scripts/programme_tranche/run_verification.py",
+      "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+    },
+    {
+      "bytes": 1224,
+      "path": "scripts/programme_tranche/semantic_backstop_child.py",
+      "sha256": "bd0bd4f9e197d3da687f3ecbadbf46c0a68c3843c51e4e1162d0a112fc097c20"
+    },
+    {
+      "bytes": 4861,
+      "path": "scripts/programme_tranche/verify_integrated_delivery.py",
+      "sha256": "eac082330dfed65db84d5834257e7c7002530a8c364577a743cd5ec183f58d94"
+    },
+    {
+      "bytes": 4180,
+      "path": "scripts/programme_tranche/verify_investigation_delivery.py",
+      "sha256": "e69a4ae57dd8f6dc382bf14271f9ae2844b57ea1847e19709b15f26be6601614"
+    },
+    {
+      "bytes": 3539,
+      "path": "scripts/programme_tranche/verify_stopped_delivery.py",
+      "sha256": "48244067e35d1a1f8e44d15d0d6bf7a0c8e18df42f12f7bba958d031c7e14f96"
+    },
+    {
+      "bytes": 7515,
+      "path": "tests/conftest.py",
+      "sha256": "a0f116d058916bc85e05494cbf8994b394b59131a496f8bfacc09846391c6c8c"
+    },
+    {
+      "bytes": 5711,
+      "path": "tests/test_agent_data_query.py",
+      "sha256": "7c93fb3887ba2aa1cdaa14c5974f3f21e57c1caa666135e7d7df69d4a06b0505"
+    },
+    {
+      "bytes": 37005,
+      "path": "tests/test_investigation_orchestration.py",
+      "sha256": "b2a38371b180c700cff26ca15963e633199f5cbecdb32316a3fd62531769ab9a"
+    },
+    {
+      "bytes": 279521,
+      "path": "tests/test_bdc_xbrl_wrapper.py",
+      "sha256": "1e3b55b95c0951125c90a446e259266d846d6de59715974cff3bf007e2730346"
+    },
+    {
+      "bytes": 610118,
+      "path": "tests/test_unified_holdings.py",
+      "sha256": "fbf828d8394b683ad597e89bb8b003ae2be1ee9c8b9f91a9412467dd01499041"
+    },
+    {
+      "bytes": 104742,
+      "path": "docs/production_stack/programme_tranche_review.html",
+      "sha256": "6186343cf012ea6e35ed792fed066335b971752389cc60f2896613afad9ecadf"
+    }
+  ],
+  "investigation": {
+    "bytes": 22216,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/verification-investigation-v1/complete.json",
+    "sha256": "2d1fbbcd3036a7bb79f63dc8a1f0363d939ae245a3d70dcf94a8f2b7728d9852"
+  },
+  "local_document_links": 113,
+  "original_owner_comments_unchanged": true,
+  "production_validator_repair_applied": false,
+  "python_syntax_files": 29,
+  "recorded_utc": "2026-09-10T18:28:25.188137+00:00",
+  "scope": "Investigation and bounded test repairs verified. Full suite, production validator correction, financial measurement and recovery remain.",
+  "status": "investigation_complete"
+}

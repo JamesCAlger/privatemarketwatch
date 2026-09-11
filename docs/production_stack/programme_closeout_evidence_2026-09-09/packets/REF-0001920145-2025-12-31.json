@@ -1,0 +1,845 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_55f2bd43-9e9b-467d-94bf-107cabf129b4",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments - 181.4 %",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "15,704,123",
+        "",
+        "$",
+        "15,674,510",
+        "",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+      "currency": "USD",
+      "fact_id": "F_55f2bd43-9e9b-467d-94bf-107cabf129b4",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "15,674,510",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[324]/table[2]/tr[34]",
+      "table_xpath": "/html/body/div[324]/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "15674510000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_30350f07-31ef-4632-a930-716b5c4bd733",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "15,704,123",
+        "",
+        "",
+        "$",
+        "15,674,510",
+        "",
+        "",
+        "$",
+        "7,285,922",
+        "",
+        "",
+        "$",
+        "7,273,815",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+      "currency": "USD",
+      "fact_id": "F_30350f07-31ef-4632-a930-716b5c4bd733",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "15,674,510",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[402]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[13]",
+      "table_xpath": "/html/body/div[402]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "15674510000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_71a3b54f-6f66-4653-a7f7-9bb25a2f0323",
+        "name": "ck0001920145:InvestmentOwnedAtFairValueAssetsAndMoneyMarketFundsAtCarryingValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Assets",
+        "",
+        "$",
+        "273,743",
+        "",
+        "",
+        "$",
+        "3,529,940",
+        "",
+        "",
+        "$",
+        "12,146,614",
+        "",
+        "",
+        "$",
+        "15,950,297",
+        "",
+        "",
+        "$",
+        "444,718",
+        "",
+        "",
+        "$",
+        "1,875,466",
+        "",
+        "",
+        "$",
+        "5,398,349",
+        "",
+        "",
+        "$",
+        "7,718,533",
+        ""
+      ],
+      "concept": "ck0001920145:InvestmentOwnedAtFairValueAssetsAndMoneyMarketFundsAtCarryingValue",
+      "context_id": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+      "currency": "USD",
+      "fact_id": "F_71a3b54f-6f66-4653-a7f7-9bb25a2f0323",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "15,950,297",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table/tr[15]",
+      "table_xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "15950297000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_a40c450d-7e0e-4ae7-aebd-e1a35600d225",
+        "name": "ck0001920145:InvestmentOwnedAtFairValueLiabilities",
+        "scale": "3",
+        "sign": "-",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Liabilities",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "( 2,075",
+        ")",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "( 2,075",
+        ")",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        ""
+      ],
+      "concept": "ck0001920145:InvestmentOwnedAtFairValueLiabilities",
+      "context_id": "C_021e8fa8-581b-4d08-912a-c01284176cac",
+      "currency": "USD",
+      "fact_id": "F_a40c450d-7e0e-4ae7-aebd-e1a35600d225",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "2,075",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table/tr[19]",
+      "table_xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "-2075000"
+    }
+  ],
+  "cik": "0001920145",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1920145/000119312526088668.html",
+  "reference_id": "REF-0001920145-2025-12-31",
+  "report_date": "2025-12-31",
+  "source_rows": 828,
+  "source_sha256": "b1a700571e2e5b3563d9283c0261318cdbb052876d1843a760d2e274ddbbebeb",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost of $ 15,623,069 and $ 7,234,752 ) | $ | 15,607,836 | $ | 7,226,585",
+        "Non-controlled affiliated investments (cost of $ 81,054 and $ 51,170 ) | 66,674 | 47,230"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (cost of $ 15,623,069 and $ 7,234,752 ) | $ | 15,607,836 | $ | 7,226,585",
+        "Non-controlled affiliated investments (cost of $ 81,054 and $ 51,170 ) | 66,674 | 47,230"
+      ],
+      "opening_rows": [
+        "",
+        "December 31, December 31,",
+        "2025 2024",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Statements of Assets and Liabilities",
+        "Goldman Sachs Private Credit Corp.",
+        "",
+        "ITEM 1. FINANCIAL STATEMENTS",
+        "",
+        "P ART I. FINANCIAL INFORMATION"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[258]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "Prestige Bidco Pty Ltd (dba Pickles Auctions) | Distributors | 8.45 % | B + 4.75 % | 08/25/31 | AUD | 72,042 | $ | 46,348 | $ | 47,837 | (7) (8) (9)",
+        "DBG Consolidated Holdings Pty Ltd (dba Arrotex Pharmaceuticals) | Pharmaceuticals | 9.04 % | B + 5.25 % | 10/29/32 | AUD | 240,767 | 157,008 | 159,069 | (7) (9)"
+      ],
+      "last": [
+        "Total Structured Finance Obligation \u2013 Debt | 171,830 | 172,100",
+        "Total Cayman Islands | $ | 171,830 | $ | 172,100"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "Debt Investments - 180.7 %",
+        "Australia - 4.2 %"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025",
+        "Goldman Sachs Private Credit Corp.",
+        ""
+      ],
+      "rows": 40,
+      "table_xpath": "/html/body/div[270]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "Financi\u00e8re N (dba Nemera) | Health Care Equipment & Supplies | 7.02 % | E + 5.00 % | 03/14/25 | 05/07/32 | EUR | 11,428 | $ | 12,799 | $ | 13,296 | (7) (8) (9)",
+        "Financi\u00e8re N (dba Nemera) | Health Care Equipment & Supplies | 7.02 % | E + 5.00 % | 03/14/25 | 05/07/32 | EUR | 5,357 | 2,584 | 2,602 | (7) (8) (9) (10)"
+      ],
+      "last": [
+        "Total 1st Lien/Senior Secured Debt | 13,754 | 15,427",
+        "Total Luxembourg | $ | 13,754 | $ | 15,427"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "France - 1.1 %",
+        "1st Lien/Senior Secured Debt - 1.1 %"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp.",
+        "",
+        "",
+        ""
+      ],
+      "rows": 30,
+      "table_xpath": "/html/body/div[273]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "OMEGA II AB (dba Fortnox) | Software | 6.12 % | STIBOR + 4.25 % | 06/17/32 | SEK | 139,883 | $ | 14,386 | $ | 15,118 | (7) (8) (9)",
+        "OMEGA II AB (dba Fortnox) | Software | STIBOR + 4.25 % | 06/17/32 | SEK | 37,895 | 10 | ( 21 | ) | (7) (8) (9) (10)"
+      ],
+      "last": [
+        "Total 2nd Lien/Senior Secured Debt | 26,873 | 27,133",
+        "Total United Kingdom | $ | 402,661 | $ | 407,278"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "Sweden - 1.0 %",
+        "1st Lien/Senior Secured Debt - 1.0 %"
+      ],
+      "preceding": [
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 38,
+      "table_xpath": "/html/body/div[276]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "Bleriot US Bidco Inc. | Aerospace & Defense | 6.17 % | S + 2.50 % | 10/31/30 | $ | 24,050 | $ | 24,080 | $ | 24,160",
+        "Frontgrade Technologies Holdings Inc. | Aerospace & Defense | 9.13 % | S + 5.25 % (incl. 1.50 % PIK) | 01/09/30 | 42,380 | 41,610 | 41,533 | (7) (8)"
+      ],
+      "last": [
+        "Olympus Water US Holding Corporation | Chemicals | 6.67 % | S + 3.00 % | 06/20/31 | 16,379 | 16,352 | 16,221",
+        "Olympus Water US Holding Corporation | Chemicals | S + 3.00 % | 11/03/32 | 2,000 | 2,000 | 1,986 | (12)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "United States - 163.3 %",
+        "1st Lien/Senior Secured Debt - 159.7 %"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/div[279]/table"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Paint Intermediate III, LLC | Chemicals | S + 3.00 % | 10/09/31 | $ | 1,421 | $ | 1,418 | $ | 1,427 | (12)",
+        "SCIH Salt Holdings, Inc. | Chemicals | 6.52 % | S + 2.75 % | 01/31/29 | 5,175 | 5,204 | 5,183 | (12)"
+      ],
+      "last": [
+        "Orthrus Limited (dba Ocorian) | Commercial Services & Supplies | 10.15 % | SN + 6.25 % (Incl. 2.75 % PIK) | 12/05/31 | GBP | 1,346 | 1,793 | 1,787 | (7) (8) (9)",
+        "Orthrus Limited (dba Ocorian) | Commercial Services & Supplies | SN + 6.25 % (Incl. 2.75 % PIK) | 12/05/31 | GBP | 1,084 | 103 | ( 22 | ) | (7) (8) (9) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Paint Intermediate III, LLC Chemicals S + 3.00 % 10/09/31 $ 1,421 $ 1,418 $ 1,427 (12)",
+        "SCIH Salt Holdings, Inc. Chemicals 6.52 % S + 2.75 % 01/31/29 5,175 5,204 5,183 (12)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/div[282]/table"
+    },
+    {
+      "contexts": 43,
+      "first": [
+        "Saber Parent Holdings Corp. (dba Service Logic) | Commercial Services & Supplies | 8.21 % | S + 4.50 % | 12/16/32 | $ | 93,525 | $ | 93,060 | $ | 93,057 | (7)",
+        "Saber Parent Holdings Corp. (dba Service Logic) | Commercial Services & Supplies | S + 4.50 % | 12/16/32 | 25,800 | ( 64 | ) | ( 64 | ) | (7) (10)"
+      ],
+      "last": [
+        "Oliver Packaging and Equipment Company, LLC (fka Buffalo Merger Sub, LLC) | Containers & Packaging | 9.15 % | S + 5.25 % | 11/01/30 | 74,231 | 73,290 | 73,118 | (7) (8)",
+        "Oliver Packaging and Equipment Company, LLC (fka Buffalo Merger Sub, LLC) | Containers & Packaging | S + 5.25 % | 11/01/30 | 8,719 | ( 106 | ) | ( 131 | ) | (7) (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Saber Parent Holdings Corp. (dba Service Logic) Commercial Services & Supplies 8.21 % S + 4.50 % 12/16/32 $ 93,525 $ 93,060 $ 93,057 (7)",
+        "Saber Parent Holdings Corp. (dba Service Logic) Commercial Services & Supplies S + 4.50 % 12/16/32 25,800 ( 64 ) ( 64 ) (7) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 43,
+      "table_xpath": "/html/body/div[285]/table"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "Precision Concepts Parent Inc. | Containers & Packaging | 8.57 % | S + 4.75 % | 08/02/32 | $ | 7,841 | $ | 7,772 | $ | 7,763 | (7) (8)",
+        "Precision Concepts Parent Inc. | Containers & Packaging | 8.59 % | S + 4.75 % | 08/02/32 | 5,726 | 5,670 | 5,669 | (7) (8)"
+      ],
+      "last": [
+        "Splash Car Wash, Inc. | Diversified Consumer Services | S + 5.00 % | 03/17/31 | 4,125 | ( 27 | ) | ( 31 | ) | (7) (8) (10)",
+        "Splash Car Wash, Inc. | Diversified Consumer Services | S + 5.00 % | 03/17/32 | 2,640 | ( 22 | ) | ( 20 | ) | (7) (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Precision Concepts Parent Inc. Containers & Packaging 8.57 % S + 4.75 % 08/02/32 $ 7,841 $ 7,772 $ 7,763 (7) (8)",
+        "Precision Concepts Parent Inc. Containers & Packaging 8.59 % S + 4.75 % 08/02/32 5,726 5,670 5,669 (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/div[288]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "Spotless Brands, LLC | Diversified Consumer Services | 8.86 % | S + 5.00 % | 07/25/28 | $ | 60,141 | $ | 8,335 | $ | 7,334 | (7) (8) (10)",
+        "Spotless Brands, LLC | Diversified Consumer Services | 9.62 % | S + 5.75 % | 07/25/28 | 42,239 | 42,282 | 42,028 | (7) (8)"
+      ],
+      "last": [
+        "BSI3 Menu Buyer, Inc (dba Kydia) | Financial Services | 9.83 % | S + 6.00 % | 12/31/99 | 6,228 | 6,196 | 6,181 | (8)",
+        "BSI3 Menu Buyer, Inc (dba Kydia) | Financial Services | 9.83 % | S + 6.00 % | 12/31/99 | 249 | 39 | 40 | (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Spotless Brands, LLC Diversified Consumer Services 8.86 % S + 5.00 % 07/25/28 $ 60,141 $ 8,335 $ 7,334 (7) (8) (10)",
+        "Spotless Brands, LLC Diversified Consumer Services 9.62 % S + 5.75 % 07/25/28 42,239 42,282 42,028 (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/div[291]/table"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Celero Commerce LLC | Financial Services | 8.70 % | S + 5.00 % | 02/28/31 | $ | 104,838 | $ | 104,139 | $ | 104,052 | (7) (8)",
+        "Celero Commerce LLC | Financial Services | 8.60 % | S + 5.00 % | 02/28/31 | 24,962 | 2,848 | 2,742 | (7) (8) (10)"
+      ],
+      "last": [
+        "Zeus Company LLC | Health Care Equipment & Supplies | 9.17 % | S + 6.00 % (Incl. 3.00 % PIK) | 02/28/31 | 15,093 | 7,327 | 6,618 | (7) (8) (10)",
+        "Zeus Company LLC | Health Care Equipment & Supplies | S + 6.00 % (Incl. 3.00 % PIK) | 02/28/30 | 11,354 | ( 162 | ) | ( 681 | ) | (7) (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "Celero Commerce LLC Financial Services 8.70 % S + 5.00 % 02/28/31 $ 104,838 $ 104,139 $ 104,052 (7) (8)",
+        "Celero Commerce LLC Financial Services 8.60 % S + 5.00 % 02/28/31 24,962 2,848 2,742 (7) (8) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/div[294]/table"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "Advarra Holdings, Inc. | Health Care Providers & Services | 8.22 % | S + 4.50 % | 09/15/31 | $ | 76,061 | $ | 75,736 | $ | 75,681 | (7) (8)",
+        "Advarra Holdings, Inc. | Health Care Providers & Services | 8.22 % | S + 4.50 % | 09/15/31 | 41,370 | 41,193 | 41,163 | (7) (8)"
+      ],
+      "last": [
+        "Cotiviti, Inc. | Health Care Technology | 6.62 % | S + 2.75 % | 05/01/31 | 85,432 | 83,217 | 81,944",
+        "Cotiviti, Inc. | Health Care Technology | 6.62 % | S + 2.75 % | 03/26/32 | 4,987 | 4,840 | 4,779"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Advarra Holdings, Inc. Health Care Providers & Services 8.22 % S + 4.50 % 09/15/31 $ 76,061 $ 75,736 $ 75,681 (7) (8)",
+        "Advarra Holdings, Inc. Health Care Providers & Services 8.22 % S + 4.50 % 09/15/31 41,370 41,193 41,163 (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/div[297]/table"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "eResearch Technology, Inc. (dba Clario) | Health Care Technology | 8.47 % | S + 4.75 % | 01/20/32 | $ | 156,715 | $ | 155,355 | $ | 156,715 | (7) (8)",
+        "eResearch Technology, Inc. (dba Clario) | Health Care Technology | 8.47 % | S + 4.75 % | 01/20/32 | 29,569 | 3,993 | 4,140 | (7) (8) (10)"
+      ],
+      "last": [
+        "Galway Borrower LLC | Insurance | 8.17 % | S + 4.50 % | 09/29/28 | 843 | 838 | 835 | (8)",
+        "HUB International Limited | Insurance | 6.12 % | S + 2.25 % | 06/20/30 | 28,263 | 28,372 | 28,397"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "eResearch Technology, Inc. (dba Clario) Health Care Technology 8.47 % S + 4.75 % 01/20/32 $ 156,715 $ 155,355 $ 156,715 (7) (8)",
+        "eResearch Technology, Inc. (dba Clario) Health Care Technology 8.47 % S + 4.75 % 01/20/32 29,569 3,993 4,140 (7) (8) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/div[300]/table"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Iris Specialty Acquisition LLC (dba Integrated Specialty Coverages) | Insurance | 8.17 % | S + 4.50 % | 11/22/32 | $ | 110,718 | $ | 110,172 | $ | 110,165 | (7)",
+        "Iris Specialty Acquisition LLC (dba Integrated Specialty Coverages) | Insurance | S + 4.50 % | 11/22/32 | 18,660 | ( 46 | ) | ( 47 | ) | (7) (10)"
+      ],
+      "last": [
+        "WCG Intermediate Corp. | Life Sciences Tools & Services | 6.72 % | S + 3.00 % | 02/25/32 | 14,132 | 14,123 | 14,152 | (12)",
+        "Brookfield WEC Holdings Inc. | Machinery | 5.87 % | S + 2.00 % | 01/27/31 | 17,008 | 17,046 | 17,031"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Iris Specialty Acquisition LLC (dba Integrated Specialty Coverages) Insurance 8.17 % S + 4.50 % 11/22/32 $ 110,718 $ 110,172 $ 110,165 (7)",
+        "Iris Specialty Acquisition LLC (dba Integrated Specialty Coverages) Insurance S + 4.50 % 11/22/32 18,660 ( 46 ) ( 47 ) (7) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/div[303]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "Dwyer Instruments, LLC | Machinery | 8.42 % | S + 4.75 % | 07/20/29 | $ | 74,455 | $ | 73,859 | $ | 73,710 | (8)",
+        "Dwyer Instruments, LLC | Machinery | 8.42 % | S + 4.75 % | 07/20/29 | 22,736 | 22,554 | 22,509 | (8)"
+      ],
+      "last": [
+        "Jupiter Refuel US Buyer, Inc. (dba 4Refuel) | Oil, Gas & Consumable Fuels | S + 5.25 % | 06/30/31 | 941 | ( 6 | ) | ( 14 | ) | (7) (8) (9) (10)",
+        "Kohler Energy Co LLC | Oil, Gas & Consumable Fuels | 7.42 % | S + 3.75 % | 05/01/31 | 18,628 | 18,649 | 18,712"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "Dwyer Instruments, LLC Machinery 8.42 % S + 4.75 % 07/20/29 $ 74,455 $ 73,859 $ 73,710 (8)",
+        "Dwyer Instruments, LLC Machinery 8.42 % S + 4.75 % 07/20/29 22,736 22,554 22,509 (8)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/div[306]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "Meade Pipeline Co LLC | Oil, Gas & Consumable Fuels | 5.69 % | S + 2.00 % | 09/22/32 | $ | 20,360 | $ | 20,382 | $ | 20,462",
+        "Oryx Midstream Services Permian Basin, LLC | Oil, Gas & Consumable Fuels | 5.98 % | S + 2.25 % | 10/05/28 | 28,269 | 28,364 | 28,378"
+      ],
+      "last": [
+        "Accommodations Plus Technologies LLC | Software | 8.94 % | S + 5.25 % | 05/28/32 | 62,916 | 62,198 | 62,195 | (7)",
+        "Accommodations Plus Technologies LLC | Software | S + 5.25 % | 05/28/32 | 12,291 | ( 119 | ) | ( 120 | ) | (7) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Meade Pipeline Co LLC Oil, Gas & Consumable Fuels 5.69 % S + 2.00 % 09/22/32 $ 20,360 $ 20,382 $ 20,462",
+        "Oryx Midstream Services Permian Basin, LLC Oil, Gas & Consumable Fuels 5.98 % S + 2.25 % 10/05/28 28,269 28,364 28,378"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/div[309]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.22 % | S + 4.50 % | 08/29/31 | $ | 16,938 | $ | 16,809 | $ | 16,768 | (7) (8)",
+        "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.32 % | S + 4.50 % | 08/29/31 | 3,388 | 739 | 728 | (7) (8) (10)"
+      ],
+      "last": [
+        "GovDelivery Holdings, LLC (dba Granicus, Inc.) | Software | S + 5.50 % (Incl. 2.00 % PIK) | 01/17/31 | 3,839 | ( 26 | ) | ( 10 | ) | (7) (8) (10)",
+        "GovDelivery Holdings, LLC (dba Granicus, Inc.) | Software | S + 5.50 % (Incl. 2.00 % PIK) | 01/17/31 | 460 | ( 6 | ) | ( 9 | ) | (7) (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "AI Titan Parent, Inc. (dba Prometheus) Software 8.22 % S + 4.50 % 08/29/31 $ 16,938 $ 16,809 $ 16,768 (7) (8)",
+        "AI Titan Parent, Inc. (dba Prometheus) Software 8.32 % S + 4.50 % 08/29/31 3,388 739 728 (7) (8) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 40,
+      "table_xpath": "/html/body/div[312]/table"
+    },
+    {
+      "contexts": 48,
+      "first": [
+        "Hyland Software, Inc. | Software | 8.67 % | S + 5.00 % | 09/19/30 | $ | 93,566 | $ | 92,522 | $ | 93,566 | (7) (8)",
+        "Hyland Software, Inc. | Software | S + 5.00 % | 09/19/29 | 4,525 | ( 44 | ) | \u2014 | (7) (8) (10)"
+      ],
+      "last": [
+        "Singlewire Software, LLC | Software | 8.42 % | S + 4.75 % | 05/10/30 | 23,868 | 23,432 | 23,689 | (7) (8)",
+        "Singlewire Software, LLC | Software | S + 4.75 % | 05/10/30 | 7,560 | ( 108 | ) | ( 57 | ) | (7) (8) (10)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Hyland Software, Inc. Software 8.67 % S + 5.00 % 09/19/30 $ 93,566 $ 92,522 $ 93,566 (7) (8)",
+        "Hyland Software, Inc. Software S + 5.00 % 09/19/29 4,525 ( 44 ) \u2014 (7) (8) (10)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 48,
+      "table_xpath": "/html/body/div[315]/table"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "Sundance Group Holdings, Inc. (dba NetDocuments) | Software | S + 4.75 % | 07/02/29 | $ | 17,848 | $ | \u2014 | $ | \u2014 | (7) (10)",
+        "Sundance Group Holdings, Inc. (dba NetDocuments) | Software | S + 4.75 % | 07/02/29 | 1,983 | \u2014 | \u2014 | (7) (10)"
+      ],
+      "last": [
+        "Diamond Communications LLC | Wireless Telecommunication Services | 7.72 % | S + 4.00 % | 05/28/30 | 25,000 | 19,888 | 19,875 | (8) (10)",
+        "Total 1st Lien/Senior Secured Debt | 13,839,279 | 13,795,273"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "Sundance Group Holdings, Inc. (dba NetDocuments) Software S + 4.75 % 07/02/29 $ 17,848 $ \u2014 $ \u2014 (7) (10)",
+        "Sundance Group Holdings, Inc. (dba NetDocuments) Software S + 4.75 % 07/02/29 1,983 \u2014 \u2014 (7) (10)"
+      ],
+      "preceding": [
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 47,
+      "table_xpath": "/html/body/div[318]/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "EDB Parent, LLC (dba Enterprise DB) | Software | 10.84 % | S + 7.00 % | 07/07/28 | 6,169 | $ | 6,109 | $ | 6,108 | (8)",
+        "EDB Parent, LLC (dba Enterprise DB) | Software | 10.84 % | S + 7.00 % | 07/07/28 | 4,010 | 2,786 | 2,801 | (8) (10)"
+      ],
+      "last": [
+        "Towerco IV Holdings, LLC | Wireless Telecommunication Services | 7.58 % | S + 3.75 % | 08/31/28 | 25,668 | 23,123 | 23,190 | (7) (8) (10)",
+        "Total 1st Lien/Last-Out Unitranche | 244,724 | 244,905"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Maturity Par (6) Cost Fair Value Footnotes",
+        "1st Lien/Last-Out Unitranche (11) - 2.8 %",
+        "EDB Parent, LLC (dba Enterprise DB) Software 10.84 % S + 7.00 % 07/07/28 6,169 $ 6,109 $ 6,108 (8)"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/div[321]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "Sazerac Company, Inc. | Beverages | 6.50 % | S + 2.50 % | 07/09/32 | $ | 24,040 | $ | 24,151 | $ | 24,063",
+        "Colossus Acquireco LLC | Oil, Gas & Consumable Fuels | 5.41 % | S + 1.75 % | 07/30/32 | 25,461 | 25,380 | 25,429"
+      ],
+      "last": [
+        "Total United States | $ | 14,157,380 | $ | 14,113,483",
+        "Total Debt Investments | $ | 15,636,232 | $ | 15,612,705"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Interest Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes",
+        "2nd Lien/Senior Secured Debt - 0.8 %",
+        "Sazerac Company, Inc. Beverages 6.50 % S + 2.50 % 07/09/32 $ 24,040 $ 24,151 $ 24,063"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[324]/table[1]"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Diameter Capital CLO 11, Ltd. - Subordinated Notes | Financial Services | 8.85 % | 07/09/25 | 07/20/38 | $ | 8,770 | $ | 8,770 | $ | 8,313 | (9)",
+        "Diameter Capital CLO 13, Ltd. - Subordinated Notes | Financial Services | 8.11 % | 11/26/25 | 01/20/39 | 7,580 | 7,580 | 7,580 | (9)"
+      ],
+      "last": [
+        "Total United States | $ | 273,743 | $ | 273,743",
+        "Total Investments in Affiliated Money Market Fund | 273,743 | 273,743"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) (2) Industry (3) Effective Yield Initial Acquisition Date (5) Maturity Shares (6) Cost Fair Value Footnotes",
+        "Equity and Other - 0.7 %",
+        "Cayman Islands - 0.6 %"
+      ],
+      "preceding": [
+        "",
+        "st Rate (4) Reference Rate and Spread (4) Initial Acquisition Date (5) Maturity Par (6) Cost Fair Value Footnotes 2nd Lien/Senior Secured Debt - 0.8 % Sazerac Company, Inc. Beverages 6.50 % S + 2.50 % 07/09/32 $ 24,040 $ 24,151 $ 24,063 AP Kona Holdings LLC (dba Keurig Dr Pepper Inc.) Food Products 5.00 % 10/26/25 11/03/32 29,300 \u2014 \u2014 (7) (9) (10) Colossus Acquireco LLC Oil, Gas & Consumable Fuels 5.41 % S + 1.75 % 07/30/32 25,461 25,380 25,429 Beach Acquisition Bidco LLC Textiles, Apparel & Luxury Goods 6.92 % S + 3.25 % 09/12/32 23,650 23,846 23,813 Total 2nd Lien/Senior Secured Debt 73,377 73,305 Total United States $ 14,157,380 $ 14,113,483 Total Debt Investments $ 15,636,232 $ 15,612,705",
+        "",
+        "(in thousands, except share and per share amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2025 (continued)",
+        "Goldman Sachs Private Credit Corp."
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/div[324]/table[2]"
+    },
+    {
+      "contexts": 5,
+      "first": [
+        "Goldman Sachs Financial Square Government Fund - Institutional Shares | $ | 444,718 | $ | 8,078,788 | $ | ( 8,249,763 | ) | $ | \u2014 | $ | \u2014 | $ | 273,743 | $ | 17,563",
+        "RPC ABC Investment Holdings LLC (dba ABC Plumbing) | 24,851 | 13,475 | ( 1,311 | ) | \u2014 | ( 2,639 | ) | 34,376 | 2,648"
+      ],
+      "last": [
+        "SEM Holdings, LLC (dba Southeast Mechanical, LLC) | \u2014 | 9,984 | ( 15 | ) | \u2014 | ( 84 | ) | 9,885 | 243",
+        "Total Non-Controlled Affiliates | $ | 491,948 | $ | 8,110,021 | $ | ( 8,251,112 | ) | $ | \u2014 | $ | ( 10,440 | ) | $ | 340,417 | $ | 22,231"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain (Loss) Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest and Other Income",
+        "For the Year Ended December 31, 2025",
+        "Non-Controlled Affiliates"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the Company\u2019s affiliated investments (including investments in money market funds, if any):"
+      ],
+      "rows": 5,
+      "table_xpath": "/html/body/div[393]/div/ix:continuation/div/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 15,059,143 | $ | 15,033,160 | $ | 7,014,260 | $ | 7,006,800",
+        "1st Lien/Last-Out Unitranche | 295,586 | 297,348 | 263,347 | 261,643"
+      ],
+      "last": [
+        "Warrants | 24 | 29 | \u2014 | \u2014",
+        "Total investments | $ | 15,704,123 | $ | 15,674,510 | $ | 7,285,922 | $ | 7,273,815"
+      ],
+      "opening_rows": [
+        "",
+        "December 31, 2025 December 31, 2024",
+        "Investment Type Cost Fair Value Cost Fair Value",
+        "1st Lien/Senior Secured Debt $ 15,059,143 $ 15,033,160 $ 7,014,260 $ 7,006,800"
+      ],
+      "preceding": [
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[402]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 8,340,684 | Discounted cash flows | Discount Rate | 6.4 % - 17.3 % | 9.1 %",
+        "$ | 18,800 | Comparable multiples | EV/EBITDA (6) | \u2014 | 10.0 x"
+      ],
+      "last": [
+        "Common Stock | $ | 5,272 | Comparable multiples | EV/EBITDA (6) | 9.5 x - 13.0 x | 11.6 x",
+        "Warrants | $ | 29 | Comparable multiples | EV/Revenue | \u2014 | 3.9 x"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Instruments Fair Value (1) (2) Valuation Techniques (3) Significant Unobservable Inputs Range of Significant Unobservable Inputs (4) Weighted Average (5)",
+        "As of December 31, 2025",
+        "Bank Loans, Corporate Debt, and Other Debt Obligations"
+      ],
+      "preceding": [],
+      "rows": 8,
+      "table_xpath": "/html/body/div[411]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 3,228,090 | $ | 11,805,070 | $ | 15,033,160 | $ | \u2014 | $ | 1,875,466 | $ | 5,131,334 | $ | 7,006,800",
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 3,228,090 | $ | 11,805,070 | $ | 15,033,160 | $ | \u2014 | $ | 1,875,466 | $ | 5,131,334 | $ | 7,006,800"
+      ],
+      "last": [
+        "Total Assets | $ | 273,743 | $ | 3,529,940 | $ | 12,146,614 | $ | 15,950,297 | $ | 444,718 | $ | 1,875,466 | $ | 5,398,349 | $ | 7,718,533",
+        "Total Assets | $ | 273,743 | $ | 3,529,940 | $ | 12,146,614 | $ | 15,950,297 | $ | 444,718 | $ | 1,875,466 | $ | 5,398,349 | $ | 7,718,533"
+      ],
+      "opening_rows": [
+        "",
+        "December 31, 2025 December 31, 2024",
+        "Assets Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total",
+        "1st Lien/Senior Secured Debt $ \u2014 $ 3,228,090 $ 11,805,070 $ 15,033,160 $ \u2014 $ 1,875,466 $ 5,131,334 $ 7,006,800"
+      ],
+      "preceding": [
+        "The following is a summary of the Company\u2019s assets categorized within the fair value hierarchy:"
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table"
+    }
+  ]
+}

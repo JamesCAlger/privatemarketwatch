@@ -1,0 +1,280 @@
+{
+  "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+  "ref": "REF-0002008748-2024-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": "September 30, 2024 |  | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost of $ 312,639 ) $ 313,562",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[9]/tr[4]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost of $ 312,639 )",
+        "",
+        "$",
+        "313,562",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:OtherInvestments",
+          "context": "c2",
+          "scale": "3",
+          "text": "312,639",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:Investments",
+          "context": "c2",
+          "scale": "3",
+          "text": "313,562",
+          "unit": "usd"
+        }
+      ],
+      "opening": "September 30, 2024 |  | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost of $ 312,639 ) $ 313,562",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[9]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "7,274",
+        "",
+        "",
+        "$",
+        "12,022",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+          "context": "c3",
+          "scale": "3",
+          "text": "7,274",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+          "context": "c0",
+          "scale": "3",
+          "text": "12,022",
+          "unit": "usd"
+        }
+      ],
+      "opening": "Three Months Ended September 30, 2024 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Investment income | Non-controlled/non-affiliated investments: | Interest income $ 7,035 $ 11,659 | Fee income 239 363",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[10]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "312,639",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "",
+        "244.41",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c2",
+          "scale": "3",
+          "text": "312,639",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c2",
+          "scale": "3",
+          "text": "313,562",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c2",
+          "scale": "-2",
+          "text": "244.41",
+          "unit": "pure"
+        }
+      ],
+      "opening": "Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets | Investments\u2014non-controlled/non-affiliated (continued) | First Lien Secured Debt\u2014non-controlled/non-affiliated (4) (6) | Life Sciences Tools & Services | TransnetYX, Inc 3M S + 5.25% 10.05 % 4/13/2026 17,740 17,740 17,740 13.83",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) September 30, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[14]/tr[15]"
+    },
+    {
+      "cells": [
+        "Total Investments at Fair Value",
+        "$",
+        "312,639",
+        "",
+        "$",
+        "313,562",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "$",
+        "313,562"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:DebtSecurities",
+          "context": "c2",
+          "scale": "3",
+          "text": "312,639",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+          "context": "c2",
+          "scale": "3",
+          "text": "313,562",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+          "context": "c115",
+          "scale": "3",
+          "text": "313,562",
+          "unit": "usd"
+        }
+      ],
+      "opening": "Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 312,639 $ 313,562 $ \u2014 $ \u2014 $ 313,562 | Total Investments at Fair Value $ 312,639 $ 313,562 $ \u2014 $ \u2014 $ 313,562",
+      "preceding": [
+        "",
+        "The following table shows the composition of the Company\u2019s investment portfolio as of September 30, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "",
+        "Fair Value Measurement and Disclosures",
+        "",
+        "",
+        "",
+        "",
+        "the Company\u2019s net assets as of the beginning of the first calendar day of the applicable month, adjusted for any share issuances or repurchases during the applicable month. Prior to the Company\u2019s election to be regulated as a BDC, the Company did not pay administration fees. During the period ended September 30, 2024, the Company incurred no administration fees. Following the BDC Election Date, the Company has begun to accrue administration fees.",
+        ""
+      ],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:continuation/table/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "$7,274",
+        "",
+        "$12,022"
+      ],
+      "facts": [],
+      "opening": "For the Three Months Ended September 30, 2024 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Total investment income $7,274 $12,022 | Less: Net expenses 3,578 6,391 | Net investment income before taxes 3,696 5,631 | Net investment income after taxes 3,696 5,631",
+      "preceding": [
+        "",
+        "",
+        "",
+        "The following table represents our operating results:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[22]/tr[2]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "$7,274",
+        "",
+        "$12,022"
+      ],
+      "facts": [],
+      "opening": "For the Three Months Ended September 30, 2024 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Investment income: | Interest income $7,035 $11,659 | Fee income 239 363 | Total Investment Income $7,274 $12,022",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Investment income was as follows:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[23]/tr[5]"
+    }
+  ],
+  "sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6",
+  "status": "literal_primary_review_candidates"
+}

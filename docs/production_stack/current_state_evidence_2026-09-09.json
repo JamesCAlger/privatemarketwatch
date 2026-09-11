@@ -1,0 +1,1845 @@
+﻿{
+    "assessment":  {
+                       "assessed_utc":  "2026-09-09T07:02:28.086806+00:00",
+                       "head":  "2e0491a45d1493e7a3ee329aee52ec96bb34986c",
+                       "static_inventory":  {
+                                                "pipeline":  {
+                                                                 "files":  123,
+                                                                 "test_functions":  0
+                                                             },
+                                                "scripts":  {
+                                                                "files":  234,
+                                                                "test_functions":  0
+                                                            },
+                                                "tests":  {
+                                                              "files":  143,
+                                                              "test_functions":  4998
+                                                          }
+                                            },
+                       "override_family_inventory":  {
+                                                         "agent_anchor":  {
+                                                                              "files":  67,
+                                                                              "json":  67
+                                                                          },
+                                                         "agent_b2_corrections":  {
+                                                                                      "files":  40,
+                                                                                      "json":  39
+                                                                                  },
+                                                         "agent_investigate_rules":  {
+                                                                                         "files":  151,
+                                                                                         "json":  144
+                                                                                     },
+                                                         "bdc_xbrl_html_section_bridges":  {
+                                                                                               "files":  1,
+                                                                                               "json":  1
+                                                                                           },
+                                                         "bdc_xbrl_wrappers":  {
+                                                                                   "files":  78,
+                                                                                   "json":  78
+                                                                               },
+                                                         "conservation_scope":  {
+                                                                                    "files":  0,
+                                                                                    "json":  0
+                                                                                },
+                                                         "enforcement_registry":  {
+                                                                                      "files":  7,
+                                                                                      "json":  0
+                                                                                  },
+                                                         "fund_highlights_wrappers":  {
+                                                                                          "files":  0,
+                                                                                          "json":  0
+                                                                                      },
+                                                         "identifier_anchors":  {
+                                                                                    "files":  69,
+                                                                                    "json":  69
+                                                                                },
+                                                         "identifier_rate_grammars":  {
+                                                                                          "files":  70,
+                                                                                          "json":  70
+                                                                                      },
+                                                         "position_id_registry":  {
+                                                                                      "files":  2,
+                                                                                      "json":  0
+                                                                                  },
+                                                         "rate_convention":  {
+                                                                                 "files":  42,
+                                                                                 "json":  42
+                                                                             },
+                                                         "wrapper_cohorts":  {
+                                                                                 "files":  2,
+                                                                                 "json":  2
+                                                                             }
+                                                     },
+                       "holdings_all":  [
+                                            {
+                                                "source":  "bdc",
+                                                "row_count":  560263,
+                                                "funds":  192
+                                            },
+                                            {
+                                                "source":  null,
+                                                "row_count":  1,
+                                                "funds":  1
+                                            },
+                                            {
+                                                "source":  "nport",
+                                                "row_count":  220161,
+                                                "funds":  146
+                                            }
+                                        ],
+                       "cohort_quarters":  [
+                                               {
+                                                   "report_date":  "2022-09-30",
+                                                   "row_count":  2135,
+                                                   "funds":  3,
+                                                   "fv":  75521011778.0,
+                                                   "missing_issuer":  0,
+                                                   "entity_populated":  2135,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  1365
+                                               },
+                                               {
+                                                   "report_date":  "2022-12-31",
+                                                   "row_count":  2425,
+                                                   "funds":  3,
+                                                   "fv":  77434735755.0,
+                                                   "missing_issuer":  0,
+                                                   "entity_populated":  2425,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  1599
+                                               },
+                                               {
+                                                   "report_date":  "2023-03-31",
+                                                   "row_count":  9440,
+                                                   "funds":  39,
+                                                   "fv":  135134133986.07599,
+                                                   "missing_issuer":  105,
+                                                   "entity_populated":  8997,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  6261
+                                               },
+                                               {
+                                                   "report_date":  "2023-06-30",
+                                                   "row_count":  10487,
+                                                   "funds":  45,
+                                                   "fv":  145061344094.0,
+                                                   "missing_issuer":  106,
+                                                   "entity_populated":  10027,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  6981
+                                               },
+                                               {
+                                                   "report_date":  "2023-09-30",
+                                                   "row_count":  12511,
+                                                   "funds":  52,
+                                                   "fv":  158077333033.0,
+                                                   "missing_issuer":  151,
+                                                   "entity_populated":  12024,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  8261
+                                               },
+                                               {
+                                                   "report_date":  "2023-12-31",
+                                                   "row_count":  14373,
+                                                   "funds":  56,
+                                                   "fv":  176267692996.0,
+                                                   "missing_issuer":  178,
+                                                   "entity_populated":  13834,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  9081
+                                               },
+                                               {
+                                                   "report_date":  "2024-03-31",
+                                                   "row_count":  16306,
+                                                   "funds":  59,
+                                                   "fv":  192653683130.0,
+                                                   "missing_issuer":  193,
+                                                   "entity_populated":  15720,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  10173
+                                               },
+                                               {
+                                                   "report_date":  "2024-06-30",
+                                                   "row_count":  18406,
+                                                   "funds":  62,
+                                                   "fv":  219698054835.0,
+                                                   "missing_issuer":  265,
+                                                   "entity_populated":  17711,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  11345
+                                               },
+                                               {
+                                                   "report_date":  "2024-09-30",
+                                                   "row_count":  20174,
+                                                   "funds":  63,
+                                                   "fv":  245319621236.0,
+                                                   "missing_issuer":  233,
+                                                   "entity_populated":  19476,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  12390
+                                               },
+                                               {
+                                                   "report_date":  "2024-12-31",
+                                                   "row_count":  22334,
+                                                   "funds":  65,
+                                                   "fv":  278068976751.0,
+                                                   "missing_issuer":  208,
+                                                   "entity_populated":  21699,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  12845
+                                               },
+                                               {
+                                                   "report_date":  "2025-03-31",
+                                                   "row_count":  24395,
+                                                   "funds":  66,
+                                                   "fv":  301445467230.0,
+                                                   "missing_issuer":  291,
+                                                   "entity_populated":  23652,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  13839
+                                               },
+                                               {
+                                                   "report_date":  "2025-06-30",
+                                                   "row_count":  26036,
+                                                   "funds":  68,
+                                                   "fv":  325187532605.0,
+                                                   "missing_issuer":  366,
+                                                   "entity_populated":  25208,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  14369
+                                               },
+                                               {
+                                                   "report_date":  "2025-09-30",
+                                                   "row_count":  28146,
+                                                   "funds":  68,
+                                                   "fv":  354302418279.0,
+                                                   "missing_issuer":  521,
+                                                   "entity_populated":  27164,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  14951
+                                               },
+                                               {
+                                                   "report_date":  "2025-12-31",
+                                                   "row_count":  28938,
+                                                   "funds":  67,
+                                                   "fv":  374335565067.0,
+                                                   "missing_issuer":  506,
+                                                   "entity_populated":  27986,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  14891
+                                               },
+                                               {
+                                                   "report_date":  "2026-03-31",
+                                                   "row_count":  30067,
+                                                   "funds":  69,
+                                                   "fv":  381537030207.0,
+                                                   "missing_issuer":  402,
+                                                   "entity_populated":  29207,
+                                                   "position_id_populated":  0,
+                                                   "gics_populated":  15041
+                                               }
+                                           ],
+                       "q1_fields":  [
+                                         {
+                                             "field":  "entity_id",
+                                             "filled":  29207,
+                                             "fv":  377181009282.0
+                                         },
+                                         {
+                                             "field":  "position_id",
+                                             "filled":  0,
+                                             "fv":  null
+                                         },
+                                         {
+                                             "field":  "position_key",
+                                             "filled":  30062,
+                                             "fv":  381106393263.0
+                                         },
+                                         {
+                                             "field":  "row_id",
+                                             "filled":  30067,
+                                             "fv":  381537030207.0
+                                         },
+                                         {
+                                             "field":  "src_context_id",
+                                             "filled":  30028,
+                                             "fv":  380597406263.0
+                                         },
+                                         {
+                                             "field":  "src_facts",
+                                             "filled":  26876,
+                                             "fv":  367369992551.0
+                                         },
+                                         {
+                                             "field":  "gics_sub_industry",
+                                             "filled":  15041,
+                                             "fv":  278502213593.0
+                                         },
+                                         {
+                                             "field":  "extracted_industry",
+                                             "filled":  1643,
+                                             "fv":  25621044520.0
+                                         },
+                                         {
+                                             "field":  "principal_amount",
+                                             "filled":  24229,
+                                             "fv":  325235099661.0
+                                         },
+                                         {
+                                             "field":  "principal_amount_usd",
+                                             "filled":  10771,
+                                             "fv":  202002205343.0
+                                         },
+                                         {
+                                             "field":  "cost",
+                                             "filled":  29334,
+                                             "fv":  381137764207.0
+                                         },
+                                         {
+                                             "field":  "maturity_date",
+                                             "filled":  26009,
+                                             "fv":  356218341048.0
+                                         },
+                                         {
+                                             "field":  "interest_rate",
+                                             "filled":  21213,
+                                             "fv":  286071986518.0
+                                         },
+                                         {
+                                             "field":  "basis_spread",
+                                             "filled":  23468,
+                                             "fv":  346918273567.0
+                                         },
+                                         {
+                                             "field":  "pik_rate",
+                                             "filled":  2262,
+                                             "fv":  42160901663.0
+                                         },
+                                         {
+                                             "field":  "lei",
+                                             "filled":  0,
+                                             "fv":  null
+                                         },
+                                         {
+                                             "field":  "cusip",
+                                             "filled":  0,
+                                             "fv":  null
+                                         },
+                                         {
+                                             "field":  "issuer_name",
+                                             "filled":  29665,
+                                             "fv":  380128160620.0
+                                         }
+                                     ],
+                       "q1_row_ids":  [
+                                          {
+                                              "row_count":  30067,
+                                              "distinct_row_ids":  30067,
+                                              "source_anchored":  30028
+                                          }
+                                      ],
+                       "q1_sources":  [
+                                          {
+                                              "principal_fx_status":  "missing_reference_fx",
+                                              "row_count":  13424,
+                                              "fv":  122413924992.0
+                                          },
+                                          {
+                                              "principal_fx_status":  "source_usd",
+                                              "row_count":  10771,
+                                              "fv":  202002205343.0
+                                          },
+                                          {
+                                              "principal_fx_status":  null,
+                                              "row_count":  5872,
+                                              "fv":  57120899872.0
+                                          }
+                                      ],
+                       "q1_cost_sources":  [
+                                               {
+                                                   "cost_source":  null,
+                                                   "row_count":  28642
+                                               },
+                                               {
+                                                   "cost_source":  "derived_proxy",
+                                                   "row_count":  1425
+                                               }
+                                           ],
+                       "q1_rate_sources":  [
+                                               {
+                                                   "interest_rate_source":  "xbrl_field",
+                                                   "row_count":  21022
+                                               },
+                                               {
+                                                   "interest_rate_source":  null,
+                                                   "row_count":  8854
+                                               },
+                                               {
+                                                   "interest_rate_source":  "identifier_text",
+                                                   "row_count":  191
+                                               }
+                                           ],
+                       "parquet_position_ids":  [
+                                                    {
+                                                        "populated":  0
+                                                    }
+                                                ],
+                       "entity_methods":  [
+                                              {
+                                                  "source":  "bdc",
+                                                  "cluster_method":  "exact",
+                                                  "variants":  107647,
+                                                  "entities":  26884
+                                              },
+                                              {
+                                                  "source":  "nport",
+                                                  "cluster_method":  "exact",
+                                                  "variants":  24414,
+                                                  "entities":  15813
+                                              },
+                                              {
+                                                  "source":  "bdc",
+                                                  "cluster_method":  "fuzzy",
+                                                  "variants":  5572,
+                                                  "entities":  1272
+                                              },
+                                              {
+                                                  "source":  "nport",
+                                                  "cluster_method":  "fuzzy",
+                                                  "variants":  3386,
+                                                  "entities":  1678
+                                              },
+                                              {
+                                                  "source":  "nport",
+                                                  "cluster_method":  "cross_source",
+                                                  "variants":  397,
+                                                  "entities":  190
+                                              },
+                                              {
+                                                  "source":  "bdc",
+                                                  "cluster_method":  "cross_source",
+                                                  "variants":  378,
+                                                  "entities":  119
+                                              },
+                                              {
+                                                  "source":  null,
+                                                  "cluster_method":  "exact",
+                                                  "variants":  2,
+                                                  "entities":  2
+                                              }
+                                          ],
+                       "pik_status":  [
+                                          {
+                                              "pik_current_status":  "unknown",
+                                              "row_count":  623790
+                                          },
+                                          {
+                                              "pik_current_status":  "not_paying",
+                                              "row_count":  151117
+                                          },
+                                          {
+                                              "pik_current_status":  "paying",
+                                              "row_count":  5548
+                                          }
+                                      ],
+                       "gics_cache_sources":  [
+                                                  {
+                                                      "source":  "llm",
+                                                      "confidence":  "high",
+                                                      "row_count":  45477
+                                                  },
+                                                  {
+                                                      "source":  "llm",
+                                                      "confidence":  "medium",
+                                                      "row_count":  43902
+                                                  },
+                                                  {
+                                                      "source":  "llm",
+                                                      "confidence":  "low",
+                                                      "row_count":  38862
+                                                  },
+                                                  {
+                                                      "source":  "extracted_industry",
+                                                      "confidence":  "high",
+                                                      "row_count":  18244
+                                                  },
+                                                  {
+                                                      "source":  "keyword",
+                                                      "confidence":  "medium",
+                                                      "row_count":  18047
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill",
+                                                      "confidence":  "medium",
+                                                      "row_count":  7398
+                                                  },
+                                                  {
+                                                      "source":  "web_search",
+                                                      "confidence":  "low",
+                                                      "row_count":  3002
+                                                  },
+                                                  {
+                                                      "source":  "web_search",
+                                                      "confidence":  "high",
+                                                      "row_count":  2860
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill",
+                                                      "confidence":  "high",
+                                                      "row_count":  2343
+                                                  },
+                                                  {
+                                                      "source":  "cc_review",
+                                                      "confidence":  "high",
+                                                      "row_count":  1563
+                                                  },
+                                                  {
+                                                      "source":  "cc_review",
+                                                      "confidence":  "medium",
+                                                      "row_count":  1125
+                                                  },
+                                                  {
+                                                      "source":  "cc_review",
+                                                      "confidence":  "low",
+                                                      "row_count":  835
+                                                  },
+                                                  {
+                                                      "source":  "web_search",
+                                                      "confidence":  "medium",
+                                                      "row_count":  777
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill",
+                                                      "confidence":  "low",
+                                                      "row_count":  169
+                                                  },
+                                                  {
+                                                      "source":  "cc_review_auto",
+                                                      "confidence":  "high",
+                                                      "row_count":  69
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill_rekeyed",
+                                                      "confidence":  "high",
+                                                      "row_count":  11
+                                                  },
+                                                  {
+                                                      "source":  "property_exposure_review",
+                                                      "confidence":  "high",
+                                                      "row_count":  9
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill_rekeyed",
+                                                      "confidence":  "medium",
+                                                      "row_count":  8
+                                                  },
+                                                  {
+                                                      "source":  "cc_review_auto",
+                                                      "confidence":  "medium",
+                                                      "row_count":  4
+                                                  },
+                                                  {
+                                                      "source":  "structured_finance_review",
+                                                      "confidence":  "high",
+                                                      "row_count":  2
+                                                  },
+                                                  {
+                                                      "source":  "cc_skill_rekeyed",
+                                                      "confidence":  "low",
+                                                      "row_count":  1
+                                                  }
+                                              ],
+                       "artifacts":  [
+                                         {
+                                             "path":  "data/output/private_markets_holdings.csv",
+                                             "exists":  true,
+                                             "bytes":  717667416,
+                                             "mtime_utc":  "2026-09-08T15:49:07.487786+00:00",
+                                             "columns":  [
+                                                             "source",
+                                                             "cik",
+                                                             "entity_name",
+                                                             "accession_number",
+                                                             "filing_date",
+                                                             "report_date",
+                                                             "issuer_name",
+                                                             "instrument_description",
+                                                             "cusip",
+                                                             "isin",
+                                                             "lei",
+                                                             "ticker",
+                                                             "fair_value",
+                                                             "cost",
+                                                             "pct_of_net_assets",
+                                                             "shares_held",
+                                                             "principal_amount",
+                                                             "fair_value_currency",
+                                                             "cost_currency",
+                                                             "principal_amount_currency",
+                                                             "principal_amount_usd",
+                                                             "principal_fx_rate_to_usd",
+                                                             "principal_fx_status",
+                                                             "asset_category",
+                                                             "issuer_category",
+                                                             "index_classification",
+                                                             "exposure_type",
+                                                             "asset_class",
+                                                             "fair_value_level",
+                                                             "interest_rate",
+                                                             "interest_rate_source",
+                                                             "basis_spread",
+                                                             "basis_spread_source",
+                                                             "reference_rate_type",
+                                                             "reference_rate_source",
+                                                             "coupon_type",
+                                                             "pik_rate",
+                                                             "maturity_date",
+                                                             "maturity_date_source",
+                                                             "bdc_investment_identifier",
+                                                             "bdc_form_type",
+                                                             "bdc_dimensions_raw",
+                                                             "bdc_unrealized_gain_loss",
+                                                             "bdc_investment_country",
+                                                             "src_context_id",
+                                                             "src_context_count",
+                                                             "src_conflict_fields",
+                                                             "src_transforms",
+                                                             "src_field_overrides",
+                                                             "cost_source",
+                                                             "shares_held_source",
+                                                             "fair_value_source",
+                                                             "principal_amount_source",
+                                                             "pct_of_net_assets_source",
+                                                             "pik_rate_source",
+                                                             "bdc_unrealized_gain_loss_source",
+                                                             "src_facts",
+                                                             "src_filled_fields",
+                                                             "corrected_fields",
+                                                             "nonaccrual_footnote",
+                                                             "nonaccrual_dimension",
+                                                             "nport_holding_id",
+                                                             "nport_series_name",
+                                                             "nport_series_id",
+                                                             "nport_asset_cat",
+                                                             "nport_issuer_type",
+                                                             "nport_payoff_profile",
+                                                             "nport_investment_country",
+                                                             "nport_is_restricted",
+                                                             "nport_quarter",
+                                                             "nport_is_default",
+                                                             "nport_are_interest_payments_in_arrears",
+                                                             "nport_is_paid_in_kind",
+                                                             "nport_currency_code",
+                                                             "nport_liquidity_classification",
+                                                             "is_subsidiary",
+                                                             "axis_profile",
+                                                             "jv_subsidiary",
+                                                             "entity_id",
+                                                             "canonical_name",
+                                                             "extracted_industry",
+                                                             "gics_sub_industry",
+                                                             "lien_position",
+                                                             "instrument_type",
+                                                             "position_key",
+                                                             "position_id",
+                                                             "row_id",
+                                                             "row_id_basis"
+                                                         ],
+                                             "rows":  780425,
+                                             "parquet_mtime_utc":  "2026-09-08T15:49:14.460984+00:00",
+                                             "parquet_columns":  [
+                                                                     "source",
+                                                                     "cik",
+                                                                     "entity_name",
+                                                                     "accession_number",
+                                                                     "filing_date",
+                                                                     "report_date",
+                                                                     "issuer_name",
+                                                                     "instrument_description",
+                                                                     "cusip",
+                                                                     "isin",
+                                                                     "lei",
+                                                                     "ticker",
+                                                                     "fair_value",
+                                                                     "cost",
+                                                                     "pct_of_net_assets",
+                                                                     "shares_held",
+                                                                     "principal_amount",
+                                                                     "fair_value_currency",
+                                                                     "cost_currency",
+                                                                     "principal_amount_currency",
+                                                                     "principal_amount_usd",
+                                                                     "principal_fx_rate_to_usd",
+                                                                     "principal_fx_status",
+                                                                     "asset_category",
+                                                                     "issuer_category",
+                                                                     "index_classification",
+                                                                     "exposure_type",
+                                                                     "asset_class",
+                                                                     "fair_value_level",
+                                                                     "interest_rate",
+                                                                     "interest_rate_source",
+                                                                     "basis_spread",
+                                                                     "basis_spread_source",
+                                                                     "reference_rate_type",
+                                                                     "reference_rate_source",
+                                                                     "coupon_type",
+                                                                     "pik_rate",
+                                                                     "maturity_date",
+                                                                     "maturity_date_source",
+                                                                     "bdc_investment_identifier",
+                                                                     "bdc_form_type",
+                                                                     "bdc_dimensions_raw",
+                                                                     "bdc_unrealized_gain_loss",
+                                                                     "bdc_investment_country",
+                                                                     "src_context_id",
+                                                                     "src_context_count",
+                                                                     "src_conflict_fields",
+                                                                     "src_transforms",
+                                                                     "src_field_overrides",
+                                                                     "cost_source",
+                                                                     "shares_held_source",
+                                                                     "fair_value_source",
+                                                                     "principal_amount_source",
+                                                                     "pct_of_net_assets_source",
+                                                                     "pik_rate_source",
+                                                                     "bdc_unrealized_gain_loss_source",
+                                                                     "src_facts",
+                                                                     "src_filled_fields",
+                                                                     "corrected_fields",
+                                                                     "nonaccrual_footnote",
+                                                                     "nonaccrual_dimension",
+                                                                     "nport_holding_id",
+                                                                     "nport_series_name",
+                                                                     "nport_series_id",
+                                                                     "nport_asset_cat",
+                                                                     "nport_issuer_type",
+                                                                     "nport_payoff_profile",
+                                                                     "nport_investment_country",
+                                                                     "nport_is_restricted",
+                                                                     "nport_quarter",
+                                                                     "nport_is_default",
+                                                                     "nport_are_interest_payments_in_arrears",
+                                                                     "nport_is_paid_in_kind",
+                                                                     "nport_currency_code",
+                                                                     "nport_liquidity_classification",
+                                                                     "is_subsidiary",
+                                                                     "axis_profile",
+                                                                     "jv_subsidiary",
+                                                                     "entity_id",
+                                                                     "canonical_name",
+                                                                     "extracted_industry",
+                                                                     "gics_sub_industry",
+                                                                     "lien_position",
+                                                                     "instrument_type",
+                                                                     "position_key",
+                                                                     "position_id",
+                                                                     "row_id",
+                                                                     "row_id_basis"
+                                                                 ],
+                                             "parquet_rows":  780425
+                                         },
+                                         {
+                                             "path":  "data/output/bdc_holdings.csv",
+                                             "exists":  true,
+                                             "bytes":  605335931,
+                                             "mtime_utc":  "2026-09-05T07:33:09.104979+00:00",
+                                             "columns":  [
+                                                             "period",
+                                                             "investment_identifier",
+                                                             "industry",
+                                                             "investment_type",
+                                                             "affiliation",
+                                                             "dimensions_raw",
+                                                             "acquisition_date",
+                                                             "basis_spread",
+                                                             "cost",
+                                                             "face_amount",
+                                                             "fair_value",
+                                                             "interest_rate",
+                                                             "interest_rate_floor",
+                                                             "maturity_date",
+                                                             "pct_of_net_assets",
+                                                             "pik_rate",
+                                                             "principal_amount",
+                                                             "realized_gain_loss",
+                                                             "reference_rate_type",
+                                                             "shares_held",
+                                                             "unrealized_gain_loss",
+                                                             "fair_value_unit",
+                                                             "cost_unit",
+                                                             "principal_amount_unit",
+                                                             "interest_rate_concept",
+                                                             "src_facts",
+                                                             "nonaccrual_footnote",
+                                                             "nonaccrual_dimension",
+                                                             "cik",
+                                                             "entity_name",
+                                                             "accession_number",
+                                                             "form_type",
+                                                             "filing_date",
+                                                             "report_date",
+                                                             "dedupe_context_count",
+                                                             "dedupe_conflict_fields",
+                                                             "dedupe_filled_fields",
+                                                             "dedupe_axis_split",
+                                                             "src_context_id"
+                                                         ],
+                                             "rows":  1184697,
+                                             "parquet_mtime_utc":  "2026-09-05T07:33:11.755757+00:00",
+                                             "parquet_columns":  [
+                                                                     "period",
+                                                                     "investment_identifier",
+                                                                     "industry",
+                                                                     "investment_type",
+                                                                     "affiliation",
+                                                                     "dimensions_raw",
+                                                                     "acquisition_date",
+                                                                     "basis_spread",
+                                                                     "cost",
+                                                                     "face_amount",
+                                                                     "fair_value",
+                                                                     "interest_rate",
+                                                                     "interest_rate_floor",
+                                                                     "maturity_date",
+                                                                     "pct_of_net_assets",
+                                                                     "pik_rate",
+                                                                     "principal_amount",
+                                                                     "realized_gain_loss",
+                                                                     "reference_rate_type",
+                                                                     "shares_held",
+                                                                     "unrealized_gain_loss",
+                                                                     "fair_value_unit",
+                                                                     "cost_unit",
+                                                                     "principal_amount_unit",
+                                                                     "interest_rate_concept",
+                                                                     "src_facts",
+                                                                     "nonaccrual_footnote",
+                                                                     "nonaccrual_dimension",
+                                                                     "cik",
+                                                                     "entity_name",
+                                                                     "accession_number",
+                                                                     "form_type",
+                                                                     "filing_date",
+                                                                     "report_date",
+                                                                     "dedupe_context_count",
+                                                                     "dedupe_conflict_fields",
+                                                                     "dedupe_filled_fields",
+                                                                     "dedupe_axis_split",
+                                                                     "src_context_id"
+                                                                 ],
+                                             "parquet_rows":  1184697
+                                         },
+                                         {
+                                             "path":  "data/output/nport_holdings.csv",
+                                             "exists":  true,
+                                             "bytes":  202656058,
+                                             "mtime_utc":  "2026-05-28T09:14:16.127239+00:00",
+                                             "columns":  [
+                                                             "accession_number",
+                                                             "holding_id",
+                                                             "issuer_name",
+                                                             "issuer_lei",
+                                                             "issuer_title",
+                                                             "issuer_cusip",
+                                                             "balance",
+                                                             "unit",
+                                                             "other_unit_desc",
+                                                             "currency_code",
+                                                             "currency_value",
+                                                             "exchange_rate",
+                                                             "percentage",
+                                                             "payoff_profile",
+                                                             "asset_cat",
+                                                             "other_asset",
+                                                             "issuer_type",
+                                                             "other_issuer",
+                                                             "investment_country",
+                                                             "is_restricted_security",
+                                                             "fair_value_level",
+                                                             "derivative_cat",
+                                                             "maturity_date",
+                                                             "coupon_type",
+                                                             "annualized_rate",
+                                                             "is_default",
+                                                             "are_any_interest_payment",
+                                                             "is_any_portion_interest_paid",
+                                                             "identifier_isin",
+                                                             "identifier_ticker",
+                                                             "other_identifier",
+                                                             "cik",
+                                                             "registrant_name",
+                                                             "filing_date",
+                                                             "report_date",
+                                                             "sub_type",
+                                                             "series_name",
+                                                             "series_id",
+                                                             "quarter",
+                                                             "sec_dataset_quarter"
+                                                         ],
+                                             "rows":  608281,
+                                             "parquet_mtime_utc":  "2026-09-03T10:34:57.847256+00:00",
+                                             "parquet_columns":  [
+                                                                     "accession_number",
+                                                                     "holding_id",
+                                                                     "issuer_name",
+                                                                     "issuer_lei",
+                                                                     "issuer_title",
+                                                                     "issuer_cusip",
+                                                                     "balance",
+                                                                     "unit",
+                                                                     "other_unit_desc",
+                                                                     "currency_code",
+                                                                     "currency_value",
+                                                                     "exchange_rate",
+                                                                     "percentage",
+                                                                     "payoff_profile",
+                                                                     "asset_cat",
+                                                                     "other_asset",
+                                                                     "issuer_type",
+                                                                     "other_issuer",
+                                                                     "investment_country",
+                                                                     "is_restricted_security",
+                                                                     "fair_value_level",
+                                                                     "derivative_cat",
+                                                                     "maturity_date",
+                                                                     "coupon_type",
+                                                                     "annualized_rate",
+                                                                     "is_default",
+                                                                     "are_any_interest_payment",
+                                                                     "is_any_portion_interest_paid",
+                                                                     "identifier_isin",
+                                                                     "identifier_ticker",
+                                                                     "other_identifier",
+                                                                     "cik",
+                                                                     "registrant_name",
+                                                                     "filing_date",
+                                                                     "report_date",
+                                                                     "sub_type",
+                                                                     "series_name",
+                                                                     "series_id",
+                                                                     "quarter",
+                                                                     "sec_dataset_quarter"
+                                                                 ],
+                                             "parquet_rows":  608281
+                                         },
+                                         {
+                                             "path":  "data/output/entity_lookup.csv",
+                                             "exists":  true,
+                                             "bytes":  24684348,
+                                             "mtime_utc":  "2026-09-05T08:16:14.828251+00:00",
+                                             "columns":  [
+                                                             "entity_id",
+                                                             "canonical_name",
+                                                             "normalized_name",
+                                                             "issuer_name_variant",
+                                                             "source",
+                                                             "occurrence_count",
+                                                             "cluster_method",
+                                                             "cusip",
+                                                             "lei"
+                                                         ],
+                                             "rows":  141796
+                                         },
+                                         {
+                                             "path":  "data/output/position_matches.csv",
+                                             "exists":  true,
+                                             "bytes":  195115768,
+                                             "mtime_utc":  "2026-09-08T08:17:48.817686+00:00",
+                                             "columns":  [
+                                                             "cik",
+                                                             "entity_name",
+                                                             "source",
+                                                             "index_classification",
+                                                             "begin_quarter",
+                                                             "begin_report_date",
+                                                             "begin_issuer_name",
+                                                             "begin_fair_value",
+                                                             "begin_cost",
+                                                             "begin_principal_amount",
+                                                             "begin_interest_rate",
+                                                             "begin_basis_spread",
+                                                             "begin_shares_held",
+                                                             "end_quarter",
+                                                             "end_report_date",
+                                                             "end_issuer_name",
+                                                             "end_fair_value",
+                                                             "end_cost",
+                                                             "end_principal_amount",
+                                                             "end_interest_rate",
+                                                             "end_basis_spread",
+                                                             "end_shares_held",
+                                                             "match_method",
+                                                             "match_key",
+                                                             "match_score",
+                                                             "span_months",
+                                                             "asset_category",
+                                                             "issuer_category",
+                                                             "maturity_date",
+                                                             "coupon_type",
+                                                             "position_id"
+                                                         ],
+                                             "rows":  497456,
+                                             "parquet_mtime_utc":  "2026-09-08T08:12:23.528962+00:00",
+                                             "parquet_columns":  [
+                                                                     "cik",
+                                                                     "entity_name",
+                                                                     "source",
+                                                                     "index_classification",
+                                                                     "begin_quarter",
+                                                                     "begin_report_date",
+                                                                     "begin_issuer_name",
+                                                                     "begin_fair_value",
+                                                                     "begin_cost",
+                                                                     "begin_principal_amount",
+                                                                     "begin_interest_rate",
+                                                                     "begin_basis_spread",
+                                                                     "begin_shares_held",
+                                                                     "end_quarter",
+                                                                     "end_report_date",
+                                                                     "end_issuer_name",
+                                                                     "end_fair_value",
+                                                                     "end_cost",
+                                                                     "end_principal_amount",
+                                                                     "end_interest_rate",
+                                                                     "end_basis_spread",
+                                                                     "end_shares_held",
+                                                                     "match_method",
+                                                                     "match_key",
+                                                                     "match_score",
+                                                                     "span_months",
+                                                                     "asset_category",
+                                                                     "issuer_category",
+                                                                     "maturity_date",
+                                                                     "coupon_type",
+                                                                     "position_id"
+                                                                 ],
+                                             "parquet_rows":  536455
+                                         },
+                                         {
+                                             "path":  "data/output/position_returns.csv",
+                                             "exists":  true,
+                                             "bytes":  159165808,
+                                             "mtime_utc":  "2026-09-08T08:20:03.938713+00:00",
+                                             "columns":  [
+                                                             "cik",
+                                                             "entity_name",
+                                                             "source",
+                                                             "begin_quarter",
+                                                             "end_quarter",
+                                                             "issuer_name",
+                                                             "index_classification",
+                                                             "asset_category",
+                                                             "begin_fair_value",
+                                                             "end_fair_value",
+                                                             "begin_cost",
+                                                             "end_cost",
+                                                             "begin_principal_amount",
+                                                             "end_principal_amount",
+                                                             "begin_shares_held",
+                                                             "end_shares_held",
+                                                             "begin_interest_rate",
+                                                             "begin_basis_spread",
+                                                             "income_rate",
+                                                             "pik_rate_pct",
+                                                             "fee_uplift_pct",
+                                                             "capital_return",
+                                                             "income_return",
+                                                             "total_return",
+                                                             "quarterly_total_return",
+                                                             "match_method",
+                                                             "match_score",
+                                                             "span_months",
+                                                             "span_adjusted",
+                                                             "position_id"
+                                                         ],
+                                             "rows":  474027,
+                                             "parquet_mtime_utc":  "2026-09-08T08:20:04.832452+00:00",
+                                             "parquet_columns":  [
+                                                                     "cik",
+                                                                     "entity_name",
+                                                                     "source",
+                                                                     "begin_quarter",
+                                                                     "end_quarter",
+                                                                     "issuer_name",
+                                                                     "index_classification",
+                                                                     "asset_category",
+                                                                     "begin_fair_value",
+                                                                     "end_fair_value",
+                                                                     "begin_cost",
+                                                                     "end_cost",
+                                                                     "begin_principal_amount",
+                                                                     "end_principal_amount",
+                                                                     "begin_shares_held",
+                                                                     "end_shares_held",
+                                                                     "begin_interest_rate",
+                                                                     "begin_basis_spread",
+                                                                     "income_rate",
+                                                                     "pik_rate_pct",
+                                                                     "fee_uplift_pct",
+                                                                     "capital_return",
+                                                                     "income_return",
+                                                                     "total_return",
+                                                                     "quarterly_total_return",
+                                                                     "match_method",
+                                                                     "match_score",
+                                                                     "span_months",
+                                                                     "span_adjusted",
+                                                                     "position_id"
+                                                                 ],
+                                             "parquet_rows":  474027
+                                         },
+                                         {
+                                             "path":  "data/output/position_pik_status.csv",
+                                             "exists":  true,
+                                             "bytes":  183623585,
+                                             "mtime_utc":  "2026-09-05T09:02:52.915212+00:00",
+                                             "columns":  [
+                                                             "holding_row_id",
+                                                             "source",
+                                                             "cik",
+                                                             "entity_name",
+                                                             "accession_number",
+                                                             "report_date",
+                                                             "report_quarter",
+                                                             "issuer_name",
+                                                             "instrument_description",
+                                                             "position_id",
+                                                             "fair_value",
+                                                             "index_classification",
+                                                             "pik_current_status",
+                                                             "pik_current_flag",
+                                                             "pik_current_evidence",
+                                                             "pik_current_amount",
+                                                             "pik_terms_flag",
+                                                             "pik_terms_rate"
+                                                         ],
+                                             "rows":  780455,
+                                             "parquet_mtime_utc":  "2026-09-05T09:02:54.285243+00:00",
+                                             "parquet_columns":  [
+                                                                     "holding_row_id",
+                                                                     "source",
+                                                                     "cik",
+                                                                     "entity_name",
+                                                                     "accession_number",
+                                                                     "report_date",
+                                                                     "report_quarter",
+                                                                     "issuer_name",
+                                                                     "instrument_description",
+                                                                     "position_id",
+                                                                     "fair_value",
+                                                                     "index_classification",
+                                                                     "pik_current_status",
+                                                                     "pik_current_flag",
+                                                                     "pik_current_evidence",
+                                                                     "pik_current_amount",
+                                                                     "pik_terms_flag",
+                                                                     "pik_terms_rate"
+                                                                 ],
+                                             "parquet_rows":  780455
+                                         },
+                                         {
+                                             "path":  "data/output/bdc_position_pik_evidence.csv",
+                                             "exists":  true,
+                                             "bytes":  8063926,
+                                             "mtime_utc":  "2026-09-05T09:02:14.244474+00:00",
+                                             "columns":  [
+                                                             "cik",
+                                                             "entity_name",
+                                                             "accession_number",
+                                                             "form_type",
+                                                             "filing_date",
+                                                             "report_date",
+                                                             "period",
+                                                             "concept",
+                                                             "context_id",
+                                                             "dimensions_raw",
+                                                             "matched_identifier",
+                                                             "amount",
+                                                             "unit",
+                                                             "decimals",
+                                                             "evidence_kind",
+                                                             "position_level"
+                                                         ],
+                                             "rows":  28495
+                                         },
+                                         {
+                                             "path":  "data/output/pik_schedule_proxy_summary.csv",
+                                             "exists":  true,
+                                             "bytes":  219979,
+                                             "mtime_utc":  "2026-09-05T09:03:17.010604+00:00",
+                                             "columns":  [
+                                                             "scope",
+                                                             "source",
+                                                             "index_classification",
+                                                             "report_date",
+                                                             "report_quarter",
+                                                             "total_rows",
+                                                             "pik_terms_rows",
+                                                             "pik_terms_row_pct",
+                                                             "total_fair_value",
+                                                             "pik_terms_fair_value",
+                                                             "pik_terms_fair_value_pct",
+                                                             "unique_positions",
+                                                             "pik_terms_unique_positions",
+                                                             "first_seen_with_pik_terms_rows",
+                                                             "first_seen_with_pik_terms_positions"
+                                                         ],
+                                             "rows":  2106
+                                         },
+                                         {
+                                             "path":  "data/output/company_gics_cache.csv",
+                                             "exists":  true,
+                                             "bytes":  32270986,
+                                             "mtime_utc":  "2026-06-23T16:59:33.417130+00:00",
+                                             "columns":  [
+                                                             "company_name_norm",
+                                                             "gics_sub_industry",
+                                                             "confidence",
+                                                             "source",
+                                                             "timestamp"
+                                                         ],
+                                             "rows":  184708
+                                         },
+                                         {
+                                             "path":  "data/output/company_lien_cache.csv",
+                                             "exists":  false
+                                         },
+                                         {
+                                             "path":  "data/output/identifier_extraction_lookup.csv",
+                                             "exists":  true,
+                                             "bytes":  18318398,
+                                             "mtime_utc":  "2026-04-08T16:14:15.102349+00:00",
+                                             "columns":  [
+                                                             "bdc_investment_identifier",
+                                                             "extracted_company_name",
+                                                             "extracted_instrument_description",
+                                                             "extracted_industry",
+                                                             "extracted_reference_rate",
+                                                             "extracted_basis_spread",
+                                                             "extracted_maturity_date",
+                                                             "extracted_is_aggregate",
+                                                             "extraction_timestamp"
+                                                         ],
+                                             "rows":  105167
+                                         },
+                                         {
+                                             "path":  "data/output/fund_financials.csv",
+                                             "exists":  true,
+                                             "bytes":  2590050,
+                                             "mtime_utc":  "2026-09-08T14:27:43.688410+00:00",
+                                             "columns":  [
+                                                             "cik",
+                                                             "entity_name",
+                                                             "vehicle_type",
+                                                             "source",
+                                                             "report_quarter",
+                                                             "report_date",
+                                                             "total_assets",
+                                                             "net_assets",
+                                                             "total_liabilities",
+                                                             "investments_at_fair_value",
+                                                             "investments_at_cost",
+                                                             "cash_equivalents_at_fair_value",
+                                                             "nav_per_share",
+                                                             "shares_outstanding",
+                                                             "borrowings",
+                                                             "total_investment_income",
+                                                             "net_investment_income",
+                                                             "management_fee",
+                                                             "incentive_fee",
+                                                             "interest_expense",
+                                                             "total_expenses",
+                                                             "monthly_return_1",
+                                                             "monthly_return_2",
+                                                             "monthly_return_3",
+                                                             "monthly_flow_sales_1",
+                                                             "monthly_flow_sales_2",
+                                                             "monthly_flow_sales_3",
+                                                             "monthly_flow_redemptions_1",
+                                                             "monthly_flow_redemptions_2",
+                                                             "monthly_flow_redemptions_3",
+                                                             "leverage_ratio",
+                                                             "quarterly_return",
+                                                             "management_fee_pct",
+                                                             "expense_ratio_pct",
+                                                             "monthly_avg_net_assets",
+                                                             "distribution_per_share",
+                                                             "dividends_declared_per_share",
+                                                             "distribution_ordinary_income",
+                                                             "distribution_return_of_capital",
+                                                             "distribution_from_nii",
+                                                             "distribution_from_gains",
+                                                             "gain_loss_per_share",
+                                                             "nav_change_per_share",
+                                                             "income_per_share",
+                                                             "income_yield_pct",
+                                                             "gross_investment_income",
+                                                             "portfolio_turnover",
+                                                             "asset_coverage_ratio",
+                                                             "unfunded_commitments",
+                                                             "unrealized_appreciation",
+                                                             "unrealized_depreciation",
+                                                             "debt_weighted_avg_rate",
+                                                             "total_borrowings_detail",
+                                                             "dv01_3mon",
+                                                             "dv01_1yr",
+                                                             "dv01_5yr",
+                                                             "dv01_10yr",
+                                                             "dv01_30yr",
+                                                             "dv100_3mon",
+                                                             "dv100_1yr",
+                                                             "dv100_5yr",
+                                                             "dv100_10yr",
+                                                             "dv100_30yr",
+                                                             "credit_spread_3mon_invest",
+                                                             "credit_spread_1yr_invest",
+                                                             "credit_spread_5yr_invest",
+                                                             "credit_spread_10yr_invest",
+                                                             "credit_spread_30yr_invest",
+                                                             "credit_spread_3mon_noninvest",
+                                                             "credit_spread_1yr_noninvest",
+                                                             "credit_spread_5yr_noninvest",
+                                                             "credit_spread_10yr_noninvest",
+                                                             "credit_spread_30yr_noninvest",
+                                                             "is_debt_default",
+                                                             "is_dividend_arrears",
+                                                             "is_fund_of_fund",
+                                                             "is_non_diversified",
+                                                             "distribution_rate",
+                                                             "distribution_rate_proxy",
+                                                             "redemption_pressure",
+                                                             "annualized_return",
+                                                             "is_formation_stage",
+                                                             "total_return_pct",
+                                                             "market_price_per_share",
+                                                             "premium_discount_pct"
+                                                         ],
+                                             "rows":  6216
+                                         },
+                                         {
+                                             "path":  "data/output/provenance_field_verdicts.csv",
+                                             "exists":  false
+                                         },
+                                         {
+                                             "path":  "data/output/source_reconciliation_metrics.csv",
+                                             "exists":  true,
+                                             "bytes":  352295,
+                                             "mtime_utc":  "2026-09-08T16:13:45.768856+00:00",
+                                             "columns":  [
+                                                             "cik",
+                                                             "entity_name",
+                                                             "report_date",
+                                                             "source_rows",
+                                                             "output_rows",
+                                                             "matched_rows",
+                                                             "missing_from_pipeline_rows",
+                                                             "extra_in_pipeline_rows",
+                                                             "value_mismatch_rows",
+                                                             "collapsed_duplicate_dimension_path_rows",
+                                                             "excluded_comparative_period_rows",
+                                                             "excluded_aggregate_candidate_rows",
+                                                             "documented_source_rollup_exact_rows",
+                                                             "documented_source_issuer_subtotal_arithmetic_rows",
+                                                             "excluded_no_fair_value_rows",
+                                                             "superseded_amendment_rows",
+                                                             "excluded_self_referential_subtotal_rows",
+                                                             "excluded_hierarchy_header_rows",
+                                                             "excluded_money_market_fund_rows",
+                                                             "excluded_bad_issuer_name_rows",
+                                                             "excluded_affiliation_dedup_rows",
+                                                             "blocking_issue_count",
+                                                             "diagnostic_issue_count",
+                                                             "calibrated_reconciled_source_row_rate",
+                                                             "strong_issue_count",
+                                                             "reconciled_source_row_rate",
+                                                             "reconciliation_status"
+                                                         ],
+                                             "rows":  1934
+                                         },
+                                         {
+                                             "path":  "data/output/validation_results_ledger.csv",
+                                             "exists":  false
+                                         },
+                                         {
+                                             "path":  "data/output/validation_disposition_ledger.csv",
+                                             "exists":  false
+                                         },
+                                         {
+                                             "path":  "data/output/match_quality_metrics.csv",
+                                             "exists":  true,
+                                             "bytes":  5866,
+                                             "mtime_utc":  "2026-09-05T08:56:36.087343+00:00",
+                                             "columns":  [
+                                                             "metric",
+                                                             "scope_type",
+                                                             "scope",
+                                                             "numerator",
+                                                             "denominator",
+                                                             "value"
+                                                         ],
+                                             "rows":  84
+                                         },
+                                         {
+                                             "path":  "data/output/agent_fix_application_audit.csv",
+                                             "exists":  true,
+                                             "bytes":  27197,
+                                             "mtime_utc":  "2026-09-08T15:48:28.931107+00:00",
+                                             "columns":  [
+                                                             "layer",
+                                                             "cik",
+                                                             "rule_id",
+                                                             "rule_type",
+                                                             "status",
+                                                             "rows_changed",
+                                                             "fv_affected",
+                                                             "authoring_rows",
+                                                             "authoring_fv",
+                                                             "drift",
+                                                             "message"
+                                                         ],
+                                             "rows":  175
+                                         }
+                                     ],
+                       "saved_acceptance":  {
+                                                "schema_version":  1,
+                                                "generated_utc":  "2026-09-08T16:31:46Z",
+                                                "target_quarter":  "2026-03-31",
+                                                "cohort_id":  "v2_70_gate_verified_wrapper_bdc",
+                                                "calibration":  "provisional",
+                                                "thresholds_version":  3,
+                                                "verdict":  "FAIL",
+                                                "checks":  [
+                                                               {
+                                                                   "id":  "fund_coverage",
+                                                                   "metric":  "cohort.funds_with_holdings",
+                                                                   "op":  "\u003e=",
+                                                                   "value":  60,
+                                                                   "actual":  69,
+                                                                   "pass":  true
+                                                               },
+                                                               {
+                                                                   "id":  "reconcile_rate",
+                                                                   "metric":  "conservation.reconcile_rate_pct",
+                                                                   "op":  "\u003e=",
+                                                                   "value":  90.0,
+                                                                   "actual":  80.882,
+                                                                   "pass":  false
+                                                               },
+                                                               {
+                                                                   "id":  "flagged_fv_share",
+                                                                   "metric":  "conservation.flagged_fv_share_pct",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  10.0,
+                                                                   "actual":  25.715,
+                                                                   "pass":  false
+                                                               },
+                                                               {
+                                                                   "id":  "source_blocking_fv_share",
+                                                                   "metric":  "source_blockers.blocking_fv_share_pct",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  1.0,
+                                                                   "actual":  0.259,
+                                                                   "pass":  true
+                                                               },
+                                                               {
+                                                                   "id":  "verified_fv_share",
+                                                                   "metric":  "cohort.verified_fv_share_pct",
+                                                                   "op":  "\u003e=",
+                                                                   "value":  70.0,
+                                                                   "actual":  60.254,
+                                                                   "pass":  false
+                                                               },
+                                                               {
+                                                                   "id":  "promoted_rule_drift",
+                                                                   "metric":  "promoted_rules.n_drift",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  0,
+                                                                   "actual":  15,
+                                                                   "pass":  false
+                                                               },
+                                                               {
+                                                                   "id":  "promoted_rule_health",
+                                                                   "metric":  "promoted_rules.n_not_ok",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  0,
+                                                                   "actual":  0,
+                                                                   "pass":  true
+                                                               },
+                                                               {
+                                                                   "id":  "over_inclusion_fv_share",
+                                                                   "metric":  "conservation.over_inclusion_fv_share_pct",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  0.5,
+                                                                   "actual":  0.883,
+                                                                   "pass":  false
+                                                               },
+                                                               {
+                                                                   "id":  "unfinished_investigations",
+                                                                   "metric":  "investigations.n_stale",
+                                                                   "op":  "\u003c=",
+                                                                   "value":  0,
+                                                                   "actual":  0,
+                                                                   "pass":  true
+                                                               }
+                                                           ],
+                                                "metrics":  {
+                                                                "cohort":  {
+                                                                               "funds":  70,
+                                                                               "funds_with_holdings":  69,
+                                                                               "cohort_fv_m":  381537.03,
+                                                                               "tiers":  {
+                                                                                             "verified":  46,
+                                                                                             "under_review":  22,
+                                                                                             "unanchored":  1,
+                                                                                             "no_holdings":  1
+                                                                                         },
+                                                                               "verified_fv_share_pct":  60.254
+                                                                           },
+                                                                "conservation":  {
+                                                                                     "n_reconciles":  55,
+                                                                                     "n_flagged":  13,
+                                                                                     "n_no_anchor":  1,
+                                                                                     "anchored_rate_pct":  98.551,
+                                                                                     "reconcile_rate_pct":  80.882,
+                                                                                     "flagged_fv_m":  98113.002,
+                                                                                     "flagged_fv_share_pct":  25.715,
+                                                                                     "over_inclusion_fv_m":  3370.057,
+                                                                                     "over_inclusion_fv_share_pct":  0.883,
+                                                                                     "band_pct":  0.5
+                                                                                 },
+                                                                "source_blockers":  {
+                                                                                        "n_funds":  11,
+                                                                                        "n_items":  11,
+                                                                                        "blocking_fv_m":  989.08,
+                                                                                        "blocking_fv_share_pct":  0.259
+                                                                                    },
+                                                                "promoted_rules":  {
+                                                                                       "n_rules":  175,
+                                                                                       "n_not_ok":  0,
+                                                                                       "n_drift":  15
+                                                                                   },
+                                                                "investigations":  {
+                                                                                       "n_stale":  0,
+                                                                                       "stale_ciks":  [
+
+                                                                                                      ],
+                                                                                       "measured":  true
+                                                                                   }
+                                                            },
+                                                "inputs":  {
+                                                               "ledger":  "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\shadow\\validation_results_ledger.csv",
+                                                               "queue":  "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\review_queue\\review_queue.csv",
+                                                               "audit":  "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\agent_fix_application_audit.csv",
+                                                               "holdings":  "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\private_markets_holdings.parquet",
+                                                               "investigate":  "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\agent_investigate"
+                                                           }
+                                            }
+                   },
+    "supplementary":  {
+                          "provenance_q1":  [
+                                                {
+                                                    "field":  "fair_value",
+                                                    "cheap_status":  "pass_trivial",
+                                                    "full_status":  "raw_match",
+                                                    "n":  30026,
+                                                    "fv":  380589786729.0
+                                                },
+                                                {
+                                                    "field":  "fair_value",
+                                                    "cheap_status":  "no_provenance",
+                                                    "full_status":  "not_checked",
+                                                    "n":  39,
+                                                    "fv":  939623944.0
+                                                },
+                                                {
+                                                    "field":  "fair_value",
+                                                    "cheap_status":  "corrected",
+                                                    "full_status":  "not_checked",
+                                                    "n":  2,
+                                                    "fv":  7619534.0
+                                                }
+                                            ],
+                          "pik_cohort_q1":  [
+                                                {
+                                                    "pik_current_status":  "unknown",
+                                                    "n":  30083
+                                                }
+                                            ],
+                          "gics_labels":  [
+                                              {
+                                                  "source":  "fuzzy",
+                                                  "n":  193
+                                              },
+                                              {
+                                                  "source":  "aggregate",
+                                                  "n":  223
+                                              },
+                                              {
+                                                  "source":  "llm",
+                                                  "n":  1421
+                                              },
+                                              {
+                                                  "source":  "alias",
+                                                  "n":  508
+                                              },
+                                              {
+                                                  "source":  "exact",
+                                                  "n":  157
+                                              }
+                                          ],
+                          "ixbrl_status":  [
+                                               {
+                                                   "maturity_status":  "comparative",
+                                                   "lien_status":  "comparative",
+                                                   "sector_status":  "comparative",
+                                                   "n":  15799
+                                               },
+                                               {
+                                                   "maturity_status":  "blank",
+                                                   "lien_status":  "value",
+                                                   "sector_status":  "value",
+                                                   "n":  673
+                                               },
+                                               {
+                                                   "maturity_status":  "not_found",
+                                                   "lien_status":  "not_found",
+                                                   "sector_status":  "not_found",
+                                                   "n":  151
+                                               },
+                                               {
+                                                   "maturity_status":  "value",
+                                                   "lien_status":  "value",
+                                                   "sector_status":  "blank",
+                                                   "n":  470
+                                               },
+                                               {
+                                                   "maturity_status":  "validation_needed",
+                                                   "lien_status":  "blank",
+                                                   "sector_status":  "blank",
+                                                   "n":  152
+                                               },
+                                               {
+                                                   "maturity_status":  "value",
+                                                   "lien_status":  "value",
+                                                   "sector_status":  "value",
+                                                   "n":  30930
+                                               },
+                                               {
+                                                   "maturity_status":  "blank",
+                                                   "lien_status":  "blank",
+                                                   "sector_status":  "value",
+                                                   "n":  2832
+                                               },
+                                               {
+                                                   "maturity_status":  "value",
+                                                   "lien_status":  "blank",
+                                                   "sector_status":  "value",
+                                                   "n":  5428
+                                               },
+                                               {
+                                                   "maturity_status":  "unfunded_commitment",
+                                                   "lien_status":  "unfunded_commitment",
+                                                   "sector_status":  "unfunded_commitment",
+                                                   "n":  998
+                                               },
+                                               {
+                                                   "maturity_status":  "validation_needed",
+                                                   "lien_status":  "value",
+                                                   "sector_status":  "value",
+                                                   "n":  1955
+                                               },
+                                               {
+                                                   "maturity_status":  "validation_needed",
+                                                   "lien_status":  "blank",
+                                                   "sector_status":  "value",
+                                                   "n":  5015
+                                               },
+                                               {
+                                                   "maturity_status":  "zero_fv",
+                                                   "lien_status":  "zero_fv",
+                                                   "sector_status":  "zero_fv",
+                                                   "n":  1
+                                               }
+                                           ],
+                          "promoted_audit":  [
+                                                 {
+                                                     "layer":  "unified_b2_corrections",
+                                                     "status":  "ok",
+                                                     "drift":  null,
+                                                     "n":  22
+                                                 },
+                                                 {
+                                                     "layer":  "unified_agent_rules",
+                                                     "status":  "ok",
+                                                     "drift":  "scope_carryover",
+                                                     "n":  14
+                                                 },
+                                                 {
+                                                     "layer":  "unified_agent_rules",
+                                                     "status":  "ok",
+                                                     "drift":  "row_drift",
+                                                     "n":  1
+                                                 },
+                                                 {
+                                                     "layer":  "raw_bdc_staging",
+                                                     "status":  "ok",
+                                                     "drift":  null,
+                                                     "n":  16
+                                                 },
+                                                 {
+                                                     "layer":  "unified_agent_rules",
+                                                     "status":  "ok",
+                                                     "drift":  null,
+                                                     "n":  122
+                                                 }
+                                             ],
+                          "unified_blank_row":  [
+                                                    {
+                                                        "source":  null,
+                                                        "cik":  "0001954360",
+                                                        "report_date":  "2024-03-31",
+                                                        "fair_value":  "745000.0"
+                                                    }
+                                                ],
+                          "cache_filing_coverage":  [
+                                                        {
+                                                            "report_date":  "2026-03-31",
+                                                            "funds":  70,
+                                                            "filings":  70
+                                                        }
+                                                    ],
+                          "public":  {
+                                         "metadata":  {
+                                                          "asOfQuarter":  "2026q1",
+                                                          "asOfDate":  "2026-03-31",
+                                                          "totalAum":  381907021055.0,
+                                                          "vehicleCount":  70,
+                                                          "bdcCount":  70,
+                                                          "intervalFundCount":  0,
+                                                          "tenderOfferCount":  0,
+                                                          "holdingsCount":  30083,
+                                                          "cikCount":  69,
+                                                          "uniqueIssuers":  8996,
+                                                          "dataVintage":  "2026-07-02"
+                                                      },
+                                         "portfolio_characteristics":  {
+                                                                           "asOf":  "2026-03-31",
+                                                                           "positionCount":  21150,
+                                                                           "totalFv":  357334626369.0,
+                                                                           "portfolioFv":  382151960774.0,
+                                                                           "classificationFv":  {
+                                                                                                    "DIRECT_LENDING":  357334626369.0,
+                                                                                                    "DIRECT_REAL_ESTATE":  504692000.0,
+                                                                                                    "PREFERRED_EQUITY":  5131867149.0,
+                                                                                                    "COMMON_EQUITY":  9820531735.0,
+                                                                                                    "PRIVATE_EQUITY_FUND":  2428422501.0,
+                                                                                                    "CASH":  1294181697.0,
+                                                                                                    "PRIVATE_CREDIT_FUND":  2452405000.0,
+                                                                                                    "UNCLASSIFIED":  1860447492.0,
+                                                                                                    "STRUCTURED_CREDIT":  1324786831.0
+                                                                                                },
+                                                                           "wac":  8.76,
+                                                                           "was":  5.14,
+                                                                           "wam":  4.2,
+                                                                           "wacCoverage":  0.8817,
+                                                                           "wasCoverage":  0.9455,
+                                                                           "wamCoverage":  0.9918,
+                                                                           "lienSplit":  {
+                                                                                             "firstLien":  0.9182,
+                                                                                             "secondLien":  0.0238,
+                                                                                             "subordinated":  0.006,
+                                                                                             "unsecured":  0.0155,
+                                                                                             "unknown":  0.0369,
+                                                                                             "source":  "layered_subtotal_plus_position",
+                                                                                             "subtotalFilers":  29
+                                                                                         },
+                                                                           "rateTypeSplit":  {
+                                                                                                 "floating":  0.9658,
+                                                                                                 "fixed":  0.0236
+                                                                                             },
+                                                                           "cashFv":  1294181697.0,
+                                                                           "portfolioDerivativeFv":  154496071.0,
+                                                                           "financingHedgeFv":  140141501.0,
+                                                                           "financingHedgeNotional":  97313991000.0
+                                                                       },
+                                         "industry_breakdown":  {
+                                                                    "shape":  "dict",
+                                                                    "length":  3,
+                                                                    "sample":  [
+                                                                                   "indexLevel",
+                                                                                   "byCik",
+                                                                                   "reconciliation"
+                                                                               ]
+                                                                },
+                                         "gics_sector_breakdown":  {
+                                                                       "shape":  "list",
+                                                                       "length":  12,
+                                                                       "sample":  [
+                                                                                      {
+                                                                                          "sector":  "Industrials",
+                                                                                          "totalFv":  84993444112.0,
+                                                                                          "pctOfTotal":  0.2224,
+                                                                                          "fundCount":  112,
+                                                                                          "sourceBreakdown":  {
+                                                                                                                  "bdcSectorReconciledFv":  64331025901.0,
+                                                                                                                  "bdcHoldingsFallbackFv":  20662418211.0,
+                                                                                                                  "nportHoldingsFv":  0.0
+                                                                                                              }
+                                                                                      },
+                                                                                      {
+                                                                                          "sector":  "Information Technology",
+                                                                                          "totalFv":  77593681553.0,
+                                                                                          "pctOfTotal":  0.203,
+                                                                                          "fundCount":  108,
+                                                                                          "sourceBreakdown":  {
+                                                                                                                  "bdcSectorReconciledFv":  61436455986.0,
+                                                                                                                  "bdcHoldingsFallbackFv":  16157225567.0,
+                                                                                                                  "nportHoldingsFv":  0.0
+                                                                                                              }
+                                                                                      }
+                                                                                  ]
+                                                                   }
+                                     },
+                          "artifact_vintages":  {
+                                                    "provenance_ledger.csv":  {
+                                                                                  "mtime_utc":  "2026-09-08T16:25:54.810753+00:00",
+                                                                                  "bytes":  674547802
+                                                                              },
+                                                    "provenance_ledger_summary.csv":  {
+                                                                                          "mtime_utc":  "2026-09-08T16:25:58.356702+00:00",
+                                                                                          "bytes":  72811
+                                                                                      },
+                                                    "bdc_ixbrl_field_status.csv":  {
+                                                                                       "mtime_utc":  "2026-06-16T13:30:17.132461+00:00",
+                                                                                       "bytes":  295981590
+                                                                                   },
+                                                    "gics_label_cache.csv":  {
+                                                                                 "mtime_utc":  "2026-06-23T16:51:40.916855+00:00",
+                                                                                 "bytes":  137449
+                                                                             },
+                                                    "unclassified_review_cache.csv":  {
+                                                                                          "mtime_utc":  "2026-05-25T08:42:34.383447+00:00",
+                                                                                          "bytes":  624058
+                                                                                      },
+                                                    "shadow/validation_results_ledger.csv":  {
+                                                                                                 "mtime_utc":  "2026-09-08T16:26:21.426234+00:00",
+                                                                                                 "bytes":  27678874
+                                                                                             },
+                                                    "shadow/validation_quality_tiers.csv":  {
+                                                                                                "mtime_utc":  "2026-06-16T11:30:52.127995+00:00",
+                                                                                                "bytes":  199921
+                                                                                            },
+                                                    "source_reconciliation_source_only_classification.md":  {
+                                                                                                                "mtime_utc":  "2026-09-08T16:13:46.216438+00:00",
+                                                                                                                "bytes":  95692
+                                                                                                            },
+                                                    "source_reconciliation_residual_classification.md":  {
+                                                                                                             "mtime_utc":  "2026-09-08T16:13:45.947547+00:00",
+                                                                                                             "bytes":  287539
+                                                                                                         }
+                                                }
+                      },
+    "gics_sector_total_fv":  382151960774,
+    "basis":  "Read-only saved artifact assessment, not a fresh gate attestation"
+}

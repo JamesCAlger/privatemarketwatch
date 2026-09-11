@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "programme-reference-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reference_id", "version", "author", "reviewer", "review_status", "exposure", "scope", "sources", "payload", "disagreements", "review_attestation"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "reference_id": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "author": {"type": "string", "minLength": 1},
+    "reviewer": {"type": ["string", "null"]},
+    "review_status": {"enum": ["development", "awaiting_independent_review", "reviewed", "disputed", "source_unavailable"]},
+    "exposure": {"enum": ["development_outputs_seen", "held_out", "unknown"]},
+    "scope": {"type": "object", "required": ["unit", "population", "quarter"], "properties": {"unit": {"type": "string"}, "population": {"type": "string"}, "quarter": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "payload": {"$ref": "#/$defs/artifact"},
+    "disagreements": {"type": "array", "items": {"type": "string"}},
+    "review_attestation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifact"}]}
+  },
+  "$defs": {"artifact": {"type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}}
+}

@@ -1,0 +1,650 @@
+{
+  "artifacts": [
+    {
+      "bytes": 12334,
+      "path": "collect-v1/diagnose_tests.executed.py",
+      "sha256": "e242b62eb9366a835b40c4852f066b37f30150eef9167d1f993908464cc96130"
+    },
+    {
+      "bytes": 1930,
+      "path": "collect-v1/process.json",
+      "sha256": "4e51da92fc3459cad81f40b537271cf008859a4af356b10de42351c7a34e8f8e"
+    },
+    {
+      "bytes": 2311,
+      "path": "collect-v1/process.log",
+      "sha256": "5eb571703b09a3cb87c18be13d22e13ba2a8e28881a4b364e0490a2f5df95e97"
+    },
+    {
+      "bytes": 3301331,
+      "path": "collect-v1/protected_after.json.gz",
+      "sha256": "e196a34dca55ec5fa927469a8ef4fdc5148bb02088446c3c38b0fe4c33fbcb6a"
+    },
+    {
+      "bytes": 3301326,
+      "path": "collect-v1/protected_before.json.gz",
+      "sha256": "d953dea4470593878f27aca740a4a503d4187db6eeda63159e9a257a502b2b09"
+    },
+    {
+      "bytes": 316,
+      "path": "collect-v1/request.json",
+      "sha256": "88e561a27658560fe3fa2e65bfc8b9e06a5fff0bc16204cbeb4aec059066694d"
+    },
+    {
+      "bytes": 679,
+      "path": "collect-v1/result.json",
+      "sha256": "6600b509028c944c888e7da0bb244b79e721e9dc5898d0727169d882ae71ea77"
+    },
+    {
+      "bytes": 342,
+      "path": "collect-v1/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 75,
+      "path": "collect-v1/telemetry/finished.json",
+      "sha256": "72219542c29855aab3c27900e5df1c0a45c88877b318c68abb431d92abda6a23"
+    },
+    {
+      "bytes": 93,
+      "path": "collect-v1/telemetry/worker.json",
+      "sha256": "0b0ad23135fa94d168de049126947eb5b5347caf405c065bed896c16898bd542"
+    },
+    {
+      "bytes": 243,
+      "path": "collect-v2/bundle/junit.xml",
+      "sha256": "eac1ce7a7c1efa9363083a97f46d8803ade7c63bb9aef7c689903c3c34d0f0d3"
+    },
+    {
+      "bytes": 1929,
+      "path": "collect-v2/process.json",
+      "sha256": "48ad0e09cd710f1e6f7ce0a58fbde1dc7e43cf083ac0401de2acb45f1669bdc4"
+    },
+    {
+      "bytes": 443478,
+      "path": "collect-v2/process.log",
+      "sha256": "2317c3e433181b606b22af3802d44ecbf8eb38a6d33d1967b36998d5de08cf83"
+    },
+    {
+      "bytes": 3301325,
+      "path": "collect-v2/protected_after.json.gz",
+      "sha256": "7ea4770554a1cd4324ff9146f4d9a855815049b8609e84ec48348a8710f06bfe"
+    },
+    {
+      "bytes": 3301315,
+      "path": "collect-v2/protected_before.json.gz",
+      "sha256": "3d4d01e994de6fcd56576def5116e8be5b7d8bc04d6751035ae5929a82a438e1"
+    },
+    {
+      "bytes": 316,
+      "path": "collect-v2/request.json",
+      "sha256": "3b940bd58f3bb77e7bc0d097ce367d292b83b31cc71e8aaf917a8f2b831bb711"
+    },
+    {
+      "bytes": 678,
+      "path": "collect-v2/result.json",
+      "sha256": "5b33496b374d857a8bc409cbd3cb961d1637521934c252500b1a413b2fd223c4"
+    },
+    {
+      "bytes": 342,
+      "path": "collect-v2/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 461906,
+      "path": "collect-v2/telemetry/collection.json",
+      "sha256": "bfd602a00043dd1445857d5f586e09e8cabcf991e2266d1ef2fdd69b203f3126"
+    },
+    {
+      "bytes": 75,
+      "path": "collect-v2/telemetry/finished.json",
+      "sha256": "a0d9a18d6818ac6b2c1442b7f72f5988d77c881d1b16af5db52a60fb315aceee"
+    },
+    {
+      "bytes": 391126,
+      "path": "collect-v2/telemetry/inner-scan-1.json",
+      "sha256": "e422c1b2c2ac16363a10cf184135a8cc380b0cbbd13d5c656cf8804bdb4a115c"
+    },
+    {
+      "bytes": 391126,
+      "path": "collect-v2/telemetry/inner-scan-2.json",
+      "sha256": "6ef0373d98b1e911a0e5342a1fc41ab7f4014233e06ad13923b359acc3779b05"
+    },
+    {
+      "bytes": 94,
+      "path": "collect-v2/telemetry/worker.json",
+      "sha256": "045c397500534cbac545ef07d1517ea23ff6b86ea0fc57e1102545a433bd43d2"
+    },
+    {
+      "bytes": 2183,
+      "path": "failure_mapping.json",
+      "sha256": "e3decf0c4eefa41a5de71701a8e075d373767bfa95a06ad8a89a81de64336f13"
+    },
+    {
+      "bytes": 22548,
+      "path": "regex_dialects.json",
+      "sha256": "16d920e2b16ae36ee8f035777250ed8ea672dbe676a91d3fc8042bb277cf49df"
+    },
+    {
+      "bytes": 16513,
+      "path": "regex_dialects_raw_v1.json",
+      "sha256": "27a9c5ef9176e80552729656b8fbd256cdaec4d78db7c131541766fb4930e4c8"
+    },
+    {
+      "bytes": 25520,
+      "path": "repaired-v1/bundle/junit.xml",
+      "sha256": "0bc05143fb40ff01823b59e24a1cbb9a24c640374412c29c008c5efb319efbf4"
+    },
+    {
+      "bytes": 1133589,
+      "path": "repaired-v1/bundle/profile.prof",
+      "sha256": "22079fe7446df7ebe19ba695709765a64eb79ae3f085fba0cb186d5738cb9eb6"
+    },
+    {
+      "bytes": 5388,
+      "path": "repaired-v1/bundle/profile.txt",
+      "sha256": "f62f3ccd976e205cd79793478636740604054651b66dbe9b360504b2e2231826"
+    },
+    {
+      "bytes": 15222,
+      "path": "repaired-v1/diagnose_tests.executed.py",
+      "sha256": "1077db5c1c560437f9cf424523b4b219b8e63647fdaac3f71de380f03a97e9b7"
+    },
+    {
+      "bytes": 1934,
+      "path": "repaired-v1/process.json",
+      "sha256": "c41da9dda0df74803c69ac569805cfd66408245c5096f7d9876116bb26309b22"
+    },
+    {
+      "bytes": 7916,
+      "path": "repaired-v1/process.log",
+      "sha256": "1177778cafe4104122261d99d3b9444f41e4a7997fad8a45ba7400a501ebc410"
+    },
+    {
+      "bytes": 3301327,
+      "path": "repaired-v1/protected_after.json.gz",
+      "sha256": "70c90f20fafd01e2175d472a559a4656a3e29610c2aafce786666b204f9e9de7"
+    },
+    {
+      "bytes": 3301327,
+      "path": "repaired-v1/protected_before.json.gz",
+      "sha256": "88d46e7e79fe8842c7b7ce9717ff2706fa1231608e737935bac16653d279d394"
+    },
+    {
+      "bytes": 603,
+      "path": "repaired-v1/request.json",
+      "sha256": "1b3782f889ef0f162138a2b60405fc40a9ab25ffec26bf201b348d8db73b8fd1"
+    },
+    {
+      "bytes": 827,
+      "path": "repaired-v1/result.json",
+      "sha256": "78faa84dde00593083e4e7a83b4022acc4289c3ff119705e62fea03cb6b110be"
+    },
+    {
+      "bytes": 342,
+      "path": "repaired-v1/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 57930,
+      "path": "repaired-v1/telemetry/collection.json",
+      "sha256": "7b3a9b85b653c7fc4ed0d665e0a8507bba6ef227a094f9113893c2557329c01f"
+    },
+    {
+      "bytes": 75,
+      "path": "repaired-v1/telemetry/finished.json",
+      "sha256": "e4405feeb0df88520cbe04849ef7265daba5c4124484591e6a364244be75ebab"
+    },
+    {
+      "bytes": 391125,
+      "path": "repaired-v1/telemetry/inner-scan-1.json",
+      "sha256": "de68f80c95433593c8e7c8ab681173c0a9e2b6c9ebdff3acc7e4573a6357f900"
+    },
+    {
+      "bytes": 391126,
+      "path": "repaired-v1/telemetry/inner-scan-2.json",
+      "sha256": "efbea954bbf7d6ad31b933a4d514c248df740f0a3146a605978bf9455c9dde3b"
+    },
+    {
+      "bytes": 99324,
+      "path": "repaired-v1/telemetry/reports.jsonl",
+      "sha256": "5eb2e9373f14ece5ce31db6c2612b7a1172ef182b662d5724200e6cbac8d7837"
+    },
+    {
+      "bytes": 93,
+      "path": "repaired-v1/telemetry/worker.json",
+      "sha256": "2cd429c88e822c0161568f269c6be118f45a2489eb6872315ff5aab872928cea"
+    },
+    {
+      "bytes": 15440,
+      "path": "repaired-v2/diagnose_tests.executed.py",
+      "sha256": "8485e70d2dc35f5ca28e3e3ccda41a2486bac393e34385f5d820eb86cebf6117"
+    },
+    {
+      "bytes": 459,
+      "path": "repaired-v2/manual_stop.json",
+      "sha256": "68b52ae8dbf4674626d2873e339df20ba81a72cdd66d7003f22aadf272f7ff48"
+    },
+    {
+      "bytes": 1933,
+      "path": "repaired-v2/process.json",
+      "sha256": "c53751ec0112351e0383b0215fa380dbca178a011477f6abb67b24f236a8c3b5"
+    },
+    {
+      "bytes": 637,
+      "path": "repaired-v2/process.log",
+      "sha256": "3ee24478895ecd1f5848cce797b15afaf43df0724e88cada9f255cf79dfd2e2c"
+    },
+    {
+      "bytes": 3301325,
+      "path": "repaired-v2/protected_after.json.gz",
+      "sha256": "f808ed7b7aaaedf615b76936f6394b8920ba9cdfa5a376aac8416d60bfa24068"
+    },
+    {
+      "bytes": 3301329,
+      "path": "repaired-v2/protected_before.json.gz",
+      "sha256": "b7960cd5d7b77d82bd65934b36ef3d1b5e7d311cb4ec3d1c8f57e41385341a2b"
+    },
+    {
+      "bytes": 693,
+      "path": "repaired-v2/request.json",
+      "sha256": "5deed7959c147274a64f730b0779467cf34caf7c2b989f2dcc3618347fde2b61"
+    },
+    {
+      "bytes": 776,
+      "path": "repaired-v2/result.json",
+      "sha256": "2085e23837af2afd7d3458d75e02112a2c63e64bbae0276e3fcccbe864a62edb"
+    },
+    {
+      "bytes": 342,
+      "path": "repaired-v2/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 58018,
+      "path": "repaired-v2/telemetry/collection.json",
+      "sha256": "5d351bbfcbf411584851b78c977f2c29ceca938143c6c22a4f0b8812c458c9f6"
+    },
+    {
+      "bytes": 391125,
+      "path": "repaired-v2/telemetry/inner-scan-1.json",
+      "sha256": "233822390c23d1093039601b4f66950ef39cf04a25039e00d061b2f617c9d3a9"
+    },
+    {
+      "bytes": 388785,
+      "path": "repaired-v2/telemetry/reports.jsonl",
+      "sha256": "aeaa10815eb789df093cc2d5fe0d887f82e0b9a69692c34bd0abb1201633dd9e"
+    },
+    {
+      "bytes": 87353,
+      "path": "repaired-v2/telemetry/starts.jsonl",
+      "sha256": "65de01e272148bd739de3762cfec79e3928a7af482cf6a9700a116d8fb21166d"
+    },
+    {
+      "bytes": 94,
+      "path": "repaired-v2/telemetry/worker.json",
+      "sha256": "d1e39dbd03b1c37677106764fc57819be886c47ef74fcb274f72726c9e95951d"
+    },
+    {
+      "bytes": 9980,
+      "path": "repaired-v3/bundle/junit.xml",
+      "sha256": "c81b5cbe9c2e57f52c3cc6067b06f0d7ee1d0e8a0b98d4b64b09a82985613ba5"
+    },
+    {
+      "bytes": 1377459,
+      "path": "repaired-v3/bundle/profile.prof",
+      "sha256": "ce75142e77a559f9c60ffb66cb754af7c152661f18d6bae0accf5a0a8400a71f"
+    },
+    {
+      "bytes": 5401,
+      "path": "repaired-v3/bundle/profile.txt",
+      "sha256": "4395a52b4f7850dc78f12dd41b35c3115c559f17b54be2ff126141738f2ae3be"
+    },
+    {
+      "bytes": 1934,
+      "path": "repaired-v3/process.json",
+      "sha256": "29108046f1eb95ef58e46542748255d9b3b105ba1060a7ca961065182cd08969"
+    },
+    {
+      "bytes": 6959,
+      "path": "repaired-v3/process.log",
+      "sha256": "36e7f6d422eb7d4fbc3d1057edcf9592bd6afb3feb82796ab2bc32e296b6607f"
+    },
+    {
+      "bytes": 3301323,
+      "path": "repaired-v3/protected_after.json.gz",
+      "sha256": "b18704d5d0dcb32de54b1a40e30b2f339c95e88f968c8311a48a865b355d8128"
+    },
+    {
+      "bytes": 3301320,
+      "path": "repaired-v3/protected_before.json.gz",
+      "sha256": "f70b9a5d5292efa5ee422a8b86cba54600c82fb3bea63e649d2daa6447fae9db"
+    },
+    {
+      "bytes": 1216,
+      "path": "repaired-v3/request.json",
+      "sha256": "968e7bb28e8c4668e882ff73d7e61d21bd1783b9001717a6ef66ed34be5b4d5e"
+    },
+    {
+      "bytes": 827,
+      "path": "repaired-v3/result.json",
+      "sha256": "0dc8708556ba8e58a1d7f706e953d8e597e072b8f77d53489fe57299c5746d5d"
+    },
+    {
+      "bytes": 342,
+      "path": "repaired-v3/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 5787,
+      "path": "repaired-v3/telemetry/collection.json",
+      "sha256": "96e8e0519103ff90befe95959aa1ba6c828fcd19ca2cffa03debc25177c42d5c"
+    },
+    {
+      "bytes": 75,
+      "path": "repaired-v3/telemetry/finished.json",
+      "sha256": "4c06660455335ca4dcc901e2ed90f6ed026f27f65ac34723766224f1a5f2003a"
+    },
+    {
+      "bytes": 391125,
+      "path": "repaired-v3/telemetry/inner-scan-1.json",
+      "sha256": "f56c205301f9961b4995beb0689795a4a7652e9baea8f37367da9942d0e11d4a"
+    },
+    {
+      "bytes": 391126,
+      "path": "repaired-v3/telemetry/inner-scan-2.json",
+      "sha256": "fe493e4f309c01e1e26b265b74e8231a9233eda1c0ad11abc7da9249ba131e4c"
+    },
+    {
+      "bytes": 45689,
+      "path": "repaired-v3/telemetry/reports.jsonl",
+      "sha256": "65ada9fd3efeac69b47bcbcecadcd0887b2b1aa882e7f92b9b335a93999507d9"
+    },
+    {
+      "bytes": 9566,
+      "path": "repaired-v3/telemetry/starts.jsonl",
+      "sha256": "a5a6bdbd345d4b5dd0c32eeb4c29b24d80bbfea0ad6204661ba52617ca93687d"
+    },
+    {
+      "bytes": 94,
+      "path": "repaired-v3/telemetry/worker.json",
+      "sha256": "0455d9fa041f634d035499c1dbe942d99ef2c14fb098e252408f3ee577d6ab6a"
+    },
+    {
+      "bytes": 14235,
+      "path": "reproduce-v1/bundle/junit.xml",
+      "sha256": "aea842dbdab436d467cd04fc32586b64d30133258fcadfbd47ecb4a796f86831"
+    },
+    {
+      "bytes": 1323806,
+      "path": "reproduce-v1/bundle/profile.prof",
+      "sha256": "ba87dfe2f83c1b043b93a5da72b499c6c1d7ad295408df221b4b62d827702383"
+    },
+    {
+      "bytes": 5413,
+      "path": "reproduce-v1/bundle/profile.txt",
+      "sha256": "4d529e0cce34f2a68892efeb4817969ccad2458053728aebe8002ce6baa2f1f5"
+    },
+    {
+      "bytes": 1940,
+      "path": "reproduce-v1/process.json",
+      "sha256": "11db0d2143d70cfdc3d84407d767bb05bc55ce134c7873cd62d732dd1fc1cbb1"
+    },
+    {
+      "bytes": 11052,
+      "path": "reproduce-v1/process.log",
+      "sha256": "c96835729d7b0770e0692fa760f4fdc47668bbedea595e96f22c063e49447f13"
+    },
+    {
+      "bytes": 3301325,
+      "path": "reproduce-v1/protected_after.json.gz",
+      "sha256": "db454e8de4642aa57596572d06c226d71e872e5f9b2f67c626704f06239ecbc5"
+    },
+    {
+      "bytes": 3301319,
+      "path": "reproduce-v1/protected_before.json.gz",
+      "sha256": "2ddef801b17164f41eccb1c3bb3d38305f31d3685bc2cc091ba236799e753f7d"
+    },
+    {
+      "bytes": 1004,
+      "path": "reproduce-v1/request.json",
+      "sha256": "033e2f25aa6ec276f1edb10b479bfe6aae4bd7e6736849d6df914d8dab739d03"
+    },
+    {
+      "bytes": 678,
+      "path": "reproduce-v1/result.json",
+      "sha256": "307d2b5cde9a78edf17310858ab126c3150f185f88dcb5a6f443b321cc3a9fae"
+    },
+    {
+      "bytes": 342,
+      "path": "reproduce-v1/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 5579,
+      "path": "reproduce-v1/telemetry/collection.json",
+      "sha256": "6e7e79a26d9d735411d85dd9fe2d80044e956bdf90d05072dcaea3a67daa6810"
+    },
+    {
+      "bytes": 75,
+      "path": "reproduce-v1/telemetry/finished.json",
+      "sha256": "a8aa0a026833a26f302a5a000d3f48efbbfb77cd429677ff5f21bcf82822754d"
+    },
+    {
+      "bytes": 391125,
+      "path": "reproduce-v1/telemetry/inner-scan-1.json",
+      "sha256": "21bce6ee017b6d0ce6922fdf8355387e52e99a1ef22ec5bfa0280ae5aaee3127"
+    },
+    {
+      "bytes": 391126,
+      "path": "reproduce-v1/telemetry/inner-scan-2.json",
+      "sha256": "40c4741c156e03a148648396bd81c7662b6646ef1af90df8185d65687a6baa41"
+    },
+    {
+      "bytes": 46034,
+      "path": "reproduce-v1/telemetry/reports.jsonl",
+      "sha256": "cca2de924d76ab7bc226e324ccef5b9cf1fdd7aeb69dd99095180702aac165e5"
+    },
+    {
+      "bytes": 94,
+      "path": "reproduce-v1/telemetry/worker.json",
+      "sha256": "1df7e91a91482ef8e40e11898d57d3e9a09d599a90d3d32da7e54956a4f60154"
+    },
+    {
+      "bytes": 31807,
+      "path": "result.json",
+      "sha256": "28a1e588120a3a8ec8d1b5c8c2f8d1eb96fff7e6c16bbd20b3db62ba301e829a"
+    },
+    {
+      "bytes": 472,
+      "path": "semantic-after-v1/bundle/full_byte_attempt.json",
+      "sha256": "ab5e9e1ee55dc8d04b49a06450b37ea8477213b6d67ec810bf8e75033f894646"
+    },
+    {
+      "bytes": 1089,
+      "path": "semantic-after-v1/bundle/full_byte_process.log",
+      "sha256": "d431be2ae8111f2bca3e75b6294602cdf9ffc68991c699c5576df7a25908f59f"
+    },
+    {
+      "bytes": 13425,
+      "path": "semantic-after-v1/bundle/semantic_diff_report.json",
+      "sha256": "3e848745c176912c158fa40d778cd6aba29d623e0124226bfe9105ea6793a973"
+    },
+    {
+      "bytes": 1966,
+      "path": "semantic-after-v1/process.json",
+      "sha256": "f8ed058319787cb54525e1c613ac30676d3f060c3f0ffb019f9aba133e0073a9"
+    },
+    {
+      "bytes": 325,
+      "path": "semantic-after-v1/process.log",
+      "sha256": "dd5b47ff30dea0385ad050d6b11f3de178fcfd403a1393fb7428365c7bf02a4c"
+    },
+    {
+      "bytes": 3301327,
+      "path": "semantic-after-v1/protected_after.json.gz",
+      "sha256": "ac9e75880490a0b6246ddd202b4c01b56d9783f8ceea158d8521eae635e7e3af"
+    },
+    {
+      "bytes": 3301315,
+      "path": "semantic-after-v1/protected_before.json.gz",
+      "sha256": "34b282a32d22fd5a4fa7fd46c8d121a321b9b83f0dbaf9d2825fa2d5e7001ab1"
+    },
+    {
+      "bytes": 317,
+      "path": "semantic-after-v1/request.json",
+      "sha256": "8cb10e2fede67dbd4e770ab5847b1aa847f39448649b038f5927db87de15a7bc"
+    },
+    {
+      "bytes": 756,
+      "path": "semantic-after-v1/result.json",
+      "sha256": "899540fbbe44f12370c1e34d4c04408075fd6d5d34240e9db1c895631553f007"
+    },
+    {
+      "bytes": 342,
+      "path": "semantic-after-v1/telemetry/canary.json",
+      "sha256": "85c1d6391b58db7425aa73095c298a6b8200acbf19bca216a86559a44ea639fd"
+    },
+    {
+      "bytes": 75,
+      "path": "semantic-after-v1/telemetry/finished.json",
+      "sha256": "213c6d168115f26e0b653d30547be73e7721d4f5e8cf301ea63411cf2072f9cc"
+    },
+    {
+      "bytes": 94,
+      "path": "semantic-after-v1/telemetry/worker.json",
+      "sha256": "3eff834cc016eb8c4054fd1d90b50be0877c336cebf6e674b725ef618747554e"
+    },
+    {
+      "bytes": 1564,
+      "path": "sources-after/scripts/programme_tranche/audit_wrapper_coherence.py",
+      "sha256": "41b819f42eab3f5a8c6d92340a9a604d33a36ff0f3ee32c8f8360a869f410d7d"
+    },
+    {
+      "bytes": 17051,
+      "path": "sources-after/scripts/programme_tranche/diagnose_tests.py",
+      "sha256": "c560f9f24e50082c1dffa0d0f2cdb4f48a9effefd48bf449804a41062c116c4d"
+    },
+    {
+      "bytes": 2253,
+      "path": "sources-after/scripts/programme_tranche/map_test_failures.py",
+      "sha256": "26a6be103b3abab76ebf69bd3efbf5363ad993b69f132bdb4dc355d4c979e776"
+    },
+    {
+      "bytes": 4320,
+      "path": "sources-after/scripts/programme_tranche/probe_regex_dialects.py",
+      "sha256": "c9db51099629002d3d57799ec65bce92e5b969d61601db5a60d351485cf12eee"
+    },
+    {
+      "bytes": 9435,
+      "path": "sources-after/scripts/programme_tranche/record_verification_investigation.py",
+      "sha256": "6c308c73aca9388ecde57aa1b966842591a9894007afbf85199a2dceeaafcfe6"
+    },
+    {
+      "bytes": 1224,
+      "path": "sources-after/scripts/programme_tranche/semantic_backstop_child.py",
+      "sha256": "bd0bd4f9e197d3da687f3ecbadbf46c0a68c3843c51e4e1162d0a112fc097c20"
+    },
+    {
+      "bytes": 7515,
+      "path": "sources-after/tests/conftest.py",
+      "sha256": "a0f116d058916bc85e05494cbf8994b394b59131a496f8bfacc09846391c6c8c"
+    },
+    {
+      "bytes": 5711,
+      "path": "sources-after/tests/test_agent_data_query.py",
+      "sha256": "7c93fb3887ba2aa1cdaa14c5974f3f21e57c1caa666135e7d7df69d4a06b0505"
+    },
+    {
+      "bytes": 279521,
+      "path": "sources-after/tests/test_bdc_xbrl_wrapper.py",
+      "sha256": "1e3b55b95c0951125c90a446e259266d846d6de59715974cff3bf007e2730346"
+    },
+    {
+      "bytes": 37005,
+      "path": "sources-after/tests/test_investigation_orchestration.py",
+      "sha256": "b2a38371b180c700cff26ca15963e633199f5cbecdb32316a3fd62531769ab9a"
+    },
+    {
+      "bytes": 610118,
+      "path": "sources-after/tests/test_unified_holdings.py",
+      "sha256": "fbf828d8394b683ad597e89bb8b003ae2be1ee9c8b9f91a9412467dd01499041"
+    },
+    {
+      "bytes": 6388,
+      "path": "sources-before/docs/production_stack/programme_tranche_handoff_2026-09-10.md",
+      "sha256": "bcc15551cc0a5b683d9a74b2418f9c5bb372088ce2bce765f3e1dae031c0381a"
+    },
+    {
+      "bytes": 9776,
+      "path": "sources-before/docs/production_stack/programme_tranche_resume_proposal_2026-09-10.md",
+      "sha256": "93acdf7280bf381e01fbc9aa9e6a594426f15be5b607cbc703932748474f76fb"
+    },
+    {
+      "bytes": 103389,
+      "path": "sources-before/docs/production_stack/programme_tranche_review.html",
+      "sha256": "e3f6b3c8929930541a50f7541509696fc0718e3527d34d5656e25614b5cf0e68"
+    },
+    {
+      "bytes": 61621,
+      "path": "sources-before/pipeline/bdc_xbrl_html_bridge.py",
+      "sha256": "c0e0384565d07e9d3b87e5956d33c142e74dcf9aa11fc2acd47ede4ded8349e4"
+    },
+    {
+      "bytes": 188185,
+      "path": "sources-before/pipeline/bdc_xbrl_wrapper_oracle.py",
+      "sha256": "899901ee982e5de22026861f6769a0189a685b47d17071c2418df483a7b81cfd"
+    },
+    {
+      "bytes": 137021,
+      "path": "sources-before/pipeline/staging_bdc.py",
+      "sha256": "fbd5d2606d0234ccaf38371ec5d706917bd909edc00e5e76b91672cc9a8c5575"
+    },
+    {
+      "bytes": 30022,
+      "path": "sources-before/scripts/programme_tranche/build_review_document.py",
+      "sha256": "294fe38349f5da91b74f4dfebcc5a5479833b918d8f54be182fc3f7eaac25447"
+    },
+    {
+      "bytes": 13987,
+      "path": "sources-before/scripts/programme_tranche/diagnose_tests.py",
+      "sha256": "7eb9d46ef855de69f0b39e70ad4eee6117b09fd970b01d2b5f1986929b325b32"
+    },
+    {
+      "bytes": 7515,
+      "path": "sources-before/tests/conftest.py",
+      "sha256": "a0f116d058916bc85e05494cbf8994b394b59131a496f8bfacc09846391c6c8c"
+    },
+    {
+      "bytes": 5711,
+      "path": "sources-before/tests/test_agent_data_query.py",
+      "sha256": "7c93fb3887ba2aa1cdaa14c5974f3f21e57c1caa666135e7d7df69d4a06b0505"
+    },
+    {
+      "bytes": 279525,
+      "path": "sources-before/tests/test_bdc_xbrl_wrapper.py",
+      "sha256": "5a74f33bb897a437c0b2176330f4f2aef57c82d46f4d5ed9e3e77aab69735996"
+    },
+    {
+      "bytes": 118130,
+      "path": "sources-before/tests/test_bdc_xbrl_wrapper_oracle.py",
+      "sha256": "cb68479fc27329e47427ad0d84868a75a2e34b48a995a67fe683465d3cb835f7"
+    },
+    {
+      "bytes": 37005,
+      "path": "sources-before/tests/test_investigation_orchestration.py",
+      "sha256": "b2a38371b180c700cff26ca15963e633199f5cbecdb32316a3fd62531769ab9a"
+    },
+    {
+      "bytes": 609624,
+      "path": "sources-before/tests/test_unified_holdings.py",
+      "sha256": "3f7b7c00a8fb0bb467a0e40a5dc19fa099b5a20e04f15f810e79e1cb844a84de"
+    },
+    {
+      "bytes": 421,
+      "path": "wrapper_coherence.json",
+      "sha256": "1ea362b89735c5063c40a91bcff039250bb8d39aaac66b3f3c8ac7975b291de1"
+    }
+  ],
+  "recorded_utc": "2026-09-10T18:26:06.455255+00:00"
+}

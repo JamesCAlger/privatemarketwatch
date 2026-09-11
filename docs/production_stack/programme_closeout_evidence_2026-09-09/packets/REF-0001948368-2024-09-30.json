@@ -1,0 +1,428 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_f6ed1b17-7492-459b-b74c-807e3b5b86eb",
+        "name": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "(13)",
+        "Securities exempt from registration under the Securities Act of 1933 and may be deemed to be \u201crestricted securities\u201d. As of September 30, 2024, the aggregate fair value of these securities is $ 2,278 or 0.62 % of the Company's net assets. The initial acquisition dates have been included for such securities ."
+      ],
+      "concept": "us-gaap:RestrictedInvestmentsAtFairValue",
+      "context_id": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+      "currency": "USD",
+      "fact_id": "F_f6ed1b17-7492-459b-b74c-807e3b5b86eb",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "2,278",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:footnote[12]/table/tr[2]",
+      "table_xpath": "/html/body/ix:footnote[12]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2278000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_09e54dc2-ef81-4936-9f6a-69c9ca00687f",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "467,602",
+        "",
+        "",
+        "$",
+        "468,697",
+        "",
+        "",
+        "$",
+        "176,995",
+        "",
+        "",
+        "$",
+        "177,418",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+      "currency": "USD",
+      "fact_id": "F_09e54dc2-ef81-4936-9f6a-69c9ca00687f",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "468,697",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[88]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[7]",
+      "table_xpath": "/html/body/div[88]/ix:nonnumeric/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "468697000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_b51246c8-8cfc-4950-909e-4584ccff5b34",
+        "name": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+      "currency": null,
+      "fact_id": "F_b51246c8-8cfc-4950-909e-4584ccff5b34",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[91]/ix:continuation/div/ix:nonnumeric/table/tr[4]",
+      "table_xpath": "/html/body/div[91]/ix:continuation/div/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_b28e6bbd-7d28-487b-ae05-3a32180de5cf",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "150",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "468,697",
+        "",
+        "",
+        "$",
+        "468,847",
+        "",
+        "",
+        "$",
+        "9,542",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "177,418",
+        "",
+        "",
+        "$",
+        "186,960",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+      "currency": "USD",
+      "fact_id": "F_b28e6bbd-7d28-487b-ae05-3a32180de5cf",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "468,847",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[98]/ix:continuation/div[2]/ix:nonnumeric/table/tr[8]",
+      "table_xpath": "/html/body/div[98]/ix:continuation/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "468847000"
+    }
+  ],
+  "cik": "0001948368",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1948368/000095017024125398.html",
+  "reference_id": "REF-0001948368-2024-09-30",
+  "report_date": "2024-09-30",
+  "source_rows": 166,
+  "source_sha256": "90c8c535f01caeb046cf2f8f23de8127e979fa4a06afd29a85f5f73c55f1c39d",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost of $ 457,839 and $ 176,995 ) | $ | 458,952 | $ | 177,418",
+        "Non-controlled affiliated investments (cost of $ 9,763 and $ 0 ) | 9,745 | \u2014"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (cost of $ 457,839 and $ 176,995 ) | $ | 458,952 | $ | 177,418",
+        "Non-controlled affiliated investments (cost of $ 9,763 and $ 0 ) | 9,745 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, December 31,",
+        "2024 (Unaudited) 2023",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Statements of Financial Condition",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "ITEM 1. FINANCIAL STATEMENTS",
+        "",
+        "PART I. FINANCIAL INFORMATION",
+        ""
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[5]"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "VisionSafe Holdings, Inc. | Aerospace & Defense | 11.13 % | S + 6.00 % | 04/18/30 | 3,624 | 3,555 | 3,551 | (5) (6) (8)",
+        "VisionSafe Holdings, Inc. | Aerospace & Defense | S + 6.00 % | 04/18/30 | 509 | ( 9 | ) | ( 10 | ) | (5) (7) (8)"
+      ],
+      "last": [
+        "Spotless Brands, LLC | Diversified Consumer Services | 10.81 % | S + 5.75 % | 07/25/28 | 8,493 | 8,285 | 8,493 | (5) (6) (8)",
+        "Spotless Brands, LLC | Diversified Consumer Services | 10.81 % | S + 5.75 % | 07/25/28 | 1,317 | 1,287 | 1,317 | (5) (8)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes",
+        "Debt Investments - 127.58 %",
+        "United States - 127.58 %"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2024",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "Table of Contents",
+        "",
+        "7"
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/table[9]"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Sunshine Cadence HoldCo, LLC (dba Cadence Education) | Diversified Consumer Services | 10.20 % | S + 5.00 % | 05/01/31 | $ | 10,615 | $ | 10,514 | $ | 10,509 | (5) (6) (8)",
+        "Sunshine Cadence HoldCo, LLC (dba Cadence Education) | Diversified Consumer Services | 9.88 % | S + 5.00 % | 05/01/31 | 2,769 | 877 | 858 | (5) (7) (8)"
+      ],
+      "last": [
+        "GPS Phoenix Buyer, Inc. (dba Guidepoint) | IT Services | S + 6.00 % | 10/02/29 | 1,305 | ( 22 | ) | ( 13 | ) | (5) (7) (8)",
+        "US Signal Company, LLC | IT Services | 10.62 % | S + 5.50 % | 09/04/29 | 15,258 | 15,107 | 15,105 | (5) (6)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes",
+        "Sunshine Cadence HoldCo, LLC (dba Cadence Education) Diversified Consumer Services 10.20 % S + 5.00 % 05/01/31 $ 10,615 $ 10,514 $ 10,509 (5) (6) (8)",
+        "Sunshine Cadence HoldCo, LLC (dba Cadence Education) Diversified Consumer Services 9.88 % S + 5.00 % 05/01/31 2,769 877 858 (5) (7) (8)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "Table of Contents",
+        "",
+        "8"
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/table[10]"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "US Signal Company, LLC | IT Services | S + 5.50 % | 09/04/29 | $ | 4,695 | $ | ( 46 | ) | $ | ( 47 | ) | (5) (7)",
+        "US Signal Company, LLC | IT Services | S + 5.50 % | 09/04/29 | 2,347 | ( 23 | ) | ( 23 | ) | (5) (7)"
+      ],
+      "last": [
+        "NCWS Intermediate, Inc. (dba National Carwash Solutions) | Trading Companies & Distributors | 10.10 % | S + 5.50 % (Incl. 2.25 % PIK) | 12/31/29 | 12,684 | 12,504 | 12,240 | (5) (6) (8)",
+        "NCWS Intermediate, Inc. (dba National Carwash Solutions) | Trading Companies & Distributors | 10.10 % | S + 5.50 % (Incl. 2.25 % PIK) | 12/31/29 | 1,494 | 98 | 67 | (5) (7) (8)"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes",
+        "US Signal Company, LLC IT Services S + 5.50 % 09/04/29 $ 4,695 $ ( 46 ) $ ( 47 ) (5) (7)",
+        "US Signal Company, LLC IT Services S + 5.50 % 09/04/29 2,347 ( 23 ) ( 23 ) (5) (7)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "Table of Contents",
+        "",
+        "9"
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "NCWS Intermediate, Inc. (dba National Carwash Solutions) | Trading Companies & Distributors | 10.10 % | S + 5.50 % (Incl. 2.25 % PIK) | 12/31/29 | $ | 897 | $ | 92 | $ | 68 | (5) (7) (8)",
+        "PT Intermediate Holdings III, LLC (dba Parts Town) | Trading Companies & Distributors | 9.60 % | S + 5.00 % (Incl. 1.75 % PIK) | 04/09/30 | 13,802 | 13,779 | 13,733 | (5) (6)"
+      ],
+      "last": [
+        "Total United States | $ | 465,354 | $ | 466,419",
+        "Total Debt Investments | $ | 465,354 | $ | 466,419"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes",
+        "NCWS Intermediate, Inc. (dba National Carwash Solutions) Trading Companies & Distributors 10.10 % S + 5.50 % (Incl. 2.25 % PIK) 12/31/29 $ 897 $ 92 $ 68 (5) (7) (8)",
+        "PT Intermediate Holdings III, LLC (dba Parts Town) Trading Companies & Distributors 9.60 % S + 5.00 % (Incl. 1.75 % PIK) 04/09/30 13,802 13,779 13,733 (5) (6)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "Table of Contents",
+        "",
+        "10"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 10,
+      "first": [
+        "VisionSafe Parent, LLC | Aerospace & Defense | 04/19/24 | 255 | $ | 255 | $ | 285 | (5) (8) (12)",
+        "RPC ABC Investment Holdings LLC (dba ABC Plumbing) | Diversified Consumer Services | 04/26/24 | 1,992,620 | 1,993 | 1,993 | (5) (8) (9) (12)"
+      ],
+      "last": [
+        "Total United States | $ | 150 | $ | 150",
+        "Total Investments and Investments in Affiliated Money Market Fund - 128.24 % | $ | 467,752 | $ | 468,847"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry (2) Initial Acquisition Date (13) Shares (4) Cost Fair Value Footnotes",
+        "Equity Securities - 0.62 %",
+        "United States - 0.62 %"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "Table of Contents",
+        "",
+        "11"
+      ],
+      "rows": 10,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Goldman Sachs Financial Square Government Fund - Institutional Shares | $ | 9,542 | $ | 386,309 | $ | ( 395,701 | ) | $ | \u2014 | $ | \u2014 | $ | 150 | $ | 700",
+        "ABC Investment Holdco Inc. (dba ABC Plumbing) | \u2014 | 9,956 | ( 193 | ) | \u2014 | ( 18 | ) | 9,745 | 409"
+      ],
+      "last": [
+        "ABC Investment Holdco Inc. (dba ABC Plumbing) | \u2014 | 9,956 | ( 193 | ) | \u2014 | ( 18 | ) | 9,745 | 409",
+        "Total Non-Controlled Affiliates | $ | 9,542 | $ | 396,265 | $ | ( 395,894 | ) | $ | \u2014 | $ | ( 18 | ) | $ | 9,895 | $ | 1,109"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain (Loss) Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest and Other Income",
+        "For the Nine Months Ended September 30, 2024",
+        "Non-Controlled Affiliates"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[84]/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 427,540 | $ | 428,617 | $ | 149,451 | $ | 149,830",
+        "1st Lien/Last-Out Unitranche | 37,814 | 37,802 | 27,544 | 27,588"
+      ],
+      "last": [
+        "Common Stock | 2,248 | 2,278 | \u2014 | \u2014",
+        "Total investments | $ | 467,602 | $ | 468,697 | $ | 176,995 | $ | 177,418"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2024 December 31, 2023",
+        "Investment Type Cost Fair Value Cost Fair Value",
+        "1st Lien/Senior Secured Debt $ 427,540 $ 428,617 $ 149,451 $ 149,830"
+      ],
+      "preceding": [
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[88]/ix:nonnumeric/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 235,530 | Discounted cash flows | Discount Rate | 8.0 % - 12.0 % | 9.6 %",
+        "1st Lien/Last-Out Unitranche | 37,802 | Discounted cash flows | Discount Rate | 8.0 % - 10.5 % | 9.7 %"
+      ],
+      "last": [
+        "1st Lien/Last-Out Unitranche | 37,802 | Discounted cash flows | Discount Rate | 8.0 % - 10.5 % | 9.7 %",
+        "Common Stock | $ | 2,278 | Comparable multiples | EV/EBITDA (6) | 10.0 x - 13.3 x | 12.9 x"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Instruments Fair Value (1)(2) Valuation Techniques (3) Significant Unobservable Inputs Range of Significant Unobservable Inputs (4) Weighted Average (5)",
+        "As of September 30, 2024",
+        "Bank Loans, Corporate Debt, and Other Debt Obligations"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[98]/ix:continuation/div[1]/ix:continuation/table"
+    }
+  ]
+}

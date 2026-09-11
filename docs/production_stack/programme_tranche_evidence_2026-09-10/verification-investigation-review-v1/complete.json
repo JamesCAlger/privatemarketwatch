@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "bytes": 6083,
+      "path": "check_review.cjs",
+      "sha256": "2245bb2a00840599c31b161a5a56e4fb440be38e52fe1de09ce5f0dd534a13e4"
+    },
+    {
+      "bytes": 448,
+      "path": "checks.json",
+      "sha256": "6e949bb5127662948c76bf76f60473421c28a3fcd3748b409822fdd2a7399417"
+    },
+    {
+      "bytes": 8221,
+      "path": "delivery.json",
+      "sha256": "b8faef6a69958de583f1ff167f7e6151ef303551bb097b8bca98d7a494fa1548"
+    },
+    {
+      "bytes": 92688,
+      "path": "desktop.png",
+      "sha256": "3929b20bad1124b822a003e5d4b17511af70439f6efd0f86be8836cb98ffb40b"
+    },
+    {
+      "bytes": 46400,
+      "path": "mobile.png",
+      "sha256": "752deb253f55eae781aeac02fbaa1c4a3ff9d23ac15e982c32c630329cbb1bd0"
+    },
+    {
+      "bytes": 253337,
+      "path": "print-check.pdf",
+      "sha256": "df73811c95dde5d73c6ed0aaa831041c44e715b836ced38906a812d011cd5b3f"
+    }
+  ],
+  "recorded_utc": "2026-09-10T18:28:25.407698+00:00"
+}

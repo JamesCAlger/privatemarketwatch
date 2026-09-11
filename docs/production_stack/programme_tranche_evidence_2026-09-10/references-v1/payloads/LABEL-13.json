@@ -1,0 +1,79 @@
+{
+  "case": 13,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001838126|2025-12-31|Sentinel Buyer Corp. 2",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "254664000.0",
+      "cik": "0001838126",
+      "exact_match": "False",
+      "field": "fair_value",
+      "join_count": "1",
+      "label_key": "position|0001838126|2025-12-31|Sentinel Buyer Corp. 2",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "-188000.0",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-48f27ab3f63f9bd2",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    },
+    {
+      "candidate": "255050000.0",
+      "cik": "0001838126",
+      "exact_match": "False",
+      "field": "cost",
+      "join_count": "1",
+      "label_key": "position|0001838126|2025-12-31|Sentinel Buyer Corp. 2",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "-190000.0",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-48f27ab3f63f9bd2",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001838126|2025-12-31|Sentinel Buyer Corp. 2",
+    "accession": "0001628280-26-020206",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001838126",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "0cc623b",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Sentinel Buyer Corp. 2",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_LENDING",
+    "true_cost": -190000.0,
+    "true_fair_value": -188000.0,
+    "true_lien": "First Lien",
+    "unit_uid": "sentinel buyer corp 2"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "legacy_jv_cost_usd": -190000,
+    "legacy_jv_fair_value_usd": -188000,
+    "parent_cost_usd": 255050000,
+    "parent_fair_value_usd": 254664000
+  },
+  "reason": "Legacy gold used a JV delayed-draw negative mark for a parent first-lien term position. Source scopes and facilities must differ.",
+  "row_xpath": null,
+  "selected_literal_evidence": [],
+  "source_path": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html",
+  "source_sha256": "2e40a16dfd71318af03e97f90560525f560faf4b8fd232a8a15b7c206b7fff0a",
+  "status": "reference_scope_and_instrument_wrong",
+  "supplementary_evidence": "programme_pilot_evidence_2026-09-09/review_case_sources.json"
+}

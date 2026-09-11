@@ -1,0 +1,722 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1674760",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001674760-2023-09-30.json",
+    "evidence_sha256": "f8dafc65e193be1133c52ae1f3c9cc78f57004b9b0d5f6cde8b6b919f7ad0b78",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001674760-2023-09-30",
+    "report_date": "2023-09-30",
+    "review_note": "Investments 485,603,000, MMF 46,467,000, combined 532,070,000; preserve cash basis.",
+    "saved_candidate_rows": "41",
+    "source_candidate_rows": "94"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1674760/000095017023060346.html",
+    "ref": "REF-0001674760-2023-09-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 ) $ 479,825 $ 514,640",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[4]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 )",
+          "",
+          "$",
+          "479,825",
+          "",
+          "",
+          "$",
+          "514,640",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_c7034698-ccd4-4ea6-8b4c-f433d406a2fd",
+            "scale": "3",
+            "text": "537,776",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_f0a65f91-2685-4f33-8049-e61f1c4c6d03",
+            "scale": "3",
+            "text": "605,919",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c7034698-ccd4-4ea6-8b4c-f433d406a2fd",
+            "scale": "3",
+            "text": "479,825",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_f0a65f91-2685-4f33-8049-e61f1c4c6d03",
+            "scale": "3",
+            "text": "514,640",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 ) $ 479,825 $ 514,640",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled affiliated investments (cost of $ 5,254 and $ 5,254 )",
+          "",
+          "",
+          "5,778",
+          "",
+          "",
+          "",
+          "6,372",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_c35312ea-e0cd-456e-9fd2-2b6a81b007d4",
+            "scale": "3",
+            "text": "5,254",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_3f04427a-6a81-4092-85b2-5e9820f66907",
+            "scale": "3",
+            "text": "5,254",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c35312ea-e0cd-456e-9fd2-2b6a81b007d4",
+            "scale": "3",
+            "text": "5,778",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_3f04427a-6a81-4092-85b2-5e9820f66907",
+            "scale": "3",
+            "text": "6,372",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 ) $ 479,825 $ 514,640",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments, at fair value (amortized cost of $ 543,030 and $ 611,173 )",
+          "",
+          "$",
+          "485,603",
+          "",
+          "",
+          "$",
+          "521,012",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+            "scale": "3",
+            "text": "543,030",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_2a4ebeba-370d-41c6-a12d-f2ff4cac264a",
+            "scale": "3",
+            "text": "611,173",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+            "scale": "3",
+            "text": "485,603",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_2a4ebeba-370d-41c6-a12d-f2ff4cac264a",
+            "scale": "3",
+            "text": "521,012",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 ) $ 479,825 $ 514,640",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "18,303",
+          "",
+          "",
+          "$",
+          "16,937",
+          "",
+          "",
+          "$",
+          "53,663",
+          "",
+          "",
+          "$",
+          "50,651",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_77ec594a-6367-4a26-898f-b6fd8c1db58d",
+            "scale": "3",
+            "text": "18,303",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_4d4da6c3-ab4d-491a-b425-d8ad3743eaf3",
+            "scale": "3",
+            "text": "16,937",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_725f9e93-28cd-41ef-9f42-25511e7ad914",
+            "scale": "3",
+            "text": "53,663",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_3ff59ef9-2fd4-4f72-91de-26d101b52a47",
+            "scale": "3",
+            "text": "50,651",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | Investment income: | From non-controlled/non-affiliated investments:",
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statem ents of Operations",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[6]/tr[11]"
+      },
+      {
+        "cells": [
+          "Total Investments - 115.19 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "543,030",
+          "",
+          "$",
+          "485,603",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_e475b292-b776-4fe9-a570-98b206f6cdb2",
+            "scale": "-2",
+            "text": "115.19",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_e475b292-b776-4fe9-a570-98b206f6cdb2",
+            "scale": "3",
+            "text": "543,030",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e475b292-b776-4fe9-a570-98b206f6cdb2",
+            "scale": "3",
+            "text": "485,603",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes | Preferred Stock - 0.71 % | Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 3,004 (6) (11) | Vantage Mobility International, LLC Health Care Equipment & Supplies 05/23/19 15,025,203 6,010 \u2014 (4) (6) (11)",
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[11]/tr[23]"
+      },
+      {
+        "cells": [
+          "Total Investments in Affiliated Money Market Fund",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "46,467",
+          "",
+          "",
+          "46,467",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_9962d8d7-375b-45ab-916c-e1e9cc738318",
+            "scale": "3",
+            "text": "46,467",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_9962d8d7-375b-45ab-916c-e1e9cc738318",
+            "scale": "3",
+            "text": "46,467",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes | Preferred Stock - 0.71 % | Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 3,004 (6) (11) | Vantage Mobility International, LLC Health Care Equipment & Supplies 05/23/19 15,025,203 6,010 \u2014 (4) (6) (11)",
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[11]/tr[26]"
+      },
+      {
+        "cells": [
+          "Total Investments and Investments in Affiliated Money Market Fund - 126.21 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "589,497",
+          "",
+          "$",
+          "532,070",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_9a3eca0f-fc48-4197-9e67-a2194cf685ab",
+            "scale": "-2",
+            "text": "126.21",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_9a3eca0f-fc48-4197-9e67-a2194cf685ab",
+            "scale": "3",
+            "text": "589,497",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_9a3eca0f-fc48-4197-9e67-a2194cf685ab",
+            "scale": "3",
+            "text": "532,070",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes | Preferred Stock - 0.71 % | Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 3,004 (6) (11) | Vantage Mobility International, LLC Health Care Equipment & Supplies 05/23/19 15,025,203 6,010 \u2014 (4) (6) (11)",
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[11]/tr[27]"
+      },
+      {
+        "cells": [
+          "Total Investments in Affiliated Money Market Fund",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "62,374",
+          "",
+          "",
+          "62,374",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_4100831a-5e60-43d4-9650-504ccf7a734b",
+            "scale": "3",
+            "text": "62,374",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_4100831a-5e60-43d4-9650-504ccf7a734b",
+            "scale": "3",
+            "text": "62,374",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment # Industry Interest Rate Initial Acquisition Date (9) Par/Shares (++) Cost Fair Value Footnotes | Preferred Stock - 1.31 % | Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 2,769 (3) (8) | Vantage Mobility International, LLC Health Care Equipment & Supplies 05/23/19 15,025,203 6,010 \u2014 (2) (3) (8)",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2022 (continued)",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[15]/tr[27]"
+      },
+      {
+        "cells": [
+          "Total Investments - 144.52 %",
+          "",
+          "",
+          "$",
+          "673,547",
+          "",
+          "$",
+          "583,386",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_a266fb6b-6f4c-412e-b89c-40472609a66b",
+            "scale": "-2",
+            "text": "144.52",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_a266fb6b-6f4c-412e-b89c-40472609a66b",
+            "scale": "3",
+            "text": "673,547",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_a266fb6b-6f4c-412e-b89c-40472609a66b",
+            "scale": "3",
+            "text": "583,386",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment # Industry Interest Rate Initial Acquisition Date (9) Par/Shares (++) Cost Fair Value Footnotes | Preferred Stock - 1.31 % | Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 2,769 (3) (8) | Vantage Mobility International, LLC Health Care Equipment & Supplies 05/23/19 15,025,203 6,010 \u2014 (2) (3) (8)",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2022 (continued)",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[15]/tr[28]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "543.03",
+          "",
+          "",
+          "$",
+          "485.60",
+          "",
+          "",
+          "$",
+          "611.17",
+          "",
+          "",
+          "$",
+          "521.01",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2023 December 31, 2022 | Amortized Cost Fair Value Amortized Cost Fair Value | ($ in millions)",
+        "preceding": [
+          "",
+          "",
+          "Our portfolio (excluding investments in money market funds, if any) consisted of the following:",
+          "PORTFOLIO AND INVESTMENT ACTIVITY",
+          "ot be considered borrowings for these purposes. Practices and investments that may involve leverage but are not considered borrowings are not subject to the Investment Company Act\u2019s asset coverage requirement. The amount of leverage that we employ will depend on the assessment by our Investment Adviser and our board of directors (the \"Board of Directors\" or the \"Board\") of market conditions and other factors at the time of any proposed borrowing.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[17]/tr[13]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "485.60",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "521.01",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2023 December 31, 2022 | Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total | (in millions) (in millions)",
+        "preceding": [
+          "",
+          "dviser grades the investments in our portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments with a grade of 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale:",
+          "tially increased since origination or acquisition, and the portfolio company likely has materially declining performance. For debt investments with an investment grade of 4, in most cases, most or all of the debt covenants are out of compliance and payments are substantially delinquent. For investments graded 4, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis upon exit.",
+          "\u2022 Grade 3 investments indicate that the risk to our ability to recoup the initial cost basis of such investment has increased materially since origination or acquisition, including as a result of factors such as declining performance and non-compliance with debt covenants; however, payments are generally not more than 120 days past due; and",
+          "\u2022 Grade 2 investments involve a level of risk to our initial cost basis that is similar to the risk to our initial cost basis at the time of origination or acquisition. This portfolio company is generally performing as expected and the risk factors to our ability to ultimately recoup the cost of our investment are neutral to favorable. All investments or acquired investments in new portfolio companies are initially assessed a grade of 2;",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[20]/tr[10]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "543.03",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "611.17",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2023 December 31, 2022 | Amortized Cost Percentage of Total Amortized Cost Percentage of Total | (in millions) (in millions)",
+        "preceding": [
+          "",
+          "The following table shows the amortized cost of our performing and non-accrual investments (excluding investments in money market funds, if any):",
+          "The increase in investments with a grade 3 investment performance rating was primarily driven by investments with a fair value of $95.67 million being downgraded from a grade 2 investment performance rating due to financial under performance.",
+          "",
+          "As of September 30, 2023 December 31, 2022 Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total (in millions) (in millions) Grade 1 $ \u2014 \u2014 % $ \u2014 \u2014 % Grade 2 351.84 72.4 481.71 92.5 Grade 3 130.89 27.0 36.63 7.0 Grade 4 2.87 0.6 2.67 0.5 Total Investments $ 485.60 100.0 % $ 521.01 100.0 %",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[21]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "18.30",
+          "",
+          "",
+          "$",
+          "16.94",
+          "",
+          "",
+          "$",
+          "53.66",
+          "",
+          "",
+          "$",
+          "50.65",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | ($ in millions) | Total investment income $ 18.30 $ 16.94 $ 53.66 $ 50.65",
+        "preceding": [
+          "",
+          "Our operating results were as follows:",
+          "RESULTS OF OPERATIONS",
+          "",
+          "(6) Computed based on (a) the annual actual interest rate on investments sold or paid down, divided by (b) the total investments sold or paid down (including investments on non-accrual and non-income producing investments). The calculation includes incremental yield earned on the \u201clast-out\u201d portion of the unitranche loan investments and excludes prepayment premiums earned on exited investments.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[23]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "18.30",
+          "",
+          "",
+          "$",
+          "16.94",
+          "",
+          "",
+          "$",
+          "53.66",
+          "",
+          "",
+          "$",
+          "50.65",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2023 September 30, 2022 September 30, 2023 September 30, 2022 | ($ in millions) | Interest $ 16.02 $ 15.00 $ 48.00 $ 46.26",
+        "preceding": [
+          "",
+          "Our investment income was as follows:",
+          "Investment Income",
+          "Table of Contents",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[24]/tr[9]"
+      }
+    ],
+    "sha256": "8d9067a7cb4957e707fb69bcef334e9348e56e8627152343ca7ed824a7156a6c",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,447 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_5f4b7c93-b229-4841-abb8-da344f3875a1",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments at fair value (amortized cost of $ 3,065,359 and $ 2,774,726 , respectively)",
+        "",
+        "",
+        "3,088,987",
+        "",
+        "",
+        "",
+        "2,787,925",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+      "currency": "USD",
+      "fact_id": "F_5f4b7c93-b229-4841-abb8-da344f3875a1",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "3,088,987",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[7]/tr[8]",
+      "table_xpath": "/html/body/table[7]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3088987000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+        "decimals": "INF",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_dec1a3e0-b0a4-49d6-80fe-043878d43422",
+        "name": "tslx:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "tslx:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+      "currency": null,
+      "fact_id": "F_dec1a3e0-b0a4-49d6-80fe-043878d43422",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[59]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[21]",
+      "table_xpath": "/html/body/div[59]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+        "decimals": "INF",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_3d290c26-0ee8-46c9-8e01-f24d547859ac",
+        "name": "tslx:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "tslx:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+      "currency": null,
+      "fact_id": "F_3d290c26-0ee8-46c9-8e01-f24d547859ac",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[59]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[16]",
+      "table_xpath": "/html/body/div[59]/ix:nonnumeric/div[3]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_1f2d8492-edf5-4e33-aa62-2d2c048f1477",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments at fair value",
+        "",
+        "$",
+        "8,053",
+        "",
+        "",
+        "$",
+        "87,413",
+        "",
+        "",
+        "$",
+        "2,993,521",
+        "",
+        "",
+        "$",
+        "3,088,987",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+      "currency": "USD",
+      "fact_id": "F_1f2d8492-edf5-4e33-aa62-2d2c048f1477",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "3,088,987",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[9]",
+      "table_xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3088987000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_60d47d73-5875-463d-8ad4-7b36e31be431",
+        "name": "tslx:InvestmentsFairValueDisclosureNet",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "8,053",
+        "",
+        "",
+        "$",
+        "34,764",
+        "",
+        "",
+        "$",
+        "2,993,521",
+        "",
+        "",
+        "$",
+        "3,036,338",
+        ""
+      ],
+      "concept": "tslx:InvestmentsFairValueDisclosureNet",
+      "context_id": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+      "currency": "USD",
+      "fact_id": "F_60d47d73-5875-463d-8ad4-7b36e31be431",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "3,036,338",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[11]",
+      "table_xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "3036338000"
+    }
+  ],
+  "cik": "0001508655",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1508655/000095017023038066.html",
+  "reference_id": "REF-0001508655-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 229,
+  "source_sha256": "d49be98258d02000ff649f9d352d8bb80984a93ef662bef742f9babc33f45daa",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled, non-affiliated investments (amortized cost of $ 2,993,190 and $ 2,707,442 , respectively) | $ | 3,022,333 | $ | 2,717,170",
+        "Controlled, affiliated investments (amortized cost of $ 72,169 and $ 67,284 , respectively) | 66,654 | 70,755"
+      ],
+      "last": [
+        "Controlled, affiliated investments (amortized cost of $ 72,169 and $ 67,284 , respectively) | 66,654 | 70,755",
+        "Total investments at fair value (amortized cost of $ 3,065,359 and $ 2,774,726 , respectively) | 3,088,987 | 2,787,925"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, December 31,",
+        "2023 2022",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands, except share and per share amounts)",
+        "Consolidated Ba lance Sheets",
+        "Sixth Street Specialty Lending, Inc.",
+        "Item 1. Financi al Statements",
+        "PART I. FINANCI AL INFORMATION",
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[7]"
+    },
+    {
+      "contexts": 43,
+      "first": [
+        "Bestpass, Inc. (3)(5) | First-lien loan ($ 40,000 par, due 5/2029 ) | 5/26/2023 | SOFR + 5.75 % | 10.85 % | $ | 38,859 | $ | 39,000 | 2.7 %",
+        "Carlstar Group, LLC (3) | First-lien loan ($ 32,725 par, due 7/2027 ) | 7/8/2022 | SOFR + 6.60 % | 11.69 % | 31,966 | 32,622 | 2.2 %"
+      ],
+      "last": [
+        "Ibis Intermediate Co. (3)(5) | First-lien loan ($ 1,518 par, due 5/2027 ) | 5/28/2021 | L + 4.50 % | 9.98 % | 1,357 | 1,558 | 0.1 %",
+        "Ibis US Blocker Co. (3) | First-lien loan ($ 14,897 par, due 5/2028 ) | 5/28/2021 | L + 8.25 % | 13.73 % PIK | 14,666 | 14,748 | 1.0 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Debt Investments",
+        "Automotive"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands, except share amounts)",
+        "Consolidated Schedule of Inve stments as of June 30, 2023",
+        "Sixth Street Specialty Lending, Inc.",
+        "",
+        "",
+        "5"
+      ],
+      "rows": 43,
+      "table_xpath": "/html/body/table[9]"
+    },
+    {
+      "contexts": 48,
+      "first": [
+        "Jonas Collections and Recovery, Inc. (3)(5) | First-lien loan ($ 19,000 par, due 6/2026 ) | 6/21/2021 | SOFR + 5.40 % | 10.64 % | 18,745 | 19,000 | 1.3 %",
+        "Kyriba Corp. (3) | First-lien loan ($ 19,928 par, due 4/2025 ) | 4/9/2019 | L + 9.00 % | 14.21 % (incl. 9.00 % PIK) | 19,783 | 20,078 | 1.4 %"
+      ],
+      "last": [
+        "Lithium Technologies, LLC (3) | First-lien loan ($ 54,700 par, due 1/2024 ) | 10/3/2017 | SOFR + 8.00 % | 13.08 % | 54,675 | 53,469 | 3.7 %",
+        "First-lien revolving loan ($ 2,309 par, due 1/2024 ) | 10/3/2017 | SOFR + 8.00 % | 13.01 % | 2,312 | 2,235 | 0.2 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Jonas Collections and Recovery, Inc. (3)(5) First-lien loan ($ 19,000 par, due 6/2026 ) 6/21/2021 SOFR + 5.40 % 10.64 % 18,745 19,000 1.3 %",
+        "Kyriba Corp. (3) First-lien loan ($ 19,928 par, due 4/2025 ) 4/9/2019 L + 9.00 % 14.21 % (incl. 9.00 % PIK) 19,783 20,078 1.4 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "6",
+        "Holdings, Inc. (3) First-lien loan ($ 46,098 par, due 12/2028 ) 12/16/2022 SOFR + 8.00 % 13.22 % 44,865 45,407 3.1 % First-lien revolving loan ($ 1,687 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.36 % 1,555 1,614 0.1 % Bear OpCo, LLC (3)(5) First-lien loan ($ 20,774 par, due 10/2024 ) 10/10/2019 SOFR + 7.65 % 12.75 % 20,616 21,034 1.4 % BlueSnap, Inc. (3)(5) First-lien loan ($ 42,000 par, due 10/2024 ) 10/25/2019 SOFR + 7.15 % 12.39 % 41,738 42,222 2.9 % Ibis Intermediate Co. (3)(5) First-lien loan ($ 1,518 par, due 5/2027 ) 5/28/2021 L + 4.50 % 9.98 % 1,357 1,558 0.1 % Ibis US Blocker Co. (3) First-lien loan ($ 14,897 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.73 % PIK 14,666 14,748 1.0 %",
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands, except share amounts)",
+        "Consolidated Schedule of Inve stments as of June 30, 2023"
+      ],
+      "rows": 48,
+      "table_xpath": "/html/body/table[10]"
+    },
+    {
+      "contexts": 42,
+      "first": [
+        "Lucidworks, Inc. (3)(5) | First-lien loan ($ 8,619 par, due 2/2027 ) | 2/11/2022 | SOFR + 7.50 % | 12.60 % (incl. 3.50 % PIK) | 8,619 | 8,548 | 0.6 %",
+        "Piano Software, Inc. (3)(5) | First-lien loan ($ 51,218 par, due 2/2026 ) | 2/25/2021 | SOFR + 7.10 % | 12.20 % | 50,483 | 50,450 | 3.4 %"
+      ],
+      "last": [
+        "AvidXchange, Inc. (10)(11) | Common Shares ( 150,541 shares) | 10/15/2021 | 767 | 1,563 | 0.1 %",
+        "Newport Parent Holdings, LP (11) | Class A-2 Units ( 131,569 units) | 12/10/2020 | 4,177 | 6,600 | 0.4 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Lucidworks, Inc. (3)(5) First-lien loan ($ 8,619 par, due 2/2027 ) 2/11/2022 SOFR + 7.50 % 12.60 % (incl. 3.50 % PIK) 8,619 8,548 0.6 %",
+        "Piano Software, Inc. (3)(5) First-lien loan ($ 51,218 par, due 2/2026 ) 2/25/2021 SOFR + 7.10 % 12.20 % 50,483 50,450 3.4 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "7",
+        "c. (3)(5) First-lien loan ($ 59,801 par, due 6/2028 ) 6/17/2022 SOFR + 6.00 % 11.09 % 58,682 59,202 4.1 % EDB Parent, LLC (3)(5) First-lien loan ($ 60,234 par, due 7/2028 ) 7/7/2022 SOFR + 6.75 % 11.99 % 58,950 59,481 4.1 % Higher Logic, LLC (3)(5) First-lien loan ($ 54,379 par, due 1/2025 ) 6/18/2018 SOFR + 6.75 % 11.99 % 54,145 54,515 3.7 % LeanTaaS Holdings, Inc. (3)(5) First-lien loan ($ 33,924 par, due 7/2028 ) 7/12/2022 SOFR + 7.50 % 12.74 % 33,079 33,361 2.3 % Lithium Technologies, LLC (3) First-lien loan ($ 54,700 par, due 1/2024 ) 10/3/2017 SOFR + 8.00 % 13.08 % 54,675 53,469 3.7 % First-lien revolving loan ($ 2,309 par, due 1/2024 ) 10/3/2017 SOFR + 8.00 % 13.01 % 2,312 2,235 0.2 %",
+        "",
+        "",
+        "6",
+        "Holdings, Inc. (3) First-lien loan ($ 46,098 par, due 12/2028 ) 12/16/2022 SOFR + 8.00 % 13.22 % 44,865 45,407 3.1 % First-lien revolving loan ($ 1,687 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.36 % 1,555 1,614 0.1 % Bear OpCo, LLC (3)(5) First-lien loan ($ 20,774 par, due 10/2024 ) 10/10/2019 SOFR + 7.65 % 12.75 % 20,616 21,034 1.4 % BlueSnap, Inc. (3)(5) First-lien loan ($ 42,000 par, due 10/2024 ) 10/25/2019 SOFR + 7.15 % 12.39 % 41,738 42,222 2.9 % Ibis Intermediate Co. (3)(5) First-lien loan ($ 1,518 par, due 5/2027 ) 5/28/2021 L + 4.50 % 9.98 % 1,357 1,558 0.1 % Ibis US Blocker Co. (3) First-lien loan ($ 14,897 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.73 % PIK 14,666 14,748 1.0 %"
+      ],
+      "rows": 42,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 49,
+      "first": [
+        "Oxford Square Capital Corp. (4)(10) | Common Shares ( 1,620 shares) | 8/5/2015 | 6 | 4 | 0.0 %",
+        "Passport Labs, Inc. (11) | 17,534 Warrants | 4/28/2021 | 192 | 8 | 0.0 %"
+      ],
+      "last": [
+        "Ares Loan Funding I Ltd, Series 2021-ALFA, Class E (3)(4)(9) | Structured Product ($ 1,000 par, due 10/2034 ) | 6/24/2022 | L + 6.70 % | 11.96 % | 931 | 915 | 0.1 %",
+        "Bain Capital Credit CLO Ltd, Series 2018-1A (3)(4)(9) | Structured Product ($ 500 par, due 4/2031 ) | 10/15/2020 | L + 5.35 % | 10.62 % | 426 | 398 | 0.0 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Oxford Square Capital Corp. (4)(10) Common Shares ( 1,620 shares) 8/5/2015 6 4 0.0 %",
+        "Passport Labs, Inc. (11) 17,534 Warrants 4/28/2021 192 8 0.0 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "8",
+        "res) 4/8/2021 1,816 2,021 0.1 % Series D Preferred Shares ( 1,598,874 shares) 4/8/2021 2,925 2,165 0.1 % 280,000 Warrants 2/28/2020 183 \u2014 0.0 % 106,592 Warrants 4/8/2021 \u2014 \u2014 0.0 % 6,174 5,436 0.3 % Education Astra 2L Holdings II LLC (11) Membership Interest ( 10.17 % ownership) 1/13/2022 3,255 610 0.0 % EMS Linq, Inc. (11) Class B Units ( 5,522,526 units) 12/22/2021 5,523 4,763 0.3 % RMCF IV CIV XXXV, LP. (11) Partnership Interest ( 11.94 % ownership) 6/8/2021 1,000 1,330 0.1 % 9,778 6,703 0.4 % Financial Services AvidXchange, Inc. (10)(11) Common Shares ( 150,541 shares) 10/15/2021 767 1,563 0.1 % Newport Parent Holdings, LP (11) Class A-2 Units ( 131,569 units) 12/10/2020 4,177 6,600 0.4 %",
+        "",
+        "",
+        "7",
+        "c. (3)(5) First-lien loan ($ 59,801 par, due 6/2028 ) 6/17/2022 SOFR + 6.00 % 11.09 % 58,682 59,202 4.1 % EDB Parent, LLC (3)(5) First-lien loan ($ 60,234 par, due 7/2028 ) 7/7/2022 SOFR + 6.75 % 11.99 % 58,950 59,481 4.1 % Higher Logic, LLC (3)(5) First-lien loan ($ 54,379 par, due 1/2025 ) 6/18/2018 SOFR + 6.75 % 11.99 % 54,145 54,515 3.7 % LeanTaaS Holdings, Inc. (3)(5) First-lien loan ($ 33,924 par, due 7/2028 ) 7/12/2022 SOFR + 7.50 % 12.74 % 33,079 33,361 2.3 % Lithium Technologies, LLC (3) First-lien loan ($ 54,700 par, due 1/2024 ) 10/3/2017 SOFR + 8.00 % 13.08 % 54,675 53,469 3.7 % First-lien revolving loan ($ 2,309 par, due 1/2024 ) 10/3/2017 SOFR + 8.00 % 13.01 % 2,312 2,235 0.2 %"
+      ],
+      "rows": 49,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "Battalion CLO Ltd, Series 2021-21A (3)(4)(9) | Structured Product ($ 1,300 par, due 7/2034 ) | 7/13/2022 | L + 3.30 % | 8.56 % | 1,162 | 1,145 | 0.1 %",
+        "Benefit Street Partners CLO Ltd, Series 2015-BR (3)(4)(9) | Structured Product ($ 2,500 par, due 7/2024 ) | 7/13/2022 | L + 3.85 % | 9.10 % | 2,187 | 2,328 | 0.2 %"
+      ],
+      "last": [
+        "Wind River CLO Ltd, Series 2014-2A (3)(4)(9) | Structured Product ($ 1,500 par, due 1/2031 ) | 6/23/2022 | L + 2.90 % | 8.16 % | 1,385 | 1,295 | 0.1 %",
+        "Wind River CLO Ltd, Series 2017-1A (3)(4)(9) | Structured Product ($ 3,000 par, due 4/2036 ) | 7/14/2022 | L + 3.72 % | 8.98 % | 2,626 | 2,732 | 0.2 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Battalion CLO Ltd, Series 2021-21A (3)(4)(9) Structured Product ($ 1,300 par, due 7/2034 ) 7/13/2022 L + 3.30 % 8.56 % 1,162 1,145 0.1 %",
+        "Benefit Street Partners CLO Ltd, Series 2015-BR (3)(4)(9) Structured Product ($ 2,500 par, due 7/2024 ) 7/13/2022 L + 3.85 % 9.10 % 2,187 2,328 0.2 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "9",
+        "O Ltd, Series 2018-1A, (3)(4)(9) Structured Product ($ 1,000 par, due 6/2031 ) 5/26/2022 L + 2.85 % 8.11 % 959 900 0.1 % American Money Management Corp CLO Ltd, Series 2016-18A (3)(4)(9) Structured Product ($ 1,500 par, due 5/2031 ) 6/22/2022 L + 3.05 % 8.47 % 1,353 1,351 0.1 % Ares CLO Ltd, Series 2021-59A (3)(4)(9) Structured Product ($ 1,000 par, due 4/2034 ) 6/23/2022 L + 6.25 % 11.51 % 896 890 0.1 % Ares Loan Funding I Ltd, Series 2021-ALFA, Class E (3)(4)(9) Structured Product ($ 1,000 par, due 10/2034 ) 6/24/2022 L + 6.70 % 11.96 % 931 915 0.1 % Bain Capital Credit CLO Ltd, Series 2018-1A (3)(4)(9) Structured Product ($ 500 par, due 4/2031 ) 10/15/2020 L + 5.35 % 10.62 % 426 398 0.0 %",
+        "",
+        "",
+        "8",
+        "res) 4/8/2021 1,816 2,021 0.1 % Series D Preferred Shares ( 1,598,874 shares) 4/8/2021 2,925 2,165 0.1 % 280,000 Warrants 2/28/2020 183 \u2014 0.0 % 106,592 Warrants 4/8/2021 \u2014 \u2014 0.0 % 6,174 5,436 0.3 % Education Astra 2L Holdings II LLC (11) Membership Interest ( 10.17 % ownership) 1/13/2022 3,255 610 0.0 % EMS Linq, Inc. (11) Class B Units ( 5,522,526 units) 12/22/2021 5,523 4,763 0.3 % RMCF IV CIV XXXV, LP. (11) Partnership Interest ( 11.94 % ownership) 6/8/2021 1,000 1,330 0.1 % 9,778 6,703 0.4 % Financial Services AvidXchange, Inc. (10)(11) Common Shares ( 150,541 shares) 10/15/2021 767 1,563 0.1 % Newport Parent Holdings, LP (11) Class A-2 Units ( 131,569 units) 12/10/2020 4,177 6,600 0.4 %"
+      ],
+      "rows": 38,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Wind River CLO Ltd, Series 2018-3A (3)(4)(9) | Structured Product ($ 2,000 par, due 1/2031 ) | 12/12/2022 | L + 5.65 % | 10.90 % | 1,704 | 1,679 | 0.1 %",
+        "54,956 | 54,183 | 4.8 %"
+      ],
+      "last": [
+        "Total Equity and Other Investments | 196,601 | 208,890 | 15.0 %",
+        "Total Investments | $ | 3,065,359 | $ | 3,088,987 | 211.5 %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets",
+        "Wind River CLO Ltd, Series 2018-3A (3)(4)(9) Structured Product ($ 2,000 par, due 1/2031 ) 12/12/2022 L + 5.65 % 10.90 % 1,704 1,679 0.1 %",
+        "54,956 54,183 4.8 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "10",
+        "1.50 % 930 877 0.1 % Stewart Park CLO Ltd, Series 2015-1A (3)(4)(9) Structured Product ($ 1,000 par, due 1/2030 ) 7/25/2022 L + 2.60 % 7.86 % 916 889 0.1 % Voya CLO Ltd, Series 2018-3A (3)(4)(9) Structured Product ($ 2,750 par, due 10/2031 ) 6/22/2022 L + 5.75 % 11.01 % 2,406 2,221 0.2 % Whitebox CLO I Ltd, Series 2020-2A (3)(4)(9) Structured Product ($ 1,125 par, due 10/2034 ) 7/12/2022 L + 3.35 % 8.62 % 1,010 1,077 0.1 % Wind River CLO Ltd, Series 2014-2A (3)(4)(9) Structured Product ($ 1,500 par, due 1/2031 ) 6/23/2022 L + 2.90 % 8.16 % 1,385 1,295 0.1 % Wind River CLO Ltd, Series 2017-1A (3)(4)(9) Structured Product ($ 3,000 par, due 4/2036 ) 7/14/2022 L + 3.72 % 8.98 % 2,626 2,732 0.2 %",
+        "",
+        "",
+        "9",
+        "O Ltd, Series 2018-1A, (3)(4)(9) Structured Product ($ 1,000 par, due 6/2031 ) 5/26/2022 L + 2.85 % 8.11 % 959 900 0.1 % American Money Management Corp CLO Ltd, Series 2016-18A (3)(4)(9) Structured Product ($ 1,500 par, due 5/2031 ) 6/22/2022 L + 3.05 % 8.47 % 1,353 1,351 0.1 % Ares CLO Ltd, Series 2021-59A (3)(4)(9) Structured Product ($ 1,000 par, due 4/2034 ) 6/23/2022 L + 6.25 % 11.51 % 896 890 0.1 % Ares Loan Funding I Ltd, Series 2021-ALFA, Class E (3)(4)(9) Structured Product ($ 1,000 par, due 10/2034 ) 6/24/2022 L + 6.70 % 11.96 % 931 915 0.1 % Bain Capital Credit CLO Ltd, Series 2018-1A (3)(4)(9) Structured Product ($ 500 par, due 4/2031 ) 10/15/2020 L + 5.35 % 10.62 % 426 398 0.0 %"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "IRGSE Holding Corp. | $ | 70,755 | $ | 4,886 | $ | \u2014 | $ | ( 8,987 | ) | $ | \u2014 | $ | \u2014 | $ | 66,654 | $ | 2 | $ | 3,570",
+        "Total | $ | 70,755 | $ | 4,886 | $ | \u2014 | $ | ( 8,987 | ) | $ | \u2014 | $ | \u2014 | $ | 66,654 | $ | 2 | $ | 3,570"
+      ],
+      "last": [
+        "IRGSE Holding Corp. | $ | 70,755 | $ | 4,886 | $ | \u2014 | $ | ( 8,987 | ) | $ | \u2014 | $ | \u2014 | $ | 66,654 | $ | 2 | $ | 3,570",
+        "Total | $ | 70,755 | $ | 4,886 | $ | \u2014 | $ | ( 8,987 | ) | $ | \u2014 | $ | \u2014 | $ | 66,654 | $ | 2 | $ | 3,570"
+      ],
+      "opening_rows": [
+        "",
+        "Company Fair Value at December 31, 2022 Gross Additions (a) Gross Reductions (b) Net Change In Unrealized Gain/(Loss) Realized Gain/(Loss) Transfers Fair Value at June 30, 2023 Other Income Interest Income",
+        "IRGSE Holding Corp. $ 70,755 $ 4,886 $ \u2014 $ ( 8,987 ) $ \u2014 $ \u2014 $ 66,654 $ 2 $ 3,570",
+        "Total $ 70,755 $ 4,886 $ \u2014 $ ( 8,987 ) $ \u2014 $ \u2014 $ 66,654 $ 2 $ 3,570"
+      ],
+      "preceding": [
+        "",
+        "Controlled, Affiliated Investments during the six months ended June 30, 2023",
+        "(6) Under the 1940 Act, the Company is deemed to be both an \u201cAffiliated Person\u201d of and \u201cControl,\u201d as such terms are defined in the 1940 Act, this portfolio company, as the Company owns more than 25 % of the portfolio company\u2019s outstanding voting securities or has the power to exercise control over management or policies of such portfolio company (including through a management agreement). Transactions during the six months ended June 30, 2023 in which the Company was an Affiliated Person of and was deemed to Control a portfolio company are as follows:",
+        "(5) In addition to the interest earned based on the stated interest rate of this investment, which is the amount reflected in this schedule, the Company may be entitled to receive additional interest as a result of an arrangement with other members in the syndicate to the extent an investment has been allocated to \u201cfirst out\u201d and \u201clast out\u201d tranches, whereby the \u201cfirst out\u201d tranche will have priority as to the \u201clast out\u201d tranche with respect to payments of principal, interest and any amounts due thereunder and the Company holds the \u201clast out\u201d tranche.",
+        "",
+        "",
+        "12",
+        "(4) This portfolio company is not a qualifying asset under Section 55(a) of the Investment Company Act of 1940, as amended (the \u201c1940 Act\u201d). Under the 1940 Act, the Company may not acquire any non-qualifying asset unless, at the time such acquisition is made, qualifying assets represent at least 70 % of total assets. Non-qualifying assets represented 10.0 % of total assets as of June 30, 2023 ."
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[16]"
+    }
+  ]
+}

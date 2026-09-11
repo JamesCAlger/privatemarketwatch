@@ -1,0 +1,32 @@
+{
+  "identity_columns_allowed": [
+    "position_id",
+    "entity_id",
+    "canonical_name"
+  ],
+  "non_identity_row_differences": 0,
+  "pik_parent_comparison": "Exact CSV tokens for position_id, cik, source, fair_value and report_date, joined by unique zero-based ordinal of the consumed CSV.",
+  "pik_parent_mismatches": 0,
+  "pik_status_rows": 780425,
+  "pik_typed_companion": {
+    "path": "data\\programme\\candidates\\spec-close-20260909-v2\\attempts\\evidence-01\\workspace\\data\\output\\position_pik_status.parquet",
+    "sha256": "8c0f030b2c5c19b450fb639b94252e4f42339003bc1af5b26d7c93c4a59b9019"
+  },
+  "production_eligible": false,
+  "quality": "FAIL_WITH_UNASSESSED_ITEMS",
+  "role": "Preparation candidate composition. No release adoption, target-schema migration or complete product acceptance.",
+  "stages": {
+    "evidence-01": {
+      "input_fingerprint": "7ab2787170d1290233dab8e322ad30bf4219d4b2366e4bb60c09f484d542fef6",
+      "result_sha256": "652ad56ac308453877db8d1712ca7f8010d5088b50a43a7206bd132d7871dfc2"
+    },
+    "identity-02": {
+      "input_fingerprint": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "result_sha256": "a111eafc4535a7ac81aabfa05608c40793facc742a2350dae53d10172be497fb"
+    },
+    "unified-01": {
+      "input_fingerprint": "af04481434101284336a11a57ec8a5ad9c04c16cc703ffb103bdea0e9fe1645f",
+      "result_sha256": "c350c650e1aee8cda8d1b2d8444708c4fc341024cabb29008a05d6790159a825"
+    }
+  }
+}

@@ -1,0 +1,519 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1634452",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001634452-2025-06-30.json",
+    "evidence_sha256": "9d7ef723ebfbe58818f370000521bc12fb948ffcc91112d68d84eb2baa971c92",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001634452-2025-06-30",
+    "report_date": "2025-06-30",
+    "review_note": "Separate unfunded schedules repeat facilities with different measures; do not double count.",
+    "saved_candidate_rows": "559",
+    "source_candidate_rows": "823"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1634452/000095017025108839.html",
+    "ref": "REF-0001634452-2025-06-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of June 30, 2025 (Unaudited) As of December 31, 2024 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively) $ 1,735,063,931 $ 1,629,513,317",
+        "preceding": [
+          "",
+          "Consolidated Statements of Assets and Liabilities",
+          "AB Private Credit Investors Corporation",
+          "Item 1. C onsolidated Fina ncial Statements",
+          "",
+          "",
+          "2",
+          " Financial Condition and Results of Operations 73 Item 3. Quantitative and Qualitative Disclosures About Market Risk 91 Item 4. Controls and Procedures 92 PART II. OTHER INFORMATION 93 Item 1. Legal Proceedings 93 Item 1A. Risk Factors 93 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 93 Item 3. Defaults Upon Senior Securities 93 Item 4. Mine Safety Disclosures 93 Item 5. Other Information 93 Item 6. Exhibits 94 SIGNATURES 95",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[4]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively)",
+          "",
+          "$",
+          "1,735,063,931",
+          "",
+          "",
+          "$",
+          "1,629,513,317",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_d47fdb34-fcb5-44be-90c2-d374d68a0cfd",
+            "scale": null,
+            "text": "1,746,674,546",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_9f01007d-e966-4cee-a0e2-51812047d8e3",
+            "scale": null,
+            "text": "1,634,572,997",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_d47fdb34-fcb5-44be-90c2-d374d68a0cfd",
+            "scale": null,
+            "text": "1,735,063,931",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_9f01007d-e966-4cee-a0e2-51812047d8e3",
+            "scale": null,
+            "text": "1,629,513,317",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | As of June 30, 2025 (Unaudited) As of December 31, 2024 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively) $ 1,735,063,931 $ 1,629,513,317",
+        "preceding": [
+          "",
+          "Consolidated Statements of Assets and Liabilities",
+          "AB Private Credit Investors Corporation",
+          "Item 1. C onsolidated Fina ncial Statements",
+          "",
+          "",
+          "2",
+          " Financial Condition and Results of Operations 73 Item 3. Quantitative and Qualitative Disclosures About Market Risk 91 Item 4. Controls and Procedures 92 PART II. OTHER INFORMATION 93 Item 1. Legal Proceedings 93 Item 1A. Risk Factors 93 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 93 Item 3. Defaults Upon Senior Securities 93 Item 4. Mine Safety Disclosures 93 Item 5. Other Information 93 Item 6. Exhibits 94 SIGNATURES 95",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled affiliated investments (amortized cost of $ 2,058,203 and $ 2,024,756 , respectively)",
+          "",
+          "",
+          "830,075",
+          "",
+          "",
+          "",
+          "835,988",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_7dc4de8e-7b6f-480b-8a19-7e0c30a10691",
+            "scale": null,
+            "text": "2,058,203",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_db1d139d-a673-46d8-8881-f6f1490168cf",
+            "scale": null,
+            "text": "2,024,756",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_7dc4de8e-7b6f-480b-8a19-7e0c30a10691",
+            "scale": null,
+            "text": "830,075",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_db1d139d-a673-46d8-8881-f6f1490168cf",
+            "scale": null,
+            "text": "835,988",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | As of June 30, 2025 (Unaudited) As of December 31, 2024 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively) $ 1,735,063,931 $ 1,629,513,317",
+        "preceding": [
+          "",
+          "Consolidated Statements of Assets and Liabilities",
+          "AB Private Credit Investors Corporation",
+          "Item 1. C onsolidated Fina ncial Statements",
+          "",
+          "",
+          "2",
+          " Financial Condition and Results of Operations 73 Item 3. Quantitative and Qualitative Disclosures About Market Risk 91 Item 4. Controls and Procedures 92 PART II. OTHER INFORMATION 93 Item 1. Legal Proceedings 93 Item 1A. Risk Factors 93 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 93 Item 3. Defaults Upon Senior Securities 93 Item 4. Mine Safety Disclosures 93 Item 5. Other Information 93 Item 6. Exhibits 94 SIGNATURES 95",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments, at fair value (amortized cost of $ 1,748,732,749 and $ 1,636,597,753 , respectively)",
+          "",
+          "",
+          "1,735,894,006",
+          "",
+          "",
+          "",
+          "1,630,349,305",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+            "scale": null,
+            "text": "1,748,732,749",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_92cd66e1-b9a3-4e32-af63-3e3720bc6dbc",
+            "scale": null,
+            "text": "1,636,597,753",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+            "scale": null,
+            "text": "1,735,894,006",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_92cd66e1-b9a3-4e32-af63-3e3720bc6dbc",
+            "scale": null,
+            "text": "1,630,349,305",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | As of June 30, 2025 (Unaudited) As of December 31, 2024 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively) $ 1,735,063,931 $ 1,629,513,317",
+        "preceding": [
+          "",
+          "Consolidated Statements of Assets and Liabilities",
+          "AB Private Credit Investors Corporation",
+          "Item 1. C onsolidated Fina ncial Statements",
+          "",
+          "",
+          "2",
+          " Financial Condition and Results of Operations 73 Item 3. Quantitative and Qualitative Disclosures About Market Risk 91 Item 4. Controls and Procedures 92 PART II. OTHER INFORMATION 93 Item 1. Legal Proceedings 93 Item 1A. Risk Factors 93 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 93 Item 3. Defaults Upon Senior Securities 93 Item 4. Mine Safety Disclosures 93 Item 5. Other Information 93 Item 6. Exhibits 94 SIGNATURES 95",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "",
+          "44,116,612",
+          "",
+          "",
+          "",
+          "42,834,856",
+          "",
+          "",
+          "",
+          "88,758,590",
+          "",
+          "",
+          "",
+          "84,080,069",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_59122517-2f27-456c-ba57-404c84f596a0",
+            "scale": null,
+            "text": "44,116,612",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_16f0b1e4-faf2-4dbd-94b7-0e3920724920",
+            "scale": null,
+            "text": "42,834,856",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_8f96bcc3-7e9a-4c64-a5e5-b83063b86f1b",
+            "scale": null,
+            "text": "88,758,590",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_b38c8a78-946b-4e7e-9273-fe4f0c717187",
+            "scale": null,
+            "text": "84,080,069",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the three months ended June 30, For the six months ended June 30, | Investment Income 2025 2024 2025 2024 | From non-controlled/non-affiliated investments: | Interest income, net of amortization/accretion $ 41,823,014 $ 40,513,701 $ 85,223,564 $ 80,113,933",
+        "preceding": [
+          "",
+          "Unaudited Consolidated Statements of Operations",
+          "AB Private Credit Investors Corporation",
+          "",
+          "",
+          "3",
+          "ted loss) ( 9,040,582 ) ( 5,878,938 ) Total net assets of AB Private Credit Investors Corporation $ 649,651,677 $ 606,989,131 Non-Controlling Interest in ABPCIC Equity Holdings, LLC $ 71,965 $ 62,414 Total net assets $ 649,723,642 $ 607,051,545 Total liabilities and net assets $ 1,807,379,145 $ 1,693,995,225 Net asset value per share of AB Private Credit Investors Corporation $ 9.49 $ 9.53 See notes to unaudited consolidated financial statements.",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[12]/table/tr[8]"
+      },
+      {
+        "cells": [
+          "Investments at Fair Value \u2014 267.17 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "(1)(2)(3)(4)(12)"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_360e26a8-0451-4b6c-a99b-11710392bf53",
+            "scale": "-2",
+            "text": "267.17",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks | Investments at Fair Value \u2014 267.17 % (1)(2)(3)(4)(12) | U.S. Corporate Debt \u2014 252.42 % | 1st Lien/Senior Secured Debt \u2014 251.99 %",
+        "preceding": [
+          "",
+          "AB Private Credit Investors Corporation Unaudited Consolidated Schedule of Investments as of June 30, 2025",
+          "",
+          "7",
+          " ( 5,248,612 ) Cash and cash equivalents, beginning of period 52,178,854 72,671,928 Cash and cash equivalents, end of period 59,574,982 67,423,316 Supplemental and non-cash financing activities Cash paid during the period for interest $ 36,414,261 $ 35,953,776 Issuance of common shares pursuant to distribution reinvestment plan $ 15,178,941 $ 13,880,864 State taxes paid $ 396,618 $ 277,659 See notes to unaudited consolidated financial statements.",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[24]/table/tr[3]"
+      },
+      {
+        "cells": [
+          "Total Investments \u2014 ( 267.17 %)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "1,748,732,749",
+          "",
+          "",
+          "$",
+          "1,735,894,006",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_d47fdb34-fcb5-44be-90c2-d374d68a0cfd",
+            "scale": "-2",
+            "text": "267.17",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+            "scale": null,
+            "text": "1,748,732,749",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+            "scale": null,
+            "text": "1,735,894,006",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Portfolio Company Class/Series Industry Shares Cost Fair value Tickmark | U.S. Investment Companies \u2014 4.13 % (18) | AB EQUITY INVESTORS, L.P. LP Interests Investment Companies 16,220,474 16,220,474 19,570,613 (8)(11) | Falcon Co-Investment Partners, L.P. Units Healthcare 849,577 849,577 850,426 (8)(11)",
+        "preceding": [
+          "",
+          "ts Software & Tech Services 3/18/2021 35,156 58,190 115,388 Total U.S. Warrants 225,605 1,646,302 United Kingdom Warrants \u2014 0.04 % (18) Global WebIndex Holdings Limited Warrants Software & Tech Services 12/30/2020 11,776 159,859 291,084 Total United Kingdom Warrants 159,859 291,084 France Warrants \u2014 0.00 % (18) Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total France Warrants 8,561 -",
+          "",
+          "AB Private Credit Investors Corporation Unaudited Consolidated Schedule of Investments as of June 30, 2025",
+          "",
+          "See notes to Unaudited Consolidated Financial Statements 21",
+          " Holdings, LLC Class A Voting Units Healthcare 5/12/2023 21 \u2014 \u2014 (5) SBS Super Holdings, LLC Class B Non-Voting Units Healthcare 5/12/2023 100 10 \u2014 (5) Singularity Topco LLC Common Units Software & Tech Services 9/30/2022 337,841 953,133 537,607 Stripe, Inc. Class B Common Stock Software & Tech Services 5/17/2021 4,158 166,854 147,339 Swyft Parent Holdings LP Common Units Services 2/7/2022 4,485 53,048 \u2014 Total U.S. Common Stock 7,987,957 8,785,008",
+          "AB Private Credit Investors Corporation Unaudited Consolidated Schedule of Investments as of June 30, 2025",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[66]/table[2]/tr[23]"
+      },
+      {
+        "cells": [
+          "Investments at Fair Value 268.57 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "(1)(2)(3)(4)"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_9f01007d-e966-4cee-a0e2-51812047d8e3",
+            "scale": "-2",
+            "text": "268.57",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks | Investments at Fair Value 268.57 % (1)(2)(3)(4) | US Corporate Debt 255.48 % | 1st Lien/Senior Secured Debt 255.01 %",
+        "preceding": [
+          "",
+          "AB Private Credit Investors Corporation Consolidated Schedule of Investments as of December 31, 2024",
+          "",
+          "See notes to Unaudited Consolidated Financial Statements 24",
+          "(17) Categorized as Level 2 assets under the definition of ASC 820 fair value hierarchy. (18) Non-income producing investment. P - Prime PIK - Payment-In-Kind S - SOFR",
+          "AB Private Credit Investors Corporation Unaudited Consolidated Schedule of Investments as of June 30, 2025",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[75]/table/tr[3]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "1,636,597,753",
+          "",
+          "",
+          "",
+          "1,630,349,305",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_92cd66e1-b9a3-4e32-af63-3e3720bc6dbc",
+            "scale": null,
+            "text": "1,636,597,753",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_92cd66e1-b9a3-4e32-af63-3e3720bc6dbc",
+            "scale": null,
+            "text": "1,630,349,305",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Portfolio Company Class/Series Industry Initial Acquisition Date (10) Shares Cost Fair Value Tickmarks | U.S. Warrants 0.23 % (18) | Alphasense, LLC Series B Warrants Software & Tech Services 6/2/2020 40,394 35,185 1,073,591 (8) | Degreed, Inc. Series C-1 Warrants Software & Tech Services 5/31/2019 26,294 46,823 38,580",
+        "preceding": [
+          "AB Private Credit Investors Corporation Consolidated Schedule of Investments as of December 31, 2024",
+          "",
+          "See notes to Unaudited Consolidated Financial Statements 38",
+          "ices 1/22/2021 102,108 271,128 756,921 Total U.S. Common Stock 7,667,275 9,914,391 France Common Stock 0.07 % Content Square SAS Ordinary Shares Software & Tech Services 11/30/2023 75,889 416,757 416,758 (8) Total France Common Stock 416,757 416,758 Luxembourg Common Stock 0.13 % Astorg VIII Co-Invest Acturis Limited Partnership Interests Software & Tech Services 10/18/2024 770,000 843,179 796,988 (8) Total Luxembourg Common Stock 843,179 796,988",
+          "AB Private Credit Investors Corporation Consolidated Schedule of Investments as of December 31, 2024",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[117]/table/tr[37]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "44,116,612",
+          "",
+          "",
+          "$",
+          "42,834,856",
+          "",
+          "",
+          "$",
+          "88,758,590",
+          "",
+          "",
+          "$",
+          "84,080,069",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the three months ended June 30, For the six months ended June 30, | 2025 2024 2025 2024 | Total investment income $ 44,116,612 $ 42,834,856 $ 88,758,590 $ 84,080,069 | Total expenses 30,183,546 29,741,774 60,672,180 57,932,391",
+        "preceding": [
+          "",
+          "The following is a summary of the Fund\u2019s operating results for the three and six months ended June 30, 2025 and June 30, 2024:",
+          "Results of Operations",
+          "",
+          "",
+          "78",
+          "t with portfolio company management and, if appropriate, the financial or strategic sponsor to discuss financial position, requirements and accomplishments; \u2022 comparisons to the Fund\u2019s other portfolio companies in the industry, if any; \u2022 attendance at and participation in board meetings or presentations by portfolio companies; and \u2022 review of monthly and quarterly consolidated financial statements and financial projections of portfolio companies.",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[237]/table/tr[4]"
+      }
+    ],
+    "sha256": "5bde956f6e71dfed0e47f90d45abb5b803358de6c3743c50b4c31c78ba289c86",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

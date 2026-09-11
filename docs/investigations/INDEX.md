@@ -23,6 +23,16 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - Data quality root-cause audit - 2026-05-18
 - Universe gating residuals - 2026-05-18
 - 2026-06-15 - bdc_fund_highlights balance-sheet fields broadly unreliable
+- 2026-09-08 - Unified holdings schema and financial-contract crosswalk
+- 2026-09-08 - Schema availability and preferred representations
+- 2026-09-08 - Current unified holdings accuracy versus verification coverage
+- 2026-09-09 - Historical XBRL coverage for programme scope
+- 2026-09-09: Programme current-state and architecture assessment
+- 2026-09-09: Programme contract conflicts traced and saved-artifact baselines prepared
+- 2026-09-09: Programme historical eligibility and independent reference preparation
+- 2026-09-09: Programme pilot distinguishes candidate errors from reference errors
+- 2026-09-09: Programme preparation closeout and synchronized candidate
+- 2026-09-10: Why programme verification failed and ran slowly
 
 ## Source reconciliation & blocker chains ([source_reconciliation.md](source_reconciliation.md))
 - BDC source reconciliation blockers - 2026-05-19
@@ -64,6 +74,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-06-16 - "15 leaked category headers" RESOLVED: MidCap flattened-identifier issuer mis-parse (not subtotal leaks)
 - 2026-06-16 - Strong-anchor blind-spot profile: broad, skews pre-XBRL/N-PORT; published cohort 25.7%
 - 2026-06-16 - BDC cross-target anchor coverage: CUSIP zero, N-PORT issuer coupled to paused entity resolution
+- 2026-09-08 - fv_conservation false-positive re-measure on the published basis (Plan 2 rollout)
 
 ## Identifier & rate semantics (Agent A) ([identifier_rate_semantics.md](identifier_rate_semantics.md))
 - 2026-06-19 - Structured-XBRL-twin coverage for freeform investment_identifier (Agent A anchor budget)

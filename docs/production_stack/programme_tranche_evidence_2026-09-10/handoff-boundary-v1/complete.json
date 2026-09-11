@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    {
+      "bytes": 706,
+      "path": "full_byte_semantic_attempt.json",
+      "sha256": "c6ced64f53b41c7d4674c16f6fa8abcb60d08a4cdb01f6821d6cae435f406776"
+    },
+    {
+      "bytes": 7168,
+      "path": "preservation.json",
+      "sha256": "dc0b710e317412fc059a1f26cd16f9b8d2636d266e305961a8c45c3e89169e42"
+    },
+    {
+      "bytes": 13411,
+      "path": "semantic_diff_report.json",
+      "sha256": "3fddbb2b3ec049249979fb9715689c8f114c995e1cd35aa439325bde08750d80"
+    },
+    {
+      "bytes": 717,
+      "path": "semantic_result.json",
+      "sha256": "138faa4716d1514ace19ece866a51d713ee5726a741cda77a9479a359727f6aa"
+    },
+    {
+      "bytes": 6863,
+      "path": "stage_records.json",
+      "sha256": "18327aecdb7081d0cd13c49efa9dacc1d9d19457d451715722d53c027fd9cedb"
+    },
+    {
+      "bytes": 18484,
+      "path": "verification.json",
+      "sha256": "6647b3619bd3fe6847a36509bf4395cacf4cb343d0ef785a794698e4c08c3751"
+    }
+  ],
+  "code": {
+    "bytes": 12151,
+    "path": "scripts/programme_tranche/record_boundary_handoff.py",
+    "sha256": "e365933a22897e428aa6bbf00f80983d74a84a546dfbdf4456411ced5b94442f"
+  },
+  "evaluation": {
+    "bytes": 888,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/evaluation-boundary-v1/evaluation_manifest.json",
+    "sha256": "cbb1b6a5094349a3f8103b218f22c56df78b60ac848f8a02c4dde6e2fabdd20a"
+  },
+  "status": "stopped_handoff_recorded; engineering incomplete"
+}

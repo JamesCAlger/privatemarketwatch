@@ -1,0 +1,112 @@
+{
+  "case": 12,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001838126|2025-12-31|ULTRA III, LLC - LLC Interest",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "UNCLASSIFIED",
+      "cik": "0001838126",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001838126|2025-12-31|ULTRA III, LLC - LLC Interest",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "PRIVATE_CREDIT_FUND",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-1a146b316b9732d3",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001838126|2025-12-31|ULTRA III, LLC - LLC Interest",
+    "accession": "0001628280-26-020206",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001838126",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "12afab7",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "ULTRA III, LLC - LLC Interest",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html",
+      "note": "Credit fund classification comes from JV nature of the entity"
+    },
+    "stratum": "tail_census",
+    "true_classification": "PRIVATE_CREDIT_FUND",
+    "true_cost": 402400000.0,
+    "true_fair_value": 416244000.0,
+    "true_lien": null,
+    "unit_uid": "ultra iii llc llc interest"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification": "PRIVATE_CREDIT_FUND",
+    "fair_value_usd": 416244000
+  },
+  "reason": "Narrative describes unitranche loan JV with Capital One; LLC interest is credit-vehicle exposure.",
+  "row_xpath": "/html/body/div[2115]/table/tr[10]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "ULTRA III, LLC (5)(20)(22) - LLC Interest",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "402,400",
+        "",
+        "",
+        "$",
+        "416,244",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-970",
+          "context_text": "0001838126 ULTRA III, LLC - LLC Interest | Non-Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "402,400",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-970",
+          "context_text": "0001838126 ULTRA III, LLC - LLC Interest | Non-Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "416,244",
+          "unit": "usd"
+        }
+      ],
+      "opening": [
+        "",
+        "Company (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/Units Amortized Cost (3) Fair Value Percentage of Net Assets",
+        "SLF V AD1 Holdings, LLC (4)(20)(21)(22) - LLC Interest 10,101 9,891 9,298"
+      ],
+      "table_xpath": "/html/body/div[2115]/table",
+      "xpath": "/html/body/div[2115]/table/tr[10]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html",
+  "source_sha256": "2e40a16dfd71318af03e97f90560525f560faf4b8fd232a8a15b7c206b7fff0a",
+  "status": "candidate_semantics_wrong",
+  "supplementary_evidence": null
+}

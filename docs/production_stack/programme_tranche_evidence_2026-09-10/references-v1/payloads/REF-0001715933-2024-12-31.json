@@ -1,0 +1,372 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1715933",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001715933-2024-12-31.json",
+    "evidence_sha256": "8c914cd0d3e5d1c68b879991a8857d8b40d17bcee2a91045fed7e3cad73a6fda",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001715933-2024-12-31",
+    "report_date": "2024-12-31",
+    "review_note": "Current literal SOI FV 1,155,866,700 in table[30]/tr[16]; comparative 977,829,415 is separate.",
+    "saved_candidate_rows": "78",
+    "source_candidate_rows": "112"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1715933/000095017025045556.html",
+    "ref": "REF-0001715933-2024-12-31",
+    "rows": [
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "137,519",
+          "",
+          "",
+          "$",
+          "148,430",
+          "",
+          "",
+          "$",
+          "160,071",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Year Ended December 31, | 2024 2023 2022 | Total investment income $ 137,519 $ 148,430 $ 160,071 | Net expenses (4,716 ) 52,557 61,663",
+        "preceding": [
+          "",
+          "Our operating results for the years ended December 31, 2024, 2023 and 2022 were as follows (dollar amounts in thousands):",
+          "Results of Operations",
+          "Interest income including interest income paid-in-kind, was $137.2 million, $148.1 million and $159.3 million, for the years ended December 31, 2024, 2023, and 2022, respectively. During the years ended December 31, 2024, 2023 and 2022, we also earned $0.3 million, $0.3 million and $0.8 million, respectively, in other fee income.",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[4]"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "Total Investments ( 218.9 %)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "1,294,756,165",
+          "",
+          "",
+          "$",
+          "1,155,866,700",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_ed52ac61-0936-4625-b6f8-d41cf9939913",
+            "scale": "-2",
+            "text": "218.9",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_ed52ac61-0936-4625-b6f8-d41cf9939913",
+            "scale": null,
+            "text": "1,294,756,165",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_ed52ac61-0936-4625-b6f8-d41cf9939913",
+            "scale": null,
+            "text": "1,155,866,700",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Industry Issuer Investment % of Net Assets Shares Amortized Cost Fair Value | EQUITY (continued) | Textiles, Apparel & Luxury Goods | Centric Brands GP LLC (3)(5)(6) Membership Interests 0.0 % 359,231 $ \u2014 $ \u2014",
+        "preceding": [
+          "",
+          "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024",
+          "",
+          "F- 6",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[30]/tr[16]"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "Total Investments ( 171.6 %)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "1,039,809,452",
+          "",
+          "",
+          "$",
+          "977,829,415",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_cbac5fa8-40a1-45c3-8b51-7df42ab94e1a",
+            "scale": "-2",
+            "text": "171.6",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_cbac5fa8-40a1-45c3-8b51-7df42ab94e1a",
+            "scale": null,
+            "text": "1,039,809,452",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_cbac5fa8-40a1-45c3-8b51-7df42ab94e1a",
+            "scale": null,
+            "text": "977,829,415",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Industry Issuer Acquisition Date Investment % of Net Assets Par Amount Maturity Date Amortized Cost Fair Value | DEBT (continued) | Textiles, Apparel & Luxury Goods | Centric Brands Inc. (3) 10/09/20 Term Loan - 14.37 % inc PIK (SOFR + 9.00 %, 1.00 % Floor, 6.50 % PIK) 7.9 % $ 46,070,354 10/09/25 $ 44,679,173 $ 44,826,454",
+        "preceding": [
+          "",
+          "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2023",
+          "",
+          "F- 11",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[34]/tr[44]"
+      },
+      {
+        "cells": [
+          "Investments, at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of December 31, | 2024 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Dollar amounts in thousands, except unit data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "TCW DIRECT LENDING VII LLC",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[38]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (amortized cost of $ 700,850 and $ 728,462 , respectively)",
+          "",
+          "$",
+          "632,586",
+          "",
+          "",
+          "$",
+          "692,514",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_ac105d12-accc-4d45-b0a2-7b1be5bddc05",
+            "scale": "3",
+            "text": "700,850",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_68e1b488-b51e-46e1-b3f1-16cd46d12f3e",
+            "scale": "3",
+            "text": "728,462",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_ac105d12-accc-4d45-b0a2-7b1be5bddc05",
+            "scale": "3",
+            "text": "632,586",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_68e1b488-b51e-46e1-b3f1-16cd46d12f3e",
+            "scale": "3",
+            "text": "692,514",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | As of December 31, | 2024 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Dollar amounts in thousands, except unit data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "TCW DIRECT LENDING VII LLC",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[38]/tr[6]"
+      },
+      {
+        "cells": [
+          "Non-controlled affiliated investments (amortized cost of $ 172,053 and $ 67,357 , respectively)",
+          "",
+          "",
+          "132,261",
+          "",
+          "",
+          "",
+          "49,969",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_420cba84-58fd-4144-875b-fbaaaf63ae48",
+            "scale": "3",
+            "text": "172,053",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_01029091-2493-44f1-8661-4cb4dc6b6c80",
+            "scale": "3",
+            "text": "67,357",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_420cba84-58fd-4144-875b-fbaaaf63ae48",
+            "scale": "3",
+            "text": "132,261",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_01029091-2493-44f1-8661-4cb4dc6b6c80",
+            "scale": "3",
+            "text": "49,969",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | As of December 31, | 2024 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(Dollar amounts in thousands, except unit data)",
+          "Consolidated Statements of Assets and Liabilities",
+          "TCW DIRECT LENDING VII LLC",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[38]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "",
+          "137,519",
+          "",
+          "",
+          "",
+          "148,430",
+          "",
+          "",
+          "",
+          "160,071",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_7a06bde1-5afc-4926-8e79-95a4ce86ef62",
+            "scale": "3",
+            "text": "137,519",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_cc12d0a2-0a1f-406d-a758-a25588a08217",
+            "scale": "3",
+            "text": "148,430",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_7b373812-13f3-41b0-9f22-21dde358ca77",
+            "scale": "3",
+            "text": "160,071",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the Year Ended December 31, | 2024 2023 2022 | Investment Income | Non-controlled/non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Dollar amounts in thousands, except unit data)",
+          "Consolidated Statements of Operations",
+          "TCW DIRECT LENDING VII LLC",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[39]/tr[16]"
+      }
+    ],
+    "sha256": "ed4a0a37ca3dfd71d121d8780871adec9b94fb034fd48d57d519c7fad7a32396",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

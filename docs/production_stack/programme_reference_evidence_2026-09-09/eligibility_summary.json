@@ -1,0 +1,161 @@
+{
+  "status_counts": {
+    "eligible_source_investments": 791,
+    "eligible_operating_interval": 20,
+    "not_yet_investment_operating": 98,
+    "unresolved_start_interval": 1
+  },
+  "follow_up_counts": {
+    "missing_output_positive_source_investments": 23,
+    "missing_output_roster_or_cash_status_unreviewed": 9,
+    "resolve_exact_quarter_before_final_denominator": 1
+  },
+  "quarters": [
+    {
+      "report_date": "2023-03-31",
+      "all_obligations": 70,
+      "eligible": 48,
+      "pre_operation": 22,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 39,
+      "eligible_missing_rows": 9,
+      "missing_positive_source": 6,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2023-06-30",
+      "all_obligations": 70,
+      "eligible": 53,
+      "pre_operation": 17,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 45,
+      "eligible_missing_rows": 8,
+      "missing_positive_source": 5,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2023-09-30",
+      "all_obligations": 70,
+      "eligible": 53,
+      "pre_operation": 17,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 52,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2023-12-31",
+      "all_obligations": 70,
+      "eligible": 59,
+      "pre_operation": 11,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 56,
+      "eligible_missing_rows": 3,
+      "missing_positive_source": 2,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2024-03-31",
+      "all_obligations": 70,
+      "eligible": 61,
+      "pre_operation": 9,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 59,
+      "eligible_missing_rows": 2,
+      "missing_positive_source": 0,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2024-06-30",
+      "all_obligations": 70,
+      "eligible": 63,
+      "pre_operation": 7,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 62,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2024-09-30",
+      "all_obligations": 70,
+      "eligible": 64,
+      "pre_operation": 6,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 63,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2024-12-31",
+      "all_obligations": 70,
+      "eligible": 66,
+      "pre_operation": 4,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 65,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2025-03-31",
+      "all_obligations": 70,
+      "eligible": 67,
+      "pre_operation": 2,
+      "unresolved": 1,
+      "eligible_with_saved_rows": 66,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2025-06-30",
+      "all_obligations": 70,
+      "eligible": 69,
+      "pre_operation": 1,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 68,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2025-09-30",
+      "all_obligations": 70,
+      "eligible": 69,
+      "pre_operation": 1,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 68,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2025-12-31",
+      "all_obligations": 70,
+      "eligible": 69,
+      "pre_operation": 1,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 67,
+      "eligible_missing_rows": 2,
+      "missing_positive_source": 2,
+      "pre_operation_with_saved_rows": 0
+    },
+    {
+      "report_date": "2026-03-31",
+      "all_obligations": 70,
+      "eligible": 70,
+      "pre_operation": 0,
+      "unresolved": 0,
+      "eligible_with_saved_rows": 69,
+      "eligible_missing_rows": 1,
+      "missing_positive_source": 1,
+      "pre_operation_with_saved_rows": 0
+    }
+  ],
+  "lifecycle_decisions": 32,
+  "source_passages": 39,
+  "interpretation": "Operating-history assessment, not complete statutory filing eligibility or independent source-roster accuracy. Pre-operation disclosed records retained. One unresolved quarter must not be silently removed."
+}

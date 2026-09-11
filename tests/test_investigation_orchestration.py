@@ -4,10 +4,17 @@ import csv
 import json
 
 import pandas as pd
+import pytest
 
 import scripts.agent_investigate.run_investigation as ri
 from pipeline import config as pipeline_config
 from scripts.agent_investigate.run_investigation import _discover_targets, loop_decision, promote
+
+
+@pytest.fixture(autouse=True)
+def _isolate_query_prewarm_sources(monkeypatch):
+    """Orchestration fixtures must not pre-warm slices of real production data."""
+    monkeypatch.setattr("pipeline.agent_data_query.default_sources", lambda: {})
 
 
 def _b1_fixture(tmp_path):

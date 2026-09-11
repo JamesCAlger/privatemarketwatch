@@ -1,0 +1,122 @@
+[
+  {
+    "case": 0,
+    "original_reference_fv": 1903400000.0,
+    "source_supported_fv": 1903400000,
+    "status": "reference_and_candidate_semantics_wrong"
+  },
+  {
+    "case": 1,
+    "original_reference_fv": 1117000000.0,
+    "source_supported_fv": null,
+    "status": "candidate_semantics_wrong"
+  },
+  {
+    "case": 2,
+    "original_reference_fv": 301200000.0,
+    "source_supported_fv": null,
+    "status": "legacy_parent_label_compatible_leaf_supported"
+  },
+  {
+    "case": 3,
+    "original_reference_fv": 1678745000.0,
+    "source_supported_fv": 1678745000,
+    "status": "candidate_semantics_wrong"
+  },
+  {
+    "case": 4,
+    "original_reference_fv": 1079456000.0,
+    "source_supported_fv": null,
+    "status": "leaf_unresolved"
+  },
+  {
+    "case": 5,
+    "original_reference_fv": 430975000.0,
+    "source_supported_fv": 430975000,
+    "status": "candidate_semantics_wrong"
+  },
+  {
+    "case": 6,
+    "original_reference_fv": 381241000.0,
+    "source_supported_fv": null,
+    "status": "leaf_unresolved"
+  },
+  {
+    "case": 7,
+    "original_reference_fv": 305986000.0,
+    "source_supported_fv": 305986000,
+    "status": "source_present_join_requires_cash_scope"
+  },
+  {
+    "case": 8,
+    "original_reference_fv": 753613000.0,
+    "source_supported_fv": null,
+    "status": "legacy_parent_label_compatible_leaf_supported"
+  },
+  {
+    "case": 9,
+    "original_reference_fv": 526684000.0,
+    "source_supported_fv": null,
+    "status": "legacy_parent_label_compatible_leaf_supported"
+  },
+  {
+    "case": 10,
+    "original_reference_fv": 479667000.0,
+    "source_supported_fv": null,
+    "status": "legacy_parent_label_compatible_leaf_supported"
+  },
+  {
+    "case": 11,
+    "original_reference_fv": 354399000.0,
+    "source_supported_fv": null,
+    "status": "candidate_leaf_not_supported"
+  },
+  {
+    "case": 12,
+    "original_reference_fv": 416244000.0,
+    "source_supported_fv": 416244000,
+    "status": "candidate_semantics_wrong"
+  },
+  {
+    "case": 13,
+    "original_reference_fv": -188000.0,
+    "source_supported_fv": null,
+    "status": "reference_scope_and_instrument_wrong"
+  },
+  {
+    "case": 14,
+    "original_reference_fv": 328199000.0,
+    "source_supported_fv": 385453000,
+    "status": "reference_currency_wrong"
+  },
+  {
+    "case": 15,
+    "original_reference_fv": 344960000.0,
+    "source_supported_fv": 344960000,
+    "status": "reference_identity_alias_and_cost_wrong"
+  },
+  {
+    "case": 16,
+    "original_reference_fv": 344960000.0,
+    "source_supported_fv": 344960000,
+    "status": "leaf_unresolved_and_cost_reference_wrong"
+  },
+  {
+    "case": 17,
+    "original_reference_fv": 321093000.0,
+    "source_supported_fv": 321093000,
+    "status": "reference_join_scope_ambiguous"
+  },
+  {
+    "case": 18,
+    "original_reference_fv": 303900000.0,
+    "source_supported_fv": 136815000,
+    "status": "reference_amounts_wrong_and_identity_join_unresolved"
+  },
+  {
+    "case": 19,
+    "original_reference_fv": 280331000.0,
+    "source_supported_fv": 280331000,
+    "status": "reference_cost_wrong_and_alias_supported"
+  }
+]

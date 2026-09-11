@@ -1,0 +1,454 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1913724",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001913724-2023-03-31.json",
+    "evidence_sha256": "51f267dbe10021373cc6e5890583b2365db554a3bc0f5f42d4d39c95c98c1b70",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001913724-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "March 2023 primary candidate 884,633,000; affiliate duplication requires lot review.",
+    "saved_candidate_rows": "128",
+    "source_candidate_rows": "171"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1913724/000191372423000032.html",
+    "ref": "REF-0001913724-2023-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value:",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | (Unaudited) | Assets | Investments at fair value:",
+        "preceding": [
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Statements of Assets and Liabilities",
+          "AG Twin Brook Capital Income Fund",
+          "",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[50]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments at fair value (amortized cost of $ 849,493 and $ 795,429 , respectively)",
+          "$",
+          "851,253",
+          "",
+          "$",
+          "797,019",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i599c1770634541298cd81763cac1a236_I20230331",
+            "scale": "3",
+            "text": "849,493",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i72d3cb7daba44e168fc42997baffa513_I20221231",
+            "scale": "3",
+            "text": "795,429",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i599c1770634541298cd81763cac1a236_I20230331",
+            "scale": "3",
+            "text": "851,253",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i72d3cb7daba44e168fc42997baffa513_I20221231",
+            "scale": "3",
+            "text": "797,019",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | (Unaudited) | Assets | Investments at fair value:",
+        "preceding": [
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Statements of Assets and Liabilities",
+          "AG Twin Brook Capital Income Fund",
+          "",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[50]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Non-controlled/affiliated investments at fair value (amortized cost of $ 30,625 and $ 27,234 , respectively)",
+          "33,380",
+          "",
+          "27,468",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i7af8207f5eda46ed8762d82c48582ccd_I20230331",
+            "scale": "3",
+            "text": "30,625",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i51e16058c8a54f389a9d0905b94eedf5_I20221231",
+            "scale": "3",
+            "text": "27,234",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i7af8207f5eda46ed8762d82c48582ccd_I20230331",
+            "scale": "3",
+            "text": "33,380",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i51e16058c8a54f389a9d0905b94eedf5_I20221231",
+            "scale": "3",
+            "text": "27,468",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | (Unaudited) | Assets | Investments at fair value:",
+        "preceding": [
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Statements of Assets and Liabilities",
+          "AG Twin Brook Capital Income Fund",
+          "",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[50]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income from non-controlled, non-affiliated investments:",
+          "25,067",
+          "",
+          "",
+          "\u2014",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "i945153ffcde14276ab993313324d1b8e_D20230101-20230331",
+            "scale": "3",
+            "text": "25,067",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "i165a495f0bb94bde9c916ded8fe32228_D20220127-20220331",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, 2023 (Unaudited) Period January 27, 2022 (Date of Inception) through March 31, 2022 | Investment income | Investment income from non-controlled, non-affiliated investments: | Interest $ 24,139 $ \u2014",
+        "preceding": [
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Statements of Operations",
+          "AG Twin Brook Capital Income Fund",
+          "Table of Contents",
+          "",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[57]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "25,067",
+          "",
+          "",
+          "\u2014",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "if224245aa767404c8b8dd364df2c8bc8_D20230101-20230331",
+            "scale": "3",
+            "text": "25,067",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "ib0a9dac721aa4322ba5e97488e9c0170_D20220127-20220331",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, 2023 (Unaudited) Period January 27, 2022 (Date of Inception) through March 31, 2022 | Investment income | Investment income from non-controlled, non-affiliated investments: | Interest $ 24,139 $ \u2014",
+        "preceding": [
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Statements of Operations",
+          "AG Twin Brook Capital Income Fund",
+          "Table of Contents",
+          "",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[57]/table/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "880,118",
+          "",
+          "",
+          "$",
+          "884,633",
+          "",
+          "",
+          "162.16",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+            "scale": "3",
+            "text": "880,118",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+            "scale": "3",
+            "text": "884,633",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+            "scale": "-2",
+            "text": "162.16",
+            "unit": "number"
+          }
+        ],
+        "opening": " | Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets | Non-controlled/affiliated investments | Multisector holdings | Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 %",
+        "preceding": [
+          "Table of Contents AG Twin Brook Capital Income Fund Consolidated Schedule of Investments As of March 31, 2023 (Amounts in thousands) (Unaudited)",
+          "",
+          "The accompanying notes are an integral part of these consolidated financial statements. 10",
+          "LC First lien senior secured delayed draw term loan S + 6.50 % 11.78 % 8/5/2028 2,618 2,599 2,574 0.47 % NEFCO Holding Company, LLC First lien senior secured revolving loan P + 5.50 % 13.00 % 8/5/2028 3,045 1,113 1,117 0.20 % NEFCO Holding Company, LLC First lien senior secured term loan S + 6.50 % 11.30 % 8/5/2028 14,397 14,122 14,167 2.60 % 26,833 26,882 4.93 % Total non-controlled/non-affiliated senior secured debt $ 849,493 $ 851,253 156.04 %",
+          "Table of Contents AG Twin Brook Capital Income Fund Consolidated Schedule of Investments As of March 31, 2023 (Amounts in thousands) (Unaudited)",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[93]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "822,663",
+          "",
+          "",
+          "$",
+          "824,487",
+          "",
+          "",
+          "155.89",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i3f25f258715849c8a3c6cffeddf6aec1_I20221231",
+            "scale": "3",
+            "text": "822,663",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i3f25f258715849c8a3c6cffeddf6aec1_I20221231",
+            "scale": "3",
+            "text": "824,487",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "i3f25f258715849c8a3c6cffeddf6aec1_I20221231",
+            "scale": "-2",
+            "text": "155.89",
+            "unit": "number"
+          }
+        ],
+        "opening": " | Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets | Specialty retail | Soccer Post Acquisition, LLC First lien senior secured delayed draw term loan S + 5.75 % 10.91 % 6/30/2027 $ 1,520 $ 1,420 $ 1,422 0.27 % | Soccer Post Acquisition, LLC First lien senior secured revolving loan S + 5.75 % 10.59 % 6/30/2027 1,741 1,017 1,020 0.19 %",
+        "preceding": [
+          "AG Twin Brook Capital Income Fund Consolidated Schedule of Investments As of December 31, 2022 (Amounts in thousands)",
+          "",
+          "The accompanying notes are an integral part of these consolidated financial statements. 15",
+          "ving loan S + 5.75 % 10.59 % 9/8/2026 $ 5,061 $ 1,792 $ 1,800 0.34 % Helpware, Inc. First lien senior secured term loan S + 5.75 % 10.41 % 9/8/2026 14,114 13,934 13,956 2.64 % 15,726 15,756 2.98 % Software Shasta Buyer, LLC First lien senior secured revolving loan S + 6.25 % 11.09 % 8/9/2028 $ 2,199 $ 196 $ 199 0.04 % Shasta Buyer, LLC First lien senior secured term loan S + 6.25 % 11.09 % 8/9/2028 11,663 11,436 11,462 2.17 % 11,632 11,661 2.21 %",
+          "AG Twin Brook Capital Income Fund Consolidated Schedule of Investments As of December 31, 2022 (Amounts in thousands)",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[121]/table/tr[23]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "$",
+          "880,118",
+          "",
+          "",
+          "$",
+          "884,633",
+          "",
+          "",
+          "$",
+          "822,663",
+          "",
+          "",
+          "$",
+          "824,487",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+            "scale": "3",
+            "text": "880,118",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+            "scale": "3",
+            "text": "884,633",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "i3f25f258715849c8a3c6cffeddf6aec1_I20221231",
+            "scale": "3",
+            "text": "822,663",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "i3f25f258715849c8a3c6cffeddf6aec1_I20221231",
+            "scale": "3",
+            "text": "824,487",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | (Amounts in thousands) Amortized Cost Fair Value Amortized Cost Fair Value | First lien senior secured debt $ 849,493 $ 851,253 $ 795,429 $ 797,019 | Investment in affiliated funds 30,625 33,380 27,234 27,468",
+        "preceding": [
+          "Investments at fair value and amortized cost consisted of the following as of March 31, 2023 and December 31, 2022:",
+          "with respect to the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled affiliated investments is contained in the consolidated financial statements, including the consolidated schedules of investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled affiliated investments."
+        ],
+        "xpath": "/html/body/ix:continuation[8]/ix:nonnumeric/div[2]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "$",
+          "880,118",
+          "",
+          "",
+          "$",
+          "884,633",
+          "",
+          "",
+          "$",
+          "822,663",
+          "",
+          "",
+          "$",
+          "824,487",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | (Amounts in thousands) Amortized Cost Fair Value Amortized Cost Fair Value | First lien senior secured debt $ 849,493 $ 851,253 $ 795,429 $ 797,019 | Investment in affiliated funds 30,625 33,380 27,234 27,468",
+        "preceding": [
+          "",
+          "",
+          "As of March 31, 2023 and December 31, 2022 our investments consisted of the following:",
+          "Table of Contents",
+          "",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[281]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "$",
+          "25,067",
+          ""
+        ],
+        "facts": [],
+        "opening": " | (Amounts in thousands) Three Months Ended March 31, 2023 | Total investment income $ 25,067 | Less: expenses 15,104 | Net investment income (loss) 9,963",
+        "preceding": [
+          "Net increase (decrease) in net assets resulting from operations can vary from period to period as a result of various factors, including the level of new investment commitments, expenses, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio.",
+          "The following table represents the operating results for the three months ended March 31, 2023:",
+          "Results of Operations",
+          "",
+          "ed as income or applied to principal depending upon the Adviser\u2019s judgment regarding collectability. Non-accrual loans are restored to accrual status when past due principal and interest is paid current and, in the Adviser\u2019s judgment, are likely to remain current. Management may make exceptions to this treatment and determine to not place a loan on non-accrual status if the loan has sufficient collateral value and is in the process of collection.",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[310]/table/tr[3]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "$",
+          "25,067",
+          ""
+        ],
+        "facts": [],
+        "opening": " | (Amounts in thousands) Three Months Ended March 31, 2023 | Interest $ 24,139 | Other 928 | Total investment income $ 25,067",
+        "preceding": [
+          "Investment income for the three months ended March 31, 2023 were as follows:",
+          "Investment Income",
+          "Net change in unrealized gain (loss) 2,691 Net increase (decrease) in net assets resulting from operations $ 12,636",
+          "Table of Contents",
+          "",
+          "tcap-20230331"
+        ],
+        "xpath": "/html/body/div[316]/table/tr[5]"
+      }
+    ],
+    "sha256": "51f31e6ee0d99b077597f9375dc9fdea2f67b9ac96e79e505bafbe2baf0f18fb",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

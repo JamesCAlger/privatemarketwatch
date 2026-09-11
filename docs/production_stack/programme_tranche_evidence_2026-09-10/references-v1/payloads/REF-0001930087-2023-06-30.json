@@ -1,0 +1,25 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "development_basis_only",
+    "cik": "1930087",
+    "disposition": "complete_development_roster",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001930087-2023-06-30.json",
+    "evidence_sha256": "677299213f8f04360ebb658216f7a1ae0cc58fa40d476183485807ca8df489df",
+    "held_out": "False",
+    "next_action": "none_for_development_roster",
+    "reference_id": "REF-0001930087-2023-06-30",
+    "report_date": "2023-06-30",
+    "review_note": "Complete named money-market holding, 650,323,000; cash-only does not mean no source positions.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1930087/000193008723000010.html",
+    "ref": "REF-0001930087-2023-06-30",
+    "rows": [],
+    "sha256": "2d2d933de4a1653010187f1ad20f68152518563c99129d556db325c10a43f006",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

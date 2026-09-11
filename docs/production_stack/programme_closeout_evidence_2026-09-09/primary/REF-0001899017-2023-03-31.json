@@ -1,0 +1,33 @@
+{
+  "path": "data/raw/filings/bdc_html/1899017/000110465923060706.html",
+  "ref": "REF-0001899017-2023-03-31",
+  "rows": [
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "\u200b",
+        "\u2014",
+        "",
+        "\u200b",
+        "\u2014"
+      ],
+      "facts": [],
+      "opening": "\u200b \u200b \u200b \u200b \u200b \u200b \u200b | \u200b For the Three Months For the Three Months | \u200b \u200b Ended \u200b Ended | \u200b \u200b March 31, 2023 \u200b March 31, 2022 | Total investment income \u200b \u2014 \u200b \u2014",
+      "preceding": [
+        "\u200b",
+        "Our operating results for the three months ended March 31, 2023 and 2022 were as follows (dollars in thousands):",
+        "Results of Operations",
+        "Table of Contents",
+        "",
+        "han 180 days past due). \u25cf An investment is rated 4 if, in the opinion of our Advisor, the investment is performing materially below underwriting expectations. For debt investments, most of or all of the debt covenants are out of compliance and payments are substantially delinquent. Investments rated 4 are not anticipated to be repaid in full, if applicable, and there is significant risk that we may realize a substantial loss on our investment. 20",
+        "",
+        "illion as compared to a $189.3 million purchase obligation relating to the Portfolio Investments under the Facility Agreements (excluding the impacts of interest receivable on investments, fees payable to the Financing Provider and foreign currency). As of March 31, 2023, the Capital Condition was not met. Portfolio and Investment Activity As of March 31, 2023 and 2022, the Company had not commenced operations and had no portfolio investments. 19",
+        ""
+      ],
+      "xpath": "/html/body/div[47]/div[2]/table[1]/tr[5]"
+    }
+  ],
+  "sha256": "da808363a6b9a8a82867121fed6da1ed87fdaf62afcf01b02b7d5ac671687e47",
+  "status": "literal_primary_review_candidates"
+}

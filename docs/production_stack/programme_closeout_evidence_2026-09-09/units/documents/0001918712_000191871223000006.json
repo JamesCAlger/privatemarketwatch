@@ -1,0 +1,50 @@
+{
+  "accession": "0001918712-23-000006",
+  "cik": "0001918712",
+  "identity": [
+    2059758,
+    1774941978267787500
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1918712/000191871223000006.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "5ff18e880e2e97556c97daaa4ebc856e9aff2c95dc4d77ec91c6428348f2c2c4",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:loan\"]",
+      "unit_ref": "loan"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"asif:shareholder\"]",
+      "unit_ref": "shareholder"
+    }
+  ]
+}

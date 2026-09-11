@@ -1,0 +1,66 @@
+{
+  "mapping": [
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-0664161909bb3724"
+    },
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-bd31b65d09a871db"
+    },
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-bfda4a43b00ac214"
+    }
+  ],
+  "registry": {
+    "assignments": {
+      "ROW-0664161909bb3724": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "ROW-bd31b65d09a871db": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "ROW-bfda4a43b00ac214": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c"
+    },
+    "events": [
+      {
+        "action": "create",
+        "decision_id": "DEV-ESDEC-SOURCE-CONTINUATION-20260909",
+        "evidence": [
+          "programme_reference_evidence_2026-09-09/development_expectations.json#REF-CASE-03"
+        ],
+        "kind": "position",
+        "scope": "filer:0001837532/parent"
+      },
+      {
+        "action": "assign",
+        "anchors": [
+          "ROW-0664161909bb3724",
+          "ROW-bd31b65d09a871db",
+          "ROW-bfda4a43b00ac214"
+        ],
+        "decision_id": "DEV-ESDEC-THREE-OBSERVATIONS",
+        "evidence": [
+          "programme_reference_evidence_2026-09-09/development_expectations.json#REF-CASE-03"
+        ],
+        "identity_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+        "kind": "position",
+        "scope": "filer:0001837532/parent"
+      }
+    ],
+    "identities": {
+      "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c": {
+        "creation_decision": "DEV-ESDEC-SOURCE-CONTINUATION-20260909",
+        "kind": "position",
+        "scope": "filer:0001837532/parent",
+        "status": "active"
+      }
+    }
+  },
+  "replay_idempotent": true,
+  "role": "Source-reviewed migration example only; no persistent production IDs allocated. Existing pid aliases always include snapshot identity.",
+  "source_subchain_scope": "Three reviewed observations. Other candidate chain members are not certified by this example."
+}

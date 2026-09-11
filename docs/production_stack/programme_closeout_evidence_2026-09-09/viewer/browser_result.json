@@ -1,0 +1,199 @@
+{
+  "status": "pass",
+  "browser": "148.0.7778.96",
+  "platform": "win32",
+  "viewport": "1440x960 desktop / 390x844 mobile",
+  "workload": "Local file; one browser context; first visits plus warm repetitions. No remote network or cold-device claim.",
+  "real_cases": 6,
+  "indirect_cases": 4,
+  "navigations": 36,
+  "p50_ms": 3410.3065999999963,
+  "p95_ms": 3913.6304999999993,
+  "max_ms": 4154.598600000001,
+  "observations": [
+    {
+      "id": "forterro-fv",
+      "repeat": 0,
+      "ms": 3650.0299
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 0,
+      "ms": 3859.2243
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 0,
+      "ms": 3582.7610999999997
+    },
+    {
+      "id": "bigtime",
+      "repeat": 0,
+      "ms": 3166.2826000000005
+    },
+    {
+      "id": "riser",
+      "repeat": 0,
+      "ms": 3650.1656000000003
+    },
+    {
+      "id": "korean",
+      "repeat": 0,
+      "ms": 2794.5758000000023
+    },
+    {
+      "id": "forterro-fv",
+      "repeat": 1,
+      "ms": 3678.357799999998
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 1,
+      "ms": 3764.6049999999996
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 1,
+      "ms": 4154.598600000001
+    },
+    {
+      "id": "bigtime",
+      "repeat": 1,
+      "ms": 3295.2267999999967
+    },
+    {
+      "id": "riser",
+      "repeat": 1,
+      "ms": 3410.3065999999963
+    },
+    {
+      "id": "korean",
+      "repeat": 1,
+      "ms": 2540.7370999999985
+    },
+    {
+      "id": "forterro-fv",
+      "repeat": 2,
+      "ms": 3608.464
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 2,
+      "ms": 3913.6304999999993
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 2,
+      "ms": 3621.852300000006
+    },
+    {
+      "id": "bigtime",
+      "repeat": 2,
+      "ms": 2886.7577999999994
+    },
+    {
+      "id": "riser",
+      "repeat": 2,
+      "ms": 3207.5423999999985
+    },
+    {
+      "id": "korean",
+      "repeat": 2,
+      "ms": 2459.8528000000006
+    },
+    {
+      "id": "forterro-fv",
+      "repeat": 3,
+      "ms": 3544.3752999999997
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 3,
+      "ms": 3865.1723000000056
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 3,
+      "ms": 3793.655700000003
+    },
+    {
+      "id": "bigtime",
+      "repeat": 3,
+      "ms": 2905.362399999998
+    },
+    {
+      "id": "riser",
+      "repeat": 3,
+      "ms": 3413.646900000007
+    },
+    {
+      "id": "korean",
+      "repeat": 3,
+      "ms": 2433.241299999994
+    },
+    {
+      "id": "forterro-fv",
+      "repeat": 4,
+      "ms": 3818.5892999999924
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 4,
+      "ms": 3525.0825999999943
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 4,
+      "ms": 3728.864600000001
+    },
+    {
+      "id": "bigtime",
+      "repeat": 4,
+      "ms": 2810.2906999999977
+    },
+    {
+      "id": "riser",
+      "repeat": 4,
+      "ms": 3247.801099999997
+    },
+    {
+      "id": "korean",
+      "repeat": 4,
+      "ms": 2240.4589000000124
+    },
+    {
+      "id": "forterro-fv",
+      "repeat": 5,
+      "ms": 3330.7465999999986
+    },
+    {
+      "id": "forterro-sek",
+      "repeat": 5,
+      "ms": 3261.339200000002
+    },
+    {
+      "id": "forterro-sek-fv",
+      "repeat": 5,
+      "ms": 3618.9081999999908
+    },
+    {
+      "id": "bigtime",
+      "repeat": 5,
+      "ms": 2762.546199999997
+    },
+    {
+      "id": "riser",
+      "repeat": 5,
+      "ms": 3015.349000000002
+    },
+    {
+      "id": "korean",
+      "repeat": 5,
+      "ms": 2281.9897000000055
+    }
+  ],
+  "external_requests": [],
+  "errors": [],
+  "keyboard": true,
+  "mobile_outer_overflow": false
+}

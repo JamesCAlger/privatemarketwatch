@@ -1,0 +1,813 @@
+{
+  "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+  "contract_sha256": "2f3c3a874e5e4763a9ead33f6dc93002dee8b9739ba1ae11a658aed126222328",
+  "contract_version": "working-v1",
+  "criteria": [
+    {
+      "criterion_id": "A1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "obligation_coverage",
+          "metric_version": 1,
+          "observation_sha256": "974178aa0c7c7e260d4ef31b3c1d7ccfedb5104d8de9a33e4dc96cc8e6d00011",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "unknown_lifecycle_count",
+          "metric_version": 1,
+          "observation_sha256": "bfbbf64de860d9c2e15cd11314acfe007140f4c42fe46c994dd49728b2489f8c",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Fund-quarter obligations"
+    },
+    {
+      "criterion_id": "A2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "roster_fv_recall",
+          "metric_version": 1,
+          "observation_sha256": "5effee3023f69d048192ff9becf41c0d7cef914dbe34acbeabbb0e713d3dc3ec",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "roster_fv_precision",
+          "metric_version": 1,
+          "observation_sha256": "573258af821a1b790f46f8c85f87e93d3a8dbae091e95d0290ab44ecf337642b",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "roster_row_recall",
+          "metric_version": 1,
+          "observation_sha256": "73080ff29cd10bb7b3171817b608670f18728f4f107e94a4aff3d314c353368c",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "roster_row_precision",
+          "metric_version": 1,
+          "observation_sha256": "4fe10a1cd8b9cef98693bfbea5f267678285f290d8a2cf881a063e6d1e7b0fde",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "fund_roster_fv_floor",
+          "metric_version": 1,
+          "observation_sha256": "d0f8df7e8cf38fe7b887a1da176c98dffa31ec08573608f62093f7d41bc8935e",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "fund_roster_row_floor",
+          "metric_version": 1,
+          "observation_sha256": "e3dfc55df9a479e9c31898ed19d20a3c89ccc189aa307071edf711d1d05fa084",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.9
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position roster completeness and purity"
+    },
+    {
+      "criterion_id": "A3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "source_selection_errors",
+          "metric_version": 1,
+          "observation_sha256": "98f6f1a86178fcd2fd2261b32a272e10fd621d8074f91949039339376f50f548",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Source selection"
+    },
+    {
+      "criterion_id": "A4",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "supplemental_disposition_coverage",
+          "metric_version": 1,
+          "observation_sha256": "133cbfc8c88e8108a7a83ca9e7842456c0322558c2babce61e13f28ab3215036",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Supplemental source disposition"
+    },
+    {
+      "criterion_id": "A5",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "accounting_scope_errors",
+          "metric_version": 1,
+          "observation_sha256": "f3ad94a7f3ee81cce9b1f92b5612c0d4388e56ce61a772d7736fdaff1dd7e965",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Accounting scope"
+    },
+    {
+      "criterion_id": "B1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "target_field_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "efac6ff7342e64ae5841ec3001eda4effa89337803915a3a2a22e58a68daa039",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Target field semantics"
+    },
+    {
+      "criterion_id": "B2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "amount_field_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "4c4ea32d7dfe16d8b1867885fd3076dc69fce3bb10e1fbeedcbf8333073f2077",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "other_field_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "c06c70be209dd8c9169b1e8f4b2be6f1818515b3035b06f8fe59d8a84fa079f4",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Field fidelity"
+    },
+    {
+      "criterion_id": "B3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "primary_absolute_error_ratio",
+          "metric_version": 1,
+          "observation_sha256": "fb784658742e738a086dc47130c2433decbb1528f744873e24926b004bbca462",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.0025
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "fund_primary_error_ratio",
+          "metric_version": 1,
+          "observation_sha256": "0d2e4127145e9f52b7263af3274365e56dcd2de48acaa096723bce2042559768",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.01
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "primary_fund_coverage",
+          "metric_version": 1,
+          "observation_sha256": "a97eacfbc16d65edd3d38dbfd0facc9e58f45fdc6a909abdb213dd1e611ccc7a",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "primary_source_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "2bd7e1ca969f712e66a7ddace6b370ea991fa01cc9ced66325a0889a637bdab3",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Independent primary reconciliation"
+    },
+    {
+      "criterion_id": "B4",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "public_partition_errors",
+          "metric_version": 1,
+          "observation_sha256": "ee94b180214091c62d6bfd1c34211e1fdef5a83602c4cedd625e3de880fb1502",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Exact public holdings partitions"
+    },
+    {
+      "criterion_id": "B5",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "rate_pik_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "b3f6075828c7c73178bbb4dc4d503e1102cc910223016bf0996f8f141adb8d00",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Rate and PIK meaning"
+    },
+    {
+      "criterion_id": "C1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "stable_entity_id_errors",
+          "metric_version": 1,
+          "observation_sha256": "c87b97097a4dfa113cb142414340f1f93ba33447ad11701ec29b0fbc42660b84",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Stable entity identifiers"
+    },
+    {
+      "criterion_id": "C2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "entity_precision",
+          "metric_version": 1,
+          "observation_sha256": "95de3041be82384b9424ea62792cd5e68ef6b4a60c4492d9517b6db7bcb79475",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "entity_recall",
+          "metric_version": 1,
+          "observation_sha256": "413b3c79c9b88275467baad712f68087163e603df33c5acfd4b60ed13c84d78a",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Entity resolution accuracy"
+    },
+    {
+      "criterion_id": "C3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "position_precision",
+          "metric_version": 1,
+          "observation_sha256": "597324386c44ae2eb7efb9dc2b1a2eb4e36955481db5b5d64cc93cf5a93f8611",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.995
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "position_recall",
+          "metric_version": 1,
+          "observation_sha256": "d37b0f5e142962369f09f8b80205877140eeee8819ecd2fdfd7948fdcf468a26",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "complete_chain_rate",
+          "metric_version": 1,
+          "observation_sha256": "a7a309cdaae8aa9616f8100b3e3a55d733d186f4296288bcb45d0a74e8e1424f",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position continuation and full chains"
+    },
+    {
+      "criterion_id": "C4",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "position_lifecycle_errors",
+          "metric_version": 1,
+          "observation_sha256": "6d221fa42f1ca5b2a11d7b6315d8fceb9db7167af6207411ae8c8e18c1b912bf",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Position identity lifecycle"
+    },
+    {
+      "criterion_id": "D1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "evidence_contract_errors",
+          "metric_version": 1,
+          "observation_sha256": "d0988d8accd21fa0d89ad4be40826eceb043eee7c3eeacd0401090922c1cc9fc",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Field and metric evidence categories"
+    },
+    {
+      "criterion_id": "D2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "enrichment_replay_errors",
+          "metric_version": 1,
+          "observation_sha256": "3bdab27a56d049508d1c80ff1ff0e19f91ce8a87c54b3a020387cc1a24acef81",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Enrichment replay"
+    },
+    {
+      "criterion_id": "D3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "sector_accuracy",
+          "metric_version": 1,
+          "observation_sha256": "ea7d78021ff9a772508a618501b8ddd21ec1c6299ca456077ed4ee597b69532d",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "sector_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "1de8f96bd0e639aed73ad086f3baf2d109d00c67b4270f31135dd5e1e796f64d",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "sector_row_coverage",
+          "metric_version": 1,
+          "observation_sha256": "5e0fc5bc9202e6c8510596536de137f96214cb8e8d015b71e94271f2ab1d2071",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.9
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Sector quality and availability"
+    },
+    {
+      "criterion_id": "D4",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "citation_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "e90562c6e69480fde17adcb2c01696fb643056b235147492aa25695846821647",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Citation scenarios"
+    },
+    {
+      "criterion_id": "D5",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "reported_amount_highlight_fv_coverage",
+          "metric_version": 1,
+          "observation_sha256": "62ce82ffd35048326d3cc981ba0128ae154cfc650a6968e45981729cb643019c",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.99
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "reported_numeric_highlight_row_coverage",
+          "metric_version": 1,
+          "observation_sha256": "e0b986d49c5c12f0055984d1eb0396f0c063d92267d808badc1c8e7050c9a066",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0.95
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "evidence_path_or_unavailable",
+          "metric_version": 1,
+          "observation_sha256": "866a120a2adb106f826611d97d3e4397a5eb47f446b04a305f6daaf080c50959",
+          "operator": "min",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 1.0
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "misleading_links",
+          "metric_version": 1,
+          "observation_sha256": "6f8ab155a3358bfd99236a4928a4ddc0642ddd06ffd94ec16302c69ae781f01f",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Evidence coverage"
+    },
+    {
+      "criterion_id": "E1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "accessible_holdings_difference",
+          "metric_version": 1,
+          "observation_sha256": "a2ab7f3d99e616eddd2f176a1b7309ccaaa12801dc1f048349d3a91bb1861186",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Complete product holdings access"
+    },
+    {
+      "criterion_id": "E2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "analytic_display_errors",
+          "metric_version": 1,
+          "observation_sha256": "763fe3e95a592903e2965ecdca13aaeffa2abab9f238f4e0409fe1dda8e2e1ee",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Analytic definitions and denominators"
+    },
+    {
+      "criterion_id": "E3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "public_scope_errors",
+          "metric_version": 1,
+          "observation_sha256": "b827d2c8e7a770a17b3722c379f5a4ef3d9199f26e87cdb4a3904ff14f633bdd",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "product_workload_errors",
+          "metric_version": 1,
+          "observation_sha256": "efaecae6f6e8619f53dbece072387deb8ba01fad39264872b928f99049f4ec7b",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "local_citation_p95_ms",
+          "metric_version": 1,
+          "observation_sha256": "7507fae79af40bec739eff1ebb6d04cd95177401d0a29abc13edabffa4e13e90",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 5000
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Public scope and performance"
+    },
+    {
+      "criterion_id": "F1",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "writer_authority_errors",
+          "metric_version": 1,
+          "observation_sha256": "e21ca43dda1e379b74ee7050c9889e43735e0119957955ed8ed2f0f09b9200a7",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Authoritative writers and dbt execution"
+    },
+    {
+      "criterion_id": "F2",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "semantic_repeat_delta",
+          "metric_version": 1,
+          "observation_sha256": "9ce55013047fe656da83973888044ad8d43e529959e931ad9580447b9939ed10",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "companion_difference",
+          "metric_version": 1,
+          "observation_sha256": "1346d9d2989fd3e936735c0a8d3dae76d5817ac9f4982a715ae604365a8dd6c8",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Repeatability and typed parity"
+    },
+    {
+      "criterion_id": "F3",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "release_failure_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "62c0877f23f7bad25dea51992bf1cf1635708a4d430a6745d757196f16238a23",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Partial failure and adoption boundary"
+    },
+    {
+      "criterion_id": "F4",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "resume_scenario_errors",
+          "metric_version": 1,
+          "observation_sha256": "51c25cd38b72f09d9403d7d5d72017be0d005c046722bbc827c09eb7a4d307d6",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Recovery and idempotency"
+    },
+    {
+      "criterion_id": "F5",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "acceptance_control_errors",
+          "metric_version": 1,
+          "observation_sha256": "636914d1524043469ba0a2c1b8aff07f366ef30bd9a79e3e19be232bfd9f7654",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Protected acceptance assets"
+    },
+    {
+      "criterion_id": "F6",
+      "results": [
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "unexplained_migration_delta",
+          "metric_version": 1,
+          "observation_sha256": "83f8a9d5138d5d3624e021434da93c5864b2a6950fd8047ac382bfc2422b5579",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        },
+        {
+          "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+          "metric_id": "signed_quarter_regressions",
+          "metric_version": 1,
+          "observation_sha256": "93990f4f4c1718013a0cdf3ef458e3dfb5ac9082fc693d0992cdbd40d4ad1d78",
+          "operator": "max",
+          "reason": "Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.",
+          "status": "UNMEASURED",
+          "threshold_status": "working_targets",
+          "threshold_version": "working-v1",
+          "value": 0
+        }
+      ],
+      "status": "UNASSESSABLE",
+      "title": "Migration deltas and regressions"
+    }
+  ],
+  "criterion_inventory_sha256": "117fce4272bdbe873e02fc5ae57c83d8ad20cd420ab9954cae7ac3460ca935d9",
+  "evaluated_utc": "2026-09-10T15:48:18.624835+00:00",
+  "evaluator_identity": {
+    "catalog.py": "a17ff58ed2e2530fecf451779acb511f59f254923c5f061fa6771b5bea88396c",
+    "core.py": "02d6f22c619693cb8727d4fa145a5d1dabab141a5879928cd80cfb703944e593",
+    "measurement.py": "93de2b55b7483461d2abfcde355ffc3f185d1b944b925177d6a789cecc003bd8"
+  },
+  "release_approval": "not_granted",
+  "schema_version": 1,
+  "verdict": "UNASSESSABLE"
+}

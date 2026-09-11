@@ -1,0 +1,47 @@
+[
+  {
+    "approval": "proposal_only",
+    "basis": "census_value",
+    "comparison_value": 0.0,
+    "metric": "roster_row_recall",
+    "operator": "min",
+    "reason": "evaluated_against_proposal",
+    "release_id": "spec-close-20260909-v2",
+    "scope": "REF-0001950976-2023-12-31",
+    "status": "FAIL",
+    "threshold": 0.95
+  },
+  {
+    "approval": "proposal_only",
+    "basis": "census_value",
+    "comparison_value": 0.0,
+    "metric": "roster_row_recall",
+    "operator": "min",
+    "reason": "evaluated_against_proposal",
+    "release_id": "spec-close-20260909-v2",
+    "scope": "REF-0001930087-2023-06-30",
+    "status": "FAIL",
+    "threshold": 0.95
+  },
+  {
+    "approval": "proposal_only",
+    "basis": "census_value",
+    "comparison_value": 0.7298411218590539,
+    "metric": "sector_fv_coverage",
+    "operator": "min",
+    "reason": "evaluated_against_proposal",
+    "release_id": "spec-close-20260909-v2",
+    "scope": "2026-03-31 00:00:00",
+    "status": "FAIL",
+    "threshold": 0.95
+  },
+  {
+    "approval": "proposal_only",
+    "metric": "sector_accuracy",
+    "operator": "min",
+    "reason": "unknown_denominator_or_FV_weight",
+    "release_id": "spec-close-20260909-v2",
+    "status": "UNASSESSABLE",
+    "threshold": 0.95
+  }
+]

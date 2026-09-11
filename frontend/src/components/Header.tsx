@@ -14,6 +14,7 @@ interface FundSearchItem {
 interface HeaderProps {
   fundCount?: number;
   fundSearchItems?: FundSearchItem[];
+  asOfLabel?: string;
 }
 
 const NAV_ITEMS = [
@@ -29,7 +30,7 @@ function getNavActive(pathname: string): string {
   return '';
 }
 
-export default function Header({ fundCount, fundSearchItems = [] }: HeaderProps) {
+export default function Header({ fundCount, fundSearchItems = [], asOfLabel }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,7 +108,7 @@ export default function Header({ fundCount, fundSearchItems = [] }: HeaderProps)
       <div className="hidden md:block border-b border-white/[0.06]">
         <div className="max-w-[1180px] mx-auto flex items-center justify-between px-6 py-2.5 text-[11px] tracking-[0.06em]">
           <span className="text-white/55">
-            As of Q4 2025
+            As of {asOfLabel ?? '—'}
           </span>
           <div className="flex gap-[18px]">
             <span>EN &#x25BE;</span>
@@ -240,7 +241,7 @@ export default function Header({ fundCount, fundSearchItems = [] }: HeaderProps)
             About
           </Link>
           <div className="pt-2 px-2 text-xs text-white/30">
-            As of Q4 2025
+            As of {asOfLabel ?? '—'}
           </div>
         </nav>
       )}

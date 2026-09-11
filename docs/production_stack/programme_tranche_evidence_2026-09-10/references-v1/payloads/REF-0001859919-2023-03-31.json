@@ -1,0 +1,309 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1859919",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001859919-2023-03-31.json",
+    "evidence_sha256": "e695854b1b51697ff7baed727e9506838fc7d3889e6d1a5314b38a097a22a39f",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001859919-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "Primary candidate 2,271,398,000; complete lot and consolidation review outstanding.",
+    "saved_candidate_rows": "506",
+    "source_candidate_rows": "881"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1859919/000185991923000018.html",
+    "ref": "REF-0001859919-2023-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value:",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | (Unaudited) | Assets: | Investments at fair value:",
+        "preceding": [
+          "(in thousands, except share and per share data)",
+          "Consolidated Balance Sheets",
+          "Barings Private Credit Corporation",
+          "",
+          "Item 1. Financial Statements.",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[51]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value",
+          "2,271,398",
+          "",
+          "",
+          "2,157,880",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+            "scale": "3",
+            "text": "2,271,398",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "ibff6e9303dfa441b8f8880990e97084f_I20221231",
+            "scale": "3",
+            "text": "2,157,880",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | (Unaudited) | Assets: | Investments at fair value:",
+        "preceding": [
+          "(in thousands, except share and per share data)",
+          "Consolidated Balance Sheets",
+          "Barings Private Credit Corporation",
+          "",
+          "Item 1. Financial Statements.",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[51]/table/tr[10]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "59,122",
+          "",
+          "",
+          "29,291",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "ic60dc6c56ca1490f80f09987fee39f1e_D20230101-20230331",
+            "scale": "3",
+            "text": "59,122",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "i2f1cdb0d1fac4b768f6f0cc4dd387012_D20220101-20220331",
+            "scale": "3",
+            "text": "29,291",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Three Months Ended Three Months Ended | March 31, 2023 March 31, 2022 | Investment income: | Interest income:",
+        "preceding": [
+          "(in thousands, except share and per share data)",
+          "Unaudited Consolidated Statements of Operations",
+          "Barings Private Credit Corporation",
+          "",
+          "",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[60]/table/tr[27]"
+      },
+      {
+        "cells": [
+          "Total Investments, March 31, 2023 ( 203.0 %)*",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,136,778",
+          "",
+          "",
+          "$",
+          "2,287,113",
+          "",
+          "",
+          "$",
+          "2,271,398",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+            "scale": "-2",
+            "text": "203.0",
+            "unit": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+            "scale": "3",
+            "text": "2,136,778",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+            "scale": "3",
+            "text": "2,287,113",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "idc1d0f7364a04906ab4cecc7ba3ae224_I20230331",
+            "scale": "3",
+            "text": "2,271,398",
+            "unit": "usd"
+          }
+        ],
+        "opening": " |  | Eclipse Business Capital, LLC Banking, Finance, Insurance & Real Estate Revolver LIBOR + 7.25 % 08/21 07/28 3,080 3,007 3,080 0.3 % (6) (8) (33) | Second Lien Senior Secured Term Loan 7.5 % Cash 08/21 07/28 3,209 3,183 3,209 0.3 % (6) (33) | LLC Units ( 63,139,338 units) N/A 08/21 N/A 65,809 101,023 9.0 % (6) (33)",
+        "preceding": [
+          "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes Zeppelin Bidco Limited Services: Business First Lien Senior Secured Term Loan SONIA + 6.25 %, 10.4 % Cash 03/22 03/29 $ 2,991 $ 3,080 $ 2,807 0.3 % (3) (5) (6) (7) (22) 2,991 3,080 2,807 Subtotal Non\u2013Control / Non\u2013Affiliate Investments ( 189.8 %) 2,130,489 2,164,913 2,124,324 Affiliate Investments (4):",
+          "Barings Private Credit Corporation Unaudited Consolidated Schedule of Investments \u2014 (Continued) March 31, 2023 (Amounts in thousands, except share amounts)",
+          "",
+          "29",
+          " 4,162 4,043 4,061 0.4 % (3) (6) (7) (33) Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 \u2014 % (3) (6) (31) (33) 15,191 15,185 15,215 ZB Holdco LLC Food & Beverage First Lien Senior Secured Term Loan LIBOR + 4.75 %, 9.9 % Cash 02/22 02/28 4,030 3,974 3,980 0.4 % (5) (6) (7) (9) Revolver LIBOR + 4.75 %, 9.9 % Cash 02/22 02/28 \u2014 ( 14 ) ( 11 ) \u2014 % (6) (7) (9) (33) LLC Units ( 152.7 units) N/A 02/22 N/A 153 198 \u2014 % (6) (31) (33) 4,030 4,113 4,167",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[161]/table/tr[33]"
+      },
+      {
+        "cells": [
+          "Total Investments, December 31, 2022 ( 198.5 %)*",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,038,976",
+          "",
+          "",
+          "$",
+          "2,187,501",
+          "",
+          "",
+          "$",
+          "2,157,880",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "ibff6e9303dfa441b8f8880990e97084f_I20221231",
+            "scale": "-2",
+            "text": "198.5",
+            "unit": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context": "ibff6e9303dfa441b8f8880990e97084f_I20221231",
+            "scale": "3",
+            "text": "2,038,976",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "ibff6e9303dfa441b8f8880990e97084f_I20221231",
+            "scale": "3",
+            "text": "2,187,501",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "ibff6e9303dfa441b8f8880990e97084f_I20221231",
+            "scale": "3",
+            "text": "2,157,880",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes | Affiliate Investments (4): | Eclipse Business Capital, LLC Banking, Finance, Insurance, & Real Estate Second Lien Senior Secured Term Loan 7.5 % Cash 08/21 07/28 $ 3,209 $ 3,182 $ 3,209 0.3 % (6) | Revolver LIBOR + 7.25 % 08/21 07/28 3,722 3,646 3,722 0.3 % (6) (8)",
+        "preceding": [
+          "",
+          "Barings Private Credit Corporation Consolidated Schedule of Investments \u2014 (Continued) December 31, 2022 (Amounts in thousands, except share amounts)",
+          "",
+          "53",
+          ".2 % (5) (6) (7) (9) Revolver LIBOR + 4.75 %, 9.5 % Cash 02/22 02/28 \u2014 ( 14 ) ( 12 ) \u2014 % (6) (7) (9) LLC Units ( 152.7 units) N/A 02/22 02/28 153 189 \u2014 % (6) (30) 2,684 2,762 2,805 Zeppelin Bidco Limited Services: Business First Lien Senior Secured Term Loan SONIA + 6.25 %, 9.2 % Cash 03/22 03/29 2,910 3,075 2,581 0.2 % (3) (5) (6) (7) (20) 2,910 3,075 2,581 Subtotal Non\u2013Control / Non\u2013Affiliate Investments ( 186.1 %) 2,032,045 2,073,049 2,023,356",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[285]/table/tr[30]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "$",
+          "59,122",
+          "",
+          "",
+          "$",
+          "29,291",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended Three Months Ended | ($ in thousands) March 31, 2023 March 31, 2022 |  | ",
+        "preceding": [
+          "Operating results for the three months ended March 31, 2023 and 2022 were as follows:",
+          "Comparison of the three months ended March 31, 2023 and 2022",
+          "Results of Operations",
+          "",
+          "2022, we placed our debt investment in Core Scientific Inc., or Core Scientific, on non-accrual status effective with the monthly payment due October 31, 2022. As a result, under U.S. GAAP, we will not recognize interest income on our debt investment in Core Scientific for financial reporting purposes. As of March 31, 2023, the cost of our debt investment in Core Scientific was $16.8 million and the fair value of such investment was $8.5 million.",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[489]/table/tr[27]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "$",
+          "59,122",
+          "",
+          "",
+          "$",
+          "29,291",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended Three Months Ended | ($ in thousands) March 31, 2023 March 31, 2022 | Investment income: | ",
+        "preceding": [
+          "Investment Income",
+          "Net increases or decreases in net assets resulting from operations can vary substantially from period to period due to various factors, including recognition of realized gains and losses and unrealized appreciation and depreciation. As a result, comparisons of net changes in net assets resulting from operations may not be meaningful.",
+          "459 Net investment income before taxes 32,718 20,832 Income taxes, including excise tax expense 53 1 Net investment income after taxes 32,665 20,831 Net realized gains (losses) (22,384) 271 Net unrealized appreciation (depreciation) 30,246 11,620 Net realized gains (losses) and unrealized appreciation (depreciation) on investments and foreign currency transactions 7,862 11,891 Net increase in net assets resulting from operations $ 40,527 $ 32,722",
+          "Operating results for the three months ended March 31, 2023 and 2022 were as follows:",
+          "Comparison of the three months ended March 31, 2023 and 2022",
+          "bdc-20230331"
+        ],
+        "xpath": "/html/body/div[492]/table/tr[27]"
+      }
+    ],
+    "sha256": "354dc1e156dca0a8ffd154746b9f020298ebf4d05b84348699c61360add0bcd9",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

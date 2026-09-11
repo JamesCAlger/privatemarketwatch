@@ -1,0 +1,557 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c-10",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-49",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Non-controlled/non-affiliate company investments (amortized cost of $ 2,556,784 and $ 108,769 , respectively)",
+        "$",
+        "2,577,558",
+        "",
+        "",
+        "$",
+        "108,529",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c-10",
+      "currency": "USD",
+      "fact_id": "f-49",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,577,558",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[2027]/table/tr[8]",
+      "table_xpath": "/html/body/div[2027]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2577558000"
+    },
+    {
+      "attributes": {
+        "contextref": "c-10",
+        "decimals": "-2",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-2012",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,556,783.9",
+        "",
+        "",
+        "$",
+        "2,577,558.1",
+        "",
+        "(7)(10)",
+        "146.34",
+        "%",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c-10",
+      "currency": "USD",
+      "fact_id": "f-2012",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,577,558.1",
+      "rounding_bound": "50.0",
+      "row_xpath": "/html/body/div[2082]/table/tr[9]",
+      "table_xpath": "/html/body/div[2082]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2577558100.0"
+    },
+    {
+      "attributes": {
+        "contextref": "c-10",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-3507",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "$",
+        "2,556,784",
+        "",
+        "",
+        "$",
+        "2,577,558",
+        "",
+        "",
+        "$",
+        "108,769",
+        "",
+        "",
+        "$",
+        "108,529",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c-10",
+      "currency": "USD",
+      "fact_id": "f-3507",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,577,558",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:nonnumeric[5]/ix:nonnumeric/div[3]/table/tr[12]",
+      "table_xpath": "/html/body/ix:nonnumeric[5]/ix:nonnumeric/div[3]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2577558000"
+    },
+    {
+      "attributes": {
+        "contextref": "c-10",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-3698",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "1,575,215",
+        "",
+        "",
+        "$",
+        "1,002,343",
+        "",
+        "",
+        "$",
+        "2,577,558",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c-10",
+      "currency": "USD",
+      "fact_id": "f-3698",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,577,558",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[17]/ix:continuation/div[1]/table/tr[12]",
+      "table_xpath": "/html/body/ix:continuation[17]/ix:continuation/div[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "2577558000"
+    }
+  ],
+  "cik": "0001918712",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1918712/000191871224000048.html",
+  "reference_id": "REF-0001918712-2023-12-31",
+  "report_date": "2023-12-31",
+  "source_rows": 472,
+  "source_sha256": "8c899eafdc0dd69c0b4243ba8836c7846a68e6a70bbda356422b121da17f17b2",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Non-controlled/non-affiliate company investments (amortized cost of $ 2,556,784 and $ 108,769 , respectively) | $ | 2,577,558 | $ | 108,529"
+      ],
+      "last": [
+        "Non-controlled/non-affiliate company investments (amortized cost of $ 2,556,784 and $ 108,769 , respectively) | $ | 2,577,558 | $ | 108,529"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31,",
+        "2023 2022",
+        ""
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/div[2027]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Access CIG, LLC | First lien senior secured loan | 10.39 % | SOFR (Q) | 5.00 % | 08/2028 | $ | 10,972.5 | $ | 10,770.5 | $ | 10,979.4 | (5)",
+        "Applied Systems, Inc. | First lien senior secured loan | 9.85 % | SOFR (Q) | 4.50 % | 09/2026 | 9,397.3 | 9,399.8 | 9,430.3 | (5)"
+      ],
+      "last": [
+        "First lien senior secured loan | 10.94 % | Euribor (Q) | 7.00 % | 07/2030 | 493.8 | 424.8 | 493.8 | (3)(5)(6)",
+        "4,543.6 | 4,716.4"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Software and Services",
+        "Access CIG, LLC First lien senior secured loan 10.39 % SOFR (Q) 5.00 % 08/2028 $ 10,972.5 $ 10,770.5 $ 10,979.4 (5)"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[2043]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Hyland Software, Inc. (8) | First lien senior secured loan | 11.36 % | SOFR (M) | 6.00 % | 09/2030 | 23,897.1 | 23,551.9 | 23,538.6 | (5)(6)",
+        "Idemia Group S.A.S. | First lien senior secured loan | 10.10 % | SOFR (Q) | 4.75 % | 09/2028 | 3,980.0 | 3,943.4 | 3,987.5 | (3)(5)"
+      ],
+      "last": [
+        "519,562.5 | 524,586.5 | 29.78 | %",
+        "Agiliti Health, Inc. | First lien senior secured loan | 8.39 % | SOFR (Q) | 3.00 % | 05/2030 | 4,381.9 | 4,368.8 | 4,376.4 | (3)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Hyland Software, Inc. (8) First lien senior secured loan 11.36 % SOFR (M) 6.00 % 09/2030 23,897.1 23,551.9 23,538.6 (5)(6)",
+        "Idemia Group S.A.S. First lien senior secured loan 10.10 % SOFR (Q) 4.75 % 09/2028 3,980.0 3,943.4 3,987.5 (3)(5)"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[2046]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Amerivet Partners Management, Inc. and AVE Holdings LP (8) | Subordinated loan | 16.50 % PIK | Fixed | 12/2030 | 26,053.3 | 24,532.8 | 24,490.1 | (6)",
+        "Class C units | 11/2023 | 3,849 | 768.4 | 768.4 | (6)"
+      ],
+      "last": [
+        "Second lien senior secured loan | 13.22 % | SOFR (M) | 7.75 % | 07/2026 | 40.4 | 37.7 | 38.7",
+        "31,071.0 | 31,398.7"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Amerivet Partners Management, Inc. and AVE Holdings LP (8) Subordinated loan 16.50 % PIK Fixed 12/2030 26,053.3 24,532.8 24,490.1 (6)",
+        "Class C units 11/2023 3,849 768.4 768.4 (6)"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[2049]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Waystar Technologies, Inc. | First lien senior secured loan | 9.47 % | SOFR (M) | 4.00 % | 10/2026 | 10,867.5 | 10,848.3 | 10,894.7",
+        "Zelis Cost Management Buyer, Inc. | First lien senior secured loan | 8.97 % | SOFR (M) | 3.50 % | 09/2026 | 10,614.8 | 10,634.5 | 10,625.7"
+      ],
+      "last": [
+        "Class A units | 12/2022 | 50,000 | 50.0 | 65.2 | (6)",
+        "4,888.7 | 5,224.3"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Waystar Technologies, Inc. First lien senior secured loan 9.47 % SOFR (M) 4.00 % 10/2026 10,867.5 10,848.3 10,894.7",
+        "Zelis Cost Management Buyer, Inc. First lien senior secured loan 8.97 % SOFR (M) 3.50 % 09/2026 10,614.8 10,634.5 10,625.7"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[2052]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "IRB Holding Corp. | First lien senior secured loan | 8.46 % | SOFR (M) | 3.00 % | 12/2027 | 12,692.5 | 12,617.7 | 12,701.5 | (5)",
+        "Learning Care Group (US) No. 2 Inc. | First lien senior secured loan | 10.13 % | SOFR (Q) | 4.75 % | 08/2028 | 5,972.8 | 5,942.1 | 5,999.7 | (5)"
+      ],
+      "last": [
+        "7,923.0 | 7,946.9",
+        "Burgess Point Purchaser Corporation | First lien senior secured loan | 10.71 % | SOFR (M) | 5.25 % | 07/2029 | 34,850.0 | 32,837.9 | 32,795.3 | (5)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "IRB Holding Corp. First lien senior secured loan 8.46 % SOFR (M) 3.00 % 12/2027 12,692.5 12,617.7 12,701.5 (5)",
+        "Learning Care Group (US) No. 2 Inc. First lien senior secured loan 10.13 % SOFR (Q) 4.75 % 08/2028 5,972.8 5,942.1 5,999.7 (5)"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[2055]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Chart Industries, Inc. | First lien senior secured loan | 8.69 % | SOFR (M) | 3.25 % | 03/2030 | 13,277.4 | 13,227.6 | 13,288.4 | (3)(5)",
+        "Clarios Global LP | First lien senior secured loan | 9.11 % | SOFR (M) | 3.75 % | 05/2030 | 6,733.1 | 6,712.6 | 6,741.5"
+      ],
+      "last": [
+        "First lien senior secured loan | 9.71 % | SOFR (M) | 4.25 % | 08/2028 | 3,279.4 | 3,153.7 | 3,263.6",
+        "14,412.2 | 14,686.8"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Chart Industries, Inc. First lien senior secured loan 8.69 % SOFR (M) 3.25 % 03/2030 13,277.4 13,227.6 13,288.4 (3)(5)",
+        "Clarios Global LP First lien senior secured loan 9.11 % SOFR (M) 3.75 % 05/2030 6,733.1 6,712.6 6,741.5"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[2058]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Broadstreet Partners, Inc. | First lien senior secured loan | 9.10 % | SOFR (M) | 3.75 % | 01/2029 | 13,637.8 | 13,579.9 | 13,659.1",
+        "Cross Financial Corp. | First lien senior secured loan | 9.47 % | SOFR (M) | 4.00 % | 09/2027 | 5,116.7 | 5,103.7 | 5,116.7 | (5)"
+      ],
+      "last": [
+        "GTCR F Buyer Corp. and GTCR (D) Investors LP (8)(9) | First lien senior secured loan | 11.36 % | SOFR (M) | 6.00 % | 09/2030 | 10,000.0 | 9,759.0 | 9,750.0 | (5)(6)",
+        "Limited partnership interests | 09/2023 | 74,074 | 74.7 | 77.7 | (6)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Broadstreet Partners, Inc. First lien senior secured loan 9.10 % SOFR (M) 3.75 % 01/2029 13,637.8 13,579.9 13,659.1",
+        "Cross Financial Corp. First lien senior secured loan 9.47 % SOFR (M) 4.00 % 09/2027 5,116.7 5,103.7 5,116.7 (5)"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[2061]/table"
+    },
+    {
+      "contexts": 33,
+      "first": [
+        "9,833.7 | 9,827.7",
+        "GTCR W Merger Sub LLC | First lien senior secured loan | 9.08 % | SOFR (S) | 3.75 % | 09/2030 | 17,900.0 | 17,843.9 | 17,967.1 | (5)"
+      ],
+      "last": [
+        "First lien senior secured loan | 10.86 % | SOFR (Q) | 5.50 % | 05/2030 | 1,254.0 | 1,228.4 | 1,209.3 | (5)(6)",
+        "15,974.6 | 16,209.3"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "9,833.7 9,827.7",
+        "GTCR W Merger Sub LLC First lien senior secured loan 9.08 % SOFR (S) 3.75 % 09/2030 17,900.0 17,843.9 17,967.1 (5)"
+      ],
+      "preceding": [],
+      "rows": 33,
+      "table_xpath": "/html/body/div[2064]/table"
+    },
+    {
+      "contexts": 29,
+      "first": [
+        "North Haven Fairway Buyer, LLC, Fairway Lawns, LLC and Command Pest Control, LLC (8) | First lien senior secured loan | 11.86 % | SOFR (Q) | 6.50 % | 05/2028 | 3,413.4 | 3,312.0 | 3,413.4 | (5)(6)",
+        "North Haven Stack Buyer, LLC (8) | First lien senior secured loan | 11.01 % | SOFR (Q) | 5.50 % | 07/2027 | 7.1 | 6.5 | 7.1 | (5)(6)"
+      ],
+      "last": [
+        "Zuffa Guarantor LLC | First lien senior secured loan | 8.40 % | SOFR (Q) | 2.75 % | 04/2026 | 10,945.4 | 10,939.2 | 10,974.3 | (3)(5)",
+        "113,530.2 | 113,822.9 | 6.46 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "North Haven Fairway Buyer, LLC, Fairway Lawns, LLC and Command Pest Control, LLC (8) First lien senior secured loan 11.86 % SOFR (Q) 6.50 % 05/2028 3,413.4 3,312.0 3,413.4 (5)(6)",
+        "North Haven Stack Buyer, LLC (8) First lien senior secured loan 11.01 % SOFR (Q) 5.50 % 07/2027 7.1 6.5 7.1 (5)(6)"
+      ],
+      "preceding": [],
+      "rows": 29,
+      "table_xpath": "/html/body/div[2067]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "ADMA Biologics Inc. (8) | First lien senior secured revolving loan | 9.13 % | SOFR (Q) | 3.75 % | 12/2027 | 1.0 | 1.0 | 1.0 | (3)(5)(6)",
+        "First lien senior secured loan | 11.88 % | SOFR (S) | 6.50 % | 12/2027 | 4,308.0 | 4,200.8 | 4,254.2 | (3)(5)(6)"
+      ],
+      "last": [
+        "CNT Holdings I Corp | First lien senior secured loan | 8.93 % | SOFR (Q) | 3.50 % | 11/2027 | 8,945.5 | 8,874.4 | 8,955.4 | (5)",
+        "Hills Distribution, Inc., Hills Intermediate FT Holdings, LLC and GMP Hills, LP (8) | First lien senior secured revolving loan | 9.87 % | SOFR (Q) | 4.50 % | 11/2029 | 0.6 | 0.6 | 0.6 | (5)(6)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Pharmaceuticals, Biotechnology and Life Sciences",
+        "ADMA Biologics Inc. (8) First lien senior secured revolving loan 9.13 % SOFR (Q) 3.75 % 12/2027 1.0 1.0 1.0 (3)(5)(6)"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[2070]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "First lien senior secured loan | 11.37 % | SOFR (S) | 6.00 % | 11/2029 | 3,102.7 | 3,041.9 | 3,040.6 | (5)(6)",
+        "Limited partnership interest | 8.00 % PIK | 11/2023 | 3,544,000 | 3,544.0 | 3,526.7 | (6)"
+      ],
+      "last": [
+        "41,534.5 | 41,364.0 | 2.35 | %",
+        "Silk Holdings III Corp. and Silk Holdings I Corp. (8) | First lien senior secured revolving loan | 11.35 % | SOFR (Q) | 6.00 % | 05/2029 | 0.6 | 0.6 | 0.6 | (5)(6)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "First lien senior secured loan 11.37 % SOFR (S) 6.00 % 11/2029 3,102.7 3,041.9 3,040.6 (5)(6)",
+        "Limited partnership interest 8.00 % PIK 11/2023 3,544,000 3,544.0 3,526.7 (6)"
+      ],
+      "preceding": [],
+      "rows": 30,
+      "table_xpath": "/html/body/div[2073]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "First lien senior secured loan | 13.10 % | SOFR (Q) | 7.75 % | 05/2029 | 14,924.0 | 14,526.3 | 14,924.0 | (5)(6)",
+        "Common stock | 05/2023 | 100 | 100.0 | 187.7 | (6)"
+      ],
+      "last": [
+        "28,799.1 | 28,823.4 | 1.64 | %",
+        "HighPeak Energy, Inc. | First lien senior secured loan | 13.00 % | SOFR (A) | 7.50 % | 09/2026 | 25,000.0 | 24,436.8 | 25,000.0 | (3)(5)(6)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "First lien senior secured loan 13.10 % SOFR (Q) 7.75 % 05/2029 14,924.0 14,526.3 14,924.0 (5)(6)",
+        "Common stock 05/2023 100 100.0 187.7 (6)"
+      ],
+      "preceding": [],
+      "rows": 30,
+      "table_xpath": "/html/body/div[2076]/table"
+    },
+    {
+      "contexts": 25,
+      "first": [
+        "24,436.8 | 25,000.0 | 1.42 | %",
+        "Fugue Finance LLC | First lien senior secured loan | 9.39 % | SOFR (B) | 4.00 % | 01/2028 | 4,974.9 | 4,952.4 | 4,989.7 | (3)(5)"
+      ],
+      "last": [
+        "5,531.3 | 5,615.8 | 0.32 | %",
+        "Iron Mountain Information Management, LLC | First lien senior secured loan | 7.58 % | SOFR (S) | 2.25 % | 01/2031 | 5,500.0 | 5,458.8 | 5,496.6 | (3)"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "",
+        "24,436.8 25,000.0 1.42 %"
+      ],
+      "preceding": [],
+      "rows": 25,
+      "table_xpath": "/html/body/div[2079]/table"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "5,458.8 | 5,496.6 | 0.31 | %",
+        "MKS Instruments, Inc. | First lien senior secured loan | 7.84 % | SOFR (M) | 2.50 % | 08/2029 | 4,482.2 | 4,471.3 | 4,486.7 | (3)(5)"
+      ],
+      "last": [
+        "4,471.3 | 4,486.7 | 0.25 | %",
+        "Total Investments | $ | 2,556,783.9 | $ | 2,577,558.1 | (7)(10) | 146.34 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets",
+        "5,458.8 5,496.6 0.31 %",
+        "Semiconductors and Semiconductor Equipment"
+      ],
+      "preceding": [],
+      "rows": 4,
+      "table_xpath": "/html/body/div[2082]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "First lien senior secured loans | $ | 2,374,887 | $ | 2,391,750 | $ | 108,669 | $ | 108,429",
+        "Second lien senior secured loans | 43,237 | 43,771 | \u2014 | \u2014"
+      ],
+      "last": [
+        "Other equity | 8,935 | 9,740 | 100 | 100",
+        "Total | $ | 2,556,784 | $ | 2,577,558 | $ | 108,769 | $ | 108,529"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31,",
+        "2023 2022",
+        ""
+      ],
+      "preceding": [],
+      "rows": 7,
+      "table_xpath": "/html/body/ix:nonnumeric[5]/ix:nonnumeric/div[3]/table"
+    },
+    {
+      "contexts": 28,
+      "first": [
+        "First lien senior secured loans | $ | \u2014 | $ | 1,533,600 | $ | 858,150 | $ | 2,391,750",
+        "First lien senior secured loans | $ | \u2014 | $ | 1,533,600 | $ | 858,150 | $ | 2,391,750"
+      ],
+      "last": [
+        "Total investments | $ | \u2014 | $ | 1,575,215 | $ | 1,002,343 | $ | 2,577,558",
+        "Total investments | $ | \u2014 | $ | 1,575,215 | $ | 1,002,343 | $ | 2,577,558"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value Measurements Using",
+        "Level 1 Level 2 Level 3 Total",
+        "Cash and cash equivalents $ 57,972 $ \u2014 $ \u2014 $ 57,972"
+      ],
+      "preceding": [],
+      "rows": 28,
+      "table_xpath": "/html/body/ix:continuation[17]/ix:continuation/div[1]/table"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "First lien senior secured loans | $ | 807,310 | Yield analysis | Market yield | 9.6 % - 21.4 % | 12.3 %",
+        "50,840 | Broker quotes | N/A | N/A | N/A"
+      ],
+      "last": [
+        "Other equity | 9,740 | EV market multiple analysis | EBITDA multiple | 7.0 x - 23.4 x | 15.5 x",
+        "Total investments | $ | 1,002,343"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31, 2023",
+        "Unobservable Input",
+        "Asset Category Fair Value Primary Valuation Techniques Input Estimated Range Weighted Average(1)"
+      ],
+      "preceding": [],
+      "rows": 9,
+      "table_xpath": "/html/body/ix:continuation[17]/ix:nonnumeric/div[3]/table"
+    }
+  ]
+}

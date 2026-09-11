@@ -1,0 +1,51 @@
+{
+  "version": "programme-reference-development-v1",
+  "status": "Agent source-reviewed development examples, not held-out or owner-confirmed gold; no current-output scorer was run.",
+  "source_index": "development_source_rows.json",
+  "cases": [
+    {
+      "id": "REF-CASE-01",
+      "criteria": ["A1", "A2", "A5", "C1", "C3"],
+      "source_group": "BAIN-2023Q2",
+      "description": "Complete small schedule: same company, two distinct equity instruments before a later formal commencement date.",
+      "expected_source_lots": [
+        {"xpath": "/html/body/table[11]/tr[5]", "issuer": "Legacy Corporate Lending HoldCo, LLC", "instrument": "Equity Interest", "shares": 71, "cost_usd": 71250, "fair_value_usd": 71250},
+        {"xpath": "/html/body/table[11]/tr[6]", "issuer": "Legacy Corporate Lending HoldCo, LLC", "instrument": "Preferred Equity", "shares": 575, "cost_usd": 575000, "fair_value_usd": 575000}
+      ],
+      "expected": {"report_date": "2023-06-30", "schedule_lots": 2, "schedule_fair_value_usd": 646250, "same_company": true, "same_instrument": false, "history_eligible": true},
+      "counterexamples": ["Do not collapse the two instruments to one borrower row.", "Repeated industry, affiliation and investment totals of 646250 are not extra investments.", "The separate affiliation roll-forward repeats these two holdings; retain its evidence without creating two extra lots.", "The later November 2023 commencement statement cannot erase this April-acquired portfolio."],
+      "review_limit": "Complete printed SOI reviewed for this one small quarter; no cohort roster-accuracy inference and no full accounting-consolidation certification. Source acquisition footnote says 2023-04-24."
+    },
+    {
+      "id": "REF-CASE-02",
+      "criteria": ["B2", "B5", "D1", "D4"],
+      "source_group": "BAIN-2023Q2",
+      "expected": {"reported_cost_is_not_proxy": true, "rate_dash_is_not_numeric_zero": true, "rate_inference_permitted": false, "document_display_scale": 1},
+      "counterexamples": ["A cost equal to FV remains source reported; equality does not prove a proxy.", "Do not apply the thousands scale from a later MD&A table to this schedule: inline cost/FV facts have unit U_USD and no scale attribute.", "An identical amount in a roll-forward or subtotal is not the same citation as this lot's FV cell."],
+      "review_limit": "Equity rate applicability and absent disclosures remain explicit; no source cost-zero or missing-cost-donor example supplied by this case."
+    },
+    {
+      "id": "REF-CASE-03",
+      "criteria": ["A3", "B2", "C3", "D4", "D5"],
+      "source_groups": ["ESDEC-2023Q3", "ESDEC-2023Q4", "ESDEC-2024Q1"],
+      "description": "Esdec Solar Group B.V. first-lien term debt; source-based continuation development example reused from mg3 with raw documents re-read.",
+      "source_observations": [
+        {"group": "ESDEC-2023Q3", "xpath": "/html/body/table[20]/tr[11]", "report_date": "2023-09-30", "principal_native": 65000000, "cost_usd": 53447000, "fair_value_usd": 50510000, "printed_principal_currency": "EUR", "tagged_principal_unit": "U_USD", "currency_status": "printed/tag conflict; not silently resolved"},
+        {"group": "ESDEC-2023Q4", "xpath": "/html/body/table[45]/tr[18]", "report_date": "2023-12-31", "principal_native": 64878000, "cost_usd": 53388000, "fair_value_usd": 52250000, "printed_principal_currency": "EUR", "tagged_principal_unit": "U_EUR", "currency_status": "printed/tag agreement"},
+        {"group": "ESDEC-2024Q1", "xpath": "/html/body/table[24]/tr[11]", "report_date": "2024-03-31", "principal_native": 64756000, "cost_usd": 53305000, "fair_value_usd": 50759000, "printed_principal_currency": "EUR", "tagged_principal_unit": "U_EUR", "currency_status": "printed/tag agreement"}
+      ],
+      "expected": {"maturity_date": "2028-08-30", "basis_spread_pp": 6, "floor_pp": 0.5, "source_rate_expression": "E+600, 0.50% Floor", "all_in_coupon_not_disclosed_in_row": true, "display_scale_amounts": 1000, "continuation_edges_supported": 2},
+      "counterexamples": ["Do not convert USD cost/FV again merely because principal is EUR.", "600 displayed basis points with inline scale -4 is 6 percentage points, not 600% or 0.06 percentage points.", "Unfunded commitment tables for Esdec/Enstall provide different measures; do not merge those amounts into the term loan's FV.", "No all-in coupon may be invented from a benchmark guess."],
+      "review_limit": "Supported development link, not proof of persistent IDs or full chain recall. The 2023Q3 currency conflict requires an explicit resolution decision with evidence; printed EUR plus later EUR tags supports that hypothesis but is not a new global precedence rule."
+    },
+    {
+      "id": "REF-CASE-04",
+      "criteria": ["A3", "D4", "D5"],
+      "source_group": "ESDEC-2024Q1",
+      "expected": {"current_schedule_xpath": "/html/body/table[24]/tr[11]", "current_report_date": "2024-03-31", "current_fv_usd": 50759000, "comparative_schedule_xpath": "/html/body/table[47]/tr[18]", "comparative_report_date": "2023-12-31", "comparative_fv_usd": 52250000},
+      "counterexamples": ["Both source rows are legitimate disclosures; the comparative row is not another Q1 position.", "A citation must highlight the chosen period, lot and FV cell, not the first matching company name or number.", "Existing mg3 table ordinals differ from raw DOM XPath numbering; do not transplant parser-specific ordinal locators without document/parser identity."],
+      "review_limit": "Raw XPath/text/fact identifiers are pinned examples; no browser click-through or viewer integration is certified."
+    }
+  ],
+  "still_needed": ["Independently governed held-out source rosters across required quarters and unflagged schedules", "Independent primary total anchors with consolidation/currency bridges", "Reported zero cost and identity-safe first-FV donor cases", "Partial maturity precision source cases", "PIK terms/current/distress positive-negative-unknown source cases", "Same-name different-borrower entity counterexamples and complete source-selected chains", "Independent GICS sector labels including inferred/default and unresolved decisions", "Actual browser navigation tests for calculations, inferred sectors and repeated numbers"]
+}

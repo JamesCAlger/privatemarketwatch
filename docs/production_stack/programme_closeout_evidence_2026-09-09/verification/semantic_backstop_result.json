@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 7.02,
+  "command_equivalent": "python scripts/diff_outputs.py --semantic",
+  "scope": "five semantic artifacts only; full 64537-entry scan reached timeout",
+  "sole_override": "SEMANTIC_REPORT_FILE redirected to scratch to preserve production artifacts"
+}

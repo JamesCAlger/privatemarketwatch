@@ -1,0 +1,525 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "0",
+        "format": "ixt:numdotdecimal",
+        "id": "F_8a18ef40-f171-4296-beab-1094f9835f50",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively)",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "$",
+        "504,942,593",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": "USD",
+      "fact_id": "F_8a18ef40-f171-4296-beab-1094f9835f50",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "526,177,088",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/table[4]/tr[4]",
+      "table_xpath": "/html/body/table[4]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "526177088"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "0",
+        "format": "ixt:numdotdecimal",
+        "id": "F_e4481b9f-fbc5-4bfb-b711-0c02dc2e346d",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "533,412,766",
+        "",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "$",
+        "510,803,850",
+        "",
+        "",
+        "$",
+        "504,942,593",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": "USD",
+      "fact_id": "F_e4481b9f-fbc5-4bfb-b711-0c02dc2e346d",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "526,177,088",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[6]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "526177088"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "0",
+        "format": "ixt:numdotdecimal",
+        "id": "F_919bc4ac-5254-4830-9ae2-d48c65ab19d7",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "504,942,593",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": "USD",
+      "fact_id": "F_919bc4ac-5254-4830-9ae2-d48c65ab19d7",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "526,177,088",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[18]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "526177088"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "INF",
+        "format": "ixt:numdotdecimal",
+        "id": "F_2944d03d-7e82-4ec9-b810-241190bf8cb7",
+        "name": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "504,942,593",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": null,
+      "fact_id": "F_2944d03d-7e82-4ec9-b810-241190bf8cb7",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[18]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "0",
+        "format": "ixt:numdotdecimal",
+        "id": "F_dd05327f-7e3a-4ef9-94af-5baeace2eae7",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "504,942,593",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": "USD",
+      "fact_id": "F_dd05327f-7e3a-4ef9-94af-5baeace2eae7",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "526,177,088",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[6]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "526177088"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "INF",
+        "format": "ixt:numdotdecimal",
+        "id": "F_581b988c-5181-43b8-a405-18be343c75bc",
+        "name": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "526,177,088",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "504,942,593",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": null,
+      "fact_id": "F_581b988c-5181-43b8-a405-18be343c75bc",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[6]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+        "decimals": "0",
+        "format": "ixt:numdotdecimal",
+        "id": "F_c0dee9a4-17ac-4bcd-83cf-5053b1b2750c",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "40,437,128",
+        "",
+        "",
+        "$",
+        "485,739,960",
+        "",
+        "",
+        "$",
+        "526,177,088",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+      "currency": "USD",
+      "fact_id": "F_c0dee9a4-17ac-4bcd-83cf-5053b1b2750c",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "526,177,088",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[5]",
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "526177088"
+    }
+  ],
+  "cik": "0001860424",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1860424/000095017023021345.html",
+  "reference_id": "REF-0001860424-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 104,
+  "source_sha256": "5db7acb9576d7e69c5501a5958bf6f6aa493d2dc2c2a60a0e0ae71236599e104",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively) | $ | 526,177,088 | $ | 504,942,593"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively) | $ | 526,177,088 | $ | 504,942,593"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "Assets:",
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively) $ 526,177,088 $ 504,942,593"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Statements of A ssets and Liabilities",
+        "Onex Falcon Direct Lending BDC Fund",
+        "Item 1. Consolidated F inancial Statements.",
+        "PART I \u2013 FINAN CIAL INFORMATION",
+        "",
+        "Table of Contents"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/table[4]"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Crash Champions Intermediate, LLC | Initial Term Loan | 1M SOFR + 7.00 % | 0.75 | % | 11.81 | % | 8/8/2022 | 8/1/2029 | 6,340,698 | $ | 6,223,824 | $ | 6,229,735 | 2.1 | %",
+        "Crash Champions Intermediate, LLC | 2022 Term Loan | 1M SOFR + 7.00 % | 0.75 | % | 11.81 | % | 8/8/2022 | 8/1/2029 | 10,000,000 | 9,617,564 | 9,825,000 | 3.3 | %"
+      ],
+      "last": [
+        "Total Consumer Services | 9,605,442 | 9,293,031 | 3.1 | %",
+        "Jackson Paper Manufacturing Company | Initial Term Loan | 3M LIBOR + 7.00 % | 1.00 | % | 11.76 | % | 10/1/2021 | 8/26/2026 | 12,063,333 | 11,865,289 | 11,767,782 | 3.9 | % | (5)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Investment Type Reference Rate and Spread (2) Floor Interest Rate (2) Initial Acquisition Date Maturity Date Par/Shares Amortized Cost (3) Fair Value (4) % of Net Assets Footnotes",
+        "Non-controlled/Non-affiliated investments",
+        "Debt Investments"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "March 31, 2023",
+        "Consolidated Schedule of Investments",
+        "Onex Falcon Direct Lending BDC Fund",
+        "",
+        "Table of Contents",
+        ""
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/table[8]"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Jackson Paper Manufacturing Company | Revolving Loan | 3M LIBOR + 7.00 % | 1.00 | % | \u2014 | 10/1/2021 | 8/26/2026 | \u2014 | ( 20,832 | ) | ( 32,667 | ) | 0.0 | % | (7) (8) (11) (13)",
+        "Total Forest Products & Paper | 11,844,457 | 11,735,115 | 3.9 | %"
+      ],
+      "last": [
+        "WSP Midco LLC | Delayed Draw Term Loan | 1M LIBOR + 6.25 % | 1.00 | % | \u2014 | 10/1/2021 | 4/27/2027 | \u2014 | ( 3,126 | ) | ( 238,102 | ) | - 0.1 | % | (7) (8) (11) (13)",
+        "WSP Midco LLC | Revolving Loan | 1M LIBOR + 6.25 % | 1.00 | % | \u2014 | 10/1/2021 | 4/27/2027 | \u2014 | ( 12,434 | ) | ( 59,526 | ) | 0.0 | % | (7) (8) (11) (13)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Investment Type Reference Rate and Spread (2) Floor Interest Rate (2) Initial Acquisition Date Maturity Date Par/Shares Amortized Cost (3) Fair Value (4) % of Net Assets Footnotes",
+        "Jackson Paper Manufacturing Company Revolving Loan 3M LIBOR + 7.00 % 1.00 % \u2014 10/1/2021 8/26/2026 \u2014 ( 20,832 ) ( 32,667 ) 0.0 % (7) (8) (11) (13)",
+        "Total Forest Products & Paper 11,844,457 11,735,115 3.9 %"
+      ],
+      "preceding": [
+        "",
+        "Table of Contents",
+        "",
+        "7",
+        "n) 6M LIBOR + 6.25 % 0.75 % 11.17 % 11/16/2021 4/21/2027 14,437,500 14,429,231 12,752,644 4.3 % (5) (12) Wellful Inc. Amendment No. 1 Incremental Term Loan 3M SOFR + 6.25 % 0.75 % 11.17 % 11/16/2021 4/21/2027 4,937,500 4,735,936 4,361,294 1.5 % (5) (12) Total Consumer Goods: Non-durable 41,120,476 38,841,933 12.9 % Consumer Services Zips Car Wash, LLC Delayed Draw Term Loan 1M SOFR + 7.25 % 1.00 % 12.07 % 7/13/2022 3/1/2024 9,729,906 9,605,442 9,293,031 3.1 % (8) (9) (13) Total Consumer Services 9,605,442 9,293,031 3.1 % Forest Products & Paper Jackson Paper Manufacturing Company Initial Term Loan 3M LIBOR + 7.00 % 1.00 % 11.76 % 10/1/2021 8/26/2026 12,063,333 11,865,289 11,767,782 3.9 % (5)",
+        "",
+        "(Unaudited)",
+        "March 31, 2023"
+      ],
+      "rows": 34,
+      "table_xpath": "/html/body/table[9]"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Total Wholesale | 18,414,228 | 17,107,166 | 5.7 | %",
+        "Total Debt Investments | 524,230,621 | 518,958,423 | 173.0 | %"
+      ],
+      "last": [
+        "Total Equity | 9,182,145 | 7,218,665 | 2.4 | %",
+        "Total Non-controlled/Non-affiliated investments | $ | 533,412,766 | 526,177,088 | 175.4 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Investment Type Reference Rate and Spread (2) Floor Interest Rate (2) Initial Acquisition Date Maturity Date Par/Shares Amortized Cost (3) Fair Value (4) % of Net Assets Footnotes",
+        "Total Wholesale 18,414,228 17,107,166 5.7 %",
+        "Total Debt Investments 524,230,621 518,958,423 173.0 %"
+      ],
+      "preceding": [
+        "",
+        "Table of Contents",
+        "",
+        "8",
+        ",508 ) \u2014 0.0 % (7) (8) (11) (13) Total Sovereign & Public Finance 53,648,588 54,009,739 18.0 % Transportation: Cargo Keystone Purchaser, LLC Term Loan 3M LIBOR + 5.50 % 1.00 % 10.62 % 2/1/2022 5/7/2027 21,246,422 20,925,446 20,889,482 7.0 % (5) (9) Total Transportation: Cargo 20,925,446 20,889,482 7.0 % Wholesale WSP Midco LLC Initial Term Loan 1M LIBOR + 6.25 % 1.00 % 11.09 % 10/1/2021 4/27/2027 18,714,832 18,429,788 17,404,794 5.8 % (5) WSP Midco LLC Delayed Draw Term Loan 1M LIBOR + 6.25 % 1.00 % \u2014 10/1/2021 4/27/2027 \u2014 ( 3,126 ) ( 238,102 ) - 0.1 % (7) (8) (11) (13) WSP Midco LLC Revolving Loan 1M LIBOR + 6.25 % 1.00 % \u2014 10/1/2021 4/27/2027 \u2014 ( 12,434 ) ( 59,526 ) 0.0 % (7) (8) (11) (13)",
+        "",
+        "Table of Contents",
+        ""
+      ],
+      "rows": 13,
+      "table_xpath": "/html/body/table[10]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Senior Secured Loans | $ | 524,230,621 | $ | 518,958,423 | $ | 501,621,705 | $ | 496,354,293",
+        "Equity | 9,182,145 | 7,218,665 | 9,182,145 | 8,588,300"
+      ],
+      "last": [
+        "Equity | 9,182,145 | 7,218,665 | 9,182,145 | 8,588,300",
+        "Total Investments | $ | 533,412,766 | $ | 526,177,088 | $ | 510,803,850 | $ | 504,942,593"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "Amortized Cost Fair Value Amortized Cost Fair Value",
+        "Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293"
+      ],
+      "preceding": [
+        "",
+        "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022:"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "Automotive | $ | 18,953,303 | 3.6 | % | $ | 18,641,767 | 3.7 | %",
+        "Business Services | 70,981,491 | 13.5 | % | 71,864,705 | 14.2 | %"
+      ],
+      "last": [
+        "Wholesale | 18,753,616 | 3.6 | % | 20,355,746 | 4.0 | %",
+        "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "Fair Value Percentage Fair Value Percentage",
+        "Automotive $ 18,953,303 3.6 % $ 18,641,767 3.7 %"
+      ],
+      "preceding": [
+        "",
+        "The following tables summarize the industry and geographic composition of the Company\u2019s investment portfolio based on fair value as of March 31, 2023 and December 31, 2022:"
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "United States | $ | 515,065,782 | 97.9 | % | $ | 493,799,332 | 97.8 | %",
+        "Canada | 11,111,306 | 2.1 | % | 11,143,261 | 2.2 | %"
+      ],
+      "last": [
+        "Canada | 11,111,306 | 2.1 | % | 11,143,261 | 2.2 | %",
+        "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "Fair Value Percentage Fair Value Percentage",
+        "United States $ 515,065,782 97.9 % $ 493,799,332 97.8 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "r 6,251,520 1.2 % 6,299,949 1.2 % Construction & Building 13,987,742 2.7 % 13,891,279 2.8 % Consumer Goods: Durable 51,834,111 9.9 % 52,528,261 10.4 % Consumer Goods: Non-durable 41,570,363 7.9 % 42,386,720 8.4 % Consumer Services 9,293,031 1.8 % 9,694,347 1.9 % Forest Products & Paper 11,735,115 2.2 % 11,681,141 2.3 % Healthcare & Pharmaceuticals 99,053,285 18.8 % 97,294,977 19.4 % High Tech Industries 89,511,780 16.9 % 85,401,792 16.9 % Insurance 19,065,681 3.6 % \u2014 \u2014 % Sovereign & Public Finance 54,296,568 10.3 % 53,948,701 10.7 % Transportation: Cargo 20,889,482 4.0 % 20,953,208 4.1 % Wholesale 18,753,616 3.6 % 20,355,746 4.0 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 %",
+        "",
+        "The following tables summarize the industry and geographic composition of the Company\u2019s investment portfolio based on fair value as of March 31, 2023 and December 31, 2022:"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "Senior Secured Loans | $ | \u2014 | $ | 40,437,128 | $ | 478,521,295 | $ | 518,958,423",
+        "Senior Secured Loans | $ | \u2014 | $ | 40,437,128 | $ | 478,521,295 | $ | 518,958,423"
+      ],
+      "last": [
+        "Total Investments | $ | \u2014 | $ | 40,437,128 | $ | 485,739,960 | $ | 526,177,088",
+        "Total Investments | $ | \u2014 | $ | 40,437,128 | $ | 485,739,960 | $ | 526,177,088"
+      ],
+      "opening_rows": [
+        "",
+        "Level 1 Level 2 Level 3 Total",
+        "Senior Secured Loans $ \u2014 $ 40,437,128 $ 478,521,295 $ 518,958,423",
+        "Equity \u2014 \u2014 7,218,665 7,218,665"
+      ],
+      "preceding": [
+        "",
+        "The following table summarizes the fair value hierarchy of the Company\u2019s investment portfolio as of March 31, 2023:"
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]"
+    }
+  ]
+}

@@ -1,0 +1,811 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1508655",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001508655-2023-06-30.json",
+    "evidence_sha256": "33c5d8e058602935703fa7a3d18683806aed5669faaccdf37f1399c2c49a188b",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001508655-2023-06-30",
+    "report_date": "2023-06-30",
+    "review_note": "SOI/financial anchor 3,088,987,000; net presentation 3,036,338,000 is a different basis.",
+    "saved_candidate_rows": "198",
+    "source_candidate_rows": "229"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1508655/000095017023038066.html",
+    "ref": "REF-0001508655-2023-06-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | June 30, December 31, | 2023 2022 | Assets | Investments at fair value",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Ba lance Sheets",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled, non-affiliated investments (amortized cost of $ 2,993,190 and $ 2,707,442 , respectively)",
+          "",
+          "$",
+          "3,022,333",
+          "",
+          "",
+          "$",
+          "2,717,170",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_b1351231-e2b9-494b-8486-45505aa31060",
+            "scale": "3",
+            "text": "2,993,190",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fe2a19d5-60a3-41bf-8b08-df245404d231",
+            "scale": "3",
+            "text": "2,707,442",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_b1351231-e2b9-494b-8486-45505aa31060",
+            "scale": "3",
+            "text": "3,022,333",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fe2a19d5-60a3-41bf-8b08-df245404d231",
+            "scale": "3",
+            "text": "2,717,170",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | June 30, December 31, | 2023 2022 | Assets | Investments at fair value",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Ba lance Sheets",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value (amortized cost of $ 3,065,359 and $ 2,774,726 , respectively)",
+          "",
+          "",
+          "3,088,987",
+          "",
+          "",
+          "",
+          "2,787,925",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+            "scale": "3",
+            "text": "3,065,359",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_849c0f2e-081c-4b80-a1e8-ebd1ea830207",
+            "scale": "3",
+            "text": "2,774,726",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+            "scale": "3",
+            "text": "3,088,987",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_849c0f2e-081c-4b80-a1e8-ebd1ea830207",
+            "scale": "3",
+            "text": "2,787,925",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | June 30, December 31, | 2023 2022 | Assets | Investments at fair value",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Ba lance Sheets",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[7]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income from non-controlled, non-affiliated investments",
+          "",
+          "",
+          "105,737",
+          "",
+          "",
+          "",
+          "62,757",
+          "",
+          "",
+          "",
+          "200,539",
+          "",
+          "",
+          "",
+          "128,986",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_154d6f9c-529b-4358-b97a-e798776965f7",
+            "scale": "3",
+            "text": "105,737",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_2f85906a-4c85-4b3a-982a-7643a5b25844",
+            "scale": "3",
+            "text": "62,757",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_b3d52f75-5fa9-463c-9ef6-ec6bbcf16d33",
+            "scale": "3",
+            "text": "200,539",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_77526b48-0b04-4657-ae3c-434c709d563a",
+            "scale": "3",
+            "text": "128,986",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended Six Months Ended | June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Income | Investment income from non-controlled, non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Stateme nts of Operations",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[10]"
+      },
+      {
+        "cells": [
+          "Total investment income from non-controlled, affiliated investments",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "133",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_a5353eb8-b0fe-46ab-b4db-6771efb146d4",
+            "scale": "3",
+            "text": "133",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended Six Months Ended | June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Income | Investment income from non-controlled, non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Stateme nts of Operations",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[13]"
+      },
+      {
+        "cells": [
+          "Total investment income from controlled, affiliated investments",
+          "",
+          "",
+          "1,868",
+          "",
+          "",
+          "",
+          "1,131",
+          "",
+          "",
+          "",
+          "3,572",
+          "",
+          "",
+          "",
+          "2,197",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_96d3e677-b6e1-4ba4-a78e-7ae83a133cc7",
+            "scale": "3",
+            "text": "1,868",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_16db689c-8ef6-4ee5-b76a-c66a8eef1797",
+            "scale": "3",
+            "text": "1,131",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_f8d6b240-0dc7-4254-9324-5ae0198a7aca",
+            "scale": "3",
+            "text": "3,572",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_fab7f566-4856-4ae2-97ab-bdb089fa46ab",
+            "scale": "3",
+            "text": "2,197",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended Six Months Ended | June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Income | Investment income from non-controlled, non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Stateme nts of Operations",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[17]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "",
+          "107,605",
+          "",
+          "",
+          "",
+          "63,888",
+          "",
+          "",
+          "",
+          "204,111",
+          "",
+          "",
+          "",
+          "131,316",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_75e3cf8d-6899-4c61-a058-b8f4bef0cf3b",
+            "scale": "3",
+            "text": "107,605",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_9bff12e5-89f2-4e8f-9912-0ef4fc6ac841",
+            "scale": "3",
+            "text": "63,888",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_15372a64-2a18-46c7-98da-879c4c05d095",
+            "scale": "3",
+            "text": "204,111",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:NonoperatingIncomeExpense",
+            "context": "C_41ca1ced-d2cc-416b-9188-c7a2e93aba0b",
+            "scale": "3",
+            "text": "131,316",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended Six Months Ended | June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Income | Investment income from non-controlled, non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share amounts)",
+          "Consolidated Stateme nts of Operations",
+          "Sixth Street Specialty Lending, Inc.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[18]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "3,065,359",
+          "",
+          "$",
+          "3,088,987",
+          "",
+          "211.5 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_21e4fc4b-4e6d-4a51-8f68-8fd9632f9a21",
+            "scale": "3",
+            "text": "3,065,359",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_21e4fc4b-4e6d-4a51-8f68-8fd9632f9a21",
+            "scale": "3",
+            "text": "3,088,987",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_21e4fc4b-4e6d-4a51-8f68-8fd9632f9a21",
+            "scale": "-2",
+            "text": "211.5",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets | Wind River CLO Ltd, Series 2018-3A (3)(4)(9) Structured Product ($ 2,000 par, due 1/2031 ) 12/12/2022 L + 5.65 % 10.90 % 1,704 1,679 0.1 % | 54,956 54,183 4.8 % | Total Equity and Other Investments 196,601 208,890 15.0 %",
+        "preceding": [
+          "",
+          "",
+          "10",
+          "2 L + 5.75 % 11.01 % 2,406 2,221 0.2 % Whitebox CLO I Ltd, Series 2020-2A (3)(4)(9) Structured Product ($ 1,125 par, due 10/2034 ) 7/12/2022 L + 3.35 % 8.62 % 1,010 1,077 0.1 % Wind River CLO Ltd, Series 2014-2A (3)(4)(9) Structured Product ($ 1,500 par, due 1/2031 ) 6/23/2022 L + 2.90 % 8.16 % 1,385 1,295 0.1 % Wind River CLO Ltd, Series 2017-1A (3)(4)(9) Structured Product ($ 3,000 par, due 4/2036 ) 7/14/2022 L + 3.72 % 8.98 % 2,626 2,732 0.2 %",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[14]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,774,726",
+          "",
+          "$",
+          "2,787,925",
+          "",
+          "204.9 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_e8109e0f-7e88-4f35-9923-37ea1346f082",
+            "scale": "3",
+            "text": "2,774,726",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e8109e0f-7e88-4f35-9923-37ea1346f082",
+            "scale": "3",
+            "text": "2,787,925",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_e8109e0f-7e88-4f35-9923-37ea1346f082",
+            "scale": "-2",
+            "text": "204.9",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Company (1)(6) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2)(8) Fair Value (9) Percentage of Net Assets | Magnetite CLO Ltd, Series 2021-30A (3)(4)(10) Structured Product ($ 1,000 par, due 10/2034 ) 6/13/2022 L + 6.20 % 8.98 % 917 909 0.1 % | MidOcean Credit CLO Ltd, Series 2016-6A (3)(4)(10) Structured Product ($ 3,500 par, due 4/2033 ) 5/23/2022 L + 3.52 % 6.23 % 3,151 2,971 0.2 % | MidOcean Credit CLO Ltd, Series 2018-9A (3)(4)(10) Structured Product ($ 1,100 par, due 7/2031 ) 6/1/2022 L + 6.05 % 8.76 % 959 828 0.1 %",
+        "preceding": [
+          "",
+          "",
+          "17",
+          "ar, due 1/2037 ) 9/12/2022 L + 6.36 % 8.87 % 1,799 1,718 0.1 % Jefferson Mill CLO Ltd, Series 2015-1A (3)(4)(10) Structured Product ($ 1,000 par, due 10/2031 ) 5/23/2022 L + 3.55 % 6.26 % 901 870 0.1 % KKR CLO Ltd, 49A (3)(4)(10) Structured Product ($ 1,000 par, due 7/2035 ) 6/2/2022 L + 8.00 % 10.17 % 966 909 0.1 % Madison Park CLO, Series 2018-28A (3)(4)(10) Structured Product ($ 1,000 par, due 7/2030 ) 6/28/2022 L + 5.25 % 7.76 % 881 877 0.1 %",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[21]/tr[23]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "3,065,359",
+          "",
+          "",
+          "$",
+          "3,088,987",
+          "",
+          "",
+          "$",
+          "23,628",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:AvailableForSaleDebtSecuritiesAmortizedCostBasis",
+            "context": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+            "scale": "3",
+            "text": "3,065,359",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:AvailableForSaleSecuritiesDebtSecurities",
+            "context": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+            "scale": "3",
+            "text": "3,088,987",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:DebtAndEquitySecuritiesUnrealizedGainLoss",
+            "context": "C_15372a64-2a18-46c7-98da-879c4c05d095",
+            "scale": "3",
+            "text": "23,628",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | June 30, 2023 | Amortized Cost (1) Fair Value Net Unrealized Gain (Loss) | First-lien debt investments $ 2,783,455 $ 2,800,152 $ 16,697 | Second-lien debt investments 47,831 39,708 ( 8,123 )",
+        "preceding": [
+          "",
+          "Investments at fair value consisted of the following at June 30, 2023 and December 31, 2022:",
+          " the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled, affiliated investments is contained in the accompanying consolidated financial statements, including the consolidated schedules of investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled, affiliated investments.",
+          "4. Investments at Fair Value"
+        ],
+        "xpath": "/html/body/div[59]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "2,774,726",
+          "",
+          "",
+          "$",
+          "2,787,925",
+          "",
+          "",
+          "$",
+          "13,199",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:AvailableForSaleDebtSecuritiesAmortizedCostBasis",
+            "context": "C_849c0f2e-081c-4b80-a1e8-ebd1ea830207",
+            "scale": "3",
+            "text": "2,774,726",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:AvailableForSaleSecuritiesDebtSecurities",
+            "context": "C_849c0f2e-081c-4b80-a1e8-ebd1ea830207",
+            "scale": "3",
+            "text": "2,787,925",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:DebtAndEquitySecuritiesUnrealizedGainLoss",
+            "context": "C_201c5a6d-4c85-418a-b380-724513f1b0d9",
+            "scale": "3",
+            "text": "13,199",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | December 31, 2022 | Amortized Cost (1) Fair Value Net Unrealized Gain (Loss) | First-lien debt investments $ 2,529,317 $ 2,517,894 $ ( 11,423 ) | Second-lien debt investments 42,743 40,762 ( 1,981 )",
+        "preceding": [
+          "",
+          "June 30, 2023 Amortized Cost (1) Fair Value Net Unrealized Gain (Loss) First-lien debt investments $ 2,783,455 $ 2,800,152 $ 16,697 Second-lien debt investments 47,831 39,708 ( 8,123 ) Mezzanine debt investments 37,472 40,237 2,765 Equity and other investments 141,646 154,707 13,061 Structured credit investments 54,955 54,183 ( 772 ) Total Investments $ 3,065,359 $ 3,088,987 $ 23,628",
+          "",
+          "Investments at fair value consisted of the following at June 30, 2023 and December 31, 2022:",
+          " the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled, affiliated investments is contained in the accompanying consolidated financial statements, including the consolidated schedules of investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled, affiliated investments.",
+          "4. Investments at Fair Value"
+        ],
+        "xpath": "/html/body/div[59]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value",
+          "",
+          "$",
+          "8,053",
+          "",
+          "",
+          "$",
+          "87,413",
+          "",
+          "",
+          "$",
+          "2,993,521",
+          "",
+          "",
+          "$",
+          "3,088,987",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_28113bef-25cf-46bd-b3bd-8e7a01827f48",
+            "scale": "3",
+            "text": "8,053",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_7ec809ca-af34-4cab-915e-b35365870fa7",
+            "scale": "3",
+            "text": "87,413",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_6baa7a55-9bf1-481b-b2e2-e32c342f64c2",
+            "scale": "3",
+            "text": "2,993,521",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_2dbf5b37-c38b-4126-b607-d27e03002c6f",
+            "scale": "3",
+            "text": "3,088,987",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Fair Value Hierarchy at June 30, 2023 | Level 1 Level 2 Level 3 Total | First-lien debt investments $ \u2014 $ 22,762 $ 2,777,390 $ 2,800,152 | Second-lien debt investments \u2014 \u2014 39,708 39,708",
+        "preceding": [
+          "",
+          "The following tables present fair value measurements of investments as of June 30, 2023 and December 31, 2022:",
+          "Investments",
+          "6. Fair Value of Financial Instruments"
+        ],
+        "xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value",
+          "",
+          "$",
+          "7,498",
+          "",
+          "",
+          "$",
+          "86,489",
+          "",
+          "",
+          "$",
+          "2,693,938",
+          "",
+          "",
+          "$",
+          "2,787,925",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_7c06bdd2-b6c4-429a-879d-1e73e5b8492e",
+            "scale": "3",
+            "text": "7,498",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_8d40502f-cfd5-4159-87de-071882747402",
+            "scale": "3",
+            "text": "86,489",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_10890a31-0fe6-4d5f-b59b-39dc3fc176de",
+            "scale": "3",
+            "text": "2,693,938",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "C_849c0f2e-081c-4b80-a1e8-ebd1ea830207",
+            "scale": "3",
+            "text": "2,787,925",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Fair Value Hierarchy at December 31, 2022 | Level 1 Level 2 Level 3 Total | First-lien debt investments $ \u2014 $ 21,935 $ 2,495,959 $ 2,517,894 | Second-lien debt investments \u2014 \u2014 40,762 40,762",
+        "preceding": [
+          "",
+          "Level 2 Level 3 Total First-lien debt investments $ \u2014 $ 22,762 $ 2,777,390 $ 2,800,152 Second-lien debt investments \u2014 \u2014 39,708 39,708 Mezzanine debt investments \u2014 \u2014 40,237 40,237 Equity and other investments 8,053 10,468 136,186 154,707 Structured credit investments \u2014 54,183 \u2014 54,183 Total investments at fair value $ 8,053 $ 87,413 $ 2,993,521 $ 3,088,987 Interest rate swaps \u2014 ( 52,649 ) \u2014 ( 52,649 ) Total $ 8,053 $ 34,764 $ 2,993,521 $ 3,036,338",
+          "",
+          "The following tables present fair value measurements of investments as of June 30, 2023 and December 31, 2022:",
+          "Investments",
+          "6. Fair Value of Financial Instruments"
+        ],
+        "xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "107.6",
+          "",
+          "",
+          "$",
+          "63.9",
+          "",
+          "",
+          "$",
+          "204.1",
+          "",
+          "",
+          "$",
+          "131.3",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended Six Months Ended | ($ in millions) June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Total investment income $ 107.6 $ 63.9 $ 204.1 $ 131.3 | Less: Net expenses 57.9 22.3 111.1 53.7",
+        "preceding": [
+          "",
+          "Operating results for the three and six months ended June 30, 2023 and 2022 were as follows:",
+          "Results of Operations",
+          "",
+          "June 30, 2023 December 31, 2022 Investment Investments at Investments at Performance Fair Value Percentage of Fair Value Percentage of Rating ($ in millions) Total Portfolio ($ in millions) Total Portfolio 1 $ 2,718.5 88.0 % $ 2,472.8 88.7 % 2 295.4 9.6 293.6 10.5 3 55.7 1.8 21.3 0.8 4 \u2014 \u2014 \u2014 \u2014 5 19.4 0.6 0.2 0.0 Total $ 3,089.0 100.0 % $ 2,787.9 100.0 %",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[33]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "107.6",
+          "",
+          "",
+          "$",
+          "63.9",
+          "",
+          "",
+          "$",
+          "204.1",
+          "",
+          "",
+          "$",
+          "131.3",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended Six Months Ended | ($ in millions) June 30, 2023 June 30, 2022 June 30, 2023 June 30, 2022 | Interest from investments $ 102.7 $ 61.2 $ 195.9 $ 126.6 | Dividend income 0.8 1.1 1.4 1.4",
+        "preceding": [
+          "",
+          "Investment Income",
+          "",
+          "",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[34]/tr[7]"
+      }
+    ],
+    "sha256": "d49be98258d02000ff649f9d352d8bb80984a93ef662bef742f9babc33f45daa",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

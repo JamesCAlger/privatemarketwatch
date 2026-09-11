@@ -1,0 +1,62 @@
+{"nodeid": "tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup", "started_utc": "2026-09-10T18:05:12.382458+00:00"}
+{"nodeid": "tests/test_bdc_xbrl_wrapper.py::test_blackrock_direct_lending_flat_debt_leaf", "started_utc": "2026-09-10T18:05:18.823656+00:00"}
+{"nodeid": "tests/test_bdc_xbrl_wrapper.py::test_silver_point_specialty_credit_comma_leaf_and_total_rows", "started_utc": "2026-09-10T18:05:18.862640+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_cik_scoping_excludes_other_filers", "started_utc": "2026-09-10T18:05:18.913904+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_cross_cik_query_returns_nothing_for_absent_cik", "started_utc": "2026-09-10T18:05:19.108513+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_groupby_aggregation_works", "started_utc": "2026-09-10T18:05:19.286696+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_join_across_tables", "started_utc": "2026-09-10T18:05:19.528800+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[DROP TABLE holdings]", "started_utc": "2026-09-10T18:05:19.797878+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[INSERT INTO holdings VALUES (1)]", "started_utc": "2026-09-10T18:05:19.921858+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[SELECT * FROM holdings; DROP TABLE holdings]", "started_utc": "2026-09-10T18:05:19.975026+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[SELECT * FROM read_parquet('C:/secret.parquet')]", "started_utc": "2026-09-10T18:05:20.046645+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[ATTACH 'other.db']", "started_utc": "2026-09-10T18:05:20.101756+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[PRAGMA database_list]", "started_utc": "2026-09-10T18:05:20.154457+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[UPDATE holdings SET fair_value = 0]", "started_utc": "2026-09-10T18:05:20.207256+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_rejects_unsafe[SELECT * FROM holdings -- sneaky]", "started_utc": "2026-09-10T18:05:20.268194+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_accepts_select[SELECT * FROM holdings]", "started_utc": "2026-09-10T18:05:20.315148+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_accepts_select[WITH t AS (SELECT * FROM holdings) SELECT count(*) FROM t]", "started_utc": "2026-09-10T18:05:20.372820+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_validate_accepts_select[select report_date, sum(fair_value) from staging group by 1]", "started_utc": "2026-09-10T18:05:20.420893+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_query_rejects_unsafe_at_runtime", "started_utc": "2026-09-10T18:05:20.481529+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_file_access_blocked_even_if_validation_bypassed", "started_utc": "2026-09-10T18:05:20.687400+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_row_cap_truncates", "started_utc": "2026-09-10T18:05:20.895681+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_describe_returns_schema_and_residual_context", "started_utc": "2026-09-10T18:05:21.026404+00:00"}
+{"nodeid": "tests/test_agent_data_query.py::test_file_backed_query_cache_is_temporary_and_keeps_cik_scope", "started_utc": "2026-09-10T18:05:21.238169+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_discover_selects_only_real_errors", "started_utc": "2026-09-10T18:05:21.491217+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_discover_dedupes_multiple_verdicts_per_target", "started_utc": "2026-09-10T18:05:21.625719+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_refuses_without_gate_pass", "started_utc": "2026-09-10T18:05:21.747785+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_loop_decision_pass_noop_stops_successfully", "started_utc": "2026-09-10T18:05:21.795162+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_noop_gate_verdict_requires_band_and_validated_tier", "started_utc": "2026-09-10T18:05:21.848625+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_gate_passes_clean_zero_rule_investigation", "started_utc": "2026-09-10T18:05:21.890686+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_gate_still_fails_over_band_zero_rule_investigation", "started_utc": "2026-09-10T18:05:21.980619+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_pass_noop_promotes_nothing", "started_utc": "2026-09-10T18:05:22.084846+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_refuses_invalid_rules", "started_utc": "2026-09-10T18:05:22.138821+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_refuses_noop_rules", "started_utc": "2026-09-10T18:05:22.221045+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_copies_valid_effective_rules", "started_utc": "2026-09-10T18:05:22.413651+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_loop_decision_stops_on_escalation_after_iter1", "started_utc": "2026-09-10T18:05:22.618614+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_loop_decision_iteration_one_still_iterates_despite_escalation", "started_utc": "2026-09-10T18:05:22.674882+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_loop_decision_pass_beats_escalation", "started_utc": "2026-09-10T18:05:22.723460+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_prep_prompt_lists_existing_escalations", "started_utc": "2026-09-10T18:05:22.784604+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_prep_blocks_without_bundle", "started_utc": "2026-09-10T18:05:23.194221+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_prep_allow_missing_bundle_overrides", "started_utc": "2026-09-10T18:05:23.279424+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_apply_escalation_counts_deduped_vs_raw", "started_utc": "2026-09-10T18:05:23.555613+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_apply_escalation_counts_no_duplicates", "started_utc": "2026-09-10T18:05:23.839234+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_route_escalations_by_category", "started_utc": "2026-09-10T18:05:24.074473+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_measure_escalation_count_scoped_to_target_quarter", "started_utc": "2026-09-10T18:05:24.224448+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_gate_uses_production_band_not_default_1pct", "started_utc": "2026-09-10T18:05:24.376549+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_measure_gate_uses_production_band", "started_utc": "2026-09-10T18:05:24.518045+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_prep_prompt_excludes_stale_quarter_escalation", "started_utc": "2026-09-10T18:05:24.803716+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_apply_records_rules_fingerprint", "started_utc": "2026-09-10T18:05:25.240183+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_gate_is_stale_when_rules_change_after_apply", "started_utc": "2026-09-10T18:05:25.503489+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_refuses_stale_gate", "started_utc": "2026-09-10T18:05:26.047735+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_gate_stale_when_rules_deleted_after_apply", "started_utc": "2026-09-10T18:05:26.118187+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_status_measurement_leaves_gate_non_stale", "started_utc": "2026-09-10T18:05:26.366100+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_status_measurement_writes_fingerprint_contract_files", "started_utc": "2026-09-10T18:05:26.708825+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_promote_refuses_pass_noop_when_rules_exist", "started_utc": "2026-09-10T18:05:27.029411+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_anchor_candidates_use_basis", "started_utc": "2026-09-10T18:05:27.094501+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_outlier_series_includes_plus_cash_quarters", "started_utc": "2026-09-10T18:05:27.906395+00:00"}
+{"nodeid": "tests/test_investigation_orchestration.py::test_ex_cash_override_does_not_displace_plus_cash", "started_utc": "2026-09-10T18:05:28.239702+00:00"}
+{"nodeid": "tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer", "started_utc": "2026-09-10T18:05:29.108022+00:00"}
+{"nodeid": "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed", "started_utc": "2026-09-10T18:06:49.869424+00:00"}
+{"nodeid": "tests/test_unified_holdings.py::TestPrepareBdc::test_gsbd_multilevel_pct_hierarchy_extracts_issuer", "started_utc": "2026-09-10T18:08:03.989426+00:00"}
+{"nodeid": "tests/test_unified_holdings.py::TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien", "started_utc": "2026-09-10T18:09:19.135874+00:00"}
+{"nodeid": "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers", "started_utc": "2026-09-10T18:13:03.734680+00:00"}

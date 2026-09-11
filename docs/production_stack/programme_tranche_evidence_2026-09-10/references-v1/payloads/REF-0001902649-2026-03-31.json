@@ -1,0 +1,363 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1902649",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001902649-2026-03-31.json",
+    "evidence_sha256": "34b82a7038fba70be3839e384bdc13fa4489273eeb0ede3c967d65aa0ce5b649",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001902649-2026-03-31",
+    "report_date": "2026-03-31",
+    "review_note": "March 2026 investments 2,354,502,240 vs combined cash basis 2,631,922,582.",
+    "saved_candidate_rows": "469",
+    "source_candidate_rows": "538"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1902649/000119312526211710.html",
+    "ref": "REF-0001902649-2026-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value:",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2026 December 31, 2025 | (Unaudited) | Assets | Investments, at fair value:",
+        "preceding": [
+          "",
+          "Consolidated Statements of Asset s and Liabilities",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "",
+          "n and Analysis of Financial Condition and Results of Operations 72 Item 3. Quantitative and Qualitative Disclosures About Market Risk 88 Item 4. Controls and Procedures 89 Part II. Other Information Item 1. Legal Proceedings 90 Item 1A. Risk Factors 90 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 90 Item 3. Defaults upon Senior Securities 90 Item 4. Mine Safety Disclosures 90 Item 5. Other Information 90 Item 6. Exhibits 91",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled, non-affiliated investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively)",
+          "",
+          "$",
+          "2,354,502,240",
+          "",
+          "",
+          "$",
+          "2,244,701,289",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_9dbed5f5-203c-4d2e-8d99-b7c4fd20c70b",
+            "scale": null,
+            "text": "2,391,096,696",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_c8b6e335-6ddd-4345-9a18-0790265000da",
+            "scale": null,
+            "text": "2,254,646,820",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_9dbed5f5-203c-4d2e-8d99-b7c4fd20c70b",
+            "scale": null,
+            "text": "2,354,502,240",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c8b6e335-6ddd-4345-9a18-0790265000da",
+            "scale": null,
+            "text": "2,244,701,289",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2026 December 31, 2025 | (Unaudited) | Assets | Investments, at fair value:",
+        "preceding": [
+          "",
+          "Consolidated Statements of Asset s and Liabilities",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "",
+          "n and Analysis of Financial Condition and Results of Operations 72 Item 3. Quantitative and Qualitative Disclosures About Market Risk 88 Item 4. Controls and Procedures 89 Part II. Other Information Item 1. Legal Proceedings 90 Item 1A. Risk Factors 90 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 90 Item 3. Defaults upon Senior Securities 90 Item 4. Mine Safety Disclosures 90 Item 5. Other Information 90 Item 6. Exhibits 91",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively)",
+          "",
+          "",
+          "2,354,502,240",
+          "",
+          "",
+          "",
+          "2,244,701,289",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": null,
+            "text": "2,391,096,696",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": null,
+            "text": "2,254,646,820",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": null,
+            "text": "2,354,502,240",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": null,
+            "text": "2,244,701,289",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2026 December 31, 2025 | (Unaudited) | Assets | Investments, at fair value:",
+        "preceding": [
+          "",
+          "Consolidated Statements of Asset s and Liabilities",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "",
+          "n and Analysis of Financial Condition and Results of Operations 72 Item 3. Quantitative and Qualitative Disclosures About Market Risk 88 Item 4. Controls and Procedures 89 Part II. Other Information Item 1. Legal Proceedings 90 Item 1A. Risk Factors 90 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 90 Item 3. Defaults upon Senior Securities 90 Item 4. Mine Safety Disclosures 90 Item 5. Other Information 90 Item 6. Exhibits 91",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "",
+          "54,387,352",
+          "",
+          "",
+          "",
+          "28,933,446",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_55e70b86-a300-4f29-a168-dba62e383e50",
+            "scale": null,
+            "text": "54,387,352",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_69299ecb-f8eb-4d94-a0b1-2402022bae34",
+            "scale": null,
+            "text": "28,933,446",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the Three Months Ended March 31, | 2026 2025 | Investment income | Interest income:",
+        "preceding": [
+          "Consolidated Statements of Operations (Unaudited)",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "4",
+          "$ 23.52 $ 23.95 Class S Shares: Net assets $ 118,391,931 $ 114,536,454 Common shares outstanding ($ 0.001 par value, unlimited shares authorized) 5,032,831 4,782,132 Net asset value per share $ 23.52 $ 23.95 Class D Shares: Net assets $ 2,269,955 $ 2,235,823 Common shares outstanding ($ 0.001 par value, unlimited shares authorized) 96,496 93,350 Net asset value per share 23.52 23.95 See accompanying notes to the consolidated financial statements.",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[15]/table/tr[9]"
+      },
+      {
+        "cells": [
+          "Total Investments - 142.1 % of Net Assets",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,391,096,696",
+          "",
+          "",
+          "$",
+          "2,354,502,240",
+          "",
+          "",
+          "",
+          "89.43",
+          "%",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": "-2",
+            "text": "142.1",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": null,
+            "text": "2,391,096,696",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": null,
+            "text": "2,354,502,240",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001902649:InvestmentOwnedPercentOfCashAndInvestment",
+            "context": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+            "scale": "-2",
+            "text": "89.43",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes | Debt Investments - Continued | Textiles, Apparel and Luxury Goods | WH Borrower, LLC (WHP) First Lien Term Loan SOFR(Q) 0.50 % 4.50 % 8.16 % 2/20/2032 $ 26,581,671 $ 26,469,603 $ 26,633,638 1.01 %",
+        "preceding": [
+          "",
+          "March 31, 2026",
+          "Consolidated Schedule of Investments (Continued) (Unaudited)",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "21",
+          "\u2014 3.50 % 7.17 % 12/29/2032 $ 1,875,000 1,865,828 1,849,228 0.07 % Flow Control Group (Flow Merger Sub) First Lien Term Loan SOFR(M) \u2014 3.25 % 6.92 % 2/28/2033 $ 52,000 52,000 52,065 \u2014 Veritiv Corp. First Lien Term Loan SOFR(Q) \u2014 4.00 % 7.70 % 11/17/2030 $ 393,493 391,948 383,374 0.01 % White Cap Supply Holdings, LLC First Lien Tranche B Term Loan SOFR(M) \u2014 3.25 % 6.92 % 10/19/2029 $ 7,778,231 7,752,306 7,499,226 0.29 % 11,263,899 10,972,261 0.42 %",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[66]/table/tr[32]"
+      },
+      {
+        "cells": [
+          "Total Investments - 142.2 % of Net Assets",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "2,254,646,820",
+          "",
+          "",
+          "",
+          "2,244,701,289",
+          "",
+          "",
+          "",
+          "91.04",
+          "%",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": "-2",
+            "text": "142.2",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": null,
+            "text": "2,254,646,820",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": null,
+            "text": "2,244,701,289",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001902649:InvestmentOwnedPercentOfCashAndInvestment",
+            "context": "C_002f3788-b508-4276-8068-fb92b0724754",
+            "scale": "-2",
+            "text": "91.04",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes | Debt Investments - Continued | Wireless Telecommunication Services | OpenMarket, Inc. (Infobip) (United Kingdom) First Lien Term Loan SOFR(Q) 0.75 % 5.50 % 9.17 % 6/11/2029 $ 43,800,168 $ 43,235,290 $ 43,368,561 1.76 % C/E",
+        "preceding": [
+          "December 31, 2025",
+          "Consolidated Schedule of Investments (Continued)",
+          "BlackRock Private Credit Fund",
+          "",
+          "",
+          "37",
+          "800,000 12,733,172 12,876,800 0.52 % C/E Transportation Infrastructure Bleriot US Bidco Inc. First Lien Term Loan SOFR(Q) \u2014 2.50 % 6.17 % 10/30/2026 $ 3,298,317 3,298,220 3,318,239 0.13 % Brown Group Holding, LLC First Lien Term Loan SOFR(Q) \u2014 2.50 % 6.22 % 7/1/2031 $ 1,236,877 1,236,877 1,244,471 0.05 % Brown Group Holding, LLC First Lien Term Loan SOFR(Q) \u2014 2.75 % 6.57 % 7/2/2029 $ 2,882,702 2,900,419 2,900,416 0.12 % 7,435,516 7,463,126 0.30 %",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[114]/table/tr[21]"
+      }
+    ],
+    "sha256": "de5a156be080bd1b8dd016ea49207c258fd7a67c7ac0d23f945ee4c3b4d0e00b",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

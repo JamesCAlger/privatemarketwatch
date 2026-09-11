@@ -1,0 +1,55 @@
+{
+  "elapsed_seconds": 10.231332199997269,
+  "entity_outcomes": {
+    "correct": 35,
+    "false_merge": 13,
+    "false_split": 2,
+    "negative_cluster_separated": 111,
+    "outside_required_period": 10,
+    "requires_explicit_pair_adjudication": 4
+  },
+  "exposure": "mg3 was used to develop/tune matching; regression only, not new hold-out or unbiased cohort precision/recall.",
+  "full_chain_completeness": "UNASSESSABLE: observed edge/subchain review does not establish complete source-selected life histories.",
+  "invalid_or_missing": 0,
+  "legal_entity_limit": "Legacy benchmark legal-entity wording and group/name inference require governance review; no full source census.",
+  "packet_types": {
+    "chain": 360,
+    "entity": 175
+  },
+  "pair_kinds": {
+    "position": 846
+  },
+  "pair_outcomes": {
+    "correct": 720,
+    "false_merge": 22,
+    "missed_same_identity": 19,
+    "missing_or_ambiguous_source_row": 14,
+    "outside_required_period": 48,
+    "uncertain_reference": 23
+  },
+  "reference_unique_row_ids": 9988,
+  "same_period_pid_collision_groups": 0,
+  "source_selected_esdec_mapping": [
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-0664161909bb3724"
+    },
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-bd31b65d09a871db"
+    },
+    {
+      "durable_position_id": "POSITION-b6e9bcc3-33b2-5724-9a9d-3c2b9a91121c",
+      "old_position_id": "POS-00065234",
+      "old_snapshot": "280525a82050be46f1fa991b46c6d250805715bc1478ed07aa16742227d3a911",
+      "row_id": "ROW-bfda4a43b00ac214"
+    }
+  ],
+  "uniquely_joined_rows": 9988,
+  "valid_packets": 535,
+  "worklist_packets": 535
+}

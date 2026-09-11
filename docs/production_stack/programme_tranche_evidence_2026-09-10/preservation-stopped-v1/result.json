@@ -1,0 +1,49 @@
+{
+  "baseline_divergence_groups": {
+    "fund_financials": 0,
+    "holdings": 11,
+    "index_returns": 6,
+    "matches": 7,
+    "position_returns": 7
+  },
+  "code": {
+    "bytes": 5546,
+    "path": "scripts/programme_tranche/check_preservation.py",
+    "sha256": "88d093bcb84acc0acaabf783bb86443a9bf91f5ef3232b19e295793e3fe4f5a9"
+  },
+  "current_baseline_manifest": {
+    "bytes": 25708533,
+    "path": "docs/refactoring/baseline_manifest.json",
+    "sha256": "5a9e76d2c9cf5c18e77262b7d04b864d590f17fdd368a81c2f7e9fc12909af00"
+  },
+  "elapsed_seconds": 37.28180680000514,
+  "original_gold": {
+    "bytes": 112693,
+    "path": "data/gold/labels/position_labels.jsonl",
+    "sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7"
+  },
+  "original_input_files": 1117,
+  "original_match_reference_files": 1605,
+  "previous_report": {
+    "bytes": 13418,
+    "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/verification/semantic_diff_report.json",
+    "sha256": "da570a27ff78407c45bf26c059e0b596e78b495ef6d4e17c29596c80ce6c5594"
+  },
+  "scope": "Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.",
+  "semantic_changes_since_preparation": [
+    "/holdings/holdings_class_fv/2/fair_value_sum_delta: numeric result changed",
+    "/holdings/holdings_class_fv/3/fair_value_sum_delta: numeric result changed",
+    "/holdings/holdings_class_fv/5/fair_value_sum_delta: numeric result changed",
+    "/holdings/holdings_class_fv/8/fair_value_sum_delta: numeric result changed",
+    "/position_returns/position_return/2/begin_fv_sum_delta: numeric result changed",
+    "/position_returns/position_return/4/begin_fv_sum_delta: numeric result changed",
+    "/position_returns/position_return/6/begin_fv_sum_delta: numeric result changed"
+  ],
+  "semantic_report": {
+    "bytes": 13428,
+    "path": "scratch/2026-09-10_programme_tranche/verification/after-fix-semantic-v1/semantic_diff_report.json",
+    "sha256": "522355658d39790e35fb133f28140a0fc15beb66b973215c79a09d3ad0048a0e"
+  },
+  "source_reference_freezes_unchanged": true,
+  "status": "unexplained_difference"
+}

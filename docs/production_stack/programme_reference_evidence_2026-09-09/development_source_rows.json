@@ -1,0 +1,1151 @@
+[
+  {
+    "example_group": "BAIN-2023Q2",
+    "cik": "0001899017",
+    "accession": "0000950170-23-041723",
+    "source_path": "data/raw/filings/bdc_html/1899017/000095017023041723.html",
+    "document_sha256": "a31ed3181befc59c13717b77194499d3a6707434b071144f886866ca57a52f08",
+    "review_status": "agent-source-reviewed development; selected using prior investigation/gold; not acceptance gold",
+    "unit_passage_candidates": [
+      "ting results for the three months ended June 30, 2023 and 2022 were as follows (dollars in thousands): For the Three Months Ended June 30, 2023 For the Three Months Ended June 30, 2022 Total investmen",
+      "rating results for the six months ended June 30, 2023 and 2022 were as follows (dollars in thousands): For the Six Months Ended June 30, 2023 For the Six Months Ended June 30, 2022 Total investment in",
+      "ing expenses for the three months ended June 30, 2023 and 2022 were as follows (dollars in thousands): Three Months Ended June 30, 2023 Three Months Ended June 30, 2022 Interest and debt financing exp"
+    ],
+    "candidate_source_rows": [
+      {
+        "xpath": "/html/body/table[11]/tr[5]",
+        "table_xpath": "/html/body/table[11]",
+        "cells": [
+          "Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5)",
+          "",
+          "Equity Interest",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "71",
+          "",
+          "",
+          "",
+          "71,250",
+          "",
+          "",
+          "",
+          "71,250",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "table_opening_rows": [
+          "",
+          "Portfolio Company Investment Type Index Spread Interest Rate Maturity Date Shares Cost Market Value % of NAV (6)",
+          "Controlled Affiliate Investments",
+          "FIRE: Finance",
+          "Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Equity Interest \u2014 \u2014 \u2014 \u2014 71 71,250 71,250"
+        ],
+        "preceding_siblings_nearest_first": [
+          "",
+          "(Unaudited)",
+          "As of June 30, 2023",
+          "Schedule of Investments",
+          "Bain Capital Private Credit",
+          "",
+          "",
+          "5"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_461a33d9-255a-411d-bd80-c10f24be3408",
+              "contextref": "C_dc09c8b1-abd8-43ad-a596-2a8476dee264",
+              "name": "us-gaap:InvestmentOwnedBalanceShares",
+              "unitref": "U_shares",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "71"
+          },
+          {
+            "attributes": {
+              "id": "F_94b4a759-ccaa-46db-93c4-64edcf937899",
+              "contextref": "C_dc09c8b1-abd8-43ad-a596-2a8476dee264",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "71,250"
+          },
+          {
+            "attributes": {
+              "id": "F_df89a202-8bb7-407c-9dd5-77ed558f20b7",
+              "contextref": "C_dc09c8b1-abd8-43ad-a596-2a8476dee264",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "71,250"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_dc09c8b1-abd8-43ad-a596-2a8476dee264": "0001899017 Legacy Corporate Lending HoldCo, LLC Equity Interest 2023-06-30",
+          "U_USD": "iso4217:USD",
+          "U_shares": "xbrli:shares"
+        }
+      },
+      {
+        "xpath": "/html/body/table[11]/tr[6]",
+        "table_xpath": "/html/body/table[11]",
+        "cells": [
+          "Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5)",
+          "",
+          "Preferred Equity",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "575",
+          "",
+          "",
+          "",
+          "575,000",
+          "",
+          "",
+          "",
+          "575,000",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "table_opening_rows": [
+          "",
+          "Portfolio Company Investment Type Index Spread Interest Rate Maturity Date Shares Cost Market Value % of NAV (6)",
+          "Controlled Affiliate Investments",
+          "FIRE: Finance",
+          "Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Equity Interest \u2014 \u2014 \u2014 \u2014 71 71,250 71,250"
+        ],
+        "preceding_siblings_nearest_first": [
+          "",
+          "(Unaudited)",
+          "As of June 30, 2023",
+          "Schedule of Investments",
+          "Bain Capital Private Credit",
+          "",
+          "",
+          "5"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_db7f8440-6086-4188-aa18-48ed683393d6",
+              "contextref": "C_5caaf08f-afab-4d3d-bbe2-2d33a4944164",
+              "name": "us-gaap:InvestmentOwnedBalanceShares",
+              "unitref": "U_shares",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "575"
+          },
+          {
+            "attributes": {
+              "id": "F_57e39c3c-2273-42c7-8cea-0db5d0bd8178",
+              "contextref": "C_5caaf08f-afab-4d3d-bbe2-2d33a4944164",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "575,000"
+          },
+          {
+            "attributes": {
+              "id": "F_5aaefb0b-f0f2-485d-80fa-98006b4994e6",
+              "contextref": "C_5caaf08f-afab-4d3d-bbe2-2d33a4944164",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "575,000"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_5caaf08f-afab-4d3d-bbe2-2d33a4944164": "0001899017 Legacy Corporate Lending HoldCo, LLC Preferred Equity 2023-06-30",
+          "U_USD": "iso4217:USD",
+          "U_shares": "xbrli:shares"
+        }
+      },
+      {
+        "xpath": "/html/body/div[12]/ix:nonnumeric/div[5]/ix:nonnumeric/table/tr[4]",
+        "table_xpath": "/html/body/div[12]/ix:nonnumeric/div[5]/ix:nonnumeric/table",
+        "cells": [
+          "Legacy Corporate Lending HoldCo, LLC Equity Interest",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "$",
+          "",
+          "71,250",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "$",
+          "",
+          "71,250",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "$",
+          "",
+          "\u2014",
+          ""
+        ],
+        "table_opening_rows": [
+          "",
+          "Portfolio Company Fair Value as of December 31, 2022 Gross Additions Gross Reductions Change in Unrealized Gains (Losses) Realized Gains (Losses) Fair Value as of June 30, 2023 Dividend, Interest, and PIK Income Other Income",
+          "Controlled affiliate investments",
+          "Legacy Corporate Lending HoldCo, LLC Equity Interest $ \u2014 $ 71,250 $ \u2014 $ \u2014 $ \u2014 $ 71,250 $ \u2014 $ \u2014",
+          "Legacy Corporate Lending HoldCo, LLC Preferred Equity \u2014 575,000 \u2014 \u2014 \u2014 575,000 \u2014 \u2014"
+        ],
+        "preceding_siblings_nearest_first": [
+          "Transactions during six months ended June 30, 2023 in which the issuer was either an Affiliated Person or an Affiliated Person that the Company is deemed to Control are as follows:"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_1d27544a-e370-4815-97d6-3aadc8b14026",
+              "contextref": "C_e5a5dab9-ff85-4297-b37c-8cdfb4c98c92",
+              "name": "ck0001899017:InvestmentOwnedGrossAdditions",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "71,250"
+          },
+          {
+            "attributes": {
+              "id": "F_c53a90f2-94ef-4147-a130-5985bf4aba7c",
+              "contextref": "C_583f47d3-284c-4308-8083-4e5833f4bd2d",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "71,250"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_583f47d3-284c-4308-8083-4e5833f4bd2d": "0001899017 ck0001899017:EquityInterestMember ck0001899017:ControlledAffiliatedEntityMember ck0001899017:LegacyCorporateLendingHoldcoLlcEquityInterestMember 2023-06-30",
+          "C_e5a5dab9-ff85-4297-b37c-8cdfb4c98c92": "0001899017 ck0001899017:EquityInterestMember ck0001899017:LegacyCorporateLendingHoldcoLlcEquityInterestMember ck0001899017:ControlledAffiliatedEntityMember 2023-01-01 2023-06-30",
+          "U_USD": "iso4217:USD"
+        }
+      },
+      {
+        "xpath": "/html/body/div[12]/ix:nonnumeric/div[5]/ix:nonnumeric/table/tr[5]",
+        "table_xpath": "/html/body/div[12]/ix:nonnumeric/div[5]/ix:nonnumeric/table",
+        "cells": [
+          "Legacy Corporate Lending HoldCo, LLC Preferred Equity",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "575,000",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "575,000",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "\u2014",
+          ""
+        ],
+        "table_opening_rows": [
+          "",
+          "Portfolio Company Fair Value as of December 31, 2022 Gross Additions Gross Reductions Change in Unrealized Gains (Losses) Realized Gains (Losses) Fair Value as of June 30, 2023 Dividend, Interest, and PIK Income Other Income",
+          "Controlled affiliate investments",
+          "Legacy Corporate Lending HoldCo, LLC Equity Interest $ \u2014 $ 71,250 $ \u2014 $ \u2014 $ \u2014 $ 71,250 $ \u2014 $ \u2014",
+          "Legacy Corporate Lending HoldCo, LLC Preferred Equity \u2014 575,000 \u2014 \u2014 \u2014 575,000 \u2014 \u2014"
+        ],
+        "preceding_siblings_nearest_first": [
+          "Transactions during six months ended June 30, 2023 in which the issuer was either an Affiliated Person or an Affiliated Person that the Company is deemed to Control are as follows:"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_f1041f99-6e7d-4046-ad82-3d4977b96a40",
+              "contextref": "C_ca1b8cd0-40ab-4976-b950-1da56dc32555",
+              "name": "ck0001899017:InvestmentOwnedGrossAdditions",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "575,000"
+          },
+          {
+            "attributes": {
+              "id": "F_d401b8ba-518d-4787-8d21-bd427d35bb35",
+              "contextref": "C_301ff63b-ae60-4a61-af4d-ead162a28aa3",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "decimals": "0",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "575,000"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_301ff63b-ae60-4a61-af4d-ead162a28aa3": "0001899017 ck0001899017:PreferredEquityMember ck0001899017:LegacyCorporateLendingHoldcoLlcPreferredEquityMember ck0001899017:ControlledAffiliatedEntityMember 2023-06-30",
+          "C_ca1b8cd0-40ab-4976-b950-1da56dc32555": "0001899017 ck0001899017:PreferredEquityMember ck0001899017:LegacyCorporateLendingHoldcoLlcPreferredEquityMember ck0001899017:ControlledAffiliatedEntityMember 2023-01-01 2023-06-30",
+          "U_USD": "iso4217:USD"
+        }
+      }
+    ]
+  },
+  {
+    "example_group": "ESDEC-2023Q3",
+    "cik": "0001837532",
+    "accession": "0000950170-23-061985",
+    "source_path": "data/raw/filings/bdc_html/1837532/000095017023061985.html",
+    "document_sha256": "0098859321c50aec0e91f0a006f6841cb72db0b8af30303a94c00b5ffca2bafd",
+    "review_status": "agent-source-reviewed development; selected using prior investigation/gold; not acceptance gold",
+    "unit_passage_candidates": [
+      "ts APOLLO DEBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES (In thousands, except share and per share data) September 30, 2023 December 31, 2022 (Unaudited) Assets Investmen",
+      " 3 APOLLO DEBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF OPERATIONS (Unaudited) (In thousands, except share and per share data) Three Months Ended September 30, Nine Months Ended September 30, ",
+      "EBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF CHANGES IN NET ASSETS (Unaudited) (In thousands, except share and per share data) Three Months Ended September 30, Nine Months Ended September 30, "
+    ],
+    "candidate_source_rows": [
+      {
+        "xpath": "/html/body/table[20]/tr[11]",
+        "table_xpath": "/html/body/table[20]",
+        "cells": [
+          "Esdec Solar Group B.V.",
+          "",
+          "First Lien Secured Debt",
+          "",
+          "E+ 600 , 0.50 % Floor",
+          "",
+          "8/30/2028",
+          "",
+          "\u20ac",
+          "65,000",
+          "",
+          "$",
+          "53,447",
+          "",
+          "$",
+          "50,510",
+          "",
+          "(3)(4)(8) (9)(21)(27)"
+        ],
+        "table_opening_rows": [
+          "",
+          "Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (28) Fair Value (1)(29)",
+          "Household Products",
+          "Advantice Health",
+          "Jazz AH Holdco, LLC First Lien Secured Debt S+ 510 , 0.75 % Floor 4/3/2028 $ 9,128 $ 7,128 $ 6,841 (4)(11)(18) (27)"
+        ],
+        "preceding_siblings_nearest_first": [
+          "",
+          "",
+          "(In thousands, except share data)",
+          "September 30, 2023",
+          "CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited)",
+          "APOLLO DEBT SOLUTIONS BDC",
+          "Table of Contents",
+          ""
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_fa417b16-4c14-486b-bd41-dbbc2fe8648d",
+              "contextref": "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c",
+              "name": "us-gaap:InvestmentBasisSpreadVariableRate",
+              "unitref": "U_pure",
+              "scale": "-4",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "600"
+          },
+          {
+            "attributes": {
+              "id": "F_cceec272-e15c-44d0-94a7-c4e04f006bad",
+              "contextref": "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c",
+              "name": "us-gaap:InvestmentInterestRateFloor",
+              "unitref": "U_pure",
+              "scale": "-2",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "0.50"
+          },
+          {
+            "attributes": {
+              "id": "F_e69981ee-b09e-4232-9f8b-5916d21651c6",
+              "contextref": "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c",
+              "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "65,000"
+          },
+          {
+            "attributes": {
+              "id": "F_20f68bb9-5713-45d4-8bc7-13ba42f4f8c2",
+              "contextref": "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "53,447"
+          },
+          {
+            "attributes": {
+              "id": "F_5a5ac73a-979f-48dc-9091-14e86397ee43",
+              "contextref": "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "50,510"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_de3bf5ad-8b72-4cdf-9c95-fcf5032f7d5c": "0001837532 Independent Power & Renewable Electricity Producers Esdec Esdec Solar Group B.V. Investment Type First Lien Secured Debt Interest Rate E+600, 0.50% Floor Maturity Date 8/30/2028 2023-09-30",
+          "U_USD": "iso4217:USD",
+          "U_pure": "xbrli:pure"
+        }
+      },
+      {
+        "xpath": "/html/body/ix:continuation[1]/table/tr[24]",
+        "table_xpath": "/html/body/ix:continuation[1]/table",
+        "cells": [
+          "Esdec Solar Group B.V. (Enstall Group B.V.)*",
+          "",
+          "17,180",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,180",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,180"
+        ],
+        "table_opening_rows": [
+          "",
+          "Name of Issuer Total revolving and delayed draw loan commitments Less: funded commitments Total unfunded commitments Less: commitments substantially at discretion of the Company Less: unavailable commitments due to borrowing base or other covenant restrictions Total net adjusted unfunded revolving and delayed draw commitments",
+          "ABG Intermediate Holdings 2 LLC $ 3,531 $ \u2014 $ 3,531 $ \u2014 $ \u2014 $ 3,531",
+          "Accela, Inc. 1,714 \u2014 1,714 \u2014 \u2014 1,714",
+          "Accelerate360 Holdings, LLC 26,908 ( 17,938 ) 8,969 \u2014 \u2014 8,969"
+        ],
+        "preceding_siblings_nearest_first": [],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_37e0a0a1-8580-4085-9178-3bf061f23d0e",
+              "contextref": "C_f82a35f6-0f5a-4e61-b7c7-329cc81dbc19",
+              "name": "us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,180"
+          },
+          {
+            "attributes": {
+              "id": "F_96869654-2fd6-411f-a8f5-7c6fff02fd3a",
+              "contextref": "C_f82a35f6-0f5a-4e61-b7c7-329cc81dbc19",
+              "name": "us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,180"
+          },
+          {
+            "attributes": {
+              "id": "F_f7565aee-d1e2-4cfd-8cbd-427781af1dc2",
+              "contextref": "C_f82a35f6-0f5a-4e61-b7c7-329cc81dbc19",
+              "name": "ck0001837532:InvestmentCompanyNetAdjustedUnfundedCommitments",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,180"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_f82a35f6-0f5a-4e61-b7c7-329cc81dbc19": "0001837532 Esdec Solar Group B.V. (Enstall Group B.V.) 2023-09-30",
+          "U_USD": "iso4217:USD"
+        }
+      }
+    ]
+  },
+  {
+    "example_group": "ESDEC-2023Q4",
+    "cik": "0001837532",
+    "accession": "0000950170-24-031479",
+    "source_path": "data/raw/filings/bdc_html/1837532/000095017024031479.html",
+    "document_sha256": "940bb8cba525166fea288146c6981598547555db4a2ac6da100ad96d7aace559",
+    "review_status": "agent-source-reviewed development; selected using prior investigation/gold; not acceptance gold",
+    "unit_passage_candidates": [
+      "each class of senior securities outstanding at the end of the period presented, in thousands. Does not include deferred financing costs and revaluation of unsecured issuances due to interest r",
+      "ears ended December 31, 2023 and 2022 were as follows: Year Ended December 31, (in thousands)* 2023 2022 Investments made in portfolio companies $ 4,146,891 $ 6,606,772 Investments sold (1,372",
+      "cember 31, 2022 Investment Ranking Fair Value Percentage Fair Value Percentage (in thousands) 1 $ 9,252 0.1 % $ 8,536 0.2 % 2 6,516,105 97.0 % 4,220,721 98.0 % 3 190,176 2.8 % 79,635 1.8 % 4 4"
+    ],
+    "candidate_source_rows": [
+      {
+        "xpath": "/html/body/table[45]/tr[18]",
+        "table_xpath": "/html/body/table[45]",
+        "cells": [
+          "Esdec Solar Group B.V.",
+          "",
+          "First Lien Secured Debt",
+          "",
+          "E+ 600 , 0.50 % Floor",
+          "",
+          "",
+          "8/30/2028",
+          "",
+          "",
+          "\u20ac",
+          "",
+          "64,878",
+          "",
+          "",
+          "$",
+          "",
+          "53,388",
+          "",
+          "",
+          "$",
+          "",
+          "52,250",
+          "",
+          "",
+          "(3)(4)(8) (9)(11)(19)(27)"
+        ],
+        "table_opening_rows": [
+          "",
+          "Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (28) Fair Value (1)(29)",
+          "HOV",
+          "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,845 ) ( 4,200 ) (4)(5)(8) (9)(11)(27)",
+          "First Lien Secured Debt - Corporate Bond 8.00 % 9/30/2028 2,000 1,981 1,980 (4)(8)(9)"
+        ],
+        "preceding_siblings_nearest_first": [
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands, except per share data)",
+          "",
+          "See notes to consolidated financial statements 97",
+          "",
+          "85 , 1.50 % Floor 4/3/2028 9,932 8,869 8,831 (4)(9)(14) (27) Sky Zone CircusTrix Holdings LLC First Lien Secured Debt S+ 675 , 1.00 % Floor 7/18/2028 14,162 12,240 12,337 (4)(9)(11) (14)(27) First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/18/2028 806 ( 18 ) ( 12 ) (4)(5)(9) (11)(27) 12,222 12,325 Total Hotels, Restaurants & Leisure $ 122,706 $ 128,353 Household Durables Ergotron Ergotron Acquisition, LLC First Lien Secured Debt S+ 586 , 0.75 % Floor 7/6/2028 $ 9,826 $ 9,668 $ 9,703 (4)(14) Ergotron Investments, LLC Common Equity - Equity Unit N/A N/A 500 Shares 50 60 (4) 9,718 9,763",
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands, except per share data)",
+          "",
+          "See notes to consolidated financial statements 96"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_c2dde575-d658-46ce-920c-0d658f679ed8",
+              "contextref": "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2",
+              "name": "us-gaap:InvestmentBasisSpreadVariableRate",
+              "unitref": "U_pure",
+              "scale": "-4",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "600"
+          },
+          {
+            "attributes": {
+              "id": "F_94b57522-4402-40eb-a747-194445345fdf",
+              "contextref": "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2",
+              "name": "us-gaap:InvestmentInterestRateFloor",
+              "unitref": "U_pure",
+              "scale": "-2",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "0.50"
+          },
+          {
+            "attributes": {
+              "id": "F_3a95e6fc-5139-46b6-b8d6-7f7e85222c46",
+              "contextref": "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2",
+              "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+              "unitref": "U_EUR",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "64,878"
+          },
+          {
+            "attributes": {
+              "id": "F_56241407-2708-48f7-b53a-a0f92fd1bfd2",
+              "contextref": "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "53,388"
+          },
+          {
+            "attributes": {
+              "id": "F_30706bd4-c4d4-4eff-861f-6935aab99534",
+              "contextref": "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "52,250"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_751dae43-462f-4208-b8b9-2dda1bbf4ad2": "0001837532 Independent Power & Renewable Electricity Producers Esdec Esdec Solar Group B.V. Investment Type First Lien Secured Debt Interest Rate E+600, 0.50% Floor Maturity Date 8/30/2028 2023-12-31",
+          "U_EUR": "iso4217:EUR",
+          "U_USD": "iso4217:USD",
+          "U_pure": "xbrli:pure"
+        }
+      },
+      {
+        "xpath": "/html/body/ix:continuation[2]/table/tr[3]",
+        "table_xpath": "/html/body/ix:continuation[2]/table",
+        "cells": [
+          "Esdec Solar Group B.V. (Enstall Group B.V.)*",
+          "",
+          "",
+          "17,939",
+          "",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "",
+          "17,939",
+          "",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "",
+          "",
+          "17,939",
+          ""
+        ],
+        "table_opening_rows": [
+          "",
+          "Name of Issuer Total revolving and delayed draw loan commitments Less: funded commitments Total unfunded commitments Less: commitments substantially at discretion of the Company Less: unavailable commitments due to borrowing base or other covenant restrictions Total net adjusted unfunded revolving and delayed draw commitments",
+          "Esdec Solar Group B.V. (Enstall Group B.V.)* 17,939 \u2014 17,939 \u2014 \u2014 17,939",
+          "Evergreen IX Borrower 2023, LLC 10,071 \u2014 10,071 \u2014 \u2014 10,071",
+          "ExactCare Parent, Inc. 4,426 \u2014 4,426 \u2014 \u2014 4,426"
+        ],
+        "preceding_siblings_nearest_first": [],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_4ee890ea-0958-46f7-b22b-ae805d21f858",
+              "contextref": "C_b9737010-9c00-4661-bf04-eec203e1e8ce",
+              "name": "us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          },
+          {
+            "attributes": {
+              "id": "F_22343c23-ac68-4b3b-8d4d-231d46ac0ca3",
+              "contextref": "C_b9737010-9c00-4661-bf04-eec203e1e8ce",
+              "name": "us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          },
+          {
+            "attributes": {
+              "id": "F_d9b543a0-6bde-4e11-ba07-fb7c1f70633a",
+              "contextref": "C_b9737010-9c00-4661-bf04-eec203e1e8ce",
+              "name": "ck0001837532:InvestmentCompanyNetAdjustedUnfundedCommitments",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_b9737010-9c00-4661-bf04-eec203e1e8ce": "0001837532 Esdec Solar Group B.V. (Enstall Group B.V.) 2023-12-31",
+          "U_USD": "iso4217:USD"
+        }
+      }
+    ]
+  },
+  {
+    "example_group": "ESDEC-2024Q1",
+    "cik": "0001837532",
+    "accession": "0000950170-24-058684",
+    "source_path": "data/raw/filings/bdc_html/1837532/000095017024058684.html",
+    "document_sha256": "f857bbfc3b1cd78b232dc6a420cb5339fce8c2e150d2a5080949916f83cc6fd2",
+    "review_status": "agent-source-reviewed development; selected using prior investigation/gold; not acceptance gold",
+    "unit_passage_candidates": [
+      "ts APOLLO DEBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES (In thousands, except share and per share data) March 31, 2024 December 31, 2023 (Unaudited) Assets Investments a",
+      "ts APOLLO DEBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF OPERATIONS (Unaudited) (In thousands, except share and per share data) Three Months Ended March 31, 2024 2023 Investment Income Non-cont",
+      "EBT SOLUTIONS BDC CONSOLIDATED STATEMENTS OF CHANGES IN NET ASSETS (Unaudited) (In thousands, except share and per share data) Three Months Ended March 31, 2024 2023 Operations Net investment "
+    ],
+    "candidate_source_rows": [
+      {
+        "xpath": "/html/body/table[24]/tr[11]",
+        "table_xpath": "/html/body/table[24]",
+        "cells": [
+          "Esdec Solar Group B.V.",
+          "",
+          "First Lien Secured Debt",
+          "",
+          "E+ 600 , 0.50 % Floor",
+          "",
+          "8/30/2028",
+          "",
+          "\u20ac",
+          "64,756",
+          "",
+          "$",
+          "53,305",
+          "",
+          "$",
+          "50,759",
+          "",
+          "(3)(4)(8)(9)(11)(20)(28)"
+        ],
+        "table_opening_rows": [
+          "",
+          "Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (29) Fair Value (1)(30)",
+          "Household Products",
+          "Advantice Health",
+          "Jazz AH Holdco, LLC First Lien Secured Debt S+ 510 , 0.75 % Floor 4/3/2028 $ 9,092 $ 7,211 $ 7,059 (4)(11)(16)(28)"
+        ],
+        "preceding_siblings_nearest_first": [
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) March 31, 2024 (In thousands, except share data)",
+          "",
+          "See notes to consolidated financial statements 19",
+          "",
+          "an Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,473 ) ( 3,500 ) (4)(5)(8)(9)(11)(28) First Lien Secured Debt - Corporate Bond 11.75 % 9/30/2029 1,950 1,899 2,163 (8)(9) First Lien Secured Debt - Corporate Bond 8.00 % 9/30/2028 2,000 1,982 2,080 (8)(9) 408 743 Polywood Poly-Wood, LLC First Lien Secured Debt S+ 575 , 1.00 % Floor 3/20/2030 145,955 119,896 119,885 (4)(9)(11)(15)(28) First Lien Secured Debt - Revolver S+ 575 , 1.00 % Floor 3/20/2030 23,045 ( 516 ) ( 519 ) (4)(5)(9)(11)(28) 119,380 119,366 Total Household Durables $ 129,488 $ 129,843",
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) March 31, 2024 (In thousands, except share data)",
+          "",
+          "See notes to consolidated financial statements 18"
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_766d4397-b1fd-4a1b-8b17-2cb3cf4f0a1d",
+              "contextref": "C_7bd65223-810c-476b-b05c-78f5083e6df3",
+              "name": "us-gaap:InvestmentBasisSpreadVariableRate",
+              "unitref": "U_pure",
+              "scale": "-4",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "600"
+          },
+          {
+            "attributes": {
+              "id": "F_f6d6f177-c420-400c-a36f-fcd2ef31f8ae",
+              "contextref": "C_7bd65223-810c-476b-b05c-78f5083e6df3",
+              "name": "us-gaap:InvestmentInterestRateFloor",
+              "unitref": "U_pure",
+              "scale": "-2",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "0.50"
+          },
+          {
+            "attributes": {
+              "id": "F_7a2a7ab2-5aae-4dc1-a055-5e6d64a909cb",
+              "contextref": "C_7bd65223-810c-476b-b05c-78f5083e6df3",
+              "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+              "unitref": "U_EUR",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "64,756"
+          },
+          {
+            "attributes": {
+              "id": "F_9091b8e0-2604-4eed-99d0-c806326731d3",
+              "contextref": "C_7bd65223-810c-476b-b05c-78f5083e6df3",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "53,305"
+          },
+          {
+            "attributes": {
+              "id": "F_c7c0cd2a-2ece-44d2-ad8f-73e8e8a7556d",
+              "contextref": "C_7bd65223-810c-476b-b05c-78f5083e6df3",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "50,759"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_7bd65223-810c-476b-b05c-78f5083e6df3": "0001837532 Independent Power & Renewable Electricity Producers Esdec Esdec Solar Group B.V. Investment Type First Lien Secured Debt Interest Rate E+600, 0.50% Floor Maturity Date 8/30/2028 2024-03-31",
+          "U_EUR": "iso4217:EUR",
+          "U_USD": "iso4217:USD",
+          "U_pure": "xbrli:pure"
+        }
+      },
+      {
+        "xpath": "/html/body/ix:continuation[1]/table/tr[32]",
+        "table_xpath": "/html/body/ix:continuation[1]/table",
+        "cells": [
+          "Esdec Solar Group B.V. (Enstall Group B.V.)*",
+          "",
+          "17,531",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,531",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,531"
+        ],
+        "table_opening_rows": [
+          "",
+          "Name of Issuer Total revolving and delayed draw loan commitments Less: funded commitments Total unfunded commitments Less: commitments substantially at discretion of the Company Less: unavailable commitments due to borrowing base or other covenant restrictions Total net adjusted unfunded revolving and delayed draw commitments",
+          "1475 Holdings, LLC $ 1,071 $ \u2014 $ 1,071 $ \u2014 $ \u2014 $ 1,071",
+          "Accela, Inc. 1,714 \u2014 1,714 \u2014 \u2014 1,714",
+          "Accelerate360 Holdings, LLC 26,908 ( 17,938 ) 8,969 \u2014 \u2014 8,969"
+        ],
+        "preceding_siblings_nearest_first": [],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_07e8cbf9-a3ad-4741-a7af-2bc66f4c623f",
+              "contextref": "C_5b072605-c26f-44b9-9c0c-28f3a987c7ad",
+              "name": "us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,531"
+          },
+          {
+            "attributes": {
+              "id": "F_12086756-f2b1-4b68-8da7-d71b692d7c87",
+              "contextref": "C_5b072605-c26f-44b9-9c0c-28f3a987c7ad",
+              "name": "us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,531"
+          },
+          {
+            "attributes": {
+              "id": "F_3746423f-a66f-41a7-bd7d-6667c9865379",
+              "contextref": "C_5b072605-c26f-44b9-9c0c-28f3a987c7ad",
+              "name": "ck0001837532:InvestmentCompanyNetAdjustedUnfundedCommitments",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,531"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_5b072605-c26f-44b9-9c0c-28f3a987c7ad": "0001837532 Esdec Solar Group B.V. (Enstall Group B.V.) 2024-03-31",
+          "U_USD": "iso4217:USD"
+        }
+      },
+      {
+        "xpath": "/html/body/table[47]/tr[18]",
+        "table_xpath": "/html/body/table[47]",
+        "cells": [
+          "Esdec Solar Group B.V.",
+          "",
+          "First Lien Secured Debt",
+          "",
+          "E+ 600 , 0.50 % Floor",
+          "",
+          "8/30/2028",
+          "",
+          "\u20ac",
+          "64,878",
+          "",
+          "$",
+          "53,388",
+          "",
+          "$",
+          "52,250",
+          "",
+          "(3)(4)(8) (9)(11)(19)(27)"
+        ],
+        "table_opening_rows": [
+          "",
+          "Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (28) Fair Value (1)(29)",
+          "HOV",
+          "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,845 ) ( 4,200 ) (4)(5)(8) (9)(11)(27)",
+          "First Lien Secured Debt - Corporate Bond 8.00 % 9/30/2028 2,000 1,981 1,980 (4)(8)(9)"
+        ],
+        "preceding_siblings_nearest_first": [
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands, except share data)",
+          "",
+          "51",
+          "",
+          "85 , 1.50 % Floor 4/3/2028 9,932 8,869 8,831 (4)(9)(14) (27) Sky Zone CircusTrix Holdings LLC First Lien Secured Debt S+ 675 , 1.00 % Floor 7/18/2028 14,162 12,240 12,337 (4)(9)(11) (14)(27) First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/18/2028 806 ( 18 ) ( 12 ) (4)(5)(9) (11)(27) 12,222 12,325 Total Hotels, Restaurants & Leisure $ 122,706 $ 128,353 Household Durables Ergotron Ergotron Acquisition, LLC First Lien Secured Debt S+ 586 , 0.75 % Floor 7/6/2028 $ 9,826 $ 9,668 $ 9,703 (4)(14) Ergotron Investments, LLC Common Equity - Equity Unit N/A N/A 500 Shares 50 60 (4) 9,718 9,763",
+          "",
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands, except share data)",
+          ""
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_a659cad4-f19f-4432-9528-693c9fe7d747",
+              "contextref": "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114",
+              "name": "us-gaap:InvestmentBasisSpreadVariableRate",
+              "unitref": "U_pure",
+              "scale": "-4",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "600"
+          },
+          {
+            "attributes": {
+              "id": "F_9e1a2a32-954a-496d-85c5-1b405cf494c3",
+              "contextref": "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114",
+              "name": "us-gaap:InvestmentInterestRateFloor",
+              "unitref": "U_pure",
+              "scale": "-2",
+              "decimals": "4",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "0.50"
+          },
+          {
+            "attributes": {
+              "id": "F_1ced435e-e38a-441c-a876-8da7cb84708a",
+              "contextref": "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114",
+              "name": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+              "unitref": "U_EUR",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "64,878"
+          },
+          {
+            "attributes": {
+              "id": "F_a904fed2-dcc6-42e4-8204-231fc902f282",
+              "contextref": "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114",
+              "name": "us-gaap:InvestmentOwnedAtCost",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "53,388"
+          },
+          {
+            "attributes": {
+              "id": "F_7ea05982-ad82-4800-88cb-5a418c2f13ed",
+              "contextref": "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114",
+              "name": "us-gaap:InvestmentOwnedAtFairValue",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "52,250"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_6cdcdd3e-c4db-4f1f-83fd-cc51955f0114": "0001837532 Independent Power & Renewable Electricity Producers Esdec Esdec Solar Group B.V. Investment Type First Lien Secured Debt Interest Rate E+600, 0.50% Floor Maturity Date 8/30/2028 2023-12-31",
+          "U_EUR": "iso4217:EUR",
+          "U_USD": "iso4217:USD",
+          "U_pure": "xbrli:pure"
+        }
+      },
+      {
+        "xpath": "/html/body/ix:continuation[11]/table/tr[3]",
+        "table_xpath": "/html/body/ix:continuation[11]/table",
+        "cells": [
+          "Esdec Solar Group B.V. (Enstall Group B.V.)*",
+          "",
+          "17,939",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,939",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "\u2014",
+          "",
+          "",
+          "17,939"
+        ],
+        "table_opening_rows": [
+          "",
+          "Name of Issuer Total revolving and delayed draw loan commitments Less: funded commitments Total unfunded commitments Less: commitments substantially at discretion of the Company Less: unavailable commitments due to borrowing base or other covenant restrictions Total net adjusted unfunded revolving and delayed draw commitments",
+          "Esdec Solar Group B.V. (Enstall Group B.V.)* 17,939 \u2014 17,939 \u2014 \u2014 17,939",
+          "Evergreen IX Borrower 2023, LLC 10,071 \u2014 10,071 \u2014 \u2014 10,071",
+          "ExactCare Parent, Inc. 4,426 \u2014 4,426 \u2014 \u2014 4,426"
+        ],
+        "preceding_siblings_nearest_first": [
+          ""
+        ],
+        "inline_numeric_facts": [
+          {
+            "attributes": {
+              "id": "F_594e5cef-2b69-4417-9969-3221435ac5fa",
+              "contextref": "C_f987b139-b2aa-41dc-9cdb-058183ee2b02",
+              "name": "us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          },
+          {
+            "attributes": {
+              "id": "F_bcfa4e9d-dfe5-4981-a981-7487dd3e404a",
+              "contextref": "C_f987b139-b2aa-41dc-9cdb-058183ee2b02",
+              "name": "us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          },
+          {
+            "attributes": {
+              "id": "F_3bbf721f-f587-477b-a04b-260e99859b18",
+              "contextref": "C_f987b139-b2aa-41dc-9cdb-058183ee2b02",
+              "name": "ck0001837532:InvestmentCompanyNetAdjustedUnfundedCommitments",
+              "unitref": "U_USD",
+              "scale": "3",
+              "decimals": "-3",
+              "format": "ixt:num-dot-decimal"
+            },
+            "text": "17,939"
+          }
+        ],
+        "source_units_and_contexts": {
+          "C_f987b139-b2aa-41dc-9cdb-058183ee2b02": "0001837532 Esdec Solar Group B.V. (Enstall Group B.V.) 2023-12-31",
+          "U_USD": "iso4217:USD"
+        }
+      }
+    ]
+  }
+]

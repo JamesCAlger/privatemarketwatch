@@ -1,0 +1,55 @@
+[
+  {
+    "cik": "0000000123",
+    "mechanism": "fixture",
+    "fix_class": "classification_fix",
+    "template": {
+      "field": "index_classification",
+      "value": "DIRECT_LENDING"
+    },
+    "scope": {
+      "quarters": [
+        "2025-12-31"
+      ]
+    },
+    "source_review_ids": [
+      "FIXTURE"
+    ],
+    "evidence_citations": [
+      {
+        "quoted_text": "Synthetic fixture, not SEC evidence",
+        "table_index": 1,
+        "row_index": 1
+      }
+    ],
+    "confidence": 0.9
+  },
+  {
+    "cik": "0000000123",
+    "mechanism": "fixture",
+    "fix_class": "dedup",
+    "template": {
+      "match_fields": [
+        "issuer_name",
+        "index_classification"
+      ],
+      "keep": "first"
+    },
+    "scope": {
+      "quarters": [
+        "2025-12-31"
+      ]
+    },
+    "source_review_ids": [
+      "FIXTURE"
+    ],
+    "evidence_citations": [
+      {
+        "quoted_text": "Synthetic fixture, not SEC evidence",
+        "table_index": 1,
+        "row_index": 1
+      }
+    ],
+    "confidence": 0.9
+  }
+]

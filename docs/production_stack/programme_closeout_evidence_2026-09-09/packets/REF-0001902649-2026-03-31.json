@@ -1,0 +1,644 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_890a8d2a-16f1-4eb7-b0b4-ded2a02082d7",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively)",
+        "",
+        "",
+        "2,354,502,240",
+        "",
+        "",
+        "",
+        "2,244,701,289",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+      "currency": "USD",
+      "fact_id": "F_890a8d2a-16f1-4eb7-b0b4-ded2a02082d7",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,354,502,240",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[9]/table/tr[7]",
+      "table_xpath": "/html/body/div[9]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2354502240"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_89eebe84-abe4-445f-a0b5-3e15fce1cdc2",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments - 142.1 % of Net Assets",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,391,096,696",
+        "",
+        "",
+        "$",
+        "2,354,502,240",
+        "",
+        "",
+        "",
+        "89.43",
+        "%",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+      "currency": "USD",
+      "fact_id": "F_89eebe84-abe4-445f-a0b5-3e15fce1cdc2",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,354,502,240",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[66]/table/tr[32]",
+      "table_xpath": "/html/body/div[66]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2354502240"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_cda782ad-dd67-4372-9f4b-2a3e34c13dc7",
+        "name": "ck0001902649:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Cash and Investments - 158.8 % of Net Assets",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,631,922,582",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "concept": "ck0001902649:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+      "context_id": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+      "currency": "USD",
+      "fact_id": "F_cda782ad-dd67-4372-9f4b-2a3e34c13dc7",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "2,631,922,582",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[66]/table/tr[36]",
+      "table_xpath": "/html/body/div[66]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2631922582"
+    },
+    {
+      "attributes": {
+        "contextref": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_4eac9687-6b39-438c-a5a8-40d5789fbfdd",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "",
+        "$",
+        "463,142,413",
+        "",
+        "",
+        "$",
+        "1,890,318,018",
+        "",
+        "",
+        "$",
+        "1,041,809",
+        "",
+        "",
+        "$",
+        "2,354,502,240",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_2218321c-37d7-4523-b6e0-7a5d210a5255",
+      "currency": "USD",
+      "fact_id": "F_4eac9687-6b39-438c-a5a8-40d5789fbfdd",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,354,502,240",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[126]/div/ix:continuation/div/ix:continuation/div[1]/ix:nonnumeric/table/tr[7]",
+      "table_xpath": "/html/body/div[126]/div/ix:continuation/div/ix:continuation/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2354502240"
+    }
+  ],
+  "cik": "0001902649",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1902649/000119312526211710.html",
+  "reference_id": "REF-0001902649-2026-03-31",
+  "report_date": "2026-03-31",
+  "source_rows": 538,
+  "source_sha256": "de5a156be080bd1b8dd016ea49207c258fd7a67c7ac0d23f945ee4c3b4d0e00b",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled, non-affiliated investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively) | $ | 2,354,502,240 | $ | 2,244,701,289",
+        "Total investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively) | 2,354,502,240 | 2,244,701,289"
+      ],
+      "last": [
+        "Non-controlled, non-affiliated investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively) | $ | 2,354,502,240 | $ | 2,244,701,289",
+        "Total investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively) | 2,354,502,240 | 2,244,701,289"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2026 December 31, 2025",
+        "(Unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "Consolidated Statements of Asset s and Liabilities",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[9]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Arcline FM Holdings, LLC (Fairbanks Morse) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 2.75 | % | 6.45 | % | 6/23/2030 | $ | 2,875,972 | $ | 2,881,744 | $ | 2,883,967 | 0.11 | %",
+        "Bleriot US Bidco Inc. | First Lien Term Loan | SOFR(Q) | \u2014 | 2.50 | % | 6.20 | % | 10/30/2026 | $ | 3,289,161 | 3,289,123 | 3,297,960 | 0.13 | %"
+      ],
+      "last": [
+        "Apex Group Treasury LLC | First Lien Term Loan | SOFR(Q) | \u2014 | 3.50 | % | 7.17 | % | 2/20/2032 | $ | 1,002,886 | 981,860 | 916,803 | 0.03 | %",
+        "Ascensus Holdings, Inc | First Lien Term Loan | SOFR(M) | 0.50 | % | 3.00 | % | 6.67 | % | 8/2/2028 | $ | 3,750,085 | 3,726,638 | 3,696,178 | 0.14 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments(A)",
+        "Aerospace and Defense"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 31,
+      "table_xpath": "/html/body/div[24]/table"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Allspring Buyer, LLC | First Lien Term Loan | SOFR(Q) | \u2014 | 3.00 | % | 6.75 | % | 11/1/2030 | $ | 1,495,773 | $ | 1,499,301 | $ | 1,498,809 | 0.06 | %",
+        "BCPE Pequod Buyer Inc. (Envestnet Inc.) | First Lien Term Loan | SOFR(Q) | \u2014 | 2.75 | % | 6.42 | % | 9/19/2031 | $ | 2,166,438 | 2,171,625 | 2,106,406 | 0.08 | %"
+      ],
+      "last": [
+        "Modigent, LLC (Pueblo) | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.70 | % | 8/23/2028 | $ | 5,438,031 | 5,381,681 | 5,372,824 | 0.20 | % | E",
+        "Modigent, LLC (Pueblo) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.70 | % | 8/23/2028 | $ | 1,412,058 | 1,397,967 | 1,395,126 | 0.05 | % | E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Capital Markets (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 39,
+      "table_xpath": "/html/body/div[27]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "Modigent, LLC (Pueblo) | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.70 | % | 8/23/2028 | $ | 979,509 | $ | 969,369 | $ | 967,764 | 0.04 | % | E",
+        "Modigent, LLC (Pueblo) | First Lien Revolver | SOFR(M) | 0.75 | % | 5.00 | % | 8.68 | % | 8/23/2027 | $ | 340,497 | 331,870 | 332,031 | 0.01 | % | E"
+      ],
+      "last": [
+        "Vortex Companies, LLC | First Lien Term Loan | SOFR(M) | 1.00 | % | 5.00 | % | 8.67 | % | 9/4/2029 | $ | 9,063,806 | 8,956,141 | 9,081,934 | 0.35 | % | E",
+        "Vortex Companies, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 | % | 5.00 | % | 8.67 | % | 9/4/2029 | $ | 2,580,854 | 2,547,443 | 2,586,016 | 0.10 | % | E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Commercial Services and Supplies (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 40,
+      "table_xpath": "/html/body/div[30]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Vortex Companies, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 | % | 5.00 | % | 8.67 | % | 9/4/2029 | $ | 610,059 | $ | 601,808 | $ | 611,279 | 0.02 | % | E",
+        "Vortex Companies, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 | % | 5.00 | % | 8.67 | % | 9/4/2029 | $ | 5,477,395 | 5,412,332 | 5,488,350 | 0.21 | % | E"
+      ],
+      "last": [
+        "GC Waves Holdings, Inc. (Mercer) | First Lien Term Loan | SOFR(M) | 0.75 | % | 4.50 | % | 8.17 | % | 9/30/2030 | $ | 18,881,052 | 18,881,052 | 19,069,860 | 0.72 | % | E",
+        "GC Waves Holdings, Inc. (Mercer) | First Lien Revolver | SOFR(M) | 0.75 | % | 4.50 | % | 8.17 | % | 8/10/2029 | $ | \u2014 | \u2014 | \u2014 | \u2014 | E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Construction and Engineering (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 37,
+      "table_xpath": "/html/body/div[33]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "GC Waves Holdings, Inc. (Mercer) | First Lien Delayed Draw Term Loan | SOFR(M) | 0.75 | % | 4.50 | % | 8.17 | % | 10/4/2030 | $ | 9,645,145 | $ | 9,509,138 | $ | 9,946,393 | 0.38 | % | E",
+        "Gryphon Debt Merger Sub Inc. (Altera Corporation LLC) | First Lien Term Loan | SOFR(Q) | \u2014 | 3.00 | % | 6.67 | % | 8/17/2028 | $ | 840,000 | 835,982 | 841,840 | 0.03 | %"
+      ],
+      "last": [
+        "Renaissance Holding Corp. | First Lien Term Loan | SOFR(M) | \u2014 | 4.00 | % | 7.67 | % | 12/11/2031 | $ | 957,753 | 940,066 | 688,687 | 0.03 | %",
+        "16,045,787 | 15,806,423 | 0.60 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Diversified Financial Services (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 37,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Sauer Brands Inc | First Lien Term Loan | SOFR(M) | \u2014 | 3.00 | % | 6.67 | % | 2/4/2032 | $ | 490,928 | $ | 491,380 | $ | 492,155 | 0.02 | %",
+        "Saratoga Food Specialties LLC (Solina France SASU) (France) | First Lien Term Loan | SOFR(Q) | \u2014 | 3.25 | % | 6.92 | % | 3/7/2029 | $ | 930,600 | 933,552 | 936,807 | 0.03 | % | C"
+      ],
+      "last": [
+        "Mpulse Mobile Inc. | First Lien Term Loan | SOFR(Q) | 0.75 | % | 4.75 | % | 8.45 | % | 8/26/2032 | $ | 40,020,902 | 39,658,447 | 39,174,979 | 1.48 | % | E",
+        "Polaris Newco, LLC | First Lien Term Loan | SOFR(Q) | 0.50 | % | 4.26 | % | 7.93 | % | 6/2/2028 | $ | 2,913,059 | 2,913,621 | 2,571,692 | 0.10 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Food Products"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 35,
+      "table_xpath": "/html/body/div[39]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "PointClickCare Technologies Inc. (Canada) | First Lien Term Loan | SOFR(M) | \u2014 | 2.75 | % | 6.67 | % | 11/3/2031 | $ | 4,382,610 | $ | 4,390,142 | $ | 4,364,817 | 0.17 | % | C",
+        "Press Ganey Holdings, Inc. | First Lien Term Loan | SOFR(M) | \u2014 | 3.00 | % | 6.42 | % | 4/30/2031 | $ | 2,044,768 | 2,047,556 | 2,044,001 | 0.08 | %"
+      ],
+      "last": [
+        "AmeriLife Holdings, LLC | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.67 | % | 8/31/2029 | $ | 919,276 | 908,564 | 912,841 | 0.03 | % | E",
+        "Amwins Group Inc | First Lien Term Loan | SOFR(Q) | 0.75 | % | 2.00 | % | 5.68 | % | 1/30/2032 | $ | 1,496,212 | 1,493,429 | 1,487,998 | 0.06 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Health Care Technology (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/div[42]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Amynta Agency Borrower Inc. (Mayfield) | First Lien Term Loan | SOFR(M) | \u2014 | 2.50 | % | 6.45 | % | 12/29/2031 | $ | 4,875,013 | $ | 4,872,067 | $ | 4,811,467 | 0.18 | %",
+        "Ardonagh Group FinCo Pty Ltd (Australia) | First Lien Term Loan | SOFR(Q) | \u2014 | 2.75 | % | 8.70 | % | 2/27/2031 | $ | 2,674,447 | 2,677,593 | 2,615,957 | 0.10 | % | C"
+      ],
+      "last": [
+        "Gympass US, LLC | First Lien Term Loan | SOFR(M) | 1.00 | % | 3.25 % Cash + 3.25 % PIK | 10.28 | % | 8/29/2029 | $ | 2,872,853 | 2,866,523 | 2,872,853 | 0.11 | % | E",
+        "Gympass US, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 1.50 | % | 3.25 % Cash + 3.25 % PIK | 10.28 | % | 8/29/2029 | $ | 12,899,403 | 12,846,638 | 12,899,403 | 0.48 | % | E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Insurance (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/div[45]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Magenta Buyer, LLC (McAfee) | First Lien Term Loan | SOFR(M) | \u2014 | 3.00 | % | 6.67 | % | 3/1/2029 | $ | 2,276,848 | $ | 2,274,072 | $ | 2,040,625 | 0.08 | %",
+        "Spartan Bidco Pty Ltd (StarRez) (Australia) | First Lien Incremental Term Loan | SOFR(Q) | 0.75 | % | 6.65 | % | 10.32 | % | 1/24/2028 | $ | 9,981,122 | 9,890,824 | 9,874,484 | 0.38 | % | C/E"
+      ],
+      "last": [
+        "Coorstek Inc. | First Lien Term Loan | SOFR(Q) | \u2014 | 3.00 | % | 6.67 | % | 10/28/2032 | $ | 668,325 | 665,174 | 672,713 | 0.03 | %",
+        "Filtration Group Corporation | First Lien Term Loan | SOFR(M) | 0.50 | % | 2.50 | % | 6.17 | % | 10/23/2028 | $ | 5,294,688 | 5,313,623 | 5,302,948 | 0.20 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Internet Software and Services (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 34,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Hobbs & Associates, LLC | First Lien Term Loan | SOFR(M) | \u2014 | 2.75 | % | 6.42 | % | 7/23/2031 | $ | 2,224,207 | $ | 2,217,494 | $ | 2,211,240 | 0.08 | %",
+        "Hobbs & Associates, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | \u2014 | 2.75 | % | 6.42 | % | 7/23/2031 | $ | \u2014 | 200 | ( 625 | ) | \u2014 | D"
+      ],
+      "last": [
+        "Allied Benefit Systems Intermediate, LLC | First Lien Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.70 | % | 10/31/2030 | $ | 41,566,958 | 41,378,673 | 41,192,854 | 1.58 | % | E",
+        "Allied Benefit Systems Intermediate, LLC | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.75 | % | 5.00 | % | 8.70 | % | 10/31/2030 | $ | \u2014 | \u2014 | ( 46,468 | ) | \u2014 | D/E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Machinery (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 35,
+      "table_xpath": "/html/body/div[51]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "Applause App Quality, Inc. | First Lien Term Loan | SOFR(Q) | 1.50 | % | 5.75 | % | 9.45 | % | 10/24/2029 | $ | 15,007,034 | $ | 14,793,023 | $ | 14,736,907 | 0.56 | % | E",
+        "Applause App Quality, Inc. | First Lien Revolver | SOFR(Q) | 1.50 | % | 5.75 | % | 9.40 | % | 10/24/2029 | $ | 150,070 | 134,879 | 123,057 | \u2014 | E"
+      ],
+      "last": [
+        "Vensure Employer Services, Inc. | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.50 | % | 5.00 | % | 8.70 | % | 9/27/2031 | $ | \u2014 | ( 51,466 | ) | ( 25,163 | ) | \u2014 | D/E",
+        "242,852,780 | 233,597,811 | 8.88 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Professional Services (Continued)"
+      ],
+      "preceding": [
+        "",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 40,
+      "table_xpath": "/html/body/div[54]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Boots Group Finco LP | First Lien Term Loan | SOFR(Q) | \u2014 | 3.25 | % | 6.92 | % | 7/22/2032 | $ | 2,050,860 | $ | 2,055,794 | $ | 2,060,684 | 0.08 | %",
+        "Community Merger Sub Debt LLC (CINC Systems) | First Lien Term Loan | SOFR(M) | 0.75 | % | 5.25 | % | 8.92 | % | 1/18/2030 | $ | 10,119,171 | 10,005,296 | 10,046,920 | 0.38 | % | E"
+      ],
+      "last": [
+        "Flexport Capital, LLC | First Lien Term Loan | SOFR(M) | 2.00 | % | 5.50 | % | 9.17 | % | 6/30/2029 | $ | 25,317,664 | 25,110,854 | 25,216,393 | 0.96 | % | E",
+        "Flexport Capital, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 2.00 | % | 5.50 | % | 9.17 | % | 6/30/2029 | $ | \u2014 | ( 158,125 | ) | ( 77,442 | ) | \u2014 | D/E"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Pharmaceuticals"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 34,
+      "table_xpath": "/html/body/div[57]/table"
+    },
+    {
+      "contexts": 33,
+      "first": [
+        "Fusion Risk Management, Inc. | First Lien Term Loan | SOFR(Q) | 1.00 | % | 6.00 | % | 9.67 | % | 5/22/2029 | $ | 4,036,148 | $ | 4,001,241 | $ | 4,024,040 | 0.15 | % | E",
+        "Fusion Risk Management, Inc. | First Lien Revolver | SOFR(M) | 1.00 | % | 6.00 | % | 9.68 | % | 5/22/2029 | $ | 137,281 | 130,756 | 135,908 | 0.01 | % | E"
+      ],
+      "last": [
+        "MH Sub I, LLC (Micro Holding Corp.) | First Lien Term Loan | SOFR(M) | \u2014 | 4.25 | % | 7.92 | % | 12/11/2031 | $ | 2,386,349 | 2,371,700 | 1,601,837 | 0.06 | %",
+        "MH Sub I, LLC (Micro Holding Corp.) | First Lien 2023 Incremental Term Loan | SOFR(M) | 1.00 | % | 4.25 | % | 7.92 | % | 5/3/2028 | $ | 2,154,098 | 2,152,994 | 1,857,910 | 0.07 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Software (Continued)"
+      ],
+      "preceding": [
+        "",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 33,
+      "table_xpath": "/html/body/div[60]/table"
+    },
+    {
+      "contexts": 29,
+      "first": [
+        "Onward Acquireco Inc (Onestream Inc) | First Lien Delayed Draw Term Loan | SOFR(M) | \u2014 | 2.38 % Cash + 2.68 % PIK | 8.71 | % | 3/30/2033 | $ | \u2014 | $ | ( 20,679 | ) | $ | ( 41,391 | ) | \u2014 | D/E",
+        "Onward Acquireco Inc (Onestream Inc) | First Lien Revolver | SOFR(M) | \u2014 | 2.38 % Cash + 2.68 % PIK | 8.71 | % | 3/30/2033 | $ | \u2014 | \u2014 | ( 17,249 | ) | \u2014 | D/E"
+      ],
+      "last": [
+        "White Cap Supply Holdings, LLC | First Lien Tranche B Term Loan | SOFR(M) | \u2014 | 3.25 | % | 6.92 | % | 10/19/2029 | $ | 7,778,231 | 7,752,306 | 7,499,226 | 0.29 | %",
+        "11,263,899 | 10,972,261 | 0.42 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Software (Continued)"
+      ],
+      "preceding": [
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 29,
+      "table_xpath": "/html/body/div[63]/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "WH Borrower, LLC (WHP) | First Lien Term Loan | SOFR(Q) | 0.50 | % | 4.50 | % | 8.16 | % | 2/20/2032 | $ | 26,581,671 | $ | 26,469,603 | $ | 26,633,638 | 1.01 | %",
+        "Composecure Holdings LLC | First Lien Term Loan | SOFR(M) | \u2014 | 2.25 | % | 5.93 | % | 1/7/2033 | $ | 864,000 | 862,949 | 863,464 | 0.03 | %"
+      ],
+      "last": [
+        "Total Equity Securities - 0.1 % of Net Assets | 1,732,683 | 1,041,809 | 0.04 | %",
+        "Total Investments - 142.1 % of Net Assets | $ | 2,391,096,696 | $ | 2,354,502,240 | 89.43 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Issuer(F) Instrument Ref(B) Floor Spread Total Coupon Maturity Principal Cost Fair Value % of Total Cash and Investment Notes",
+        "Debt Investments - Continued",
+        "Textiles, Apparel and Luxury Goods"
+      ],
+      "preceding": [
+        "",
+        "March 31, 2026",
+        "Consolidated Schedule of Investments (Continued) (Unaudited)",
+        "BlackRock Private Credit Fund"
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/div[66]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "1 | Quoted prices in active markets for identical assets | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014",
+        "1 | Quoted prices in active markets for identical assets | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014"
+      ],
+      "last": [
+        "Total | $ | 463,142,413 | $ | 1,890,318,018 | $ | 1,041,809 | $ | 2,354,502,240",
+        "Total | $ | 463,142,413 | $ | 1,890,318,018 | $ | 1,041,809 | $ | 2,354,502,240"
+      ],
+      "opening_rows": [
+        "",
+        "",
+        "Level Basis for Determining Fair Value Broadly Syndicated Loans (1) Middle Market Loans (2) Equity Securities Total",
+        "1 Quoted prices in active markets for identical assets $ \u2014 $ \u2014 $ \u2014 $ \u2014"
+      ],
+      "preceding": [
+        "At March 31, 2026, the Fund\u2019s investments were categorized as follows:"
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[126]/div/ix:continuation/div/ix:continuation/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "Broadly Syndicated Loans | $ | 15,681,202 | Market Quotations | Indicative bid/ask quotes | 1 ( 1 )",
+        "Middle Market Loans | 1,584,021,423 | Income Approach | Discount rate | 8.1 % - 20.7 % ( 9.8 %)"
+      ],
+      "last": [
+        "\u2014 | Market Comparable Companies | Revenue Multiple | 0.8 x ( 0.8 x)",
+        "$ | 1,755,663,305"
+      ],
+      "opening_rows": [
+        "",
+        "Asset Type Fair Value Valuation Technique Unobservable Input Weighted Average Range (1)",
+        "Broadly Syndicated Loans $ 15,681,202 Market Quotations Indicative bid/ask quotes 1 ( 1 )",
+        "Middle Market Loans 1,584,021,423 Income Approach Discount rate 8.1 % - 20.7 % ( 9.8 %)"
+      ],
+      "preceding": [
+        "Unobservable inputs used in the fair value measurement of Level 3 investments as of March 31, 2026 included the following:"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[126]/div/ix:continuation/div/ix:continuation/div[2]/ix:nonnumeric/table"
+    }
+  ]
+}

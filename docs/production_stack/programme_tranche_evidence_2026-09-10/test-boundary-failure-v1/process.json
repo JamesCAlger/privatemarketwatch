@@ -1,0 +1,23 @@
+{
+  "code": {
+    "bytes": 8915,
+    "path": "scripts/programme_tranche/run_verification.py",
+    "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+  },
+  "command": [
+    "C:\\Users\\alger\\miniconda3\\python.exe",
+    "-m",
+    "scripts.programme_tranche.run_verification",
+    "tests",
+    "--worker",
+    "--output",
+    "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\scratch\\2026-09-10_programme_tranche\\verification\\full-suite-v1"
+  ],
+  "controller_pid": 22236,
+  "limit_job_memory_bytes": 12884901888,
+  "limit_seconds": 5400,
+  "network": "external denied; loopback allowed",
+  "started_utc": "2026-09-10T13:36:45.065148+00:00",
+  "worker_created": 1789047405.0603263,
+  "worker_pid": 4672
+}

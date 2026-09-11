@@ -1,0 +1,224 @@
+{
+  "evidence": {
+    "artifacts_metadata": {
+      "pik_schedule_proxy_summary.csv": {
+        "columns": 15,
+        "rows": 2104,
+        "typed_multiset_difference": 0
+      },
+      "pik_schedule_proxy_transitions.csv": {
+        "columns": 15,
+        "rows": 5034,
+        "typed_multiset_difference": 0
+      },
+      "pik_transitions.csv": {
+        "columns": 13,
+        "rows": 796,
+        "typed_multiset_difference": 0
+      },
+      "position_pik_status.csv": {
+        "columns": 18,
+        "rows": 780425,
+        "typed_multiset_difference": 0
+      }
+    },
+    "completion": {
+      "bytes": 198,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/complete.json",
+      "sha256": "82d108853586c403e769da18f4f65f0c40a67dacbd493e8bf37fbbd6658d3a72"
+    },
+    "result": {
+      "bytes": 4164,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/result.json",
+      "sha256": "f1a72405ec60e42698925244d0f9248379af25ee7f736fdab8679f8937f77e60"
+    },
+    "summary": {
+      "artifacts_metadata": {
+        "pik_schedule_proxy_summary.csv": {
+          "columns": 15,
+          "rows": 2104,
+          "typed_multiset_difference": 0
+        },
+        "pik_schedule_proxy_transitions.csv": {
+          "columns": 15,
+          "rows": 5034,
+          "typed_multiset_difference": 0
+        },
+        "pik_transitions.csv": {
+          "columns": 13,
+          "rows": 796,
+          "typed_multiset_difference": 0
+        },
+        "position_pik_status.csv": {
+          "columns": 18,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "elapsed_seconds": 66.2933139000088,
+      "financial_convention": "legacy cash leg; no income formula migration",
+      "identity_policy": {
+        "contested_assignment": true,
+        "use_registry": false
+      },
+      "input_fingerprint": "e8188974f5382a0c269abadd0ea75683b56c2a37b6f33cceb5f6b89ff4b09291",
+      "parents": {
+        "identity": {
+          "attempt": "identity-01",
+          "holdings_sha256": "488d630d3e5d69e0af965031a23435d1e9fa3b6b7582fec0d6a43e1f7d499c8a",
+          "result_sha256": "58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a"
+        }
+      },
+      "quality": "not_evaluated",
+      "rows": 780425,
+      "stage": "evidence",
+      "times": {
+        "summary_rows": 2104,
+        "terms_transitions": 5034
+      }
+    }
+  },
+  "identity": {
+    "artifacts_metadata": {
+      "entity_lookup.csv": {
+        "columns": 9,
+        "rows": 135086,
+        "typed_multiset_difference": 0
+      },
+      "entity_resolution_stats.csv": {
+        "columns": 9,
+        "rows": 1,
+        "typed_multiset_difference": 0
+      },
+      "position_id_edges.csv": {
+        "columns": 16,
+        "rows": 542468,
+        "typed_multiset_difference": 0
+      },
+      "position_matches.csv": {
+        "columns": 31,
+        "rows": 497451,
+        "typed_multiset_difference": 0
+      },
+      "private_markets_holdings.csv": {
+        "columns": 88,
+        "rows": 780425,
+        "typed_multiset_difference": 0
+      }
+    },
+    "completion": {
+      "bytes": 198,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/complete.json",
+      "sha256": "96c12fecf8e807ec1de761900cf669be074a0f1a4452ff9cef5430cdfd669b4d"
+    },
+    "result": {
+      "bytes": 4567,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/result.json",
+      "sha256": "58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a"
+    },
+    "summary": {
+      "artifacts_metadata": {
+        "entity_lookup.csv": {
+          "columns": 9,
+          "rows": 135086,
+          "typed_multiset_difference": 0
+        },
+        "entity_resolution_stats.csv": {
+          "columns": 9,
+          "rows": 1,
+          "typed_multiset_difference": 0
+        },
+        "position_id_edges.csv": {
+          "columns": 16,
+          "rows": 542468,
+          "typed_multiset_difference": 0
+        },
+        "position_matches.csv": {
+          "columns": 31,
+          "rows": 497451,
+          "typed_multiset_difference": 0
+        },
+        "private_markets_holdings.csv": {
+          "columns": 88,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "elapsed_seconds": 632.9883561999886,
+      "financial_convention": "legacy cash leg; no income formula migration",
+      "identity_policy": {
+        "contested_assignment": true,
+        "use_registry": false
+      },
+      "input_fingerprint": "9389123b00fc18b6ee9660eb7f37ae99d86e67a250b77385aaf675aca0476703",
+      "parents": {
+        "unified": {
+          "attempt": "unified-01",
+          "holdings_sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+          "result_sha256": "e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb"
+        }
+      },
+      "quality": "not_evaluated",
+      "rows": 780425,
+      "stage": "identity",
+      "times": {
+        "entity_seconds": 118.29965779998747,
+        "matches": 497451,
+        "matching_seconds": 121.11630350000632,
+        "position_ids_seconds": 291.18320759999915
+      }
+    }
+  },
+  "unified": {
+    "artifacts_metadata": {
+      "agent_fix_application_audit.csv": {
+        "columns": 11,
+        "rows": 175,
+        "typed_multiset_difference": 0
+      },
+      "private_markets_holdings.csv": {
+        "columns": 88,
+        "rows": 780425,
+        "typed_multiset_difference": 0
+      }
+    },
+    "completion": {
+      "bytes": 198,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/complete.json",
+      "sha256": "8c8e28e99abceb6b71d45354b40760b048ffaf07ca486b51a9637da24b65e0ff"
+    },
+    "result": {
+      "bytes": 3020,
+      "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/result.json",
+      "sha256": "e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb"
+    },
+    "summary": {
+      "artifacts_metadata": {
+        "agent_fix_application_audit.csv": {
+          "columns": 11,
+          "rows": 175,
+          "typed_multiset_difference": 0
+        },
+        "private_markets_holdings.csv": {
+          "columns": 88,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "elapsed_seconds": 2189.728961300003,
+      "financial_convention": "legacy cash leg; no income formula migration",
+      "identity_policy": {
+        "contested_assignment": true,
+        "use_registry": false
+      },
+      "input_fingerprint": "e06fce533fc2bc1fa8f98e6099e3b0c500583509f72bf5e1f200e81b5db1b228",
+      "parents": {},
+      "quality": "not_evaluated",
+      "rows": 780425,
+      "stage": "unified",
+      "times": {
+        "build_seconds": 2105.4393495999975
+      }
+    }
+  }
+}

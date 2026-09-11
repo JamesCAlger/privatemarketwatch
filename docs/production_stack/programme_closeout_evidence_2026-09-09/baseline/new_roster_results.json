@@ -1,0 +1,62 @@
+[
+  {
+    "candidate_fv": 0.0,
+    "candidate_rows": 0,
+    "primary_result": {
+      "absolute_residual_sum": "52566000.0",
+      "assessed_primary_anchors": 1,
+      "eligible_primary_anchors": 1,
+      "ratio": 1.0,
+      "source_abs_total": "52566000"
+    },
+    "reference_id": "REF-0001950976-2023-12-31",
+    "roster_result": {
+      "ambiguous_duplicate_fv_keys": 0,
+      "candidate_rows": 0,
+      "fv_precision": null,
+      "fv_recall": 0.0,
+      "matched_rows": 0,
+      "output_only_or_duplicate_rows": 0,
+      "published_abs_fv_known": "0",
+      "published_missing_fv_rows": 0,
+      "reference_rows": 4,
+      "row_precision": null,
+      "row_recall": 0.0,
+      "source_abs_fv_known": "52722000",
+      "source_missing_fv_rows": 0,
+      "source_only_rows": 4,
+      "status": "reviewed_reference_comparison"
+    },
+    "scope": "development fund-quarter census, not cohort estimate"
+  },
+  {
+    "candidate_fv": 0.0,
+    "candidate_rows": 0,
+    "primary_result": {
+      "absolute_residual_sum": "650323000.0",
+      "assessed_primary_anchors": 1,
+      "eligible_primary_anchors": 1,
+      "ratio": 1.0,
+      "source_abs_total": "650323000"
+    },
+    "reference_id": "REF-0001930087-2023-06-30",
+    "roster_result": {
+      "ambiguous_duplicate_fv_keys": 0,
+      "candidate_rows": 0,
+      "fv_precision": null,
+      "fv_recall": 0.0,
+      "matched_rows": 0,
+      "output_only_or_duplicate_rows": 0,
+      "published_abs_fv_known": "0",
+      "published_missing_fv_rows": 0,
+      "reference_rows": 1,
+      "row_precision": null,
+      "row_recall": 0.0,
+      "source_abs_fv_known": "650323000",
+      "source_missing_fv_rows": 0,
+      "source_only_rows": 1,
+      "status": "reviewed_reference_comparison"
+    },
+    "scope": "development fund-quarter census, not cohort estimate"
+  }
+]

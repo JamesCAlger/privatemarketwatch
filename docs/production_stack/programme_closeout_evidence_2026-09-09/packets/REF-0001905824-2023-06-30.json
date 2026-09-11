@@ -1,0 +1,297 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Non-controlled, non-affiliated investments, at fair value (cost of $ 245,950 and $ 256,627 , respectively)",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "236,260",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]",
+      "table_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "236260000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "Fact_86011947",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "245,950",
+        "",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "",
+        "97.52",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "Fact_86011947",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "236,260",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]/tr[18]",
+      "table_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "236260000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "245,950",
+        "",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "$",
+        "256,627",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "236,260",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[11]",
+      "table_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "236260000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total assets",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "153,845",
+        "",
+        "",
+        "$",
+        "82,415",
+        "",
+        "",
+        "$",
+        "236,260",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "236,260",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[16]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table/tr[11]",
+      "table_xpath": "/html/body/div[16]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "236260000"
+    }
+  ],
+  "cik": "0001905824",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1905824/000119312523210651.html",
+  "reference_id": "REF-0001905824-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 73,
+  "source_sha256": "1403858977f8e1fa48a8207615a8aa60db8ef806c309e9a3bba849e0173802b7",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 33,
+      "first": [
+        "Alorica, Inc. Term Loan (4) | IT Services | SOFR + 6.875 | % | 11.575 | % | 12/21/2027 | $ | 12,375 | $ | 12,253 | $ | 12,356 | 5.10 | %",
+        "AP Core Holdings II, LLC Term B-1 Loan | Entertainment | SOFR + 5.614 | % | 10.717 | % | 09/01/2027 | 3,585 | 3,541 | 3,462 | 1.43 | %"
+      ],
+      "last": [
+        "Rivian Holdings/Auto LLC 144A (3) | Automotive | LIBOR + 5.625 | % | 10.931 | % | 10/15/2026 | 28,601 | 28,199 | 27,867 | 11.50 | %",
+        "Total Corporate Bonds | 28,199 | 27,867 | 11.50 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets",
+        "Debt Investments",
+        "First Lien Senior Secured"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "rows": 33,
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 10,
+      "first": [
+        "U.S. Treasury Bill | N/A | 4.26 | % | 07/20/2023 | 3,200 | 3,191 | 3,192 | 1.32 | %",
+        "U.S. Treasury Bill | N/A | 4.66 | % | 08/03/2023 | 6,500 | 6,470 | 6,472 | 2.67 | %"
+      ],
+      "last": [
+        "Total Non-Controlled, Non-Affiliated Investments | $ | 245,950 | $ | 236,260 | 97.52 | %",
+        "Total Investments | $ | 245,950 | $ | 236,260 | 97.52 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets",
+        "Short-Term Investments",
+        "U.S. Treasury Bills"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "rows": 10,
+      "table_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "First Lien Secured | $ | 147,557 | $ | 143,942 | $ | 143,434 | $ | 132,532",
+        "Second Lien Secured | 6,542 | 3,576 | 23,905 | 11,715"
+      ],
+      "last": [
+        "Short-Term Investments | 33,410 | 33,419 | 32,640 | 32,650",
+        "Total investments | $ | 245,950 | $ | 236,260 | $ | 256,627 | $ | 230,202"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2023 December 31, 2022",
+        "",
+        "(Amounts in thousands) Cost Fair Value Cost Fair Value"
+      ],
+      "preceding": [
+        "",
+        "Investments at fair value and cost consisted of the following as of June 30, 2023 and December 31, 2022:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "First Lien Secured | $ | \u2014 | $ | 89,978 | $ | 53,964 | $ | 143,942",
+        "First Lien Secured | $ | \u2014 | $ | 89,978 | $ | 53,964 | $ | 143,942"
+      ],
+      "last": [
+        "Total assets | $ | \u2014 | $ | 153,845 | $ | 82,415 | $ | 236,260",
+        "Total assets | $ | \u2014 | $ | 153,845 | $ | 82,415 | $ | 236,260"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2023",
+        "",
+        "Assets Level 1 Level 2 Level 3 Total"
+      ],
+      "preceding": [
+        "",
+        "The following tables summarize the fair value of the Company\u2019s investments as of June 30, 2023 and December 31, 2022 (amounts in thousands):"
+      ],
+      "rows": 24,
+      "table_xpath": "/html/body/div[16]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table"
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>First programme tranche - review</title><style>
+:root{color-scheme:light;--ink:#172b35;--muted:#536873;--line:#d8e1e6;--paper:#f2f5f4;--accent:#126b65;--warn:#875b10}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1040px;margin:auto;padding:42px 26px 100px}header{margin-bottom:34px}h1{font-size:clamp(32px,5vw,54px);line-height:1.12;letter-spacing:-.035em;max-width:800px}h2{font-size:29px;line-height:1.25}h3{line-height:1.35}p{max-width:80ch}.eyebrow{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:750}.lede{font-size:20px;color:var(--muted)}section{background:white;border:1px solid var(--line);border-radius:18px;padding:28px;margin:24px 0;scroll-margin-top:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.card{background:#f2f6f5;padding:18px;border-radius:12px}.number{font-size:30px;font-weight:750}.muted,.hint{color:var(--muted)}.hint{font-size:14px}.badge{display:inline-block;padding:4px 10px;border-radius:6px;background:#fff2d8;color:#705016;font-size:13px;font-weight:700}.status-pass{background:#e0f3e7;color:#195632}.status-fail{background:#fbe7e5;color:#8e3026}a{color:var(--accent);text-underline-offset:3px}.toolbar{display:flex;flex-wrap:wrap;gap:10px}button{font:inherit;border:1px solid var(--line);border-radius:9px;padding:9px 14px;background:white;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #23938b;outline-offset:3px}details{border-top:1px solid var(--line);padding:14px 0}summary{cursor:pointer;font-weight:650}.detail{padding:8px 3px}.literal{background:#f4f6f7;border-left:3px solid #94aaa9;padding:14px;overflow-wrap:anywhere;font-size:15px}.row{padding:12px 0;border-bottom:1px solid var(--line)}.row strong{display:block}code{font-size:13px;overflow-wrap:anywhere}textarea{width:100%;min-height:100px;padding:12px;font:inherit;border:1px solid #a6b9be;border-radius:8px}.comment{background:#f8faf9;padding:14px;margin-top:22px;border-radius:10px}.comment label{display:block;font-size:14px;font-weight:650;margin-bottom:6px}.metric{display:flex;justify-content:space-between;gap:20px;padding:9px 0;border-bottom:1px solid var(--line)}.metric span:last-child{text-align:right;max-width:55%}.wide{overflow-x:auto}nav a{display:inline-block;margin:4px 15px 4px 0}ol,ul{padding-left:24px}li{margin:7px 0}.screen-only{display:block}.print-comment{display:none;white-space:pre-wrap}footer{font-size:14px;color:var(--muted)}
+@media(max-width:600px){main{padding:22px 14px 70px}section{padding:20px}.metric{display:block}.metric span{display:block}.metric span:last-child{text-align:left;max-width:100%}}
+@media print{body{background:white;font-size:11pt}main{max-width:none;padding:0}section{break-inside:avoid;padding:16px;margin:12px 0}button,nav,.screen-only,textarea,.comment label{display:none!important}.print-comment{display:block}details{display:block}a{color:inherit}.comment{padding:4px}.literal{font-size:10pt}}
+</style></head><body><main><header><p class="eyebrow">Private markets data programme / 10 September 2026</p><h1>The first implementation tranche.</h1><p class="lede">A controlled way to run, measure and resume the pipeline, with source-backed work ready for review.</p><div class="toolbar"><button id="save">Save review file</button><button id="expand">Show / hide supporting detail</button><button id="print">Print / save PDF</button></div><p id="save-status" class="hint screen-only">Use [brackets] or plain text in any comment box. Browser drafts stay local; save the review file for Codex.</p><nav><a href="#result">Result</a><a href="#changes">What changed</a><a href="#queue">Four next fixes</a><a href="#source-review">Source review</a><a href="#criteria">Acceptance criteria</a></nav></header><section id="result" data-review="result"><p class="eyebrow">01 / Outcome</p><h2>Verification stopped: protected test-cache writes</h2><p id="engineering-status"><strong>The three candidate stages completed. Engineering verification is incomplete.</strong></p><p>The revised dependency inventory covered 247,333 files. The full holdings, matching and PIK stages then completed, with all 11 CSV/Parquet pairs agreeing.</p><div class="cards"><div class="card"><div class="number">780,425</div>Candidate holdings rows</div><div class="card"><div class="number">497,451</div>Assigned position matches</div><div class="card"><div class="number">68</div>Focused tests passed before the full suite</div></div><p>The full test suite reached its time limit, with <strong>four failure markers</strong> and no final traceback. The earlier handoff incorrectly counted one. Its outer guard found <strong>six new empty query-cache files</strong> in a protected output folder. The agreed stop rule therefore applies. All 237,621 pre-existing protected files retained their size and modification time; that is not a full content-hash proof.</p><p>A test fixture redirected one output directory but missed a separate DuckDB cache. A fix now sends those caches to temporary test folders and gives orchestration tests synthetic query sources. The subsequent bounded investigation verified these repairs; see its results below.</p><p>Integrated financial measurements and the actual recovery drill did not run. All 50 programme metrics below remain UNMEASURED. Stage row counts and matching file formats do not establish financial accuracy.</p><p>The six files total 9,580 bytes and remain in place. Automatic approval review rejected their removal as "blocked by policy"; no further reason was supplied. Forensic copies and hashes are preserved.</p><p><a href="programme_tranche_handoff_2026-09-10.md">Read the handoff and preservation limits</a> / <a href="programme_tranche_resume_proposal_2026-09-10.md">Read the revised proposal and outcome</a></p><h3>What the subsequent investigation found</h3><p>All four failures reproduced: three tests expected outdated wrapper versions, and one validator checked DuckDB regexes using Python syntax. The stale expectations and test-cache isolation are repaired. The production regex validator still needs its correction.</p><p><strong>61 targeted tests passed; one known validator test still failed.</strong> Four representative staging/integration cases were checked. The broader 59-case class did not fit the diagnostic budget and was stopped with its completed results retained. No protected-output files changed during these diagnostic jobs. The full suite has not been rerun.</p><p>The slow fixtures repeatedly processed a large production overlay. The two profiled examples improved from about 170 seconds each to 80.7 seconds and 74.1 seconds. Staging still has substantial processing cost. These are instrumented diagnostic timings, not a prediction of total suite runtime.</p><p>The diagnostic controller now saves failures immediately and checks the worker result and JUnit, because launcher success alone proved unreliable.</p><p><a href="programme_verification_investigation_2026-09-10.md">Read the investigation, evidence and remaining work</a></p><p><strong>Independent source review is still pending.</strong> No reviewer has been appointed and none of the development labels has been promoted to acceptance evidence.</p></section><section id="changes" data-review="changes"><p class="eyebrow">02 / Implementation</p><h2>Completed work can be verified and reused.</h2><ul><li>The candidate runner freezes inputs and dependencies, isolates writes, and verifies each holdings, identity and PIK stage before marking it complete.</li><li>CSV and Parquet companions must agree, including duplicate counts. Failed or incomplete stages cannot be mistaken for usable results.</li><li>The evaluator records all 28 criteria against versioned working targets. Missing evidence stays visibly unassessed.</li><li>Target amendments retain old and proposed results on the same candidate. Original gold and live thresholds stay under their existing authority.</li></ul><p>This tranche establishes controls. The schema, rate, persistent-identity and dbt migrations remain subsequent implementation packages.</p><details><summary>Execution and verification evidence</summary><div class="detail"><p>All three isolated candidate stages completed. Full pytest timed out with one failure marker and six new empty protected query-cache files. The tranche is stopped. The test-isolation fix is prepared but untested; integrated measurement and recovery did not run.</p><pre class="literal">{
+  &quot;candidate&quot;: &quot;t1-runtime-20260910-v5&quot;,
+  &quot;candidate_fingerprint&quot;: &quot;396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7&quot;,
+  &quot;created_utc&quot;: &quot;2026-09-10T15:48:18.814693+00:00&quot;,
+  &quot;engineering_tranche_complete&quot;: false,
+  &quot;execution_status&quot;: &quot;stopped_protected_output&quot;,
+  &quot;fix&quot;: {
+    &quot;bytes&quot;: 1885,
+    &quot;path&quot;: &quot;docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-fix-v1/complete.json&quot;,
+    &quot;sha256&quot;: &quot;bb4e7debfdc6084928539fdb88030c568e538955cc6fc74648c943e00a1bb8c8&quot;
+  },
+  &quot;focused_tests&quot;: {
+    &quot;evidence&quot;: {
+      &quot;bytes&quot;: 718,
+      &quot;path&quot;: &quot;scratch/2026-09-10_programme_tranche/verification/strengthened-preflight-tests-v2/result.json&quot;,
+      &quot;sha256&quot;: &quot;d5c40b5dc992b9a03d589d14f796aefabe7040077c933c15e920d8c49272e15a&quot;
+    },
+    &quot;passed&quot;: 68,
+    &quot;seconds&quot;: 53.076,
+    &quot;timing&quot;: &quot;Before the full suite; does not verify the later test-isolation fix&quot;
+  },
+  &quot;full_suite&quot;: {
+    &quot;elapsed_seconds&quot;: 5789.302398400003,
+    &quot;exit_code&quot;: 124,
+    &quot;final_junit_available&quot;: false,
+    &quot;final_traceback_available&quot;: false,
+    &quot;observed_failure_markers&quot;: 1,
+    &quot;progress&quot;: &quot;Approximately 79%; incomplete run, no final test counts&quot;,
+    &quot;timed_out&quot;: true,
+    &quot;worker_stopped&quot;: true
+  },
+  &quot;incident&quot;: {
+    &quot;all_protected_content_hashed&quot;: false,
+    &quot;bytes&quot;: 9580,
+    &quot;cleanup&quot;: &quot;Automatic approval review rejected removal: blocked by policy; files remain&quot;,
+    &quot;created_empty_cache_files&quot;: 6,
+    &quot;diagnosis&quot;: {
+      &quot;bytes&quot;: 2206,
+      &quot;path&quot;: &quot;docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-failure-v1/complete.json&quot;,
+      &quot;sha256&quot;: &quot;78648b1c42632a43e16a76c8eaf79485dfba4275423a1b3b2ee4fad6a5649594&quot;
+    },
+    &quot;removed_files&quot;: 0,
+    &quot;unchanged_existing_size_mtime_files&quot;: 237621
+  },
+  &quot;integrated_measurement&quot;: &quot;Not run&quot;,
+  &quot;next_work&quot;: &quot;Resolve the stop; verify test isolation and identify the earlier failure, finish full-suite verification, then measure/recover the existing sealed candidate after validating its identities.&quot;,
+  &quot;paid_calls&quot;: 0,
+  &quot;preservation&quot;: {
+    &quot;baseline_divergence_groups&quot;: {
+      &quot;fund_financials&quot;: 0,
+      &quot;holdings&quot;: 11,
+      &quot;index_returns&quot;: 6,
+      &quot;matches&quot;: 7,
+      &quot;position_returns&quot;: 7
+    },
+    &quot;code&quot;: {
+      &quot;bytes&quot;: 7051,
+      &quot;path&quot;: &quot;scripts/programme_tranche/check_preservation.py&quot;,
+      &quot;sha256&quot;: &quot;5b2c0a20670b85b3d337a2ad2cced0392abe98b28c1cc57bad7a93f9d49fb262&quot;
+    },
+    &quot;current_baseline_manifest&quot;: {
+      &quot;bytes&quot;: 25708533,
+      &quot;path&quot;: &quot;docs/refactoring/baseline_manifest.json&quot;,
+      &quot;sha256&quot;: &quot;5a9e76d2c9cf5c18e77262b7d04b864d590f17fdd368a81c2f7e9fc12909af00&quot;
+    },
+    &quot;derived_delta_roundoff&quot;: [
+      {
+        &quot;change&quot;: 3.637978807091713e-12,
+        &quot;new_delta&quot;: -1181.2205822721508,
+        &quot;old_delta&quot;: -1181.2205822721544,
+        &quot;path&quot;: &quot;/position_returns/position_return/0/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -0.0001220703125,
+        &quot;new_delta&quot;: -271163614.6602173,
+        &quot;old_delta&quot;: -271163614.6600952,
+        &quot;path&quot;: &quot;/position_returns/position_return/0/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 4.589557647705078e-06,
+        &quot;new_delta&quot;: -353908044.3096588,
+        &quot;old_delta&quot;: -353908044.3096634,
+        &quot;path&quot;: &quot;/position_returns/position_return/1/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -0.005859375,
+        &quot;new_delta&quot;: -9743223304.770508,
+        &quot;old_delta&quot;: -9743223304.764648,
+        &quot;path&quot;: &quot;/position_returns/position_return/1/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 9.237055564881302e-14,
+        &quot;new_delta&quot;: -9.251740571898235,
+        &quot;old_delta&quot;: -9.251740571898328,
+        &quot;path&quot;: &quot;/position_returns/position_return/2/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 1.6370904631912708e-11,
+        &quot;new_delta&quot;: -656.4379660223722,
+        &quot;old_delta&quot;: -656.4379660223885,
+        &quot;path&quot;: &quot;/position_returns/position_return/3/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 3.0517578125e-05,
+        &quot;new_delta&quot;: -202695199.09991455,
+        &quot;old_delta&quot;: -202695199.09994507,
+        &quot;path&quot;: &quot;/position_returns/position_return/3/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -9.094947017729282e-13,
+        &quot;new_delta&quot;: -0.1228552317793401,
+        &quot;old_delta&quot;: -0.1228552317784306,
+        &quot;path&quot;: &quot;/position_returns/position_return/4/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 0.0001220703125,
+        &quot;new_delta&quot;: -92874368.32995605,
+        &quot;old_delta&quot;: -92874368.33007812,
+        &quot;path&quot;: &quot;/position_returns/position_return/4/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 9.313225746154785e-10,
+        &quot;new_delta&quot;: 4334954.627437041,
+        &quot;old_delta&quot;: 4334954.62743704,
+        &quot;path&quot;: &quot;/position_returns/position_return/5/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -1.52587890625e-05,
+        &quot;new_delta&quot;: -1185865.5000305176,
+        &quot;old_delta&quot;: -1185865.5000152588,
+        &quot;path&quot;: &quot;/position_returns/position_return/5/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 2.2737367544323206e-13,
+        &quot;new_delta&quot;: -2.2737367544323206e-13,
+        &quot;old_delta&quot;: -4.547473508864641e-13,
+        &quot;path&quot;: &quot;/position_returns/position_return/6/total_return_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 0.000213623046875,
+        &quot;new_delta&quot;: 2908500.000213623,
+        &quot;old_delta&quot;: 2908500.0,
+        &quot;path&quot;: &quot;/position_returns/position_return/6/begin_fv_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 1.52587890625e-05,
+        &quot;new_delta&quot;: -45551112.99999237,
+        &quot;old_delta&quot;: -45551113.00000763,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/1/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -0.0003662109375,
+        &quot;new_delta&quot;: 29327971.999816895,
+        &quot;old_delta&quot;: 29327972.000183105,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/2/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -0.015625,
+        &quot;new_delta&quot;: -32474804.002929688,
+        &quot;old_delta&quot;: -32474803.987304688,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/3/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -1.52587890625e-05,
+        &quot;new_delta&quot;: -48439072.0,
+        &quot;old_delta&quot;: -48439071.99998474,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/4/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -9.1552734375e-05,
+        &quot;new_delta&quot;: 29504999.999969482,
+        &quot;old_delta&quot;: 29505000.000061035,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/5/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 1.52587890625e-05,
+        &quot;new_delta&quot;: 3921854569.582794,
+        &quot;old_delta&quot;: 3921854569.582779,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/6/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: 6.103515625e-05,
+        &quot;new_delta&quot;: -1643282630.659851,
+        &quot;old_delta&quot;: -1643282630.659912,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/7/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      },
+      {
+        &quot;change&quot;: -6.103515625e-05,
+        &quot;new_delta&quot;: 2681492.529724121,
+        &quot;old_delta&quot;: 2681492.5297851562,
+        &quot;path&quot;: &quot;/holdings/holdings_class_fv/8/fair_value_sum_delta&quot;,
+        &quot;source_totals_within_existing_noise_rule&quot;: true
+      }
+    ],
+    &quot;elapsed_seconds&quot;: 128.92322630000126,
+    &quot;numeric_rule&quot;: &quot;Unchanged scripts.diff_outputs source-scale numeric-noise rule; each derived delta must equal its recorded subtraction&quot;,
+    &quot;original_gold&quot;: {
+      &quot;bytes&quot;: 112693,
+      &quot;path&quot;: &quot;data/gold/labels/position_labels.jsonl&quot;,
+      &quot;sha256&quot;: &quot;924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7&quot;
+    },
+    &quot;original_input_files&quot;: 1117,
+    &quot;original_match_reference_files&quot;: 1605,
+    &quot;previous_report&quot;: {
+      &quot;bytes&quot;: 13418,
+      &quot;path&quot;: &quot;docs/production_stack/programme_closeout_evidence_2026-09-09/verification/semantic_diff_report.json&quot;,
+      &quot;sha256&quot;: &quot;da570a27ff78407c45bf26c059e0b596e78b495ef6d4e17c29596c80ce6c5594&quot;
+    },
+    &quot;scope&quot;: &quot;Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.&quot;,
+    &quot;semantic_changes_since_preparation&quot;: [],
+    &quot;semantic_report&quot;: {
+      &quot;bytes&quot;: 13411,
+      &quot;path&quot;: &quot;scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/semantic_diff_report.json&quot;,
+      &quot;sha256&quot;: &quot;3fddbb2b3ec049249979fb9715689c8f114c995e1cd35aa439325bde08750d80&quot;
+    },
+    &quot;source_reference_freezes_unchanged&quot;: true,
+    &quot;status&quot;: &quot;pass&quot;
+  },
+  &quot;product_acceptance&quot;: {
+    &quot;criteria&quot;: 28,
+    &quot;metric_status_counts&quot;: {
+      &quot;UNMEASURED&quot;: 50
+    },
+    &quot;metrics&quot;: 50
+  },
+  &quot;production_adoption&quot;: false,
+  &quot;recovery&quot;: &quot;Not run&quot;,
+  &quot;references&quot;: {
+    &quot;dispositions&quot;: 61,
+    &quot;independently_reviewed&quot;: 0,
+    &quot;label_proposals&quot;: 20
+  },
+  &quot;remediation_packets&quot;: 4,
+  &quot;sec_requests&quot;: 0,
+  &quot;semantic_job&quot;: {
+    &quot;code_unchanged&quot;: true,
+    &quot;consistently_unreadable_paths&quot;: [],
+    &quot;elapsed_seconds&quot;: 655.5189213999984,
+    &quot;exit_code&quot;: 0,
+    &quot;log&quot;: {
+      &quot;bytes&quot;: 330,
+      &quot;path&quot;: &quot;scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/process.log&quot;,
+      &quot;sha256&quot;: &quot;261a646c6678aa1e08c2125c0f4ef1d3997e184ffd6699d7dce2876ec25c2e39&quot;
+    },
+    &quot;mode&quot;: &quot;semantic-only&quot;,
+    &quot;protected_changes&quot;: [],
+    &quot;protected_readable_files&quot;: 237627,
+    &quot;protected_unreadable_paths_changed&quot;: false,
+    &quot;started_code&quot;: {
+      &quot;bytes&quot;: 8915,
+      &quot;path&quot;: &quot;scripts/programme_tranche/run_verification.py&quot;,
+      &quot;sha256&quot;: &quot;d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8&quot;
+    },
+    &quot;timed_out&quot;: false,
+    &quot;worker_stopped&quot;: true
+  },
+  &quot;stage_record_scope&quot;: &quot;Completion/result identities and recorded typed-pair checks; the large output bundles were verified when sealed, not rehashed by this handoff writer.&quot;,
+  &quot;stages&quot;: {
+    &quot;evidence&quot;: {
+      &quot;artifacts_metadata&quot;: {
+        &quot;pik_schedule_proxy_summary.csv&quot;: {
+          &quot;columns&quot;: 15,
+          &quot;rows&quot;: 2104,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;pik_schedule_proxy_transitions.csv&quot;: {
+          &quot;columns&quot;: 15,
+          &quot;rows&quot;: 5034,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;pik_transitions.csv&quot;: {
+          &quot;columns&quot;: 13,
+          &quot;rows&quot;: 796,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;position_pik_status.csv&quot;: {
+          &quot;columns&quot;: 18,
+          &quot;rows&quot;: 780425,
+          &quot;typed_multiset_difference&quot;: 0
+        }
+      },
+      &quot;completion&quot;: {
+        &quot;bytes&quot;: 198,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/complete.json&quot;,
+        &quot;sha256&quot;: &quot;82d108853586c403e769da18f4f65f0c40a67dacbd493e8bf37fbbd6658d3a72&quot;
+      },
+      &quot;result&quot;: {
+        &quot;bytes&quot;: 4164,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/result.json&quot;,
+        &quot;sha256&quot;: &quot;f1a72405ec60e42698925244d0f9248379af25ee7f736fdab8679f8937f77e60&quot;
+      },
+      &quot;summary&quot;: {
+        &quot;artifacts_metadata&quot;: {
+          &quot;pik_schedule_proxy_summary.csv&quot;: {
+            &quot;columns&quot;: 15,
+            &quot;rows&quot;: 2104,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;pik_schedule_proxy_transitions.csv&quot;: {
+            &quot;columns&quot;: 15,
+            &quot;rows&quot;: 5034,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;pik_transitions.csv&quot;: {
+            &quot;columns&quot;: 13,
+            &quot;rows&quot;: 796,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;position_pik_status.csv&quot;: {
+            &quot;columns&quot;: 18,
+            &quot;rows&quot;: 780425,
+            &quot;typed_multiset_difference&quot;: 0
+          }
+        },
+        &quot;elapsed_seconds&quot;: 66.2933139000088,
+        &quot;financial_convention&quot;: &quot;legacy cash leg; no income formula migration&quot;,
+        &quot;identity_policy&quot;: {
+          &quot;contested_assignment&quot;: true,
+          &quot;use_registry&quot;: false
+        },
+        &quot;input_fingerprint&quot;: &quot;e8188974f5382a0c269abadd0ea75683b56c2a37b6f33cceb5f6b89ff4b09291&quot;,
+        &quot;parents&quot;: {
+          &quot;identity&quot;: {
+            &quot;attempt&quot;: &quot;identity-01&quot;,
+            &quot;holdings_sha256&quot;: &quot;488d630d3e5d69e0af965031a23435d1e9fa3b6b7582fec0d6a43e1f7d499c8a&quot;,
+            &quot;result_sha256&quot;: &quot;58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a&quot;
+          }
+        },
+        &quot;quality&quot;: &quot;not_evaluated&quot;,
+        &quot;rows&quot;: 780425,
+        &quot;stage&quot;: &quot;evidence&quot;,
+        &quot;times&quot;: {
+          &quot;summary_rows&quot;: 2104,
+          &quot;terms_transitions&quot;: 5034
+        }
+      }
+    },
+    &quot;identity&quot;: {
+      &quot;artifacts_metadata&quot;: {
+        &quot;entity_lookup.csv&quot;: {
+          &quot;columns&quot;: 9,
+          &quot;rows&quot;: 135086,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;entity_resolution_stats.csv&quot;: {
+          &quot;columns&quot;: 9,
+          &quot;rows&quot;: 1,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;position_id_edges.csv&quot;: {
+          &quot;columns&quot;: 16,
+          &quot;rows&quot;: 542468,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;position_matches.csv&quot;: {
+          &quot;columns&quot;: 31,
+          &quot;rows&quot;: 497451,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;private_markets_holdings.csv&quot;: {
+          &quot;columns&quot;: 88,
+          &quot;rows&quot;: 780425,
+          &quot;typed_multiset_difference&quot;: 0
+        }
+      },
+      &quot;completion&quot;: {
+        &quot;bytes&quot;: 198,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/complete.json&quot;,
+        &quot;sha256&quot;: &quot;96c12fecf8e807ec1de761900cf669be074a0f1a4452ff9cef5430cdfd669b4d&quot;
+      },
+      &quot;result&quot;: {
+        &quot;bytes&quot;: 4567,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/result.json&quot;,
+        &quot;sha256&quot;: &quot;58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a&quot;
+      },
+      &quot;summary&quot;: {
+        &quot;artifacts_metadata&quot;: {
+          &quot;entity_lookup.csv&quot;: {
+            &quot;columns&quot;: 9,
+            &quot;rows&quot;: 135086,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;entity_resolution_stats.csv&quot;: {
+            &quot;columns&quot;: 9,
+            &quot;rows&quot;: 1,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;position_id_edges.csv&quot;: {
+            &quot;columns&quot;: 16,
+            &quot;rows&quot;: 542468,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;position_matches.csv&quot;: {
+            &quot;columns&quot;: 31,
+            &quot;rows&quot;: 497451,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;private_markets_holdings.csv&quot;: {
+            &quot;columns&quot;: 88,
+            &quot;rows&quot;: 780425,
+            &quot;typed_multiset_difference&quot;: 0
+          }
+        },
+        &quot;elapsed_seconds&quot;: 632.9883561999886,
+        &quot;financial_convention&quot;: &quot;legacy cash leg; no income formula migration&quot;,
+        &quot;identity_policy&quot;: {
+          &quot;contested_assignment&quot;: true,
+          &quot;use_registry&quot;: false
+        },
+        &quot;input_fingerprint&quot;: &quot;9389123b00fc18b6ee9660eb7f37ae99d86e67a250b77385aaf675aca0476703&quot;,
+        &quot;parents&quot;: {
+          &quot;unified&quot;: {
+            &quot;attempt&quot;: &quot;unified-01&quot;,
+            &quot;holdings_sha256&quot;: &quot;f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68&quot;,
+            &quot;result_sha256&quot;: &quot;e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb&quot;
+          }
+        },
+        &quot;quality&quot;: &quot;not_evaluated&quot;,
+        &quot;rows&quot;: 780425,
+        &quot;stage&quot;: &quot;identity&quot;,
+        &quot;times&quot;: {
+          &quot;entity_seconds&quot;: 118.29965779998747,
+          &quot;matches&quot;: 497451,
+          &quot;matching_seconds&quot;: 121.11630350000632,
+          &quot;position_ids_seconds&quot;: 291.18320759999915
+        }
+      }
+    },
+    &quot;unified&quot;: {
+      &quot;artifacts_metadata&quot;: {
+        &quot;agent_fix_application_audit.csv&quot;: {
+          &quot;columns&quot;: 11,
+          &quot;rows&quot;: 175,
+          &quot;typed_multiset_difference&quot;: 0
+        },
+        &quot;private_markets_holdings.csv&quot;: {
+          &quot;columns&quot;: 88,
+          &quot;rows&quot;: 780425,
+          &quot;typed_multiset_difference&quot;: 0
+        }
+      },
+      &quot;completion&quot;: {
+        &quot;bytes&quot;: 198,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/complete.json&quot;,
+        &quot;sha256&quot;: &quot;8c8e28e99abceb6b71d45354b40760b048ffaf07ca486b51a9637da24b65e0ff&quot;
+      },
+      &quot;result&quot;: {
+        &quot;bytes&quot;: 3020,
+        &quot;path&quot;: &quot;data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/result.json&quot;,
+        &quot;sha256&quot;: &quot;e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb&quot;
+      },
+      &quot;summary&quot;: {
+        &quot;artifacts_metadata&quot;: {
+          &quot;agent_fix_application_audit.csv&quot;: {
+            &quot;columns&quot;: 11,
+            &quot;rows&quot;: 175,
+            &quot;typed_multiset_difference&quot;: 0
+          },
+          &quot;private_markets_holdings.csv&quot;: {
+            &quot;columns&quot;: 88,
+            &quot;rows&quot;: 780425,
+            &quot;typed_multiset_difference&quot;: 0
+          }
+        },
+        &quot;elapsed_seconds&quot;: 2189.728961300003,
+        &quot;financial_convention&quot;: &quot;legacy cash leg; no income formula migration&quot;,
+        &quot;identity_policy&quot;: {
+          &quot;contested_assignment&quot;: true,
+          &quot;use_registry&quot;: false
+        },
+        &quot;input_fingerprint&quot;: &quot;e06fce533fc2bc1fa8f98e6099e3b0c500583509f72bf5e1f200e81b5db1b228&quot;,
+        &quot;parents&quot;: {},
+        &quot;quality&quot;: &quot;not_evaluated&quot;,
+        &quot;rows&quot;: 780425,
+        &quot;stage&quot;: &quot;unified&quot;,
+        &quot;times&quot;: {
+          &quot;build_seconds&quot;: 2105.4393495999975
+        }
+      }
+    }
+  },
+  &quot;summary&quot;: &quot;All three isolated candidate stages completed. Full pytest timed out with one failure marker and six new empty protected query-cache files. The tranche is stopped. The test-isolation fix is prepared but untested; integrated measurement and recovery did not run.&quot;
+}</pre><a href="programme_runner.md">Runner and recovery guide</a> / <a href="programme_tranche_2026-09-10_work_record.md">Execution record</a></div></details></section><section id="queue"><p class="eyebrow">03 / Prioritized work</p><h2>Four bounded fixes, with explicit counterexamples.</h2><p>These are implementation proposals. Their expected changes have not been applied to the candidate.</p><details data-review="T1-P01" data-title="26North: untagged four-position schedule"><summary>26North: untagged four-position schedule</summary><div class="detail"><p>Source schedule is present as literal HTML while candidate has zero rows. Add governed per-CIK extraction for this accession and table; do not synthesize missing XBRL facts.</p><p><strong>Positive case:</strong> Penn first-lien term loan: FV 24,720,000 USD; separate delayed-draw FV 264,000 and revolver FV -78,000.</p><p><strong>Counterexample:</strong> The table total repeats the four-lot sum and is not a fifth position. Three Penn facilities are not one borrower position.</p><p><strong>Expected change:</strong> absolute fv usd: 52722000; known cost usd: 52628000; rows: 4; signed fv usd: 52566000</p><p><strong>Must remain true:</strong> Other CIK/quarter row multisets and values unchanged; four unique source rows; preserve the negative revolver; source total and independent lot count both reconcile.</p><p><strong>Rule location:</strong> Per-CIK HTML extraction/staging configuration; shared parser only for a demonstrated general mechanism.</p><p><strong>Unresolved:</strong> Principal dash does not automatically mean zero. Required-quarter coverage beyond this accession remains unproved.</p></div></details><details data-review="T1-P02" data-title="Golub: retain a named money-market holding"><summary>Golub: retain a named money-market holding</summary><div class="detail"><p>A named Treasury Portfolio instrument is a position even though it is cash-like. Existing staging/reconciliation has intentional money-market exclusions; the accepted target requires a scoped contract change, not a fund-total overlay.</p><p><strong>Positive case:</strong> Morgan Stanley Institutional Liquidity Funds Treasury Portfolio, CUSIP 61747C582, FV/cost 650,323,000 USD.</p><p><strong>Counterexample:</strong> Do not add the repeated schedule total as a second position, or turn an undifferentiated cash balance into an invented security. Do not apply this amount to another quarter.</p><p><strong>Expected change:</strong> classification: named money-market fund / cash equivalent; cost usd: 650323000; rows: 1; signed fv usd: 650323000</p><p><strong>Must remain true:</strong> Same one holding contributes once to each public partition. Primary investment anchor uses an explicit cash bridge; other quarters and ordinary cash balances unchanged.</p><p><strong>Rule location:</strong> Per-CIK cash-instrument extraction plus explicit global retain-named-instrument contract; review existing add_2025q4_money_market_rows mechanism before generalizing.</p><p><strong>Unresolved:</strong> An investment-only primary anchor may exclude cash equivalents; adding the holding without a scope bridge would create a misleading reconciliation error.</p></div></details><details data-review="T1-P03" data-title="Lord Abbett: recover schedule while preserving unresolved dashes"><summary>Lord Abbett: recover schedule while preserving unresolved dashes</summary><div class="detail"><p>The source has a complete 33-position/facility schedule and candidate has zero rows. Extract the reviewed schedule; six FV dashes retain unknown numeric meaning until separately resolved.</p><p><strong>Positive case:</strong> RJW funded position has reported FV 2,880,000 USD. The separately disclosed RJW revolver has an FV dash and remains a separate observation.</p><p><strong>Counterexample:</strong> Do not convert six dashes to six zero-FV facts because the 27 known amounts happen to sum to the printed total. Do not include the total row as a holding.</p><p><strong>Expected change:</strong> known absolute fv usd: 314430000; known fv rows: 27; known signed fv usd: 313562000; monetary recall: unassessable until missing weights are resolved; rows: 33; unresolved fv rows: 6</p><p><strong>Must remain true:</strong> Keep negative facilities; source roster count 33; all 27 known FV values match; all six dashes remain unresolved; no fabricated zero and no claimed full FV recall.</p><p><strong>Rule location:</strong> Per-CIK wrapper/HTML staging configuration; shared availability-state contract for displayed dashes.</p><p><strong>Unresolved:</strong> Equal aggregate totals cannot prove each omitted value is zero; broader historical schedule extraction remains separate.</p></div></details><details data-review="T1-P04" data-title="Ivy Hill: distinguish operating-company equity from a credit fund"><summary>Ivy Hill: distinguish operating-company equity from a credit fund</summary><div class="detail"><p>Member interest is equity in an operating asset-management business. Current PRIVATE_CREDIT_FUND and legacy PRIVATE_EQUITY_FUND labels both miss that business role; legal form alone does not identify a pooled fund.</p><p><strong>Positive case:</strong> Ivy Hill member interest: source cost 1,700,500,000 and FV 1,903,400,000 USD, context c-413.</p><p><strong>Counterexample:</strong> BCRED Emerald JV LP is a disclosed senior-secured lending joint venture (FV 1,678,745,000 USD); its LP interest must remain a credit-vehicle exposure.</p><p><strong>Expected change:</strong> from role: private_credit_fund; precise equity leaf: unresolved pending rights evidence; reclassified fv usd: 1903400000; rows: 0; to role: operating_company_equity; total fv usd: 0</p><p><strong>Must remain true:</strong> FV/cost/source identity unchanged; public total unchanged; classification partition shift equals 1,903,400,000; Emerald and other genuine credit vehicles unchanged.</p><p><strong>Rule location:</strong> Evidence-backed per-investee business-role decision scoped to filer/source observation; then governed instrument/asset classification. No global LP/LLC/member-interest keyword override.</p><p><strong>Unresolved:</strong> Do not turn business-role evidence into an unsupported GICS leaf or common/preferred rights claim.</p></div></details></section><section id="source-review" data-review="review-authority"><p class="eyebrow">04 / Independent review</p><h2>Four schedules and 20 label proposals.</h2><p>Check the literal filing passages, position boundaries, currencies, units and unknown values. The proposed interpretations are shown for review. Comments do not automatically approve, relabel or publish anything.</p><p>All examples have been exposed during development. Even after review, this set cannot certify an unbiased sampled accuracy estimate for the whole portfolio.</p><details data-review="REF-0001899017-2023-06-30" data-title="Bain Capital Private Credit 2023-06-30"><summary>Bain Capital Private Credit / 2023-06-30 / 2 proposed holdings</summary><div class="detail"><p>Two distinct equity positions. Repeated totals and affiliation summaries are not extra holdings.</p><p><a href="../../data/raw/filings/bdc_html/1899017/000095017023041723.html">Open the cached source filing</a></p><p class="hint">Source SHA-256: <code>a31ed3181befc59c13717b77194499d3a6707434b071144f886866ca57a52f08</code></p><div class="row"><strong>1. Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5)</strong><p>Proposed fair value: $71,250</p><p class="literal">Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Equity Interest — — — — 71 71,250 71,250</p><p class="hint"><code>/html/body/table[11]/tr[5]</code></p></div><div class="row"><strong>2. Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5)</strong><p>Proposed fair value: $575,000</p><p class="literal">Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Preferred Equity — — — — 575 575,000 575,000</p><p class="hint"><code>/html/body/table[11]/tr[6]</code></p></div><details><summary>Whole schedule: headers, totals and excluded rows</summary><p class="literal"><br><code>/html/body/table[11]/tr[1]</code></p><p class="literal">Portfolio Company Investment Type Index Spread Interest Rate Maturity Date Shares Cost Market Value % of NAV (6)<br><code>/html/body/table[11]/tr[2]</code></p><p class="literal">Controlled Affiliate Investments<br><code>/html/body/table[11]/tr[3]</code></p><p class="literal">FIRE: Finance<br><code>/html/body/table[11]/tr[4]</code></p><p class="literal">Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Equity Interest — — — — 71 71,250 71,250<br><code>/html/body/table[11]/tr[5]</code></p><p class="literal">Legacy Corporate Lending HoldCo, LLC (1)(2)(3)(4)(5) Preferred Equity — — — — 575 575,000 575,000<br><code>/html/body/table[11]/tr[6]</code></p><p class="literal">FIRE: Finance Total $ 646,250 $ 646,250 - 54.4 %<br><code>/html/body/table[11]/tr[7]</code></p><p class="literal">Controlled Affiliate Investments Total $ 646,250 $ 646,250 - 54.4 %<br><code>/html/body/table[11]/tr[8]</code></p><p class="literal">Investments Total $ 646,250 $ 646,250 - 54.4 %<br><code>/html/body/table[11]/tr[9]</code></p></details></div></details><details data-review="REF-0001950976-2023-12-31" data-title="26North 2023-12-31"><summary>26North / 2023-12-31 / 4 proposed holdings</summary><div class="detail"><p>Preserve the four distinct facilities and negative revolver.</p><p><a href="../../data/raw/filings/bdc_html/1950976/000119312524063364.html">Open the cached source filing</a></p><p class="hint">Source SHA-256: <code>b8201e99865a871ed0f6ddba605a6199775077d6089ad7420f2f7bb99d97be57</code></p><div class="row"><strong>1. Penn TRGRP Holdings, LLC</strong><p>Proposed fair value: $24,720,000</p><p class="literal">Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.098 % 09/27/2030 $ 25,225 $ 24,737 $ 24,720 35.17 %</p><p class="hint"><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[4]</code></p></div><div class="row"><strong>2. Penn TRGRP Holdings, LLC</strong><p>Proposed fair value: $264,000</p><p class="literal">Penn TRGRP Holdings LLC (2)(3) First Lien Senior Secured Delayed Draw Term Loan Diversified Financial Services SOFR + 6.750 % 12.098 % 09/27/2030 294 294 264 0.38 %</p><p class="hint"><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[5]</code></p></div><div class="row"><strong>3. Penn TRGRP Holdings, LLC</strong><p>Proposed fair value: $-78,000</p><p class="literal">Penn TRGRP Holdings LLC (2)(3)(7) First Lien Senior Secured Revolving Loan Diversified Financial Services SOFR + 6.750 % 09/27/2030  (75 ) (78 ) (0.11 )%</p><p class="hint"><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[6]</code></p></div><div class="row"><strong>4. Serrano Parent, LLC</strong><p>Proposed fair value: $27,660,000</p><p class="literal">Serrano Parent, LLC (2) First Lien Senior Secured Term Loan IT Services SOFR + 6.500 % 11.880 % 05/12/2030 28,297 27,672 27,660 39.35 %</p><p class="hint"><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[7]</code></p></div><details><summary>Whole schedule: headers, totals and excluded rows</summary><p class="literal"><br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[1]</code></p><p class="literal">Portfolio Company (1)(6) Investment Type Industry Reference Rate Spread (4) Interest Rate Maturity Date Par Amount/ Shares Amortized Cost (5) Fair Value Percentage of Net Assets<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[2]</code></p><p class="literal">Debt Investments<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[3]</code></p><p class="literal">Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.098 % 09/27/2030 $ 25,225 $ 24,737 $ 24,720 35.17 %<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[4]</code></p><p class="literal">Penn TRGRP Holdings LLC (2)(3) First Lien Senior Secured Delayed Draw Term Loan Diversified Financial Services SOFR + 6.750 % 12.098 % 09/27/2030 294 294 264 0.38 %<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[5]</code></p><p class="literal">Penn TRGRP Holdings LLC (2)(3)(7) First Lien Senior Secured Revolving Loan Diversified Financial Services SOFR + 6.750 % 09/27/2030  (75 ) (78 ) (0.11 )%<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[6]</code></p><p class="literal">Serrano Parent, LLC (2) First Lien Senior Secured Term Loan IT Services SOFR + 6.500 % 11.880 % 05/12/2030 28,297 27,672 27,660 39.35 %<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[7]</code></p><p class="literal"><br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[8]</code></p><p class="literal">Total Investments $ 52,628 $ 52,566 74.79 %<br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[9]</code></p><p class="literal"><br><code>/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[10]</code></p></details></div></details><details data-review="REF-0001930087-2023-06-30" data-title="Golub Capital Private Credit Fund 2023-06-30"><summary>Golub Capital Private Credit Fund / 2023-06-30 / 1 proposed holdings</summary><div class="detail"><p>One named Treasury Portfolio holding. Do not add its repeated schedule total or invent a security from aggregate cash.</p><p><a href="../../data/raw/filings/bdc_html/1930087/000193008723000010.html">Open the cached source filing</a></p><p class="hint">Source SHA-256: <code>2d2d933de4a1653010187f1ad20f68152518563c99129d556db325c10a43f006</code></p><div class="row"><strong>1. Morgan Stanley Institutional Liquidity Funds</strong><p>Proposed fair value: $650,323,000</p><p class="literal">Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582) 5.0 % $ 650,323 100.0 % $ 650,323</p><p class="hint"><code>/html/body/div[71]/table/tr[4]</code></p></div><details><summary>Whole schedule: headers, totals and excluded rows</summary><p class="literal"><br><code>/html/body/div[71]/table/tr[1]</code></p><p class="literal">Yield (1) Amortized Cost Percentage of Net Assets Fair Value<br><code>/html/body/div[71]/table/tr[2]</code></p><p class="literal">Money market funds (included in cash and cash equivalents)<br><code>/html/body/div[71]/table/tr[3]</code></p><p class="literal">Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582) 5.0 % $ 650,323 100.0 % $ 650,323<br><code>/html/body/div[71]/table/tr[4]</code></p><p class="literal">Total money market funds $ 650,323 100.0 % $ 650,323<br><code>/html/body/div[71]/table/tr[5]</code></p></details></div></details><details data-review="REF-0002008748-2024-09-30" data-title="Lord Abbett Private Credit Fund 2024-09-30"><summary>Lord Abbett Private Credit Fund / 2024-09-30 / 33 proposed holdings</summary><div class="detail"><p>33 distinct loans/facilities; 27 known FV amounts and six displayed dashes. Those dashes remain unresolved, not zero.</p><p><a href="../../data/raw/filings/bdc_html/2008748/000093041324003190.html">Open the cached source filing</a></p><p class="hint">Source SHA-256: <code>1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6</code></p><div class="row"><strong>1. RJW Logistics Group, Inc</strong><p>Proposed fair value: $2,880,000</p><p class="literal">RJW Logistics Group, Inc 3M S + 3.75% 9.10 % 3/5/2027 $ 2,880 $ 2,882 $ 2,880 2.24 %</p><p class="hint"><code>/html/body/table[13]/tr[5]</code></p></div><div class="row"><strong>2. RJW Logistics Group, Inc (Revolver) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">RJW Logistics Group, Inc (Revolver) (8) 3M S + 3.75% N/A 3/5/2027 — — — —</p><p class="hint"><code>/html/body/table[13]/tr[6]</code></p></div><div class="row"><strong>3. Meridian Waste Acquisitions, LLC</strong><p>Proposed fair value: $9,055,000</p><p class="literal">Meridian Waste Acquisitions, LLC 3M S + 4.00% 8.96 % 8/30/2029 9,100 9,078 9,055 7.05</p><p class="hint"><code>/html/body/table[13]/tr[9]</code></p></div><div class="row"><strong>4. Meridian Waste Acquisitions, LLC (Delayed Draw) (8)</strong><p>Proposed fair value: $907,000</p><p class="literal">Meridian Waste Acquisitions, LLC (Delayed Draw) (8) 3M S + 3.50% 8.43 % 8/30/2029 927 927 907 0.71</p><p class="hint"><code>/html/body/table[13]/tr[10]</code></p></div><div class="row"><strong>5. Meridian Waste Acquisitions, LLC (Revolver) (8)</strong><p>Proposed fair value: $186,000</p><p class="literal">Meridian Waste Acquisitions, LLC (Revolver) (8) 3M S + 3.50% 8.43 % 8/30/2029 195 195 186 0.15</p><p class="hint"><code>/html/body/table[13]/tr[11]</code></p></div><div class="row"><strong>6. United Flow Technologies Intermediate Holdco II, LLC</strong><p>Proposed fair value: $17,775,000</p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC 3M S + 5.25% 9.85 % 6/23/2031 18,000 17,738 17,775 13.86</p><p class="hint"><code>/html/body/table[13]/tr[12]</code></p></div><div class="row"><strong>7. United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (8)</strong><p>Proposed fair value: $-25,000</p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (8) 3M S + 5.25% 10.54 % 6/23/2031 100 27 ( 25 ) ( 0.02 )</p><p class="hint"><code>/html/body/table[13]/tr[13]</code></p></div><div class="row"><strong>8. United Flow Technologies Intermediate Holdco II, LLC (Revolver) (8)</strong><p>Proposed fair value: $-25,000</p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC (Revolver) (8) 3M S + 5.25% N/A 6/21/2030 — ( 28 ) ( 25 ) ( 0.02 )</p><p class="hint"><code>/html/body/table[13]/tr[14]</code></p></div><div class="row"><strong>9. Schoeneck Containers, LLC</strong><p>Proposed fair value: $9,324,000</p><p class="literal">Schoeneck Containers, LLC 1M S + 4.75% 9.71 % 5/7/2025 9,347 9,347 9,324 7.27</p><p class="hint"><code>/html/body/table[13]/tr[17]</code></p></div><div class="row"><strong>10. Schoeneck Containers, LLC (Delayed Draw)</strong><p>Proposed fair value: $4,753,000</p><p class="literal">Schoeneck Containers, LLC (Delayed Draw) 1M S + 4.75% 9.71 % 5/7/2025 4,765 4,765 4,753 3.70</p><p class="hint"><code>/html/body/table[13]/tr[18]</code></p></div><div class="row"><strong>11. Schoeneck Containers, LLC (Revolver) (8)</strong><p>Proposed fair value: $332,000</p><p class="literal">Schoeneck Containers, LLC (Revolver) (8) 3M P + 3.75% 11.75 % 5/7/2025 341 341 332 0.26</p><p class="hint"><code>/html/body/table[13]/tr[19]</code></p></div><div class="row"><strong>12. MGS MFG. Group, Inc.</strong><p>Proposed fair value: $9,193,000</p><p class="literal">MGS MFG. Group, Inc. 1M S + 4.50% 9.45 % 5/31/2027 9,193 9,193 9,193 7.16</p><p class="hint"><code>/html/body/table[13]/tr[22]</code></p></div><div class="row"><strong>13. MGS MFG. Group, Inc. (Delayed Draw)</strong><p>Proposed fair value: $2,832,000</p><p class="literal">MGS MFG. Group, Inc. (Delayed Draw) 1M S + 4.50% 9.45 % 5/31/2027 2,832 2,832 2,832 2.21</p><p class="hint"><code>/html/body/table[13]/tr[23]</code></p></div><div class="row"><strong>14. MGS MFG. Group, Inc. (Revolver) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">MGS MFG. Group, Inc. (Revolver) (8) 3M S + 4.50% N/A 5/31/2027 — — — —</p><p class="hint"><code>/html/body/table[13]/tr[24]</code></p></div><div class="row"><strong>15. Continental Buyer Inc</strong><p>Proposed fair value: $32,484,000</p><p class="literal">Continental Buyer Inc 3M S + 5.25% 9.85 % 4/2/2031 32,484 32,021 32,484 25.32</p><p class="hint"><code>/html/body/table[13]/tr[27]</code></p></div><div class="row"><strong>16. Continental Buyer Inc (Delayed Draw) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">Continental Buyer Inc (Delayed Draw) (8) 3M S + 5.25% N/A 4/2/2031 — ( 89 ) — —</p><p class="hint"><code>/html/body/table[13]/tr[28]</code></p></div><div class="row"><strong>17. Continental Buyer Inc (Revolver) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">Continental Buyer Inc (Revolver) (8) 3M S + 5.25% N/A 4/2/2031 — ( 66 ) — —</p><p class="hint"><code>/html/body/table[13]/tr[29]</code></p></div><div class="row"><strong>18. Endo1 Partners - California, LLC</strong><p>Proposed fair value: $16,875,000</p><p class="literal">Endo1 Partners - California, LLC 1M S + 5.25% 10.35 % 3/24/2026 16,875 16,875 16,875 13.15</p><p class="hint"><code>/html/body/table[13]/tr[30]</code></p></div><div class="row"><strong>19. Ardonagh Midco 3 PLC (5)(7)</strong><p>Proposed fair value: $29,398,000</p><p class="literal">Ardonagh Midco 3 PLC (5)(7) 6M S + 4.75% 9.90 % 2/17/2031 29,398 28,983 29,398 22.92</p><p class="hint"><code>/html/body/table[13]/tr[33]</code></p></div><div class="row"><strong>20. RSC Acquisition, Inc. (Delayed Draw) (8)</strong><p>Proposed fair value: $-230,000</p><p class="literal">RSC Acquisition, Inc. (Delayed Draw) (8) 3M S + 4.75% N/A 11/1/2029 — ( 230 ) ( 230 ) ( 0.18 )</p><p class="hint"><code>/html/body/table[13]/tr[34]</code></p></div><div class="row"><strong>21. RSC Acquisition, Inc. (Revolver) (8)</strong><p>Proposed fair value: $-26,000</p><p class="literal">RSC Acquisition, Inc. (Revolver) (8) 3M S + 4.75% N/A 10/30/2029 — ( 26 ) ( 26 ) ( 0.02 )</p><p class="hint"><code>/html/body/table[13]/tr[35]</code></p></div><div class="row"><strong>22. BCM One, Inc.</strong><p>Proposed fair value: $15,089,000</p><p class="literal">BCM One, Inc. 6M S + 4.50% 8.85 % 11/17/2027 15,089 15,089 15,089 11.77</p><p class="hint"><code>/html/body/table[13]/tr[38]</code></p></div><div class="row"><strong>23. BCM One, Inc. (Delayed Draw)</strong><p>Proposed fair value: $4,775,000</p><p class="literal">BCM One, Inc. (Delayed Draw) 1M S + 4.50% 9.45 % 11/17/2027 4,775 4,775 4,775 3.72</p><p class="hint"><code>/html/body/table[13]/tr[39]</code></p></div><div class="row"><strong>24. BCM One, Inc. (Revolver) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 — — — —</p><p class="hint"><code>/html/body/table[13]/tr[40]</code></p></div><div class="row"><strong>25. GCOM</strong><p>Proposed fair value: $39,505,000</p><p class="literal">GCOM 3M S + 7.50% 12.89 % 8/1/2031 39,899 39,505 39,505 30.79</p><p class="hint"><code>/html/body/table[13]/tr[41]</code></p></div><div class="row"><strong>26. Playpower, Inc.</strong><p>Proposed fair value: $42,790,000</p><p class="literal">Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %</p><p class="hint"><code>/html/body/table[13]/tr[44]</code></p></div><div class="row"><strong>27. Playpower, Inc. (Revolver) (8)</strong><p>Proposed fair value: $-97,000</p><p class="literal">Playpower, Inc. (Revolver) (8) 3M S + 5.25% N/A 8/28/2030 — ( 97 ) ( 97 ) ( 0.08 )</p><p class="hint"><code>/html/body/table[13]/tr[45]</code></p></div><div class="row"><strong>28. TransnetYX, Inc</strong><p>Proposed fair value: $17,740,000</p><p class="literal">TransnetYX, Inc 3M S + 5.25% 10.05 % 4/13/2026 17,740 17,740 17,740 13.83</p><p class="hint"><code>/html/body/table[14]/tr[5]</code></p></div><div class="row"><strong>29. TransnetYX, Inc (Revolver) (8)</strong><p>Proposed fair value: Unresolved</p><p class="literal">TransnetYX, Inc (Revolver) (8) 3M S + 5.25% N/A 4/13/2026 — — — —</p><p class="hint"><code>/html/body/table[14]/tr[6]</code></p></div><div class="row"><strong>30. ComPsych Investment Corp.</strong><p>Proposed fair value: $27,104,000</p><p class="literal">ComPsych Investment Corp. 3M S + 4.75% 10.03 % 7/22/2031 27,170 27,104 27,104 21.13</p><p class="hint"><code>/html/body/table[14]/tr[9]</code></p></div><div class="row"><strong>31. ComPsych Investment Corp. (Delayed Draw) (8)</strong><p>Proposed fair value: $-9,000</p><p class="literal">ComPsych Investment Corp. (Delayed Draw) (8) 3M S + 4.75% N/A 7/22/2031 — ( 9 ) ( 9 ) ( 0.01 )</p><p class="hint"><code>/html/body/table[14]/tr[10]</code></p></div><div class="row"><strong>32. Vensure Employer Services Inc</strong><p>Proposed fair value: $30,999,000</p><p class="literal">Vensure Employer Services Inc 3M S + 5.00% 9.64 % 9/29/2031 31,155 30,999 30,999 24.16</p><p class="hint"><code>/html/body/table[14]/tr[11]</code></p></div><div class="row"><strong>33. Vensure Employer Services Inc (Delayed Draw) (8)</strong><p>Proposed fair value: $-22,000</p><p class="literal">Vensure Employer Services Inc (Delayed Draw) (8) 3M S + 5.00% N/A 9/29/2031 — ( 22 ) ( 22 ) ( 0.02 )</p><p class="hint"><code>/html/body/table[14]/tr[12]</code></p></div><details><summary>Whole schedule: headers, totals and excluded rows</summary><p class="literal">Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets<br><code>/html/body/table[13]/tr[1]</code></p><p class="literal">Investments—non-controlled/non-affiliated<br><code>/html/body/table[13]/tr[2]</code></p><p class="literal">First Lien Secured Debt— non-controlled/non-affiliated (4) (6)<br><code>/html/body/table[13]/tr[3]</code></p><p class="literal">Air Freight &amp; Logistics<br><code>/html/body/table[13]/tr[4]</code></p><p class="literal">RJW Logistics Group, Inc 3M S + 3.75% 9.10 % 3/5/2027 $ 2,880 $ 2,882 $ 2,880 2.24 %<br><code>/html/body/table[13]/tr[5]</code></p><p class="literal">RJW Logistics Group, Inc (Revolver) (8) 3M S + 3.75% N/A 3/5/2027 — — — —<br><code>/html/body/table[13]/tr[6]</code></p><p class="literal">2,882 2,880 2.24<br><code>/html/body/table[13]/tr[7]</code></p><p class="literal">Commercial Services &amp; Supplies<br><code>/html/body/table[13]/tr[8]</code></p><p class="literal">Meridian Waste Acquisitions, LLC 3M S + 4.00% 8.96 % 8/30/2029 9,100 9,078 9,055 7.05<br><code>/html/body/table[13]/tr[9]</code></p><p class="literal">Meridian Waste Acquisitions, LLC (Delayed Draw) (8) 3M S + 3.50% 8.43 % 8/30/2029 927 927 907 0.71<br><code>/html/body/table[13]/tr[10]</code></p><p class="literal">Meridian Waste Acquisitions, LLC (Revolver) (8) 3M S + 3.50% 8.43 % 8/30/2029 195 195 186 0.15<br><code>/html/body/table[13]/tr[11]</code></p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC 3M S + 5.25% 9.85 % 6/23/2031 18,000 17,738 17,775 13.86<br><code>/html/body/table[13]/tr[12]</code></p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (8) 3M S + 5.25% 10.54 % 6/23/2031 100 27 ( 25 ) ( 0.02 )<br><code>/html/body/table[13]/tr[13]</code></p><p class="literal">United Flow Technologies Intermediate Holdco II, LLC (Revolver) (8) 3M S + 5.25% N/A 6/21/2030 — ( 28 ) ( 25 ) ( 0.02 )<br><code>/html/body/table[13]/tr[14]</code></p><p class="literal">27,937 27,873 21.73<br><code>/html/body/table[13]/tr[15]</code></p><p class="literal">Containers &amp; Packaging<br><code>/html/body/table[13]/tr[16]</code></p><p class="literal">Schoeneck Containers, LLC 1M S + 4.75% 9.71 % 5/7/2025 9,347 9,347 9,324 7.27<br><code>/html/body/table[13]/tr[17]</code></p><p class="literal">Schoeneck Containers, LLC (Delayed Draw) 1M S + 4.75% 9.71 % 5/7/2025 4,765 4,765 4,753 3.70<br><code>/html/body/table[13]/tr[18]</code></p><p class="literal">Schoeneck Containers, LLC (Revolver) (8) 3M P + 3.75% 11.75 % 5/7/2025 341 341 332 0.26<br><code>/html/body/table[13]/tr[19]</code></p><p class="literal">14,453 14,409 11.23<br><code>/html/body/table[13]/tr[20]</code></p><p class="literal">Health Care Equipment &amp; Supplies<br><code>/html/body/table[13]/tr[21]</code></p><p class="literal">MGS MFG. Group, Inc. 1M S + 4.50% 9.45 % 5/31/2027 9,193 9,193 9,193 7.16<br><code>/html/body/table[13]/tr[22]</code></p><p class="literal">MGS MFG. Group, Inc. (Delayed Draw) 1M S + 4.50% 9.45 % 5/31/2027 2,832 2,832 2,832 2.21<br><code>/html/body/table[13]/tr[23]</code></p><p class="literal">MGS MFG. Group, Inc. (Revolver) (8) 3M S + 4.50% N/A 5/31/2027 — — — —<br><code>/html/body/table[13]/tr[24]</code></p><p class="literal">12,025 12,025 9.37<br><code>/html/body/table[13]/tr[25]</code></p><p class="literal">Health Care Providers &amp; Services<br><code>/html/body/table[13]/tr[26]</code></p><p class="literal">Continental Buyer Inc 3M S + 5.25% 9.85 % 4/2/2031 32,484 32,021 32,484 25.32<br><code>/html/body/table[13]/tr[27]</code></p><p class="literal">Continental Buyer Inc (Delayed Draw) (8) 3M S + 5.25% N/A 4/2/2031 — ( 89 ) — —<br><code>/html/body/table[13]/tr[28]</code></p><p class="literal">Continental Buyer Inc (Revolver) (8) 3M S + 5.25% N/A 4/2/2031 — ( 66 ) — —<br><code>/html/body/table[13]/tr[29]</code></p><p class="literal">Endo1 Partners - California, LLC 1M S + 5.25% 10.35 % 3/24/2026 16,875 16,875 16,875 13.15<br><code>/html/body/table[13]/tr[30]</code></p><p class="literal">48,741 49,359 38.47<br><code>/html/body/table[13]/tr[31]</code></p><p class="literal">Insurance<br><code>/html/body/table[13]/tr[32]</code></p><p class="literal">Ardonagh Midco 3 PLC (5)(7) 6M S + 4.75% 9.90 % 2/17/2031 29,398 28,983 29,398 22.92<br><code>/html/body/table[13]/tr[33]</code></p><p class="literal">RSC Acquisition, Inc. (Delayed Draw) (8) 3M S + 4.75% N/A 11/1/2029 — ( 230 ) ( 230 ) ( 0.18 )<br><code>/html/body/table[13]/tr[34]</code></p><p class="literal">RSC Acquisition, Inc. (Revolver) (8) 3M S + 4.75% N/A 10/30/2029 — ( 26 ) ( 26 ) ( 0.02 )<br><code>/html/body/table[13]/tr[35]</code></p><p class="literal">28,727 29,142 22.72<br><code>/html/body/table[13]/tr[36]</code></p><p class="literal">IT Services<br><code>/html/body/table[13]/tr[37]</code></p><p class="literal">BCM One, Inc. 6M S + 4.50% 8.85 % 11/17/2027 15,089 15,089 15,089 11.77<br><code>/html/body/table[13]/tr[38]</code></p><p class="literal">BCM One, Inc. (Delayed Draw) 1M S + 4.50% 9.45 % 11/17/2027 4,775 4,775 4,775 3.72<br><code>/html/body/table[13]/tr[39]</code></p><p class="literal">BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 — — — —<br><code>/html/body/table[13]/tr[40]</code></p><p class="literal">GCOM 3M S + 7.50% 12.89 % 8/1/2031 39,899 39,505 39,505 30.79<br><code>/html/body/table[13]/tr[41]</code></p><p class="literal">59,369 59,369 46.28<br><code>/html/body/table[13]/tr[42]</code></p><p class="literal">Leisure Products<br><code>/html/body/table[13]/tr[43]</code></p><p class="literal">Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %<br><code>/html/body/table[13]/tr[44]</code></p><p class="literal">Playpower, Inc. (Revolver) (8) 3M S + 5.25% N/A 8/28/2030 — ( 97 ) ( 97 ) ( 0.08 )<br><code>/html/body/table[13]/tr[45]</code></p><p class="literal">42,693 42,693 33.28<br><code>/html/body/table[13]/tr[46]</code></p><p class="literal">Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets<br><code>/html/body/table[14]/tr[1]</code></p><p class="literal">Investments—non-controlled/non-affiliated (continued)<br><code>/html/body/table[14]/tr[2]</code></p><p class="literal">First Lien Secured Debt—non-controlled/non-affiliated (4) (6)<br><code>/html/body/table[14]/tr[3]</code></p><p class="literal">Life Sciences Tools &amp; Services<br><code>/html/body/table[14]/tr[4]</code></p><p class="literal">TransnetYX, Inc 3M S + 5.25% 10.05 % 4/13/2026 17,740 17,740 17,740 13.83<br><code>/html/body/table[14]/tr[5]</code></p><p class="literal">TransnetYX, Inc (Revolver) (8) 3M S + 5.25% N/A 4/13/2026 — — — —<br><code>/html/body/table[14]/tr[6]</code></p><p class="literal">17,740 17,740 13.83<br><code>/html/body/table[14]/tr[7]</code></p><p class="literal">Professional Services<br><code>/html/body/table[14]/tr[8]</code></p><p class="literal">ComPsych Investment Corp. 3M S + 4.75% 10.03 % 7/22/2031 27,170 27,104 27,104 21.13<br><code>/html/body/table[14]/tr[9]</code></p><p class="literal">ComPsych Investment Corp. (Delayed Draw) (8) 3M S + 4.75% N/A 7/22/2031 — ( 9 ) ( 9 ) ( 0.01 )<br><code>/html/body/table[14]/tr[10]</code></p><p class="literal">Vensure Employer Services Inc 3M S + 5.00% 9.64 % 9/29/2031 31,155 30,999 30,999 24.16<br><code>/html/body/table[14]/tr[11]</code></p><p class="literal">Vensure Employer Services Inc (Delayed Draw) (8) 3M S + 5.00% N/A 9/29/2031 — ( 22 ) ( 22 ) ( 0.02 )<br><code>/html/body/table[14]/tr[12]</code></p><p class="literal">58,072 58,072 45.26<br><code>/html/body/table[14]/tr[13]</code></p><p class="literal">Total First Lien Secured Debt—non-controlled/non-affiliated $ 312,639 $ 313,562 244.41 %<br><code>/html/body/table[14]/tr[14]</code></p><p class="literal">Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %<br><code>/html/body/table[14]/tr[15]</code></p></details></div></details><details data-review="LABEL-00" data-title="Ivy Hill Asset Management, L.P., Member interest"><summary>LABEL-00 / Ivy Hill Asset Management, L.P., Member interest</summary><div class="detail"><p><span class="badge">reference and candidate semantics wrong</span></p><p>Operating asset-management business equity; neither PE-fund nor credit-fund classification is supported. Leaf rights need review.</p><p><strong>Original label:</strong> PRIVATE_EQUITY_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;asset_role&quot;: &quot;operating_company_equity&quot;, &quot;cost_usd&quot;: 1700500000, &quot;fair_value_usd&quot;: 1903400000, &quot;instrument&quot;: &quot;Member interest&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1287750/000128775026000006.html">Open the cached source filing</a></p><p class="literal">Member interest | 06/2009 | 100.00 % | 1,700.5 | 1,903.4 | (6)</p><p class="hint"><code>/html/body/div[2390]/table/tr[17]</code></p></div></details><details data-review="LABEL-01" data-title="Senior Direct Lending Program, LLC, Subordinated certificates"><summary>LABEL-01 / Senior Direct Lending Program, LLC, Subordinated certificates</summary><div class="detail"><p><span class="badge">candidate semantics wrong</span></p><p>Co-investment vehicle subordinated certificates; preserve credit-vehicle interest rather than ordinary direct borrower loan.</p><p><strong>Original label:</strong> PRIVATE_CREDIT_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;instrument&quot;: &quot;Subordinated certificates&quot;, &quot;investment_vehicle&quot;: &quot;credit_joint_venture&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1287750/000128775026000006.html">Open the cached source filing</a></p><p class="literal">Senior Direct Lending Program, LLC (5)(15) | Co-investment vehicle | Subordinated certificates | 11.65 % | SOFR (Q) | 8.00 % | 07/2016 | 12/2036 | 1,117.0 | 1,103.3 | 1,117.0 | (6)(10)</p><p class="hint"><code>/html/body/div[2504]/table/tr[20]</code></p></div></details><details data-review="LABEL-02" data-title="AthenaHealth Group Inc., Minerva Holdco, Inc. and BCPE Co-Invest (A), LP, Series A preferred stock"><summary>LABEL-02 / AthenaHealth Group Inc., Minerva Holdco, Inc. and BCPE Co-Invest (A), LP, Series A preferred stock</summary><div class="detail"><p><span class="badge">legacy parent label compatible leaf supported</span></p><p>Series A preferred stock explicitly printed; candidate preferred leaf supported. PIK coupon describes terms, not current PIK income or distress.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;bad_pik&quot;: &quot;unproven&quot;, &quot;classification&quot;: &quot;PREFERRED_EQUITY&quot;, &quot;pik_current_status&quot;: &quot;unknown&quot;, &quot;pik_terms_rate_pp&quot;: 10.75}</p><p><a href="../../data/raw/filings/bdc_html/1287750/000128775026000006.html">Open the cached source filing</a></p><p class="literal">Series A preferred stock | 10.75 % PIK | 02/2022 | 198,505 | 301.2 | 301.2 | (2)</p><p class="hint"><code>/html/body/div[2402]/table/tr[27]</code></p></div></details><details data-review="LABEL-03" data-title="BCRED Emerald JV LP - LP Interest"><summary>LABEL-03 / BCRED Emerald JV LP - LP Interest</summary><div class="detail"><p><span class="badge">candidate semantics wrong</span></p><p>Narrative identifies senior-secured loan JV with pension investor; LP interest is private-credit vehicle exposure.</p><p><strong>Original label:</strong> PRIVATE_CREDIT_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;PRIVATE_CREDIT_FUND&quot;, &quot;fair_value_usd&quot;: 1678745000}</p><p><a href="../../data/raw/filings/bdc_html/1803498/000180349826000014.html">Open the cached source filing</a></p><p class="literal">BCRED Emerald JV LP - LP Interest | (6)(16) | 1/19/2022 | 1,815,000 | 1,678,745 | 3.53</p><p class="hint"><code>/html/body/div[1208]/table/tr[15]</code></p></div></details><details data-review="LABEL-04" data-title="Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units"><summary>LABEL-04 / Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units</summary><div class="detail"><p><span class="badge">leaf unresolved</span></p><p>Class B units pay 7.60% PIK; equity is supported but common versus preferred rights cannot be inferred from units alone.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification_parent&quot;: &quot;DIRECT_EQUITY&quot;, &quot;leaf&quot;: &quot;unresolved&quot;, &quot;pik_terms_rate_pp&quot;: 7.6}</p><p><a href="../../data/raw/filings/bdc_html/1803498/000180349826000014.html">Open the cached source filing</a></p><p class="literal">Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | (4)(7)(16) | 7.60 % PIK | 9/22/2025 | 69,729,468 | 1,079,477 | 1,079,456 | 2.27</p><p class="hint"><code>/html/body/div[1205]/table/tr[20]</code></p></div></details><details data-review="LABEL-05" data-title="Blackstone Private Real Estate Credit and Income Fund - Common Shares"><summary>LABEL-05 / Blackstone Private Real Estate Credit and Income Fund - Common Shares</summary><div class="detail"><p><span class="badge">candidate semantics wrong</span></p><p>Investee-fund table explicitly says real estate credit and income; common shares are a fund interest, not directly held property.</p><p><strong>Original label:</strong> REAL_ESTATE_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;REAL_ESTATE_FUND&quot;, &quot;fair_value_usd&quot;: 430975000, &quot;strategy_evidence_xpath&quot;: &quot;/html/body/div[1271]/ix:footnote/table/tr[3]&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1803498/000180349826000014.html">Open the cached source filing</a></p><p class="literal">Blackstone Private Real Estate Credit and Income Fund - Common Shares | (4)(6)(16)(21) | 6/1/2025 | 16,525,117 | 422,500 | 430,975 | 0.91</p><p class="hint"><code>/html/body/div[1205]/table/tr[26]</code></p></div></details><details data-review="LABEL-06" data-title="Specialty Lending Company, LLC - LLC Interest"><summary>LABEL-06 / Specialty Lending Company, LLC - LLC Interest</summary><div class="detail"><p><span class="badge">leaf unresolved</span></p><p>LLC interest is disclosed; operating-company versus pooled-vehicle nature and precise leaf need business/rights evidence.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification_parent&quot;: &quot;DIRECT_EQUITY&quot;, &quot;leaf&quot;: &quot;unresolved&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1803498/000180349826000014.html">Open the cached source filing</a></p><p class="literal">Specialty Lending Company, LLC - LLC Interest | (4)(6)(16) | 10/19/2021 | 371,979,000 | 371,979 | 381,241 | 0.80</p><p class="hint"><code>/html/body/div[1205]/table/tr[27]</code></p></div></details><details data-review="LABEL-07" data-title="State Street Institutional U.S. Government Money Market Fund - Premier Class"><summary>LABEL-07 / State Street Institutional U.S. Government Money Market Fund - Premier Class</summary><div class="detail"><p><span class="badge">source present join requires cash scope</span></p><p>Current Premier class exists with FV/cost 305.986m; do not substitute prior-year 291.131m or other share classes.</p><p><strong>Original label:</strong> CASH</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;CASH&quot;, &quot;cost_usd&quot;: 305986000, &quot;fair_value_usd&quot;: 305986000}</p><p><a href="../../data/raw/filings/bdc_html/1803498/000180349826000014.html">Open the cached source filing</a></p><p class="literal">State Street Institutional U.S. Government Money Market Fund - Premier Class | 3.74 % | 305,986 | 305,986 | 0.64</p><p class="hint"><code>/html/body/div[1208]/table/tr[29]</code></p></div></details><details data-review="LABEL-08" data-title="Pioneer JV Holdings LLC, Common equity"><summary>LABEL-08 / Pioneer JV Holdings LLC, Common equity</summary><div class="detail"><p><span class="badge">legacy parent label compatible leaf supported</span></p><p>Current SOI common-equity category supports the common leaf; issuer contains JV but its name alone does not define a fund instrument.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;COMMON_EQUITY&quot;}</p><p><a href="../../data/raw/filings/bdc_html/2031750/000203175026000015.html">Open the cached source filing</a></p><p class="literal">Pioneer JV Holdings LLC (1)(5)(6) | 10/2025 | 49 | 731,872 | 753,613 | (2)</p><p class="hint"><code>/html/body/div[2331]/table/tr[21]</code></p></div></details><details data-review="LABEL-09" data-title="Tango Holdings LLC, Common equity"><summary>LABEL-09 / Tango Holdings LLC, Common equity</summary><div class="detail"><p><span class="badge">legacy parent label compatible leaf supported</span></p><p>Current SOI common-equity category supports the common leaf.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;COMMON_EQUITY&quot;}</p><p><a href="../../data/raw/filings/bdc_html/2031750/000203175026000015.html">Open the cached source filing</a></p><p class="literal">Tango Holdings LLC (1)(5)(6) | 07/2025 | 488,168 | 492,623 | 526,684 | (2)</p><p class="hint"><code>/html/body/div[2331]/table/tr[23]</code></p></div></details><details data-review="LABEL-10" data-title="Aspen Renewables Equity Holdings LLC, Common equity"><summary>LABEL-10 / Aspen Renewables Equity Holdings LLC, Common equity</summary><div class="detail"><p><span class="badge">legacy parent label compatible leaf supported</span></p><p>Current SOI common-equity category supports the common leaf.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;COMMON_EQUITY&quot;}</p><p><a href="../../data/raw/filings/bdc_html/2031750/000203175026000015.html">Open the cached source filing</a></p><p class="literal">Aspen Renewables Equity Holdings LLC (1)(5) | 03/2025 | 4,900 | 431,267 | 479,667 | (2)</p><p class="hint"><code>/html/body/div[2331]/table/tr[20]</code></p></div></details><details data-review="LABEL-11" data-title="Denali Equity Holdings LLC, Other equity"><summary>LABEL-11 / Denali Equity Holdings LLC, Other equity</summary><div class="detail"><p><span class="badge">candidate leaf not supported</span></p><p>Current schedule places Denali above Total other equity, separately from common equity. Prior Class A units do not establish current common rights.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;OTHER_EQUITY&quot;, &quot;leaf_rights&quot;: &quot;not established&quot;}</p><p><a href="../../data/raw/filings/bdc_html/2031750/000203175026000015.html">Open the cached source filing</a></p><p class="literal">Denali Equity Holdings LLC (1)(5) | 09/2024 | 3,749 | 340,995 | 354,399 | (2)</p><p class="hint"><code>/html/body/div[2331]/table/tr[15]</code></p></div></details><details data-review="LABEL-12" data-title="ULTRA III, LLC - LLC Interest"><summary>LABEL-12 / ULTRA III, LLC - LLC Interest</summary><div class="detail"><p><span class="badge">candidate semantics wrong</span></p><p>Narrative describes unitranche loan JV with Capital One; LLC interest is credit-vehicle exposure.</p><p><strong>Original label:</strong> PRIVATE_CREDIT_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;classification&quot;: &quot;PRIVATE_CREDIT_FUND&quot;, &quot;fair_value_usd&quot;: 416244000}</p><p><a href="../../data/raw/filings/bdc_html/1838126/000162828026020206.html">Open the cached source filing</a></p><p class="literal">ULTRA III, LLC (5)(20)(22) - LLC Interest | $ | 402,400 | $ | 416,244</p><p class="hint"><code>/html/body/div[2115]/table/tr[10]</code></p></div></details><details data-review="LABEL-13" data-title="Sentinel Buyer Corp. 2"><summary>LABEL-13 / Sentinel Buyer Corp. 2</summary><div class="detail"><p><span class="badge">reference scope and instrument wrong</span></p><p>Legacy gold used a JV delayed-draw negative mark for a parent first-lien term position. Source scopes and facilities must differ.</p><p><strong>Original label:</strong> DIRECT_LENDING</p><p><strong>Proposed interpretation:</strong> {&quot;legacy_jv_cost_usd&quot;: -190000, &quot;legacy_jv_fair_value_usd&quot;: -188000, &quot;parent_cost_usd&quot;: 255050000, &quot;parent_fair_value_usd&quot;: 254664000}</p><p><a href="../../data/raw/filings/bdc_html/1838126/000162828026020206.html">Open the cached source filing</a></p><details><summary>Supplementary source context</summary><pre class="literal">&quot;programme_pilot_evidence_2026-09-09/review_case_sources.json&quot;</pre></details></div></details><details data-review="LABEL-14" data-title="Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%"><summary>LABEL-14 / Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%</summary><div class="detail"><p><span class="badge">reference currency wrong</span></p><p>Legacy reference copied EUR FV into USD comparison; USD FV 385.453m is source-supported. Currency belongs to each field.</p><p><strong>Original label:</strong> DIRECT_LENDING</p><p><strong>Proposed interpretation:</strong> {&quot;fair_value_usd&quot;: 385453000, &quot;legacy_fair_value_eur&quot;: 328199000}</p><p><a href="../../data/raw/filings/bdc_html/1925309/000119312526051289.html">Open the cached source filing</a></p><details><summary>Supplementary source context</summary><pre class="literal">&quot;programme_pilot_evidence_2026-09-09/review_case_sources.json&quot;</pre></details></div></details><details data-review="LABEL-15" data-title="Fifth Season Investments LLC"><summary>LABEL-15 / Fifth Season Investments LLC</summary><div class="detail"><p><span class="badge">reference identity alias and cost wrong</span></p><p>Duplicate issuer-only label should map to the same source observation as the instrument label. Prior FV 223.274m was misread as cost.</p><p><strong>Original label:</strong> COMMON_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;alias_of_case&quot;: 16, &quot;cost_usd&quot;: 310978000, &quot;fair_value_usd&quot;: 344960000}</p><p><a href="../../data/raw/filings/bdc_html/1812554/000181255426000011.html">Open the cached source filing</a></p><p class="literal">Fifth Season Investments LLC(3)(4)(24)(30) | Specialty finance equity investment | N/A | N/A | 31 | 310,978 | 344,960</p><p class="hint"><code>/html/body/div[1451]/table/tr[20]</code></p></div></details><details data-review="LABEL-16" data-title="Fifth Season Investments LLC | Specialty finance equity investment"><summary>LABEL-16 / Fifth Season Investments LLC | Specialty finance equity investment</summary><div class="detail"><p><span class="badge">leaf unresolved and cost reference wrong</span></p><p>Specialty finance equity supports broad equity; does not by itself establish common rights. Current cost is 310.978m.</p><p><strong>Original label:</strong> DIRECT_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;cost_usd&quot;: 310978000, &quot;fair_value_usd&quot;: 344960000, &quot;leaf&quot;: &quot;unresolved&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1812554/000181255426000011.html">Open the cached source filing</a></p><p class="literal">Fifth Season Investments LLC(3)(4)(24)(30) | Specialty finance equity investment | N/A | N/A | 31 | 310,978 | 344,960</p><p class="hint"><code>/html/body/div[1451]/table/tr[20]</code></p></div></details><details data-review="LABEL-17" data-title="LSI Financing LLC | Specialty finance equity investment"><summary>LABEL-17 / LSI Financing LLC | Specialty finance equity investment</summary><div class="detail"><p><span class="badge">reference join scope ambiguous</span></p><p>Two matches must be separated by physical scope: current SOI equity versus unfunded commitment. Same name is insufficient.</p><p><strong>Original label:</strong> PRIVATE_CREDIT_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;cost_usd&quot;: 296883000, &quot;fair_value_usd&quot;: 321093000, &quot;unfunded_table_xpath&quot;: &quot;/html/body/ix:continuation[52]/div[1]/table/tr[42]&quot;}</p><p><a href="../../data/raw/filings/bdc_html/1812554/000181255426000011.html">Open the cached source filing</a></p><p class="literal">LSI Financing LLC(3)(5)(22)(24)(29)(30)(31) | Specialty finance equity investment | N/A | N/A | 296,883 | 296,883 | 321,093</p><p class="hint"><code>/html/body/div[1451]/table/tr[28]</code></p></div></details><details data-review="LABEL-18" data-title="Blue Owl Cross-Strategy Opportunities LLC (BOCSO)"><summary>LABEL-18 / Blue Owl Cross-Strategy Opportunities LLC (BOCSO)</summary><div class="detail"><p><span class="badge">reference amounts wrong and identity join unresolved</span></p><p>Cited current SOI has cost 137.069m and FV 136.815m; old 304.4m/303.9m values are unsupported by this row.</p><p><strong>Original label:</strong> COMMON_EQUITY</p><p><strong>Proposed interpretation:</strong> {&quot;cost_usd&quot;: 137069000, &quot;fair_value_usd&quot;: 136815000}</p><p><a href="../../data/raw/filings/bdc_html/1812554/000181255426000011.html">Open the cached source filing</a></p><p class="literal">Blue Owl Cross-Strategy Opportunities LLC(3)(5)(24)(30)(31)(34) | Specialty finance equity investment | N/A | N/A | 137,069 | 137,069 | 136,815</p><p class="hint"><code>/html/body/div[1451]/table/tr[17]</code></p></div></details><details data-review="LABEL-19" data-title="OCIC SLF LLC (fka Blue Owl Credit Income Senior Loan Fund LLC)(d)"><summary>LABEL-19 / OCIC SLF LLC (fka Blue Owl Credit Income Senior Loan Fund LLC)(d)</summary><div class="detail"><p><span class="badge">reference cost wrong and alias supported</span></p><p>Explicit fka alias identifies the LLC; cost 314.808m, FV 280.331m. Legacy cost copied FV.</p><p><strong>Original label:</strong> PRIVATE_CREDIT_FUND</p><p><strong>Proposed interpretation:</strong> {&quot;alias&quot;: &quot;Blue Owl Credit Income Senior Loan Fund LLC&quot;, &quot;cost_usd&quot;: 314808000, &quot;fair_value_usd&quot;: 280331000}</p><p><a href="../../data/raw/filings/bdc_html/1812554/000181255426000011.html">Open the cached source filing</a></p><p class="literal">OCIC SLF LLC (fka Blue Owl Credit Income Senior Loan Fund LLC)(5)(24)(30)(31) | LLC Interest | N/A | N/A | 314,800 | 314,808 | 280,331</p><p class="hint"><code>/html/body/div[1451]/table/tr[23]</code></p></div></details></section><section id="criteria" data-review="criteria"><p class="eyebrow">05 / Acceptance</p><h2>Every criterion keeps a result.</h2><details><summary>A1 / Fund-quarter obligations <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>obligation coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>unknown lifecycle count</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>A2 / Position roster completeness and purity <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>roster fv recall</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>roster fv precision</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>roster row recall</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>roster row precision</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>fund roster fv floor</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>fund roster row floor</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>A3 / Source selection <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>source selection errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>A4 / Supplemental source disposition <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>supplemental disposition coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>A5 / Accounting scope <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>accounting scope errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>B1 / Target field semantics <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>target field contract errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>B2 / Field fidelity <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>amount field accuracy</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>other field accuracy</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>B3 / Independent primary reconciliation <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>primary absolute error ratio</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>fund primary error ratio</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>primary fund coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>primary source fv coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>B4 / Exact public holdings partitions <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>public partition errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>B5 / Rate and PIK meaning <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>rate pik contract errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>C1 / Stable entity identifiers <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>stable entity id errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>C2 / Entity resolution accuracy <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>entity precision</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>entity recall</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>C3 / Position continuation and full chains <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>position precision</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>position recall</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>complete chain rate</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>C4 / Position identity lifecycle <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>position lifecycle errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>D1 / Field and metric evidence categories <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>evidence contract errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>D2 / Enrichment replay <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>enrichment replay errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>D3 / Sector quality and availability <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>sector accuracy</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>sector fv coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>sector row coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>D4 / Citation scenarios <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>citation scenario errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>D5 / Evidence coverage <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>reported amount highlight fv coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>reported numeric highlight row coverage</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>evidence path or unavailable</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>misleading links</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>E1 / Complete product holdings access <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>accessible holdings difference</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>E2 / Analytic definitions and denominators <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>analytic display errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>E3 / Public scope and performance <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>public scope errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>product workload errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>local citation p95 ms</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F1 / Authoritative writers and dbt execution <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>writer authority errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F2 / Repeatability and typed parity <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>semantic repeat delta</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>companion difference</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F3 / Partial failure and adoption boundary <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>release failure scenario errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F4 / Recovery and idempotency <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>resume scenario errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F5 / Protected acceptance assets <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>acceptance control errors</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><details><summary>F6 / Migration deltas and regressions <span class="badge status-unassessable">UNASSESSABLE</span></summary><div class="detail"><div class="metric"><span>unexplained migration delta</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p><div class="metric"><span>signed quarter regressions</span><span>Not measured / UNMEASURED</span></div><p class="hint">Not executed: protected test-cache writes stopped the tranche after the three candidate stages completed.</p></div></details><p><a href="programme_measurement_register.md">Measurement definitions</a> / <a href="../../pipeline/programme/contracts/working-v1.json">Working targets</a></p></section><footer><p>This briefing is a review companion, not a production dashboard or a source-citation product. Source amounts and label proposals retain their development status. The execution record and hashed artifacts are the detailed evidence.</p><p><a href="programme_tranche_evidence_2026-09-10/source-review-v1/requests.json">Full source review request</a> / <a href="programme_tranche_evidence_2026-09-10/references-v1/registry.json">Reference registry</a> / <a href="programme_execution_tranche_2026-09-09.md">Approved tranche scope</a></p></footer></main><script>
+const storageKey='programme-tranche-review-20260910:'+location.pathname;
+let draft={},stored=true;try{draft=JSON.parse(localStorage.getItem(storageKey)||'{}');if(!draft||typeof draft!=='object'||Array.isArray(draft))draft={};}catch(_){stored=false;}
+const notes=Array.from(document.querySelectorAll('[data-review]')).map(host=>{
+ const key=host.dataset.review,title=host.dataset.title||host.querySelector('h2,h3,summary')?.textContent||key;
+ const panel=document.createElement('div');panel.className='comment';
+ const label=document.createElement('label');label.textContent='Your comments on '+title;label.htmlFor='note-'+key;
+ const input=document.createElement('textarea');input.id=label.htmlFor;input.placeholder='[Your comment or question]';input.value=typeof draft[key]==='string'?draft[key]:'';
+ const print=document.createElement('div');print.className='print-comment';print.textContent=input.value;
+ input.addEventListener('input',()=>{draft[key]=input.value;print.textContent=input.value;try{localStorage.setItem(storageKey,JSON.stringify(draft));stored=true;}catch(_){stored=false;}status.textContent=stored?'Draft saved in this browser. Save a review file for Codex to read.':'Browser storage unavailable. Save or copy your comments before closing.';});
+ panel.append(label,input,print);host.append(panel);return {key,title,input};
+});
+const status=document.getElementById('save-status');
+if(!stored)status.textContent='Browser storage unavailable. Save or copy your comments before closing.';
+document.getElementById('save').addEventListener('click',async()=>{
+ const lines=['# First tranche review comments','','Briefing: programme_tranche_review.html','Saved: '+new Date().toISOString(),'','These comments are review notes; they do not automatically approve a reference or release.',''];
+ notes.forEach(note=>{if(note.input.value.trim())lines.push('## '+note.title+' ['+note.key+']','',note.input.value.trim(),'');});
+ const content=lines.join('\n'),filename='programme_tranche_review_comments.md';
+ try{if('showSaveFilePicker'in window){const handle=await showSaveFilePicker({suggestedName:filename,types:[{description:'Markdown comments',accept:{'text/markdown':['.md']}}]});const writable=await handle.createWritable();await writable.write(content);await writable.close();status.textContent='Saved '+handle.name+'. Later edits need another save.';}
+ else{const url=URL.createObjectURL(new Blob([content],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);status.textContent='Download requested. Place '+filename+' beside this briefing for Codex to read.';}}
+ catch(error){status.textContent=error.name==='AbortError'?'Save cancelled; comments remain in the page.':'Save failed; copy your comments before closing.';}
+});
+document.getElementById('expand').addEventListener('click',()=>{const all=Array.from(document.querySelectorAll('details'));const open=!all.every(d=>d.open);all.forEach(d=>d.open=open);});
+document.getElementById('print').addEventListener('click',()=>window.print());
+let printState=[];addEventListener('beforeprint',()=>{printState=Array.from(document.querySelectorAll('details')).map(d=>d.open);document.querySelectorAll('details').forEach(d=>d.open=true);});addEventListener('afterprint',()=>document.querySelectorAll('details').forEach((d,i)=>d.open=printState[i]||false));
+</script></body></html>

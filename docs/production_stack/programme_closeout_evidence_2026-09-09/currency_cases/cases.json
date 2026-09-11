@@ -1,0 +1,4961 @@
+[
+  {
+    "accession": "0000950170-23-017863",
+    "cases": [
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "1000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "HumanState Limited (dba PayProp)",
+        "published_fv": "-135000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-0f56b5d7a7275b38",
+        "source_currency": "GBP",
+        "src_context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "-50000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Bigchange Group Limited",
+        "published_fv": "-67000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-346fd803e1bb34f1",
+        "source_currency": "GBP",
+        "src_context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "42818000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Diligent Corporation",
+        "published_fv": "40652000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-54281c7ee2f279b6",
+        "source_currency": "EUR",
+        "src_context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "229000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Trader Corporation",
+        "published_fv": "229000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-7ebe058e4c4668c6",
+        "source_currency": "CAD",
+        "src_context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "339000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "1272775 B.C. LTD. (dba Everest Clinical Research)",
+        "published_fv": "331000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-9adf36d94e844237",
+        "source_currency": "CAD",
+        "src_context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "-135000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "HumanState Limited (dba PayProp)",
+        "published_fv": "-135000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-0f56b5d7a7275b38",
+        "source_currency": "GBP",
+        "src_context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "-67000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Bigchange Group Limited",
+        "published_fv": "-67000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-346fd803e1bb34f1",
+        "source_currency": "GBP",
+        "src_context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "40652000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Diligent Corporation",
+        "published_fv": "40652000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-54281c7ee2f279b6",
+        "source_currency": "EUR",
+        "src_context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "229000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Trader Corporation",
+        "published_fv": "229000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-7ebe058e4c4668c6",
+        "source_currency": "CAD",
+        "src_context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "331000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "1272775 B.C. LTD. (dba Everest Clinical Research)",
+        "published_fv": "331000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-9adf36d94e844237",
+        "source_currency": "CAD",
+        "src_context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "7270000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt \u2013 198.65% HumanState Limited (dba PayProp) Industry Diversified Consumer Services Reference Rate and Spread SN+6.00% Maturity 11/23/28 - Two",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "HumanState Limited (dba PayProp)",
+        "published_fv": "-135000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-0f56b5d7a7275b38",
+        "source_currency": "GBP",
+        "src_context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "2400000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Bigchange Group Limited Industry Software Reference Rate and Spread SN+6.00% Maturity 12/23/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Bigchange Group Limited",
+        "published_fv": "-67000.00000000",
+        "raw_unit": "U_GBP",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "GBP",
+        "row_id": "ROW-346fd803e1bb34f1",
+        "source_currency": "GBP",
+        "src_context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "37579000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Diligent Corporation Industry Professional Services Interest Rate 9.15% Reference Rate and Spread E+6.25% Maturity 08/04/25",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Diligent Corporation",
+        "published_fv": "40652000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-54281c7ee2f279b6",
+        "source_currency": "EUR",
+        "src_context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "317000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% Trader Corporation Industry Automobiles Interest Rate 11.68% Reference Rate and Spread C + 6.75% Maturity 12/21/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Trader Corporation",
+        "published_fv": "229000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-7ebe058e4c4668c6",
+        "source_currency": "CAD",
+        "src_context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-017863",
+        "amount": "454000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "bdc_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 198.65% 1272775 B.C. LTD. (dba Everest Clinical Research) Industry Professional Services Interest Rate 11.45% Reference Rate and Spread CDNP+4.75% Maturity 11/06/26",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "1272775 B.C. LTD. (dba Everest Clinical Research)",
+        "published_fv": "331000.00000000",
+        "raw_unit": "U_CAD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CAD",
+        "row_id": "ROW-9adf36d94e844237",
+        "source_currency": "CAD",
+        "src_context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001572694",
+    "path": "data/raw/filings/bdc_html/1572694/000095017023017863.html",
+    "report_date": "2023-03-31",
+    "sha256": "944ac37c527e6c3f597ced0b2102cadfef18c2c035fdaf8ea1119d9567897e37",
+    "source_rows": [
+      {
+        "cells": [
+          "1272775 B.C. LTD. (dba Everest Clinical Research)",
+          "Professional Services",
+          "11.45 %",
+          "CDN P + 4.75 %",
+          "11/06/26",
+          "CAD",
+          "",
+          "454",
+          "",
+          "",
+          "339",
+          "",
+          "",
+          "331",
+          "",
+          "(5) (6) (7)"
+        ],
+        "context_ids": [
+          "C_1845b9c0-392b-424e-b354-639beea5cdb2"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": "-2",
+            "text": "11.45",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": "-2",
+            "text": "4.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": null,
+            "text": "11/06/26",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": "3",
+            "text": "454",
+            "unit_ref": "U_CAD"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": "3",
+            "text": "339",
+            "unit_ref": "U_CAD"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_1845b9c0-392b-424e-b354-639beea5cdb2",
+            "scale": "3",
+            "text": "331",
+            "unit_ref": "U_CAD"
+          }
+        ],
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023",
+          "Goldman Sachs BDC, Inc."
+        ],
+        "row_xpath": "/html/body/table[9]/tr[6]",
+        "table_xpath": "/html/body/table[9]"
+      },
+      {
+        "cells": [
+          "Bigchange Group Limited",
+          "Software",
+          "",
+          "SN + 6.00 %",
+          "12/23/26",
+          "GBP",
+          "",
+          "2,400",
+          "",
+          "",
+          "( 50",
+          ")",
+          "",
+          "( 67",
+          ")",
+          "(5) (6) (7) (8)"
+        ],
+        "context_ids": [
+          "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+            "scale": null,
+            "text": "12/23/26",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+            "scale": "3",
+            "text": "2,400",
+            "unit_ref": "U_GBP"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+            "scale": "3",
+            "text": "50",
+            "unit_ref": "U_GBP"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_b60ee425-ba39-4a59-a9cb-aaa192aff40a",
+            "scale": "3",
+            "text": "67",
+            "unit_ref": "U_GBP"
+          }
+        ],
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023",
+          "Goldman Sachs BDC, Inc."
+        ],
+        "row_xpath": "/html/body/table[9]/tr[36]",
+        "table_xpath": "/html/body/table[9]"
+      },
+      {
+        "cells": [
+          "Diligent Corporation",
+          "Professional Services",
+          "9.15 %",
+          "E + 6.25 %",
+          "08/04/25",
+          "\u20ac",
+          "",
+          "37,579",
+          "",
+          "",
+          "42,818",
+          "",
+          "",
+          "40,652",
+          "",
+          "(6) (7)"
+        ],
+        "context_ids": [
+          "C_a5b90e14-893d-498d-820f-046a1dae430d"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": "-2",
+            "text": "9.15",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": "-2",
+            "text": "6.25",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": null,
+            "text": "08/04/25",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": "3",
+            "text": "37,579",
+            "unit_ref": "U_EUR"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": "3",
+            "text": "42,818",
+            "unit_ref": "U_EUR"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_a5b90e14-893d-498d-820f-046a1dae430d",
+            "scale": "3",
+            "text": "40,652",
+            "unit_ref": "U_EUR"
+          }
+        ],
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+          "Goldman Sachs BDC, Inc."
+        ],
+        "row_xpath": "/html/body/table[10]/tr[32]",
+        "table_xpath": "/html/body/table[10]"
+      },
+      {
+        "cells": [
+          "HumanState Limited (dba PayProp)",
+          "Diversified Consumer Services",
+          "",
+          "SN + 6.00 %",
+          "11/23/28",
+          "GBP",
+          "",
+          "7,270",
+          "",
+          "",
+          "1",
+          "",
+          "",
+          "( 135",
+          ")",
+          "(5) (6) (7) (8)"
+        ],
+        "context_ids": [
+          "C_a1b9009e-245d-4c98-83b2-ab0887010f3d"
+        ],
+        "facts": [
+          {
+            "concept": "gsbd:InvestmentReferenceRateAndSpread",
+            "context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+            "scale": null,
+            "text": "11/23/28",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+            "scale": "3",
+            "text": "7,270",
+            "unit_ref": "U_GBP"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+            "scale": "3",
+            "text": "1",
+            "unit_ref": "U_GBP"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_a1b9009e-245d-4c98-83b2-ab0887010f3d",
+            "scale": "3",
+            "text": "135",
+            "unit_ref": "U_GBP"
+          }
+        ],
+        "preceding": [
+          "",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+          "Goldman Sachs BDC, Inc.",
+          "Table of Contents"
+        ],
+        "row_xpath": "/html/body/table[11]/tr[41]",
+        "table_xpath": "/html/body/table[11]"
+      },
+      {
+        "cells": [
+          "Trader Corporation",
+          "Automobiles",
+          "11.68 %",
+          "C + 6.75 %",
+          "12/21/29",
+          "CAD",
+          "",
+          "317",
+          "",
+          "",
+          "229",
+          "",
+          "",
+          "229",
+          "",
+          "(5) (6) (7)"
+        ],
+        "context_ids": [
+          "C_ca0af0fb-3c93-430f-a06c-35938bf000c4"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": "-2",
+            "text": "11.68",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "gsbd:InvestmentReferenceRateAndSpread",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": "-2",
+            "text": "6.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": null,
+            "text": "12/21/29",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": "3",
+            "text": "317",
+            "unit_ref": "U_CAD"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": "3",
+            "text": "229",
+            "unit_ref": "U_CAD"
+          },
+          {
+            "concept": "gsbd:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_ca0af0fb-3c93-430f-a06c-35938bf000c4",
+            "scale": "3",
+            "text": "229",
+            "unit_ref": "U_CAD"
+          }
+        ],
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+          "Goldman Sachs BDC, Inc."
+        ],
+        "row_xpath": "/html/body/table[14]/tr[25]",
+        "table_xpath": "/html/body/table[14]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-24-123412",
+    "cases": [
+      {
+        "accession": "0000950170-24-123412",
+        "amount": "4351000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 212.84% United States - 200.15% 1st Lien/Senior Secured Debt - 188.54% Northstar Acquisition HoldCo, LLC (dba n2y) Industry Software Interest Rate 9.75% Reference Rate and Spread N + 5.00% Maturity 05/03/29",
+        "bdc_investment_identifier": "Investment Debt Investments - 212.84% United States - 200.15% 1st Lien/Senior Secured Debt - 188.54% Northstar Acquisition HoldCo, LLC (dba n2y) Industry Software Interest Rate 9.75% Reference Rate and Spread N + 5.00% Maturity 05/03/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Northstar Acquisition HoldCo, LLC (dba n2y)",
+        "published_fv": "4432000.00000000",
+        "raw_unit": "U_NOK",
+        "report_date": "2024-09-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-31777dd4eef40514",
+        "source_currency": "NOK",
+        "src_context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-24-123412",
+        "amount": "4432000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 212.84% United States - 200.15% 1st Lien/Senior Secured Debt - 188.54% Northstar Acquisition HoldCo, LLC (dba n2y) Industry Software Interest Rate 9.75% Reference Rate and Spread N + 5.00% Maturity 05/03/29",
+        "bdc_investment_identifier": "Investment Debt Investments - 212.84% United States - 200.15% 1st Lien/Senior Secured Debt - 188.54% Northstar Acquisition HoldCo, LLC (dba n2y) Industry Software Interest Rate 9.75% Reference Rate and Spread N + 5.00% Maturity 05/03/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Northstar Acquisition HoldCo, LLC (dba n2y)",
+        "published_fv": "4432000.00000000",
+        "raw_unit": "U_NOK",
+        "report_date": "2024-09-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-31777dd4eef40514",
+        "source_currency": "NOK",
+        "src_context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001572694",
+    "path": "data/raw/filings/bdc_html/1572694/000095017024123412.html",
+    "report_date": "2024-09-30",
+    "sha256": "1e100fc5eaf344ee6e94fd2b8fa07582d8e2ec5ab18d79990ae0b18998ba8223",
+    "source_rows": [
+      {
+        "cells": [
+          "Northstar Acquisition HoldCo, LLC (dba n2y)",
+          "Software",
+          "9.75 %",
+          "N + 5.00 %",
+          "05/03/29",
+          "NOK",
+          "",
+          "47,006",
+          "",
+          "",
+          "4,351",
+          "",
+          "",
+          "4,432",
+          "",
+          "(6) (7) (8)"
+        ],
+        "context_ids": [
+          "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": "-2",
+            "text": "9.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": "-2",
+            "text": "5.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": null,
+            "text": "05/03/29",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": "3",
+            "text": "47,006",
+            "unit_ref": "U_NOK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": "3",
+            "text": "4,351",
+            "unit_ref": "U_NOK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_4b55e5d7-dd1e-4e68-be09-daf55ba73bb4",
+            "scale": "3",
+            "text": "4,432",
+            "unit_ref": "U_NOK"
+          }
+        ],
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+          "Goldman Sachs BDC, Inc.",
+          "Table of Contents"
+        ],
+        "row_xpath": "/html/body/table[19]/tr[36]",
+        "table_xpath": "/html/body/table[19]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-029231",
+    "cases": [
+      {
+        "accession": "0000950170-25-029231",
+        "amount": "4341000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 216.8% United States - 210.4% 1st Lien/Senior Secured Debt - 195.8% Northstar Acquisition HoldCo, LLC (dba n2y) In Industry Software Interest Rate 9.45% Reference Rate and Spread N + 4.75% Maturity 05/03/29",
+        "bdc_investment_identifier": "Investment Debt Investments - 216.8% United States - 210.4% 1st Lien/Senior Secured Debt - 195.8% Northstar Acquisition HoldCo, LLC (dba n2y) In Industry Software Interest Rate 9.45% Reference Rate and Spread N + 4.75% Maturity 05/03/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Northstar Acquisition HoldCo, LLC (dba n2y) In",
+        "published_fv": "4098000.00000000",
+        "raw_unit": "U_NOK",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-63073c0c0fb7be22",
+        "source_currency": "NOK",
+        "src_context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-029231",
+        "amount": "4098000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 216.8% United States - 210.4% 1st Lien/Senior Secured Debt - 195.8% Northstar Acquisition HoldCo, LLC (dba n2y) In Industry Software Interest Rate 9.45% Reference Rate and Spread N + 4.75% Maturity 05/03/29",
+        "bdc_investment_identifier": "Investment Debt Investments - 216.8% United States - 210.4% 1st Lien/Senior Secured Debt - 195.8% Northstar Acquisition HoldCo, LLC (dba n2y) In Industry Software Interest Rate 9.45% Reference Rate and Spread N + 4.75% Maturity 05/03/29",
+        "cik": "0001572694",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Northstar Acquisition HoldCo, LLC (dba n2y) In",
+        "published_fv": "4098000.00000000",
+        "raw_unit": "U_NOK",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-63073c0c0fb7be22",
+        "source_currency": "NOK",
+        "src_context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001572694",
+    "path": "data/raw/filings/bdc_html/1572694/000095017025029231.html",
+    "report_date": "2024-12-31",
+    "sha256": "039bae5ce5d7c55a1eca1aeb880717abde6ac10e57c85a39f882ec48f76ddeb0",
+    "source_rows": [
+      {
+        "cells": [
+          "Northstar Acquisition HoldCo, LLC (dba n2y)",
+          "Software",
+          "9.45 %",
+          "N + 4.75 %",
+          "05/03/29",
+          "NOK",
+          "",
+          "46,888",
+          "",
+          "",
+          "4,341",
+          "",
+          "",
+          "4,098",
+          "",
+          "(6) (7) (8)"
+        ],
+        "context_ids": [
+          "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": "-2",
+            "text": "9.45",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": "-2",
+            "text": "4.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": null,
+            "text": "05/03/29",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": "3",
+            "text": "46,888",
+            "unit_ref": "U_NOK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": "3",
+            "text": "4,341",
+            "unit_ref": "U_NOK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_e1c39293-423f-4d7b-8847-e8f8d6672a6d",
+            "scale": "3",
+            "text": "4,098",
+            "unit_ref": "U_NOK"
+          }
+        ],
+        "preceding": [
+          "",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2024 (continued)",
+          "Goldman Sachs BDC, Inc.",
+          ""
+        ],
+        "row_xpath": "/html/body/table[43]/tr[39]",
+        "table_xpath": "/html/body/table[43]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-23-020540",
+    "cases": [
+      {
+        "accession": "0000950170-23-020540",
+        "amount": "4162000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Belgium Debt Investments Commercial & Professional Services Miraclon Corporation Investment\u00a0Type Unitranche First Lien Term Loan Interest Term\u00a0L + 600 Interest Rate 10.38% Maturity/ Dissolution Date 04/2026",
+        "bdc_investment_identifier": "Investments Belgium Debt Investments Commercial & Professional Services Miraclon Corporation Investment\u00a0Type Unitranche First Lien Term Loan Interest Term\u00a0L + 600 Interest Rate 10.38% Maturity/ Dissolution Date 04/2026",
+        "cik": "0001633336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Miraclon Corporation",
+        "published_fv": "4162000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-04a5b8c2463a3881",
+        "source_currency": "EUR",
+        "src_context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-020540",
+        "amount": "29775000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Australia Debt Investments Retailing Greencross (Vermont Aus Pty Ltd) Investment\u00a0Type Unitranche First Lien Term Loan Interest Term\u00a0B + 575 Interest Rate 9.52% Maturity/ Dissolution Date 03/2028",
+        "bdc_investment_identifier": "Investments Australia Debt Investments Retailing Greencross (Vermont Aus Pty Ltd) Investment\u00a0Type Unitranche First Lien Term Loan Interest Term\u00a0B + 575 Interest Rate 9.52% Maturity/ Dissolution Date 03/2028",
+        "cik": "0001633336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Greencross (Vermont Aus Pty Ltd)",
+        "published_fv": "19441000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-c0861ba7a79f7655",
+        "source_currency": "AUD",
+        "src_context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001633336",
+    "path": "data/raw/filings/bdc_html/1633336/000095017023020540.html",
+    "report_date": "2023-03-31",
+    "sha256": "d76a03f428df038ab293762323364b7ca7e8708d0c1e4d6bb76b324682a7f0a1",
+    "source_rows": [
+      {
+        "cells": [
+          "Miraclon Corporation (11)",
+          "Unitranche First Lien Term Loan",
+          "L + 600",
+          "10.38 %",
+          "04/2026",
+          "\u20ac",
+          "4,162",
+          "",
+          "",
+          "",
+          "4,100",
+          "",
+          "",
+          "",
+          "0.6",
+          "",
+          "",
+          "",
+          "4,162",
+          ""
+        ],
+        "context_ids": [
+          "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "-4",
+            "text": "600",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "-2",
+            "text": "10.38",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "3",
+            "text": "4,162",
+            "unit_ref": "U_EUR"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "3",
+            "text": "4,100",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "-2",
+            "text": "0.6",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_4e62fe3d-77b5-4441-b2a3-c52a5446b228",
+            "scale": "3",
+            "text": "4,162",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "",
+          "",
+          "",
+          "34",
+          ""
+        ],
+        "row_xpath": "/html/body/table[36]/tr[22]",
+        "table_xpath": "/html/body/table[36]"
+      },
+      {
+        "cells": [
+          "Greencross (Vermont Aus Pty Ltd) (11)",
+          "Unitranche First Lien Term Loan",
+          "B + 575",
+          "9.52 %",
+          "03/2028",
+          "",
+          "A$ 29,775",
+          "",
+          "",
+          "$",
+          "21,740",
+          "",
+          "",
+          "",
+          "2.7",
+          "",
+          "",
+          "$",
+          "19,441",
+          ""
+        ],
+        "context_ids": [
+          "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "-4",
+            "text": "575",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "-2",
+            "text": "9.52",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "3",
+            "text": "29,775",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "3",
+            "text": "21,740",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "-2",
+            "text": "2.7",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_0f6d9ae4-da2a-4edc-987c-d4544065f5ae",
+            "scale": "3",
+            "text": "19,441",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "",
+          "",
+          "",
+          "35",
+          ""
+        ],
+        "row_xpath": "/html/body/table[37]/tr[7]",
+        "table_xpath": "/html/body/table[37]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-23-019632",
+    "cases": [
+      {
+        "accession": "0000950170-23-019632",
+        "amount": "26918000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=1st Lien/Senior Secured Debt CorePower Yoga LLC Professional Services Interest Rate 9.15% Reference Rate and Spread E + 6.25% Maturity 08/04/25",
+        "bdc_investment_identifier": "1st Lien/Senior Secured Debt CorePower Yoga LLC Professional Services Interest Rate 9.15% Reference Rate and Spread E + 6.25% Maturity 08/04/25",
+        "cik": "0001674760",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "CorePower Yoga LLC",
+        "published_fv": "25332000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-43332cf86e0ac274",
+        "source_currency": "EUR",
+        "src_context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-23-019632",
+        "amount": "25332000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=1st Lien/Senior Secured Debt CorePower Yoga LLC Professional Services Interest Rate 9.15% Reference Rate and Spread E + 6.25% Maturity 08/04/25",
+        "bdc_investment_identifier": "1st Lien/Senior Secured Debt CorePower Yoga LLC Professional Services Interest Rate 9.15% Reference Rate and Spread E + 6.25% Maturity 08/04/25",
+        "cik": "0001674760",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "CorePower Yoga LLC",
+        "published_fv": "25332000.00000000",
+        "raw_unit": "U_EUR",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EUR",
+        "row_id": "ROW-43332cf86e0ac274",
+        "source_currency": "EUR",
+        "src_context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001674760",
+    "path": "data/raw/filings/bdc_html/1674760/000095017023019632.html",
+    "report_date": "2023-03-31",
+    "sha256": "80f91e943bbbac084fce3b10c155467bdc07d01e12735fafa24b9cab119f99b4",
+    "source_rows": [
+      {
+        "cells": [
+          "Diligent Corporation",
+          "Professional Services",
+          "9.15 %",
+          "E + 6.25 %",
+          "08/04/25",
+          "\u20ac",
+          "23,416",
+          "",
+          "",
+          "26,918",
+          "",
+          "",
+          "25,332",
+          "",
+          "(4) (5) (6)"
+        ],
+        "context_ids": [
+          "C_df468d2d-84d7-46b6-893f-a5588c240c14"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+            "scale": "-2",
+            "text": "6.25",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+            "scale": null,
+            "text": "08/04/25",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+            "scale": "3",
+            "text": "23,416",
+            "unit_ref": "U_EUR"
+          },
+          {
+            "concept": "ck0001674760:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+            "context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+            "scale": "3",
+            "text": "26,918",
+            "unit_ref": "U_EUR"
+          },
+          {
+            "concept": "ck0001674760:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+            "context_id": "C_df468d2d-84d7-46b6-893f-a5588c240c14",
+            "scale": "3",
+            "text": "25,332",
+            "unit_ref": "U_EUR"
+          }
+        ],
+        "preceding": [
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of March 31, 2023",
+          "Goldman Sachs Private Middle Market Credit LLC",
+          "Table of Contents"
+        ],
+        "row_xpath": "/html/body/table[9]/tr[6]",
+        "table_xpath": "/html/body/table[9]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001803498-23-000012",
+    "cases": [
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "599094000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Monterey Financing, S.A.R.L 3",
+        "bdc_investment_identifier": "Monterey Financing, S.A.R.L 3",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Monterey Financing, S.A.R.L 3",
+        "published_fv": "55756000.00000000",
+        "raw_unit": "NOK",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-38ea21dea2a6d9a9",
+        "source_currency": null,
+        "src_context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "243186000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Monterey Financing, S.A.R.L 4",
+        "bdc_investment_identifier": "Monterey Financing, S.A.R.L 4",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Monterey Financing, S.A.R.L 4",
+        "published_fv": "22859000.00000000",
+        "raw_unit": "SEK",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "SEK",
+        "row_id": "ROW-7d8a9ee54c9cb723",
+        "source_currency": null,
+        "src_context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "97449000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=CEP V Investment 11 Sarl",
+        "bdc_investment_identifier": "CEP V Investment 11 Sarl",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "CEP V Investment 11 Sarl",
+        "published_fv": "105514000.00000000",
+        "raw_unit": "CHF",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-997df93b7c69bbb0",
+        "source_currency": null,
+        "src_context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "10674000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Forterro UK Ltd. 1",
+        "bdc_investment_identifier": "Forterro UK Ltd. 1",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Forterro UK Ltd. 1",
+        "published_fv": "11333000.00000000",
+        "raw_unit": "CHF",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-c129f1a4336d7972",
+        "source_currency": null,
+        "src_context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "39278000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=FFML Holdco Ltd",
+        "bdc_investment_identifier": "FFML Holdco Ltd",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "FFML Holdco Ltd",
+        "published_fv": "23837000.00000000",
+        "raw_unit": "NZD",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "NZD",
+        "row_id": "ROW-c31ec499d1580f67",
+        "source_currency": null,
+        "src_context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "112563000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Forterro UK Ltd. 4",
+        "bdc_investment_identifier": "Forterro UK Ltd. 4",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Forterro UK Ltd. 4",
+        "published_fv": "10529000.00000000",
+        "raw_unit": "SEK",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "SEK",
+        "row_id": "ROW-c3c28562bc4790bb",
+        "source_currency": null,
+        "src_context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000012",
+        "amount": "560750000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Monterey Financing, S.A.R.L 1",
+        "bdc_investment_identifier": "Monterey Financing, S.A.R.L 1",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Monterey Financing, S.A.R.L 1",
+        "published_fv": "79664000.00000000",
+        "raw_unit": "DKK",
+        "report_date": "2023-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "DKK",
+        "row_id": "ROW-e0cbfe46ea4b3eea",
+        "source_currency": null,
+        "src_context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001803498",
+    "path": "data/raw/filings/bdc_html/1803498/000180349823000012.html",
+    "report_date": "2023-03-31",
+    "sha256": "af9ca86832ac75369afa8f2561bc78d9815ad6e732efa30d71d9b16b54b61525",
+    "source_rows": [
+      {
+        "cells": [
+          "CEP V Investment 11 Sarl",
+          "",
+          "(4)(6)(7)(10)",
+          "",
+          "SA +",
+          "5.75 %",
+          "",
+          "6.70 %",
+          "",
+          "2/11/2028",
+          "",
+          "CHF",
+          "97,449",
+          "",
+          "",
+          "93,969",
+          "",
+          "",
+          "105,514",
+          "",
+          "",
+          "0.46",
+          ""
+        ],
+        "context_ids": [
+          "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "-2",
+            "text": "5.75",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "-2",
+            "text": "6.70",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "3",
+            "text": "97,449",
+            "unit_ref": "chf"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "3",
+            "text": "93,969",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "3",
+            "text": "105,514",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "ic30f99d660cf43cf83eac2d4f17edfb9_I20230331",
+            "scale": "-2",
+            "text": "0.46",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[147]/table/tr[19]",
+        "table_xpath": "/html/body/div[147]/table"
+      },
+      {
+        "cells": [
+          "Monterey Financing, S.A.R.L",
+          "",
+          "(4)(6)(8)",
+          "",
+          "CI +",
+          "6.00 %",
+          "",
+          "9.11 %",
+          "",
+          "9/28/2029",
+          "",
+          "DKK",
+          "560,750",
+          "",
+          "",
+          "72,131",
+          "",
+          "",
+          "79,664",
+          "",
+          "",
+          "0.34",
+          ""
+        ],
+        "context_ids": [
+          "i0ffc980a4b4d4af1916392a30a38a871_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "-2",
+            "text": "9.11",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "3",
+            "text": "560,750",
+            "unit_ref": "dkk"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "3",
+            "text": "72,131",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "3",
+            "text": "79,664",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "i0ffc980a4b4d4af1916392a30a38a871_I20230331",
+            "scale": "-2",
+            "text": "0.34",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[153]/table/tr[13]",
+        "table_xpath": "/html/body/div[153]/table"
+      },
+      {
+        "cells": [
+          "Monterey Financing, S.A.R.L",
+          "",
+          "(4)(6)(9)",
+          "",
+          "N +",
+          "6.00 %",
+          "",
+          "9.68 %",
+          "",
+          "9/28/2029",
+          "",
+          "NOK",
+          "599,094",
+          "",
+          "",
+          "54,502",
+          "",
+          "",
+          "55,756",
+          "",
+          "",
+          "0.24",
+          ""
+        ],
+        "context_ids": [
+          "i486f988b09de4461bba525322fd68e9c_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "-2",
+            "text": "9.68",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "3",
+            "text": "599,094",
+            "unit_ref": "nok"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "3",
+            "text": "54,502",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "3",
+            "text": "55,756",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "i486f988b09de4461bba525322fd68e9c_I20230331",
+            "scale": "-2",
+            "text": "0.24",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[153]/table/tr[15]",
+        "table_xpath": "/html/body/div[153]/table"
+      },
+      {
+        "cells": [
+          "Monterey Financing, S.A.R.L",
+          "",
+          "(4)(6)(8)",
+          "",
+          "ST +",
+          "6.00 %",
+          "",
+          "9.30 %",
+          "",
+          "9/28/2029",
+          "",
+          "SEK",
+          "243,186",
+          "",
+          "",
+          "21,220",
+          "",
+          "",
+          "22,859",
+          "",
+          "",
+          "0.10",
+          ""
+        ],
+        "context_ids": [
+          "ib47758f1c3e34b479d60b1d26ef63e01_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "-2",
+            "text": "9.30",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "3",
+            "text": "243,186",
+            "unit_ref": "sek"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "3",
+            "text": "21,220",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "3",
+            "text": "22,859",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "ib47758f1c3e34b479d60b1d26ef63e01_I20230331",
+            "scale": "-2",
+            "text": "0.10",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[153]/table/tr[16]",
+        "table_xpath": "/html/body/div[153]/table"
+      },
+      {
+        "cells": [
+          "Forterro UK Ltd.",
+          "",
+          "(4)(6)(9)",
+          "",
+          "SA +",
+          "5.00 %",
+          "",
+          "6.41 %",
+          "",
+          "7/9/2029",
+          "",
+          "CHF",
+          "10,674",
+          "",
+          "",
+          "10,708",
+          "",
+          "11,333",
+          "",
+          "0.05",
+          ""
+        ],
+        "context_ids": [
+          "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "-2",
+            "text": "5.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "-2",
+            "text": "6.41",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "3",
+            "text": "10,674",
+            "unit_ref": "chf"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "3",
+            "text": "10,708",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "3",
+            "text": "11,333",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "i064f08f2fe7b4d3e9bf9653b22b6c53b_I20230331",
+            "scale": "-2",
+            "text": "0.05",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[163]/table/tr[46]",
+        "table_xpath": "/html/body/div[163]/table"
+      },
+      {
+        "cells": [
+          "Forterro UK Ltd.",
+          "",
+          "(4)(6)(8)",
+          "",
+          "ST +",
+          "5.00 %",
+          "",
+          "7.81 %",
+          "",
+          "7/9/2029",
+          "",
+          "SEK",
+          "112,563",
+          "",
+          "",
+          "10,431",
+          "",
+          "10,529",
+          "",
+          "0.05",
+          ""
+        ],
+        "context_ids": [
+          "i2e0318fed6744bc78ebb9d5642900655_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "-2",
+            "text": "5.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "-2",
+            "text": "7.81",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "3",
+            "text": "112,563",
+            "unit_ref": "sek"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "3",
+            "text": "10,431",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "3",
+            "text": "10,529",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "i2e0318fed6744bc78ebb9d5642900655_I20230331",
+            "scale": "-2",
+            "text": "0.05",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[163]/table/tr[49]",
+        "table_xpath": "/html/body/div[163]/table"
+      },
+      {
+        "cells": [
+          "FFML Holdco Ltd",
+          "",
+          "(4)(6)(8)",
+          "",
+          "SOFR +",
+          "6.25 %",
+          "",
+          "11.43 %",
+          "",
+          "11/30/2028",
+          "",
+          "NZD",
+          "39,278",
+          "",
+          "",
+          "23,705",
+          "",
+          "23,837",
+          "",
+          "0.10",
+          ""
+        ],
+        "context_ids": [
+          "ia6be196487cb43b6adc12c0599653775_I20230331"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "-2",
+            "text": "6.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "-2",
+            "text": "11.43",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "3",
+            "text": "39,278",
+            "unit_ref": "nzd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "3",
+            "text": "23,705",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "3",
+            "text": "23,837",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "ia6be196487cb43b6adc12c0599653775_I20230331",
+            "scale": "-2",
+            "text": "0.10",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[172]/table/tr[9]",
+        "table_xpath": "/html/body/div[172]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001803498-23-000017",
+    "cases": [
+      {
+        "accession": "0001803498-23-000017",
+        "amount": "560750000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Monterey Financing, S.A.R.L 1",
+        "bdc_investment_identifier": "Monterey Financing, S.A.R.L 1",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Monterey Financing, S.A.R.L 1",
+        "published_fv": "80112000.00000000",
+        "raw_unit": "DKK",
+        "report_date": "2023-06-30",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "DKK",
+        "row_id": "ROW-07351d080622f631",
+        "source_currency": null,
+        "src_context_id": "c-453",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000017",
+        "amount": "599094000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Monterey Financing, S.A.R.L 2",
+        "bdc_investment_identifier": "Monterey Financing, S.A.R.L 2",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Monterey Financing, S.A.R.L 2",
+        "published_fv": "54433000.00000000",
+        "raw_unit": "NOK",
+        "report_date": "2023-06-30",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "NOK",
+        "row_id": "ROW-da381fd057381f7c",
+        "source_currency": null,
+        "src_context_id": "c-454",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      },
+      {
+        "accession": "0001803498-23-000017",
+        "amount": "39278000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=FFML Holdco Ltd",
+        "bdc_investment_identifier": "FFML Holdco Ltd",
+        "cik": "0001803498",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "FFML Holdco Ltd",
+        "published_fv": "23342000.00000000",
+        "raw_unit": "NZD",
+        "report_date": "2023-06-30",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "NZD",
+        "row_id": "ROW-efe6c1d164df86ed",
+        "source_currency": null,
+        "src_context_id": "c-123",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001803498",
+    "path": "data/raw/filings/bdc_html/1803498/000180349823000017.html",
+    "report_date": "2023-06-30",
+    "sha256": "46dab9d2eb498235caac17aa0b996e0b6292ffacc6f61f84b54e80cae826f901",
+    "source_rows": [
+      {
+        "cells": [
+          "FFML Holdco Ltd",
+          "",
+          "(4)(6)(8)",
+          "",
+          "L +",
+          "6.25 %",
+          "",
+          "11.99 %",
+          "",
+          "11/30/2028",
+          "",
+          "NZD",
+          "39,278",
+          "",
+          "",
+          "23,735",
+          "",
+          "23,342",
+          "",
+          "0.10",
+          ""
+        ],
+        "context_ids": [
+          "c-123"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-123",
+            "scale": "-2",
+            "text": "6.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-123",
+            "scale": "-2",
+            "text": "11.99",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-123",
+            "scale": "3",
+            "text": "39,278",
+            "unit_ref": "nzd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-123",
+            "scale": "3",
+            "text": "23,735",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-123",
+            "scale": "3",
+            "text": "23,342",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "c-123",
+            "scale": "-2",
+            "text": "0.10",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[127]/table/tr[30]",
+        "table_xpath": "/html/body/div[127]/table"
+      },
+      {
+        "cells": [
+          "Monterey Financing, S.A.R.L",
+          "",
+          "(4)(6)(8)",
+          "",
+          "CI +",
+          "6.00 %",
+          "",
+          "9.62 %",
+          "",
+          "9/28/2029",
+          "",
+          "DKK",
+          "560,750",
+          "",
+          "",
+          "72,204",
+          "",
+          "",
+          "80,112",
+          "",
+          "",
+          "0.34",
+          ""
+        ],
+        "context_ids": [
+          "c-453"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-453",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-453",
+            "scale": "-2",
+            "text": "9.62",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-453",
+            "scale": "3",
+            "text": "560,750",
+            "unit_ref": "dkk"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-453",
+            "scale": "3",
+            "text": "72,204",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-453",
+            "scale": "3",
+            "text": "80,112",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "c-453",
+            "scale": "-2",
+            "text": "0.34",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[152]/table/tr[37]",
+        "table_xpath": "/html/body/div[152]/table"
+      },
+      {
+        "cells": [
+          "Monterey Financing, S.A.R.L",
+          "",
+          "(4)(6)(9)",
+          "",
+          "N +",
+          "6.00 %",
+          "",
+          "10.33 %",
+          "",
+          "9/28/2029",
+          "",
+          "NOK",
+          "599,094",
+          "",
+          "",
+          "54,552",
+          "",
+          "",
+          "54,433",
+          "",
+          "",
+          "0.23",
+          ""
+        ],
+        "context_ids": [
+          "c-454"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-454",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-454",
+            "scale": "-2",
+            "text": "10.33",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-454",
+            "scale": "3",
+            "text": "599,094",
+            "unit_ref": "nok"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-454",
+            "scale": "3",
+            "text": "54,552",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-454",
+            "scale": "3",
+            "text": "54,433",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "c-454",
+            "scale": "-2",
+            "text": "0.23",
+            "unit_ref": "number"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[152]/table/tr[38]",
+        "table_xpath": "/html/body/div[152]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-23-021206",
+    "cases": [
+      {
+        "accession": "0000950170-23-021206",
+        "amount": "9900000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Diversified Consumer Services Greencross Vermont Aus Pty Ltd Investment Type First Lien Secured Debt Interest Rate BBSW+575, 0.75% Floor Maturity Date 3/23/2028",
+        "bdc_investment_identifier": "Diversified Consumer Services Greencross Vermont Aus Pty Ltd Investment Type First Lien Secured Debt Interest Rate BBSW+575, 0.75% Floor Maturity Date 3/23/2028",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Greencross Vermont Aus Pty Ltd",
+        "published_fv": "6452000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2023-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-9d7ad6f5d52a688a",
+        "source_currency": "AUD",
+        "src_context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000095017023021206.html",
+    "report_date": "2023-03-31",
+    "sha256": "8297137b4c1b2c396576ccd9b2bc7fa889c963564cbb10dac730a533fe082207",
+    "source_rows": [
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt",
+          "",
+          "BBSW+ 575 , 0.75 % Floor",
+          "",
+          "3/23/2028",
+          "",
+          "A$",
+          "9,900",
+          "",
+          "",
+          "7,184",
+          "",
+          "",
+          "6,452",
+          "",
+          "(3)(4)(8) (9)(20)"
+        ],
+        "context_ids": [
+          "C_84d89082-4060-4c9b-804f-8533d7a7df4a"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap-supplement:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": "-4",
+            "text": "575",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap-supplement:InvestmentInterestRateFloor",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": "-2",
+            "text": "0.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": null,
+            "text": "3/23/2028",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": "3",
+            "text": "9,900",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "ck0001837532:InvestmentOwnedAtCostCredit",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": "3",
+            "text": "7,184",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_84d89082-4060-4c9b-804f-8533d7a7df4a",
+            "scale": "3",
+            "text": "6,452",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "",
+          "",
+          "(In thousands, except share data)",
+          "March 31, 2023",
+          "CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited)"
+        ],
+        "row_xpath": "/html/body/table[14]/tr[12]",
+        "table_xpath": "/html/body/table[14]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-24-094137",
+    "cases": [
+      {
+        "accession": "0000950170-24-094137",
+        "amount": "195000000000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH Investment Type First Lien Secured Debt - Term Loan Interest Rate K+575, 0.00% Floor Maturity Date 8/12/2027",
+        "bdc_investment_identifier": "Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH Investment Type First Lien Secured Debt - Term Loan Interest Rate K+575, 0.00% Floor Maturity Date 8/12/2027",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Delivery Hero Delivery Hero Finco Germany GmbH",
+        "published_fv": "141664000.00000000",
+        "raw_unit": "U_KPW",
+        "report_date": "2024-06-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "KPW",
+        "row_id": "ROW-4ea2d77670588d51",
+        "source_currency": "KPW",
+        "src_context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000095017024094137.html",
+    "report_date": "2024-06-30",
+    "sha256": "f305c6ac5de1d78a86d524f86c9e9e3fdbd155d0911ae3c7541113e1f1066d21",
+    "source_rows": [
+      {
+        "cells": [
+          "Delivery Hero Finco Germany GmbH",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "K+ 575 , 0.00 % Floor",
+          "",
+          "8/12/2027",
+          "",
+          "\u20a9",
+          "195,000,000",
+          "",
+          "",
+          "138,436",
+          "",
+          "",
+          "141,664",
+          "",
+          "(3)(4)(8)(9)(18)"
+        ],
+        "context_ids": [
+          "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": "-4",
+            "text": "575",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": "-2",
+            "text": "0.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": null,
+            "text": "8/12/2027",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": "3",
+            "text": "195,000,000",
+            "unit_ref": "U_KPW"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": "3",
+            "text": "138,436",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_712d6f48-29a3-4c9c-b7d7-dcd14fb069f9",
+            "scale": "3",
+            "text": "141,664",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "",
+          "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) June 30, 2024 (In thousands, except share data)",
+          "",
+          "See notes to consolidated financial statements 21",
+          ""
+        ],
+        "row_xpath": "/html/body/table[26]/tr[15]",
+        "table_xpath": "/html/body/table[26]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-24-124223",
+    "cases": [
+      {
+        "accession": "0000950170-24-124223",
+        "amount": "194831194000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt - Term Loan Interest Rate K+500, 0.50% Floor Maturity Date 12/12/2029",
+        "bdc_investment_identifier": "Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt - Term Loan Interest Rate K+500, 0.50% Floor Maturity Date 12/12/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt",
+        "published_fv": "148988000.00000000",
+        "raw_unit": "U_KRW",
+        "report_date": "2024-09-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "KRW",
+        "row_id": "ROW-22791c159ba7cabe",
+        "source_currency": "KRW",
+        "src_context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000095017024124223.html",
+    "report_date": "2024-09-30",
+    "sha256": "bc13fcd902aae03d5f1c02448692dfc7164da86c049ca61ac5ee637942f06f68",
+    "source_rows": [
+      {
+        "cells": [
+          "Delivery Hero Finco Germany GmbH",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "K+ 500 , 0.50 % Floor",
+          "",
+          "12/12/2029",
+          "",
+          "\u20a9",
+          "194,831,194",
+          "",
+          "",
+          "138,556",
+          "",
+          "",
+          "148,988",
+          "",
+          "(3)(4)(8)(9)(18)"
+        ],
+        "context_ids": [
+          "C_0907e651-de29-4c97-afb7-904f888500c8"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": "-4",
+            "text": "500",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": "-2",
+            "text": "0.50",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": null,
+            "text": "12/12/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": "3",
+            "text": "194,831,194",
+            "unit_ref": "U_KRW"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": "3",
+            "text": "138,556",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_0907e651-de29-4c97-afb7-904f888500c8",
+            "scale": "3",
+            "text": "148,988",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) September 30, 2024 (In thousands, except share data)",
+          "Table of Contents",
+          "",
+          "See notes to consolidated financial statements. 24",
+          ""
+        ],
+        "row_xpath": "/html/body/table[29]/tr[9]",
+        "table_xpath": "/html/body/table[29]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-038785",
+    "cases": [
+      {
+        "accession": "0000950170-25-038785",
+        "amount": "194831194000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt - Term Loan Interest Rate K+500, 0.50% Floor Maturity Date 12/12/2029",
+        "bdc_investment_identifier": "Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt - Term Loan Interest Rate K+500, 0.50% Floor Maturity Date 12/12/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Hotels, Restaurants & Leisure Delivery Hero Delivery Hero Finco Germany GmbH First Lien Secured Debt",
+        "published_fv": "133668000.00000000",
+        "raw_unit": "U_KRW",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "KRW",
+        "row_id": "ROW-f315faa1c3422a35",
+        "source_currency": "KRW",
+        "src_context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000095017025038785.html",
+    "report_date": "2024-12-31",
+    "sha256": "faba55fbdeee1c6a7f875fb4bd243b25a3987e08ef11d70a7909d30edf9e0b4b",
+    "source_rows": [
+      {
+        "cells": [
+          "Delivery Hero Finco Germany GmbH",
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "K+ 500 , 0.50 % Floor",
+          "",
+          "",
+          "12/12/2029",
+          "",
+          "",
+          "\u20a9",
+          "",
+          "194,831,194",
+          "",
+          "",
+          "",
+          "",
+          "138,676",
+          "",
+          "",
+          "",
+          "",
+          "133,668",
+          "",
+          "",
+          "(3)(4)(8)(9)(18)"
+        ],
+        "context_ids": [
+          "C_9a53ee43-9146-4bee-a51e-089871e4ea69"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": "-4",
+            "text": "500",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": "-2",
+            "text": "0.50",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": null,
+            "text": "12/12/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": "3",
+            "text": "194,831,194",
+            "unit_ref": "U_KRW"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": "3",
+            "text": "138,676",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_9a53ee43-9146-4bee-a51e-089871e4ea69",
+            "scale": "3",
+            "text": "133,668",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [
+          "APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except per share data)",
+          "Table of Contents",
+          "",
+          "See notes to consolidated financial statements 108",
+          ""
+        ],
+        "row_xpath": "/html/body/table[56]/tr[24]",
+        "table_xpath": "/html/body/table[56]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-068013",
+    "cases": [
+      {
+        "accession": "0000950170-25-068013",
+        "amount": "3365000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate SARON+475 (includes 5.00% PIK) Maturity Date 7/9/2029",
+        "bdc_investment_identifier": "Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate SARON+475 (includes 5.00% PIK) Maturity Date 7/9/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Forterro Yellow Castle AB",
+        "published_fv": "3752000.00000000",
+        "raw_unit": "U_CHF",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-14edcac87b875102",
+        "source_currency": "CHF",
+        "src_context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-068013",
+        "amount": "3289000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate STIBOR+475 (includes 8.63% PIK) Maturity Date 7/9/2029",
+        "bdc_investment_identifier": "Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate STIBOR+475 (includes 8.63% PIK) Maturity Date 7/9/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Forterro Yellow Castle AB",
+        "published_fv": "3499000.00000000",
+        "raw_unit": "U_SEK",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "SEK",
+        "row_id": "ROW-94264e25f355e97b",
+        "source_currency": "SEK",
+        "src_context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-068013",
+        "amount": "3752000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate SARON+475 (includes 5.00% PIK) Maturity Date 7/9/2029",
+        "bdc_investment_identifier": "Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate SARON+475 (includes 5.00% PIK) Maturity Date 7/9/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Forterro Yellow Castle AB",
+        "published_fv": "3752000.00000000",
+        "raw_unit": "U_CHF",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-14edcac87b875102",
+        "source_currency": "CHF",
+        "src_context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-068013",
+        "amount": "3499000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate STIBOR+475 (includes 8.63% PIK) Maturity Date 7/9/2029",
+        "bdc_investment_identifier": "Technology Hardware, Storage & Peripherals Forterro Yellow Castle AB Investment Type First Lien Secured Debt - Term Loan Interest Rate STIBOR+475 (includes 8.63% PIK) Maturity Date 7/9/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Forterro Yellow Castle AB",
+        "published_fv": "3499000.00000000",
+        "raw_unit": "U_SEK",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "SEK",
+        "row_id": "ROW-94264e25f355e97b",
+        "source_currency": "SEK",
+        "src_context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-068013",
+        "amount": "2261924000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "bdc_investment_identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Vantive Spruce Bidco II Inc.",
+        "published_fv": "14854000.00000000",
+        "raw_unit": "U_JPY",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-fe46a6323715234e",
+        "source_currency": "JPY",
+        "src_context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000095017025068013.html",
+    "report_date": "2025-03-31",
+    "sha256": "36ecf8328eadcf67f71a2f79f1f4ce05545953995e073fdded918c48923fff6a",
+    "source_rows": [
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "T + 525 , 0.75 % Floor",
+          "",
+          "2/2/2032",
+          "",
+          "\u00a5",
+          "2,261,924",
+          "",
+          "",
+          "14,550",
+          "",
+          "",
+          "14,854",
+          "(3)(4)(27)"
+        ],
+        "context_ids": [
+          "C_197669af-0254-4059-8c17-54fee83f60d0"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": "-4",
+            "text": "525",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": "-2",
+            "text": "0.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": null,
+            "text": "2/2/2032",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": "3",
+            "text": "2,261,924",
+            "unit_ref": "U_JPY"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": "3",
+            "text": "14,550",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_197669af-0254-4059-8c17-54fee83f60d0",
+            "scale": "3",
+            "text": "14,854",
+            "unit_ref": "U_USD"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[81]/table/tr[5]",
+        "table_xpath": "/html/body/div[81]/table"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "SARON + 475 (Includes 5.46 % PIK)",
+          "",
+          "7/7/2029",
+          "",
+          "\u20a3",
+          "3,327",
+          "",
+          "",
+          "3,365",
+          "",
+          "",
+          "3,752",
+          "(3)(4)(8)(9)(22)"
+        ],
+        "context_ids": [
+          "C_aced19a2-b10c-4166-8a75-17619e79e296"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": "-4",
+            "text": "475",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRatePaidInKind",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": "-2",
+            "text": "5.46",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": null,
+            "text": "7/7/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": "3",
+            "text": "3,327",
+            "unit_ref": "U_CHF"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": "3",
+            "text": "3,365",
+            "unit_ref": "U_CHF"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_aced19a2-b10c-4166-8a75-17619e79e296",
+            "scale": "3",
+            "text": "3,752",
+            "unit_ref": "U_CHF"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[159]/table/tr[16]",
+        "table_xpath": "/html/body/div[159]/table"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "STIBOR+ 475 (Inlcudes 8.63 % PIK)",
+          "",
+          "7/7/2029",
+          "",
+          "kr",
+          "35,257",
+          "",
+          "",
+          "3,289",
+          "",
+          "",
+          "3,499",
+          "(3)(4)(8)(9)(23)"
+        ],
+        "context_ids": [
+          "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": "-4",
+            "text": "475",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRatePaidInKind",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": "-2",
+            "text": "8.63",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": null,
+            "text": "7/7/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": "3",
+            "text": "35,257",
+            "unit_ref": "U_SEK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": "3",
+            "text": "3,289",
+            "unit_ref": "U_SEK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_5fd04bf2-9f99-415f-a5ce-6ab25a1879bd",
+            "scale": "3",
+            "text": "3,499",
+            "unit_ref": "U_SEK"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[159]/table/tr[17]",
+        "table_xpath": "/html/body/div[159]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001193125-26-215667",
+    "cases": [
+      {
+        "accession": "0001193125-26-215667",
+        "amount": "3344000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate STIBOR+475, 0.00% Floor Maturity Date 07/09/2029",
+        "bdc_investment_identifier": "Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate STIBOR+475, 0.00% Floor Maturity Date 07/09/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Forterro Forterro Group AB",
+        "published_fv": "3663000.00000000",
+        "raw_unit": "U_RSD",
+        "report_date": "2026-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "RSD",
+        "row_id": "ROW-20464ee04c95cbac",
+        "source_currency": "RSD",
+        "src_context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-26-215667",
+        "amount": "4721000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate SARON+475, 0.00% Floor Maturity Date 07/09/2029",
+        "bdc_investment_identifier": "Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate SARON+475, 0.00% Floor Maturity Date 07/09/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Forterro Forterro Group AB",
+        "published_fv": "5388000.00000000",
+        "raw_unit": "U_AFN",
+        "report_date": "2026-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AFN",
+        "row_id": "ROW-abd4ab55fad50974",
+        "source_currency": "AFN",
+        "src_context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-26-215667",
+        "amount": "3663000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate STIBOR+475, 0.00% Floor Maturity Date 07/09/2029",
+        "bdc_investment_identifier": "Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate STIBOR+475, 0.00% Floor Maturity Date 07/09/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Forterro Forterro Group AB",
+        "published_fv": "3663000.00000000",
+        "raw_unit": "U_RSD",
+        "report_date": "2026-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "RSD",
+        "row_id": "ROW-20464ee04c95cbac",
+        "source_currency": "RSD",
+        "src_context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-26-215667",
+        "amount": "5388000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate SARON+475, 0.00% Floor Maturity Date 07/09/2029",
+        "bdc_investment_identifier": "Software Forterro Forterro Group AB Investment Type First Lien Secured Debt \u2013 Term Loan Interest Rate SARON+475, 0.00% Floor Maturity Date 07/09/2029",
+        "cik": "0001837532",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Forterro Forterro Group AB",
+        "published_fv": "5388000.00000000",
+        "raw_unit": "U_AFN",
+        "report_date": "2026-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AFN",
+        "row_id": "ROW-abd4ab55fad50974",
+        "source_currency": "AFN",
+        "src_context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001837532",
+    "path": "data/raw/filings/bdc_html/1837532/000119312526215667.html",
+    "report_date": "2026-03-31",
+    "sha256": "b085a88f9b69818254ca225982069ea85ebf10d251609198f73cc5505767c3df",
+    "source_rows": [
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "SARON + 475 , 0.00 % Floor",
+          "",
+          "07/09/2029",
+          "",
+          "\u20a3",
+          "4,430",
+          "",
+          "",
+          "4,721",
+          "",
+          "",
+          "5,388",
+          "",
+          "(3)(4)(8)(9)(24)"
+        ],
+        "context_ids": [
+          "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": "-4",
+            "text": "475",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": "-2",
+            "text": "0.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": null,
+            "text": "07/09/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": "3",
+            "text": "4,430",
+            "unit_ref": "U_CHF"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": "3",
+            "text": "4,721",
+            "unit_ref": "U_AFN"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_ccbc188d-53f0-4a0b-aaa3-891a55ff1b2d",
+            "scale": "3",
+            "text": "5,388",
+            "unit_ref": "U_AFN"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[153]/table/tr[25]",
+        "table_xpath": "/html/body/div[153]/table"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "STIBOR + 475 , 0.00 % Floor",
+          "",
+          "07/09/2029",
+          "",
+          "Skr",
+          "35,658",
+          "",
+          "",
+          "3,344",
+          "",
+          "",
+          "3,663",
+          "",
+          "(3)(4)(8)(9)(25)"
+        ],
+        "context_ids": [
+          "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": "-4",
+            "text": "475",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": "-2",
+            "text": "0.00",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": null,
+            "text": "07/09/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": "3",
+            "text": "35,658",
+            "unit_ref": "U_SEK"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": "3",
+            "text": "3,344",
+            "unit_ref": "U_RSD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_92931db3-1be0-4eb1-92bd-96b6b382b3ba",
+            "scale": "3",
+            "text": "3,663",
+            "unit_ref": "U_RSD"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[153]/table/tr[26]",
+        "table_xpath": "/html/body/div[153]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001838126-24-000038",
+    "cases": [
+      {
+        "accession": "0001838126-24-000038",
+        "amount": "44063000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=AI Learning (Singapore) PTE. LTD.",
+        "bdc_investment_identifier": "AI Learning (Singapore) PTE. LTD.",
+        "cik": "0001838126",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "AI Learning (Singapore) PTE. LTD.",
+        "published_fv": "31975000.00000000",
+        "raw_unit": "SGD",
+        "report_date": "2024-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "SGD",
+        "row_id": "ROW-3743d422382ab7b7",
+        "source_currency": null,
+        "src_context_id": "c-74",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001838126",
+    "path": "data/raw/filings/bdc_html/1838126/000183812624000038.html",
+    "report_date": "2024-03-31",
+    "sha256": "fcfe1294e71b0e0f996dda85f7a9647212bceb1cff53efbf0fe2ba0372261a7b",
+    "source_rows": [
+      {
+        "cells": [
+          "AI Learning (Singapore) PTE. LTD. (4)(5)(12)",
+          "",
+          "SORA +",
+          "8.25 % (incl 4.00 % PIK)",
+          "",
+          "12.19",
+          "%",
+          "",
+          "5/25/2027",
+          "",
+          "44,063",
+          "S$",
+          "",
+          "31,773",
+          "",
+          "",
+          "31,975",
+          "",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "c-74"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-74",
+            "scale": "-2",
+            "text": "8.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRatePaidInKind",
+            "context_id": "c-74",
+            "scale": "-2",
+            "text": "4.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-74",
+            "scale": "-2",
+            "text": "12.19",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-74",
+            "scale": "3",
+            "text": "44,063",
+            "unit_ref": "sgd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-74",
+            "scale": "3",
+            "text": "31,773",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-74",
+            "scale": "3",
+            "text": "31,975",
+            "unit_ref": "usd"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[113]/table/tr[47]",
+        "table_xpath": "/html/body/div[113]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001838126-24-000061",
+    "cases": [
+      {
+        "accession": "0001838126-24-000061",
+        "amount": "44947000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=AI Learning (Singapore) PTE. LTD.",
+        "bdc_investment_identifier": "AI Learning (Singapore) PTE. LTD.",
+        "cik": "0001838126",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "AI Learning (Singapore) PTE. LTD.",
+        "published_fv": "32767000.00000000",
+        "raw_unit": "SGD",
+        "report_date": "2024-06-30",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "SGD",
+        "row_id": "ROW-39fd1ff4883b8405",
+        "source_currency": null,
+        "src_context_id": "c-93",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001838126",
+    "path": "data/raw/filings/bdc_html/1838126/000183812624000061.html",
+    "report_date": "2024-06-30",
+    "sha256": "2df1ea6f69c5777c78fb9cb58b82bee1ebf6eaa96772ecfcd605b59f0177ab7f",
+    "source_rows": [
+      {
+        "cells": [
+          "AI Learning (Singapore) PTE. LTD. (4)(5)(12)",
+          "",
+          "SORA +",
+          "8.25 % (incl 4.00 % PIK)",
+          "",
+          "11.69",
+          "%",
+          "",
+          "5/25/2027",
+          "",
+          "44,947",
+          "S$",
+          "",
+          "32,488",
+          "",
+          "",
+          "32,767",
+          "",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "c-93"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-93",
+            "scale": "-2",
+            "text": "8.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRatePaidInKind",
+            "context_id": "c-93",
+            "scale": "-2",
+            "text": "4.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-93",
+            "scale": "-2",
+            "text": "11.69",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-93",
+            "scale": "3",
+            "text": "44,947",
+            "unit_ref": "sgd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-93",
+            "scale": "3",
+            "text": "32,488",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-93",
+            "scale": "3",
+            "text": "32,767",
+            "unit_ref": "usd"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[113]/table/tr[48]",
+        "table_xpath": "/html/body/div[113]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001838126-25-000031",
+    "cases": [
+      {
+        "accession": "0001838126-25-000031",
+        "amount": "3744213000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Spruce Bidco II Inc. 2",
+        "bdc_investment_identifier": "Spruce Bidco II Inc. 2",
+        "cik": "0001838126",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Spruce Bidco II Inc. 2",
+        "published_fv": "24604000.00000000",
+        "raw_unit": "JPY",
+        "report_date": "2025-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-1c28067df5c822d3",
+        "source_currency": null,
+        "src_context_id": "c-426",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001838126",
+    "path": "data/raw/filings/bdc_html/1838126/000183812625000031.html",
+    "report_date": "2025-03-31",
+    "sha256": "8d1345bbf3955cdbf5ba6a3b45e1b31e07ac2bf89ffbf4b2f73172a9943580e3",
+    "source_rows": [
+      {
+        "cells": [
+          "Spruce Bidco II Inc. (4)(9)",
+          "",
+          "TN +",
+          "5.25 %",
+          "",
+          "6.00",
+          "%",
+          "",
+          "1/31/2032",
+          "",
+          "\u00a5",
+          "3,744,213",
+          "",
+          "",
+          "23,822",
+          "",
+          "",
+          "24,604",
+          "",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "c-426"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-426",
+            "scale": "-2",
+            "text": "5.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-426",
+            "scale": "-2",
+            "text": "6.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-426",
+            "scale": "3",
+            "text": "3,744,213",
+            "unit_ref": "jpy"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-426",
+            "scale": "3",
+            "text": "23,822",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-426",
+            "scale": "3",
+            "text": "24,604",
+            "unit_ref": "usd"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[137]/table/tr[19]",
+        "table_xpath": "/html/body/div[137]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001872371-25-000008",
+    "cases": [
+      {
+        "accession": "0001872371-25-000008",
+        "amount": "2262960000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Spruce Bidco I Inc., First Lien Term Loan 1",
+        "bdc_investment_identifier": "Spruce Bidco I Inc., First Lien Term Loan 1",
+        "cik": "0001872371",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Spruce Bidco I Inc., First Lien Term Loan 1",
+        "published_fv": "14916000.00000000",
+        "raw_unit": "CNY",
+        "report_date": "2025-03-31",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "CNY",
+        "row_id": "ROW-14cfc6130414c361",
+        "source_currency": null,
+        "src_context_id": "c-337",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001872371",
+    "path": "data/raw/filings/bdc_html/1872371/000187237125000008.html",
+    "report_date": "2025-03-31",
+    "sha256": "95730403325534759ecf9291b2930b7ac7764e991c9aff0c77ceebcc71c07abe",
+    "source_rows": [
+      {
+        "cells": [
+          "Spruce Bidco I Inc.",
+          "Health Care Equipment",
+          "First Lien Term Loan",
+          "TONA+",
+          "5.25 %",
+          "6.06 %",
+          "",
+          "2/2/2032",
+          "",
+          "\u00a5",
+          "2,262,960",
+          "",
+          "14,398",
+          "",
+          "14,916",
+          "",
+          "(5)(8)"
+        ],
+        "context_ids": [
+          "c-337"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-337",
+            "scale": "-2",
+            "text": "5.25",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "c-337",
+            "scale": "-2",
+            "text": "6.06",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-337",
+            "scale": "3",
+            "text": "2,262,960",
+            "unit_ref": "cny"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-337",
+            "scale": "3",
+            "text": "14,398",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-337",
+            "scale": "3",
+            "text": "14,916",
+            "unit_ref": "usd"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[127]/table/tr[22]",
+        "table_xpath": "/html/body/div[127]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001872371-25-000014",
+    "cases": [
+      {
+        "accession": "0001872371-25-000014",
+        "amount": "0.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Spruce Bidco I Inc., First Lien Revolver",
+        "bdc_investment_identifier": "Spruce Bidco I Inc., First Lien Revolver",
+        "cik": "0001872371",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Spruce Bidco I Inc., First Lien Revolver",
+        "published_fv": "-377000.00000000",
+        "raw_unit": "CNY",
+        "report_date": "2025-06-30",
+        "resolution": "case_normalized_source_unit",
+        "resolved_currency": "CNY",
+        "row_id": "ROW-3ace6fe5ad907b80",
+        "source_currency": null,
+        "src_context_id": "c-350",
+        "unit_kind": null,
+        "unit_status": "unresolved_unit_token"
+      }
+    ],
+    "cik": "0001872371",
+    "path": "data/raw/filings/bdc_html/1872371/000187237125000014.html",
+    "report_date": "2025-06-30",
+    "sha256": "073493bac4d6435fe2b7a495caf4ecf6e138897ed52ae885ca7818b55f58b314",
+    "source_rows": [
+      {
+        "cells": [
+          "Spruce Bidco I Inc.",
+          "Health Care Equipment",
+          "First Lien Revolver",
+          "SOFR+",
+          "5.00 %",
+          "",
+          "",
+          "1/30/2032",
+          "",
+          "\u2014",
+          "",
+          "( 372 )",
+          "",
+          "( 377 )",
+          "",
+          "(5)(8)(9)"
+        ],
+        "context_ids": [
+          "c-350"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "c-350",
+            "scale": "-2",
+            "text": "5.00",
+            "unit_ref": "number"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "c-350",
+            "scale": "3",
+            "text": "\u2014",
+            "unit_ref": "cny"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "c-350",
+            "scale": "3",
+            "text": "372",
+            "unit_ref": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "c-350",
+            "scale": "3",
+            "text": "377",
+            "unit_ref": "usd"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[127]/table/tr[35]",
+        "table_xpath": "/html/body/div[127]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-032238",
+    "cases": [
+      {
+        "accession": "0000950170-25-032238",
+        "amount": "3682000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 149.7% United States - 149.7% 1st Lien/Senior Secured Debt - 139.8% Sonar Acquisitionco, Inc. (dba SimPRO) Industry Construction & Engineering Interest Rate 9.12% Reference Rate and Spread B + 4.75% Maturity 10/24/30",
+        "bdc_investment_identifier": "Investment Debt Investments - 149.7% United States - 149.7% 1st Lien/Senior Secured Debt - 139.8% Sonar Acquisitionco, Inc. (dba SimPRO) Industry Construction & Engineering Interest Rate 9.12% Reference Rate and Spread B + 4.75% Maturity 10/24/30",
+        "cik": "0001948368",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Sonar Acquisitionco, Inc. (dba SimPRO)",
+        "published_fv": "3431000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-b255264b657136c6",
+        "source_currency": "AUD",
+        "src_context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-032238",
+        "amount": "3431000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 149.7% United States - 149.7% 1st Lien/Senior Secured Debt - 139.8% Sonar Acquisitionco, Inc. (dba SimPRO) Industry Construction & Engineering Interest Rate 9.12% Reference Rate and Spread B + 4.75% Maturity 10/24/30",
+        "bdc_investment_identifier": "Investment Debt Investments - 149.7% United States - 149.7% 1st Lien/Senior Secured Debt - 139.8% Sonar Acquisitionco, Inc. (dba SimPRO) Industry Construction & Engineering Interest Rate 9.12% Reference Rate and Spread B + 4.75% Maturity 10/24/30",
+        "cik": "0001948368",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Sonar Acquisitionco, Inc. (dba SimPRO)",
+        "published_fv": "3431000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-b255264b657136c6",
+        "source_currency": "AUD",
+        "src_context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001948368",
+    "path": "data/raw/filings/bdc_html/1948368/000095017025032238.html",
+    "report_date": "2024-12-31",
+    "sha256": "e6099deff69448c7e743f3de3530c97be1e3b3adef4ec5555a4138381ba5bfcb",
+    "source_rows": [
+      {
+        "cells": [
+          "Sonar Acquisitionco, Inc. (dba SimPRO)",
+          "Construction & Engineering",
+          "9.12 %",
+          "B + 4.75 %",
+          "10/24/30",
+          "AUD",
+          "",
+          "5,600",
+          "",
+          "",
+          "3,682",
+          "",
+          "",
+          "3,431",
+          "",
+          "(5) (6) (9)"
+        ],
+        "context_ids": [
+          "C_31c188d1-4126-488c-a52d-8dd2f467b483"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": "-2",
+            "text": "9.12",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": "-2",
+            "text": "4.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": null,
+            "text": "10/24/30",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": "3",
+            "text": "5,600",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": "3",
+            "text": "3,682",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_31c188d1-4126-488c-a52d-8dd2f467b483",
+            "scale": "3",
+            "text": "3,431",
+            "unit_ref": "U_AUD"
+          }
+        ],
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2024",
+          "Phillip Street Middle Market Lending Fund LLC",
+          ""
+        ],
+        "row_xpath": "/html/body/table[35]/tr[33]",
+        "table_xpath": "/html/body/table[35]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-024835",
+    "cases": [
+      {
+        "accession": "0000950170-25-024835",
+        "amount": "-14000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "bdc_investment_identifier": "Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "cik": "0001954360",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "published_fv": "-13000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-a728e5227f3337f3",
+        "source_currency": "AUD",
+        "src_context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-024835",
+        "amount": "-13000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "bdc_investment_identifier": "Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "cik": "0001954360",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Investments Australia Debt Investments Commercial and Professional Services Ancora Bidco PTY LTD Type Unitranche First Lien Delayed Draw Term Loan Interest Term Maturity/Dissolution Date 11/2030",
+        "published_fv": "-13000.00000000",
+        "raw_unit": "U_AUD",
+        "report_date": "2024-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "AUD",
+        "row_id": "ROW-a728e5227f3337f3",
+        "source_currency": "AUD",
+        "src_context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001954360",
+    "path": "data/raw/filings/bdc_html/1954360/000095017025024835.html",
+    "report_date": "2024-12-31",
+    "sha256": "d74ca22abcdb8f850c9cdf3498e9588d6bdef9dd5de8dfc13cfe43c79a6b62c5",
+    "source_rows": [
+      {
+        "cells": [
+          "Ancora Bidco PTY LTD (4)(5)(6)",
+          "Unitranche First Lien Delayed Draw Term Loan",
+          "",
+          "",
+          "11/2030",
+          "",
+          "AUD 0",
+          "",
+          "",
+          "( 14",
+          ")",
+          "",
+          "",
+          "( 0.0",
+          ")",
+          "",
+          "",
+          "( 13",
+          ")"
+        ],
+        "context_ids": [
+          "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+            "scale": "3",
+            "text": "0",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+            "scale": "3",
+            "text": "14",
+            "unit_ref": "U_AUD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+            "scale": "-2",
+            "text": "0.0",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00",
+            "scale": "3",
+            "text": "13",
+            "unit_ref": "U_AUD"
+          }
+        ],
+        "preceding": [
+          "",
+          "",
+          "85",
+          "Crescent Private Credit Income Corp. Consolidated Schedule of Investments December 31, 2024 (in thousands, except share and per share data) Country/Security/Industry/Company Investment Type Interest Term * Interest Rate Maturity/ Dissolution Date Principal Amount, Par Value or Shares ** Cost Percentage of Net Assets *** Fair Value Telecommunication Services CCI Buyer (7) Senior Secured First Lien Term Loan S + 400 ( 75 Floor) 8.33 % 12/2027 1,485 1,480 0.8 1,488 1,485 1,480 0.8 1,488 Transportation AIT Worldwide Logistics Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 475 9.18 % 04/2030 738 735 0.4 745 735 0.4 745 Total Debt Investments United States 257,152 $ 254,242 141.7 % $ 255,964 Equity Investments Commercial and Professional Services Iris Buyer, LLC Common Stock 192 193 0.1 212 Iris Buyer, LLC Common Stock 192,308 - 0.0 19 193 0.1 231 Diversified Financials WhiteHawk Evergreen Fund, LP (2)(6)(9)(10) Partnership Interest 4,500 2.6 4,612 4,500 2.6 4,612 Health Care Equipment and Services IVX Health Merger Sub, Inc. Common Stock 880 880 0.6 995 Vital Care Buyer, LLC Common Stock 649 64 0.0 56 Vital Care Buyer, LLC Common Stock 64 1 0.0 5 945 0.6 1,056 Pharmaceuticals, Biotechnology and Life Sciences RN Enterprises, LLC Common Stock 621 621 0.3 621 WCT Group Holdings, LLC Common Stock 118 1,176 0.9 1,675 1,797 1.2 2,296 Total Equity Investments United States $ 7,435 4.5 % $ 8,195 Netherlands Debt Investments Commercial and Professional Services Pitch MidCo B.V. (6) Unitranche First Lien Term Loan E + 625 9.60 % 04/2031 \u20ac 2,864 2,981 1.6 2,967 Pitch MidCo B.V. (5)(6) Unitranche First Lien Delayed Draw Term Loan 04/2031 \u20ac - - - - Van Der Steen (6) Unitranche First Lien Term Loan E + 600 9.35 % 05/2031 \u20ac 3,289 3,448 1.9 3,407 Van Der Steen (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 05/2031 \u20ac - ( 15 ) - - 6,414 3.5 6,374 Financial Services Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486 1,472 0.8 1,486 Total Debt Investments Netherlands $ 7,886 4.3 % $ 7,860 United Kingdom Debt Investments Commercial and Professional Services Hamsard 3778 Limited (4)(5)(6) Unitranche First Lien - Last Out Delayed Draw Term Loan 10/2031 \u00a3 - ( 7 ) ( 0.0 ) ( 7 ) Hamsard 3778 Limited (6) Unitranche First Lien - Last Out Term Loan S + 550 10.45 % 10/2031 \u00a3 2,853 3,612 1.9 3,486 Ineos Quattro (6) Senior Secured First Lien Term Loan S + 425 8.61 % 04/2029 $ 441 433 0.2 445 4,038 2.1 3,924 See accompanying notes",
+          ""
+        ],
+        "row_xpath": "/html/body/table[36]/tr[12]",
+        "table_xpath": "/html/body/table[36]"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001193125-25-180767",
+    "cases": [
+      {
+        "accession": "0001193125-25-180767",
+        "amount": "197000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "bdc_investment_identifier": "Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "cik": "0001954360",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "published_fv": "235000.00000000",
+        "raw_unit": "U_CHF",
+        "report_date": "2025-06-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-69392802aaaa880b",
+        "source_currency": "CHF",
+        "src_context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-25-180767",
+        "amount": "235000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "bdc_investment_identifier": "Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "cik": "0001954360",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology and Life Sciences Sequence Parent Investment\u00a0Type Common Stock",
+        "published_fv": "235000.00000000",
+        "raw_unit": "U_CHF",
+        "report_date": "2025-06-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "CHF",
+        "row_id": "ROW-69392802aaaa880b",
+        "source_currency": "CHF",
+        "src_context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001954360",
+    "path": "data/raw/filings/bdc_html/1954360/000119312525180767.html",
+    "report_date": "2025-06-30",
+    "sha256": "4270791ee4239455d6571cbe6bfee727848d436f984f8fbf3745a00c9cd4da08",
+    "source_rows": [
+      {
+        "cells": [
+          "Sequence Parent (6)",
+          "Common Stock",
+          "",
+          "",
+          "",
+          "",
+          "3,290",
+          "",
+          "",
+          "197",
+          "",
+          "",
+          "",
+          "0.1",
+          "",
+          "",
+          "",
+          "235",
+          ""
+        ],
+        "context_ids": [
+          "C_0773542e-785d-480e-9be6-8a08cdbb49e3"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+            "scale": "3",
+            "text": "3,290",
+            "unit_ref": "U_CHF"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+            "scale": "3",
+            "text": "197",
+            "unit_ref": "U_CHF"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+            "scale": "-2",
+            "text": "0.1",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_0773542e-785d-480e-9be6-8a08cdbb49e3",
+            "scale": "3",
+            "text": "235",
+            "unit_ref": "U_CHF"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[60]/table/tr[6]",
+        "table_xpath": "/html/body/div[60]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001959604-25-000006",
+    "cases": [
+      {
+        "accession": "0001959604-25-000006",
+        "amount": "360000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/2/2032",
+        "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/2/2032",
+        "cik": "0001959604",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Spruce Bidco II Inc.",
+        "published_fv": "387000.00000000",
+        "raw_unit": "U_JPY",
+        "report_date": "2025-06-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-e66f10fab16f3f37",
+        "source_currency": "JPY",
+        "src_context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001959604-25-000006",
+        "amount": "387000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/2/2032",
+        "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/2/2032",
+        "cik": "0001959604",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Spruce Bidco II Inc.",
+        "published_fv": "387000.00000000",
+        "raw_unit": "U_JPY",
+        "report_date": "2025-06-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-e66f10fab16f3f37",
+        "source_currency": "JPY",
+        "src_context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001959604",
+    "path": "data/raw/filings/bdc_html/1959604/000195960425000006.html",
+    "report_date": "2025-06-30",
+    "sha256": "426ab07668a15a64c005437daa8f1c43ac03e0575b3053e8b8133aa6e0452406",
+    "source_rows": [
+      {
+        "cells": [
+          "Spruce Bidco II Inc.",
+          "",
+          "First Lien Term Loan",
+          "",
+          "T + 5.25 %",
+          "",
+          "2/2/2032",
+          "",
+          "",
+          "JPY 56,586",
+          "",
+          "",
+          "",
+          "360",
+          "",
+          "",
+          "",
+          "387",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "11"
+        ],
+        "context_ids": [
+          "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+            "scale": "-2",
+            "text": "5.25",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+            "scale": null,
+            "text": "2/2/2032",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+            "scale": "3",
+            "text": "56,586",
+            "unit_ref": "U_JPY"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+            "scale": "3",
+            "text": "360",
+            "unit_ref": "U_JPY"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_beef95e9-5d8d-4e18-9af4-eaa1bf7dd85b",
+            "scale": "3",
+            "text": "387",
+            "unit_ref": "U_JPY"
+          }
+        ],
+        "preceding": [
+          "",
+          "(In thousands, except for share and per share data)",
+          "June 30, 2025",
+          "Consolidated Schedule of Investments (Unaudited) - Continued",
+          "JEFFERIES CREDIT PARTNERS BDC INC."
+        ],
+        "row_xpath": "/html/body/div[24]/table/tr[44]",
+        "table_xpath": "/html/body/div[24]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001193125-25-280627",
+    "cases": [
+      {
+        "accession": "0001193125-25-280627",
+        "amount": "200000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments - non-controlled/non-affiliated Secured Debt IT Services BigTime Software, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 6.25% Interest Rate 10.23% Maturity Date 6/30/2028",
+        "bdc_investment_identifier": "Secured Debt IT Services BigTime Software, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 6.25% Interest Rate 10.23% Maturity Date 6/30/2028",
+        "cik": "0001976336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "BigTime Software, Inc.",
+        "published_fv": "198000.00000000",
+        "raw_unit": "U_EGP",
+        "report_date": "2025-09-30",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EGP",
+        "row_id": "ROW-51a410b99d34fa58",
+        "source_currency": "EGP",
+        "src_context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001976336",
+    "path": "data/raw/filings/bdc_html/1976336/000119312525280627.html",
+    "report_date": "2025-09-30",
+    "sha256": "3f26dd535f9e37d5b39e027e0901738938f05044ccffb14a12d76f119ccde6e1",
+    "source_rows": [
+      {
+        "cells": [
+          "BigTime Software, Inc.",
+          "",
+          "(13)",
+          "",
+          "First Lien Term Loan",
+          "",
+          "S + 6.25 %",
+          "",
+          "10.23 %",
+          "",
+          "6/30/2028",
+          "",
+          "$",
+          "200",
+          "",
+          "",
+          "$",
+          "200",
+          "",
+          "",
+          "$",
+          "198",
+          "",
+          "",
+          "",
+          "0.03",
+          "",
+          "%"
+        ],
+        "context_ids": [
+          "C_d7140248-f46f-4a94-8b24-ce31a2d24183"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "-2",
+            "text": "6.25",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "-2",
+            "text": "10.23",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": null,
+            "text": "6/30/2028",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "3",
+            "text": "200",
+            "unit_ref": "U_EGP"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "3",
+            "text": "200",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "3",
+            "text": "198",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_d7140248-f46f-4a94-8b24-ce31a2d24183",
+            "scale": "-2",
+            "text": "0.03",
+            "unit_ref": "U_pure"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[100]/table/tr[4]",
+        "table_xpath": "/html/body/div[100]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001193125-26-115260",
+    "cases": [
+      {
+        "accession": "0001193125-26-115260",
+        "amount": "2489000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments - non-controlled/non-affiliated Secured Debt Insurance Broadstreet Partners, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 6.42% Maturity Date 06/13/2031",
+        "bdc_investment_identifier": "Secured Debt Insurance Broadstreet Partners, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 6.42% Maturity Date 06/13/2031",
+        "cik": "0001976336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Broadstreet Partners, Inc.",
+        "published_fv": "2500000.00000000",
+        "raw_unit": "U_EGP",
+        "report_date": "2025-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EGP",
+        "row_id": "ROW-6bcf1a9fd73c7f03",
+        "source_currency": "EGP",
+        "src_context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-26-115260",
+        "amount": "6367000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments - non-controlled/non-affiliated Secured Debt Insurance Beyond Risk Parent Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.25% Maturity Date 10/08/2027",
+        "bdc_investment_identifier": "Secured Debt Insurance Beyond Risk Parent Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.25% Maturity Date 10/08/2027",
+        "cik": "0001976336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Beyond Risk Parent Holdings, Inc.",
+        "published_fv": "524000.00000000",
+        "raw_unit": "U_EGP",
+        "report_date": "2025-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EGP",
+        "row_id": "ROW-9b63d5a52d5d8fce",
+        "source_currency": "EGP",
+        "src_context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0001193125-26-115260",
+        "amount": "4294000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments - non-controlled/non-affiliated Secured Debt Insurance Foundation Risk Partners, Corp. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate 8.40% Maturity Date 10/29/2030",
+        "bdc_investment_identifier": "Secured Debt Insurance Foundation Risk Partners, Corp. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate 8.40% Maturity Date 10/29/2030",
+        "cik": "0001976336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Foundation Risk Partners, Corp.",
+        "published_fv": "2504000.00000000",
+        "raw_unit": "U_EGP",
+        "report_date": "2025-12-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EGP",
+        "row_id": "ROW-b90320ce555f93d0",
+        "source_currency": "EGP",
+        "src_context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001976336",
+    "path": "data/raw/filings/bdc_html/1976336/000119312526115260.html",
+    "report_date": "2025-12-31",
+    "sha256": "463527ef9d4887af02957cfaf56adb21b27e0c69d1528f2791d663a36ebe34b7",
+    "source_rows": [
+      {
+        "cells": [
+          "Beyond Risk Parent Holdings, Inc.",
+          "",
+          "(7)(12)(14)",
+          "",
+          "First Lien Delayed Draw Term Loan",
+          "",
+          "S + 4.50 %",
+          "",
+          "8.25 %",
+          "",
+          "10/8/2027",
+          "",
+          "$",
+          "6,367",
+          "",
+          "",
+          "$",
+          "515",
+          "",
+          "",
+          "$",
+          "524",
+          "",
+          "",
+          "",
+          "0.07",
+          "",
+          "%"
+        ],
+        "context_ids": [
+          "C_de9b157c-7076-4a80-840d-035e76013a76"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "-2",
+            "text": "4.50",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "-2",
+            "text": "8.25",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": null,
+            "text": "10/8/2027",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "3",
+            "text": "6,367",
+            "unit_ref": "U_EGP"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "3",
+            "text": "515",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "3",
+            "text": "524",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_de9b157c-7076-4a80-840d-035e76013a76",
+            "scale": "-2",
+            "text": "0.07",
+            "unit_ref": "U_pure"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[424]/table/tr[4]",
+        "table_xpath": "/html/body/div[424]/table"
+      },
+      {
+        "cells": [
+          "Broadstreet Partners, Inc.",
+          "",
+          "(5)(6)(8)(16)",
+          "",
+          "First Lien Term Loan",
+          "",
+          "S + 2.75 %",
+          "",
+          "6.42 %",
+          "",
+          "6/13/2031",
+          "",
+          "",
+          "2,489",
+          "",
+          "",
+          "",
+          "2,493",
+          "",
+          "",
+          "",
+          "2,500",
+          "",
+          "",
+          "",
+          "0.34",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "-2",
+            "text": "2.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "-2",
+            "text": "6.42",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": null,
+            "text": "6/13/2031",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "3",
+            "text": "2,489",
+            "unit_ref": "U_EGP"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "3",
+            "text": "2,493",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "3",
+            "text": "2,500",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_9a8f514b-4bd9-4aa6-9b38-d97f5fa3aad7",
+            "scale": "-2",
+            "text": "0.34",
+            "unit_ref": "U_pure"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[424]/table/tr[5]",
+        "table_xpath": "/html/body/div[424]/table"
+      },
+      {
+        "cells": [
+          "Foundation Risk Partners, Corp.",
+          "",
+          "(7)(12)(14)",
+          "",
+          "First Lien Delayed Draw Term Loan",
+          "",
+          "S + 4.75 %",
+          "",
+          "8.40 %",
+          "",
+          "10/29/2030",
+          "",
+          "",
+          "4,294",
+          "",
+          "",
+          "",
+          "2,489",
+          "",
+          "",
+          "",
+          "2,504",
+          "",
+          "",
+          "",
+          "0.34",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "C_7bd21e83-10a4-4073-a791-68d3b7683347"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "-2",
+            "text": "4.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "-2",
+            "text": "8.40",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": null,
+            "text": "10/29/2030",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "3",
+            "text": "4,294",
+            "unit_ref": "U_EGP"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "3",
+            "text": "2,489",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "3",
+            "text": "2,504",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_7bd21e83-10a4-4073-a791-68d3b7683347",
+            "scale": "-2",
+            "text": "0.34",
+            "unit_ref": "U_pure"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[424]/table/tr[6]",
+        "table_xpath": "/html/body/div[424]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0001193125-26-221684",
+    "cases": [
+      {
+        "accession": "0001193125-26-221684",
+        "amount": "981000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Investments - non-controlled/non-affiliated Secured Debt Insurance Riser Interco, LLC Asset Type First Lien Term Loan Reference Rate and Spread SON + 4.75% Interest Rate 8.49% Maturity Date 10/31/2029",
+        "bdc_investment_identifier": "Secured Debt Insurance Riser Interco, LLC Asset Type First Lien Term Loan Reference Rate and Spread SON + 4.75% Interest Rate 8.49% Maturity Date 10/31/2029",
+        "cik": "0001976336",
+        "document_status": "units_read",
+        "field": "principal_amount",
+        "issuer_name": "Riser Interco, LLC",
+        "published_fv": "1278000.00000000",
+        "raw_unit": "U_EGP",
+        "report_date": "2026-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "EGP",
+        "row_id": "ROW-d1e9e0b631890579",
+        "source_currency": "EGP",
+        "src_context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0001976336",
+    "path": "data/raw/filings/bdc_html/1976336/000119312526221684.html",
+    "report_date": "2026-03-31",
+    "sha256": "d7eadebcca45f76168b44b54a9cae38f5e622929a9a70e34a62c978f1125cce1",
+    "source_rows": [
+      {
+        "cells": [
+          "Riser Interco, LLC",
+          "",
+          "(8)(14)",
+          "",
+          "First Lien Term Loan",
+          "",
+          "SON + 4.75 %",
+          "",
+          "8.49 %",
+          "",
+          "10/31/2029",
+          "",
+          "",
+          "GBP 981",
+          "",
+          "",
+          "",
+          "1,298",
+          "",
+          "",
+          "",
+          "1,278",
+          "",
+          "",
+          "",
+          "0.16",
+          "",
+          ""
+        ],
+        "context_ids": [
+          "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "-2",
+            "text": "4.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRate",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "-2",
+            "text": "8.49",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": null,
+            "text": "10/31/2029",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "3",
+            "text": "981",
+            "unit_ref": "U_EGP"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "3",
+            "text": "1,298",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "3",
+            "text": "1,278",
+            "unit_ref": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context_id": "C_dfd6f486-4cdb-4d2b-8bc1-3f563caedd39",
+            "scale": "-2",
+            "text": "0.16",
+            "unit_ref": "U_pure"
+          }
+        ],
+        "preceding": [],
+        "row_xpath": "/html/body/div[96]/table/tr[35]",
+        "table_xpath": "/html/body/div[96]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  },
+  {
+    "accession": "0000950170-25-070628",
+    "cases": [
+      {
+        "accession": "0000950170-25-070628",
+        "amount": "1658000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "bdc_investment_identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "cik": "0002052152",
+        "document_status": "units_read",
+        "field": "cost",
+        "issuer_name": "Vantive Spruce Bidco II Inc.",
+        "published_fv": "1658000.00000000",
+        "raw_unit": "U_JPY",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-20e12a5ed205d787",
+        "source_currency": "JPY",
+        "src_context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      },
+      {
+        "accession": "0000950170-25-070628",
+        "amount": "1658000.00000000",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "bdc_investment_identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 2/2/2032",
+        "cik": "0002052152",
+        "document_status": "units_read",
+        "field": "fair_value",
+        "issuer_name": "Vantive Spruce Bidco II Inc.",
+        "published_fv": "1658000.00000000",
+        "raw_unit": "U_JPY",
+        "report_date": "2025-03-31",
+        "resolution": "exact_source_unit",
+        "resolved_currency": "JPY",
+        "row_id": "ROW-20e12a5ed205d787",
+        "source_currency": "JPY",
+        "src_context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+        "unit_kind": "monetary",
+        "unit_status": "reported_unit_foreign"
+      }
+    ],
+    "cik": "0002052152",
+    "path": "data/raw/filings/bdc_html/2052152/000095017025070628.html",
+    "report_date": "2025-03-31",
+    "sha256": "5fb5ffb6cec4858e754156d0ea146e46e3d1ee6bc6c8389b63ae023ab3af18e1",
+    "source_rows": [
+      {
+        "cells": [
+          "",
+          "",
+          "First Lien Secured Debt - Term Loan",
+          "",
+          "T + 525 , 0.75 % Floor",
+          "",
+          "2/2/2032",
+          "",
+          "\u00a5",
+          "",
+          "252,358",
+          "",
+          "",
+          "",
+          "",
+          "1,658",
+          "",
+          "",
+          "",
+          "",
+          "1,658",
+          "",
+          "(3)(10)(11)"
+        ],
+        "context_ids": [
+          "C_6542e41d-1ff1-4247-a1d0-8b13b9429926"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentBasisSpreadVariableRate",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": "-4",
+            "text": "525",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentInterestRateFloor",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": "-2",
+            "text": "0.75",
+            "unit_ref": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentMaturityDate",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": null,
+            "text": "2/2/2032",
+            "unit_ref": null
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedBalancePrincipalAmount",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": "3",
+            "text": "252,358",
+            "unit_ref": "U_JPY"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": "3",
+            "text": "1,658",
+            "unit_ref": "U_JPY"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context_id": "C_6542e41d-1ff1-4247-a1d0-8b13b9429926",
+            "scale": "3",
+            "text": "1,658",
+            "unit_ref": "U_JPY"
+          }
+        ],
+        "preceding": [
+          "",
+          "(In thousands, except share data)",
+          "March 31, 2025",
+          "CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited)",
+          "APOLLO ORIGINATION II (LEVERED) CAPITAL TRUST"
+        ],
+        "row_xpath": "/html/body/div[27]/table/tr[24]",
+        "table_xpath": "/html/body/div[27]/table"
+      }
+    ],
+    "status": "literal_source_rows"
+  }
+]

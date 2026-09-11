@@ -1,0 +1,190 @@
+{
+  "browser": {
+    "brackets_unicode_literal_newlines": true,
+    "comment_boxes": 32,
+    "desktop_mobile": true,
+    "download": true,
+    "elapsed_seconds": 2.005,
+    "errors": [],
+    "input_sha256": "41e2d47f04e7e99da947a7da7b15ffbb1e05096faa32aa10d64306b05e5a4cd0",
+    "local_links": 38,
+    "native_save": "writer and cancellation stubs; OS dialog not automated",
+    "network": [],
+    "print": true,
+    "sections": 5,
+    "status": "pass",
+    "storage_failure_visible": true
+  },
+  "criteria": 28,
+  "documents": 4,
+  "engineering_end_state_complete": false,
+  "files": [
+    {
+      "bytes": 8285,
+      "path": "docs/production_stack/programme_runner.md",
+      "sha256": "2dc74f6296308c7d3131d3e9053ee8702763eb461b11b7bd5a574c46e0209628"
+    },
+    {
+      "bytes": 4652,
+      "path": "docs/production_stack/programme_tranche_handoff_2026-09-10.md",
+      "sha256": "6e856901582bd2a57960b0dea52e90e927baa6227fb99592976e780253d802ae"
+    },
+    {
+      "bytes": 2919,
+      "path": "docs/production_stack/programme_tranche_resume_proposal_2026-09-10.md",
+      "sha256": "f068b3c99ed5c0b142e0d7d67fc9ebf1ab983fb90cf580d5bfaa48d6f0fb19f8"
+    },
+    {
+      "bytes": 15810,
+      "path": "docs/production_stack/programme_tranche_2026-09-10_work_record.md",
+      "sha256": "024f459111cf550e787b75010316f43df028f8b6d00311f37c96d2a8a2178230"
+    },
+    {
+      "bytes": 100,
+      "path": "pipeline/programme/__init__.py",
+      "sha256": "59e010d8e6624c4d720a9fde0b6889a5e3a3c92797c8056ab81790251a834759"
+    },
+    {
+      "bytes": 5976,
+      "path": "pipeline/programme/artifacts.py",
+      "sha256": "3ca92045b077199f24865090614c58b6dac0a19b8981cac0916626b6a8cba620"
+    },
+    {
+      "bytes": 5286,
+      "path": "pipeline/programme/bootstrap.py",
+      "sha256": "77a93fbb875c21cc48ad372de2e406f5de95b467d379172bc81fa9a7d0209839"
+    },
+    {
+      "bytes": 2748,
+      "path": "pipeline/programme/canary.py",
+      "sha256": "9e1bd68ca2b96185853cdf33bddd85b58836284f0f12096d013b9ce088f95222"
+    },
+    {
+      "bytes": 4797,
+      "path": "pipeline/programme/catalog.py",
+      "sha256": "a17ff58ed2e2530fecf451779acb511f59f254923c5f061fa6771b5bea88396c"
+    },
+    {
+      "bytes": 7079,
+      "path": "pipeline/programme/core.py",
+      "sha256": "02d6f22c619693cb8727d4fa145a5d1dabab141a5879928cd80cfb703944e593"
+    },
+    {
+      "bytes": 12208,
+      "path": "pipeline/programme/measurement.py",
+      "sha256": "93de2b55b7483461d2abfcde355ffc3f185d1b944b925177d6a789cecc003bd8"
+    },
+    {
+      "bytes": 9221,
+      "path": "pipeline/programme/native.py",
+      "sha256": "e0dda63d1ed5b3696de26031975345f919c1e3c17b7c894f254acfe5adeb42ef"
+    },
+    {
+      "bytes": 22075,
+      "path": "pipeline/programme/runner.py",
+      "sha256": "2757298633a15b8e6018133a9e1fb315bb0bc4ffcbfbfa8ec439d29263e61c97"
+    },
+    {
+      "bytes": 6164,
+      "path": "pipeline/programme/stages.py",
+      "sha256": "de76c42c93f08b73bdfb845369db608817e244ae2c90168317c1c7cdea0db2c4"
+    },
+    {
+      "bytes": 67,
+      "path": "scripts/programme_tranche/__init__.py",
+      "sha256": "7602dec324f435e29611f5368d32c7fec063eebb6ef098ea4abd6de10dd74622"
+    },
+    {
+      "bytes": 27551,
+      "path": "scripts/programme_tranche/build_review_document.py",
+      "sha256": "58b9df5c9f805d22f0fa6c65aa74215a742d30e1e3c60c74ce4f03ce2f5453ee"
+    },
+    {
+      "bytes": 15240,
+      "path": "scripts/programme_tranche/build_review_pack.py",
+      "sha256": "70fbe6f70cc32de3ed32a6dc6cff29045060cfc7a726a669580e6fc80c120c69"
+    },
+    {
+      "bytes": 5546,
+      "path": "scripts/programme_tranche/check_preservation.py",
+      "sha256": "88d093bcb84acc0acaabf783bb86443a9bf91f5ef3232b19e295793e3fe4f5a9"
+    },
+    {
+      "bytes": 3640,
+      "path": "scripts/programme_tranche/diagnose_runtime_closure.py",
+      "sha256": "ff88c29e1a467a6d27ba382f1027e05a1142c4662cacd5ecd4545ba78ca2b3f7"
+    },
+    {
+      "bytes": 5058,
+      "path": "scripts/programme_tranche/exercise_recovery.py",
+      "sha256": "bd5c367b80a8cf7f2680f41b601225910085965e1326bbe72ee39fc597abbeee"
+    },
+    {
+      "bytes": 24364,
+      "path": "scripts/programme_tranche/measure_candidate.py",
+      "sha256": "66e169670154c80c1097e717b32305254556031ab438211722c0c6815eb7149b"
+    },
+    {
+      "bytes": 7151,
+      "path": "scripts/programme_tranche/record_failure_handoff.py",
+      "sha256": "2d1c3a2b3801c68bf0ae3e60e28ac330527aa0923294151df10b2cd9128aeb54"
+    },
+    {
+      "bytes": 2494,
+      "path": "scripts/programme_tranche/record_stopped_evaluation.py",
+      "sha256": "df07a5540f2bf91b083e1a1ad91386185690845487b7a3067aa00d3e4f176376"
+    },
+    {
+      "bytes": 8915,
+      "path": "scripts/programme_tranche/run_verification.py",
+      "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+    },
+    {
+      "bytes": 3539,
+      "path": "scripts/programme_tranche/verify_stopped_delivery.py",
+      "sha256": "48244067e35d1a1f8e44d15d0d6bf7a0c8e18df42f12f7bba958d031c7e14f96"
+    },
+    {
+      "bytes": 6697,
+      "path": "tests/test_programme_runtime.py",
+      "sha256": "78403d2c5f1a833a06a5a2ffe33e7bc5ac03a22df2babb7fedf1c55e1553cb5e"
+    },
+    {
+      "bytes": 2229,
+      "path": "tests/test_programme_runtime_metadata.py",
+      "sha256": "35eb7ee54a6dfe8aeb9dd9e01569f31aefdab553fd08cdfea6831f56947d8ed9"
+    },
+    {
+      "bytes": 8256,
+      "path": "tests/test_programme_measurement.py",
+      "sha256": "0e8ab4f570d44c1c959e482588086e13ea18b45a5fe25cc2fd3462433d847f73"
+    },
+    {
+      "bytes": 1817,
+      "path": "tests/test_programme_tranche.py",
+      "sha256": "b716992cfdc3a2b07e8d540e082153c22b97361b54ea4041ab4fcc6968bfe1fc"
+    },
+    {
+      "bytes": 84947,
+      "path": "docs/production_stack/programme_tranche_review.html",
+      "sha256": "41e2d47f04e7e99da947a7da7b15ffbb1e05096faa32aa10d64306b05e5a4cd0"
+    },
+    {
+      "bytes": 448,
+      "path": "scratch/2026-09-10_programme_tranche/browser-review/checks.json",
+      "sha256": "d96f9c9cd789ca00b56cb6cc1def007af5d2f7ca8de3ca8dabc97b52f0ffba74"
+    }
+  ],
+  "local_document_links": 13,
+  "metrics": 50,
+  "note": "Verifies this failure handoff; not full-suite, recovery, integrated candidate or release acceptance.",
+  "original_owner_comments_unchanged": true,
+  "python_syntax_files": 25,
+  "status": "failure_handoff_verified",
+  "test_result": {
+    "bytes": 708,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/handoff-stopped-v1/focused_result.json",
+    "sha256": "10d55f812b21942b5e07368a21e4e2afb483a868640e8e071f3b7ca6f718b0c9"
+  },
+  "unmeasured": 50
+}

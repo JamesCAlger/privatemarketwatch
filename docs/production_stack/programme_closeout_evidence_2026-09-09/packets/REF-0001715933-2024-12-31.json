@@ -1,0 +1,200 @@
+{
+  "anchors": [],
+  "cik": "0001715933",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1715933/000095017025045556.html",
+  "reference_id": "REF-0001715933-2024-12-31",
+  "report_date": "2024-12-31",
+  "source_rows": 112,
+  "source_sha256": "ed4a0a37ca3dfd71d121d8780871adec9b94fb034fd48d57d519c7fad7a32396",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 27,
+      "first": [
+        "Columbia Helicopters Inc. | 08/20/19 | Last Out Term Loan - 15.84 % inc PIK (SOFR + 11.25 %, 1.50 % Floor, 3.75 % PIK) | 2.9 | % | $ | 16,068,695 | 09/04/25 | $ | 16,068,695 | $ | 15,474,153",
+        "Heligear Acquisition Co. | 07/30/19 | Term Loan - 12.08 % (SOFR + 7.50 %, 2.00 % Floor) | 8.5 | % | 44,822,810 | 06/30/25 | 44,822,810 | 44,822,810"
+      ],
+      "last": [
+        "Twin Star International, Inc. | 10/03/24 | 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.1 | % | 273,819 | 06/18/26 | 273,819 | 273,819",
+        "2.3 | % | 64,205,734 | 54,380,119 | 11,767,513"
+      ],
+      "opening_rows": [
+        "",
+        "Industry Issuer Acquisition Date Investment % of Net Assets Par Amount Maturity Date Amortized Cost Fair Value",
+        "DEBT (1)",
+        "Aerospace & Defense"
+      ],
+      "preceding": [
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments As of December 31, 2024",
+        "",
+        "F- 3",
+        "",
+        "We have served as the auditor of one or more investment companies within the group of investment companies since 2014.",
+        "",
+        "March 26, 2025"
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/table[27]"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Grand Circle Corporation | 02/26/21 | Term Loan - 13.60 % (SOFR + 8.75 %, 1.25 % Floor) | 7.1 | % | $ | 37,534,574 | 02/26/26 | $ | 37,362,357 | $ | 37,534,574",
+        "7.1 | % | 37,534,574 | 37,362,357 | 37,534,574"
+      ],
+      "last": [
+        "20.0 | % | 113,450,904 | 108,095,211 | 105,157,434",
+        "Total Debt Investments | 146.9 | % | 933,966,135 | 900,209,979 | 775,319,010"
+      ],
+      "opening_rows": [
+        "",
+        "Industry Issuer Acquisition Date Investment % of Net Assets Par Amount Maturity Date Amortized Cost Fair Value",
+        "DEBT (continued)",
+        "Consumer Services"
+      ],
+      "preceding": [
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024",
+        "",
+        "F- 4",
+        "",
+        "ional, Inc. 06/20/24 Protective Advance Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.4 % 2,142,232 06/18/26 2,142,232 2,142,232 Twin Star International, Inc. 10/03/24 13th Amendment Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 318,295 06/18/26 318,295 318,295 Twin Star International, Inc. 10/03/24 13th Amendment Delayed Draw Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 705,796 06/18/26 705,796 705,796 Twin Star International, Inc. 10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 11,767,513",
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments As of December 31, 2024"
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/table[28]"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "TCW ND Parent Holdings LLC. (2)(5)(6) | Class A Units | 0.0 | % | 4,399 | $ | 43,990 | $ | \u2014",
+        "0.0 | % | 4,399 | 43,990 | \u2014"
+      ],
+      "last": [
+        "Mondee Holdings LLC (5)(6) | Common Stock | 0.0 | % | 570,627 | 764,071 | 30,643",
+        "0.0 | % | 570,627 | 764,071 | 30,643"
+      ],
+      "opening_rows": [
+        "",
+        "Industry Issuer Investment % of Net Assets Shares Amortized Cost Fair Value",
+        "EQUITY",
+        "Aerospace & Defense"
+      ],
+      "preceding": [
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024",
+        "",
+        "F- 5",
+        "",
+        ".03 % (SOFR + 5.50 %, 1.00 % Floor) 3.1 % 16,206,598 08/06/29 15,829,204 16,206,598 Centric Brands TopCo, LLC (fka Centric Brands Inc.) (3) 02/06/24 Term Loan A-1 - 11.03 % (SOFR + 6.50 %, 1.00 % Floor) 3.2 % 16,725,454 02/06/31 16,319,532 16,725,454 Centric Brands TopCo, LLC (fka Centric Brands Inc.) (3) 02/06/24 Term Loan A-2 - 12.53 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.9 % 15,215,944 02/06/31 14,881,614 15,215,944 Hollander Intermediate LLC 09/19/22 Term Loan - 13.22 % inc PIK (SOFR + 8.75 %, 3.00 % Floor, 10.58 % PIK) 10.8 % 65,302,908 09/21/26 61,064,861 57,009,438 20.0 % 113,450,904 108,095,211 105,157,434 Total Debt Investments 146.9 % 933,966,135 900,209,979 775,319,010",
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024"
+      ],
+      "rows": 24,
+      "table_xpath": "/html/body/table[29]"
+    },
+    {
+      "contexts": 10,
+      "first": [
+        "Centric Brands GP LLC (3)(5)(6) | Membership Interests | 0.0 | % | 359,231 | $ | \u2014 | $ | \u2014",
+        "Centric Brands L.P. (3)(5)(6) | Class A LP Interests | 2.4 | % | 359,231 | 95,579 | 12,469,537"
+      ],
+      "last": [
+        "Total Short-term Investments | 56.2 | % | 296,799,833 | 296,799,833",
+        "Total Investments ( 218.9 %) | $ | 1,294,756,165 | $ | 1,155,866,700"
+      ],
+      "opening_rows": [
+        "",
+        "Industry Issuer Investment % of Net Assets Shares Amortized Cost Fair Value",
+        "EQUITY (continued)",
+        "Textiles, Apparel & Luxury Goods"
+      ],
+      "preceding": [
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024",
+        "",
+        "F- 6",
+        "",
+        "c Group Holdings, Inc (4)(5)(6) Common Stock 0.0 % 1,254,034 \u2014 \u2014 Greenfield World Trade, Inc. (5)(6) Class A-1 Warrant, expires 03/25/27 0.3 % 4,975 3,178,520 1,741,586 Greenfield World Trade, Inc. (5)(6) Class A-2 Warrant, expires 03/25/27 0.1 % 1,730 1,189,508 292,306 Greenfield World Trade, Inc. (5)(6) Class A-3 Warrant, expires 03/25/27 0.0 % 145 113,932 24,448 Greenfield World Trade, Inc. (5)(6) Class A-4 Warrant, expires 03/25/27 0.1 % 2,401 \u2014 406,041 0.5 % 1,263,285 4,481,960 2,464,381 Media Encompass Digital Media, Inc. (4)(5)(6) Class A Units 0.0 % 722,097 \u2014 \u2014 0.0 % 722,097 \u2014 \u2014 Software Mondee Holdings LLC (5)(6) Common Stock 0.0 % 570,627 764,071 30,643 0.0 % 570,627 764,071 30,643",
+        "",
+        "TCW DIRECT LENDING VII LLC Consolidated Schedule of Investments (Continued) As of December 31, 2024"
+      ],
+      "rows": 10,
+      "table_xpath": "/html/body/table[30]"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "Navistar Defense, LLC Super Senior Revolver - 14.96 % inc PIK | $ | 10,326,607 | $ | 31,171,795 | $ | \u2014 | $ | \u2014 | $ | ( 12,781 | ) | $ | 41,485,621 | $ | 4,864,058",
+        "Navistar Defense, LLC Term Loan - 12.96 % inc PIK | 33,940,881 | 248,217 | \u2014 | \u2014 | ( 28,962,661 | ) | 5,226,437 | 271,614"
+      ],
+      "last": [
+        "WDE TorcSill Holdings LLC Term Loan - 10.71 % inc PIK | 21,861,053 | 2,752,106 | ( 396,977 | ) | \u2014 | ( 1,445,817 | ) | 22,770,365 | 3,708,057",
+        "Total Controlled Affiliated investments | $ | 75,731,243 | $ | 38,564,204 | $ | ( 988,374 | ) | $ | \u2014 | $ | ( 30,956,622 | ) | $ | 82,350,451 | $ | 10,603,030"
+      ],
+      "opening_rows": [
+        "",
+        "Name of Investment Fair Value at December 31, 2023 Gross Addition (a) Gross Reduction (b) Realized Gains (Losses) Net Change in Unrealized Appreciation/ (Depreciation) Fair Value at December 31, 2024 Interest/Dividend/ Other income",
+        "Navistar Defense, LLC Super Senior Revolver - 14.96 % inc PIK $ 10,326,607 $ 31,171,795 $ \u2014 $ \u2014 $ ( 12,781 ) $ 41,485,621 $ 4,864,058",
+        "Navistar Defense, LLC Term Loan - 12.96 % inc PIK 33,940,881 248,217 \u2014 \u2014 ( 28,962,661 ) 5,226,437 271,614"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/ix:continuation[1]/table"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Encompass Digital Media Holdings, LLC Class A Units | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014",
+        "Encompass Digital Media, Inc. Revolver - 12.08 % inc PIK | 2,515,804 | 491,358 | ( 180,533 | ) | \u2014 | ( 834,097 | ) | 1,992,532 | 266,556"
+      ],
+      "last": [
+        "Slogic Holding Corp. Revolver - 10.35 % | 3,877,285 | 3,256,919 | ( 3,256,919 | ) | \u2014 | \u2014 | 3,877,285 | 357,502",
+        "Total Non-Controlled Affiliated Investments | $ | 61,766,871 | $ | 97,250,004 | $ | ( 5,586,356 | ) | $ | \u2014 | $ | ( 21,169,030 | ) | $ | 132,261,489 | $ | 9,878,784"
+      ],
+      "opening_rows": [
+        "",
+        "Name of Investment Fair Value at December 31, 2023 Gross Addition (a) Gross Reduction (b) Realized Gains (Losses) Net Change in Unrealized Appreciation/ (Depreciation) Fair Value at December 31, 2024 Interest/Dividend/ Other income",
+        "Encompass Digital Media Holdings, LLC Class A Units $ \u2014 $ \u2014 $ \u2014 $ \u2014 $ \u2014 $ \u2014 $ \u2014",
+        "Encompass Digital Media, Inc. Revolver - 12.08 % inc PIK 2,515,804 491,358 ( 180,533 ) \u2014 ( 834,097 ) 1,992,532 266,556"
+      ],
+      "preceding": [],
+      "rows": 13,
+      "table_xpath": "/html/body/ix:continuation[2]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (amortized cost of $ 700,850 and $ 728,462 , respectively) | $ | 632,586 | $ | 692,514",
+        "Non-controlled affiliated investments (amortized cost of $ 172,053 and $ 67,357 , respectively) | 132,261 | 49,969"
+      ],
+      "last": [
+        "Non-controlled affiliated investments (amortized cost of $ 172,053 and $ 67,357 , respectively) | 132,261 | 49,969",
+        "Controlled affiliated investments (amortized cost of $ 113,183 and $ 109,499 , respectively) | 82,350 | 100,856"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31,",
+        "2024 2023",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(Dollar amounts in thousands, except unit data)",
+        "Consolidated Statements of Assets and Liabilities",
+        "TCW DIRECT LENDING VII LLC",
+        "",
+        "",
+        "F- 14",
+        "See Notes to Consolidated Financial Statements"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[38]"
+    }
+  ]
+}

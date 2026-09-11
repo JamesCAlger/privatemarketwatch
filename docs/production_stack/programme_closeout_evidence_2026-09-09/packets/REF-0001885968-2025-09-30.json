@@ -1,0 +1,894 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_8b29d8eb-78f5-4695-9df1-05cc265177e3",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (cost of $ 2,090,770 and $ 2,048,601 )",
+        "",
+        "",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "2,029,756",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_8b29d8eb-78f5-4695-9df1-05cc265177e3",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,058,550",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[12]/table/tr[8]",
+      "table_xpath": "/html/body/div[12]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2058550000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_5d182349-b10c-4b89-adcb-ee9191088dec",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Portfolio Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,090,770",
+        "",
+        "",
+        "$",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "185.69",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_5d182349-b10c-4b89-adcb-ee9191088dec",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,058,550",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[88]/table[1]/tr[5]",
+      "table_xpath": "/html/body/div[88]/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2058550000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_77332317-5f18-40e6-bb39-c9f7c840ece5",
+        "name": "ck0001885968:CashCashEquivalentsAndShort-TermInvestmentsFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Cash and Cash Equivalents and Short Term Investments",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "51,846",
+        "",
+        "",
+        "$",
+        "51,846",
+        "",
+        "",
+        "",
+        "4.68",
+        "%"
+      ],
+      "concept": "ck0001885968:CashCashEquivalentsAndShort-TermInvestmentsFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_77332317-5f18-40e6-bb39-c9f7c840ece5",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "51,846",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[88]/table[2]/tr[5]",
+      "table_xpath": "/html/body/div[88]/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "51846000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_ff22d29a-d438-41c4-9bcd-adfbe67a15c6",
+        "name": "ck0001885968:InvestmentOwnedAtCostAndCashAndCashEquivalentsAtCarryingValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,142,616",
+        "",
+        "",
+        "$",
+        "2,110,396",
+        "",
+        "",
+        "",
+        "190.37",
+        "%"
+      ],
+      "concept": "ck0001885968:InvestmentOwnedAtCostAndCashAndCashEquivalentsAtCarryingValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_ff22d29a-d438-41c4-9bcd-adfbe67a15c6",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "2,142,616",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[88]/table[2]/tr[6]",
+      "table_xpath": "/html/body/div[88]/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2142616000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_65b8a349-2c58-4880-857f-62934a0328b8",
+        "name": "ck0001885968:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,142,616",
+        "",
+        "",
+        "$",
+        "2,110,396",
+        "",
+        "",
+        "",
+        "190.37",
+        "%"
+      ],
+      "concept": "ck0001885968:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_65b8a349-2c58-4880-857f-62934a0328b8",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "2,110,396",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[88]/table[2]/tr[6]",
+      "table_xpath": "/html/body/div[88]/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2110396000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_91dfb006-b926-4d6b-907c-f3dc54eb3d60",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "2,090,770",
+        "",
+        "",
+        "$",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "2,048,601",
+        "",
+        "",
+        "$",
+        "2,029,756",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_91dfb006-b926-4d6b-907c-f3dc54eb3d60",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,058,550",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[220]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[8]",
+      "table_xpath": "/html/body/div[220]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2058550000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_3d2b92eb-225d-4c9d-b29f-6e0d7f71e898",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "2,090,770",
+        "",
+        "",
+        "$",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "2,048,601",
+        "",
+        "",
+        "$",
+        "2,029,756",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_3d2b92eb-225d-4c9d-b29f-6e0d7f71e898",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,058,550",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[224]/div[1]/ix:continuation/div/ix:continuation/table[2]/tr[8]",
+      "table_xpath": "/html/body/div[224]/div[1]/ix:continuation/div/ix:continuation/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2058550000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_44da9fe4-6b68-4484-aa98-3363c8c97d76",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "38,352",
+        "",
+        "",
+        "$",
+        "2,020,198",
+        "",
+        "",
+        "$",
+        "2,058,550",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "67,325",
+        "",
+        "",
+        "$",
+        "1,962,431",
+        "",
+        "",
+        "$",
+        "2,029,756",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+      "currency": "USD",
+      "fact_id": "F_44da9fe4-6b68-4484-aa98-3363c8c97d76",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "2,058,550",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[232]/div/ix:continuation/div[1]/ix:nonnumeric/table/tr[8]",
+      "table_xpath": "/html/body/div[232]/div/ix:continuation/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "2058550000"
+    }
+  ],
+  "cik": "0001885968",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1885968/000119312525277734.html",
+  "reference_id": "REF-0001885968-2025-09-30",
+  "report_date": "2025-09-30",
+  "source_rows": 593,
+  "source_sha256": "a698a8134f72d68231e5e3e63db4f12e049e369fc3d02daea3a0c12e62b28953",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 2,076,211 and $ 2,048,601 ) | $ | 2,044,505 | $ | 2,029,756",
+        "Non-controlled/affiliated investments, at fair value (amortized cost of $ 14,559 and $ \u2014 ) | 14,045 | \u2014"
+      ],
+      "last": [
+        "Non-controlled/affiliated investments, at fair value (amortized cost of $ 14,559 and $ \u2014 ) | 14,045 | \u2014",
+        "Total investments, at fair value (cost of $ 2,090,770 and $ 2,048,601 ) | 2,058,550 | 2,029,756"
+      ],
+      "opening_rows": [
+        "",
+        "As of",
+        "September 30, 2025 December 31, 2024",
+        "(Unaudited) (Audited)"
+      ],
+      "preceding": [
+        "",
+        "(In thousands, except unit and per unit amounts)",
+        "Cons olidated Statements of Financial Condition",
+        "T Series Middle Market Loan Fund LLC"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[12]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Jonathan Acquisition Company | (5) (6) | First Lien Debt | S + | 5.00 % | 9.10 % | 12/22/2026 | 373 | $ | 368 | $ | 373 | 0.03 | %",
+        "Mantech International CP | (5) (7) (9) | First Lien Debt | S + | 5.00 % | 9.31 % | 09/14/2029 | 18,012 | 17,795 | 18,012 | 1.62"
+      ],
+      "last": [
+        "Vamos Bidco, Inc. | (5) (8) (17) | First Lien Debt | S + | 4.75 % | 8.75 % | 01/30/2032 | 112 | 109 | 112 | 0.01",
+        "2,772 | 2,795 | 0.25"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Debt Investments - non-controlled/non-affiliated",
+        "Aerospace & Defense"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/div[28]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "Project Potter Buyer, LLC | (5) (6) (10) | First Lien Debt | S + | 5.25 % | 9.25 % | 04/23/2027 | 8,840 | 8,837 | 8,840 | 0.80",
+        "Project Potter Buyer, LLC | (5) (6) (17) | First Lien Debt | S + | 5.25 % | 9.25 % | 04/23/2027 | \u2014 | \u2014 | \u2014 | \u2014"
+      ],
+      "last": [
+        "Iris Buyer, LLC | (5) (6) (11) | First Lien Debt | S + | 5.25 % | 9.56 % | 10/02/2030 | 278 | 272 | 278 | 0.03",
+        "Iris Buyer, LLC | (5) (6) (11) (17) | First Lien Debt | S + | 5.25 % | 9.56 % | 10/02/2029 | 86 | 78 | 85 | 0.01"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Project Potter Buyer, LLC (5) (6) (10) First Lien Debt S + 5.25 % 9.25 % 04/23/2027 8,840 8,837 8,840 0.80",
+        "Project Potter Buyer, LLC (5) (6) (17) First Lien Debt S + 5.25 % 9.25 % 04/23/2027 \u2014 \u2014 \u2014 \u2014"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[32]/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "Procure Acquireco, Inc. (Procure Analytics) | (5) (7) (10) | First Lien Debt | S + | 4.75 % | 8.75 % | 12/20/2028 | 17,439 | 17,253 | 17,439 | 1.57",
+        "Procure Acquireco, Inc. (Procure Analytics) | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.75 % | 12/20/2028 | 979 | 967 | 979 | 0.09"
+      ],
+      "last": [
+        "LJ Avalon Holdings, LLC | (5) (6) (17) | First Lien Debt | S + | 4.75 % | 8.77 % | 02/01/2029 | \u2014 | ( 10 | ) | \u2014 | \u2014",
+        "Superman Holdings, LLC | (5) (7) (9) | First Lien Debt | S + | 4.50 % | 8.50 % | 08/29/2031 | 6,632 | 6,603 | 6,632 | 0.60"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Procure Acquireco, Inc. (Procure Analytics) (5) (7) (10) First Lien Debt S + 4.75 % 8.75 % 12/20/2028 17,439 17,253 17,439 1.57",
+        "Procure Acquireco, Inc. (Procure Analytics) (5) (7) (17) First Lien Debt S + 4.75 % 8.75 % 12/20/2028 979 967 979 0.09"
+      ],
+      "preceding": [],
+      "rows": 41,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "Superman Holdings, LLC | (5) (7) (17) | First Lien Debt | S + | 4.50 % | 8.50 % | 08/29/2031 | 1,387 | 1,377 | 1,387 | 0.13",
+        "Superman Holdings, LLC | (5) (7) (17) | First Lien Debt | S + | 4.50 % | 8.50 % | 08/29/2031 | \u2014 | ( 4 | ) | \u2014 | \u2014"
+      ],
+      "last": [
+        "FPG Intermediate Holdco, LLC | (5) (12) | First Lien Debt | S + | 5.00 % PIK | 9.32 % | 07/02/2029 | 3,094 | 3,036 | 3,036 | 0.27",
+        "FPG Intermediate Holdco, LLC | (5) (6) | First Lien Debt | S + | 5.00 % PIK | 9.32 % | 07/02/2029 | 917 | 917 | 917 | 0.08"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Superman Holdings, LLC (5) (7) (17) First Lien Debt S + 4.50 % 8.50 % 08/29/2031 1,387 1,377 1,387 0.13",
+        "Superman Holdings, LLC (5) (7) (17) First Lien Debt S + 4.50 % 8.50 % 08/29/2031 \u2014 ( 4 ) \u2014 \u2014"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[40]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "GarageCo Intermediate II, LLC | (5) (7) (10) | First Lien Debt | S + | 4.25 % | 8.25 % | 08/02/2032 | 1,202 | 1,190 | 1,190 | 0.11",
+        "GarageCo Intermediate II, LLC | (5) (7) (17) | First Lien Debt | S + | 4.25 % | 8.25 % | 08/02/2032 | \u2014 | ( 9 | ) | ( 9 | ) | \u2014"
+      ],
+      "last": [
+        "NSI Holdings, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.91 % | 11/17/2031 | \u2014 | ( 1 | ) | \u2014 | \u2014",
+        "NSI Holdings, Inc. | (5) (17) | First Lien Debt | P + | 3.75 % | 11.00 % | 11/17/2031 | 7 | 5 | 7 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "GarageCo Intermediate II, LLC (5) (7) (10) First Lien Debt S + 4.25 % 8.25 % 08/02/2032 1,202 1,190 1,190 0.11",
+        "GarageCo Intermediate II, LLC (5) (7) (17) First Lien Debt S + 4.25 % 8.25 % 08/02/2032 \u2014 ( 9 ) ( 9 ) \u2014"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[44]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "77,412 | 74,096 | 6.68",
+        "Applitools, Inc. | (5) (7) (11) (14) | First Lien Debt | S + | 6.25 % PIK | 10.25 % | 05/25/2029 | 7,763 | 7,706 | 7,685 | 0.69"
+      ],
+      "last": [
+        "YI, LLC | (5) (6) (17) | First Lien Debt | S + | 5.75 % | 9.90 % | 12/03/2029 | \u2014 | ( 19 | ) | \u2014 | \u2014",
+        "27,431 | 27,947 | 2.52"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "77,412 74,096 6.68",
+        "Financial Services"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Advarra Holdings, Inc. | (5) (6) (11) | First Lien Debt | S + | 4.50 % | 8.66 % | 09/15/2031 | 19,922 | 19,595 | 19,922 | 1.80",
+        "Advarra Holdings, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.50 % | 8.66 % | 09/15/2031 | \u2014 | ( 4 | ) | \u2014 | \u2014"
+      ],
+      "last": [
+        "Vardiman Black Holdings, LLC | (5) (8) | First Lien Debt | S + | 7.00 % (incl. 2.00 % PIK) | 11.29 % | 03/18/2027 | 9,981 | 9,980 | 8,833 | 0.80",
+        "Vardiman Black Holdings, LLC | (5) (8) (12) (17) | First Lien Debt | S + | 7.00 % (incl. 2.00 % PIK) | 11.29 % | 03/18/2027 | 1,131 | 1,115 | 996 | 0.09"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Health Care Providers & Services",
+        "Advarra Holdings, Inc. (5) (6) (11) First Lien Debt S + 4.50 % 8.66 % 09/15/2031 19,922 19,595 19,922 1.80"
+      ],
+      "preceding": [],
+      "rows": 39,
+      "table_xpath": "/html/body/div[52]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "185,283 | 184,253 | 16.62",
+        "Hyland Software, Inc. | (5) (7) (11) | First Lien Debt | S + | 5.00 % | 9.16 % | 09/19/2030 | 19,924 | 19,692 | 19,924 | 1.80"
+      ],
+      "last": [
+        "FMG Suite Holdings, LLC | (5) (10) | First Lien Debt | S + | 4.75 % | 8.91 % | 09/09/2032 | 5,934 | 5,875 | 5,875 | 0.53",
+        "FMG Suite Holdings, LLC | (5) (17) | First Lien Debt | S + | 4.75 % | 8.91 % | 09/09/2032 | \u2014 | ( 8 | ) | ( 8 | ) | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "185,283 184,253 16.62",
+        "Health Care Technology"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[56]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "FMG Suite Holdings, LLC | (5) (17) | First Lien Debt | S + | 4.75 % | 8.91 % | 09/09/2032 | \u2014 | ( 9 | ) | ( 10 | ) | ( 0.00 | )",
+        "Triple Lift, Inc. | (5) (7) (9) | First Lien Debt | S + | 5.75 % | 9.90 % | 05/05/2028 | 4,583 | 4,539 | 4,297 | 0.39"
+      ],
+      "last": [
+        "Vessco Midco Holdings, LLC | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.93 % | 07/24/2031 | 307 | 304 | 307 | 0.03",
+        "Vessco Midco Holdings, LLC | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.93 % | 07/24/2031 | \u2014 | ( 2 | ) | \u2014 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "FMG Suite Holdings, LLC (5) (17) First Lien Debt S + 4.75 % 8.91 % 09/09/2032 \u2014 ( 9 ) ( 10 ) ( 0.00 )",
+        "Triple Lift, Inc. (5) (7) (9) First Lien Debt S + 5.75 % 9.90 % 05/05/2028 4,583 4,539 4,297 0.39"
+      ],
+      "preceding": [],
+      "rows": 40,
+      "table_xpath": "/html/body/div[60]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "13,340 | 13,808 | 1.25",
+        "Caerus US 1, Inc. | (5) (7) (9) (14) | First Lien Debt | S + | 5.00 % | 9.00 % | 05/25/2029 | 7,910 | 7,813 | 7,875 | 0.71"
+      ],
+      "last": [
+        "UHY Advisors, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.95 % | 11/21/2031 | 28 | 26 | 28 | \u2014",
+        "UHY Advisors, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.95 % | 11/21/2031 | 9 | 8 | 9 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "13,340 13,808 1.25",
+        "Pharmaceuticals"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[64]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "Verdantas, LLC | (5) (7) (9) | First Lien Debt | S + | 5.25 % | 9.25 % | 05/06/2031 | 16,285 | 16,078 | 16,264 | 1.47",
+        "Verdantas, LLC | (5) (7) | First Lien Debt | S + | 5.25 % | 9.25 % | 05/06/2031 | 688 | 677 | 687 | 0.06"
+      ],
+      "last": [
+        "Diligent Corporation | (5) (7) | First Lien Debt | S + | 5.00 % | 9.20 % | 08/02/2030 | 24,117 | 23,970 | 24,117 | 2.18",
+        "Diligent Corporation | (5) (7) (17) | First Lien Debt | S + | 5.00 % | 9.20 % | 08/02/2030 | \u2014 | ( 20 | ) | \u2014 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Verdantas, LLC (5) (7) (9) First Lien Debt S + 5.25 % 9.25 % 05/06/2031 16,285 16,078 16,264 1.47",
+        "Verdantas, LLC (5) (7) First Lien Debt S + 5.25 % 9.25 % 05/06/2031 688 677 687 0.06"
+      ],
+      "preceding": [],
+      "rows": 40,
+      "table_xpath": "/html/body/div[68]/table"
+    },
+    {
+      "contexts": 38,
+      "first": [
+        "Diligent Corporation | (5) (7) (17) | First Lien Debt | S + | 5.00 % | 9.20 % | 08/02/2030 | 259 | 245 | 259 | 0.02",
+        "E-Discovery AcquireCo, LLC | (5) (6) (9) | First Lien Debt | S + | 6.00 % | 10.13 % | 08/29/2029 | 7,955 | 7,823 | 7,955 | 0.72"
+      ],
+      "last": [
+        "Nasuni Corporation | (5) (7) (17) | First Lien Debt | S + | 5.00 % | 9.07 % | 09/10/2030 | \u2014 | ( 21 | ) | \u2014 | \u2014",
+        "Netwrix Corporation And Concept Searching, Inc. | (5) (7) (9) | First Lien Debt | S + | 4.75 % | 8.95 % | 06/11/2029 | 5,022 | 4,994 | 4,997 | 0.45"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Diligent Corporation (5) (7) (17) First Lien Debt S + 5.00 % 9.20 % 08/02/2030 259 245 259 0.02",
+        "E-Discovery AcquireCo, LLC (5) (6) (9) First Lien Debt S + 6.00 % 10.13 % 08/29/2029 7,955 7,823 7,955 0.72"
+      ],
+      "preceding": [],
+      "rows": 38,
+      "table_xpath": "/html/body/div[72]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Netwrix Corporation And Concept Searching, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.95 % | 06/11/2029 | \u2014 | ( 2 | ) | ( 2 | ) | \u2014",
+        "Oak Purchaser, Inc. | (5) (7) (9) | First Lien Debt | S + | 5.50 % | 9.37 % | 05/31/2028 | 5,113 | 5,084 | 5,109 | 0.46"
+      ],
+      "last": [
+        "10,578 | 10,696 | 0.96",
+        "Total Debt Investments - non-controlled/non-affiliated | $ | 2,055,651 | $ | 2,026,570 | 182.81 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Netwrix Corporation And Concept Searching, Inc. (5) (7) (17) First Lien Debt S + 4.75 % 8.95 % 06/11/2029 \u2014 ( 2 ) ( 2 ) \u2014",
+        "Oak Purchaser, Inc. (5) (7) (9) First Lien Debt S + 5.50 % 9.37 % 05/31/2028 5,113 5,084 5,109 0.46"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[76]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "KWOR Acquisition, Inc. | (5) (6) (18) | Second Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.45 % | 02/28/2030 | 8,873 | 8,873 | 8,873 | 0.80",
+        "KWOR Acquisition, Inc. | (5) (6) (17) (18) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.45 % | 02/28/2030 | 49 | 6 | 49 | \u2014"
+      ],
+      "last": [
+        "Total Debt Investments - non-controlled/affiliated | $ | 11,950 | $ | 12,056 | 1.09 | %",
+        "Total Debt Investments | $ | 2,067,601 | $ | 2,038,626 | 183.89 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Debt Investments - non-controlled/affiliated",
+        "Professional Services"
+      ],
+      "preceding": [],
+      "rows": 7,
+      "table_xpath": "/html/body/div[80]/table[1]"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "Continental Battery Company | (5) (15) (16) | Common Equity | 07/16/2025 | 7,758 | $ | \u2014 | $ | \u2014 | \u2014",
+        "Firebird Acquisition Corp, Inc. | (5) (15) (16) | Common Equity | 02/03/2025 | 50,000 | 48 | 58 | 0.01"
+      ],
+      "last": [
+        "1,454 | \u2014 | \u2014",
+        "48Forty Solutions, LLC | (5) (9) (10) (15) (16) | Common Equity | 11/01/2024 | 3,969 | \u2014 | \u2014 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Acquisition Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Equity Investments - non-controlled/non-affiliated",
+        "Automobile Components"
+      ],
+      "preceding": [
+        "",
+        "tage of Net Assets Debt Investments - non-controlled/affiliated Professional Services KWOR Acquisition, Inc. (5) (6) (18) Second Lien Debt S + 6.25 % (incl. 5.25 % PIK) 10.45 % 02/28/2030 8,873 8,873 8,873 0.80 KWOR Acquisition, Inc. (5) (6) (17) (18) First Lien Debt S + 6.25 % (incl. 5.25 % PIK) 10.45 % 02/28/2030 49 6 49 \u2014 KWOR Acquisition, Inc. (5) (6) (17) (18) First Lien Debt S + 6.25 % (incl. 5.25 % PIK) 10.45 % 02/28/2030 71 8 71 0.01 KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28 11,950 12,056 1.09 Total Debt Investments - non-controlled/affiliated $ 11,950 $ 12,056 1.09 % Total Debt Investments $ 2,067,601 $ 2,038,626 183.89 %"
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[80]/table[2]"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Eclipse Topco, Inc. | (5) (15) | Preferred Equity | 12.50 % PIK | 09/05/2024 | 45 | 447 | 447 | 0.04",
+        "FPG Intermediate Holdco, LLC | (5) (15) (16) | Common Equity | 07/18/2025 | 8,121 | \u2014 | \u2014 | \u2014"
+      ],
+      "last": [
+        "KWOR Intermediate I, Inc. | (5) (15) (18) | Preferred Equity | S + | 8.00 % PIK | 02/28/2025 | 1,920,386 | 1,920 | 1,920 | 0.17",
+        "2,609 | 1,989 | 0.18"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Acquisition Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Diversified Consumer Services",
+        "Eclipse Topco, Inc. (5) (15) Preferred Equity 12.50 % PIK 09/05/2024 45 447 447 0.04"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[84]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Total Equity Investments - non-controlled/affiliated | $ | 2,609 | $ | 1,989 | 0.18 | %",
+        "Total Equity Investments | $ | 23,169 | $ | 19,924 | 1.80 | %"
+      ],
+      "last": [
+        "Total Equity Investments | $ | 23,169 | $ | 19,924 | 1.80 | %",
+        "Total Portfolio Investments | $ | 2,090,770 | $ | 2,058,550 | 185.69 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Acquisition Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets",
+        "Total Equity Investments - non-controlled/affiliated $ 2,609 $ 1,989 0.18 %",
+        "Total Equity Investments $ 23,169 $ 19,924 1.80 %"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/div[88]/table[1]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "KWOR Acquisition, Inc. (a) | $ | \u2014 | $ | 14,559 | $ | \u2014 | $ | ( 514 | ) | $ | \u2014 | $ | 14,045 | $ | 792",
+        "Total | $ | \u2014 | $ | 14,559 | $ | \u2014 | $ | ( 514 | ) | $ | \u2014 | $ | 14,045 | $ | 792"
+      ],
+      "last": [
+        "KWOR Acquisition, Inc. (a) | $ | \u2014 | $ | 14,559 | $ | \u2014 | $ | ( 514 | ) | $ | \u2014 | $ | 14,045 | $ | 792",
+        "Total | $ | \u2014 | $ | 14,559 | $ | \u2014 | $ | ( 514 | ) | $ | \u2014 | $ | 14,045 | $ | 792"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value as of December 31, 2024 Gross Additions (b) Gross Reductions (c) Net Change in Unrealized Gains (Losses) Net Realized Gain (Loss) Fair Value as of September 30, 2025 Interest, Dividend and Other Income",
+        "KWOR Acquisition, Inc. (a) $ \u2014 $ 14,559 $ \u2014 $ ( 514 ) $ \u2014 $ 14,045 $ 792",
+        "Total $ \u2014 $ 14,559 $ \u2014 $ ( 514 ) $ \u2014 $ 14,045 $ 792"
+      ],
+      "preceding": [
+        "",
+        "(18) As defined in the 1940 Act, the Company is deemed to be an \u201caffiliated person\u201d of the portfolio company as the Company owns, either directly or indirectly, 5% or more of the portfolio company's voting securities (\u201cnon-controlled affiliate\u201d). Transactions related to investments in non-controlled affiliates for the nine months ended September 30, 2025 were as follows:",
+        "",
+        "8/15/2026 339 \u2014 Victors Purchaser, LLC Revolver 08/15/2031 248 \u2014 YI, LLC Revolver 12/03/2029 1,373 \u2014 Zarya Intermediate, LLC Revolver 07/01/2027 2,807 \u2014 iCIMS, Inc. Revolver 08/18/2028 112 ( 1 ) mPulse Mobile, Inc. Delayed Draw Term Loan 08/26/2027 865 ( 4 ) mPulse Mobile, Inc. Revolver 08/26/2032 1,298 ( 13 ) Total First Lien Debt Unfunded Commitments \u2013 non-controlled/non-affiliated $ 240,232 $ ( 1,841 ) First Lien Debt \u2014 non-controlled/affiliated KWOR Acquisition, Inc. Delayed Draw Term Loan 02/28/2027 1,946 \u2014 KWOR Acquisition, Inc. Revolver 02/28/2030 1,427 \u2014 Total First Lien Debt Unfunded Commitments \u2014 non-controlled/affiliated $ 3,373 $ \u2014 Total Unfunded Commitments $ 243,605 $ ( 1,841 )"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[112]/table[2]"
+    },
+    {
+      "contexts": 5,
+      "first": [
+        "First Lien Debt | $ | 2,042,815 | $ | 2,013,847 | 97.8 | % | $ | 2,016,560 | $ | 1,997,629 | 98.4 | %",
+        "Second Lien Debt | 16,877 | 16,917 | 0.8 | 7,733 | 7,771 | 0.4"
+      ],
+      "last": [
+        "Equity | 23,169 | 19,924 | 1.0 | 19,814 | 19,829 | 1.0",
+        "Total | $ | 2,090,770 | $ | 2,058,550 | 100.0 | % | $ | 2,048,601 | $ | 2,029,756 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2025 December 31, 2024",
+        "Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value",
+        "First Lien Debt $ 2,042,815 $ 2,013,847 97.8 % $ 2,016,560 $ 1,997,629 98.4 %"
+      ],
+      "preceding": [
+        "",
+        "The composition of the Company\u2019s investment portfolio was as follows:"
+      ],
+      "rows": 5,
+      "table_xpath": "/html/body/div[220]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 5,
+      "first": [
+        "Australia | $ | 19,530 | $ | 19,844 | 1.0 | % | $ | 16,649 | $ | 16,993 | 0.8 | %",
+        "Canada | 61,964 | 62,389 | 3.0 | 52,932 | 52,990 | 2.6"
+      ],
+      "last": [
+        "United States | 1,999,930 | 1,966,893 | 95.5 | 1,969,963 | 1,950,876 | 96.2",
+        "Total | $ | 2,090,770 | $ | 2,058,550 | 100.0 | % | $ | 2,048,601 | $ | 2,029,756 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2025 December 31, 2024",
+        "Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value",
+        "Australia $ 19,530 $ 19,844 1.0 % $ 16,649 $ 16,993 0.8 %"
+      ],
+      "preceding": [
+        "",
+        "The geographic composition of investments at cost and fair value was as follows:",
+        "",
+        " 1.3 Distributors 3.4 4.0 Diversified Consumer Services 6.0 6.3 Electrical Equipment 0.3 0.1 Electronic Equipment, Instruments & Components 3.6 3.5 Financial Services 5.0 4.0 Ground Transportation 1.1 0.7 Health Care Equipment & Supplies 1.4 1.4 Health Care Providers & Services 9.0 9.7 Health Care Technology 1.0 1.0 Industrial Conglomerates 4.3 4.6 Insurance Services 9.8 12.3 Interactive Media & Services 0.5 0.2 IT Services 4.7 4.2 Life Sciences Tools & Services 0.7 0.7 Machinery 1.7 1.7 Multi-Utilities 0.7 0.7 Pharmaceuticals 0.6 0.4 Professional Services 4.4 3.4 Real Estate Management & Development 2.8 2.6 Software 18.3 17.7 Wireless Telecommunication Services 0.5 0.1 Total 100.0 % 100.0 %",
+        "",
+        "The industry composition of investments at fair value was as follows:"
+      ],
+      "rows": 5,
+      "table_xpath": "/html/body/div[224]/div[1]/ix:continuation/div/ix:continuation/table[2]"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "First Lien Debt | $ | \u2014 | $ | 34,557 | $ | 1,979,290 | $ | 2,013,847 | $ | \u2014 | $ | 63,619 | $ | 1,934,010 | $ | 1,997,629",
+        "First Lien Debt | $ | \u2014 | $ | 34,557 | $ | 1,979,290 | $ | 2,013,847 | $ | \u2014 | $ | 63,619 | $ | 1,934,010 | $ | 1,997,629"
+      ],
+      "last": [
+        "Total | $ | \u2014 | $ | 38,352 | $ | 2,020,198 | $ | 2,058,550 | $ | \u2014 | $ | 67,325 | $ | 1,962,431 | $ | 2,029,756",
+        "Total | $ | \u2014 | $ | 38,352 | $ | 2,020,198 | $ | 2,058,550 | $ | \u2014 | $ | 67,325 | $ | 1,962,431 | $ | 2,029,756"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2025 December 31, 2024",
+        "Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total",
+        "First Lien Debt $ \u2014 $ 34,557 $ 1,979,290 $ 2,013,847 $ \u2014 $ 63,619 $ 1,934,010 $ 1,997,629"
+      ],
+      "preceding": [
+        "",
+        "The following tables present the fair value hierarchy of investments:"
+      ],
+      "rows": 20,
+      "table_xpath": "/html/body/div[232]/div/ix:continuation/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 11,
+      "first": [
+        "Investments in first lien debt | $ | 1,973,802 | Yield Analysis | Discount Rate | 6.77 | % | 29.40 | % | 9.53 | %",
+        "5,488 | Market Approach | EBITDA Multiple | 8.25 | x | 10.00 | x | 9.78 | x"
+      ],
+      "last": [
+        "3,668 | Market Approach | Revenue Multiple | 3.30 | x | 22.25 | x | 8.87 | x",
+        "Total investments | $ | 2,020,198"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2025",
+        "Fair Valuation Significant Unobservable Range (1) Weighted",
+        "Value Technique (2) Input Low High Average (3)"
+      ],
+      "preceding": [
+        "",
+        "The following tables present quantitative information about the significant unobservable inputs of the Company\u2019s Level 3 financial instruments as of September 30, 2025 and December 31, 2024, respectively. The tables are not intended to be all-inclusive but instead captures the significant unobservable inputs relevant to the Company\u2019s determination of fair value."
+      ],
+      "rows": 11,
+      "table_xpath": "/html/body/div[240]/div/ix:continuation/div/ix:nonnumeric/table[1]"
+    }
+  ]
+}

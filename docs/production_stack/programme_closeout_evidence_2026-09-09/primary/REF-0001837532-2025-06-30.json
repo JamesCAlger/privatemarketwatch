@@ -1,0 +1,648 @@
+{
+  "path": "data/raw/filings/bdc_html/1837532/000095017025105984.html",
+  "ref": "REF-0001837532-2025-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | APOLLO DEBT SOLUTIONS BDC | CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES | (In thousands, except share and per share data) | ",
+      "preceding": [
+        "",
+        "Item 1. Consolidated Financial Statements",
+        "",
+        "In this report, the terms the \u201c Company ,\u201d \u201c ADS ,\u201d \u201c we ,\u201d \u201c us \u201d and \u201c our \u201d refer to Apollo Debt Solutions BDC unless the context specifically states otherwise.",
+        "",
+        "Table of Contents",
+        "",
+        "",
+        "l Condition and Results of Operations 172 Item 3. Quantitative and Qualitative Disclosures About Market Risk 193 Item 4. Controls and Procedures 194 PART II - OTHER INFORMATION Item 1. Legal Proceedings 195 Item 1A. Risk Factors 195 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 196 Item 3. Defaults Upon Senior Securities 197 Item 4. Mine Safety Disclosures 197 Item 5. Other Information 197 Item 6. Exhibits 198 Signatures 199",
+        "",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[9]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost \u2014 $ 19,670,193 and $ 14,609,338 at June 30, 2025 and December 31, 2024, respectively)",
+        "$",
+        "19,896,145",
+        "",
+        "$",
+        "14,555,535"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "19,670,193",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,609,338",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "19,896,145",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,555,535",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | APOLLO DEBT SOLUTIONS BDC | CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES | (In thousands, except share and per share data) | ",
+      "preceding": [
+        "",
+        "Item 1. Consolidated Financial Statements",
+        "",
+        "In this report, the terms the \u201c Company ,\u201d \u201c ADS ,\u201d \u201c we ,\u201d \u201c us \u201d and \u201c our \u201d refer to Apollo Debt Solutions BDC unless the context specifically states otherwise.",
+        "",
+        "Table of Contents",
+        "",
+        "",
+        "l Condition and Results of Operations 172 Item 3. Quantitative and Qualitative Disclosures About Market Risk 193 Item 4. Controls and Procedures 194 PART II - OTHER INFORMATION Item 1. Legal Proceedings 195 Item 1A. Risk Factors 195 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 196 Item 3. Defaults Upon Senior Securities 197 Item 4. Mine Safety Disclosures 197 Item 5. Other Information 197 Item 6. Exhibits 198 Signatures 199",
+        "",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[9]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "$",
+        "456,524",
+        "",
+        "$",
+        "281,719",
+        "",
+        "$",
+        "849,296",
+        "",
+        "$",
+        "506,413"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_f4390270-aaea-407c-9c4b-96e406fcca9f",
+          "scale": "3",
+          "text": "456,524",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_60e96a89-a69a-4646-9ae4-b956b94a94d8",
+          "scale": "3",
+          "text": "281,719",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_375fb3e2-d80c-46ec-ba90-9e78f2377b7c",
+          "scale": "3",
+          "text": "849,296",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_728a6cd1-5d0a-4a11-b88d-7b24f65cd4f1",
+          "scale": "3",
+          "text": "506,413",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | APOLLO DEBT SOLUTIONS BDC | CONSOLIDATED STATEMENTS OF OPERATIONS (Unaudited) | (In thousands, except share and per share data) | ",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Table of Contents",
+        "",
+        "See notes to consolidated financial statements 3",
+        " authorized) 105,820,841 81,193,852 Net asset value per share $ 24.60 $ 24.86 Class D Shares: Net assets $ 30,194 $ 25,580 Common shares outstanding ($ 0.01 par value, unlimited shares authorized) 1,227,190 1,029,046 Net asset value per share $ 24.60 $ 24.86 Class I Shares: Net assets $ 10,507,091 $ 7,502,609 Common shares outstanding ($ 0.01 par value, unlimited shares authorized) 427,046,173 301,820,104 Net asset value per share $ 24.60 $ 24.86",
+        "Table of Contents",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[12]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "Total Investments before Cash Equivalents",
+        "",
+        "$",
+        "19,670,193",
+        "",
+        "$",
+        "19,896,145",
+        "",
+        "(2)(6)(30)"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "19,670,193",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "19,896,145",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35) | Signature Aviation | Brown Group Holding, LLC First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 7/1/2031 14,962 14,907 14,997 (15)(16) | Total Transportation Infrastructure $ 399,672 $ 412,039",
+      "preceding": [
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) June 30, 2025 (In thousands, except share data)",
+        "",
+        "See notes to consolidated financial statements 54",
+        " P + 525 , 1.00 % Floor 5/9/2029 794 766 776 (4)(9)(12)(16)(24)(32) 17,683 17,770 GSI Geotechnical Merger Sub, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 10/15/2031 67,411 66,788 66,736 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 10/15/2031 10,736 10,449 10,486 (4)(9)(12)(16)(32) First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/15/2031 3,121 3,036 3,027 (4)(9)(12)(16)(32) 80,273 80,249",
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) June 30, 2025 (In thousands, except share data)",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[165]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "Total Investments after Cash Equivalents",
+        "",
+        "$",
+        "20,456,126",
+        "",
+        "$",
+        "20,682,078",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostAfterCashEquivalents",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "20,456,126",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_ce90f8e1-e5bc-49dd-8f1b-cbbc33e29b54",
+          "scale": "3",
+          "text": "20,682,078",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35) | Signature Aviation | Brown Group Holding, LLC First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 7/1/2031 14,962 14,907 14,997 (15)(16) | Total Transportation Infrastructure $ 399,672 $ 412,039",
+      "preceding": [
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) June 30, 2025 (In thousands, except share data)",
+        "",
+        "See notes to consolidated financial statements 54",
+        " P + 525 , 1.00 % Floor 5/9/2029 794 766 776 (4)(9)(12)(16)(24)(32) 17,683 17,770 GSI Geotechnical Merger Sub, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 10/15/2031 67,411 66,788 66,736 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 10/15/2031 10,736 10,449 10,486 (4)(9)(12)(16)(32) First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/15/2031 3,121 3,036 3,027 (4)(9)(12)(16)(32) 80,273 80,249",
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS (Unaudited) June 30, 2025 (In thousands, except share data)",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[165]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Total Investments before Cash Equivalents",
+        "",
+        "",
+        "$",
+        "",
+        "14,609,338",
+        "",
+        "",
+        "$",
+        "",
+        "14,555,535",
+        "",
+        "",
+        "(2)(6)(28)"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,609,338",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,555,535",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (29) Fair Value (1)(30) | Transportation Infrastructure | Alliance Ground International | AGI-CFI Holdings, Inc. First Lien Secured Debt - Term Loan S + 600 , 0.75 % Floor 6/11/2027 $ 9,750 $ 9,640 $ 9,750 (4)(15)",
+      "preceding": [
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)",
+        "",
+        "113",
+        "e Corporation First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 7/10/2031 $ 196,000 $ 194,136 $ 195,020 (4)(15) Foundation Building Materials Foundation Building Materials, Inc. First Lien Secured Debt - Term Loan S + 400 , 0.00 % Floor 1/29/2031 14,762 14,668 14,569 (14)(15) First Lien Secured Debt - Term Loan S + 325 , 0.50 % Floor 1/31/2028 7,220 7,061 7,128 (15) 21,729 21,697 Total Trading Companies & Distributors $ 215,865 $ 216,717",
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[342]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Total Investments after Cash Equivalents",
+        "",
+        "",
+        "$",
+        "",
+        "14,763,922",
+        "",
+        "",
+        "$",
+        "",
+        "14,710,119",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostAfterCashEquivalents",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,763,922",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_4b21ab28-61bd-4c32-8f01-547723c8c3c4",
+          "scale": "3",
+          "text": "14,710,119",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Industry/Company Investment Type Interest Rate (12) Maturity Date Par/Shares (3) Cost (29) Fair Value (1)(30) | Transportation Infrastructure | Alliance Ground International | AGI-CFI Holdings, Inc. First Lien Secured Debt - Term Loan S + 600 , 0.75 % Floor 6/11/2027 $ 9,750 $ 9,640 $ 9,750 (4)(15)",
+      "preceding": [
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)",
+        "",
+        "113",
+        "e Corporation First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 7/10/2031 $ 196,000 $ 194,136 $ 195,020 (4)(15) Foundation Building Materials Foundation Building Materials, Inc. First Lien Secured Debt - Term Loan S + 400 , 0.00 % Floor 1/29/2031 14,762 14,668 14,569 (14)(15) First Lien Secured Debt - Term Loan S + 325 , 0.50 % Floor 1/31/2028 7,220 7,061 7,128 (15) 21,729 21,697 Total Trading Companies & Distributors $ 215,865 $ 216,717",
+        "Table of Contents APOLLO DEBT SOLUTIONS BDC CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[342]/table/tr[22]"
+    },
+    {
+      "cells": [
+        "Total Investments before Cash Equivalents",
+        "",
+        "$",
+        "19,670,193",
+        "",
+        "$",
+        "19,896,145",
+        "",
+        "$",
+        "81",
+        "",
+        "$",
+        "5,347,654",
+        "",
+        "$",
+        "14,548,410"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostBeforeCashEquivalents",
+          "context": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+          "scale": "3",
+          "text": "19,670,193",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+          "scale": "3",
+          "text": "19,896,145",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_8dba4de1-bbac-4fcd-9156-b46d3b2bbc62",
+          "scale": "3",
+          "text": "81",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_c3889ca5-5be4-4dca-ae0b-92d36dc7cddb",
+          "scale": "3",
+          "text": "5,347,654",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_b9c6113b-bd07-4613-b265-ade9d4fbb4d0",
+          "scale": "3",
+          "text": "14,548,410",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 19,642,363 $ 19,863,636 $ \u2014 $ 5,328,969 $ 14,534,667 | Second Lien Secured Debt \u2014 \u2014 \u2014 \u2014 \u2014",
+      "preceding": [
+        "The following table shows the composition of our investments as of June 30, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "Fair Value Measurement and Disclosures",
+        "Note 4. Investments"
+      ],
+      "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments after Cash Equivalents",
+        "",
+        "$",
+        "20,456,126",
+        "",
+        "$",
+        "20,682,078",
+        "",
+        "$",
+        "786,014",
+        "",
+        "$",
+        "5,347,654",
+        "",
+        "$",
+        "14,548,410"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostAfterCashEquivalents",
+          "context": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+          "scale": "3",
+          "text": "20,456,126",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+          "scale": "3",
+          "text": "20,682,078",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_8dba4de1-bbac-4fcd-9156-b46d3b2bbc62",
+          "scale": "3",
+          "text": "786,014",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_c3889ca5-5be4-4dca-ae0b-92d36dc7cddb",
+          "scale": "3",
+          "text": "5,347,654",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_b9c6113b-bd07-4613-b265-ade9d4fbb4d0",
+          "scale": "3",
+          "text": "14,548,410",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 19,642,363 $ 19,863,636 $ \u2014 $ 5,328,969 $ 14,534,667 | Second Lien Secured Debt \u2014 \u2014 \u2014 \u2014 \u2014",
+      "preceding": [
+        "The following table shows the composition of our investments as of June 30, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "Fair Value Measurement and Disclosures",
+        "Note 4. Investments"
+      ],
+      "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[12]"
+    },
+    {
+      "cells": [
+        "Total Investments before Cash Equivalents",
+        "",
+        "$",
+        "14,609,338",
+        "",
+        "$",
+        "14,555,535",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "$",
+        "3,351,022",
+        "",
+        "$",
+        "11,204,513"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostBeforeCashEquivalents",
+          "context": "C_f1113868-b9e1-4cca-a7be-86d771778fa1",
+          "scale": "3",
+          "text": "14,609,338",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_f1113868-b9e1-4cca-a7be-86d771778fa1",
+          "scale": "3",
+          "text": "14,555,535",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_49386304-36fa-468b-9898-9f0daa01f625",
+          "scale": "3",
+          "text": "3,351,022",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+          "context": "C_cce41321-207e-4426-8458-0a0b72de73ec",
+          "scale": "3",
+          "text": "11,204,513",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 14,565,460 $ 14,542,450 $ \u2014 $ 3,350,919 $ 11,191,531 | Second Lien Secured Debt 36,810 5,723 \u2014 \u2014 5,723",
+      "preceding": [
+        "The following table shows the composition of our investments as of December 31, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        " 785,933 $ 785,933 $ \u2014 $ \u2014 Total Cash Equivalents $ 785,933 $ 785,933 $ 785,933 $ \u2014 $ \u2014 Total Investments after Cash Equivalents $ 20,456,126 $ 20,682,078 $ 786,014 $ 5,347,654 $ 14,548,410 Currency swaps $ \u2014 $ ( 4,894 ) $ \u2014 $ ( 4,894 ) $ \u2014 Interest rate swaps \u2014 64,844 \u2014 64,844 \u2014 Foreign currency forward transactions \u2014 ( 66,506 ) \u2014 ( 66,506 ) \u2014 Total Assets and Liabilities at Fair Value $ 20,456,126 $ 20,675,522 $ 786,014 $ 5,341,098 $ 14,548,410",
+        "The following table shows the composition of our investments as of June 30, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "Fair Value Measurement and Disclosures",
+        "Note 4. Investments"
+      ],
+      "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[2]/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments after Cash Equivalents",
+        "",
+        "$",
+        "14,763,922",
+        "",
+        "$",
+        "14,710,119",
+        "",
+        "$",
+        "154,584",
+        "",
+        "$",
+        "3,351,022",
+        "",
+        "$",
+        "11,204,513"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtCostAfterCashEquivalents",
+          "context": "C_f1113868-b9e1-4cca-a7be-86d771778fa1",
+          "scale": "3",
+          "text": "14,763,922",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_f1113868-b9e1-4cca-a7be-86d771778fa1",
+          "scale": "3",
+          "text": "14,710,119",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_a3c07737-4012-44d6-8d10-cbaefc6bb893",
+          "scale": "3",
+          "text": "154,584",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_49386304-36fa-468b-9898-9f0daa01f625",
+          "scale": "3",
+          "text": "3,351,022",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+          "context": "C_cce41321-207e-4426-8458-0a0b72de73ec",
+          "scale": "3",
+          "text": "11,204,513",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 14,565,460 $ 14,542,450 $ \u2014 $ 3,350,919 $ 11,191,531 | Second Lien Secured Debt 36,810 5,723 \u2014 \u2014 5,723",
+      "preceding": [
+        "The following table shows the composition of our investments as of December 31, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        " 785,933 $ 785,933 $ \u2014 $ \u2014 Total Cash Equivalents $ 785,933 $ 785,933 $ 785,933 $ \u2014 $ \u2014 Total Investments after Cash Equivalents $ 20,456,126 $ 20,682,078 $ 786,014 $ 5,347,654 $ 14,548,410 Currency swaps $ \u2014 $ ( 4,894 ) $ \u2014 $ ( 4,894 ) $ \u2014 Interest rate swaps \u2014 64,844 \u2014 64,844 \u2014 Foreign currency forward transactions \u2014 ( 66,506 ) \u2014 ( 66,506 ) \u2014 Total Assets and Liabilities at Fair Value $ 20,456,126 $ 20,675,522 $ 786,014 $ 5,341,098 $ 14,548,410",
+        "The following table shows the composition of our investments as of June 30, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "Fair Value Measurement and Disclosures",
+        "Note 4. Investments"
+      ],
+      "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[2]/tr[12]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "$",
+        "456.5",
+        "",
+        "$",
+        "281.7",
+        "",
+        "$",
+        "849.3",
+        "",
+        "$",
+        "506.4"
+      ],
+      "facts": [],
+      "opening": " | Three Months Ended June 30, Six Months Ended June 30, | 2025 2024 2025 2024 | Total investment income $ 456.5 $ 281.7 $ 849.3 $ 506.4 | Net expenses (198.4) (120.4) (367.2) (216.7)",
+      "preceding": [
+        "Operating results for the three and six months ended June 30, 2025 and 2024 were as follows (dollar amounts in millions)*:",
+        "Results of Operations",
+        "Table of Contents",
+        "",
+        "178",
+        "nt we anticipate will be recovered. The following table shows the composition of our portfolio on the 1 to 5 rating scale as of June 30, 2025 and December 31, 2024: June 30, 2025 December 31, 2024 Investment Ranking Fair Value Percentage Fair Value Percentage (in thousands) 1 $ \u2014 0.0% $ \u2014 0.0% 2 19,627,475 98.6% 14,433,436 99.1% 3 237,147 1.2% 96,589 0.7% 4 20,588 0.1% \u2014 0.0% 5 10,936 0.1% 25,510 0.2% Total $ 19,896,145 100.0% $ 14,555,535 100.0%",
+        "Table of Contents",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[537]/table[1]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "$",
+        "456.5",
+        "",
+        "$",
+        "281.7",
+        "",
+        "$",
+        "849.3",
+        "",
+        "$",
+        "506.4"
+      ],
+      "facts": [],
+      "opening": " | Three Months Ended June 30, Six Months Ended June 30, | 2025 2024 2025 2024 | Interest income $ 442.4 $ 267.4 $ 824.2 $ 482.8 | PIK interest income 9.2 3.8 14.5 9.1",
+      "preceding": [
+        "Investment income, for the three and six months ended June 30, 2025 and 2024 were as follows (dollar amounts in millions)*:",
+        "Investment Income",
+        "ng from operations can vary from period to period as a result of various factors, including acquisitions, the level of new investment commitments, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio. Additionally, many of the period over period changes are a result of increased deployment of capital and balance of our investments. Thus, comparisons may not be meaningful.",
+        "* Totals may not foot due to rounding.",
+        "Three Months Ended June 30, Six Months Ended June 30, 2025 2024 2025 2024 Total investment income $ 456.5 $ 281.7 $ 849.3 $ 506.4 Net expenses (198.4) (120.4) (367.2) (216.7) Net investment income 258.1 161.3 482.1 289.7 Net realized gain (loss) (160.5) 12.9 (220.5) (13.3) Net unrealized appreciation (depreciation) 187.0 (10.9) 185.5 52.7 Net increase (decrease) in net assets resulting from operations $ 284.6 $ 163.3 $ 447.2 $ 329.1",
+        "Table of Contents",
+        "",
+        "178",
+        "nt we anticipate will be recovered. The following table shows the composition of our portfolio on the 1 to 5 rating scale as of June 30, 2025 and December 31, 2024: June 30, 2025 December 31, 2024 Investment Ranking Fair Value Percentage Fair Value Percentage (in thousands) 1 $ \u2014 0.0% $ \u2014 0.0% 2 19,627,475 98.6% 14,433,436 99.1% 3 237,147 1.2% 96,589 0.7% 4 20,588 0.1% \u2014 0.0% 5 10,936 0.1% 25,510 0.2% Total $ 19,896,145 100.0% $ 14,555,535 100.0%",
+        "Table of Contents",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[537]/table[2]/tr[8]"
+    }
+  ],
+  "sha256": "56f16b2ad7b2a995e335b5a3e57e2ef7ae2e859f877bfc429a02fd9644c0b025",
+  "status": "literal_primary_review_candidates"
+}

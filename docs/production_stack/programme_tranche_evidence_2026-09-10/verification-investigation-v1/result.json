@@ -1,0 +1,685 @@
+{
+  "before_outcomes": {
+    "failed": 4,
+    "passed": 56
+  },
+  "broader_run_completed_outcomes": {
+    "passed": 574
+  },
+  "broader_staging_class": "Not completed: measured case durations did not fit the diagnostic budget; attempt stopped and retained, then narrowed to four representative cases.",
+  "cache_query_tests_passed": 54,
+  "financial_measurement": "Not run; all 50 programme metrics remain unmeasured",
+  "full_byte_attempt": {
+    "child_stopped": true,
+    "command": [
+      "C:\\Users\\alger\\miniconda3\\python.exe",
+      "-B",
+      "-m",
+      "scripts.programme_tranche.semantic_backstop_child",
+      "--job-name",
+      "semantic-after-v1"
+    ],
+    "elapsed_seconds": 2.724270799997612,
+    "exit_code": 1,
+    "parent_cap_seconds": 210,
+    "semantic_report_exists": false,
+    "semantics": "scripts.diff_outputs.main with --semantic; report redirected only",
+    "timed_out": false,
+    "worker_cap_seconds": 180
+  },
+  "full_suite": "Not rerun; original suite remains incomplete",
+  "jobs": {
+    "collect-v1": {
+      "after_scan_seconds": 71.61496940000507,
+      "before_scan_seconds": 101.27670049999142,
+      "canaries_preserved": true,
+      "elapsed_seconds": 205.91913729999214,
+      "exit_code": 3,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_stopped": true
+    },
+    "collect-v2": {
+      "after_scan_seconds": 62.91125639999518,
+      "before_scan_seconds": 47.87003369999002,
+      "canaries_preserved": true,
+      "elapsed_seconds": 339.23772960000497,
+      "exit_code": 0,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_stopped": true
+    },
+    "repaired-v1": {
+      "after_scan_seconds": 42.49885600000562,
+      "before_scan_seconds": 49.84377579999273,
+      "canaries_preserved": true,
+      "elapsed_seconds": 307.1384426000004,
+      "exit_code": 3,
+      "junit_outcomes": {
+        "errors": 1,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 145
+      },
+      "launcher_exit_code": 0,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_exit_code": 3,
+      "worker_stopped": true
+    },
+    "repaired-v2": {
+      "after_scan_seconds": 46.82673889999569,
+      "before_scan_seconds": 49.71789179999905,
+      "canaries_preserved": true,
+      "elapsed_seconds": 522.3916305999883,
+      "exit_code": 4294967295,
+      "junit_outcomes": null,
+      "launcher_exit_code": 4294967295,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_exit_code": null,
+      "worker_stopped": true
+    },
+    "repaired-v3": {
+      "after_scan_seconds": 50.537550000008196,
+      "before_scan_seconds": 51.31520640000235,
+      "canaries_preserved": true,
+      "elapsed_seconds": 803.3502875999984,
+      "exit_code": 1,
+      "junit_outcomes": {
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "tests": 62
+      },
+      "launcher_exit_code": 0,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_exit_code": 1,
+      "worker_stopped": true
+    },
+    "reproduce-v1": {
+      "after_scan_seconds": 43.59536600000865,
+      "before_scan_seconds": 49.069679899999755,
+      "canaries_preserved": true,
+      "elapsed_seconds": 694.0009532000113,
+      "exit_code": 0,
+      "launcher_status_was_insufficient": true,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_exit_code_from_durable_record": 1,
+      "worker_stopped": true
+    },
+    "semantic-after-v1": {
+      "after_scan_seconds": 65.0118736000004,
+      "before_scan_seconds": 63.643798699995386,
+      "canaries_preserved": true,
+      "elapsed_seconds": 138.33225559999119,
+      "exit_code": 0,
+      "junit_outcomes": null,
+      "launcher_exit_code": 0,
+      "native_canary": {
+        "arrow_allowed": "allowed",
+        "arrow_new_outside": "denied",
+        "arrow_protected": "denied",
+        "duckdb_allowed": "allowed",
+        "duckdb_new_outside": "denied",
+        "duckdb_protected": "denied",
+        "native_delete": "denied",
+        "python_allowed": "allowed",
+        "python_new_outside": "denied",
+        "python_protected": "denied",
+        "rename": "denied"
+      },
+      "protected_changes": [],
+      "protected_files": 237627,
+      "unreadable_changed": false,
+      "worker_exit_code": 0,
+      "worker_stopped": true
+    }
+  },
+  "original_cache_files": [
+    {
+      "bytes": 312,
+      "path": "data/output/agent_investigate/_qcache/666/conservation.1788885037.parquet",
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "bytes": 2243,
+      "path": "data/output/agent_investigate/_qcache/666/fund_financials.1788877663.parquet",
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "bytes": 2235,
+      "path": "data/output/agent_investigate/_qcache/666/holdings.1788882554.parquet",
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    },
+    {
+      "bytes": 312,
+      "path": "data/output/agent_investigate/_qcache/999/conservation.1788885037.parquet",
+      "sha256": "e6db1019d12c3d619abff77fa4a9589caa26fad80831337f2e00e829aeca2076"
+    },
+    {
+      "bytes": 2243,
+      "path": "data/output/agent_investigate/_qcache/999/fund_financials.1788877663.parquet",
+      "sha256": "cb893ab93c203a5ef53b6627f2cbb0e7eb6dbd115ddb87451cdc113eca63f105"
+    },
+    {
+      "bytes": 2235,
+      "path": "data/output/agent_investigate/_qcache/999/holdings.1788882554.parquet",
+      "sha256": "341e0982718f79cc0ce5f28a7736046964f92e39fd775ceaf4622c7e04fdd4be"
+    }
+  ],
+  "original_failure_markers": 4,
+  "original_log_sha256": "a33962c7113d6504c2aed3c23ed39201fab0b04f70b9f6e1833d0262abc48cb5",
+  "owner_comments_sha256": "9a431d8d5b0aa8870ca031a0498665df2dc071107f0696fd85a3e8ea5ea6b267",
+  "preservation": {
+    "baseline_divergence_groups": {
+      "fund_financials": 0,
+      "holdings": 11,
+      "index_returns": 6,
+      "matches": 7,
+      "position_returns": 7
+    },
+    "code": {
+      "bytes": 7051,
+      "path": "scripts/programme_tranche/check_preservation.py",
+      "sha256": "5b2c0a20670b85b3d337a2ad2cced0392abe98b28c1cc57bad7a93f9d49fb262"
+    },
+    "current_baseline_manifest": {
+      "bytes": 25708533,
+      "path": "docs/refactoring/baseline_manifest.json",
+      "sha256": "5a9e76d2c9cf5c18e77262b7d04b864d590f17fdd368a81c2f7e9fc12909af00"
+    },
+    "derived_delta_roundoff": [
+      {
+        "change": 6.103515625e-05,
+        "new_delta": -271163614.6600342,
+        "old_delta": -271163614.6600952,
+        "path": "/position_returns/position_return/0/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -1.8189894035458565e-12,
+        "new_delta": -1181.2205822721562,
+        "old_delta": -1181.2205822721544,
+        "path": "/position_returns/position_return/0/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.00146484375,
+        "new_delta": -9743223304.763184,
+        "old_delta": -9743223304.764648,
+        "path": "/position_returns/position_return/1/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 3.814697265625e-06,
+        "new_delta": -353908044.3096596,
+        "old_delta": -353908044.3096634,
+        "path": "/position_returns/position_return/1/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -1.52587890625e-05,
+        "new_delta": -31903298.99998474,
+        "old_delta": -31903298.999969482,
+        "path": "/position_returns/position_return/2/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 3.552713678800501e-14,
+        "new_delta": -9.251740571898292,
+        "old_delta": -9.251740571898328,
+        "path": "/position_returns/position_return/2/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.000152587890625,
+        "new_delta": -202695199.10009766,
+        "old_delta": -202695199.09994507,
+        "path": "/position_returns/position_return/3/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -2.2737367544323206e-12,
+        "new_delta": -656.4379660223908,
+        "old_delta": -656.4379660223885,
+        "path": "/position_returns/position_return/3/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.00018310546875,
+        "new_delta": -92874368.32989502,
+        "old_delta": -92874368.33007812,
+        "path": "/position_returns/position_return/4/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -2.2737367544323206e-13,
+        "new_delta": -0.12285523177865798,
+        "old_delta": -0.1228552317784306,
+        "path": "/position_returns/position_return/4/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -1.52587890625e-05,
+        "new_delta": -1185865.5000305176,
+        "old_delta": -1185865.5000152588,
+        "path": "/position_returns/position_return/5/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.862645149230957e-09,
+        "new_delta": 4334954.627437042,
+        "old_delta": 4334954.62743704,
+        "path": "/position_returns/position_return/5/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.00018310546875,
+        "new_delta": 2908500.0001831055,
+        "old_delta": 2908500.0,
+        "path": "/position_returns/position_return/6/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.5916157281026244e-12,
+        "new_delta": 1.1368683772161603e-12,
+        "old_delta": -4.547473508864641e-13,
+        "path": "/position_returns/position_return/6/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.9073486328125e-05,
+        "new_delta": -45551112.999988556,
+        "old_delta": -45551113.00000763,
+        "path": "/holdings/holdings_class_fv/1/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.00054931640625,
+        "new_delta": 29327971.99963379,
+        "old_delta": 29327972.000183105,
+        "path": "/holdings/holdings_class_fv/2/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.0087890625,
+        "new_delta": -32474803.99609375,
+        "old_delta": -32474803.987304688,
+        "path": "/holdings/holdings_class_fv/3/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 6.103515625e-05,
+        "new_delta": -48439071.999923706,
+        "old_delta": -48439071.99998474,
+        "path": "/holdings/holdings_class_fv/4/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -3.0517578125e-05,
+        "new_delta": 29505000.000030518,
+        "old_delta": 29505000.000061035,
+        "path": "/holdings/holdings_class_fv/5/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 9.1552734375e-05,
+        "new_delta": 3921854569.5828705,
+        "old_delta": 3921854569.582779,
+        "path": "/holdings/holdings_class_fv/6/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -3.0517578125e-05,
+        "new_delta": -1643282630.6599426,
+        "old_delta": -1643282630.659912,
+        "path": "/holdings/holdings_class_fv/7/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.000274658203125,
+        "new_delta": 2681492.5300598145,
+        "old_delta": 2681492.5297851562,
+        "path": "/holdings/holdings_class_fv/8/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.00018310546875,
+        "new_delta": -2260767650.452667,
+        "old_delta": -2260767650.4528503,
+        "path": "/holdings/holdings_class_fv/9/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      }
+    ],
+    "elapsed_seconds": 77.63618259999203,
+    "numeric_rule": "Unchanged scripts.diff_outputs source-scale numeric-noise rule; each derived delta must equal its recorded subtraction",
+    "original_gold": {
+      "bytes": 112693,
+      "path": "data/gold/labels/position_labels.jsonl",
+      "sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7"
+    },
+    "original_input_files": 1117,
+    "original_match_reference_files": 1605,
+    "previous_report": {
+      "bytes": 13418,
+      "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/verification/semantic_diff_report.json",
+      "sha256": "da570a27ff78407c45bf26c059e0b596e78b495ef6d4e17c29596c80ce6c5594"
+    },
+    "scope": "Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.",
+    "semantic_changes_since_preparation": [],
+    "semantic_report": {
+      "bytes": 13425,
+      "path": "scratch/2026-09-10_verification_investigation/semantic-after-v1/bundle/semantic_diff_report.json",
+      "sha256": "3e848745c176912c158fa40d778cd6aba29d623e0124226bfe9105ea6793a973"
+    },
+    "source_reference_freezes_unchanged": true,
+    "status": "pass"
+  },
+  "production_validator": "Unchanged. Fix must preserve staging preprocessing and use DuckDB for staging regexes, Python for dispatch regexes.",
+  "profile_functions": {
+    "repaired-v3": [
+      {
+        "calls": 2,
+        "cumulative_seconds": 110.01469030000001,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\scripts\\programme_tranche\\diagnose_tests.py",
+        "function": "inventory",
+        "line": 24,
+        "own_seconds": 47.869898000000006,
+        "primitive_calls": 2
+      },
+      {
+        "calls": 16,
+        "cumulative_seconds": 4.897376100000001,
+        "file": "C:\\Users\\alger\\AppData\\Roaming\\Python\\Python313\\site-packages\\pandas\\io\\parsers\\readers.py",
+        "function": "read_csv",
+        "line": 868,
+        "own_seconds": 0.0015581000000000002,
+        "primitive_calls": 16
+      },
+      {
+        "calls": 8,
+        "cumulative_seconds": 0.9580428000000001,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\staging_bdc.py",
+        "function": "_load_staging_configs",
+        "line": 150,
+        "own_seconds": 0.0507408,
+        "primitive_calls": 8
+      },
+      {
+        "calls": 4076,
+        "cumulative_seconds": 0.1051934,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\staging_bdc.py",
+        "function": "_expand_placeholders",
+        "line": 119,
+        "own_seconds": 0.0332188,
+        "primitive_calls": 4076
+      },
+      {
+        "calls": 1,
+        "cumulative_seconds": 0.0932684,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "apply_ixbrl_field_status_overlay",
+        "line": 1022,
+        "own_seconds": 0.0010576000000000001,
+        "primitive_calls": 1
+      },
+      {
+        "calls": 3652,
+        "cumulative_seconds": 0.0879704,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "_norm_text",
+        "line": 206,
+        "own_seconds": 0.0231314,
+        "primitive_calls": 3652
+      },
+      {
+        "calls": 340,
+        "cumulative_seconds": 0.012285200000000001,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "_raw_id_lower",
+        "line": 216,
+        "own_seconds": 0.0009536000000000001,
+        "primitive_calls": 340
+      }
+    ],
+    "reproduce-v1": [
+      {
+        "calls": 2,
+        "cumulative_seconds": 157.48146440000002,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "apply_ixbrl_field_status_overlay",
+        "line": 1022,
+        "own_seconds": 0.9698776,
+        "primitive_calls": 2
+      },
+      {
+        "calls": 2,
+        "cumulative_seconds": 113.21917330000001,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\scripts\\programme_tranche\\diagnose_tests.py",
+        "function": "inventory",
+        "line": 23,
+        "own_seconds": 49.259984900000006,
+        "primitive_calls": 2
+      },
+      {
+        "calls": 4273203,
+        "cumulative_seconds": 111.64937060000001,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "_norm_text",
+        "line": 206,
+        "own_seconds": 21.8537544,
+        "primitive_calls": 4273203
+      },
+      {
+        "calls": 1423957,
+        "cumulative_seconds": 64.757243,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\bdc_xbrl_html_bridge.py",
+        "function": "_raw_id_lower",
+        "line": 216,
+        "own_seconds": 4.0829899,
+        "primitive_calls": 1423957
+      },
+      {
+        "calls": 9,
+        "cumulative_seconds": 28.939337700000003,
+        "file": "C:\\Users\\alger\\AppData\\Roaming\\Python\\Python313\\site-packages\\pandas\\io\\parsers\\readers.py",
+        "function": "read_csv",
+        "line": 868,
+        "own_seconds": 0.0007620000000000001,
+        "primitive_calls": 9
+      },
+      {
+        "calls": 4,
+        "cumulative_seconds": 0.63761,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\staging_bdc.py",
+        "function": "_load_staging_configs",
+        "line": 150,
+        "own_seconds": 0.0325881,
+        "primitive_calls": 4
+      },
+      {
+        "calls": 2038,
+        "cumulative_seconds": 0.1010578,
+        "file": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\pipeline\\staging_bdc.py",
+        "function": "_expand_placeholders",
+        "line": 119,
+        "own_seconds": 0.0261725,
+        "primitive_calls": 2038
+      }
+    ]
+  },
+  "recorded_utc": "2026-09-10T18:25:15.240532+00:00",
+  "repaired_outcomes": {
+    "failed": 1,
+    "passed": 61
+  },
+  "reproduced_failures": [
+    {
+      "duration": 0.04674360000353772,
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup",
+      "outcome": "failed",
+      "recorded_utc": "2026-09-10T17:35:00.455760+00:00",
+      "traceback": "def test_trinity_bare_debt_identifier_is_issuer_rollup():\n        bare = \"Portfolio Company Debt Securities- Europe Industrials Aledia, Inc.\"\n        leaf = (\n            \"Portfolio Company Debt Securities- Europe Industrials Aledia, Inc.\"\n            \"Type of Investment Equipment Financing Investment Date March 31, 2022 \"\n            \"Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%\"\n        )\n    \n        rollup = classify_identifier(\"1786108\", bare)\n        child = classify_identifier(\"0001786108\", leaf)\n    \n        assert rollup[\"wrapper_family\"] == \"debt\"\n        assert rollup[\"wrapper_disposition\"] == \"debt_issuer_rollup\"\n>       assert rollup[\"wrapper_rule_id\"] == \"TRINITY_DEBT_ISSUER_ROLLUP_V3\"\nE       AssertionError: assert 'TRINITY_DEBT...UER_ROLLUP_V5' == 'TRINITY_DEBT...UER_ROLLUP_V3'\nE         \nE         - TRINITY_DEBT_ISSUER_ROLLUP_V3\nE         ?                             ^\nE         + TRINITY_DEBT_ISSUER_ROLLUP_V5\nE         ?                             ^\n\ntests\\test_bdc_xbrl_wrapper.py:26: AssertionError",
+      "when": "call"
+    },
+    {
+      "duration": 0.0063513999921269715,
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_blackrock_direct_lending_flat_debt_leaf",
+      "outcome": "failed",
+      "recorded_utc": "2026-09-10T17:35:01.273923+00:00",
+      "traceback": "def test_blackrock_direct_lending_flat_debt_leaf():\n        row = classify_identifier(\n            \"0001834543\",\n            \"Debt Investments Diversified Financial Services GC Champion Acquisition LLC \"\n            \"(Numerix) Instrument First Lien Delayed Draw Term Loan Ref SOFR(Q) \"\n            \"Floor 1.00% Spread 5.00% Total Coupon 8.67% Maturity 8/21/2028\",\n        )\n    \n        assert row[\"wrapper_family\"] == \"debt\"\n        assert row[\"wrapper_disposition\"] == \"debt_position_leaf\"\n>       assert row[\"wrapper_rule_id\"] == \"BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1\"\nE       AssertionError: assert 'BLACKROCK_DI..._DEBT_LEAF_V2' == 'BLACKROCK_DI..._DEBT_LEAF_V1'\nE         \nE         - BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1\nE         ?                                     ^\nE         + BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V2\nE         ?                                     ^\n\ntests\\test_bdc_xbrl_wrapper.py:195: AssertionError",
+      "when": "call"
+    },
+    {
+      "duration": 0.011304799991194159,
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_silver_point_specialty_credit_comma_leaf_and_total_rows",
+      "outcome": "failed",
+      "recorded_utc": "2026-09-10T17:35:02.696399+00:00",
+      "traceback": "def test_silver_point_specialty_credit_comma_leaf_and_total_rows():\n        leaf = classify_identifier(\n            \"0001646614\",\n            \"Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien \"\n            \"Term Loan, Luxembourg, Mallinckrodt International Finance S.A., \"\n            \"Pharmaceuticals & Life Sciences, Rate L+5.25%, 0.75% Floor, \"\n            \"Interest Rate 10.40%, Original Acquisition Date 10/13/2020, \"\n            \"Maturity Date 9/30/2027\",\n        )\n        total_trust = classify_identifier(\n            \"0001646614\",\n            \"Controlled Investments, Total Trust Interest\",\n        )\n        bare_category = classify_identifier(\n            \"0001646614\",\n            \"1st Lien/Secured Loans United States of America\",\n        )\n        total_equity = classify_identifier(\n            \"0001646614\",\n            \"Non-Controlled/Non-Affiliated Investments, Total Equities\",\n        )\n    \n        assert leaf[\"wrapper_family\"] == \"debt\"\n        assert leaf[\"wrapper_disposition\"] == \"debt_position_leaf\"\n>       assert leaf[\"wrapper_rule_id\"] == \"SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1\"\nE       AssertionError: assert 'SILVER_POINT..._DEBT_LEAF_V2' == 'SILVER_POINT..._DEBT_LEAF_V1'\nE         \nE         - SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1\nE         ?                                          ^\nE         + SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V2\nE         ?                                          ^\n\ntests\\test_bdc_xbrl_wrapper.py:786: AssertionError",
+      "when": "call"
+    },
+    {
+      "duration": 0.22158420000050683,
+      "nodeid": "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers",
+      "outcome": "failed",
+      "recorded_utc": "2026-09-10T17:35:03.680823+00:00",
+      "traceback": "def test_coherence_passes_all_existing_wrappers():\n        \"\"\"All committed wrapper JSONs should pass coherence with zero hard errors.\n    \n        Warnings (prefixed with 'warning:') are allowed.\n        \"\"\"\n        import glob\n        wrapper_files = glob.glob(\n            \"data/overrides/bdc_xbrl_wrappers/*.json\"\n        )\n        for path in wrapper_files:\n            if \"reference\" in path:\n                continue\n            with open(path, encoding=\"utf-8\") as f:\n                raw = json.load(f)\n            if raw.get(\"schema_version\") not in (\n                \"bdc-xbrl-wrapper.v2\",\n                \"bdc-xbrl-wrapper.v3\",\n            ):\n                continue\n            issues = validate_wrapper_json_coherence(raw)\n            errors = [i for i in issues if not i.startswith(\"warning:\")]\n>           assert errors == [], f\"{path}: {errors}\"\nE           AssertionError: data/overrides/bdc_xbrl_wrappers\\0001572694.json: ['staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\\\x at position 136']\nE           assert ['staging.hie...position 136'] == []\nE             \nE             Left contains one more item: 'staging.hierarchy_issuer_re is not a valid regex: incomplete escape \\\\x at position 136'\nE             Use -v to get more diff\n\ntests\\test_bdc_xbrl_wrapper_oracle.py:3084: AssertionError",
+      "when": "call"
+    }
+  ],
+  "scope": "Bounded owner-requested investigation after the expired tranche; no resumption or adoption",
+  "semantic_scope": "The bounded full byte+semantic attempt is reported separately. Completion of the five-artifact semantic comparator is not a full baseline pass.",
+  "slow_test_comparison": [
+    {
+      "after_seconds": 80.68171469999652,
+      "before_seconds": 169.4751752000011,
+      "instrumentation": "cProfile in both runs; diagnostic timings, not an unprofiled full-suite benchmark",
+      "nodeid": "tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer",
+      "ratio": 2.1005400768956193
+    },
+    {
+      "after_seconds": 74.06035030000203,
+      "before_seconds": 169.57483810000122,
+      "instrumentation": "cProfile in both runs; diagnostic timings, not an unprofiled full-suite benchmark",
+      "nodeid": "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed",
+      "ratio": 2.2896845263773558
+    }
+  ],
+  "staging_phase_logs": {
+    "tests/test_unified_holdings.py::TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien": [
+      "INFO     pipeline.staging_bdc:staging_bdc.py:462 Preparing BDC holdings: 2 input rows",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:1680   Phase A (filter+dedup): 2 rows in 7.0 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2182   Phase B (parse+dedup): 2 rows in 57.4 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2795   Phase C (classify+map): 2 rows in 0.4 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2805   After all BDC filters: 2 rows (0 removed)"
+    ],
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer": [
+      "INFO     pipeline.staging_bdc:staging_bdc.py:462 Preparing BDC holdings: 3 input rows",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:1680   Phase A (filter+dedup): 3 rows in 9.7 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2182   Phase B (parse+dedup): 3 rows in 68.7 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2795   Phase C (classify+map): 3 rows in 0.5 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2805   After all BDC filters: 3 rows (0 removed)"
+    ],
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_gsbd_multilevel_pct_hierarchy_extracts_issuer": [
+      "INFO     pipeline.staging_bdc:staging_bdc.py:462 Preparing BDC holdings: 3 input rows",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:1680   Phase A (filter+dedup): 3 rows in 9.2 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2182   Phase B (parse+dedup): 3 rows in 63.9 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2795   Phase C (classify+map): 3 rows in 0.6 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2805   After all BDC filters: 3 rows (0 removed)"
+    ],
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed": [
+      "INFO     pipeline.staging_bdc:staging_bdc.py:462 Preparing BDC holdings: 3 input rows",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:1680   Phase A (filter+dedup): 2 rows in 8.3 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2182   Phase B (parse+dedup): 2 rows in 63.3 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2795   Phase C (classify+map): 2 rows in 0.6 s",
+      "INFO     pipeline.staging_bdc:staging_bdc.py:2805   After all BDC filters: 2 rows (1 removed)"
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost: $ 530,773 and $ 529,070 , respectively)",
+        "",
+        "$",
+        "524,126",
+        "",
+        "",
+        "$",
+        "532,895",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "524,126",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[8]/div/div[1]/div/table/tr[4]",
+      "table_xpath": "/html/body/div[8]/div/div[1]/div/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "524126000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "name": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "Unit_pure"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": null,
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[17]/div/table[1]/tr[29]",
+      "table_xpath": "/html/body/div[17]/div/table[1]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "Unit_pure",
+      "value": "1.000"
+    }
+  ],
+  "cik": "0001743415",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1743415/000119312523140727.html",
+  "reference_id": "REF-0001743415-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 64,
+  "source_sha256": "7824c21ab34271122ef33f01daae2eb7ec43c1e1df8f6593e6f9e7e3d6e5082b",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 45,
+      "first": [
+        "ACRES Commercial Mortgage, LLC (2) | Diversified Financial Services | S+705 | 1.00 | % | 11.87 | % | 12/24/2021 | 8/21/2028 | $ | 12,660 | $ | 12,445 | $ | 12,660",
+        "Alimera Sciences, Inc. (2) | Pharmaceuticals | S+515 | 4.60 | % | 9.96 | % | 12/31/2019 | 5/1/2028 | 4,147 | 4,146 | 4,147"
+      ],
+      "last": [
+        "RxSense Holdings LLC (2) | Diversified Consumer Services | S+500 | 1.00 | % | 9.83 | % | 3/17/2020 | 3/13/2026 | 14,599 | 14,458 | 14,599",
+        "Southern Orthodontic Partners Management, LLC (2) | Health Care Providers & Services | S+600 | 1.00 | % | 11.16 | % | 6/3/2022 | 1/27/2026 | 2,347 | 2,327 | 2,347"
+      ],
+      "opening_rows": [
+        "",
+        "Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value",
+        "",
+        "Bank Debt/Senior Secured Loans \u2014202.9%"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except share/unit amounts)",
+        "March 31, 2023",
+        "Consolidated Schedule of Investments (unaudited)",
+        "SCP Private Credit Income BDC LLC",
+        "",
+        "",
+        ""
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/div[12]/div/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Spectrum Pharmaceuticals, Inc. (2) | Biotechnology | S+570 | 2.30 | % | 10.36 | % | 9/21/2022 | 9/1/2027 | $ | 3,559 | $ | 3,530 | $ | 3,877",
+        "SunMed Group Holdings, LLC (2) | Health Care Equipment & Supplies | L+575 | 0.75 | % | 10.77 | % | 6/16/2021 | 6/16/2028 | 7,889 | 7,780 | 7,889"
+      ],
+      "last": [
+        "Liabilities in Excess of Other Assets\u2014(102.9%) | ( 265,861 | )",
+        "Net Assets\u2014100.0% | $ | 258,265"
+      ],
+      "opening_rows": [
+        "",
+        "Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value",
+        "Bank Debt/Senior Secured Loans (continued)",
+        "Spectrum Pharmaceuticals, Inc. (2) Biotechnology S+570 2.30 % 10.36 % 9/21/2022 9/1/2027 $ 3,559 $ 3,530 $ 3,877"
+      ],
+      "preceding": [
+        "",
+        "(in thousands)",
+        "March 31, 2023",
+        "Consolidated Schedule of Investments (unaudited) (continued)",
+        "SCP Private Credit Income BDC LLC"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[14]/div/table[1]"
+    }
+  ]
+}

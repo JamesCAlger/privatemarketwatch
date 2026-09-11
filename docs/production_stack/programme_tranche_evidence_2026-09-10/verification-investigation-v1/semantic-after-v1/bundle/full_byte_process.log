@@ -1,0 +1,16 @@
+pip_system_certs: ERROR: could not register module: DLL load failed while importing _ssl: A dynamic link library (DLL) initialization routine failed.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\scripts\programme_tranche\semantic_backstop_child.py", line 30, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\scripts\programme_tranche\semantic_backstop_child.py", line 20, in main
+    from scripts import diff_outputs
+  File "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl\scripts\diff_outputs.py", line 12, in <module>
+    import duckdb
+  File "C:\Users\alger\miniconda3\Lib\site-packages\duckdb\__init__.py", line 12, in <module>
+    from _duckdb import (
+    ...<140 lines>...
+    )
+ImportError: DLL load failed while importing _duckdb: An internal error occurred.

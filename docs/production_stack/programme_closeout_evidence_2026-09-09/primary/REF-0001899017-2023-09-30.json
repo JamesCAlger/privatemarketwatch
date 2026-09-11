@@ -1,0 +1,90 @@
+{
+  "path": "data/raw/filings/bdc_html/1899017/000095017023062818.html",
+  "ref": "REF-0001899017-2023-09-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value:",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | As of September 30, 2023 As of December 31, 2022 | (Unaudited) | Assets | Investments at fair value:",
+      "preceding": [
+        "",
+        "Statements of Assets and Liabilities",
+        "Bain Capital Private Credit",
+        "Item 1. Financial Statements",
+        "PART I FINANCIAL INFORMATION",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[7]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "-",
+        "",
+        "",
+        "$",
+        "-",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended September 30, 2023 For the Three Months Ended September 30, 2022 | Total investment income $ - $ - | Total expenses, net of fee waivers 502 98 | Net investment income before taxes (502 ) (98 )",
+      "preceding": [
+        "",
+        "Our operating results for the three months ended September 30, 2023 and 2022 were as follows (dollars in thousands):",
+        "Results of Operations",
+        "As of September 30, 2023, the Company held one issuer with an investment rating of 2.",
+        "\u2022 An investment is rated 4 if, in the opinion of our Advisor, the investment is performing materially below underwriting expectations. For debt investments, most of or all of the debt covenants are out of compliance and payments are substantially delinquent. Investments rated 4 are not anticipated to be repaid in full, if applicable, and there is significant risk that we may realize a substantial loss on our investment.",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[12]/tr[3]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "-",
+        "",
+        "",
+        "$",
+        "-",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Nine Months Ended September 30, 2023 For the Nine Months Ended September 30, 2022 | Total investment income $ - $ - | Total expenses, net of fee waivers 1,600 362 | Net investment income before taxes (1,600 ) (362 )",
+      "preceding": [
+        "",
+        "Our operating results for the nine months ended September 30, 2023 and 2022 were as follows (dollars in thousands):",
+        "",
+        "For the Three Months Ended September 30, 2023 For the Three Months Ended September 30, 2022 Total investment income $ - $ - Total expenses, net of fee waivers 502 98 Net investment income before taxes (502 ) (98 ) Less income taxes, including excise tax - - Net investment income (502 ) (98 ) Net realized gain (loss) - - Net change in unrealized appreciation - - Net decrease in net assets resulting from operations (502 ) (98 )",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[13]/tr[3]"
+    }
+  ],
+  "sha256": "ccd4c25e5dba50ced319673c457f1ead95fd631471a528cbd38379625054c1d7",
+  "status": "literal_primary_review_candidates"
+}

@@ -1,0 +1,300 @@
+{
+  "path": "data/raw/filings/bdc_html/1588272/000119312523145196.html",
+  "ref": "REF-0001588272-2023-03-31",
+  "rows": [
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "",
+        "814,832",
+        "",
+        "",
+        "",
+        "1,014,610",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "P01_01_2023To03_31_2023",
+          "scale": "0",
+          "text": "814,832",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "P01_01_2022To03_31_2022",
+          "scale": "0",
+          "text": "1,014,610",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Three Months Ended March 31, | 2023 2022 | Investment income: | Interest $ 636,822 $ 562,607",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Statements of Operations",
+        "NexPoint Capital, Inc."
+      ],
+      "xpath": "/html/body/div[4]/div/div/div[1]/div/table[1]/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments \u2013 95.3%",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "50,811,343",
+        "",
+        "",
+        "$",
+        "48,731,529",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "cik0001588272:InvestmentOwnedAtAmortizedCost",
+          "context": "P01_01_2023To03_31_2023_TotalInvestmentNinetyFivePointThreeMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "50,811,343",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023_TotalInvestmentNinetyFivePointThreeMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "48,731,529",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Real Estate Investment Trust (REIT) \u2013 2.0% | NexPoint Residential Trust, Inc. (5) (10) 23,409 $ 698,189 $ 1,022,291 |  | Service \u2013 0.0%",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "As of March 31, 2023",
+        "Schedule of Investments (continued)",
+        "NexPoint Capital, Inc."
+      ],
+      "xpath": "/html/body/div[9]/div/div[1]/div/table[1]/tr[61]"
+    },
+    {
+      "cells": [
+        "Total Investments- 99.2%",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "54,011,971",
+        "",
+        "",
+        "$",
+        "53,293,715",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "cik0001588272:InvestmentOwnedAtAmortizedCost",
+          "context": "P01_01_2022To12_31_2022_TotalInvestmentNinetyNinePointTwoMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "54,011,971",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022_TotalInvestmentNinetyNinePointTwoMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "53,293,715",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Real Estate Investment Trust (REIT) \u2013 1.9% | NexPoint Residential Trust, Inc. (5) (16) 23,409 $ 698,189 $ 1,018,779 |  | Service \u2013 0.0%",
+      "preceding": [
+        "",
+        "As of December 31, 2022",
+        "Schedule of Investments (continued)",
+        "NexPoint Capital, Inc.",
+        ""
+      ],
+      "xpath": "/html/body/div[15]/div/div[1]/div/table[1]/tr[62]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "3,085,554",
+        "",
+        "",
+        "$",
+        "11,200,749",
+        "",
+        "",
+        "$",
+        "34,445,226",
+        "",
+        "",
+        "$",
+        "48,731,529",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel1MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "3,085,554",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel2MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "11,200,749",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel3MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "34,445,226",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023",
+          "scale": "0",
+          "text": "48,731,529",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | March 31, 2023 | Investments Level 1 Level 2 Level 3 Total |  | Assets",
+      "preceding": [
+        "",
+        "The inputs or methodology used for valuing investments are not necessarily an indication of the risk associated with investing in those investments. The following are summaries of the Company\u2019s investments categorized within the fair value hierarchy as of March 31, 2023 and December 31, 2022:"
+      ],
+      "xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:continuation/ix:nonnumeric/table/tr[35]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "8,672,509",
+        "",
+        "",
+        "$",
+        "16,120,417",
+        "",
+        "",
+        "$",
+        "28,500,789",
+        "",
+        "",
+        "$",
+        "53,293,715",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel1MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "8,672,509",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel2MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "16,120,417",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel3MemberusgaapFairValueByFairValueHierarchyLevelAxis",
+          "scale": "0",
+          "text": "28,500,789",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022",
+          "scale": "0",
+          "text": "53,293,715",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | December 31, 2022 | Investments Level 1 Level 2 Level 3 Total |  | Assets",
+      "preceding": [],
+      "xpath": "/html/body/div[20]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:continuation/table/tr[34]"
+    },
+    {
+      "cells": [
+        "Total Investment Activity",
+        "",
+        "$",
+        "463,314",
+        "",
+        "",
+        "",
+        "100",
+        "%",
+        "",
+        "$",
+        "6,918,805",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended March 31, 2023 For the Three Months Ended March 31, 2022 | New Investment Activity by Asset Class Purchases Percentage Purchases Percentage | Senior Secured Loans\u2014First Lien $ 463,314 100 % $ 2,910,000 42.06 % | Senior Secured Loans\u2014Second Lien \u2014 \u2014 \u2014 0.0 %",
+      "preceding": [
+        "",
+        "Net Investment Activity For the Three Months Ended March 31, 2023 For the Three Months Ended March 31, 2022 Purchases $ 463,314 $ 6,918,805 Payment-in-kind 29,847 106,711 Sales and Principal Repayments (3,808,980 ) (5,631,508 ) Net Portfolio Activity $ (3,315,819 ) $ (1,394,008 )",
+        "",
+        "The following tables present selected information regarding our portfolio investment activity for the three months ended March 31, 2023, and March 31, 2022. The table below includes non-cash transactions for the three months ended March 31, 2023.",
+        "Total Portfolio Activity",
+        "",
+        "",
+        "s and principal repayments on long investments of $5,643,969. As of March 31, 2022, our investment portfolio, with a total fair value of $62.4 million, consisted of 36 interests in portfolio companies (calculated as a percentage of total invested assets: 23.4% in first lien senior secured loans, 4.9% in second lien senior secured loans, 10.8% in corporate bonds, 0.8% in asset-backed securities, 0.3% in warrants, 37.1% in common stock, 15.6% in 41",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/div[35]/div/table[2]/tr[12]"
+    }
+  ],
+  "sha256": "eeca3734da8285717f690a8a2fe42f5228b3b526d9f56275792625d3ce1580ab",
+  "status": "literal_primary_review_candidates"
+}

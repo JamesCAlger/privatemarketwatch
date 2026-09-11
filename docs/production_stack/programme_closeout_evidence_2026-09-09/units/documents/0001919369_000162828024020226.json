@@ -1,0 +1,44 @@
+{
+  "accession": "0001628280-24-020226",
+  "cik": "0001919369",
+  "identity": [
+    910264,
+    1774941981402571600
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1919369/000162828024020226.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "55ceeeff2bfe5f9cbf4e7f807d986e28fd3e150e28c94b8c4364efac16c7b39e",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"vcsl:company\"]",
+      "unit_ref": "company"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "case": 6,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001803498|2025-12-31|Specialty Lending Company, LLC - LLC Interest",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "COMMON_EQUITY",
+      "cik": "0001803498",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001803498|2025-12-31|Specialty Lending Company, LLC - LLC Interest",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "DIRECT_EQUITY",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-83c13ebd7d695db4",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001803498|2025-12-31|Specialty Lending Company, LLC - LLC Interest",
+    "accession": "0001803498-26-000014",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001803498",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "12afab7",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Specialty Lending Company, LLC - LLC Interest",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_EQUITY",
+    "true_cost": 371979000.0,
+    "true_fair_value": 381241000.0,
+    "true_lien": null,
+    "unit_uid": "specialty lending company llc llc interest"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification_parent": "DIRECT_EQUITY",
+    "leaf": "unresolved"
+  },
+  "reason": "LLC interest is disclosed; operating-company versus pooled-vehicle nature and precise leaf need business/rights evidence.",
+  "row_xpath": "/html/body/div[1205]/table/tr[27]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "Specialty Lending Company, LLC - LLC Interest",
+        "",
+        "(4)(6)(16)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "10/19/2021",
+        "",
+        "",
+        "",
+        "371,979,000",
+        "",
+        "",
+        "371,979",
+        "",
+        "",
+        "381,241",
+        "",
+        "",
+        "0.80",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-1540",
+          "context_text": "0001803498 Specialty Lending Company, LLC - LLC Interest | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "0",
+          "text": "371,979,000",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1540",
+          "context_text": "0001803498 Specialty Lending Company, LLC - LLC Interest | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "371,979",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1540",
+          "context_text": "0001803498 Specialty Lending Company, LLC - LLC Interest | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "381,241",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1540",
+          "context_text": "0001803498 Specialty Lending Company, LLC - LLC Interest | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "-2",
+          "text": "0.80",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Investments (1)(19) Footnotes Reference Rate and Spread (2) Interest Rate (2)(15) Acquisition Date Maturity Date Par Amount/Units (1) Cost (3) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1205]/table",
+      "xpath": "/html/body/div[1205]/table/tr[27]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+  "source_sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c",
+  "status": "leaf_unresolved",
+  "supplementary_evidence": null
+}

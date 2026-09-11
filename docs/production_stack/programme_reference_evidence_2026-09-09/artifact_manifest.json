@@ -1,0 +1,155 @@
+{
+  "files": [
+    {
+      "file": "inventory.py",
+      "bytes": 8138,
+      "sha256": "15e042fee8369ab3f5577f4c11b30d7f05384d7cd192d5c3e61617950e043d55"
+    },
+    {
+      "file": "xml_text_fallback.py",
+      "bytes": 2284,
+      "sha256": "7fb7e0d098505d9005452f8e0e77e0437ac4e071a9f25ad5c2ebf3460ea0f920"
+    },
+    {
+      "file": "early_documents.py",
+      "bytes": 2194,
+      "sha256": "a538b7be90ee3a6ec9b26ef1b411cc621062b1bed21f6364bce8db7a0960beec"
+    },
+    {
+      "file": "benchmark_inventory.py",
+      "bytes": 5526,
+      "sha256": "82617e8e3bc06201450fd7178a613c9ef7d89043dfdba4f18f7044806043c28a"
+    },
+    {
+      "file": "adjudicate.py",
+      "bytes": 11951,
+      "sha256": "34a6be0d712908976145fc934459dfe902737b43bd83a020257afd13446870ff"
+    },
+    {
+      "file": "reference_frame.py",
+      "bytes": 6472,
+      "sha256": "f198b33961c9881d29bdaeff34e34ad09f3b77820c43388fba43f7ba06a3ae50"
+    },
+    {
+      "file": "development_examples.py",
+      "bytes": 3812,
+      "sha256": "c776586afe39f799a391065a53f5bb73fa4c072a5def98300119cf7406d59fbf"
+    },
+    {
+      "file": "fund_metadata.csv",
+      "bytes": 3871,
+      "sha256": "698ad3aba64787e2484f6ac31aae2a4bb7a9bd7e52aa65ed34e4986f1f96561c"
+    },
+    {
+      "file": "fund_source_documents.csv",
+      "bytes": 26882,
+      "sha256": "10dca7ff2f033a6f1c7846f60ab65ace06a3c2a95469a475c9c63f929c89469f"
+    },
+    {
+      "file": "xml_fallback_documents.csv",
+      "bytes": 2864,
+      "sha256": "5c9ad611d953ac9cf09ce41c3127cce078933c2023b6996a08b58b24c6b91a7c"
+    },
+    {
+      "file": "early_source_documents.csv",
+      "bytes": 4506,
+      "sha256": "5cbb6e98cb3c47c26a157c199660be22bfaba6f95048006bdc02177e883a689d"
+    },
+    {
+      "file": "companyfacts_concepts.csv",
+      "bytes": 26525,
+      "sha256": "8c9c90b594d61b00a178ef3cbfd726c1efc70e411922b0fb60761877b0debccd"
+    },
+    {
+      "file": "companyfacts_evidence.csv",
+      "bytes": 644933,
+      "sha256": "e68a3d70df6888ac062b545aa295446b7b57bcedec4be3587a223848bf33be78"
+    },
+    {
+      "file": "positive_investment_evidence.csv",
+      "bytes": 123443,
+      "sha256": "ddbbf6a65fbce928b5aca4309b0413effe361064735b8ed7e6215042cb0c271e"
+    },
+    {
+      "file": "lifecycle_decisions.csv",
+      "bytes": 5000,
+      "sha256": "68612f6ae4ac36a477161e11837dc24a82c61286acf00d5eee11e2a7153f0d42"
+    },
+    {
+      "file": "source_passages.json",
+      "bytes": 49508,
+      "sha256": "4f0cf4824367f196e13cef558833c6917f6a11dddf57240eda7dd9b5f61d6d1c"
+    },
+    {
+      "file": "obligations.csv",
+      "bytes": 172055,
+      "sha256": "4ff966c7874a0ab18595326ae76bd0898a1a15ef08f87e73792a23267c067b67"
+    },
+    {
+      "file": "missing_output_obligations.csv",
+      "bytes": 18947,
+      "sha256": "0b701672d805e8715885a29a43f7f85cae9987dc270f339b675823a7733a3dbb"
+    },
+    {
+      "file": "eligibility_quarters.csv",
+      "bytes": 571,
+      "sha256": "f0363df139f007e5595d7e5a7f57d7030279f03228fa33806751138f2e5684a0"
+    },
+    {
+      "file": "eligibility_summary.json",
+      "bytes": 4707,
+      "sha256": "0420eefedda6704d53b042c12c89c4e6c1e853986bf922ddeb07351c268bc526"
+    },
+    {
+      "file": "benchmark_inventory.json",
+      "bytes": 4112,
+      "sha256": "45c4514dc0eafcdfb3eeaec92f1967ddbc33debb85dcf0ea3f98f0b51d7a2799"
+    },
+    {
+      "file": "existing_position_reference_index.csv",
+      "bytes": 44483,
+      "sha256": "2299de32f48c5e1e3108ebba814a45372e0fd0c07404175b4232c1999665730c"
+    },
+    {
+      "file": "existing_match_reference_index.csv",
+      "bytes": 172432,
+      "sha256": "4b0023863bf0e5c233f6ae175ba37de58449f8a64fafeb892806ae8e3a275060"
+    },
+    {
+      "file": "source_document_frame.csv",
+      "bytes": 375568,
+      "sha256": "6d1fb0656fd2945379702f66269eed9d9b8ad1ff284b906b64fb051cfac8b7ab"
+    },
+    {
+      "file": "reference_pilot.csv",
+      "bytes": 48174,
+      "sha256": "bb2b788958d7e4863dd6d2e119eab4caa64fe6af847b2f619f563df304d84257"
+    },
+    {
+      "file": "reference_summary.json",
+      "bytes": 734,
+      "sha256": "2237af2f4a277f54b906962e85ee976ef8f436745c12e0d63d7983cbcb46a231"
+    },
+    {
+      "file": "development_source_rows.json",
+      "bytes": 46438,
+      "sha256": "a7f81e7d7466ae535e575a111d9febf76b8f86e6bb3771660271156f309cac7d"
+    },
+    {
+      "file": "development_expectations.json",
+      "bytes": 6277,
+      "sha256": "583fa6db4acb8407c64761a6111b83f86ed0c656e26d22bfbd72ecf5e2f5eeff"
+    },
+    {
+      "file": "all_input_manifest.csv",
+      "bytes": 334151,
+      "sha256": "47315d7d1eedc055920d15b1e418bd2c8279a3d284936080eb4292ebf96865b3"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 592,
+      "sha256": "6621eb9b4f834dc9ec0540af7ee46fd137e0374e9fdffc5ed082306c566c8334"
+    }
+  ],
+  "note": "Source text scratch files are not archived; short source passages and cache hashes are retained."
+}

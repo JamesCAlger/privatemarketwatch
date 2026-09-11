@@ -1,0 +1,74 @@
+{
+  "candidate_sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+  "currencies": [
+    [
+      "AFN"
+    ],
+    [
+      "AUD"
+    ],
+    [
+      "CAD"
+    ],
+    [
+      "CHF"
+    ],
+    [
+      "CNY"
+    ],
+    [
+      "DKK"
+    ],
+    [
+      "EGP"
+    ],
+    [
+      "EUR"
+    ],
+    [
+      "GBP"
+    ],
+    [
+      "JPY"
+    ],
+    [
+      "KPW"
+    ],
+    [
+      "KRW"
+    ],
+    [
+      "NOK"
+    ],
+    [
+      "NZD"
+    ],
+    [
+      "RSD"
+    ],
+    [
+      "SEK"
+    ],
+    [
+      "SGD"
+    ],
+    [
+      "USD"
+    ]
+  ],
+  "elapsed_seconds": 3.1937048000036157,
+  "foreign_field_observations": 6650,
+  "inputs": [
+    {
+      "path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\units\\document_units.csv",
+      "sha256": "96ab9092dd87e53665f9a979ded4094d27159772356339da79ecdeecd953ffb2"
+    },
+    {
+      "path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\units\\unit_exceptions.csv",
+      "sha256": "b4325eced66c26e00d7c53227caee291c51c8fba5060dd3e9cf1a20ca20ea890"
+    }
+  ],
+  "remaining_unresolved": 7107,
+  "scope": "Refinement of non-USD/missing/unknown token exceptions; exact USD rows remain in original inventory",
+  "status": "complete"
+}

@@ -1,0 +1,89 @@
+{
+  "anchors": [],
+  "cik": "0001899017",
+  "component": "lifecycle_source_counterexample",
+  "path": "data/raw/filings/bdc_html/1899017/000095017023062818.html",
+  "reference_id": "REF-0001899017-2023-09-30",
+  "report_date": "2023-09-30",
+  "source_rows": 11,
+  "source_sha256": "ccd4c25e5dba50ced319673c457f1ead95fd631471a528cbd38379625054c1d7",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) | $ | 1,215,000 | $ | -"
+      ],
+      "last": [
+        "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) | $ | 1,215,000 | $ | -"
+      ],
+      "opening_rows": [
+        "",
+        "As of September 30, 2023 As of December 31, 2022",
+        "(Unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "Statements of Assets and Liabilities",
+        "Bain Capital Private Credit",
+        "Item 1. Financial Statements",
+        "PART I FINANCIAL INFORMATION",
+        "",
+        "",
+        "1"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/table[7]"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "Legacy Corporate Lending HoldCo, LLC (1 )(2)(3)(4)(5 ) | Preferred Equity | \u2014 | \u2014 | \u2014 | \u2014 | 1,125 | 1,125,000 | 1,125,000 | - 94.6 | %",
+        "Legacy Corporate Lending HoldCo, LLC , Class A (1)(2)(3)(4)(5) | Equity Interest | \u2014 | \u2014 | \u2014 | \u2014 | 90 | 90,000 | 90,000 | - 7.6 | %"
+      ],
+      "last": [
+        "Controlled Affiliate Investments Total | $ | 1,215,000 | $ | 1,215,000 | - 102.2 | %",
+        "Investments Total | $ | 1,215,000 | $ | 1,215,000 | - 102.2 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Investment Type Index Spread Interest Rate Maturity Date Shares Cost Market Value % of NAV (6)",
+        "Controlled Affiliate Investments",
+        "FIRE: Finance"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "As of September 30, 2023",
+        "Schedule of Investments",
+        "Bain Capital Private Credit",
+        "",
+        "",
+        "5"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Legacy Corporate Lending HoldCo, LLC Equity Interest | $ | \u2014 | $ | 90,000 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 90,000 | $ | \u2014 | $ | \u2014",
+        "Legacy Corporate Lending HoldCo, LLC Preferred Equity | \u2014 | 1,125,000 | \u2014 | \u2014 | \u2014 | 1,125,000 | \u2014 | \u2014"
+      ],
+      "last": [
+        "Total Controlled affiliate investments | $ | \u2014 | $ | 1,215,000 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 1,215,000 | $ | \u2014 | $ | \u2014",
+        "Total | $ | \u2014 | $ | 1,215,000 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 1,215,000 | $ | \u2014 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Fair Value as of December 31, 2022 Gross Additions Gross Reductions Change in Unrealized Gains (Losses) Realized Gains (Losses) Fair Value as of September 30, 2023 Dividend, Interest, and PIK Income Other Income",
+        "Controlled affiliate investments",
+        "Legacy Corporate Lending HoldCo, LLC Equity Interest $ \u2014 $ 90,000 $ \u2014 $ \u2014 $ \u2014 $ 90,000 $ \u2014 $ \u2014"
+      ],
+      "preceding": [],
+      "rows": 4,
+      "table_xpath": "/html/body/div[12]/ix:nonnumeric/div[5]/ix:continuation/table"
+    }
+  ]
+}

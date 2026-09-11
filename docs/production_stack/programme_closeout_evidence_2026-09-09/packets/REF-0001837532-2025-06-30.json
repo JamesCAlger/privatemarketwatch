@@ -1,0 +1,1229 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_68db0699-4184-4049-baed-dd75cd252685",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "$",
+        "19,863,636",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "$",
+        "18,685",
+        "",
+        "$",
+        "6,944",
+        "",
+        "$",
+        "6,880",
+        "",
+        "$",
+        "19,896,145",
+        "",
+        "151.5 %"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+      "currency": "USD",
+      "fact_id": "F_68db0699-4184-4049-baed-dd75cd252685",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "19,896,145",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[204]/ix:continuation/table/tr[10]",
+      "table_xpath": "/html/body/div[204]/ix:continuation/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "19896145000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_0f347384-0336-4520-ae66-8313bb148979",
+        "name": "ck0001837532:PercentageOfTotalInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "",
+        "100.0 %"
+      ],
+      "concept": "ck0001837532:PercentageOfTotalInvestmentsAtFairValue",
+      "context_id": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+      "currency": null,
+      "fact_id": "F_0f347384-0336-4520-ae66-8313bb148979",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[207]/table/tr[56]",
+      "table_xpath": "/html/body/div[207]/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_54cf2097-1c39-48d6-958e-430bfbca5da9",
+        "name": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments before Cash Equivalents",
+        "",
+        "$",
+        "19,670,193",
+        "",
+        "$",
+        "19,896,145",
+        "",
+        "$",
+        "81",
+        "",
+        "$",
+        "5,347,654",
+        "",
+        "$",
+        "14,548,410"
+      ],
+      "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+      "context_id": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+      "currency": "USD",
+      "fact_id": "F_54cf2097-1c39-48d6-958e-430bfbca5da9",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "19,896,145",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[9]",
+      "table_xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "19896145000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_1e151845-7cb7-4201-8685-dfe108097e0f",
+        "name": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments after Cash Equivalents",
+        "",
+        "$",
+        "20,456,126",
+        "",
+        "$",
+        "20,682,078",
+        "",
+        "$",
+        "786,014",
+        "",
+        "$",
+        "5,347,654",
+        "",
+        "$",
+        "14,548,410"
+      ],
+      "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+      "context_id": "C_d2c73f81-f4b7-4599-a719-22e49e1ccacc",
+      "currency": "USD",
+      "fact_id": "F_1e151845-7cb7-4201-8685-dfe108097e0f",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "20,682,078",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[12]",
+      "table_xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "20682078000"
+    }
+  ],
+  "cik": "0001837532",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1837532/000095017025105984.html",
+  "reference_id": "REF-0001837532-2025-06-30",
+  "report_date": "2025-06-30",
+  "source_rows": 1052,
+  "source_sha256": "56f16b2ad7b2a995e335b5a3e57e2ef7ae2e859f877bfc429a02fd9644c0b025",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost \u2014 $ 19,670,193 and $ 14,609,338 at June 30, 2025 and December 31, 2024, respectively) | $ | 19,896,145 | $ | 14,555,535"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (cost \u2014 $ 19,670,193 and $ 14,609,338 at June 30, 2025 and December 31, 2024, respectively) | $ | 19,896,145 | $ | 14,555,535"
+      ],
+      "opening_rows": [
+        "",
+        "APOLLO DEBT SOLUTIONS BDC",
+        "CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES",
+        "(In thousands, except share and per share data)"
+      ],
+      "preceding": [
+        "",
+        "Item 1. Consolidated Financial Statements",
+        "",
+        "In this report, the terms the \u201c Company ,\u201d \u201c ADS ,\u201d \u201c we ,\u201d \u201c us \u201d and \u201c our \u201d refer to Apollo Debt Solutions BDC unless the context specifically states otherwise.",
+        "",
+        "PART I. FINANCIAL INFORMATION"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/div[9]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450 , 0.50 % Floor | 4/24/2032 | $ | 187,003 | $ | 186,087 | $ | 186,068 | (4)(16)",
+        "First Lien Secured Debt - Revolver | S + 450 , 0.50 % Floor | 4/24/2032 | \u2014 | ( 157 ) | ( 161 ) | (4)(5)(12)(32)"
+      ],
+      "last": [
+        "Mavis Tire Express Services TopCo, L.P. | First Lien Secured Debt - Term Loan | S + 300 , 0.75 % Floor | 5/4/2028 | 46,456 | 46,348 | 46,492 | (16)",
+        "Total Automobile Components | $ | 240,438 | $ | 238,969"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Aerospace & Defense",
+        "Accel International"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 18,
+      "table_xpath": "/html/body/div[21]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "CPI Holdco B, LLC | First Lien Secured Debt - Term Loan | S + 225 , 0.00 % Floor | 5/17/2031 | $ | 30,500 | $ | 30,446 | $ | 30,510 | (15)(16)",
+        "Creative Planning, LLC | First Lien Secured Debt - Term Loan | S + 200 , 0.00 % Floor | 5/17/2031 | 9,975 | 9,900 | 9,958 | (15)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 1.00 % Floor | 3/4/2030 | \u2014 | ( 10 ) | ( 9 ) | (4)(5)(9)(12)(32)",
+        "2,666 | 2,673"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Banks",
+        "Creative Planning"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/div[24]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "LBM Acquisition, LLC | First Lien Secured Debt - Term Loan | S + 385 , 0.75 % Floor | 12/17/2027 | 10,835 | 10,780 | 10,713 | (15)",
+        "Total Building Products | $ | 225,965 | $ | 225,888"
+      ],
+      "last": [
+        "167,866 | 182,107",
+        "Total Capital Markets | $ | 392,504 | $ | 404,733"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "US LBM",
+        "LBM Acquisition, LLC First Lien Secured Debt - Term Loan S + 385 , 0.75 % Floor 12/17/2027 10,835 10,780 10,713 (15)"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[27]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 11.00 % | 4/30/2024 | $ | 485 | $ | 427 | $ | 243 | (4)(8)(16)(28)",
+        "9,866 | 243"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 676 , 1.00 % Floor | 7/2/2028 | 952 | 951 | 952 | (4)(12)(16)(32)",
+        "18,722 | 18,691"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Chemicals",
+        "Heubach"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[30]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "A&V Holdings Midco, LLC | First Lien Secured Debt - Term Loan | S + 500 , 0.00 % Floor | 6/6/2031 | 173,813 | 171,502 | 171,431 | (4)(9)(15)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.00 % Floor | 6/6/2031 | \u2014 | ( 228 ) | ( 488 ) | (4)(5)(9)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.75 % Floor | 1/31/2031 | \u2014 | ( 28 ) | ( 94 ) | (4)(5)(9)(32)",
+        "97,932 | 99,659"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "AVI-SPL",
+        "A&V Holdings Midco, LLC First Lien Secured Debt - Term Loan S + 500 , 0.00 % Floor 6/6/2031 173,813 171,502 171,431 (4)(9)(15)(16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[33]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Mount Olympus Bidco Limited | First Lien Secured Debt - Term Loan | S + 550 , 0.50 % Floor | 8/9/2029 | 13,705 | 13,457 | 13,466 | (4)(8)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 550 , 0.50 % Floor | 8/9/2029 | 4,760 | 4,741 | 4,677 | (4)(8)(9)(16)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 525 , 1.00 % Floor | 11/17/2029 | 687 | 660 | 677 | (4)(9)(12)(17)(32)",
+        "12,505 | 12,663"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "HKA",
+        "Mount Olympus Bidco Limited First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 8/9/2029 13,705 13,457 13,466 (4)(8)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Smith Topco, Inc. | First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 11/6/2029 | 14,361 | 14,112 | 14,145 | (4)(9)(16)(17)",
+        "First Lien Secured Debt - Revolver | S + 475 , 1.00 % Floor | 11/6/2029 | \u2014 | ( 28 ) | ( 25 ) | (4)(5)(9)(12)(32)"
+      ],
+      "last": [
+        "237,615 | 239,361",
+        "Congruex Group LLC | First Lien Secured Debt - Term Loan | S + 165 Cash plus 5.00 % PIK, 0.75 % Floor | 5/3/2029 | 30,581 | 30,136 | 26,803 | (9)(16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Smith System",
+        "Smith Topco, Inc. First Lien Secured Debt - Term Loan S + 475 , 1.00 % Floor 11/6/2029 14,361 14,112 14,145 (4)(9)(16)(17)"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/div[39]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Mobile Communications America, Inc. | First Lien Secured Debt - Term Loan | S + 500 , 1.00 % Floor | 10/16/2029 | 8,298 | 8,137 | 8,215 | (4)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 1.00 % Floor | 10/16/2029 | 1,955 | 1,915 | 1,896 | (4)(9)(12)(16)(32)"
+      ],
+      "last": [
+        "193,374 | 191,709",
+        "Cube A&D Buyer Inc | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 10/17/2031 | 24,439 | 24,341 | 24,599 | (9)(16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "MCA",
+        "Mobile Communications America, Inc. First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 10/16/2029 8,298 8,137 8,215 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[42]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Pave America Interco, LLC | First Lien Secured Debt - Term Loan | S + 565 , 1.00 % Floor | 8/9/2030 | 25,609 | 25,175 | 25,225 | (4)(9)(16)",
+        "First Lien Secured Debt - Term Loan | S + 565 , 1.00 % Floor | 2/7/2029 | 6,729 | 6,599 | 6,628 | (4)(9)(16)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Term Loan | S + 250 , 0.50 % Floor | 6/21/2028 | 2,992 | 2,974 | 2,998 | (17)",
+        "49,007 | 49,683"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Pave America",
+        "Pave America Interco, LLC First Lien Secured Debt - Term Loan S + 565 , 1.00 % Floor 8/9/2030 25,609 25,175 25,225 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[45]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Volunteer AcquisitionCo, LLC | First Lien Secured Debt - Term Loan | S + 650 , 1.00 % Floor | 9/1/2029 | 5,105 | 5,007 | 4,952 | (4)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 650 , 1.00 % Floor | 9/1/2029 | 376 | 369 | 365 | (4)(9)(16)"
+      ],
+      "last": [
+        "Viking Baked Goods Acquisition Corporation | First Lien Secured Debt - Term Loan | S + 500 , 0.00 % Floor | 11/4/2031 | 159,200 | 156,976 | 156,016 | (4)(9)(16)",
+        "Total Consumer Staples Distribution & Retail | $ | 361,612 | $ | 377,013"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Volunteer Materials",
+        "Volunteer AcquisitionCo, LLC First Lien Secured Debt - Term Loan S + 650 , 1.00 % Floor 9/1/2029 5,105 5,007 4,952 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Ardagh Group S.A. | First Lien Secured Debt - Term Loan | 8.88 % | 7/2/2029 | \u20ac | 99,000 | $ | 105,268 | $ | 115,451 | (3)(4)(8)(9)(10)",
+        "Ardagh Metal Packaging Finance plc | First Lien Secured Debt - Term Loan | E + 450 , 1.00 % Floor | 9/24/2029 | \u20ac | 59,921 | 66,536 | 70,231 | (3)(4)(8)(10)(20)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 250 Cash plus 4.75 % PIK, 1.00 % Floor | 3/22/2029 | 4,015 | 3,913 | 3,945 | (4)(9)(16)(32)",
+        "26,816 | 26,865"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Containers & Packaging",
+        "Ardagh"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[51]/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Excelligence Learning Corporation | First Lien Secured Debt - Term Loan | S + 575 , 1.00 % Floor | 1/18/2030 | 84,370 | 83,003 | 83,105 | (4)(9)(16)",
+        "First Lien Secured Debt - Revolver | S + 575 , 1.00 % Floor | 1/18/2030 | 4,747 | 4,587 | 4,543 | (4)(9)(12)(16)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 600 , 1.00 % Floor | 10/4/2028 | 114 | 106 | 114 | (4)(9)(12)(15)(32)",
+        "8,286 | 8,418"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Excelligence",
+        "Excelligence Learning Corporation First Lien Secured Debt - Term Loan S + 575 , 1.00 % Floor 1/18/2030 84,370 83,003 83,105 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 23,
+      "table_xpath": "/html/body/div[54]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "CI | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 6/6/2031 | 17,201 | 17,027 | 16,996 | (4)(15)",
+        "First Lien Secured Debt - Delayed Draw | S + 500, 0.75 % Floor | 10/12/2028 | \u2014 | ( 50 ) | ( 119 ) | (4)(5)(12)(32)"
+      ],
+      "last": [
+        "Level 3 Financing, Inc. | First Lien Secured Debt - Term Loan | S + 425 , 0.50 % Floor | 3/29/2032 | 73,500 | 72,428 | 74,403 | (15)(16)",
+        "Total Diversified Telecommunication Services | $ | 256,866 | $ | 261,276"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "SAVATREE",
+        "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,201 17,027 16,996 (4)(15)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[57]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Megavolt Borrower, LLC | First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 2/13/2032 | $ | 18,750 | $ | 18,390 | $ | 18,375 | (4)(16)",
+        "BGIF IV Fearless Utility Services, Inc. | First Lien Secured Debt - Term Loan | S + 500 , 0.50 % Floor | 6/9/2031 | 134,381 | 133,190 | 133,037 | (4)(9)(15)(16)"
+      ],
+      "last": [
+        "Total Electrical Equipment | $ | 80,643 | $ | 84,663",
+        "Lightning Power, LLC | First Lien Secured Debt - Term Loan | S + 225 , 0.00 % Floor | 8/18/2031 | $ | 11,414 | $ | 11,366 | $ | 11,448 | (16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Electric Utilities",
+        "Dynagrid"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[60]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Madison Safety & Flow LLC | First Lien Secured Debt - Term Loan | S + 275 , 0.00 % Floor | 9/26/2031 | 19,406 | 19,324 | 19,466 | (15)",
+        "Total Electronic Equipment, Instruments & Components | $ | 30,690 | $ | 30,914"
+      ],
+      "last": [
+        "68,367 | 68,541",
+        "Total Entertainment | $ | 158,192 | $ | 159,531"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Madison Safety",
+        "Madison Safety & Flow LLC First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 9/26/2031 19,406 19,324 19,466 (15)"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/div[63]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Eclipse Buyer, Inc. | First Lien Secured Debt - Term Loan | S + 475 , 0.50 % Floor | 9/8/2031 | $ | 22,738 | $ | 22,530 | $ | 22,511 | (4)(15)",
+        "First Lien Secured Debt - Delayed Draw | S + 475 , 0.50 % Floor | 9/8/2031 | \u2014 | ( 17 ) | ( 39 ) | (4)(5)(12)(32)"
+      ],
+      "last": [
+        "25,402 | 24,832",
+        "Tulip Bidco Limited | First Lien Secured Debt - Delayed Draw | 9.22 % | 12/13/2027 | \u00a3 | 7,069 | 7,553 | 5,851 | (3)(4)(8)(10)(12)(32)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Financial Services",
+        "AffiniPay"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[66]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "GC Waves Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 485 , 0.75 % Floor | 10/4/2030 | 63,212 | 63,140 | 62,972 | (4)(9)(15)",
+        "First Lien Secured Debt - Delayed Draw | S + 485 , 0.75 % Floor | 10/4/2030 | 18,683 | 18,452 | 18,555 | (4)(9)(12)(15)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | SONIA + 625 , 0.00 % Floor | 12/5/2031 | \u2014 | ( 220 ) | ( 172 ) | (3)(4)(5)(8)(9)(10)(12)(32)",
+        "81,837 | 85,421"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "GC Waves",
+        "GC Waves Holdings, Inc. First Lien Secured Debt - Term Loan S + 485 , 0.75 % Floor 10/4/2030 63,212 63,140 62,972 (4)(9)(15)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[69]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Orion US Finco | First Lien Secured Debt - Term Loan | S + 350 , 0.00 % Floor | 5/20/2032 | 15,000 | 14,925 | 15,064 | (8)(15)",
+        "Hurricane Cleanco Limited | First Lien Secured Debt - Term Loan | 12.50 % Cash plus 6.25 % PIK, 1.00 % Floor | 11/21/2029 | \u00a3 | 51,630 | 61,518 | 70,161 | (3)(4)(8)(9)"
+      ],
+      "last": [
+        "WH Borrower, LLC | First Lien Secured Debt - Term Loan | S + 475 , 0.50 % Floor | 2/20/2032 | 56,850 | 56,275 | 56,939 | (16)",
+        "Total Financial Services | $ | 1,372,723 | $ | 1,419,296"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "OSTTRA",
+        "Orion US Finco First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 5/20/2032 15,000 14,925 15,064 (8)(15)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[72]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Green Grass Foods, Inc. | First Lien Secured Debt - Term Loan | S + 625 , 1.00 % Floor | 12/26/2029 | $ | 3,694 | $ | 3,634 | $ | 3,685 | (4)(9)(16)",
+        "First Lien Secured Debt - Revolver | S + 650 , 1.00 % Floor | 12/26/2029 | \u2014 | ( 19 ) | ( 3 ) | (4)(5)(9)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 525 , 0.75 % Floor | 12/17/2030 | \u2014 | ( 184 ) | ( 190 ) | (4)(5)(12)(32)",
+        "36,084 | 35,946"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Food Products",
+        "Nutpods"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[75]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Student Transportation of America Holdings Inc | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 6/24/2032 | 7,280 | 7,244 | 7,304 | (16)",
+        "7,241 | 7,304"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 0.75 % Floor | 1/31/2032 | \u2014 | ( 374 ) | ( 395 ) | (4)(5)(9)(12)(32)",
+        "143,728 | 145,485"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Student Transportation of America",
+        "Student Transportation of America Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 6/24/2032 7,280 7,244 7,304 (16)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[78]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Zest Acquisition Corp. | First Lien Secured Debt - Term Loan | S + 525 , 0.00 % Floor | 2/8/2028 | 20,732 | 20,562 | 20,732 | (16)",
+        "Zeus Company LLC | First Lien Secured Debt - Term Loan | S + 550 , 0.75 % Floor | 2/28/2031 | 53,493 | 52,805 | 53,626 | (4)(9)(16)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 0.75 % Floor | 8/7/2031 | \u2014 | ( 55 ) | ( 52 ) | (4)(5)(12)(32)",
+        "40,408 | 40,271"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Zest Dental Solutions",
+        "Zest Acquisition Corp. First Lien Secured Debt - Term Loan S + 525 , 0.00 % Floor 2/8/2028 20,732 20,562 20,732 (16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[81]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "DCA Investment Holding LLC | First Lien Secured Debt - Term Loan | S + 641 , 0.75 % Floor | 4/3/2028 | 2,411 | 2,411 | 2,326 | (4)(16)",
+        "ERC Topco Holdings, LLC | First Lien Secured Debt - Term Loan | 7.50 % PIK | 3/29/2030 | 10,415 | 34,037 | 5,911 | (4)(16)(28)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 450 , 1.00 % Floor | 4/1/2030 | \u2014 | ( 123 ) | ( 189 ) | (4)(5)(9)(12)(32)",
+        "249,589 | 248,949"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Dental Care Alliance",
+        "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S + 641 , 0.75 % Floor 4/3/2028 2,411 2,411 2,326 (4)(16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[84]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Phoenix Newco, Inc. | First Lien Secured Debt - Term Loan | S + 250 , 0.50 % Floor | 11/15/2028 | 38,415 | 38,295 | 38,468 | (15)",
+        "Paradigm Parent, LLC | First Lien Secured Debt - Term Loan | S + 375 , 0.00 % Floor | 4/17/2032 | 28,125 | 27,233 | 27,230 | (4)(8)(16)"
+      ],
+      "last": [
+        "86,788 | 87,221",
+        "Total Health Care Providers & Services | $ | 1,272,637 | $ | 1,251,939"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Parexel",
+        "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 11/15/2028 38,415 38,295 38,468 (15)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[87]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Acentra Holdings, LLC | First Lien Secured Debt - Term Loan | S + 550 , 0.50 % Floor | 12/17/2029 | $ | 37,513 | $ | 36,624 | $ | 37,232 | (4)(9)(16)",
+        "First Lien Secured Debt - Term Loan | S + 575 , 0.50 % Floor | 12/17/2029 | 2,920 | 2,873 | 2,913 | (4)(9)(16)"
+      ],
+      "last": [
+        "Project Ruby Ultimate Parent Corp. | First Lien Secured Debt - Term Loan | S + 311 , 0.00 % Floor | 3/10/2028 | 52,055 | 51,858 | 52,174 | (15)",
+        "Total Health Care Technology | $ | 331,977 | $ | 332,525"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Health Care Technology",
+        "CNSI"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[90]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Accommodations Plus Technologies LLC | First Lien Secured Debt - Term Loan | S + 450 , 0.75 % Floor | 5/29/2032 | $ | 73,883 | $ | 73,039 | $ | 73,145 | (4)(9)(16)",
+        "First Lien Secured Debt - Revolver | S + 450 , 0.75 % Floor | 5/29/2032 | \u2014 | \u2014 | ( 114 ) | (4)(5)(9)(12)(32)"
+      ],
+      "last": [
+        "201,263 | 201,638",
+        "Joker Holdco 3 S.a r.l. | First Lien Secured Debt - Term Loan | E + 600 , 0.00 % Floor | 4/19/2031 | \u20ac | 126,725 | 132,670 | 148,156 | (3)(4)(8)(9)(10)(21)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Hotels, Restaurants & Leisure",
+        "Aston"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[93]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Life Time, Inc. | First Lien Secured Debt - Term Loan | S + 225 , 0.00 % Floor | 11/5/2031 | 8,416 | 8,396 | 8,448 | (8)(16)",
+        "Nottingham Forest Football Club Limited | First Lien Secured Debt - Term Loan | 8.75 % | 12/27/2027 | 24,688 | 30,796 | 33,718 | (3)(4)(8)(10)"
+      ],
+      "last": [
+        "30,800 | 30,374",
+        "Total Hotels, Restaurants & Leisure | $ | 1,163,771 | $ | 1,193,702"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Life Time Fitness",
+        "Life Time, Inc. First Lien Secured Debt - Term Loan S + 225 , 0.00 % Floor 11/5/2031 8,416 8,396 8,448 (8)(16)"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[96]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "K Hovnanian Enterprises Inc | First Lien Secured Debt - Revolver | S + 450 , 3.00 % Floor | 6/30/2026 | $ | \u2014 | $ | ( 1,573 ) | $ | ( 1,925 ) | (4)(5)(8)(9)(12)(32)",
+        "First Lien Secured Debt - Corporate Bond | 11.75 % | 9/30/2029 | 1,950 | 1,908 | 2,118 | (8)(9)"
+      ],
+      "last": [
+        "Total Household Products | $ | 103,772 | $ | 104,646",
+        "Calpine Corporation | First Lien Secured Debt - Term Loan | S + 175 , 0.00 % Floor | 1/31/2031 | $ | 14,862 | $ | 14,860 | $ | 14,878 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Household Durables",
+        "HOV"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[99]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Cogentrix Finance Holdco I LLC | First Lien Secured Debt - Term Loan | S + 275 , 0.00 % Floor | 2/26/2032 | 14,963 | 14,927 | 15,007 | (15)",
+        "Esdec Solar Group B.V. | First Lien Secured Debt - Term Loan | E + 625 , 0.50 % Floor | 8/30/2028 | \u20ac | 63,014 | 69,777 | 55,299 | (3)(4)(8)(9)(20)"
+      ],
+      "last": [
+        "AmWINS Group, Inc. | First Lien Secured Debt - Term Loan | S + 225 , 0.75 % Floor | 1/30/2032 | 19,900 | 19,875 | 19,930 | (15)",
+        "Ardonagh Group Finco Pty Ltd | First Lien Secured Debt - Term Loan | S + 275 , 0.00 % Floor | 2/15/2031 | 34,913 | 34,739 | 34,738 | (8)(16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Cogentrix",
+        "Cogentrix Finance Holdco I LLC First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 2/26/2032 14,963 14,927 15,007 (15)"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[102]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "AssuredPartners, Inc. | First Lien Secured Debt - Term Loan | S + 350 , 0.50 % Floor | 2/14/2031 | 34,401 | 34,362 | 34,526 | (15)",
+        "Asurion, LLC | First Lien Secured Debt - Term Loan | S + 336 , 0.00 % Floor | 7/31/2027 | 66,493 | 66,059 | 66,510 | (15)"
+      ],
+      "last": [
+        "166,135 | 167,805",
+        "Hub International Limited | First Lien Secured Debt - Term Loan | S + 250 , 0.00 % Floor | 6/20/2030 | 21,254 | 21,252 | 21,341 | (16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "AssuredPartners",
+        "AssuredPartners, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.50 % Floor 2/14/2031 34,401 34,362 34,526 (15)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[105]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Patriot Growth Insurance Services, LLC | First Lien Secured Debt - Term Loan | S + 515 , 0.75 % Floor | 10/16/2028 | 31,652 | 31,652 | 31,652 | (4)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.75 % Floor | 10/16/2028 | 5,030 | 4,985 | 5,030 | (4)(12)(16)(32)"
+      ],
+      "last": [
+        "113,627 | 113,848",
+        "Total Interactive Media & Services | $ | 345,499 | $ | 361,076"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Patriot Growth Insurance Services",
+        "Patriot Growth Insurance Services, LLC First Lien Secured Debt - Term Loan S + 515 , 0.75 % Floor 10/16/2028 31,652 31,652 31,652 (4)(16)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[108]/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "FINANCIERE ASTEK | First Lien Secured Debt - Term Loan | E + 650 , 0.00 % Floor | 4/25/2031 | \u20ac | 50,293 | $ | 52,662 | $ | 58,502 | (3)(4)(8)(9)(10)(20)",
+        "First Lien Secured Debt - Delayed Draw | E + 650 , 0.00 % Floor | 4/25/2031 | \u20ac | 20,626 | 21,590 | 23,989 | (3)(4)(8)(9)(10)(12)(20)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 0.75 % Floor | 8/6/2030 | 2,105 | 2,054 | 2,056 | (4)(12)(16)(32)",
+        "22,672 | 22,689"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "IT Services",
+        "Astek"
+      ],
+      "preceding": [],
+      "rows": 23,
+      "table_xpath": "/html/body/div[111]/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "Virtusa Corporation | First Lien Secured Debt - Term Loan | S + 325 , 0.75 % Floor | 2/15/2029 | 12,716 | 12,727 | 12,735 | (15)",
+        "Total IT Services | $ | 285,529 | $ | 295,986"
+      ],
+      "last": [
+        "LSF12 Donnelly Bidco, LLC | First Lien Secured Debt - Term Loan | S + 650 , 1.00 % Floor | 10/2/2029 | 14,738 | 14,453 | 14,541 | (4)(9)(15)",
+        "Charter Next Generation, Inc. | First Lien Secured Debt - Term Loan | S + 275 , 0.75 % Floor | 11/29/2030 | 30,489 | 30,445 | 30,631 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Virtusa",
+        "Virtusa Corporation First Lien Secured Debt - Term Loan S + 325 , 0.75 % Floor 2/15/2029 12,716 12,727 12,735 (15)"
+      ],
+      "preceding": [],
+      "rows": 15,
+      "table_xpath": "/html/body/div[114]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Engineered Machinery Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 376 , 0.75 % Floor | 5/19/2028 | 20,160 | 20,038 | 20,305 | (16)",
+        "Titan Acquisition Ltd of Canada | First Lien Secured Debt - Term Loan | S + 450 , 0.00 % Floor | 2/15/2029 | 75,499 | 74,824 | 75,795 | (8)(16)(17)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Convertible Bond | 3.88 % PIK | 11/30/2030 | 37 | 37 | 44 | (8)",
+        "66,683 | 67,063"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Duravant",
+        "Engineered Machinery Holdings, Inc. First Lien Secured Debt - Term Loan S + 376 , 0.75 % Floor 5/19/2028 20,160 20,038 20,305 (16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[117]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Gannett Co., Inc. | First Lien Secured Debt - Convertible Bond | 6.00 % | 12/1/2031 | 500 | 527 | 581 | (4)(8)",
+        "Gannett Holdings, LLC | First Lien Secured Debt - Term Loan | S + 500 , 1.50 % Floor | 10/15/2029 | 185,521 | 183,098 | 184,826 | (8)(16)"
+      ],
+      "last": [
+        "WhiteWater DBR HoldCo LLC | First Lien Secured Debt - Term Loan | S + 225 , 0.00 % Floor | 3/3/2031 | 9,241 | 9,268 | 9,264 | (16)",
+        "Total Oil, Gas & Consumable Fuels | $ | 85,891 | $ | 86,066"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Gannett",
+        "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 500 527 581 (4)(8)"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[120]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Complete Paper Inc. | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 2/4/2031 | $ | 19,950 | $ | 19,666 | $ | 19,665 | (4)(16)",
+        "Total Paper & Forest Products | $ | 19,666 | $ | 19,665"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 525 , 1.00 % Floor | 6/27/2029 | \u2014 | ( 82 ) | ( 103 ) | (4)(5)(9)(12)(32)",
+        "162,408 | 162,172"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Paper & Forest Products",
+        "BiOrigin Specialty"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/div[123]/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "RoC Holdco LLC | First Lien Secured Debt - Term Loan | S + 575 , 1.00 % Floor | 2/21/2031 | 25,290 | 24,855 | 24,910 | (4)(9)(16)",
+        "First Lien Secured Debt - Revolver | S + 600 , 1.00 % Floor | 2/21/2030 | \u2014 | ( 68 ) | ( 66 ) | (4)(5)(9)(12)(32)"
+      ],
+      "last": [
+        "PAI Co-Investor FT Aggregator LLC | Common Equity - Stock | N/A | N/A | 100 Shares | 100 | 102 | (4)(9)(33)",
+        "24,419 | 24,402"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "RoC Skincare",
+        "RoC Holdco LLC First Lien Secured Debt - Term Loan S + 575 , 1.00 % Floor 2/21/2031 25,290 24,855 24,910 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 24,
+      "table_xpath": "/html/body/div[126]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "TerSera Therapeutics LLC | First Lien Secured Debt - Term Loan | S + 575 , 1.00 % Floor | 4/4/2029 | 16,665 | 16,382 | 16,665 | (4)(9)(15)",
+        "16,360 | 16,665"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.00 % Floor | 9/20/2031 | \u2014 | ( 105 ) | ( 228 ) | (4)(5)(10)(32)",
+        "60,830 | 60,633"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "TerSera Therapeutics",
+        "TerSera Therapeutics LLC First Lien Secured Debt - Term Loan S + 575 , 1.00 % Floor 4/4/2029 16,665 16,382 16,665 (4)(9)(15)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[129]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "G&A Partners Holding Company II, LLC | First Lien Secured Debt - Term Loan | S + 475 , 0.75 % Floor | 3/1/2031 | 26,427 | 26,089 | 26,295 | (4)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 475 , 0.75 % Floor | 3/1/2031 | 352 | 295 | 327 | (4)(9)(12)(16)(32)"
+      ],
+      "last": [
+        "141,317 | 148,974",
+        "Total Professional Services | $ | 1,057,500 | $ | 1,095,107"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "G&A",
+        "G&A Partners Holding Company II, LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 3/1/2031 26,427 26,089 26,295 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[132]/table"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "Polyphase Elevator Holding Company | First Lien Secured Debt - Term Loan | S + 610 , 1.00 % Floor | 6/23/2027 | $ | 3,581 | $ | 3,581 | $ | 3,151 | (4)(16)",
+        "Pritchard Industries, LLC | First Lien Secured Debt - Term Loan | S + 600 , 0.75 % Floor | 10/13/2027 | 6,288 | 6,288 | 6,241 | (4)(16)"
+      ],
+      "last": [
+        "Anaplan, Inc. | First Lien Secured Debt - Term Loan | S + 450 , 0.75 % Floor | 6/21/2029 | 239,109 | 239,109 | 239,109 | (4)(16)",
+        "239,109 | 239,109"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Real Estate Management & Development",
+        "3Phase Elevator"
+      ],
+      "preceding": [],
+      "rows": 17,
+      "table_xpath": "/html/body/div[135]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Avalara, Inc. | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 3/26/2032 | 53,688 | 53,408 | 53,982 | (15)(16)",
+        "Artifact Bidco, Inc. | First Lien Secured Debt - Term Loan | S + 425 , 0.50 % Floor | 7/28/2031 | 63,399 | 62,831 | 62,765 | (4)(9)(16)"
+      ],
+      "last": [
+        "24,502 | 25,462",
+        "Clover Holdings 2, LLC | First Lien Secured Debt - Term Loan | S + 400 , 0.00 % Floor | 12/9/2031 | 35,500 | 35,033 | 35,600 | (16)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Avalara",
+        "Avalara, Inc. First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 3/26/2032 53,688 53,408 53,982 (15)(16)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[138]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Endor Purchaser, Inc. | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 1/9/2032 | 37,594 | 37,237 | 37,218 | (4)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.75 % Floor | 1/9/2032 | \u2014 | ( 39 ) | ( 84 ) | (4)(5)(9)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | STIBOR + 475 , 0.00 % Floor | 6/18/2032 | kr | \u2014 | ( 46 ) | ( 47 ) | (3)(4)(5)(8)(10)(12)(32)",
+        "54,276 | 55,366"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "CompTIA",
+        "Endor Purchaser, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 1/9/2032 37,594 37,237 37,218 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/div[141]/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "Evergreen IX Borrower 2023, LLC | First Lien Secured Debt - Term Loan | S + 475 , 0.75 % Floor | 9/30/2030 | 122,178 | 120,069 | 122,177 | (4)(9)(16)",
+        "119,889 | 122,177"
+      ],
+      "last": [
+        "Mitchell International, Inc. | First Lien Secured Debt - Term Loan | S + 325 , 0.50 % Floor | 6/17/2031 | 50,181 | 49,965 | 50,198 | (15)",
+        "MYOB US Borrower LLC | First Lien Secured Debt - Term Loan | BBSW + 550 , 0.75 % Floor | 6/6/2030 | A$ | 153,800 | 98,417 | 99,705 | (3)(4)(8)(9)(10)(25)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "G2CI",
+        "Evergreen IX Borrower 2023, LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/30/2030 122,178 120,069 122,177 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/div[144]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Crewline Buyer, Inc. | First Lien Secured Debt - Term Loan | S + 675 , 1.00 % Floor | 11/8/2030 | 66,900 | 65,456 | 66,900 | (4)(9)(15)",
+        "65,372 | 66,900"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 0.50 % Floor | 12/17/2031 | \u2014 | ( 192 ) | ( 208 ) | (4)(5)(12)(32)",
+        "164,775 | 164,441"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "New Relic",
+        "Crewline Buyer, Inc. First Lien Secured Debt - Term Loan S + 675 , 1.00 % Floor 11/8/2030 66,900 65,456 66,900 (4)(9)(15)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[147]/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Relativity ODA LLC | First Lien Secured Debt - Term Loan | S + 450 , 1.00 % Floor | 5/12/2029 | 29,262 | 28,769 | 29,117 | (4)(15)",
+        "First Lien Secured Debt - Revolver | S + 500 , 1.00 % Floor | 5/12/2029 | \u2014 | ( 38 ) | ( 12 ) | (4)(5)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Corporate Bond | 12.50 % | 6/30/2030 | 24,000 | 24,000 | 24,279",
+        "110,546 | 110,617"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Relativity",
+        "Relativity ODA LLC First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 5/12/2029 29,262 28,769 29,117 (4)(15)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[150]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Zafin Labs Americas Incorporated | First Lien Secured Debt - Term Loan | S + 475 , 0.75 % Floor | 2/14/2031 | 12,500 | 12,322 | 12,325 | (4)(8)(9)(17)",
+        "First Lien Secured Debt - Revolver | S + 475 , 0.75 % Floor | 2/14/2031 | \u2014 | ( 35 ) | ( 35 ) | (4)(5)(8)(9)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 2.00 % Floor | 6/13/2028 | 7,840 | 7,727 | 7,840 | (4)(9)(12)(16)(32)",
+        "64,957 | 65,517"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Zafin",
+        "Zafin Labs Americas Incorporated First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 2/14/2031 12,500 12,322 12,325 (4)(8)(9)(17)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[153]/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Kaseya Inc | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 3/20/2032 | 24,938 | 24,820 | 25,064 | (15)",
+        "First Lien Secured Debt - Revolver | S + 325 , 0.00 % Floor | 3/20/2030 | \u2014 | ( 12 ) | ( 8 ) | (5)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | E + 500 , 0.00 % Floor | 7/9/2029 | \u20ac | 23,672 | 24,728 | 27,765 | (3)(4)(8)(9)(18)(21)(22)(32)",
+        "41,332 | 47,336"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Kaseya",
+        "Kaseya Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 3/20/2032 24,938 24,820 25,064 (15)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[156]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Ichor Management Limited | First Lien Secured Debt - Term Loan | S + 550 , 1.00 % Floor | 12/8/2029 | 9,139 | 8,957 | 8,774 | (4)(8)(9)(17)",
+        "First Lien Secured Debt - Delayed Draw | SONIA + 550 , 1.00 % Floor | 12/7/2029 | \u00a3 | \u2014 | ( 36 ) | ( 169 ) | (3)(4)(5)(8)(9)(12)(32)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 525 , 1.00 % Floor | 3/1/2030 | 720 | 689 | 690 | (4)(9)(12)(16)(32)",
+        "34,516 | 34,482"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Instem",
+        "Ichor Management Limited First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 12/8/2029 9,139 8,957 8,774 (4)(8)(9)(17)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[159]/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "WC ORS Buyer, Inc. | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 8/7/2031 | 96,697 | 95,358 | 95,247 | (4)(9)(16)",
+        "First Lien Secured Debt - Delayed Draw | S + 500 , 0.75 % Floor | 8/7/2031 | 14,330 | 14,138 | 14,115 | (4)(9)(16)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 475 , 0.75 % Floor | 10/15/2031 | 3,121 | 3,036 | 3,027 | (4)(9)(12)(16)(32)",
+        "80,273 | 80,249"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "ORS Nasco",
+        "WC ORS Buyer, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 8/7/2031 96,697 95,358 95,247 (4)(9)(16)"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[162]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "Brown Group Holding, LLC | First Lien Secured Debt - Term Loan | S + 250 , 0.50 % Floor | 7/1/2031 | 14,962 | 14,907 | 14,997 | (15)(16)",
+        "Total Transportation Infrastructure | $ | 399,672 | $ | 412,039"
+      ],
+      "last": [
+        "Total Wireless Telecommunication Services | $ | 93,777 | $ | 93,763",
+        "Total Investments before Cash Equivalents | $ | 19,670,193 | $ | 19,896,145 | (2)(6)(30)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (13) Maturity Date Par/Shares (3) Cost (34) Fair Value (1)(35)",
+        "Signature Aviation",
+        "Brown Group Holding, LLC First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 7/1/2031 14,962 14,907 14,997 (15)(16)"
+      ],
+      "preceding": [],
+      "rows": 6,
+      "table_xpath": "/html/body/div[165]/table"
+    },
+    {
+      "contexts": 106,
+      "first": [
+        "Aerospace & Defense | $ | 518,426 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 518,426 | 3.9 %",
+        "Aerospace & Defense | $ | 518,426 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 518,426 | 3.9 %"
+      ],
+      "last": [
+        "Software | 2,792,945 | \u2014 | \u2014 | \u2014 | \u2014 | 2,792,945 | 21.7 %",
+        "Software | 2,792,945 | \u2014 | \u2014 | \u2014 | \u2014 | 2,792,945 | 21.7 %"
+      ],
+      "opening_rows": [
+        "",
+        "Industry First Lien - Secured Debt Second Lien - Secured Debt Unsecured Debt Preferred Equity Common Equity Total % of Net Assets",
+        "Aerospace & Defense $ 518,426 $ \u2014 $ \u2014 $ \u2014 $ \u2014 $ 518,426 3.9 %",
+        "Automobile Components 238,969 \u2014 \u2014 \u2014 \u2014 238,969 1.8 %"
+      ],
+      "preceding": [],
+      "rows": 106,
+      "table_xpath": "/html/body/div[201]/ix:continuation/table"
+    },
+    {
+      "contexts": 20,
+      "first": [
+        "Specialized REITs | $ | 24,537 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 24,537 | 0.2 %",
+        "Specialized REITs | $ | 24,537 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 24,537 | 0.2 %"
+      ],
+      "last": [
+        "Total | $ | 19,863,636 | $ | \u2014 | $ | 18,685 | $ | 6,944 | $ | 6,880 | $ | 19,896,145 | 151.5 %",
+        "Total | $ | 19,863,636 | $ | \u2014 | $ | 18,685 | $ | 6,944 | $ | 6,880 | $ | 19,896,145 | 151.5 %"
+      ],
+      "opening_rows": [
+        "",
+        "Industry First Lien - Secured Debt Second Lien - Secured Debt Unsecured Debt Preferred Equity Common Equity Total % of Net Assets",
+        "Specialized REITs $ 24,537 $ \u2014 $ \u2014 $ \u2014 $ \u2014 $ 24,537 0.2 %",
+        "Specialty Retail 427,412 \u2014 \u2014 \u2014 \u2014 427,412 3.3 %"
+      ],
+      "preceding": [],
+      "rows": 20,
+      "table_xpath": "/html/body/div[204]/ix:continuation/table"
+    }
+  ]
+}

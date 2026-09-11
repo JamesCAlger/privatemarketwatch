@@ -1,0 +1,660 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_d591b1b6-18fb-4718-b196-c30518fbcaeb",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "",
+        "962,492",
+        "",
+        "",
+        "$",
+        "",
+        "942,796",
+        "",
+        "",
+        "(2)(7)"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+      "currency": "USD",
+      "fact_id": "F_d591b1b6-18fb-4718-b196-c30518fbcaeb",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "942,796",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[336]/div/ix:continuation/div/ix:continuation/table[1]/tr[37]",
+      "table_xpath": "/html/body/div[336]/div/ix:continuation/div/ix:continuation/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "942796000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_0942f6bf-c24c-415b-a8c7-f972d0be6dda",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "$",
+        "",
+        "938,801",
+        "",
+        "",
+        "$",
+        "",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "",
+        "3,995",
+        "",
+        "",
+        "$",
+        "",
+        "942,796",
+        "",
+        "",
+        "",
+        "237.6",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+      "currency": "USD",
+      "fact_id": "F_0942f6bf-c24c-415b-a8c7-f972d0be6dda",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "942,796",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[360]/div/ix:continuation/div/ix:continuation/ix:continuation/table/tr[47]",
+      "table_xpath": "/html/body/div[360]/div/ix:continuation/div/ix:continuation/ix:continuation/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "942796000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_32d005ce-8c62-4fad-9d0d-c5beb7b4139c",
+        "name": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+      "context_id": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+      "currency": null,
+      "fact_id": "F_32d005ce-8c62-4fad-9d0d-c5beb7b4139c",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[364]/ix:continuation/div/ix:continuation/div/ix:continuation/table[1]/tr[40]",
+      "table_xpath": "/html/body/div[364]/ix:continuation/div/ix:continuation/div/ix:continuation/table[1]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_b33ab764-f05e-4e3b-b21e-9d8fbe57cde3",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments before Foreign Currency Forward Contracts",
+        "",
+        "$",
+        "",
+        "962,492",
+        "",
+        "",
+        "$",
+        "",
+        "942,796",
+        "",
+        "",
+        "$",
+        "",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "",
+        "6,814",
+        "",
+        "",
+        "$",
+        "",
+        "935,982",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_24810985-a777-49c9-8e9b-7ca29dc4bd43",
+      "currency": "USD",
+      "fact_id": "F_b33ab764-f05e-4e3b-b21e-9d8fbe57cde3",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "942,796",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[488]/div/ix:continuation/div/ix:continuation/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[7]",
+      "table_xpath": "/html/body/div[488]/div/ix:continuation/div/ix:continuation/div/ix:nonnumeric/div/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "942796000"
+    }
+  ],
+  "cik": "0002006758",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2006758/000119312526104070.html",
+  "reference_id": "REF-0002006758-2025-12-31",
+  "report_date": "2025-12-31",
+  "source_rows": 493,
+  "source_sha256": "5ffe8f7b6928f2d0d73d04a017be3698544d70085b49f1feacb80a5a6d99dde8",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost $ 955,289 and $ 918,595 , respectively) | $ | 936,374 | $ | 909,845",
+        "Non-controlled/affiliated investments (cost $ 7,203 and $ 0 , respectively) | 6,422 | \u2014"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (cost $ 955,289 and $ 918,595 , respectively) | $ | 936,374 | $ | 909,845",
+        "Non-controlled/affiliated investments (cost $ 7,203 and $ 0 , respectively) | 6,422 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "MIDCAP APOLLO INSTITUTIONAL PRIVATE LENDING",
+        "CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES",
+        "(In thousands, except share and per share data)"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[252]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Eagle Aggregator Ltd | Common Equity - Preferred Stocks | N/A | N/A | 36,288 Shares | $ | 49 | $ | 49 | (9)(11)",
+        "Common Equity - Stock | N/A | N/A | 741 Shares | 1 | 1 | (9)(11)"
+      ],
+      "last": [
+        "4,812 | 2,028",
+        "Total Air Freight & Logistics | $ | 15,924 | $ | 13,324"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Aerospace & Defense",
+        "Beaufort"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[268]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "AAMP Global Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 485 , 1.00 % Floor | 11/05/26 | $ | 7,719 | $ | 7,683 | $ | 7,692 | (17)",
+        "Cool Acquisition Holdings, LP | Common Equity - Limited Partnership | N/A | N/A | 34,483 Shares | 34 | 18 | (6)(9)(15)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 510 , 2.50 % Floor | 08/19/29 | 15 | 15 | 13 | (9)(11)(13)(14) (16)",
+        "7,228 | 7,138"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Automobile Components",
+        "AAMP Global Holdings, Inc."
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[272]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Lunar Buyer, LLC | First Lien Secured Debt - Term Loan | S + 550 , 0.75 % Floor | 10/03/30 | 4,752 | 4,673 | 4,609 | (9)(17)",
+        "First Lien Secured Debt - Delayed Draw | S + 550 , 0.75 % Floor | 10/03/30 | \u2014 | ( 1 | ) | ( 3 | ) | (9)(12)(13)(14)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 525 , 1.00 % Floor | 08/09/30 | \u2014 | ( 2 | ) | ( 1 | ) | (9)(12)(13)(14)",
+        "4,734 | 4,755"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Meristem Crop Performance",
+        "Lunar Buyer, LLC First Lien Secured Debt - Term Loan S + 550 , 0.75 % Floor 10/03/30 4,752 4,673 4,609 (9)(17)"
+      ],
+      "preceding": [],
+      "rows": 23,
+      "table_xpath": "/html/body/div[276]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "Rasa Floors & Carpet Cleaning, LLC | First Lien Secured Debt - Term Loan | S + 560 , 1.00 % Floor | 12/22/27 | 7,817 | 7,454 | 7,343 | (17)",
+        "Vixxo Corporation | First Lien Secured Debt - Term Loan | S + 500 , 1.00 % Floor | 08/01/30 | 2,025 | 2,001 | 2,010 | (9)(17)"
+      ],
+      "last": [
+        "6,527 | 6,564",
+        "Total Construction & Engineering | $ | 39,796 | $ | 39,994"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Rasa Floors & Carpet Cleaning, LLC",
+        "Rasa Floors & Carpet Cleaning, LLC First Lien Secured Debt - Term Loan S + 560 , 1.00 % Floor 12/22/27 7,817 7,454 7,343 (17)"
+      ],
+      "preceding": [],
+      "rows": 24,
+      "table_xpath": "/html/body/div[280]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Protein For Pets Opco, LLC | First Lien Secured Debt - Term Loan | S + 525 , 1.00 % Floor | 09/20/30 | $ | 7,782 | $ | 7,660 | $ | 7,626 | (9)(17)",
+        "First Lien Secured Debt - Revolver | S + 525 , 1.00 % Floor | 09/20/30 | 20 | 19 | 18 | (9)(13)(14)(17)"
+      ],
+      "last": [
+        "Total Containers & Packaging | $ | 29,902 | $ | 29,999",
+        "Club Car Wash Operating, LLC | First Lien Secured Debt - Delayed Draw | S + 615 , 1.00 % Floor | 06/16/27 | $ | 9,343 | $ | 9,269 | $ | 9,283 | (9)(13)(14)(17)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Consumer Staples Distribution & Retail",
+        "3D Protein"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[284]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Go Car Wash Management, Corp. | First Lien Secured Debt - Delayed Draw | S + 585 , 1.00 % Floor | 06/30/28 | 7,816 | 7,767 | 7,651 | (9)(17)",
+        "Lotus Topco Inc. | First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 06/07/30 | 3,367 | 3,324 | 3,334 | (9)(17)"
+      ],
+      "last": [
+        "7,649 | 7,610",
+        "Total Diversified Consumer Services | $ | 59,006 | $ | 58,955"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Go Car Wash",
+        "Go Car Wash Management, Corp. First Lien Secured Debt - Delayed Draw S + 585 , 1.00 % Floor 06/30/28 7,816 7,767 7,651 (9)(17)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[288]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Brush Group Bidco Limited | First Lien Secured Debt - Term Loan | SONIA + 500 , 0.00 % Floor | 07/30/31 | \u00a3 | 5,985 | $ | 7,815 | $ | 7,946 | (9)(11)(24)",
+        "First Lien Secured Debt - Revolver | SONIA + 500 , 0.00 % Floor | 07/30/31 | \u00a3 | \u2014 | ( 28 | ) | ( 30 | ) | (9)(11)(12)(13) (14)"
+      ],
+      "last": [
+        "4,771 | 4,748",
+        "Total Entertainment | $ | 12,053 | $ | 11,994"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Electrical Equipment",
+        "Brush Group"
+      ],
+      "preceding": [],
+      "rows": 23,
+      "table_xpath": "/html/body/div[292]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Gabriel Partners, LLC | First Lien Secured Debt - Term Loan | S + 195 Cash plus 5.45 % PIK, 1.00 % Floor | 01/21/27 | $ | 8,122 | $ | 8,106 | $ | 7,960 | (9)(17)",
+        "GC Waves Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 450 , 0.75 % Floor | 10/04/30 | 9,678 | 9,678 | 9,631 | (9)(17)"
+      ],
+      "last": [
+        "2,146 | 2,146",
+        "Total Food Products | $ | 30,699 | $ | 30,432"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Financial Services",
+        "AML Rightsource"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/div[296]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Heniff Holdco, LLC | First Lien Secured Debt - Term Loan | S + 610 , 1.00 % Floor | 12/03/26 | $ | 7,621 | $ | 7,608 | $ | 7,526 | (9)(17)",
+        "Total Ground Transportation | $ | 7,608 | $ | 7,526"
+      ],
+      "last": [
+        "EmpiRx Health LLC | First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 08/05/29 | $ | 9,817 | $ | 9,771 | $ | 9,717 | (9)(17)",
+        "SCP Eye Care Services, LLC | First Lien Secured Debt - Term Loan | S + 560 , 1.00 % Floor | 10/05/29 | 7,819 | 7,629 | 7,628 | (17)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Ground Transportation",
+        "Heniff and Superior"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[300]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "FP UC Intermediate Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 560 , 1.00 % Floor | 11/22/27 | 7,857 | 7,811 | 7,531 | (16)",
+        "Kure Pain Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 560 , 1.00 % Floor | 08/30/30 | 6,727 | 6,726 | 6,724 | (9)(17)"
+      ],
+      "last": [
+        "Thomas Scientific, LLC | First Lien Secured Debt - Term Loan | S + 340 Cash plus 4.50 % PIK, 1.00 % Floor | 12/14/27 | 8,386 | 8,316 | 8,098 | (9)(17)",
+        "TST Intermediate Holdings, LLC | First Lien Secured Debt - Term Loan | S + 560 , 1.00 % Floor | 12/31/28 | 7,439 | 7,355 | 7,049 | (17)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "FP UC Intermediate Holdings, Inc.",
+        "FP UC Intermediate Holdings, Inc. First Lien Secured Debt - Term Loan S + 560 , 1.00 % Floor 11/22/27 7,857 7,811 7,531 (16)"
+      ],
+      "preceding": [],
+      "rows": 24,
+      "table_xpath": "/html/body/div[304]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "TVG Shelby Buyer, Inc. | First Lien Secured Debt - Term Loan | S + 510 , 1.00 % Floor | 03/27/28 | 7,936 | 7,868 | 7,816 | (17)",
+        "TVG-MEDULLA, LLC | First Lien Secured Debt - Term Loan | S + 460 Cash plus 2.50 % PIK, 1.00 % Floor | 09/30/27 | 8,231 | 8,167 | 7,578 | (17)"
+      ],
+      "last": [
+        "Parcelshield Holdings LLC | First Lien Secured Debt - Term Loan | 9.32 % | 09/30/27 | 7,763 | 7,440 | 3,885 | (5)",
+        "Total Health Care Technology | $ | 17,935 | $ | 14,384"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "TVG Shelby Buyer, Inc.",
+        "TVG Shelby Buyer, Inc. First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 03/27/28 7,936 7,868 7,816 (17)"
+      ],
+      "preceding": [],
+      "rows": 23,
+      "table_xpath": "/html/body/div[308]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "AWRG Borrower LLC | First Lien Secured Debt - Term Loan | S + 510 , 1.00 % Floor | 06/18/30 | $ | 5,543 | $ | 5,543 | $ | 5,343 | (17)(25)",
+        "AWRG Parent LLC | Common Equity - Stock | N/A | N/A | 807,101 Shares | 1,659 | 1,079 | (6)(15)(25)"
+      ],
+      "last": [
+        "West-NR AcquisitionCo, LLC | First Lien Secured Debt - Term Loan | S + 510 , 1.00 % Floor | 12/27/27 | 7,817 | 7,760 | 7,794 | (17)",
+        "Total Insurance | $ | 15,484 | $ | 15,571"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Hotels, Restaurants & Leisure",
+        "American West"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/div[312]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Distinct Holdings Inc | First Lien Secured Debt - Term Loan | S + 575 , 1.00 % Floor | 07/18/29 | $ | 9,776 | $ | 9,647 | $ | 9,487 | (9)(17)",
+        "First Lien Secured Debt - Revolver | S + 575 , 1.00 % Floor | 07/18/29 | 72 | 70 | 69 | (9)(13)(14)(17)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 475 , 0.00 % Floor | 03/31/32 | 347 | 331 | 328 | (9)(13)(14)(17)",
+        "6,398 | 6,389"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "IT Services",
+        "Distinct"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[316]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 18,
+      "first": [
+        "OEH Parent Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 585 , 1.00 % Floor | 11/09/27 | 7,817 | 7,736 | 7,682 | (16)",
+        "Relevant Industrial, LLC | First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 05/16/31 | 2,724 | 2,693 | 2,690 | (9)(17)"
+      ],
+      "last": [
+        "Complete Paper Inc. | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 02/04/31 | $ | 7,444 | $ | 7,345 | $ | 7,294 | (9)(17)",
+        "Total Paper & Forest Products | $ | 7,345 | $ | 7,294"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "OEH",
+        "OEH Parent Holdings, Inc. First Lien Secured Debt - Term Loan S + 585 , 1.00 % Floor 11/09/27 7,817 7,736 7,682 (16)"
+      ],
+      "preceding": [],
+      "rows": 18,
+      "table_xpath": "/html/body/div[320]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "Jazz AH Holdco, LLC | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 04/02/29 | $ | 7,818 | $ | 7,714 | $ | 7,706 | (17)",
+        "DRS Holdings III, Inc. | First Lien Secured Debt - Term Loan | S + 525 , 1.00 % Floor | 11/01/28 | 8,963 | 8,926 | 8,918 | (9)(17)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Delayed Draw | SONIA + 325 Cash plus 2.50 % PIK, 0.75 % Floor | 09/24/31 | \u00a3 | \u2014 | \u2014 | ( 4 | ) | (9)(11)(12)(13) (14)",
+        "9,692 | 9,565"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Personal Care Products",
+        "Advantice Health"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[324]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "TerSera Therapeutics LLC | First Lien Secured Debt - Term Loan | S + 575 , 1.00 % Floor | 04/04/29 | 7,820 | 7,780 | 7,820 | (9)(17)",
+        "Trillium Health Care Products Inc. | First Lien Secured Debt - Term Loan | S + 525 , 1.00 % Floor | 08/06/31 | 9,801 | 9,634 | 9,482 | (9)(17)"
+      ],
+      "last": [
+        "First Lien Secured Debt - Revolver | S + 500 , 1.00 % Floor | 04/15/31 | \u2014 | ( 3 | ) | ( 4 | ) | (9)(12)(13)(14)",
+        "3,552 | 3,542"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "TersSera",
+        "TerSera Therapeutics LLC First Lien Secured Debt - Term Loan S + 575 , 1.00 % Floor 04/04/29 7,820 7,780 7,820 (9)(17)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[328]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "The North Highland Company LLC | First Lien Secured Debt - Term Loan | S + 475 , 0.75 % Floor | 12/20/31 | 4,752 | 4,710 | 4,704 | (9)(17)",
+        "First Lien Secured Debt - Delayed Draw | S + 475 , 0.75 % Floor | 12/20/31 | \u2014 | \u2014 | ( 1 | ) | (9)(12)(13)(14)"
+      ],
+      "last": [
+        "9,576 | 9,564",
+        "Total Software | $ | 42,942 | $ | 43,016"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "North Highland",
+        "The North Highland Company LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 12/20/31 4,752 4,710 4,704 (9)(17)"
+      ],
+      "preceding": [],
+      "rows": 21,
+      "table_xpath": "/html/body/div[332]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "Club Champion LLC | First Lien Secured Debt - Term Loan | S + 500 , 0.75 % Floor | 06/14/29 | $ | 9,799 | $ | 9,686 | $ | 9,701 | (17)(9)",
+        "First Lien Secured Debt - Revolver | S + 500 , 0.75 % Floor | 06/14/29 | 37 | 36 | 36 | (17)(9)(13)(14)"
+      ],
+      "last": [
+        "Total Wireless Telecommunication Services | $ | 7,921 | $ | 7,877",
+        "Total Investments | $ | 962,492 | $ | 942,796 | (2)(7)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (26) Fair Value (1)(27)",
+        "Specialty Retail",
+        "Club Champion"
+      ],
+      "preceding": [],
+      "rows": 24,
+      "table_xpath": "/html/body/div[336]/div/ix:continuation/div/ix:continuation/table[1]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "AWRG Borrower LLC, Term Loan | $ | \u2014 | $ | 5,557 | $ | ( 14 | ) | $ | ( 200 | ) | $ | 5,343 | $ | \u2014 | $ | \u2014",
+        "AWRG Parent LLC, Stock | \u2014 | 1,660 | \u2014 | ( 581 | ) | 1,079 | \u2014 | \u2014"
+      ],
+      "last": [
+        "AWRG Parent LLC, Stock | \u2014 | 1,660 | \u2014 | ( 581 | ) | 1,079 | \u2014 | \u2014",
+        "$ | \u2014 | $ | 7,217 | $ | ( 14 | ) | $ | ( 781 | ) | $ | 6,422 | $ | \u2014 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Name of Issuer Fair Value at Year ended December 31, 2024 Gross Additions \u25cf Gross Reductions \u25a0 Net Change in Unrealized Gains (Losses) Fair Value at December 31, 2025 Net Realized Gains (Losses) Interest/ Dividend/ Other Income",
+        "AWRG Borrower LLC, Term Loan $ \u2014 $ 5,557 $ ( 14 ) $ ( 200 ) $ 5,343 $ \u2014 $ \u2014",
+        "AWRG Parent LLC, Stock \u2014 1,660 \u2014 ( 581 ) 1,079 \u2014 \u2014"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[352]/div/ix:continuation/div/ix:continuation/ix:continuation/table"
+    },
+    {
+      "contexts": 97,
+      "first": [
+        "Aerospace & Defense | $ | 8,998 | $ | \u2014 | $ | 98 | $ | 9,096 | 2.3 | %",
+        "Aerospace & Defense | $ | 8,998 | $ | \u2014 | $ | 98 | $ | 9,096 | 2.3 | %"
+      ],
+      "last": [
+        "Total | $ | 938,801 | $ | \u2014 | $ | 3,995 | $ | 942,796 | 237.6 | %",
+        "Total | $ | 938,801 | $ | \u2014 | $ | 3,995 | $ | 942,796 | 237.6 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Industry First Lien - Secured Debt Unsecured Debt Common Equity Total % of Net Assets",
+        "Non-Controlled / Non-Affiliated Investments",
+        "Aerospace & Defense $ 8,998 $ \u2014 $ 98 $ 9,096 2.3 %"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 97,
+      "table_xpath": "/html/body/div[360]/div/ix:continuation/div/ix:continuation/ix:continuation/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "First Lien Secured Debt | $ | 954,701 | $ | 938,801 | $ | \u2014 | $ | 6,814 | $ | 931,987",
+        "First Lien Secured Debt | $ | 954,701 | $ | 938,801 | $ | \u2014 | $ | 6,814 | $ | 931,987"
+      ],
+      "last": [
+        "Total Investments before Foreign Currency Forward Contracts | $ | 962,492 | $ | 942,796 | $ | \u2014 | $ | 6,814 | $ | 935,982",
+        "Total Investments before Foreign Currency Forward Contracts | $ | 962,492 | $ | 942,796 | $ | \u2014 | $ | 6,814 | $ | 935,982"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value Hierarchy",
+        "Cost Fair Value Level 1 Level 2 Level 3",
+        "First Lien Secured Debt $ 954,701 $ 938,801 $ \u2014 $ 6,814 $ 931,987"
+      ],
+      "preceding": [
+        "",
+        "The following table shows the composition of our investments as of December 31, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:"
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/div[488]/div/ix:continuation/div/ix:continuation/div/ix:nonnumeric/div/ix:nonnumeric/table[1]"
+    }
+  ]
+}

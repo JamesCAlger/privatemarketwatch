@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    {
+      "bytes": 316,
+      "path": "focused.log",
+      "sha256": "5ceb6f76bdbbd9a04be4d71e11ab4bdd8f2a2f3e4f7778f9e6e31d54edcc7baa"
+    },
+    {
+      "bytes": 8115,
+      "path": "focused_junit.xml",
+      "sha256": "39864eb3a218174e5aa234cd2cbb5839ded62c8ef488ff31d8d0e7c306372c1a"
+    },
+    {
+      "bytes": 708,
+      "path": "focused_result.json",
+      "sha256": "10d55f812b21942b5e07368a21e4e2afb483a868640e8e071f3b7ca6f718b0c9"
+    },
+    {
+      "bytes": 13428,
+      "path": "semantic_diff_report.json",
+      "sha256": "522355658d39790e35fb133f28140a0fc15beb66b973215c79a09d3ad0048a0e"
+    },
+    {
+      "bytes": 2455,
+      "path": "semantic_disposition.json",
+      "sha256": "b2030933a03ee705e1949ef9720ab40779743811ad853e93bbb9639d3ffe1157"
+    },
+    {
+      "bytes": 714,
+      "path": "semantic_result.json",
+      "sha256": "273604ae0dca70f2776db258d74dd15aa6a065410b1c8b69f6c704c109c65da2"
+    },
+    {
+      "bytes": 2195,
+      "path": "verification.json",
+      "sha256": "21fd8b18fd7aec96bf4201cd37712ccc24e9503b7fa545dd3e6920d974b2b4be"
+    }
+  ],
+  "code": {
+    "bytes": 7151,
+    "path": "scripts/programme_tranche/record_failure_handoff.py",
+    "sha256": "2d1c3a2b3801c68bf0ae3e60e28ac330527aa0923294151df10b2cd9128aeb54"
+  },
+  "status": "failure_handoff"
+}

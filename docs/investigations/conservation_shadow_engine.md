@@ -380,3 +380,75 @@ Decisions:
 - Parked for the paused entity-resolution backlog (NOT a v1 priority): per-CLO-series entity
   disambiguation; the over-merge corrupts any position-level structured-credit analytics.
 
+
+## 2026-09-08 - fv_conservation false-positive re-measure on the published basis (Plan 2 rollout)
+
+Question: after the published-basis gate change (the conservation numerator now sums
+EXACTLY what the public headline sums -- cash and subsidiary rows included -- and every
+anchor leaf declares a basis), what share of the cohort fv_conservation flags are FALSE
+positives? Decision rule set before measuring: keep the `fv_conservation_fail` surface
+label unless false positives exceed 50% of flags.
+
+Method: read-only. `scratch/2026-09-07_published_basis/fp_remeasure.py` joins every cohort
+fv_conservation row with status <> 'reconciles' for 2025-12-31 and 2026-03-31 against the
+per-fund row classes that can explain a residual (cash rows, is_subsidiary rows, rows added
+by a promoted row_add). Sources: `data/output/shadow/conservation_gate_results.csv`
+(refreshed by scripts/shadow_conservation_engine.py after the rebuild) and
+`data/output/private_markets_holdings.parquet` (rebuilt 2026-09-08 16:49). Classification
+rule taken from the task supplement: a flag is a TRUE positive when the residual is a real
+headline defect, OR an anchor that needs re-adjudication (anchor_basis = investments_ex_cash
+while the published rows carry cash, or one of the 7 unresolved anchor leaves), OR a
+scope_carryover rule; it is a FALSE positive only when the published rows AND the anchor
+both look right and still disagree.
+
+Results: 22 flagged cohort fund-quarters (20 with a residual + 2 no_anchor).
+
+| cik | quarter | status | resid_mm | anchor_used | anchor_basis | cash_mm | sub_mm | added_mm | class |
+|---|---|---|---|---|---|---|---|---|---|
+| 0001838126 | 2026-03-31 | overshoot | 1579.4 | verified_override_ex_cash | investments_ex_cash | - | - | - | TRUE scope_carryover (50 rows / $2,177M out of scope) |
+| 0001899017 | 2026-03-31 | overshoot | 406.5 | verified_override_ex_cash | investments_ex_cash | - | 406.5 | - | TRUE subsidiary layer double-counted (sub_mm == residual) |
+| 0001715933 | 2026-03-31 | overshoot | 355.9 | companyfacts_fv | investments_ex_cash | - | - | - | TRUE unresolved anchor leaf + scope_carryover (27 rows / $355.9M) |
+| 0001920145 | 2026-03-31 | overshoot | 343.6 | verified_override | published_rows | 343.5 | - | 349.4 | TRUE anchor mislabelled published_rows but excludes cash |
+| 0001603480 | 2026-03-31 | overshoot | 323.1 | companyfacts_fv | investments_ex_cash | - | - | 323.1 | TRUE unresolved anchor leaf; residual == added rows |
+| 0001920145 | 2025-12-31 | overshoot | 268.0 | companyfacts_fv | investments_ex_cash | 273.7 | - | - | TRUE ex-cash anchor, published rows carry cash |
+| 0001965934 | 2025-12-31 | undershoot | -172.9 | companyfacts_fv | investments_ex_cash | - | - | - | TRUE under-extraction (published < ex-cash anchor) |
+| 0001837532 | 2026-03-31 | overshoot | 156.1 | verified_override_ex_cash | investments_ex_cash | 159.4 | - | - | TRUE ex-cash anchor, published rows carry cash |
+| 0001851322 | 2026-03-31 | overshoot | 99.2 | verified_override_ex_cash | investments_ex_cash | 99.2 | - | - | TRUE ex-cash anchor, residual == cash |
+| 0001930087 | 2026-03-31 | undershoot | -84.8 | companyfacts_fv | investments_ex_cash | - | - | - | TRUE under-extraction |
+| 0001851322 | 2025-12-31 | overshoot | 46.9 | companyfacts_fv_plus_cash | published_rows | 85.3 | - | - | UNEXPLAINED (anchor already includes cash) |
+| 0001859919 | 2025-12-31 | overshoot | 34.7 | companyfacts_fv | investments_ex_cash | 10.8 | - | - | TRUE ex-cash anchor, published rows carry cash |
+| 0001646614 | 2026-03-31 | overshoot | 32.4 | verified_override_ex_cash | investments_ex_cash | 32.4 | - | - | TRUE ex-cash anchor, residual == cash |
+| 0002052152 | 2026-03-31 | overshoot | 31.4 | verified_override_ex_cash | investments_ex_cash | 31.4 | - | - | TRUE ex-cash anchor, residual == cash |
+| 0001859919 | 2026-03-31 | overshoot | 28.1 | verified_override_ex_cash | investments_ex_cash | 10.9 | - | - | TRUE ex-cash anchor, published rows carry cash |
+| 0001572694 | 2025-12-31 | overshoot | 26.9 | companyfacts_fv | investments_ex_cash | 35.7 | - | - | TRUE ex-cash anchor, published rows carry cash |
+| 0001948368 | 2025-12-31 | overshoot | 18.7 | companyfacts_fv | investments_ex_cash | 18.7 | - | - | TRUE ex-cash anchor, residual == cash |
+| 0001784700 | 2026-03-31 | overshoot | 14.5 | verified_override_ex_cash | investments_ex_cash | 15.5 | - | 3.5 | TRUE ex-cash anchor, published rows carry cash |
+| 0001646614 | 2025-12-31 | overshoot | 13.0 | companyfacts_fv_plus_cash | published_rows | 24.0 | - | - | TRUE scope_carryover (204 rows / $1,257.9M out of scope) |
+| 0001905824 | 2026-03-31 | undershoot | -9.0 | verified_override_ex_cash | investments_ex_cash | 38.8 | - | - | TRUE under-extraction against an ex-cash anchor |
+| 0001743415 | 2025-12-31 | no_anchor | - | none | - | - | - | - | TRUE unresolved anchor leaf (no anchor at all) |
+| 0001743415 | 2026-03-31 | no_anchor | - | none | - | - | - | - | TRUE unresolved anchor leaf (no anchor at all) |
+
+Counts: 21 TRUE / 0 demonstrable FALSE / 1 UNEXPLAINED of 22 flags. Even scoring the single
+unexplained case as a false positive gives a 4.5% FP rate, far below the 50% decision bar,
+so `fv_conservation_fail` STAYS surfaced. No demonstrable false positive was found: in no
+case did both the published rows and the anchor independently verify as correct.
+
+The single unexplained case (0001851322 2025-12-31, +$46.9M / 0.705% against a
+companyfacts_fv_plus_cash anchor) is not cleared as a false positive. Its anchor already
+includes cash, so the residual is an undiagnosed over-inclusion of non-cash rows. It is a
+candidate for the anchor lane, and it is also the case owner decision 6 predicts (a filer
+tagging both CashEquivalentsAtCarryingValue and MoneyMarketFundsAtCarryingValue, where the
+extractor picks one variant and can understate the plus_cash anchor).
+
+Dominant mechanism (10 of 22 flags): the anchor declares `investments_ex_cash` while the
+published rows carry cash. This is a direct consequence of the accepted plan deviation that
+an ex-cash override outranks the new `companyfacts_fv_plus_cash` anchor. After the basis
+backfill, 51 of 69 cohort Q1 quarters resolve on `verified_override_ex_cash`, so the
+plus_cash anchor almost never wins in Q1 (1 quarter) versus Q4 (8 quarters). Cohort quarters
+holding an ex-cash anchor while the published rows carry cash: 11 in Q1 ($650.3M of cash)
+and 9 in Q4 ($715.2M). That pool -- not the gate -- is the next anchor-lane target.
+
+Decisions:
+- KEEP `fv_conservation_fail` surfaced (FP rate 0-4.5%, bar 50%).
+- Do NOT re-point the ex-cash overrides at plus_cash in this pass; that is owner decision 4
+  (basis precedence / averaging across bases) and belongs with the anchor lane, not here.

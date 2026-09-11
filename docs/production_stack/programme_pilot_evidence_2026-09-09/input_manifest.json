@@ -1,0 +1,50 @@
+[
+  {
+    "path": "data\\output\\private_markets_holdings.csv",
+    "sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+    "bytes": 717667416,
+    "mtime_ns": 1788882547487786200
+  },
+  {
+    "path": "docs\\production_stack\\programme_reference_evidence_2026-09-09\\reference_pilot.csv",
+    "sha256": "bb2b788958d7e4863dd6d2e119eab4caa64fe6af847b2f619f563df304d84257",
+    "bytes": 48174,
+    "mtime_ns": 1788958595541406000
+  },
+  {
+    "path": "docs\\production_stack\\programme_reference_evidence_2026-09-09\\obligations.csv",
+    "sha256": "4ff966c7874a0ab18595326ae76bd0898a1a15ef08f87e73792a23267c067b67",
+    "bytes": 172055,
+    "mtime_ns": 1788958595523256200
+  },
+  {
+    "path": "data\\gold\\labels\\position_labels.jsonl",
+    "sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7",
+    "bytes": 112693,
+    "mtime_ns": 1781895815548214600
+  },
+  {
+    "path": "scripts\\gold\\estimate_gold.py",
+    "sha256": "38feb6ef3bf727e7a0aba7fb7737867a0c0569eeb82de8ac40a3d7f7b033f5e4",
+    "bytes": 8938,
+    "mtime_ns": 1781723008796189000
+  },
+  {
+    "path": "scripts\\programme_reference\\measure_pilot.py",
+    "sha256": "0c0fcd65c71e0e7506dc8b914ec4de954ec625cc63cb8ca6f52525a5954340da",
+    "bytes": 16180,
+    "mtime_ns": 1788960454882978000
+  },
+  {
+    "path": "scripts\\programme_reference\\evaluate.py",
+    "sha256": "292e954a870fe6b3466b84f971a6c4605d2cce7bf7d32030bbec7cef150b35cf",
+    "bytes": 4762,
+    "mtime_ns": 1788960124143016700
+  },
+  {
+    "path": "scripts\\programme_reference\\source_reader.py",
+    "sha256": "a81819d6dd97b781ca4f21053f62ccecad14f4252fd617fa7f59365979985c3f",
+    "bytes": 8092,
+    "mtime_ns": 1788959642786252900
+  }
+]

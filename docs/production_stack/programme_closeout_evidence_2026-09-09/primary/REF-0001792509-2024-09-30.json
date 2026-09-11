@@ -1,0 +1,391 @@
+{
+  "path": "data/raw/filings/bdc_html/1792509/000179250924000034.html",
+  "ref": "REF-0001792509-2024-09-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value (amortized cost of $ 393,790 and $ 406,433 , respectively)",
+        "$",
+        "380,841",
+        "",
+        "",
+        "$",
+        "400,195",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-3",
+          "scale": "3",
+          "text": "393,790",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-4",
+          "scale": "3",
+          "text": "406,433",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-3",
+          "scale": "3",
+          "text": "380,841",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-4",
+          "scale": "3",
+          "text": "400,195",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | September 30, 2024 December 31, 2023 | (unaudited) | Assets | Investments at fair value (amortized cost of $ 393,790 and $ 406,433 , respectively) $ 380,841 $ 400,195",
+      "preceding": [
+        "(in thousands, except share and per share data)",
+        "CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES",
+        "",
+        "Item 1. Financial Statements",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[55]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment and other income",
+        "15,411",
+        "",
+        "",
+        "18,031",
+        "",
+        "",
+        "48,187",
+        "",
+        "",
+        "53,367",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-5",
+          "scale": "3",
+          "text": "15,411",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-6",
+          "scale": "3",
+          "text": "18,031",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-1",
+          "scale": "3",
+          "text": "48,187",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-7",
+          "scale": "3",
+          "text": "53,367",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | For the Three Months Ended September 30, For the Nine Months Ended September 30, | 2024 2023 2024 2023 | Investment income | Interest income from investments $ 14,146 $ 17,496 $ 44,430 $ 51,457",
+      "preceding": [
+        "(in thousands, except share and per share data)",
+        "(unaudited)",
+        "CONSOLIDATED STATEMENTS OF OPERATIONS",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES",
+        "",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[65]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments in Portfolio Companies - 135.52 %* (4)(5)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "393,790",
+        "",
+        "",
+        "$",
+        "380,841",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-718",
+          "scale": "-2",
+          "text": "135.52",
+          "unit": "number"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-3",
+          "scale": "3",
+          "text": "393,790",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-3",
+          "scale": "3",
+          "text": "380,841",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of September 30, 2024 | Company Type of Equity Acquisition Date (10) Shares Cost (6) Fair Value | Etched.ai, Inc. Preferred Stock (2) 4/9/2024 30,757 500 500 | Total Information Technology - 0.18 %* 500 500",
+      "preceding": [
+        "",
+        "",
+        "22",
+        "Preferred Stock (2) 8/24/2022 949,667 200 285 Total Healthcare Services - 0.17 %* 720 473 Healthcare Technology Systems Capsule Corporation Preferred Stock (2) 4/21/2021 863 13 2 Capsule Corporation Preferred Stock (2) 12/29/2022 519 2 1 Total Healthcare Technology Systems - \u2014 %* 15 3 Information Services (B2C) Kasa Living, Inc. Preferred Stock (2) 12/29/2022 22,725 150 150 Total Information Services (B2C) - 0.05 %* 150 150 Information Technology",
+        "",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[151]/table/tr[43]"
+    },
+    {
+      "cells": [
+        "Total Investments in Portfolio Companies - 137.74 %* (4)(5)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "406,433",
+        "",
+        "",
+        "$",
+        "400,195",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-4",
+          "scale": "-2",
+          "text": "137.74",
+          "unit": "number"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-4",
+          "scale": "3",
+          "text": "406,433",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-4",
+          "scale": "3",
+          "text": "400,195",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) As of December 31, 2023 | Company Type of Equity Acquisition Date (10) Shares Cost (6) Fair Value |  | Software Development Applications",
+      "preceding": [
+        "",
+        "",
+        "41",
+        "erred Stock (2) 4/29/2022 656 8 6 N26 GmbH (1)(3) Preferred Stock (2) 12/8/2021 12 690 817 Total Other Financial Services - 0.28 %* 698 823 Real Estate Services Belong Home, Inc. Preferred Stock (2) 4/15/2022 6,033 29 29 Habyt GmbH Preferred Stock (2) 2/21/2023 400 443 252 McN Investments Ltd. (1)(3) Preferred Stock (2) 5/6/2022 749 20 14 True Footage, Inc. Preferred Stock (2) 10/18/2021 18,366 100 122 Total Real Estate Services - 0.14 %* 592 417",
+        "",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[222]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Total investments, including derivative instruments",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "( 393 )",
+        "",
+        "",
+        "$",
+        "380,841",
+        "",
+        "",
+        "$",
+        "380,448",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "( 430 )",
+        "",
+        "",
+        "$",
+        "400,195",
+        "",
+        "",
+        "$",
+        "399,765",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-1417",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "usd"
+        },
+        {
+          "concept": "tpvc:AssetFairValueDisclosureNetting",
+          "context": "c-1418",
+          "scale": "3",
+          "text": "393",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-1419",
+          "scale": "3",
+          "text": "380,841",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-3",
+          "scale": "3",
+          "text": "380,448",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-1420",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "usd"
+        },
+        {
+          "concept": "tpvc:AssetFairValueDisclosureNetting",
+          "context": "c-1421",
+          "scale": "3",
+          "text": "430",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-1422",
+          "scale": "3",
+          "text": "400,195",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:AssetsFairValueDisclosure",
+          "context": "c-4",
+          "scale": "3",
+          "text": "399,765",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | Investment Type (in thousands) September 30, 2024 December 31, 2023 | Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total | Debt investments $ \u2014 $ \u2014 $ 346,056 $ 346,056 $ \u2014 $ \u2014 $ 375,025 $ 375,025 | Warrant investments \u2014 \u2014 18,313 18,313 \u2014 \u2014 16,915 16,915",
+      "preceding": [
+        "Investments measured at fair value on a recurring basis are categorized in the following table based upon the lowest level of significant input to the valuations as of September 30, 2024 and December 31, 2023. The Company transfers investments in and out of Levels 1, 2 and 3 as of the beginning balance sheet date, based on changes in the use of observable and unobservable inputs utilized to perform the valuation for the period.",
+        "ly held investments are inherently uncertain, as they are based on estimates, and their values may fluctuate over time. The determination of fair value may differ materially from the values that would have been used if an active market for these investments existed. In some cases, the fair value of such investments is best expressed as a range of values derived utilizing different methodologies from which a single estimate may then be determined.",
+        "Investment Valuation",
+        "The fair value of an equity investment in a publicly traded company is based upon the closing public share price on the date of measurement.",
+        "nancing subsequent to its investment. The Company may adjust the fair value of an equity investment absent a new equity financing event based upon positive or negative changes in a portfolio company\u2019s financial or operational performance. The Company may also reference comparable transactions and/or secondary market transactions of comparable companies to estimate fair value. These valuation methodologies involve a significant degree of judgment.",
+        "Equity Investments"
+      ],
+      "xpath": "/html/body/ix:continuation[9]/ix:nonnumeric[1]/div[2]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total investments in portfolio companies",
+        "",
+        "$",
+        "393,790",
+        "",
+        "",
+        "$",
+        "380,841",
+        "",
+        "",
+        "$",
+        "(12,949)",
+        "",
+        "",
+        "492",
+        "",
+        "",
+        "161",
+        "",
+        "(1)"
+      ],
+      "facts": [],
+      "opening": " | September 30, 2024 | Investments by Type (dollars in thousands) Cost Fair Value Net Unrealized Gains (Losses) Number of Investments Number of Companies | Debt investments $ 361,017 $ 346,056 $ (14,961) 222 80 | Warrant investments 15,122 18,313 3,191 202 145",
+      "preceding": [
+        "The following tables show certain information relating to the composition of our portfolio as of September 30, 2024 and December 31, 2023:",
+        "",
+        "",
+        "61",
+        "",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[370]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "Total investments in portfolio companies",
+        "",
+        "$",
+        "406,433",
+        "",
+        "",
+        "$",
+        "400,195",
+        "",
+        "",
+        "$",
+        "(6,238)",
+        "",
+        "",
+        "467",
+        "",
+        "",
+        "157",
+        "",
+        "(1)"
+      ],
+      "facts": [],
+      "opening": " | December 31, 2023 | Investments by Type (dollars in thousands) Cost Fair Value Net Unrealized Gains (Losses) Number of Investments Number of Companies | Debt investments $ 383,570 $ 375,025 $ (8,545) 228 83 | Warrant investments 13,419 16,915 3,496 183 144",
+      "preceding": [
+        "(1) Represents non-duplicative number of companies.",
+        "_______________",
+        "September 30, 2024 Investments by Type (dollars in thousands) Cost Fair Value Net Unrealized Gains (Losses) Number of Investments Number of Companies Debt investments $ 361,017 $ 346,056 $ (14,961) 222 80 Warrant investments 15,122 18,313 3,191 202 145 Equity investments 17,651 16,472 (1,179) 68 54 Total investments in portfolio companies $ 393,790 $ 380,841 $ (12,949) 492 161 (1)",
+        "The following tables show certain information relating to the composition of our portfolio as of September 30, 2024 and December 31, 2023:",
+        "",
+        "tpvc-20240930"
+      ],
+      "xpath": "/html/body/div[373]/table/tr[7]"
+    }
+  ],
+  "sha256": "a627f90dde9cc7b64f98d6a5ddbf4826dcd865adf8415f63bc8e7f4f571f7102",
+  "status": "literal_primary_review_candidates"
+}

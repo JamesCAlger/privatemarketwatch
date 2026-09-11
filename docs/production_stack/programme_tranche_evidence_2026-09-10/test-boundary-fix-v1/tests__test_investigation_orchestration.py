@@ -1,0 +1,668 @@
+"""Tests for the agentic driver's orchestration: discover (B1 -> investigation targets) and
+promote (gate-PASS rules -> overrides). Steps 3-4 of the B2 consolidation."""
+import csv
+import json
+
+import pandas as pd
+
+import scripts.agent_investigate.run_investigation as ri
+from pipeline import config as pipeline_config
+from scripts.agent_investigate.run_investigation import _discover_targets, loop_decision, promote
+
+
+def _b1_fixture(tmp_path):
+    verdicts = tmp_path / "verdicts"
+    verdicts.mkdir()
+    (verdicts / "R1.json").write_text(json.dumps({"verdict": "real_error", "mechanism": "subtotal_leak"}))
+    (verdicts / "R2.json").write_text(json.dumps({"verdict": "false_alarm"}))
+    (verdicts / "R3.json").write_text(json.dumps({"verdict": "real_error"}))
+    wl = tmp_path / "worklist.csv"
+    wl.write_text(
+        "review_id,cik,report_date,rule_name\n"
+        "R1,0001920453,2024-03-31,fv_conservation\n"        # real_error -> target
+        "R2,0001920453,2024-06-30,fv_conservation\n"        # false_alarm -> skipped
+        "R3,0001715933,2025-12-31,fv_conservation\n"        # real_error -> target
+        ",0001603480,2025-06-30,fv_conservation\n"          # no review_id -> skipped
+    )
+    return wl, verdicts
+
+
+def test_discover_selects_only_real_errors(tmp_path):
+    wl, verdicts = _b1_fixture(tmp_path)
+    targets = _discover_targets(wl, verdicts)
+    assert set(targets) == {("1920453", "2024-03-31"), ("1715933", "2025-12-31")}
+    assert targets[("1920453", "2024-03-31")] == {"R1"}            # false_alarm R2 excluded
+
+
+def test_discover_dedupes_multiple_verdicts_per_target(tmp_path):
+    verdicts = tmp_path / "verdicts"
+    verdicts.mkdir()
+    for r in ("R1", "R2"):
+        (verdicts / f"{r}.json").write_text(json.dumps({"verdict": "real_error"}))
+    wl = tmp_path / "worklist.csv"
+    wl.write_text("review_id,cik,report_date\nR1,0001920453,2024-03-31\nR2,0001920453,2024-03-31\n")
+    targets = _discover_targets(wl, verdicts)
+    assert set(targets) == {("1920453", "2024-03-31")}
+    assert targets[("1920453", "2024-03-31")] == {"R1", "R2"}      # one target, both review_ids
+
+
+def test_promote_refuses_without_gate_pass(tmp_path):
+    # No corrected holdings for a fake cik -> gate is not PASS -> promote must refuse (no copy).
+    res = promote("9999999999", "2025-12-31", overrides_dir=tmp_path)
+    assert res["status"] == "refused" and res.get("gate") != "PASS"
+    assert not any(tmp_path.iterdir())                             # nothing written to overrides
+
+
+# --- PASS_NOOP: clean zero-rule investigations (2083477 q1p3 false-FAIL) ----------------
+# held_out_coverage hard-failed a first-time filer with ONE anchored quarter, zero rules,
+# and residual 0.0 -- there is no correction to overfit, so the predicate's rationale is
+# vacuous. A clean no-op must pass; an over-band or unvalidated-anchor no-op must not
+# (that is a worker that gave up, not a clean quarter).
+
+def _noop_fixture(tmp_path, monkeypatch, fair_value, anchor):
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["2083477"], "report_date": ["2026-03-31"],
+                       "fair_value": [fair_value]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter",
+                        lambda cik: ({"2026-03-31": {"companyfacts_fv": anchor}}, {}))
+    out = tmp_path / "2083477"
+    out.mkdir()
+    df.to_csv(out / "corrected_holdings.2083477.csv", index=False)
+
+
+def test_loop_decision_pass_noop_stops_successfully():
+    d = loop_decision(0.0, 1, gate_verdict="PASS_NOOP")
+    assert d["stop"] is True and d["success"] is True
+
+
+def test_noop_gate_verdict_requires_band_and_validated_tier():
+    assert ri._noop_gate_verdict(0.0, "MEDIUM")["verdict"] == "PASS_NOOP"
+    assert ri._noop_gate_verdict(0.0, "HIGH")["verdict"] == "PASS_NOOP"
+    assert ri._noop_gate_verdict(5.0, "MEDIUM") is None      # over band -> gave up, not clean
+    assert ri._noop_gate_verdict(None, "MEDIUM") is None     # no residual -> undecidable
+    assert ri._noop_gate_verdict(0.0, "NONE") is None        # unvalidated anchor -> escalate
+
+
+def test_gate_passes_clean_zero_rule_investigation(tmp_path, monkeypatch):
+    _noop_fixture(tmp_path, monkeypatch, fair_value=1811075043.0, anchor=1811075043.0)
+    res = ri.gate("2083477", "2026-03-31")
+    assert res["verdict"] == "PASS_NOOP"
+    assert res["checks"] == {"noop_reconciled": True}
+
+
+def test_gate_still_fails_over_band_zero_rule_investigation(tmp_path, monkeypatch):
+    _noop_fixture(tmp_path, monkeypatch, fair_value=1600000000.0, anchor=1811075043.0)
+    res = ri.gate("2083477", "2026-03-31")
+    assert res["verdict"] == "FAIL"
+
+
+def test_promote_pass_noop_promotes_nothing(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "gate",
+                        lambda cik, q: {"verdict": "PASS_NOOP", "reasons": ["clean no-op"]})
+    res = promote("2083477", "2026-03-31", overrides_dir=tmp_path)
+    assert res["status"] == "no_rules_to_promote" and res["gate"] == "PASS_NOOP"
+    assert not any(tmp_path.iterdir())                             # nothing written to overrides
+
+
+# --- promote audit guard: invalid/noop rules must not reach production ------------------
+# q1p3: the Fiesta dedup (position_key not in DEDUP_KEY_FIELDS) was invalid in trial AND
+# production, yet promoted -- the conservation gate passes trivially for an FV-neutral
+# rule on an already-reconciled quarter, and promote copied every file unconditionally.
+
+def _valid_rule(rule_id, predicate, cik="2083477"):
+    return {"cik": cik, "rule_id": rule_id, "rule_type": "row_exclusion", "action": "exclude",
+            "predicate_sql": predicate, "scope": {"quarters": ["all"]},
+            "evidence": ["filing table 1 row 2"], "rationale": "test rule",
+            "confidence": 0.9}
+
+
+def _promote_fixture(tmp_path, monkeypatch, rules):
+    monkeypatch.setattr(ri, "BASE", tmp_path / "base")
+    rules_dir = tmp_path / "base" / "2083477" / "rules"
+    rules_dir.mkdir(parents=True)
+    for r in rules:
+        (rules_dir / f"{r['rule_id']}.json").write_text(json.dumps(r), encoding="utf-8")
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "PASS"})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame({
+        "cik": ["2083477", "2083477"], "report_date": ["2026-03-31", "2026-03-31"],
+        "issuer_name": ["Acme Corp", "Total Investments"],
+        "fair_value": [100.0, 200.0]}))
+    return tmp_path / "overrides"
+
+
+def test_promote_refuses_invalid_rules(tmp_path, monkeypatch):
+    bad = _valid_rule("dedup_bad", "")
+    bad.update({"rule_type": "dedup", "action": "dedup",
+                "match_fields": ["report_date", "position_key"], "keep": "last"})
+    ov = _promote_fixture(tmp_path, monkeypatch, [bad])
+    res = promote("2083477", "2026-03-31", overrides_dir=ov)
+    assert res["status"] == "refused_invalid_rules"
+    assert res["invalid_rules"][0]["rule_id"] == "dedup_bad"
+    assert not ov.exists() or not any(ov.iterdir())
+
+
+def test_promote_refuses_noop_rules(tmp_path, monkeypatch):
+    ov = _promote_fixture(tmp_path, monkeypatch,
+                          [_valid_rule("exclude_nothing", "issuer_name = 'Nobody At All'")])
+    res = promote("2083477", "2026-03-31", overrides_dir=ov)
+    assert res["status"] == "refused_noop_rules"
+    assert res["noop_rules"] == ["exclude_nothing"]
+    assert not ov.exists() or not any(ov.iterdir())
+
+
+def test_promote_copies_valid_effective_rules(tmp_path, monkeypatch):
+    ov = _promote_fixture(tmp_path, monkeypatch,
+                          [_valid_rule("exclude_total", "issuer_name = 'Total Investments'")])
+    res = promote("2083477", "2026-03-31", overrides_dir=ov)
+    assert res["status"] == "promoted" and res["n_rules"] == 1
+    assert (ov / "2083477" / "exclude_total.json").exists()
+
+
+# --- escalation handling: workers who escalate get one post-escalation iteration ---
+# Before iter 2, the escalation does not stop the loop; at iter 2+ with escalation,
+# the loop stops (honest outcome -- escalation is a terminal decision).
+
+
+def test_loop_decision_stops_on_escalation_after_iter1():
+    d = loop_decision(-1.6, 2, gate_verdict="FAIL", n_escalations=1)
+    assert d["stop"] is True and d["success"] is False
+    assert "escalat" in d["reason"]
+
+
+def test_loop_decision_iteration_one_still_iterates_despite_escalation():
+    # give the worker one post-escalation iteration to also author expressible rules
+    d = loop_decision(-1.6, 1, gate_verdict="FAIL", n_escalations=1)
+    assert d["stop"] is False
+
+
+def test_loop_decision_pass_beats_escalation():
+    d = loop_decision(0.0, 2, gate_verdict="PASS", n_escalations=1)
+    assert d["stop"] is True and d["success"] is True
+
+
+# --- escalation dedup + idempotency prompt ------------------------------------------
+
+def test_prep_prompt_lists_existing_escalations(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    esc_dir = tmp_path / "999" / "escalations"
+    esc_dir.mkdir(parents=True)
+    esc_dir.joinpath("prior.json").write_text(json.dumps(
+        {"target_quarter": "2026-03-31", "category": "vocab", "kind": "proposed_mechanism",
+         "summary": "missing cash row", "evidence": [{"source": "query", "quote": "x"}],
+         "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.9}),
+        encoding="utf-8")
+    ri.prep("999", "2026-03-31", iteration=2, allow_missing_bundle=True)
+    prompt = (tmp_path / "999" / "prompt.md").read_text(encoding="utf-8")
+    assert "missing cash row" in prompt
+    assert "do not re-author" in prompt.lower()
+
+
+# --- bundle precondition (Task 6) ---------------------------------------------------
+
+def test_prep_blocks_without_bundle(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    res = ri.prep("999", "2026-03-31")
+    assert res["status"] == "blocked_no_bundle"
+    assert not (tmp_path / "999" / "prompt.md").exists()
+
+
+def test_prep_allow_missing_bundle_overrides(tmp_path, monkeypatch):
+    # same monkeypatching as above
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    res = ri.prep("999", "2026-03-31", allow_missing_bundle=True)
+    assert (tmp_path / "999" / "prompt.md").exists()
+    assert res.get("bundle") == ""
+
+
+# --- apply() escalation count consistency: n_escalations=deduped, n_escalation_files=raw ----
+# apply_audit.json reported raw len(load_escalations()) as n_escalations while _measure/status
+# used the deduped count -- two semantics under the same key. apply() now mirrors _measure.
+
+def _apply_fixture(tmp_path, monkeypatch):
+    """Wire BASE and _load_holdings so apply('888') runs without filesystem/pipeline deps.
+    Creates a minimal valid rule so apply() does not early-return on no_rules."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["888"], "report_date": ["2026-03-31"],
+                       "issuer_name": ["Acme Corp"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    out = tmp_path / "888"
+    out.mkdir(parents=True)
+    # A rule that matches nothing (noop) -- sufficient to pass the no_rules guard.
+    rules_dir = out / "rules"
+    rules_dir.mkdir()
+    rule = _valid_rule("stub_rule", "issuer_name = 'Nobody'", cik="888")
+    (rules_dir / "stub_rule.json").write_text(json.dumps(rule), encoding="utf-8")
+    return out
+
+
+def test_apply_escalation_counts_deduped_vs_raw(tmp_path, monkeypatch):
+    """Two files with the same (target_quarter, category) key -> n_escalations=1, n_escalation_files=2."""
+    out = _apply_fixture(tmp_path, monkeypatch)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    # Two escalation files with identical (target_quarter, category) -- second should win after dedup.
+    esc_base = {"target_quarter": "2026-03-31", "category": "structural",
+                "kind": "no_known_mechanism", "summary": "first write",
+                "evidence": [{"source": "query", "quote": "x"}], "confidence": 0.7}
+    esc_dir.joinpath("esc_v1.json").write_text(json.dumps(esc_base), encoding="utf-8")
+    esc_base2 = dict(esc_base, summary="second write")
+    esc_dir.joinpath("esc_v2.json").write_text(json.dumps(esc_base2), encoding="utf-8")
+
+    res = ri.apply("888")
+    assert res["n_escalations"] == 1, f"expected deduped count 1, got {res['n_escalations']}"
+    assert res["n_escalation_files"] == 2, f"expected raw count 2, got {res['n_escalation_files']}"
+
+
+def test_apply_escalation_counts_no_duplicates(tmp_path, monkeypatch):
+    """Two files with DIFFERENT keys -> both counts are 2 (no dedup collapses them)."""
+    out = _apply_fixture(tmp_path, monkeypatch)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    esc1 = {"target_quarter": "2026-03-31", "category": "structural",
+            "kind": "no_known_mechanism", "summary": "s1",
+            "evidence": [{"source": "q", "quote": "x"}], "confidence": 0.7}
+    esc2 = dict(esc1, category="vocab", summary="s2")
+    esc_dir.joinpath("esc1.json").write_text(json.dumps(esc1), encoding="utf-8")
+    esc_dir.joinpath("esc2.json").write_text(json.dumps(esc2), encoding="utf-8")
+
+    res = ri.apply("888")
+    assert res["n_escalations"] == 2
+    assert res["n_escalation_files"] == 2
+
+
+# --- route_escalations: category -> lane routing ------------------------------------
+
+def test_route_escalations_by_category(tmp_path):
+    def _esc(cik, name, category, quarter="2026-03-31"):
+        d = tmp_path / cik / "escalations"
+        d.mkdir(parents=True, exist_ok=True)
+        d.joinpath(name).write_text(json.dumps(
+            {"cik": cik, "target_quarter": quarter, "category": category,
+             "summary": f"{category} finding", "confidence": 0.9}), encoding="utf-8")
+    _esc("111", "a.json", "anchor")
+    _esc("222", "v1.json", "vocab")
+    _esc("222", "v2_restated.json", "vocab")     # duplicate -> collapsed
+    _esc("333", "o.json", "other")
+    res = ri.route_escalations(base_dir=tmp_path, out_dir=tmp_path / "routing")
+    assert res["n_files"] == 4 and res["n_distinct"] == 3
+    assert res["by_route"] == {"anchor_lane": 1, "extraction_review": 1, "human_review": 1}
+    rows = list(csv.DictReader(open(tmp_path / "routing" / "escalation_routing.csv",
+                                    encoding="utf-8")))
+    routes = {r["cik"]: r["route"] for r in rows}
+    assert routes == {"111": "anchor_lane", "222": "extraction_review", "333": "human_review"}
+    assert rows[[r["cik"] for r in rows].index("222")]["n_duplicate_files"] == "2"
+
+
+# --- F1: stale cross-quarter escalations must not pollute current-quarter counts -----
+# A prior-quarter escalation surviving on disk made _measure count it in n_escalations
+# (stopping a NEW quarter's investigation at iter 2) and prep listed it in the prompt.
+# Fix: filter to target_quarter before dedup/count in both _measure and prep.
+
+def test_measure_escalation_count_scoped_to_target_quarter(tmp_path, monkeypatch):
+    """Stale escalation from a prior quarter must not count toward the current
+    quarter's n_escalations (F1: cross-quarter escalation lifecycle)."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["555"], "report_date": ["2026-03-31"], "fair_value": [1.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    out = tmp_path / "555"
+    out.mkdir(parents=True)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    current_q = "2026-03-31"
+    stale_q = "2025-12-31"
+    esc_cur = {
+        "target_quarter": current_q, "category": "vocab",
+        "kind": "proposed_mechanism", "summary": "current finding",
+        "evidence": [{"source": "query", "quote": "x"}],
+        "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.8,
+    }
+    esc_stale = dict(esc_cur, target_quarter=stale_q, summary="stale prior quarter")
+    esc_dir.joinpath("cur.json").write_text(json.dumps(esc_cur), encoding="utf-8")
+    esc_dir.joinpath("stale.json").write_text(json.dumps(esc_stale), encoding="utf-8")
+    m = ri._measure("555", current_q)
+    # Only the current-quarter escalation should count
+    assert m["n_escalations"] == 1, (
+        f"expected 1 current-quarter escalation, got {m['n_escalations']} "
+        f"(stale quarter must not be counted)")
+    assert m["n_escalation_files"] == 1, (
+        f"expected n_escalation_files==1 (current only), got {m['n_escalation_files']}"
+    )
+
+
+# --- F3: gate band must match the production reconcile band --------------------------
+# gate_rules defaults threshold_pct=1.0; production flags at FV_CONSERVATION_BAND_PCT=0.5.
+# A 0.7% undershoot trial must fail/flag through ri.gate and ri._measure (not pass at
+# the 1.0% default while production still flags). Both call sites must pass config.FV_CONSERVATION_BAND_PCT.
+
+def test_gate_uses_production_band_not_default_1pct(tmp_path, monkeypatch):
+    """A 0.7% undershoot (between 0.5% and 1.0%) must FAIL via ri.gate so trial and
+    production use the same band (F3).  We capture the threshold_pct kwarg passed to
+    gate_rules and assert it equals config.FV_CONSERVATION_BAND_PCT (0.5)."""
+    from pipeline.agent_rule import GateResult
+    captured = {}
+
+    def _fake_gate_rules(*args, threshold_pct=1.0, **kwargs):
+        captured["threshold_pct"] = threshold_pct
+        r = GateResult(cik="777", target_quarter="2026-03-31")
+        return r
+
+    monkeypatch.setattr(ri, "gate_rules", _fake_gate_rules)
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["777"], "report_date": ["2026-03-31"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: (
+        {"2026-03-31": {"companyfacts_fv": 100.0}}, {}))
+    out = tmp_path / "777"
+    out.mkdir(parents=True)
+    # Create a minimal rule file so gate_rules gets called (not the no-rules path)
+    rules_dir = out / "rules"
+    rules_dir.mkdir()
+    import json as _json
+    (rules_dir / "stub.json").write_text(_json.dumps({
+        "cik": "777", "rule_id": "stub", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": ["x"], "rationale": "test", "confidence": 0.9,
+    }), encoding="utf-8")
+    (out / f"corrected_holdings.777.csv").write_text(
+        df.to_csv(index=False), encoding="utf-8")
+    # This test bypasses ri.apply() and writes corrected_holdings.csv directly, so it must
+    # also record apply_audit.json (what a real apply() call would do) or the new STALE guard
+    # (rules dir fingerprint vs apply_audit.json fingerprint) refuses before gate_rules runs.
+    from pipeline.investigation_state import rules_fingerprint
+    (out / "apply_audit.json").write_text(
+        _json.dumps({"rules_fingerprint": rules_fingerprint(rules_dir)}), encoding="utf-8")
+    ri.gate("777", "2026-03-31")
+    assert "threshold_pct" in captured, "gate_rules was not called"
+    assert captured["threshold_pct"] == pipeline_config.FV_CONSERVATION_BAND_PCT, (
+        f"gate called gate_rules with threshold_pct={captured['threshold_pct']} "
+        f"but production band is {pipeline_config.FV_CONSERVATION_BAND_PCT} -- "
+        "trial-vs-production divergence (F3)")
+
+
+def test_measure_gate_uses_production_band(tmp_path, monkeypatch):
+    """_measure's gate_rules call must also use config.FV_CONSERVATION_BAND_PCT (F3 second site)."""
+    from pipeline.agent_rule import GateResult
+    import json as _json
+    captured = {}
+
+    def _fake_gate_rules(*args, threshold_pct=1.0, **kwargs):
+        captured["threshold_pct"] = threshold_pct
+        return GateResult(cik="778", target_quarter="2026-03-31")
+
+    monkeypatch.setattr(ri, "gate_rules", _fake_gate_rules)
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["778"], "report_date": ["2026-03-31"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: (
+        {"2026-03-31": {"companyfacts_fv": 100.0}}, {}))
+    monkeypatch.setattr(ri, "load_anchors", lambda cik, **kw: {})
+    out = tmp_path / "778"
+    rules_dir = out / "rules"
+    rules_dir.mkdir(parents=True)
+    (rules_dir / "stub.json").write_text(_json.dumps({
+        "cik": "778", "rule_id": "stub", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": ["x"], "rationale": "test", "confidence": 0.9,
+    }), encoding="utf-8")
+    ri._measure("778", "2026-03-31")
+    assert "threshold_pct" in captured
+    assert captured["threshold_pct"] == pipeline_config.FV_CONSERVATION_BAND_PCT, (
+        f"_measure called gate_rules with threshold_pct={captured['threshold_pct']} "
+        f"but production band is {pipeline_config.FV_CONSERVATION_BAND_PCT}")
+
+
+def test_prep_prompt_excludes_stale_quarter_escalation(tmp_path, monkeypatch):
+    """prep's 'Existing escalations' listing must not include a stale-quarter escalation (F1)."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["666"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    esc_dir = tmp_path / "666" / "escalations"
+    esc_dir.mkdir(parents=True)
+    current_q = "2026-03-31"
+    stale_q = "2025-12-31"
+    esc_cur = {
+        "target_quarter": current_q, "category": "vocab",
+        "kind": "proposed_mechanism", "summary": "current finding in prompt",
+        "evidence": [{"source": "query", "quote": "x"}],
+        "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.8,
+    }
+    esc_stale = dict(esc_cur, target_quarter=stale_q, summary="stale prior quarter finding")
+    esc_dir.joinpath("cur.json").write_text(json.dumps(esc_cur), encoding="utf-8")
+    esc_dir.joinpath("stale.json").write_text(json.dumps(esc_stale), encoding="utf-8")
+    ri.prep("666", current_q, iteration=2, allow_missing_bundle=True)
+    prompt = (tmp_path / "666" / "prompt.md").read_text(encoding="utf-8")
+    assert "current finding in prompt" in prompt
+    assert "stale prior quarter finding" not in prompt
+
+
+def _wire(tmp_path, monkeypatch, cik="888", q="2026-03-31"):
+    """BASE + holdings + a validated MEDIUM anchor so apply/gate run on a synthetic frame."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame([
+        {"cik": cik, "report_date": q, "fair_value": 1000.0, "bdc_dimensions_raw": "x=y",
+         "issuer_name": "Keep Co", "bdc_investment_identifier": "Keep Co"},
+        {"cik": cik, "report_date": q, "fair_value": 200.0, "bdc_dimensions_raw": "x=y",
+         "issuer_name": "Dup Co", "bdc_investment_identifier": "Dup Co"},
+    ])
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter",
+                        lambda c: ({q: {"companyfacts_fv": 1000.0}}, {}))
+    rules = tmp_path / cik / "rules"
+    rules.mkdir(parents=True)
+    rules.joinpath("drop_dup.json").write_text(json.dumps({
+        "cik": cik, "rule_id": "drop_dup", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Dup Co'", "scope": {"quarters": ["all"]},
+        "evidence": [{"source": "filing", "quote": "x"}], "rationale": "dup", "confidence": 0.9}),
+        encoding="utf-8")
+    return rules
+
+
+def test_apply_records_rules_fingerprint(tmp_path, monkeypatch):
+    from pipeline.investigation_state import rules_fingerprint
+    rules = _wire(tmp_path, monkeypatch)
+    res = ri.apply("888")
+    audit = json.loads((tmp_path / "888" / "apply_audit.json").read_text(encoding="utf-8"))
+    assert res["rules_fingerprint"] == audit["rules_fingerprint"] == rules_fingerprint(rules)
+
+
+def test_gate_is_stale_when_rules_change_after_apply(tmp_path, monkeypatch):
+    rules = _wire(tmp_path, monkeypatch)
+    ri.apply("888")
+    rules.joinpath("second.json").write_text(json.dumps({
+        "cik": "888", "rule_id": "second", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": [{"source": "filing", "quote": "x"}], "rationale": "late", "confidence": 0.5}),
+        encoding="utf-8")
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] == "STALE"
+    assert g["rules_fingerprint"] != g["apply_fingerprint"]
+    assert "newest_rule_file" in g and g["newest_rule_file"] == "second.json"
+    rec = json.loads((tmp_path / "888" / "gate.2026-03-31.json").read_text(encoding="utf-8"))
+    assert rec["verdict"] == "STALE"
+    # re-apply clears it
+    ri.apply("888")
+    g2 = ri.gate("888", "2026-03-31")
+    assert g2["verdict"] != "STALE"
+    assert "rules_fingerprint" in g2
+
+
+def test_promote_refuses_stale_gate(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "STALE", "reasons": ["rules changed"]})
+    res = promote("888", "2026-03-31", overrides_dir=tmp_path / "ov")
+    assert res["status"] == "refused" and res["gate"] == "STALE"
+
+
+def test_gate_stale_when_rules_deleted_after_apply(tmp_path, monkeypatch):
+    """F3: gate()'s STALE guard must also fire when the rule that was applied is later
+    DELETED (fp goes back to "", apply_fingerprint stays non-empty) -- not just when rules
+    change. The old `if fp and fp != apply_fp` skipped this case because fp was falsy."""
+    rules = _wire(tmp_path, monkeypatch)
+    ri.apply("888")
+    for f in rules.glob("*.json"):
+        f.unlink()
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] == "STALE"
+
+
+# --- F1: _measure (status()/fleet loop) must also write the fingerprint contract -----
+# _measure re-applies rules and overwrites corrected_holdings.csv but wrote no
+# apply_audit.json and no gate record -- a CIK measured only through status() then read
+# as STALE by gate() (never applied) even though its rules were faithfully applied.
+
+def test_status_measurement_leaves_gate_non_stale(tmp_path, monkeypatch):
+    rules = _wire(tmp_path, monkeypatch)
+    ri.status("888", "2026-03-31", iteration=1)
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] != "STALE"
+
+
+def test_status_measurement_writes_fingerprint_contract_files(tmp_path, monkeypatch):
+    from pipeline.investigation_state import rules_fingerprint
+    rules = _wire(tmp_path, monkeypatch)
+    fp = rules_fingerprint(rules)
+    ri.status("888", "2026-03-31", iteration=1)
+    gate_rec = json.loads((tmp_path / "888" / "gate.2026-03-31.json").read_text(encoding="utf-8"))
+    assert gate_rec["rules_fingerprint"] == fp
+    audit = json.loads((tmp_path / "888" / "apply_audit.json").read_text(encoding="utf-8"))
+    assert audit["rules_fingerprint"] == fp
+
+
+def test_promote_refuses_pass_noop_when_rules_exist(tmp_path, monkeypatch):
+    """Silver Capital shape: a PASS_NOOP verdict ('no rules authored') must never promote a
+    rules directory that has since been populated."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    (tmp_path / "888" / "rules").mkdir(parents=True)
+    (tmp_path / "888" / "rules" / "late.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "PASS_NOOP", "reasons": ["noop"]})
+    res = promote("888", "2026-03-31", overrides_dir=tmp_path / "ov")
+    assert res["status"] == "refused_noop_with_rules"
+    assert not (tmp_path / "ov").exists()
+
+
+def test_anchor_candidates_use_basis(tmp_path, monkeypatch):
+    q = "2026-03-31"
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+                  "0000000888,2026-03-31,companyfacts,1000,20\n"
+                  "0000000889,2026-03-31,companyfacts,500,7\n"
+                  "0000000890,2026-03-31,companyfacts,300,\n", encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    ov = tmp_path / "agent_anchor"
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", ov)
+    frames = {
+        "888": pd.DataFrame([{"cik": "888", "report_date": q, "fair_value": 1000.0, "asset_category": "LOAN"},
+                             {"cik": "888", "report_date": q, "fair_value": 20.0, "asset_category": "CASH"}]),
+        "889": pd.DataFrame([{"cik": "889", "report_date": q, "fair_value": 500.0, "asset_category": "LOAN"}]),
+        "890": pd.DataFrame([{"cik": "890", "report_date": q, "fair_value": 300.0, "asset_category": "LOAN"},
+                             {"cik": "890", "report_date": q, "fair_value": 9.0, "asset_category": "CASH"}]),
+    }
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: frames[str(c).lstrip("0")])
+    # 888: cash rows + cash column -> plus_cash replaces companyfacts_fv
+    assert ri.load_anchor_candidates("888")[q] == {"companyfacts_fv_plus_cash": 1020.0}
+    # 889: no cash rows -> plain companyfacts_fv
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0}
+    # 890: cash rows but the cash concept is untagged -> plain companyfacts_fv (honest overshoot later)
+    assert ri.load_anchor_candidates("890")[q] == {"companyfacts_fv": 300.0}
+    # override with published_rows basis that disagrees with companyfacts -> replaces it
+    (ov / "889").mkdir(parents=True)
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 540.0, "method": "total_row",
+        "basis": "published_rows", "companyfacts_fv": 500.0,
+        "components": [{"label": "Total investments and cash equivalents", "value": 540.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"printed_schedule_total": 540.0}
+    # override with ex-cash basis agreeing with companyfacts -> both kept (HIGH)
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 501.0, "method": "total_row",
+        "basis": "investments_ex_cash", "companyfacts_fv": 500.0,
+        "components": [{"label": "Total investments", "value": 501.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0,
+                                                    "verified_investments_ex_cash": 501.0}
+    # a leaf without basis is ignored
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 999.0, "method": "total_row",
+        "components": [{"label": "x", "value": 999.0, "source": "s"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0}
+
+
+def test_outlier_series_includes_plus_cash_quarters(tmp_path, monkeypatch):
+    """A cash-holding fund's quarters carry 'companyfacts_fv_plus_cash' INSTEAD of
+    'companyfacts_fv'. They must still reach the cross-quarter outlier series, or the guard that
+    turns a mis-extracted anchor into NONE/escalate goes dark for exactly those funds."""
+    qs = ["2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"]
+    vals = [1000.0, 1000.0, 1000.0, 10000.0]      # last quarter is a ~10x mis-extraction
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text(
+        "cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+        + "".join(f"0000000891,{q},companyfacts,{v:.0f},20\n" for q, v in zip(qs, vals)),
+        encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", tmp_path / "agent_anchor")
+    holdings = pd.DataFrame(
+        [{"cik": "891", "report_date": q, "fair_value": v, "asset_category": "LOAN"} for q, v in zip(qs, vals)]
+        + [{"cik": "891", "report_date": q, "fair_value": 20.0, "asset_category": "CASH"} for q in qs])
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: holdings)
+
+    # every quarter is upgraded to the published-rows candidate
+    assert ri.load_anchor_candidates("891") == {
+        q: {"companyfacts_fv_plus_cash": v + 20.0} for q, v in zip(qs, vals)}
+
+    candidates, flags = ri._candidates_with_outlier_filter("891")
+    assert set(flags) == set(qs)                      # all four quarters reached the series
+    assert flags[qs[-1]].flagged is True              # the 10x quarter is caught
+    assert candidates[qs[-1]] == {}                   # suspect anchor removed -> NONE -> escalate
+    assert all(not flags[q].flagged for q in qs[:-1])
+    assert candidates[qs[0]] == {"companyfacts_fv_plus_cash": 1020.0}
+
+
+def test_ex_cash_override_does_not_displace_plus_cash(tmp_path, monkeypatch):
+    """An investments_ex_cash override is a LOWER-basis anchor than the published-rows
+    companyfacts_fv_plus_cash candidate; it must not pop it. A published_rows override still does."""
+    q = "2026-03-31"
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+                  f"0000000892,{q},companyfacts,1000,100\n", encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    ov = tmp_path / "agent_anchor"
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", ov)
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: pd.DataFrame(
+        [{"cik": "892", "report_date": q, "fair_value": 1000.0, "asset_category": "LOAN"},
+         {"cik": "892", "report_date": q, "fair_value": 100.0, "asset_category": "CASH"}]))
+    assert ri.load_anchor_candidates("892")[q] == {"companyfacts_fv_plus_cash": 1100.0}
+
+    # ex-cash override, 9% below the plus-cash candidate (the cash balance) -> plus_cash SURVIVES
+    (ov / "892").mkdir(parents=True)
+    (ov / "892" / f"{q}.json").write_text(json.dumps({
+        "cik": "892", "target_quarter": q, "grand_total": 1000.0, "method": "total_row",
+        "basis": "investments_ex_cash", "companyfacts_fv": 1000.0,
+        "components": [{"label": "Total investments", "value": 1000.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("892")[q] == {"companyfacts_fv_plus_cash": 1100.0,
+                                                   "verified_investments_ex_cash": 1000.0}
+
+    # a published_rows override that disagrees still drops the companyfacts candidate (unchanged)
+    (ov / "892" / f"{q}.json").write_text(json.dumps({
+        "cik": "892", "target_quarter": q, "grand_total": 1200.0, "method": "total_row",
+        "basis": "published_rows", "companyfacts_fv": 1000.0,
+        "components": [{"label": "Total investments and cash equivalents", "value": 1200.0,
+                        "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("892")[q] == {"printed_schedule_total": 1200.0}

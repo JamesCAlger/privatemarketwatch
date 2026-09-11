@@ -1,0 +1,298 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1872371",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001872371-2024-06-30.json",
+    "evidence_sha256": "67078a40db37611e249c85f4c2653424677327b79fb7f24d3717b0d3a22cf288",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001872371-2024-06-30",
+    "report_date": "2024-06-30",
+    "review_note": "June 2024 combined FV 4,614,434,000; 4,596,251,000 is cost despite FV tagging. Affiliation subset is not primary.",
+    "saved_candidate_rows": "330",
+    "source_candidate_rows": "442"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1872371/000187237124000011.html",
+    "ref": "REF-0001872371-2024-06-30",
+    "rows": [
+      {
+        "cells": [
+          "Total investment income",
+          "114,509",
+          "",
+          "",
+          "32,442",
+          "",
+          "",
+          "283,159",
+          "",
+          "",
+          "69,180",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-14",
+            "scale": "3",
+            "text": "114,509",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-15",
+            "scale": "3",
+            "text": "32,442",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-1",
+            "scale": "3",
+            "text": "283,159",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-16",
+            "scale": "3",
+            "text": "69,180",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Three months ended June 30, 2024 Three months ended June 30, 2023 Nine months ended June 30, 2024 Nine months ended June 30, 2023 | Interest income: | Non-control/Non-affiliate investments $ 107,921 $ 30,228 $ 266,204 $ 65,274 | Interest on cash and cash equivalents 3,467 453 9,517 829",
+        "preceding": [
+          "Oaktree Strategic Credit Fund Consolidated Statements of Operations (in thousands, except per share amounts) (unaudited)",
+          "",
+          "",
+          "3",
+          "See notes to Consolidated Financial Statements.",
+          "oscf-20240630"
+        ],
+        "xpath": "/html/body/div[78]/table/tr[13]"
+      },
+      {
+        "cells": [
+          "Total Portfolio Investments, Cash and Cash Equivalents and Restricted Cash ( 160.3 % of net assets)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "4,596,251",
+          "",
+          "$",
+          "4,614,434",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "oscf:InvestmentOwnedAndMoneyMarketFundsPercentOfNetAssets",
+            "context": "c-6",
+            "scale": "-2",
+            "text": "160.3",
+            "unit": "number"
+          },
+          {
+            "concept": "oscf:InvestmentOwnedAtCostAndMoneyMarketFundsAtCarryingValue",
+            "context": "c-6",
+            "scale": "3",
+            "text": "4,596,251",
+            "unit": "usd"
+          },
+          {
+            "concept": "oscf:InvestmentOwnedAtFairValueAndMoneyMarketFundsAtCarryingValue",
+            "context": "c-6",
+            "scale": "3",
+            "text": "4,614,434",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes | Wellfleet CLO 2022-2, Ltd. Multi-Sector Holdings CLO Notes SOFR+ 8.56 % 13.89 % 10/18/2035 $ 1,500 $ 1,446 $ 1,531 (5)(10) | Wind River 2020-1 CLO Multi-Sector Holdings CLO Notes SOFR+ 7.42 % 12.75 % 7/20/2037 2,000 1,960 2,010 (5)(10) | Wind River 2024-1 CLO Multi-Sector Holdings CLO Notes SOFR+ 4.25 % 9.57 % 4/20/2037 3,250 3,250 3,297 (5)(10)",
+        "preceding": [
+          "Oaktree Strategic Credit Fund Consolidated Schedule of Investments June 30, 2024 (dollar amounts in thousands) (unaudited)",
+          "",
+          "15",
+          "Pharma, Inc. Pharmaceuticals First Lien Term Loan 9/30/2025 \u2014 \u2014 \u2014 (8)(9)(10)(13) Violin Finco Guernsey Limited Asset Management & Custody Banks First Lien Term Loan SONIA+ 5.50 % 6/6/2031 \u00a3 \u2014 ( 20 ) ( 20 ) (5)(8)(9)(10) Violin Finco Guernsey Limited Asset Management & Custody Banks First Lien Term Loan SONIA+ 5.50 % 10.70 % 6/6/2031 46,900 58,909 58,693 (5)(8)(10) WAVE 2019-1 Specialized Finance CLO Notes 3.60 % 9/15/2044 $ 4,765 3,953 4,234 (10)",
+          "Oaktree Strategic Credit Fund Consolidated Schedule of Investments June 30, 2024 (dollar amounts in thousands) (unaudited)",
+          "oscf-20240630"
+        ],
+        "xpath": "/html/body/div[123]/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Portfolio Investments, Cash and Cash Equivalents and Restricted Cash ( 135.9 % of net assets)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,073,354",
+          "",
+          "$",
+          "2,078,373",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "oscf:InvestmentOwnedAndMoneyMarketFundsPercentOfNetAssets",
+            "context": "c-7",
+            "scale": "-2",
+            "text": "135.9",
+            "unit": "number"
+          },
+          {
+            "concept": "oscf:InvestmentOwnedAtCostAndMoneyMarketFundsAtCarryingValue",
+            "context": "c-7",
+            "scale": "3",
+            "text": "2,073,354",
+            "unit": "usd"
+          },
+          {
+            "concept": "oscf:InvestmentOwnedAtFairValueAndMoneyMarketFundsAtCarryingValue",
+            "context": "c-7",
+            "scale": "3",
+            "text": "2,078,373",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes | THL Zinc Ventures Ltd Diversified Metals & Mining First Lien Term Loan 13.00 % 5/23/2026 $ 39,751 $ 39,296 $ 39,318 (8)(10) | TIBCO Software Inc. Application Software First Lien Term Loan SOFR+ 4.50 % 9.99 % 3/30/2029 17,755 16,613 17,103 (5) | Touchstone Acquisition, Inc. Health Care Supplies First Lien Term Loan SOFR+ 6.00 % 11.42 % 12/29/2028 8,485 8,357 8,261 (5)(8)",
+        "preceding": [
+          "Oaktree Strategic Credit Fund Consolidated Schedule of Investments September 30, 2023 (dollar amounts in thousands)",
+          "",
+          "23",
+          "8)(9) Supreme Fitness Group NY Holdings, LLC Leisure Facilities First Lien Revolver SOFR+ 7.00 % 12.44 % 12/31/2026 396 391 377 (5)(8) Tacala, LLC Restaurants First Lien Term Loan SOFR+ 3.50 % 9.43 % 2/5/2027 11,945 11,703 11,919 (5) Tacala, LLC Restaurants Second Lien Term Loan SOFR+ 8.00 % 13.43 % 2/4/2028 7,310 7,129 7,094 (5) Ten-X LLC Interactive Media & Services First Lien Term Loan SOFR+ 6.00 % 11.32 % 5/26/2028 24,934 23,766 23,999 (5)(8)",
+          "Oaktree Strategic Credit Fund Consolidated Schedule of Investments September 30, 2023 (dollar amounts in thousands)",
+          "oscf-20240630"
+        ],
+        "xpath": "/html/body/div[168]/table/tr[19]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value",
+          "",
+          "\u2014",
+          "",
+          "",
+          "1,437,310",
+          "",
+          "",
+          "2,752,013",
+          "",
+          "",
+          "4,189,323",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1138",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1139",
+            "scale": "3",
+            "text": "1,437,310",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1140",
+            "scale": "3",
+            "text": "2,752,013",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-6",
+            "scale": "3",
+            "text": "4,189,323",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Level 1 Level 2 Level 3 Total | Senior secured debt $ \u2014 $ 1,174,795 $ 2,511,476 $ 3,686,271 | Subordinated debt (including CLO notes and credit linked notes) \u2014 262,515 223,319 485,834 | Common equity and warrants \u2014 \u2014 3,954 3,954",
+        "preceding": [
+          "The following table presents the financial instruments carried at fair value as of June 30, 2024 on the Company's Consolidated Statement of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+          "Fair Value Measurements"
+        ],
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric/div[2]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value",
+          "",
+          "\u2014",
+          "",
+          "",
+          "838,097",
+          "",
+          "",
+          "1,089,140",
+          "",
+          "",
+          "1,927,237",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1153",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1154",
+            "scale": "3",
+            "text": "838,097",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-1155",
+            "scale": "3",
+            "text": "1,089,140",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-7",
+            "scale": "3",
+            "text": "1,927,237",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Level 1 Level 2 Level 3 Total | Senior secured debt $ \u2014 $ 754,220 $ 1,063,761 $ 1,817,981 | Subordinated debt (including CLO notes) \u2014 83,824 13,792 97,616 | Common equity and warrants \u2014 53 5,839 5,892",
+        "preceding": [
+          "The following table presents the financial instruments carried at fair value as of September 30, 2023 on the Company's Consolidated Statement of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+          "Level 1 Level 2 Level 3 Total Senior secured debt $ \u2014 $ 1,174,795 $ 2,511,476 $ 3,686,271 Subordinated debt (including CLO notes and credit linked notes) \u2014 262,515 223,319 485,834 Common equity and warrants \u2014 \u2014 3,954 3,954 Preferred equity \u2014 \u2014 13,264 13,264 Total investments at fair value \u2014 1,437,310 2,752,013 4,189,323 Derivative assets \u2014 2,943 \u2014 2,943 Total assets at fair value $ \u2014 $ 1,440,253 $ 2,752,013 $ 4,192,266",
+          "The following table presents the financial instruments carried at fair value as of June 30, 2024 on the Company's Consolidated Statement of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+          "Fair Value Measurements"
+        ],
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric/div[4]/table/tr[7]"
+      }
+    ],
+    "sha256": "88e71b12df9ae8e7df838495c75938a219445a57010a141b3895cc906b3fd119",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,62 @@
+{
+  "accession": "0001410578-23-001083",
+  "cik": "0001742313",
+  "identity": [
+    11848952,
+    1774941508785406200
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1742313/000141057823001083.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "bf6153fc356ee5eb3ece055231b3c914796da50ab04685454e15ab21adb8abdb",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "Unit_Standard_shares_tdnEgrtOnU27EQzJm2zmbg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "Unit_Standard_pure_Rv3IeTkbjEida8YaSMZveg"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "Unit_Standard_USD_CiKPrNfZBUSwLCt-9uUKgw"
+    },
+    {
+      "currency": "CAD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:CAD\"]",
+      "unit_ref": "Unit_Standard_CAD_Xm76dWF0PEOcDOz_f6wTkw"
+    },
+    {
+      "currency": "AUD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:AUD\"]",
+      "unit_ref": "Unit_Standard_AUD_DEGE0s2QxUCc5_UmUgFhpQ"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "Unit_Divide_USD_shares_SspsCuZ1DUaAfbrH4Dignw"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"mcip:item\"]",
+      "unit_ref": "Unit_Standard_item_h8lo7a8YXkSSieQ0AmnpCw"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"mcip:component\"]",
+      "unit_ref": "Unit_Standard_component_E0uU7W_FXUWrEhwCsNxUQQ"
+    }
+  ]
+}

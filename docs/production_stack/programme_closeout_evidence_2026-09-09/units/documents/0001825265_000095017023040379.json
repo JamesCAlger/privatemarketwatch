@@ -1,0 +1,50 @@
+{
+  "accession": "0000950170-23-040379",
+  "cik": "0001825265",
+  "identity": [
+    2667164,
+    1774941731067006900
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1825265/000095017023040379.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "38908d9a29bf0a78cfd52af08e37108174019bde5a3f9fcb9f12365e57a9bafd",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "U_UnitedStatesOfAmericaDollarsShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "U_pure"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001825265:Persons\"]",
+      "unit_ref": "U_Persons"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "U_shares"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"ck0001825265:SubscriptionAgreement\"]",
+      "unit_ref": "U_SubscriptionAgreement"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "U_USD"
+    }
+  ]
+}

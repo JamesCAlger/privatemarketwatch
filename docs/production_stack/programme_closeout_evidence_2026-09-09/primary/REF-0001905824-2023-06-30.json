@@ -1,0 +1,371 @@
+{
+  "path": "data/raw/filings/bdc_html/1905824/000119312523210651.html",
+  "ref": "REF-0001905824-2023-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | June 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments at fair value | Non-controlled, non-affiliated investments, at fair value (cost of $ 245,950 and $ 256,627 , respectively) $ 236,260 $ 230,202",
+      "preceding": [
+        "",
+        "(Amounts in thousands, except share and per share)",
+        "Consolidated Statements of Assets and Liabilities",
+        "PIMCO Capital Solutions BDC Corp.",
+        "Item 1. Consolidated Financial Statements (Unaudited)"
+      ],
+      "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[4]"
+    },
+    {
+      "cells": [
+        "Non-controlled, non-affiliated investments, at fair value (cost of $ 245,950 and $ 256,627 , respectively)",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "245,950",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "256,627",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "236,260",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "230,202",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | June 30, 2023 (Unaudited) December 31, 2022 | Assets | Investments at fair value | Non-controlled, non-affiliated investments, at fair value (cost of $ 245,950 and $ 256,627 , respectively) $ 236,260 $ 230,202",
+      "preceding": [
+        "",
+        "(Amounts in thousands, except share and per share)",
+        "Consolidated Statements of Assets and Liabilities",
+        "PIMCO Capital Solutions BDC Corp.",
+        "Item 1. Consolidated Financial Statements (Unaudited)"
+      ],
+      "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "7,280",
+        "",
+        "",
+        "$",
+        "13,434",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "P04_01_2023To06_30_2023",
+          "scale": "3",
+          "text": "7,280",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "P01_01_2023To06_30_2023",
+          "scale": "3",
+          "text": "13,434",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Three Months Ended June 30, 2023 Six Months Ended June 30, 2023 | Investment Income | From non-controlled, non-affiliated investments: | Interest income $ 6,410 $ 10,050",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands, except share and per share)",
+        "Consolidated Statements of Operations",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "xpath": "/html/body/div[6]/div/div/div[1]/div/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "245,950",
+        "",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "",
+        "97.52",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "245,950",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "236,260",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "PAsOn06_30_2023",
+          "scale": "-2",
+          "text": "97.52",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | Investments (1) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill N/A 4.26 % 07/20/2023 3,200 3,191 3,192 1.32 %",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]/tr[18]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "256,627",
+        "",
+        "",
+        "$",
+        "230,202",
+        "",
+        "",
+        "",
+        "98.46",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "256,627",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "230,202",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "PAsOn12_31_2022",
+          "scale": "-2",
+          "text": "98.46",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | Investments (1)(2) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets | Debt Investments | First Lien Senior Secured | AP Core Holdings II, LLC Term B-1 Loan Entertainment LIBOR + 5.500 % 9.884 % 09/01/2027 $ 3,683 $ 3,632 $ 3,349 1.43 %",
+      "preceding": [
+        "",
+        "(Amounts in thousands)",
+        "Consolidated Schedule of Investments as of December 31, 2022",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "xpath": "/html/body/div[11]/div[1]/div[1]/div/div/table[1]/tr[63]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "245,950",
+        "",
+        "",
+        "$",
+        "236,260",
+        "",
+        "",
+        "$",
+        "256,627",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "245,950",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn06_30_2023",
+          "scale": "3",
+          "text": "236,260",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "256,627",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "230,202",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | June 30, 2023 December 31, 2022 |  | (Amounts in thousands) Cost Fair Value Cost Fair Value | First Lien Secured $ 147,557 $ 143,942 $ 143,434 $ 132,532",
+      "preceding": [
+        "",
+        "Investments at fair value and cost consisted of the following as of June 30, 2023 and December 31, 2022:",
+        "with respect to the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled affiliated investments is contained in the consolidated financial statements, including the Consolidated Schedules of Investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled affiliated investments.",
+        "5. Investments"
+      ],
+      "xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "7,280",
+        "",
+        "",
+        "$",
+        "13,434",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, 2023 For the Six Months Ended June 30, 2023 | Total investment income $ 7,280 $ 13,434 | Less: Net expenses 498 784 | ",
+      "preceding": [
+        "",
+        "The following table represents our operating results (amounts in thousands):",
+        "Consolidated Results Of Operations",
+        "Table of Contents",
+        "",
+        "",
+        "s as follows: June 30, 2023 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 223,692 94.7 24 Risk rating 3 11,573 4.9 2 Risk rating 4 995 0.4 1 $ 236,260 100 % 27 December 31, 2022 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 217,461 94.5 27 Risk rating 3 12,741 5.5 1 Risk rating 4 \u2014 \u2014 \u2014 $ 230,202 100 % 28 26",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[24]/div/table[1]/tr[3]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "",
+        "$",
+        "7,280",
+        "",
+        "",
+        "$",
+        "13,434",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, 2023 For the Six Months Ended June 30, 2023 | Investment income: | Interest income $ 6,410 $ 10,050 | Payment in-kind interest 861 3,375",
+      "preceding": [
+        "",
+        "Investment income was as follows (amounts in thousands):",
+        "For the Three Months Ended June 30, 2023 For the Six Months Ended June 30, 2023 Total investment income $ 7,280 $ 13,434 Less: Net expenses 498 784 Net investment income (loss) 6,782 12,650 Net realized gain (loss) (171 ) (17,922 ) Net change in unrealized appreciation (depreciation) (859 ) 16,735 Net increase (decrease) in Net Assets resulting from operations $ 5,752 $ 11,463",
+        "",
+        "The following table represents our operating results (amounts in thousands):",
+        "Table of Contents",
+        "",
+        "",
+        "s as follows: June 30, 2023 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 223,692 94.7 24 Risk rating 3 11,573 4.9 2 Risk rating 4 995 0.4 1 $ 236,260 100 % 27 December 31, 2022 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 217,461 94.5 27 Risk rating 3 12,741 5.5 1 Risk rating 4 \u2014 \u2014 \u2014 $ 230,202 100 % 28 26",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[24]/div/table[2]/tr[8]"
+    }
+  ],
+  "sha256": "1403858977f8e1fa48a8207615a8aa60db8ef806c309e9a3bba849e0173802b7",
+  "status": "literal_primary_review_candidates"
+}

@@ -221,3 +221,278 @@ only source of reliable per-share financial-highlights data -- and use
 fund_financials for the balance sheet. Schema change to a production artifact;
 requires tests + rebuild + semantic diff.
 
+## 2026-09-08 - Unified holdings schema and financial-contract crosswalk
+
+QUESTION: map the existing definitions, actual transformations, validation and
+downstream interpretations before proposing a replacement schema or architecture.
+
+RESULT: [Full crosswalk](../reference/unified_holdings_contract_crosswalk.md)
+accounts for all 88 saved unified-holdings columns, with BDC-only interpretation,
+explicit treatment of 14 N-PORT-only columns, and related PIK, rate-grammar,
+provenance and fund-level artifacts. Existing schemas/contracts are substantial;
+the finding is distributed definitions and specific alignment gaps, not absence
+of architecture.
+
+Twelve bounded findings cover rate conventions, cost proxies, FX assumptions,
+percentage denominators, enforcement/enums, point-in-time leakage, maturity
+precision, negative evidence, normalized identifiers, population basis,
+documentation/verification scope and identifier stability. Findings distinguish
+directly inspected code behavior from inferred analytical consequences; no
+population-level error rate or new quality score is asserted.
+
+Evidence: working-tree code at HEAD 2e0491a45d1493e7a3ee329aee52ec96bb34986c,
+saved CSV header, current definitions and relevant test sources. Worktree was
+already dirty; unrelated changes were preserved. Header-to-crosswalk check:
+88/88 fields, no omissions, extras or duplicates; all relative document links
+resolve. No tests, rebuilds, source downloads, fleet dispatches or production
+data writes were run. This is a documentation audit, not a semantic migration
+or quarter acceptance decision.
+
+## 2026-09-08 - Schema availability and preferred representations
+
+QUESTION: which of the crosswalk's 12 alignment choices are supported by the
+cached source and curated BDC data?
+
+RESULT: [Availability audit](../reference/unified_holdings_contract_crosswalk.md#18-availability-audit-and-preferred-representations)
+records bounded profiling for Q4-2025 and Q1-2026 under the active 70-CIK
+manifest, plus three cached-XML source checks. Q1 includes 30,067 current
+holdings across 69 funds; direct-lending principal exists on 90.1% of rows but
+USD principal on only 39.7%. A checked U_USD unit resolves to actual USD;
+many similar unit tokens currently produce missing-FX status, and the FX
+reference file has no rate rows. Currency resolution is a high-value recovery
+candidate, not evidence that the source principal is generally undisclosed.
+
+Reported cost exists on 96.1% of matched Q1 source anchors; retain legitimate
+zeros and distinguish proxies. Direct-lending maturity coverage is 95.4%, with
+substantial existing iXBRL enrichment. Preserve that pathway while adding
+precision/unknown semantics. Rates require source-aware cash versus all-in
+meaning. Optional floor tags exist, but a checked bond example demonstrates
+that the economic interpretation cannot be assumed from the tag alone.
+
+The older strict-current-PIK artifact is all unknown in these two quarters,
+despite a small pool of position-level evidence records; attachment and period
+eligibility need investigation before attributing this to disclosure absence.
+Current saved position_id is entirely blank for both selected quarters; the
+matching workflow exists separately. Do not use these current artifacts as
+already-joined, synchronized transition inputs.
+
+Coverage is not accuracy. The report separates extraction from original source,
+different artifact vintages, verified examples from screening estimates, and
+available fields from supported meanings. Corrected the crosswalk's omitted
+HTML/iXBRL maturity/reference-rate provenance pathways. No pipeline or data
+changes, SEC calls, tests, rebuilds, exports or semantic output diff. Both
+bounded scratch diagnostics exited successfully; findings persisted in docs.
+
+## 2026-09-08 - Current unified holdings accuracy versus verification coverage
+
+QUESTION: how well does the pipeline currently get accurate numbers into unified
+holdings, separately from the proposed schema-alignment work?
+
+SCOPE: active 70-CIK manifest, BDC source, Q4-2025 and Q1-2026. Existing artifacts
+read on 2026-09-08: unified Parquet 16:49 local; reconciliation 17:13; provenance
+ledger 17:25; Q1 acceptance generated 16:31:46 UTC (17:31 local). No new
+validation battery was run. PowerShell aggregated small summaries; bounded
+`scratch/2026-09-08_schema_availability/profile_accuracy.py` read the larger
+Parquet ledgers using DuckDB (two threads, 768MB, no spill, 60-second watchdog).
+The diagnostic completed successfully; no remaining diagnostic process.
+
+### Numeric fidelity is substantially stronger than the fund-tier percentage
+
+`pipeline/provenance_reverify.py::full_tier` checks an anchored field against the
+cached instance, applies declared scale transforms and compares published
+values. `classify_reason` only calls a field verified after full `raw_match`
+without an overriding correction/derivation/failure classification. This is
+stronger than just having a non-null value, but it is not certification of the
+chosen context, interpretation, economic valuation or row population. It also
+reuses parsing helpers, so this is not a wholly independent manual gold audit.
+
+| Q1 field | Populated | Verified populated | Share of populated |
+|---|---:|---:|---:|
+| Fair value | 30,067 | 30,026 | 99.86% |
+| Original principal | 24,229 | 24,194 | 99.86% |
+| Spread | 23,468 | 23,340 | 99.45% |
+| Interest rate | 21,213 | 21,022 | 99.10% |
+| PIK rate | 2,262 | 2,221 | 98.19% |
+| Cost | 29,334 | 27,873 | 95.02% |
+| Shares | 3,386 | 3,325 | 98.20% |
+| Percent of NAV | 15,490 | 8,514 | 54.96% |
+
+For fair value the ledger's verified dollars are $380,589,786,729 of
+$381,537,030,207 (99.75%). Q4: 28,870/28,938 FV rows (99.77%) and
+$373,681,983,944/$374,335,565,067 (99.83%). These are verification-coverage
+statistics, NOT estimated end-to-end accuracy. Unverified is not synonymous
+with wrong: Q1 cost includes 1,425 derived entries; %NAV includes 6,975
+corrected entries; interest rate includes 191 text-pathway entries.
+
+### Getting the right rows and totals remains a material weakness
+
+Latest Q1 `data/output/quarter_acceptance.json`, provisional v3, is FAIL (4/9
+checks pass). Exact figures:
+
+- 69/70 funds have holdings; 55/68 anchored funds reconcile (80.882%).
+- 13 flagged funds hold $98.113bn, 25.715% of published FV. This is the entire
+  size of those funds' holdings, NOT an estimate that $98bn is wrong.
+- Positive excess over independent anchors across failed funds is $3.370bn,
+  0.883% of published FV. This does not measure omissions, offsetting errors
+  or every possible duplication, and is not a total error bound.
+- 46 funds are tier `verified`, representing 60.254% of FV; 22 under review,
+  one unanchored, one without holdings. Code assigns verified when conservation
+  passes and the source-reconciliation review queue has no blockers for the
+  fund. It does not require every field to have passed numeric verification.
+- Queue source-blocker FV is $989.080m across 11 fund packets, 0.259% of FV;
+  this is queue exposure, not a universal missing-holdings percentage.
+- 15 promoted-rule drift records also fail the gate; zero unhealthy rules and
+  zero stale investigations. Drift count is global, not solely Q1.
+
+Source reconciliation gives an additional, differently scoped view. Q1 metrics
+contain 30,029 output-associated records: 27,800 matched, 2,223 secondary-field
+diagnostics and six output-only records before final residual classification.
+The final cohort residual classification retains 97 source-only blockers
+(77 terminal-percentage parser mismatches + 20 other position-like mismatches),
+with $981.492m source FV, and one $7.3m output-only blocker. These are unresolved
+source/output identities, not 97 independently confirmed absent legal positions.
+No Q1 matched-FV disagreement remains in this artifact. Q4 retains 75 source-only
+blockers ($830.961m) and one FV disagreement ($3.902m versus $3.918m).
+
+Q1's 2,223 secondary diagnostics agree on FV but disagree on cost/principal/
+shares: 1,887 cost-only, 247 principal-only, 44 shares-only, 35 cost+principal,
+10 cost+shares. They cannot be dismissed because FV matches, nor assumed all
+wrong before reviewing correction/proxy/source-context mechanisms. The source
+reconciliation and declared-provenance checks have different matching and
+normalization paths; their apparently conflicting results are not interchangeable.
+Neither reconciliation's evaluated row count nor its pre-calibration missing
+count should be substituted for the current unified denominator.
+
+The all-history, broader-universe source-only header has 9,335 blocking rows of
+15,338 reviewed. Those are NOT current-quarter unlisted-cohort counts. The
+filtered figures above prevent conflating those populations.
+
+### Assessment and limitations
+
+The pipeline has strong measured fidelity for many source-backed numbers,
+especially FV. Its weaker parts are complete/nonduplicated population selection,
+economic meaning and derived values. A real subtotal can pass fact replay but
+still be an invalid position. A cash coupon can exactly match its source while
+still being wrongly treated as all-in. Original principal can verify while USD
+principal is missing through unit resolution. Source-reported marks are not
+independent estimates of economic value.
+
+Do not describe this as either "60% accurate" or "99.9% accurate." There is no
+single measured end-to-end field/position correctness rate in these artifacts.
+Use source-backed positions for research with field eligibility and reconciliation
+context; do not treat the full unified table as an analysis-ready, uniformly
+validated dataset. Historical v2 sign-offs do not override the current v3 FAIL.
+
+No pipeline changes, downloads, tests, rebuilds, exports, output semantic diff,
+baseline refresh or re-attestation. Only read-only diagnostics and documentation.
+
+
+## 2026-09-09 - Historical XBRL coverage for programme scope
+
+Question: Which quarter first has broad extended XBRL holdings coverage among the active 70-BDC wrapper cohort?
+
+Cache-only DuckDB audit using data/overrides/wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json (70 distinct CIKs). Source artifact vintages UTC: bdc_holdings.csv 2026-09-05 07:33:09; private_markets_holdings.csv 2026-09-08 15:49:07; fund_financials.csv 2026-09-08 14:27:43. Diagnostic and quarterly CSV: scratch/2026-09-09_history_coverage/. Queries aggregate distinct CIKs by calendar quarter, with current-period evidence requiring period=report_date. This measures extracted position presence, not completeness, accuracy, or the first regulatory tagging obligation.
+
+| Quarter | XBRL funds including later comparatives | Current-period XBRL funds | Unified funds |
+|---|---:|---:|---:|
+| 2021 Q4 | 12 | 0 | 0 |
+| 2022 Q1 | 3 | 0 | 0 |
+| 2022 Q2 | 2 | 0 | 0 |
+| 2022 Q3 | 9 | 3 | 3 |
+| 2022 Q4 | 46 | 3 | 3 |
+| 2023 Q1 | 39 | 39 | 39 |
+| 2023 Q2 | 47 | 46 | 45 |
+| 2023 Q3 | 52 | 52 | 52 |
+| 2023 Q4 | 58 | 56 | 56 |
+| 2024 Q4 | 66 | 65 | 65 |
+| 2025 Q2 | 69 | 69 | 68 |
+| 2026 Q1 | 70 | 70 | 69 |
+
+Finding: 2022 Q4 is the first broad historical-period presence (46/70); 2023 Q1 is the first broad current-period presence (39/70). Broad describes the observed step-change, not a new approved numerical threshold. The current staging_bdc.py pre-filter removes comparative rows; thus 2022 Q4 has only 3 cohort funds in unified holdings. Adopting 2022 Q4 as required public history would require a separately validated historical reconstruction mechanism, including accession selection, deduplication and disclosure availability dates. Do not simply remove the comparative filter.
+
+Recommendation for owner decision: 2023 Q1 for the continuous core history; optionally 2022 Q4 as a separately accepted opening snapshot. The fixed 70-fund denominator is today's cohort, not the number operating in each historical quarter. Fund financials are not a sufficient operating-fund denominator: 2023 Q1 has 51 funds with financial rows, 40 with positive extracted investment FV, and 5 of those 40 lack current-period XBRL holdings. Historical formation/operation dates and extraction gaps still require assessment. Raw XML availability and field-level tagging breadth were not independently inventoried, so absence in outputs does not prove absence in filings. Cohort labels were not reclassified in this audit.
+
+Validation: bounded diagnostic completed, process exited; no remaining diagnostic Python process. No pytest, full suite, rebuild, output diff, export, baseline refresh, SEC downloads or pipeline changes.
+
+## 2026-09-09: Programme current-state and architecture assessment
+
+Question: What is implemented, what is active, and what prevents a reproducible approval-ready release across the approved historical, identity, enrichment and citation scope?
+
+Read-only assessment traced production entrypoints, extraction/staging/unification, financial facts, distributed rules, entity/GICS enrichment, matching/chains, provenance/shadow validation, quarter passes, worker cleanup and public export paths. Inventoried 500 Python files (123 pipeline, 234 scripts, 143 tests; 4,998 static test functions) and 534 rule/config assets with hashes and loader qualifications. These are inventory counts, not collected tests or certified active rule counts.
+
+Measured Q1-2026 manifest-cohort holdings: 30,067 rows, 69 funds, FV 381,537,030,207. Public portfolioFv and the GICS sector sum remain 382,151,960,774; metadata is separately 381,907,021,055. Source inspection also found scaled/reconciled GICS overlays contrary to the current direct-aggregation contract. Position matches CSV/Parquet have 497,456/536,455 rows; current cohort position IDs are all blank. Saved provisional-v3 quarter gate dated 2026-09-08 16:31:46 UTC fails 5 of 9 checks. Numeric FV provenance raw-matches approximately 99.75% of current cohort FV, which does not establish roster completeness or economic-row correctness.
+
+Important existing capabilities retained in the assessment: promoted correction verification/audits, raw XML provenance, shadow ledgers, matching gold/chain tooling, GICS quality gate/review caches, HTML table/cell citation anchors, typed Parquet and a bounded dbt spike. Remaining gaps include stable entity as well as position IDs, historical eligible-fund denominators, inference lineage, atomic release dependencies, complete holdings/history serving and PDF passage mapping. Worker cleanup removes resumable session state by default; no provider quota-interruption experiment was performed.
+
+Deliverables: [architecture](../reference/current_architecture.md), [dated assessment](../production_stack/current_state_assessment_2026-09-09.md), [tracked evidence](../production_stack/current_state_evidence_2026-09-09.json), and linked source/rule inventories. See those documents for denominators, artifact timestamps, qualifications and recommended acceptance-contract work.
+
+Validation: bounded cached read-only diagnostics completed; documentation links checked. No tests, build, rebuild, export, semantic diff, baseline refresh, reattestation, SEC downloads or enrichment calls. No production behavior/schema/output changes. Existing working-tree changes preserved.
+
+## 2026-09-09: Programme contract conflicts traced and saved-artifact baselines prepared
+
+Question: How do F01-F12 relate to current rule order, existing validation and the accepted owner decisions, and which measurements can be prepared without changing production?
+
+Added [rule/validation resolutions](../production_stack/programme_conflict_resolution.md) for all twelve findings and seven bounded implementation packet boundaries, plus a [dated assessment](../production_stack/programme_contract_assessment_2026-09-09.md) with tracked collector, queries, results, 653 input hashes, 251 correction/anchor/bridge JSON instance records and a 910-slot obligation frame. The instance inventory records loader-path eligibility and scopes, not successful application or complete runtime rule coverage.
+
+Fresh saved-CSV assessment covers 261,613 observations over Q1-2023 through Q1-2026. 779 of 910 cohort-quarter slots contain holdings; 131 lack output, of which 31 have same-report-date filing-index records. Eligibility remains unadjudicated. Ten exact-key Agent A spread-correction matches at CIK 0001633336 retain decimal fractions in a percentage-point field (two in Q1-2026); source-value correctness still needs independent review. Production/verifier B2 order algorithms differ, but zero current cross-stage inversions were found within a CIK. The single .proposed.json HTML bridge remains loader-eligible with 41 records containing required keys; no conclusion about separate approval or current matched rows.
+
+Q1 remains 30,067 rows / 69 funds / signed FV 381,537,030,207; absolute FV is 382,026,825,645. It has 1,425 cost-proxy rows, no output zero costs, 15,041 GICS-filled rows (72.9841% absolute-FV coverage), 860 missing entity IDs and all 30,067 position IDs blank. Thirteen-quarter row IDs/source-context keys have no duplicates among nonempty keys, but 4,555 within-quarter position-key groups have multiple observations (5,459 excess members); this is not permission to deduplicate lots. Unit tokens require source-document resolution; missing_reference_fx is not a count of foreign loans.
+
+Validation: completed bounded DuckDB/config diagnostic with 240-second watchdog, two threads, 1 GB DuckDB memory, no spill, and unchanged pinned-input size/mtime guards. Earlier diagnostic SQL alias errors exited and were corrected; successful output supersedes partial scratch files. Documentation/artifact consistency checked; investigation index rebuilt. No pytest/build, pipeline/correction replay, source benchmark, rebuild/export, semantic diff, baseline change, reattestation, SEC download, enrichment call or agent dispatch. Production files and prior user changes preserved.
+
+## 2026-09-09: Programme historical eligibility and independent reference preparation
+
+**Question:** Which of the 131 missing required-history fund-quarters are actual coverage gaps, and which existing source/identity/enrichment reference assets can support measured programme acceptance?
+
+**Method:** Cache-only bounded DuckDB/HTML/XBRL-text-block inspection using the 70-CIK manifest and the previous 910-slot frame. Read source lifecycle statements and early filings, distinguish investment activity from BDC election, inventory existing gold metadata/exposure, and freeze source-selected calibration clusters. No SEC requests, production rebuilds or gold-label edits. Full methods and limitations: [programme reference assessment](../production_stack/programme_reference_and_eligibility.md); [evidence bundle](../production_stack/programme_reference_evidence_2026-09-09/README.md).
+
+**Results:** 811 slots assessed eligible, 98 before investment activity and one unresolved (Fortress Q1-2025). 779/811 eligible slots contain saved rows, or 96.05% presence; this is not row/FV accuracy. The 131 missing-output slots split into 98 pre-investment, 32 eligible gaps and one unresolved. Positive source investment facts support 23 of those 32 gaps; nine require a roster or evidenced empty/cash-only status. Seven eligible gaps have no primary-period/companyfacts-accession document candidate in the bounded inventory; this does not establish absence throughout the cache. Lifecycle exclusions require independent review before the final gate denominator; cash and other retained disclosures are not erased.
+
+**Mechanisms:** Bain disclosed two Legacy Corporate Lending equity positions at June 2023 totaling $646,250 before a later stated November commencement, so its earlier investment quarters remain eligible. Fidelity's LP-to-LLC continuity and December 2022 portfolio predate BDC election. Lord Abbett has nine eligible quarters missing from holdings, with March 2026 source investments of $1.413006bn. Source Esdec principal at September 2023 is printed in EUR but tagged USD; following quarters agree on EUR, while cost/FV stay USD. Record the conflict and evidence before resolving it; do not turn a tag-only match into a claim of financial accuracy.
+
+**Reference readiness:** Existing source-field gold has 128 latest labels, 127 in programme scope, all tail census. mg3 includes 175 entity packets within its 535-packet batch; mg4 and mg5 add 265 and 100 packets. Prior tuning/promotion exposure prevents an automatic fresh-held-out claim. No independent reviewed sector benchmark was found in the bounded inventory. A 61-cluster calibration pilot, 39 exact source passages and four development case definitions are pinned. Complete independent rosters, primary anchors, sector labels and final hold-out governance remain open; no cohort source-accuracy result or new threshold is claimed.
+
+**Verification:** 2,083 pinned input stats unchanged; canonical holdings hash matches the prior audit; 910 unique slots, quarter/sample counts and exact passages checked. Collector syntax/document links checked and investigation index rebuilt. No tests, application build, production evaluator, benchmark scorer, downloads, rebuild, export, semantic output diff, baseline refresh, reattestation or agent fleet run.
+
+## 2026-09-09: Programme pilot distinguishes candidate errors from reference errors
+
+**Question:** Can the frozen source pilot support numerical programme gates, and which reference/eligibility gaps prevent a trustworthy accuracy claim?
+
+**Method:** Independent cache-only inline/source-row reader, explicit development roster review, DuckDB comparisons to the pinned saved holdings and isolated reuse of the old source-field label scorer. Original sources, gold labels, production outputs and prior dated reference files preserved. Full [pilot report and proposed gates](../production_stack/programme_measurement_pilot_2026-09-09.md), [evidence bundle](../production_stack/programme_pilot_evidence_2026-09-09/README.md).
+
+**Results:** Fortress Q1-2025 is positively evidenced as investment-active. The updated 910-slot assessment has 812 eligible, 98 pre-investment and zero unresolved statuses; 779/812 have saved rows (95.94% presence), with 33 unrepresented slots still requiring portfolio/empty-state dispositions. Source candidates exist for 53 of the 61 pilot packets; a bounded comparative search read 77 XML documents for the other eight. Two complete development rosters were reviewed: Bain Q2-2023's two equity instruments/$646,250 match the saved candidate; Lord Abbett Q3-2024 has 33 disclosed loans/facilities, no saved holdings and a $313.562m primary portfolio anchor. Six untagged FV dashes explain why a tag-only roster is incomplete even when known signed values sum exactly to the source total. No numerical zero was fabricated for those fields.
+
+**Reference failure mechanisms:** The 47,230 tag-copy probes have 26,345 agreeing fields and 30 numeric discrepancies, plus explicit unavailable/conflicting/unmatched states. Agreement is not correctness: Paragon's source prints 3.38% PIK and the candidate stores 3.38pp, but the inline fact incorrectly implies 338pp under fractional-rate interpretation. The historical label comparison has 122 unique joins out of 127, four missing and one ambiguous. Source review found that Aurelia's apparent FV failure uses a EUR label against a USD output; Sentinel's apparent FV/cost failures use a JV delayed-draw reference against the parent's term loan. Both Sentinel schedules are December 2025 and reuse the same numbered identifier, so date/name matching alone cannot fix the reference key. No original labels were edited or silently excluded from the archived diagnostic.
+
+**Implication:** Keep source meaning, accounting basis and currency in benchmark identity; require row/FV/fund coverage separately; never certify a source-only fact extractor as the source roster. The proposed numerical gate is concrete but not calibrated/approved: remaining rosters, independent sector/identity truth, synchronized candidate and browser evidence are still required. No full-population financial accuracy, entity precision, GICS accuracy or citation coverage is claimed.
+
+**Verification:** Eight focused tests passed; successful bounded pilot, hashes and 2,083 prior input stats checked unchanged. Full semantic-backstop byte scan stopped at 240 seconds; five-artifact semantic comparison completed with existing active-baseline differences. Protected-output guard passed. No production data/schema/threshold changes, gold promotion, rebuild/export, full suite/build, source downloads or fleet. Investigation index rebuilt.
+
+## 2026-09-09: Programme preparation closeout and synchronized candidate
+
+**Question:** Can the remaining specification preparation be made concrete with source dispositions, measured rule impact, compatible consumers, execution/recovery proofs and numerical requirements?
+
+**Method:** Frozen 1,372-file copied workspace; cached isolated unified build; derivative identity and PIK builds; full B2 pre/post accounting and reverse-order replay; source-specific literal reviews; all 535 exposed mg3 packets scored against regenerated identities. Original production data, labels, thresholds and baseline preserved. Full [closeout](../production_stack/programme_spec_closeout_2026-09-09.md), [evidence](../production_stack/programme_closeout_evidence_2026-09-09/README.md) and [bounded next tranche](../production_stack/programme_execution_tranche_2026-09-09.md).
+
+**Source findings:** All 61 packets now have explicit dispositions: four complete development rosters, 48 uncertified full rosters, eight primary sources unavailable and one pre-investment. Newly reviewed 26North Dec-2023 has four source positions/$52.566m signed FV; Golub Private Credit Jun-2023 has one named money-market instrument/$650.323m. Both have zero candidate rows. These amounts are from different quarters and must not be pooled into a current-portfolio error rate. Twenty legacy-label proposals identify currency, parent/JV, prior-period/current-cost, exact-source-row and classification-leaf defects; original labels remain unchanged. Document unit resolution found 6,650 foreign-tagged field observations and 7,107 absent/unresolved observations. Printed-source conflicts prevent interpreting every foreign tag as an actual FX requirement.
+
+**Synchronized results:** The 780,425-row unified CSV is byte-identical to the pilot input; CSV/Parquet comparison has zero typed cell differences. All 22 applied B2 leaves replayed without execution errors; net signed FV change $21.298m, sum of absolute fund-quarter changes $78.482m, one observed overlap and zero tracked-field order differences. These are B2-only input-specific results, not certification of all rule families. Fresh matching/entity generation yields 237,957 position IDs, 37,103 entity IDs and no same-period position-ID collision groups. Exposed mg3 regression still finds 22 false position merges, 19 missed continuations, 13 entity false merges and two false splits. Full source-selected chain completeness and unbiased population identity accuracy remain unassessable.
+
+**Execution/navigation:** Unified success took 35.8 minutes after a retained timed-out attempt; identity about 9.5 minutes; PIK about one minute. A real 2.18GB completed-bundle restore passed in 6.52 seconds. Six actual filing highlights, calculation/inference evidence, unavailable/rejected locators, keyboard and mobile checks passed; 36 browser navigations had local p95 3.91 seconds. The inferred sector example is provisional research, not independent GICS gold. Python guards and strict manifests prove a trusted-code preparation boundary, not complete native-IO isolation.
+
+**Implication:** Preparation can close with explicit evidence gaps. The proposed result is `FAIL_WITH_UNASSESSED_ITEMS`; no current-data acceptance is implied. Requirements and a concrete eight-hour WP-01/WP-02 tranche are ready for review. Independent roster/sector/chain references, broader interaction checks and final production runtime remain implementation dependencies.
+
+**Verification:** Twenty-six focused tests, real isolated stages, browser checks and final stage composition passed. Exact PIK correspondence covers all 780,425 parent CSV rows; an initial checker mistook timestamp spelling normalization for drift, with zero typed-date differences. Original 1,117 frozen pipeline/data/control files, 1,605 used match-reference inputs and position-label SHA unchanged. Two large CSVs compressed with verified roundtrips. Full semantic byte scan did not complete within 240 seconds; five-artifact semantic comparison completed with the same pre-existing divergence. No full suite, public frontend build, production rebuild/export, live-gate/reattest, downloads, paid enrichment, gold/threshold promotion or baseline refresh.
+
+
+## 2026-09-10: Why programme verification failed and ran slowly
+
+**Question:** What caused the stopped full-suite failures, six protected cache writes and excessive runtime, and which repairs can be verified without another candidate build?
+
+**Findings:** The original log has four failure markers; the earlier one-failure handoff was wrong. All four mapped candidates reproduced: three stale expected wrapper versions and one production validator checking DuckDB regexes with Python. The version expectations are repaired; the validator correction remains. All 106 staging expressions from 77 v2/v3 wrappers compile after existing preprocessing. Native DuckDB cache writes escaped Python file-open interception because orchestration fixtures missed the query module's independent cache root and real default sources. Tiny staging fixtures also processed a 296 MB production overlay. Isolating it reduced two profiled cases from about 170 seconds each to 74-81 seconds, while retaining a real file-backed integration test. Remaining parse/dedup cost is substantial and is not fully explained.
+
+**Verification:** Final bounded run: 61 passed, one known validator failure, including all 54 cache/query/orchestration tests and four staging/integration cases. A broader attempt was stopped after 574 passing calls; the 59-case class and full suite are not completed passes. A launcher-zero/worker-failure mismatch and a Windows progress-file replacement failure were retained and addressed in the diagnostic controller. Seven diagnostic attempts ended with no further protected-file metadata changes; 1,117 frozen inputs, 1,605 matching references, original gold and source freezes retain hashes. Existing five-artifact semantic divergence is unchanged under the established numeric rule. The full byte-scan child failed on DLL loading before comparison; it is not a pass.
+
+**Implication:** Correct the regex validator using the runtime dialect and preprocessing, integrate the verified native boundary/durable-result handling into full-suite execution, and measure an adequate runtime allowance. Then verify candidate dependencies before financial measurement and recovery. No production pipeline change or holdings rebuild was needed for these test repairs. The six original empty caches remain because earlier automatic approval review rejected removal. No full-population accuracy or engineering-completion claim.
+
+**Evidence:** [Readable investigation](../production_stack/programme_verification_investigation_2026-09-10.md), [retained results](../production_stack/programme_tranche_evidence_2026-09-10/verification-investigation-v1/result.json), [preservation check](../production_stack/programme_tranche_evidence_2026-09-10/investigation-preservation-v1/result.json). Failed attempts and historical handoffs were preserved, with corrections recorded separately.

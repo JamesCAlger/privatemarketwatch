@@ -1,0 +1,45 @@
+{
+  "collection": {
+    "bytes": 461906,
+    "path": "scratch/2026-09-10_verification_investigation/collect-v2/telemetry/collection.json",
+    "sha256": "bfd602a00043dd1445857d5f586e09e8cabcf991e2266d1ef2fdd69b203f3126"
+  },
+  "confidence": "Candidate mapping from unchanged pytest order after removing the one newly added case; reproduce each failure to confirm its mechanism. No original collection manifest survived.",
+  "current_nodes": 5110,
+  "failure_markers": 4,
+  "failures": [
+    {
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup",
+      "one_based_index": 736
+    },
+    {
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_blackrock_direct_lending_flat_debt_leaf",
+      "one_based_index": 746
+    },
+    {
+      "nodeid": "tests/test_bdc_xbrl_wrapper.py::test_silver_point_specialty_credit_comma_leaf_and_total_rows",
+      "one_based_index": 790
+    },
+    {
+      "nodeid": "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers",
+      "one_based_index": 1353
+    }
+  ],
+  "inferred_original_nodes": 5109,
+  "last_progress_nodes": [
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_src_transforms_empty_string_when_no_events_fire",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_src_facts_and_filled_fields_pass_through",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_value_field_pathway_enums",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_pik_rate_xbrl_pathway",
+    "tests/test_unified_holdings.py::TestAmendmentDedup::test_amendment_with_holdings_supersedes_original"
+  ],
+  "observation_index": 4069,
+  "observed_progress": 4093,
+  "original_log": {
+    "bytes": 4597,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-failure-v1/process.log",
+    "sha256": "a33962c7113d6504c2aed3c23ed39201fab0b04f70b9f6e1833d0262abc48cb5"
+  },
+  "removed_new_test": "tests/test_agent_data_query.py::test_file_backed_query_cache_is_temporary_and_keeps_cik_scope",
+  "saved_worker_observation": "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed"
+}

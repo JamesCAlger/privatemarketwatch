@@ -1,0 +1,441 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-17321",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments at fair value (cost of $ 471,418 )",
+        "",
+        "",
+        "472,588",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-17321",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "472,588",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[195]/tr[6]",
+      "table_xpath": "/html/body/table[195]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "472588000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-17887",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "",
+        "$",
+        "472,588",
+        "",
+        "",
+        "",
+        "100.00",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-17887",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "472,588",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[206]/tr[18]",
+      "table_xpath": "/html/body/table[206]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "472588000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-17893",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "472,588",
+        "",
+        "",
+        "",
+        "100.00",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-17893",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "472,588",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[207]/tr[4]",
+      "table_xpath": "/html/body/table[207]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "472588000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-18174",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Fair Market Value of Investments",
+        "",
+        "",
+        "472,588",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-18174",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "472,588",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:nonnumeric[13]/ix:nonnumeric[3]/table/tr[3]",
+      "table_xpath": "/html/body/ix:nonnumeric[13]/ix:nonnumeric[3]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "472588000"
+    }
+  ],
+  "cik": "0002008748",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2008748/000093041325000900.html",
+  "reference_id": "REF-0002008748-2024-12-31",
+  "report_date": "2024-12-31",
+  "source_rows": 110,
+  "source_sha256": "e47fce3a1b63ee29bc49a2ce454b64b92e6c99f88c6cb5dd73b842fd2b3cc0cc",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Total investments at fair value (cost of $ 471,418 ) | 472,588"
+      ],
+      "last": [
+        "Total investments at fair value (cost of $ 471,418 ) | 472,588"
+      ],
+      "opening_rows": [
+        "December 31, 2024",
+        "ASSETS",
+        "Investments at fair value",
+        "Non-controlled/non-affiliated investments (cost of $ 438,194 ) $ 439,367"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Statement of Assets and Liabilities (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/table[195]"
+    },
+    {
+      "contexts": 29,
+      "first": [
+        "Applied Aerospace Structures Corp. (Term Loan) | 3M S + 4.75% | 9.08 % | 12/1/2030 | $ 39,964 | $ 39,577 | $ 39,616 | 19.47 %",
+        "Applied Aerospace Structures Corp. (Delayed Draw) (8) | 3M S + 4.75% | N/A | 11/29/2030 | \u2014 | ( 77 ) | ( 139 ) | ( 0.07 )"
+      ],
+      "last": [
+        "MGS MFG. Group, Inc. (Delayed Draw) | 1M S + 4.25% | 8.71 % | 5/31/2027 | 2,794 | 2,794 | 2,794 | 1.37",
+        "6,106 | 6,106 | 3.00"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "First Lien Secured Debt\u2014 non-controlled/non-affiliated (4) (6)",
+        "Aerospace & Defense"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "December 31, 2024",
+        "",
+        "Consolidated Schedule of Investments"
+      ],
+      "rows": 29,
+      "table_xpath": "/html/body/table[199]"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Continental Buyer Inc (Term Loan) | 6M S + 5.25% | 9.50 % | 4/2/2031 | $ 32,403 | $ 31,954 | $ 32,403 | 15.92 %",
+        "Endo1 Partners - California, LLC | 1M S + 5.25% | 9.86 % | 3/24/2026 | 4,807 | 4,807 | 4,807 | 2.36"
+      ],
+      "last": [
+        "29,074 | 29,074 | 14.28",
+        "Total First Lien Secured Debt\u2014non-controlled/non-affiliated | $ 438,194 | $ 439,367 | 215.86 %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "First Lien Secured Debt\u2014 non-controlled/non-affiliated (4) (6)",
+        "Health Care Providers & Services"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "December 31, 2024",
+        "",
+        "Consolidated Schedule of Investments (continued)"
+      ],
+      "rows": 31,
+      "table_xpath": "/html/body/table[200]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "SBLA Private Credit LLC (5) | $ 33,224 | $ 33,224 | $ 33,221 | 16.32 %",
+        "$ 33,224 | $ 33,221 | 16.32"
+      ],
+      "last": [
+        "Total Investments in Joint Venture | $ 33,224 | $ 33,221 | 16.32 %",
+        "Total Investments at Fair Value (9) | $ 471,418 | $ 472,588 | 232.18 %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014controlled/affiliated",
+        "Investments in Joint Venture (4) (6) (10)",
+        "SBLA Private Credit LLC (5) $ 33,224 $ 33,224 $ 33,221 16.32 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "December 31, 2024",
+        "",
+        "Consolidated Schedule of Investments (continued)"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/table[201]"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "SBLA Private Credit LLC | $\u2013 | $ 33,224 | $\u2013 | $( 3 ) | $\u2013 | $ 33,221 | $ 278",
+        "Total | $\u2013 | $ 33,224 | $\u2013 | $( 3 ) | $\u2013 | $ 33,221 | $ 278"
+      ],
+      "last": [
+        "SBLA Private Credit LLC | $\u2013 | $ 33,224 | $\u2013 | $( 3 ) | $\u2013 | $ 33,221 | $ 278",
+        "Total | $\u2013 | $ 33,224 | $\u2013 | $( 3 ) | $\u2013 | $ 33,221 | $ 278"
+      ],
+      "opening_rows": [
+        "Fair Value as of February 23, 2024 (commencement of operations) Gross Additions Gross Reductions Net Change in Unrealized appreciation/ (depreciation) Net Realized Gain (Loss) Fair Value as of December 31, 2024 Dividend Income",
+        "Controlled/Affiliated Investments",
+        "SBLA Private Credit LLC $\u2013 $ 33,224 $\u2013 $( 3 ) $\u2013 $ 33,221 $ 278",
+        "Total $\u2013 $ 33,224 $\u2013 $( 3 ) $\u2013 $ 33,221 $ 278"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "MBC Revolving Credit Facility (\u201cSMBC Revolving Credit Facility\u201d) as defined in \u201c Note 5 - Debt \u201d). As such, these securities are not available as collateral to our general creditors. (10) Under the 1940 Act, the Company is deemed to \u201ccontrol\u201d a portfolio company if the Company owns more than 25% of its outstanding voting securities and/or held the power to exercise control over the management or policies of the portfolio company. Under the 1940 Act, the Company is deemed an \u201caffiliated person\u201d of a portfolio company if the Company owns 5% or more of the portfolio company\u2019s outstanding voting securities. As of December 31, 2024, the Company\u2019s controlled/affiliated investments were as follows:",
+        "",
+        ""
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[203]"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "IT Services | First Lien Secured Debt | $ | 53,946 | 11.42 | %",
+        "Health Care Providers & Services | First Lien Secured Debt | 53,656 | 11.35"
+      ],
+      "last": [
+        "Construction and Engineering | First Lien Secured Debt | ( 118 | ) | ( 0.02 | )",
+        "Total | $ | 472,588 | 100.00"
+      ],
+      "opening_rows": [
+        "Industry Investment Type Fair Value Percentage of Total Investments at Fair Value",
+        "IT Services First Lien Secured Debt $ 53,946 11.42 %",
+        "Health Care Providers & Services First Lien Secured Debt 53,656 11.35",
+        "Electrical Equipment First Lien Secured Debt 45,914 9.72"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "December 31, 2024",
+        "",
+        "Consolidated Schedule of Investments (continued)"
+      ],
+      "rows": 17,
+      "table_xpath": "/html/body/table[206]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "United Kingdom | $ | 29,398 | 6.22 | %",
+        "United States | 443,190 | 93.78"
+      ],
+      "last": [
+        "United States | 443,190 | 93.78",
+        "Total | $ | 472,588 | 100.00"
+      ],
+      "opening_rows": [
+        "Geography Fair Value Percentage of Total Investments at Fair Value",
+        "United Kingdom $ 29,398 6.22 %",
+        "United States 443,190 93.78",
+        "Total $ 472,588 100.00"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "urance First Lien Secured Debt 36,402 7.70 Professional Services First Lien Secured Debt 36,099 7.64 Air Freight & Logistics First Lien Secured Debt 34,267 7.25 Investments in Joint Venture Joint Venture 33,221 7.03 Textiles, Apparel & Luxury Goods First Lien Secured Debt 29,074 6.15 Commercial Services & Supplies First Lien Secured Debt 24,963 5.28 Life Sciences Tools & Services First Lien Secured Debt 16,050 3.40 Containers & Packaging First Lien Secured Debt 14,654 3.10 Telecommunication Services First Lien Secured Debt 6,291 1.33 Health Care Equipment & Supplies First Lien Secured Debt 6,106 1.29 Construction and Engineering First Lien Secured Debt ( 118 ) ( 0.02 ) Total $ 472,588 100.00",
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[207]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "First Lien Secured Debt | $ | 305,443 | Income Approach | Discount Rate | 7.27 % - 12.33 % | 9.46 %",
+        "133,924 | Market Approach | Transaction Price | n/a | n/a"
+      ],
+      "last": [
+        "133,924 | Market Approach | Transaction Price | n/a | n/a",
+        "Total Level 3 Investments | $ | 439,367"
+      ],
+      "opening_rows": [
+        "Quantitative Information about Level 3 Fair Value Measurements",
+        "Asset Category Fair Value Valuation Techniques/ Methodologies Unobservable Input Range Weighted Average (1)",
+        "First Lien Secured Debt $ 305,443 Income Approach Discount Rate 7.27 % - 12.33 % 9.46 %",
+        "133,924 Market Approach Transaction Price n/a n/a"
+      ],
+      "preceding": [
+        "",
+        "The unobservable inputs used in the fair value measurement of the Company \u2019s Level 3 investments as of December 31, 2024 , were as follows:"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:continuation[16]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 12,
+      "first": [
+        "RJW Logistics Group, Inc | 3M S + 5.25% | 9.58 | % | 11/26/2031 | $ | 12,000 | $ | 11,883 | $ | 11,883 | 31.30 | %",
+        "11,883 | 11,883 | 31.30"
+      ],
+      "last": [
+        "BCM One, Inc. (Delayed Draw) | 1M S + 4.50% | 8.96 | % | 11/17/2027 | 1,588 | 1,587 | 1,588 | 4.18",
+        "11,966 | 11,967 | 31.53"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount /Units Cost (3) Fair Value % of Net Assets",
+        "Investments-non-controlled/non-affiliated",
+        "First Lien secured Debt-non-controlled/non-affiliated (4) (5) (6)",
+        "Air Freight & Logistics"
+      ],
+      "preceding": [],
+      "rows": 12,
+      "table_xpath": "/html/body/ix:continuation[18]/ix:continuation/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "TransnetYX, Inc | 3M S + 5.25% | 9.78 | % | 4/13/2027 | 11,973 | 11,973 | 11,973 | 31.53",
+        "11,973 | 11,973 | 31.53"
+      ],
+      "last": [
+        "Total First Lien Secured Debt-non-controlled/non-affiliated | $ | 95,414 | $ | 95,411 | 251.31 | %",
+        "Total Investments at Fair Value | $ | 95,414 | $ | 95,411 | 251.31 | %"
+      ],
+      "opening_rows": [
+        "Life Sciences Tools & Services",
+        "TransnetYX, Inc 3M S + 5.25% 9.78 % 4/13/2027 11,973 11,973 11,973 31.53",
+        "11,973 11,973 31.53",
+        ""
+      ],
+      "preceding": [],
+      "rows": 7,
+      "table_xpath": "/html/body/ix:continuation[19]/ix:continuation/table[1]"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "Fair Market Value of Investments | 472,588"
+      ],
+      "last": [
+        "Fair Market Value of Investments | 472,588"
+      ],
+      "opening_rows": [
+        "Tax Cost of Investments 471,418",
+        "",
+        "Fair Market Value of Investments 472,588",
+        ""
+      ],
+      "preceding": [
+        "",
+        "The cost and unrealized appreciation/(depreciation) on the Company\u2019s consolidated financial instruments, as calculated on a tax basis, at December 31, 2024 were as follows:"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/ix:nonnumeric[13]/ix:nonnumeric[3]/table"
+    }
+  ]
+}

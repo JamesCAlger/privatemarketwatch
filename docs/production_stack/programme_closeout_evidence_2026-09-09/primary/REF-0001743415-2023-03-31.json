@@ -1,0 +1,425 @@
+{
+  "path": "data/raw/filings/bdc_html/1743415/000119312523140727.html",
+  "ref": "REF-0001743415-2023-03-31",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value:",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": "March 31, 2023 (unaudited) December 31, 2022 | Assets | Investments at fair value: | Non-controlled/non-affiliated investments (cost: $ 530,773 and $ 529,070 , respectively) $ 524,126 $ 532,895 | Cash 14,062 16,697",
+      "preceding": [
+        "",
+        "(in thousands, except unit amounts)",
+        "Consolidated Statements of Assets and Liabilities",
+        "SCP Private Credit Income BDC LLC",
+        "Item 1. Financial Statements"
+      ],
+      "xpath": "/html/body/div[8]/div/div[1]/div/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost: $ 530,773 and $ 529,070 , respectively)",
+        "",
+        "$",
+        "524,126",
+        "",
+        "",
+        "$",
+        "532,895",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn03_31_2023",
+          "scale": "3",
+          "text": "530,773",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "529,070",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023",
+          "scale": "3",
+          "text": "524,126",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022",
+          "scale": "3",
+          "text": "532,895",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": "March 31, 2023 (unaudited) December 31, 2022 | Assets | Investments at fair value: | Non-controlled/non-affiliated investments (cost: $ 530,773 and $ 529,070 , respectively) $ 524,126 $ 532,895 | Cash 14,062 16,697",
+      "preceding": [
+        "",
+        "(in thousands, except unit amounts)",
+        "Consolidated Statements of Assets and Liabilities",
+        "SCP Private Credit Income BDC LLC",
+        "Item 1. Financial Statements"
+      ],
+      "xpath": "/html/body/div[8]/div/div[1]/div/table/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "",
+        "14,792",
+        "",
+        "",
+        "",
+        "8,647",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001743415:GrossInvestmentIncome",
+          "context": "P01_01_2023To03_31_2023",
+          "scale": "3",
+          "text": "14,792",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "ck0001743415:GrossInvestmentIncome",
+          "context": "P01_01_2022To03_31_2022",
+          "scale": "3",
+          "text": "8,647",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Three months ended March 31, 2023 Three months ended March 31, 2022 | Investment Income: | Interest income from non-controlled/non-affiliated investments $ 14,388 $ 8,522 | Other income from non-controlled/non-affiliated investments 404 125",
+      "preceding": [
+        "",
+        "(in thousands, except unit amounts)",
+        "Consolidated Statement of Operations (unaudited)",
+        "SCP Private Credit Income BDC LLC",
+        ""
+      ],
+      "xpath": "/html/body/div[9]/div/div[1]/div/div[2]/div/table/tr[7]"
+    },
+    {
+      "cells": [
+        "Total Investments (9) \u2014202.9%",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "530,773",
+        "",
+        "",
+        "$",
+        "524,126",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn03_31_2023_InvestmentsTwoHundredAndTwoPointNinePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "3",
+          "text": "530,773",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023_InvestmentsTwoHundredAndTwoPointNinePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "3",
+          "text": "524,126",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value | Bank Debt/Senior Secured Loans (continued) | Spectrum Pharmaceuticals, Inc. (2) Biotechnology S+570 2.30 % 10.36 % 9/21/2022 9/1/2027 $ 3,559 $ 3,530 $ 3,877 | SunMed Group Holdings, LLC (2) Health Care Equipment & Supplies L+575 0.75 % 10.77 % 6/16/2021 6/16/2028 7,889 7,780 7,889",
+      "preceding": [
+        "",
+        "(in thousands)",
+        "March 31, 2023",
+        "Consolidated Schedule of Investments (unaudited) (continued)",
+        "SCP Private Credit Income BDC LLC",
+        "Table of Contents",
+        "",
+        "97 % 8/20/2021 8/12/2026 15,640 15,471 15,640 RSC Acquisition, Inc. (2) Insurance S+550 0.75 % 10.24 % 10/5/2020 11/1/2026 12,753 12,574 12,753 RxSense Holdings LLC (2) Diversified Consumer Services S+500 1.00 % 9.83 % 3/17/2020 3/13/2026 14,599 14,458 14,599 Southern Orthodontic Partners Management, LLC (2) Health Care Providers & Services S+600 1.00 % 11.16 % 6/3/2022 1/27/2026 2,347 2,327 2,347 See notes to consolidated financial statements. 7",
+        ",825 ) ( 7,277 ) Proceeds from borrowings 12,868 38,400 Repayments of borrowings ( 73,476 ) ( 19,000 ) Net Cash Provided by (Used in) Financing Activities ( 6,433 ) 12,123 NET DECREASE IN CASH ( 2,635 ) ( 4,394 ) CASH AT BEGINNING OF PERIOD 16,697 11,181 CASH AT END OF PERIOD $ 14,062 $ 6,787 Supplemental disclosure of cash flow information: Cash paid for interest $ 5,690 $ 2,490 See notes to consolidated financial statements. 6 Table of Contents",
+        "ty Contributions 65,000 \u2014 Net increase in unitholders\u2019 capital resulting from capital activity 65,000 \u2014 Total increase in unitholders\u2019 capital 62,011 4,815 Unitholders\u2019 capital, beginning of period 196,254 176,113 Unitholders\u2019 capital, end of period $ 258,265 $ 180,928 Capital unit activity (see note 7): Units issued 6,197,690 \u2014 Net increase from capital unit activity 6,197,690 \u2014 See notes to consolidated financial statements. 5 Table of Contents"
+      ],
+      "xpath": "/html/body/div[14]/div/table[1]/tr[27]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+          "context": "PAsOn03_31_2023",
+          "scale": "-2",
+          "text": "100.0",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | Industry Classification Percentage of Total Investments (at fair value) as of March 31, 2023 |  | Health Care Providers & Services 13.8 % | Insurance 12.7 %",
+      "preceding": [
+        "",
+        "",
+        "(in thousands)",
+        "March 31, 2023",
+        "Consolidated Schedule of Investments (unaudited) (continued)",
+        "Table of Contents",
+        "",
+        "",
+        "tments in private transactions exempt from registration under the Securities Act of 1933, as amended (the \u201cSecurities Act\u201d). These investments are generally subject to certain limitations on resale, and may be deemed to be \u201crestricted securities\u201d under the Securities Act. All investments are Level 3 unless otherwise indicated. * Investment is on non-accrual status. \u2020 Non-income producing security. See notes to consolidated financial statements. 8",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[17]/div/table[1]/tr[29]"
+    },
+    {
+      "cells": [
+        "Total Investments (9) \u2014 271.5%",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "529,070",
+        "",
+        "",
+        "$",
+        "532,895",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn12_31_2022_InvestmentsTwoHundredSeventyOnePointFivePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "3",
+          "text": "529,070",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022_InvestmentsTwoHundredSeventyOnePointFivePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "3",
+          "text": "532,895",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Description Industry Spread above Index (3) Floor Interest Rate (1) Acquisition Date Maturity Date Par Amount Cost Fair Value | Bank Debt/Senior Secured Loans (continued) | Southern Orthodontic Partners Management, LLC (2) Health Care Providers & Services S+600 1.00 % 10.84 % 6/3/2022 1/27/2026 $ 1,901 $ 1,884 $ 1,901 | Spectrum Pharmaceuticals, Inc. (2) Biotechnology S+570 2.30 % 9.88 % 9/21/2022 9/1/2027 3,559 3,519 3,524",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands)",
+        "December 31, 2022",
+        "Table of Contents",
+        "",
+        "",
+        "2) Personal Products P+475 2.75 % 12.25 % 5/7/2021 6/17/2023 13,905 13,876 13,974 RQM+ Corp. (2) Life Sciences Tools & Services S+575 1.00 % 10.59 % 8/20/2021 8/12/2026 15,680 15,499 15,680 RSC Acquisition, Inc. (2) Insurance S+550 0.75 % 9.26 % 10/5/2020 11/1/2026 9,345 9,191 9,345 RxSense Holdings LLC (2) Diversified Consumer Services L+500 1.00 % 9.41 % 3/17/2020 3/13/2026 14,674 14,522 14,674 See notes to consolidated financial statements. 10",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[22]/div/table[1]/tr[29]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+          "context": "PAsOn12_31_2022",
+          "scale": "-2",
+          "text": "100.0",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | Industry Classification Percentage of Total Investments (at fair value) as of December 31, 2022 | Insurance 14.3 % | Health Care Providers & Services 12.4 % | Software 9.8 %",
+      "preceding": [
+        "",
+        "(in thousands)",
+        "December 31, 2022",
+        "Consolidated Schedule of Investments (continued)",
+        "SCP Private Credit Income BDC LLC",
+        "Table of Contents",
+        "",
+        "",
+        "e Company generally acquires its investments in private transactions exempt from registration under the Securities Act of 1933, as amended (the \u201cSecurities Act\u201d). These investments are generally subject to certain limitations on resale, and may be deemed to be \u201crestricted securities\u201d under the Securities Act. All investments are Level 3 unless otherwise indicated. \u2020 Non-income producing security. See notes to consolidated financial statements. 11",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[25]/div/table/tr[28]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "57",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "524,069",
+        "",
+        "",
+        "$",
+        "524,126",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel1MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "57",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel2MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueInputsLevel3MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "524,069",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn03_31_2023_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "524,126",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Level 1 Level 2 Level 3 Total |  | Assets: | Bank Debt/Senior Secured Loans $ \u2014 $ \u2014 $ 524,025 $ 524,025",
+      "preceding": [
+        "",
+        "As of March 31, 2023",
+        "",
+        "Fair Value Measurements",
+        "The following tables present the balances of assets measured at fair value on a recurring basis, as of March 31, 2023 and December 31, 2022:",
+        "ucted on a quarterly basis. Changes in the observability of valuation inputs may result in a reclassification for certain financial assets or liabilities. Such reclassifications involving Level 3 assets and liabilities are reported as transfers in/out of Level 3 as of the end of the quarter in which the reclassifications occur. Within the fair value hierarchy tables below, cash and cash equivalents are excluded but could be classified as Level 1.",
+        "Gains and losses for assets and liabilities categorized within the Level 3 table below may include changes in fair value that are attributable to both observable inputs (Levels 1 and 2) and unobservable inputs (Level 3).",
+        "SCP Private Credit Income BDC LLC Notes to Consolidated Financial Statements (unaudited) (continued) March 31, 2023 (in thousands, except unit amounts)"
+      ],
+      "xpath": "/html/body/div[32]/div/div[1]/div/ix:continuation/ix:nonnumeric/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "82",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "532,813",
+        "",
+        "",
+        "$",
+        "532,895",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel1MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "82",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel2MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueInputsLevel3MemberusgaapFairValueByFairValueHierarchyLevelAxis_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "532,813",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentsFairValueDisclosure",
+          "context": "PAsOn12_31_2022_FairValueMeasurementsRecurringMemberusgaapFairValueByMeasurementFrequencyAxis",
+          "scale": "3",
+          "text": "532,895",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Level 1 Level 2 Level 3 Total | Assets: | Bank Debt/Senior Secured Loans $ \u2014 $ \u2014 $ 532,753 $ 532,753 | Common Equity/Equity Interests/Warrants 82 \u2014 60 142",
+      "preceding": [
+        "",
+        "",
+        "As of December 31, 2022",
+        "Fair Value Measurements",
+        "",
+        "While the Company has not made an election to apply the fair value option of accounting to any of its debt obligations, if the Company\u2019s debt obligations were carried at fair value at March 31, 2023, the fair value of the SPV Facility and the Subscription Facility would be $ 253,050 and $ 24,500 , respectively.",
+        "SCP Private Credit Income BDC LLC Notes to Consolidated Financial Statements (unaudited) (continued) March 31, 2023 (in thousands, except unit amounts)"
+      ],
+      "xpath": "/html/body/div[32]/div/div[2]/div/ix:continuation/ix:continuation/table/tr[7]"
+    }
+  ],
+  "sha256": "7824c21ab34271122ef33f01daae2eb7ec43c1e1df8f6593e6f9e7e3d6e5082b",
+  "status": "literal_primary_review_candidates"
+}

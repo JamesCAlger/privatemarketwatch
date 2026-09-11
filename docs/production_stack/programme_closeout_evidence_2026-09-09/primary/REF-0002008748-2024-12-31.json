@@ -1,0 +1,554 @@
+{
+  "path": "data/raw/filings/bdc_html/2008748/000093041325000900.html",
+  "ref": "REF-0002008748-2024-12-31",
+  "rows": [
+    {
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "$",
+        "471,418",
+        "",
+        "",
+        "$",
+        "472,588",
+        "",
+        "",
+        "",
+        "100",
+        "%"
+      ],
+      "facts": [],
+      "opening": "December 31, 2024 | Cost Fair Value % of Total Investments at Fair Value | First Lien Secured Debt $ 438,194 $ 439,367 93 % | Investments in Joint Venture 33,224 33,221 7 | Total Investments at Fair Value $ 471,418 $ 472,588 100 %",
+      "preceding": [
+        "",
+        "",
+        "",
+        "As of December 31, 2024, our investments consisted of the following:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[174]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "23,634",
+        ""
+      ],
+      "facts": [],
+      "opening": "For the period from February 23, 2024 (commencement of operations) to December 31, 2024 | Total investment income $ 23,634 | Less: Net expenses 12,854 | Net investment income before taxes 10,780 | Net investment income after taxes 10,780",
+      "preceding": [
+        "",
+        "",
+        "",
+        "The following table represents our operating results:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[181]/tr[2]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "",
+        "$",
+        "23,634",
+        ""
+      ],
+      "facts": [],
+      "opening": "For the period from February 23, 2024 (commencement of operations) to December 31, 2024 | Investment income: | Interest income $ 22,719 | Fee income 637 | Dividend income 278",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Investment income was as follows:",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[182]/tr[6]"
+    },
+    {
+      "cells": [
+        "Investments at fair value",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": "December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost of $ 438,194 ) $ 439,367 | Controlled/affiliated investments (cost of $ 33,224 ) 33,221",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Statement of Assets and Liabilities (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[195]/tr[3]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost of $ 438,194 )",
+        "",
+        "$",
+        "439,367",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:OtherInvestments",
+          "context": "c2",
+          "scale": "3",
+          "text": "438,194",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:Investments",
+          "context": "c2",
+          "scale": "3",
+          "text": "439,367",
+          "unit": "usd"
+        }
+      ],
+      "opening": "December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost of $ 438,194 ) $ 439,367 | Controlled/affiliated investments (cost of $ 33,224 ) 33,221",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Statement of Assets and Liabilities (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[195]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investments at fair value (cost of $ 471,418 )",
+        "",
+        "",
+        "472,588",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c2",
+          "scale": "3",
+          "text": "471,418",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c2",
+          "scale": "3",
+          "text": "472,588",
+          "unit": "usd"
+        }
+      ],
+      "opening": "December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost of $ 438,194 ) $ 439,367 | Controlled/affiliated investments (cost of $ 33,224 ) 33,221",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Statement of Assets and Liabilities (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[195]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "23,634",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+          "context": "c0",
+          "scale": "3",
+          "text": "23,634",
+          "unit": "usd"
+        }
+      ],
+      "opening": "For the period from February 23, 2024 (commencement of operations) to December 31, 2024 | Investment income | Non-controlled/non-affiliated investments: | Interest income $ 22,719 | Fee income 637",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Statement of Operations (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[196]/tr[8]"
+    },
+    {
+      "cells": [
+        "Total Investments in Joint Venture",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$ 33,224",
+        "",
+        "$ 33,221",
+        "",
+        "16.32 %",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c122",
+          "scale": "3",
+          "text": "33,224",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c122",
+          "scale": "3",
+          "text": "33,221",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c122",
+          "scale": "-2",
+          "text": "16.32",
+          "unit": "pure"
+        }
+      ],
+      "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets | Investments\u2014controlled/affiliated | Investments in Joint Venture (4) (6) (10) | SBLA Private Credit LLC (5) $ 33,224 $ 33,224 $ 33,221 16.32 % | $ 33,224 $ 33,221 16.32",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[201]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total Investments at Fair Value (9)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$ 471,418",
+        "",
+        "$ 472,588",
+        "",
+        "232.18 %",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c123",
+          "scale": "3",
+          "text": "471,418",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c123",
+          "scale": "3",
+          "text": "472,588",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c123",
+          "scale": "-2",
+          "text": "232.18",
+          "unit": "pure"
+        }
+      ],
+      "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets | Investments\u2014controlled/affiliated | Investments in Joint Venture (4) (6) (10) | SBLA Private Credit LLC (5) $ 33,224 $ 33,224 $ 33,221 16.32 % | $ 33,224 $ 33,221 16.32",
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[201]/tr[7]"
+    },
+    {
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "$",
+        "471,418",
+        "",
+        "",
+        "$",
+        "472,588",
+        "",
+        "",
+        "$",
+        "\u2013",
+        "",
+        "",
+        "$",
+        "\u2013",
+        "",
+        "",
+        "$",
+        "439,367",
+        "",
+        "",
+        "$",
+        "33,221",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:DebtSecurities",
+          "context": "c2",
+          "scale": "3",
+          "text": "471,418",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+          "context": "c2",
+          "scale": "3",
+          "text": "472,588",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+          "context": "c174",
+          "scale": "3",
+          "text": "439,367",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:FairValueNetAssetLiability",
+          "context": "c2",
+          "scale": "3",
+          "text": "33,221",
+          "unit": "usd"
+        }
+      ],
+      "opening": "Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 Measured at Net Asset Value (1) | First Lien Secured Debt $ 438,194 $ 439,367 $ \u2013 $ \u2013 $ 439,367 $ \u2013 | Investments in Joint Venture 33,224 33,221 \u2013 \u2013 \u2013 33,221 | Total Investments at Fair Value $ 471,418 $ 472,588 $ \u2013 $ \u2013 $ 439,367 $ 33,221",
+      "preceding": [
+        "",
+        "The following table shows the composition of the Company \u2019s investment portfolio as of December 31, 2024 , with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "",
+        "Fair Value Measurement and Disclosures",
+        "",
+        "(4) INVESTMENTS",
+        "",
+        "",
+        "",
+        "investments. Detailed information with respect to the Company \u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled affiliated investments is contained in the accompanying Consolidated Financial Statements , including the Consolidated Schedule of Investments . The Company has made investments in a joint venture that have been considered a controlled/affiliated company. For further description, see \u201c Note 4 - Investments \u201d.",
+        ""
+      ],
+      "xpath": "/html/body/ix:nonnumeric[8]/ix:nonnumeric[1]/table[1]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "95,414",
+        "",
+        "",
+        "$",
+        "95,411",
+        "",
+        "",
+        "",
+        "251.31",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c215",
+          "scale": "3",
+          "text": "95,414",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c215",
+          "scale": "3",
+          "text": "95,411",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c215",
+          "scale": "-2",
+          "text": "251.31",
+          "unit": "pure"
+        }
+      ],
+      "opening": "Life Sciences Tools & Services | TransnetYX, Inc 3M S + 5.25% 9.78 % 4/13/2027 11,973 11,973 11,973 31.53 | 11,973 11,973 31.53 |  | Professional Services",
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Notes to the Consolidated Financial Statements December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        ""
+      ],
+      "xpath": "/html/body/ix:continuation[19]/ix:continuation/table[1]/tr[11]"
+    },
+    {
+      "cells": [
+        "Investments at fair value",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": "December 31, 2024 |  | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 95,414 ) $ 95,411",
+      "preceding": [
+        "",
+        "The following table presents the selected statement of assets and liabilities information of the SBLA JV as of December 31, 2024:",
+        "",
+        "SBLA Private Credit LLC Financial Statements (in thousands, except share amount, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Notes to the Consolidated Financial Statements December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        ""
+      ],
+      "xpath": "/html/body/ix:continuation[20]/ix:nonnumeric/table/tr[4]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost $ 95,414 )",
+        "",
+        "$",
+        "95,411",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:OtherInvestments",
+          "context": "c124",
+          "scale": "3",
+          "text": "95,414",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:Investments",
+          "context": "c124",
+          "scale": "3",
+          "text": "95,411",
+          "unit": "usd"
+        }
+      ],
+      "opening": "December 31, 2024 |  | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 95,414 ) $ 95,411",
+      "preceding": [
+        "",
+        "The following table presents the selected statement of assets and liabilities information of the SBLA JV as of December 31, 2024:",
+        "",
+        "SBLA Private Credit LLC Financial Statements (in thousands, except share amount, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Notes to the Consolidated Financial Statements December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        ""
+      ],
+      "xpath": "/html/body/ix:continuation[20]/ix:nonnumeric/table/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "676",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+          "context": "c216",
+          "scale": "3",
+          "text": "676",
+          "unit": "usd"
+        }
+      ],
+      "opening": "For the period from December 3, 2024 (commencement of operations) to December 31, 2024 | Investment income | Non-controlled/non-affiliated investments: | Interest income $ 676 | Total investment income $ 676",
+      "preceding": [
+        "",
+        "The following table presents the selected statements of operations information of the SBLA JV for the period from December 3, 2024 (commencement of operations) to December 31, 2024:",
+        "",
+        "SBLA Private Credit LLC Financial Statements (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Notes to the Consolidated Financial Statements December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        ""
+      ],
+      "xpath": "/html/body/ix:continuation[21]/ix:nonnumeric/table/tr[5]"
+    }
+  ],
+  "sha256": "e47fce3a1b63ee29bc49a2ce454b64b92e6c99f88c6cb5dd73b842fd2b3cc0cc",
+  "status": "literal_primary_review_candidates"
+}

@@ -1,0 +1,62 @@
+reference_id,cik,report_date,component,source_status,source_fact_rows,roster_status,primary_anchor_status,acceptance_label_status
+REF-0001508655-2023-06-30,0001508655,2023-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,229,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001572694-2023-09-30,0001572694,2023-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,420,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001588272-2023-03-31,0001588272,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,82,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001588272-2023-06-30,0001588272,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,80,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001588272-2024-03-31,0001588272,2024-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,70,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001634452-2023-03-31,0001634452,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,602,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001634452-2023-06-30,0001634452,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,666,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001634452-2025-06-30,0001634452,2025-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,823,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001646614-2023-03-31,0001646614,2023-03-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001646614-2024-06-30,0001646614,2024-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,278,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001646614-2025-03-31,0001646614,2025-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,289,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001674760-2023-09-30,0001674760,2023-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,94,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001715933-2024-12-31,0001715933,2024-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,112,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001743415-2023-03-31,0001743415,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,64,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001743415-2023-06-30,0001743415,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,68,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001792509-2023-03-31,0001792509,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,632,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001792509-2023-06-30,0001792509,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,653,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001792509-2023-09-30,0001792509,2023-09-30,missing_output_census,source_candidates_require_review; not acceptance labels,664,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001792509-2024-09-30,0001792509,2024-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,697,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001837532-2025-06-30,0001837532,2025-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,1052,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001859919-2023-03-31,0001859919,2023-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,881,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001860424-2023-03-31,0001860424,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,104,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001872371-2024-06-30,0001872371,2024-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,442,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001872371-2025-12-31,0001872371,2025-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,492,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001885968-2025-09-30,0001885968,2025-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,593,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001899017-2023-03-31,0001899017,2023-03-31,lifecycle_source_counterexample,source_candidates_require_review; not acceptance labels,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001899017-2023-06-30,0001899017,2023-06-30,lifecycle_source_counterexample,source_candidates_require_review; not acceptance labels,10,reviewed_development_two_lots,agent-reviewed development basis; not held-out acceptance,none; calibration only
+REF-0001899017-2023-09-30,0001899017,2023-09-30,lifecycle_source_counterexample,source_candidates_require_review; not acceptance labels,11,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001899996-2023-03-31,0001899996,2023-03-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001901164-2023-03-31,0001901164,2023-03-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001902649-2026-03-31,0001902649,2026-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,538,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001905824-2023-03-31,0001905824,2023-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,71,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001905824-2023-06-30,0001905824,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,73,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001913724-2023-03-31,0001913724,2023-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,171,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001916099-2023-12-31,0001916099,2023-12-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001916099-2024-03-31,0001916099,2024-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,46,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001918712-2023-12-31,0001918712,2023-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,472,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001919369-2024-12-31,0001919369,2024-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,76,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001919369-2025-09-30,0001919369,2025-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,98,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001920145-2025-12-31,0001920145,2025-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,828,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001920453-2023-12-31,0001920453,2023-12-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,159,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001920453-2026-03-31,0001920453,2026-03-31,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,479,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001930087-2023-06-30,0001930087,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001948368-2023-06-30,0001948368,2023-06-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,5,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001948368-2024-09-30,0001948368,2024-09-30,quarter_probability_pilot,source_candidates_require_review; not acceptance labels,166,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001950803-2023-06-30,0001950803,2023-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,70,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001950976-2023-12-31,0001950976,2023-12-31,missing_output_census,source_candidates_require_review; not acceptance labels,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0001954360-2023-06-30,0001954360,2023-06-30,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002006758-2023-12-31,0002006758,2023-12-31,missing_output_census,source_candidates_require_review; not acceptance labels,216,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002006758-2024-03-31,0002006758,2024-03-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002006758-2025-12-31,0002006758,2025-12-31,missing_output_census,source_candidates_require_review; not acceptance labels,493,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2024-03-31,0002008748,2024-03-31,missing_output_census,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2024-06-30,0002008748,2024-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,1,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2024-09-30,0002008748,2024-09-30,missing_output_census,source_candidates_require_review; not acceptance labels,58,reviewed_development_33_lots; six FV dashes unresolved,agent-reviewed development basis; not held-out acceptance,none; calibration only
+REF-0002008748-2024-12-31,0002008748,2024-12-31,missing_output_census,source_candidates_require_review; not acceptance labels,110,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2025-03-31,0002008748,2025-03-31,quarter_probability_pilot;also_missing_output_census,source_candidates_require_review; not acceptance labels,122,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2025-06-30,0002008748,2025-06-30,missing_output_census,source_candidates_require_review; not acceptance labels,146,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2025-09-30,0002008748,2025-09-30,missing_output_census,source_candidates_require_review; not acceptance labels,162,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2025-12-31,0002008748,2025-12-31,missing_output_census,source_candidates_require_review; not acceptance labels,212,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002008748-2026-03-31,0002008748,2026-03-31,missing_output_census,source_candidates_require_review; not acceptance labels,248,not_adjudicated,not_basis_certified,none; calibration only
+REF-0002012139-2025-03-31,0002012139,2025-03-31,eligibility_unresolved,no_primary_html_candidate,0,not_adjudicated,not_basis_certified,none; calibration only

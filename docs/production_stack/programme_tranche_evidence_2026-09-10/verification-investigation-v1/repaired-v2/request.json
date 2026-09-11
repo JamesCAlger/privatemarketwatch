@@ -1,0 +1,17 @@
+{
+  "authority": "Owner requested investigation after the stopped tranche; bounded diagnostics only",
+  "code": {
+    "bytes": 15440,
+    "path": "scripts/programme_tranche/diagnose_tests.py",
+    "sha256": "8485e70d2dc35f5ca28e3e3ccda41a2486bac393e34385f5d820eb86cebf6117"
+  },
+  "mode": "profile",
+  "nodes": [
+    "tests/test_bdc_xbrl_wrapper.py",
+    "tests/test_agent_data_query.py",
+    "tests/test_investigation_orchestration.py",
+    "tests/test_unified_holdings.py::TestPrepareBdc",
+    "tests/test_unified_holdings.py::TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien",
+    "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers"
+  ]
+}

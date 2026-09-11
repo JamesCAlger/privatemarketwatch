@@ -1,0 +1,18 @@
+{
+  "obligations": 910,
+  "html_candidates": 810,
+  "xml_candidates": 811,
+  "eligible_no_cached_candidate": 7,
+  "pilot_clusters": 61,
+  "pilot_probability_clusters": 26,
+  "pilot_reasons": {
+    "quarter_probability_pilot": 25,
+    "missing_output_census": 31,
+    "lifecycle_source_counterexample": 3,
+    "quarter_probability_pilot;also_missing_output_census": 1,
+    "eligibility_unresolved": 1
+  },
+  "pilot_no_cached_candidate": 8,
+  "pinned_source_files": 103,
+  "sampling_caveat": "Two source clusters per quarter are a pilot, not enough to certify 99%+ accuracy. Do not pool targeted census/counterexamples with probability estimates. Full schedule rosters and final hold-out split remain to be reviewed."
+}

@@ -1,0 +1,152 @@
+{
+  "path": "data/raw/filings/bdc_html/1872371/000187237126000004.html",
+  "ref": "REF-0001872371-2025-12-31",
+  "rows": [
+    {
+      "cells": [
+        "Total investment income",
+        "184,387",
+        "",
+        "",
+        "141,636",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-1",
+          "scale": "3",
+          "text": "184,387",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "c-18",
+          "scale": "3",
+          "text": "141,636",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | Three months ended December 31, 2025 Three months ended December 31, 2024 | Interest income: | Non-control/Non-affiliate investments $ 173,956 $ 134,062 | Interest on cash and cash equivalents 2,232 3,933",
+      "preceding": [
+        "Oaktree Strategic Credit Fund Consolidated Statements of Operations (in thousands, except per share amounts) (unaudited)",
+        "",
+        "",
+        "3",
+        "See notes to Consolidated Financial Statements.",
+        "oscf-20251231"
+      ],
+      "xpath": "/html/body/div[88]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "Total investments at fair value",
+        "",
+        "20",
+        "",
+        "",
+        "1,679,985",
+        "",
+        "",
+        "5,753,856",
+        "",
+        "",
+        "7,433,861",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1338",
+          "scale": "3",
+          "text": "20",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1339",
+          "scale": "3",
+          "text": "1,679,985",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1340",
+          "scale": "3",
+          "text": "5,753,856",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-6",
+          "scale": "3",
+          "text": "7,433,861",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | Level 1 Level 2 Level 3 Total | Senior secured debt $ \u2014 $ 1,529,797 $ 5,468,194 $ 6,997,991 | Subordinated debt (including CLO notes and credit linked notes) \u2014 150,188 256,449 406,637 | Common equity and warrants 20 \u2014 10,278 10,298",
+      "preceding": [
+        "The following table presents the financial instruments carried at fair value as of December 31, 2025 on the Company\u2019s Consolidated Statements of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+        "Fair Value Measurements"
+      ],
+      "xpath": "/html/body/ix:continuation[15]/ix:nonnumeric/div[2]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "Total investments at fair value",
+        "",
+        "33",
+        "",
+        "",
+        "1,582,035",
+        "",
+        "",
+        "5,316,963",
+        "",
+        "",
+        "6,899,031",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1353",
+          "scale": "3",
+          "text": "33",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1354",
+          "scale": "3",
+          "text": "1,582,035",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1355",
+          "scale": "3",
+          "text": "5,316,963",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-7",
+          "scale": "3",
+          "text": "6,899,031",
+          "unit": "usd"
+        }
+      ],
+      "opening": " | Level 1 Level 2 Level 3 Total | Senior secured debt $ \u2014 $ 1,418,025 $ 5,020,054 $ 6,438,079 | Subordinated debt (including CLO notes and credit linked notes) \u2014 164,010 265,289 429,299 | Common equity and warrants 33 \u2014 12,962 12,995",
+      "preceding": [
+        "The following table presents the financial instruments carried at fair value as of September 30, 2025 on the Company\u2019s Consolidated Statements of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+        "ng CLO notes and credit linked notes) \u2014 150,188 256,449 406,637 Common equity and warrants 20 \u2014 10,278 10,298 Preferred equity \u2014 \u2014 18,935 18,935 Total investments at fair value 20 1,679,985 5,753,856 7,433,861 Cash equivalents 157,177 \u2014 \u2014 157,177 Derivative assets \u2014 19,544 \u2014 19,544 Total assets at fair value $ 157,197 $ 1,699,529 $ 5,753,856 $ 7,610,582 Derivative liabilities \u2014 1,189 \u2014 1,189 Total liabilities at fair value $ \u2014 $ 1,189 $ \u2014 $ 1,189",
+        "The following table presents the financial instruments carried at fair value as of December 31, 2025 on the Company\u2019s Consolidated Statements of Assets and Liabilities for each of the three levels of hierarchy established by ASC 820:",
+        "Fair Value Measurements"
+      ],
+      "xpath": "/html/body/ix:continuation[15]/ix:nonnumeric/div[4]/table/tr[7]"
+    }
+  ],
+  "sha256": "08f6c5c99f69140de07fa45d21a0f67a469607b3cb61e3a7950f58855cb3635b",
+  "status": "literal_primary_review_candidates"
+}

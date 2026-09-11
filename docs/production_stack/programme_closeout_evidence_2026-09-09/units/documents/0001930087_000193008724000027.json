@@ -1,0 +1,56 @@
+{
+  "accession": "0001930087-24-000027",
+  "cik": "0001930087",
+  "identity": [
+    4757909,
+    1774942007972346900
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1930087/000193008724000027.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "dd6f02b64706662dea37601ded23bbcb66362c2aaadd87b0e1d49994e1d9a775",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gcred:installment\"]",
+      "unit_ref": "installment"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gcred:investor\"]",
+      "unit_ref": "investor"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"gcred:portfolio_company\"]",
+      "unit_ref": "portfolio_company"
+    }
+  ]
+}

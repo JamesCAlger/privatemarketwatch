@@ -1,0 +1,124 @@
+{
+  "case": 11,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0002031750|2025-12-31|Denali Equity Holdings LLC, Other equity",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "COMMON_EQUITY",
+      "cik": "0002031750",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0002031750|2025-12-31|Denali Equity Holdings LLC, Other equity",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "DIRECT_EQUITY",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-af4279faaea2de71",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0002031750|2025-12-31|Denali Equity Holdings LLC, Other equity",
+    "accession": "0002031750-26-000015",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0002031750",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "4aada0b",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Denali Equity Holdings LLC, Other equity",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_EQUITY",
+    "true_cost": 340995000.0,
+    "true_fair_value": 354399000.0,
+    "true_lien": null,
+    "unit_uid": "denali equity holdings llc other equity"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification": "OTHER_EQUITY",
+    "leaf_rights": "not established"
+  },
+  "reason": "Current schedule places Denali above Total other equity, separately from common equity. Prior Class A units do not establish current common rights.",
+  "row_xpath": "/html/body/div[2331]/table/tr[15]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "Denali Equity Holdings LLC (1)(5)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "09/2024",
+        "",
+        "",
+        "",
+        "3,749",
+        "",
+        "",
+        "",
+        "",
+        "340,995",
+        "",
+        "",
+        "354,399",
+        "",
+        "(2)",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-99",
+          "context_text": "0002031750 Denali Equity Holdings LLC, Other equity 2025-12-31",
+          "scale": "3",
+          "text": "3,749",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-99",
+          "context_text": "0002031750 Denali Equity Holdings LLC, Other equity 2025-12-31",
+          "scale": "3",
+          "text": "340,995",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-99",
+          "context_text": "0002031750 Denali Equity Holdings LLC, Other equity 2025-12-31",
+          "scale": "3",
+          "text": "354,399",
+          "unit": "usd"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Company Coupon (4) Reference (4) Spread (4) Acquisition Date Maturity Date Shares/ Units Principal Cost Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[2331]/table",
+      "xpath": "/html/body/div[2331]/table/tr[15]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html",
+  "source_sha256": "0499abeec7ccc30c73b2b16e0be581d5cb503b2c8b74909ad77f3069b53546c7",
+  "status": "candidate_leaf_not_supported",
+  "supplementary_evidence": null
+}

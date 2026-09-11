@@ -1,0 +1,441 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "2006758",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0002006758-2023-12-31.json",
+    "evidence_sha256": "7bb18148dafb742a532962797da593a848dce7939c2184887f432914a5fa5bb9",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0002006758-2023-12-31",
+    "report_date": "2023-12-31",
+    "review_note": "December 2023 is comparative evidence in a later document: retain report-date selection. Missing March primary is not an empty portfolio.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "216"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/2006758/000095017025040394.html",
+    "ref": "REF-0002006758-2023-12-31",
+    "rows": [
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "",
+          "100.8",
+          "",
+          "",
+          "$",
+          "",
+          "1.3",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Year Ended December 31, Period Ended December 31, | (in millions)* 2024 2023 | Investment Income | Interest income $ 97.2 $ 1.3",
+        "preceding": [
+          "Operating results for the year ended December 31, 2024 and period ended December 31, 2023were as follows:",
+          "Results of Operations",
+          "",
+          "indicated below, we value our private investments based upon a multi-step valuation process, including valuation recommendations from independent valuation firms.",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[10]/tr[9]"
+      },
+      {
+        "cells": [
+          "Investments at fair value:",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING | CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES | (In thousands, except share and per share data) | ",
+        "preceding": [
+          "",
+          "",
+          "Table of Contents",
+          "",
+          "74",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[16]/tr[10]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (cost $ 918,595 and $ 785,277 , respectively)",
+          "",
+          "$",
+          "",
+          "909,845",
+          "",
+          "",
+          "$",
+          "",
+          "785,199",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_4ebeda59-f761-4e1d-ad8b-74e9b9000fdf",
+            "scale": "3",
+            "text": "918,595",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_62c38e04-849a-485f-9e6c-eeec663cafe4",
+            "scale": "3",
+            "text": "785,277",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_45646f69-9538-4f61-9d31-d7af3882f19d",
+            "scale": "3",
+            "text": "909,845",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_50241274-57ed-4f54-af49-153a412109ea",
+            "scale": "3",
+            "text": "785,199",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING | CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES | (In thousands, except share and per share data) | ",
+        "preceding": [
+          "",
+          "",
+          "Table of Contents",
+          "",
+          "74",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[16]/tr[11]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "$",
+          "",
+          "100,753",
+          "",
+          "",
+          "$",
+          "",
+          "1,326",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_64412075-53f9-4cfa-879b-65581a456027",
+            "scale": "3",
+            "text": "100,753",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_9cf3d1b9-2b17-43cc-92c6-9b7166c30c0b",
+            "scale": "3",
+            "text": "1,326",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING | CONSOLIDATED STATEMENTS OF OPERATIONS | (In thousands, except share and per share data) | ",
+        "preceding": [
+          "",
+          "Table of Contents",
+          "",
+          "See notes to the consolidated financial statements. 75",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[17]/tr[15]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "",
+          "918,595",
+          "",
+          "",
+          "$",
+          "",
+          "909,845",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_555f10c4-eaea-49ae-82f4-2f9454168fbb",
+            "scale": "3",
+            "text": "918,595",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_555f10c4-eaea-49ae-82f4-2f9454168fbb",
+            "scale": "3",
+            "text": "909,845",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (22) Fair Value (1)(23) | Specialty Retail | Club Champion LLC | Club Champion LLC First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 6/14/2029 $ 8,856 $ 8,732 $ 8,701 (10)(15)",
+        "preceding": [
+          "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)",
+          "Table of Contents",
+          "",
+          "See notes to the consolidated financial statements. 90",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[32]/tr[37]"
+      },
+      {
+        "cells": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Total Investments",
+          "",
+          "",
+          "$",
+          "",
+          "785,277",
+          "",
+          "",
+          "$",
+          "",
+          "785,199",
+          "",
+          "",
+          "(2)(5)(6)(7)(12)"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_7798e61a-09d1-4e6d-8e27-d16f083d4fa6",
+            "scale": "3",
+            "text": "785,277",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_7798e61a-09d1-4e6d-8e27-d16f083d4fa6",
+            "scale": "3",
+            "text": "785,199",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14) |  | Technology Hardware, Storage & Peripherals | Parcelshield Holdings LLC",
+        "preceding": [
+          "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+          "Table of Contents",
+          "",
+          "See notes to the consolidated financial statements. 105",
+          "",
+          "10-K",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[42]/tr[19]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value",
+          "",
+          "$",
+          "",
+          "918,595",
+          "",
+          "",
+          "$",
+          "",
+          "909,845",
+          "",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "",
+          "14,183",
+          "",
+          "",
+          "$",
+          "",
+          "895,662",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_45646f69-9538-4f61-9d31-d7af3882f19d",
+            "scale": "3",
+            "text": "918,595",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_45646f69-9538-4f61-9d31-d7af3882f19d",
+            "scale": "3",
+            "text": "909,845",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e85eac13-02da-4400-9f43-edbaac35b252",
+            "scale": "3",
+            "text": "14,183",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_d5585340-7387-49f4-b6d2-e992effefebb",
+            "scale": "3",
+            "text": "895,662",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 915,677 $ 906,931 $ \u2014 $ 14,183 $ 892,748 | Unsecured Debt 19 19 \u2014 \u2014 19",
+        "preceding": [
+          "",
+          "The following table shows the composition of our investments as of December 31, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+          "",
+          "Fair Value Measurement and Disclosures",
+          "Note 4. Investments"
+        ],
+        "xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value",
+          "",
+          "$",
+          "",
+          "785,277",
+          "",
+          "",
+          "$",
+          "",
+          "785,199",
+          "",
+          "",
+          "$",
+          "",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "",
+          "7,979",
+          "",
+          "",
+          "$",
+          "",
+          "777,220",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_50241274-57ed-4f54-af49-153a412109ea",
+            "scale": "3",
+            "text": "785,277",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_50241274-57ed-4f54-af49-153a412109ea",
+            "scale": "3",
+            "text": "785,199",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e6595b0c-c1fb-4a09-b333-25881551ca13",
+            "scale": "3",
+            "text": "7,979",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_15c660b9-1edb-4cf7-9eef-5282df51a19d",
+            "scale": "3",
+            "text": "777,220",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 | First Lien Secured Debt $ 785,277 $ 785,199 $ \u2014 $ 7,979 $ 777,220 | Total Investments at Fair Value $ 785,277 $ 785,199 $ \u2014 $ 7,979 $ 777,220",
+        "preceding": [
+          "",
+          "The following table shows the composition of our investments as of December 31, 2023, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+          "",
+          "Fair Value Hierarchy Cost Fair Value Level 1 Level 2 Level 3 First Lien Secured Debt $ 915,677 $ 906,931 $ \u2014 $ 14,183 $ 892,748 Unsecured Debt 19 19 \u2014 \u2014 19 Common Equity/Interests 2,899 2,895 \u2014 \u2014 2,895 Total Investments at Fair Value $ 918,595 $ 909,845 $ \u2014 $ 14,183 $ 895,662",
+          "",
+          "",
+          "Fair Value Measurement and Disclosures",
+          "Note 4. Investments"
+        ],
+        "xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]/tr[5]"
+      }
+    ],
+    "sha256": "18eb8dfd8d9e22bee07ca36634b716907ddc10070f253f8639a0d777af3aa4df",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

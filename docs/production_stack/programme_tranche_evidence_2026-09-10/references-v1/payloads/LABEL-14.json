@@ -1,0 +1,62 @@
+{
+  "case": 14,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001925309|2025-12-31|Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "385453000.0",
+      "cik": "0001925309",
+      "exact_match": "False",
+      "field": "fair_value",
+      "join_count": "1",
+      "label_key": "position|0001925309|2025-12-31|Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "328199000.0",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-95be9717a24be087",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001925309|2025-12-31|Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%",
+    "accession": "0001193125-26-051289",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001925309",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "12afab7",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1925309\\000119312526051289.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_LENDING",
+    "true_cost": 354785000.0,
+    "true_fair_value": 328199000.0,
+    "true_lien": "First Lien",
+    "unit_uid": "debt investments communications aurelia netherlands b v first lien loan eur 326 566 par due 5 2031 initial acquisition date 5 22 24 reference rate and spread e 4 75 interest rate 6 78"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "fair_value_usd": 385453000,
+    "legacy_fair_value_eur": 328199000
+  },
+  "reason": "Legacy reference copied EUR FV into USD comparison; USD FV 385.453m is source-supported. Currency belongs to each field.",
+  "row_xpath": null,
+  "selected_literal_evidence": [],
+  "source_path": "data\\raw\\filings\\bdc_html\\1925309\\000119312526051289.html",
+  "source_sha256": "3a2aaed9888dca4ffd8cca41525014f712042c16e03fc2960205464bca0c4f4c",
+  "status": "reference_currency_wrong",
+  "supplementary_evidence": "programme_pilot_evidence_2026-09-09/review_case_sources.json"
+}

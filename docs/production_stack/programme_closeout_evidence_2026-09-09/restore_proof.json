@@ -1,0 +1,12 @@
+{
+  "artifacts": 8,
+  "bytes": 2184394269,
+  "input_fingerprint": "af04481434101284336a11a57ec8a5ad9c04c16cc703ffb103bdea0e9fe1645f",
+  "limits": "Completed-result restore. Mid-SQL work is intentionally not resumable; restart that failed stage from frozen inputs.",
+  "mode": "Physical copy, no hard links; independently verify every artifact and final manifest. No pipeline recomputation or adoption.",
+  "restored": "data\\programme\\restores\\spec-close-20260909-v2\\unified-bundle",
+  "result": "pass",
+  "result_sha256": "c350c650e1aee8cda8d1b2d8444708c4fc341024cabb29008a05d6790159a825",
+  "seconds": 6.5209336999978404,
+  "source": "data\\programme\\candidates\\spec-close-20260909-v2\\attempts\\unified-01\\bundle"
+}

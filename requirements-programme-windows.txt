@@ -1,0 +1,4 @@
+# Optional supported programme runner on native Windows; main pipeline unchanged.
+-r requirements.txt
+pywin32>=311; sys_platform == "win32"
+psutil>=7.0

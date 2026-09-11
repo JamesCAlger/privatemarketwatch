@@ -1,0 +1,65 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c4",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-7273",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Fair value as of June 30, 2024",
+        "",
+        "$",
+        "228,062",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c4",
+      "currency": "USD",
+      "fact_id": "ixv-7273",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "228,062",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table/tr[3]",
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "228062000"
+    }
+  ],
+  "cik": "0002008748",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+  "reference_id": "REF-0002008748-2024-06-30",
+  "report_date": "2024-06-30",
+  "source_rows": 1,
+  "source_sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Fair value as of June 30, 2024 | $ | 228,062"
+      ],
+      "last": [
+        "Fair value as of June 30, 2024 | $ | 228,062"
+      ],
+      "opening_rows": [
+        "Three Months Ended September 30, 2024",
+        "First Lien Secured Debt",
+        "Fair value as of June 30, 2024 $ 228,062",
+        "Purchases 151,534"
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table"
+    }
+  ]
+}

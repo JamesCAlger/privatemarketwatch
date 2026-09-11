@@ -1,0 +1,29 @@
+{
+  "candidate_fingerprint": "01f173cf5a683c308688b4f67b0c7d2e655199982b7201c9bb4b4e2092e7a173",
+  "complete_candidate": false,
+  "financial_measurement_executed": false,
+  "identity_basis": "Failed attempt and snapshot; not an accepted integrated stage graph",
+  "inputs": [
+    {
+      "bytes": 2639,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/runtime-failure-v1/result.json",
+      "sha256": "ab842b94401a45ea4e37f08d5db0a6c78bc0033f72a275c26c1f82c966a30fb5"
+    },
+    {
+      "bytes": 253383,
+      "path": "data/programme/candidates/t1-runtime-20260910-v3/snapshot.json",
+      "sha256": "10f1997d39a583c76285af03fa8c7f06af51dd3bee79362ed069db5e1be5304c"
+    },
+    {
+      "bytes": 2148,
+      "path": "pipeline/programme/contracts/working-v1.json",
+      "sha256": "2e09600756d2586dda512c3632846308457d49de2e273f63d59327b798b46eaa"
+    },
+    {
+      "bytes": 2494,
+      "path": "scripts/programme_tranche/record_stopped_evaluation.py",
+      "sha256": "df07a5540f2bf91b083e1a1ad91386185690845487b7a3067aa00d3e4f176376"
+    }
+  ],
+  "status": "blocked"
+}

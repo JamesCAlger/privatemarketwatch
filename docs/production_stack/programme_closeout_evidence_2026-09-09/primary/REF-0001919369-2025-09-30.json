@@ -1,0 +1,548 @@
+{
+  "path": "data/raw/filings/bdc_html/1919369/000119312525271488.html",
+  "ref": "REF-0001919369-2025-09-30",
+  "rows": [
+    {
+      "cells": [
+        "Total investment income from non-controlled/non-affiliated investments",
+        "",
+        "26,764",
+        "",
+        "",
+        "",
+        "8,995",
+        "",
+        "",
+        "",
+        "58,037",
+        "",
+        "",
+        "",
+        "18,969",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_36fa09c1-8db0-4ac7-9af1-dbcd9ea7ca13",
+          "scale": "3",
+          "text": "26,764",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_735580c6-8ad7-4d47-b993-f51d80a2d390",
+          "scale": "3",
+          "text": "8,995",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_807aa840-023d-4104-b250-643c390b0ff8",
+          "scale": "3",
+          "text": "58,037",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_f2f62613-a2bd-443f-b765-2b53f4203e55",
+          "scale": "3",
+          "text": "18,969",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Three Months Ended September 30, Nine Months Ended September 30, | 2025 2024 2025 2024 | Investment income: | From non-controlled/non-affiliated investments",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "CONSOLIDATED STATE MENTS OF OPERATIONS (unaudited)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "6",
+        "ed as of September 30, 2025; 500,000,000.000 shares authorized as of December 31, 2024) 26,558,209.938 13,426,673.156 Net asset value per share $ 19.65 $ 19.80 Class S Common Stock: Net assets $ 61,673 $ - Common Stock outstanding ($ 0.01 par value, 50,000,000.000 shares authorized as of September 30, 2025) 3,138,621.254 - Net asset value per share $ 19.65 $ - The accompanying notes are an integral part of these consolidated financial statements.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[28]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "26,764",
+        "",
+        "",
+        "",
+        "8,995",
+        "",
+        "",
+        "",
+        "58,037",
+        "",
+        "",
+        "",
+        "18,969",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_a69d68dd-a984-4aa0-9ab4-c8dd884515e6",
+          "scale": "3",
+          "text": "26,764",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_2438cb3b-b474-4f7f-a650-8aca75a4b7e8",
+          "scale": "3",
+          "text": "8,995",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_34ec8b1a-2b37-4d26-b61c-e9a06e286b99",
+          "scale": "3",
+          "text": "58,037",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_6004f519-7666-4bf2-a690-fa823966a76a",
+          "scale": "3",
+          "text": "18,969",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Three Months Ended September 30, Nine Months Ended September 30, | 2025 2024 2025 2024 | Investment income: | From non-controlled/non-affiliated investments",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "CONSOLIDATED STATE MENTS OF OPERATIONS (unaudited)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "6",
+        "ed as of September 30, 2025; 500,000,000.000 shares authorized as of December 31, 2024) 26,558,209.938 13,426,673.156 Net asset value per share $ 19.65 $ 19.80 Class S Common Stock: Net assets $ 61,673 $ - Common Stock outstanding ($ 0.01 par value, 50,000,000.000 shares authorized as of September 30, 2025) 3,138,621.254 - Net asset value per share $ 19.65 $ - The accompanying notes are an integral part of these consolidated financial statements.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[28]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments - Non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "1,144,522",
+        "",
+        "",
+        "",
+        "1,147,559",
+        "",
+        "",
+        "",
+        "196.8",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_e17f8671-4a35-401b-bf61-1542bd0bd04a",
+          "scale": "3",
+          "text": "1,144,522",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_e17f8671-4a35-401b-bf61-1542bd0bd04a",
+          "scale": "3",
+          "text": "1,147,559",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_e17f8671-4a35-401b-bf61-1542bd0bd04a",
+          "scale": "-2",
+          "text": "196.8",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments (1)(16)(24) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets | Preferred Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "September 30, 2025",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (unaudited) - (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "13",
+        "% 11.42 % 8/12/2030 26,552 25,343 25,193 4.3 Metropolis Technologies, Inc. (4) (6) (7) (21) SOFR + 6.00 % 10.26 % 5/16/2031 15,694 15,426 16,165 2.8 Softeon, Inc. (4) (9) (21) (22) (23) SOFR + 5.75 % 9.75 % 11/20/2030 12,313 12,066 12,313 2.1 52,835 53,671 9.2 Utilities & Utility Equipment and Services Enverus Holdings, Inc. (9) (21) (22) (23) SOFR + 5.50 % 9.66 % 12/24/2029 17,064 16,860 17,088 2.9 Total First-Lien Debt 1,133,079 1,135,522 194.8",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[56]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "",
+        "$",
+        "1,182,918",
+        "",
+        "",
+        "$",
+        "1,185,955",
+        "",
+        "",
+        "",
+        "203.4",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001919369:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+          "context": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+          "scale": "3",
+          "text": "1,182,918",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001919369:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+          "context": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+          "scale": "3",
+          "text": "1,185,955",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001919369:InvestmentOwnedAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsNetAssetsPercentage",
+          "context": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+          "scale": "-2",
+          "text": "203.4",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments (1)(16)(24) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets | Preferred Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "September 30, 2025",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (unaudited) - (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "13",
+        "% 11.42 % 8/12/2030 26,552 25,343 25,193 4.3 Metropolis Technologies, Inc. (4) (6) (7) (21) SOFR + 6.00 % 10.26 % 5/16/2031 15,694 15,426 16,165 2.8 Softeon, Inc. (4) (9) (21) (22) (23) SOFR + 5.75 % 9.75 % 11/20/2030 12,313 12,066 12,313 2.1 52,835 53,671 9.2 Utilities & Utility Equipment and Services Enverus Holdings, Inc. (9) (21) (22) (23) SOFR + 5.50 % 9.66 % 12/24/2029 17,064 16,860 17,088 2.9 Total First-Lien Debt 1,133,079 1,135,522 194.8",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[56]/table/tr[22]"
+    },
+    {
+      "cells": [
+        "Total Investments - Non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "504,119",
+        "",
+        "",
+        "",
+        "506,574",
+        "",
+        "",
+        "",
+        "190.7",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_197c8f60-0255-4d24-b5e7-9251d2fb3c44",
+          "scale": "3",
+          "text": "504,119",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_197c8f60-0255-4d24-b5e7-9251d2fb3c44",
+          "scale": "3",
+          "text": "506,574",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_197c8f60-0255-4d24-b5e7-9251d2fb3c44",
+          "scale": "-2",
+          "text": "190.7",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets | Other Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (15) 5/16/2034 280 $ 20 $ 20 0.0 %",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2024",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "19",
+        "6 27,647 27,848 10.5 Utilities & Utility Equipment and Services Enverus Holdings, Inc. (9) (20) (21) SOFR + 5.50 % 9.86 % 12/24/2029 16,563 16,331 16,525 6.2 Total First-Lien Debt 498,055 500,587 188.4 Preferred Equity Transportation, Logistics & Supply Chain Metropolis Technologies, Inc. (4 ) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6 Metropolis Technologies, Inc. (4 ) N/A 17.50 % 5/16/2034 480 456 459 0.2 Total Preferred Equity 4,732 4,740 1.8",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[80]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "",
+        "$",
+        "537,454",
+        "",
+        "",
+        "$",
+        "539,909",
+        "",
+        "",
+        "",
+        "203.2",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001919369:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+          "context": "C_9255f8a8-0766-4c62-9439-f3d455189ddc",
+          "scale": "3",
+          "text": "537,454",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001919369:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+          "context": "C_9255f8a8-0766-4c62-9439-f3d455189ddc",
+          "scale": "3",
+          "text": "539,909",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001919369:InvestmentOwnedAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsNetAssetsPercentage",
+          "context": "C_9255f8a8-0766-4c62-9439-f3d455189ddc",
+          "scale": "-2",
+          "text": "203.2",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/ Units (1) Amortized Cost (3) Fair Value % of Net Assets | Other Equity | Transportation, Logistics & Supply Chain | Metropolis Technologies, Inc. (4) (15) 5/16/2034 280 $ 20 $ 20 0.0 %",
+      "preceding": [
+        "",
+        "(dollars in thousands, except share and per share data)",
+        "DECEMBER 31, 2024",
+        "CONSOLIDATED SCHEDULE OF INVESTMENTS (continued)",
+        "VISTA CREDIT STRATEGIC LENDING CORP.",
+        "",
+        "Table of Contents",
+        "",
+        "19",
+        "6 27,647 27,848 10.5 Utilities & Utility Equipment and Services Enverus Holdings, Inc. (9) (20) (21) SOFR + 5.50 % 9.86 % 12/24/2029 16,563 16,331 16,525 6.2 Total First-Lien Debt 498,055 500,587 188.4 Preferred Equity Transportation, Logistics & Supply Chain Metropolis Technologies, Inc. (4 ) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6 Metropolis Technologies, Inc. (4 ) N/A 17.50 % 5/16/2034 480 456 459 0.2 Total Preferred Equity 4,732 4,740 1.8",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[80]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "1,147,559",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_9e0c0ad0-15aa-405e-9054-84ad8fed8696",
+          "scale": "3",
+          "text": "1,147,559",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | As of September 30, 2025 | Level 1 Level 2 Level 3 Total | Assets | First-lien debt $ - $ 345,060 $ 790,462 $ 1,135,522",
+      "preceding": [
+        "",
+        "The following tables summarize the Company\u2019s investments measured at fair value on a recurring basis by the above fair value hierarchy levels as of September 30, 2025 and December 31, 2024."
+      ],
+      "xpath": "/html/body/div[112]/div/ix:continuation/div[1]/ix:nonnumeric/table[1]/tr[10]"
+    },
+    {
+      "cells": [
+        "Total investments at amortized cost, beginning of period",
+        "",
+        "$",
+        "734,233",
+        "",
+        "",
+        "$",
+        "269,059",
+        "",
+        "",
+        "$",
+        "504,119",
+        "",
+        "",
+        "$",
+        "104,685",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Three Months Ended September 30, 2025 For the Three Months Ended September 30, 2024 For the Nine Months Ended September 30, 2025 For the Nine Months Ended September 30, 2024 | Investments: | Total investments at amortized cost, beginning of period $ 734,233 $ 269,059 $ 504,119 $ 104,685 | New investments purchased 420,070 90,095 677,255 275,900",
+      "preceding": [
+        "",
+        "Our investment activity for the three and nine months ended September 30, 2025 and 2024 is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+        "(5) Primarily subject to interest rate floors.",
+        "(4) YTM is calculated based on the amortized cost and contractual interest rate for the investment at the end of the applicable reporting period, and assumes the investment is held until the sooner of actual maturity or a three-year assumed life with no prepayments or losses and exited at par at maturity.",
+        "(3) EBITDA margin is calculated as EBITDA divided by total revenue of the portfolio company. Excludes twelve and five portfolio company investments as of September 30, 2025 and December 31, 2024, respectively, where EBITDA margin may not be the appropriate measure of credit risk as the investments were underwritten and covenanted based on recurring revenue as opposed to EBITDA.",
+        "",
+        "Table of Contents",
+        "",
+        "48",
+        "culations was derived from the most recently available portfolio company financial statements, which has not been independently reviewed by us, and may reflect a normalized or adjusted amount. Accordingly, we make no representation or warranty in respect of this information. Revenues, EBITDA, gross margins, and EBITDA margins reported by our portfolio companies and used in the calculations below are generally for the trailing twelve-month period.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[196]/table[2]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investments at amortized cost, end of period",
+        "",
+        "$",
+        "1,144,522",
+        "",
+        "",
+        "$",
+        "358,995",
+        "",
+        "",
+        "$",
+        "1,144,522",
+        "",
+        "",
+        "$",
+        "358,995",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Three Months Ended September 30, 2025 For the Three Months Ended September 30, 2024 For the Nine Months Ended September 30, 2025 For the Nine Months Ended September 30, 2024 | Investments: | Total investments at amortized cost, beginning of period $ 734,233 $ 269,059 $ 504,119 $ 104,685 | New investments purchased 420,070 90,095 677,255 275,900",
+      "preceding": [
+        "",
+        "Our investment activity for the three and nine months ended September 30, 2025 and 2024 is presented below (information presented herein is at amortized cost unless otherwise indicated):",
+        "(5) Primarily subject to interest rate floors.",
+        "(4) YTM is calculated based on the amortized cost and contractual interest rate for the investment at the end of the applicable reporting period, and assumes the investment is held until the sooner of actual maturity or a three-year assumed life with no prepayments or losses and exited at par at maturity.",
+        "(3) EBITDA margin is calculated as EBITDA divided by total revenue of the portfolio company. Excludes twelve and five portfolio company investments as of September 30, 2025 and December 31, 2024, respectively, where EBITDA margin may not be the appropriate measure of credit risk as the investments were underwritten and covenanted based on recurring revenue as opposed to EBITDA.",
+        "",
+        "Table of Contents",
+        "",
+        "48",
+        "culations was derived from the most recently available portfolio company financial statements, which has not been independently reviewed by us, and may reflect a normalized or adjusted amount. Accordingly, we make no representation or warranty in respect of this information. Revenues, EBITDA, gross margins, and EBITDA margins reported by our portfolio companies and used in the calculations below are generally for the trailing twelve-month period.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[196]/table[2]/tr[9]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "",
+        "$",
+        "26,764",
+        "",
+        "",
+        "$",
+        "8,995",
+        "",
+        "",
+        "$",
+        "58,037",
+        "",
+        "",
+        "$",
+        "18,969",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Three Months Ended September 30, 2025 For the Three Months Ended September 30, 2024 For the Nine Months Ended September 30, 2025 For the Nine Months Ended September 30, 2024 | First-lien debt $ 26,563 $ 8,703 $ 57,452 $ 18,677 | Preferred stock dividends 201 292 585 292 | Total Investment Income $ 26,764 $ 8,995 $ 58,037 $ 18,969",
+      "preceding": [
+        "",
+        "Investment income for the three and nine months ended September 30, 2025 and 2024 was as follows:",
+        "Investment Income",
+        "",
+        "Table of Contents",
+        "",
+        "51",
+        "nt commitments, expenses, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio. In addition, as we have continued to raise and deploy capital, we have experienced significant growth in total assets, total liabilities and net assets since commencing operations in the fourth quarter of 2023. As a result, year-over-year comparisons of operating results may not be meaningful.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[208]/table[1]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "26,764",
+        "",
+        "",
+        "$",
+        "8,995",
+        "",
+        "",
+        "$",
+        "58,037",
+        "",
+        "",
+        "$",
+        "18,969",
+        ""
+      ],
+      "facts": [],
+      "opening": " | (In thousands) For the Three Months Ended September 30, 2025 For the Three Months Ended September 30, 2024 For the Nine Months Ended September 30, 2025 For the Nine Months Ended September 30, 2024 | Total investment income $ 26,764 $ 8,995 $ 58,037 $ 18,969 | Total expenses 14,034 6,588 32,369 15,588 | Expense support and waivers (309 ) (515 ) (497 ) (1,141 )",
+      "preceding": [
+        "",
+        "Net investment income after giving effect to any expense support and waivers of expenses for the three and nine months ended September 30, 2025 and 2024 was as follows:",
+        "Our weighted average investment income yield on total investments at amortized cost and fair value was 10.5% and 10.5%, respectively, as of September 30, 2025, and 11.0% and 11.0%, respectively, as of December 31, 2024. The decrease in the weighted average yield on total investments was primarily due to a decline in the underlying SOFR that is utilized to set the interest rate on our variable rate loans.",
+        "4 to $26.8 million for the three months ended September 30, 2025 due to the increase in our investment portfolio from $359.0 at September 30, 2024 to $1,147.6 million at September 30, 2025. Total investment income increased from $19.0 million for the nine months ended September 30, 2024 to $58.0 million for the nine months ended September 30, 2025 also due to the significant increase in our investment portfolio over this twelve month time period.",
+        "Interest income on our debt investments is dependent on the composition and credit quality of the portfolio. Generally, we expect the portfolio to generate predictable quarterly interest income based on the terms stated in each loan\u2019s credit agreement. As of September 30, 2025, there were no debt investments on non-accrual status.",
+        "",
+        "Table of Contents",
+        "",
+        "51",
+        "nt commitments, expenses, the recognition of realized gains and losses and changes in unrealized appreciation and depreciation on the investment portfolio. In addition, as we have continued to raise and deploy capital, we have experienced significant growth in total assets, total liabilities and net assets since commencing operations in the fourth quarter of 2023. As a result, year-over-year comparisons of operating results may not be meaningful.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[208]/table[2]/tr[3]"
+    }
+  ],
+  "sha256": "f9ca5b7892e7b6da304fe3cc1137119faf6b9b1ba6b280f88401e5bd5dec747c",
+  "status": "literal_primary_review_candidates"
+}

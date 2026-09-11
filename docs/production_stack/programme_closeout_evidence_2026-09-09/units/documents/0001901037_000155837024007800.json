@@ -1,0 +1,56 @@
+{
+  "accession": "0001558370-24-007800",
+  "cik": "0001901037",
+  "identity": [
+    4441883,
+    1774941929565998400
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1901037/000155837024007800.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "da7ab06a36af35f79dccce3e87be18699c1abe5c5437e0e46a48c27aa5022778",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "Unit_Standard_shares_4XW_8LxQ6UqJjWEl2UYqxA"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "Unit_Standard_USD_LsNkgwMbd0itlxwetK7Arg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "Unit_Standard_pure_oe3zE1IFD02hzYjzF60aYg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "Unit_Divide_USD_shares_1GwGHMjVFkm-GK7PNMMy9A"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:company\"]",
+      "unit_ref": "Unit_Standard_company_UD-_zEBMlUKqJ0zY5OHfhg"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"spcbdc:item\"]",
+      "unit_ref": "Unit_Standard_item_OMg2kzrXfkyffDyaCIb0UQ"
+    },
+    {
+      "currency": "EUR",
+      "kind": "monetary",
+      "measures": "[\"iso4217:EUR\"]",
+      "unit_ref": "Unit_Standard_EUR_NHsU1YZ5YEKwGW_jJikCsw"
+    }
+  ]
+}

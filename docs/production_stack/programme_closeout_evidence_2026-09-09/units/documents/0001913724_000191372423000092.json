@@ -1,0 +1,44 @@
+{
+  "accession": "0001913724-23-000092",
+  "cik": "0001913724",
+  "identity": [
+    2279855,
+    1774941969020883800
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1913724/000191372423000092.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "e0c54ceb078b5cb59bd212ef1f598de4f5f796afac001c5f172233322133b72a",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"tcap:component\"]",
+      "unit_ref": "component"
+    }
+  ]
+}

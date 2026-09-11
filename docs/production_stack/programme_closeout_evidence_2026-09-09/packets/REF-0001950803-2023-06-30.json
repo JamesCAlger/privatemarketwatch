@@ -1,0 +1,277 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Investments at fair value (Cost $ 193,103,033 )",
+        "",
+        "$",
+        "193,103,033",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "193,103,033",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[4]",
+      "table_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "193103033"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "",
+        "260.53",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "193,103,033",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[7]",
+      "table_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "193103033"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "name": "ck0001950803:PercentageOfInvestmentBasedOnFairValue",
+        "scale": "-2",
+        "unitref": "Unit_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "260.5",
+        "%"
+      ],
+      "concept": "ck0001950803:PercentageOfInvestmentBasedOnFairValue",
+      "context_id": "PAsOn06_30_2023",
+      "currency": null,
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[2]/table/tr[13]",
+      "table_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[2]/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "Unit_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn06_30_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total assets",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "$",
+        "193,103,033",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn06_30_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "193,103,033",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[15]/div/div/div[4]/div/ix:nonnumeric[1]/ix:nonnumeric[1]/table/tr[6]",
+      "table_xpath": "/html/body/div[15]/div/div/div[4]/div/ix:nonnumeric[1]/ix:nonnumeric[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "193103033"
+    }
+  ],
+  "cik": "0001950803",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1950803/000119312523210954.html",
+  "reference_id": "REF-0001950803-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 70,
+  "source_sha256": "0a25243845ca3164bec5eaca41c00ede7cbc1b22feeba99ff499702ec03b6ba9",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Investments at fair value (Cost $ 193,103,033 ) | $ | 193,103,033"
+      ],
+      "last": [
+        "Investments at fair value (Cost $ 193,103,033 ) | $ | 193,103,033"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2023",
+        "Assets",
+        "Investments at fair value (Cost $ 193,103,033 ) $ 193,103,033"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Statement of Assets and Liabilities",
+        "StepStone Private Credit Fund LLC",
+        "Item 1. Consolidated Financial Statements (Unaudited)",
+        "",
+        "PART I. FINANCIAL INFORMATION"
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]"
+    },
+    {
+      "contexts": 50,
+      "first": [
+        "Accordion Partners Intermediate LLC Term Loan | MassMutual SPV I Facility | (1)(2)(3)(4)(5)(6)(7) | Industrials | SOFR + 6.50 | % | 11.77 | % | 8/29/2029 | $ | 4,272,044 | $ | 4,208,960 | $ | 4,208,960 | 5.68 | %",
+        "Accordion Partners Intermediate LLC Third Amendment Delayed Draw Term Loan | MassMutual SPV I Facility | (1)(2)(3)(4)(5)(6)(7)(8) | Industrials | SOFR + 5.00 | % | 0.00 | % | 8/29/2029 | \u2014 | ( 6,450 | ) | ( 6,450 | ) | - 0.01 | %"
+      ],
+      "last": [
+        "Sequon, LLC Initial Term Loan | BMO SPV II Credit Facility | (1)(2)(3)(4)(5)(6)(7) | Health Care | SOFR + 6.51 | % | 11.75 | % | 12/29/2026 | 4,988,375 | 4,952,845 | 4,952,845 | 6.68 | %",
+        "Signature Brands, LLC Term Loan | MassMutual SPV I Facility | (1)(2)(3)(4)(5)(6)(7) | Consumer Staples | SOFR + 8.00 | % | 13.32 | % | 5/4/2028 | 4,481,985 | 4,423,584 | 4,423,584 | 5.97 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments SPV Vehicle (10) Footnotes Industry Reference Rate Spread Interest Rate Maturity Date Outstanding Principal Amortized Cost Fair Value Percentage of Net Assets",
+        "Non-Controlled, Non-Affiliated Debt Investments",
+        "First Lien Senior Secured"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "StepStone Private Credit Fund LLC"
+      ],
+      "rows": 50,
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "SourceHOV Tax, LLC Initial Term A Loan | BMO SPV II Credit Facility | (1)(2)(3)(4)(5)(6)(7) | Industrials | SOFR + 5.75 | % | 11.04 | % | 4/6/2028 | 4,987,406 | 4,948,006 | 4,948,006 | 6.67 | %",
+        "Superjet Buyer, LLC Initial Term Loan | MassMutual SPV I Facility | (1)(2)(3)(4)(5)(6)(7) | Information Technology | SOFR + 5.75 | % | 10.99 | % | 12/30/2027 | 1,530,123 | 1,523,824 | 1,523,824 | 2.06 | %"
+      ],
+      "last": [
+        "Total Non-Controlled, Non-Affiliated Debt Investments | $ | 193,103,033 | $ | 193,103,033 | 260.53 | %",
+        "Total Investments | $ | 193,103,033 | $ | 193,103,033 | 260.53 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments SPV Vehicle (10) Footnotes Industry Reference Rate Spread Interest Rate Maturity Date Outstanding Principal Amortized Cost Fair Value Percentage of Net Assets",
+        "Non-Controlled, Non-Affiliated Debt Investments",
+        "First Lien Senior Secured (continued)"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "StepStone Private Credit Fund LLC"
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "First Lien Senior Secured | $ | 188,491,055 | 97.61 | % | $ | 188,491,055 | 97.61 | % | 254.30 | %",
+        "Second Lien Senior Secured | 4,611,978 | 2.39 | % | 4,611,978 | 2.39 | % | 6.23 | %"
+      ],
+      "last": [
+        "Second Lien Senior Secured | 4,611,978 | 2.39 | % | 4,611,978 | 2.39 | % | 6.23 | %",
+        "Total investments | $ | 193,103,033 | 100.00 | % | $ | 193,103,033 | 100.00 | % | 260.53 | %"
+      ],
+      "opening_rows": [
+        "",
+        "% of Total % of Total",
+        "Cost Investments Fair Value Investments % of Net Assets",
+        "First Lien Senior Secured $ 188,491,055 97.61 % $ 188,491,055 97.61 % 254.30 %"
+      ],
+      "preceding": [
+        "",
+        "Investments at fair value and cost consisted of the following as of June 30, 2023:"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table"
+    }
+  ]
+}

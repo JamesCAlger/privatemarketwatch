@@ -1,0 +1,560 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1646614",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001646614-2025-03-31.json",
+    "evidence_sha256": "9f5e2c3a402e112125d56498f97e8491885e9c6ec5562395ed575202a63cff56",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001646614-2025-03-31",
+    "report_date": "2025-03-31",
+    "review_note": "Separate cash and affiliated roll-forwards require explicit scope bridges; missing early primary remains unavailable.",
+    "saved_candidate_rows": "149",
+    "source_candidate_rows": "289"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1646614/000095017025070278.html",
+    "ref": "REF-0001646614-2025-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value:",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2025 December 31, 2024 |  | Assets | Investments, at fair value:",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Silver Point Specialty Lending Fund",
+          "",
+          "Item 1. Consolida ted Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          "ts of Operations 46 Item 3 Quantitative and Qualitative Disclosures About Market Risk 58 Item 4 Controls and Procedures 60 PART II OTHER INFORMATION 61 Item 1 Legal Proceedings 61 Item 1A Risk Factors 61 Item 2 Unregistered Sales of Equity Securities, Use of Proceeds, and Issuer Purchases of Equity Securities 62 Item 3 Defaults Upon Senior Securities 62 Item 4 Mine Safety Disclosures 62 Item 5 Other Information 62 Item 6 Exhibits 62 Signatures 63",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled, non-affiliated investments (amortized cost of $ 856,085,858 and $ 865,232,646 , respectively)",
+          "",
+          "$",
+          "838,935,887",
+          "",
+          "",
+          "$",
+          "849,500,690",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_be84d61f-6a09-48b0-a7f9-56519bf7e16a",
+            "scale": null,
+            "text": "856,085,858",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_79f3c90c-0099-4f70-9d23-ad2efd7eb252",
+            "scale": null,
+            "text": "865,232,646",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_be84d61f-6a09-48b0-a7f9-56519bf7e16a",
+            "scale": null,
+            "text": "838,935,887",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_79f3c90c-0099-4f70-9d23-ad2efd7eb252",
+            "scale": null,
+            "text": "849,500,690",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2025 December 31, 2024 |  | Assets | Investments, at fair value:",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Silver Point Specialty Lending Fund",
+          "",
+          "Item 1. Consolida ted Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          "ts of Operations 46 Item 3 Quantitative and Qualitative Disclosures About Market Risk 58 Item 4 Controls and Procedures 60 PART II OTHER INFORMATION 61 Item 1 Legal Proceedings 61 Item 1A Risk Factors 61 Item 2 Unregistered Sales of Equity Securities, Use of Proceeds, and Issuer Purchases of Equity Securities 62 Item 3 Defaults Upon Senior Securities 62 Item 4 Mine Safety Disclosures 62 Item 5 Other Information 62 Item 6 Exhibits 62 Signatures 63",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Non-controlled, affiliated investments (amortized cost of $ 24,796,185 and 8,032,091 , respectively)",
+          "",
+          "",
+          "28,992,893",
+          "",
+          "",
+          "",
+          "12,137,420",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_4f37bf11-8bd8-4966-936c-b08487526358",
+            "scale": null,
+            "text": "24,796,185",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_6e44ffea-e9ea-4f5e-a3bc-4c8a0a9850ce",
+            "scale": null,
+            "text": "8,032,091",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_4f37bf11-8bd8-4966-936c-b08487526358",
+            "scale": null,
+            "text": "28,992,893",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_6e44ffea-e9ea-4f5e-a3bc-4c8a0a9850ce",
+            "scale": null,
+            "text": "12,137,420",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2025 December 31, 2024 |  | Assets | Investments, at fair value:",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Silver Point Specialty Lending Fund",
+          "",
+          "Item 1. Consolida ted Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          "ts of Operations 46 Item 3 Quantitative and Qualitative Disclosures About Market Risk 58 Item 4 Controls and Procedures 60 PART II OTHER INFORMATION 61 Item 1 Legal Proceedings 61 Item 1A Risk Factors 61 Item 2 Unregistered Sales of Equity Securities, Use of Proceeds, and Issuer Purchases of Equity Securities 62 Item 3 Defaults Upon Senior Securities 62 Item 4 Mine Safety Disclosures 62 Item 5 Other Information 62 Item 6 Exhibits 62 Signatures 63",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investments, at fair value (amortized cost of $ 922,634,556 and $ 919,774,172 , respectively)",
+          "",
+          "",
+          "891,256,739",
+          "",
+          "",
+          "",
+          "891,045,657",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+            "scale": null,
+            "text": "922,634,556",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_a5989036-c143-44b6-8321-d402d5c6e5db",
+            "scale": null,
+            "text": "919,774,172",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+            "scale": null,
+            "text": "891,256,739",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_a5989036-c143-44b6-8321-d402d5c6e5db",
+            "scale": null,
+            "text": "891,045,657",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2025 December 31, 2024 |  | Assets | Investments, at fair value:",
+        "preceding": [
+          "Consolidated Statements of Assets and Liabilities",
+          "Silver Point Specialty Lending Fund",
+          "",
+          "Item 1. Consolida ted Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          "ts of Operations 46 Item 3 Quantitative and Qualitative Disclosures About Market Risk 58 Item 4 Controls and Procedures 60 PART II OTHER INFORMATION 61 Item 1 Legal Proceedings 61 Item 1A Risk Factors 61 Item 2 Unregistered Sales of Equity Securities, Use of Proceeds, and Issuer Purchases of Equity Securities 62 Item 3 Defaults Upon Senior Securities 62 Item 4 Mine Safety Disclosures 62 Item 5 Other Information 62 Item 6 Exhibits 62 Signatures 63",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[9]/table/tr[9]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "",
+          "27,237,926",
+          "",
+          "",
+          "",
+          "30,429,915",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_6376ca11-b0cb-410f-ace1-02bbd1cd5ef3",
+            "scale": null,
+            "text": "27,237,926",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "C_6ad424f9-27f2-437a-9686-2edbd0780913",
+            "scale": null,
+            "text": "30,429,915",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the Three Months Ended March 31, | 2025 2024 | Investment income: | Non-controlled/non-affiliated investments:",
+        "preceding": [
+          "(Unaudited)",
+          "Consolidated Statem ents of Operations",
+          "Silver Point Specialty Lending Fund",
+          "",
+          "",
+          "The accompanying notes are an integral part of these consolidated financial statements. 1",
+          " and contingencies (Note 8) Net assets Common shares $ 0.001 par value, unlimited shares authorized; 36,907,451 and 36,907,451 shares issued and outstanding, respectively 36,907 36,907 Paid-in-capital in excess of par 553,574,864 553,574,864 Distributable earnings (losses) ( 11,389,185 ) ( 8,698,777 ) Total net assets 542,222,586 544,912,994 Total liabilities and net assets $ 1,005,899,118 $ 1,019,911,260 Net asset value per share $ 14.69 $ 14.76",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[12]/table/tr[15]"
+      },
+      {
+        "cells": [
+          "Total Investments, March 31, 2025",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 922,634,556",
+          "",
+          "$ 891,256,739",
+          "",
+          "164.48 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_eff6a02d-4c0d-4e75-9177-6b8f78483f83",
+            "scale": null,
+            "text": "922,634,556",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_eff6a02d-4c0d-4e75-9177-6b8f78483f83",
+            "scale": null,
+            "text": "891,256,739",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_eff6a02d-4c0d-4e75-9177-6b8f78483f83",
+            "scale": "-2",
+            "text": "164.48",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5) | Unsecured Debt | United States of America | Wesco Aircraft Holdings Inc\u207d\u2077\u207e\u207d\u00b3\u2074\u207e Unsecured Debt Industrial Products & Services 6.00 % 6.00 % 1/31/2025 1/31/2033 4,195,024 $ 6,406,376 $ 6,334,487 1.17 %",
+        "preceding": [
+          "",
+          "Silver Point Specialty Lending Fund Consolidated Schedule of Investments March 31, 2025 (Unaudited)",
+          "",
+          "The accompanying notes are an integral part of these consolidated financial statements. 9",
+          "\u2074\u207e Senior Secured Debt Industrial Products & Services 8.00 % 8.00 1/31/2025 1/31/2030 5,668,193 5,638,509 5,526,488 1.02 Total United States of America Senior Secured Debt 5,638,509 5,526,488 1.02 Germany Takko Fashion GmbH\u207d\u00b9\u2070\u207e\u207d\u00b3\u00b3\u207e Senior Secured Debt Specialty Retail 10.25 % 10.25 10/30/2024 4/15/2030 \u20ac 1,271,000 1,374,968 1,465,409 0.27 Total Germany Senior Secured Debt 1,374,968 1,465,409 0.27 Total Senior Secured Debt 7,013,477 6,991,897 1.29",
+          "Silver Point Specialty Lending Fund Consolidated Schedule of Investments March 31, 2025 (Unaudited)",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[36]/table/tr[37]"
+      },
+      {
+        "cells": [
+          "Total Investments, December 31, 2024",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 919,774,172",
+          "",
+          "$ 891,045,657",
+          "",
+          "163.51 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_92ff3f90-9c47-4377-879a-6ef06a98a2c8",
+            "scale": null,
+            "text": "919,774,172",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_92ff3f90-9c47-4377-879a-6ef06a98a2c8",
+            "scale": null,
+            "text": "891,045,657",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_92ff3f90-9c47-4377-879a-6ef06a98a2c8",
+            "scale": "-2",
+            "text": "163.51",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (31) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5) | Non-Controlled/Affiliated Investments | Senior Secured Debt | Germany",
+        "preceding": [
+          "Silver Point Specialty Lending Fund Consolidated Schedule of Investments December 31, 2024",
+          "",
+          "The accompanying notes are an integral part of these consolidated financial statements. 18",
+          "y Health Co\u207d\u00b2\u2075\u207e Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 \u2014 1,452,401 0.27 Monomoy Capital Partners IV-Titan, L.P. (Waupaca Foundry)\u207d\u2077\u207e\u207d\u00b9\u2070\u207e\u207d\u00b2\u2075\u207e Partnership Interests Industrial Products & Services N/A N/A 2/23/2024 N/A 313,577 313,577 410,472 0.08 Total United States of America Equities 313,577 1,862,873 0.35 Total Equities 313,577 1,862,873 0.35 Total Non-Controlled/Non-Affiliated Investments 865,232,646 849,500,690 155.89 %",
+          "Silver Point Specialty Lending Fund Consolidated Schedule of Investments December 31, 2024",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[63]/table/tr[34]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "1,224,036",
+          "",
+          "",
+          "$",
+          "70,003,584",
+          "",
+          "",
+          "$",
+          "820,029,119",
+          "",
+          "",
+          "$",
+          "891,256,739",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_9c0a1a39-c03c-4ee5-ad84-9e15cae33022",
+            "scale": null,
+            "text": "1,224,036",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_77b708d8-53a7-4fb2-b78b-239d8946352e",
+            "scale": null,
+            "text": "70,003,584",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_5b0fcdac-844d-4581-a627-d5e1464e166d",
+            "scale": null,
+            "text": "820,029,119",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_20580638-1002-48df-9c7f-b235a075c1d2",
+            "scale": null,
+            "text": "891,256,739",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2025 | Level 1 Level 2 Level 3 Total | Investments: | Secured loans $ \u2014 $ 54,741,484 $ 791,344,437 $ 846,085,921",
+        "preceding": [
+          "",
+          "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of March 31, 2025.",
+          "5. Fair Value Measurements"
+        ],
+        "xpath": "/html/body/div[105]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[11]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "1,452,401",
+          "",
+          "",
+          "$",
+          "92,478,860",
+          "",
+          "",
+          "$",
+          "797,114,396",
+          "",
+          "",
+          "$",
+          "891,045,657",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_14664bdc-157b-4664-a650-806d9b8836bb",
+            "scale": null,
+            "text": "1,452,401",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_e561acea-3998-47aa-a337-ed5f00d9b546",
+            "scale": null,
+            "text": "92,478,860",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_dc0f9ade-0e4c-430e-818d-c769cbeb7dc1",
+            "scale": null,
+            "text": "797,114,396",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_b488746c-0808-459a-b853-09a6d65c0415",
+            "scale": null,
+            "text": "891,045,657",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | December 31, 2024 | Level 1 Level 2 Level 3 Total | Investments: | Secured loans $ \u2014 $ 66,475,497 $ 780,905,839 $ 847,381,336",
+        "preceding": [
+          "",
+          "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of December 31, 2024."
+        ],
+        "xpath": "/html/body/div[108]/div/ix:continuation/div[1]/ix:continuation/table/tr[11]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "27.2",
+          "",
+          "",
+          "$",
+          "30.4",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended March 31, | ($ in millions) 2025 2024 | Total investment income $ 27.2 $ 30.4 | Less: Total expenses 11.6 14.8",
+        "preceding": [
+          "",
+          "Operating results for the three months ended March 31, 2025 and March 31, 2024 were as follows:",
+          "Results of Operations",
+          "March 31, 2025 December 31, 2024 Weighted average yield of portfolio 10.9 % 11.2 % Weighted average yield of performing debt investments 11.7 % 12.0 % Weighted average interest rate of performing debt investments 10.8 % 11.1 % Weighted average spread over SOFR of floating rate performing investments 6.6 % 6.7 %",
+          "",
+          "",
+          "",
+          "50",
+          "million of aggregate repayments, paydowns and sales. For the three months ended March 31, 2024, we funded an aggregate principal amount of $69.0 million. We funded $58.6 million in 9 new portfolio company and $10.4 million in existing portfolio companies. For this period, the weighted average term for investments in new portfolio companies was 5.4 years. For the same period, we received $(31.5) million of aggregate repayments, paydowns and sales.",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[159]/table[3]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "27.2",
+          "",
+          "",
+          "$",
+          "30.4",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended March 31, | ($ in millions) 2025 2024 | Interest income, excluding PIK interest $ 25.9 $ 28.7 | PIK interest income 1.3 1.7",
+        "preceding": [
+          "",
+          "Investment income is comprised primarily of interest from debt investments, which includes PIK, amortization of upfront fees and prepayment fees.",
+          "Investment Income",
+          "",
+          "",
+          "51",
+          "7 % Results of Operations Operating results for the three months ended March 31, 2025 and March 31, 2024 were as follows: For the Three Months Ended March 31, ($ in millions) 2025 2024 Total investment income $ 27.2 $ 30.4 Less: Total expenses 11.6 14.8 Net investment income 15.6 15.6 Net realized gain (loss) (2.3 ) (1.4 ) Net change in unrealized gain (loss) (3.1 ) 2.5 Net increase (decrease) in net assets resulting from operations $ 10.2 $ 16.7",
+          "",
+          "10-Q"
+        ],
+        "xpath": "/html/body/div[162]/table[1]/tr[7]"
+      }
+    ],
+    "sha256": "7cb65dbd950c46325e20ba77cccd24d98e29f1ed7a85f3b54651613d5cc53ef2",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

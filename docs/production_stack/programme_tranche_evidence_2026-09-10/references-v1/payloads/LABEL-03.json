@@ -1,0 +1,122 @@
+{
+  "case": 3,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001803498|2025-12-31|BCRED Emerald JV LP - LP Interest",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "PRIVATE_EQUITY_FUND",
+      "cik": "0001803498",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001803498|2025-12-31|BCRED Emerald JV LP - LP Interest",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "PRIVATE_CREDIT_FUND",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-f519c24cce398bb6",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001803498|2025-12-31|BCRED Emerald JV LP - LP Interest",
+    "accession": "0001803498-26-000014",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001803498",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "6f1487b",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "BCRED Emerald JV LP - LP Interest",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+      "note": "\"The Emerald JV's principal purpose is to make investments, primarily in senior secured loans that are made to middle-market comp \u2026\""
+    },
+    "stratum": "tail_census",
+    "true_classification": "PRIVATE_CREDIT_FUND",
+    "true_cost": 1815000000.0,
+    "true_fair_value": 1678745000.0,
+    "true_lien": null,
+    "unit_uid": "bcred emerald jv lp lp interest"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification": "PRIVATE_CREDIT_FUND",
+    "fair_value_usd": 1678745000
+  },
+  "reason": "Narrative identifies senior-secured loan JV with pension investor; LP interest is private-credit vehicle exposure.",
+  "row_xpath": "/html/body/div[1208]/table/tr[15]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "BCRED Emerald JV LP - LP Interest",
+        "",
+        "(6)(16)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "1/19/2022",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "1,815,000",
+        "",
+        "",
+        "1,678,745",
+        "",
+        "",
+        "3.53",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1548",
+          "context_text": "0001803498 BCRED Emerald JV LP - LP Interest 2025-12-31",
+          "scale": "3",
+          "text": "1,815,000",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1548",
+          "context_text": "0001803498 BCRED Emerald JV LP - LP Interest 2025-12-31",
+          "scale": "3",
+          "text": "1,678,745",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1548",
+          "context_text": "0001803498 BCRED Emerald JV LP - LP Interest 2025-12-31",
+          "scale": "-2",
+          "text": "3.53",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Investments (1)(19) Footnotes Reference Rate and Spread (2) Interest Rate (2)(15) Acquisition Date Maturity Date Par Amount/Units (1) Cost (3) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1208]/table",
+      "xpath": "/html/body/div[1208]/table/tr[15]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+  "source_sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c",
+  "status": "candidate_semantics_wrong",
+  "supplementary_evidence": null
+}

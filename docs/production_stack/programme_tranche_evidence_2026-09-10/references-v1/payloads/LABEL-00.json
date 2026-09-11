@@ -1,0 +1,125 @@
+{
+  "case": 0,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001287750|2025-12-31|Ivy Hill Asset Management, L.P., Member interest",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "PRIVATE_CREDIT_FUND",
+      "cik": "0001287750",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001287750|2025-12-31|Ivy Hill Asset Management, L.P., Member interest",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "PRIVATE_EQUITY_FUND",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-60b2948e98dd3861",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001287750|2025-12-31|Ivy Hill Asset Management, L.P., Member interest",
+    "accession": "0001287750-26-000006",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001287750",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "6f1487b",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Ivy Hill Asset Management, L.P., Member interest",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1287750\\000128775026000006.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "PRIVATE_EQUITY_FUND",
+    "true_cost": 1700500000.0,
+    "true_fair_value": 1903400000.0,
+    "true_lien": null,
+    "unit_uid": "ivy hill asset management l p member interest"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "asset_role": "operating_company_equity",
+    "cost_usd": 1700500000,
+    "fair_value_usd": 1903400000,
+    "instrument": "Member interest"
+  },
+  "reason": "Operating asset-management business equity; neither PE-fund nor credit-fund classification is supported. Leaf rights need review.",
+  "row_xpath": "/html/body/div[2390]/table/tr[17]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "Member interest",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "06/2009",
+        "",
+        "",
+        "",
+        "100.00 %",
+        "",
+        "",
+        "1,700.5",
+        "",
+        "",
+        "1,903.4",
+        "",
+        "(6)",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-413",
+          "context_text": "0001287750 Ivy Hill Asset Management, L.P., Member interest 2025-12-31",
+          "scale": "-2",
+          "text": "100.00",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-413",
+          "context_text": "0001287750 Ivy Hill Asset Management, L.P., Member interest 2025-12-31",
+          "scale": "6",
+          "text": "1,700.5",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-413",
+          "context_text": "0001287750 Ivy Hill Asset Management, L.P., Member interest 2025-12-31",
+          "scale": "6",
+          "text": "1,903.4",
+          "unit": "usd"
+        }
+      ],
+      "opening": [
+        "",
+        "Company (1) Business Description Investment Coupon (3) Reference (7) Spread (3) Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets",
+        "Endeavor Bidco LLC and Endeavor TopCo, Inc. Global securities finance trading platform First lien senior secured loan 7.92 % SOFR (Q) 4.25 % 08/2024 08/2029 6.1 6.1 6.1 (2)(9)"
+      ],
+      "table_xpath": "/html/body/div[2390]/table",
+      "xpath": "/html/body/div[2390]/table/tr[17]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1287750\\000128775026000006.html",
+  "source_sha256": "ad71baf7a7214d6301ba8a431b40f34c081508999847273ab3add7bcb49f317f",
+  "status": "reference_and_candidate_semantics_wrong",
+  "supplementary_evidence": null
+}

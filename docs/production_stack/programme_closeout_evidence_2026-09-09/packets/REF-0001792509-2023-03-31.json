@@ -1,0 +1,599 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM18xMy9mcmFnOjY1ZmIxMmM4NTgyZTQyNGRhMTgxMDg4ODdkZTg1MmUyL3RhYmxlOjJkNzA2ZGE4YjUwYTQyNjhiYTQzMmRlNjcxMTMzNzZkL3RhYmxlcmFuZ2U6MmQ3MDZkYThiNTBhNDI2OGJhNDMyZGU2NzExMzM3NmRfMy0xLTEtMS02NzU1Nw_245d3dc8-4114-4e81-8cc5-29694bfeea0c",
+        "name": "us-gaap:FinancialInstrumentsOwnedPrincipalInvestmentsAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Investments at fair value (amortized cost of $ 453,693 and $ 447,814 , respectively)",
+        "$",
+        "441,998",
+        "",
+        "",
+        "$",
+        "441,376",
+        ""
+      ],
+      "concept": "us-gaap:FinancialInstrumentsOwnedPrincipalInvestmentsAtFairValue",
+      "context_id": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM18xMy9mcmFnOjY1ZmIxMmM4NTgyZTQyNGRhMTgxMDg4ODdkZTg1MmUyL3RhYmxlOjJkNzA2ZGE4YjUwYTQyNjhiYTQzMmRlNjcxMTMzNzZkL3RhYmxlcmFuZ2U6MmQ3MDZkYThiNTBhNDI2OGJhNDMyZGU2NzExMzM3NmRfMy0xLTEtMS02NzU1Nw_245d3dc8-4114-4e81-8cc5-29694bfeea0c",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "441,998",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[55]/table/tr[5]",
+      "table_xpath": "/html/body/div[55]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "441998000"
+    },
+    {
+      "attributes": {
+        "contextref": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM18yNS9mcmFnOjU4NDMyM2VkOWE3ZDQzNjI5NzA5YmRhOWRhOTZiYTU2L3RhYmxlOjI0MjVmMTg5NDQ0ODQ3YzNiN2Q0NGNiZDJiMGMxN2M4L3RhYmxlcmFuZ2U6MjQyNWYxODk0NDQ4NDdjM2I3ZDQ0Y2JkMmIwYzE3YzhfMTI3LTEwLTEtMS0xMTU0NDA_8df7b874-2a51-45c4-887c-4ec31e50eb7d",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments - 151.78 %* (5)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "453,693",
+        "",
+        "",
+        "$",
+        "441,998",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM18yNS9mcmFnOjU4NDMyM2VkOWE3ZDQzNjI5NzA5YmRhOWRhOTZiYTU2L3RhYmxlOjI0MjVmMTg5NDQ0ODQ3YzNiN2Q0NGNiZDJiMGMxN2M4L3RhYmxlcmFuZ2U6MjQyNWYxODk0NDQ4NDdjM2I3ZDQ0Y2JkMmIwYzE3YzhfMTI3LTEwLTEtMS0xMTU0NDA_8df7b874-2a51-45c4-887c-4ec31e50eb7d",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "441,998",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[149]/table/tr[8]",
+      "table_xpath": "/html/body/div[149]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "441998000"
+    },
+    {
+      "attributes": {
+        "contextref": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM180MC9mcmFnOjA0YjE1NzFkYjk2YjQ4NGU5NDZmYjQ1Yzk5ODQxZDY2L3RhYmxlOmRhMWU1ZDI2ZDhkODQwZWRiOGFhZTU3ZGQwZGVkMWQwL3RhYmxlcmFuZ2U6ZGExZTVkMjZkOGQ4NDBlZGI4YWFlNTdkZDBkZWQxZDBfNS04LTEtMS05NzI0MA_1a4e7714-16e5-4cb5-b09d-91579e3c29d4",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "441,998",
+        "",
+        "",
+        "$",
+        "441,998",
+        "",
+        "",
+        "$",
+        "7",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "441,369",
+        "",
+        "",
+        "$",
+        "441,376",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM180MC9mcmFnOjA0YjE1NzFkYjk2YjQ4NGU5NDZmYjQ1Yzk5ODQxZDY2L3RhYmxlOmRhMWU1ZDI2ZDhkODQwZWRiOGFhZTU3ZGQwZGVkMWQwL3RhYmxlcmFuZ2U6ZGExZTVkMjZkOGQ4NDBlZGI4YWFlNTdkZDBkZWQxZDBfNS04LTEtMS05NzI0MA_1a4e7714-16e5-4cb5-b09d-91579e3c29d4",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "441,998",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[5]/ix:nonnumeric[1]/div[2]/table/tr[7]",
+      "table_xpath": "/html/body/ix:continuation[5]/ix:nonnumeric[1]/div[2]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "441998000"
+    },
+    {
+      "attributes": {
+        "contextref": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM180OS9mcmFnOmY5ZTBmNGE2ZTY1ZTQzMjNhNWY2YzI4MTJlZjE0ZDdjL3RhYmxlOmZhMTAwMTgzNzBlODQwMmY4MzE2MzU5NmNhZWU5YTEzL3RhYmxlcmFuZ2U6ZmExMDAxODM3MGU4NDAyZjgzMTYzNTk2Y2FlZTlhMTNfNTgtNC0xLTEtOTg4Njg_7fcd3cd4-55d7-48fb-a655-8be2d08499ed",
+        "name": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "",
+        "",
+        "$",
+        "105,430",
+        "",
+        "",
+        "$",
+        "1,124",
+        "",
+        "",
+        "$",
+        "137,102",
+        "",
+        "",
+        "$",
+        "2,162",
+        ""
+      ],
+      "concept": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+      "context_id": "i2f701d9624f54b68998ffdc7abd8d613_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjg1OTA5ODQ1ZjQ1NDQ4M2FiN2NlMWRmNGQyNzRlN2IzL3NlYzo4NTkwOTg0NWY0NTQ0ODNhYjdjZTFkZjRkMjc0ZTdiM180OS9mcmFnOmY5ZTBmNGE2ZTY1ZTQzMjNhNWY2YzI4MTJlZjE0ZDdjL3RhYmxlOmZhMTAwMTgzNzBlODQwMmY4MzE2MzU5NmNhZWU5YTEzL3RhYmxlcmFuZ2U6ZmExMDAxODM3MGU4NDAyZjgzMTYzNTk2Y2FlZTlhMTNfNTgtNC0xLTEtOTg4Njg_7fcd3cd4-55d7-48fb-a655-8be2d08499ed",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "1,124",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[10]/ix:continuation/div[1]/table/tr[32]",
+      "table_xpath": "/html/body/ix:continuation[10]/ix:continuation/div[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "1124000"
+    }
+  ],
+  "cik": "0001792509",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1792509/000179250923000024.html",
+  "reference_id": "REF-0001792509-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 632,
+  "source_sha256": "d6546a3275b6a6011033df69bb4b15a8920b0c389ae93bfc0979b09973232b91",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 32,
+      "first": [
+        "Dedrone Holdings, Inc. | Growth Capital Loan (Prime + 4.25 % interest rate, 7.50 % floor, 5.50 % EOT payment) | 3/31/2021 | $ | 1,816 | $ | 2,009 | $ | 2,014 | 3/31/2024",
+        "Total Aerospace and Defense - 0.69 %* | 1,816 | 2,009 | 2,014"
+      ],
+      "last": [
+        "6,000 | 5,988 | 5,988",
+        "Certamen Ventures Inc. | Growth Capital Loan (Prime + 5.50 % interest rate, 8.75 % floor, 3.00 % EOT payment) | 11/30/2021 | 6,945 | 7,011 | 7,011 | 11/30/2024"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        ""
+      ],
+      "preceding": [],
+      "rows": 32,
+      "table_xpath": "/html/body/div[98]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Path Robotics, Inc. | Growth Capital Loan (Prime + 6.00 % interest rate, 9.25 % floor, 8.75 % EOT payment) (2) | 2/15/2022 | 1,940 | 1,963 | 1,963 | 8/31/2025",
+        "Path Robotics, Inc. | Growth Capital Loan (Prime + 6.00 % interest rate, 9.25 % floor, 8.75 % EOT payment) (2) | 4/25/2022 | 1,828 | 1,836 | 1,836 | 10/31/2025"
+      ],
+      "last": [
+        "Activehours, Inc. | Revolver (Prime + 4.25 % interest rate, 8.50 % floor, 0.00% EOT payment) (2) | 12/30/2022 | 10,000 | 9,900 | 9,987 | 12/30/2025",
+        "Cherry Technologies Inc. | Growth Capital Loan (Prime + 7.00 % interest rate, 10.25 % floor, 5.50 % EOT payment) (2) | 5/6/2022 | 8,500 | 8,502 | 8,502 | 11/30/2024"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "Path Robotics, Inc. Growth Capital Loan (Prime + 6.00 % interest rate, 9.25 % floor, 8.75 % EOT payment) (2) 2/15/2022 1,940 1,963 1,963 8/31/2025"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[101]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Cherry Technologies Inc. | Growth Capital Loan (Prime + 7.00 % interest rate, 10.25 % floor, 5.50 % EOT payment) (2) | 7/14/2022 | 5,500 | 5,472 | 5,472 | 1/31/2025",
+        "24,000 | 23,874 | 23,961"
+      ],
+      "last": [
+        "Ephemeral Solutions, Inc. | Growth Capital Loan (Prime + 4.75 % interest rate, 8.00 % floor, 5.25 % EOT payment) (2) | 6/27/2022 | 333 | 334 | 334 | 3/31/2025",
+        "Ephemeral Solutions, Inc. | Growth Capital Loan (Prime + 4.75 % interest rate, 8.00 % floor, 5.25 % EOT payment) (2) | 8/12/2022 | 111 | 111 | 111 | 5/31/2025"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "Cherry Technologies Inc. Growth Capital Loan (Prime + 7.00 % interest rate, 10.25 % floor, 5.50 % EOT payment) (2) 7/14/2022 5,500 5,472 5,472 1/31/2025"
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[104]/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Ephemeral Solutions, Inc. | Growth Capital Loan (Prime + 4.75 % interest rate, 8.00 % floor, 5.25 % EOT payment) (2) | 12/9/2022 | 222 | 219 | 219 | 9/30/2025",
+        "Ephemeral Solutions, Inc. | Growth Capital Loan (Prime + 4.75 % interest rate, 8.00 % floor, 5.25 % EOT payment) (2) | 3/1/2023 | 333 | 327 | 327 | 11/30/2025"
+      ],
+      "last": [
+        "7,810 | 7,659 | 2,665",
+        "NxFoods GmbH (1)(3) | Growth Capital Loan (Prime + 7.75 % interest rate, 11.00 % floor, 8.00 % EOT payment) (2) | 6/30/2022 | 588 | 587 | 587 | 6/30/2026"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "Ephemeral Solutions, Inc. Growth Capital Loan (Prime + 4.75 % interest rate, 8.00 % floor, 5.25 % EOT payment) (2) 12/9/2022 222 219 219 9/30/2025"
+      ],
+      "preceding": [],
+      "rows": 37,
+      "table_xpath": "/html/body/div[107]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "NxFoods GmbH (1)(3) | Growth Capital Loan (Prime + 7.75 % interest rate, 11.00 % floor, 8.00 % EOT payment) (2) | 12/30/2022 | 207 | 204 | 204 | 12/31/2026",
+        "NxFoods GmbH (1)(3) | Growth Capital Loan (Prime + 7.75 % interest rate, 11.00 % floor, 8.00 % EOT payment) (2) | 2/28/2023 | 172 | 169 | 169 | 2/28/2027"
+      ],
+      "last": [
+        "Trendly, Inc. | Growth Capital Loan (Prime + 7.75 % interest rate, 11.00 % floor, 8.50 % EOT payment) (2) | 6/7/2022 | 1,000 | 999 | 989 | 12/31/2025",
+        "7,500 | 7,663 | 7,613"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "NxFoods GmbH (1)(3) Growth Capital Loan (Prime + 7.75 % interest rate, 11.00 % floor, 8.00 % EOT payment) (2) 12/30/2022 207 204 204 12/31/2026"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/div[110]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Total E-Commerce - Clothing and Accessories - 13.28 %* | 38,500 | 38,918 | 38,685",
+        "Forum Brands, LLC | Growth Capital Loan ( 10.00 % interest rate, 4.00 % EOT payment) | 7/6/2021 | 3,477 | 3,568 | 3,553 | 7/31/2023"
+      ],
+      "last": [
+        "Total Entertainment Software - 1.32 %* | 3,855 | 3,870 | 3,849",
+        "Parker Group Inc. | Growth Capital Loan (Prime + 3.50 % interest rate, 6.75 % floor, 0.00% EOT payment) (2) | 4/6/2022 | 274 | 271 | 271 | 10/31/2024"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "Total E-Commerce - Clothing and Accessories - 13.28 %* 38,500 38,918 38,685"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[113]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "Parker Group Inc. | Growth Capital Loan (Prime + 5.25 % interest rate, 8.50 % floor, 8.25 % EOT payment) (2) | 4/6/2022 | 700 | 711 | 711 | 4/30/2025",
+        "974 | 982 | 982"
+      ],
+      "last": [
+        "2,592 | 2,686 | 2,671",
+        "Total Multimedia and Design Software - 2.61 %* | 7,592 | 7,603 | 7,588"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "Parker Group Inc. Growth Capital Loan (Prime + 5.25 % interest rate, 8.50 % floor, 8.25 % EOT payment) (2) 4/6/2022 700 711 711 4/30/2025"
+      ],
+      "preceding": [],
+      "rows": 30,
+      "table_xpath": "/html/body/div[116]/table"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "Jerry Services, Inc. | Growth Capital Loan ( 10.00 % interest rate, 8.25 % EOT payment) (2) | 6/13/2022 | 500 | 501 | 489 | 9/30/2025",
+        "Jerry Services, Inc. | Growth Capital Loan ( 13.75 % interest rate, 8.25 % EOT payment) (2) | 3/17/2023 | 500 | 491 | 491 | 3/17/2023"
+      ],
+      "last": [
+        "True Footage, Inc. | Growth Capital Loan ( 11.00 % interest rate, 6.00 % EOT payment) | 12/15/2021 | 1,372 | 1,379 | 1,351 | 12/31/2024",
+        "True Footage, Inc. | Growth Capital Loan ( 11.00 % interest rate, 6.00 % EOT payment) | 12/21/2021 | 760 | 764 | 748 | 12/31/2024"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        ""
+      ],
+      "preceding": [],
+      "rows": 35,
+      "table_xpath": "/html/body/div[119]/table"
+    },
+    {
+      "contexts": 25,
+      "first": [
+        "True Footage, Inc. | Growth Capital Loan ( 11.00 % interest rate, 7.00 % EOT payment) | 1/31/2022 | 170 | 171 | 167 | 1/31/2025",
+        "True Footage, Inc. | Growth Capital Loan ( 11.00 % interest rate, 8.00 % EOT payment) | 2/25/2022 | 116 | 116 | 114 | 2/28/2025"
+      ],
+      "last": [
+        "Total Social/Platform Software - 2.97 %* | 8,606 | 8,674 | 8,642",
+        "Total Debt Investments - 142.38 %* | $ | 427,253 | $ | 429,829 | $ | 414,609"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Investment Acquisition Date (10) Outstanding Principal Cost (6) Fair Value Maturity Date",
+        "True Footage, Inc. Growth Capital Loan ( 11.00 % interest rate, 7.00 % EOT payment) 1/31/2022 170 171 167 1/31/2025"
+      ],
+      "preceding": [],
+      "rows": 25,
+      "table_xpath": "/html/body/div[122]/table"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Astranis Space Technologies Corp. | Preferred Stock (2) | 5/27/2020 | 70,959 | $ | 93 | $ | 763",
+        "Dedrone Holdings, Inc. | Preferred Stock | 3/2/2021 | 71,018 | 92 | 197"
+      ],
+      "last": [
+        "Idelic Inc. | Preferred Stock (2) | 12/10/2021 | 30,551 | 46 | 46",
+        "Manufactured Networks, Inc. (11) | Preferred Stock (2) | 5/6/2022 | \u2014 | \u2014 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        ""
+      ],
+      "preceding": [],
+      "rows": 45,
+      "table_xpath": "/html/body/div[125]/table"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "Metropolis Technologies, Inc. | Common Stock (2) | 3/30/2022 | 3,495 | 3 | 19",
+        "Strata Identity, Inc. | Preferred Stock (2) | 11/3/2021 | 4,297 | 4 | 4"
+      ],
+      "last": [
+        "Flink SE (1)(3) | Common Stock (2) | 4/13/2022 | 18 | 23 | 24",
+        "Foodology Inc. (1)(3) | Preferred Stock (2) | 3/25/2022 | 2,869 | 12 | 12"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Metropolis Technologies, Inc. Common Stock (2) 3/30/2022 3,495 3 19"
+      ],
+      "preceding": [],
+      "rows": 47,
+      "table_xpath": "/html/body/div[128]/table"
+    },
+    {
+      "contexts": 48,
+      "first": [
+        "Good Eggs, Inc. | Preferred Stock | 8/12/2021 | 83,265 | 142 | 3",
+        "Hydrow, Inc. | Common Stock | 2/9/2021 | 50,863 | 70 | 144"
+      ],
+      "last": [
+        "Merama Inc. | Preferred Stock | 4/28/2021 | 71,728 | 589 | 563",
+        "Total E-Commerce - Personal Goods - 0.23 %* | 923 | 659"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Good Eggs, Inc. Preferred Stock 8/12/2021 83,265 142 3"
+      ],
+      "preceding": [],
+      "rows": 48,
+      "table_xpath": "/html/body/div[131]/table"
+    },
+    {
+      "contexts": 40,
+      "first": [
+        "Honor Technology, Inc. | Preferred Stock (2) | 5/27/2020 | 130,618 | 50 | 192",
+        "Total Elder and Disabled Care - 0.07 %* | 50 | 192"
+      ],
+      "last": [
+        "Eightfold AI Inc. | Preferred Stock (2) | 5/27/2020 | 69,577 | 186 | 336",
+        "Karat Financial Technologies Incorporated | Preferred Stock (2) | 6/18/2021 | 156,720 | 91 | 713"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Honor Technology, Inc. Preferred Stock (2) 5/27/2020 130,618 50 192"
+      ],
+      "preceding": [],
+      "rows": 40,
+      "table_xpath": "/html/body/div[134]/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "Karat Financial Technologies Incorporated | Preferred Stock (2) | 1/11/2023 | 8,012 | \u2014 | \u2014",
+        "91 | 713"
+      ],
+      "last": [
+        "Ribbon Home, Inc. | Common Stock | 12/30/2021 | 12,272 | 114 | \u2014",
+        "340 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Karat Financial Technologies Incorporated Preferred Stock (2) 1/11/2023 8,012 \u2014 \u2014"
+      ],
+      "preceding": [],
+      "rows": 42,
+      "table_xpath": "/html/body/div[137]/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "Side, Inc. | Preferred Stock | 7/29/2020 | 71,501 | 57 | 583",
+        "True Footage, Inc. | Preferred Stock | 11/24/2021 | 88,762 | 122 | 217"
+      ],
+      "last": [
+        "Total Software Development Applications - 0.08 %* | 65 | 223",
+        "Total Warrant Investments - 6.05 %* | $ | 13,787 | $ | 17,604"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Warrant Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Side, Inc. Preferred Stock 7/29/2020 71,501 57 583"
+      ],
+      "preceding": [],
+      "rows": 15,
+      "table_xpath": "/html/body/div[140]/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "DialPad, Inc. | Preferred Stock (2) | 9/22/2020 | 9,016 | $ | 70 | $ | 92",
+        "Filevine, Inc. | Preferred Stock (2) | 2/4/2022 | 22,541 | 142 | 142"
+      ],
+      "last": [
+        "Honor Technology, Inc. | Preferred Stock (2) | 10/1/2021 | 20,932 | 66 | 66",
+        "Total Elder and Disabled Care - 0.10 %* | 264 | 294"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Equity Acquisition Date (10) Shares Cost (6) Fair Value",
+        ""
+      ],
+      "preceding": [],
+      "rows": 42,
+      "table_xpath": "/html/body/div[143]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Arcadia Power, Inc. | Preferred Stock (2) | 9/21/2021 | 16,438 | 167 | 245",
+        "Kobold Metals Company | Preferred Stock (2) | 1/10/2022 | 25,537 | 700 | 700"
+      ],
+      "last": [
+        "Forte Labs, Inc. | Preferred Stock (2) | 5/13/2021 | 184,679 | 250 | 303",
+        "Total Software Development Applications - 0.10 %* | 250 | 303"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Equity Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Arcadia Power, Inc. Preferred Stock (2) 9/21/2021 16,438 167 245"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[146]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Total Equity Investments - 3.36 %* | $ | 10,077 | $ | 9,785",
+        "Total Investments in Portfolio Companies - 151.78 %* (4) | $ | 453,693 | $ | 441,998"
+      ],
+      "last": [
+        "Total Investments in Portfolio Companies - 151.78 %* (4) | $ | 453,693 | $ | 441,998",
+        "Total Investments - 151.78 %* (5) | $ | 453,693 | $ | 441,998"
+      ],
+      "opening_rows": [
+        "",
+        "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2023",
+        "Company Type of Equity Acquisition Date (10) Shares Cost (6) Fair Value",
+        "Total Equity Investments - 3.36 %* $ 10,077 $ 9,785"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/div[149]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Debt investments | $ | \u2014 | $ | \u2014 | $ | 414,609 | $ | 414,609 | $ | \u2014 | $ | \u2014 | $ | 413,558 | $ | 413,558",
+        "Debt investments | $ | \u2014 | $ | \u2014 | $ | 414,609 | $ | 414,609 | $ | \u2014 | $ | \u2014 | $ | 413,558 | $ | 413,558"
+      ],
+      "last": [
+        "Total investments | $ | \u2014 | $ | \u2014 | $ | 441,998 | $ | 441,998 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376",
+        "Total investments | $ | \u2014 | $ | \u2014 | $ | 441,998 | $ | 441,998 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376"
+      ],
+      "opening_rows": [
+        "",
+        "Investment Type (in thousands) March 31, 2023 December 31, 2022",
+        "Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total",
+        "Debt investments $ \u2014 $ \u2014 $ 414,609 $ 414,609 $ \u2014 $ \u2014 $ 413,558 $ 413,558"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/ix:continuation[5]/ix:nonnumeric[1]/div[2]/table"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Debt investments | $ | 414,609 | Discounted Cash Flows | Discount Rate | 10.00 % - 35.94 % | 18.83 %",
+        "Warrant investments | 17,604 | Black Scholes Option Pricing Model | Revenue Multiples | 0.25 x - 56.90 x | 8.05 x"
+      ],
+      "last": [
+        "Equity investments | 9,785 | Black Scholes Option Pricing Model | Volatility | 50.00 % - 85.00 % | 60.27 %",
+        "Total investments | $ | 441,998"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Investments (dollars in thousands) March 31, 2023",
+        "Fair Value Valuation Technique Unobservable Inputs Range Weighted Average",
+        "Debt investments $ 414,609 Discounted Cash Flows Discount Rate 10.00 % - 35.94 % 18.83 %"
+      ],
+      "preceding": [],
+      "rows": 4,
+      "table_xpath": "/html/body/ix:continuation[6]/ix:nonnumeric/div[2]/table"
+    }
+  ]
+}

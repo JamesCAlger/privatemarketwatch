@@ -1,0 +1,24 @@
+{
+  "after_scan_seconds": 62.91125639999518,
+  "before_scan_seconds": 47.87003369999002,
+  "canaries_preserved": true,
+  "elapsed_seconds": 339.23772960000497,
+  "exit_code": 0,
+  "native_canary": {
+    "arrow_allowed": "allowed",
+    "arrow_new_outside": "denied",
+    "arrow_protected": "denied",
+    "duckdb_allowed": "allowed",
+    "duckdb_new_outside": "denied",
+    "duckdb_protected": "denied",
+    "native_delete": "denied",
+    "python_allowed": "allowed",
+    "python_new_outside": "denied",
+    "python_protected": "denied",
+    "rename": "denied"
+  },
+  "protected_changes": [],
+  "protected_files": 237627,
+  "unreadable_changed": false,
+  "worker_stopped": true
+}

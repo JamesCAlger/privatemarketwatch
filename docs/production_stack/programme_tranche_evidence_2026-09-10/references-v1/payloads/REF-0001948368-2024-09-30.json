@@ -1,0 +1,840 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1948368",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001948368-2024-09-30.json",
+    "evidence_sha256": "b86b3325ae018a7e5c76eb784f31169bc7d12727db1f3fdd677840a4d8decd6a",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001948368-2024-09-30",
+    "report_date": "2024-09-30",
+    "review_note": "June 2023 investments 42,023,000 plus MMF 49,067,000; five original candidates omit literal positions. September 2024 cash 150,000 separate.",
+    "saved_candidate_rows": "142",
+    "source_candidate_rows": "166"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1948368/000095017024125398.html",
+    "ref": "REF-0001948368-2024-09-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments, at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | September 30, December 31, | 2024 (Unaudited) 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (cost of $ 457,839 and $ 176,995 )",
+          "",
+          "$",
+          "458,952",
+          "",
+          "",
+          "$",
+          "177,418",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_3c2b6f83-ff8e-4dd5-afdd-0103ee06e0a2",
+            "scale": "3",
+            "text": "457,839",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_5886a11b-d5bb-4552-ab9c-ec16f88594c1",
+            "scale": "3",
+            "text": "176,995",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_3c2b6f83-ff8e-4dd5-afdd-0103ee06e0a2",
+            "scale": "3",
+            "text": "458,952",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_5886a11b-d5bb-4552-ab9c-ec16f88594c1",
+            "scale": "3",
+            "text": "177,418",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, December 31, | 2024 (Unaudited) 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[6]"
+      },
+      {
+        "cells": [
+          "Non-controlled affiliated investments (cost of $ 9,763 and $ 0 )",
+          "",
+          "",
+          "9,745",
+          "",
+          "",
+          "",
+          "\u2014",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_2e375954-3383-499b-b0f0-04b0f6b71a3b",
+            "scale": "3",
+            "text": "9,763",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_5799ed6c-baae-44d8-b2a6-cc32fc40869e",
+            "scale": "3",
+            "text": "0",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_2e375954-3383-499b-b0f0-04b0f6b71a3b",
+            "scale": "3",
+            "text": "9,745",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_5799ed6c-baae-44d8-b2a6-cc32fc40869e",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, December 31, | 2024 (Unaudited) 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investments, at fair value (cost of $ 467,602 and $ 176,995 )",
+          "",
+          "$",
+          "468,697",
+          "",
+          "",
+          "$",
+          "177,418",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+            "scale": "3",
+            "text": "467,602",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_dd474390-1829-4084-8dab-17b39c35b925",
+            "scale": "3",
+            "text": "176,995",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:Investments",
+            "context": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+            "scale": "3",
+            "text": "468,697",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:Investments",
+            "context": "C_dd474390-1829-4084-8dab-17b39c35b925",
+            "scale": "3",
+            "text": "177,418",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, December 31, | 2024 (Unaudited) 2023 | Assets | Investments, at fair value",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statements of Financial Condition",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "ITEM 1. FINANCIAL STATEMENTS",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "12,702",
+          "",
+          "",
+          "$",
+          "2,875",
+          "",
+          "",
+          "$",
+          "27,038",
+          "",
+          "",
+          "$",
+          "6,016",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "ck0001948368:TotalInvestmentIncome",
+            "context": "C_486f2da6-0fab-4e7d-9192-107e7f95ced4",
+            "scale": "3",
+            "text": "12,702",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001948368:TotalInvestmentIncome",
+            "context": "C_8b5bc6c6-642b-4e29-9b82-0ce0bc74c30b",
+            "scale": "3",
+            "text": "2,875",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001948368:TotalInvestmentIncome",
+            "context": "C_5f279a08-4041-4c80-8e03-e60214cd3579",
+            "scale": "3",
+            "text": "27,038",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001948368:TotalInvestmentIncome",
+            "context": "C_9685dba7-a51d-493d-992b-f04cec9b586f",
+            "scale": "3",
+            "text": "6,016",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2024 September 30, 2023 September 30, 2024 September 30, 2023 | Investment income: | From non-controlled/non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Statement of Operation s",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[6]/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Investments - 128.20 %",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "467,602",
+          "",
+          "$",
+          "468,697",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_a31fa1c1-1a00-47ac-83b7-e0cc23f8c540",
+            "scale": "-2",
+            "text": "128.20",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_a31fa1c1-1a00-47ac-83b7-e0cc23f8c540",
+            "scale": "3",
+            "text": "467,602",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_a31fa1c1-1a00-47ac-83b7-e0cc23f8c540",
+            "scale": "3",
+            "text": "468,697",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Initial Acquisition Date (13) Shares (4) Cost Fair Value Footnotes | Equity Securities - 0.62 % | United States - 0.62 % | Common Stock - 0.62 %",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[13]/tr[11]"
+      },
+      {
+        "cells": [
+          "Total Investments in Affiliated Money Market Fund",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "150",
+          "",
+          "$",
+          "150",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_7ab6f72d-2a34-4084-a927-ffb2eebc89b7",
+            "scale": "3",
+            "text": "150",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_7ab6f72d-2a34-4084-a927-ffb2eebc89b7",
+            "scale": "3",
+            "text": "150",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Initial Acquisition Date (13) Shares (4) Cost Fair Value Footnotes | Equity Securities - 0.62 % | United States - 0.62 % | Common Stock - 0.62 %",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[13]/tr[15]"
+      },
+      {
+        "cells": [
+          "Total Investments and Investments in Affiliated Money Market Fund - 128.24 %",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "467,752",
+          "",
+          "$",
+          "468,847",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_ff4a10ef-c580-40a4-9a11-7256a6bf1c05",
+            "scale": "-2",
+            "text": "128.24",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_ff4a10ef-c580-40a4-9a11-7256a6bf1c05",
+            "scale": "3",
+            "text": "467,752",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_ff4a10ef-c580-40a4-9a11-7256a6bf1c05",
+            "scale": "3",
+            "text": "468,847",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Initial Acquisition Date (13) Shares (4) Cost Fair Value Footnotes | Equity Securities - 0.62 % | United States - 0.62 % | Common Stock - 0.62 %",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of September 30, 2024 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[13]/tr[17]"
+      },
+      {
+        "cells": [
+          "Total Investments - 103.41 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "176,995",
+          "",
+          "$",
+          "177,418",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_078b29cf-9187-44cb-a931-18e027452024",
+            "scale": "-2",
+            "text": "103.41",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_078b29cf-9187-44cb-a931-18e027452024",
+            "scale": "3",
+            "text": "176,995",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_078b29cf-9187-44cb-a931-18e027452024",
+            "scale": "3",
+            "text": "177,418",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes | Recorded Books Inc. (dba RBMedia) Media S + 6.25 % 08/31/28 $ 471 $ ( 12 ) $ ( 9 ) (5) (6) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.85 % S + 6.50 % 07/01/30 2,942 2,872 2,898 (6) (7) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 07/01/30 679 ( 8 ) ( 10 ) (5) (6) (8)",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2023 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[18]/tr[33]"
+      },
+      {
+        "cells": [
+          "Total Investments in Affiliated Money Market Fund",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "9,542",
+          "",
+          "",
+          "9,542",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_a84bc3e1-b4ee-43c2-b78c-ad083736ceec",
+            "scale": "3",
+            "text": "9,542",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_a84bc3e1-b4ee-43c2-b78c-ad083736ceec",
+            "scale": "3",
+            "text": "9,542",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes | Recorded Books Inc. (dba RBMedia) Media S + 6.25 % 08/31/28 $ 471 $ ( 12 ) $ ( 9 ) (5) (6) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.85 % S + 6.50 % 07/01/30 2,942 2,872 2,898 (6) (7) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 07/01/30 679 ( 8 ) ( 10 ) (5) (6) (8)",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2023 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[18]/tr[36]"
+      },
+      {
+        "cells": [
+          "Total Investments and Investments in Affiliated Money Market Fund - 108.97 %",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "186,537",
+          "",
+          "$",
+          "186,960",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "C_02e4690f-84f6-482c-9265-01a22561da6b",
+            "scale": "-2",
+            "text": "108.97",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fd64a017-e784-4f9f-903c-cdfb82d8e223",
+            "scale": "3",
+            "text": "186,537",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fd64a017-e784-4f9f-903c-cdfb82d8e223",
+            "scale": "3",
+            "text": "186,960",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Investment (1) Industry (2) Interest Rate (3) Reference Rate and Spread (3) Maturity Par/Shares (4) Cost Fair Value Footnotes | Recorded Books Inc. (dba RBMedia) Media S + 6.25 % 08/31/28 $ 471 $ ( 12 ) $ ( 9 ) (5) (6) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.85 % S + 6.50 % 07/01/30 2,942 2,872 2,898 (6) (7) (8) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 07/01/30 679 ( 8 ) ( 10 ) (5) (6) (8)",
+        "preceding": [
+          "",
+          "(in thousands, except unit and per unit amounts)",
+          "Consolidated Schedule of Investments as of December 31, 2023 (continued)",
+          "Phillip Street Middle Market Lending Fund LLC",
+          "Table of Contents",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[18]/tr[37]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "467,602",
+          "",
+          "",
+          "$",
+          "468,697",
+          "",
+          "",
+          "$",
+          "176,995",
+          "",
+          "",
+          "$",
+          "177,418",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+            "scale": "3",
+            "text": "467,602",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_00591e43-28da-4ea1-aa7e-80f20a31fa84",
+            "scale": "3",
+            "text": "468,697",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_dd474390-1829-4084-8dab-17b39c35b925",
+            "scale": "3",
+            "text": "176,995",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_dd474390-1829-4084-8dab-17b39c35b925",
+            "scale": "3",
+            "text": "177,418",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | September 30, 2024 December 31, 2023 | Investment Type Cost Fair Value Cost Fair Value | 1st Lien/Senior Secured Debt $ 427,540 $ 428,617 $ 149,451 $ 149,830 | 1st Lien/Last-Out Unitranche 37,814 37,802 27,544 27,588",
+        "preceding": [
+          "",
+          "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:",
+          "4. INVESTMENTS"
+        ],
+        "xpath": "/html/body/div[88]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "467.60",
+          "",
+          "",
+          "$",
+          "468.70",
+          "",
+          "",
+          "$",
+          "176.99",
+          "",
+          "",
+          "$",
+          "177.42",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2024 December 31, 2023 | Amortized Cost Fair Value Amortized Cost Fair Value | ($ in millions) ($ in millions)",
+        "preceding": [
+          "",
+          "Our portfolio (excluding investments in money market funds, if any) consisted of the following:",
+          "PORTFOLIO AND INVESTMENT ACTIVITY",
+          "ot be considered borrowings for these purposes. Practices and investments that may involve leverage but are not considered borrowings are not subject to the Investment Company Act\u2019s asset coverage requirement. The amount of leverage that we employ will depend on the assessment by our Investment Adviser and our board of directors (the \u201cBoard of Directors\u201d or the \u201cBoard\u201d) of market conditions and other factors at the time of any proposed borrowing.",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[19]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "468.70",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "177.42",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2024 December 31, 2023 | Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total | (in millions) (in millions)",
+        "preceding": [
+          "",
+          "estment Adviser grades the investments in our portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments graded 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale:",
+          "Table of Contents",
+          "",
+          "36",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[23]/tr[10]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "467.60",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "176.99",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | As of | September 30, 2024 December 31, 2023 | Amortized Cost Percentage of Total Amortized Cost Percentage of Total | (in millions) (in millions)",
+        "preceding": [
+          "",
+          "The following table shows the amortized cost of our performing and non-accrual investments (excluding investments in money market funds, if any):",
+          "As of September 30, 2024 December 31, 2023 Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total (in millions) (in millions) Grade 1 $ \u2014 \u2014 % $ \u2014 \u2014 % Grade 2 468.70 100.0 177.42 100.0 Grade 3 \u2014 \u2014 \u2014 \u2014 Grade 4 \u2014 \u2014 \u2014 \u2014 Total Investments $ 468.70 100.0 % $ 177.42 100.0 %",
+          "",
+          "estment Adviser grades the investments in our portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments graded 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale:",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[24]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "12.70",
+          "",
+          "",
+          "$",
+          "2.87",
+          "",
+          "",
+          "$",
+          "27.04",
+          "",
+          "",
+          "$",
+          "6.01",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2024 September 30, 2023 September 30, 2024 September 30, 2023 | ($ in millions) | Total investment income $ 12.70 $ 2.87 $ 27.04 $ 6.01",
+        "preceding": [
+          "",
+          "Our operating results were as follows:",
+          "",
+          "RESULTS OF OPERATIONS",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[26]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "12.70",
+          "",
+          "",
+          "$",
+          "2.87",
+          "",
+          "",
+          "$",
+          "27.04",
+          "",
+          "",
+          "$",
+          "6.01",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2024 September 30, 2023 September 30, 2024 September 30, 2023 | ($ in millions) | Interest $ 12.06 $ 2.58 $ 25.87 $ 4.23",
+        "preceding": [
+          "",
+          "Our investment income was as follows:",
+          "Investment Income",
+          "Table of Contents",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[27]/tr[8]"
+      }
+    ],
+    "sha256": "90c8c535f01caeb046cf2f8f23de8127e979fa4a06afd29a85f5f73c55f1c39d",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,23 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "unavailable",
+    "cik": "2008748",
+    "disposition": "primary_source_unavailable",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0002008748-2024-03-31.json",
+    "evidence_sha256": "1b21e52572659a8d2b4138b32871c1b0bc04801b060633ae99432ccdc6c867d5",
+    "held_out": "False",
+    "next_action": "obtain_primary_under_separate_authority",
+    "reference_id": "REF-0002008748-2024-03-31",
+    "report_date": "2024-03-31",
+    "review_note": "September 2024 complete 33-lot development roster; six untagged FV dashes remain unresolved. June 2024 literal portfolio 228,062,000 despite only one tagged candidate.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "",
+    "ref": "REF-0002008748-2024-03-31",
+    "status": "primary_HTML_unavailable"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

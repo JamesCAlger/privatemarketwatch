@@ -1,0 +1,993 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "2008748",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0002008748-2025-09-30.json",
+    "evidence_sha256": "13ef36e372847e9fdc3b8ec76712c2fce1aa1e6ad6ae7c35bfe9ac162c7861a7",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0002008748-2025-09-30",
+    "report_date": "2025-09-30",
+    "review_note": "September 2024 complete 33-lot development roster; six untagged FV dashes remain unresolved. June 2024 literal portfolio 228,062,000 despite only one tagged candidate.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "162"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/2008748/000093041325003431.html",
+    "ref": "REF-0002008748-2025-09-30",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": "September 30, 2025 December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively) $ 892,133 $ 439,367 | Controlled/affiliated investments (cost $ 58,092 , $ 33,224 , respectively) 58,331 33,221",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Item 1. Consolidated Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[3]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively)",
+          "",
+          "$",
+          "892,133",
+          "",
+          "",
+          "$",
+          "439,367",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c2",
+            "scale": "3",
+            "text": "890,933",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c3",
+            "scale": "3",
+            "text": "438,194",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c2",
+            "scale": "3",
+            "text": "892,133",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c3",
+            "scale": "3",
+            "text": "439,367",
+            "unit": "usd"
+          }
+        ],
+        "opening": "September 30, 2025 December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively) $ 892,133 $ 439,367 | Controlled/affiliated investments (cost $ 58,092 , $ 33,224 , respectively) 58,331 33,221",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Item 1. Consolidated Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investments at fair value (cost of $ 949,025 , $ 471,418 , respectively)",
+          "",
+          "$",
+          "950,464",
+          "",
+          "",
+          "$",
+          "472,588",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c6",
+            "scale": "3",
+            "text": "949,025",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c7",
+            "scale": "3",
+            "text": "471,418",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c6",
+            "scale": "3",
+            "text": "950,464",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c7",
+            "scale": "3",
+            "text": "472,588",
+            "unit": "usd"
+          }
+        ],
+        "opening": "September 30, 2025 December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively) $ 892,133 $ 439,367 | Controlled/affiliated investments (cost $ 58,092 , $ 33,224 , respectively) 58,331 33,221",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Item 1. Consolidated Financial Statements",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[8]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "23,027",
+          "",
+          "",
+          "$",
+          "7,274",
+          "",
+          "",
+          "$",
+          "55,671",
+          "",
+          "",
+          "$",
+          "12,022",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c9",
+            "scale": "3",
+            "text": "23,027",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c10",
+            "scale": "3",
+            "text": "7,274",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c0",
+            "scale": "3",
+            "text": "55,671",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c11",
+            "scale": "3",
+            "text": "12,022",
+            "unit": "usd"
+          }
+        ],
+        "opening": "For the three months ended September 30, 2025 For the three months ended September 30, 2024 For the nine months ended September 30, 2025 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Investment income | Non-controlled/non-affiliated investments: | Interest income $ 20,722 $ 7,035 $ 50,156 $ 11,659 | Fee income 374 239 1,620 363",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Lord Abbett Private Credit Fund Consolidated Statements of Operations (Unaudited) (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[9]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total Investment in Joint Venture",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 58,092",
+          "",
+          "",
+          "$ 58,331",
+          "",
+          "13.91 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c225",
+            "scale": "3",
+            "text": "58,092",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c225",
+            "scale": "3",
+            "text": "58,331",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c225",
+            "scale": "-2",
+            "text": "13.91",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets | Investment in Joint Venture (4)(6)(9) | SBLA Private Credit LLC (5) N/A N/A N/A 58,092 $ 58,092 $ 58,331 13.91 % | Total Investment in Joint Venture $ 58,092 $ 58,331 13.91 % | Total Investments (8) $ 949,025 $ 950,464 226.60 %",
+        "preceding": [
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[15]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total Investments (8)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 949,025",
+          "",
+          "",
+          "$ 950,464",
+          "",
+          "226.60 %"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c226",
+            "scale": "3",
+            "text": "949,025",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c226",
+            "scale": "3",
+            "text": "950,464",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c226",
+            "scale": "-2",
+            "text": "226.60",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets | Investment in Joint Venture (4)(6)(9) | SBLA Private Credit LLC (5) N/A N/A N/A 58,092 $ 58,092 $ 58,331 13.91 % | Total Investment in Joint Venture $ 58,092 $ 58,331 13.91 % | Total Investments (8) $ 949,025 $ 950,464 226.60 %",
+        "preceding": [
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[15]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total Investments in Joint Venture",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 33,224",
+          "",
+          "",
+          "",
+          "$ 33,221",
+          "",
+          "",
+          "",
+          "16.32 %",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c363",
+            "scale": "3",
+            "text": "33,224",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c363",
+            "scale": "3",
+            "text": "33,221",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c363",
+            "scale": "-2",
+            "text": "16.32",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets | Insurance | Ardonagh Midco 3 PLC (Term Loan) (5)(7) 6M S + 4.75 % 9.90 % 2/17/2031 $ 29,398 $ 28,995 $ 29,398 14.44 % | RSC Acquisition, Inc. (Delayed Draw) 3M S + 4.75 % 9.34 % 11/1/2029 7,135 7,104 7,117 3.50 | RSC Acquisition, Inc. (Delayed Draw) (8) 3M S + 4.75 % N/A 11/1/2029 \u2014 ( 186 ) ( 100 ) ( 0.05 )",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) (Continued) December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[24]/tr[42]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value (9)",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$ 471,418",
+          "",
+          "",
+          "",
+          "$ 472,588",
+          "",
+          "",
+          "",
+          "232.18 %",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c364",
+            "scale": "3",
+            "text": "471,418",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c364",
+            "scale": "3",
+            "text": "472,588",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c364",
+            "scale": "-2",
+            "text": "232.18",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets | Insurance | Ardonagh Midco 3 PLC (Term Loan) (5)(7) 6M S + 4.75 % 9.90 % 2/17/2031 $ 29,398 $ 28,995 $ 29,398 14.44 % | RSC Acquisition, Inc. (Delayed Draw) 3M S + 4.75 % 9.34 % 11/1/2029 7,135 7,104 7,117 3.50 | RSC Acquisition, Inc. (Delayed Draw) (8) 3M S + 4.75 % N/A 11/1/2029 \u2014 ( 186 ) ( 100 ) ( 0.05 )",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) (Continued) December 31, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[24]/tr[43]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value",
+          "",
+          "$",
+          "949,025",
+          "",
+          "",
+          "$",
+          "950,464",
+          "",
+          "",
+          "$",
+          "-",
+          "",
+          "",
+          "$",
+          "14,148",
+          "",
+          "",
+          "$",
+          "877,985",
+          "",
+          "",
+          "$",
+          "58,331",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:DebtSecurities",
+            "context": "c6",
+            "scale": "3",
+            "text": "949,025",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+            "context": "c6",
+            "scale": "3",
+            "text": "950,464",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+            "context": "c562",
+            "scale": "3",
+            "text": "14,148",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+            "context": "c563",
+            "scale": "3",
+            "text": "877,985",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:FairValueNetAssetLiability",
+            "context": "c6",
+            "scale": "3",
+            "text": "58,331",
+            "unit": "usd"
+          }
+        ],
+        "opening": "Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 Measured at Net Asset Value (1) | First Lien Secured Debt $ 861,007 $ 862,207 $ - $ 14,148 $ 848,059 $ - | Second Lien Secured Debt 29,926 29,926 - - 29,926 - | Investments in Joint Venture 58,092 58,331 - - 58,331",
+        "preceding": [
+          "",
+          "The following table shows the composition of the Company\u2019s investment portfolio as of September 30, 2025, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+          "",
+          "Fair Value Measurement and Disclosures",
+          "",
+          "(4) INVESTMENTS",
+          "",
+          "",
+          "",
+          " to the BDC Election Date, the Company did not incur administration fees. For the three and nine months ended September 30, 2025, the Company incurred $ 250 and $ 592 , respectively, of administration fees, of which $ 87 remains payable as of September 30, 2025. There were no administration fees for the period from February 23, 2024 (commencement of operations) to September 30, 2024. As of December 31, 2024, Administration fees payable was $ 78 .",
+          ""
+        ],
+        "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric/table[1]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "471,418",
+          "",
+          "",
+          "$",
+          "472,588",
+          "",
+          "",
+          "$",
+          "-",
+          "",
+          "",
+          "$",
+          "-",
+          "",
+          "",
+          "$",
+          "439,367",
+          "",
+          "",
+          "$",
+          "33,221",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:DebtSecurities",
+            "context": "c7",
+            "scale": "3",
+            "text": "471,418",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+            "context": "c7",
+            "scale": "3",
+            "text": "472,588",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:HeldToMaturitySecuritiesFairValue",
+            "context": "c574",
+            "scale": "3",
+            "text": "439,367",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:FairValueNetAssetLiability",
+            "context": "c7",
+            "scale": "3",
+            "text": "33,221",
+            "unit": "usd"
+          }
+        ],
+        "opening": "Fair Value Hierarchy | Cost Fair Value Level 1 Level 2 Level 3 Measured at Net Asset Value (1) | First Lien Secured Debt $ 438,194 $ 439,367 $ - $ - $ 439,367 $ - | Investments in Joint Venture 33,224 33,221 - - - 33,221 | Total Investments $ 471,418 $ 472,588 $ - $ - $ 439,367 $ 33,221",
+        "preceding": [
+          "",
+          "The following table shows the composition of the Company\u2019s investment portfolio as of December 31, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+          "",
+          "(1) In accordance with ASC 820, the Company\u2019s investment in JV is measured using the net asset value (or its equivalent) as a practical expedient for fair value and has not been classified in the fair value hierarchy.",
+          "",
+          "",
+          "Fair Value Measurement and Disclosures",
+          "",
+          "(4) INVESTMENTS",
+          "",
+          "",
+          "",
+          " to the BDC Election Date, the Company did not incur administration fees. For the three and nine months ended September 30, 2025, the Company incurred $ 250 and $ 592 , respectively, of administration fees, of which $ 87 remains payable as of September 30, 2025. There were no administration fees for the period from February 23, 2024 (commencement of operations) to September 30, 2024. As of December 31, 2024, Administration fees payable was $ 78 .",
+          ""
+        ],
+        "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric/table[3]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "282,315",
+          "",
+          "",
+          "$",
+          "282,587",
+          "",
+          "",
+          "",
+          "423.90",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c715",
+            "scale": "3",
+            "text": "282,315",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c715",
+            "scale": "3",
+            "text": "282,587",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c715",
+            "scale": "-2",
+            "text": "423.90",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ CommonUnits Cost (3) Fair Value % of Net Assets | First Lien Secured Debt (4)(5) |  | Financial Services | Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %",
+        "preceding": [
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          ""
+        ],
+        "xpath": "/html/body/ix:continuation[11]/ix:continuation/table/tr[62]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair Value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "95,414",
+          "",
+          "",
+          "$",
+          "95,411",
+          "",
+          "",
+          "",
+          "251.31",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c753",
+            "scale": "3",
+            "text": "95,414",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c753",
+            "scale": "3",
+            "text": "95,411",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c753",
+            "scale": "-2",
+            "text": "251.31",
+            "unit": "pure"
+          }
+        ],
+        "opening": "Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets | Investments-non-controlled/non-affiliated | First Lien secured Debt-non-controlled/non-affiliated (4)(5) | Air Freight & Logistics | RJW Logistics Group, Inc 3M S + 5.25 % 9.58 % 11/26/2031 $ 12,000 $ 11,883 $ 11,883 31.30 %",
+        "preceding": [
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "December 31, 2024",
+          "Schedule of Investments",
+          "SBLA Private Credit LLC",
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          ""
+        ],
+        "xpath": "/html/body/ix:continuation[13]/ix:continuation/table[1]/tr[36]"
+      },
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": "September 30, 2025 December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 282,315 and $ 95,414 , respectively) $ 282,587 $ 95,411 | Cash and cash equivalents 16,818 743",
+        "preceding": [
+          "",
+          "The following table presents the consolidated statements of assets and liabilities information of the SBLA JV as of September 30, 2025 and December 31, 2024:",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "Consolidated Financial Statements",
+          "SBLA Private Credit LLC",
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          ""
+        ],
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric[1]/table/tr[3]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments (cost $ 282,315 and $ 95,414 , respectively)",
+          "",
+          "$",
+          "282,587",
+          "",
+          "",
+          "$",
+          "95,411",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:OtherInvestments",
+            "context": "c754",
+            "scale": "3",
+            "text": "282,315",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:OtherInvestments",
+            "context": "c755",
+            "scale": "3",
+            "text": "95,414",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:Investments",
+            "context": "c754",
+            "scale": "3",
+            "text": "282,587",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:Investments",
+            "context": "c755",
+            "scale": "3",
+            "text": "95,411",
+            "unit": "usd"
+          }
+        ],
+        "opening": "September 30, 2025 December 31, 2024 | ASSETS | Investments at fair value | Non-controlled/non-affiliated investments (cost $ 282,315 and $ 95,414 , respectively) $ 282,587 $ 95,411 | Cash and cash equivalents 16,818 743",
+        "preceding": [
+          "",
+          "The following table presents the consolidated statements of assets and liabilities information of the SBLA JV as of September 30, 2025 and December 31, 2024:",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "Consolidated Financial Statements",
+          "SBLA Private Credit LLC",
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          ""
+        ],
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric[1]/table/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "6,469",
+          "",
+          "",
+          "$",
+          "12,192",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+            "context": "c756",
+            "scale": "3",
+            "text": "6,469",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:IncomeLossFromEquityMethodInvestments",
+            "context": "c757",
+            "scale": "3",
+            "text": "12,192",
+            "unit": "usd"
+          }
+        ],
+        "opening": "For the three months ended September 30, 2025 For the nine months ended September 30, 2025 |  | Investment income | Non-controlled/non-affiliated investments: | Interest income $ 6,469 $ 12,192",
+        "preceding": [
+          "",
+          "The following table presents the consolidated statements of operations information of the SBLA JV for the three and nine months ended September 30, 2025:",
+          "",
+          "8 Total assets $ 300,383 $ 97,065 LIABILITIES Debt (net of deferred financing costs of $ 2,734 and $ 1,553 , respectively) $ 227,266 $ 58,446 Interest payable 3,974 302 Distribution payable 2,201 317 Administration fees payable 146 - Professional fees payable 133 34 Total liabilities $ 233,720 $ 59,099 MEMBERS\u2019 EQUITY Members\u2019 equity $ 66,663 $ 37,966 Total members\u2019 equity $ 66,663 $ 37,966 Total liabilities and members\u2019 equity $ 300,383 $ 97,065",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          "Consolidated Financial Statements",
+          "",
+          "",
+          "",
+          "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+          ""
+        ],
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric[2]/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments at Fair value",
+          "",
+          "$",
+          "949,025",
+          "",
+          "",
+          "$",
+          "950,464",
+          "",
+          "",
+          "",
+          "100",
+          "%",
+          "",
+          "$",
+          "471,418",
+          "",
+          "",
+          "$",
+          "472,588",
+          "",
+          "",
+          "",
+          "100",
+          "%"
+        ],
+        "facts": [],
+        "opening": "As of September 30, 2025 As of December 31, 2024 | Cost Fair Value % of Total Investments at Fair Value Cost Fair Value % of Total Investments at Fair Value | First Lien Secured Debt $ 861,007 $ 862,207 91 % $ 438,194 $ 439,367 93 % | Second Lien Secured Debt 29,926 29,926 3 \u2014 \u2014 \u2014 | Investments in Joint Venture 58,092 58,331 6 33,224 33,221 7",
+        "preceding": [
+          "",
+          "",
+          "",
+          "Our portfolio is presented below:",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[34]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "23,027",
+          "",
+          "",
+          "$",
+          "7,274",
+          "",
+          "",
+          "$",
+          "55,671",
+          "",
+          "",
+          "$",
+          "12,022",
+          ""
+        ],
+        "facts": [],
+        "opening": "For the three months ended September 30, 2025 For the three months ended September 30, 2024 For the nine months ended September 30, 2025 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Total investment income $ 23,027 $ 7,274 $ 55,671 $ 12,022 | Less: Net expenses 11,854 3,578 29,057 6,391 | Net investment income before taxes 11,173 3,696 26,614 5,631 | Net investment income after taxes 11,173 3,696 26,614 5,631",
+        "preceding": [
+          "",
+          "",
+          "",
+          "The following table represents our operating results:",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[37]/tr[2]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "$",
+          "23,027",
+          "",
+          "",
+          "$",
+          "7,274",
+          "",
+          "",
+          "$",
+          "55,671",
+          "",
+          "",
+          "$",
+          "12,022",
+          ""
+        ],
+        "facts": [],
+        "opening": "For the three months ended September 30, 2025 For the three months ended September 30, 2024 For the nine months ended September 30, 2025 For the period from February 23, 2024 (commencement of operations) to September 30, 2024 | Investment income: | Non-controlled/non-affiliated investments: | Interest income $ 20,722 $ 7,035 $ 50,156 $ 11,659 | Fee income 374 239 1,620 363",
+        "preceding": [
+          "",
+          "",
+          "",
+          "The composition of our investment income for the three and nine months ended September 30, 2025 and the three months ended September 30, 2024 and for the period from February 23, 2024 (commencement of operations) to September 30, 2024 was a follows:",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[38]/tr[8]"
+      }
+    ],
+    "sha256": "a88f94c0b29af875ef7c3b896f33d651b8fa9d1aa93171242d2db3fa8a111d71",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

@@ -1,0 +1,23 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "unavailable",
+    "cik": "1901164",
+    "disposition": "primary_source_unavailable",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001901164-2023-03-31.json",
+    "evidence_sha256": "8200e9679ea6bc5bc5d002d5b0bc2756d1bfb1013fc5a591781344faf59a9558",
+    "held_out": "False",
+    "next_action": "obtain_primary_under_separate_authority",
+    "reference_id": "REF-0001901164-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "Primary source missing from allowed cache; cannot certify absence, fields, lots or accounting basis.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "",
+    "ref": "REF-0001901164-2023-03-31",
+    "status": "primary_HTML_unavailable"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

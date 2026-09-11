@@ -1,0 +1,23 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "unavailable",
+    "cik": "1646614",
+    "disposition": "primary_source_unavailable",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001646614-2023-03-31.json",
+    "evidence_sha256": "8083350ef1185d56aa77214d76c9b0716109a40e572bebdc4d1790f8452428f8",
+    "held_out": "False",
+    "next_action": "obtain_primary_under_separate_authority",
+    "reference_id": "REF-0001646614-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "Separate cash and affiliated roll-forwards require explicit scope bridges; missing early primary remains unavailable.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "",
+    "ref": "REF-0001646614-2023-03-31",
+    "status": "primary_HTML_unavailable"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

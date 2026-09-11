@@ -1,0 +1,33 @@
+{
+  "builder_sha256": "0e977887d36c15aea7b07e741fd78ce895363a835a0b88600ee397b9a180f1a8",
+  "cases": 10,
+  "real_highlights": 6,
+  "seconds": 12.584300800001074,
+  "source_documents": {
+    "0000950170-24-094137": {
+      "bytes": 15460252,
+      "rendition": "0000950170-24-094137.html",
+      "sha256": "decef4f1dc7cfe068cfd92665c2f67e9fb037df934e03b8ea9fb538a995db650",
+      "source_sha256": "f305c6ac5de1d78a86d524f86c9e9e3fdbd155d0911ae3c7541113e1f1066d21"
+    },
+    "0001193125-25-280627": {
+      "bytes": 28491069,
+      "rendition": "0001193125-25-280627.html",
+      "sha256": "5d58c1e623e1c8bcf63c3fe2541a165a8ef32a17f7381175715c47214e254ae6",
+      "source_sha256": "3f26dd535f9e37d5b39e027e0901738938f05044ccffb14a12d76f119ccde6e1"
+    },
+    "0001193125-26-215667": {
+      "bytes": 34477910,
+      "rendition": "0001193125-26-215667.html",
+      "sha256": "bbebf5c7fd151a7c80fcdb0af302b86dff55dae3ba56ed79bb076661244e9e15",
+      "source_sha256": "b085a88f9b69818254ca225982069ea85ebf10d251609198f73cc5505767c3df"
+    },
+    "0001193125-26-221684": {
+      "bytes": 33716939,
+      "rendition": "0001193125-26-221684.html",
+      "sha256": "ff79e782655171fb6ddd32522586bf41dab2b22a9e92fe142ea2dd69a4ebb336",
+      "source_sha256": "d7eadebcca45f76168b44b54a9cae38f5e622929a9a70e34a62c978f1125cce1"
+    }
+  },
+  "status": "built; browser validation separate"
+}

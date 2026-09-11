@@ -23,9 +23,9 @@ def test_trinity_bare_debt_identifier_is_issuer_rollup():
 
     assert rollup["wrapper_family"] == "debt"
     assert rollup["wrapper_disposition"] == "debt_issuer_rollup"
-    assert rollup["wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V3"
+    assert rollup["wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V5"
     assert child["wrapper_disposition"] == "debt_position_leaf"
-    assert child["wrapper_rule_id"] == "TRINITY_DEBT_LEAF_V3"
+    assert child["wrapper_rule_id"] == "TRINITY_DEBT_LEAF_V5"
     assert rollup["wrapper_parent_key"] == child["wrapper_parent_key"]
     assert child["wrapper_position_key"] != rollup["wrapper_parent_key"]
     assert child["wrapper_structured_leaf_key"]
@@ -192,7 +192,7 @@ def test_blackrock_direct_lending_flat_debt_leaf():
 
     assert row["wrapper_family"] == "debt"
     assert row["wrapper_disposition"] == "debt_position_leaf"
-    assert row["wrapper_rule_id"] == "BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1"
+    assert row["wrapper_rule_id"] == "BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V2"
     assert row["wrapper_position_key"]
     assert "ref sofr" not in row["wrapper_position_key"]
 
@@ -783,7 +783,7 @@ def test_silver_point_specialty_credit_comma_leaf_and_total_rows():
 
     assert leaf["wrapper_family"] == "debt"
     assert leaf["wrapper_disposition"] == "debt_position_leaf"
-    assert leaf["wrapper_rule_id"] == "SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1"
+    assert leaf["wrapper_rule_id"] == "SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V2"
     assert "10 40" not in leaf["wrapper_position_key"]
     assert total_trust["wrapper_disposition"] == "mixed_total_rollup"
     assert bare_category["wrapper_disposition"] == "debt_category_rollup"

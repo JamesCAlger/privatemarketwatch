@@ -1,0 +1,627 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_0ed6e806-4324-4426-a3c5-48033bb5923c",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 1,748,732,749 and $ 1,636,597,753 , respectively)",
+        "",
+        "",
+        "1,735,894,006",
+        "",
+        "",
+        "",
+        "1,630,349,305",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+      "currency": "USD",
+      "fact_id": "F_0ed6e806-4324-4426-a3c5-48033bb5923c",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,735,894,006",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[9]/table/tr[7]",
+      "table_xpath": "/html/body/div[9]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "1735894006"
+    },
+    {
+      "attributes": {
+        "contextref": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_4a0731cd-db67-4f00-a914-156fb69869ee",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments \u2014 ( 267.17 %)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "1,748,732,749",
+        "",
+        "",
+        "$",
+        "1,735,894,006",
+        "",
+        "",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_66ddd900-6b25-4b65-bd36-209358b668f9",
+      "currency": "USD",
+      "fact_id": "F_4a0731cd-db67-4f00-a914-156fb69869ee",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,735,894,006",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[66]/table[2]/tr[23]",
+      "table_xpath": "/html/body/div[66]/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "1735894006"
+    }
+  ],
+  "cik": "0001634452",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1634452/000095017025108839.html",
+  "reference_id": "REF-0001634452-2025-06-30",
+  "report_date": "2025-06-30",
+  "source_rows": 823,
+  "source_sha256": "5bde956f6e71dfed0e47f90d45abb5b803358de6c3743c50b4c31c78ba289c86",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (amortized cost of $ 1,746,674,546 and $ 1,634,572,997 , respectively) | $ | 1,735,063,931 | $ | 1,629,513,317",
+        "Non-controlled affiliated investments (amortized cost of $ 2,058,203 and $ 2,024,756 , respectively) | 830,075 | 835,988"
+      ],
+      "last": [
+        "Non-controlled affiliated investments (amortized cost of $ 2,058,203 and $ 2,024,756 , respectively) | 830,075 | 835,988",
+        "Total investments, at fair value (amortized cost of $ 1,748,732,749 and $ 1,636,597,753 , respectively) | 1,735,894,006 | 1,630,349,305"
+      ],
+      "opening_rows": [
+        "",
+        "As of June 30, 2025 (Unaudited) As of December 31, 2024",
+        "Assets",
+        "Investments, at fair value"
+      ],
+      "preceding": [
+        "",
+        "Consolidated Statements of Assets and Liabilities",
+        "AB Private Credit Investors Corporation",
+        "Item 1. C onsolidated Fina ncial Statements"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[9]/table"
+    },
+    {
+      "contexts": 43,
+      "first": [
+        "123.Net, LLC | Digital Infrastructure & Services | Delayed Draw Term Loan | 8.54 % (S + 4.25 % ) | 7/19/2029 | 761,353 | 745,848 | 747,676 | (6)(15)",
+        "123.Net, LLC | Digital Infrastructure & Services | Term Loan | 8.51 % (S + 4.25 % ) | 7/19/2029 | 4,331,058 | 4,293,860 | 4,298,576 | (15)"
+      ],
+      "last": [
+        "Azurite Intermediate Holdings, Inc. | Software & Tech Services | Term Loan | 10.32 % (S + 6.00 %; 0.75 % Floor) | 3/19/2031 | 3,128,738 | 3,087,859 | 3,128,738 | (15)",
+        "BHG Holdings, LLC | Healthcare | Term Loan | 9.82 % (S + 5.5 %; 0.75 % Floor) | 4/22/2032 | 12,837,656 | 12,617,299 | 12,612,997 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Investments at Fair Value \u2014 267.17 % (1)(2)(3)(4)(12)",
+        "U.S. Corporate Debt \u2014 252.42 %"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 43,
+      "table_xpath": "/html/body/div[24]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "BHG Holdings, LLC | Healthcare | Revolver | \u2014 (S + 5.5 %; 0.75 % Floor) | 4/22/2032 | - | ( 27,577 | ) | ( 28,333 | ) | (6)(7)",
+        "BHG Holdings, LLC | Healthcare | Delayed Draw Term Loan | \u2014 (S + 5.5 %; 0.75 % Floor) | 4/22/2032 | - | ( 31,247 | ) | ( 32,094 | ) | (6)(7)"
+      ],
+      "last": [
+        "Coding Solutions Acquisition, Inc. | Healthcare | Delayed Draw Term Loan | \u2014 ( S + 5.00 %; 0.75 % Floor) | 8/7/2031 | - | ( 11,297 | ) | - | (6)(7)",
+        "Coding Solutions Acquisition, Inc. | Healthcare | Revolver | \u2014 (S + 5.00 %; 0.75 % Floor) | 8/7/2031 | - | ( 9,225 | ) | - | (6)(7)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "BHG Holdings, LLC Healthcare Revolver \u2014 (S + 5.5 %; 0.75 % Floor) 4/22/2032 - ( 27,577 ) ( 28,333 ) (6)(7)",
+        "BHG Holdings, LLC Healthcare Delayed Draw Term Loan \u2014 (S + 5.5 %; 0.75 % Floor) 4/22/2032 - ( 31,247 ) ( 32,094 ) (6)(7)"
+      ],
+      "preceding": [],
+      "rows": 46,
+      "table_xpath": "/html/body/div[27]/table"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "Colo Holdings LLC | Digital Infrastructure & Services | Term Loan | 21.5 % ( 21.5 % PIK) | 3/27/2026 | 177,369 | 147,559 | 177,369",
+        "Community Based Care Acquisition, Inc. | Healthcare | Revolver | \u2014 ( S + 5.25 %; 1.00 % Floor) | 9/16/2027 | \u2014 | ( 6,569 | ) | ( 4,319 | ) | (6)(7)"
+      ],
+      "last": [
+        "Colo Holdings LLC | Digital Infrastructure & Services | Term Loan | 21.5 % ( 21.5 % PIK) | 3/27/2026 | 177,369 | 147,559 | 177,369",
+        "Community Based Care Acquisition, Inc. | Healthcare | Revolver | \u2014 ( S + 5.25 %; 1.00 % Floor) | 9/16/2027 | \u2014 | ( 6,569 | ) | ( 4,319 | ) | (6)(7)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369",
+        "Community Based Care Acquisition, Inc. Healthcare Revolver \u2014 ( S + 5.25 %; 1.00 % Floor) 9/16/2027 \u2014 ( 6,569 ) ( 4,319 ) (6)(7)"
+      ],
+      "preceding": [],
+      "rows": 2,
+      "table_xpath": "/html/body/div[30]/table"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "Community Based Care Acquisition, Inc. | Healthcare | Delayed Draw Term Loan | 9.64 % ( S + 5.25 %; 1.00 % Floor) | 9/16/2027 | 2,089,950 | 2,075,114 | 2,079,500 | (15)",
+        "Community Based Care Acquisition, Inc. | Healthcare | Term Loan | 9.64 % ( S + 5.25 %; 1.00 % Floor) | 9/16/2027 | 5,154,804 | 5,113,399 | 5,129,030 | (15)"
+      ],
+      "last": [
+        "Enverus Holdings, Inc. | Software & Tech Services | Delayed Draw Term Loan | \u2014 (S + 5.5 %; 0.75 % Floor) | 12/24/2029 | - | ( 945 | ) | - | (6)(7)",
+        "Enverus Holdings, Inc. | Software & Tech Services | Revolver | 9.81 % (S + 5.5 %; 0.75 % Floor) | 12/24/2029 | 48,548 | 40,995 | 48,548 | (6)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Community Based Care Acquisition, Inc. Healthcare Delayed Draw Term Loan 9.64 % ( S + 5.25 %; 1.00 % Floor) 9/16/2027 2,089,950 2,075,114 2,079,500 (15)",
+        "Community Based Care Acquisition, Inc. Healthcare Term Loan 9.64 % ( S + 5.25 %; 1.00 % Floor) 9/16/2027 5,154,804 5,113,399 5,129,030 (15)"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 47,
+      "table_xpath": "/html/body/div[33]/table"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "Enverus Holdings, Inc. | Software & Tech Services | Term Loan | 9.82 % (S + 5.5 %; 0.75 % Floor) | 12/24/2029 | 8,982,740 | 8,877,834 | 8,982,740 | (15)",
+        "Exterro, Inc. | Software & Tech Services | Term Loan | 9.97 % (S + 5.5 %; 1.00 % Floor) | 6/1/2027 | 2,750,781 | 2,739,951 | 2,750,781 | (15)"
+      ],
+      "last": [
+        "Greenlight Intermediate II, Inc. | Digital Infrastructure & Services | Term Loan | 9.94 % (S + 5.5 %; 0.75 % Floor) | 6/1/2028 | 5,331,605 | 5,275,095 | 5,278,289 | (15)",
+        "Greenlight Intermediate II, Inc. | Digital Infrastructure & Services | Delayed Draw Term Loan | 9.94 % (S + 5.5 %; 0.75 % Floor) | 6/1/2028 | 6,702,083 | 6,627,274 | 6,635,063 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Enverus Holdings, Inc. Software & Tech Services Term Loan 9.82 % (S + 5.5 %; 0.75 % Floor) 12/24/2029 8,982,740 8,877,834 8,982,740 (15)",
+        "Exterro, Inc. Software & Tech Services Term Loan 9.97 % (S + 5.5 %; 1.00 % Floor) 6/1/2027 2,750,781 2,739,951 2,750,781 (15)"
+      ],
+      "preceding": [],
+      "rows": 47,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 49,
+      "first": [
+        "Greenlight Intermediate II, Inc. | Digital Infrastructure & Services | Delayed Draw Term Loan | 9.94 % ( S + 5.5 %; 0.75 % Floor) | 6/1/2028 | 7,384,968 | 7,266,609 | 7,332,219 | (6)(15)",
+        "Gryphon-Redwood Acquisition LLC | Software & Tech Services | Term Loan | 14.21 % ( S + 5.00 %; 1.00 % Floor; 5.00 % PIK) | 9/18/2028 | 3,922,136 | 3,876,282 | 3,804,472 | (15)"
+      ],
+      "last": [
+        "LivTech Purchaser, Inc. | Software & Tech Services | Delayed Draw Term Loan | 8.78 % ( S + 4.5 %; 0.75 % Floor) | 11/24/2031 | 6,429,837 | 6,363,434 | 6,349,863 | (6)(15)",
+        "Lotus HPI Buyer, Inc | Healthcare | Revolver | 10.49 % ( S + 6.25 %; 1.00 % Floor) | 1/21/2030 | 1,381,542 | 1,345,678 | 1,343,863 | (6)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Greenlight Intermediate II, Inc. Digital Infrastructure & Services Delayed Draw Term Loan 9.94 % ( S + 5.5 %; 0.75 % Floor) 6/1/2028 7,384,968 7,266,609 7,332,219 (6)(15)",
+        "Gryphon-Redwood Acquisition LLC Software & Tech Services Term Loan 14.21 % ( S + 5.00 %; 1.00 % Floor; 5.00 % PIK) 9/18/2028 3,922,136 3,876,282 3,804,472 (15)"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 49,
+      "table_xpath": "/html/body/div[39]/table"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "Lotus HPI Buyer, Inc | Healthcare | Delayed Draw Term Loan | \u2014 (S + 6.25 %; 1.00 % Floor) | 1/21/2030 | - | ( 35,932 | ) | ( 28,259 | ) | (6)(7)",
+        "Lotus HPI Buyer, Inc | Healthcare | Term Loan | 10.51 % (S + 6.25 %; 1.00 % Floor) | 1/21/2030 | 12,402,477 | 12,149,549 | 12,154,427 | (15)"
+      ],
+      "last": [
+        "MSM Acquisitions, Inc. | Services | Delayed Draw Term Loan | 10.33 % ( S + 3.5 %; 1.00 % Floor; 2.5 % PIK) | 12/9/2026 | 375,300 | 373,836 | 319,943 | (15)",
+        "MSP Global Holdings, Inc. | Digital Infrastructure & Services | Term Loan | 9.98 % ( S + 5.5 %; 1.00 % Floor) | 4/9/2029 | 7,672,842 | 7,619,647 | 7,615,296 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Lotus HPI Buyer, Inc Healthcare Delayed Draw Term Loan \u2014 (S + 6.25 %; 1.00 % Floor) 1/21/2030 - ( 35,932 ) ( 28,259 ) (6)(7)",
+        "Lotus HPI Buyer, Inc Healthcare Term Loan 10.51 % (S + 6.25 %; 1.00 % Floor) 1/21/2030 12,402,477 12,149,549 12,154,427 (15)"
+      ],
+      "preceding": [],
+      "rows": 44,
+      "table_xpath": "/html/body/div[42]/table"
+    },
+    {
+      "contexts": 50,
+      "first": [
+        "MSP Global Holdings, Inc. | Digital Infrastructure & Services | Revolver | 9.95 % ( S + 5.5 %; 1.00 % Floor) | 4/9/2029 | 723,743 | 707,721 | 710,127 | (6)",
+        "MSP Global Holdings, Inc. | Digital Infrastructure & Services | Delayed Draw Term Loan | 9.95 % ( S + 5.5 %; 1.00 % Floor) | 4/9/2029 | 599,371 | 594,337 | 594,876 | (15)"
+      ],
+      "last": [
+        "Pinnacle Treatment Centers, Inc. | Healthcare | Term Loan | 10.08 % ( S + 5.75 %; 1.00 % Floor) | 1/4/2027 | 279,612 | 278,544 | 274,020 | (15)",
+        "Pinnacle Treatment Centers, Inc. | Healthcare | Term Loan | 10.08 % ( S + 5.75 %; 1.00 % Floor) | 1/4/2027 | 378,739 | 376,353 | 371,164 | (15)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "MSP Global Holdings, Inc. Digital Infrastructure & Services Revolver 9.95 % ( S + 5.5 %; 1.00 % Floor) 4/9/2029 723,743 707,721 710,127 (6)",
+        "MSP Global Holdings, Inc. Digital Infrastructure & Services Delayed Draw Term Loan 9.95 % ( S + 5.5 %; 1.00 % Floor) 4/9/2029 599,371 594,337 594,876 (15)"
+      ],
+      "preceding": [],
+      "rows": 50,
+      "table_xpath": "/html/body/div[45]/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "Priority OnDemand Midco 2, L.P. | Healthcare | Delayed Draw Term Loan | 9.74 % (S + 5.25 %; 1.00 % Floor) | 7/17/2028 | 176,582 | 163,487 | 176,582 | (6)",
+        "Priority OnDemand Midco 2, L.P. | Healthcare | Term Loan | 9.74 % ( S + 5.25 %; 1.00 % Floor) | 7/17/2028 | 7,427,436 | 7,359,876 | 7,427,436 | (15)"
+      ],
+      "last": [
+        "Sapphire Software Buyer, Inc. | Software & Tech Services | Term Loan | 12.21 % (S + 2.5 %; 0.75 % Floor; 3.00 % PIK) | 9/30/2031 | 14,406,158 | 14,277,181 | 14,298,112 | (15)",
+        "Sapphire Software Buyer, Inc. | Software & Tech Services | Revolver | \u2014 ( S + 5.00 %; 0.75 % Floor) | 9/30/2031 | - | ( 15,452 | ) | ( 12,928 | ) | (6)(7)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Priority OnDemand Midco 2, L.P. Healthcare Delayed Draw Term Loan 9.74 % (S + 5.25 %; 1.00 % Floor) 7/17/2028 176,582 163,487 176,582 (6)",
+        "Priority OnDemand Midco 2, L.P. Healthcare Term Loan 9.74 % ( S + 5.25 %; 1.00 % Floor) 7/17/2028 7,427,436 7,359,876 7,427,436 (15)"
+      ],
+      "preceding": [],
+      "rows": 41,
+      "table_xpath": "/html/body/div[48]/table"
+    },
+    {
+      "contexts": 45,
+      "first": [
+        "Sauce Labs Inc | Software & Tech Services | Term Loan | 10.37 % ( S + 5.5 %; 1.00 % Floor; 0.5 % PIK) | 8/16/2027 | 7,599,012 | 7,533,392 | 7,466,029 | (15)",
+        "Sauce Labs Inc | Software & Tech Services | Delayed Draw Term Loan | 10.37 % ( S + 5.5 %; 1.00 % Floor; 0.5 % PIK) | 8/16/2027 | 1,949,471 | 1,935,493 | 1,915,355 | (15)"
+      ],
+      "last": [
+        "Telesoft Holdings, LLC | Software & Tech Services | Term Loan | 10.17 % ( S + 5.75 %; 1.00 % Floor) | 12/16/2026 | 5,655,310 | 5,641,111 | 5,627,033 | (15)",
+        "Telesoft Holdings, LLC | Software & Tech Services | Revolver | 10.17 % ( S + 5.75 %; 1.00 % Floor) | 12/16/2026 | 139,269 | 138,212 | 136,285 | (6)"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Sauce Labs Inc Software & Tech Services Term Loan 10.37 % ( S + 5.5 %; 1.00 % Floor; 0.5 % PIK) 8/16/2027 7,599,012 7,533,392 7,466,029 (15)",
+        "Sauce Labs Inc Software & Tech Services Delayed Draw Term Loan 10.37 % ( S + 5.5 %; 1.00 % Floor; 0.5 % PIK) 8/16/2027 1,949,471 1,935,493 1,915,355 (15)"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 45,
+      "table_xpath": "/html/body/div[51]/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "The Center for Orthopedic and Research Excellence, Inc. | Healthcare | Term Loan | 10.42 % (S + 6.00 %; 1.00 % Floor) | 12/31/2026 | 4,718,491 | 4,716,458 | 4,718,491 | (15)",
+        "The Center for Orthopedic and Research Excellence, Inc. | Healthcare | Revolver | \u2014 (S + 6.00 %; 1.00 % Floor) | 12/31/2026 | \u2014 | ( 270 | ) | - | (6)(7)"
+      ],
+      "last": [
+        "Veracross LLC | Software & Tech Services | Delayed Draw Term Loan | 10.92 % (S + 6.5 %; 1.00 % Floor) | 12/28/2027 | 403,852 | 403,852 | 403,852 | (6)(15)",
+        "Vhagar Purchaser, LLC | Software & Tech Services | Revolver | \u2014 (S + 5.00 %; 1.00 % Floor) | 6/11/2029 | - | ( 7,446 | ) | ( 5,600 | ) | (6)(7)"
+      ],
+      "opening_rows": [
+        "",
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "The Center for Orthopedic and Research Excellence, Inc. Healthcare Term Loan 10.42 % (S + 6.00 %; 1.00 % Floor) 12/31/2026 4,718,491 4,716,458 4,718,491 (15)"
+      ],
+      "preceding": [],
+      "rows": 46,
+      "table_xpath": "/html/body/div[54]/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "Vhagar Purchaser, LLC | Software & Tech Services | Term Loan | 9.81 % ( S + 5.5 %; 1.00 % Floor) | 6/11/2031 | 1,873,375 | 1,845,476 | 1,845,274 | (15)",
+        "Vhagar Purchaser, LLC | Software & Tech Services | Delayed Draw Term Loan | \u2014 (S + 5.5 %; 1.00 % Floor) | 6/11/2031 | - | ( 6,945 | ) | ( 2,342 | ) | (6)(7)"
+      ],
+      "last": [
+        "Total United Kingdom 1st Lien/Senior Secured Debt | 19,357,950 | 19,400,942",
+        "Total United Kingdom Corporate Debt | 19,357,950 | 19,400,942"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value Tickmarks",
+        "Vhagar Purchaser, LLC Software & Tech Services Term Loan 9.81 % ( S + 5.5 %; 1.00 % Floor) 6/11/2031 1,873,375 1,845,476 1,845,274 (15)",
+        "Vhagar Purchaser, LLC Software & Tech Services Delayed Draw Term Loan \u2014 (S + 5.5 %; 1.00 % Floor) 6/11/2031 - ( 6,945 ) ( 2,342 ) (6)(7)"
+      ],
+      "preceding": [],
+      "rows": 41,
+      "table_xpath": "/html/body/div[57]/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Alphasense, LLC | Series C Preferred | Software & Tech Services | 6/1/2021 | 23,961 | 369,843 | 945,079 | (8)",
+        "Concerto HealthAI Solutions LLC | Series B-1 Preferred | Software & Tech Services | 12/23/2019 | 65,614 | 349,977 | 263,172"
+      ],
+      "last": [
+        "Content Square SAS | Series F Preferred | Software & Tech Services | 11/30/2023 | 27,976 | 206,755 | 236,313 | (8)",
+        "Total France Preferred Stock | 206,755 | 236,313"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Initial Acquisition Date (10) Shares Cost Fair Value Tickmarks",
+        "U.S. Preferred Stock \u2014 1.17 % (18)",
+        "Alphasense, LLC Series C Preferred Software & Tech Services 6/1/2021 23,961 369,843 945,079 (8)"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/div[60]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "Advantage AVP Parent Holdings, L.P. | Units | Healthcare | 9/24/2021 | 34,492 | 34,492 | 30,029",
+        "Artemis Investor Holdings, LLC | Class A Units | Services | 1/22/2021 | 38,551 | 385,509 | 372,013"
+      ],
+      "last": [
+        "Swyft Parent Holdings LP | Common Units | Services | 2/7/2022 | 4,485 | 53,048 | \u2014",
+        "Total U.S. Common Stock | 7,987,957 | 8,785,008"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Initial Acquisition Date (10) Shares Cost Fair Value Tickmark",
+        "U.S. Common Stock \u2014 1.35 % (18)",
+        "Advantage AVP Parent Holdings, L.P. Units Healthcare 9/24/2021 34,492 34,492 30,029"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 31,
+      "table_xpath": "/html/body/div[63]/table"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "Content Square SAS | Ordinary Shares | Software & Tech Services | 11/30/2023 | 78,527 | 416,757 | 431,245 | (8)",
+        "Total France Common Stock | 416,757 | 431,245"
+      ],
+      "last": [
+        "Content Square SAS | Indemnity Series F Shares Warrants | Software & Tech Services | 11/30/2023 | 2,027 | 8,561 | - | (8)",
+        "Total France Warrants | 8,561 | -"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Initial Acquisition Date (10) Shares Cost Fair Value Tickmark",
+        "France Common Stock \u2014 0.07 % (18)",
+        "Content Square SAS Ordinary Shares Software & Tech Services 11/30/2023 78,527 416,757 431,245 (8)"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/div[66]/table[1]"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "AB EQUITY INVESTORS, L.P. | LP Interests | Investment Companies | 16,220,474 | 16,220,474 | 19,570,613 | (8)(11)",
+        "Falcon Co-Investment Partners, L.P. | Units | Healthcare | 849,577 | 849,577 | 850,426 | (8)(11)"
+      ],
+      "last": [
+        "Total Canada Investment Companies | 271,942 | 302,671",
+        "Total Investments \u2014 ( 267.17 %) | $ | 1,748,732,749 | $ | 1,735,894,006"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Shares Cost Fair value Tickmark",
+        "U.S. Investment Companies \u2014 4.13 % (18)",
+        "AB EQUITY INVESTORS, L.P. LP Interests Investment Companies 16,220,474 16,220,474 19,570,613 (8)(11)"
+      ],
+      "preceding": [
+        "",
+        "ware & Tech Services 5/31/2019 26,294 46,823 33,994 Degreed, Inc. Common Warrants Software & Tech Services 8/31/2022 9,374 41,527 16,050 Scylla DB Ltd Series C-1 Warrants Software & Tech Services 9/9/2022 239,984 43,880 166,323 Vectra AI, Inc. Warrants Software & Tech Services 3/18/2021 35,156 58,190 115,388 Total U.S. Warrants 225,605 1,646,302 United Kingdom Warrants \u2014 0.04 % (18) Global WebIndex Holdings Limited Warrants Software & Tech Services 12/30/2020 11,776 159,859 291,084 Total United Kingdom Warrants 159,859 291,084 France Warrants \u2014 0.00 % (18) Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total France Warrants 8,561 -",
+        ""
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[66]/table[2]"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "SBS Super Holdings, LLC (Class B Units) | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014",
+        "Delaware Valley Management Holdings, Inc. | 60,364 | 2,415 | \u2014 | \u2014 | ( 2,839 | ) | 59,940 | \u2014"
+      ],
+      "last": [
+        "Delaware Valley Management Holdings, Inc. | 573,457 | 22,944 | \u2014 | \u2014 | ( 26,972 | ) | 569,429 | \u2014",
+        "Total Non-Controlled Affiliates | $ | 835,988 | $ | 33,447 | $ | \u2014 | $ | \u2014 | $ | ( 39,360 | ) | $ | 830,075 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain/Loss Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest, PIK and Other Income",
+        "For the six months ended June 30, 2025",
+        "Non-Controlled Affiliates"
+      ],
+      "preceding": [
+        "",
+        "As defined in the Investment Company Act, an investment is deemed to be a \u201ccontrolled affiliated person\u201d of the Fund because the Fund owns, either directly or indirectly, 25% or more of the portfolio company\u2019s outstanding voting securities or has the power to exercise control over management or policies of such portfolio company. As defined in the Investment Company Act an investment is deemed to be an \u201caffiliated person\u201d of the Fund because the Fund owns, either directly or indirectly, 5% or more of the portfolio company\u2019s outstanding voting securities. The table below presents the Fund\u2019s affiliated investments:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[147]/div[1]/ix:continuation/div/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "123.Net, LLC | Delayed Draw Term Loan | 7/19/2026 | $ | 1,062,248 | $ | ( 7,967 | ) | $ | 1,522,707 | $ | ( 15,227 | )",
+        "AAH Topco, LLC | Revolver | 12/22/2027 | 787,273 | ( 3,936 | ) | 787,273 | ( 11,809 | )"
+      ],
+      "last": [
+        "Bonterra LLC | Revolver | 9/8/2027 | \u2014 | \u2014 | 414,630 | ( 1,037 | )",
+        "Bridgepointe Technologies, LLC | Revolver | 12/31/2027 | 777,494 | ( 5,831 | ) | 777,494 | ( 9,719 | )"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "123.Net, LLC Delayed Draw Term Loan 7/19/2026 $ 1,062,248 $ ( 7,967 ) $ 1,522,707 $ ( 15,227 )"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/div[189]/div/ix:nonnumeric/div/ix:continuation/table"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Bridgepointe Technologies, LLC | Delayed Draw Term Loan | 7/1/2026 | 1,474,224 | ( 3,686 | ) | 3,324,983 | ( 41,562 | )",
+        "Brightspot Buyer, Inc. | Revolver | 11/16/2027 | 680,292 | ( 11,905 | ) | 680,292 | ( 10,204 | )"
+      ],
+      "last": [
+        "Delaware Valley Management Holdings, Inc. | Revolver | 1/30/2026 | 293,952 | ( 129,956 | ) | 293,952 | ( 124,636 | )",
+        "DeLorean Purchaser, Inc. | Revolver | 12/16/2031 | 2,409,819 | ( 48,196 | ) | 2,409,819 | ( 36,147 | )"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Bridgepointe Technologies, LLC Delayed Draw Term Loan 7/1/2026 1,474,224 ( 3,686 ) 3,324,983 ( 41,562 )"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/div[192]/div/ix:continuation/div/ix:continuation/table[1]"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "Dispatchtrack, LLC | Revolver | 12/17/2026 | 301,930 | \u2014 | 301,930 | -",
+        "DLRdmv, LLC | Revolver | 5/7/2032 | 805,500 | ( 8,055 | ) | \u2014 | \u2014"
+      ],
+      "last": [
+        "Greenhouse Software, Inc. | Revolver | 9/1/2028 | 1,232,251 | \u2014 | 1,232,251 | \u2014",
+        "Greenhouse Software, Inc. | Revolver | 9/1/2028 | 604,499 | \u2014 | 604,499 | -"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Dispatchtrack, LLC Revolver 12/17/2026 301,930 \u2014 301,930 -"
+      ],
+      "preceding": [
+        "",
+        "layed Draw Term Loan 6/3/2027 948,020 \u2014 948,020 \u2014 Coupa Holdings, LLC Revolver 2/27/2029 725,890 \u2014 725,890 \u2014 Crewline Buyer, Inc. Revolver 11/8/2030 1,366,496 \u2014 1,366,496 \u2014 DA Blocker Corp. Delayed Draw Term Loan 2/10/2027 4,719,998 ( 47,200 ) \u2014 \u2014 DA Blocker Corp. Revolver 2/10/2032 1,101,333 ( 16,520 ) \u2014 \u2014 Datacor, Inc. Revolver 3/13/2029 1,939,002 \u2014 2,154,447 \u2014 Datacor, Inc. Delayed Draw Term Loan 3/13/2026 1,173,651 \u2014 5,988,015 - Dearborn TopCo, LLC Revolver 5/22/2029 672,040 ( 5,040 ) 840,050 ( 12,601 ) Delaware Valley Management Holdings, Inc. Revolver 1/30/2026 293,952 ( 129,956 ) 293,952 ( 124,636 ) DeLorean Purchaser, Inc. Revolver 12/16/2031 2,409,819 ( 48,196 ) 2,409,819 ( 36,147 )",
+        ""
+      ],
+      "rows": 32,
+      "table_xpath": "/html/body/div[192]/div/ix:continuation/div/ix:continuation/table[2]"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "Greenlight Intermediate II, Inc. | Delayed Draw Term Loan | 11/14/2025 | 3,164,986 | ( 15,825 | ) | 8,000,382 | -",
+        "GS AcquisitionCo, Inc. | Revolver | 5/25/2028 | 648,910 | ( 3,245 | ) | 700,823 | ( 1,752 | )"
+      ],
+      "last": [
+        "Lotus HPI Buyer, Inc | Delayed Draw Term Loan | 1/19/2026 | 3,767,841 | ( 28,259 | ) | 3,767,841 | ( 18,839 | )",
+        "Magaya Corporation | Revolver | 7/26/2030 | 522,121 | ( 10,442 | ) | 921,390 | ( 9,214 | )"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Greenlight Intermediate II, Inc. Delayed Draw Term Loan 11/14/2025 3,164,986 ( 15,825 ) 8,000,382 -"
+      ],
+      "preceding": [],
+      "rows": 32,
+      "table_xpath": "/html/body/div[195]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "Magaya Corporation | Delayed Draw Term Loan | 7/24/2026 | 2,314,841 | ( 40,510 | ) | 2,457,041 | ( 12,285 | )",
+        "Mastery Acquisition Corp. | Revolver | 9/7/2029 | 851,781 | ( 2,129 | ) | 851,781 | -"
+      ],
+      "last": [
+        "OPOC Acquisition, LLC | Delayed Draw Term Loan | 12/21/2026 | 1,514,969 | ( 7,575 | ) | 1,514,969 | ( 11,362 | )",
+        "Pace Health Companies, LLC | Revolver | 8/3/2026 | 616,682 | \u2014 | 616,682 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Magaya Corporation Delayed Draw Term Loan 7/24/2026 2,314,841 ( 40,510 ) 2,457,041 ( 12,285 )"
+      ],
+      "preceding": [],
+      "rows": 32,
+      "table_xpath": "/html/body/div[198]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Pace Health Companies, LLC | Delayed Draw Term Loan | 10/17/2025 | 888,879 | \u2014 | 888,879 | -",
+        "PDI TA Holdings, Inc | Revolver | 2/3/2031 | 566,145 | ( 4,246 | ) | 943,575 | ( 4,718 | )"
+      ],
+      "last": [
+        "Soladoc, LLC | Revolver | 6/12/2028 | 588,923 | ( 13,251 | ) | 588,923 | ( 19,140 | )",
+        "Spark DSO, LLC | Revolver | 4/20/2026 | 555,867 | ( 6,948 | ) | 561,561 | ( 8,423 | )"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Pace Health Companies, LLC Delayed Draw Term Loan 10/17/2025 888,879 \u2014 888,879 -"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[201]/div/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 49,
+      "first": [
+        "Stratus Networks, Inc. | Revolver | 12/15/2028 | 858,085 | ( 6,436 | ) | 990,098 | ( 4,950 | )",
+        "Stratus Networks, Inc. | Delayed Draw Term Loan | 12/23/2026 | 3,769,790 | - | 3,833,685 | \u2014"
+      ],
+      "last": [
+        "Zendesk, Inc. | Revolver | 11/22/2028 | 1,372,537 | - | 1,372,628 | \u2014",
+        "$ | 314,266,232 | $ | ( 2,399,531 | ) | $ | 308,439,840 | $ | ( 2,075,224 | )"
+      ],
+      "opening_rows": [
+        "",
+        "6/30/2025 12/31/2024",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "Stratus Networks, Inc. Revolver 12/15/2028 858,085 ( 6,436 ) 990,098 ( 4,950 )"
+      ],
+      "preceding": [],
+      "rows": 49,
+      "table_xpath": "/html/body/div[204]/div/ix:continuation/div/ix:continuation/table"
+    }
+  ]
+}

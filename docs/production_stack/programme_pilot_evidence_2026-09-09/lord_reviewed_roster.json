@@ -1,0 +1,293 @@
+{
+  "source_path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+  "source_sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6",
+  "roster": [
+    {
+      "key": "/html/body/table[13]/tr[5]",
+      "issuer_instrument": "RJW Logistics Group, Inc",
+      "context_id": "c7",
+      "fair_value": "2880000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[6]",
+      "issuer_instrument": "RJW Logistics Group, Inc (Revolver) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[13]/tr[9]",
+      "issuer_instrument": "Meridian Waste Acquisitions, LLC",
+      "context_id": "c12",
+      "fair_value": "9055000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[10]",
+      "issuer_instrument": "Meridian Waste Acquisitions, LLC (Delayed Draw) (8)",
+      "context_id": "c14",
+      "fair_value": "907000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[11]",
+      "issuer_instrument": "Meridian Waste Acquisitions, LLC (Revolver) (8)",
+      "context_id": "c16",
+      "fair_value": "186000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[12]",
+      "issuer_instrument": "United Flow Technologies Intermediate Holdco II, LLC",
+      "context_id": "c18",
+      "fair_value": "17775000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[13]",
+      "issuer_instrument": "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (8)",
+      "context_id": "c20",
+      "fair_value": "-25000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[14]",
+      "issuer_instrument": "United Flow Technologies Intermediate Holdco II, LLC (Revolver) (8)",
+      "context_id": "c22",
+      "fair_value": "-25000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[17]",
+      "issuer_instrument": "Schoeneck Containers, LLC",
+      "context_id": "c25",
+      "fair_value": "9324000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[18]",
+      "issuer_instrument": "Schoeneck Containers, LLC (Delayed Draw)",
+      "context_id": "c27",
+      "fair_value": "4753000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[19]",
+      "issuer_instrument": "Schoeneck Containers, LLC (Revolver) (8)",
+      "context_id": "c29",
+      "fair_value": "332000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[22]",
+      "issuer_instrument": "MGS MFG. Group, Inc.",
+      "context_id": "c32",
+      "fair_value": "9193000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[23]",
+      "issuer_instrument": "MGS MFG. Group, Inc. (Delayed Draw)",
+      "context_id": "c34",
+      "fair_value": "2832000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[24]",
+      "issuer_instrument": "MGS MFG. Group, Inc. (Revolver) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[13]/tr[27]",
+      "issuer_instrument": "Continental Buyer Inc",
+      "context_id": "c39",
+      "fair_value": "32484000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[28]",
+      "issuer_instrument": "Continental Buyer Inc (Delayed Draw) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[13]/tr[29]",
+      "issuer_instrument": "Continental Buyer Inc (Revolver) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[13]/tr[30]",
+      "issuer_instrument": "Endo1 Partners - California, LLC",
+      "context_id": "c45",
+      "fair_value": "16875000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[33]",
+      "issuer_instrument": "Ardonagh Midco 3 PLC (5)(7)",
+      "context_id": "c48",
+      "fair_value": "29398000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[34]",
+      "issuer_instrument": "RSC Acquisition, Inc. (Delayed Draw) (8)",
+      "context_id": "c50",
+      "fair_value": "-230000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[35]",
+      "issuer_instrument": "RSC Acquisition, Inc. (Revolver) (8)",
+      "context_id": "c52",
+      "fair_value": "-26000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[38]",
+      "issuer_instrument": "BCM One, Inc.",
+      "context_id": "c55",
+      "fair_value": "15089000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[39]",
+      "issuer_instrument": "BCM One, Inc. (Delayed Draw)",
+      "context_id": "c57",
+      "fair_value": "4775000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[40]",
+      "issuer_instrument": "BCM One, Inc. (Revolver) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[13]/tr[41]",
+      "issuer_instrument": "GCOM",
+      "context_id": "c61",
+      "fair_value": "39505000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[44]",
+      "issuer_instrument": "Playpower, Inc.",
+      "context_id": "c64",
+      "fair_value": "42790000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[13]/tr[45]",
+      "issuer_instrument": "Playpower, Inc. (Revolver) (8)",
+      "context_id": "c66",
+      "fair_value": "-97000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[14]/tr[5]",
+      "issuer_instrument": "TransnetYX, Inc",
+      "context_id": "c69",
+      "fair_value": "17740000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[14]/tr[6]",
+      "issuer_instrument": "TransnetYX, Inc (Revolver) (8)",
+      "context_id": null,
+      "fair_value": null,
+      "fair_value_status": "displayed_dash; numeric interpretation not adjudicated",
+      "rounding_bound": null
+    },
+    {
+      "key": "/html/body/table[14]/tr[9]",
+      "issuer_instrument": "ComPsych Investment Corp.",
+      "context_id": "c74",
+      "fair_value": "27104000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[14]/tr[10]",
+      "issuer_instrument": "ComPsych Investment Corp. (Delayed Draw) (8)",
+      "context_id": "c76",
+      "fair_value": "-9000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[14]/tr[11]",
+      "issuer_instrument": "Vensure Employer Services Inc",
+      "context_id": "c78",
+      "fair_value": "30999000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    },
+    {
+      "key": "/html/body/table[14]/tr[12]",
+      "issuer_instrument": "Vensure Employer Services Inc (Delayed Draw) (8)",
+      "context_id": "c80",
+      "fair_value": "-22000",
+      "fair_value_status": "reported_inline",
+      "rounding_bound": "500.0"
+    }
+  ],
+  "result": {
+    "status": "reviewed_reference_comparison",
+    "reference_rows": 33,
+    "candidate_rows": 0,
+    "matched_rows": 0,
+    "source_only_rows": 33,
+    "output_only_or_duplicate_rows": 0,
+    "row_recall": 0.0,
+    "row_precision": null,
+    "fv_recall": null,
+    "fv_precision": null,
+    "ambiguous_duplicate_fv_keys": 0,
+    "source_missing_fv_rows": 6,
+    "published_missing_fv_rows": 0,
+    "source_abs_fv_known": "314430000",
+    "published_abs_fv_known": "0",
+    "reference_id": "REF-0002008748-2024-09-30",
+    "reference_label_status": "agent-reviewed development; candidate absence already known",
+    "source_signed_fv_known": "313562000",
+    "primary_source_total": "313562000",
+    "primary_source_total_xpath": "/html/body/table[14]/tr[15]",
+    "monetary_scope": "USD parent investment schedule; all disclosed loans and facilities; no subtotal or look-through additions"
+  }
+}

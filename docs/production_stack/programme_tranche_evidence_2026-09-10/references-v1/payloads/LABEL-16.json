@@ -1,0 +1,129 @@
+{
+  "case": 16,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001812554|2025-12-31|Fifth Season Investments LLC | Specialty finance equity investment",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "COMMON_EQUITY",
+      "cik": "0001812554",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001812554|2025-12-31|Fifth Season Investments LLC | Specialty finance equity investment",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "DIRECT_EQUITY",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-2cebd68d9639e818",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001812554|2025-12-31|Fifth Season Investments LLC | Specialty finance equity investment",
+    "accession": "0001812554-26-000011",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001812554",
+    "disposition": "valid",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "4aada0b",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Fifth Season Investments LLC | Specialty finance equity investment",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_EQUITY",
+    "true_cost": 310978000.0,
+    "true_fair_value": 344960000.0,
+    "true_lien": null,
+    "unit_uid": "fifth season investments llc specialty finance equity investment"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "cost_usd": 310978000,
+    "fair_value_usd": 344960000,
+    "leaf": "unresolved"
+  },
+  "reason": "Specialty finance equity supports broad equity; does not by itself establish common rights. Current cost is 310.978m.",
+  "row_xpath": "/html/body/div[1451]/table/tr[20]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "Fifth Season Investments LLC(3)(4)(24)(30)",
+        "",
+        "Specialty finance equity investment",
+        "",
+        "N/A",
+        "",
+        "",
+        "",
+        "N/A",
+        "",
+        "31",
+        "",
+        "",
+        "310,978",
+        "",
+        "",
+        "344,960",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-1148",
+          "context_text": "0001812554 Fifth Season Investments LLC | Specialty finance equity investment | Affiliated Issuer 2025-12-31",
+          "scale": "0",
+          "text": "31",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1148",
+          "context_text": "0001812554 Fifth Season Investments LLC | Specialty finance equity investment | Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "310,978",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1148",
+          "context_text": "0001812554 Fifth Season Investments LLC | Specialty finance equity investment | Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "344,960",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1148",
+          "context_text": "0001812554 Fifth Season Investments LLC | Specialty finance equity investment | Affiliated Issuer 2025-12-31",
+          "scale": null,
+          "text": "",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "Interest",
+        "Company(1)(25) Investment Ref. Rate Cash PIK Maturity Date Par / Units Amortized Cost(2)(27) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1451]/table",
+      "xpath": "/html/body/div[1451]/table/tr[20]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html",
+  "source_sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec",
+  "status": "leaf_unresolved_and_cost_reference_wrong",
+  "supplementary_evidence": null
+}

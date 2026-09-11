@@ -1,0 +1,23 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "unavailable",
+    "cik": "2006758",
+    "disposition": "primary_source_unavailable",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0002006758-2024-03-31.json",
+    "evidence_sha256": "7765a14c393a5267f292773f0c10e4b4884b5457ec1d7866bbc04242d4cb57f5",
+    "held_out": "False",
+    "next_action": "obtain_primary_under_separate_authority",
+    "reference_id": "REF-0002006758-2024-03-31",
+    "report_date": "2024-03-31",
+    "review_note": "December 2023 is comparative evidence in a later document: retain report-date selection. Missing March primary is not an empty portfolio.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "",
+    "ref": "REF-0002006758-2024-03-31",
+    "status": "primary_HTML_unavailable"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

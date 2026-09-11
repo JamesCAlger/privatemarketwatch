@@ -1,0 +1,3972 @@
+{
+  "reference_id": "REF-0001930087-2023-06-30",
+  "rows": [
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[22]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "Delaware",
+        "",
+        "92-2030260"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-1",
+            "format": "ixt-sec:stateprovnameen",
+            "id": "f-7",
+            "name": "dei:EntityIncorporationStateCountryCode"
+          },
+          "text": "Delaware"
+        },
+        {
+          "attributes": {
+            "contextref": "c-1",
+            "id": "f-8",
+            "name": "dei:EntityTaxIdentificationNumber"
+          },
+          "text": "92-2030260"
+        }
+      ],
+      "xpath": "/html/body/div[22]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "(State or other jurisdiction of incorporation or organization)",
+        "",
+        "(I.R.S. Employer Identification No.)"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[22]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[32]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "Title of each class",
+        "Trading Symbol",
+        "Name of each exchange on which registered"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[32]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "None",
+        "None",
+        "None"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[32]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[39]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "\u2610",
+        "Large accelerated filer",
+        "\u2610",
+        "Accelerated filer"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[39]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "\u2611",
+        "Non-accelerated filer",
+        "\u2610",
+        "Smaller reporting company"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-1",
+            "format": "ixt-sec:entityfilercategoryen",
+            "id": "f-17",
+            "name": "dei:EntityFilerCategory"
+          },
+          "text": "Non-accelerated filer"
+        },
+        {
+          "attributes": {
+            "contextref": "c-1",
+            "format": "ixt-sec:boolballotbox",
+            "id": "f-18",
+            "name": "dei:EntitySmallBusiness"
+          },
+          "text": "\u2610"
+        }
+      ],
+      "xpath": "/html/body/div[39]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "\u2611",
+        "Emerging growth company",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-1",
+            "format": "ixt:fixed-true",
+            "id": "f-19",
+            "name": "dei:EntityEmergingGrowthCompany"
+          },
+          "text": "\u2611"
+        }
+      ],
+      "xpath": "/html/body/div[39]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "Part I. Financial Information",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "Item 1.",
+        "Financial Statements",
+        "3"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "Statement of Financial Condition as of June 30, 2023 (unaudited)",
+        "3"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "Statement of Operations for June 30, 2023 (unaudited)",
+        "4"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "Statement of Changes in Net Assets for June 30, 2023 (unaudited)",
+        "5"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "Schedule of Investments as of June 30, 2023 (unaudited)",
+        "6"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "",
+        "Notes to Financial Statements (unaudited)",
+        "7"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "Item 2.",
+        "Management's Discussion and Analysis of Financial Condition and Results of Operations",
+        "16"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "Item 3.",
+        "Quantitative and Qualitative Disclosures about Market Risk",
+        "22"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "Item 4.",
+        "Controls and Procedures",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "Part II. Other Information",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "Item 1.",
+        "Legal Proceedings",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "Item 1A.",
+        "Risk Factors",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "Item 2.",
+        "Unregistered Sales of Equity Securities and Use of Proceeds",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "Item 3.",
+        "Defaults Upon Senior Securities",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "Item 4.",
+        "Mine Safety Disclosures",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[18]"
+    },
+    {
+      "cells": [
+        "Item 5.",
+        "Other Information",
+        "23"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[19]"
+    },
+    {
+      "cells": [
+        "Item 6.",
+        "Exhibits",
+        "25"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[46]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "June 30, 2023",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "(unaudited)",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Assets",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "Cash and cash equivalents",
+        "$",
+        "650,323",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-28",
+            "name": "us-gaap:CashAndCashEquivalentsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "Deferred offering costs",
+        "3,410",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-29",
+            "name": "us-gaap:DeferredOfferingCosts",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "3,410"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[18]"
+    },
+    {
+      "cells": [
+        "Total Assets",
+        "$",
+        "653,733",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-30",
+            "name": "us-gaap:Assets",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "653,733"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[19]"
+    },
+    {
+      "cells": [
+        "Liabilities",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[21]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[22]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[23]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[24]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[25]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[26]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[27]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[28]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[29]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[30]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[31]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[32]"
+    },
+    {
+      "cells": [
+        "Due to affiliate",
+        "$",
+        "3,410",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-31",
+            "name": "us-gaap:OtherLiabilities",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "3,410"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[33]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[34]"
+    },
+    {
+      "cells": [
+        "Total Liabilities",
+        "3,410",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-32",
+            "name": "us-gaap:Liabilities",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "3,410"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[35]"
+    },
+    {
+      "cells": [
+        "Commitments and Contingencies (Note 6)",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "id": "f-33",
+            "name": "us-gaap:CommitmentsAndContingencies",
+            "scale": "3",
+            "unitref": "usd",
+            "xsi:nil": "true"
+          },
+          "text": ""
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[36]"
+    },
+    {
+      "cells": [
+        "Net Assets",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[37]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[38]"
+    },
+    {
+      "cells": [
+        "Class I common shares, par value $ 0.01 per share, unlimited shares authorized, 26,012,927.600 shares issued and outstanding as of June 30, 2023",
+        "260",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "2",
+            "id": "f-34",
+            "name": "us-gaap:CommonStockParOrStatedValuePerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "0.01"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-35",
+            "name": "us-gaap:CommonStockSharesOutstanding",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,012,927.600"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-36",
+            "name": "us-gaap:CommonStockSharesIssued",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,012,927.600"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "id": "f-37",
+            "name": "us-gaap:CommonStockValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "260"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[39]"
+    },
+    {
+      "cells": [
+        "Paid in capital in excess of par",
+        "650,063",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-38",
+            "name": "us-gaap:AdditionalPaidInCapital",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,063"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[40]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[50]/table/tr[41]"
+    },
+    {
+      "cells": [
+        "Total Net Assets",
+        "650,323",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-39",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[42]"
+    },
+    {
+      "cells": [
+        "Total Liabilities and Total Net Assets",
+        "$",
+        "653,733",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-40",
+            "name": "us-gaap:LiabilitiesAndStockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "653,733"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[43]"
+    },
+    {
+      "cells": [
+        "Number of common shares outstanding (Class I)",
+        "26,012,927.600",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-41",
+            "name": "us-gaap:CommonStockSharesOutstanding",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,012,927.600"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[44]"
+    },
+    {
+      "cells": [
+        "Net asset value per common share (Class I)",
+        "$",
+        "25.00",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "2",
+            "id": "f-42",
+            "name": "us-gaap:NetAssetValuePerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "25.00"
+        }
+      ],
+      "xpath": "/html/body/div[50]/table/tr[45]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "June 30, 2023",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "Expenses",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[18]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[19]"
+    },
+    {
+      "cells": [
+        "Professional fees",
+        "$",
+        "148",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "id": "f-43",
+            "name": "us-gaap:ProfessionalFees",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "148"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[21]"
+    },
+    {
+      "cells": [
+        "Organization expenses",
+        "1,109",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-44",
+            "name": "gcred:OrganizationExpenses",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "1,109"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[22]"
+    },
+    {
+      "cells": [
+        "Total expenses",
+        "1,257",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-45",
+            "name": "us-gaap:InvestmentIncomeInvestmentExpense",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "1,257"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[23]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[24]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[25]"
+    },
+    {
+      "cells": [
+        "Expense support (Note 3)",
+        "( 1,257 )",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-46",
+            "name": "us-gaap:InvestmentCompanyExpenseOffsetArrangement",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "1,257"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[26]"
+    },
+    {
+      "cells": [
+        "Net expenses",
+        "\u2014",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-47",
+            "name": "us-gaap:InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[27]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[28]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[29]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[30]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[31]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[32]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[33]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[34]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[35]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[36]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[37]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[38]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[39]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[40]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[41]"
+    },
+    {
+      "cells": [
+        "Net increase (decrease) in net assets resulting from operations",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-4",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-48",
+            "name": "us-gaap:NetIncomeLoss",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        }
+      ],
+      "xpath": "/html/body/div[60]/table/tr[42]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[43]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[44]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[60]/table/tr[45]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "Common Shares",
+        "",
+        "Paid in Capital in Excess of Par",
+        "",
+        "",
+        "",
+        "Total Net Assets"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "Shares",
+        "",
+        "Par Amount",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[18]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[19]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[20]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[21]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[22]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[23]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[24]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[25]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[26]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[27]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[28]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[29]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[30]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[31]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[32]"
+    },
+    {
+      "cells": [
+        "Beginning Balance",
+        "2,000.000",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "50",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "50",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-5",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-49",
+            "name": "us-gaap:CommonStockSharesOutstanding",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "2,000.000"
+        },
+        {
+          "attributes": {
+            "contextref": "c-5",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-50",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        },
+        {
+          "attributes": {
+            "contextref": "c-6",
+            "decimals": "0",
+            "id": "f-51",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "50"
+        },
+        {
+          "attributes": {
+            "contextref": "c-7",
+            "decimals": "0",
+            "id": "f-52",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "50"
+        }
+      ],
+      "xpath": "/html/body/div[65]/table/tr[33]"
+    },
+    {
+      "cells": [
+        "Issuance of common shares",
+        "26,010,927.600",
+        "",
+        "",
+        "260",
+        "",
+        "",
+        "650,013",
+        "",
+        "",
+        "",
+        "",
+        "650,273",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-8",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-53",
+            "name": "us-gaap:StockIssuedDuringPeriodSharesNewIssues",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,010,927.600"
+        },
+        {
+          "attributes": {
+            "contextref": "c-8",
+            "decimals": "0",
+            "id": "f-54",
+            "name": "us-gaap:StockIssuedDuringPeriodValueNewIssues",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "260"
+        },
+        {
+          "attributes": {
+            "contextref": "c-9",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-55",
+            "name": "us-gaap:StockIssuedDuringPeriodValueNewIssues",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,013"
+        },
+        {
+          "attributes": {
+            "contextref": "c-10",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-56",
+            "name": "us-gaap:StockIssuedDuringPeriodValueNewIssues",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,273"
+        }
+      ],
+      "xpath": "/html/body/div[65]/table/tr[34]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[35]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[36]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[37]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[38]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[39]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[40]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[41]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[42]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[43]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[44]"
+    },
+    {
+      "cells": [
+        "Total increase for June 30, 2023",
+        "26,010,927.600",
+        "",
+        "",
+        "260",
+        "",
+        "",
+        "650,013",
+        "",
+        "",
+        "",
+        "",
+        "650,273",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-8",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-57",
+            "name": "us-gaap:StockIssuedDuringPeriodSharesPeriodIncreaseDecrease",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,010,927.600"
+        },
+        {
+          "attributes": {
+            "contextref": "c-8",
+            "decimals": "0",
+            "id": "f-58",
+            "name": "us-gaap:StockholdersEquityPeriodIncreaseDecrease",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "260"
+        },
+        {
+          "attributes": {
+            "contextref": "c-9",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-59",
+            "name": "us-gaap:StockholdersEquityPeriodIncreaseDecrease",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,013"
+        },
+        {
+          "attributes": {
+            "contextref": "c-10",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-60",
+            "name": "us-gaap:StockholdersEquityPeriodIncreaseDecrease",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,273"
+        }
+      ],
+      "xpath": "/html/body/div[65]/table/tr[45]"
+    },
+    {
+      "cells": [
+        "Balance at June 30, 2023",
+        "26,012,927.600",
+        "",
+        "",
+        "$",
+        "260",
+        "",
+        "",
+        "$",
+        "650,063",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "650,323",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-11",
+            "decimals": "INF",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-61",
+            "name": "us-gaap:CommonStockSharesOutstanding",
+            "scale": "0",
+            "unitref": "shares"
+          },
+          "text": "26,012,927.600"
+        },
+        {
+          "attributes": {
+            "contextref": "c-11",
+            "decimals": "0",
+            "id": "f-62",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "260"
+        },
+        {
+          "attributes": {
+            "contextref": "c-12",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-63",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,063"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-64",
+            "name": "us-gaap:StockholdersEquity",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[65]/table/tr[46]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[47]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[48]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[49]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[50]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[51]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[52]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[53]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[54]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[55]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[56]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[57]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[58]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[59]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[65]/table/tr[60]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Yield (1)",
+        "",
+        "Amortized Cost",
+        "",
+        "Percentage of Net Assets",
+        "",
+        "Fair Value",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "Money market funds (included in cash and cash equivalents)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582)",
+        "",
+        "5.0 %",
+        "",
+        "$",
+        "650,323",
+        "",
+        "",
+        "100.0",
+        "%",
+        "$",
+        "650,323",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "3",
+            "id": "f-65",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "5.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-66",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "3",
+            "id": "f-67",
+            "name": "gcred:MoneyMarketFundsPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "100.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-68",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[71]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "Total money market funds",
+        "$",
+        "650,323",
+        "",
+        "",
+        "100.0",
+        "%",
+        "$",
+        "650,323",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-69",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "3",
+            "id": "f-70",
+            "name": "gcred:MoneyMarketFundsPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "100.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-71",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[71]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "As of June 30, 2023",
+        "",
+        "Fair Value Measurements Using"
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "Description",
+        "",
+        "Level 1",
+        "",
+        "Level 2",
+        "",
+        "Level 3",
+        "",
+        "Total"
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Assets, at fair value:",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "Money market funds (1)",
+        "",
+        "$",
+        "650,323",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "650,323",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-40",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-121",
+            "name": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-41",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-122",
+            "name": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        },
+        {
+          "attributes": {
+            "contextref": "c-42",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-123",
+            "name": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-124",
+            "name": "us-gaap:CashAndCashEquivalentsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Total assets, at fair value:",
+        "",
+        "$",
+        "650,323",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "650,323",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-40",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-125",
+            "name": "us-gaap:AssetsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-41",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-126",
+            "name": "us-gaap:AssetsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        },
+        {
+          "attributes": {
+            "contextref": "c-42",
+            "decimals": "0",
+            "format": "ixt:fixed-zero",
+            "id": "f-127",
+            "name": "us-gaap:AssetsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "\u2014"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-128",
+            "name": "us-gaap:AssetsFairValueDisclosure",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[3]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[4]/table/tr[1]"
+    },
+    {
+      "cells": [
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:nonnumeric[4]/ix:nonnumeric[2]/div[4]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "Declaration Date",
+        "",
+        "Record Date",
+        "",
+        "Payment Date",
+        "",
+        "Amount Per Share"
+      ],
+      "facts": [],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "July 31, 2023",
+        "",
+        "July 31, 2023",
+        "",
+        "August 29, 2023",
+        "",
+        "$ 0.21"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-53",
+            "decimals": "2",
+            "id": "f-158",
+            "name": "us-gaap:InvestmentCompanyDistributionToShareholdersPerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "0.21"
+        }
+      ],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "August 3, 2023",
+        "",
+        "August 31, 2023",
+        "",
+        "September 29, 2023",
+        "",
+        "$ 0.21"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-54",
+            "decimals": "2",
+            "id": "f-159",
+            "name": "us-gaap:InvestmentCompanyDistributionToShareholdersPerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "0.21"
+        }
+      ],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "August 3, 2023",
+        "",
+        "September 30, 2023",
+        "",
+        "October 30, 2023",
+        "",
+        "$ 0.21"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-55",
+            "decimals": "2",
+            "id": "f-160",
+            "name": "us-gaap:InvestmentCompanyDistributionToShareholdersPerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "0.21"
+        }
+      ],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "August 3, 2023",
+        "",
+        "October 31, 2023",
+        "",
+        "November 29, 2023",
+        "",
+        "$ 0.21"
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-56",
+            "decimals": "2",
+            "id": "f-161",
+            "name": "us-gaap:InvestmentCompanyDistributionToShareholdersPerShare",
+            "scale": "0",
+            "unitref": "usdPerShare"
+          },
+          "text": "0.21"
+        }
+      ],
+      "xpath": "/html/body/ix:continuation[7]/ix:nonnumeric/div[2]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "Number",
+        "",
+        "Description"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "10.1",
+        "",
+        "Purchase and Sale Agreement, dated as of July 1, 2023, by and among Golub Capital Private Credit Fund, GCP HS Fund, GCP CLO Holdings Sub LP and GC Advisors LLC. (Incorporated by reference to Exhibit 10.1 to the Registrant\u2019s Current Report on Form 8-K (File No. 814-01555), filed on July 6, 2023).",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "10.2",
+        "",
+        "Syndicated Corporate Revolving Credit Facility, dated as of June 8, 2023, by and among GCP SG Warehouse 2022-1, as borrower, the Lenders party thereto from time to time, the Subordinated Noteholders party thereto from time to time, Soci\u00e9t\u00e9 G\u00e9n\u00e9rale, as administrative agent, and Wilmington Trust, National Association as collateral agent, collateral administrator, custodian and collateral custodian. (Incorporated by reference to Exhibit 10.2.1 to the Registrant\u2019s Current Report on Form 8-K (File No. 814-01555), filed on July 6, 2023).",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "10.3",
+        "",
+        "Amended and Restated Credit Agreement, dated as of July 1, 2023, by and among GCP SG Warehouse 2022-1, as borrower, Soci\u00e9t\u00e9 G\u00e9n\u00e9rale, as administrative agent, the Lenders and the Subordinated Noteholders party thereto from time to time, and Wilmington Trust, National Association as collateral agent, collateral administrator, custodian and collateral custodian. (Incorporated by reference to Exhibit 10.2.2 to the Registrant\u2019s Current Report on Form 8-K (File No. 814-01555), filed on July 6, 2023).",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "10.4",
+        "",
+        "Amended and Restated Collateral Management Agreement, dated as of July 1, 2023, by and among GCP SG Warehouse 2022-1, as borrower, and GC Advisors LLC, as collateral manager. (Incorporated by reference to Exhibit 10.2.3 to the Registrant\u2019s Current Report on Form 8-K (File No. 814-01555), filed on July 6, 2023).",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "10.5",
+        "",
+        "Revolving Loan Agreement, dated as of July 3, 2023, by and among Golub Capital Private Credit Fund, as the borrower, and GC Advisors LLC, as the lender. (Incorporated by reference to Exhibit 10.3 to the Registrant\u2019s Current Report on Form 8-K (File No. 814-01555), filed on July 6, 2023).",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "31.1",
+        "",
+        "Certification of Chief Executive Officer pursuant to Rule 13a-14 of the Securities Exchange Act of 1934, as amended.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "31.2",
+        "",
+        "Certification of Chief Financial Officer pursuant to Rule 13a-14 of the Securities Exchange Act of 1934, as amended.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "32.1",
+        "",
+        "Certification pursuant to 18 U.S.C. Section 1350, as adopted pursuant to Section 906 of the Sarbanes-Oxley Act of 2002.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "101.INS",
+        "",
+        "Inline XBRL Instance Document - the instance document does not appear in the Interactive Data File because its XBRL tags are embedded within the Inline XBRL document.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[12]"
+    },
+    {
+      "cells": [
+        "101.SCH",
+        "",
+        "Inline XBRL Taxonomy Extension Schema Document.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[13]"
+    },
+    {
+      "cells": [
+        "101.CAL",
+        "",
+        "Inline XBRL Taxonomy Extension Calculation Linkbase Document",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "101.DEF",
+        "",
+        "Inline XBRL Taxonomy Extension Definition Linkbase Document.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "101.LAB",
+        "",
+        "Inline XBRL Taxonomy Extension Label Linkbase Document.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[16]"
+    },
+    {
+      "cells": [
+        "101.PRE",
+        "",
+        "Inline XBRL Taxonomy Extension Presentation Linkbase Document.",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[17]"
+    },
+    {
+      "cells": [
+        "104",
+        "",
+        "Cover Page Interactive Data File (formatted as Inline XBRL and contained in Exhibit 101)",
+        "*"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[349]/table/tr[18]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "Golub Capital Private Credit Fund"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Date: August 14, 2023",
+        "By",
+        "/s/ David B. Golub"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "David B. Golub"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[5]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "Chief Executive Officer"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "(Principal Executive Officer)"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Date: August 14, 2023",
+        "By",
+        "/s/ Christopher C. Ericson"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[9]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "Christopher C. Ericson"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[10]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "Chief Financial Officer"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[11]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "(Principal Accounting and Financial Officer)"
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[364]/table/tr[12]"
+    }
+  ],
+  "source_path": "data/raw/filings/bdc_html/1930087/000193008723000010.html",
+  "source_sha256": "2d2d933de4a1653010187f1ad20f68152518563c99129d556db325c10a43f006"
+}

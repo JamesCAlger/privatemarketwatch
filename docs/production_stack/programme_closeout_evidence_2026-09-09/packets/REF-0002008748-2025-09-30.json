@@ -1,0 +1,376 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-19012",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments at fair value (cost of $ 949,025 , $ 471,418 , respectively)",
+        "",
+        "$",
+        "950,464",
+        "",
+        "",
+        "$",
+        "472,588",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c6",
+      "currency": "USD",
+      "fact_id": "ixv-19012",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "950,464",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[8]/tr[6]",
+      "table_xpath": "/html/body/table[8]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "950464000"
+    },
+    {
+      "attributes": {
+        "contextref": "c6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-19931",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "950,464",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c6",
+      "currency": "USD",
+      "fact_id": "ixv-19931",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "950,464",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[22]/tr[3]",
+      "table_xpath": "/html/body/table[22]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "950464000"
+    }
+  ],
+  "cik": "0002008748",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2008748/000093041325003431.html",
+  "reference_id": "REF-0002008748-2025-09-30",
+  "report_date": "2025-09-30",
+  "source_rows": 162,
+  "source_sha256": "a88f94c0b29af875ef7c3b896f33d651b8fa9d1aa93171242d2db3fa8a111d71",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively) | $ | 892,133 | $ | 439,367",
+        "Controlled/affiliated investments (cost $ 58,092 , $ 33,224 , respectively) | 58,331 | 33,221"
+      ],
+      "last": [
+        "Controlled/affiliated investments (cost $ 58,092 , $ 33,224 , respectively) | 58,331 | 33,221",
+        "Total investments at fair value (cost of $ 949,025 , $ 471,418 , respectively) | $ | 950,464 | $ | 472,588"
+      ],
+      "opening_rows": [
+        "September 30, 2025 December 31, 2024",
+        "ASSETS",
+        "Investments at fair value",
+        "Non-controlled/non-affiliated investments (cost $ 890,933 , $ 438,194 , respectively) $ 892,133 $ 439,367"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Item 1. Consolidated Financial Statements",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[8]"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Accel International Holdings Inc (Term Loan) | 3M S + 4.50 % | 8.81 % | 4/26/2032 | $ 12,568 | $ 12,504 | $ 12,505 | 2.98 %",
+        "Accel International Holdings Inc (Revolver) (7) | 3M S + 4.50 % | N/A | 4/26/2032 | \u2014 | ( 10 ) | ( 11 ) | \u2014"
+      ],
+      "last": [
+        "Meridian Waste Acquisitions, LLC (Delayed Draw) (7) | 3M S + 3.38 % | 7.55 % | 8/30/2029 | 3,433 | 3,433 | 3,433 | 0.82",
+        "Meridian Waste Acquisitions, LLC (Revolver) (7) | 3M S + 3.38 % | 7.38 % | 8/30/2029 | 586 | 586 | 586 | 0.14"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "First Lien Secured Debt (4)(6)",
+        ""
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) September 30, 2025",
+        "",
+        ""
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/table[12]"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "United Flow Technologies Intermediate Holdco II, LLC (Term Loan) | 3M S + 5.25 % | 9.25 % | 6/23/2031 | $ 11,880 | $ 11,729 | $ 11,835 | 2.82 %",
+        "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) | 3M S + 5.25 % | 9.31 % | 6/23/2031 | 9,954 | 9,830 | 9,916 | 2.36"
+      ],
+      "last": [
+        "BCM One, Inc. (Term Loan) | 6M S + 4.50 % | 8.77 % | 11/17/2027 | 9,602 | 9,602 | 9,602 | 2.29",
+        "BCM One, Inc. (Delayed Draw) | 6M S + 4.50 % | 8.80 % | 11/17/2027 | 4,726 | 4,726 | 4,726 | 1.13"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "United Flow Technologies Intermediate Holdco II, LLC (Term Loan) 3M S + 5.25 % 9.25 % 6/23/2031 $ 11,880 $ 11,729 $ 11,835 2.82 %",
+        "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) 3M S + 5.25 % 9.31 % 6/23/2031 9,954 9,830 9,916 2.36",
+        "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (7) 3M S + 5.25 % 9.45 % 6/23/2031 2,325 2,265 2,288 0.55"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "Consolidated Schedule of Investments (Unaudited) (Continued) September 30, 2025",
+        "",
+        "Lord Abbett Private Credit Fund"
+      ],
+      "rows": 31,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 35,
+      "first": [
+        "GCOM (Term Loan) | 3M S + 7.50 % | 11.98 % | 8/21/2028 | $ 39,202 | $ 38,884 | $ 39,251 | 9.36 %",
+        "Security 101 (Term Loan) | 3M S + 5.00 % | 9.00 % | 4/11/2028 | 77,460 | 76,796 | 76,879 | 18.32"
+      ],
+      "last": [
+        "29,926 | 29,926 | 7.13",
+        "Total Second Lien Secured Debt | $ 29,926 | $ 29,926 | 7.13 %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "GCOM (Term Loan) 3M S + 7.50 % 11.98 % 8/21/2028 $ 39,202 $ 38,884 $ 39,251 9.36 %",
+        "Security 101 (Term Loan) 3M S + 5.00 % 9.00 % 4/11/2028 77,460 76,796 76,879 18.32",
+        "Security 101 (Revolver) (7) 3M S + 5.00 % N/A 4/11/2028 \u2014 ( 50 ) ( 45 ) ( 0.01 )"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "Consolidated Schedule of Investments (Unaudited) (Continued) September 30, 2025",
+        "",
+        "Lord Abbett Private Credit Fund"
+      ],
+      "rows": 35,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "SBLA Private Credit LLC (5) | N/A | N/A | N/A | 58,092 | $ 58,092 | $ 58,331 | 13.91 %",
+        "Total Investment in Joint Venture | $ 58,092 | $ 58,331 | 13.91 %"
+      ],
+      "last": [
+        "Total Investment in Joint Venture | $ 58,092 | $ 58,331 | 13.91 %",
+        "Total Investments (8) | $ 949,025 | $ 950,464 | 226.60 %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ Common Units Cost (3) Fair Value % of Net Assets",
+        "Investment in Joint Venture (4)(6)(9)",
+        "SBLA Private Credit LLC (5) N/A N/A N/A 58,092 $ 58,092 $ 58,331 13.91 %",
+        "Total Investment in Joint Venture $ 58,092 $ 58,331 13.91 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "Consolidated Schedule of Investments (Unaudited) (Continued) September 30, 2025",
+        "",
+        "Lord Abbett Private Credit Fund"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[15]"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "SBLA Private Credit LLC | $ 33,221 | $ 24,868 | $\u2014 | $ 242 | $\u2014 | $ 58,331 | $ 3,895",
+        "Total | $ 33,221 | $ 24,868 | $\u2014 | $ 242 | $\u2014 | $ 58,331 | $ 3,895"
+      ],
+      "last": [
+        "SBLA Private Credit LLC | $ 33,221 | $ 24,868 | $\u2014 | $ 242 | $\u2014 | $ 58,331 | $ 3,895",
+        "Total | $ 33,221 | $ 24,868 | $\u2014 | $ 242 | $\u2014 | $ 58,331 | $ 3,895"
+      ],
+      "opening_rows": [
+        "Fair Value as of January 1, 2025 Gross Additions Gross Reductions Net Change in Unrealized appreciation/ (depreciation) Net Realized Gain (Loss) Fair Value as of September 30, 2025 Dividend Income",
+        "Controlled/Affiliated Investments",
+        "SBLA Private Credit LLC $ 33,221 $ 24,868 $\u2014 $ 242 $\u2014 $ 58,331 $ 3,895",
+        "Total $ 33,221 $ 24,868 $\u2014 $ 242 $\u2014 $ 58,331 $ 3,895"
+      ],
+      "preceding": [
+        "",
+        "ecurities are not available as collateral to our general creditors. (9) Under the Investment Company Act of 1940, as amended (together with the rules and regulations promulgated thereunder, the \u201c1940 Act\u201d), the Company is deemed to \u201ccontrol\u201d a portfolio company if the Company owns more than 25% of its outstanding voting securities and/or held the power to exercise control over the management or policies of the portfolio company. Under the 1940 Act, the Company is deemed an \u201caffiliated person\u201d of a portfolio company if the Company owns 5% or more of the portfolio company\u2019s outstanding voting securities. As of September 30, 2025, the Company\u2019s controlled/affiliated investments were as follows:",
+        "",
+        " Buyer, LLC (Delayed Draw) 10/15/2031 18,750 Spark Buyer, LLC (Revolver) 10/15/2031 6,188 Spotless Brands, LLC (Delayed Draw) 7/25/2028 21,848 TransnetYX, Inc (Revolver) 4/13/2026 2,167 United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) 6/23/2031 7,675 United Flow Technologies Intermediate Holdco II, LLC (Revolver) 6/21/2030 2,000 Uptime Institute (Revolver) 1/12/2027 2,056 Vacation Rental Brands, LLC (Delayed Draw) 5/6/2032 4,206 Vacation Rental Brands, LLC (Revolver) 5/6/2032 5,462 Vensure Employer Services Inc (Delayed Draw) 9/29/2031 2,622 World Insurance Associates, LLC (Delayed Draw) 4/3/2030 3,932 World Insurance Associates, LLC (Revolver) 4/3/2030 250 Total $ 230,460",
+        "",
+        "",
+        "",
+        "(in thousands, except share amounts, per share data, percentages, and as otherwise noted)"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[19]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "United States | $ | 950,464 | 100.00 | %",
+        "Total | $ | 950,464 | 100.00 | %"
+      ],
+      "last": [
+        "United States | $ | 950,464 | 100.00 | %",
+        "Total | $ | 950,464 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "Geography Fair Value Percentage of Total Investments at Fair Value",
+        "United States $ 950,464 100.00 %",
+        "Total $ 950,464 100.00 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        ".48 % Electrical Equipment 47,190 - - 47,190 4.96 % Health Care Equipment & Supplies 6,016 - - 6,016 0.63 % Health Care Providers & Services 80,839 - - 80,839 8.51 % Insurance 1,048 - - 1,048 0.11 % Investments in Joint Venture - - 58,331 58,331 6.14 % IT Services 146,625 - - 146,625 15.43 % Leisure Products 43,000 - - 43,000 4.52 % Life Sciences Tools & Services 13,606 - - 13,606 1.43 % Professional Services 40,130 - - 40,130 4.22 % Real Estate Management & Development 54,028 - - 54,028 5.68 % Software 72,404 29,926 - 102,330 10.77 % Telecommunication Services 34,381 - - 34,381 3.62 % Textiles, Apparel & Luxury Goods 26,013 - - 26,013 2.74 % Total $ 862,207 $ 29,926 $ 58,331 $ 950,464 100 %",
+        "",
+        "",
+        "",
+        "The following shows the composition of the Company\u2019s portfolio at fair value by industry and geography as of September 30, 2025."
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[22]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "Fair value, end of period | $ | 848,059 | $ | 29,926",
+        "Fair value, end of period | $ | 848,059 | $ | 29,926"
+      ],
+      "last": [
+        "Fair value, end of period | $ | 848,059 | $ | 29,926",
+        "Fair value, end of period | $ | 848,059 | $ | 29,926"
+      ],
+      "opening_rows": [
+        "For the nine months ended September 30, 2025",
+        "First Lien Secured Debt Second Lien Secured Debt",
+        "Fair value, beginning of period $ 439,367 $ -",
+        "Purchases 499,047 29,915"
+      ],
+      "preceding": [
+        "",
+        "The following table presents changes in the fair value of the Company\u2019s investments for which Level 3 inputs were used to determine the fair value for the nine months ended September 30, 2025:"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/ix:nonnumeric[5]/ix:continuation/table[1]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "First Lien Secured Debt | $ | 821,113 | Income Approach | Discount Rate | 6.63 % - 11.25 % | 8.66 %",
+        "First Lien Secured Debt | 26,946 | Market Approach | Transaction Price | n/a | n/a"
+      ],
+      "last": [
+        "Second Lien Secured Debt | 29,926 | Market Approach | Transaction Price | n/a | n/a",
+        "Total Level 3 Investments | $ | 877,985"
+      ],
+      "opening_rows": [
+        "Asset Category Fair Value Valuation Techniques/ Methodologies Unobservable Input Range Weighted Average (1)",
+        "First Lien Secured Debt $ 821,113 Income Approach Discount Rate 6.63 % - 11.25 % 8.66 %",
+        "First Lien Secured Debt 26,946 Market Approach Transaction Price n/a n/a",
+        "Second Lien Secured Debt 29,926 Market Approach Transaction Price n/a n/a"
+      ],
+      "preceding": [
+        "",
+        "The unobservable inputs used in the fair value measurement of our Level 3 investments as of September 30, 2025, were as follows:"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/ix:continuation[9]/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Unical Aviation Inc (Term Loan) | 1M S + 3.75 % | 7.91 % | 11/7/2031 | $ | 7,994 | $ | 7,917 | $ | 7,934 | 11.90 | %",
+        "7,917 | 7,934 | 11.90"
+      ],
+      "last": [
+        "Accord Buyer LLC (Term Loan) | 1M S + 4.50 % | 8.65 % | 5/19/2028 | 9,912 | 9,834 | 9,770 | 14.66",
+        "9,834 | 9,770 | 14.66"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ CommonUnits Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "",
+        "First Lien Secured Debt (4)(5)"
+      ],
+      "preceding": [],
+      "rows": 19,
+      "table_xpath": "/html/body/ix:continuation[10]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Trimont Holdings LLC (Term Loan) | 1M S + 3.00 % | 7.16 % | 5/31/2027 | $ | 26,600 | $ | 26,364 | $ | 26,334 | 39.50 | %",
+        "26,364 | 26,334 | 39.50"
+      ],
+      "last": [
+        "Total First Lien Secured Debt | $ | 282,315 | $ | 282,587 | 423.90 | %",
+        "Total Investments at Fair Value | $ | 282,315 | $ | 282,587 | 423.90 | %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread (2) Interest Rate (2) Maturity Date Par Amount/ CommonUnits Cost (3) Fair Value % of Net Assets",
+        "First Lien Secured Debt (4)(5)",
+        "",
+        "Financial Services"
+      ],
+      "preceding": [],
+      "rows": 34,
+      "table_xpath": "/html/body/ix:continuation[11]/ix:continuation/table"
+    }
+  ]
+}

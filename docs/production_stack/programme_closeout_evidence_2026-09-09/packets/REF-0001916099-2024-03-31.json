@@ -1,0 +1,427 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_6e7743c6-fc4f-4527-b77c-2522092269e9",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value",
+        "",
+        "",
+        "",
+        "167,278",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": "USD",
+      "fact_id": "F_6e7743c6-fc4f-4527-b77c-2522092269e9",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "167,278",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[7]/tr[7]",
+      "table_xpath": "/html/body/table[7]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "167278000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_6f27287a-b6eb-40e0-b490-d7e7542617ba",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "166,694",
+        "",
+        "",
+        "$",
+        "167,278",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": "USD",
+      "fact_id": "F_6f27287a-b6eb-40e0-b490-d7e7542617ba",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "167,278",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[5]",
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "167278000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "INF",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_56e6814b-b3a9-4ef0-b590-ffbaf6d66b89",
+        "name": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "166,694",
+        "",
+        "",
+        "$",
+        "167,278",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": null,
+      "fact_id": "F_56e6814b-b3a9-4ef0-b590-ffbaf6d66b89",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[5]",
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "INF",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_6961711c-44fa-4ad2-b5f1-c4e95529c0b4",
+        "name": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": null,
+      "fact_id": "F_6961711c-44fa-4ad2-b5f1-c4e95529c0b4",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[2]/tr[12]",
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_5a0b1bca-bc99-4ae5-9687-e2e72cbd4e41",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "166,694",
+        "",
+        "",
+        "$",
+        "167,278",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": "USD",
+      "fact_id": "F_5a0b1bca-bc99-4ae5-9687-e2e72cbd4e41",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "167,278",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]/tr[5]",
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "167278000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "INF",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_9879492a-f5dc-438c-8839-8f578ffac0f4",
+        "name": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "166,694",
+        "",
+        "",
+        "$",
+        "167,278",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": null,
+      "fact_id": "F_9879492a-f5dc-438c-8839-8f578ffac0f4",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0",
+      "row_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]/tr[5]",
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_1932115e-9049-4541-8ba0-bf0d2e526113",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "167,278",
+        "",
+        "",
+        "$",
+        "167,278",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "C_f7d74372-f3fb-4097-8924-350bb8dd025e",
+      "currency": "USD",
+      "fact_id": "F_1932115e-9049-4541-8ba0-bf0d2e526113",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "167,278",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[40]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[5]",
+      "table_xpath": "/html/body/div[40]/ix:nonnumeric/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "167278000"
+    }
+  ],
+  "cik": "0001916099",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1916099/000095017024058570.html",
+  "reference_id": "REF-0001916099-2024-03-31",
+  "report_date": "2024-03-31",
+  "source_rows": 46,
+  "source_sha256": "77ce45b0b723aff4a468b265fc6ad7609d9e453c2b75ed088e5e357559002561",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled/non-affiliated investments (amortized cost $ 166,694 ) | $ | 167,278 | $ | \u2014",
+        "Total investments, at fair value | 167,278 | \u2014"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (amortized cost $ 166,694 ) | $ | 167,278 | $ | \u2014",
+        "Total investments, at fair value | 167,278 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2024 December 31, 2023",
+        "(Unaudited)",
+        "Assets"
+      ],
+      "preceding": [
+        "",
+        "(Amounts in thousands, except share and per share data)",
+        "Consolidated Statements of Assets and Liabilities",
+        "Diameter Credit Company",
+        "Ite m 1. Consolidated Financial Statements.",
+        "PART I\u2014FIN ANCIAL INFORMATION",
+        "",
+        ""
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/table[7]"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Neutron Holdings, Inc. | Term Loan | 10.00 % | N/A | 9/30/2026 | $ | 15,000 | $ | 14,875 | $ | 14,850",
+        "15,000 | 14,875 | 14,850 | 12.11 | %"
+      ],
+      "last": [
+        "Total First Lien Debt | 170,368 | 166,694 | 167,278 | 136.42 | %",
+        "Total Investments - Non-Controlled/Non-Affiliated | $ | 170,368 | $ | 166,694 | $ | 167,278 | 136.42 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1) Footnotes Investment Type Interest Rate (2) Reference Rate Spread Maturity Date Principal Amortized Cost Fair Value (3) % of Net Assets Applicable to Common Shares",
+        "Non-Controlled/Non-Affiliated",
+        "First Lien Debt"
+      ],
+      "preceding": [
+        "",
+        "Diameter Credit Company Consolidated Schedule of Investments as of March 31, 2024 (Amounts in thousands) (Unaudited)",
+        "",
+        "5",
+        "The accompanying notes are an integral part of these consolidated financial statements.",
+        "",
+        "93 Due to affiliates 705 Board of Trustees' fees payable 38 Accrued expenses and other liabilities ( 1,136 ) Net Cash Used in Operating Activities ( 163,726 ) Financing Activities Proceeds from repurchase obligations 19,600 Borrowings of revolving credit facility 182,000 Repayments of revolving credit facility ( 71,000 ) Proceeds from issuance of common shares, net of deferred offering costs of $ 174 119,902 Net Cash Provided by Financing Activities 250,502 Net Increase in Cash and Cash Equivalents 86,776 Cash and Cash Equivalents, Beginning of Period 2,880 Cash and Cash Equivalents, End of Period $ 89,656 Supplemental Information and Non-Cash Activities Interest paid during the period $ 114",
+        ""
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "First lien debt | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "Total | $ | 166,694 | $ | 167,278 | 100.00 | %"
+      ],
+      "last": [
+        "First lien debt | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "Total | $ | 166,694 | $ | 167,278 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2024",
+        "Amortized Cost Fair Value % of Total Investments at Fair Value",
+        "First lien debt $ 166,694 $ 167,278 100.00 %"
+      ],
+      "preceding": [
+        "",
+        "The composition of the Company\u2019s investment portfolio at amortized cost and fair value was as follows:"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "United States | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "Total | $ | 166,694 | $ | 167,278 | 100.00 | %"
+      ],
+      "last": [
+        "United States | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "Total | $ | 166,694 | $ | 167,278 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2024",
+        "Amortized Cost Fair Value % of Total Investments at Fair Value",
+        "United States $ 166,694 $ 167,278 100.00 %"
+      ],
+      "preceding": [
+        "",
+        "The geographic composition of investments at amortized cost and fair value was as follows:",
+        "",
+        "March 31, 2024 Automobiles 8.88 % Commercial Services & Supplies 10.95 % Construction & Engineering 21.55 % Financial Services 8.71 % Health Care Technology 3.28 % Hotels, Restaurants & Leisure 14.76 % Insurance 6.64 % Interactive Media & Services 8.84 % Software 16.38 % Total 100.00 %",
+        "",
+        "The industry composition of investments at fair value was as follows:",
+        "",
+        "March 31, 2024 Amortized Cost Fair Value % of Total Investments at Fair Value First lien debt $ 166,694 $ 167,278 100.00 % Total $ 166,694 $ 167,278 100.00 %"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Investments in first lien debt | $ | 97,819 | Yield analysis | Discount rate | 10.14 % | 11.37 % | 10.76 %",
+        "69,459 | Transaction price | N/A | N/A | N/A | N/A"
+      ],
+      "last": [
+        "167,278",
+        "Total | $ | 167,278"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2024",
+        "Range",
+        "Fair Value Valuation Technique Unobservable Input Low High Weighted Average (1)"
+      ],
+      "preceding": [
+        "",
+        "The following table presents quantitative information about the significant unobservable inputs of the Company\u2019s Level 3 financial instruments. The table is not intended to be all-inclusive but instead captures the significant unobservable inputs relevant to the Company\u2019s determination of fair value."
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[40]/ix:nonnumeric/div[3]/ix:nonnumeric/table"
+    }
+  ]
+}

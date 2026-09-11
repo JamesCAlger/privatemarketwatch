@@ -1,0 +1,578 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1860424",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001860424-2023-03-31.json",
+    "evidence_sha256": "81ba38925595c6c120deb112413b7020161ef57472189282d071efcf54b873b4",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001860424-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "526,177,088 candidate is noncontrolled/nonaffiliated; cannot presume it is the whole portfolio.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "104"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1860424/000095017023021345.html",
+    "ref": "REF-0001860424-2023-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively)",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "$",
+          "504,942,593",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "533,412,766",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "510,803,850",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "526,177,088",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "504,942,593",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | Assets: | Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively) $ 526,177,088 $ 504,942,593 | Cash and cash equivalents 27,042,779 6,395,756",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "Consolidated Statements of A ssets and Liabilities",
+          "Onex Falcon Direct Lending BDC Fund",
+          "Item 1. Consolidated F inancial Statements.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[4]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "",
+          "15,559,129",
+          "",
+          "",
+          "",
+          "6,009,083",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_d280a074-df5b-4210-a37c-8b135a1382a0",
+            "scale": null,
+            "text": "15,559,129",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "C_08f6e7e4-e4d5-484b-bad6-0183e5f9bc5b",
+            "scale": null,
+            "text": "6,009,083",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, | 2023 2022 | Investment Income | Non-controlled, non-affiliated investments:",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "Consolidated State ments of Operations",
+          "Onex Falcon Direct Lending BDC Fund",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[5]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "533,412,766",
+          "",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "$",
+          "510,803,850",
+          "",
+          "",
+          "$",
+          "504,942,593",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "533,412,766",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "526,177,088",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "510,803,850",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "504,942,593",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | Amortized Cost Fair Value Amortized Cost Fair Value | Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 | Equity 9,182,145 7,218,665 9,182,145 8,588,300",
+        "preceding": [
+          "",
+          "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022:",
+          "Note 4. Investments and Fair Value Measurements"
+        ],
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "504,942,593",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "526,177,088",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "504,942,593",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | Fair Value Percentage Fair Value Percentage | Automotive $ 18,953,303 3.6 % $ 18,641,767 3.7 % | Business Services 70,981,491 13.5 % 71,864,705 14.2 %",
+        "preceding": [
+          "",
+          "The following tables summarize the industry and geographic composition of the Company\u2019s investment portfolio based on fair value as of March 31, 2023 and December 31, 2022:",
+          "rtfolio company if it owned more than 25% of its voting securities or it had the power to exercise control over the management or policies of such portfolio company, and would be an \u201caffiliated person\u201d of a portfolio company if it owned 5% or more of its voting securities. As of March 31, 2023 and December 31, 2022, the Company did not \u201ccontrol\u201d and was not an \u201caffiliated person\u201d of any of its portfolio companies, each as defined in the 1940 Act.",
+          "",
+          "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022: March 31, 2023 December 31, 2022 Amortized Cost Fair Value Amortized Cost Fair Value Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 Equity 9,182,145 7,218,665 9,182,145 8,588,300 Total Investments $ 533,412,766 $ 526,177,088 $ 510,803,850 $ 504,942,593",
+          "Note 4. Investments and Fair Value Measurements"
+        ],
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[18]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "504,942,593",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "526,177,088",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "504,942,593",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": "-2",
+            "text": "100.0",
+            "unit": "U_pure"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | Fair Value Percentage Fair Value Percentage | United States $ 515,065,782 97.9 % $ 493,799,332 97.8 % | Canada 11,111,306 2.1 % 11,143,261 2.2 %",
+        "preceding": [
+          "",
+          "",
+          "94,347 1.9 % Forest Products & Paper 11,735,115 2.2 % 11,681,141 2.3 % Healthcare & Pharmaceuticals 99,053,285 18.8 % 97,294,977 19.4 % High Tech Industries 89,511,780 16.9 % 85,401,792 16.9 % Insurance 19,065,681 3.6 % \u2014 \u2014 % Sovereign & Public Finance 54,296,568 10.3 % 53,948,701 10.7 % Transportation: Cargo 20,889,482 4.0 % 20,953,208 4.1 % Wholesale 18,753,616 3.6 % 20,355,746 4.0 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 %",
+          "",
+          "The following tables summarize the industry and geographic composition of the Company\u2019s investment portfolio based on fair value as of March 31, 2023 and December 31, 2022:",
+          "rtfolio company if it owned more than 25% of its voting securities or it had the power to exercise control over the management or policies of such portfolio company, and would be an \u201caffiliated person\u201d of a portfolio company if it owned 5% or more of its voting securities. As of March 31, 2023 and December 31, 2022, the Company did not \u201ccontrol\u201d and was not an \u201caffiliated person\u201d of any of its portfolio companies, each as defined in the 1940 Act.",
+          "",
+          "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022: March 31, 2023 December 31, 2022 Amortized Cost Fair Value Amortized Cost Fair Value Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 Equity 9,182,145 7,218,665 9,182,145 8,588,300 Total Investments $ 533,412,766 $ 526,177,088 $ 510,803,850 $ 504,942,593",
+          "Note 4. Investments and Fair Value Measurements"
+        ],
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "40,437,128",
+          "",
+          "",
+          "$",
+          "485,739,960",
+          "",
+          "",
+          "$",
+          "526,177,088",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_80aa1bdd-9e42-4777-8869-c75a66e3ac30",
+            "scale": null,
+            "text": "40,437,128",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_4940f0d9-0ed6-4f03-9a70-f1dc8f16cd16",
+            "scale": null,
+            "text": "485,739,960",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_c896cb68-591a-4e90-b7c7-c8bba8b97631",
+            "scale": null,
+            "text": "526,177,088",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Level 1 Level 2 Level 3 Total | Senior Secured Loans $ \u2014 $ 40,437,128 $ 478,521,295 $ 518,958,423 | Equity \u2014 \u2014 7,218,665 7,218,665 | Total Investments $ \u2014 $ 40,437,128 $ 485,739,960 $ 526,177,088",
+        "preceding": [
+          "",
+          "The following table summarizes the fair value hierarchy of the Company\u2019s investment portfolio as of March 31, 2023:",
+          "",
+          "96,568 10.3 % 53,948,701 10.7 % Transportation: Cargo 20,889,482 4.0 % 20,953,208 4.1 % Wholesale 18,753,616 3.6 % 20,355,746 4.0 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 % March 31, 2023 December 31, 2022 Fair Value Percentage Fair Value Percentage United States $ 515,065,782 97.9 % $ 493,799,332 97.8 % Canada 11,111,306 2.1 % 11,143,261 2.2 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 % 24 Table of Contents",
+          "rtfolio company if it owned more than 25% of its voting securities or it had the power to exercise control over the management or policies of such portfolio company, and would be an \u201caffiliated person\u201d of a portfolio company if it owned 5% or more of its voting securities. As of March 31, 2023 and December 31, 2022, the Company did not \u201ccontrol\u201d and was not an \u201caffiliated person\u201d of any of its portfolio companies, each as defined in the 1940 Act.",
+          "",
+          "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022: March 31, 2023 December 31, 2022 Amortized Cost Fair Value Amortized Cost Fair Value Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 Equity 9,182,145 7,218,665 9,182,145 8,588,300 Total Investments $ 533,412,766 $ 526,177,088 $ 510,803,850 $ 504,942,593"
+        ],
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "17,733,300",
+          "",
+          "",
+          "$",
+          "487,209,293",
+          "",
+          "",
+          "$",
+          "504,942,593",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_dd1854ab-8060-4d40-90a3-7215cdf474f7",
+            "scale": null,
+            "text": "17,733,300",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_53366fc0-5774-4f82-b8c3-bd5518111d1f",
+            "scale": null,
+            "text": "487,209,293",
+            "unit": "U_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "C_fdd26695-c166-48b1-a9ac-815c69a37a15",
+            "scale": null,
+            "text": "504,942,593",
+            "unit": "U_USD"
+          }
+        ],
+        "opening": " | Level 1 Level 2 Level 3 Total | Senior Secured Loans $ \u2014 $ 17,733,300 $ 478,620,993 $ 496,354,293 | Equity \u2014 \u2014 8,588,300 8,588,300 | Total Investments $ \u2014 $ 17,733,300 $ 487,209,293 $ 504,942,593",
+        "preceding": [
+          "",
+          "The following table summarizes the fair value hierarchy of the Company\u2019s investment portfolio as of December 31, 2022:",
+          "",
+          "Level 1 Level 2 Level 3 Total Senior Secured Loans $ \u2014 $ 40,437,128 $ 478,521,295 $ 518,958,423 Equity \u2014 \u2014 7,218,665 7,218,665 Total Investments $ \u2014 $ 40,437,128 $ 485,739,960 $ 526,177,088",
+          "",
+          "",
+          "96,568 10.3 % 53,948,701 10.7 % Transportation: Cargo 20,889,482 4.0 % 20,953,208 4.1 % Wholesale 18,753,616 3.6 % 20,355,746 4.0 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 % March 31, 2023 December 31, 2022 Fair Value Percentage Fair Value Percentage United States $ 515,065,782 97.9 % $ 493,799,332 97.8 % Canada 11,111,306 2.1 % 11,143,261 2.2 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 % 24 Table of Contents",
+          "rtfolio company if it owned more than 25% of its voting securities or it had the power to exercise control over the management or policies of such portfolio company, and would be an \u201caffiliated person\u201d of a portfolio company if it owned 5% or more of its voting securities. As of March 31, 2023 and December 31, 2022, the Company did not \u201ccontrol\u201d and was not an \u201caffiliated person\u201d of any of its portfolio companies, each as defined in the 1940 Act.",
+          "",
+          "The following table summarizes the composition of the Company\u2019s investment portfolio at amortized cost and fair value as of March 31, 2023 and December 31, 2022: March 31, 2023 December 31, 2022 Amortized Cost Fair Value Amortized Cost Fair Value Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 Equity 9,182,145 7,218,665 9,182,145 8,588,300 Total Investments $ 533,412,766 $ 526,177,088 $ 510,803,850 $ 504,942,593"
+        ],
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | Automotive 3.6 % 3.7 % | Business Services 13.5 % 14.2 % | Chemicals, Plastics & Rubber 1.2 % 1.2 %",
+        "preceding": [
+          "",
+          "The industry composition of our portfolio at fair value at March 31, 2023 and December 31, 2022 was as follows:",
+          "nnect America.com, LLC 4.9% Business Services 14.2% MMS Bidco LLC 4.9% Sovereign & Public Finance 10.7% BCDI Meteor Acquisition, LLC 4.8% Consumer Goods: Durable 10.4% BCP V Everise Acquisition LLC 4.8% Consumer Goods: Non-durable 8.4% Medallia, Inc. 4.7% Transportation: Cargo 4.1% Amplity Parent, Inc. 4.6% Wholesale 4.0% SailPoint Technologies Holdings, Inc. 4.4% Automotive 3.7% Montana Buyer Inc. (ApexAnalytix) 4.2% Construction & Building 2.8%",
+          "",
+          "The following table summarizes our top ten portfolio companies and industries based on fair value as of December 31, 2022:",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[20]/tr[17]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "533,412,766",
+          "",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "$",
+          "510,803,850",
+          "",
+          "",
+          "$",
+          "504,942,593",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | Amortized Cost Fair Value Amortized Cost Fair Value | Senior Secured Loans $ 524,230,621 $ 518,958,423 $ 501,621,705 $ 496,354,293 | Equity 9,182,145 7,218,665 9,182,145 8,588,300",
+        "preceding": [
+          "",
+          "As of March 31, 2023 and December 31, 2022, our investments consisted of the following:",
+          "% Chemicals, Plastics & Rubber 1.2 % 1.2 % Construction & Building 2.7 % 2.8 % Consumer Goods: Durable 9.9 % 10.4 % Consumer Goods: Non-durable 7.9 % 8.4 % Consumer Services 1.8 % 1.9 % Forest Products & Paper 2.2 % 2.3 % Healthcare & Pharmaceuticals 18.8 % 19.4 % High Tech Industries 16.9 % 16.9 % Insurance 3.6 % \u2014 % Sovereign & Public Finance 10.3 % 10.7 % Transportation: Cargo 4.0 % 4.1 % Wholesale 3.6 % 4.0 % Total Investments 100.0 % 100.0 %",
+          "",
+          "The industry composition of our portfolio at fair value at March 31, 2023 and December 31, 2022 was as follows:",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[21]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "526,177,088",
+          "",
+          "",
+          "",
+          "100.0",
+          "%",
+          "",
+          "$",
+          "504,942,593",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 December 31, 2022 | Fair Value Percentage Fair Value Percentage | Performing $ 526,177,088 100.0 % $ 504,942,593 100.0 % | Non-accrual \u2014 0.0 % \u2014 0.0 %",
+        "preceding": [
+          "",
+          "Table of Contents",
+          "",
+          "34",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[22]/tr[6]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "15,559,129",
+          "",
+          "",
+          "$",
+          "6,009,083",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2023 2022 | Total investment income $ 15,559,129 $ 6,009,083 | Net expenses 8,359,104 2,498,571",
+        "preceding": [
+          "",
+          "Our operating results for the three months ended March 31, 2023 and 2022 were as follows:",
+          "Results of Operations",
+          "March 31, 2023 December 31, 2022 Fair Value Percentage Fair Value Percentage Performing $ 526,177,088 100.0 % $ 504,942,593 100.0 % Non-accrual \u2014 0.0 % \u2014 0.0 % Total Investments $ 526,177,088 100.0 % $ 504,942,593 100.0 %",
+          "",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[23]/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "15,559,129",
+          "",
+          "",
+          "$",
+          "6,009,083",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Three Months Ended March 31, | 2023 2022 | Interest income $ 15,212,889 $ 6,009,083 | Other income 346,240 \u2014",
+        "preceding": [
+          "",
+          "Investment income for the three months ended March 31, 2023 and 2022 were as follows:",
+          "imarily dependent on the composition and credit quality of our investment portfolio. Generally, we expect our debt investments to generate predictable, recurring interest income in accordance with the contractual terms of each loan. Corporate equity securities may pay a dividend and may increase in value for which a gain may be recognized; generally, such dividend payments and gains are less predictable than interest income on our loan portfolio.",
+          "Investment Income",
+          "Net income can vary substantially from period-to-period due to various factors, including the level of new investment commitments, the recognition of realized gains and losses and unrealized appreciation and depreciation. As a result, comparisons of net increase in net assets resulting from operations may not be meaningful.",
+          "10-Q",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "xpath": "/html/body/table[24]/tr[6]"
+      }
+    ],
+    "sha256": "5db7acb9576d7e69c5501a5958bf6f6aa493d2dc2c2a60a0e0ae71236599e104",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

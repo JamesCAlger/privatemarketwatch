@@ -1,0 +1,303 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_42ffc883-36fb-4078-aa37-c2f4cbaa8b12",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 543,030 and $ 611,173 )",
+        "",
+        "$",
+        "485,603",
+        "",
+        "",
+        "$",
+        "521,012",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+      "currency": "USD",
+      "fact_id": "F_42ffc883-36fb-4078-aa37-c2f4cbaa8b12",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "485,603",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[5]/tr[7]",
+      "table_xpath": "/html/body/table[5]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "485603000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_5c9de708-8257-4ce4-9e73-bab1364f7144",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "543,030",
+        "",
+        "",
+        "$",
+        "485,603",
+        "",
+        "",
+        "$",
+        "611,173",
+        "",
+        "",
+        "$",
+        "521,012",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_3efcf70a-4b6f-4522-a55b-7f83e423efb6",
+      "currency": "USD",
+      "fact_id": "F_5c9de708-8257-4ce4-9e73-bab1364f7144",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "485,603",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[51]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[11]",
+      "table_xpath": "/html/body/div[51]/ix:nonnumeric/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "485603000"
+    }
+  ],
+  "cik": "0001674760",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1674760/000095017023060346.html",
+  "reference_id": "REF-0001674760-2023-09-30",
+  "report_date": "2023-09-30",
+  "source_rows": 94,
+  "source_sha256": "8d9067a7cb4957e707fb69bcef334e9348e56e8627152343ca7ed824a7156a6c",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost of $ 537,776 and $ 605,919 ) | $ | 479,825 | $ | 514,640",
+        "Non-controlled affiliated investments (cost of $ 5,254 and $ 5,254 ) | 5,778 | 6,372"
+      ],
+      "last": [
+        "Non-controlled affiliated investments (cost of $ 5,254 and $ 5,254 ) | 5,778 | 6,372",
+        "Total investments, at fair value (amortized cost of $ 543,030 and $ 611,173 ) | $ | 485,603 | $ | 521,012"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 (Unaudited) December 31, 2022",
+        "Assets",
+        "Investments, at fair value"
+      ],
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Statements of Financial Condition",
+        "Goldman Sachs Private Middle Market Credit LLC",
+        "ITEM 1. FINANCIAL STATEMENTS",
+        "PART I. FINANCIAL INFORMATION",
+        "Table of Contents",
+        ""
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[5]"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "Acuity Specialty Products, Inc. (dba Zep Inc.) | Chemicals | 9.40 % | S + 4.00 % | 10/02/28 | $ | 34,878 | $ | 34,878 | $ | 32,872 | (4) (5) (6)",
+        "CorePower Yoga LLC | Diversified Consumer Services | 12.65 % | S + 7.00 % (Incl. 5.00 % PIK) | 05/14/25 | 17,310 | 17,210 | 14,541 | (4) (5) (6)"
+      ],
+      "last": [
+        "Xactly Corporation | IT Services | S + 7.25 % | 07/31/25 | 2,554 | ( 23 | ) | ( 38 | ) | (5) (6) (7)",
+        "Total 1st Lien/Senior Secured Debt | 356,350 | 337,708"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par/Shares (3) Cost Fair Value Footnotes",
+        "1st Lien/Senior Secured Debt - 80.11 %",
+        "Acuity Specialty Products, Inc. (dba Zep Inc.) Chemicals 9.40 % S + 4.00 % 10/02/28 $ 34,878 $ 34,878 $ 32,872 (4) (5) (6)"
+      ],
+      "preceding": [
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023",
+        "Goldman Sachs Private Middle Market Credit LLC",
+        "Table of Contents",
+        "",
+        "7",
+        "The accompanying notes are an integral part of these unaudited consolidated financial statements."
+      ],
+      "rows": 24,
+      "table_xpath": "/html/body/table[9]"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Doxim, Inc. | Diversified Financial Services | 11.82 % | S + 6.40 % | 06/01/26 | $ | 30,617 | $ | 30,242 | $ | 28,780 | (4) (5) (6)",
+        "Doxim, Inc. | Diversified Financial Services | 11.73 % | S + 6.40 % | 06/01/26 | 23,681 | 23,393 | 22,260 | (4) (5) (6)"
+      ],
+      "last": [
+        "Recipe Acquisition Corp. (dba Roland Foods) | Food Products | 14.25 % | 14.25 % PIK | 12/21/24 | $ | 7,175 | $ | 7,147 | $ | 6,835 | (6) (8)",
+        "Total Unsecured Debt | 7,147 | 6,835"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par/Shares (3) Cost Fair Value Footnotes",
+        "1st Lien/Last-Out Unitranche (10) - 15.24 %",
+        "Doxim, Inc. Diversified Financial Services 11.82 % S + 6.40 % 06/01/26 $ 30,617 $ 30,242 $ 28,780 (4) (5) (6)"
+      ],
+      "preceding": [
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs Private Middle Market Credit LLC",
+        "Table of Contents",
+        "",
+        "8",
+        ""
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/table[10]"
+    },
+    {
+      "contexts": 12,
+      "first": [
+        "Recipe Acquisition Corp. (dba Roland Foods) | Food Products | 11.00 % PIK | 12/22/16 | 1,600 | $ | 1,496 | $ | 3,004 | (6) (11)",
+        "Total Preferred Stock | 12,339 | 3,004"
+      ],
+      "last": [
+        "Total Investments in Affiliated Money Market Fund | 46,467 | 46,467",
+        "Total Investments and Investments in Affiliated Money Market Fund - 126.21 % | $ | 589,497 | $ | 532,070"
+      ],
+      "opening_rows": [
+        "",
+        "Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes",
+        "Preferred Stock - 0.71 %",
+        "Recipe Acquisition Corp. (dba Roland Foods) Food Products 11.00 % PIK 12/22/16 1,600 $ 1,496 $ 3,004 (6) (11)"
+      ],
+      "preceding": [
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of September 30, 2023 (continued)",
+        "Goldman Sachs Private Middle Market Credit LLC",
+        "Table of Contents",
+        "",
+        "9",
+        ""
+      ],
+      "rows": 12,
+      "table_xpath": "/html/body/table[11]"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Goldman Sachs Financial Square Government Fund | $ | 62,374 | $ | 176,320 | $ | ( 192,227 | ) | $ | \u2014 | $ | \u2014 | $ | 46,467 | $ | 2,029",
+        "Collaborative Imaging, LLC (dba Texas Radiology Associates) | 3,019 | \u2014 | \u2014 | \u2014 | ( 595 | ) | 2,424 | 113"
+      ],
+      "last": [
+        "Elah Holdings, Inc. | 3,353 | \u2014 | \u2014 | \u2014 | 1 | 3,354 | \u2014",
+        "Total Non-Controlled Affiliates | $ | 68,746 | $ | 176,320 | $ | ( 192,227 | ) | $ | \u2014 | $ | ( 594 | ) | $ | 52,245 | $ | 2,142"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain (Loss) Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest and Other Income",
+        "For the Nine Months Ended September 30, 2023",
+        "Non-Controlled Affiliates"
+      ],
+      "preceding": [
+        "",
+        "The table below presents the Company\u2019s affiliated investments:"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[50]/ix:nonnumeric/div[3]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 356,350 | $ | 337,708 | $ | 321,402 | $ | 312,364",
+        "1st Lien/Last-Out Unitranche | 80,808 | 64,232 | 81,054 | 64,320"
+      ],
+      "last": [
+        "Warrants | 1,338 | 67 | 1,337 | 90",
+        "Total | $ | 543,030 | $ | 485,603 | $ | 611,173 | $ | 521,012"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 December 31, 2022",
+        "Investment Type Cost Fair Value Cost Fair Value",
+        "1st Lien/Senior Secured Debt $ 356,350 $ 337,708 $ 321,402 $ 312,364"
+      ],
+      "preceding": [
+        "",
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:"
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/div[51]/ix:nonnumeric/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 317,952 | Discounted cash flows | Discount Rate | 9.3 % \u2014 27.4 % | 14.6 %",
+        "$ | 1,074 | Comparable multiples | EV/Revenue | \u2014 | 0.5 x"
+      ],
+      "last": [
+        "$ | 1,799 | Comparable multiples | EV/EBITDA (6) | \u2014 | 8.9 x",
+        "Unsecured Debt | $ | 6,835 | Discounted cash flows | Discount Rate | \u2014 | 18.7 %"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Instruments Fair Value (1)(2) Valuation Techniques (3) Significant Unobservable Inputs Range (4) of Significant Unobservable Inputs Weighted Average (5)",
+        "As of September 30, 2023",
+        "Bank Loans, Corporate Debt, and Other Debt Obligations"
+      ],
+      "preceding": [],
+      "rows": 6,
+      "table_xpath": "/html/body/div[52]/ix:nonnumeric/div[1]/ix:continuation/table"
+    },
+    {
+      "contexts": 21,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 18,682 | $ | 319,026 | $ | 337,708 | $ | \u2014 | $ | 18,305 | $ | 294,059 | $ | 312,364",
+        "1st Lien/Senior Secured Debt | $ | \u2014 | $ | 18,682 | $ | 319,026 | $ | 337,708 | $ | \u2014 | $ | 18,305 | $ | 294,059 | $ | 312,364"
+      ],
+      "last": [
+        "Total assets | $ | 46,467 | $ | 18,682 | $ | 466,921 | $ | 532,070 | $ | 62,374 | $ | 74,065 | $ | 446,947 | $ | 583,386",
+        "Total assets | $ | 46,467 | $ | 18,682 | $ | 466,921 | $ | 532,070 | $ | 62,374 | $ | 74,065 | $ | 446,947 | $ | 583,386"
+      ],
+      "opening_rows": [
+        "",
+        "September 30, 2023 December 31, 2022",
+        "Assets Level 1 Level 2 Level 3 Total Level 1 Level 2 Level 3 Total",
+        "1st Lien/Senior Secured Debt $ \u2014 $ 18,682 $ 319,026 $ 337,708 $ \u2014 $ 18,305 $ 294,059 $ 312,364"
+      ],
+      "preceding": [
+        "",
+        "",
+        "The following is a summary of the Company\u2019s assets categorized within the fair value hierarchy:"
+      ],
+      "rows": 21,
+      "table_xpath": "/html/body/div[52]/ix:nonnumeric/div[3]/ix:nonnumeric/table"
+    }
+  ]
+}

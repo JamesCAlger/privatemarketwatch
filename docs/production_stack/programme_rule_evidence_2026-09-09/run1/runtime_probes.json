@@ -1,0 +1,249 @@
+[
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "input_rows": [
+      {
+        "cik": "0000000123",
+        "fair_value": 100.0,
+        "index_classification": "DIRECT_LENDING",
+        "interest_rate": 10.0,
+        "issuer_name": "Same Borrower",
+        "report_date": "2025-12-31",
+        "source": "bdc"
+      },
+      {
+        "cik": "0000000123",
+        "fair_value": 100.0,
+        "index_classification": "STRUCTURED_CREDIT",
+        "interest_rate": 10.0,
+        "issuer_name": "Same Borrower",
+        "report_date": "2025-12-31",
+        "source": "bdc"
+      }
+    ],
+    "observed": {
+      "production_fv": 100.0,
+      "production_order": [
+        "classification_fix",
+        "dedup"
+      ],
+      "production_rows": 1,
+      "verifier_fv": 200.0,
+      "verifier_order": [
+        "dedup",
+        "classification_fix"
+      ],
+      "verifier_rows": 2
+    },
+    "probe": "B2_order",
+    "valid_leaf_schema": true
+  },
+  {
+    "audits": [
+      {
+        "cik": "0000000123",
+        "drift": "",
+        "fv_affected": 0.0,
+        "layer": "unified_b2_corrections",
+        "message": "",
+        "rows_changed": 1,
+        "rule_id": "rate_rescale",
+        "rule_type": "b2_correction",
+        "status": "ok"
+      }
+    ],
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": [
+      {
+        "cik": "0000000123",
+        "interest_rate": 1.0,
+        "report_date": "2025-12-31",
+        "source": "bdc"
+      },
+      {
+        "cik": "0000000456",
+        "interest_rate": 10.0,
+        "report_date": "2025-12-31",
+        "source": "bdc"
+      },
+      {
+        "cik": "0000000123",
+        "interest_rate": 10.0,
+        "report_date": "2025-12-31",
+        "source": "nport"
+      },
+      {
+        "cik": "0000000123",
+        "interest_rate": 10.0,
+        "report_date": "2025-09-30",
+        "source": "bdc"
+      }
+    ],
+    "probe": "B2_scope_counterexamples"
+  },
+  {
+    "audits": [
+      {
+        "cik": "0000000123",
+        "drift": "",
+        "fv_affected": 0.0,
+        "layer": "unified_b2_corrections",
+        "message": "",
+        "rows_changed": 2,
+        "rule_id": "rate_rescale",
+        "rule_type": "b2_correction",
+        "status": "ok"
+      }
+    ],
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "loaded": 1,
+      "rates": [
+        1.0,
+        10.0,
+        10.0,
+        1.0
+      ],
+      "schema_errors": [
+        "missing required key: mechanism",
+        "missing required key: source_review_ids",
+        "missing required key: evidence_citations",
+        "missing required key: confidence",
+        "mechanism is empty",
+        "rate_rescale requires scope.quarters: the explicit list of quarters this fix is evidenced for (a value fix may only touch quarters whose filings show the defect)",
+        "source_review_ids must be a non-empty list of review_ids",
+        "evidence_citations must carry >=1 valid citation (quote or table/row coordinate)",
+        "confidence must be a number"
+      ]
+    },
+    "probe": "B2_unadmitted_proposed"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "rows_loaded": 1,
+      "source_hash_verified_by_loader": false
+    },
+    "probe": "HTML_proposed_admission"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "dispatch_overlay_loaded": true,
+      "staging_dir": "data\\overrides\\bdc_xbrl_wrappers",
+      "trial_staging_loaded": false
+    },
+    "probe": "wrapper_trial_resolvers"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "after": [
+        "Systems Software",
+        ""
+      ],
+      "before": [
+        "Application Software",
+        "Health Care Equipment"
+      ]
+    },
+    "probe": "GICS_cache_replacement"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "csv": true,
+      "parquet": false,
+      "rows": 0
+    },
+    "probe": "empty_unified_bundle"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "observed": {
+      "default_created": true,
+      "explicit_strict_error": "OutputSchemaError"
+    },
+    "probe": "isolated_companion_strictness"
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "boundary": "real finalizer/B2/writer; source staging and unrelated late helpers stubbed",
+    "observed": {
+      "audit_file_written": false,
+      "audits": [
+        {
+          "cik": "0000000123",
+          "drift": "",
+          "fv_affected": 0.0,
+          "layer": "unified_b2_corrections",
+          "message": "",
+          "rows_changed": 1,
+          "rule_id": "rate_rescale",
+          "rule_type": "b2_correction",
+          "status": "ok"
+        }
+      ],
+      "interest_rate": [
+        1.0
+      ],
+      "output_written": true,
+      "rows": 1
+    },
+    "probe": "b2_only_finalizer",
+    "stubbed": [
+      "_apply_universe_gate",
+      "_stabilize_classification",
+      "_restore_deterministic_classification_rules",
+      "_correct_pct_of_net_assets",
+      "_apply_row_corrections",
+      "_apply_fund_strategy_corrections",
+      "_apply_fund_strategy_asset_class_override",
+      "_apply_gics_cache",
+      "_apply_lien_cache",
+      "_apply_unclassified_cache",
+      "_apply_wrapper_position_keys",
+      "_apply_re_fund_gics_overrides"
+    ]
+  },
+  {
+    "basis": "synthetic <=20-row isolated replay; not source accuracy",
+    "boundary": "real finalizer/B2/writer; source staging and unrelated late helpers stubbed",
+    "observed": {
+      "audit_file_written": false,
+      "audits": [
+        {
+          "cik": "0000000123",
+          "drift": "",
+          "fv_affected": 0.0,
+          "layer": "unified_b2_corrections",
+          "message": "row_selector column missing: missing_column",
+          "rows_changed": 0,
+          "rule_id": "rate_rescale",
+          "rule_type": "b2_correction",
+          "status": "error"
+        }
+      ],
+      "interest_rate": [
+        10.0
+      ],
+      "output_written": true,
+      "rows": 1
+    },
+    "probe": "b2_error_finalizer",
+    "stubbed": [
+      "_apply_universe_gate",
+      "_stabilize_classification",
+      "_restore_deterministic_classification_rules",
+      "_correct_pct_of_net_assets",
+      "_apply_row_corrections",
+      "_apply_fund_strategy_corrections",
+      "_apply_fund_strategy_asset_class_override",
+      "_apply_gics_cache",
+      "_apply_lien_cache",
+      "_apply_unclassified_cache",
+      "_apply_wrapper_position_keys",
+      "_apply_re_fund_gics_overrides"
+    ]
+  }
+]

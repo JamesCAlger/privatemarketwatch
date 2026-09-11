@@ -1,0 +1,53 @@
+{
+  "assets": 740,
+  "assets_by_family": {
+    "agent_anchor": 67,
+    "agent_b2_corrections": 40,
+    "agent_investigate_rules": 151,
+    "bdc_xbrl_html_section_bridges": 1,
+    "bdc_xbrl_wrappers": 78,
+    "conservation_scope": 5,
+    "enforcement_registry": 7,
+    "html_templates": 201,
+    "identifier_anchors": 69,
+    "identifier_rate_grammars": 70,
+    "position_id_registry": 2,
+    "rate_convention": 42,
+    "top_level": 5,
+    "wrapper_cohorts": 2
+  },
+  "control_inputs": 14,
+  "families": 77,
+  "finished_utc": "2026-09-09T19:41:21.286974+00:00",
+  "head": "2e0491a45d1493e7a3ee329aee52ec96bb34986c",
+  "loaders": {
+    "anchor_records": 60,
+    "b2_leaves": 38,
+    "comma_delimited_ciks": 9,
+    "html_bridge_rows": 32,
+    "identifier_parsers": 4,
+    "issuer_bridge_rows": 21,
+    "layer_c_leaves": 137,
+    "prefix_rule_ciks": 34,
+    "staging_configs": 51,
+    "wrapper_specs": 76
+  },
+  "metadata_scope": "top-level data/output files plus recursive frontend/public/data; not historical output tree",
+  "pinned_input_drift": [],
+  "probes": 10,
+  "production_rebuild": false,
+  "protected_artifact_drift": [],
+  "protected_files": 341,
+  "schema_error_assets": [
+    "data/overrides/agent_investigate_rules/1869453/_pulled_inert_frame_divergence_2026-09-02/dedup_fiesta_revolver_partial_context_20260331.json"
+  ],
+  "source_accuracy_measured": false,
+  "started_utc": "2026-09-09T19:41:11.332791+00:00",
+  "status": "complete",
+  "unresolved_function_names": [],
+  "versions": {
+    "duckdb": "1.4.3",
+    "pandas": "2.2.3",
+    "python": "3.13.5"
+  }
+}

@@ -1,0 +1,1841 @@
+[
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (amortized cost of $ 3,065,359 and $ 2,774,726 , respectively) | 3,088,987 | 2,787,925",
+        "value": "3088987000",
+        "xpath": "/html/body/table[7]/tr[8]"
+      },
+      {
+        "concept": "tslx:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[59]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[21]"
+      },
+      {
+        "concept": "tslx:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[59]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[16]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total investments at fair value | $ | 8,053 | $ | 87,413 | $ | 2,993,521 | $ | 3,088,987",
+        "value": "3088987000",
+        "xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[9]"
+      },
+      {
+        "concept": "tslx:InvestmentsFairValueDisclosureNet",
+        "currency": "USD",
+        "row": "Total | $ | 8,053 | $ | 34,764 | $ | 2,993,521 | $ | 3,036,338",
+        "value": "3036338000",
+        "xpath": "/html/body/div[61]/ix:nonnumeric/div[1]/ix:nonnumeric/table[1]/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001508655-2023-06-30",
+    "source_rows": 229,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 8
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (cost of $ 3,618,855 and $ 3,691,041 ) | $ | 3,438,696 | $ | 3,506,216",
+        "value": "3438696000",
+        "xpath": "/html/body/table[5]/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 3,618,855 | $ | 3,438,696 | $ | 3,691,041 | $ | 3,506,216",
+        "value": "3438696000",
+        "xpath": "/html/body/div[55]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[11]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 291 | $ | 105,622 | $ | 3,332,783 | $ | 3,438,696 | $ | 993 | $ | 163,376 | $ | 3,341,847 | $ | 3,506,216",
+        "value": "3438696000",
+        "xpath": "/html/body/div[56]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001572694-2023-09-30",
+    "source_rows": 420,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 14
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Assets | $ | 3,085,554 | $ | 11,200,749 | $ | 34,445,226 | $ | 48,731,529",
+        "value": "48731529",
+        "xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:continuation/ix:nonnumeric/table/tr[33]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Investments | $ | 3,085,554 | $ | 11,200,749 | $ | 34,445,226 | $ | 48,731,529",
+        "value": "48731529",
+        "xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:continuation/ix:nonnumeric/table/tr[35]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 48,731,529 | 100.0 | %",
+        "value": "48731529",
+        "xpath": "/html/body/div[22]/div/div/div[4]/div/ix:nonnumeric/ix:nonnumeric/table[1]/tr[15]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 50,811,343 | $ | 48,731,529 | 100.0 | %",
+        "value": "48731529",
+        "xpath": "/html/body/div[23]/div[1]/div/div/div/ix:continuation/ix:nonnumeric[1]/table[1]/tr[13]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 48,731,529 | 100.0 | %",
+        "value": "48731529",
+        "xpath": "/html/body/div[23]/div[1]/div/div/div/ix:continuation/ix:nonnumeric[2]/table[1]/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsInAndAdvancesToAffiliatesAtFairValue",
+        "currency": "USD",
+        "row": "Total affiliated investments | 956,291 | $ | 10,273,001 | $ | \u2014 | $ | 463,314 | $ | \u2014 | $ | \u2014 | $ | 135,389 | $ | 10,871,704 | 1,070,232 | $ | 111,456",
+        "value": "10871704",
+        "xpath": "/html/body/div[28]/div[2]/div/div[1]/div/ix:nonnumeric/ix:continuation/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001588272-2023-03-31",
+    "source_rows": 82,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 5
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Assets | $ | 3,117,391 | $ | 10,593,317 | $ | 34,476,314 | $ | 48,187,022",
+        "value": "48187022",
+        "xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]/tr[33]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Investments | $ | 3,117,391 | $ | 10,593,317 | $ | 34,476,314 | $ | 48,187,022",
+        "value": "48187022",
+        "xpath": "/html/body/div[16]/div[1]/div/div/div/ix:continuation/ix:continuation/ix:nonnumeric/table[1]/tr[35]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 48,187,022 | 100.0 | %",
+        "value": "48187022",
+        "xpath": "/html/body/div[19]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric/table[1]/tr[15]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 47,099,829 | $ | 48,187,022 | 100.0 | %",
+        "value": "48187022",
+        "xpath": "/html/body/div[19]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table[1]/tr[13]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 48,187,022 | 100.0 | %",
+        "value": "48187022",
+        "xpath": "/html/body/div[20]/div[1]/div/div/div/ix:continuation/ix:nonnumeric/table[1]/tr[8]"
+      },
+      {
+        "concept": "cik0001588272:AffiliatedInvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total affiliated investments | 956,291 | $ | 10,273,001 | $ | \u2014 | $ | 7,911,399 | $ | ( 7,448,085 | ) | $ | \u2014 | $ | 436,517 | $ | 11,172,832 | 990,242 | $ | 222,644",
+        "value": "11172832",
+        "xpath": "/html/body/div[26]/div[1]/div/div/div/ix:nonnumeric[1]/ix:continuation/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001588272-2023-06-30",
+    "source_rows": 80,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 5
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Assets | $ | 3,319,959 | $ | 4,593,271 | $ | 38,005,376 | $ | 45,918,606",
+        "value": "45918606",
+        "xpath": "/html/body/div[15]/div/div/div[2]/div/ix:continuation/ix:continuation/ix:nonnumeric/table/tr[28]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Investments | $ | 3,319,959 | $ | 4,593,271 | $ | 38,005,376 | $ | 45,918,606",
+        "value": "45918606",
+        "xpath": "/html/body/div[15]/div/div/div[2]/div/ix:continuation/ix:continuation/ix:nonnumeric/table/tr[30]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 45,918,606 | 100.0 | %",
+        "value": "45918606",
+        "xpath": "/html/body/div[18]/div[2]/div/div[2]/div/ix:nonnumeric/ix:nonnumeric[1]/table[1]/tr[16]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 43,180,963 | $ | 45,918,606 | 100.0 | %",
+        "value": "45918606",
+        "xpath": "/html/body/div[18]/div[2]/div/div[2]/div/ix:nonnumeric/ix:nonnumeric[2]/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 45,918,606 | 100.0 | %",
+        "value": "45918606",
+        "xpath": "/html/body/div[19]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table[1]/tr[7]"
+      },
+      {
+        "concept": "cik0001588272:AffiliatedInvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total affiliated investments | 990,242 | $ | 10,696,845 | $ | \u2014 | $ | 467,275 | $ | ( 782,368 | ) | $ | \u2014 | $ | ( 369,731 | ) | $ | 10,012,021 | 526,980 | $ | 90,712",
+        "value": "10012021",
+        "xpath": "/html/body/div[25]/div[1]/div/div[2]/div/ix:nonnumeric/ix:nonnumeric/table[1]/tr[13]"
+      }
+    ],
+    "reference_id": "REF-0001588272-2024-03-31",
+    "source_rows": 70,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 5
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 ) | 1,179,343,662 | 1,122,517,095",
+        "value": "1179343662",
+        "xpath": "/html/body/div[5]/div/div[1]/div/table[2]/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "TOTAL INVESTMENTS - 254.06% (14) | $ | 1,198,535,419 | $ | 1,179,343,662",
+        "value": "1179343662",
+        "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]/tr[14]"
+      },
+      {
+        "concept": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "(9) | Securities exempt from registration under the Securities Act of 1933, and may be deemed to be \u201crestricted securities\u201d. As of March 31, 2023, the aggregate fair value of these securities is $ 18,652,582 or 4.02 % of the Fund\u2019s net assets. The in",
+        "value": "18652582",
+        "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[16]/tr"
+      }
+    ],
+    "reference_id": "REF-0001634452-2023-03-31",
+    "source_rows": 602,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 19
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 1,253,961,805 and $ 1,146,231,264 ) | 1,227,572,852 | 1,122,517,095",
+        "value": "1227572852",
+        "xpath": "/html/body/div[5]/div[1]/div/table[2]/tr[9]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "TOTAL INVESTMENTS - 253.7 5 % (15) | $ | 1,253,961,805 | $ | 1,227,572,852",
+        "value": "1227572852",
+        "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]/tr[9]"
+      },
+      {
+        "concept": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "(10) | Securities exempt from registration under the Securities Act of 1933, and may be deemed to be \u201crestricted securities\u201d. As of June 30, 2023, the aggregate fair value of these securities is $ 19,549,493 or 4.04 % of the Fund\u2019s net assets. The in",
+        "value": "19549493",
+        "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[17]/tr"
+      }
+    ],
+    "reference_id": "REF-0001634452-2023-06-30",
+    "source_rows": 666,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 21
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 1,748,732,749 and $ 1,636,597,753 , respectively) | 1,735,894,006 | 1,630,349,305",
+        "value": "1735894006",
+        "xpath": "/html/body/div[9]/table/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments \u2014 ( 267.17 %) | $ | 1,748,732,749 | $ | 1,735,894,006",
+        "value": "1735894006",
+        "xpath": "/html/body/div[66]/table[2]/tr[23]"
+      }
+    ],
+    "reference_id": "REF-0001634452-2025-06-30",
+    "source_rows": 823,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 25
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001646614-2023-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 952,451,230 and $ 885,470,822 , respectively) | 931,158,200 | 876,197,259",
+        "value": "931158200",
+        "xpath": "/html/body/table[7]/tr[9]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "931158200",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "931158200",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[38]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[38]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "931158200",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]/tr[14]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 952,451,230 | $ | 931,158,200 | 100.00 | % | $ | 885,470,822 | $ | 876,197,259 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[118]/ix:nonnumeric/div[3]/ix:nonnumeric/table[2]/tr[14]"
+      }
+    ],
+    "reference_id": "REF-0001646614-2024-06-30",
+    "source_rows": 278,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 14
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 922,634,556 and $ 919,774,172 , respectively) | 891,256,739 | 891,045,657",
+        "value": "891256739",
+        "xpath": "/html/body/div[9]/table/tr[9]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "891256739",
+        "xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "891256739",
+        "xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table/tr[42]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table/tr[42]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "891256739",
+        "xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table/tr[11]"
+      },
+      {
+        "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001646614-2025-03-31",
+    "source_rows": 289,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 14
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (amortized cost of $ 543,030 and $ 611,173 ) | $ | 485,603 | $ | 521,012",
+        "value": "485603000",
+        "xpath": "/html/body/table[5]/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 543,030 | $ | 485,603 | $ | 611,173 | $ | 521,012",
+        "value": "485603000",
+        "xpath": "/html/body/div[51]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001674760-2023-09-30",
+    "source_rows": 94,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 8
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001715933-2024-12-31",
+    "source_rows": 112,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 7
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Non-controlled/non-affiliated investments (cost: $ 530,773 and $ 529,070 , respectively) | $ | 524,126 | $ | 532,895",
+        "value": "524126000",
+        "xpath": "/html/body/div[8]/div/div[1]/div/table/tr[4]"
+      },
+      {
+        "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total Investments | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[17]/div/table[1]/tr[29]"
+      }
+    ],
+    "reference_id": "REF-0001743415-2023-03-31",
+    "source_rows": 64,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 2
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "ck0001743415:PercentageOfTotalInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total Investments | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[11]/div[1]/div[1]/div[4]/div/table/tr[28]"
+      }
+    ],
+    "reference_id": "REF-0001743415-2023-06-30",
+    "source_rows": 68,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 3
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:FinancialInstrumentsOwnedPrincipalInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "Investments at fair value (amortized cost of $ 453,693 and $ 447,814 , respectively) | $ | 441,998 | $ | 441,376",
+        "value": "441998000",
+        "xpath": "/html/body/div[55]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments - 151.78 %* (5) | $ | 453,693 | $ | 441,998",
+        "value": "441998000",
+        "xpath": "/html/body/div[149]/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | \u2014 | $ | \u2014 | $ | 441,998 | $ | 441,998 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376",
+        "value": "441998000",
+        "xpath": "/html/body/ix:continuation[5]/ix:nonnumeric[1]/div[2]/table/tr[7]"
+      },
+      {
+        "concept": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+        "currency": "USD",
+        "row": "$ | 105,430 | $ | 1,124 | $ | 137,102 | $ | 2,162",
+        "value": "1124000",
+        "xpath": "/html/body/ix:continuation[10]/ix:continuation/div[1]/table/tr[32]"
+      }
+    ],
+    "reference_id": "REF-0001792509-2023-03-31",
+    "source_rows": 632,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 20
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:FinancialInstrumentsOwnedPrincipalInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "Investments at fair value (amortized cost of $ 460,009 and $ 447,814 , respectively) | $ | 448,085 | $ | 441,376",
+        "value": "448085000",
+        "xpath": "/html/body/div[55]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments - 163.30 %* (5) | $ | 460,009 | $ | 448,085",
+        "value": "448085000",
+        "xpath": "/html/body/div[152]/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | \u2014 | $ | \u2014 | $ | 448,085 | $ | 448,085 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376",
+        "value": "448085000",
+        "xpath": "/html/body/ix:continuation[5]/ix:nonnumeric[1]/div[2]/table/tr[7]"
+      },
+      {
+        "concept": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+        "currency": "USD",
+        "row": "$ | 88,138 | $ | 1,162 | $ | 137,102 | $ | 2,162",
+        "value": "1162000",
+        "xpath": "/html/body/ix:continuation[10]/ix:continuation/div[1]/table/tr[50]"
+      }
+    ],
+    "reference_id": "REF-0001792509-2023-06-30",
+    "source_rows": 653,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 21
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:FinancialInstrumentsOwnedPrincipalInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "Investments at fair value (amortized cost of $ 443,251 and $ 447,814 , respectively) | $ | 427,776 | $ | 441,376",
+        "value": "427776000",
+        "xpath": "/html/body/div[55]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments - 156.89 %* (5) | $ | 443,251 | $ | 427,776",
+        "value": "427776000",
+        "xpath": "/html/body/div[152]/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | \u2014 | $ | \u2014 | $ | 427,776 | $ | 427,776 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376",
+        "value": "427776000",
+        "xpath": "/html/body/ix:continuation[4]/ix:nonnumeric[1]/div[2]/table/tr[7]"
+      },
+      {
+        "concept": "tpvc:InvestmentsOwnedFairValueAndDerivativeAsset",
+        "currency": "USD",
+        "row": "Total investments, including derivative instruments | $ | \u2014 | $ | 198 | $ | 427,776 | $ | 427,974 | $ | 7 | $ | \u2014 | $ | 441,369 | $ | 441,376",
+        "value": "427974000",
+        "xpath": "/html/body/ix:continuation[4]/ix:nonnumeric[1]/div[2]/table/tr[9]"
+      },
+      {
+        "concept": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 103,800 | $ | 1,365 | $ | 137,102 | $ | 2,162",
+        "value": "1365000",
+        "xpath": "/html/body/ix:continuation[9]/ix:continuation/div[1]/table/tr[37]"
+      }
+    ],
+    "reference_id": "REF-0001792509-2023-09-30",
+    "source_rows": 664,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 21
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Investments at fair value (amortized cost of $ 393,790 and $ 406,433 , respectively) | $ | 380,841 | $ | 400,195",
+        "value": "380841000",
+        "xpath": "/html/body/div[55]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments in Portfolio Companies - 135.52 %* (4)(5) | $ | 393,790 | $ | 380,841",
+        "value": "380841000",
+        "xpath": "/html/body/div[151]/table/tr[43]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total portfolio company investments | $ | \u2014 | $ | \u2014 | $ | 380,841 | $ | 380,841 | $ | \u2014 | $ | \u2014 | $ | 400,195 | $ | 400,195",
+        "value": "380841000",
+        "xpath": "/html/body/ix:continuation[9]/ix:nonnumeric[1]/div[2]/table/tr[7]"
+      },
+      {
+        "concept": "tpvc:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmountFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 63,916 | $ | 882 | $ | 72,193 | $ | 1,224",
+        "value": "882000",
+        "xpath": "/html/body/ix:continuation[17]/ix:nonnumeric/div[1]/table/tr[46]"
+      }
+    ],
+    "reference_id": "REF-0001792509-2024-09-30",
+    "source_rows": 697,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 23
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 19,863,636 | $ | \u2014 | $ | 18,685 | $ | 6,944 | $ | 6,880 | $ | 19,896,145 | 151.5 %",
+        "value": "19896145000",
+        "xpath": "/html/body/div[204]/ix:continuation/table/tr[10]"
+      },
+      {
+        "concept": "ck0001837532:PercentageOfTotalInvestmentsAtFairValue",
+        "currency": null,
+        "row": "100.0 %",
+        "value": "1.000",
+        "xpath": "/html/body/div[207]/table/tr[56]"
+      },
+      {
+        "concept": "ck0001837532:InvestmentOwnedAtFairValueBeforeCashEquivalents",
+        "currency": "USD",
+        "row": "Total Investments before Cash Equivalents | $ | 19,670,193 | $ | 19,896,145 | $ | 81 | $ | 5,347,654 | $ | 14,548,410",
+        "value": "19896145000",
+        "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[9]"
+      },
+      {
+        "concept": "ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents",
+        "currency": "USD",
+        "row": "Total Investments after Cash Equivalents | $ | 20,456,126 | $ | 20,682,078 | $ | 786,014 | $ | 5,347,654 | $ | 14,548,410",
+        "value": "20682078000",
+        "xpath": "/html/body/div[420]/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[12]"
+      }
+    ],
+    "reference_id": "REF-0001837532-2025-06-30",
+    "source_rows": 1052,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 52
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value | 2,271,398 | 2,157,880",
+        "value": "2271398000",
+        "xpath": "/html/body/div[51]/table/tr[10]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments, March 31, 2023 ( 203.0 %)* | $ | 2,136,778 | $ | 2,287,113 | $ | 2,271,398",
+        "value": "2271398000",
+        "xpath": "/html/body/div[161]/table/tr[33]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "$ | 2,287,113 | 100 | % | $ | 2,271,398 | 100 | % | 203 | %",
+        "value": "2271398000",
+        "xpath": "/html/body/ix:continuation[11]/ix:continuation/div[1]/table/tr[11]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 2,271,398 | 100.0 | % | $ | 2,157,880 | 100.0 | %",
+        "value": "2271398000",
+        "xpath": "/html/body/ix:continuation[12]/ix:continuation/div[2]/table/tr[36]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "$ | 2,271,398",
+        "value": "2271398000",
+        "xpath": "/html/body/ix:continuation[19]/ix:nonnumeric/div[2]/table/tr[12]"
+      }
+    ],
+    "reference_id": "REF-0001859919-2023-03-31",
+    "source_rows": 881,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 31
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 533,412,766 and $ 510,803,850 , respectively) | $ | 526,177,088 | $ | 504,942,593",
+        "value": "526177088",
+        "xpath": "/html/body/table[4]/tr[4]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 533,412,766 | $ | 526,177,088 | $ | 510,803,850 | $ | 504,942,593",
+        "value": "526177088",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %",
+        "value": "526177088",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[18]"
+      },
+      {
+        "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+        "currency": null,
+        "row": "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[18]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %",
+        "value": "526177088",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[6]"
+      },
+      {
+        "concept": "ck0001860424:InvestmentOwnedPercentOfPortfolioFairValue",
+        "currency": null,
+        "row": "Total Investments | $ | 526,177,088 | 100.0 | % | $ | 504,942,593 | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | \u2014 | $ | 40,437,128 | $ | 485,739,960 | $ | 526,177,088",
+        "value": "526177088",
+        "xpath": "/html/body/div[60]/ix:nonnumeric/div[3]/ix:nonnumeric/table[1]/tr[5]"
+      }
+    ],
+    "reference_id": "REF-0001860424-2023-03-31",
+    "source_rows": 104,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 8
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Investments \u2013 Non-control/Non-affiliate, at fair value (cost June 30, 2024: $ 4,171,140 ; cost September 30, 2023: $ 1,922,218 ) | $ | 4,189,323 | $ | 1,927,237",
+        "value": "4189323000",
+        "xpath": "/html/body/div[64]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Non-Control/Non-Affiliate Investments ( 145.5 % of net assets) | $ | 4,171,140 | $ | 4,189,323",
+        "value": "4189323000",
+        "xpath": "/html/body/div[123]/table/tr[8]"
+      },
+      {
+        "concept": "oscf:InvestmentOwnedAtCostAndMoneyMarketFundsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Portfolio Investments, Cash and Cash Equivalents and Restricted Cash ( 160.3 % of net assets) | $ | 4,596,251 | $ | 4,614,434",
+        "value": "4596251000",
+        "xpath": "/html/body/div[123]/table/tr[12]"
+      },
+      {
+        "concept": "oscf:InvestmentOwnedAtFairValueAndMoneyMarketFundsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Portfolio Investments, Cash and Cash Equivalents and Restricted Cash ( 160.3 % of net assets) | $ | 4,596,251 | $ | 4,614,434",
+        "value": "4614434000",
+        "xpath": "/html/body/div[123]/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 4,189,323 | 100.00 | % | 145.49 | % | $ | 1,927,237 | 100.00 | % | 126.03 | %",
+        "value": "4189323000",
+        "xpath": "/html/body/ix:continuation[10]/ix:continuation[1]/div/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 4,189,323 | 100.00 | % | 145.49 | % | $ | 1,927,237 | 100.00 | % | 126.03 | %",
+        "value": "4189323000",
+        "xpath": "/html/body/ix:continuation[11]/ix:continuation/div/table/tr[16]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 4,189,323 | 100.00 | % | 145.49 | % | $ | 1,927,237 | 100.00 | % | 126.03 | %",
+        "value": "4189323000",
+        "xpath": "/html/body/ix:continuation[13]/ix:continuation/div/table/tr[66]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value | \u2014 | 1,437,310 | 2,752,013 | 4,189,323",
+        "value": "4189323000",
+        "xpath": "/html/body/ix:continuation[14]/ix:nonnumeric/div[2]/table/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0001872371-2024-06-30",
+    "source_rows": 442,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 16
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Investments \u2013 Non-control/Non-affiliate, at fair value (cost December 31, 2025: $ 7,429,166 ; cost September 30, 2025: $ 6,863,940 ) | $ | 7,433,861 | $ | 6,899,031",
+        "value": "7433861000",
+        "xpath": "/html/body/div[74]/table/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Non-Control/Non-Affiliate Investments ( 159.4 % of net assets) | $ | 7,429,166 | $ | 7,433,861",
+        "value": "7433861000",
+        "xpath": "/html/body/div[135]/table/tr[29]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 7,433,861 | 100.00 | % | 159.40 | % | $ | 6,899,031 | 100.00 | % | 151.90 | %",
+        "value": "7433861000",
+        "xpath": "/html/body/ix:continuation[11]/ix:nonnumeric[1]/div[5]/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 7,433,861 | 100.00 | % | 159.40 | % | $ | 6,899,031 | 100.00 | % | 151.90 | %",
+        "value": "7433861000",
+        "xpath": "/html/body/ix:continuation[12]/ix:continuation/div[3]/table/tr[16]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 7,433,861 | 100.00 | % | 159.40 | % | $ | 6,899,031 | 100.00 | % | 151.90 | %",
+        "value": "7433861000",
+        "xpath": "/html/body/ix:continuation[14]/ix:continuation/div/table/tr[61]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value | 20 | 1,679,985 | 5,753,856 | 7,433,861",
+        "value": "7433861000",
+        "xpath": "/html/body/ix:continuation[15]/ix:nonnumeric/div[2]/table/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0001872371-2025-12-31",
+    "source_rows": 492,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 17
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value (cost of $ 2,090,770 and $ 2,048,601 ) | 2,058,550 | 2,029,756",
+        "value": "2058550000",
+        "xpath": "/html/body/div[12]/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Portfolio Investments | $ | 2,090,770 | $ | 2,058,550 | 185.69 | %",
+        "value": "2058550000",
+        "xpath": "/html/body/div[88]/table[1]/tr[5]"
+      },
+      {
+        "concept": "ck0001885968:CashCashEquivalentsAndShort-TermInvestmentsFairValue",
+        "currency": "USD",
+        "row": "Total Cash and Cash Equivalents and Short Term Investments | $ | 51,846 | $ | 51,846 | 4.68 | %",
+        "value": "51846000",
+        "xpath": "/html/body/div[88]/table[2]/tr[5]"
+      },
+      {
+        "concept": "ck0001885968:InvestmentOwnedAtCostAndCashAndCashEquivalentsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments | $ | 2,142,616 | $ | 2,110,396 | 190.37 | %",
+        "value": "2142616000",
+        "xpath": "/html/body/div[88]/table[2]/tr[6]"
+      },
+      {
+        "concept": "ck0001885968:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments | $ | 2,142,616 | $ | 2,110,396 | 190.37 | %",
+        "value": "2110396000",
+        "xpath": "/html/body/div[88]/table[2]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 2,090,770 | $ | 2,058,550 | 100.0 | % | $ | 2,048,601 | $ | 2,029,756 | 100.0 | %",
+        "value": "2058550000",
+        "xpath": "/html/body/div[220]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 2,090,770 | $ | 2,058,550 | 100.0 | % | $ | 2,048,601 | $ | 2,029,756 | 100.0 | %",
+        "value": "2058550000",
+        "xpath": "/html/body/div[224]/div[1]/ix:continuation/div/ix:continuation/table[2]/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | \u2014 | $ | 38,352 | $ | 2,020,198 | $ | 2,058,550 | $ | \u2014 | $ | 67,325 | $ | 1,962,431 | $ | 2,029,756",
+        "value": "2058550000",
+        "xpath": "/html/body/div[232]/div/ix:continuation/div[1]/ix:nonnumeric/table/tr[8]"
+      }
+    ],
+    "reference_id": "REF-0001885968-2025-09-30",
+    "source_rows": 593,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 23
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001899017-2023-03-31",
+    "source_rows": 0,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001899017-2023-06-30",
+    "source_rows": 10,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 3
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001899017-2023-09-30",
+    "source_rows": 11,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 3
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001899996-2023-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001901164-2023-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments (cost of $ 2,391,096,696 and $ 2,254,646,820 , respectively) | 2,354,502,240 | 2,244,701,289",
+        "value": "2354502240",
+        "xpath": "/html/body/div[9]/table/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments - 142.1 % of Net Assets | $ | 2,391,096,696 | $ | 2,354,502,240 | 89.43 | %",
+        "value": "2354502240",
+        "xpath": "/html/body/div[66]/table/tr[32]"
+      },
+      {
+        "concept": "ck0001902649:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total Cash and Investments - 158.8 % of Net Assets | $ | 2,631,922,582 | 100.00 | %",
+        "value": "2631922582",
+        "xpath": "/html/body/div[66]/table/tr[36]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 463,142,413 | $ | 1,890,318,018 | $ | 1,041,809 | $ | 2,354,502,240",
+        "value": "2354502240",
+        "xpath": "/html/body/div[126]/div/ix:continuation/div/ix:continuation/div[1]/ix:nonnumeric/table/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0001902649-2026-03-31",
+    "source_rows": 538,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 18
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Non-controlled, non-affiliated investments, at fair value (cost of $ 244,421 and $ 256,627 , respectively) | $ | 235,590 | $ | 230,202",
+        "value": "235590000",
+        "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 244,421 | $ | 235,590 | 98.36 | %",
+        "value": "235590000",
+        "xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table[1]/tr[62]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 244,421 | $ | 235,590 | $ | 256,627 | $ | 230,202",
+        "value": "235590000",
+        "xpath": "/html/body/div[13]/div/div/div[2]/div/ix:nonnumeric[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total assets | $ | \u2014 | $ | 166,513 | $ | 69,077 | $ | 235,590",
+        "value": "235590000",
+        "xpath": "/html/body/div[14]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table/tr[10]"
+      }
+    ],
+    "reference_id": "REF-0001905824-2023-03-31",
+    "source_rows": 71,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 3
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Non-controlled, non-affiliated investments, at fair value (cost of $ 245,950 and $ 256,627 , respectively) | $ | 236,260 | $ | 230,202",
+        "value": "236260000",
+        "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 245,950 | $ | 236,260 | 97.52 | %",
+        "value": "236260000",
+        "xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]/tr[18]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 245,950 | $ | 236,260 | $ | 256,627 | $ | 230,202",
+        "value": "236260000",
+        "xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[11]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total assets | $ | \u2014 | $ | 153,845 | $ | 82,415 | $ | 236,260",
+        "value": "236260000",
+        "xpath": "/html/body/div[16]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0001905824-2023-06-30",
+    "source_rows": 73,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 4
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 880,118 | $ | 884,633 | 162.16 | %",
+        "value": "884633000",
+        "xpath": "/html/body/div[93]/table/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 880,118 | $ | 884,633 | $ | 822,663 | $ | 824,487",
+        "value": "884633000",
+        "xpath": "/html/body/ix:continuation[8]/ix:nonnumeric/div[2]/table/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total financial instruments, at fair value | $ | 884,633",
+        "value": "884633000",
+        "xpath": "/html/body/ix:continuation[10]/ix:nonnumeric/div[2]/table/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0001913724-2023-03-31",
+    "source_rows": 171,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 10
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001916099-2023-12-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments, at fair value | 167,278 | \u2014",
+        "value": "167278000",
+        "xpath": "/html/body/table[7]/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "value": "167278000",
+        "xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[5]"
+      },
+      {
+        "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[5]"
+      },
+      {
+        "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[2]/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "value": "167278000",
+        "xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]/tr[5]"
+      },
+      {
+        "concept": "ck0001916099:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 166,694 | $ | 167,278 | 100.00 | %",
+        "value": "1.0000",
+        "xpath": "/html/body/div[39]/ix:nonnumeric/div/ix:nonnumeric/table[3]/tr[5]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total | $ | \u2014 | $ | \u2014 | $ | 167,278 | $ | 167,278",
+        "value": "167278000",
+        "xpath": "/html/body/div[40]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[5]"
+      }
+    ],
+    "reference_id": "REF-0001916099-2024-03-31",
+    "source_rows": 46,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 5
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Non-controlled/non-affiliate company investments (amortized cost of $ 2,556,784 and $ 108,769 , respectively) | $ | 2,577,558 | $ | 108,529",
+        "value": "2577558000",
+        "xpath": "/html/body/div[2027]/table/tr[8]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 2,556,783.9 | $ | 2,577,558.1 | (7)(10) | 146.34 | %",
+        "value": "2577558100.0",
+        "xpath": "/html/body/div[2082]/table/tr[9]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 2,556,784 | $ | 2,577,558 | $ | 108,769 | $ | 108,529",
+        "value": "2577558000",
+        "xpath": "/html/body/ix:nonnumeric[5]/ix:nonnumeric/div[3]/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | \u2014 | $ | 1,575,215 | $ | 1,002,343 | $ | 2,577,558",
+        "value": "2577558000",
+        "xpath": "/html/body/ix:continuation[17]/ix:continuation/div[1]/table/tr[12]"
+      }
+    ],
+    "reference_id": "REF-0001918712-2023-12-31",
+    "source_rows": 472,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 18
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "vcsl:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ 537,454 | $ 539,909 | 203.2 %",
+        "value": "537454000",
+        "xpath": "/html/body/div[1273]/table/tr[11]"
+      },
+      {
+        "concept": "vcsl:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+        "currency": "USD",
+        "row": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ 537,454 | $ 539,909 | 203.2 %",
+        "value": "539909000",
+        "xpath": "/html/body/div[1273]/table/tr[11]"
+      },
+      {
+        "concept": "vcsl:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredNotProvidedAmountFairValue",
+        "currency": "USD",
+        "row": "Total unfunded commitments | $ | 95,273 | $ | ( 1,096 )",
+        "value": "-1096000",
+        "xpath": "/html/body/ix:continuation[3]/div[5]/table/tr[35]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | - | $ | 235,497 | $ | 271,077 | $ | 506,574",
+        "value": "506574000",
+        "xpath": "/html/body/ix:continuation[12]/ix:nonnumeric[1]/div[3]/table/tr[8]"
+      }
+    ],
+    "reference_id": "REF-0001919369-2024-12-31",
+    "source_rows": 76,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 7
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "ck0001919369:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ | 1,182,918 | $ | 1,185,955 | 203.4 | %",
+        "value": "1182918000",
+        "xpath": "/html/body/div[56]/table/tr[22]"
+      },
+      {
+        "concept": "ck0001919369:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+        "currency": "USD",
+        "row": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ | 1,182,918 | $ | 1,185,955 | 203.4 | %",
+        "value": "1185955000",
+        "xpath": "/html/body/div[56]/table/tr[22]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 1,147,559",
+        "value": "1147559000",
+        "xpath": "/html/body/div[112]/div/ix:continuation/div[1]/ix:nonnumeric/table[1]/tr[10]"
+      }
+    ],
+    "reference_id": "REF-0001919369-2025-09-30",
+    "source_rows": 98,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 7
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments - 181.4 % | $ | 15,704,123 | $ | 15,674,510",
+        "value": "15674510000",
+        "xpath": "/html/body/div[324]/table[2]/tr[34]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 15,704,123 | $ | 15,674,510 | $ | 7,285,922 | $ | 7,273,815",
+        "value": "15674510000",
+        "xpath": "/html/body/div[402]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[13]"
+      },
+      {
+        "concept": "ck0001920145:InvestmentOwnedAtFairValueAssetsAndMoneyMarketFundsAtCarryingValue",
+        "currency": "USD",
+        "row": "Total Assets | $ | 273,743 | $ | 3,529,940 | $ | 12,146,614 | $ | 15,950,297 | $ | 444,718 | $ | 1,875,466 | $ | 5,398,349 | $ | 7,718,533",
+        "value": "15950297000",
+        "xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table/tr[15]"
+      },
+      {
+        "concept": "ck0001920145:InvestmentOwnedAtFairValueLiabilities",
+        "currency": "USD",
+        "row": "Total Liabilities | $ | \u2014 | $ | ( 2,075 | ) | $ | \u2014 | $ | ( 2,075 | ) | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014",
+        "value": "-2075000",
+        "xpath": "/html/body/div[414]/div/ix:continuation/div[2]/ix:nonnumeric/table/tr[19]"
+      }
+    ],
+    "reference_id": "REF-0001920145-2025-12-31",
+    "source_rows": 828,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 25
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "ck0001920453:CompositionOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[257]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[28]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 531,466,625 | 100.0 | % | 130.9 | %",
+        "value": "531466625",
+        "xpath": "/html/body/div[257]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[7]"
+      },
+      {
+        "concept": "ck0001920453:TotalInvestmentAtFairValue",
+        "currency": null,
+        "row": "Total | $ | 531,466,625 | 100.0 | % | 130.9 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[257]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[7]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 40,123,900 | $ | 63,355,799 | $ | 427,986,926 | $ | 531,466,625",
+        "value": "531466625",
+        "xpath": "/html/body/div[260]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0001920453-2023-12-31",
+    "source_rows": 159,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 13
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %",
+        "value": "2487588823",
+        "xpath": "/html/body/div[93]/table/tr[23]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 2,513,533,478 | $ | 2,487,588,823 | 100.0 | % | $ | 2,314,667,480 | $ | 2,292,614,325 | 100.0 | %",
+        "value": "2487588823",
+        "xpath": "/html/body/div[198]/div[2]/ix:nonnumeric/div/ix:nonnumeric/table/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 2,487,588,823 | 100.0 | % | 186.8 | % | $ | 2,292,614,325 | 100.0 | % | 179.8 | %",
+        "value": "2487588823",
+        "xpath": "/html/body/div[204]/div[1]/ix:continuation/div/ix:continuation/table/tr[9]"
+      }
+    ],
+    "reference_id": "REF-0001920453-2026-03-31",
+    "source_rows": 479,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 27
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001930087-2023-06-30",
+    "source_rows": 0,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 42,091 | $ | 42,023 | $ | 17,360 | $ | 17,352",
+        "value": "42023000",
+        "xpath": "/html/body/div[34]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[5]"
+      },
+      {
+        "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 43.3 | % | 100.0 | % | 18.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[34]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[34]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[4]"
+      },
+      {
+        "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+        "currency": "USD",
+        "row": "Total | $ | 49,067 | $ | \u2014 | $ | 42,023 | $ | 91,090 | $ | 79,725 | $ | \u2014 | $ | 17,352 | $ | 97,077",
+        "value": "91090000",
+        "xpath": "/html/body/div[35]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[6]"
+      }
+    ],
+    "reference_id": "REF-0001948368-2023-06-30",
+    "source_rows": 5,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 3
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "currency": "USD",
+        "row": "(13) | Securities exempt from registration under the Securities Act of 1933 and may be deemed to be \u201crestricted securities\u201d. As of September 30, 2024, the aggregate fair value of these securities is $ 2,278 or 0.62 % of the Company's net assets. The ",
+        "value": "2278000",
+        "xpath": "/html/body/ix:footnote[12]/table/tr[2]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 467,602 | $ | 468,697 | $ | 176,995 | $ | 177,418",
+        "value": "468697000",
+        "xpath": "/html/body/div[88]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[7]"
+      },
+      {
+        "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[91]/ix:continuation/div/ix:nonnumeric/table/tr[4]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total | $ | 150 | $ | \u2014 | $ | 468,697 | $ | 468,847 | $ | 9,542 | $ | \u2014 | $ | 177,418 | $ | 186,960",
+        "value": "468847000",
+        "xpath": "/html/body/div[98]/ix:continuation/div[2]/ix:nonnumeric/table/tr[8]"
+      }
+    ],
+    "reference_id": "REF-0001948368-2024-09-30",
+    "source_rows": 166,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 9
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Investments at fair value (Cost $ 193,103,033 ) | $ | 193,103,033",
+        "value": "193103033",
+        "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[4]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments | $ | 193,103,033 | 100.00 | % | $ | 193,103,033 | 100.00 | % | 260.53 | %",
+        "value": "193103033",
+        "xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[7]"
+      },
+      {
+        "concept": "ck0001950803:PercentageOfInvestmentBasedOnFairValue",
+        "currency": null,
+        "row": "Total | 100.0 | % | 100.0 | % | 260.5 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[2]/table/tr[13]"
+      },
+      {
+        "concept": "us-gaap:InvestmentsFairValueDisclosure",
+        "currency": "USD",
+        "row": "Total assets | $ | \u2014 | $ | \u2014 | $ | 193,103,033 | $ | 193,103,033",
+        "value": "193103033",
+        "xpath": "/html/body/div[15]/div/div/div[4]/div/ix:nonnumeric[1]/ix:nonnumeric[1]/table/tr[6]"
+      }
+    ],
+    "reference_id": "REF-0001950803-2023-06-30",
+    "source_rows": 70,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 4
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001950976-2023-12-31",
+    "source_rows": 0,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0001954360-2023-06-30",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Non-controlled/non-affiliated investments (cost $ 918,595 and $ 785,277 , respectively) | $ | 909,845 | $ | 785,199",
+        "value": "785199000",
+        "xpath": "/html/body/table[16]/tr[11]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 785,199 | $ | 785,199 | 265.8 | %",
+        "value": "785199000",
+        "xpath": "/html/body/ix:continuation[7]/table/tr[38]"
+      },
+      {
+        "concept": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+        "currency": null,
+        "row": "100.0 %",
+        "value": "1.000",
+        "xpath": "/html/body/table[43]/tr[38]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments at Fair Value | $ | 785,277 | $ | 785,199 | $ | \u2014 | $ | 7,979 | $ | 777,220",
+        "value": "785199000",
+        "xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]/tr[5]"
+      }
+    ],
+    "reference_id": "REF-0002006758-2023-12-31",
+    "source_rows": 216,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 13
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0002006758-2024-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments | $ | 962,492 | $ | 942,796 | (2)(7)",
+        "value": "942796000",
+        "xpath": "/html/body/div[336]/div/ix:continuation/div/ix:continuation/table[1]/tr[37]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 938,801 | $ | \u2014 | $ | 3,995 | $ | 942,796 | 237.6 | %",
+        "value": "942796000",
+        "xpath": "/html/body/div[360]/div/ix:continuation/div/ix:continuation/ix:continuation/table/tr[47]"
+      },
+      {
+        "concept": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+        "currency": null,
+        "row": "100.0 | %",
+        "value": "1.000",
+        "xpath": "/html/body/div[364]/ix:continuation/div/ix:continuation/div/ix:continuation/table[1]/tr[40]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments before Foreign Currency Forward Contracts | $ | 962,492 | $ | 942,796 | $ | \u2014 | $ | 6,814 | $ | 935,982",
+        "value": "942796000",
+        "xpath": "/html/body/div[488]/div/ix:continuation/div/ix:continuation/div/ix:nonnumeric/div/ix:nonnumeric/table[1]/tr[7]"
+      }
+    ],
+    "reference_id": "REF-0002006758-2025-12-31",
+    "source_rows": 493,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 22
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0002008748-2024-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Fair value as of June 30, 2024 | $ | 228,062",
+        "value": "228062000",
+        "xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table/tr[3]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2024-06-30",
+    "source_rows": 1,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 1
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total First Lien Secured Debt\u2014non-controlled/non-affiliated | $ | 312,639 | $ | 313,562 | 244.41 | %",
+        "value": "313562000",
+        "xpath": "/html/body/table[14]/tr[14]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total Investments at Fair Value | $ | 312,639 | $ | 313,562 | 244.41 | %",
+        "value": "313562000",
+        "xpath": "/html/body/table[14]/tr[15]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 313,562 | 100.00 | %",
+        "value": "313562000",
+        "xpath": "/html/body/table[17]/tr[12]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 313,562 | 100.00 | %",
+        "value": "313562000",
+        "xpath": "/html/body/table[18]/tr[4]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Fair value as of September 30, 2024 | $ | 313,562",
+        "value": "313562000",
+        "xpath": "/html/body/ix:continuation[7]/ix:continuation[1]/table/tr[11]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Fair value as of September 30, 2024 | $ | 313,562",
+        "value": "313562000",
+        "xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table/tr[11]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2024-09-30",
+    "source_rows": 58,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 7
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost of $ 471,418 ) | 472,588",
+        "value": "472588000",
+        "xpath": "/html/body/table[195]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 472,588 | 100.00",
+        "value": "472588000",
+        "xpath": "/html/body/table[206]/tr[18]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 472,588 | 100.00",
+        "value": "472588000",
+        "xpath": "/html/body/table[207]/tr[4]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Fair Market Value of Investments | 472,588",
+        "value": "472588000",
+        "xpath": "/html/body/ix:nonnumeric[13]/ix:nonnumeric[3]/table/tr[3]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2024-12-31",
+    "source_rows": 110,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 11
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost of $ 589,761 , $ 471,418 , respectively) | $ | 591,274 | $ | 472,588",
+        "value": "591274000",
+        "xpath": "/html/body/table[8]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 591,274 | 100.00 | %",
+        "value": "591274000",
+        "xpath": "/html/body/table[19]/tr[19]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 591,274 | 100.00 | %",
+        "value": "591274000",
+        "xpath": "/html/body/table[20]/tr[3]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2025-03-31",
+    "source_rows": 122,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 10
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost of $ 856,319 , $ 471,418 , respectively) | $ | 856,850 | $ | 472,588",
+        "value": "856850000",
+        "xpath": "/html/body/table[7]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 856,850 | 100 | %",
+        "value": "856850000",
+        "xpath": "/html/body/table[18]/tr[19]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 856,850 | 100.00 | %",
+        "value": "856850000",
+        "xpath": "/html/body/table[19]/tr[3]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2025-06-30",
+    "source_rows": 146,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 11
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost of $ 949,025 , $ 471,418 , respectively) | $ | 950,464 | $ | 472,588",
+        "value": "950464000",
+        "xpath": "/html/body/table[8]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 950,464 | 100.00 | %",
+        "value": "950464000",
+        "xpath": "/html/body/table[22]/tr[3]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2025-09-30",
+    "source_rows": 162,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 11
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost $ 1,312,388 , $ 471,418 , respectively) | $ | 1,309,928 | $ | 472,588",
+        "value": "1309928000",
+        "xpath": "/html/body/table[97]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 1,309,928 | 100.0 | %",
+        "value": "1309928000",
+        "xpath": "/html/body/table[113]/tr[4]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2025-12-31",
+    "source_rows": 212,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 11
+  },
+  {
+    "primary_candidates": [
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total investments at fair value (cost $ 1,423,993 and $ 1,312,388 , respectively) | $ | 1,413,006 | $ | 1,309,928",
+        "value": "1413006000",
+        "xpath": "/html/body/table[8]/tr[6]"
+      },
+      {
+        "concept": "us-gaap:InvestmentOwnedAtFairValue",
+        "currency": "USD",
+        "row": "Total | $ | 1,413,006 | 100.0 | %",
+        "value": "1413006000",
+        "xpath": "/html/body/table[23]/tr[4]"
+      }
+    ],
+    "reference_id": "REF-0002008748-2026-03-31",
+    "source_rows": 248,
+    "source_status": "source_candidates_require_review; not acceptance labels",
+    "tables": 12
+  },
+  {
+    "primary_candidates": [],
+    "reference_id": "REF-0002012139-2025-03-31",
+    "source_rows": 0,
+    "source_status": "no_primary_html_candidate",
+    "tables": 0
+  }
+]

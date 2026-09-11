@@ -1,0 +1,115 @@
+[
+  {
+    "case": 2,
+    "expectation": "terms true; current accrual unknown; distress unproven; preferred rate not loan yield",
+    "id": "PIK-ATHENA"
+  },
+  {
+    "case": 2,
+    "expectation": "02/2022 is acquisition month, not maturity; empty maturity must stay missing",
+    "id": "PARTIAL-ATHENA"
+  },
+  {
+    "case": 19,
+    "expectation": "explicit former name supports legal-name alias within the same filer and disclosed LLC interest",
+    "id": "ENTITY-OCIC-ALIAS"
+  },
+  {
+    "case": 17,
+    "expectation": "same issuer does not merge main equity and unfunded commitment into one disclosure observation",
+    "id": "SCOPE-LSI"
+  },
+  {
+    "case": 13,
+    "expectation": "parent loan and JV delayed draw are separate position scopes",
+    "id": "SCOPE-SENTINEL"
+  },
+  {
+    "expectation": "same legal company, three distinct term/DD/revolver positions",
+    "id": "FACILITIES-PENN",
+    "reference": "review/new_development_rosters.json"
+  },
+  {
+    "cost": 0,
+    "expectation": "Explicit printed numeric 0 cost and 0 FV; preserve reported zero, no proxy donor",
+    "fair_value": 0,
+    "id": "ZERO-CFCO",
+    "literal_evidence": {
+      "cells": [
+        "CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units",
+        "",
+        "(4)(16)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "9/28/2023",
+        "",
+        "",
+        "",
+        "134,166,603",
+        "",
+        "",
+        "0",
+        "",
+        "",
+        "0",
+        "",
+        "",
+        "0.00",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-1542",
+          "context_text": "0001803498 CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "0",
+          "text": "134,166,603",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1542",
+          "context_text": "0001803498 CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "0",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1542",
+          "context_text": "0001803498 CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "0",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1542",
+          "context_text": "0001803498 CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units | Controlled Affiliated Issuer 2025-12-31",
+          "scale": "-2",
+          "text": "0.00",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Investments (1)(19) Footnotes Reference Rate and Spread (2) Interest Rate (2)(15) Acquisition Date Maturity Date Par Amount/Units (1) Cost (3) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1205]/table",
+      "xpath": "/html/body/div[1205]/table/tr[30]"
+    },
+    "row_xpath": "/html/body/div[1205]/table/tr[30]",
+    "source_path": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+    "source_sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+  },
+  {
+    "expectation": "Three source-selected quarterly observations and two continuation edges; no full-population chain claim",
+    "id": "CHAIN-ESDEC",
+    "reference": "programme_reference_evidence_2026-09-09/development_expectations.json#REF-CASE-03"
+  }
+]

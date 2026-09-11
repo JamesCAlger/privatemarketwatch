@@ -1,0 +1,16 @@
+{
+  "schema_version": "bdc-xbrl-html-section-bridge.v1",
+  "cik": "123",
+  "bridges": [
+    {
+      "accession_number": "fixture-accession",
+      "report_date": "2025-12-31",
+      "raw_id_lower": "fixture loan",
+      "family": "debt",
+      "issuer_name": "Fixture",
+      "html_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "table_index": 1,
+      "row_index": 2
+    }
+  ]
+}

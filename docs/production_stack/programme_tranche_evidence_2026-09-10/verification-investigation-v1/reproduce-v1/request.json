@@ -1,0 +1,19 @@
+{
+  "authority": "Owner requested investigation after the stopped tranche; bounded diagnostics only",
+  "code": {
+    "bytes": 13987,
+    "path": "scripts/programme_tranche/diagnose_tests.py",
+    "sha256": "7eb9d46ef855de69f0b39e70ad4eee6117b09fd970b01d2b5f1986929b325b32"
+  },
+  "mode": "profile",
+  "nodes": [
+    "tests/test_bdc_xbrl_wrapper.py::test_trinity_bare_debt_identifier_is_issuer_rollup",
+    "tests/test_bdc_xbrl_wrapper.py::test_blackrock_direct_lending_flat_debt_leaf",
+    "tests/test_bdc_xbrl_wrapper.py::test_silver_point_specialty_credit_comma_leaf_and_total_rows",
+    "tests/test_bdc_xbrl_wrapper_oracle.py::test_coherence_passes_all_existing_wrappers",
+    "tests/test_agent_data_query.py",
+    "tests/test_investigation_orchestration.py",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_fidelity_central_type_keyword_does_not_leak_into_issuer",
+    "tests/test_unified_holdings.py::TestPrepareBdc::test_prefix_parent_with_two_children_summing_exactly_is_removed"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "programme-result-v1",
+  "type": "object",
+  "required": ["schema_version", "candidate_fingerprint", "contract_sha256", "contract_version", "evaluated_utc", "criteria", "verdict", "evaluator_identity", "release_approval", "criterion_inventory_sha256"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "candidate_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "contract_version": {"type": "string"},
+    "evaluated_utc": {"type": "string"},
+    "criteria": {
+      "type": "array", "minItems": 28, "maxItems": 28,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["criterion_id", "title", "status", "results"],
+        "properties": {
+          "criterion_id": {"enum": ["A1","A2","A3","A4","A5","B1","B2","B3","B4","B5","C1","C2","C3","C4","D1","D2","D3","D4","D5","E1","E2","E3","F1","F2","F3","F4","F5","F6"]},
+          "title": {"type": "string"},
+          "status": {"enum": ["PASS", "FAIL", "UNASSESSABLE"]},
+          "results": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["metric_id", "metric_version", "candidate_fingerprint", "threshold_version", "threshold_status", "operator", "value", "status", "reason"],
+              "properties": {"status": {"enum": ["PASS", "FAIL", "UNMEASURED", "UNASSESSABLE"]}}
+            }
+          }
+        }
+      }
+    },
+    "verdict": {"enum": ["FAIL_WITH_UNASSESSED_ITEMS", "FAIL", "UNASSESSABLE", "MEETS_WORKING_CONTRACT"]},
+    "evaluator_identity": {"type": "object"},
+    "release_approval": {"const": "not_granted"},
+    "criterion_inventory_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

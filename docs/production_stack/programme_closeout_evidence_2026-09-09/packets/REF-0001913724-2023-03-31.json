@@ -1,0 +1,342 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl8yOC9mcmFnOjA3ODU4ZjRmNTQ5NjQzMzg5NTFhNTlhMTY4NWZhMTlhL3RhYmxlOmUyNTExMDg5NDhmYTQ1MTdhMGY1ZjE4OWFjYzM2ZDQwL3RhYmxlcmFuZ2U6ZTI1MTEwODk0OGZhNDUxN2EwZjVmMTg5YWNjMzZkNDBfMTMzLTktMS0xLTc5Mzg0_471ccf8f-11e3-4839-b437-d95a748a0e26",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "880,118",
+        "",
+        "",
+        "$",
+        "884,633",
+        "",
+        "",
+        "162.16",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl8yOC9mcmFnOjA3ODU4ZjRmNTQ5NjQzMzg5NTFhNTlhMTY4NWZhMTlhL3RhYmxlOmUyNTExMDg5NDhmYTQ1MTdhMGY1ZjE4OWFjYzM2ZDQwL3RhYmxlcmFuZ2U6ZTI1MTEwODk0OGZhNDUxN2EwZjVmMTg5YWNjMzZkNDBfMTMzLTktMS0xLTc5Mzg0_471ccf8f-11e3-4839-b437-d95a748a0e26",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "884,633",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[93]/table/tr[7]",
+      "table_xpath": "/html/body/div[93]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "884633000"
+    },
+    {
+      "attributes": {
+        "contextref": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl80MC9mcmFnOjhhM2E2MzExYzdlNTQ0NmVhZjg2ZGMwZmQzOWRiZDcxL3RhYmxlOjVlYzczOTJhZDRlZjRjYmY4MzY5ZDA2MGFhYjc5YjU1L3RhYmxlcmFuZ2U6NWVjNzM5MmFkNGVmNGNiZjgzNjlkMDYwYWFiNzliNTVfNC0zLTEtMS03OTM4NA_e609d9ee-074d-4adc-a3f3-f21abff08c1d",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total investments",
+        "$",
+        "880,118",
+        "",
+        "",
+        "$",
+        "884,633",
+        "",
+        "",
+        "$",
+        "822,663",
+        "",
+        "",
+        "$",
+        "824,487",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl80MC9mcmFnOjhhM2E2MzExYzdlNTQ0NmVhZjg2ZGMwZmQzOWRiZDcxL3RhYmxlOjVlYzczOTJhZDRlZjRjYmY4MzY5ZDA2MGFhYjc5YjU1L3RhYmxlcmFuZ2U6NWVjNzM5MmFkNGVmNGNiZjgzNjlkMDYwYWFiNzliNTVfNC0zLTEtMS03OTM4NA_e609d9ee-074d-4adc-a3f3-f21abff08c1d",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "884,633",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[8]/ix:nonnumeric/div[2]/table/tr[6]",
+      "table_xpath": "/html/body/ix:continuation[8]/ix:nonnumeric/div[2]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "884633000"
+    },
+    {
+      "attributes": {
+        "contextref": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl80My9mcmFnOjc2NzQzZWRjNmFmNjQyNzRiMTI4MWMxNjQ3ZWFmNTAzL3RhYmxlOmEyZmYxMWRhZWVhOTRhYjI4NTEzZWFmYmRjNDUxMDQ2L3RhYmxlcmFuZ2U6YTJmZjExZGFlZWE5NGFiMjg1MTNlYWZiZGM0NTEwNDZfNS03LTEtMS03OTM4NA_cc5d5a00-9f91-4003-8643-23603b899c3b",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total financial instruments, at fair value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "884,633",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "i2817377ff6a2439bb20a14b5e934160a_I20230331",
+      "currency": "USD",
+      "fact_id": "id3VybDovL2RvY3MudjEvZG9jOjQ0Y2U1ZmQ3NjgwZTRhNzc4MWQ5YjhmNWE1NDc2ZDZiL3NlYzo0NGNlNWZkNzY4MGU0YTc3ODFkOWI4ZjVhNTQ3NmQ2Yl80My9mcmFnOjc2NzQzZWRjNmFmNjQyNzRiMTI4MWMxNjQ3ZWFmNTAzL3RhYmxlOmEyZmYxMWRhZWVhOTRhYjI4NTEzZWFmYmRjNDUxMDQ2L3RhYmxlcmFuZ2U6YTJmZjExZGFlZWE5NGFiMjg1MTNlYWZiZGM0NTEwNDZfNS03LTEtMS03OTM4NA_cc5d5a00-9f91-4003-8643-23603b899c3b",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "884,633",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[10]/ix:nonnumeric/div[2]/table/tr[7]",
+      "table_xpath": "/html/body/ix:continuation[10]/ix:nonnumeric/div[2]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "884633000"
+    }
+  ],
+  "cik": "0001913724",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1913724/000191372423000032.html",
+  "reference_id": "REF-0001913724-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 171,
+  "source_sha256": "51f31e6ee0d99b077597f9375dc9fdea2f67b9ac96e79e505bafbe2baf0f18fb",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Non-controlled/non-affiliated investments at fair value (amortized cost of $ 849,493 and $ 795,429 , respectively) | $ | 851,253 | $ | 797,019",
+        "Non-controlled/affiliated investments at fair value (amortized cost of $ 30,625 and $ 27,234 , respectively) | 33,380 | 27,468"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments at fair value (amortized cost of $ 849,493 and $ 795,429 , respectively) | $ | 851,253 | $ | 797,019",
+        "Non-controlled/affiliated investments at fair value (amortized cost of $ 30,625 and $ 27,234 , respectively) | 33,380 | 27,468"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "(Unaudited)",
+        "Assets"
+      ],
+      "preceding": [],
+      "rows": 2,
+      "table_xpath": "/html/body/div[50]/table"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Load One Purchaser Corporation (6) | First lien senior secured delayed draw term loan | S + | 6.00 % | 11.16 % | 6/21/2028 | $ | 6,080 | $ | ( 99 ) | $ | ( 97 ) | ( 0.02 ) | %",
+        "Load One Purchaser Corporation | First lien senior secured revolving loan | S + | 6.00 % | 11.16 % | 6/21/2028 | 3,482 | 288 | 294 | 0.05 | %"
+      ],
+      "last": [
+        "Bulk Lift International, LLC (6) | First lien senior secured revolving loan | S + | 6.75 % | 11.91 % | 11/15/2027 | $ | 1,748 | $ | ( 40 ) | $ | ( 38 ) | ( 0.01 ) | %",
+        "Bulk Lift International, LLC | First lien senior secured term loan | S + | 6.75 % | 11.91 % | 11/15/2027 | 5,801 | 5,667 | 5,675 | 1.04 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "Investments",
+        "Non-controlled/non-affiliated senior secured debt"
+      ],
+      "preceding": [],
+      "rows": 27,
+      "table_xpath": "/html/body/div[78]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "K-1 Packaging Group, LLC. (6) | First lien senior secured revolving loan | S + | 6.00 % | 11.16 % | 10/6/2027 | 6,748 | ( 152 ) | ( 144 ) | ( 0.03 ) | %",
+        "K-1 Packaging Group, LLC. | First lien senior secured term loan | S + | 6.00 % | 11.16 % | 10/6/2027 | 33,032 | 32,253 | 32,326 | 5.93 | %"
+      ],
+      "last": [
+        "BPCP WLF Intermedco LLC (6) | First lien senior secured delayed draw term loan | S + | 6.00 % | 11.05 % | 8/19/2027 | 5,846 | ( 103 ) | ( 94 ) | ( 0.02 ) | %",
+        "BPCP WLF Intermedco LLC | First lien senior secured revolving loan | S + | 6.00 % | 11.05 % | 8/19/2027 | 3,383 | 1,294 | 1,299 | 0.24 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "K-1 Packaging Group, LLC. (6) First lien senior secured revolving loan S + 6.00 % 11.16 % 10/6/2027 6,748 ( 152 ) ( 144 ) ( 0.03 ) %",
+        "K-1 Packaging Group, LLC. First lien senior secured term loan S + 6.00 % 11.16 % 10/6/2027 33,032 32,253 32,326 5.93 %"
+      ],
+      "preceding": [],
+      "rows": 30,
+      "table_xpath": "/html/body/div[81]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "BPCP WLF Intermedco LLC | First lien senior secured term loan | S + | 6.00 % | 11.05 % | 8/19/2027 | 23,267 | 22,857 | 22,895 | 4.20 | %",
+        "Treat Planet Acquisition, LLC (6) | First lien senior secured revolving loan | S + | 6.50 % | 11.66 % | 1/11/2028 | 1,965 | ( 56 ) | ( 56 ) | ( 0.01 ) | %"
+      ],
+      "last": [
+        "ADVI Health, LLC (6) | First lien senior secured revolving loan | S + | 7.00 % | 12.16 % | 11/29/2027 | 1,062 | ( 25 ) | ( 23 ) | 0.00 | %",
+        "ADVI Health, LLC | First lien senior secured term loan | S + | 7.00 % | 12.16 % | 11/29/2027 | 6,226 | 6,080 | 6,088 | 1.12 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "BPCP WLF Intermedco LLC First lien senior secured term loan S + 6.00 % 11.05 % 8/19/2027 23,267 22,857 22,895 4.20 %",
+        "Treat Planet Acquisition, LLC (6) First lien senior secured revolving loan S + 6.50 % 11.66 % 1/11/2028 1,965 ( 56 ) ( 56 ) ( 0.01 ) %"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[84]/table"
+    },
+    {
+      "contexts": 32,
+      "first": [
+        "Spear Education Holdings, LLC (6) | First lien senior secured revolving loan | S + | 7.50 % | 12.55 % | 12/15/2027 | 4,463 | ( 116 ) | ( 111 ) | ( 0.02 ) | %",
+        "Spear Education Holdings, LLC | First lien senior secured term loan | S + | 7.50 % | 12.55 % | 12/15/2027 | 12,541 | 12,215 | 12,230 | 2.24 | %"
+      ],
+      "last": [
+        "Icreon Holdings, LLC (6) | First lien senior secured revolving loan | S + | 6.50 % | 11.66 % | 10/26/2027 | 1,049 | ( 24 ) | ( 23 ) | \u2014 | %",
+        "Icreon Holdings, LLC | First lien senior secured term loan | S + | 6.50 % | 11.66 % | 10/26/2027 | 8,244 | 8,051 | 8,068 | 1.48 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "Spear Education Holdings, LLC (6) First lien senior secured revolving loan S + 7.50 % 12.55 % 12/15/2027 4,463 ( 116 ) ( 111 ) ( 0.02 ) %",
+        "Spear Education Holdings, LLC First lien senior secured term loan S + 7.50 % 12.55 % 12/15/2027 12,541 12,215 12,230 2.24 %"
+      ],
+      "preceding": [],
+      "rows": 32,
+      "table_xpath": "/html/body/div[87]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "31,796 | 31,859 | 5.85 | %",
+        "Double E Company, LLC (6) | First lien senior secured delayed draw term loan | S + | 6.00 % | 11.05 % | 6/21/2028 | $ | 1,969 | $ | ( 16 ) | $ | ( 13 ) | 0.00 | %"
+      ],
+      "last": [
+        "26,833 | 26,882 | 4.93 | %",
+        "Total non-controlled/non-affiliated senior secured debt | $ | 849,493 | $ | 851,253 | 156.04 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "31,796 31,859 5.85 %",
+        "Machinery"
+      ],
+      "preceding": [],
+      "rows": 31,
+      "table_xpath": "/html/body/div[90]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "Twin Brook Equity Holdings, LLC(10)(11)(12) | Equity 6.03 % membership interest | $ | 30,625 | $ | 33,380 | 6.12 | %",
+        "Total non-controlled/affiliated investments | $ | 30,625 | $ | 33,380 | 6.12 | %"
+      ],
+      "last": [
+        "Total non-controlled/affiliated investments | $ | 30,625 | $ | 33,380 | 6.12 | %",
+        "Total investments | $ | 880,118 | $ | 884,633 | 162.16 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Company (1)(2) Investment Reference Rate and Spread (5) Interest Rate Maturity Date Principal/ Par Amount(3) Amortized Cost(4) Fair Value Percentage of Net Assets",
+        "Non-controlled/affiliated investments",
+        "Multisector holdings"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/div[93]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "First lien senior secured debt | $ | 849,493 | $ | 851,253 | $ | 795,429 | $ | 797,019",
+        "Investment in affiliated funds | 30,625 | 33,380 | 27,234 | 27,468"
+      ],
+      "last": [
+        "Investment in affiliated funds | 30,625 | 33,380 | 27,234 | 27,468",
+        "Total investments | $ | 880,118 | $ | 884,633 | $ | 822,663 | $ | 824,487"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "(Amounts in thousands) Amortized Cost Fair Value Amortized Cost Fair Value",
+        "First lien senior secured debt $ 849,493 $ 851,253 $ 795,429 $ 797,019"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:continuation[8]/ix:nonnumeric/div[2]/table"
+    },
+    {
+      "contexts": 10,
+      "first": [
+        "First lien senior secured debt | $ | \u2014 | $ | \u2014 | $ | 851,253 | $ | 851,253",
+        "First lien senior secured debt | $ | \u2014 | $ | \u2014 | $ | 851,253 | $ | 851,253"
+      ],
+      "last": [
+        "Investments measured at net asset value (1) | $ | 33,380",
+        "Total financial instruments, at fair value | $ | 884,633"
+      ],
+      "opening_rows": [
+        "",
+        "Assets at Fair Value as of March 31, 2023",
+        "(Amounts in thousands) Level 1 Level 2 Level 3 Total",
+        "First lien senior secured debt $ \u2014 $ \u2014 $ 851,253 $ 851,253"
+      ],
+      "preceding": [],
+      "rows": 10,
+      "table_xpath": "/html/body/ix:continuation[10]/ix:nonnumeric/div[2]/table"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "First lien senior secured debt | $ | 788,381 | Discounted cash flow | Yield | 9.4 % - 13.0 % | 10.5 | % | Decrease",
+        "$ | 788,381"
+      ],
+      "last": [
+        "First lien senior secured debt | $ | 788,381 | Discounted cash flow | Yield | 9.4 % - 13.0 % | 10.5 | % | Decrease",
+        "$ | 788,381"
+      ],
+      "opening_rows": [
+        "",
+        "Asset Class Fair Value as of 3/31/23 Valuation Techniques Significant Unobservable Inputs Input Ranges Weighted Average (1) Impact to Valuation from an Increase in Input",
+        "(Amounts in thousands)",
+        "First lien senior secured debt $ 788,381 Discounted cash flow Yield 9.4 % - 13.0 % 10.5 % Decrease"
+      ],
+      "preceding": [],
+      "rows": 2,
+      "table_xpath": "/html/body/ix:continuation[11]/ix:nonnumeric[2]/div[2]/table"
+    }
+  ]
+}

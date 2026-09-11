@@ -1,0 +1,268 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+        "decimals": "-3",
+        "format": "ixt:numdotdecimal",
+        "id": "F_c90c55e8-e43a-47bd-9187-6ec1278fcb38",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "42,091",
+        "",
+        "",
+        "$",
+        "42,023",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "17,360",
+        "",
+        "",
+        "$",
+        "17,352",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+      "currency": "USD",
+      "fact_id": "F_c90c55e8-e43a-47bd-9187-6ec1278fcb38",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "42,023",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[34]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[5]",
+      "table_xpath": "/html/body/div[34]/ix:nonnumeric/div[1]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "42023000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+        "decimals": "3",
+        "format": "ixt:numdotdecimal",
+        "id": "F_77607305-979e-46f4-ba87-1f787d2fb794",
+        "name": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "43.3",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "18.0",
+        "%",
+        ""
+      ],
+      "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+      "currency": null,
+      "fact_id": "F_77607305-979e-46f4-ba87-1f787d2fb794",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[34]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[34]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+        "decimals": "3",
+        "format": "ixt:numdotdecimal",
+        "id": "F_5ef2e817-0c1d-4a73-8948-fa3a21c0140a",
+        "name": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "concept": "ck0001948368:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+      "currency": null,
+      "fact_id": "F_5ef2e817-0c1d-4a73-8948-fa3a21c0140a",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/div[34]/ix:nonnumeric/div[3]/ix:nonnumeric/table/tr[4]",
+      "table_xpath": "/html/body/div[34]/ix:nonnumeric/div[3]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+        "decimals": "-3",
+        "format": "ixt:numdotdecimal",
+        "id": "F_66e93042-b6a7-46d5-9ffc-617946b73107",
+        "name": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "49,067",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "42,023",
+        "",
+        "",
+        "$",
+        "91,090",
+        "",
+        "",
+        "$",
+        "79,725",
+        "",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "17,352",
+        "",
+        "",
+        "$",
+        "97,077",
+        ""
+      ],
+      "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+      "context_id": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+      "currency": "USD",
+      "fact_id": "F_66e93042-b6a7-46d5-9ffc-617946b73107",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "91,090",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[35]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[6]",
+      "table_xpath": "/html/body/div[35]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "91090000"
+    }
+  ],
+  "cik": "0001948368",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1948368/000095017023039890.html",
+  "reference_id": "REF-0001948368-2023-06-30",
+  "report_date": "2023-06-30",
+  "source_rows": 5,
+  "source_sha256": "8f393176d459a174bbec5840cfb972d7b0a4b8b257750cee662187c29f2e083e",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 2,
+      "first": [
+        "Goldman Sachs Financial Square Government Fund | $ | 79,725 | $ | 136,421 | $ | ( 167,079 | ) | $ | \u2014 | $ | \u2014 | $ | 49,067 | $ | 1,471",
+        "Total Non-Controlled Affiliates | $ | 79,725 | $ | 136,421 | $ | ( 167,079 | ) | $ | \u2014 | $ | \u2014 | $ | 49,067 | $ | 1,471"
+      ],
+      "last": [
+        "Goldman Sachs Financial Square Government Fund | $ | 79,725 | $ | 136,421 | $ | ( 167,079 | ) | $ | \u2014 | $ | \u2014 | $ | 49,067 | $ | 1,471",
+        "Total Non-Controlled Affiliates | $ | 79,725 | $ | 136,421 | $ | ( 167,079 | ) | $ | \u2014 | $ | \u2014 | $ | 49,067 | $ | 1,471"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain (Loss) Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest and Other Income",
+        "For the Six Months Ended June 30, 2023",
+        "Non-Controlled Affiliates"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[33]/ix:nonnumeric/div/ix:continuation/table"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 42,091 | $ | 42,023 | $ | 17,360 | $ | 17,352",
+        "Total investments | $ | 42,091 | $ | 42,023 | $ | 17,360 | $ | 17,352"
+      ],
+      "last": [
+        "1st Lien/Senior Secured Debt | $ | 42,091 | $ | 42,023 | $ | 17,360 | $ | 17,352",
+        "Total investments | $ | 42,091 | $ | 42,023 | $ | 17,360 | $ | 17,352"
+      ],
+      "opening_rows": [
+        "",
+        "June 30, 2023 December 31, 2022",
+        "Investment Type Cost Fair Value Cost Fair Value",
+        "1st Lien/Senior Secured Debt $ 42,091 $ 42,023 $ 17,360 $ 17,352"
+      ],
+      "preceding": [
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[34]/ix:nonnumeric/div[1]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "1st Lien/Senior Secured Debt | $ | 25,255 | Discounted cash flows | Discount Rate | 10.4 % - 11.7 % | 11.2 %"
+      ],
+      "last": [
+        "1st Lien/Senior Secured Debt | $ | 25,255 | Discounted cash flows | Discount Rate | 10.4 % - 11.7 % | 11.2 %"
+      ],
+      "opening_rows": [
+        "",
+        "Level 3 Instruments Fair Value (1)(2) Valuation Techniques (3) Significant Unobservable Inputs Range of Significant Unobservable Inputs (4) Weighted Average (5)",
+        "As of June 30, 2023",
+        "Bank Loans, Corporate Debt, and Other Debt Obligations"
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/div[35]/ix:nonnumeric/div[1]/ix:continuation/table"
+    }
+  ]
+}

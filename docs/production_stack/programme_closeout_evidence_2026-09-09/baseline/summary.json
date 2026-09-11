@@ -1,0 +1,126 @@
+{
+  "byte_identical_to_pilot": true,
+  "candidate": "spec-close-20260909-v2",
+  "elapsed_seconds": 11.41011210000579,
+  "eligible_obligations": 812,
+  "holdings_sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+  "new_development_rosters": [
+    {
+      "candidate_fv": 0.0,
+      "candidate_rows": 0,
+      "primary_result": {
+        "absolute_residual_sum": "52566000.0",
+        "assessed_primary_anchors": 1,
+        "eligible_primary_anchors": 1,
+        "ratio": 1.0,
+        "source_abs_total": "52566000"
+      },
+      "reference_id": "REF-0001950976-2023-12-31",
+      "roster_result": {
+        "ambiguous_duplicate_fv_keys": 0,
+        "candidate_rows": 0,
+        "fv_precision": null,
+        "fv_recall": 0.0,
+        "matched_rows": 0,
+        "output_only_or_duplicate_rows": 0,
+        "published_abs_fv_known": "0",
+        "published_missing_fv_rows": 0,
+        "reference_rows": 4,
+        "row_precision": null,
+        "row_recall": 0.0,
+        "source_abs_fv_known": "52722000",
+        "source_missing_fv_rows": 0,
+        "source_only_rows": 4,
+        "status": "reviewed_reference_comparison"
+      },
+      "scope": "development fund-quarter census, not cohort estimate"
+    },
+    {
+      "candidate_fv": 0.0,
+      "candidate_rows": 0,
+      "primary_result": {
+        "absolute_residual_sum": "650323000.0",
+        "assessed_primary_anchors": 1,
+        "eligible_primary_anchors": 1,
+        "ratio": 1.0,
+        "source_abs_total": "650323000"
+      },
+      "reference_id": "REF-0001930087-2023-06-30",
+      "roster_result": {
+        "ambiguous_duplicate_fv_keys": 0,
+        "candidate_rows": 0,
+        "fv_precision": null,
+        "fv_recall": 0.0,
+        "matched_rows": 0,
+        "output_only_or_duplicate_rows": 0,
+        "published_abs_fv_known": "0",
+        "published_missing_fv_rows": 0,
+        "reference_rows": 1,
+        "row_precision": null,
+        "row_recall": 0.0,
+        "source_abs_fv_known": "650323000",
+        "source_missing_fv_rows": 0,
+        "source_only_rows": 1,
+        "status": "reviewed_reference_comparison"
+      },
+      "scope": "development fund-quarter census, not cohort estimate"
+    }
+  ],
+  "obligations": 910,
+  "population_accuracy": "UNASSESSABLE; no complete independent cohort reference",
+  "proposal_evaluation": "FAIL_WITH_UNASSESSED_ITEMS",
+  "required_history_rows": 261613,
+  "reuse_reason": "Exact same canonical CSV bytes; pilot source/evaluator identities remain in its manifest. Identity outputs are not reused.",
+  "reused_pilot_summary": {
+    "eligible_obligations": 812,
+    "eligible_with_rows": 779,
+    "eligible_without_rows": 33,
+    "held_out_acceptance_rosters": 0,
+    "legacy_ambiguous_joins": 1,
+    "legacy_labels_in_scope": 127,
+    "legacy_missing_joins": 4,
+    "legacy_numeric_flag_review": "Aurelia currency mismatch and Sentinel JV/parent scope and tranche mismatch in stored references; do not count as confirmed pipeline amount errors",
+    "legacy_unique_candidate_joins": 122,
+    "pilot_clusters": 61,
+    "population_accuracy_estimate": null,
+    "presence_ratio": 0.9593596059113301,
+    "primary_anchor_scores": [
+      {
+        "absolute_residual_sum": "0",
+        "assessed_primary_anchors": 1,
+        "cik": "0001899017",
+        "eligible_primary_anchors": 1,
+        "ratio": 0.0,
+        "report_date": "2023-06-30",
+        "source_abs_total": "646250"
+      },
+      {
+        "absolute_residual_sum": "313562000",
+        "assessed_primary_anchors": 1,
+        "cik": "0002008748",
+        "eligible_primary_anchors": 1,
+        "ratio": 1.0,
+        "report_date": "2024-09-30",
+        "source_abs_total": "313562000"
+      }
+    ],
+    "programme_verdict": "NOT_ASSESSABLE",
+    "reviewed_development_rosters": 2,
+    "source_candidate_rows": 15128,
+    "source_documents": 53,
+    "source_field_groups": 47230,
+    "tag_copy_status_counts": {
+      "conflicting_source_facts": 16,
+      "missing_candidate_value": 49,
+      "no_exact_candidate_context": 19485,
+      "unassessable_reference_value": 1234,
+      "unresolved_candidate_currency": 71,
+      "value_mismatch": 30,
+      "within_source_precision": 26345
+    }
+  },
+  "reused_pilot_summary_sha256": "b6bef6122e675e170309f9db84828a6c3ed4374a0c613fdea6505f9b6f4c2aa4",
+  "rows": 780425,
+  "taxonomy_sha256": "0f6a129407650f296cc20d2dc809fa9a72361a9ef5e3ef7f8c92e5b4b14f967e",
+  "typed_parity_different_cells": 0
+}

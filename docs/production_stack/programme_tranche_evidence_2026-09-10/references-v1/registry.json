@@ -1,0 +1,2572 @@
+{
+  "author": "Codex first-tranche controller",
+  "complete_development_schedules": 4,
+  "held_out": 0,
+  "independent_review_authority": null,
+  "independently_reviewed": 0,
+  "label_proposals": 20,
+  "references": [
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 27567,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001508655-2023-06-30.json",
+        "sha256": "f62b5664352e30d6ccae7e5fea4d0ac17a8a350952b92b514003e16c5530f92f"
+      },
+      "reference_id": "REF-0001508655-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1508655",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 25828,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001508655-2023-06-30.json",
+          "sha256": "33c5d8e058602935703fa7a3d18683806aed5669faaccdf37f1399c2c49a188b"
+        },
+        {
+          "bytes": 12819997,
+          "path": "data/raw/filings/bdc_html/1508655/000095017023038066.html",
+          "sha256": "d49be98258d02000ff649f9d352d8bb80984a93ef662bef742f9babc33f45daa"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 20836,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001572694-2023-09-30.json",
+        "sha256": "44ed0b074ff6bd89a04863e0da47b75c12271b4261770b37d65f14f7a7a02aa6"
+      },
+      "reference_id": "REF-0001572694-2023-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1572694",
+        "quarter": "2023-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 19335,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001572694-2023-09-30.json",
+          "sha256": "30c30750675be0a2e915e6ec6f7ea1d1a38757a741e5751a541deee1e9f4411b"
+        },
+        {
+          "bytes": 12767647,
+          "path": "data/raw/filings/bdc_html/1572694/000095017023060336.html",
+          "sha256": "f84de85c7dcd837b1ca4969d6cb282cabd4adf8c785325f5924f470e70cdc9a9"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 10921,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001588272-2023-03-31.json",
+        "sha256": "2eea5f9cd91dc62d32edffdc020f1387fd4b444b8b8d205088eecd14a8572587"
+      },
+      "reference_id": "REF-0001588272-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1588272",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 9674,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001588272-2023-03-31.json",
+          "sha256": "d69fc5c48f45f7ec292d6f273a43357f49b8b85c4a488ca645dc1be88153ffd1"
+        },
+        {
+          "bytes": 3113524,
+          "path": "data/raw/filings/bdc_html/1588272/000119312523145196.html",
+          "sha256": "eeca3734da8285717f690a8a2fe42f5228b3b526d9f56275792625d3ce1580ab"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13809,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001588272-2023-06-30.json",
+        "sha256": "12e3d6b1bb38c55b88e07ca3f11a97dc9458853d627241c34effcde118e64194"
+      },
+      "reference_id": "REF-0001588272-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1588272",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12505,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001588272-2023-06-30.json",
+          "sha256": "816bf0ff91fa89d2ba31c4556ab2ec1cfca8b5471fae235e63c0daf8b6ad2430"
+        },
+        {
+          "bytes": 3168510,
+          "path": "data/raw/filings/bdc_html/1588272/000119312523212420.html",
+          "sha256": "52e1b226212462ef4a95203cb2c6c38c4909e973ea6b373d035e0b042d0b9bf1"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 12664,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001588272-2024-03-31.json",
+        "sha256": "653dc83eb548c80334e5d4c7be38c8354a34d0037ff46b877a799917b3e41f2a"
+      },
+      "reference_id": "REF-0001588272-2024-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1588272",
+        "quarter": "2024-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 11410,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001588272-2024-03-31.json",
+          "sha256": "b039ff4bacf8b1d566d25deef42622ac23559cdc5ea996248246fa04b959d981"
+        },
+        {
+          "bytes": 2744612,
+          "path": "data/raw/filings/bdc_html/1588272/000119312524139303.html",
+          "sha256": "3bf420473a6fbac5bc87561981f5f307441cc70c88bb2ab7a9f97759a94652f2"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 14153,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001634452-2023-03-31.json",
+        "sha256": "701510071186d287d913650fba6cb24962b7c13e96dd4692fd6f89ff414f8cdf"
+      },
+      "reference_id": "REF-0001634452-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1634452",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12837,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001634452-2023-03-31.json",
+          "sha256": "140006d08ba737f527f734ac22fa0a37714b1f720c0ac1240d4c23720d1c28c5"
+        },
+        {
+          "bytes": 10049075,
+          "path": "data/raw/filings/bdc_html/1634452/000119312523145163.html",
+          "sha256": "fdcd47f337568a630db7f7815221f449eb51582898a4ccaf4561b960ae703bfd"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 16315,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001634452-2023-06-30.json",
+        "sha256": "9b40301a9a84e417e7b73d1d429de48319d3310caf6c324d5ae03bf11fdc8085"
+      },
+      "reference_id": "REF-0001634452-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1634452",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 14939,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001634452-2023-06-30.json",
+          "sha256": "24c07af695b6ec3d0ab6c8ec58a5700da57ece1fc133da0ba4a7391da987fa46"
+        },
+        {
+          "bytes": 11673516,
+          "path": "data/raw/filings/bdc_html/1634452/000119312523212335.html",
+          "sha256": "62c93bf0b43f9c8f78caa385413c1934931c6573632bfe42885c1186d7cea7b9"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 21583,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001634452-2025-06-30.json",
+        "sha256": "e6e098f7f08a803a57a91fdc05bb54467112388ac9f0a839c9f3ae20734d9b64"
+      },
+      "reference_id": "REF-0001634452-2025-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1634452",
+        "quarter": "2025-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 20133,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001634452-2025-06-30.json",
+          "sha256": "9d7ef723ebfbe58818f370000521bc12fb948ffcc91112d68d84eb2baa971c92"
+        },
+        {
+          "bytes": 22200042,
+          "path": "data/raw/filings/bdc_html/1634452/000095017025108839.html",
+          "sha256": "5bde956f6e71dfed0e47f90d45abb5b803358de6c3743c50b4c31c78ba289c86"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1034,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001646614-2023-03-31.json",
+        "sha256": "71f3d6c5350a5c08556c84d7e5b029af8ce3138bf629f2d5e162871a98c109c0"
+      },
+      "reference_id": "REF-0001646614-2023-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1646614",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001646614-2023-03-31.json",
+          "sha256": "8083350ef1185d56aa77214d76c9b0716109a40e572bebdc4d1790f8452428f8"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 19960,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001646614-2024-06-30.json",
+        "sha256": "b9f1c088cf6c23ab4de466f2da5ed593186188896cc3edef3fc191d91e0a8e7d"
+      },
+      "reference_id": "REF-0001646614-2024-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1646614",
+        "quarter": "2024-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 18398,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001646614-2024-06-30.json",
+          "sha256": "ffa23cf4094d0eb5148112b7f2a337e7066a055f88813ef9c3f8ee462771f746"
+        },
+        {
+          "bytes": 8469567,
+          "path": "data/raw/filings/bdc_html/1646614/000095017024095339.html",
+          "sha256": "0149a016cd39916fb201dae4fab90ad8e8913f2d4de717efa348a6572750c4ee"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 22103,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001646614-2025-03-31.json",
+        "sha256": "29da5f1442d05503b032b901a91761910da79b77593f0537b8b4684df6f3d7e2"
+      },
+      "reference_id": "REF-0001646614-2025-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1646614",
+        "quarter": "2025-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 20586,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001646614-2025-03-31.json",
+          "sha256": "9f5e2c3a402e112125d56498f97e8491885e9c6ec5562395ed575202a63cff56"
+        },
+        {
+          "bytes": 10341962,
+          "path": "data/raw/filings/bdc_html/1646614/000095017025070278.html",
+          "sha256": "7cb65dbd950c46325e20ba77cccd24d98e29f1ed7a85f3b54651613d5cc53ef2"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 25360,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001674760-2023-09-30.json",
+        "sha256": "0fa2bd8047c7b64c303565476cbc136ce4dd5dc38854c4bde67994bf16c53691"
+      },
+      "reference_id": "REF-0001674760-2023-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1674760",
+        "quarter": "2023-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 23717,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001674760-2023-09-30.json",
+          "sha256": "f8dafc65e193be1133c52ae1f3c9cc78f57004b9b0d5f6cde8b6b919f7ad0b78"
+        },
+        {
+          "bytes": 4796699,
+          "path": "data/raw/filings/bdc_html/1674760/000095017023060346.html",
+          "sha256": "8d9067a7cb4957e707fb69bcef334e9348e56e8627152343ca7ed824a7156a6c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 11328,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001715933-2024-12-31.json",
+        "sha256": "2f5924467b9805dfbc673ef90bd96a54ef4a5e90a2762b08c83c978fb01056b2"
+      },
+      "reference_id": "REF-0001715933-2024-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1715933",
+        "quarter": "2024-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 10023,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001715933-2024-12-31.json",
+          "sha256": "8c914cd0d3e5d1c68b879991a8857d8b40d17bcee2a91045fed7e3cad73a6fda"
+        },
+        {
+          "bytes": 6311349,
+          "path": "data/raw/filings/bdc_html/1715933/000095017025045556.html",
+          "sha256": "ed4a0a37ca3dfd71d121d8780871adec9b94fb034fd48d57d519c7fad7a32396"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 19120,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001743415-2023-03-31.json",
+        "sha256": "f0953a033b19921781b044754dbda8fd1f12d63b31ac6f643b62907dec5be0a2"
+      },
+      "reference_id": "REF-0001743415-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1743415",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 17741,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001743415-2023-03-31.json",
+          "sha256": "2a061261e14af51c72a3b333454a56ee6b385e065ed4c8d33d1c1beb15f7cb23"
+        },
+        {
+          "bytes": 2503650,
+          "path": "data/raw/filings/bdc_html/1743415/000119312523140727.html",
+          "sha256": "7824c21ab34271122ef33f01daae2eb7ec43c1e1df8f6593e6f9e7e3d6e5082b"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 17117,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001743415-2023-06-30.json",
+        "sha256": "10690110e8e90c0a7c137c6deb871d83c2b0f45fdc18b8b869b05040482bf4c2"
+      },
+      "reference_id": "REF-0001743415-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1743415",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 15799,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001743415-2023-06-30.json",
+          "sha256": "0e630563ba9aac20bee957ba6a5c48557691e0ebe1eaf70cf8109bcf06e2e598"
+        },
+        {
+          "bytes": 2238704,
+          "path": "data/raw/filings/bdc_html/1743415/000119312523206204.html",
+          "sha256": "3849ccbe616ac855b6824cbf8859fbdb975ca7bf4c4c52f0956afb0b88bd8119"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 23676,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001792509-2023-03-31.json",
+        "sha256": "e23f987aba025df9e63481e40a28d2b12554473ed0937f422e96f255d784295f"
+      },
+      "reference_id": "REF-0001792509-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1792509",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 22165,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001792509-2023-03-31.json",
+          "sha256": "d253d1ba434d1d960affc8c0c942b60bb6ddf5d2cd26c8c679c760be953f19d5"
+        },
+        {
+          "bytes": 13552412,
+          "path": "data/raw/filings/bdc_html/1792509/000179250923000024.html",
+          "sha256": "d6546a3275b6a6011033df69bb4b15a8920b0c389ae93bfc0979b09973232b91"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 23536,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001792509-2023-06-30.json",
+        "sha256": "5d493a1b340144d36e91ef3d6dcafe1c90d686db45554dbd0b7e1072e8944543"
+      },
+      "reference_id": "REF-0001792509-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1792509",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 22004,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001792509-2023-06-30.json",
+          "sha256": "11523ab267e2c96bfd62cbdef98a618c861db11e374db1080c53bffa445745ae"
+        },
+        {
+          "bytes": 8050327,
+          "path": "data/raw/filings/bdc_html/1792509/000179250923000028.html",
+          "sha256": "2dd9ee691f6b6c9ccba860bab4e62b975f2546a29a397c25ae216a591b1c8d58"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 27907,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001792509-2023-09-30.json",
+        "sha256": "9bb5b06a544b2d5d63fa470b07b02916416e664657ffa6ce91d66844d496ee18"
+      },
+      "reference_id": "REF-0001792509-2023-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1792509",
+        "quarter": "2023-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 26270,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001792509-2023-09-30.json",
+          "sha256": "92f8da905e5bcbf414a65820edcb6346bd39e768f794e83a6362eb474305b1cb"
+        },
+        {
+          "bytes": 8264101,
+          "path": "data/raw/filings/bdc_html/1792509/000179250923000032.html",
+          "sha256": "e41149cc58d380d0880e068c6b33061e38cf76842841136842cf320dcec90804"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 15103,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001792509-2024-09-30.json",
+        "sha256": "c1308a429945b8854f071107184e004ede59c96162df43629ed6bb1784b6c47d"
+      },
+      "reference_id": "REF-0001792509-2024-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1792509",
+        "quarter": "2024-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 13738,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001792509-2024-09-30.json",
+          "sha256": "9856c717eb2ffcbada81b44d6a60d38d6043434d4582667fe0c03f25053f4e98"
+        },
+        {
+          "bytes": 6414789,
+          "path": "data/raw/filings/bdc_html/1792509/000179250924000034.html",
+          "sha256": "a627f90dde9cc7b64f98d6a5ddbf4826dcd865adf8415f63bc8e7f4f571f7102"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 29828,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001837532-2025-06-30.json",
+        "sha256": "11e694afdd82df0b15dbf0ca156f49e3c5abc321b736dd44f8b0e5fa9a3d0402"
+      },
+      "reference_id": "REF-0001837532-2025-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1837532",
+        "quarter": "2025-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 28203,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001837532-2025-06-30.json",
+          "sha256": "60f552cd19b66510ab56bac12803e7e74cf75b9ed96cac9dd2a9bf7a5107d4bb"
+        },
+        {
+          "bytes": 38827537,
+          "path": "data/raw/filings/bdc_html/1837532/000095017025105984.html",
+          "sha256": "56f16b2ad7b2a995e335b5a3e57e2ef7ae2e859f877bfc429a02fd9644c0b025"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 12577,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001859919-2023-03-31.json",
+        "sha256": "cfc731d839e64722e1813993d6776c28d515a1fceaaa669d75b50666dbe042f4"
+      },
+      "reference_id": "REF-0001859919-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1859919",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 11345,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001859919-2023-03-31.json",
+          "sha256": "e695854b1b51697ff7baed727e9506838fc7d3889e6d1a5314b38a097a22a39f"
+        },
+        {
+          "bytes": 33415570,
+          "path": "data/raw/filings/bdc_html/1859919/000185991923000018.html",
+          "sha256": "354dc1e156dca0a8ffd154746b9f020298ebf4d05b84348699c61360add0bcd9"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 24971,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001860424-2023-03-31.json",
+        "sha256": "83fba731319a1b8f0b35161afb3e79c7ede521fc8078461965f5e6fed1cc6541"
+      },
+      "reference_id": "REF-0001860424-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1860424",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 23460,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001860424-2023-03-31.json",
+          "sha256": "81ba38925595c6c120deb112413b7020161ef57472189282d071efcf54b873b4"
+        },
+        {
+          "bytes": 7029936,
+          "path": "data/raw/filings/bdc_html/1860424/000095017023021345.html",
+          "sha256": "5db7acb9576d7e69c5501a5958bf6f6aa493d2dc2c2a60a0e0ae71236599e104"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 12388,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001872371-2024-06-30.json",
+        "sha256": "d76290063ffdeb37aea7448255d612e4d3f09375d06c431bd52a005436c8bb7f"
+      },
+      "reference_id": "REF-0001872371-2024-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1872371",
+        "quarter": "2024-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 11137,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001872371-2024-06-30.json",
+          "sha256": "67078a40db37611e249c85f4c2653424677327b79fb7f24d3717b0d3a22cf288"
+        },
+        {
+          "bytes": 6324652,
+          "path": "data/raw/filings/bdc_html/1872371/000187237124000011.html",
+          "sha256": "88e71b12df9ae8e7df838495c75938a219445a57010a141b3895cc906b3fd119"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 6801,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001872371-2025-12-31.json",
+        "sha256": "5d808c08f6844a109598d1b19be02225b9e5e1ea121ffb95b78564ba732960b6"
+      },
+      "reference_id": "REF-0001872371-2025-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1872371",
+        "quarter": "2025-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 5678,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001872371-2025-12-31.json",
+          "sha256": "d17bee6aaca43afa019be148f3d3e2efafb8ea37b344812e3bfc3ea136344856"
+        },
+        {
+          "bytes": 7023044,
+          "path": "data/raw/filings/bdc_html/1872371/000187237126000004.html",
+          "sha256": "08f6c5c99f69140de07fa45d21a0f67a469607b3cb61e3a7950f58855cb3635b"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 26743,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001885968-2025-09-30.json",
+        "sha256": "f9afc95e707c2015b18f3bbee2fd3171ba9b55b35f359a757fbd9c6893efb031"
+      },
+      "reference_id": "REF-0001885968-2025-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1885968",
+        "quarter": "2025-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 25168,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001885968-2025-09-30.json",
+          "sha256": "3f2079de4a7b8d6b20638b119795909156ff34740de0f1c4eff7c98f744ad15b"
+        },
+        {
+          "bytes": 22703100,
+          "path": "data/raw/filings/bdc_html/1885968/000119312525277734.html",
+          "sha256": "a698a8134f72d68231e5e3e63db4f12e049e369fc3d02daea3a0c12e62b28953"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 2999,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001899017-2023-03-31.json",
+        "sha256": "49bd0ddfb684768629fdb64a1f3a2b0fd41acb6d3134383a27cfe8591bc1ff48"
+      },
+      "reference_id": "REF-0001899017-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1899017",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 1994,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001899017-2023-03-31.json",
+          "sha256": "cc16790f86490a2195ccfa3cc670ad840e4bb2551e3f89d022961909beaa1d30"
+        },
+        {
+          "bytes": 553722,
+          "path": "data/raw/filings/bdc_html/1899017/000110465923060706.html",
+          "sha256": "da808363a6b9a8a82867121fed6da1ed87fdaf62afcf01b02b7d5ac671687e47"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4482,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001899017-2023-06-30.json",
+        "sha256": "e334d232d63017fff1aa3466564fd7b2ae06118781295f4964a0d72292ab30c0"
+      },
+      "reference_id": "REF-0001899017-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1899017",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 3440,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001899017-2023-06-30.json",
+          "sha256": "e01d47ba90df15d732817f574c015ed806e8fc561b726423574e6722f13d68d7"
+        },
+        {
+          "bytes": 1314256,
+          "path": "data/raw/filings/bdc_html/1899017/000095017023041723.html",
+          "sha256": "a31ed3181befc59c13717b77194499d3a6707434b071144f886866ca57a52f08"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4495,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001899017-2023-09-30.json",
+        "sha256": "15e8e56484622c45e2024561dd8dce29694698c0ae4d459a95482a63f931f040"
+      },
+      "reference_id": "REF-0001899017-2023-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1899017",
+        "quarter": "2023-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 3413,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001899017-2023-09-30.json",
+          "sha256": "ddfeb4a02f616533e89db0db4a8e7b3d4f4c99a1057ebdcff567544fde692c60"
+        },
+        {
+          "bytes": 1206101,
+          "path": "data/raw/filings/bdc_html/1899017/000095017023062818.html",
+          "sha256": "ccd4c25e5dba50ced319673c457f1ead95fd631471a528cbd38379625054c1d7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1017,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001899996-2023-03-31.json",
+        "sha256": "7bcb8d79b31feeefbd51788ff4b6ede809c51719eed8a52cb39fd720bde00d7d"
+      },
+      "reference_id": "REF-0001899996-2023-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1899996",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001899996-2023-03-31.json",
+          "sha256": "40b6a611e002034514306171a0952396adc6a8920ecb27323df4513c50d72edc"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1017,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001901164-2023-03-31.json",
+        "sha256": "3b6724446cc81add934e071888334ccda7afd5102adef49a229766dd490562fc"
+      },
+      "reference_id": "REF-0001901164-2023-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1901164",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001901164-2023-03-31.json",
+          "sha256": "8200e9679ea6bc5bc5d002d5b0bc2756d1bfb1013fc5a591781344faf59a9558"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13549,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001902649-2026-03-31.json",
+        "sha256": "e48a507e74d04c39348e688732166c0dea824646d898b50439c2cac330755475"
+      },
+      "reference_id": "REF-0001902649-2026-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1902649",
+        "quarter": "2026-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12272,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001902649-2026-03-31.json",
+          "sha256": "34b82a7038fba70be3839e384bdc13fa4489273eeb0ede3c967d65aa0ce5b649"
+        },
+        {
+          "bytes": 24682258,
+          "path": "data/raw/filings/bdc_html/1902649/000119312526211710.html",
+          "sha256": "de5a156be080bd1b8dd016ea49207c258fd7a67c7ac0d23f945ee4c3b4d0e00b"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13926,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001905824-2023-03-31.json",
+        "sha256": "0b06ac2ffd3f77163be3f6aeabbefd27a0c4d941192751b17d200b869b8377f4"
+      },
+      "reference_id": "REF-0001905824-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1905824",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12616,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001905824-2023-03-31.json",
+          "sha256": "9860aa5096c896bcecb786d883a19243517f29f7781873a2cba80e9430693945"
+        },
+        {
+          "bytes": 1589151,
+          "path": "data/raw/filings/bdc_html/1905824/000119312523142263.html",
+          "sha256": "d98aeb009050f8dbd41677ad8168359291e995fd3771216005a3257f901ef571"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13809,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001905824-2023-06-30.json",
+        "sha256": "8c5a3dfbb7560ad2692d54ec733d8adbc1052d71da7b04f0a678789c2ea42928"
+      },
+      "reference_id": "REF-0001905824-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1905824",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12482,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001905824-2023-06-30.json",
+          "sha256": "e9cdbae9bf02a772afb7b5282777dbd6de4c13a4dbe2eafadced4c1ddcc46f27"
+        },
+        {
+          "bytes": 1753960,
+          "path": "data/raw/filings/bdc_html/1905824/000119312523210651.html",
+          "sha256": "1403858977f8e1fa48a8207615a8aa60db8ef806c309e9a3bba849e0173802b7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 18076,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001913724-2023-03-31.json",
+        "sha256": "969dd251eb62507e43081e95695e5b3ea57d703feb379bad5855df7c09323431"
+      },
+      "reference_id": "REF-0001913724-2023-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1913724",
+        "quarter": "2023-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 16698,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001913724-2023-03-31.json",
+          "sha256": "51f267dbe10021373cc6e5890583b2365db554a3bc0f5f42d4d39c95c98c1b70"
+        },
+        {
+          "bytes": 4151437,
+          "path": "data/raw/filings/bdc_html/1913724/000191372423000032.html",
+          "sha256": "51f31e6ee0d99b077597f9375dc9fdea2f67b9ac96e79e505bafbe2baf0f18fb"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 988,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001916099-2023-12-31.json",
+        "sha256": "352e94d77194c13330d387d9303bdbd017e4ff746b24d2c1f10dbc8442bab9ce"
+      },
+      "reference_id": "REF-0001916099-2023-12-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1916099",
+        "quarter": "2023-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001916099-2023-12-31.json",
+          "sha256": "cd7526ef63a0cc1e4fea749154d6bfb9b076ae18d61d3df808da90311c49d7dd"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 14298,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001916099-2024-03-31.json",
+        "sha256": "0f04a38072ade74ebe423ebdbb77a04c4b3e21e6341e7269ae31c0e67e07a7aa"
+      },
+      "reference_id": "REF-0001916099-2024-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1916099",
+        "quarter": "2024-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 13027,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001916099-2024-03-31.json",
+          "sha256": "d20b27c6d8351f936bdb7632cbbca21ace3f743ca737e454cba99f7f39c68be3"
+        },
+        {
+          "bytes": 1541841,
+          "path": "data/raw/filings/bdc_html/1916099/000095017024058570.html",
+          "sha256": "77ce45b0b723aff4a468b265fc6ad7609d9e453c2b75ed088e5e357559002561"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 15869,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001918712-2023-12-31.json",
+        "sha256": "0214db2b790d5f0498751dda9beea4d62e4fb547f9616998f4c82174ce6dcdab"
+      },
+      "reference_id": "REF-0001918712-2023-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1918712",
+        "quarter": "2023-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 14471,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001918712-2023-12-31.json",
+          "sha256": "fbefcb4c94556d24296edf622c3924e65ef33f1c7a35357e7948d19bebb8fd3c"
+        },
+        {
+          "bytes": 5930158,
+          "path": "data/raw/filings/bdc_html/1918712/000191871224000048.html",
+          "sha256": "8c899eafdc0dd69c0b4243ba8836c7846a68e6a70bbda356422b121da17f17b2"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 16125,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001919369-2024-12-31.json",
+        "sha256": "0f97d246641c6e18322600737729d5bd6bce0d75334218e4afca360140a21d53"
+      },
+      "reference_id": "REF-0001919369-2024-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1919369",
+        "quarter": "2024-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 14742,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001919369-2024-12-31.json",
+          "sha256": "12d64003b49e8df55aeeef3482c24c5853ba14aa42a4da54eea1020c915ed173"
+        },
+        {
+          "bytes": 2498726,
+          "path": "data/raw/filings/bdc_html/1919369/000191936925000009.html",
+          "sha256": "e1fc3f38f3cf9d7fb7d6235be9f5eb140406b8e38986a5455a36a427589709aa"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 25810,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001919369-2025-09-30.json",
+        "sha256": "7538c20a8b51d5d80dd686ead99681ff463cdf621bcee31cf124ee0c1c1572b7"
+      },
+      "reference_id": "REF-0001919369-2025-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1919369",
+        "quarter": "2025-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 24293,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001919369-2025-09-30.json",
+          "sha256": "5fc0f7d607d1d9a6b67b5815ba37e24b610a87d6b83db766a02af20bc55cfb99"
+        },
+        {
+          "bytes": 6701999,
+          "path": "data/raw/filings/bdc_html/1919369/000119312525271488.html",
+          "sha256": "f9ca5b7892e7b6da304fe3cc1137119faf6b9b1ba6b280f88401e5bd5dec747c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 40066,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001920145-2025-12-31.json",
+        "sha256": "83ece13ba435ba396be1d24d78b682d7177526d1846f5e5c8d789af273a9f620"
+      },
+      "reference_id": "REF-0001920145-2025-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1920145",
+        "quarter": "2025-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 38254,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001920145-2025-12-31.json",
+          "sha256": "c62459804ed7c267fa22a4e5671a99f9c0401d4183900cbf4088308cfd5bd0dc"
+        },
+        {
+          "bytes": 21738069,
+          "path": "data/raw/filings/bdc_html/1920145/000119312526088668.html",
+          "sha256": "b1a700571e2e5b3563d9283c0261318cdbb052876d1843a760d2e274ddbbebeb"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 19885,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001920453-2023-12-31.json",
+        "sha256": "d7cab8bce1ae274494272cda2087d5c955292203e271f03e00b01c1ec8f0919a"
+      },
+      "reference_id": "REF-0001920453-2023-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1920453",
+        "quarter": "2023-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 18381,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001920453-2023-12-31.json",
+          "sha256": "4f7f5829a92d1a2c3d2211fac21e56c5c5c31dea8b7c86b0102bdba2b4ebfad1"
+        },
+        {
+          "bytes": 5100665,
+          "path": "data/raw/filings/bdc_html/1920453/000095017024035353.html",
+          "sha256": "f06d490496fec2dc1e414a7684588654fee6ce2ed8c914ec43f680a13295202c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 43682,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001920453-2026-03-31.json",
+        "sha256": "d4c7080da8cf5658e9b46927c123f9c873b0aa169b71606c93e3b556d610c653"
+      },
+      "reference_id": "REF-0001920453-2026-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1920453",
+        "quarter": "2026-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 41687,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001920453-2026-03-31.json",
+          "sha256": "f05c2ecd24d6777c7000f78fce218c07772452aeab688f312403c478ffed9312"
+        },
+        {
+          "bytes": 17906322,
+          "path": "data/raw/filings/bdc_html/1920453/000119312526214226.html",
+          "sha256": "58667bff809f36b505e6e257e769148278664dd964063f11dc2ea7d5c0fc92d6"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1175,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001930087-2023-06-30.json",
+        "sha256": "3c7a5989f8498998b992d9da68bfcda5032a0e6993b879b41c93616fd22121eb"
+      },
+      "reference_id": "REF-0001930087-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1930087",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 260,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001930087-2023-06-30.json",
+          "sha256": "677299213f8f04360ebb658216f7a1ae0cc58fa40d476183485807ca8df489df"
+        },
+        {
+          "bytes": 363979,
+          "path": "data/raw/filings/bdc_html/1930087/000193008723000010.html",
+          "sha256": "2d2d933de4a1653010187f1ad20f68152518563c99129d556db325c10a43f006"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 22121,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001948368-2023-06-30.json",
+        "sha256": "f22817223f0cb259301bc3e6f18e03f257774f5847c9bd02d38b1e8a4d088607"
+      },
+      "reference_id": "REF-0001948368-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1948368",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 20494,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001948368-2023-06-30.json",
+          "sha256": "0b6d46793971910444d85b6124ba3b9f1f4cb4ffa5d62fbd526823abf48af3f5"
+        },
+        {
+          "bytes": 2657547,
+          "path": "data/raw/filings/bdc_html/1948368/000095017023039890.html",
+          "sha256": "8f393176d459a174bbec5840cfb972d7b0a4b8b257750cee662187c29f2e083e"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 26955,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001948368-2024-09-30.json",
+        "sha256": "9febccc477031e90872b04debea3accb75858ba58b1049eb4256b230d13e2712"
+      },
+      "reference_id": "REF-0001948368-2024-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1948368",
+        "quarter": "2024-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 25135,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001948368-2024-09-30.json",
+          "sha256": "b86b3325ae018a7e5c76eb784f31169bc7d12727db1f3fdd677840a4d8decd6a"
+        },
+        {
+          "bytes": 4562966,
+          "path": "data/raw/filings/bdc_html/1948368/000095017024125398.html",
+          "sha256": "90c8c535f01caeb046cf2f8f23de8127e979fa4a06afd29a85f5f73c55f1c39d"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 12047,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001950803-2023-06-30.json",
+        "sha256": "8925f645c0a53e875966cf1b29ec85d39d8b1cd4bfe2046af330626868296f6e"
+      },
+      "reference_id": "REF-0001950803-2023-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1950803",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 10861,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001950803-2023-06-30.json",
+          "sha256": "3692d3ef0bcb35690b4aae6a18c31f7151c7ed0955b25a5ddded09cf31f3b724"
+        },
+        {
+          "bytes": 1648488,
+          "path": "data/raw/filings/bdc_html/1950803/000119312523210954.html",
+          "sha256": "0a25243845ca3164bec5eaca41c00ede7cbc1b22feeba99ff499702ec03b6ba9"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13961,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001950976-2023-12-31.json",
+        "sha256": "0523cc4363a4bcf1fa9a53843ad0b07000ac37505d4518a03c1fe38c11091541"
+      },
+      "reference_id": "REF-0001950976-2023-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1950976",
+        "quarter": "2023-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12802,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001950976-2023-12-31.json",
+          "sha256": "e997287f00207b81a2b92245dc541e62055bf57dde36c9d8c88d3701061a687f"
+        },
+        {
+          "bytes": 1079519,
+          "path": "data/raw/filings/bdc_html/1950976/000119312524063364.html",
+          "sha256": "b8201e99865a871ed0f6ddba605a6199775077d6089ad7420f2f7bb99d97be57"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1017,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0001954360-2023-06-30.json",
+        "sha256": "d583b0b39b994ca8d7d63b632919744f96cf9062634b11f2de8194d5a04dfa6a"
+      },
+      "reference_id": "REF-0001954360-2023-06-30",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "1954360",
+        "quarter": "2023-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0001954360-2023-06-30.json",
+          "sha256": "335ab6e0f1dbae9ebcd9fc99d519449c02ea9a56cea92359a17acad739cb8565"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 13452,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002006758-2023-12-31.json",
+        "sha256": "b7e63642dd2187f8e44ee0e63c605f15d4bde13e9ad17f9732abd1df1012d565"
+      },
+      "reference_id": "REF-0002006758-2023-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2006758",
+        "quarter": "2023-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 12036,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002006758-2023-12-31.json",
+          "sha256": "7bb18148dafb742a532962797da593a848dce7939c2184887f432914a5fa5bb9"
+        },
+        {
+          "bytes": 11597616,
+          "path": "data/raw/filings/bdc_html/2006758/000095017025040394.html",
+          "sha256": "18eb8dfd8d9e22bee07ca36634b716907ddc10070f253f8639a0d777af3aa4df"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1054,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002006758-2024-03-31.json",
+        "sha256": "2834e1630742b359e925ffcb207acdb2dc53c364c69ad2d8b54c7e9292352a57"
+      },
+      "reference_id": "REF-0002006758-2024-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2006758",
+        "quarter": "2024-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002006758-2024-03-31.json",
+          "sha256": "7765a14c393a5267f292773f0c10e4b4884b5457ec1d7866bbc04242d4cb57f5"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 17056,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002006758-2025-12-31.json",
+        "sha256": "0804a800195981420666dd4ab56e20ce4f3a27707a2d4e3251ffb546ff0d45b1"
+      },
+      "reference_id": "REF-0002006758-2025-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2006758",
+        "quarter": "2025-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 15561,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002006758-2025-12-31.json",
+          "sha256": "972253470d53653ce607cf0156bb6a03203a05f03de58c4694100a53a538f412"
+        },
+        {
+          "bytes": 17983509,
+          "path": "data/raw/filings/bdc_html/2006758/000119312526104070.html",
+          "sha256": "5ffe8f7b6928f2d0d73d04a017be3698544d70085b49f1feacb80a5a6d99dde8"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1084,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2024-03-31.json",
+        "sha256": "70a07539882d72f586ddc0e58892bf8bd28e01b4383532a072dd3e8ba7db870d"
+      },
+      "reference_id": "REF-0002008748-2024-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2024-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2024-03-31.json",
+          "sha256": "1b21e52572659a8d2b4138b32871c1b0bc04801b060633ae99432ccdc6c867d5"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 9646,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2024-06-30.json",
+        "sha256": "891d16c353e1e00a5baf728045528fa6c965d1d88d7fe5767c86360b5a5c8821"
+      },
+      "reference_id": "REF-0002008748-2024-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2024-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 8345,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2024-06-30.json",
+          "sha256": "eb9f3205c1403dddb32e004c20c4a051b728587e2a9f657827958b15b4502cce"
+        },
+        {
+          "bytes": 618464,
+          "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+          "sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 9607,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2024-09-30.json",
+        "sha256": "837a9e78bd8c45164a6d80ff461c49000f424e5d46b8c18c5247c18a26d1be58"
+      },
+      "reference_id": "REF-0002008748-2024-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2024-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 8345,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2024-09-30.json",
+          "sha256": "32f5d6130df4c83ce10ccbf7a83b6eefa20cb84047ff52f6df7e78540867e960"
+        },
+        {
+          "bytes": 618464,
+          "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+          "sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 18726,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2024-12-31.json",
+        "sha256": "1687ea1e6a62da74f3d7d30211f4b773f82c85f3d2d22144f0337798aa774b3a"
+      },
+      "reference_id": "REF-0002008748-2024-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2024-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 17149,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2024-12-31.json",
+          "sha256": "50af9e36fa88ff0391df6575143ac0b54736932a861175c12b64dca0bdb07453"
+        },
+        {
+          "bytes": 1907658,
+          "path": "data/raw/filings/bdc_html/2008748/000093041325000900.html",
+          "sha256": "e47fce3a1b63ee29bc49a2ce454b64b92e6c99f88c6cb5dd73b842fd2b3cc0cc"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 26799,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2025-03-31.json",
+        "sha256": "3a720994c999090feca708bbd215b0330a22d8aed5dc783cf88a8054db5fc57f"
+      },
+      "reference_id": "REF-0002008748-2025-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2025-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 24932,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2025-03-31.json",
+          "sha256": "9a0b155df29a18be848303482095ec980b3a846250f9dcd33093b3042e17dc57"
+        },
+        {
+          "bytes": 1310923,
+          "path": "data/raw/filings/bdc_html/2008748/000093041325001811.html",
+          "sha256": "f913be4a65683d29ec2a7ad6391e7501bd42ca0fdff378e3dc5cd40bfc854807"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 30533,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2025-06-30.json",
+        "sha256": "ea903eabe1b94b0bf59838b3ac582a6f00cb6c17c5601159eeb16b0f0452c146"
+      },
+      "reference_id": "REF-0002008748-2025-06-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2025-06-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 28564,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2025-06-30.json",
+          "sha256": "533c12117d174f220f08f9562a2790e0b125942f0e042360e0c8786cff987ddd"
+        },
+        {
+          "bytes": 1909478,
+          "path": "data/raw/filings/bdc_html/2008748/000093041325002470.html",
+          "sha256": "1a6a2208382484a877dd38ef40d8bd8aed0731bf48dcb16d7eeb99a5e77470fe"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 32040,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2025-09-30.json",
+        "sha256": "c2c611838ec959def6e4aeb1662a8ba7c34f7b13d0470f651622396b94af6476"
+      },
+      "reference_id": "REF-0002008748-2025-09-30",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2025-09-30",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 30042,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2025-09-30.json",
+          "sha256": "13ef36e372847e9fdc3b8ec76712c2fce1aa1e6ad6ae7c35bfe9ac162c7861a7"
+        },
+        {
+          "bytes": 2108362,
+          "path": "data/raw/filings/bdc_html/2008748/000093041325003431.html",
+          "sha256": "a88f94c0b29af875ef7c3b896f33d651b8fa9d1aa93171242d2db3fa8a111d71"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 29205,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2025-12-31.json",
+        "sha256": "e6232cecb0146d8af891af4c9fcfa0c5fa1ad0c3cce0a7e1258990e1db2301b5"
+      },
+      "reference_id": "REF-0002008748-2025-12-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2025-12-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 27273,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2025-12-31.json",
+          "sha256": "0d24f6c363df9ee53f3b651b6930ed1f0f6594b44df2eac9f03f7fb540ee45cc"
+        },
+        {
+          "bytes": 3241143,
+          "path": "data/raw/filings/bdc_html/2008748/000093041326000841.html",
+          "sha256": "7604189dfe5f193e6737cd2e21f0a815bc649919003b0cdf33a18d994e250058"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 29928,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002008748-2026-03-31.json",
+        "sha256": "27ca468788b8da0b1aec16968b792043da5024393ec07eb980b40fad4d5e764d"
+      },
+      "reference_id": "REF-0002008748-2026-03-31",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2008748",
+        "quarter": "2026-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 27949,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002008748-2026-03-31.json",
+          "sha256": "a7b069f826f58392a129c557d9407be89f90f39294717062edbbe8383b7168dc"
+        },
+        {
+          "bytes": 3239377,
+          "path": "data/raw/filings/bdc_html/2008748/000093041326001612.html",
+          "sha256": "8dae2d352dde6895afb4d05e1a158699e33bea1ed7eedb1dc80c4a2ab456c349"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 1017,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/REF-0002012139-2025-03-31.json",
+        "sha256": "3fa3154cbc171ed15b80fa056a8b9580649303ebb89ce4b8dba450f624cd0c10"
+      },
+      "reference_id": "REF-0002012139-2025-03-31",
+      "review_attestation": null,
+      "review_status": "source_unavailable",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "2012139",
+        "quarter": "2025-03-31",
+        "unit": "fund-quarter"
+      },
+      "sources": [
+        {
+          "bytes": 98,
+          "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/primary/REF-0002012139-2025-03-31.json",
+          "sha256": "e4ad08a24d5fdfb902afff08c8cbd7771e91f807190b5cf88e073a3dcad8283c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Operating asset-management business equity; neither PE-fund nor credit-fund classification is supported. Leaf rights need review."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4262,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-00.json",
+        "sha256": "5513ca221432b37329a8427c2d7ec6654ebde87b0f9ff54ce0b2eb0f8c2a79ca"
+      },
+      "reference_id": "LABEL-00",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001287750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 24506125,
+          "path": "data/raw/filings/bdc_html/1287750/000128775026000006.html",
+          "sha256": "ad71baf7a7214d6301ba8a431b40f34c081508999847273ab3add7bcb49f317f"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Co-investment vehicle subordinated certificates; preserve credit-vehicle interest rather than ordinary direct borrower loan."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 5189,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-01.json",
+        "sha256": "783c9725b7b5a02077f436eedf4be15cb44541ef528078c2941b156006717838"
+      },
+      "reference_id": "LABEL-01",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001287750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 24506125,
+          "path": "data/raw/filings/bdc_html/1287750/000128775026000006.html",
+          "sha256": "ad71baf7a7214d6301ba8a431b40f34c081508999847273ab3add7bcb49f317f"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4915,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-02.json",
+        "sha256": "32285ef9f0b124bc4858526cdf03592d5f0ee4eca749b498a6fb720a77ba50a1"
+      },
+      "reference_id": "LABEL-02",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001287750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 24506125,
+          "path": "data/raw/filings/bdc_html/1287750/000128775026000006.html",
+          "sha256": "ad71baf7a7214d6301ba8a431b40f34c081508999847273ab3add7bcb49f317f"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Narrative identifies senior-secured loan JV with pension investor; LP interest is private-credit vehicle exposure."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4028,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-03.json",
+        "sha256": "0e083ce46087ee5f794bdd7d260af732a8bb4c68803e86b4d7931c348ae4674d"
+      },
+      "reference_id": "LABEL-03",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001803498",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 32501837,
+          "path": "data/raw/filings/bdc_html/1803498/000180349826000014.html",
+          "sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Class B units pay 7.60% PIK; equity is supported but common versus preferred rights cannot be inferred from units alone."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 5023,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-04.json",
+        "sha256": "d02b1b6b9ec4d475fe635d2d05252104bd99c1eb36e7002e4baca9b31283ad7b"
+      },
+      "reference_id": "LABEL-04",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001803498",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 32501837,
+          "path": "data/raw/filings/bdc_html/1803498/000180349826000014.html",
+          "sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Investee-fund table explicitly says real estate credit and income; common shares are a fund interest, not directly held property."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4783,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-05.json",
+        "sha256": "f65d9db9fb4b9a45109b6ab92bc5ca17c5dca4c026b958439347bda08f47e3c4"
+      },
+      "reference_id": "LABEL-05",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001803498",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 32501837,
+          "path": "data/raw/filings/bdc_html/1803498/000180349826000014.html",
+          "sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "LLC interest is disclosed; operating-company versus pooled-vehicle nature and precise leaf need business/rights evidence."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4431,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-06.json",
+        "sha256": "77a213ba635ce8622ccc2b9dfa64bc5d3e1ad8f23c2d7d2e6d623289205c0206"
+      },
+      "reference_id": "LABEL-06",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001803498",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 32501837,
+          "path": "data/raw/filings/bdc_html/1803498/000180349826000014.html",
+          "sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 6155,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-07.json",
+        "sha256": "55f0aac7c7ba9633f2733553858174e6b52739d0f9b3f222de40ba55b7d0b47d"
+      },
+      "reference_id": "LABEL-07",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001803498",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 32501837,
+          "path": "data/raw/filings/bdc_html/1803498/000180349826000014.html",
+          "sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3855,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-08.json",
+        "sha256": "9ffb4b794c823e978f8448c80de602dbe6ff145c4c8cada23ccb0b67f754d8c8"
+      },
+      "reference_id": "LABEL-08",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0002031750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 3442814,
+          "path": "data/raw/filings/bdc_html/2031750/000203175026000015.html",
+          "sha256": "0499abeec7ccc30c73b2b16e0be581d5cb503b2c8b74909ad77f3069b53546c7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3747,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-09.json",
+        "sha256": "ff77a34e0945bf3ccb4cefdc54c080098c3379fc9c471e95ed7937e7d11ecbc1"
+      },
+      "reference_id": "LABEL-09",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0002031750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 3442814,
+          "path": "data/raw/filings/bdc_html/2031750/000203175026000015.html",
+          "sha256": "0499abeec7ccc30c73b2b16e0be581d5cb503b2c8b74909ad77f3069b53546c7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3931,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-10.json",
+        "sha256": "c285e5a7a1a0420e9ede658bdd2c964325df71b38bedfe4b331393fcb1fc928f"
+      },
+      "reference_id": "LABEL-10",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0002031750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 3442814,
+          "path": "data/raw/filings/bdc_html/2031750/000203175026000015.html",
+          "sha256": "0499abeec7ccc30c73b2b16e0be581d5cb503b2c8b74909ad77f3069b53546c7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3937,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-11.json",
+        "sha256": "8a476245d432c4b6a26a354a0cca0608d140d680f6650ce63bcbad1974a1131f"
+      },
+      "reference_id": "LABEL-11",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0002031750",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 3442814,
+          "path": "data/raw/filings/bdc_html/2031750/000203175026000015.html",
+          "sha256": "0499abeec7ccc30c73b2b16e0be581d5cb503b2c8b74909ad77f3069b53546c7"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Narrative describes unitranche loan JV with Capital One; LLC interest is credit-vehicle exposure."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3683,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-12.json",
+        "sha256": "3a12949c6acc481314873c08f701209ac3ddbdc6df75f4a76b31c98c9304254f"
+      },
+      "reference_id": "LABEL-12",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001838126",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15190865,
+          "path": "data/raw/filings/bdc_html/1838126/000162828026020206.html",
+          "sha256": "2e40a16dfd71318af03e97f90560525f560faf4b8fd232a8a15b7c206b7fff0a"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Legacy gold used a JV delayed-draw negative mark for a parent first-lien term position. Source scopes and facilities must differ."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 2913,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-13.json",
+        "sha256": "fb9b4d79413fcfc3d426b0a1d7a2c3a1d472e4b82e38800babc7d90c27489b17"
+      },
+      "reference_id": "LABEL-13",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001838126",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15190865,
+          "path": "data/raw/filings/bdc_html/1838126/000162828026020206.html",
+          "sha256": "2e40a16dfd71318af03e97f90560525f560faf4b8fd232a8a15b7c206b7fff0a"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Legacy reference copied EUR FV into USD comparison; USD FV 385.453m is source-supported. Currency belongs to each field."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 3145,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-14.json",
+        "sha256": "844dbaf9fe01e3fd7ba0b1d110837f09a15efaf9d152db013761ccd0cde07368"
+      },
+      "reference_id": "LABEL-14",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001925309",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 10646440,
+          "path": "data/raw/filings/bdc_html/1925309/000119312526051289.html",
+          "sha256": "3a2aaed9888dca4ffd8cca41525014f712042c16e03fc2960205464bca0c4f4c"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Duplicate issuer-only label should map to the same source observation as the instrument label. Prior FV 223.274m was misread as cost."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 5768,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-15.json",
+        "sha256": "04cd49ae031b09d15171022a4263ab621aee21300e53103cbfe57c22df8959b2"
+      },
+      "reference_id": "LABEL-15",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001812554",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15772430,
+          "path": "data/raw/filings/bdc_html/1812554/000181255426000011.html",
+          "sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Specialty finance equity supports broad equity; does not by itself establish common rights. Current cost is 310.978m."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 4515,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-16.json",
+        "sha256": "2796c61671454f080f6a637d19c252903d0a9f75f214543031deaa99a8c6591f"
+      },
+      "reference_id": "LABEL-16",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001812554",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15772430,
+          "path": "data/raw/filings/bdc_html/1812554/000181255426000011.html",
+          "sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 6842,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-17.json",
+        "sha256": "0d2e36be566ee97e11f74683dc3b7d2f7d473f08d3a2376c33df54e54a3fa926"
+      },
+      "reference_id": "LABEL-17",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001812554",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15772430,
+          "path": "data/raw/filings/bdc_html/1812554/000181255426000011.html",
+          "sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Cited current SOI has cost 137.069m and FV 136.815m; old 304.4m/303.9m values are unsupported by this row."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 6085,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-18.json",
+        "sha256": "0ba482bcfa208c7d514ad15173e37999df721511cc861a7d3fdcbdbf17a223b9"
+      },
+      "reference_id": "LABEL-18",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001812554",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15772430,
+          "path": "data/raw/filings/bdc_html/1812554/000181255426000011.html",
+          "sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec"
+        }
+      ],
+      "version": "development-v1"
+    },
+    {
+      "author": "Codex source preparation 2026-09-09",
+      "disagreements": [
+        "Explicit fka alias identifies the LLC; cost 314.808m, FV 280.331m. Legacy cost copied FV."
+      ],
+      "exposure": "development_outputs_seen",
+      "payload": {
+        "bytes": 6737,
+        "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/references-v1/payloads/LABEL-19.json",
+        "sha256": "a822b79b7f91d8186cdaa1bdced1e8b5ee470341c4a96061c330adb3ee9402fc"
+      },
+      "reference_id": "LABEL-19",
+      "review_attestation": null,
+      "review_status": "awaiting_independent_review",
+      "reviewer": null,
+      "schema_version": 1,
+      "scope": {
+        "population": "0001812554",
+        "quarter": "2025-12-31",
+        "unit": "source-observation"
+      },
+      "sources": [
+        {
+          "bytes": 15772430,
+          "path": "data/raw/filings/bdc_html/1812554/000181255426000011.html",
+          "sha256": "c88a394c96d06bff94fcc0c475b7ed1756c2b68f40a4fb7c2fb251b19ed03dec"
+        }
+      ],
+      "version": "development-v1"
+    }
+  ],
+  "schedule_dispositions": 61,
+  "schema_version": 1,
+  "version": "development-v1"
+}

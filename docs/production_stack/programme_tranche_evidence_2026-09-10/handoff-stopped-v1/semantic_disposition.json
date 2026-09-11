@@ -1,0 +1,61 @@
+{
+  "derived_delta_roundoff": [
+    {
+      "delta_change": -0.000732421875,
+      "new_delta": 29327971.999450684,
+      "old_delta": 29327972.000183105,
+      "path": "/holdings/holdings_class_fv/2/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": -0.0224609375,
+      "new_delta": -32474804.009765625,
+      "old_delta": -32474803.987304688,
+      "path": "/holdings/holdings_class_fv/3/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": -9.1552734375e-05,
+      "new_delta": 29504999.999969482,
+      "old_delta": 29505000.000061035,
+      "path": "/holdings/holdings_class_fv/5/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": 0.000274658203125,
+      "new_delta": 2681492.5300598145,
+      "old_delta": 2681492.5297851562,
+      "path": "/holdings/holdings_class_fv/8/fair_value_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": -4.57763671875e-05,
+      "new_delta": -31903299.00001526,
+      "old_delta": -31903298.999969482,
+      "path": "/position_returns/position_return/2/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": 0.0001220703125,
+      "new_delta": -92874368.32995605,
+      "old_delta": -92874368.33007812,
+      "path": "/position_returns/position_return/4/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    },
+    {
+      "delta_change": 3.0517578125e-05,
+      "new_delta": 2908500.0000305176,
+      "old_delta": 2908500.0,
+      "path": "/position_returns/position_return/6/begin_fv_sum_delta",
+      "source_totals_within_existing_noise_rule": true
+    }
+  ],
+  "material_source_summary_changes": 0,
+  "mechanism": "Floating aggregate differences propagated through subtraction. Each original current/baseline total passes the unchanged semantic backstop numeric-noise rule; every recorded delta equals its source subtraction. Original input files separately match their frozen hashes.",
+  "original_checker_status": "unexplained_difference",
+  "original_preservation_result": {
+    "bytes": 2278,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/preservation-stopped-v1/result.json",
+    "sha256": "7e78bbb751b8cd231355208b18f44ddc6b41de7eaa871a95f60e12ed3979eabd"
+  }
+}

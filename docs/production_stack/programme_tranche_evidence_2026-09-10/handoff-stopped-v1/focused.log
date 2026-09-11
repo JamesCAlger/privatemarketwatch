@@ -1,0 +1,6 @@
+............................................................             [100%]
+============================ slowest 50 durations =============================
+1.48s setup    tests/test_programme_runtime.py::test_completed_stage_reuses_only_same_dependencies
+
+(49 durations < 0.5s hidden.)
+60 passed in 56.09s

@@ -1,0 +1,545 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_50241274-57ed-4f54-af49-153a412109ea",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_70161a1a-341a-492a-b083-82dd42cb33e9",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost $ 918,595 and $ 785,277 , respectively)",
+        "",
+        "$",
+        "",
+        "909,845",
+        "",
+        "",
+        "$",
+        "",
+        "785,199",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_50241274-57ed-4f54-af49-153a412109ea",
+      "currency": "USD",
+      "fact_id": "F_70161a1a-341a-492a-b083-82dd42cb33e9",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "785,199",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[16]/tr[11]",
+      "table_xpath": "/html/body/table[16]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "785199000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_50241274-57ed-4f54-af49-153a412109ea",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_5233de9e-2242-4051-bcf7-f8e4c97e2de3",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "$",
+        "",
+        "785,199",
+        "",
+        "",
+        "$",
+        "",
+        "785,199",
+        "",
+        "",
+        "",
+        "265.8",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_50241274-57ed-4f54-af49-153a412109ea",
+      "currency": "USD",
+      "fact_id": "F_5233de9e-2242-4051-bcf7-f8e4c97e2de3",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "785,199",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[7]/table/tr[38]",
+      "table_xpath": "/html/body/ix:continuation[7]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "785199000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_50241274-57ed-4f54-af49-153a412109ea",
+        "decimals": "3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_85e842b0-a5f2-4460-9fae-b5e19a876ed8",
+        "name": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "",
+        "100.0 %"
+      ],
+      "concept": "ck0002006758:PercentageOfTotalInvestmentsAtFairValue",
+      "context_id": "C_50241274-57ed-4f54-af49-153a412109ea",
+      "currency": null,
+      "fact_id": "F_85e842b0-a5f2-4460-9fae-b5e19a876ed8",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.0",
+      "rounding_bound": "0.0005",
+      "row_xpath": "/html/body/table[43]/tr[38]",
+      "table_xpath": "/html/body/table[43]",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_50241274-57ed-4f54-af49-153a412109ea",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_8134e1a9-8207-469d-ab45-47412f0f0f06",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "$",
+        "",
+        "785,277",
+        "",
+        "",
+        "$",
+        "",
+        "785,199",
+        "",
+        "",
+        "$",
+        "",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "",
+        "7,979",
+        "",
+        "",
+        "$",
+        "",
+        "777,220",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_50241274-57ed-4f54-af49-153a412109ea",
+      "currency": "USD",
+      "fact_id": "F_8134e1a9-8207-469d-ab45-47412f0f0f06",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "785,199",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]/tr[5]",
+      "table_xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "785199000"
+    }
+  ],
+  "cik": "0002006758",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2006758/000095017025040394.html",
+  "reference_id": "REF-0002006758-2023-12-31",
+  "report_date": "2023-12-31",
+  "source_rows": 216,
+  "source_sha256": "18eb8dfd8d9e22bee07ca36634b716907ddc10070f253f8639a0d777af3aa4df",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Non-controlled/non-affiliated investments (cost $ 918,595 and $ 785,277 , respectively) | $ | 909,845 | $ | 785,199"
+      ],
+      "last": [
+        "Non-controlled/non-affiliated investments (cost $ 918,595 and $ 785,277 , respectively) | $ | 909,845 | $ | 785,199"
+      ],
+      "opening_rows": [
+        "",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING",
+        "CONSOLIDATED STATEMENTS OF ASSETS AND LIABILITIES",
+        "(In thousands, except share and per share data)"
+      ],
+      "preceding": [
+        "",
+        "",
+        "Table of Contents",
+        "",
+        "74",
+        "",
+        "",
+        "We have served as the auditor of the Company since 2023."
+      ],
+      "rows": 1,
+      "table_xpath": "/html/body/table[16]"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "SI Holdings, Inc. | First Lien Secured Debt | S+ 610 , 1.00 % Floor | 12/31/2027 | $ | 7,979 | $ | 7,894 | $ | 7,894 | (4)(10)",
+        "Total Aerospace & Defense | $ | 7,894 | $ | 7,894"
+      ],
+      "last": [
+        "Universal Fiber Systems LLC | First Lien Secured Debt | S+ 561 , 1.00 % Floor | 9/29/2026 | $ | 8,027 | $ | 7,935 | $ | 7,934 | (4)(10)",
+        "Total Chemicals | $ | 7,935 | $ | 7,934"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Aerospace & Defense",
+        "SI Holdings, Inc."
+      ],
+      "preceding": [
+        "",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 96",
+        "",
+        "% Machinery 1.7 % Insurance 1.7 % Ground Transportation 1.7 % Aerospace & Defense 1.7 % Health Care Technology 1.7 % Media 1.7 % Automobile Components 1.4 % Entertainment 1.4 % Air Freight & Logistics 1.4 % Containers & Packaging 1.1 % Textiles, Apparel & Luxury Goods 0.9 % Electronic Equipment, Instruments & Components 0.9 % Wireless Telecommunication Services 0.9 % Capital Markets 0.9 % Building Products 0.8 % Life Sciences Tools & Services 0.8 % Energy Equipment & Services 0.8 % Electrical Equipment 0.7 % Communications Equipment 0.7 % Transportation Infrastructure 0.4 % 100.0 % Geographic Region December 31, 2024 United States 94.6 % Canada 2.4 % United Kingdom 1.9 % Europe 1.1 % 100.0 %",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2024 (In thousands, except share data)"
+      ],
+      "rows": 13,
+      "table_xpath": "/html/body/table[33]"
+    },
+    {
+      "contexts": 14,
+      "first": [
+        "Applied Technical Services, LLC | First Lien Secured Debt | S+ 590 , 1.00 % Floor | 12/29/2026 | $ | 7,979 | $ | 7,832 | $ | 7,831 | (4)(10)",
+        "CI | First Lien Secured Debt | S+ 715 , 1.00 % Floor | 3/24/2028 | 7,980 | 7,815 | 7,813 | (4)(9)"
+      ],
+      "last": [
+        "Pave America Interco, LLC | First Lien Secured Debt | S+ 690 , 1.00 % Floor | 2/7/2028 | 7,980 | 7,741 | 7,741 | (4)(10)",
+        "Total Construction & Engineering | $ | 39,253 | $ | 39,250"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Commercial Services & Supplies",
+        "Applied Technical Services, LLC"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 97",
+        "",
+        "onents $ 23,567 $ 23,565 Building Products Carr and Duff, LLC Carr and Duff, LLC First Lien Secured Debt S+ 630 , 1.00 % Floor 3/11/2027 $ 7,980 $ 7,869 $ 7,869 (4)(10) SAFEbuilt, LLC SAFEbuilt, LLC First Lien Secured Debt S+ 685 , 1.00 % Floor 12/31/2025 8,099 8,039 8,037 (4)(10) Total Building Products $ 15,908 $ 15,906 Capital Markets STOUT INTERMEDIATE II Stout Intermediate II, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 11/22/2027 $ 7,980 $ 7,841 $ 7,841 (4)(9) Total Capital Markets $ 7,841 $ 7,841 Chemicals Universal Fiber Systems LLC Universal Fiber Systems LLC First Lien Secured Debt S+ 561 , 1.00 % Floor 9/29/2026 $ 8,027 $ 7,935 $ 7,934 (4)(10) Total Chemicals $ 7,935 $ 7,934",
+        "",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)"
+      ],
+      "rows": 14,
+      "table_xpath": "/html/body/table[34]"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Casper's Ice Cream, LLC | First Lien Secured Debt | S+ 615 , 1.00 % Floor | 12/29/2027 | $ | 7,980 | $ | 7,867 | $ | 7,866 | (4)(9)",
+        "Protein For Pets Opco, LLC | First Lien Secured Debt | S+ 460 , 1.00 % Floor | 11/28/2025 | 8,000 | 8,000 | 8,000 | (4)(9)"
+      ],
+      "last": [
+        "Congruex Group LLC | First Lien Secured Debt | S+ 590 , 0.75 % Floor | 5/3/2029 | $ | 7,980 | $ | 7,761 | $ | 7,760 | (4)(10)",
+        "Total Electric Utilities | $ | 7,761 | $ | 7,760"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Consumer Staples Distribution & Retail",
+        "Casper's Ice Cream, LLC"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 98",
+        "",
+        " Climate Pros, LLC Climate Pros, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 1/24/2026 $ 7,978 $ 7,904 $ 7,903 (4)(10) Encore Holdings, LLC Encore Holdings, LLC First Lien Secured Debt S+ 510 , 0.75 % Floor 11/23/2028 7,980 7,844 7,844 (4)(10) Kauffman Intermediate, LLC Kauffman Intermediate, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 5/8/2025 7,978 7,881 7,880 (4)(9) Monarch Landscape Holdings, LLC Monarch Landscape Holdings, LLC First Lien Secured Debt S+ 525 , 0.75 % Floor 3/31/2028 7,980 7,883 7,882 (4)(10) Pave America Pave America Interco, LLC First Lien Secured Debt S+ 690 , 1.00 % Floor 2/7/2028 7,980 7,741 7,741 (4)(10) Total Construction & Engineering $ 39,253 $ 39,250",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 13,
+      "table_xpath": "/html/body/table[35]"
+    },
+    {
+      "contexts": 12,
+      "first": [
+        "IW Buyer LLC | First Lien Secured Debt | S+ 685 , 1.00 % Floor | 6/28/2029 | $ | 7,980 | $ | 7,821 | $ | 7,820 | (4)(10)",
+        "LAV Gear Holdings, inc | First Lien Secured Debt | S+ 643 , 1.00 % Floor | 10/31/2024 | 8,666 | 8,603 | 8,596 | (4)(10)"
+      ],
+      "last": [
+        "Jewel Purchaser, Inc. | First Lien Secured Debt | S+ 560 , 0.50 % Floor | 7/1/2027 | $ | 7,949 | $ | 7,949 | $ | 7,949 | (4)(10)",
+        "Total Entertainment | $ | 7,949 | $ | 7,949"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Electrical Equipment",
+        "International Wire Group"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 99",
+        "",
+        "Diversified Consumer Services Club Car Wash Operating, LLC Club Car Wash Operating, LLC First Lien Secured Debt S+ 665 , 1.00 % Floor 6/16/2027 $ 8,000 $ 7,874 $ 7,874 (4)(10) Go Car Wash Management, Corp. Go Car Wash Management, Corp. First Lien Secured Debt S+ 635 , 1.00 % Floor 12/31/2026 7,980 7,843 7,842 (4)(10) Rasa Floors & Carpet Cleaning, LLC Rasa Floors & Carpet Cleaning, LLC First Lien Secured Debt S+ 685 , 1.00 % Floor 12/22/2027 7,980 7,307 7,307 (4)(10) Total Diversified Consumer Services $ 23,024 $ 23,023 Electric Utilities Congruex Congruex Group LLC First Lien Secured Debt S+ 590 , 0.75 % Floor 5/3/2029 $ 7,980 $ 7,761 $ 7,760 (4)(10) Total Electric Utilities $ 7,761 $ 7,760",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 12,
+      "table_xpath": "/html/body/table[36]"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "FEV Acquisition Corporation | First Lien Secured Debt | S+ 575 , 0.75 % Floor | 7/15/2028 | $ | 7,980 | $ | 7,201 | $ | 7,199 | (4)(10)",
+        "Gabriel Partners, LLC | First Lien Secured Debt | S+ 615 , 1.00 % Floor | 9/21/2026 | 7,979 | 7,920 | 7,919 | (4)(9)"
+      ],
+      "last": [
+        "SEKO Global Logistics Network, LLC | First Lien Secured Debt | S+ 525 , 1.00 % Floor | 12/30/2026 | 7,980 | 7,813 | 7,812 | (4)(9)",
+        "Total Ground Transportation | $ | 23,698 | $ | 23,696"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Financial Services",
+        "FEV Acquisition Corporation"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 100",
+        "",
+        "Floor 1/10/2029 $ 7,980 $ 7,822 $ 7,822 (4)(10) Li-Cor, Inc. Li-Cor, Inc. First Lien Secured Debt S+ 510 , 1.00 % Floor 12/1/2027 7,980 7,902 7,902 (4)(9) Total Electronic Equipment, Instruments & Components $ 15,724 $ 15,724 Energy Equipment & Services Tailwind Loenbro, LLC Tailwind Loenbro, LLC First Lien Secured Debt S+ 485 , 1.00 % Floor 10/26/2024 $ 4,000 $ 3,940 $ 3,940 (4)(10) First Lien Secured Debt S+ 585 , 1.00 % Floor 10/26/2025 4,000 3,940 3,940 (4)(10) Total Energy Equipment & Services $ 7,880 $ 7,880 Entertainment Chernin Entertainment Jewel Purchaser, Inc. First Lien Secured Debt S+ 560 , 0.50 % Floor 7/1/2027 $ 7,949 $ 7,949 $ 7,949 (4)(10) Total Entertainment $ 7,949 $ 7,949",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/table[37]"
+    },
+    {
+      "contexts": 17,
+      "first": [
+        "ACP Hyperdrive, Inc. | First Lien Secured Debt | S+ 590 , 1.00 % Floor | 3/8/2028 | $ | 7,980 | $ | 7,774 | $ | 7,774 | (4)(10)",
+        "Medical Guardian, LLC | First Lien Secured Debt | S+ 635 , 1.00 % Floor | 10/26/2026 | 7,980 | 7,900 | 7,900 | (4)(10)"
+      ],
+      "last": [
+        "TS Investors, LLC | First Lien Secured Debt | S+ 660 , 1.00 % Floor | 5/4/2029 | 7,980 | 7,901 | 7,900 | (4)(10)",
+        "Thomas Scientific, LLC | First Lien Secured Debt | S+ 640 , 1.00 % Floor | 12/14/2027 | 7,980 | 7,848 | 7,847 | (4)(9)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Health Care Equipment & Supplies",
+        "ACP Hyperdrive, Inc."
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 101",
+        "",
+        " , 1.00 % Floor 7/30/2027 $ 7,980 $ 7,662 $ 7,660 (4)(10) Fortune International LLC Fortune International LLC First Lien Secured Debt S+ 485 , 1.00 % Floor 1/17/2026 7,980 7,867 7,866 (4)(10) Total Food Products $ 15,529 $ 15,526 Ground Transportation Beacon Mobility Corp. Beacon Mobility Corp. First Lien Secured Debt S+ 635 , 1.00 % Floor 12/31/2025 $ 7,973 $ 7,945 $ 7,945 (4)(10) HENIFF HOLDCO LLC Heniff Holdco, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 12/3/2026 7,979 7,940 7,939 (4)(9) SEKO Global Logistics Network, LLC SEKO Global Logistics Network, LLC First Lien Secured Debt S+ 525 , 1.00 % Floor 12/30/2026 7,980 7,813 7,812 (4)(9) Total Ground Transportation $ 23,698 $ 23,696",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 17,
+      "table_xpath": "/html/body/table[38]"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "TST Intermediate Holdings, LLC | First Lien Secured Debt | S+ 585 , 1.00 % Floor | 11/27/2026 | 7,980 | 7,781 | 7,780 | (4)(10)",
+        "TVG Shelby Buyer, Inc. | First Lien Secured Debt | S+ 535 , 1.00 % Floor | 3/27/2028 | 8,000 | 7,845 | 7,845 | (4)(10)"
+      ],
+      "last": [
+        "Jazz AH Holdco, LLC | First Lien Secured Debt | S+ 510 , 0.75 % Floor | 4/3/2028 | $ | 7,980 | $ | 7,823 | $ | 7,822 | (4)(10)",
+        "Total Household Products | $ | 7,823 | $ | 7,822"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "TST Intermediate Holdings, LLC",
+        "TST Intermediate Holdings, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 11/27/2026 7,980 7,781 7,780 (4)(10)"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 102",
+        "",
+        " Secured Debt S+ 465 , 1.00 % Floor 11/29/2027 7,980 7,973 7,973 (4)(10) Pace Health Companies, LLC Pace Health Companies, LLC First Lien Secured Debt S+ 640 , 1.00 % Floor 8/2/2025 7,979 7,840 7,840 (4)(10) SBH Buyer, LLC Salisbury House, LLC First Lien Secured Debt S+ 590 , 1.00 % Floor 8/30/2025 8,000 7,841 7,840 (4)(10) SCP Eye Care Services, LLC SCP Eye Care Services, LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 10/5/2029 7,980 7,710 7,709 (4)(10) Team Select TS Investors, LLC First Lien Secured Debt S+ 660 , 1.00 % Floor 5/4/2029 7,980 7,901 7,900 (4)(10) Thomas Scientific, LLC Thomas Scientific, LLC First Lien Secured Debt S+ 640 , 1.00 % Floor 12/14/2027 7,980 7,848 7,847 (4)(9)",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/table[39]"
+    },
+    {
+      "contexts": 15,
+      "first": [
+        "CM Acquisitions Holdings Inc. | First Lien Secured Debt | S+ 490 , 1.00 % Floor | 5/6/2025 | $ | 7,979 | $ | 7,830 | $ | 7,828 | (4)(9)",
+        "Naviga Inc. | First Lien Secured Debt | S+ 710 , 1.00 % Floor | 2/27/2024 | 7,979 | 8,052 | 8,060 | (4)(10)"
+      ],
+      "last": [
+        "RailPros Consolidated, Inc. | First Lien Secured Debt | S+ 560 , 1.00 % Floor | 7/31/2026 | 7,979 | 7,965 | 7,965 | (4)(9)",
+        "Total Machinery | $ | 39,507 | $ | 39,505"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "IT Services",
+        "CM Acquisitions Holdings Inc. (fka Sisterco"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 103",
+        "",
+        "ngs LLC First Lien Secured Debt S+ 585 , 1.00 % Floor 2/2/2028 $ 7,980 $ 7,684 $ 7,683 (4)(9) Cave Enterprises Operations, LLC Cave Enterprises Operations, LLC First Lien Secured Debt S+ 660 , 1.50 % Floor 8/9/2028 8,000 8,000 8,000 (4)(9) PARS PARS Group LLC First Lien Secured Debt S+ 685 , 1.50 % Floor 4/3/2028 8,000 7,880 7,880 (4)(9) YTC Enterprises, LLC YTC Enterprises, LLC First Lien Secured Debt S+ 636 , 1.00 % Floor 8/16/2026 8,000 7,841 7,840 (4)(9) Total Hotels, Restaurants & Leisure $ 31,405 $ 31,403 Household Products Advantice Health Jazz AH Holdco, LLC First Lien Secured Debt S+ 510 , 0.75 % Floor 4/3/2028 $ 7,980 $ 7,823 $ 7,822 (4)(10) Total Household Products $ 7,823 $ 7,822",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 15,
+      "table_xpath": "/html/body/table[40]"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "M&M OPCO, LLC | First Lien Secured Debt | S+ 810 , 1.00 % Floor | 4/7/2029 | $ | 7,980 | $ | 7,801 | $ | 7,800 | (4)(10)",
+        "HU Buyer, Inc. | First Lien Secured Debt | S+ 610 , 1.00 % Floor | 12/29/2026 | 7,979 | 7,782 | 7,782 | (4)(10)"
+      ],
+      "last": [
+        "Measure Buyer, Inc. | First Lien Secured Debt | S+ 535 , 1.00 % Floor | 12/18/2026 | 7,980 | 7,876 | 7,876 | (4)(10)",
+        "Total Software | $ | 23,671 | $ | 23,671"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "Media",
+        "Escalent"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 104",
+        "",
+        " LLC BW Colson Acquisition LLC First Lien Secured Debt S+ 515 , 1.00 % Floor 2/26/2027 $ 8,000 $ 7,864 $ 7,864 (4)(9) Jonathan Acquisition Company Jonathan Acquisition Company First Lien Secured Debt L+ 510 , 1.00 % Floor 12/22/2026 7,979 7,876 7,875 (4)(11) MTI Group Acquisition Company MTI Group Acquisition Company First Lien Secured Debt S+ 610 , 1.00 % Floor 9/30/2025 8,019 7,980 7,979 (9) OEH Parent Holdings, Inc. OEH Parent Holdings, Inc. First Lien Secured Debt S+ 585 , 1.00 % Floor 11/9/2027 7,980 7,822 7,822 (4)(9) RailPros Consolidated, Inc. RailPros Consolidated, Inc. First Lien Secured Debt S+ 560 , 1.00 % Floor 7/31/2026 7,979 7,965 7,965 (4)(9) Total Machinery $ 39,507 $ 39,505",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/table[41]"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "Parcelshield Holdings LLC | First Lien Secured Debt | S+ 560 , 1.00 % Floor | 9/30/2027 | $ | 7,980 | $ | 7,741 | $ | 7,740 | (4)(10)",
+        "Total Technology Hardware, Storage & Peripherals | $ | 7,741 | $ | 7,740"
+      ],
+      "last": [
+        "Total Wireless Telecommunication Services | $ | 7,837 | $ | 7,837",
+        "Total Investments | $ | 785,277 | $ | 785,199 | (2)(5)(6)(7)(12)"
+      ],
+      "opening_rows": [
+        "",
+        "Industry/Company Investment Type Interest Rate (8) Maturity Date Par/Shares (3) Cost (13) Fair Value (1)(14)",
+        "",
+        "Technology Hardware, Storage & Peripherals"
+      ],
+      "preceding": [
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents",
+        "",
+        "See notes to the consolidated financial statements. 105",
+        "",
+        "(4)(10) Total Pharmaceuticals $ 15,694 $ 15,690 Professional Services Career Certified, LLC (The CE Shop Buyer, L Career Certified, LLC First Lien Secured Debt S+ 635 , 1.00 % Floor 12/18/2026 $ 7,979 $ 7,708 $ 7,707 (4)(10) Total Professional Services $ 7,708 $ 7,707 Software Activ Software Holdings, LLC Activ Software Holdings, LLC First Lien Secured Debt S+ 650 , 1.00 % Floor 5/4/2027 $ 7,980 $ 7,900 $ 7,900 (4)(10) EVER.AG Corporation EVER.AG Corporation First Lien Secured Debt S+ 585 , 1.00 % Floor 6/24/2027 7,980 7,895 7,895 (4)(10) Measure Buyer, Inc. Measure Buyer, Inc. First Lien Secured Debt S+ 535 , 1.00 % Floor 12/18/2026 7,980 7,876 7,876 (4)(10) Total Software $ 23,671 $ 23,671",
+        "MIDDLE MARKET APOLLO INSTITUTIONAL PRIVATE LENDING CONSOLIDATED SCHEDULE OF INVESTMENTS December 31, 2023 (In thousands. except share data)",
+        "Table of Contents"
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/table[42]"
+    },
+    {
+      "contexts": 72,
+      "first": [
+        "Aerospace & Defense | $ | 7,894 | $ | 7,894 | 2.7 | %",
+        "Aerospace & Defense | $ | 7,894 | $ | 7,894 | 2.7 | %"
+      ],
+      "last": [
+        "Total | $ | 785,199 | $ | 785,199 | 265.8 | %",
+        "Total | $ | 785,199 | $ | 785,199 | 265.8 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Industry First Lien - Secured Debt Total % of Net Assets",
+        "Aerospace & Defense $ 7,894 $ 7,894 2.7 %",
+        "Automobile Components 23,565 23,565 8.0 %"
+      ],
+      "preceding": [],
+      "rows": 72,
+      "table_xpath": "/html/body/ix:continuation[7]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "First Lien Secured Debt | $ | 785,277 | $ | 785,199 | $ | \u2014 | $ | 7,979 | $ | 777,220",
+        "First Lien Secured Debt | $ | 785,277 | $ | 785,199 | $ | \u2014 | $ | 7,979 | $ | 777,220"
+      ],
+      "last": [
+        "Total Investments at Fair Value | $ | 785,277 | $ | 785,199 | $ | \u2014 | $ | 7,979 | $ | 777,220",
+        "Total Investments at Fair Value | $ | 785,277 | $ | 785,199 | $ | \u2014 | $ | 7,979 | $ | 777,220"
+      ],
+      "opening_rows": [
+        "",
+        "Fair Value Hierarchy",
+        "Cost Fair Value Level 1 Level 2 Level 3",
+        "First Lien Secured Debt $ 785,277 $ 785,199 $ \u2014 $ 7,979 $ 777,220"
+      ],
+      "preceding": [
+        "",
+        "The following table shows the composition of our investments as of December 31, 2023, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:",
+        "",
+        "Fair Value Hierarchy Cost Fair Value Level 1 Level 2 Level 3 First Lien Secured Debt $ 915,677 $ 906,931 $ \u2014 $ 14,183 $ 892,748 Unsecured Debt 19 19 \u2014 \u2014 19 Common Equity/Interests 2,899 2,895 \u2014 \u2014 2,895 Total Investments at Fair Value $ 918,595 $ 909,845 $ \u2014 $ 14,183 $ 895,662",
+        "",
+        "The following table shows the composition of our investments as of December 31, 2024, with the fair value disaggregated into the three levels of the fair value hierarchy in accordance with ASC 820:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[547]/ix:nonnumeric/div[1]/ix:nonnumeric/table[2]"
+    }
+  ]
+}

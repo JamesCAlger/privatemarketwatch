@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "programme-threshold-v1",
+  "type": "object",
+  "required": ["schema_version", "version", "status", "review_date", "reference_review_authority", "authority_note", "history", "required_population_scope", "targets", "amendment"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "version": {"type": "string", "minLength": 1},
+    "status": {"enum": ["working_targets", "approved"]},
+    "review_date": {"type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"},
+    "reference_review_authority": {"type": ["string", "null"]},
+    "authority_note": {"type": "string", "minLength": 1},
+    "required_population_scope": {"const": "cohort_70_required_history"},
+    "history": {"type": "object", "additionalProperties": false, "required": ["first_quarter", "last_quarter", "cohort_size"], "properties": {"first_quarter": {"type": "string"}, "last_quarter": {"type": "string"}, "cohort_size": {"type": "integer", "minimum": 1}}},
+    "targets": {"type": "object", "minProperties": 25, "maxProperties": 25, "additionalProperties": {"type": "object", "additionalProperties": false, "required": ["operator", "value"], "properties": {"operator": {"enum": ["min", "max"]}, "value": {"type": "number"}}}},
+    "amendment": {"oneOf": [{"type": "null"}, {"type": "object", "required": ["previous_contract_sha256", "rationale", "evidence"], "properties": {"previous_contract_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "rationale": {"type": "string", "minLength": 1}, "evidence": {"type": "array", "minItems": 1}}, "additionalProperties": false}]}
+  }
+}

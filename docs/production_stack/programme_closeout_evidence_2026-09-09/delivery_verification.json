@@ -1,0 +1,194 @@
+{
+  "checked_at": "2026-09-09T21:54:18.505212+00:00",
+  "code": [
+    {
+      "path": "scripts/programme_closeout/__init__.py",
+      "sha256": "0ac147a924687f2248ec4666fae270e0c7fdac43aa0cdb617d6fe8017bb49b02"
+    },
+    {
+      "path": "scripts/programme_closeout/acceptance.py",
+      "sha256": "74957a373c6e63ac1efa16a65782da4f9188d87c54e9d35f0b23b457e8f46683"
+    },
+    {
+      "path": "scripts/programme_closeout/baseline_measure.py",
+      "sha256": "29a3afd372a408a74fc038b9cd2863990af55270cb1199b51cacf5a67f00951f"
+    },
+    {
+      "path": "scripts/programme_closeout/candidate.py",
+      "sha256": "37e537a6e00e48673b45a9a2e3c7b2da363c3cda2acddb8d0f9e307ac4a28eda"
+    },
+    {
+      "path": "scripts/programme_closeout/citation_viewer.py",
+      "sha256": "0e977887d36c15aea7b07e741fd78ce895363a835a0b88600ee397b9a180f1a8"
+    },
+    {
+      "path": "scripts/programme_closeout/currency_cases.py",
+      "sha256": "2730ab2467de441e85bbf62bad9928e0e9732878f1ecb89c52dbdf4069363a89"
+    },
+    {
+      "path": "scripts/programme_closeout/currency_passages.py",
+      "sha256": "c8f695320cb5d7ce0eb1930dee6f44fd71f4cc44863f399e1e166d1a695842e7"
+    },
+    {
+      "path": "scripts/programme_closeout/downstream.py",
+      "sha256": "fdf32d2c4758d2a99d59e3bfb2af0ad65b35b975d633e22b3d44b41badd8bbe3"
+    },
+    {
+      "path": "scripts/programme_closeout/evidence_worker.py",
+      "sha256": "e46f9accd5ed7a4bf5e2fa94098bb45e33a961fd2f6912aaca055a281d271951"
+    },
+    {
+      "path": "scripts/programme_closeout/finalize_evidence.py",
+      "sha256": "d34394c469bcab88ca0fc397cbae51b795eb42ac142613fce4839728d0e54f54"
+    },
+    {
+      "path": "scripts/programme_closeout/fx.py",
+      "sha256": "490f7e60bc8be28b9926458e4d2af956f759c2ce16d99c5daf911cc2d824671b"
+    },
+    {
+      "path": "scripts/programme_closeout/guard_probe.py",
+      "sha256": "aefa447b2e8735b10245fa4d5e6ca05ec02ed713028f6c15263fb5ef0b391f00"
+    },
+    {
+      "path": "scripts/programme_closeout/identity.py",
+      "sha256": "52e28bd121a50aadee66d7dc2b0d94b3bdb04d0206593199d20a793f9bbc5620"
+    },
+    {
+      "path": "scripts/programme_closeout/identity_measure.py",
+      "sha256": "42d0f662b6bf1d175e8099c99b05548febd60377c25afb524d131a0bf8161ca7"
+    },
+    {
+      "path": "scripts/programme_closeout/identity_worker.py",
+      "sha256": "58b45113e169f96ad6f4ecce08c5bf6afd141b3a3b2a83de00eca3006f8878a5"
+    },
+    {
+      "path": "scripts/programme_closeout/inspect_packets.py",
+      "sha256": "cf6fc320ceaab666a4b8567d32bbf033574df019c2c0adb6bc6e24bd4a30cdc5"
+    },
+    {
+      "path": "scripts/programme_closeout/inventory_units.py",
+      "sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba"
+    },
+    {
+      "path": "scripts/programme_closeout/label_decisions.py",
+      "sha256": "b2551fc09edd81a697f332b7d71707e568be3f18a6e7461ae58b138be542608a"
+    },
+    {
+      "path": "scripts/programme_closeout/label_packets.py",
+      "sha256": "b8eeebd5096fa478c3e444ccb4c4e1606e8d250ba40a57a373df76881ab01377"
+    },
+    {
+      "path": "scripts/programme_closeout/literal_tables.py",
+      "sha256": "315d1e28d280fc2d5cf9d535dab1ec6793c100d1b66fb4bc5745ee35c0887f1a"
+    },
+    {
+      "path": "scripts/programme_closeout/packet_inventory.py",
+      "sha256": "6606b192ccbee50c7ecf4a8ac4010369ffc6b635487abd93e5be10f9de4d8679"
+    },
+    {
+      "path": "scripts/programme_closeout/pik_source_example.py",
+      "sha256": "5b83c113dbfc44f8dda5d27fbc2a909e61c3c78c3b7531748172f01fa3ed5f8f"
+    },
+    {
+      "path": "scripts/programme_closeout/primary_passages.py",
+      "sha256": "27d77997179bfda8db9ca4a7b4c8265bad60c50b073066e189685bed5e4bdbb2"
+    },
+    {
+      "path": "scripts/programme_closeout/resolve_units.py",
+      "sha256": "687cd59c2a68b050a3761354136af54cc0fb56f95cb483e99aaf90b82785d7a5"
+    },
+    {
+      "path": "scripts/programme_closeout/restore_proof.py",
+      "sha256": "51ac34cd836dfe83ac8774c7ff8001242add4e4081bad19f33b9205b8574ff99"
+    },
+    {
+      "path": "scripts/programme_closeout/review_sources.py",
+      "sha256": "047461dbf942aa88b7090790986175de3139c0f711bc2f67f6f1e393f0e913ad"
+    },
+    {
+      "path": "scripts/programme_closeout/rule_replay.py",
+      "sha256": "7dd5f6e98216f0baed1fe3efd75ade057b2f1dbc242816dceea6309905a52f25"
+    },
+    {
+      "path": "scripts/programme_closeout/verify_delivery.py",
+      "sha256": "a0e0b64a3b5bf5d9c0f2f40d060d8df8412221563fc0bc4a251ddf0c75bee23e"
+    },
+    {
+      "path": "scripts/programme_closeout/worker.py",
+      "sha256": "7cd5e1d570bd51f2c2030c71a6f7664480957a393200fa0ec05e3146d7604cde"
+    },
+    {
+      "path": "tests/test_programme_closeout.py",
+      "sha256": "6bae0e5edfaf68e712aa29bafb75ed7762871135e0a68108cb989031337f9818"
+    },
+    {
+      "path": "scripts/programme_closeout/check_viewer.cjs",
+      "sha256": "ce2ce5bbda525412ac55c424dcaa1495afe16295b9eba3abb14f6a7ae9b019ee"
+    }
+  ],
+  "document_count": 12,
+  "documents": [
+    {
+      "path": "docs/production_stack/programme_spec_closeout_2026-09-09.md",
+      "sha256": "18c7db04991a020152628c2fad71854741cbe629c9526d7bc80780798a9db593"
+    },
+    {
+      "path": "docs/production_stack/programme_execution_tranche_2026-09-09.md",
+      "sha256": "e7dba16b265dbcb12d88b2c99e5336d8d32af1620ec6e65f69a32fd5d51a2134"
+    },
+    {
+      "path": "docs/production_stack/programme_units_fx_identity_contract.md",
+      "sha256": "e8a520b9ab8932696e6ac58e2372f770ba98f09ed0f29c420884afe318b8faa5"
+    },
+    {
+      "path": "docs/production_stack/programme_overnight_work_record_2026-09-09.md",
+      "sha256": "ddfce5c1c0f38b5d6ce25ce63fe8408793c2cbca33216212d6fb9a9c60791d03"
+    },
+    {
+      "path": "docs/production_stack/programme_measurement_register.md",
+      "sha256": "02e19fddf0d45c6b377ed78fe914caf671ef0d90b198bf7a258aa2ca229a7599"
+    },
+    {
+      "path": "docs/production_stack/programme_measurement_pilot_2026-09-09.md",
+      "sha256": "40f47339326f57813eee0f0983799032dbe60d91642fd005b44e0261b209aa24"
+    },
+    {
+      "path": "docs/production_stack/consolidation_readiness_plan.md",
+      "sha256": "c8eb6cfbadab813e5852da1a3b04fd951ca1d2a854c0436223f15cd50f9a2bdf"
+    },
+    {
+      "path": "docs/production_stack/programme_implementation_plan.md",
+      "sha256": "50fcd89b52d87548c384c074053c43a297f60bb160c69f54b78895c948f96829"
+    },
+    {
+      "path": "docs/production_stack/programme_physical_architecture.md",
+      "sha256": "6b0f169f24f5b1aa1852443e77962e7be04f767d1e3c0353971dcd935ffa9317"
+    },
+    {
+      "path": "docs/production_stack/programme_rule_authority_assessment_2026-09-09.md",
+      "sha256": "8c02b918f4395504e2acd3873c1a85ef119754fdf75dc373c643f0e8afab2b43"
+    },
+    {
+      "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/README.md",
+      "sha256": "cc28cd1e76df9c130f3fca8190641510830a29f12c3ce2cb18e46570b86763aa"
+    },
+    {
+      "path": "docs/reference/current_architecture.md",
+      "sha256": "753a6e82df02339c304d4f84e116917087a38f96e6ce2f9f9a21b023397a6538"
+    }
+  ],
+  "json_files_parsed": 960,
+  "limitations": "No full suite, public application build or production acceptance. See closeout.",
+  "local_links_checked": 171,
+  "original_input_preservation": "pass",
+  "python_syntax_files": 30,
+  "semantic_backstop": "Pre-existing divergence; full byte scan incomplete within bound.",
+  "stage_compatibility": "pass",
+  "tests": {
+    "passed": 26,
+    "runs": [
+      "25 passed in 54.35s",
+      "1 passed in 54.13s"
+    ]
+  }
+}

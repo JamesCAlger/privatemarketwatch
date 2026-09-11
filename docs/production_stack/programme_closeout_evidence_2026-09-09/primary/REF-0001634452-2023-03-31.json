@@ -1,0 +1,369 @@
+{
+  "path": "data/raw/filings/bdc_html/1634452/000119312523145163.html",
+  "ref": "REF-0001634452-2023-03-31",
+  "rows": [
+    {
+      "cells": [
+        "Investments, at fair value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | As of March 31, 2023 (Unaudited) As of December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 , respectively) $ 1,179,169,825 $ 1,122,343,258",
+      "preceding": [
+        "",
+        "Consolidated Statements of Assets and Liabilities",
+        "AB Private Credit Investors Corporation",
+        "Item 1. Financial Statements"
+      ],
+      "xpath": "/html/body/div[5]/div/div[1]/div/table[2]/tr[4]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 , respectively)",
+        "",
+        "$",
+        "1,179,169,825",
+        "",
+        "",
+        "$",
+        "1,122,343,258",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "abpcic:InvestmentsAtAmortizedCost",
+          "context": "PAsOn03_31_2023_InvestmentsMemberusgaapInvestmentsInAndAdvancesToAffiliatesCategorizationAxis",
+          "scale": "0",
+          "text": "1,198,535,419",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "abpcic:InvestmentsAtAmortizedCost",
+          "context": "PAsOn12_31_2022_InvestmentsMemberusgaapInvestmentsInAndAdvancesToAffiliatesCategorizationAxis",
+          "scale": "0",
+          "text": "1,146,231,264",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023_InvestmentsMemberusgaapInvestmentsInAndAdvancesToAffiliatesCategorizationAxis",
+          "scale": "0",
+          "text": "1,179,169,825",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022_InvestmentsMemberusgaapInvestmentsInAndAdvancesToAffiliatesCategorizationAxis",
+          "scale": "0",
+          "text": "1,122,343,258",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | As of March 31, 2023 (Unaudited) As of December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 , respectively) $ 1,179,169,825 $ 1,122,343,258",
+      "preceding": [
+        "",
+        "Consolidated Statements of Assets and Liabilities",
+        "AB Private Credit Investors Corporation",
+        "Item 1. Financial Statements"
+      ],
+      "xpath": "/html/body/div[5]/div/div[1]/div/table[2]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 )",
+        "",
+        "",
+        "1,179,343,662",
+        "",
+        "",
+        "",
+        "1,122,517,095",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "abpcic:InvestmentsAtAmortizedCost",
+          "context": "PAsOn03_31_2023",
+          "scale": "0",
+          "text": "1,198,535,419",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "abpcic:InvestmentsAtAmortizedCost",
+          "context": "PAsOn12_31_2022",
+          "scale": "0",
+          "text": "1,146,231,264",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023",
+          "scale": "0",
+          "text": "1,179,343,662",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022",
+          "scale": "0",
+          "text": "1,122,517,095",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | As of March 31, 2023 (Unaudited) As of December 31, 2022 | Assets | Investments, at fair value | Non-controlled/non-affiliated investments (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 , respectively) $ 1,179,169,825 $ 1,122,343,258",
+      "preceding": [
+        "",
+        "Consolidated Statements of Assets and Liabilities",
+        "AB Private Credit Investors Corporation",
+        "Item 1. Financial Statements"
+      ],
+      "xpath": "/html/body/div[5]/div/div[1]/div/table[2]/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "",
+        "32,844,791",
+        "",
+        "",
+        "",
+        "19,687,437",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "P01_01_2023To03_31_2023",
+          "scale": "0",
+          "text": "32,844,791",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentIncomeNet",
+          "context": "P01_01_2022To03_31_2022",
+          "scale": "0",
+          "text": "19,687,437",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | For the Three Months Ended March 31, | 2023 2022 | Investment Income: | From non-controlled/non-affiliated investments:",
+      "preceding": [
+        "",
+        "Unaudited Consolidated Statements of Operations",
+        "AB Private Credit Investors Corporation"
+      ],
+      "xpath": "/html/body/div[6]/div/div/div[1]/div/table/tr[12]"
+    },
+    {
+      "cells": [
+        "Investments at Fair Value - 254.06% (++) + * # ^",
+        ""
+      ],
+      "facts": [],
+      "opening": " | Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value | Investments at Fair Value - 254.06% (++) + * # ^ |  | U.S. Corporate Debt - 243.60%",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023",
+        "AB Private Credit Investors Corporation"
+      ],
+      "xpath": "/html/body/div[10]/div[1]/div[1]/div/div/table/tr[3]"
+    },
+    {
+      "cells": [
+        "Total Investment Companies",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "4,122,185",
+        "",
+        "",
+        "",
+        "5,716,977",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "abpcic:InvestmentOwnedAtCostIncludingCapitalizedDiscountGreaterThanPrincipalAmountOutstanding",
+          "context": "PAsOn03_31_2023_InvestmentCompaniesAtOnePointTwoThreePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "4,122,185",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023_InvestmentCompaniesAtOnePointTwoThreePercentageMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "5,716,977",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Portfolio Company Class/Series Shares Cost Fair Value | Investment Companies - 1.23 % | Orangewood WWB Co-Invest, L.P. (10) (13) LP Interests 829,314 $ 829,314 $ 995,177 | ORCP III Triton Co-Investors, L.P. (10) (13) LP Interests 341,592 98,394 420,500",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]/tr[13]"
+    },
+    {
+      "cells": [
+        "TOTAL INVESTMENTS - 254.06% (14)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "1,198,535,419",
+        "",
+        "",
+        "$",
+        "1,179,343,662",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "abpcic:InvestmentOwnedAtCostIncludingCapitalizedDiscountGreaterThanPrincipalAmountOutstanding",
+          "context": "PAsOn03_31_2023",
+          "scale": "0",
+          "text": "1,198,535,419",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn03_31_2023",
+          "scale": "0",
+          "text": "1,179,343,662",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | Portfolio Company Class/Series Shares Cost Fair Value | Investment Companies - 1.23 % | Orangewood WWB Co-Invest, L.P. (10) (13) LP Interests 829,314 $ 829,314 $ 995,177 | ORCP III Triton Co-Investors, L.P. (10) (13) LP Interests 341,592 98,394 420,500",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]/tr[14]"
+    },
+    {
+      "cells": [
+        "Investments at Fair Value \u2014245.69% (++) + * # ^",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value | Investments at Fair Value \u2014245.69% (++) + * # ^ |  | U.S. Corporate Debt \u2014236.64%",
+      "preceding": [
+        "",
+        "Consolidated Schedule of Investments as of December 31, 2022",
+        "AB Private Credit Investors Corporation",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/div[21]/div/div[1]/div/table/tr[3]"
+    },
+    {
+      "cells": [
+        "TOTAL INVESTMENTS - 245.69 % ( 19 )",
+        "",
+        "",
+        "$",
+        "1,146,231,264",
+        "",
+        "",
+        "$",
+        "1,122,517,095",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "abpcic:PercentageRepresentingTotalInvestmentsInInvestmentOwned",
+          "context": "PAsOn12_31_2022",
+          "scale": "-2",
+          "text": "245.69",
+          "unit": "Unit_pure"
+        },
+        {
+          "concept": "abpcic:InvestmentOwnedAtCostIncludingCapitalizedDiscountGreaterThanPrincipalAmountOutstanding",
+          "context": "PAsOn12_31_2022",
+          "scale": "0",
+          "text": "1,146,231,264",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn12_31_2022",
+          "scale": "0",
+          "text": "1,122,517,095",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " |  | Portfolio Company Class/Series Shares Cost Fair Value | Falcon Co-Investment Partners, L.P. (15) (18) LP Interests 812,734 812,734 $ 813,547 | GHP E Aggregator, LLC (15) (18) LLC Units 417,813 186,588 614,185",
+      "preceding": [
+        "",
+        "Consolidated Schedule of Investments as of December 31, 2022 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "xpath": "/html/body/div[31]/div/div/div/table[1]/tr[12]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "32,844,791",
+        "",
+        "",
+        "$",
+        "19,687,437",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended March 31, 2023 For the Three Months Ended March 31, 2022 | Total investment income $ 32,844,791 $ 19,687,437 | Total expenses 21,805,644 11,614,038 | ",
+      "preceding": [
+        "",
+        "The following is a summary of the Fund\u2019s operating results for the three months ended March 31, 2023 and March 31, 2022:",
+        "Results of Operations",
+        "\u2022 review of monthly and quarterly consolidated financial statements and financial projections of portfolio companies.",
+        "",
+        "Table of Contents",
+        "",
+        "",
+        "cal 52,028,608 4.34 50,240,600 4.26 Digital Infrastructure & Services 201,143,665 16.78 199,146,564 16.89 Energy 3,538,289 0.30 3,751,433 0.32 Financials 47,036,130 3.92 45,785,196 3.88 Healthcare & HCIT 235,848,865 19.68 222,688,577 18.88 Investment Companies 4,122,185 0.34 5,716,977 0.48 Software & Tech Services 554,108,687 46.23 554,400,163 47.01 Transport & Logistics 4,039,205 0.34 1,066,233 0.09 $ 1,198,535,419 100 % $ 1,179,343,662 100 % 61",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[51]/div/table[7]/tr[3]"
+    }
+  ],
+  "sha256": "fdcd47f337568a630db7f7815221f449eb51582898a4ccaf4561b960ae703bfd",
+  "status": "literal_primary_review_candidates"
+}

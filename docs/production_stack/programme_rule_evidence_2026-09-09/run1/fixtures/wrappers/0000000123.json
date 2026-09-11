@@ -1,0 +1,14 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0000000123",
+  "version": 1,
+  "dispatch": {
+    "rule_prefix": "FIXTURE",
+    "prefix_rules": {
+      "debt": "debt"
+    }
+  },
+  "staging": {
+    "strategy": "fixture_trial_only"
+  }
+}

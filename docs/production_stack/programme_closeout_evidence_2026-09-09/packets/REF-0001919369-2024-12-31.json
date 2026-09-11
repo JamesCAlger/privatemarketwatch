@@ -1,0 +1,304 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c-6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-615",
+        "name": "vcsl:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "$ 537,454",
+        "",
+        "$ 539,909",
+        "203.2 %"
+      ],
+      "concept": "vcsl:InvestmentOwnedCostCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsAtCarryingValue",
+      "context_id": "c-6",
+      "currency": "USD",
+      "fact_id": "f-615",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "537,454",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[1273]/table/tr[11]",
+      "table_xpath": "/html/body/div[1273]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "537454000"
+    },
+    {
+      "attributes": {
+        "contextref": "c-6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-616",
+        "name": "vcsl:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents",
+        "",
+        "$ 537,454",
+        "",
+        "$ 539,909",
+        "203.2 %"
+      ],
+      "concept": "vcsl:InvestmentOwnedFairValueAndCashAndCashEquivalentsAndRestrictedCashAndCashEquivalentsFairValue",
+      "context_id": "c-6",
+      "currency": "USD",
+      "fact_id": "f-616",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "539,909",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[1273]/table/tr[11]",
+      "table_xpath": "/html/body/div[1273]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "539909000"
+    },
+    {
+      "attributes": {
+        "contextref": "c-6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-691",
+        "name": "vcsl:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredNotProvidedAmountFairValue",
+        "scale": "3",
+        "sign": "-",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total unfunded commitments",
+        "",
+        "",
+        "",
+        "$",
+        "95,273",
+        "",
+        "",
+        "$",
+        "( 1,096 )",
+        ""
+      ],
+      "concept": "vcsl:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredNotProvidedAmountFairValue",
+      "context_id": "c-6",
+      "currency": "USD",
+      "fact_id": "f-691",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "1,096",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[3]/div[5]/table/tr[35]",
+      "table_xpath": "/html/body/ix:continuation[3]/div[5]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "-1096000"
+    },
+    {
+      "attributes": {
+        "contextref": "c-6",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "f-928",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "$",
+        "-",
+        "",
+        "",
+        "$",
+        "235,497",
+        "",
+        "",
+        "$",
+        "271,077",
+        "",
+        "",
+        "$",
+        "506,574",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c-6",
+      "currency": "USD",
+      "fact_id": "f-928",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "506,574",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[12]/ix:nonnumeric[1]/div[3]/table/tr[8]",
+      "table_xpath": "/html/body/ix:continuation[12]/ix:nonnumeric[1]/div[3]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "506574000"
+    }
+  ],
+  "cik": "0001919369",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1919369/000191936925000009.html",
+  "reference_id": "REF-0001919369-2024-12-31",
+  "report_date": "2024-12-31",
+  "source_rows": 76,
+  "source_sha256": "e1fc3f38f3cf9d7fb7d6235be9f5eb140406b8e38986a5455a36a427589709aa",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 1,
+      "first": [
+        "Investments \u2013 non-controlled/non-affiliated, at fair value (amortized cost of $ 504,119 and $ 104,685 , respectively) | $ | 506,574 | $ | 104,869"
+      ],
+      "last": [
+        "Investments \u2013 non-controlled/non-affiliated, at fair value (amortized cost of $ 504,119 and $ 104,685 , respectively) | $ | 506,574 | $ | 104,869"
+      ],
+      "opening_rows": [
+        "",
+        "December 31, 2024 December 31, 2023",
+        "Assets",
+        "Investments \u2013 non-controlled/non-affiliated, at fair value (amortized cost of $ 504,119 and $ 104,685 , respectively) $ 506,574 $ 104,869"
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/div[1206]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Central Parent, Inc. | (7) (20) | SOFR + 3.25 % | 7.58 % | 7/6/2029 | 9,975 | $ 9,997 | $ 9,856 | 3.7 %",
+        "OEConnection LLC | (9) (20) (21) | SOFR + 5.00 % | 9.36 % | 4/22/2031 | 19,402 | 19,178 | 19,352 | 7.3"
+      ],
+      "last": [
+        "Mews Systems B.V. | (4) (5) (10) (19) (20) (21) | SOFR + 9.00 % | 13.36 % | 9/14/2029 | 16,153 | 14,897 | 15,069 | 5.7",
+        "Perforce Software, Inc. | (8) (20) | SOFR + 4.75 % | 9.11 % | 3/21/2031 | 19,950 | 19,754 | 19,734 | 7.4"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Investments \u2013 non-controlled/non-affiliated",
+        "First-Lien Debt"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[1249]/table"
+    },
+    {
+      "contexts": 22,
+      "first": [
+        "Integrity Marketing Acquisition, LLC | (4) (9) (20) (21) | SOFR + 5.00 % | 9.51 % | 8/25/2028 | 2,031 | $ 2,016 | $ 2,006 | 0.8 %",
+        "Zinnia Corporate Holdings, LLC | (4) (13) (20) (21) | SOFR + 8.00 % | 12.34 % | 8/30/2029 | 26,471 | 25,964 | 26,021 | 9.8"
+      ],
+      "last": [
+        "Metropolis Technologies, Inc. | (4) | N/A | 17.50 % | 5/16/2034 | 480 | 456 | 459 | 0.2",
+        "Total Preferred Equity | 4,732 | 4,740 | 1.8"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Insurance",
+        "Integrity Marketing Acquisition, LLC (4) (9) (20) (21) SOFR + 5.00 % 9.51 % 8/25/2028 2,031 $ 2,016 $ 2,006 0.8 %"
+      ],
+      "preceding": [],
+      "rows": 22,
+      "table_xpath": "/html/body/div[1261]/table"
+    },
+    {
+      "contexts": 4,
+      "first": [
+        "Metropolis Technologies, Inc. | (4) (15) | 5/16/2034 | 280 | $ 20 | $ 20 | 0.0 %",
+        "Mews Systems B.V. | (4) (5) (15) (19) | 9/14/2029 | 192 | 1,312 | 1,227 | 0.5"
+      ],
+      "last": [
+        "Total Other Equity | 1,332 | 1,247 | 0.5",
+        "Total Investments - non-controlled/non-affiliated | 504,119 | 506,574 | 190.7"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(16)(22) Footnotes Reference Rate and Spread Interest Rate (2) (14) Maturity Date Par Amount/Units (1) Amortized Cost (3) Fair Value % of Net Assets",
+        "Other Equity",
+        "Transportation, Logistics & Supply Chain"
+      ],
+      "preceding": [],
+      "rows": 4,
+      "table_xpath": "/html/body/div[1273]/table"
+    },
+    {
+      "contexts": 5,
+      "first": [
+        "United States | $ | 457,975 | 90.8 | % | $ | 460,090 | 90.8 | %",
+        "Luxembourg | 10,031 | 2.0 | 10,032 | 2.0"
+      ],
+      "last": [
+        "Switzerland | 19,904 | 3.9 | 20,156 | 4.0",
+        "Total | $ | 504,119 | 100.0 | % | $ | 506,574 | 100.0 | %"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31, 2024",
+        "Geography - % of Fair Value Amortized Cost Fair Value",
+        "United States $ 457,975 90.8 % $ 460,090 90.8 %"
+      ],
+      "preceding": [],
+      "rows": 5,
+      "table_xpath": "/html/body/ix:continuation[4]/div/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "First-lien debt | $ | - | $ | 235,497 | $ | 265,090 | $ | 500,587",
+        "First-lien debt | $ | - | $ | 235,497 | $ | 265,090 | $ | 500,587"
+      ],
+      "last": [
+        "Total | $ | - | $ | 235,497 | $ | 271,077 | $ | 506,574",
+        "Total | $ | - | $ | 235,497 | $ | 271,077 | $ | 506,574"
+      ],
+      "opening_rows": [
+        "",
+        "As of December 31, 2024",
+        "Level 1 Level 2 Level 3 Total",
+        "Investment Type"
+      ],
+      "preceding": [],
+      "rows": 16,
+      "table_xpath": "/html/body/ix:continuation[12]/ix:nonnumeric[1]/div[3]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "First-lien debt | $ | 187,455 | Yield Analysis | Discount Rate | 9.70 | % | 15.80 | % | 12.20 | %",
+        "77,635 | Recent Transactions | Transaction Price | 98.00 | 99.00 | 98.48"
+      ],
+      "last": [
+        "1,227 | Market Approach | Revenue Multiple | 8.25 x | 10.25 x | 9.25 x",
+        "Total Investments | $ | 271,077"
+      ],
+      "opening_rows": [
+        "",
+        "Range",
+        "Fair Value as of December 31, 2024 Valuation Techniques Significant Unobservable Inputs Low High Weighted Average",
+        "First-lien debt $ 187,455 Yield Analysis Discount Rate 9.70 % 15.80 % 12.20 %"
+      ],
+      "preceding": [],
+      "rows": 6,
+      "table_xpath": "/html/body/ix:continuation[14]/ix:nonnumeric[1]/div[3]/table"
+    }
+  ]
+}

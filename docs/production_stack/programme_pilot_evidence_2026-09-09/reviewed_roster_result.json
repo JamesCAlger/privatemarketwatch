@@ -1,0 +1,18 @@
+{
+  "status": "reviewed_reference_comparison",
+  "reference_rows": 2,
+  "candidate_rows": 2,
+  "matched_rows": 2,
+  "source_only_rows": 0,
+  "output_only_or_duplicate_rows": 0,
+  "row_recall": 1.0,
+  "row_precision": 1.0,
+  "fv_recall": 1.0,
+  "fv_precision": 1.0,
+  "ambiguous_duplicate_fv_keys": 0,
+  "source_missing_fv_rows": 0,
+  "published_missing_fv_rows": 0,
+  "source_abs_fv_known": "646250",
+  "published_abs_fv_known": "646250.0",
+  "scope": "Bain 2023Q2 complete two-lot development schedule only; not held-out acceptance"
+}

@@ -1,0 +1,259 @@
+{
+  "path": "data/raw/filings/bdc_html/1950803/000119312523210954.html",
+  "ref": "REF-0001950803-2023-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments at fair value (Cost $ 193,103,033 )",
+        "",
+        "$",
+        "193,103,033",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn06_30_2023",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn06_30_2023",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | June 30, 2023 | Assets | Investments at fair value (Cost $ 193,103,033 ) $ 193,103,033 | Cash and cash equivalents 7,566,683",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Statement of Assets and Liabilities",
+        "StepStone Private Credit Fund LLC",
+        "Item 1. Consolidated Financial Statements (Unaudited)"
+      ],
+      "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "3,546,896",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "P04_03_2023To06_30_2023",
+          "scale": "0",
+          "text": "3,546,896",
+          "unit": "Unit_USD"
+        }
+      ],
+      "opening": " | For the Period from April 3, 2023 (commencement of operations) to June 30, 2023 | Investment Income | Interest income on investments $ 3,546,896 | ",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Statement of Operations",
+        "StepStone Private Credit Fund LLC"
+      ],
+      "xpath": "/html/body/div[6]/div/div/div[1]/div/table/tr[6]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "",
+        "260.53",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001950803:AmortizedCost",
+          "context": "PAsOn06_30_2023_DebtSecuritiesMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn06_30_2023_DebtSecuritiesMemberusgaapInvestmentTypeAxis",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "PAsOn06_30_2023_DebtSecuritiesMemberusgaapInvestmentTypeAxis",
+          "scale": "-2",
+          "text": "260.53",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | Investments SPV Vehicle (10) Footnotes Industry Reference Rate Spread Interest Rate Maturity Date Outstanding Principal Amortized Cost Fair Value Percentage of Net Assets | Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured (continued) | SourceHOV Tax, LLC Initial Term A Loan BMO SPV II Credit Facility (1)(2)(3)(4)(5)(6)(7) Industrials SOFR + 5.75 % 11.04 % 4/6/2028 4,987,406 4,948,006 4,948,006 6.67 %",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "StepStone Private Credit Fund LLC"
+      ],
+      "xpath": "/html/body/div[10]/div/div/div[1]/div/table[1]/tr[26]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "193,103,033",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "",
+        "260.53",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "PAsOn06_30_2023",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "ck0001950803:PercentageOfInvestment",
+          "context": "PAsOn06_30_2023",
+          "scale": "-2",
+          "text": "100.00",
+          "unit": "Unit_pure"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "PAsOn06_30_2023",
+          "scale": "0",
+          "text": "193,103,033",
+          "unit": "Unit_USD"
+        },
+        {
+          "concept": "ck0001950803:PercentageOfInvestment",
+          "context": "PAsOn06_30_2023",
+          "scale": "-2",
+          "text": "100.00",
+          "unit": "Unit_pure"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "PAsOn06_30_2023",
+          "scale": "-2",
+          "text": "260.53",
+          "unit": "Unit_pure"
+        }
+      ],
+      "opening": " | % of Total % of Total | Cost Investments Fair Value Investments % of Net Assets | First Lien Senior Secured $ 188,491,055 97.61 % $ 188,491,055 97.61 % 254.30 % | Second Lien Senior Secured 4,611,978 2.39 % 4,611,978 2.39 % 6.23 %",
+      "preceding": [
+        "",
+        "Investments at fair value and cost consisted of the following as of June 30, 2023:",
+        ". Detailed information with respect to the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled investments is contained in the consolidated financial statements, including the Consolidated Schedule of Investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled investments.",
+        "5. Investments",
+        "ighted average interest rate of 7.55 %. The average amount of borrowings is $ 75,655,866 . For the period from April 3, 2023 (commencement of operations) to June 30, 2023, the Company\u2019s aggregate weighted average interest rate under the MassMutual SPV I Facility and the BMO SPV II Credit Facility (the \u201cLines of Credit\u201d) amounted to 7.91 % and the Company\u2019s aggregate average amount of borrowings under the Lines of Credit amounted to $ 74,137,728 ."
+      ],
+      "xpath": "/html/body/div[15]/div/div/div[1]/div/ix:nonnumeric/ix:nonnumeric[1]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "3,546,896",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Period from April 3, 2023 (commencement of | operations) to June 30, 2023 | Total investment income $ 3,546,896 | Less: Net expenses (1,733,766 )",
+      "preceding": [
+        "",
+        "The Company was formed on September 26, 2022 and commenced investment operations on April 3, 2023. The following table represents our operating results for the period from April 3, 2023 (commencement of operations) to June 30, 2023:",
+        "Consolidated Results of Operations",
+        " to an increase in defaults on our debt investments or in realized losses on our investments and to difficulty in maintaining historical dividend payment rates and unrealized appreciation on our equity investments. Consequently, we can provide no assurance that the performance of certain portfolio companies will not be negatively impacted by future economic cycles or other conditions, which could also have a negative impact on our future results.",
+        "As of June 30, 2023, our investment portfolio had no investments on non-accrual status.",
+        "Table of Contents",
+        "",
+        "",
+        "ministrative costs. We reimburse the Advisor, subject to the Expense Limitation Agreement, for amounts paid or costs borne that properly constitute Company expenses as set forth in the Administration Agreement and Advisory Agreement or otherwise. We expect our general and administrative expenses to be relatively stable or to decline as a percentage of total assets during periods of asset growth and to increase during periods of asset declines. 25",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[22]/div/table[1]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "",
+        "$",
+        "3,546,896",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Period from April 3, 2023 (commencement of | operations) to June 30, 2023 | Investment income: | Interest income $ 3,546,896",
+      "preceding": [
+        "",
+        "Net increases (decreases) in net assets resulting from operations can vary substantially from period to period due to various factors, including recognition of realized gains and losses and unrealized appreciation and depreciation. As a result, comparisons of net changes in net assets resulting from operations may not be meaningful.",
+        "For the Period from April 3, 2023 (commencement of operations) to June 30, 2023 Total investment income $ 3,546,896 Less: Net expenses (1,733,766 ) Net investment income (loss) 1,813,130 Net realized gain (loss) 4,695 Net increase (decrease) in Net Assets resulting from operations $ 1,817,825",
+        "",
+        "The Company was formed on September 26, 2022 and commenced investment operations on April 3, 2023. The following table represents our operating results for the period from April 3, 2023 (commencement of operations) to June 30, 2023:",
+        "Table of Contents",
+        "",
+        "",
+        "ministrative costs. We reimburse the Advisor, subject to the Expense Limitation Agreement, for amounts paid or costs borne that properly constitute Company expenses as set forth in the Administration Agreement and Advisory Agreement or otherwise. We expect our general and administrative expenses to be relatively stable or to decline as a percentage of total assets during periods of asset growth and to increase during periods of asset declines. 25",
+        "Table of Contents"
+      ],
+      "xpath": "/html/body/div[22]/div/table[2]/tr[7]"
+    }
+  ],
+  "sha256": "0a25243845ca3164bec5eaca41c00ede7cbc1b22feeba99ff499702ec03b6ba9",
+  "status": "literal_primary_review_candidates"
+}

@@ -1,0 +1,434 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ix_222_fact",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total First Lien Secured Debt\u2014non-controlled/non-affiliated",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "312,639",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "",
+        "244.41",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ix_222_fact",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[14]/tr[14]",
+      "table_xpath": "/html/body/table[14]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ix_225_fact",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total Investments at Fair Value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "312,639",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "",
+        "244.41",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ix_225_fact",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[14]/tr[15]",
+      "table_xpath": "/html/body/table[14]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-7242",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-7242",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[17]/tr[12]",
+      "table_xpath": "/html/body/table[17]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-7248",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "313,562",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-7248",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/table[18]/tr[4]",
+      "table_xpath": "/html/body/table[18]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-7269",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Fair value as of September 30, 2024",
+        "",
+        "$",
+        "313,562",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-7269",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[7]/ix:continuation[1]/table/tr[11]",
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[1]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    },
+    {
+      "attributes": {
+        "contextref": "c2",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "ixv-7279",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "usd"
+      },
+      "cells": [
+        "Fair value as of September 30, 2024",
+        "",
+        "$",
+        "313,562",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "c2",
+      "currency": "USD",
+      "fact_id": "ixv-7279",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "313,562",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table/tr[11]",
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "usd",
+      "value": "313562000"
+    }
+  ],
+  "cik": "0002008748",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/2008748/000093041324003190.html",
+  "reference_id": "REF-0002008748-2024-09-30",
+  "report_date": "2024-09-30",
+  "source_rows": 58,
+  "source_sha256": "1dcfa3c23ca0eb1844ba0a8d9892d839b1c1910cc6a122925437327aadd1adb6",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 30,
+      "first": [
+        "RJW Logistics Group, Inc | 3M S + 3.75% | 9.10 | % | 3/5/2027 | $ | 2,880 | $ | 2,882 | $ | 2,880 | 2.24 | %",
+        "2,882 | 2,880 | 2.24"
+      ],
+      "last": [
+        "Playpower, Inc. (Revolver) (8) | 3M S + 5.25% | N/A | 8/28/2030 | \u2014 | ( 97 ) | ( 97 ) | ( 0.08 | )",
+        "42,693 | 42,693 | 33.28"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated",
+        "First Lien Secured Debt\u2014 non-controlled/non-affiliated (4) (6)",
+        "Air Freight & Logistics"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) September 30, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 30,
+      "table_xpath": "/html/body/table[13]"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "TransnetYX, Inc | 3M S + 5.25% | 10.05 | % | 4/13/2026 | 17,740 | 17,740 | 17,740 | 13.83",
+        "17,740 | 17,740 | 13.83"
+      ],
+      "last": [
+        "Total First Lien Secured Debt\u2014non-controlled/non-affiliated | $ | 312,639 | $ | 313,562 | 244.41 | %",
+        "Total Investments at Fair Value | $ | 312,639 | $ | 313,562 | 244.41 | %"
+      ],
+      "opening_rows": [
+        "Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets",
+        "Investments\u2014non-controlled/non-affiliated (continued)",
+        "First Lien Secured Debt\u2014non-controlled/non-affiliated (4) (6)",
+        "Life Sciences Tools & Services"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) September 30, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/table[14]"
+    },
+    {
+      "contexts": 11,
+      "first": [
+        "IT Services | First Lien Secured Debt | $ | 59,369 | 18.93 | %",
+        "Professional Services | First Lien Secured Debt | 58,072 | 18.52"
+      ],
+      "last": [
+        "Air Freight & Logistics | First Lien Secured Debt | 2,880 | 0.92",
+        "Total | $ | 313,562 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "Industry Investment Type Fair Value Percentage of Total Portfolio",
+        "IT Services First Lien Secured Debt $ 59,369 18.93 %",
+        "Professional Services First Lien Secured Debt 58,072 18.52",
+        "Health Care Providers & Services First Lien Secured Debt 49,359 15.74"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "The following shows the composition of the Company\u2019s portfolio at fair value by industry and geography as of September 30, 2024.",
+        "",
+        "",
+        "",
+        "Lord Abbett Private Credit Fund Consolidated Schedule of Investments (Unaudited) September 30, 2024 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)"
+      ],
+      "rows": 11,
+      "table_xpath": "/html/body/table[17]"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "United Kingdom | $ | 29,398 | 9.38 | %",
+        "United States | 284,164 | 90.62"
+      ],
+      "last": [
+        "United States | 284,164 | 90.62",
+        "Total | $ | 313,562 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "Geography Fair Value Percentage of Total Portfolio",
+        "United Kingdom $ 29,398 9.38 %",
+        "United States 284,164 90.62",
+        "Total $ 313,562 100.00 %"
+      ],
+      "preceding": [
+        "",
+        "",
+        "",
+        "Industry Investment Type Fair Value Percentage of Total Portfolio IT Services First Lien Secured Debt $ 59,369 18.93 % Professional Services First Lien Secured Debt 58,072 18.52 Health Care Providers & Services First Lien Secured Debt 49,359 15.74 Leisure Products First Lien Secured Debt 42,693 13.62 Insurance First Lien Secured Debt 29,142 9.29 Commercial Services & Supplies First Lien Secured Debt 27,873 8.89 Life Sciences Tools & Services First Lien Secured Debt 17,740 5.66 Containers & Packaging First Lien Secured Debt 14,409 4.60 Health Care Equipment & Supplies First Lien Secured Debt 12,025 3.83 Air Freight & Logistics First Lien Secured Debt 2,880 0.92 Total $ 313,562 100.00 %",
+        "",
+        "",
+        "",
+        "The following shows the composition of the Company\u2019s portfolio at fair value by industry and geography as of September 30, 2024."
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/table[18]"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "Fair value as of September 30, 2024 | $ | 313,562"
+      ],
+      "last": [
+        "Fair value as of September 30, 2024 | $ | 313,562"
+      ],
+      "opening_rows": [
+        "For the period from February 23, 2024 (commencement of operations) to September 30, 2024",
+        "First Lien Secured Debt",
+        "Fair value as of February 23, 2024 $ -",
+        "Purchases 384,230"
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[1]/table"
+    },
+    {
+      "contexts": 1,
+      "first": [
+        "Fair value as of September 30, 2024 | $ | 313,562"
+      ],
+      "last": [
+        "Fair value as of September 30, 2024 | $ | 313,562"
+      ],
+      "opening_rows": [
+        "Three Months Ended September 30, 2024",
+        "First Lien Secured Debt",
+        "Fair value as of June 30, 2024 $ 228,062",
+        "Purchases 151,534"
+      ],
+      "preceding": [],
+      "rows": 1,
+      "table_xpath": "/html/body/ix:continuation[7]/ix:continuation[3]/table"
+    },
+    {
+      "contexts": 3,
+      "first": [
+        "First Lien Secured Debt | $ | 173,548 | Income Approach | Discount Rate | 6.48 % - 9.75 % | 8.42 %",
+        "140,014 | Market Approach | Transaction Price | n/a | n/a"
+      ],
+      "last": [
+        "140,014 | Market Approach | Transaction Price | n/a | n/a",
+        "Total Level 3 Investments | $ | 313,562"
+      ],
+      "opening_rows": [
+        "Quantitative Information about Level 3 Fair Value Measurements",
+        "Asset Category Fair Value Valuation Techniques/ Methodologies Unobservable Input Range Weighted Average (1)",
+        "First Lien Secured Debt $ 173,548 Income Approach Discount Rate 6.48 % - 9.75 % 8.42 %",
+        "140,014 Market Approach Transaction Price n/a n/a"
+      ],
+      "preceding": [],
+      "rows": 3,
+      "table_xpath": "/html/body/ix:continuation[8]/ix:continuation[1]/table"
+    }
+  ]
+}

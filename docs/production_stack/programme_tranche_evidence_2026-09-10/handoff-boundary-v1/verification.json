@@ -1,0 +1,503 @@
+{
+  "candidate": "t1-runtime-20260910-v5",
+  "candidate_fingerprint": "396539ea2c2add560da0196272e34f134ec4af1af49c892e605521f1ca8a8eb7",
+  "created_utc": "2026-09-10T15:48:18.814693+00:00",
+  "engineering_tranche_complete": false,
+  "execution_status": "stopped_protected_output",
+  "fix": {
+    "bytes": 1885,
+    "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-fix-v1/complete.json",
+    "sha256": "bb4e7debfdc6084928539fdb88030c568e538955cc6fc74648c943e00a1bb8c8"
+  },
+  "focused_tests": {
+    "evidence": {
+      "bytes": 718,
+      "path": "scratch/2026-09-10_programme_tranche/verification/strengthened-preflight-tests-v2/result.json",
+      "sha256": "d5c40b5dc992b9a03d589d14f796aefabe7040077c933c15e920d8c49272e15a"
+    },
+    "passed": 68,
+    "seconds": 53.076,
+    "timing": "Before the full suite; does not verify the later test-isolation fix"
+  },
+  "full_suite": {
+    "elapsed_seconds": 5789.302398400003,
+    "exit_code": 124,
+    "final_junit_available": false,
+    "final_traceback_available": false,
+    "observed_failure_markers": 1,
+    "progress": "Approximately 79%; incomplete run, no final test counts",
+    "timed_out": true,
+    "worker_stopped": true
+  },
+  "incident": {
+    "all_protected_content_hashed": false,
+    "bytes": 9580,
+    "cleanup": "Automatic approval review rejected removal: blocked by policy; files remain",
+    "created_empty_cache_files": 6,
+    "diagnosis": {
+      "bytes": 2206,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-failure-v1/complete.json",
+      "sha256": "78648b1c42632a43e16a76c8eaf79485dfba4275423a1b3b2ee4fad6a5649594"
+    },
+    "removed_files": 0,
+    "unchanged_existing_size_mtime_files": 237621
+  },
+  "integrated_measurement": "Not run",
+  "next_work": "Resolve the stop; verify test isolation and identify the earlier failure, finish full-suite verification, then measure/recover the existing sealed candidate after validating its identities.",
+  "paid_calls": 0,
+  "preservation": {
+    "baseline_divergence_groups": {
+      "fund_financials": 0,
+      "holdings": 11,
+      "index_returns": 6,
+      "matches": 7,
+      "position_returns": 7
+    },
+    "code": {
+      "bytes": 7051,
+      "path": "scripts/programme_tranche/check_preservation.py",
+      "sha256": "5b2c0a20670b85b3d337a2ad2cced0392abe98b28c1cc57bad7a93f9d49fb262"
+    },
+    "current_baseline_manifest": {
+      "bytes": 25708533,
+      "path": "docs/refactoring/baseline_manifest.json",
+      "sha256": "5a9e76d2c9cf5c18e77262b7d04b864d590f17fdd368a81c2f7e9fc12909af00"
+    },
+    "derived_delta_roundoff": [
+      {
+        "change": 3.637978807091713e-12,
+        "new_delta": -1181.2205822721508,
+        "old_delta": -1181.2205822721544,
+        "path": "/position_returns/position_return/0/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.0001220703125,
+        "new_delta": -271163614.6602173,
+        "old_delta": -271163614.6600952,
+        "path": "/position_returns/position_return/0/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 4.589557647705078e-06,
+        "new_delta": -353908044.3096588,
+        "old_delta": -353908044.3096634,
+        "path": "/position_returns/position_return/1/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.005859375,
+        "new_delta": -9743223304.770508,
+        "old_delta": -9743223304.764648,
+        "path": "/position_returns/position_return/1/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 9.237055564881302e-14,
+        "new_delta": -9.251740571898235,
+        "old_delta": -9.251740571898328,
+        "path": "/position_returns/position_return/2/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.6370904631912708e-11,
+        "new_delta": -656.4379660223722,
+        "old_delta": -656.4379660223885,
+        "path": "/position_returns/position_return/3/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 3.0517578125e-05,
+        "new_delta": -202695199.09991455,
+        "old_delta": -202695199.09994507,
+        "path": "/position_returns/position_return/3/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -9.094947017729282e-13,
+        "new_delta": -0.1228552317793401,
+        "old_delta": -0.1228552317784306,
+        "path": "/position_returns/position_return/4/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.0001220703125,
+        "new_delta": -92874368.32995605,
+        "old_delta": -92874368.33007812,
+        "path": "/position_returns/position_return/4/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 9.313225746154785e-10,
+        "new_delta": 4334954.627437041,
+        "old_delta": 4334954.62743704,
+        "path": "/position_returns/position_return/5/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -1.52587890625e-05,
+        "new_delta": -1185865.5000305176,
+        "old_delta": -1185865.5000152588,
+        "path": "/position_returns/position_return/5/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 2.2737367544323206e-13,
+        "new_delta": -2.2737367544323206e-13,
+        "old_delta": -4.547473508864641e-13,
+        "path": "/position_returns/position_return/6/total_return_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 0.000213623046875,
+        "new_delta": 2908500.000213623,
+        "old_delta": 2908500.0,
+        "path": "/position_returns/position_return/6/begin_fv_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.52587890625e-05,
+        "new_delta": -45551112.99999237,
+        "old_delta": -45551113.00000763,
+        "path": "/holdings/holdings_class_fv/1/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.0003662109375,
+        "new_delta": 29327971.999816895,
+        "old_delta": 29327972.000183105,
+        "path": "/holdings/holdings_class_fv/2/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -0.015625,
+        "new_delta": -32474804.002929688,
+        "old_delta": -32474803.987304688,
+        "path": "/holdings/holdings_class_fv/3/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -1.52587890625e-05,
+        "new_delta": -48439072.0,
+        "old_delta": -48439071.99998474,
+        "path": "/holdings/holdings_class_fv/4/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -9.1552734375e-05,
+        "new_delta": 29504999.999969482,
+        "old_delta": 29505000.000061035,
+        "path": "/holdings/holdings_class_fv/5/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 1.52587890625e-05,
+        "new_delta": 3921854569.582794,
+        "old_delta": 3921854569.582779,
+        "path": "/holdings/holdings_class_fv/6/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": 6.103515625e-05,
+        "new_delta": -1643282630.659851,
+        "old_delta": -1643282630.659912,
+        "path": "/holdings/holdings_class_fv/7/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      },
+      {
+        "change": -6.103515625e-05,
+        "new_delta": 2681492.529724121,
+        "old_delta": 2681492.5297851562,
+        "path": "/holdings/holdings_class_fv/8/fair_value_sum_delta",
+        "source_totals_within_existing_noise_rule": true
+      }
+    ],
+    "elapsed_seconds": 128.92322630000126,
+    "numeric_rule": "Unchanged scripts.diff_outputs source-scale numeric-noise rule; each derived delta must equal its recorded subtraction",
+    "original_gold": {
+      "bytes": 112693,
+      "path": "data/gold/labels/position_labels.jsonl",
+      "sha256": "924f0b4096aaec355ae9e8fbede857ed616260155123538d89b11d48b7bdd3c7"
+    },
+    "original_input_files": 1117,
+    "original_match_reference_files": 1605,
+    "previous_report": {
+      "bytes": 13418,
+      "path": "docs/production_stack/programme_closeout_evidence_2026-09-09/verification/semantic_diff_report.json",
+      "sha256": "da570a27ff78407c45bf26c059e0b596e78b495ef6d4e17c29596c80ce6c5594"
+    },
+    "scope": "Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.",
+    "semantic_changes_since_preparation": [],
+    "semantic_report": {
+      "bytes": 13411,
+      "path": "scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/semantic_diff_report.json",
+      "sha256": "3fddbb2b3ec049249979fb9715689c8f114c995e1cd35aa439325bde08750d80"
+    },
+    "source_reference_freezes_unchanged": true,
+    "status": "pass"
+  },
+  "product_acceptance": {
+    "criteria": 28,
+    "metric_status_counts": {
+      "UNMEASURED": 50
+    },
+    "metrics": 50
+  },
+  "production_adoption": false,
+  "recovery": "Not run",
+  "references": {
+    "dispositions": 61,
+    "independently_reviewed": 0,
+    "label_proposals": 20
+  },
+  "remediation_packets": 4,
+  "sec_requests": 0,
+  "semantic_job": {
+    "code_unchanged": true,
+    "consistently_unreadable_paths": [],
+    "elapsed_seconds": 655.5189213999984,
+    "exit_code": 0,
+    "log": {
+      "bytes": 330,
+      "path": "scratch/2026-09-10_programme_tranche/verification/boundary-semantic-only-v1/process.log",
+      "sha256": "261a646c6678aa1e08c2125c0f4ef1d3997e184ffd6699d7dce2876ec25c2e39"
+    },
+    "mode": "semantic-only",
+    "protected_changes": [],
+    "protected_readable_files": 237627,
+    "protected_unreadable_paths_changed": false,
+    "started_code": {
+      "bytes": 8915,
+      "path": "scripts/programme_tranche/run_verification.py",
+      "sha256": "d04f44afbe3433acc35d549cec03cba2f3a161187a3ce3db15a3bbfaa24bc6e8"
+    },
+    "timed_out": false,
+    "worker_stopped": true
+  },
+  "stage_record_scope": "Completion/result identities and recorded typed-pair checks; the large output bundles were verified when sealed, not rehashed by this handoff writer.",
+  "stages": {
+    "evidence": {
+      "artifacts_metadata": {
+        "pik_schedule_proxy_summary.csv": {
+          "columns": 15,
+          "rows": 2104,
+          "typed_multiset_difference": 0
+        },
+        "pik_schedule_proxy_transitions.csv": {
+          "columns": 15,
+          "rows": 5034,
+          "typed_multiset_difference": 0
+        },
+        "pik_transitions.csv": {
+          "columns": 13,
+          "rows": 796,
+          "typed_multiset_difference": 0
+        },
+        "position_pik_status.csv": {
+          "columns": 18,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "completion": {
+        "bytes": 198,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/complete.json",
+        "sha256": "82d108853586c403e769da18f4f65f0c40a67dacbd493e8bf37fbbd6658d3a72"
+      },
+      "result": {
+        "bytes": 4164,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/evidence-01/result.json",
+        "sha256": "f1a72405ec60e42698925244d0f9248379af25ee7f736fdab8679f8937f77e60"
+      },
+      "summary": {
+        "artifacts_metadata": {
+          "pik_schedule_proxy_summary.csv": {
+            "columns": 15,
+            "rows": 2104,
+            "typed_multiset_difference": 0
+          },
+          "pik_schedule_proxy_transitions.csv": {
+            "columns": 15,
+            "rows": 5034,
+            "typed_multiset_difference": 0
+          },
+          "pik_transitions.csv": {
+            "columns": 13,
+            "rows": 796,
+            "typed_multiset_difference": 0
+          },
+          "position_pik_status.csv": {
+            "columns": 18,
+            "rows": 780425,
+            "typed_multiset_difference": 0
+          }
+        },
+        "elapsed_seconds": 66.2933139000088,
+        "financial_convention": "legacy cash leg; no income formula migration",
+        "identity_policy": {
+          "contested_assignment": true,
+          "use_registry": false
+        },
+        "input_fingerprint": "e8188974f5382a0c269abadd0ea75683b56c2a37b6f33cceb5f6b89ff4b09291",
+        "parents": {
+          "identity": {
+            "attempt": "identity-01",
+            "holdings_sha256": "488d630d3e5d69e0af965031a23435d1e9fa3b6b7582fec0d6a43e1f7d499c8a",
+            "result_sha256": "58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a"
+          }
+        },
+        "quality": "not_evaluated",
+        "rows": 780425,
+        "stage": "evidence",
+        "times": {
+          "summary_rows": 2104,
+          "terms_transitions": 5034
+        }
+      }
+    },
+    "identity": {
+      "artifacts_metadata": {
+        "entity_lookup.csv": {
+          "columns": 9,
+          "rows": 135086,
+          "typed_multiset_difference": 0
+        },
+        "entity_resolution_stats.csv": {
+          "columns": 9,
+          "rows": 1,
+          "typed_multiset_difference": 0
+        },
+        "position_id_edges.csv": {
+          "columns": 16,
+          "rows": 542468,
+          "typed_multiset_difference": 0
+        },
+        "position_matches.csv": {
+          "columns": 31,
+          "rows": 497451,
+          "typed_multiset_difference": 0
+        },
+        "private_markets_holdings.csv": {
+          "columns": 88,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "completion": {
+        "bytes": 198,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/complete.json",
+        "sha256": "96c12fecf8e807ec1de761900cf669be074a0f1a4452ff9cef5430cdfd669b4d"
+      },
+      "result": {
+        "bytes": 4567,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/identity-01/result.json",
+        "sha256": "58283539b65157f81a897a69c3902e528efdc1a7e297b2f0b7bd132dac6d9f8a"
+      },
+      "summary": {
+        "artifacts_metadata": {
+          "entity_lookup.csv": {
+            "columns": 9,
+            "rows": 135086,
+            "typed_multiset_difference": 0
+          },
+          "entity_resolution_stats.csv": {
+            "columns": 9,
+            "rows": 1,
+            "typed_multiset_difference": 0
+          },
+          "position_id_edges.csv": {
+            "columns": 16,
+            "rows": 542468,
+            "typed_multiset_difference": 0
+          },
+          "position_matches.csv": {
+            "columns": 31,
+            "rows": 497451,
+            "typed_multiset_difference": 0
+          },
+          "private_markets_holdings.csv": {
+            "columns": 88,
+            "rows": 780425,
+            "typed_multiset_difference": 0
+          }
+        },
+        "elapsed_seconds": 632.9883561999886,
+        "financial_convention": "legacy cash leg; no income formula migration",
+        "identity_policy": {
+          "contested_assignment": true,
+          "use_registry": false
+        },
+        "input_fingerprint": "9389123b00fc18b6ee9660eb7f37ae99d86e67a250b77385aaf675aca0476703",
+        "parents": {
+          "unified": {
+            "attempt": "unified-01",
+            "holdings_sha256": "f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68",
+            "result_sha256": "e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb"
+          }
+        },
+        "quality": "not_evaluated",
+        "rows": 780425,
+        "stage": "identity",
+        "times": {
+          "entity_seconds": 118.29965779998747,
+          "matches": 497451,
+          "matching_seconds": 121.11630350000632,
+          "position_ids_seconds": 291.18320759999915
+        }
+      }
+    },
+    "unified": {
+      "artifacts_metadata": {
+        "agent_fix_application_audit.csv": {
+          "columns": 11,
+          "rows": 175,
+          "typed_multiset_difference": 0
+        },
+        "private_markets_holdings.csv": {
+          "columns": 88,
+          "rows": 780425,
+          "typed_multiset_difference": 0
+        }
+      },
+      "completion": {
+        "bytes": 198,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/complete.json",
+        "sha256": "8c8e28e99abceb6b71d45354b40760b048ffaf07ca486b51a9637da24b65e0ff"
+      },
+      "result": {
+        "bytes": 3020,
+        "path": "data/programme/candidates/t1-runtime-20260910-v5/attempts/unified-01/result.json",
+        "sha256": "e2ffa1879fa955aebf3e0b5e59d5167dd35d8a5ea978dbbc0b4a409e399d75fb"
+      },
+      "summary": {
+        "artifacts_metadata": {
+          "agent_fix_application_audit.csv": {
+            "columns": 11,
+            "rows": 175,
+            "typed_multiset_difference": 0
+          },
+          "private_markets_holdings.csv": {
+            "columns": 88,
+            "rows": 780425,
+            "typed_multiset_difference": 0
+          }
+        },
+        "elapsed_seconds": 2189.728961300003,
+        "financial_convention": "legacy cash leg; no income formula migration",
+        "identity_policy": {
+          "contested_assignment": true,
+          "use_registry": false
+        },
+        "input_fingerprint": "e06fce533fc2bc1fa8f98e6099e3b0c500583509f72bf5e1f200e81b5db1b228",
+        "parents": {},
+        "quality": "not_evaluated",
+        "rows": 780425,
+        "stage": "unified",
+        "times": {
+          "build_seconds": 2105.4393495999975
+        }
+      }
+    }
+  },
+  "summary": "All three isolated candidate stages completed. Full pytest timed out with one failure marker and six new empty protected query-cache files. The tranche is stopped. The test-isolation fix is prepared but untested; integrated measurement and recovery did not run."
+}

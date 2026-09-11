@@ -76,3 +76,11 @@ parquet_analysis.md
 # (~108MB) to track in git / push to GitHub. Kept on disk; back it up out-of-band.
 data/overrides/position_id_registry/registry.csv
 scripts/match_gold/chain_experiments/out/
+
+# Isolated programme source/input snapshots and candidate attempts.
+data/programme/
+
+# Reproducible programme proof assets; compact gzip/hash manifests are retained.
+docs/production_stack/programme_closeout_evidence_2026-09-09/units/unit_exceptions.csv
+docs/production_stack/programme_closeout_evidence_2026-09-09/unit_resolution/resolved_exceptions.csv
+docs/production_stack/programme_closeout_evidence_2026-09-09/viewer/000*.html

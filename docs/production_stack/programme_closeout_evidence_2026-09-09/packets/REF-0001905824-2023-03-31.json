@@ -1,0 +1,271 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentsFairValueDisclosure",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Non-controlled, non-affiliated investments, at fair value (cost of $ 244,421 and $ 256,627 , respectively)",
+        "",
+        "$",
+        "235,590",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentsFairValueDisclosure",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "235,590",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]",
+      "table_xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "235590000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "id": "Fact_78960300",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "244,421",
+        "",
+        "",
+        "$",
+        "235,590",
+        "",
+        "",
+        "",
+        "98.36",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "Fact_78960300",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "235,590",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table[1]/tr[62]",
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "235590000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "244,421",
+        "",
+        "",
+        "$",
+        "235,590",
+        "",
+        "",
+        "$",
+        "256,627",
+        "",
+        "",
+        "$",
+        "230,202",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "235,590",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[13]/div/div/div[2]/div/ix:nonnumeric[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[13]/div/div/div[2]/div/ix:nonnumeric[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "235590000"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "-3",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "3",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total assets",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "166,513",
+        "",
+        "",
+        "$",
+        "69,077",
+        "",
+        "",
+        "$",
+        "235,590",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "235,590",
+      "rounding_bound": "500.0",
+      "row_xpath": "/html/body/div[14]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[14]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "235590000"
+    }
+  ],
+  "cik": "0001905824",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1905824/000119312523142263.html",
+  "reference_id": "REF-0001905824-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 71,
+  "source_sha256": "d98aeb009050f8dbd41677ad8168359291e995fd3771216005a3257f901ef571",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 41,
+      "first": [
+        "Alorica, Inc. Term Loan (4) | IT Services | SOFR + 6.875 | % | 11.575 | % | 12/21/2027 | $ | 12,438 | $ | 12,315 | $ | 12,304 | 5.14 | %",
+        "AP Core Holdings II, LLC Term B-1 Loan | Entertainment | LIBOR + 5.500 | % | 10.340 | % | 09/01/2027 | 3,634 | 3,587 | 3,544 | 1.48 | %"
+      ],
+      "last": [
+        "Total Non-Controlled, Non-Affiliated Investments | $ | 244,421 | $ | 235,590 | 98.36 | %",
+        "Total Investments | $ | 244,421 | $ | 235,590 | 98.36 | %"
+      ],
+      "opening_rows": [
+        "",
+        "Investments (1)(2) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets",
+        "Debt Investments",
+        "First Lien Senior Secured"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(Amounts in thousands)",
+        "Consolidated Schedule of Investments as of March 31, 2023",
+        "PIMCO Capital Solutions BDC Corp."
+      ],
+      "rows": 41,
+      "table_xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table[1]"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "First Lien Secured | $ | 137,013 | $ | 132,123 | $ | 143,434 | $ | 132,532",
+        "Second Lien Secured | 9,516 | 8,706 | 23,905 | 11,715"
+      ],
+      "last": [
+        "Short-Term Investments | 39,484 | 39,493 | 32,640 | 32,650",
+        "Total investments | $ | 244,421 | $ | 235,590 | $ | 256,627 | $ | 230,202"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023 December 31, 2022",
+        "(Amounts in thousands) Cost Fair Value Cost Fair Value",
+        "First Lien Secured $ 137,013 $ 132,123 $ 143,434 $ 132,532"
+      ],
+      "preceding": [
+        "",
+        "Investments at fair value and cost consisted of the following as of March 31, 2023 and December 31, 2022:"
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[13]/div/div/div[2]/div/ix:nonnumeric[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "First Lien Secured | $ | \u2014 | $ | 96,099 | $ | 36,024 | $ | 132,123",
+        "First Lien Secured | $ | \u2014 | $ | 96,099 | $ | 36,024 | $ | 132,123"
+      ],
+      "last": [
+        "Total assets | $ | \u2014 | $ | 166,513 | $ | 69,077 | $ | 235,590",
+        "Total assets | $ | \u2014 | $ | 166,513 | $ | 69,077 | $ | 235,590"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2023",
+        "Assets Level 1 Level 2 Level 3 Total",
+        "First Lien Secured $ \u2014 $ 96,099 $ 36,024 $ 132,123"
+      ],
+      "preceding": [
+        "",
+        "The following tables summarize the fair value of the Company\u2019s investments as of March 31, 2023 and December 31, 2022 (amounts in thousands):"
+      ],
+      "rows": 24,
+      "table_xpath": "/html/body/div[14]/div/div/div[2]/div/ix:continuation/ix:nonnumeric/table"
+    }
+  ]
+}

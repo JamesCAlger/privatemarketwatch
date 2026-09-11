@@ -1,0 +1,468 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1918712",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001918712-2023-12-31.json",
+    "evidence_sha256": "fbefcb4c94556d24296edf622c3924e65ef33f1c7a35357e7948d19bebb8fd3c",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001918712-2023-12-31",
+    "report_date": "2023-12-31",
+    "review_note": "Balance 2,577,558,000 vs SOI 2,577,558,100: review source rounding, do not force equality.",
+    "saved_candidate_rows": "338",
+    "source_candidate_rows": "472"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1918712/000191871224000048.html",
+    "ref": "REF-0001918712-2023-12-31",
+    "rows": [
+      {
+        "cells": [
+          "Total investment income",
+          "109,809",
+          "",
+          "",
+          "183",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | (in thousands) For the Year Ended December 31, 2023 For the period from December 5, 2022 (commencement of operations) to December 31, 2022 |  |  | Investment Income",
+        "preceding": [
+          "Operating results for the year ended December 31, 2023 and the period from December 5, 2022 (commencement of operations) to December 31, 2022 were as follows:",
+          "",
+          "For the year ended December 31, 2023 and the period from December 5, 2022 (commencement of operations) to December 31, 2022",
+          "",
+          "We commenced operations on December 5, 2022.",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[1636]/table/tr[9]"
+      },
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | As of December 31, | 2023 2022 |  | ",
+        "preceding": [
+          "",
+          "(in thousands, except per share data)",
+          "CONSOLIDATED STATEMENT OF ASSETS AND LIABILITIES",
+          "ARES STRATEGIC INCOME FUND",
+          "",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[2027]/table/tr[7]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliate company investments (amortized cost of $ 2,556,784 and $ 108,769 , respectively)",
+          "$",
+          "2,577,558",
+          "",
+          "",
+          "$",
+          "108,529",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c-10",
+            "scale": "3",
+            "text": "2,556,784",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c-11",
+            "scale": "3",
+            "text": "108,769",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-10",
+            "scale": "3",
+            "text": "2,577,558",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-11",
+            "scale": "3",
+            "text": "108,529",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | As of December 31, | 2023 2022 |  | ",
+        "preceding": [
+          "",
+          "(in thousands, except per share data)",
+          "CONSOLIDATED STATEMENT OF ASSETS AND LIABILITIES",
+          "ARES STRATEGIC INCOME FUND",
+          "",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[2027]/table/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income from non-controlled/non-affiliate company investments",
+          "109,809",
+          "",
+          "",
+          "",
+          "",
+          "183",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-1",
+            "scale": "3",
+            "text": "109,809",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:GrossInvestmentIncomeOperating",
+            "context": "c-18",
+            "scale": "3",
+            "text": "183",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | For the Year Ended December 31, 2023 For the period from December 5, 2022 (commencement of operations) to December 31, 2022 | INVESTMENT INCOME: | From non-controlled/non-affiliate company investments: | ",
+        "preceding": [
+          "(in thousands)",
+          "CONSOLIDATED STATEMENT OF OPERATIONS",
+          "ARES STRATEGIC INCOME FUND",
+          "",
+          "",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[2037]/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "2,556,783.9",
+          "",
+          "",
+          "$",
+          "2,577,558.1",
+          "",
+          "(7)(10)",
+          "146.34",
+          "%",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c-10",
+            "scale": "3",
+            "text": "2,556,783.9",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-10",
+            "scale": "3",
+            "text": "2,577,558.1",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c-10",
+            "scale": "-2",
+            "text": "146.34",
+            "unit": "number"
+          }
+        ],
+        "opening": " | Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets | 5,458.8 5,496.6 0.31 % | Semiconductors and Semiconductor Equipment | MKS Instruments, Inc. First lien senior secured loan 7.84 % SOFR (M) 2.50 % 08/2029 4,482.2 4,471.3 4,486.7 (3)(5)",
+        "preceding": [
+          "ARES STRATEGIC INCOME FUND CONSOLIDATED SCHEDULE OF INVESTMENTS As of December 31, 2023 (dollar amounts in thousands)",
+          "",
+          "F-17",
+          "l Lakeshore Learning Materials, LLC First lien senior secured loan 8.97 % SOFR (M) 3.50 % 09/2028 10,267.0 10,164.4 10,247.8 (5) 10,164.4 10,247.8 0.58 % Transportation First Student Bidco Inc. First lien senior secured loan 8.62 % SOFR (Q) 3.00 % 07/2028 5,664.2 5,531.3 5,615.8 (5) 5,531.3 5,615.8 0.32 % Real Estate Iron Mountain Information Management, LLC First lien senior secured loan 7.58 % SOFR (S) 2.25 % 01/2031 5,500.0 5,458.8 5,496.6 (3)",
+          "ARES STRATEGIC INCOME FUND CONSOLIDATED SCHEDULE OF INVESTMENTS As of December 31, 2023 (dollar amounts in thousands)",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[2082]/table/tr[9]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "108,769.4",
+          "",
+          "",
+          "$",
+          "108,529.2",
+          "",
+          "(8)(9)",
+          "73.28",
+          "%",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "c-11",
+            "scale": "3",
+            "text": "108,769.4",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-11",
+            "scale": "3",
+            "text": "108,529.2",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "c-11",
+            "scale": "-2",
+            "text": "73.28",
+            "unit": "number"
+          }
+        ],
+        "opening": " | Company (1) Investment Coupon (2) Reference (4) Spread (2) Acquisition Date Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets |  | Total Investments $ 108,769.4 $ 108,529.2 (8)(9) 73.28 % | ",
+        "preceding": [
+          "ARES STRATEGIC INCOME FUND CONSOLIDATED SCHEDULE OF INVESTMENTS As of December 31, 2022 (dollar amounts in thousands)",
+          "",
+          "F-26",
+          "earning Materials, LLC First lien senior secured loan 8.23 % LIBOR (Q) 3.50 % 09/2028 748.1 735.0 729.4 (5) 735.0 729.4 0.49 % Telecommunication Services Iridium Satellite LLC First lien senior secured loan 6.92 % LIBOR (Q) 2.50 % 11/2026 498.6 495.5 493.4 (3)(5) 495.5 493.4 0.33 % Investment Funds and Vehicles The Edelman Financial Center, LLC First lien senior secured loan 7.88 % LIBOR (M) 3.50 % 04/2028 498.7 477.7 464.2 (5) 477.7 464.2 0.31 %",
+          "ARES STRATEGIC INCOME FUND CONSOLIDATED SCHEDULE OF INVESTMENTS As of December 31, 2022 (dollar amounts in thousands)",
+          "asif-20231231"
+        ],
+        "xpath": "/html/body/div[2137]/table/tr[4]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "1,575,215",
+          "",
+          "",
+          "$",
+          "1,002,343",
+          "",
+          "",
+          "$",
+          "2,577,558",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-843",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-844",
+            "scale": "3",
+            "text": "1,575,215",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-845",
+            "scale": "3",
+            "text": "1,002,343",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-10",
+            "scale": "3",
+            "text": "2,577,558",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Fair Value Measurements Using | Level 1 Level 2 Level 3 Total | Cash and cash equivalents $ 57,972 $ \u2014 $ \u2014 $ 57,972 | ",
+        "preceding": [],
+        "xpath": "/html/body/ix:continuation[17]/ix:continuation/div[1]/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "$",
+          "\u2014",
+          "",
+          "",
+          "$",
+          "89,785",
+          "",
+          "",
+          "$",
+          "18,744",
+          "",
+          "",
+          "$",
+          "108,529",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-864",
+            "scale": "3",
+            "text": "\u2014",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-865",
+            "scale": "3",
+            "text": "89,785",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-866",
+            "scale": "3",
+            "text": "18,744",
+            "unit": "usd"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-11",
+            "scale": "3",
+            "text": "108,529",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | Fair Value Measurements Using | Level 1 Level 2 Level 3 Total | Cash and cash equivalents $ 113,417 $ \u2014 $ \u2014 $ 113,417 | ",
+        "preceding": [
+          "The following table presents fair value measurements of cash and cash equivalents and investments as of December 31, 2022:",
+          "",
+          "(1) The fair value of unfunded revolving and delayed draw loan commitments is included in \u201caccounts payable and other liabilities\u201d in the accompanying consolidated statement of assets and liabilities.",
+          "",
+          "________________________________________"
+        ],
+        "xpath": "/html/body/ix:continuation[17]/ix:continuation/div[7]/table/tr[12]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "1,002,343",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-845",
+            "scale": "3",
+            "text": "1,002,343",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | As of December 31, 2023 | Unobservable Input | Asset Category Fair Value Primary Valuation Techniques Input Estimated Range Weighted Average(1) | First lien senior secured loans $ 807,310 Yield analysis Market yield 9.6 % - 21.4 % 12.3 %",
+        "preceding": [
+          "",
+          "The following tables summarize the significant unobservable inputs the Fund\u2019s investment adviser used to value the majority of the Fund\u2019s investments categorized within Level 3 as of December 31, 2023 and 2022. The table is not intended to be all-inclusive, but instead to capture the significant unobservable inputs relevant to the determination of fair values.",
+          "",
+          "ies\u201d in the accompanying consolidated statement of assets and liabilities. The following table presents fair value measurements of cash and cash equivalents and investments as of December 31, 2022: Fair Value Measurements Using Level 1 Level 2 Level 3 Total Cash and cash equivalents $ 113,417 $ \u2014 $ \u2014 $ 113,417 First lien senior secured loans $ \u2014 $ 89,785 $ 18,644 $ 108,429 Other equity \u2014 \u2014 100 100 Total investments $ \u2014 $ 89,785 $ 18,744 $ 108,529"
+        ],
+        "xpath": "/html/body/ix:continuation[17]/ix:nonnumeric/div[3]/table/tr[13]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "18,744",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "c-866",
+            "scale": "3",
+            "text": "18,744",
+            "unit": "usd"
+          }
+        ],
+        "opening": " | As of December 31, 2022 | Unobservable Input | Asset Category Fair Value Primary Valuation Techniques Input Estimated Range Weighted Average(1) | First lien senior secured loans $ 18,644 Yield analysis Market yield 12.3 % - 13.9 % 13.2 %",
+        "preceding": [],
+        "xpath": "/html/body/ix:continuation[18]/ix:continuation[1]/div[1]/table/tr[12]"
+      }
+    ],
+    "sha256": "8c899eafdc0dd69c0b4243ba8836c7846a68e6a70bbda356422b121da17f17b2",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

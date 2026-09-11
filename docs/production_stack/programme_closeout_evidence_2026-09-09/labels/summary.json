@@ -1,0 +1,378 @@
+[
+  {
+    "flags": [
+      {
+        "candidate": "PRIVATE_CREDIT_FUND",
+        "field": "classification",
+        "join": "1",
+        "reference": "PRIVATE_EQUITY_FUND"
+      }
+    ],
+    "key": "position|0001287750|2025-12-31|Ivy Hill Asset Management, L.P., Member interest",
+    "matches": 44,
+    "needle": "Ivy Hill Asset Management",
+    "source": "data\\raw\\filings\\bdc_html\\1287750\\000128775026000006.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "DIRECT_LENDING",
+        "field": "classification",
+        "join": "1",
+        "reference": "PRIVATE_CREDIT_FUND"
+      }
+    ],
+    "key": "position|0001287750|2025-12-31|Senior Direct Lending Program, LLC, Subordinated certificates",
+    "matches": 31,
+    "needle": "Senior Direct Lending Program",
+    "source": "data\\raw\\filings\\bdc_html\\1287750\\000128775026000006.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "PREFERRED_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0001287750|2025-12-31|AthenaHealth Group Inc., Minerva Holdco, Inc. and BCPE Co-Invest (A), LP, Series A preferred stock",
+    "matches": 24,
+    "needle": "AthenaHealth",
+    "source": "data\\raw\\filings\\bdc_html\\1287750\\000128775026000006.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "PRIVATE_EQUITY_FUND",
+        "field": "classification",
+        "join": "1",
+        "reference": "PRIVATE_CREDIT_FUND"
+      }
+    ],
+    "key": "position|0001803498|2025-12-31|BCRED Emerald JV LP - LP Interest",
+    "matches": 16,
+    "needle": "BCRED Emerald JV LP",
+    "source": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0001803498|2025-12-31|Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+    "matches": 12,
+    "needle": "Port Arthur LNG Phase II Intermediate Company, LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "DIRECT_REAL_ESTATE",
+        "field": "classification",
+        "join": "1",
+        "reference": "REAL_ESTATE_FUND"
+      }
+    ],
+    "key": "position|0001803498|2025-12-31|Blackstone Private Real Estate Credit and Income Fund - Common Shares",
+    "matches": 11,
+    "needle": "Blackstone Private Real Estate Credit and Income Fund",
+    "source": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0001803498|2025-12-31|Specialty Lending Company, LLC - LLC Interest",
+    "matches": 16,
+    "needle": "Specialty Lending Company, LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "",
+        "field": "fair_value",
+        "join": "0",
+        "reference": "305986000.0"
+      },
+      {
+        "candidate": "",
+        "field": "cost",
+        "join": "0",
+        "reference": "305986000.0"
+      },
+      {
+        "candidate": "",
+        "field": "classification",
+        "join": "0",
+        "reference": "CASH"
+      },
+      {
+        "candidate": "",
+        "field": "lien",
+        "join": "0",
+        "reference": ""
+      }
+    ],
+    "key": "position|0001803498|2025-12-31|State Street Institutional U.S. Government Money Market Fund - Premier Class",
+    "matches": 18,
+    "needle": "State Street Institutional U.S. Government Money Market Fund",
+    "source": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0002031750|2025-12-31|Pioneer JV Holdings LLC, Common equity",
+    "matches": 10,
+    "needle": "Pioneer JV Holdings LLC",
+    "source": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0002031750|2025-12-31|Tango Holdings LLC, Common equity",
+    "matches": 4,
+    "needle": "Tango Holdings LLC",
+    "source": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0002031750|2025-12-31|Aspen Renewables Equity Holdings LLC, Common equity",
+    "matches": 4,
+    "needle": "Aspen Renewables Equity Holdings LLC",
+    "source": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0002031750|2025-12-31|Denali Equity Holdings LLC, Other equity",
+    "matches": 10,
+    "needle": "Denali Equity Holdings",
+    "source": "data\\raw\\filings\\bdc_html\\2031750\\000203175026000015.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "UNCLASSIFIED",
+        "field": "classification",
+        "join": "1",
+        "reference": "PRIVATE_CREDIT_FUND"
+      }
+    ],
+    "key": "position|0001838126|2025-12-31|ULTRA III, LLC - LLC Interest",
+    "matches": 18,
+    "needle": "ULTRA III, LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "254664000.0",
+        "field": "fair_value",
+        "join": "1",
+        "reference": "-188000.0"
+      },
+      {
+        "candidate": "255050000.0",
+        "field": "cost",
+        "join": "1",
+        "reference": "-190000.0"
+      }
+    ],
+    "key": "position|0001838126|2025-12-31|Sentinel Buyer Corp. 2",
+    "matches": 16,
+    "needle": "Sentinel Buyer",
+    "source": "data\\raw\\filings\\bdc_html\\1838126\\000162828026020206.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "385453000.0",
+        "field": "fair_value",
+        "join": "1",
+        "reference": "328199000.0"
+      }
+    ],
+    "key": "position|0001925309|2025-12-31|Debt Investments Communications Aurelia Netherlands B.V. First lien loan (EUR 326,566 par, due 5/2031) Initial Acquisition Date 5/22/2024 Reference Rate and Spread E + 4.75% Interest Rate 6.78%",
+    "matches": 8,
+    "needle": "Aurelia Netherlands",
+    "source": "data\\raw\\filings\\bdc_html\\1925309\\000119312526051289.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "",
+        "field": "fair_value",
+        "join": "0",
+        "reference": "344960000.0"
+      },
+      {
+        "candidate": "",
+        "field": "cost",
+        "join": "0",
+        "reference": "223274000.0"
+      },
+      {
+        "candidate": "",
+        "field": "classification",
+        "join": "0",
+        "reference": "COMMON_EQUITY"
+      },
+      {
+        "candidate": "",
+        "field": "lien",
+        "join": "0",
+        "reference": ""
+      }
+    ],
+    "key": "position|0001812554|2025-12-31|Fifth Season Investments LLC",
+    "matches": 28,
+    "needle": "Fifth Season Investments LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "COMMON_EQUITY",
+        "field": "classification",
+        "join": "1",
+        "reference": "DIRECT_EQUITY"
+      }
+    ],
+    "key": "position|0001812554|2025-12-31|Fifth Season Investments LLC | Specialty finance equity investment",
+    "matches": 28,
+    "needle": "Fifth Season Investments LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "",
+        "field": "fair_value",
+        "join": "2",
+        "reference": "321093000.0"
+      },
+      {
+        "candidate": "",
+        "field": "cost",
+        "join": "2",
+        "reference": "296883000.0"
+      },
+      {
+        "candidate": "",
+        "field": "classification",
+        "join": "2",
+        "reference": "PRIVATE_CREDIT_FUND"
+      },
+      {
+        "candidate": "",
+        "field": "lien",
+        "join": "2",
+        "reference": ""
+      }
+    ],
+    "key": "position|0001812554|2025-12-31|LSI Financing LLC | Specialty finance equity investment",
+    "matches": 32,
+    "needle": "LSI Financing LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "",
+        "field": "fair_value",
+        "join": "0",
+        "reference": "303900000.0"
+      },
+      {
+        "candidate": "",
+        "field": "cost",
+        "join": "0",
+        "reference": "304400000.0"
+      },
+      {
+        "candidate": "",
+        "field": "classification",
+        "join": "0",
+        "reference": "COMMON_EQUITY"
+      },
+      {
+        "candidate": "",
+        "field": "lien",
+        "join": "0",
+        "reference": ""
+      }
+    ],
+    "key": "position|0001812554|2025-12-31|Blue Owl Cross-Strategy Opportunities LLC (BOCSO)",
+    "matches": 12,
+    "needle": "Blue Owl Cross-Strategy Opportunities",
+    "source": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html"
+  },
+  {
+    "flags": [
+      {
+        "candidate": "",
+        "field": "fair_value",
+        "join": "0",
+        "reference": "280331000.0"
+      },
+      {
+        "candidate": "",
+        "field": "cost",
+        "join": "0",
+        "reference": "280331000.0"
+      },
+      {
+        "candidate": "",
+        "field": "classification",
+        "join": "0",
+        "reference": "PRIVATE_CREDIT_FUND"
+      },
+      {
+        "candidate": "",
+        "field": "lien",
+        "join": "0",
+        "reference": ""
+      }
+    ],
+    "key": "position|0001812554|2025-12-31|OCIC SLF LLC (fka Blue Owl Credit Income Senior Loan Fund LLC)(d)",
+    "matches": 29,
+    "needle": "OCIC SLF LLC",
+    "source": "data\\raw\\filings\\bdc_html\\1812554\\000181255426000011.html"
+  }
+]

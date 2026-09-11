@@ -1,0 +1,628 @@
+{
+  "path": "data/raw/filings/bdc_html/1885968/000119312525277734.html",
+  "ref": "REF-0001885968-2025-09-30",
+  "rows": [
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 2,076,211 and $ 2,048,601 )",
+        "",
+        "$",
+        "2,044,505",
+        "",
+        "",
+        "$",
+        "2,029,756",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_72f95336-145f-4e9a-adfa-eb2057c91b37",
+          "scale": "3",
+          "text": "2,076,211",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_d6140a35-8b78-4769-8b3f-cc273f28dd51",
+          "scale": "3",
+          "text": "2,048,601",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_72f95336-145f-4e9a-adfa-eb2057c91b37",
+          "scale": "3",
+          "text": "2,044,505",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_d6140a35-8b78-4769-8b3f-cc273f28dd51",
+          "scale": "3",
+          "text": "2,029,756",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | As of | September 30, 2025 December 31, 2024 | (Unaudited) (Audited) | Assets",
+      "preceding": [
+        "",
+        "(In thousands, except unit and per unit amounts)",
+        "Cons olidated Statements of Financial Condition",
+        "T Series Middle Market Loan Fund LLC",
+        "",
+        "Table of Contents",
+        "",
+        "2",
+        " of Financial Condition and Results of Operations 67 Item 3. Quantitative and Qualitative Disclosures About Market Risk 77 Item 4. Controls and Procedures 78 Part II. Other Information Item 1. Legal Proceedings 79 Item 1A. Risk Factors 79 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 79 Item 3. Defaults Upon Senior Securities 79 Item 4. Mine Safety Disclosures 79 Item 5. Other Information 79 Item 6. Exhibits 80 SIGNATURES 81",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[12]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "Non-controlled/affiliated investments, at fair value (amortized cost of $ 14,559 and $ \u2014 )",
+        "",
+        "",
+        "14,045",
+        "",
+        "",
+        "",
+        "\u2014",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ccfabe48-295e-4a44-bfc1-c795f662eff6",
+          "scale": "3",
+          "text": "14,559",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_f08b0c82-6807-433c-a2e8-69d073c7d324",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ccfabe48-295e-4a44-bfc1-c795f662eff6",
+          "scale": "3",
+          "text": "14,045",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_f08b0c82-6807-433c-a2e8-69d073c7d324",
+          "scale": "3",
+          "text": "\u2014",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | As of | September 30, 2025 December 31, 2024 | (Unaudited) (Audited) | Assets",
+      "preceding": [
+        "",
+        "(In thousands, except unit and per unit amounts)",
+        "Cons olidated Statements of Financial Condition",
+        "T Series Middle Market Loan Fund LLC",
+        "",
+        "Table of Contents",
+        "",
+        "2",
+        " of Financial Condition and Results of Operations 67 Item 3. Quantitative and Qualitative Disclosures About Market Risk 77 Item 4. Controls and Procedures 78 Part II. Other Information Item 1. Legal Proceedings 79 Item 1A. Risk Factors 79 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 79 Item 3. Defaults Upon Senior Securities 79 Item 4. Mine Safety Disclosures 79 Item 5. Other Information 79 Item 6. Exhibits 80 SIGNATURES 81",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[12]/table/tr[7]"
+    },
+    {
+      "cells": [
+        "Total investments, at fair value (cost of $ 2,090,770 and $ 2,048,601 )",
+        "",
+        "",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "2,029,756",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,090,770",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,048,601",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,058,550",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,029,756",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | As of | September 30, 2025 December 31, 2024 | (Unaudited) (Audited) | Assets",
+      "preceding": [
+        "",
+        "(In thousands, except unit and per unit amounts)",
+        "Cons olidated Statements of Financial Condition",
+        "T Series Middle Market Loan Fund LLC",
+        "",
+        "Table of Contents",
+        "",
+        "2",
+        " of Financial Condition and Results of Operations 67 Item 3. Quantitative and Qualitative Disclosures About Market Risk 77 Item 4. Controls and Procedures 78 Part II. Other Information Item 1. Legal Proceedings 79 Item 1A. Risk Factors 79 Item 2. Unregistered Sales of Equity Securities and Use of Proceeds 79 Item 3. Defaults Upon Senior Securities 79 Item 4. Mine Safety Disclosures 79 Item 5. Other Information 79 Item 6. Exhibits 80 SIGNATURES 81",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[12]/table/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "",
+        "53,391",
+        "",
+        "",
+        "",
+        "59,775",
+        "",
+        "",
+        "",
+        "161,566",
+        "",
+        "",
+        "",
+        "168,133",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_055a89ac-a54a-4d91-82e7-698e2b59dd1b",
+          "scale": "3",
+          "text": "53,391",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_786683eb-e252-4d32-85a3-aa1f3b2af9bd",
+          "scale": "3",
+          "text": "59,775",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_2fda697d-82c6-41b4-ab28-0f0f2536caed",
+          "scale": "3",
+          "text": "161,566",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_8081a7a0-08af-4810-bda4-6f271646f43b",
+          "scale": "3",
+          "text": "168,133",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2025 September 30, 2024 September 30, 2025 September 30, 2024 | Investment Income: | From non-controlled/non-affiliated investments:",
+      "preceding": [
+        "",
+        "(In thousands, except unit and per unit amounts)",
+        "Consolida ted Statements of Operations (Unaudited)",
+        "T Series Middle Market Loan Fund LLC",
+        "",
+        "Table of Contents",
+        "",
+        "3",
+        "tal Common units ( 59,974,447 and 55,022,961 common units issued and outstanding) $ 60 $ 55 Paid-in capital in excess of par value 1,159,721 1,066,763 Distributable earnings (loss) ( 51,208 ) ( 24,853 ) Total members' capital $ 1,108,573 $ 1,041,965 Total liabilities and members' capital $ 2,140,630 $ 2,108,821 Net asset value per unit $ 18.48 $ 18.94 The accompanying notes are an integral part of these unaudited consolidated financial statements",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[16]/table/tr[14]"
+    },
+    {
+      "cells": [
+        "Total Portfolio Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,090,770",
+        "",
+        "",
+        "$",
+        "2,058,550",
+        "",
+        "",
+        "",
+        "185.69",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,090,770",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,058,550",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "-2",
+          "text": "185.69",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments (1) Footnotes Investment Reference Rate and Spread Acquisition Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets | Total Equity Investments - non-controlled/affiliated $ 2,609 $ 1,989 0.18 % | Total Equity Investments $ 23,169 $ 19,924 1.80 % | Total Portfolio Investments $ 2,090,770 $ 2,058,550 185.69 %",
+      "preceding": [
+        "T Series Middle Market Loan Fund LLC Consolidated Schedules of Investments (Unaudited) September 30, 2025 (In thousands, except unit amounts)",
+        "Table of Contents",
+        "",
+        "21",
+        "15) Preferred Equity S+ 10.50 % 07/07/2022 2,123,800 2,985 3,174 0.29 8,494 9,157 0.83 Total Equity Investments - non-controlled/non-affiliated $ 20,560 $ 17,935 1.62 Equity Investments - non-controlled/affiliated Professional Services KWOR Intermediate I, Inc. (5) (15) (16) (18) Common Equity 02/28/2025 1,796 689 69 0.01 KWOR Intermediate I, Inc. (5) (15) (18) Preferred Equity S + 8.00 % PIK 02/28/2025 1,920,386 1,920 1,920 0.17 2,609 1,989 0.18",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[88]/table[1]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,142,616",
+        "",
+        "",
+        "$",
+        "2,110,396",
+        "",
+        "",
+        "",
+        "190.37",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001885968:InvestmentOwnedAtCostAndCashAndCashEquivalentsAtCarryingValue",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,142,616",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001885968:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "3",
+          "text": "2,110,396",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001885968:InvestmentOwnedAndCashAndCashEquivalentsPercentOfNetAssets",
+          "context": "C_ae31dd31-9d7d-4ea4-9617-ce686e15a535",
+          "scale": "-2",
+          "text": "190.37",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Cash and Cash Equivalents and Short Term Investments | J.P. Morgan US Government Money Market Fund - Institutional Shares 3.99 % $ 11,105 $ 11,105 1.00 % | Cash 40,741 40,741 3.68 % | Total Cash and Cash Equivalents and Short Term Investments $ 51,846 $ 51,846 4.68 %",
+      "preceding": [
+        "",
+        "Investments (1) Footnotes Investment Reference Rate and Spread Acquisition Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets Total Equity Investments - non-controlled/affiliated $ 2,609 $ 1,989 0.18 % Total Equity Investments $ 23,169 $ 19,924 1.80 % Total Portfolio Investments $ 2,090,770 $ 2,058,550 185.69 %",
+        "T Series Middle Market Loan Fund LLC Consolidated Schedules of Investments (Unaudited) September 30, 2025 (In thousands, except unit amounts)",
+        "Table of Contents",
+        "",
+        "21",
+        "15) Preferred Equity S+ 10.50 % 07/07/2022 2,123,800 2,985 3,174 0.29 8,494 9,157 0.83 Total Equity Investments - non-controlled/non-affiliated $ 20,560 $ 17,935 1.62 Equity Investments - non-controlled/affiliated Professional Services KWOR Intermediate I, Inc. (5) (15) (16) (18) Common Equity 02/28/2025 1,796 689 69 0.01 KWOR Intermediate I, Inc. (5) (15) (18) Preferred Equity S + 8.00 % PIK 02/28/2025 1,920,386 1,920 1,920 0.17 2,609 1,989 0.18",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[88]/table[2]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total Portfolio Investments",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "2,048,601",
+        "",
+        "",
+        "$",
+        "2,029,756",
+        "",
+        "",
+        "",
+        "194.80",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,048,601",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,029,756",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "-2",
+          "text": "194.80",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Investments-non-controlled/non-affiliated (1) Footnotes Investment Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Shares (3) Cost (4) Fair Value Percentage of Net Assets | Verdantas, LLC (5) (14) (15) Common Equity 05/03/2024 3,984 4 5 0.00 | Verdantas, LLC (5) (15) Preferred Equity 10.00 % 05/03/2024 394,416 422 477 0.05 | 426 482 0.05",
+      "preceding": [
+        "T Series Middle Market Loan Fund LLC Consolidated Schedules of Investments December 31, 2024 (In thousands, except unit and per unit amounts)",
+        "Table of Contents",
+        "",
+        "42",
+        " Black Holdings, LLC (5) (15) Preferred Equity 6.00 % PIK 03/29/2024 4,415,744 3,015 1,539 0.15 3,795 2,892 0.28 Insurance Services Amerilife Holdings, LLC (5) (14) (15) Common Equity 09/01/2022 14,856 410 887 0.09 Frisbee Holdings, LP (Fetch) (5) (14) (15) Common Equity 10/31/2022 18,287 233 294 0.03 Integrity Marketing Acquisition, LLC (5) (15) Preferred Equity 10.50 % 12/21/2021 1,000,000 1,355 1,330 0.13 1,998 2,511 0.24 Professional Services",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[172]/table/tr[15]"
+    },
+    {
+      "cells": [
+        "Total Portfolio Investments, Cash and Cash Equivalents, and Short Term Investments",
+        "",
+        "",
+        "",
+        "$",
+        "2,097,191",
+        "",
+        "",
+        "$",
+        "2,078,346",
+        "",
+        "",
+        "",
+        "199.46",
+        "%"
+      ],
+      "facts": [
+        {
+          "concept": "ck0001885968:InvestmentOwnedAtCostAndCashAndCashEquivalentsAtCarryingValue",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,097,191",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001885968:InvestmentOwnedAtFairValueAndCashAndCashEquivalentsFairValueDisclosure",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "3",
+          "text": "2,078,346",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001885968:InvestmentOwnedAndCashAndCashEquivalentsPercentOfNetAssets",
+          "context": "C_770491a7-8729-40c2-8a23-974ea0732ebc",
+          "scale": "-2",
+          "text": "199.46",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Cash and Cash Equivalents and Short Term Investments | J.P. Morgan US Government Money Market Fund - Institutional Shares $ 7,952 $ 7,952 0.76 % | Cash 40,638 40,638 3.90 % | Total Cash and Cash Equivalents and Short Term Investments $ 48,590 $ 48,590 4.66 %",
+      "preceding": [
+        "",
+        "T Series Middle Market Loan Fund LLC Consolidated Schedules of Investments December 31, 2024 (In thousands, except unit and per unit amounts)",
+        "Table of Contents",
+        "",
+        "43",
+        ") (15) Common Equity 09/12/2024 25,375 \u2014 \u2014 \u2014 Revalize, Inc. (5) (15) Preferred Equity S + 10.00 % 12/14/2021 2,154 3,151 3,124 0.30 Reveal Data Solutions (5) (14) (15) Common Equity 08/29/2023 186,769 243 306 0.03 RSK Holdings, Inc. (Riskonnect) (5) (15) Preferred Equity S + 10.50 % 07/07/2022 2,123,800 2,985 3,101 0.30 9,441 10,205 0.98 Total Equity Investments $ 19,814 $ 19,829 1.90 % Total Portfolio Investments $ 2,048,601 $ 2,029,756 194.80 %",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[176]/table/tr[6]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "2,020,198",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_0b3aafff-a61e-4661-8431-bcdcea3cb6e2",
+          "scale": "3",
+          "text": "2,020,198",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | September 30, 2025 | Fair Valuation Significant Unobservable Range (1) Weighted | Value Technique (2) Input Low High Average (3) | Investments in first lien debt $ 1,973,802 Yield Analysis Discount Rate 6.77 % 29.40 % 9.53 %",
+      "preceding": [
+        "",
+        "The following tables present quantitative information about the significant unobservable inputs of the Company\u2019s Level 3 financial instruments as of September 30, 2025 and December 31, 2024, respectively. The tables are not intended to be all-inclusive but instead captures the significant unobservable inputs relevant to the Company\u2019s determination of fair value."
+      ],
+      "xpath": "/html/body/div[240]/div/ix:continuation/div/ix:nonnumeric/table[1]/tr[16]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "",
+        "1,962,431",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_42add0a2-9240-48ef-be4e-0040474a7e9c",
+          "scale": "3",
+          "text": "1,962,431",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | December 31, 2024 | Fair Valuation Significant Unobservable Range (1) Weighted | Value Technique (2) Input Low High Average (3) | Investments in first lien debt $ 1,934,010 Yield Analysis Discount Rate 8.05 % 34.06 % 10.36 %",
+      "preceding": [
+        "",
+        "(3) Weighted average for an asset category consisting of multiple investments is calculated by weighting the significant unobservable input by the relative fair value of the investment. Weighted average for an asset category consisting of a single investment represents the significant unobservable input used in the fair value of the investment.",
+        "(2) During the nine months ended September 30, 2025, two debt investments with a combined fair value of $ 5.37 million transitioned from yield analysis to a market approach valuation technique. Also, two preferred equity positions with combined fair value of $ 2.14 million transitioned from income approach to market approach valuation technique.",
+        "(1) For an asset category that contains a single investment, the range is not included.",
+        ""
+      ],
+      "xpath": "/html/body/div[240]/div/ix:continuation/div/ix:nonnumeric/table[2]/tr[12]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "$",
+        "53,391",
+        "",
+        "",
+        "$",
+        "59,775",
+        "",
+        "",
+        "$",
+        "161,566",
+        "",
+        "",
+        "$",
+        "168,133",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2025 September 30, 2024 September 30, 2025 September 30, 2024 | Total investment income $ 53,391 $ 59,775 $ 161,566 $ 168,133 | Less: Total expenses 23,315 27,482 71,652 77,913",
+      "preceding": [
+        "",
+        "The following table represents our operating results:",
+        "CONSOLIDATED RESULTS OF OPERATIONS",
+        " principal or interest will be collected in full. Accrued interest is reversed when an investment is placed on non-accrual status. Additionally, any original issue discount and market discount are no longer accreted to interest income as of the date the investment is placed on non-accrual status. We may determine to not place an investment on non-accrual status if the investment has sufficient collateral value and is in the process of collection.",
+        "",
+        "",
+        "Table of Contents",
+        "",
+        "71",
+        " performing substantially below expectations and indicate that the loan\u2019s risk has increased substantially since origination or acquisition. Most or all of the debt covenants are out of compliance, and payments are substantially delinquent. For Risk Rating 4 investments, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis at the time of origination or acquisition upon exit.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[288]/table[3]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total Investment Income",
+        "$",
+        "53,391",
+        "",
+        "",
+        "$",
+        "59,775",
+        "",
+        "",
+        "$",
+        "161,566",
+        "",
+        "",
+        "$",
+        "168,133",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended For the Nine Months Ended | September 30, 2025 September 30, 2024 September 30, 2025 September 30, 2024 | Investment income: | Interest income $ 50,389 $ 55,768 $ 149,998 $ 158,567",
+      "preceding": [
+        "",
+        "Investment income was as follows:",
+        "Investment Income",
+        "",
+        "tal expenses 23,315 27,482 71,652 77,913 Net investment income before taxes 30,076 32,293 89,914 90,220 Less: Excise tax expense 28 \u2014 46 16 Net investment income after taxes 30,048 32,293 89,868 90,204 Net realized gain (loss) (7,312 ) (10,712 ) (10,932 ) (12,650 ) Net change in unrealized appreciation (depreciation) 217 4,329 (14,282 ) 5,128 Net increase (decrease) in Members' Capital resulting from operations $ 22,953 $ 25,910 $ 64,654 $ 82,682",
+        "",
+        "Table of Contents",
+        "",
+        "71",
+        " performing substantially below expectations and indicate that the loan\u2019s risk has increased substantially since origination or acquisition. Most or all of the debt covenants are out of compliance, and payments are substantially delinquent. For Risk Rating 4 investments, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis at the time of origination or acquisition upon exit.",
+        "10-Q"
+      ],
+      "xpath": "/html/body/div[288]/table[4]/tr[9]"
+    }
+  ],
+  "sha256": "a698a8134f72d68231e5e3e63db4f12e049e369fc3d02daea3a0c12e62b28953",
+  "status": "literal_primary_review_candidates"
+}

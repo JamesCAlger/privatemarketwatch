@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "programme-observation-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "metric_id", "metric_version", "candidate_fingerprint", "scope", "quarter", "design", "denominator_known", "eligible", "assessed", "missing_weight", "value", "unit", "formula", "evidence", "references", "reason"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "metric_id": {"type": "string", "minLength": 1},
+    "metric_version": {"const": 1},
+    "candidate_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "scope": {"type": "string", "minLength": 1},
+    "quarter": {"type": ["string", "null"]},
+    "design": {"enum": ["census", "sample", "scenario", "unmeasured"]},
+    "denominator_known": {"type": "boolean"},
+    "eligible": {"type": "integer", "minimum": 0},
+    "assessed": {"type": "integer", "minimum": 0},
+    "missing_weight": {"type": "number", "minimum": 0},
+    "value": {"type": ["number", "null"]},
+    "unit": {"type": "string", "minLength": 1},
+    "formula": {"type": "string", "minLength": 1},
+    "numerator": {"type": ["number", "null"]},
+    "denominator": {"type": ["number", "null"]},
+    "lower_95_bound": {"type": ["number", "null"]},
+    "upper_95_bound": {"type": ["number", "null"]},
+    "design_id": {"type": ["string", "null"]},
+    "interval_method": {"type": ["string", "null"]},
+    "independent_units": {"type": ["integer", "null"], "minimum": 1},
+    "evidence": {"type": "array", "items": {"type": "object", "required": ["path", "bytes", "sha256"], "additionalProperties": false, "properties": {"path": {"type": "string"}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+    "references": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "reason": {"type": "string"}
+  }
+}

@@ -1,0 +1,3 @@
+cik,report_date,primary,basis_verified,reference,actual,row_xpath,status
+0001899017,2023-06-30,True,True,646250,646250,/html/body/table[11]/tr[9],agent-reviewed development schedule only; not cohort acceptance
+0002008748,2024-09-30,True,True,313562000,0,/html/body/table[14]/tr[15],empty saved candidate has sum zero; known positive source portfolio entirely absent

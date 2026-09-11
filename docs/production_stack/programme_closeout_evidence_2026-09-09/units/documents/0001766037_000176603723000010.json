@@ -1,0 +1,44 @@
+{
+  "accession": "0001766037-23-000010",
+  "cik": "0001766037",
+  "identity": [
+    3382855,
+    1774941563714522300
+  ],
+  "path": "data/raw/filings/bdc_xbrl/1766037/000176603723000010.xml",
+  "reader_sha256": "369fcec3047bb2cbb95db39b4de83c12f69c81b0b03c4039cac1d912c882ddba",
+  "sha256": "d76bad952ab97974daf5569e8a78d0b8fa46ceab129d5bbe34d2ce3742a6fbb1",
+  "status": "units_read",
+  "units": [
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"shares\"]",
+      "unit_ref": "shares"
+    },
+    {
+      "currency": "USD",
+      "kind": "monetary",
+      "measures": "[\"iso4217:USD\"]",
+      "unit_ref": "usd"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[]",
+      "unit_ref": "usdPerShare"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"pure\"]",
+      "unit_ref": "number"
+    },
+    {
+      "currency": "",
+      "kind": "non_monetary_or_composite",
+      "measures": "[\"nmslf:investment\"]",
+      "unit_ref": "investment"
+    }
+  ]
+}

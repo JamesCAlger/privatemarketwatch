@@ -1,0 +1,819 @@
+{
+  "affected_wrapper": {
+    "bytes": 5450,
+    "path": "data/overrides/bdc_xbrl_wrappers/0001572694.json",
+    "sha256": "e30ede578328a895aaefa6b6eacc1a365bdf72abb116d9f7cf6d330732908659"
+  },
+  "cases": [
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.type_industry_prefix_re",
+      "python": "valid",
+      "wrapper": "0001508655.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.marker_re",
+      "python": "valid",
+      "wrapper": "0001508655.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.evidence_re",
+      "python": "valid",
+      "wrapper": "0001508655.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "incomplete escape \\x at position 136",
+      "wrapper": "0001572694.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001572694.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001603480.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001603480.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001633336.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001633336.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001633336.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001633858.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001633858.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001634452.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001634452.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001646614.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001646614.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001646614.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001674760.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001674760.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001702510.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001702510.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001702510.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001715933.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001715933.json"
+    },
+    {
+      "duckdb": "Invalid Input Error: invalid escape sequence: \\u",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001743415.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001743415.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001784700.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001784700.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001786108.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001786108.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001786108.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001792509.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001792509.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001825265.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001825265.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001834543.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001834543.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001837532.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001837532.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001841514.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001841514.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_prefix_re",
+      "python": "valid",
+      "wrapper": "0001849894.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001851322.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001851322.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001860424.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001860424.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001885968.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001885968.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_prefix_re",
+      "python": "valid",
+      "wrapper": "0001899017.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.type_industry_prefix_re",
+      "python": "valid",
+      "wrapper": "0001899996.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.marker_re",
+      "python": "valid",
+      "wrapper": "0001899996.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.evidence_re",
+      "python": "valid",
+      "wrapper": "0001899996.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001901037.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001901037.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001902649.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001902649.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001902649.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_prefix_re",
+      "python": "valid",
+      "wrapper": "0001905824.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001911066.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001911066.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001913724.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001913724.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_prefix_re",
+      "python": "valid",
+      "wrapper": "0001916099.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001916608.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001916608.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001919369.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001919369.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.type_industry_prefix_re",
+      "python": "valid",
+      "wrapper": "0001920453.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.marker_re",
+      "python": "valid",
+      "wrapper": "0001920453.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.evidence_re",
+      "python": "valid",
+      "wrapper": "0001920453.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.type_industry_prefix_re",
+      "python": "valid",
+      "wrapper": "0001925309.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.marker_re",
+      "python": "valid",
+      "wrapper": "0001925309.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "leaf_guard.evidence_re",
+      "python": "valid",
+      "wrapper": "0001925309.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001930679.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001930679.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_prefix_re",
+      "python": "valid",
+      "wrapper": "0001950803.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001950976.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001950976.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001954360.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001954360.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001954360.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001959568.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001959568.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001959604.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001959604.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001965934.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001965934.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_trailing_re",
+      "python": "valid",
+      "wrapper": "0001965934.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001975736.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001975736.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001976336.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001976336.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001993402.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0001993402.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002006758.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002006758.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002011498.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002011498.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002012139.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002012139.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002037804.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002037804.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002052152.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002052152.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0002052153.json"
+    },
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_instrument_re",
+      "python": "valid",
+      "wrapper": "0002052153.json"
+    }
+  ],
+  "dialect_mismatches": [
+    {
+      "duckdb": "valid",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "incomplete escape \\x at position 136",
+      "wrapper": "0001572694.json"
+    },
+    {
+      "duckdb": "Invalid Input Error: invalid escape sequence: \\u",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001743415.json"
+    }
+  ],
+  "duckdb_failures": [
+    {
+      "duckdb": "Invalid Input Error: invalid escape sequence: \\u",
+      "duckdb_after_existing_unicode_decode": "valid",
+      "field": "hierarchy_issuer_re",
+      "python": "valid",
+      "wrapper": "0001743415.json"
+    }
+  ],
+  "elapsed_seconds": 1.4902827000041725,
+  "extraction_samples": [
+    {
+      "extracted": "Acme LLC",
+      "separator_codepoint": 45
+    },
+    {
+      "extracted": "Acme LLC",
+      "separator_codepoint": 8211
+    },
+    {
+      "extracted": "Acme LLC",
+      "separator_codepoint": 8212
+    },
+    {
+      "extracted": "Acme LLC",
+      "separator_codepoint": 65533
+    }
+  ],
+  "rejection_cases": [
+    {
+      "error": "Invalid Input Error: missing ]: [invalid(",
+      "pattern": "[invalid(",
+      "rejected": true
+    },
+    {
+      "error": "Invalid Input Error: invalid perl operator: (?<",
+      "pattern": "(?<=a)b",
+      "rejected": true
+    },
+    {
+      "error": "Invalid Input Error: invalid escape sequence: \\1",
+      "pattern": "(a)\\1",
+      "rejected": true
+    },
+    {
+      "error": "Invalid Input Error: invalid escape sequence: \\x{N",
+      "pattern": "\\x{NOT_HEX}",
+      "rejected": true
+    }
+  ],
+  "runtime_preprocessed_failures": [],
+  "staging_patterns_checked": 106
+}

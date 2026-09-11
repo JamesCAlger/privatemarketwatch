@@ -1,0 +1,48 @@
+{
+  "source_documents": 53,
+  "pilot_clusters": 61,
+  "source_candidate_rows": 15128,
+  "source_field_groups": 47230,
+  "tag_copy_status_counts": {
+    "within_source_precision": 26345,
+    "value_mismatch": 30,
+    "missing_candidate_value": 49,
+    "unassessable_reference_value": 1234,
+    "no_exact_candidate_context": 19485,
+    "conflicting_source_facts": 16,
+    "unresolved_candidate_currency": 71
+  },
+  "eligible_obligations": 812,
+  "eligible_with_rows": 779,
+  "eligible_without_rows": 33,
+  "presence_ratio": 0.9593596059113301,
+  "reviewed_development_rosters": 2,
+  "held_out_acceptance_rosters": 0,
+  "primary_anchor_scores": [
+    {
+      "cik": "0001899017",
+      "report_date": "2023-06-30",
+      "eligible_primary_anchors": 1,
+      "assessed_primary_anchors": 1,
+      "absolute_residual_sum": "0",
+      "source_abs_total": "646250",
+      "ratio": 0.0
+    },
+    {
+      "cik": "0002008748",
+      "report_date": "2024-09-30",
+      "eligible_primary_anchors": 1,
+      "assessed_primary_anchors": 1,
+      "absolute_residual_sum": "313562000",
+      "source_abs_total": "313562000",
+      "ratio": 1.0
+    }
+  ],
+  "legacy_labels_in_scope": 127,
+  "legacy_unique_candidate_joins": 122,
+  "legacy_missing_joins": 4,
+  "legacy_ambiguous_joins": 1,
+  "legacy_numeric_flag_review": "Aurelia currency mismatch and Sentinel JV/parent scope and tranche mismatch in stored references; do not count as confirmed pipeline amount errors",
+  "population_accuracy_estimate": null,
+  "programme_verdict": "NOT_ASSESSABLE"
+}

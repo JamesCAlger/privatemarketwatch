@@ -1,0 +1,261 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "development_basis_only",
+    "cik": "1950976",
+    "disposition": "complete_development_roster",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001950976-2023-12-31.json",
+    "evidence_sha256": "e997287f00207b81a2b92245dc541e62055bf57dde36c9d8c88d3701061a687f",
+    "held_out": "False",
+    "next_action": "none_for_development_roster",
+    "reference_id": "REF-0001950976-2023-12-31",
+    "report_date": "2023-12-31",
+    "review_note": "Complete untagged four-lot schedule, signed FV 52,566,000; three Penn facilities must remain distinct.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "0"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1950976/000119312524063364.html",
+    "ref": "REF-0001950976-2023-12-31",
+    "rows": [
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "$",
+          "52,566",
+          "",
+          "",
+          "",
+          "100.0",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | Investment Performance Rating Fair Value Percentage of Total | Grade 1 $ \u0097 0.0 % | Grade 2 52,566 100.0 % | Grade 3 \u0097 0.0 %",
+        "preceding": [
+          "",
+          " portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments with a grade of 3 or 4, the Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale as of December 31, 2023 (amounts in thousands).",
+          "Table of Contents",
+          "",
+          "",
+          "lly increased since origination or acquisition, and the portfolio company likely has materially declining performance. For debt investments with an investment grade of 4, in most cases, most or all of the debt covenants are out of compliance and payments are substantially delinquent. For investments graded 4, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis upon exit. 90",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[93]/div/table[1]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "1,490",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Total investment income $ 1,490 | Net operating expenses 1,426 |  | Net investment income before excise tax 64",
+        "preceding": [
+          "",
+          "Operating results for the period from October 1, 2023 to December 31, 2023 were as follows (amounts in thousands):",
+          "For the period from October 1, 2023 to December 31, 2023",
+          "Results of Operations",
+          " otherwise do not expect the borrower to be able to service its debt and other obligations, we will place the loan on non-accrual status and will generally cease recognizing interest income on that loan for financial reporting purposes until all principal and interest have been brought current through payment or due to a restructuring such that the interest income is deemed to be collectible. As of December 31, 2023, we had no non-accrual assets.",
+          "Table of Contents",
+          "",
+          "",
+          "lly increased since origination or acquisition, and the portfolio company likely has materially declining performance. For debt investments with an investment grade of 4, in most cases, most or all of the debt covenants are out of compliance and payments are substantially delinquent. For investments graded 4, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis upon exit. 90",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[93]/div/table[2]/tr[2]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "1,490",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Total interest income $ 1,407 | Total other income 83 |  | Total investment income $ 1,490",
+        "preceding": [
+          "",
+          "Investment Income",
+          "Net increases in net assets resulting from operations can vary substantially from period to period due to various factors, including recognition of realized gains and losses and unrealized appreciation and depreciation. As a result, comparisons of net changes in net assets resulting from operations may not be meaningful (amounts in thousands).",
+          "Total investment income $ 1,490 Net operating expenses 1,426 Net investment income before excise tax 64 Excise tax expense 2 Net investment income after excise tax 62 Net unrealized appreciation / (depreciation) (62 ) Net increase in net assets resulting from operations $ \u0097",
+          "",
+          "Table of Contents",
+          "",
+          "",
+          "lly increased since origination or acquisition, and the portfolio company likely has materially declining performance. For debt investments with an investment grade of 4, in most cases, most or all of the debt covenants are out of compliance and payments are substantially delinquent. For investments graded 4, it is anticipated that we will not recoup our initial cost basis and may realize a substantial loss of our initial cost basis upon exit. 90",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[93]/div/table[3]/tr[5]"
+      },
+      {
+        "cells": [
+          "Non-controlled/non-affiliated investments at fair value (amortized cost $52,628)",
+          "",
+          "$",
+          "52,566",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Assets | Non-controlled/non-affiliated investments at fair value (amortized cost $52,628) $ 52,566 | Cash and cash equivalents 67,664 | Expense reimbursement receivable 6,434",
+        "preceding": [
+          "",
+          "(in thousands, except share and per share amounts)",
+          "as of December 31, 2023",
+          "Consolidated Statement of Assets and Liabilities",
+          "26North BDC, Inc.",
+          "Table of Contents",
+          "",
+          "",
+          "by management, as well as evaluating the overall presentation of the financial statements and financial highlights. Our procedures included confirmation of investments owned as of December 31, 2023, by correspondence with the custodian, loan agents, and borrowers. We believe that our audit provides a reasonable basis for our opinion. /s/ DELOITTE & TOUCHE LLP New York, New York March 8, 2024 We have served as the Company\u0092s auditor since 2023. 102",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[105]/div/table/tr[3]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "",
+          "1,490",
+          ""
+        ],
+        "facts": [],
+        "opening": " | October 1, 2023 to December 31, 2023 (1) | Investment Income | From non-controlled/non-affiliated investments: | Interest income $ 1,407",
+        "preceding": [
+          "",
+          "(in thousands, except share and per share amounts)",
+          "Consolidated Statement of Operations",
+          "26North BDC, Inc.",
+          "Table of Contents",
+          "",
+          "",
+          " 90 Total Liabilities 62,378 Commitments and contingencies (Note 7) Net Assets Common stock, $0.001 par value (1,000,000,000 shares authorized and 2,811,638 shares issued and outstanding) 3 Additional paid-in capital 70,288 Distributable earnings (loss) \u0097 Total Net Assets $ 70,291 Total Liabilities and Net Assets $ 132,669 Net asset value per share $ 25.00 The accompanying notes are an integral part of these consolidated financial statements. 103",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[106]/div/table[1]/tr[8]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "52,628",
+          "",
+          "",
+          "$",
+          "52,566",
+          "",
+          "",
+          "",
+          "74.79",
+          "%"
+        ],
+        "facts": [],
+        "opening": " | Portfolio Company (1)(6) Investment Type Industry Reference Rate Spread (4) Interest Rate Maturity Date Par Amount/ Shares Amortized Cost (5) Fair Value Percentage of Net Assets | Debt Investments | Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.098 % 09/27/2030 $ 25,225 $ 24,737 $ 24,720 35.17 % | Penn TRGRP Holdings LLC (2)(3) First Lien Senior Secured Delayed Draw Term Loan Diversified Financial Services SOFR + 6.750 % 12.098 % 09/27/2030 294 294 264 0.38 %",
+        "preceding": [
+          "",
+          "(in thousands)",
+          "Consolidated Schedule of Investments as of December 31, 2023",
+          "26North BDC, Inc.",
+          "Table of Contents",
+          "",
+          "",
+          " cash equivalents, beginning of period 25 Cash and cash equivalents, end of period $ 67,664 Supplemental disclosure of cash flow and non-cash activities: Accrued but unpaid deferred financing costs $ 1,256 Interest paid during the period $ 135 (1) Period beginning after the date of the financial statements included in the Registration Statement on Form 10. The accompanying notes are an integral part of these consolidated financial statements. 106",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[109]/div/table[1]/tr[9]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "52,628",
+          "",
+          "",
+          "$",
+          "52,566",
+          ""
+        ],
+        "facts": [],
+        "opening": " | December 31, 2023 | Amortized Cost Fair Value | First Lien Senior Secured $ 52,628 $ 52,566 | ",
+        "preceding": [
+          "",
+          "The following table summarizes the composition of the Company\u0092s investment portfolio at cost and fair value (amounts in thousands):",
+          "4. INVESTMENTS",
+          "viser with experienced investment professionals and access to the resources of 26North so as to enable the Adviser to fulfill its obligations under the Investment Advisory Agreement. Through the Resource Sharing Agreement, the Adviser intends to capitalize on the significant deal origination, credit underwriting, due diligence, investment structuring, execution, portfolio management and monitoring experience of 26North\u0092s investment professionals.",
+          "Resource Sharing Agreement",
+          "Table of Contents",
+          "",
+          "",
+          "til such time as all Expense Payments made by the Adviser to the Company within three years prior to the last business day of such calendar quarter have been reimbursed; provided, that the Company shall have commenced operations prior to making any such payments. Any payments required to be made by the Company under the Expense Support Agreement are referred to as a \u0093Reimbursement Payment.\u0094 \u0093Available Operating Funds\u0094 means the sum of (i) the 117",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[120]/div/table/tr[6]"
+      },
+      {
+        "cells": [
+          "Total Portfolio Investments, Cash and Cash Equivalents",
+          "",
+          "$",
+          "67,664",
+          "",
+          "",
+          "$",
+          "\u0097",
+          "",
+          "",
+          "$",
+          "52,566",
+          "",
+          "",
+          "$",
+          "120,230",
+          ""
+        ],
+        "facts": [],
+        "opening": " | Assets Level 1 Level 2 Level 3 Total | First Lien Senior Secured $ \u0097 $ \u0097 $ 52,566 $ 52,566 | Cash and Cash Equivalents 67,664 \u0097 \u0097 67,664 | ",
+        "preceding": [
+          "",
+          "The following is a summary of the Company\u0092s assets categorized within the fair value hierarchy as of December 31, 2023 (amounts in thousands):",
+          "5. FAIR VALUE MEASUREMENTS",
+          "December 31, 2023 United States 100.0 % Total 100.0 %",
+          "",
+          "Table of Contents",
+          "",
+          "",
+          " deal origination, credit underwriting, due diligence, investment structuring, execution, portfolio management and monitoring experience of 26North\u0092s investment professionals. 4. INVESTMENTS The following table summarizes the composition of the Company\u0092s investment portfolio at cost and fair value (amounts in thousands): December 31, 2023 Amortized Cost Fair Value First Lien Senior Secured $ 52,628 $ 52,566 Total investments $ 52,628 $ 52,566 118",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/document/type/sequence/filename/description/text/center[121]/div/table[3]/tr[6]"
+      }
+    ],
+    "sha256": "b8201e99865a871ed0f6ddba605a6199775077d6089ad7420f2f7bb99d97be57",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

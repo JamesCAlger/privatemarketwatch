@@ -1,0 +1,80 @@
+{
+  "browser": {
+    "brackets_unicode_literal_newlines": true,
+    "comment_boxes": 32,
+    "desktop_mobile": true,
+    "download": true,
+    "elapsed_seconds": 11.476,
+    "errors": [],
+    "input_sha256": "e3f6b3c8929930541a50f7541509696fc0718e3527d34d5656e25614b5cf0e68",
+    "local_links": 38,
+    "native_save": "writer and cancellation stubs; OS dialog not automated",
+    "network": [],
+    "print": true,
+    "sections": 5,
+    "status": "pass",
+    "storage_failure_visible": true
+  },
+  "candidate": "t1-runtime-20260910-v5",
+  "code": {
+    "bytes": 5353,
+    "path": "scratch/2026-09-10_programme_tranche/verify_boundary_delivery.py",
+    "sha256": "71ddc4ad97947fe52c61fdd1d2e50887fcff4b24d01f8187b1044df11ebdb21d"
+  },
+  "created_utc": "2026-09-10T15:51:59.127661+00:00",
+  "documents": [
+    {
+      "bytes": 6388,
+      "path": "docs/production_stack/programme_tranche_handoff_2026-09-10.md",
+      "sha256": "bcc15551cc0a5b683d9a74b2418f9c5bb372088ce2bce765f3e1dae031c0381a"
+    },
+    {
+      "bytes": 9776,
+      "path": "docs/production_stack/programme_tranche_resume_proposal_2026-09-10.md",
+      "sha256": "93acdf7280bf381e01fbc9aa9e6a594426f15be5b607cbc703932748474f76fb"
+    },
+    {
+      "bytes": 8924,
+      "path": "docs/production_stack/programme_runner.md",
+      "sha256": "1e3c3474448201e6d73aeac3148dccd3ba1a95d4d5a3e54f3159d97642a84dbc"
+    }
+  ],
+  "html": {
+    "bytes": 103389,
+    "path": "docs/production_stack/programme_tranche_review.html",
+    "sha256": "e3f6b3c8929930541a50f7541509696fc0718e3527d34d5656e25614b5cf0e68"
+  },
+  "local_html_links": 38,
+  "markdown_links": 18,
+  "original_comments": {
+    "bytes": 933,
+    "path": "docs/production_stack/programme_review_comments.md",
+    "sha256": "9a431d8d5b0aa8870ca031a0498665df2dc071107f0696fd85a3e8ea5ea6b267"
+  },
+  "owned_jobs": [],
+  "prepared_fix": "AST only; no tests after stop",
+  "records": [
+    {
+      "bytes": 1457,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/handoff-boundary-v1/complete.json",
+      "sha256": "5fbb4293f172d200da8f476dda2d5c1c4843be3f63352b18144209cab274cfa6"
+    },
+    {
+      "bytes": 888,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/evaluation-boundary-v1/evaluation_manifest.json",
+      "sha256": "cbb1b6a5094349a3f8103b218f22c56df78b60ac848f8a02c4dde6e2fabdd20a"
+    },
+    {
+      "bytes": 1885,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-fix-v1/complete.json",
+      "sha256": "bb4e7debfdc6084928539fdb88030c568e538955cc6fc74648c943e00a1bb8c8"
+    },
+    {
+      "bytes": 2206,
+      "path": "docs/production_stack/programme_tranche_evidence_2026-09-10/test-boundary-failure-v1/complete.json",
+      "sha256": "78648b1c42632a43e16a76c8eaf79485dfba4275423a1b3b2ee4fad6a5649594"
+    }
+  ],
+  "remaining_protected_cache_files": 6,
+  "status": "stopped_delivery_verified; engineering incomplete"
+}

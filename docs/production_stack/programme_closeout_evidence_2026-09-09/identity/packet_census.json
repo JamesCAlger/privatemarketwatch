@@ -1,0 +1,4817 @@
+[
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-004e0e6281c8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0100195319cb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-01153f7c6f05",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-02821ff6d6f5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-029b2cfe768b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-03ea17676f54",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-055127e5660c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-05787e9b3e7b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-05a0a851a827",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-069a8cf461f9",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 82,
+    "stratum": "entity_merge_verify",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-06ec78631319",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-077ab2f67fa3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-07fc8359333d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 153,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-081b4e42d6d4",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0842bed9852b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-086589f5cbd0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-0879e2e29ac0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-0896e3779921",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0946da1b9cc4",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-09ed5b1232c9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-09f737d5292b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0a2d5b8985e0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0a3a425ff763",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0a92d060eed3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-0abacb7afb67",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0acdec849e60",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-0aed23369409",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0b74285f5dee",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0bf403292896",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0d19be556bb0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0df3057eb46d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0e16966d40f3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0e2376e037f0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0e67bce99aac",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0f3b9b10cb76",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-0f4f51a0f15e",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 172,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-0ffb56482c28",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-10f8ea0555a1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-10fbde2b08d3",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-11b686e98663",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-120c6e920b6e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-140f3e7a2626",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-145354528397",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-14f405245471",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1508a794a739",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-15d440c2ec9a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-17723ecdf2f2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-189cfbc6c5d4",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-19765301336c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-19a352b4e290",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1ac37fb828c9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1b566a0de726",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1cbcb1e31803",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1cdda7eee65d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1d3d0b0dfbd1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-1db45c8704f5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 59,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-1f468fa7e2a4",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-1f7a7d4981a1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-1fd1d5f5f993",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-2012c5bf0eec",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-209260806441",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-221918ea7f05",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-228d105c7b34",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-22bf38bdee7d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 125,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-23860bd8da66",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-23a79ae43521",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-23f8ea7e1386",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-24128046c260",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 9,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-2418e7e8552d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-24464bfef665",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 8,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-245e4e156493",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2499d4a50a56",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-249a21e9e7dc",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 16,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-24b5b101174a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 1,
+    "packet": "MGP-25948b5c52ac",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 180,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-25f6edfd758b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-2620a8f7ebc0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 203,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-263e3a6f2937",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-26630879c8d6",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-274509e225ae",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-27f96c5dbdea",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-286d5d55394b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-28baca98a1e6",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-28ee21d4522d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 159,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-2979f4f781e8",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 38,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 1,
+    "packet": "MGP-2a2aaa2232f0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2a561c81f0ec",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-2b71ea4d01a1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-2ca8f67ba4b2",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2cec075dc301",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2cf3637f23d3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-2d97efd8372d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 219,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-2dd5637aa6c5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 221,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-2e28f66923b0",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-2e4f738b8778",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 92,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2e6c46c32fd8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-2ed6f75c717a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-2fa1fcea2eaf",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-303b8704ee45",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-305b373e3e3a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 124,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-30ddf513abc7",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-30e12cdd043e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-31eb1587b8ba",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3231b21a3ddb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 12,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-336ba89149a5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-3540f16b81c0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-35a5539f370a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 76,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-35c72e81af4a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-36035be887e8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-37aba0719a59",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-37b23e8367ba",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-37be4ec8fed7",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 78,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-381c9730b833",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3860ecb57e18",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-387c7e89e1e9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-3889a3db85bb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-38a0b712a903",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-39050286626a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3939baf523fe",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3a00af03c33c",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3a2ac53a94ea",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3a4bbb3bc8f8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3a898e1539f6",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-3b16f77782e2",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 107,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3c6bf4e4676b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3cb9ca9290a5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3ce5823bf613",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3d1a4025b17e",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3dcea7c421b4",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-3e1ba2f31075",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 141,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3e29752f7b39",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3e298006443c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3e987b8cfef7",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3fadda3d1e5d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-3fb3d33c5cb2",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 258,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3fd21a13b01d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-3fdd8247424c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-4184e7dfb9ee",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-418f91e89fec",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-41be3bcdb272",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-41e668f7c2cc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4386a32b052f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-44426ab3237b",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 234,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-4497e6fe0073",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-45540930a60d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-45645f7f49bb",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-45e20843d0d6",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4672de6a8713",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4748e0e3a81a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-476dfda5df5e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-47a831c7bc66",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-48b53989bcae",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-490fe36c130b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-49fe60128892",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4b1e9ae2a46c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4bdcfa9fd3d8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4bf2c2a36952",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4c00a58e5e64",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4ce580f69fc5",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 12,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-4d173754c54d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-4d1f0959f045",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-4d8873e4789f",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 89,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4df3059dc84b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-4e27e6aba895",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 66,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4e6f57e1ecf0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4ea66bbd4ab5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-4fd1f006ae70",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 173,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4fe2f185dec5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-4febecafabb7",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-500e04625812",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-503902b738cc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-5056b175dfdf",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-510d76b6f76d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-52f11bf2e0ab",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 35,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5384cb2a04ac",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-54a992de5328",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-54c3ccc3e21a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-556155305075",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 15,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-55b882c4116c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-55e11c76493e",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 76,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5625e98fbdb8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5657bb5e1f6b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5786bc8af8df",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 9,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5844ce20cf42",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-58ed6b215785",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-597ba09e3444",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-59b7640cd792",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-5a22445de573",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 133,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-5aa2b2c58a37",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 212,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-5bb0876f89c5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-5bf027c69091",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5c1bdb1acce0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-5ca9e265ade2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5ce7a4f9ecbe",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5e1d8af35489",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5e4f657f7aa9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5e533e413a41",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-5e65694d1085",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-5eb6f349c734",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5fa1eddc0d1d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5fbcd8d6f3e3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-5fc06e87a04a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-5fd0f6d64b0d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 211,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-610598765cdb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-615064cad12e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-61889ea89d8a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6194ad9d5e4d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-61b3bb15098d",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-61d217fbfbbe",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 14,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-625541b76ef2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-62608eb88839",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 9,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-62fd9be75bfc",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6317d70ef165",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-63a49c4bac4e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-63bda95f73c2",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-63cb4519b382",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-63e739e50fa6",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-63f5c39551dc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-64acecc6468b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-653ef2c38c62",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 161,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6550bd17cf96",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-65ff218a89d5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6651475bed0a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-665e48502315",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6787b5baeea8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-67fe70a25345",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-688080f7facd",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-691f283d4fb0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6929493cf0a8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-69962f48936a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6a01606a507d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 77,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6b487acabcb1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6b505422b4c1",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 224,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6b954a13a919",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-6c057759151c",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 196,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6cf2f7a853c0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6d68c79be7e9",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6e984f2b542f",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-6ef14642190a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6f1b5263cc2f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-6f20211b96ad",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 8,
+    "packet": "MGP-7038fc3c9fae",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 89,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7039e6d1e432",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7054d760cad2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-707d08a1be77",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-70ec78fdef61",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-712b9b7dd805",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 83,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-718eb3be4a79",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-71e98222ae43",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-72163236a881",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-7218677e677c",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 163,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-726d536b51bf",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-737eac99484e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-73838e378c24",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-742cafc01ca0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-74a98d0a3b90",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-74e7d8d77339",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-75d9c9dd6eeb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-76b75a51c8d9",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 13,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-76d3c67e602f",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 12,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-773851188ae0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-77d3e9360249",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7862e697929c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-78668e4cf0aa",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-796bfce55953",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-79a72c211a7e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-79cfdbf5178d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7a20294b3be1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-7a25691a4aed",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7a687581024c",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 12,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7a77f26892fa",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7b21372c9715",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7b42a0e8cd59",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-7b7213c1c535",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7be35e70b507",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-7d1044446158",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7d4318b82c95",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7e3f9668c102",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7e4729a0d9d5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-7e4e5eca32b5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 12,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-7ec98437ef74",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-7ecc06feedb3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-80a2860894dc",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 218,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-80e2738b7fca",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-812b3459eb43",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-814f6ac3bad1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8247ffdd5146",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-831921b7654f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-83438b800f51",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-83452d641de3",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 102,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-835a171cee8f",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 62,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-83f66308b0d8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-86a132cdfe35",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-86d57fb7ce49",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8726721d8cb1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-883fb37c71bf",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-88779e59b255",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8893a89a9c8a",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-89a2c184bc2f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8a30f73ba583",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-8a7ae514dbb5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 49,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-8a85947adb9b",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 122,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-8bccdb08cd99",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8c32a96c96f5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8db2000df390",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 8,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8e54a734f43c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-8e571123ee8b",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8e7bb8d5892d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8ed663312499",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8f150a24fe33",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8f235ad5f9a0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8f55e5f525ec",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8f880a183a17",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-8fe5f0c6b7b7",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-8ff4130a42bc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-900e3244ea88",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 184,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-90571f0a7077",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-90763a159d84",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-90889a9ea56a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-92443e7c1f3a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-928dc00e6977",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-92e320b291fb",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-9389ed9803bf",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 214,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-93a74fbab4e6",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-93c52b7d7e7b",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 8,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-94c801e51976",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 54,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-94e3b7909070",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-95e5caa34d23",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-960229913154",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-971a15d72069",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 14,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-980bdf1f7a4c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-9810481c7427",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-98adab4d5c35",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-98b289990b75",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9976c6afc323",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-99c56b1e97a9",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 110,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-99d7d403e87d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-99ef3acc249f",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9c5fd924149d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 1,
+    "packet": "MGP-9c624a6fc241",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 119,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-9d0c60094e1a",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-9de456870b9c",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9f11a621021b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9f33a3454d91",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9f7d82978b59",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9fc09707f59c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-9fcbb956525f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-a037a8ae7458",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a06c48f876ed",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a06eadd971bc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a1aea3c3942c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a2a1f93cc1de",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a2fac3c584f2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a3a2ff7ecaa3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-a42e862bd7d1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a482568c4a6c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-a4e3409e058b",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 175,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-a6214b723764",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a66acd4a372f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-a6ff5770c674",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a7f2a677cc1a",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a7fac52b7a58",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a82d1198f312",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-a8e2688d9228",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 212,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-a91567ed338d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-a931d0a659b2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-aa18c3931191",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-abb7daa7d703",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-abd75fa36564",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ac0557938c8f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ac3faf2b0147",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ad2d305c3752",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ad3d6671e45c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-adce7e7aae82",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ae187dc27580",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ae914d92e042",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-afd593b186cc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b05f85f6ae81",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b06cf8f6e12c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b083824750c4",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b1e42ad4dd39",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b24368832e8e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b2a8ebc539bd",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b310aba2a34b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-b3ada378adb0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b4645528b050",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b4739a6d7bee",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b4824f17f29d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-b5e3cb95c836",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 7,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b6200547eafc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-b63c42fc1b25",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-b65a03753a12",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 101,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b7033a41d0ef",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b77b22efc920",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 9,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-b844c30f83f7",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b9297a24ea53",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-b97c01d968cf",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-b9897febc1ab",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-b9a2ff31079f",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 198,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ba3d5019ae10",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-ba556b504dd7",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 9,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-bac0fdd00fa5",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-bb45ce1a584d",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bb959651093f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bbea1f302852",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-bcc18194937e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-bd1358edb5b2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bd4b5f5ad2da",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-bd694ee73925",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-be3b6bbaea7e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-be535f1b4267",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-be787ea955a8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bea0d1f07990",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 12,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bef234eedea8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-bf35689eed98",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c024ef520f66",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c04247670ede",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-c09f84331b21",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-c0fbb4503e82",
+    "packet_type": "chain",
+    "required_period_scope": false,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-c101548fe17b",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 253,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-c10862503998",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c110e823cf76",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c183e0a708c3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 1,
+    "packet": "MGP-c23dae514218",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 161,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c48436297a53",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-c4d0cf3c6951",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 68,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c51468ee20d4",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 6,
+    "packet": "MGP-c574589c1937",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 141,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c61d77175653",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-c72abc883f36",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 15,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-c78b1d6a3969",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c8082da9eb6d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-c8cebdc22aca",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c94012f0844e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-c9e83879cf40",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ca11e9d7e4fc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ca1b0d5173d1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-cb22a8c1558e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-cb8477152379",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-cb8c550df2d8",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 150,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-cba5e076ebd7",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-cc468f540840",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-ccc09ff1ca82",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 89,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-cee9041d8618",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-cfa4aa4b135e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-cfb5ade5f34e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-cfc117e41a35",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-cfc446a47dbe",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 111,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d0091593e949",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d0866cca3967",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d087347e6992",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d0881e9f8c47",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d0dc3f51acd3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d0fcedba23b3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d1125f60ac13",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d181448252e3",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d19962bc8e79",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-d1d64765a919",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-d24964d9b089",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 114,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d2f85f5d9c22",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 11,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d34cdabc3b01",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 10,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d3ccc2e52fa9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d3de3fb50745",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d482fff59001",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d55d9f1eab71",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d5f9df07d87b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d68d24e8517e",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d73c6d5d1614",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d79f8711602d",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-d9a929c3594f",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-d9ad340a3cf0",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 7,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-da69989dc5d9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 12,
+    "stratum": "fv_jump",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-dab72370cc2e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-db0af98d2fd2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-db67dd6f724e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-db6d14e6a1c3",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-db6ef90b940b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-dc844571ee3c",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-de58f512b99b",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-dece86ba328c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e04e99ee42f5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-e05e688d1dac",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e124382a9ea6",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e13f58622998",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e1b827855e21",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e1cf1271701a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e2d2fd83b520",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-e316cfdbbe01",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 1,
+    "packet": "MGP-e3506da2a674",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 5,
+    "packet": "MGP-e41df9f4f0bc",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 106,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e42f8be417bc",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e4390dfc153c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e45f30c8f96a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e47b65edba8e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-e4ebe267ae75",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e58ab14a7e62",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "MISSED_LINK"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-e6189aa85942",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-e66749d25d6c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e68bf05bbcb1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e7aa548dad0e",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e87153665f99",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "tier_random",
+    "verdict": "INSUFFICIENT_EVIDENCE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-e8d8d8337b9f",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 5,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ebd5716ee1a1",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ebf166615601",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ed186f83ffa7",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-ee2899cec1b9",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-eea5250d5756",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 1,
+    "stratum": "interior_singleton",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 4,
+    "packet": "MGP-f0532d6ba789",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 106,
+    "stratum": "entity_merge_verify",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f0dafabb1255",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "fv_jump",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f12b4c3551a9",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 4,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-f1bfdc811f3f",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f1febb9096df",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-f23a838cac29",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f2f194da134a",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f33356381429",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f373fc36f9b5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f3a33b884933",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f4c67b392b4c",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f599a4d62ec5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 8,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-f5a2604249d8",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 161,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f5dfacf45905",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f5fbf86e23b5",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-f7651b756ce8",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 3,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-f7fce76ca845",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-f83215a1ef83",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-fa78fa530028",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 6,
+    "stratum": "fv_jump",
+    "verdict": "MIXED"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-fae55e9845e2",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-fb545c9a54a4",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-fbd3910511bf",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-fc36c335029f",
+    "packet_type": "entity",
+    "required_period_scope": false,
+    "rows": 101,
+    "stratum": "entity_merge_verify",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-fde173f7eadf",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 3,
+    "packet": "MGP-fe738ccbf694",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "drift_break",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-feeaa201dce0",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "cross_fund_near_miss",
+    "verdict": "WRONG_MERGE"
+  },
+  {
+    "evidence_entries": 0,
+    "packet": "MGP-ff41d7964030",
+    "packet_type": "chain",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "tier_random",
+    "verdict": "CONFIRMED"
+  },
+  {
+    "evidence_entries": 2,
+    "packet": "MGP-ffa2109bf469",
+    "packet_type": "entity",
+    "required_period_scope": true,
+    "rows": 2,
+    "stratum": "within_fund_name_cluster",
+    "verdict": "WRONG_MERGE"
+  }
+]

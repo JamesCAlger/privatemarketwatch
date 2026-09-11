@@ -1,0 +1,683 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_b5b30670-da25-4e13-a06e-0397263064fc",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 922,634,556 and $ 919,774,172 , respectively)",
+        "",
+        "",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "891,045,657",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": "USD",
+      "fact_id": "F_b5b30670-da25-4e13-a06e-0397263064fc",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "891,256,739",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[9]/table/tr[9]",
+      "table_xpath": "/html/body/div[9]/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "891256739"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_cd625ef0-ed23-4b18-b377-930bb47aff94",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": "USD",
+      "fact_id": "F_cd625ef0-ed23-4b18-b377-930bb47aff94",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "891,256,739",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "891256739"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_86949eba-d38c-44fe-9184-a8c3d736c07a",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": null,
+      "fact_id": "F_86949eba-d38c-44fe-9184-a8c3d736c07a",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table/tr[10]",
+      "table_xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_f40f2c95-63e1-4d42-84e6-1d87b1722b3e",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": "USD",
+      "fact_id": "F_f40f2c95-63e1-4d42-84e6-1d87b1722b3e",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "891,256,739",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table/tr[42]",
+      "table_xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "891256739"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_35a9cd4d-de7e-4a66-9a5e-504c95b988bb",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": null,
+      "fact_id": "F_35a9cd4d-de7e-4a66-9a5e-504c95b988bb",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table/tr[42]",
+      "table_xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_73e11e63-84dd-41fe-9090-97bd8e586cdd",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "unitref": "U_USD"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": "USD",
+      "fact_id": "F_73e11e63-84dd-41fe-9090-97bd8e586cdd",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "891,256,739",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table/tr[11]",
+      "table_xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "U_USD",
+      "value": "891256739"
+    },
+    {
+      "attributes": {
+        "contextref": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+        "decimals": "4",
+        "format": "ixt:num-dot-decimal",
+        "id": "F_27cdd596-2306-4b7c-8e82-59c721a924ef",
+        "name": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+        "scale": "-2",
+        "unitref": "U_pure"
+      },
+      "cells": [
+        "Total",
+        "",
+        "$",
+        "922,634,556",
+        "",
+        "",
+        "$",
+        "891,256,739",
+        "",
+        "",
+        "",
+        "100.00",
+        "%",
+        "",
+        "$",
+        "919,774,172",
+        "",
+        "",
+        "$",
+        "891,045,657",
+        "",
+        "",
+        "",
+        "100.00",
+        "%"
+      ],
+      "concept": "ck0001646614:PercentageOfInvestmentsAtFairValue",
+      "context_id": "C_517b3294-ad46-4623-bb45-2564971c10c2",
+      "currency": null,
+      "fact_id": "F_27cdd596-2306-4b7c-8e82-59c721a924ef",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "100.00",
+      "rounding_bound": "0.00005",
+      "row_xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table/tr[11]",
+      "table_xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table",
+      "unit_measures": [
+        "xbrli:pure"
+      ],
+      "unit_ref": "U_pure",
+      "value": "1.0000"
+    }
+  ],
+  "cik": "0001646614",
+  "component": "quarter_probability_pilot",
+  "path": "data/raw/filings/bdc_html/1646614/000095017025070278.html",
+  "reference_id": "REF-0001646614-2025-03-31",
+  "report_date": "2025-03-31",
+  "source_rows": 289,
+  "source_sha256": "7cb65dbd950c46325e20ba77cccd24d98e29f1ed7a85f3b54651613d5cc53ef2",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 4,
+      "first": [
+        "Non-controlled, non-affiliated investments (amortized cost of $ 856,085,858 and $ 865,232,646 , respectively) | $ | 838,935,887 | $ | 849,500,690",
+        "Non-controlled, affiliated investments (amortized cost of $ 24,796,185 and 8,032,091 , respectively) | 28,992,893 | 12,137,420"
+      ],
+      "last": [
+        "Controlled investments (amortized cost of $ 41,752,513 and $ 46,509,435 , respectively) | 23,327,959 | 29,407,547",
+        "Total investments, at fair value (amortized cost of $ 922,634,556 and $ 919,774,172 , respectively) | 891,256,739 | 891,045,657"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2025 December 31, 2024",
+        "",
+        "Assets"
+      ],
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "PART I\u2014 CONSOLIDAT ED FINANCIAL INFORMATION"
+      ],
+      "rows": 4,
+      "table_xpath": "/html/body/div[9]/table"
+    },
+    {
+      "contexts": 31,
+      "first": [
+        "48Forty Solutions LLC\u207d\u2077\u207e\u207d\u00b2\u2074\u207e | 1st Lien Term Loan | Transportation & Logistics | S+ 6.10 %, 1.00 % Floor | 10.42 % | 4/8/2022 | 11/30/2029 | $ | 6,571,346 | $ 6,486,225 | $ 4,520,082 | 0.83 %",
+        "Accela Inc/US\u207d\u2077\u207e | 1st Lien Term Loan | Government Services | S+ 6.00 %, 0.75 % Floor | 10.32 | 9/1/2023 | 9/3/2030 | 10,596,118 | 10,436,483 | 10,507,653 | 1.94"
+      ],
+      "last": [
+        "Circle Graphics Inc\u207d\u2077\u207e\u207d\u00b3\u00b9\u207e | 1st Lien Term Loan | E-Commerce | S+ 7.51 %, 2.25 % Floor | 11.83 | 2/17/2021 | 3/31/2027 | 22,822,369 | 22,490,359 | 18,359,464 | 3.39",
+        "Circle Graphics Inc\u207d\u2077\u207e\u207d\u00b3\u00b9\u207e | 1st Lien Delayed Draw Term Loan | E-Commerce | S+ 7.51 %, 2.25 % Floor | 11.83 | 7/12/2021 | 3/31/2027 | 533,038 | 522,419 | 428,803 | 0.08"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Non-Controlled/Non-Affiliated Investments",
+        "1st Lien/Secured Loans"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 31,
+      "table_xpath": "/html/body/div[21]/table"
+    },
+    {
+      "contexts": 34,
+      "first": [
+        "Columbia Helicopters Inc.\u207d\u2077\u207e\u207d\u00b9\u00b3\u207e\u207d\u00b3\u00b9\u207e | 1st Lien Term Loan | Aerospace & Defense | S+ 11.36 %, 1.50 % Floor | 15.69 % | 8/20/2019 | 9/4/2025 | $ | 8,869,951 | $ 8,693,906 | $ 8,759,649 | 1.62 %",
+        "Contractual Buyer, LLC (dba Kodiak Solutions)\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Healthcare Technology | S+ 6.00 %, 0.75 % Floor | 10.29 | 10/10/2023 | 10/10/2030 | 3,477,348 | 3,404,362 | 3,402,550 | 0.63"
+      ],
+      "last": [
+        "KORE Wireless Group Inc\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Telecommunications | S+ 6.50 %, 1.00 % Floor | 10.82 | 12/20/2023 | 11/9/2028 | 4,578,967 | 4,509,604 | 4,507,053 | 0.83",
+        "KORE Wireless Group Inc\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2077\u207e\u207d\u00b2\u2078\u207e | 1st Lien Revolver | Telecommunications | S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) | 0.50 | 12/20/2023 | 11/9/2028 | 626,612 | ( 9,248 ) | ( 9,788 ) | ( 0.00 )"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Columbia Helicopters Inc.\u207d\u2077\u207e\u207d\u00b9\u00b3\u207e\u207d\u00b3\u00b9\u207e 1st Lien Term Loan Aerospace & Defense S+ 11.36 %, 1.50 % Floor 15.69 % 8/20/2019 9/4/2025 $ 8,869,951 $ 8,693,906 $ 8,759,649 1.62 %",
+        "Contractual Buyer, LLC (dba Kodiak Solutions)\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Healthcare Technology S+ 6.00 %, 0.75 % Floor 10.29 10/10/2023 10/10/2030 3,477,348 3,404,362 3,402,550 0.63"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 34,
+      "table_xpath": "/html/body/div[24]/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b2\u00b2\u207e | 1st Lien Term Loan | Healthcare Providers & Services | S+ 11.15 %, 3.00 % Floor | 15.46 % | 7/23/2021 | 7/23/2027 | $ | 18,900,523 | $ 18,754,941 | $ 17,617,965 | 3.25 %",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2077\u207e | 1st Lien Revolver | Healthcare Providers & Services | S+ 11.15 %, 3.00 % Floor ( 0.50 % on unfunded) | 0.50 | 4/3/2024 | 7/23/2027 | 500,000 | - | ( 33,929 ) | ( 0.01 )"
+      ],
+      "last": [
+        "Shrieve Chemical Co LLC\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Specialty Chemicals | S+ 6.00 %, 1.00 % Floor | 10.30 | 10/30/2024 | 10/30/2030 | 6,282,249 | 6,165,352 | 6,163,444 | 1.14",
+        "Shrieve Chemical Co LLC\u207d\u2076\u207e\u207d\u2077\u207e | 1st Lien Revolver | Specialty Chemicals | S+ 6.00 %, 1.00 % Floor ( 0.50 % on unfunded) | 10.30 | 10/30/2024 | 10/30/2030 | 539,828 | 79,821 | 79,760 | 0.01"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2077\u207e\u207d\u2078\u207e\u207d\u00b2\u00b2\u207e 1st Lien Term Loan Healthcare Providers & Services S+ 11.15 %, 3.00 % Floor 15.46 % 7/23/2021 7/23/2027 $ 18,900,523 $ 18,754,941 $ 17,617,965 3.25 %",
+        "LAC Acquisition LLC d/b/a Lighthouse Autism Center\u207d\u2076\u207e\u207d\u2077\u207e\u207d\u00b2\u2077\u207e 1st Lien Revolver Healthcare Providers & Services S+ 11.15 %, 3.00 % Floor ( 0.50 % on unfunded) 0.50 4/3/2024 7/23/2027 500,000 - ( 33,929 ) ( 0.01 )"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 36,
+      "table_xpath": "/html/body/div[27]/table"
+    },
+    {
+      "contexts": 30,
+      "first": [
+        "Sintec Media NYC Inc\u207d\u2077\u207e\u207d\u2079\u207e | 1st Lien Term Loan | Media: Diversified & Production | S+ 7.00 %, 1.00 % Floor | 11.30 % | 6/21/2023 | 6/21/2029 | $ | 12,288,613 | $ 12,006,420 | $ 11,824,362 | 2.18 %",
+        "Sintec Media NYC Inc\u207d\u2076\u207e\u207d\u2077\u207e | 1st Lien Revolver | Media: Diversified & Production | S+ 7.00 %, 1.00 % Floor (0.50% on unfunded) | 11.30 | 6/21/2023 | 6/21/2029 | 1,164,025 | 720,415 | 699,031 | 0.13"
+      ],
+      "last": [
+        "Infrabuild Australia Pty Ltd\u207d\u2077\u207e\u207d\u2079\u207e\u207d\u00b9\u2070\u207e | 1st Lien Term Loan | Industrial Products & Services | S+ 14.00 %, 3.50 % Floor | 18.30 | 5/26/2023 | 5/26/2026 | 6,438,514 | 6,280,041 | 6,438,573 | 1.19",
+        "Total Australia 1st Lien/Secured Loans | 6,280,041 | 6,438,573 | 1.19"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Sintec Media NYC Inc\u207d\u2077\u207e\u207d\u2079\u207e 1st Lien Term Loan Media: Diversified & Production S+ 7.00 %, 1.00 % Floor 11.30 % 6/21/2023 6/21/2029 $ 12,288,613 $ 12,006,420 $ 11,824,362 2.18 %",
+        "Sintec Media NYC Inc\u207d\u2076\u207e\u207d\u2077\u207e 1st Lien Revolver Media: Diversified & Production S+ 7.00 %, 1.00 % Floor (0.50% on unfunded) 11.30 6/21/2023 6/21/2029 1,164,025 720,415 699,031 0.13"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 30,
+      "table_xpath": "/html/body/div[30]/table"
+    },
+    {
+      "contexts": 27,
+      "first": [
+        "Gateway Casinos & Entertainment Ltd\u207d\u2079\u207e\u207d\u00b9\u2070\u207e | 1st Lien Term Loan | Gaming & Entertainment | S+ 6.25 %, 0.75 % Floor | 10.55 % | 12/18/2024 | 12/18/2030 | $ | 7,653,036 | $ 7,583,982 | $ 7,681,735 | 1.42 %",
+        "Source Energy Services Ltd\u207d\u2077\u207e\u207d\u2079\u207e\u207d\u00b9\u2070\u207e | 1st Lien Term Loan | Oilfield Services | S+ 5.25 %, 4.25 % Floor | 9.57 | 12/20/2024 | 12/20/2029 | 2,339,791 | 2,262,202 | 2,289,988 | 0.42"
+      ],
+      "last": [
+        "Total Germany Senior Secured Debt | 1,374,968 | 1,465,409 | 0.27",
+        "Total Senior Secured Debt | 7,013,477 | 6,991,897 | 1.29"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Canada",
+        "Gateway Casinos & Entertainment Ltd\u207d\u2079\u207e\u207d\u00b9\u2070\u207e 1st Lien Term Loan Gaming & Entertainment S+ 6.25 %, 0.75 % Floor 10.55 % 12/18/2024 12/18/2030 $ 7,653,036 $ 7,583,982 $ 7,681,735 1.42 %"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 27,
+      "table_xpath": "/html/body/div[33]/table"
+    },
+    {
+      "contexts": 23,
+      "first": [
+        "Wesco Aircraft Holdings Inc\u207d\u2077\u207e\u207d\u00b3\u2074\u207e | Unsecured Debt | Industrial Products & Services | 6.00 % | 6.00 % | 1/31/2025 | 1/31/2033 | 4,195,024 | $ 6,406,376 | $ 6,334,487 | 1.17 %",
+        "Total United States of America Unsecured Debt | 6,406,376 | 6,334,487 | 1.17"
+      ],
+      "last": [
+        "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class\u207d\u2078\u207e\u207d\u2079\u207e | Money Market Fund | 78,134,546 | 78,134,546 | 78,134,546 | 14.41",
+        "Total Cash Equivalents and Restricted Cash Equivalents | $ 78,134,546 | $ 78,134,546 | 14.41 %"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (32) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5)",
+        "Unsecured Debt",
+        "United States of America"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 23,
+      "table_xpath": "/html/body/div[36]/table"
+    },
+    {
+      "contexts": 6,
+      "first": [
+        "Takko Fashion GmbH | Secured Debt | $ | 4,100,660 | $ | \u2014 | $ | ( 2,838,424 | ) | $ | 112,521 | $ | 90,652 | $ | 1,465,409 | $ | 60,138 | $ | \u2014 | \u20ac | 1,271,000",
+        "Takko Fashion Sarl | Unsecured Debt | \u0086 | 8,036,760 | 7,412 | \u2014 | 226,031 | \u2014 | 8,270,203 | 152,505 | \u2014 | \u20ac | 3,576,263"
+      ],
+      "last": [
+        "Wesco Aircraft Holdings Inc | Equities | \u2014 | 7,459,569 | \u2014 | ( 63,263 | ) | \u2014 | 7,396,306 | \u2014 | \u2014 | 195,566",
+        "Total | $ | 12,137,420 | $ | 19,511,866 | $ | ( 2,838,424 | ) | $ | 91,379 | $ | 90,652 | $ | 28,992,893 | $ | 331,189 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Type of Investment Fair Value at December 31, 2024 Gross additions* Gross reductions** Net change in unrealized appreciation (depreciation) Net realized gains (losses) Fair Value at March 31, 2025 Interest income Dividend income Par Amount ($) / Number Of Shares / Ownership %",
+        "Takko Fashion GmbH Secured Debt $ 4,100,660 $ \u2014 $ ( 2,838,424 ) $ 112,521 $ 90,652 $ 1,465,409 $ 60,138 $ \u2014 \u20ac 1,271,000",
+        "Takko Fashion Sarl Unsecured Debt \u0086 8,036,760 7,412 \u2014 226,031 \u2014 8,270,203 152,505 \u2014 \u20ac 3,576,263"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 6,
+      "table_xpath": "/html/body/div[42]/ix:continuation[1]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "1035 Mecklenburg Highway, Mooresville, North Carolina | Real Estate Properties | $ | 12,808,845 | $ | 109,565 | $ | \u2014 | $ | ( 1,255,656 | ) | $ | \u2014 | $ | 11,662,754 | $ | \u2014 | $ | \u2014 | 100 | %",
+        "SP-CREH 19 Highline LLC | Secured Loans | 7,639,424 | \u2014 | ( 4,892,558 | ) | 1,008 | \u2014 | 2,747,874 | 102,250 | \u2014 | $ | 2,748,011"
+      ],
+      "last": [
+        "TH Liquidating Trust | Trust Interest | 455,086 | 26,071 | \u2014 | ( 5,310 | ) | \u2014 | 475,847 | 26,071 | \u2014 | $ | 597,573",
+        "Total | $ | 29,407,547 | $ | 135,636 | $ | ( 4,892,558 | ) | $ | ( 1,322,666 | ) | $ | \u2014 | $ | 23,327,959 | $ | 224,675 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Type of Investment Fair Value at December 31, 2024 Gross additions* Gross reductions** Net change in unrealized appreciation (depreciation) Net realized gains (losses) Fair Value at March 31, 2025 Interest income Dividend income Par Amount ($) / Number Of Units/ Ownership %",
+        "1035 Mecklenburg Highway, Mooresville, North Carolina Real Estate Properties $ 12,808,845 $ 109,565 $ \u2014 $ ( 1,255,656 ) $ \u2014 $ 11,662,754 $ \u2014 $ \u2014 100 %",
+        "SP-CREH 19 Highline LLC Secured Loans 7,639,424 \u2014 ( 4,892,558 ) 1,008 \u2014 2,747,874 102,250 \u2014 $ 2,748,011"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/div[42]/ix:continuation[3]/table"
+    },
+    {
+      "contexts": 7,
+      "first": [
+        "First lien debt | $ | 854,586,855 | $ | 836,886,969 | 93.90 | % | $ | 876,955,559 | $ | 860,212,364 | 96.54 | %",
+        "Second lien debt | 17,071,914 | 16,190,849 | 1.82 | 5,851,820 | 5,135,575 | 0.58"
+      ],
+      "last": [
+        "Trust interest | 3,751,047 | 1,445,347 | 0.16 | 3,724,975 | 1,424,586 | 0.16",
+        "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2025 December 31, 2024",
+        "Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "First lien debt $ 854,586,855 $ 836,886,969 93.90 % $ 876,955,559 $ 860,212,364 96.54 %"
+      ],
+      "preceding": [
+        "",
+        "Investments consisted of the following at March 31, 2025 and December 31, 2024:"
+      ],
+      "rows": 7,
+      "table_xpath": "/html/body/div[99]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 39,
+      "first": [
+        "Aerospace & Defense | $ | 45,291,327 | $ | 45,412,914 | 5.10 | % | $ | 45,540,104 | $ | 45,623,118 | 5.12 | %",
+        "Automobiles & Components | 15,964,109 | 16,070,303 | 1.80 | 19,406,634 | 19,567,821 | 2.20"
+      ],
+      "last": [
+        "Other | 3,751,047 | 1,445,347 | 0.15 | 3,724,975 | 1,424,586 | 0.17",
+        "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2025 December 31, 2024",
+        "Industry Classification Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "Aerospace & Defense $ 45,291,327 $ 45,412,914 5.10 % $ 45,540,104 $ 45,623,118 5.12 %"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the composition of the investment portfolio by industry classifications at amortized cost and fair value as of March 31, 2025 and December 31, 2024 with corresponding percentages of total fair value:"
+      ],
+      "rows": 39,
+      "table_xpath": "/html/body/div[102]/div/ix:continuation/div/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 8,
+      "first": [
+        "Australia | $ | 6,280,041 | $ | 6,438,573 | 0.72 | % | $ | 6,250,605 | $ | 6,562,777 | 0.74 | %",
+        "Canada | 22,346,173 | 22,623,123 | 2.54 | 22,401,729 | 22,639,890 | 2.54"
+      ],
+      "last": [
+        "United States of America | 879,662,634 | 843,384,407 | 94.63 | 873,999,097 | 840,726,890 | 94.36",
+        "Total | $ | 922,634,556 | $ | 891,256,739 | 100.00 | % | $ | 919,774,172 | $ | 891,045,657 | 100.00 | %"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2025 December 31, 2024",
+        "Geographic Dispersion (1) Amortized Cost Fair Value % of Fair Value Amortized Cost Fair Value % of Fair Value",
+        "Australia $ 6,280,041 $ 6,438,573 0.72 % $ 6,250,605 $ 6,562,777 0.74 %"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the composition of the investment portfolio by geographic dispersion at amortized cost and fair value as of March 31, 2025 and December 31, 2024 with corresponding percentages of total fair value:"
+      ],
+      "rows": 8,
+      "table_xpath": "/html/body/div[105]/div[1]/ix:continuation/div/ix:continuation/table"
+    },
+    {
+      "contexts": 28,
+      "first": [
+        "Secured loans | $ | \u2014 | $ | 54,741,484 | $ | 791,344,437 | $ | 846,085,921",
+        "Secured loans | $ | \u2014 | $ | 54,741,484 | $ | 791,344,437 | $ | 846,085,921"
+      ],
+      "last": [
+        "Total investments | $ | 1,224,036 | $ | 70,003,584 | $ | 820,029,119 | $ | 891,256,739",
+        "Total investments | $ | 1,224,036 | $ | 70,003,584 | $ | 820,029,119 | $ | 891,256,739"
+      ],
+      "opening_rows": [
+        "",
+        "March 31, 2025",
+        "Level 1 Level 2 Level 3 Total",
+        "Investments:"
+      ],
+      "preceding": [
+        "",
+        "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of March 31, 2025."
+      ],
+      "rows": 28,
+      "table_xpath": "/html/body/div[105]/div[2]/ix:nonnumeric/div[2]/ix:nonnumeric/table"
+    },
+    {
+      "contexts": 9,
+      "first": [
+        "Secured Loans | $ | 708,096,178 | Income Approach | Yield | 6.6 % - 27.8 % ( 12.9 %) | Decrease",
+        "46,943,594 | Recent Transaction | N/A | N/A | N/A"
+      ],
+      "last": [
+        "Trust Interest | 1,445,347 | Asset Approach | Recovery Rate | 0.8 % | Increase",
+        "Total Level 3 Investments | $ | 820,029,119"
+      ],
+      "opening_rows": [
+        "",
+        "Quantitative Information about Level 3 Value Investments",
+        "Investment Type Fair Value at March 31, 2025 Valuation Technique(s) Unobservable Input(s) Range (Weighted Average) Impact to Valuation from an Increase in Input (1)",
+        "Secured Loans $ 708,096,178 Income Approach Yield 6.6 % - 27.8 % ( 12.9 %) Decrease"
+      ],
+      "preceding": [
+        "",
+        "The following tables provide quantitative information about the Fund\u2019s level 3 fair value measurements for the Fund\u2019s investments as of March 31, 2025 and December 31, 2024. In addition to the techniques and inputs noted in the tables below, the Fund may also use, in accordance with the valuation policy, other valuation techniques and methodologies when determining the Fund\u2019s fair value measurements. The below tables are not intended to be inclusive of all unobservable inputs, but rather provide information on the significant level 3 inputs as they relate to the Fund\u2019s fair value measurements."
+      ],
+      "rows": 9,
+      "table_xpath": "/html/body/div[111]/div/ix:continuation/div[2]/ix:nonnumeric/table[1]"
+    }
+  ]
+}

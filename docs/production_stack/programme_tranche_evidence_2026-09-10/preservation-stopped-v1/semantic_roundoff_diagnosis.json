@@ -1,0 +1,79 @@
+[
+    {
+        "path":  "/holdings/holdings_class_fv/2/fair_value_sum_delta",
+        "old_delta":  29327972.000183105,
+        "new_delta":  29327971.999450684,
+        "delta_change":  -0.000732421875,
+        "old_current":  416234524734.53406,
+        "new_current":  416234524734.5335,
+        "old_baseline":  416205196762.5339,
+        "new_baseline":  416205196762.53406,
+        "existing_source_scale_tolerance":  0.41623452473453404
+    },
+    {
+        "path":  "/holdings/holdings_class_fv/3/fair_value_sum_delta",
+        "old_delta":  -32474803.987304688,
+        "new_delta":  -32474804.009765625,
+        "delta_change":  -0.0224609375,
+        "old_current":  5706826460524.832,
+        "new_current":  5706826460524.807,
+        "old_baseline":  5706858935328.819,
+        "new_baseline":  5706858935328.816,
+        "existing_source_scale_tolerance":  5.7068589353288193
+    },
+    {
+        "path":  "/holdings/holdings_class_fv/5/fair_value_sum_delta",
+        "old_delta":  29505000.000061035,
+        "new_delta":  29504999.999969482,
+        "delta_change":  -9.1556459665298462E-05,
+        "old_current":  231288938449.59503,
+        "new_current":  231288938449.59497,
+        "old_baseline":  231259433449.59497,
+        "new_baseline":  231259433449.595,
+        "existing_source_scale_tolerance":  0.23128893844959503
+    },
+    {
+        "path":  "/holdings/holdings_class_fv/8/fair_value_sum_delta",
+        "old_delta":  2681492.5297851562,
+        "new_delta":  2681492.5300598145,
+        "delta_change":  0.00027465866878628731,
+        "old_current":  168451731212.05994,
+        "new_current":  168451731212.0602,
+        "old_baseline":  168449049719.53015,
+        "new_baseline":  168449049719.53015,
+        "existing_source_scale_tolerance":  0.16845173121205995
+    },
+    {
+        "path":  "/position_returns/position_return/2/begin_fv_sum_delta",
+        "old_delta":  -31903298.999969482,
+        "new_delta":  -31903299.00001526,
+        "delta_change":  -4.5780092477798462E-05,
+        "old_current":  122083352914.64996,
+        "new_current":  122083352914.64995,
+        "old_baseline":  122115256213.64993,
+        "new_baseline":  122115256213.64996,
+        "existing_source_scale_tolerance":  0.12211525621364991
+    },
+    {
+        "path":  "/position_returns/position_return/4/begin_fv_sum_delta",
+        "old_delta":  -92874368.33007812,
+        "new_delta":  -92874368.32995605,
+        "delta_change":  0.00012208521366119385,
+        "old_current":  165132741982.5115,
+        "new_current":  165132741982.51157,
+        "old_baseline":  165225616350.84158,
+        "new_baseline":  165225616350.84152,
+        "existing_source_scale_tolerance":  0.16522561635084157
+    },
+    {
+        "path":  "/position_returns/position_return/6/begin_fv_sum_delta",
+        "old_delta":  2908500.0,
+        "new_delta":  2908500.0000305176,
+        "delta_change":  3.0517578125E-05,
+        "old_current":  193339101510.79675,
+        "new_current":  193339101510.79675,
+        "old_baseline":  193336193010.79675,
+        "new_baseline":  193336193010.79672,
+        "existing_source_scale_tolerance":  0.19333910151079675
+    }
+]

@@ -1,0 +1,632 @@
+{
+  "path": "data/raw/filings/bdc_html/1948368/000095017023039890.html",
+  "ref": "REF-0001948368-2023-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments, at fair value",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | June 30, December 31, | 2023 (Unaudited) 2022 | Assets | Investments, at fair value",
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Statements of Financial Condition",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[5]"
+    },
+    {
+      "cells": [
+        "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 )",
+        "",
+        "$",
+        "42,023",
+        "",
+        "",
+        "$",
+        "17,352",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001948368:NonControlledAndNonAffiliatedInvestmentsAtCost",
+          "context": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+          "scale": "3",
+          "text": "42,091",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:NonControlledAndNonAffiliatedInvestmentsAtCost",
+          "context": "C_5ca61698-2a2b-47db-ab86-26e60c4656fa",
+          "scale": "3",
+          "text": "17,360",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:NonControlledAndNonAffiliatedInvestments",
+          "context": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+          "scale": "3",
+          "text": "42,023",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:NonControlledAndNonAffiliatedInvestments",
+          "context": "C_5ca61698-2a2b-47db-ab86-26e60c4656fa",
+          "scale": "3",
+          "text": "17,352",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, December 31, | 2023 (Unaudited) 2022 | Assets | Investments, at fair value",
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Statements of Financial Condition",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[5]/tr[6]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "1,684",
+        "",
+        "",
+        "$",
+        "3,141",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001948368:TotalInvestmentIncome",
+          "context": "C_528eed66-3d7c-424b-b519-41676cab23c8",
+          "scale": "3",
+          "text": "1,684",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:TotalInvestmentIncome",
+          "context": "C_713100dc-5802-4d73-a2f6-094e7514b2eb",
+          "scale": "3",
+          "text": "3,141",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | 2023 2023 | Investment income: | From non-controlled/non-affiliated investments:",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Statement of Operation s",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[6]/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments - 43.30 %",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "42,091",
+        "",
+        "$",
+        "42,023",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_db82228a-4094-48b3-a10c-f207558c1847",
+          "scale": "-2",
+          "text": "43.30",
+          "unit": "U_pure"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_db82228a-4094-48b3-a10c-f207558c1847",
+          "scale": "3",
+          "text": "42,091",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+          "context": "C_db82228a-4094-48b3-a10c-f207558c1847",
+          "scale": "3",
+          "text": "42,023",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment (1) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par/Shares (3) Cost Fair Value Footnotes | 1st Lien/Senior Secured Debt - 43.30 % | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 $ 2,942 $ 2,868 $ 2,868 (4) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 06/28/30 679 ( 8 ) ( 8 ) (4) (5)",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[9]/tr[28]"
+    },
+    {
+      "cells": [
+        "Total Investments in Affiliated Money Market Fund",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "49,067",
+        "",
+        "",
+        "49,067",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_696626bb-3424-431d-8d90-53e61bb79868",
+          "scale": "3",
+          "text": "49,067",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+          "context": "C_696626bb-3424-431d-8d90-53e61bb79868",
+          "scale": "3",
+          "text": "49,067",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment (1) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par/Shares (3) Cost Fair Value Footnotes | 1st Lien/Senior Secured Debt - 43.30 % | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 $ 2,942 $ 2,868 $ 2,868 (4) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 06/28/30 679 ( 8 ) ( 8 ) (4) (5)",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[9]/tr[31]"
+    },
+    {
+      "cells": [
+        "Total Investments and Investments in Affiliated Money Market Fund - 93.86 %",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "91,158",
+        "",
+        "$",
+        "91,090",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_94929d40-83b8-412a-bdc9-d42cf1373a33",
+          "scale": "-2",
+          "text": "93.86",
+          "unit": "U_pure"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_94929d40-83b8-412a-bdc9-d42cf1373a33",
+          "scale": "3",
+          "text": "91,158",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+          "context": "C_94929d40-83b8-412a-bdc9-d42cf1373a33",
+          "scale": "3",
+          "text": "91,090",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment (1) Industry Interest Rate (2) Reference Rate and Spread (2) Maturity Par/Shares (3) Cost Fair Value Footnotes | 1st Lien/Senior Secured Debt - 43.30 % | Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 $ 2,942 $ 2,868 $ 2,868 (4) | Arrow Buyer, Inc. (dba Archer Technologies) Software S + 6.50 % 06/28/30 679 ( 8 ) ( 8 ) (4) (5)",
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of June 30, 2023",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[9]/tr[32]"
+    },
+    {
+      "cells": [
+        "Total Investments in Affiliated Money Market Fund",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "79,725",
+        "",
+        "",
+        "79,725",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_882fdd40-03c2-4106-93c6-226094f2d1a2",
+          "scale": "3",
+          "text": "79,725",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+          "context": "C_882fdd40-03c2-4106-93c6-226094f2d1a2",
+          "scale": "3",
+          "text": "79,725",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment # Industry Interest Rate (+) Reference Rate and Spread (+) Maturity Par/Shares (++) Cost Fair Value Footnotes | 1st Lien/Senior Secured Debt - 17.95 % | DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ \u2014 $ \u2014 (1) (2) | DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 1,292 \u2014 \u2014 (1) (2)",
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2022",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[10]/tr[14]"
+    },
+    {
+      "cells": [
+        "Total Investments - 100.43 %",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "97,085",
+        "",
+        "$",
+        "97,077",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_e3d5567d-9850-4519-8826-93136fb36c0c",
+          "scale": "-2",
+          "text": "100.43",
+          "unit": "U_pure"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_e3d5567d-9850-4519-8826-93136fb36c0c",
+          "scale": "3",
+          "text": "97,085",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtFairValueNetOfCapitalizedDiscount",
+          "context": "C_e3d5567d-9850-4519-8826-93136fb36c0c",
+          "scale": "3",
+          "text": "97,077",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | Investment # Industry Interest Rate (+) Reference Rate and Spread (+) Maturity Par/Shares (++) Cost Fair Value Footnotes | 1st Lien/Senior Secured Debt - 17.95 % | DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ \u2014 $ \u2014 (1) (2) | DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 1,292 \u2014 \u2014 (1) (2)",
+      "preceding": [
+        "",
+        "(in thousands, except unit and per unit amounts)",
+        "Consolidated Schedule of Investments as of December 31, 2022",
+        "Phillip Street Middle Market Lending Fund LLC",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[10]/tr[15]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "42,091",
+        "",
+        "",
+        "$",
+        "42,023",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "17,360",
+        "",
+        "",
+        "$",
+        "17,352",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+          "scale": "3",
+          "text": "42,091",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_816820b4-2191-41c6-b926-a48f4df5c94d",
+          "scale": "3",
+          "text": "42,023",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "ck0001948368:InvestmentOwnedAtCostNetOfCapitalizedDiscount",
+          "context": "C_5ca61698-2a2b-47db-ab86-26e60c4656fa",
+          "scale": "3",
+          "text": "17,360",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_5ca61698-2a2b-47db-ab86-26e60c4656fa",
+          "scale": "3",
+          "text": "17,352",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, 2023 December 31, 2022 | Investment Type Cost Fair Value Cost Fair Value | 1st Lien/Senior Secured Debt $ 42,091 $ 42,023 $ 17,360 $ 17,352 | Total investments $ 42,091 $ 42,023 $ 17,360 $ 17,352",
+      "preceding": [
+        "",
+        "The Company\u2019s investments (excluding investments in money market funds, if any) consisted of the following:",
+        "4. INVESTMENTS"
+      ],
+      "xpath": "/html/body/div[34]/ix:nonnumeric/div[1]/ix:nonnumeric/table/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "42.09",
+        "",
+        "",
+        "$",
+        "42.02",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "17.36",
+        "",
+        "",
+        "$",
+        "17.35",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | As of | June 30, 2023 December 31, 2022 | Amortized Cost Fair Value Percentage of Total Portfolio at Fair Value Amortized Cost Fair Value Percentage of Total Portfolio at Fair Value | ($ in millions) ($ in millions)",
+      "preceding": [
+        "",
+        "Our portfolio (excluding investments in money market funds, if any) consisted of the following:",
+        "PORTFOLIO AND INVESTMENT ACTIVITY",
+        "red borrowings are not subject to the Investment Company Act\u2019s asset coverage requirement, and we will not otherwise segregate or earmark liquid assets or enter into offsetting positions for such transactions. The amount of leverage that we employ will depend on the assessment by our Investment Adviser and our board of directors (the \u201cBoard of Directors\u201d or the \u201cBoard\u201d) of market conditions and other factors at the time of any proposed borrowing.",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[12]/tr[7]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "42.02",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "17.35",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | As of | June 30, 2023 December 31, 2022 | Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total | (in millions) (in millions)",
+      "preceding": [
+        "",
+        "dviser grades the investments in our portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments with a grade of 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale:",
+        "",
+        "Table of Contents",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[16]/tr[10]"
+    },
+    {
+      "cells": [
+        "Total Investments",
+        "",
+        "$",
+        "42.09",
+        "",
+        "",
+        "",
+        "100.0",
+        "%",
+        "",
+        "$",
+        "17.36",
+        "",
+        "",
+        "",
+        "100.0",
+        "%"
+      ],
+      "facts": [],
+      "opening": " | As of | June 30, 2023 December 31, 2022 | Amortized Cost Percentage of Total Amortized Cost Percentage of Total | (in millions) (in millions)",
+      "preceding": [
+        "",
+        "The following table shows the amortized cost of our performing and non-accrual investments (excluding investments in money market funds, if any):",
+        "As of June 30, 2023 December 31, 2022 Investment Performance Rating Fair Value Percentage of Total Fair Value Percentage of Total (in millions) (in millions) Grade 1 $ \u2014 \u2014 % $ \u2014 \u2014 % Grade 2 42.02 100.0 17.35 100.0 Grade 3 \u2014 \u2014 \u2014 \u2014 Grade 4 \u2014 \u2014 \u2014 \u2014 Total Investments $ 42.02 100.0 % $ 17.35 100.0 %",
+        "",
+        "dviser grades the investments in our portfolio at least each quarter and it is possible that the grade of a portfolio investment may be reduced or increased over time. For investments with a grade of 3 or 4, our Investment Adviser enhances its level of scrutiny over the monitoring of such portfolio company. The following table shows the composition of our portfolio (excluding investments in money market funds, if any) on the 1 to 4 grading scale:",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[17]/tr[8]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "1.68",
+        "",
+        "",
+        "$",
+        "3.14",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | 2023 2023 | ($ in millions) | Total investment income $ 1.68 $ 3.14",
+      "preceding": [
+        "",
+        "We commenced investment operations on October 6, 2022. As a result, comparisons to the prior period are not meaningful. Our operating results for the three and six months ended June 30, 2023 were as follows:",
+        "RESULTS OF OPERATIONS",
+        "",
+        "(7) Computed based on (a) the annual actual interest rate on investments sold or paid down, divided by (b) the total investments sold or paid down (including investments on non-accrual and non-income producing investments). The calculation includes incremental yield earned on the \u201clast-out\u201d portion of the unitranche loan investments and excludes prepayment premiums earned on exited investments.",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[19]/tr[5]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "1.68",
+        "",
+        "",
+        "$",
+        "3.14",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | 2023 2023 | ($ in millions) | Interest $ 0.99 $ 1.65",
+      "preceding": [
+        "",
+        "Our investment income was as follows:",
+        "Investment Income",
+        "",
+        "Table of Contents",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[20]/tr[8]"
+    }
+  ],
+  "sha256": "8f393176d459a174bbec5840cfb972d7b0a4b8b257750cee662187c29f2e083e",
+  "status": "literal_primary_review_candidates"
+}

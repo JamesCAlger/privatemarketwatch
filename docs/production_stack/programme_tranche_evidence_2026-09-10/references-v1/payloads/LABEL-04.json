@@ -1,0 +1,140 @@
+{
+  "case": 4,
+  "exposure": "development; prior outputs seen; not hold-out",
+  "key": "position|0001803498|2025-12-31|Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+  "narrative_review_packet": "labels/packets.json",
+  "original_comparison": [
+    {
+      "candidate": "COMMON_EQUITY",
+      "cik": "0001803498",
+      "exact_match": "False",
+      "field": "classification",
+      "join_count": "1",
+      "label_key": "position|0001803498|2025-12-31|Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+      "legacy_checked": "True",
+      "legacy_error": "True",
+      "reference": "DIRECT_EQUITY",
+      "report_date": "2025-12-31",
+      "row_id": "ROW-f84d684f8bfd5109",
+      "status": "selected_tail_legacy_1pct; not programme B2 or new holdout",
+      "stored_label_status": "human_confirmed"
+    }
+  ],
+  "original_label": {
+    "_key": "position|0001803498|2025-12-31|Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+    "accession": "0001803498-26-000014",
+    "adjudicator": "human:james",
+    "ambiguous": false,
+    "ambiguous_fields": [],
+    "cik": "0001803498",
+    "label_status": "human_confirmed",
+    "labeled_date": "2026-06-17",
+    "pipeline_version": "12afab7",
+    "record_type": "position",
+    "report_date": "2025-12-31",
+    "schema_version": "1.0",
+    "source_identifier": "Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+    "source_ref": {
+      "context_id": null,
+      "doc": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+      "note": ""
+    },
+    "stratum": "tail_census",
+    "true_classification": "DIRECT_EQUITY",
+    "true_cost": 1079477000.0,
+    "true_fair_value": 1079456000.0,
+    "true_lien": null,
+    "unit_uid": "port arthur lng phase ii intermediate company llc class b units"
+  },
+  "promotion_status": "proposal_only; original gold unchanged",
+  "proposal": {
+    "classification_parent": "DIRECT_EQUITY",
+    "leaf": "unresolved",
+    "pik_terms_rate_pp": 7.6
+  },
+  "reason": "Class B units pay 7.60% PIK; equity is supported but common versus preferred rights cannot be inferred from units alone.",
+  "row_xpath": "/html/body/div[1205]/table/tr[20]",
+  "selected_literal_evidence": [
+    {
+      "cells": [
+        "Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units",
+        "",
+        "(4)(7)(16)",
+        "",
+        "",
+        "",
+        "",
+        "7.60 % PIK",
+        "",
+        "9/22/2025",
+        "",
+        "",
+        "",
+        "69,729,468",
+        "",
+        "",
+        "1,079,477",
+        "",
+        "",
+        "1,079,456",
+        "",
+        "",
+        "2.27",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentInterestRatePaidInKind",
+          "context": "c-1536",
+          "context_text": "0001803498 Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | Non-Controlled Affiliated Issuer 2025-12-31",
+          "scale": "-2",
+          "text": "7.60",
+          "unit": "number"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedBalanceShares",
+          "context": "c-1536",
+          "context_text": "0001803498 Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | Non-Controlled Affiliated Issuer 2025-12-31",
+          "scale": "0",
+          "text": "69,729,468",
+          "unit": "shares"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "c-1536",
+          "context_text": "0001803498 Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | Non-Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "1,079,477",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "c-1536",
+          "context_text": "0001803498 Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | Non-Controlled Affiliated Issuer 2025-12-31",
+          "scale": "3",
+          "text": "1,079,456",
+          "unit": "usd"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "c-1536",
+          "context_text": "0001803498 Port Arthur LNG Phase II Intermediate Company, LLC - Class B Units | Non-Controlled Affiliated Issuer 2025-12-31",
+          "scale": "-2",
+          "text": "2.27",
+          "unit": "number"
+        }
+      ],
+      "opening": [
+        "",
+        "",
+        "Investments (1)(19) Footnotes Reference Rate and Spread (2) Interest Rate (2)(15) Acquisition Date Maturity Date Par Amount/Units (1) Cost (3) Fair Value % of Net Assets"
+      ],
+      "table_xpath": "/html/body/div[1205]/table",
+      "xpath": "/html/body/div[1205]/table/tr[20]"
+    }
+  ],
+  "source_path": "data\\raw\\filings\\bdc_html\\1803498\\000180349826000014.html",
+  "source_sha256": "01fba557d60e5306de01fa04a6b78ed81868bf18e456542459ab07bb6d5d155c",
+  "status": "leaf_unresolved",
+  "supplementary_evidence": null
+}

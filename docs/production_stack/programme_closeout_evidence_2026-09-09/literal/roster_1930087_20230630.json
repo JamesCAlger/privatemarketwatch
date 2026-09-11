@@ -1,0 +1,237 @@
+{
+  "reference_id": "REF-0001930087-2023-06-30",
+  "rows": [
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[1]"
+    },
+    {
+      "cells": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Yield (1)",
+        "",
+        "Amortized Cost",
+        "",
+        "Percentage of Net Assets",
+        "",
+        "Fair Value",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[2]"
+    },
+    {
+      "cells": [
+        "",
+        "Money market funds (included in cash and cash equivalents)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "xpath": "/html/body/div[71]/table/tr[3]"
+    },
+    {
+      "cells": [
+        "",
+        "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582)",
+        "",
+        "5.0 %",
+        "",
+        "$",
+        "650,323",
+        "",
+        "",
+        "100.0",
+        "%",
+        "$",
+        "650,323",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "3",
+            "id": "f-65",
+            "name": "us-gaap:InvestmentInterestRate",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "5.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-66",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "3",
+            "id": "f-67",
+            "name": "gcred:MoneyMarketFundsPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "100.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-13",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-68",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[71]/table/tr[4]"
+    },
+    {
+      "cells": [
+        "",
+        "Total money market funds",
+        "$",
+        "650,323",
+        "",
+        "",
+        "100.0",
+        "%",
+        "$",
+        "650,323",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-69",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "3",
+            "id": "f-70",
+            "name": "gcred:MoneyMarketFundsPercentOfNetAssets",
+            "scale": "-2",
+            "unitref": "number"
+          },
+          "text": "100.0"
+        },
+        {
+          "attributes": {
+            "contextref": "c-3",
+            "decimals": "0",
+            "format": "ixt:num-dot-decimal",
+            "id": "f-71",
+            "name": "us-gaap:MoneyMarketFundsAtCarryingValue",
+            "scale": "3",
+            "unitref": "usd"
+          },
+          "text": "650,323"
+        }
+      ],
+      "xpath": "/html/body/div[71]/table/tr[5]"
+    }
+  ],
+  "source_path": "data/raw/filings/bdc_html/1930087/000193008723000010.html",
+  "source_sha256": "2d2d933de4a1653010187f1ad20f68152518563c99129d556db325c10a43f006",
+  "tables": [
+    {
+      "preceding": [
+        "",
+        "TABLE OF CONTENTS Golub Capital Private Credit Fund Schedule of Investments (unaudited) June 30, 2023 (In thousands)",
+        "",
+        "",
+        "See Notes to Financial Statements 5",
+        "",
+        "gcred-20230630"
+      ],
+      "xpath": "/html/body/div[71]/table"
+    }
+  ]
+}

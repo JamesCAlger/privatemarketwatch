@@ -1,0 +1,73 @@
+{
+  "candidate": "t1-runtime-20260910-v3",
+  "changed_declared_records": [],
+  "code": {
+    "bytes": 3640,
+    "path": "scripts/programme_tranche/diagnose_runtime_closure.py",
+    "sha256": "ff88c29e1a467a6d27ba382f1027e05a1142c4662cacd5ecd4545ba78ca2b3f7"
+  },
+  "diagnostic_elapsed_seconds": 5.061089399998309,
+  "downstream_stages_started": false,
+  "external_python_reads_checked": 1764,
+  "inputs": [
+    {
+      "bytes": 14939652,
+      "path": "data/programme/candidates/t1-runtime-20260910-v3/runtime.json",
+      "sha256": "d1ab219dc34f49cd859e342c217253acac01d2d9ebdcb6e5d9b30ef9f3f1c730"
+    },
+    {
+      "bytes": 616864,
+      "path": "data/programme/candidates/t1-runtime-20260910-v3/attempts/unified-01/bundle/read_ledger.json",
+      "sha256": "9e151ad3e64af3d31a67f4cf9c08eb47e9555a2071ff0ca832676974e4ee4740"
+    },
+    {
+      "bytes": 311,
+      "path": "data/programme/candidates/t1-runtime-20260910-v3/attempts/unified-01/process_result.json",
+      "sha256": "0c24633c38c3ea2cc59403b541ff3b51a2d42bff46b65ab9cd42e0d8e124a3d0"
+    }
+  ],
+  "meaning": "The build worker finished, but complete dependency identity was not established. Retained output is an unsealed development artifact and cannot feed supported descendants.",
+  "missing_runtime_records": [
+    {
+      "bytes": 2449,
+      "case_alias_only": false,
+      "evidence_timing": "post_execution_only; cannot certify prior state",
+      "path": "C:/Users/alger/miniconda3/Lib/site-packages/setuptools-78.1.1-py3.13.egg-info/entry_points.txt",
+      "sha256": "ce482d8697ff15af4d544f69e85293dd793d0d1d5f680711538728820b15ee30"
+    }
+  ],
+  "runtime_manifest_files": 65107,
+  "stage_sealed": false,
+  "status": "blocked_missing_preexecution_runtime_identity",
+  "worker_elapsed_seconds": 2394.811275100001,
+  "worker_exit_code": 0,
+  "worker_stopped": true,
+  "worker_summary": {
+    "artifacts_metadata": {
+      "agent_fix_application_audit.csv": {
+        "columns": 11,
+        "rows": 175,
+        "typed_multiset_difference": 0
+      },
+      "private_markets_holdings.csv": {
+        "columns": 88,
+        "rows": 780425,
+        "typed_multiset_difference": 0
+      }
+    },
+    "elapsed_seconds": 2388.3080656999955,
+    "financial_convention": "legacy cash leg; no income formula migration",
+    "identity_policy": {
+      "contested_assignment": true,
+      "use_registry": false
+    },
+    "input_fingerprint": "13ff295c7f24684778896fd1a4dbe82b0ed48454e688e02ca7d07a80545b4d04",
+    "parents": {},
+    "quality": "not_evaluated",
+    "rows": 780425,
+    "stage": "unified",
+    "times": {
+      "build_seconds": 2304.6126128999895
+    }
+  }
+}

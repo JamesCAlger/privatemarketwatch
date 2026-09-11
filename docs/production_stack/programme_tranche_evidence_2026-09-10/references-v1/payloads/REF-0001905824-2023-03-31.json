@@ -1,0 +1,372 @@
+{
+  "original_disposition": {
+    "acceptance_eligible": "False",
+    "anchor_status": "candidate_not_basis_certified",
+    "cik": "1905824",
+    "disposition": "source_packet_reviewed_roster_not_certified",
+    "evidence_path": "docs\\production_stack\\programme_closeout_evidence_2026-09-09\\primary\\REF-0001905824-2023-03-31.json",
+    "evidence_sha256": "9860aa5096c896bcecb786d883a19243517f29f7781873a2cba80e9430693945",
+    "held_out": "False",
+    "next_action": "review_full_lot_boundaries_and_primary_scope",
+    "reference_id": "REF-0001905824-2023-03-31",
+    "report_date": "2023-03-31",
+    "review_note": "Noncontrolled balances are only candidate anchors; establish whole-portfolio scope before B3 scoring.",
+    "saved_candidate_rows": "0",
+    "source_candidate_rows": "71"
+  },
+  "primary_packet": {
+    "path": "data/raw/filings/bdc_html/1905824/000119312523142263.html",
+    "ref": "REF-0001905824-2023-03-31",
+    "rows": [
+      {
+        "cells": [
+          "Investments at fair value",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "facts": [],
+        "opening": " | March 31, 2023 (Unaudited) December 31, 2022 | Assets | Investments at fair value | Non-controlled, non-affiliated investments, at fair value (cost of $ 244,421 and $ 256,627 , respectively) $ 235,590 $ 230,202",
+        "preceding": [
+          "",
+          "(Amounts in thousands, except share and per share)",
+          "Consolidated Statement of Assets and Liabilities",
+          "PIMCO Capital Solutions BDC Corp.",
+          "Item 1. Consolidated Financial Statements (Unaudited)"
+        ],
+        "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[4]"
+      },
+      {
+        "cells": [
+          "Non-controlled, non-affiliated investments, at fair value (cost of $ 244,421 and $ 256,627 , respectively)",
+          "",
+          "$",
+          "235,590",
+          "",
+          "",
+          "$",
+          "230,202",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "244,421",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "256,627",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "235,590",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentsFairValueDisclosure",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "230,202",
+            "unit": "Unit_USD"
+          }
+        ],
+        "opening": " | March 31, 2023 (Unaudited) December 31, 2022 | Assets | Investments at fair value | Non-controlled, non-affiliated investments, at fair value (cost of $ 244,421 and $ 256,627 , respectively) $ 235,590 $ 230,202",
+        "preceding": [
+          "",
+          "(Amounts in thousands, except share and per share)",
+          "Consolidated Statement of Assets and Liabilities",
+          "PIMCO Capital Solutions BDC Corp.",
+          "Item 1. Consolidated Financial Statements (Unaudited)"
+        ],
+        "xpath": "/html/body/div[5]/div/div/div[1]/div/table[2]/tr[5]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "6,154",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentIncomeNet",
+            "context": "P01_01_2023To03_31_2023",
+            "scale": "3",
+            "text": "6,154",
+            "unit": "Unit_USD"
+          }
+        ],
+        "opening": " | Three Months Ended March 31, 2023 | Investment Income | From non-controlled, non-affiliated investments: | Interest income $ 3,640",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands, except share and per share)",
+          "Consolidated Statement of Operations",
+          "PIMCO Capital Solutions BDC Corp."
+        ],
+        "xpath": "/html/body/div[6]/div/div/div[1]/div/table/tr[8]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "244,421",
+          "",
+          "",
+          "$",
+          "235,590",
+          "",
+          "",
+          "",
+          "98.36",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "244,421",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "235,590",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "PAsOn03_31_2023",
+            "scale": "-2",
+            "text": "98.36",
+            "unit": "Unit_pure"
+          }
+        ],
+        "opening": " | Investments (1)(2) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets | Debt Investments | First Lien Senior Secured | Alorica, Inc. Term Loan (4) IT Services SOFR + 6.875 % 11.575 % 12/21/2027 $ 12,438 $ 12,315 $ 12,304 5.14 %",
+        "preceding": [
+          "",
+          "(Unaudited)",
+          "(Amounts in thousands)",
+          "Consolidated Schedule of Investments as of March 31, 2023",
+          "PIMCO Capital Solutions BDC Corp."
+        ],
+        "xpath": "/html/body/div[9]/div[1]/div[1]/div/div/table[1]/tr[62]"
+      },
+      {
+        "cells": [
+          "Total Investments",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "$",
+          "256,627",
+          "",
+          "",
+          "$",
+          "230,202",
+          "",
+          "",
+          "",
+          "98.46",
+          "%"
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "256,627",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "230,202",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+            "context": "PAsOn12_31_2022",
+            "scale": "-2",
+            "text": "98.46",
+            "unit": "Unit_pure"
+          }
+        ],
+        "opening": " | Investments (1)(2) Non-Controlled, Non-Affiliated Investments Industry Reference Rate Spread (5) Interest Rate (6) Maturity Date Par Amount Cost Fair Value Percentage of Net Assets | Debt Investments | First Lien Senior Secured | AP Core Holdings II, LLC Term B-1 Loan Entertainment LIBOR + 5.500 % 9.884 % 09/01/2027 $ 3,683 $ 3,632 $ 3,349 1.43 %",
+        "preceding": [
+          "",
+          "(Amounts in thousands)",
+          "Consolidated Schedule of Investments as of December 31, 2022",
+          "PIMCO Capital Solutions BDC Corp."
+        ],
+        "xpath": "/html/body/div[10]/div[1]/div[1]/div/div/table[1]/tr[63]"
+      },
+      {
+        "cells": [
+          "Total investments",
+          "",
+          "$",
+          "244,421",
+          "",
+          "",
+          "$",
+          "235,590",
+          "",
+          "",
+          "$",
+          "256,627",
+          "",
+          "",
+          "$",
+          "230,202",
+          ""
+        ],
+        "facts": [
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "244,421",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "PAsOn03_31_2023",
+            "scale": "3",
+            "text": "235,590",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtCost",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "256,627",
+            "unit": "Unit_USD"
+          },
+          {
+            "concept": "us-gaap:InvestmentOwnedAtFairValue",
+            "context": "PAsOn12_31_2022",
+            "scale": "3",
+            "text": "230,202",
+            "unit": "Unit_USD"
+          }
+        ],
+        "opening": " | March 31, 2023 December 31, 2022 | (Amounts in thousands) Cost Fair Value Cost Fair Value | First Lien Secured $ 137,013 $ 132,123 $ 143,434 $ 132,532 | Second Lien Secured 9,516 8,706 23,905 11,715",
+        "preceding": [
+          "",
+          "Investments at fair value and cost consisted of the following as of March 31, 2023 and December 31, 2022:",
+          " with respect to the Company\u2019s non-controlled, non-affiliated; non-controlled, affiliated; and controlled affiliated investments is contained in the consolidated financial statements, including the Consolidated Schedule of Investments. The information in the tables below is presented on an aggregate portfolio basis, without regard to whether they are non-controlled, non-affiliated; non-controlled, affiliated; or controlled affiliated investments.",
+          "5. Investments",
+          "4. Borrowings As of the date of this report, the Company has not entered into any credit facilities or engaged in any borrowing transactions.",
+          "ermits it to (among other things) co-invest with certain other persons, including certain affiliates of the Advisor and certain public or private funds managed by the Advisor and its affiliates, subject t o certain terms and conditions. The exemptive relief from the S E C with respect to co-investments imposes extensive conditions on any co-investments made in reliance on such relief. See Note 1. Organization for other related party transactions."
+        ],
+        "xpath": "/html/body/div[13]/div/div/div[2]/div/ix:nonnumeric[2]/ix:nonnumeric/table/tr[10]"
+      },
+      {
+        "cells": [
+          "Total investment income",
+          "",
+          "$",
+          "6,154",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended March 31, 2023 | Total investment income $ 6,154 | Less: Net expenses 286 | ",
+        "preceding": [
+          "",
+          "The following table represents our operating results (amounts in thousands):",
+          "Consolidated Results Of Operations",
+          "Table of Contents",
+          "",
+          "",
+          "m is as follows: March 31, 2023 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 223,391 94.8 24 Risk rating 3 12,199 5.2 1 Risk rating 4 \u2014 \u2014 \u2014 $ 235,590 100 % 25 December 31, 2022 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 217,461 94.5 27 Risk rating 3 12,741 5.5 1 Risk rating 4 \u2014 \u2014 \u2014 $ 230,202 100 % 28 24",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/div[22]/div/table[1]/tr[3]"
+      },
+      {
+        "cells": [
+          "Total Investment Income",
+          "",
+          "$",
+          "6,154",
+          ""
+        ],
+        "facts": [],
+        "opening": " | For the Three Months Ended March 31, 2023 | Investment income: | Interest income $ 3,640 | Payment in-kind interest 2,514",
+        "preceding": [
+          "",
+          "Investment income was as follows (amounts in thousands):",
+          "For the Three Months Ended March 31, 2023 Total investment income $ 6,154 Less: Net expenses 286 Net investment income (loss) 5,868 Net realized gain (loss) (17,751 ) Net change in unrealized appreciation (depreciation) 17,594 Net increase (decrease) in Net Assets resulting from operations $ 5,711",
+          "",
+          "The following table represents our operating results (amounts in thousands):",
+          "Table of Contents",
+          "",
+          "",
+          "m is as follows: March 31, 2023 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 223,391 94.8 24 Risk rating 3 12,199 5.2 1 Risk rating 4 \u2014 \u2014 \u2014 $ 235,590 100 % 25 December 31, 2022 Fair Value (amounts in thousands) % of Portfolio Number of Portfolio Companies Risk rating 1 $ \u2014 \u2014 % \u2014 Risk rating 2 217,461 94.5 27 Risk rating 3 12,741 5.5 1 Risk rating 4 \u2014 \u2014 \u2014 $ 230,202 100 % 28 24",
+          "Table of Contents"
+        ],
+        "xpath": "/html/body/div[22]/div/table[2]/tr[7]"
+      }
+    ],
+    "sha256": "d98aeb009050f8dbd41677ad8168359291e995fd3771216005a3257f901ef571",
+    "status": "literal_primary_review_candidates"
+  },
+  "review_request": "Independently establish source eligibility, complete lot boundaries, accounting scope, dates, units and unknowns."
+}

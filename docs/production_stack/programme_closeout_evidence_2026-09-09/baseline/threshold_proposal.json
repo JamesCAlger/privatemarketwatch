@@ -1,0 +1,108 @@
+{
+  "approved": false,
+  "invariants": "Exact structural/identity/replay/evidence/public-total requirements remain 100% or zero violations; this file does not replace the 28-criterion register.",
+  "thresholds": {
+    "amount_field_accuracy": {
+      "operator": "min",
+      "value": 0.995
+    },
+    "complete_chain_rate": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "entity_precision": {
+      "operator": "min",
+      "value": 0.995
+    },
+    "entity_recall": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "evidence_path_or_unavailable": {
+      "operator": "min",
+      "value": 1
+    },
+    "fund_primary_error_ratio": {
+      "operator": "max",
+      "value": 0.01
+    },
+    "fund_roster_fv_floor": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "fund_roster_row_floor": {
+      "operator": "min",
+      "value": 0.9
+    },
+    "local_citation_p95_ms": {
+      "operator": "max",
+      "value": 5000
+    },
+    "misleading_links": {
+      "operator": "max",
+      "value": 0
+    },
+    "other_field_accuracy": {
+      "operator": "min",
+      "value": 0.99
+    },
+    "position_precision": {
+      "operator": "min",
+      "value": 0.995
+    },
+    "position_recall": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "primary_absolute_error_ratio": {
+      "operator": "max",
+      "value": 0.0025
+    },
+    "primary_fund_coverage": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "primary_source_fv_coverage": {
+      "operator": "min",
+      "value": 0.99
+    },
+    "reported_amount_highlight_fv_coverage": {
+      "operator": "min",
+      "value": 0.99
+    },
+    "reported_numeric_highlight_row_coverage": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "roster_fv_precision": {
+      "operator": "min",
+      "value": 0.99
+    },
+    "roster_fv_recall": {
+      "operator": "min",
+      "value": 0.99
+    },
+    "roster_row_precision": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "roster_row_recall": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "sector_accuracy": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "sector_fv_coverage": {
+      "operator": "min",
+      "value": 0.95
+    },
+    "sector_row_coverage": {
+      "operator": "min",
+      "value": 0.9
+    }
+  },
+  "units": "ratios 0..1 except local_citation_p95_ms and zero violation counts",
+  "version": "programme-proposal-20260909-v2"
+}

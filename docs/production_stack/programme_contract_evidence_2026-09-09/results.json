@@ -1,0 +1,7054 @@
+{
+  "started_utc": "2026-09-09T10:03:08.724192+00:00",
+  "basis": "saved CSV; no rebuild; cohort 70; 13 quarter ends; eligibility not inferred",
+  "git_head": "2e0491a45d1493e7a3ee329aee52ec96bb34986c",
+  "git_status_before": " M docs/agent_changelog.md\n M docs/investigations/INDEX.md\n M docs/investigations/conservation_shadow_engine.md\n M docs/investigations/data_quality_audits.md\n M frontend/public/data/aum_time_series.json\n M frontend/public/data/concentration_curve.json\n M frontend/public/data/credit_risk.json\n M frontend/public/data/distribution_histogram.json\n M frontend/public/data/fund_index_returns.json\n M frontend/public/data/gics_sector_breakdown.json\n M frontend/public/data/index_returns.json\n M frontend/public/data/index_summary.json\n M frontend/public/data/industry_breakdown.json\n M frontend/public/data/investee_concentration.json\n M frontend/public/data/leverage_histogram.json\n M frontend/public/data/manager_concentration.json\n M frontend/public/data/metadata.json\n M frontend/public/data/pik_eligibility.json\n M frontend/public/data/portfolio_characteristics.json\n M frontend/public/data/position_concentration.json\n M frontend/public/data/sector_breakdown.json\n M frontend/public/data/spread_by_fund_size.json\n M frontend/public/data/spread_by_lien.json\n M frontend/public/data/spread_time_series.json\n M frontend/public/data/top_constituents.json\n M frontend/public/data/vehicle_concentration.json\n M frontend/public/data/vehicle_contribution.json\n M frontend/src/app/layout.tsx\n M frontend/src/components/Header.tsx\n M pipeline/config.py\n?? docs/production_stack/consolidation_readiness_plan.md\n?? docs/production_stack/current_state_assessment_2026-09-09.md\n?? docs/production_stack/current_state_evidence_2026-09-09.json\n?? docs/production_stack/programme_acceptance_draft.md\n?? docs/production_stack/programme_conflict_resolution.md\n?? docs/production_stack/programme_decision_sheet.md\n?? docs/production_stack/programme_measurement_register.md\n?? docs/production_stack/programme_target_contract.md\n?? docs/reference/architecture_rule_assets.csv\n?? docs/reference/architecture_source_inventory.csv\n?? docs/reference/current_architecture.md\n?? docs/reference/programme_field_disposition.csv\n?? docs/reference/unified_holdings_contract_crosswalk.md\n",
+  "duckdb_version": "1.4.3",
+  "quarter_profile": [
+    {
+      "report_date": "2023-03-31",
+      "row_count": 9440,
+      "funds": 39,
+      "signed_fv": 135134133986.076,
+      "absolute_fv": 135238120360.076,
+      "missing_fv": 0,
+      "negative_fv": 819,
+      "cost_proxy_rows": 283,
+      "cost_proxy_absolute_fv": 1295494205.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 2504,
+      "positive_pik_zero_rate": 2,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 443,
+      "missing_position_id": 9440,
+      "missing_position_key": 0,
+      "gics_populated": 6261,
+      "gics_populated_absolute_fv": 111918229109.379,
+      "subsidiary_rows": 123
+    },
+    {
+      "report_date": "2023-06-30",
+      "row_count": 10487,
+      "funds": 45,
+      "signed_fv": 145061344094.0,
+      "absolute_fv": 145170055586.0,
+      "missing_fv": 0,
+      "negative_fv": 882,
+      "cost_proxy_rows": 277,
+      "cost_proxy_absolute_fv": 1396974066.0,
+      "zero_cost_rows": 1,
+      "missing_rate": 2790,
+      "positive_pik_zero_rate": 0,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 460,
+      "missing_position_id": 10487,
+      "missing_position_key": 1,
+      "gics_populated": 6981,
+      "gics_populated_absolute_fv": 120363356466.0,
+      "subsidiary_rows": 153
+    },
+    {
+      "report_date": "2023-09-30",
+      "row_count": 12511,
+      "funds": 52,
+      "signed_fv": 158077333033.0,
+      "absolute_fv": 158188319699.0,
+      "missing_fv": 0,
+      "negative_fv": 1072,
+      "cost_proxy_rows": 223,
+      "cost_proxy_absolute_fv": 1138128163.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 3146,
+      "positive_pik_zero_rate": 9,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 487,
+      "missing_position_id": 12511,
+      "missing_position_key": 0,
+      "gics_populated": 8261,
+      "gics_populated_absolute_fv": 131114596775.0,
+      "subsidiary_rows": 188
+    },
+    {
+      "report_date": "2023-12-31",
+      "row_count": 14373,
+      "funds": 56,
+      "signed_fv": 176267692996.0,
+      "absolute_fv": 176402456538.0,
+      "missing_fv": 0,
+      "negative_fv": 1298,
+      "cost_proxy_rows": 310,
+      "cost_proxy_absolute_fv": 1188246812.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 3903,
+      "positive_pik_zero_rate": 9,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 539,
+      "missing_position_id": 14373,
+      "missing_position_key": 7,
+      "gics_populated": 9081,
+      "gics_populated_absolute_fv": 144491721129.0,
+      "subsidiary_rows": 209
+    },
+    {
+      "report_date": "2024-03-31",
+      "row_count": 16306,
+      "funds": 59,
+      "signed_fv": 192653683130.0,
+      "absolute_fv": 192798599602.0,
+      "missing_fv": 0,
+      "negative_fv": 1422,
+      "cost_proxy_rows": 432,
+      "cost_proxy_absolute_fv": 1307974827.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 4545,
+      "positive_pik_zero_rate": 8,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 586,
+      "missing_position_id": 16306,
+      "missing_position_key": 1,
+      "gics_populated": 10173,
+      "gics_populated_absolute_fv": 158559089900.0,
+      "subsidiary_rows": 235
+    },
+    {
+      "report_date": "2024-06-30",
+      "row_count": 18406,
+      "funds": 62,
+      "signed_fv": 219698054835.0,
+      "absolute_fv": 219866869383.0,
+      "missing_fv": 0,
+      "negative_fv": 1637,
+      "cost_proxy_rows": 583,
+      "cost_proxy_absolute_fv": 1439878392.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 5430,
+      "positive_pik_zero_rate": 7,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 695,
+      "missing_position_id": 18406,
+      "missing_position_key": 0,
+      "gics_populated": 11345,
+      "gics_populated_absolute_fv": 180193883144.0,
+      "subsidiary_rows": 254
+    },
+    {
+      "report_date": "2024-09-30",
+      "row_count": 20174,
+      "funds": 63,
+      "signed_fv": 245319621236.0,
+      "absolute_fv": 245515617954.0,
+      "missing_fv": 0,
+      "negative_fv": 2115,
+      "cost_proxy_rows": 736,
+      "cost_proxy_absolute_fv": 1598886617.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 6038,
+      "positive_pik_zero_rate": 16,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 698,
+      "missing_position_id": 20174,
+      "missing_position_key": 0,
+      "gics_populated": 12390,
+      "gics_populated_absolute_fv": 202524567494.0,
+      "subsidiary_rows": 254
+    },
+    {
+      "report_date": "2024-12-31",
+      "row_count": 22334,
+      "funds": 65,
+      "signed_fv": 278068976751.0,
+      "absolute_fv": 278256435235.0,
+      "missing_fv": 0,
+      "negative_fv": 2324,
+      "cost_proxy_rows": 1034,
+      "cost_proxy_absolute_fv": 1597242825.0,
+      "zero_cost_rows": 1,
+      "missing_rate": 6289,
+      "positive_pik_zero_rate": 15,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 635,
+      "missing_position_id": 22334,
+      "missing_position_key": 0,
+      "gics_populated": 12845,
+      "gics_populated_absolute_fv": 226777593396.0,
+      "subsidiary_rows": 0
+    },
+    {
+      "report_date": "2025-03-31",
+      "row_count": 24395,
+      "funds": 66,
+      "signed_fv": 301445467230.0,
+      "absolute_fv": 301660322272.0,
+      "missing_fv": 0,
+      "negative_fv": 2602,
+      "cost_proxy_rows": 1204,
+      "cost_proxy_absolute_fv": 1656136720.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 6975,
+      "positive_pik_zero_rate": 17,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 743,
+      "missing_position_id": 24395,
+      "missing_position_key": 0,
+      "gics_populated": 13839,
+      "gics_populated_absolute_fv": 243527437276.0,
+      "subsidiary_rows": 17
+    },
+    {
+      "report_date": "2025-06-30",
+      "row_count": 26036,
+      "funds": 68,
+      "signed_fv": 325187532605.0,
+      "absolute_fv": 325440736225.0,
+      "missing_fv": 0,
+      "negative_fv": 2735,
+      "cost_proxy_rows": 1240,
+      "cost_proxy_absolute_fv": 1767217299.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 7338,
+      "positive_pik_zero_rate": 16,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 828,
+      "missing_position_id": 26036,
+      "missing_position_key": 5,
+      "gics_populated": 14369,
+      "gics_populated_absolute_fv": 261588872750.0,
+      "subsidiary_rows": 19
+    },
+    {
+      "report_date": "2025-09-30",
+      "row_count": 28146,
+      "funds": 68,
+      "signed_fv": 354302418279.0,
+      "absolute_fv": 354562797037.0,
+      "missing_fv": 0,
+      "negative_fv": 2759,
+      "cost_proxy_rows": 1286,
+      "cost_proxy_absolute_fv": 1744532749.0,
+      "zero_cost_rows": 1,
+      "missing_rate": 8128,
+      "positive_pik_zero_rate": 14,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 982,
+      "missing_position_id": 28146,
+      "missing_position_key": 5,
+      "gics_populated": 14951,
+      "gics_populated_absolute_fv": 278484283949.0,
+      "subsidiary_rows": 26
+    },
+    {
+      "report_date": "2025-12-31",
+      "row_count": 28938,
+      "funds": 67,
+      "signed_fv": 374335565067.0,
+      "absolute_fv": 374613329429.0,
+      "missing_fv": 0,
+      "negative_fv": 3113,
+      "cost_proxy_rows": 1349,
+      "cost_proxy_absolute_fv": 408093914.0,
+      "zero_cost_rows": 1,
+      "missing_rate": 8321,
+      "positive_pik_zero_rate": 8,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 952,
+      "missing_position_id": 28938,
+      "missing_position_key": 24,
+      "gics_populated": 14891,
+      "gics_populated_absolute_fv": 287822791275.0,
+      "subsidiary_rows": 9
+    },
+    {
+      "report_date": "2026-03-31",
+      "row_count": 30067,
+      "funds": 69,
+      "signed_fv": 381537030207.0,
+      "absolute_fv": 382026825645.0,
+      "missing_fv": 0,
+      "negative_fv": 3957,
+      "cost_proxy_rows": 1425,
+      "cost_proxy_absolute_fv": 1055385896.0,
+      "zero_cost_rows": 0,
+      "missing_rate": 8854,
+      "positive_pik_zero_rate": 14,
+      "pct_outside_schema": 0,
+      "missing_entity_id": 860,
+      "missing_position_id": 30067,
+      "missing_position_key": 5,
+      "gics_populated": 15041,
+      "gics_populated_absolute_fv": 278818887009.0,
+      "subsidiary_rows": 66
+    }
+  ],
+  "currency_profile": [
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 160,
+      "populated_amounts": 158,
+      "absolute_native_amount": 1211754550.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 6791000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 44867000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA",
+      "row_count": 75,
+      "populated_amounts": 75,
+      "absolute_native_amount": 165413414.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_A_GQEVCGC0M5K8QD6SY5IG",
+      "row_count": 138,
+      "populated_amounts": 138,
+      "absolute_native_amount": 1782188216.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_CIKPRNFZBUSWLCT-9UUKGW",
+      "row_count": 337,
+      "populated_amounts": 337,
+      "absolute_native_amount": 1535484000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA",
+      "row_count": 264,
+      "populated_amounts": 264,
+      "absolute_native_amount": 406370121.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 5719,
+      "populated_amounts": 5662,
+      "absolute_native_amount": 109483739182.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 568000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 81701000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 59321000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 2731,
+      "populated_amounts": 2723,
+      "absolute_native_amount": 22573603812.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 6990000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 45810000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA",
+      "row_count": 75,
+      "populated_amounts": 75,
+      "absolute_native_amount": 164829686.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_A_GQEVCGC0M5K8QD6SY5IG",
+      "row_count": 139,
+      "populated_amounts": 139,
+      "absolute_native_amount": 1758290421.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_CIKPRNFZBUSWLCT-9UUKGW",
+      "row_count": 353,
+      "populated_amounts": 353,
+      "absolute_native_amount": 1585799000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA",
+      "row_count": 264,
+      "populated_amounts": 264,
+      "absolute_native_amount": 398843940.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 5737,
+      "populated_amounts": 5737,
+      "absolute_native_amount": 108580832293.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 560000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 65984000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 58904000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 2857,
+      "populated_amounts": 2857,
+      "absolute_native_amount": 22571277020.076
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 1353,
+      "populated_amounts": 0,
+      "absolute_native_amount": null
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 390642000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 627987000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 108123000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 44,
+      "populated_amounts": 44,
+      "absolute_native_amount": 1181926000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 27,
+      "populated_amounts": 27,
+      "absolute_native_amount": 1385178000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 39278000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_DKZGRGQEEUCBE0ETX-39QW",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4211456.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA",
+      "row_count": 45,
+      "populated_amounts": 43,
+      "absolute_native_amount": 156405535.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_A_GQEVCGC0M5K8QD6SY5IG",
+      "row_count": 113,
+      "populated_amounts": 112,
+      "absolute_native_amount": 1821219896.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_CIKPRNFZBUSWLCT-9UUKGW",
+      "row_count": 286,
+      "populated_amounts": 286,
+      "absolute_native_amount": 1626456000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA",
+      "row_count": 264,
+      "populated_amounts": 248,
+      "absolute_native_amount": 407505625.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 4996,
+      "populated_amounts": 4992,
+      "absolute_native_amount": 98356475501.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 39675000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 15,
+      "populated_amounts": 15,
+      "absolute_native_amount": 174286000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3296000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 19,
+      "populated_amounts": 19,
+      "absolute_native_amount": 404990000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 248299000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2023-03-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 2219,
+      "populated_amounts": 2176,
+      "absolute_native_amount": 15148416824.115
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 165,
+      "populated_amounts": 163,
+      "absolute_native_amount": 1216848368.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 5901000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 65349000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_-TFCNJXBJEGMOEZBJKD3OA",
+      "row_count": 90,
+      "populated_amounts": 90,
+      "absolute_native_amount": 186902942.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_CR9LP9EAXUC9L93M4DIW9Q",
+      "row_count": 355,
+      "populated_amounts": 355,
+      "absolute_native_amount": 1745417000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_CT-SAHFSX0-2CMHMWRP95G",
+      "row_count": 148,
+      "populated_amounts": 148,
+      "absolute_native_amount": 1883589848.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_FTFM0LGSWE-SGUXG511BXA",
+      "row_count": 258,
+      "populated_amounts": 258,
+      "absolute_native_amount": 399459530.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 6213,
+      "populated_amounts": 6148,
+      "absolute_native_amount": 113684651036.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 85062000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 3250,
+      "populated_amounts": 3243,
+      "absolute_native_amount": 27497925049.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 8671175.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 5920000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 67996000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_-TFCNJXBJEGMOEZBJKD3OA",
+      "row_count": 90,
+      "populated_amounts": 90,
+      "absolute_native_amount": 188323515.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_CR9LP9EAXUC9L93M4DIW9Q",
+      "row_count": 364,
+      "populated_amounts": 364,
+      "absolute_native_amount": 1764774000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_CT-SAHFSX0-2CMHMWRP95G",
+      "row_count": 149,
+      "populated_amounts": 149,
+      "absolute_native_amount": 1857040575.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_FTFM0LGSWE-SGUXG511BXA",
+      "row_count": 258,
+      "populated_amounts": 258,
+      "absolute_native_amount": 390663159.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 6226,
+      "populated_amounts": 6226,
+      "absolute_native_amount": 112991654015.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 95440000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 3390,
+      "populated_amounts": 3390,
+      "absolute_native_amount": 27799573147.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 1474,
+      "populated_amounts": 0,
+      "absolute_native_amount": null
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 443476000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 18,
+      "populated_amounts": 18,
+      "absolute_native_amount": 635456000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 58123000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 41,
+      "populated_amounts": 41,
+      "absolute_native_amount": 1211749000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 28,
+      "populated_amounts": 28,
+      "absolute_native_amount": 1426935000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 39278000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_A8EFFI1ZD06SCUHYS78XCW",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4837213.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_-TFCNJXBJEGMOEZBJKD3OA",
+      "row_count": 52,
+      "populated_amounts": 52,
+      "absolute_native_amount": 166011494.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_CR9LP9EAXUC9L93M4DIW9Q",
+      "row_count": 306,
+      "populated_amounts": 306,
+      "absolute_native_amount": 1834856000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_CT-SAHFSX0-2CMHMWRP95G",
+      "row_count": 119,
+      "populated_amounts": 118,
+      "absolute_native_amount": 1921514594.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_FTFM0LGSWE-SGUXG511BXA",
+      "row_count": 258,
+      "populated_amounts": 239,
+      "absolute_native_amount": 399983318.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 5461,
+      "populated_amounts": 5458,
+      "absolute_native_amount": 100644350044.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 14420000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 262464058.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3296000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 24,
+      "populated_amounts": 24,
+      "absolute_native_amount": 504218000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 34,
+      "populated_amounts": 34,
+      "absolute_native_amount": 274845000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2023-06-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 2625,
+      "populated_amounts": 2601,
+      "absolute_native_amount": 23092923295.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 93,
+      "populated_amounts": 90,
+      "absolute_native_amount": 916878675.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 5894000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 67432000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_E9S6NDWF-EIK_QHINF4RDW",
+      "row_count": 106,
+      "populated_amounts": 106,
+      "absolute_native_amount": 209482572.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_IAEBSKPPVE2TAD5O5HT2RG",
+      "row_count": 261,
+      "populated_amounts": 261,
+      "absolute_native_amount": 399122655.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_LET8HZAVVUED9FCWOYGJUW",
+      "row_count": 375,
+      "populated_amounts": 375,
+      "absolute_native_amount": 1968026000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_PPLIGPLGDKCXVLK4D1G25G",
+      "row_count": 152,
+      "populated_amounts": 152,
+      "absolute_native_amount": 1956462296.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 719,
+      "populated_amounts": 716,
+      "absolute_native_amount": 2456689124.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 7241,
+      "populated_amounts": 7151,
+      "absolute_native_amount": 120788440905.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 50294000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 3556,
+      "populated_amounts": 3548,
+      "absolute_native_amount": 30286558469.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 11125429.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 5813000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 67573000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_E9S6NDWF-EIK_QHINF4RDW",
+      "row_count": 106,
+      "populated_amounts": 106,
+      "absolute_native_amount": 211762646.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_IAEBSKPPVE2TAD5O5HT2RG",
+      "row_count": 261,
+      "populated_amounts": 261,
+      "absolute_native_amount": 391223496.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_LET8HZAVVUED9FCWOYGJUW",
+      "row_count": 390,
+      "populated_amounts": 390,
+      "absolute_native_amount": 2012210000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_PPLIGPLGDKCXVLK4D1G25G",
+      "row_count": 153,
+      "populated_amounts": 153,
+      "absolute_native_amount": 1937994845.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 720,
+      "populated_amounts": 720,
+      "absolute_native_amount": 2433768028.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 7257,
+      "populated_amounts": 7257,
+      "absolute_native_amount": 120858018880.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 50786000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 3614,
+      "populated_amounts": 3614,
+      "absolute_native_amount": 30208044375.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 1624,
+      "populated_amounts": 0,
+      "absolute_native_amount": null
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 445637000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 24,
+      "populated_amounts": 24,
+      "absolute_native_amount": 600155000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 44,
+      "populated_amounts": 44,
+      "absolute_native_amount": 1411755000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 33,
+      "populated_amounts": 33,
+      "absolute_native_amount": 1519051000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 39278000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_L5ZFCO_2HU6N7TU24IPGKG",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4837213.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_E9S6NDWF-EIK_QHINF4RDW",
+      "row_count": 69,
+      "populated_amounts": 60,
+      "absolute_native_amount": 177260121.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_IAEBSKPPVE2TAD5O5HT2RG",
+      "row_count": 261,
+      "populated_amounts": 239,
+      "absolute_native_amount": 398912100.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_LET8HZAVVUED9FCWOYGJUW",
+      "row_count": 321,
+      "populated_amounts": 321,
+      "absolute_native_amount": 2028095000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_PPLIGPLGDKCXVLK4D1G25G",
+      "row_count": 122,
+      "populated_amounts": 120,
+      "absolute_native_amount": 1987491998.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 632,
+      "populated_amounts": 615,
+      "absolute_native_amount": 2403458615.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 6487,
+      "populated_amounts": 6446,
+      "absolute_native_amount": 108788413997.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 39400000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 19,
+      "populated_amounts": 19,
+      "absolute_native_amount": 240948059.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 5569000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 30,
+      "populated_amounts": 30,
+      "absolute_native_amount": 498975000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 38,
+      "populated_amounts": 38,
+      "absolute_native_amount": 447240000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 84112000.0
+    },
+    {
+      "report_date": "2023-09-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 2779,
+      "populated_amounts": 2753,
+      "absolute_native_amount": 23918026804.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 121,
+      "populated_amounts": 116,
+      "absolute_native_amount": 1004900497.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 63101000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 67495000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_9P-9F_C1IKSONJOTJB-ZVA",
+      "row_count": 164,
+      "populated_amounts": 164,
+      "absolute_native_amount": 2016130526.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_AAGISYJDWKCKT7JH8XN7-Q",
+      "row_count": 113,
+      "populated_amounts": 113,
+      "absolute_native_amount": 206513758.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_LK2ZO2A8WEMVYWDCSIAHLQ",
+      "row_count": 267,
+      "populated_amounts": 267,
+      "absolute_native_amount": 390625150.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 772,
+      "populated_amounts": 770,
+      "absolute_native_amount": 2077688203.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 8914,
+      "populated_amounts": 8735,
+      "absolute_native_amount": 134778728332.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 7361000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 13373020.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 4006,
+      "populated_amounts": 3994,
+      "absolute_native_amount": 35992151757.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 100348122.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 66207000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 70659000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_9P-9F_C1IKSONJOTJB-ZVA",
+      "row_count": 165,
+      "populated_amounts": 165,
+      "absolute_native_amount": 2004671897.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_AAGISYJDWKCKT7JH8XN7-Q",
+      "row_count": 113,
+      "populated_amounts": 113,
+      "absolute_native_amount": 208574078.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_LK2ZO2A8WEMVYWDCSIAHLQ",
+      "row_count": 267,
+      "populated_amounts": 267,
+      "absolute_native_amount": 387194568.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 772,
+      "populated_amounts": 772,
+      "absolute_native_amount": 2058828821.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 8942,
+      "populated_amounts": 8942,
+      "absolute_native_amount": 135553950100.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 7005859.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 13682942.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 4088,
+      "populated_amounts": 4088,
+      "absolute_native_amount": 35931334151.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 2122,
+      "populated_amounts": 7,
+      "absolute_native_amount": 92412000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 392623000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 24,
+      "populated_amounts": 24,
+      "absolute_native_amount": 676667000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 64,
+      "populated_amounts": 64,
+      "absolute_native_amount": 1947971000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 41,
+      "populated_amounts": 41,
+      "absolute_native_amount": 1699135000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 38495000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_GGFJPVZUYKOQFQPZBLERVQ",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 6507572.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_9P-9F_C1IKSONJOTJB-ZVA",
+      "row_count": 131,
+      "populated_amounts": 129,
+      "absolute_native_amount": 2043470849.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_AAGISYJDWKCKT7JH8XN7-Q",
+      "row_count": 68,
+      "populated_amounts": 67,
+      "absolute_native_amount": 194637558.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_LK2ZO2A8WEMVYWDCSIAHLQ",
+      "row_count": 267,
+      "populated_amounts": 243,
+      "absolute_native_amount": 390220926.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 691,
+      "populated_amounts": 680,
+      "absolute_native_amount": 2013514695.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 7702,
+      "populated_amounts": 7692,
+      "absolute_native_amount": 122177093900.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 39300000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 270819569.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3296000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 39,
+      "populated_amounts": 39,
+      "absolute_native_amount": 721097959.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 41,
+      "populated_amounts": 41,
+      "absolute_native_amount": 504521000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2023-12-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 3145,
+      "populated_amounts": 3105,
+      "absolute_native_amount": 28707008577.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 233,
+      "populated_amounts": 191,
+      "absolute_native_amount": 923352715.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 24000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 20141000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_JDHVHAQXUUYUYA4OY65LVQ",
+      "row_count": 176,
+      "populated_amounts": 176,
+      "absolute_native_amount": 2115372633.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG",
+      "row_count": 119,
+      "populated_amounts": 119,
+      "absolute_native_amount": 213929910.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_TGZTYARHYK2WZ1RUYLPRDA",
+      "row_count": 278,
+      "populated_amounts": 278,
+      "absolute_native_amount": 379746036.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 912,
+      "populated_amounts": 911,
+      "absolute_native_amount": 2464993645.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 9630,
+      "populated_amounts": 9421,
+      "absolute_native_amount": 144457893494.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 4956,
+      "populated_amounts": 4929,
+      "absolute_native_amount": 42135107017.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 1234350.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 285000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 20133000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_JDHVHAQXUUYUYA4OY65LVQ",
+      "row_count": 180,
+      "populated_amounts": 180,
+      "absolute_native_amount": 2110282264.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG",
+      "row_count": 119,
+      "populated_amounts": 119,
+      "absolute_native_amount": 216314810.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_TGZTYARHYK2WZ1RUYLPRDA",
+      "row_count": 279,
+      "populated_amounts": 279,
+      "absolute_native_amount": 376257907.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 912,
+      "populated_amounts": 912,
+      "absolute_native_amount": 2452103265.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 9664,
+      "populated_amounts": 9664,
+      "absolute_native_amount": 145615917600.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 5148,
+      "populated_amounts": 5148,
+      "absolute_native_amount": 42006071406.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 2401,
+      "populated_amounts": 1,
+      "absolute_native_amount": 744000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 285619000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 37,
+      "populated_amounts": 37,
+      "absolute_native_amount": 727597000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 74,
+      "populated_amounts": 74,
+      "absolute_native_amount": 2344096000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 43,
+      "populated_amounts": 43,
+      "absolute_native_amount": 1830900000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 38495000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 44063000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_NHSU1YZ5YEKWGW_JJIKCSW",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 11227807.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_JDHVHAQXUUYUYA4OY65LVQ",
+      "row_count": 136,
+      "populated_amounts": 134,
+      "absolute_native_amount": 2141435482.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG",
+      "row_count": 89,
+      "populated_amounts": 70,
+      "absolute_native_amount": 193648868.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_TGZTYARHYK2WZ1RUYLPRDA",
+      "row_count": 279,
+      "populated_amounts": 255,
+      "absolute_native_amount": 379566362.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 819,
+      "populated_amounts": 808,
+      "absolute_native_amount": 2280824949.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 8324,
+      "populated_amounts": 8320,
+      "absolute_native_amount": 131187380600.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 74198000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 255265195.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3296000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 47,
+      "populated_amounts": 46,
+      "absolute_native_amount": 882945027.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 45,
+      "populated_amounts": 45,
+      "absolute_native_amount": 519918040.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 118694000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2024-03-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 3968,
+      "populated_amounts": 3896,
+      "absolute_native_amount": 54107496626.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 309,
+      "populated_amounts": 264,
+      "absolute_native_amount": 1053402110.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 25983000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 45058000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3139000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_-N3TBOFHC0GXB9NQ3RVJVG",
+      "row_count": 288,
+      "populated_amounts": 288,
+      "absolute_native_amount": 387968108.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_EB_HRZXYB0UP6UQE2QKGTG",
+      "row_count": 139,
+      "populated_amounts": 139,
+      "absolute_native_amount": 251978860.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_WAY6GT-JDUMNOHDI54ATXQ",
+      "row_count": 198,
+      "populated_amounts": 198,
+      "absolute_native_amount": 2317342522.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 1029,
+      "populated_amounts": 1023,
+      "absolute_native_amount": 2814390408.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 10732,
+      "populated_amounts": 10487,
+      "absolute_native_amount": 162140297252.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 60121000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 5693,
+      "populated_amounts": 5667,
+      "absolute_native_amount": 51107348323.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 13025443.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 26079000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 45345000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3142000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_-N3TBOFHC0GXB9NQ3RVJVG",
+      "row_count": 289,
+      "populated_amounts": 289,
+      "absolute_native_amount": 382936269.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_EB_HRZXYB0UP6UQE2QKGTG",
+      "row_count": 139,
+      "populated_amounts": 139,
+      "absolute_native_amount": 254154676.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_WAY6GT-JDUMNOHDI54ATXQ",
+      "row_count": 204,
+      "populated_amounts": 204,
+      "absolute_native_amount": 2310654494.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 1029,
+      "populated_amounts": 1029,
+      "absolute_native_amount": 2802724077.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 10779,
+      "populated_amounts": 10779,
+      "absolute_native_amount": 163160144100.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 60868000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 5947,
+      "populated_amounts": 5947,
+      "absolute_native_amount": 50807796324.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 2692,
+      "populated_amounts": 0,
+      "absolute_native_amount": null
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 274239000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 35,
+      "populated_amounts": 35,
+      "absolute_native_amount": 756723000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 630081000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 103,
+      "populated_amounts": 103,
+      "absolute_native_amount": 2909643000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 57,
+      "populated_amounts": 57,
+      "absolute_native_amount": 2431607000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 37987000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 355749000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 44947000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_VGXS-84WJ0MORFLRXHS5AQ",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 9876633.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_-N3TBOFHC0GXB9NQ3RVJVG",
+      "row_count": 289,
+      "populated_amounts": 264,
+      "absolute_native_amount": 387899952.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_EB_HRZXYB0UP6UQE2QKGTG",
+      "row_count": 96,
+      "populated_amounts": 86,
+      "absolute_native_amount": 231094866.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_WAY6GT-JDUMNOHDI54ATXQ",
+      "row_count": 153,
+      "populated_amounts": 151,
+      "absolute_native_amount": 2347536293.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 924,
+      "populated_amounts": 910,
+      "absolute_native_amount": 2540162070.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 9306,
+      "populated_amounts": 9298,
+      "absolute_native_amount": 148191106900.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 64323000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 17,
+      "populated_amounts": 17,
+      "absolute_native_amount": 375278308.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3296000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 58,
+      "populated_amounts": 56,
+      "absolute_native_amount": 1253493138.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 53,
+      "populated_amounts": 53,
+      "absolute_native_amount": 871124000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_KPW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 195000000000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 165817000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2024-06-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 4594,
+      "populated_amounts": 4497,
+      "absolute_native_amount": 59699044926.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 425,
+      "populated_amounts": 397,
+      "absolute_native_amount": 1183130158.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 42415000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 45075000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3139000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_-SV7PJPJEUOAXL3ASAJNTW",
+      "row_count": 220,
+      "populated_amounts": 220,
+      "absolute_native_amount": 2466667806.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_GYIAAUPKRUCQGOAUDCFQTQ",
+      "row_count": 212,
+      "populated_amounts": 212,
+      "absolute_native_amount": 254883228.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA",
+      "row_count": 307,
+      "populated_amounts": 307,
+      "absolute_native_amount": 401984928.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 631,
+      "populated_amounts": 627,
+      "absolute_native_amount": 1862070672.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 11558,
+      "populated_amounts": 11291,
+      "absolute_native_amount": 180469405752.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 59995000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 250000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 2692000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "U_NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 4351000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 6796,
+      "populated_amounts": 6771,
+      "absolute_native_amount": 58607671345.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 6551660.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 43108000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 47220000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3343000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_-SV7PJPJEUOAXL3ASAJNTW",
+      "row_count": 225,
+      "populated_amounts": 225,
+      "absolute_native_amount": 2463629801.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_GYIAAUPKRUCQGOAUDCFQTQ",
+      "row_count": 212,
+      "populated_amounts": 212,
+      "absolute_native_amount": 256654766.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA",
+      "row_count": 308,
+      "populated_amounts": 308,
+      "absolute_native_amount": 395592598.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 631,
+      "populated_amounts": 631,
+      "absolute_native_amount": 1867107306.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 11610,
+      "populated_amounts": 11610,
+      "absolute_native_amount": 181904005900.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 61507000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 256000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 2854000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "U_NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 4432000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 7160,
+      "populated_amounts": 7160,
+      "absolute_native_amount": 58459355923.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 2916,
+      "populated_amounts": 0,
+      "absolute_native_amount": null
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 414197000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 40,
+      "populated_amounts": 40,
+      "absolute_native_amount": 788620000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 629907000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 113,
+      "populated_amounts": 113,
+      "absolute_native_amount": 3177243000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 64,
+      "populated_amounts": 64,
+      "absolute_native_amount": 2840766000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 37316000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 1032599000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_-SV7PJPJEUOAXL3ASAJNTW",
+      "row_count": 173,
+      "populated_amounts": 167,
+      "absolute_native_amount": 2455472430.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_GYIAAUPKRUCQGOAUDCFQTQ",
+      "row_count": 160,
+      "populated_amounts": 160,
+      "absolute_native_amount": 246682816.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA",
+      "row_count": 308,
+      "populated_amounts": 282,
+      "absolute_native_amount": 401700943.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 571,
+      "populated_amounts": 561,
+      "absolute_native_amount": 1320019144.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 10119,
+      "populated_amounts": 10004,
+      "absolute_native_amount": 166307874300.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 200322000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 10,
+      "populated_amounts": 10,
+      "absolute_native_amount": 309677966.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 39018000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 67,
+      "populated_amounts": 67,
+      "absolute_native_amount": 1582748309.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 46,
+      "populated_amounts": 46,
+      "absolute_native_amount": 786366171.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 165403000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 1080000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2024-09-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 5549,
+      "populated_amounts": 5415,
+      "absolute_native_amount": 47060645108.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 797,
+      "populated_amounts": 698,
+      "absolute_native_amount": 1909630610.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 22044000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 45092000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3140000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_T4ATXCB5IUEP8MXI6R_UPG",
+      "row_count": 239,
+      "populated_amounts": 239,
+      "absolute_native_amount": 297578966.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_VED452FSYUYWOZRE_O3C6A",
+      "row_count": 233,
+      "populated_amounts": 233,
+      "absolute_native_amount": 2492778000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 732,
+      "populated_amounts": 729,
+      "absolute_native_amount": 1820614809.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 11923,
+      "populated_amounts": 11651,
+      "absolute_native_amount": 202231170454.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 7041000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 5988000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 47761391.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 6041000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 4341000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 8377,
+      "populated_amounts": 8347,
+      "absolute_native_amount": 71079820478.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 7989778.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 21686000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 43939000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3121000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_T4ATXCB5IUEP8MXI6R_UPG",
+      "row_count": 239,
+      "populated_amounts": 239,
+      "absolute_native_amount": 300732065.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_VED452FSYUYWOZRE_O3C6A",
+      "row_count": 237,
+      "populated_amounts": 237,
+      "absolute_native_amount": 2508612000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 732,
+      "populated_amounts": 732,
+      "absolute_native_amount": 1823698452.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 12326,
+      "populated_amounts": 12326,
+      "absolute_native_amount": 202669502400.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 6595000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 5992000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 46074591.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 5896000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 4098000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 8762,
+      "populated_amounts": 8762,
+      "absolute_native_amount": 70808498949.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 3473,
+      "populated_amounts": 1,
+      "absolute_native_amount": 929000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 477001000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 38,
+      "populated_amounts": 38,
+      "absolute_native_amount": 1682606000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61607000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 566979000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 134,
+      "populated_amounts": 134,
+      "absolute_native_amount": 4761688000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 82,
+      "populated_amounts": 82,
+      "absolute_native_amount": 3226158000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 37054000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 1865758000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_JVHVPW4FVU-JMPI1LUF3SQ",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 11278442.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_T4ATXCB5IUEP8MXI6R_UPG",
+      "row_count": 184,
+      "populated_amounts": 169,
+      "absolute_native_amount": 273957852.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_VED452FSYUYWOZRE_O3C6A",
+      "row_count": 184,
+      "populated_amounts": 181,
+      "absolute_native_amount": 2500025000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 721,
+      "populated_amounts": 713,
+      "absolute_native_amount": 1750750228.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 10350,
+      "populated_amounts": 10220,
+      "absolute_native_amount": 184667407696.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 15,
+      "populated_amounts": 13,
+      "absolute_native_amount": 263690000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 283292000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 39018000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 68,
+      "populated_amounts": 67,
+      "absolute_native_amount": 1459467059.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 74,
+      "populated_amounts": 74,
+      "absolute_native_amount": 1238853000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 164988000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 801000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 34792000.0
+    },
+    {
+      "report_date": "2024-12-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 6942,
+      "populated_amounts": 6758,
+      "absolute_native_amount": 57271523913.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 965,
+      "populated_amounts": 842,
+      "absolute_native_amount": 2225746110.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 9916000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 45065000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3145000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_K5CWMI1_BU-1-I27YDNS8W",
+      "row_count": 258,
+      "populated_amounts": 258,
+      "absolute_native_amount": 330308200.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 905,
+      "populated_amounts": 903,
+      "absolute_native_amount": 2187730148.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 12629,
+      "populated_amounts": 12336,
+      "absolute_native_amount": 215171656053.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 7742000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 7829000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3365000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 263211000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 210665000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 1658000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3289000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 9593,
+      "populated_amounts": 9556,
+      "absolute_native_amount": 83197175521.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 61293000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 9665000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 45968000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3217000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_K5CWMI1_BU-1-I27YDNS8W",
+      "row_count": 258,
+      "populated_amounts": 258,
+      "absolute_native_amount": 334655126.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 905,
+      "populated_amounts": 905,
+      "absolute_native_amount": 2194387081.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 13070,
+      "populated_amounts": 13070,
+      "absolute_native_amount": 215633586100.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 7335000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 7747000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3752000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 11,
+      "populated_amounts": 11,
+      "absolute_native_amount": 271022000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 213198000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 1658000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3499000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 10113,
+      "populated_amounts": 10113,
+      "absolute_native_amount": 82869339965.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 3833,
+      "populated_amounts": 2,
+      "absolute_native_amount": 61893000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 13,
+      "populated_amounts": 13,
+      "absolute_native_amount": 471885000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 34,
+      "populated_amounts": 34,
+      "absolute_native_amount": 1341446000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61739000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "CNY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 2262960000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 658733000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 159,
+      "populated_amounts": 157,
+      "absolute_native_amount": 4507556000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 93,
+      "populated_amounts": 92,
+      "absolute_native_amount": 3398205000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "JPY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4123988000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 599094000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 36590000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 1983226000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR__UOVVTDBN0AEPYGHXVPCOA",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 5241794.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_K5CWMI1_BU-1-I27YDNS8W",
+      "row_count": 188,
+      "populated_amounts": 187,
+      "absolute_native_amount": 314744823.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 893,
+      "populated_amounts": 882,
+      "absolute_native_amount": 2088312265.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 10945,
+      "populated_amounts": 10791,
+      "absolute_native_amount": 198772684296.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 15,
+      "populated_amounts": 13,
+      "absolute_native_amount": 261574000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 29,
+      "populated_amounts": 29,
+      "absolute_native_amount": 321314000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 10,
+      "populated_amounts": 9,
+      "absolute_native_amount": 203518000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 74,
+      "populated_amounts": 73,
+      "absolute_native_amount": 1470252000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 65,
+      "populated_amounts": 65,
+      "absolute_native_amount": 1372199241.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_JPY",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 2570868000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 164574000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 807000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 35257000.0
+    },
+    {
+      "report_date": "2025-03-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 8008,
+      "populated_amounts": 7781,
+      "absolute_native_amount": 68909826168.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 1059,
+      "populated_amounts": 897,
+      "absolute_native_amount": 2644158796.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 14,
+      "populated_amounts": 13,
+      "absolute_native_amount": 37075000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 106652000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3145000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_KQJVLDFGZ0E38P0J92LZQA",
+      "row_count": 261,
+      "populated_amounts": 261,
+      "absolute_native_amount": 334963235.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 1005,
+      "populated_amounts": 999,
+      "absolute_native_amount": 2374454992.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 13514,
+      "populated_amounts": 13202,
+      "absolute_native_amount": 232850715304.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 7059000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 62904000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 10256000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 18,
+      "populated_amounts": 18,
+      "absolute_native_amount": 330735481.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 500927000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 360000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 10129,
+      "populated_amounts": 10083,
+      "absolute_native_amount": 86601352422.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 22,
+      "populated_amounts": 22,
+      "absolute_native_amount": 484999972.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 37236000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 6,
+      "populated_amounts": 6,
+      "absolute_native_amount": 114201000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3415000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_KQJVLDFGZ0E38P0J92LZQA",
+      "row_count": 261,
+      "populated_amounts": 261,
+      "absolute_native_amount": 340357403.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 1005,
+      "populated_amounts": 1005,
+      "absolute_native_amount": 2368640075.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 13966,
+      "populated_amounts": 13966,
+      "absolute_native_amount": 234259842763.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 7059000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 63220000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 12076000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 19,
+      "populated_amounts": 19,
+      "absolute_native_amount": 355964474.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 531407000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 387000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 10712,
+      "populated_amounts": 10712,
+      "absolute_native_amount": 86861930538.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 4044,
+      "populated_amounts": 19,
+      "absolute_native_amount": 63048000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 17,
+      "populated_amounts": 17,
+      "absolute_native_amount": 531902000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 38,
+      "populated_amounts": 38,
+      "absolute_native_amount": 1367741000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61739000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "CNY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 2262960000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 629561000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 163,
+      "populated_amounts": 161,
+      "absolute_native_amount": 4701888000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 99,
+      "populated_amounts": 99,
+      "absolute_native_amount": 3518291000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "JPY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4123988000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 1099702000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 166153000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 3192956000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_MKP_BH4MHUQWW9JCZ0JQ1W",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 5194042.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_KQJVLDFGZ0E38P0J92LZQA",
+      "row_count": 194,
+      "populated_amounts": 185,
+      "absolute_native_amount": 311494129.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 1004,
+      "populated_amounts": 995,
+      "absolute_native_amount": 2341113300.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 11782,
+      "populated_amounts": 11624,
+      "absolute_native_amount": 215112907613.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 13,
+      "populated_amounts": 13,
+      "absolute_native_amount": 471614000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 39,
+      "populated_amounts": 39,
+      "absolute_native_amount": 505357583.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 9,
+      "populated_amounts": 7,
+      "absolute_native_amount": 206509000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 103,
+      "populated_amounts": 101,
+      "absolute_native_amount": 1682813168.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 80,
+      "populated_amounts": 79,
+      "absolute_native_amount": 1571001000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_JPY",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 2570868000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 189433000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 1176000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 739923000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 8411,
+      "populated_amounts": 8228,
+      "absolute_native_amount": 88582716712.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 1064,
+      "populated_amounts": 875,
+      "absolute_native_amount": 2209372432.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 11430000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 114525000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3146000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_KSDGCPCYDEAEQHFDLHZODW",
+      "row_count": 295,
+      "populated_amounts": 295,
+      "absolute_native_amount": 371205233.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 1209,
+      "populated_amounts": 1202,
+      "absolute_native_amount": 2857792591.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 13236,
+      "populated_amounts": 12871,
+      "absolute_native_amount": 243889578711.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 7062000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 12,
+      "populated_amounts": 12,
+      "absolute_native_amount": 41478000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 10241000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 21,
+      "populated_amounts": 21,
+      "absolute_native_amount": 159018159.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 11,
+      "populated_amounts": 10,
+      "absolute_native_amount": 16881000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 12276,
+      "populated_amounts": 12174,
+      "absolute_native_amount": 106217518095.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 16,
+      "populated_amounts": 16,
+      "absolute_native_amount": 91394000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 11435000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 122497000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3363000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_KSDGCPCYDEAEQHFDLHZODW",
+      "row_count": 295,
+      "populated_amounts": 295,
+      "absolute_native_amount": 376434763.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 1209,
+      "populated_amounts": 1209,
+      "absolute_native_amount": 2835272406.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 13732,
+      "populated_amounts": 13732,
+      "absolute_native_amount": 244903558757.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 7144000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 12,
+      "populated_amounts": 12,
+      "absolute_native_amount": 41284000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 12078000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 20,
+      "populated_amounts": 20,
+      "absolute_native_amount": 35083827.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 12,
+      "populated_amounts": 12,
+      "absolute_native_amount": 17482000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 12828,
+      "populated_amounts": 12828,
+      "absolute_native_amount": 106105770284.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 4500,
+      "populated_amounts": 13,
+      "absolute_native_amount": 1247000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 19,
+      "populated_amounts": 19,
+      "absolute_native_amount": 610417000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 35,
+      "populated_amounts": 35,
+      "absolute_native_amount": 1388353000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61853000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "CNY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 2257303000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 186,
+      "populated_amounts": 184,
+      "absolute_native_amount": 5658388000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 112,
+      "populated_amounts": 112,
+      "absolute_native_amount": 3670538000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "JPY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4113679000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1356076000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 165815000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 3674835000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_8G9Z-K292U66-F9TU8PWPW",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 7493887.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_KSDGCPCYDEAEQHFDLHZODW",
+      "row_count": 222,
+      "populated_amounts": 210,
+      "absolute_native_amount": 348823536.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 1208,
+      "populated_amounts": 1192,
+      "absolute_native_amount": 2762369927.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 11369,
+      "populated_amounts": 11213,
+      "absolute_native_amount": 223769312062.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 18,
+      "populated_amounts": 18,
+      "absolute_native_amount": 779319000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 48,
+      "populated_amounts": 48,
+      "absolute_native_amount": 622953583.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 10,
+      "populated_amounts": 8,
+      "absolute_native_amount": 206050000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_EGP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 200000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 129,
+      "populated_amounts": 127,
+      "absolute_native_amount": 1821023368.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 89,
+      "populated_amounts": 89,
+      "absolute_native_amount": 1626074704.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_JPY",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 2528793000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 903080000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 1180000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1174874000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 10151,
+      "populated_amounts": 10054,
+      "absolute_native_amount": 103167118856.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 1215,
+      "populated_amounts": 969,
+      "absolute_native_amount": 1884959443.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 13321000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 97952000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3309000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_CUSGSLFY1KA176YT_R1ASQ",
+      "row_count": 329,
+      "populated_amounts": 329,
+      "absolute_native_amount": 396579679.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 87,
+      "populated_amounts": 86,
+      "absolute_native_amount": 210014999.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 13310,
+      "populated_amounts": 12940,
+      "absolute_native_amount": 254009967657.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 4391000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 22,
+      "populated_amounts": 22,
+      "absolute_native_amount": 193952000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 10226000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 16,
+      "populated_amounts": 15,
+      "absolute_native_amount": 302446000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 15,
+      "populated_amounts": 10,
+      "absolute_native_amount": 187856000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 359000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 13921,
+      "populated_amounts": 13510,
+      "absolute_native_amount": 117758804822.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 63,
+      "populated_amounts": 63,
+      "absolute_native_amount": 514141000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 13381000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 105008000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3372000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_CUSGSLFY1KA176YT_R1ASQ",
+      "row_count": 329,
+      "populated_amounts": 329,
+      "absolute_native_amount": 400131924.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 87,
+      "populated_amounts": 87,
+      "absolute_native_amount": 210805400.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 13843,
+      "populated_amounts": 13843,
+      "absolute_native_amount": 253597274523.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 5167000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 194774000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 11898000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 15,
+      "populated_amounts": 15,
+      "absolute_native_amount": 186910000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 15,
+      "populated_amounts": 15,
+      "absolute_native_amount": 216630000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 359000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 14539,
+      "populated_amounts": 14539,
+      "absolute_native_amount": 119153477582.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 4726,
+      "populated_amounts": 182,
+      "absolute_native_amount": 3007340745.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 793058000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 28,
+      "populated_amounts": 28,
+      "absolute_native_amount": 1372018000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61853000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "CNY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 2251646000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 209,
+      "populated_amounts": 207,
+      "absolute_native_amount": 5966212000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 120,
+      "populated_amounts": 120,
+      "absolute_native_amount": 3891387000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "JPY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4103368000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1323433000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 200842000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 3646158000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_RZMLEMEHNKKMTRZ4EU7RVQ",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 147946853.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_CUSGSLFY1KA176YT_R1ASQ",
+      "row_count": 251,
+      "populated_amounts": 249,
+      "absolute_native_amount": 377960787.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 78,
+      "populated_amounts": 67,
+      "absolute_native_amount": 183805750.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 11379,
+      "populated_amounts": 11222,
+      "absolute_native_amount": 231590727026.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 21,
+      "populated_amounts": 21,
+      "absolute_native_amount": 1215710352.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 60,
+      "populated_amounts": 60,
+      "absolute_native_amount": 733362113.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 241153000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_EGP",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 13150000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 126,
+      "populated_amounts": 126,
+      "absolute_native_amount": 2114639355.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 94,
+      "populated_amounts": 94,
+      "absolute_native_amount": 2112313782.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_JPY",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 2327662000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 926152000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 720000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1174873000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 11768,
+      "populated_amounts": 11716,
+      "absolute_native_amount": 118267513632.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "<blank>",
+      "row_count": 1225,
+      "populated_amounts": 1003,
+      "absolute_native_amount": 2395626230.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "CAD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 14418000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "EUR",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 102769000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3294000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "UNIT_STANDARD_USD_BVO0A1W2CK-D1RKEV3HOGW",
+      "row_count": 326,
+      "populated_amounts": 326,
+      "absolute_native_amount": 402000216.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "UNIT_USD",
+      "row_count": 94,
+      "populated_amounts": 93,
+      "absolute_native_amount": 233319464.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "USD",
+      "row_count": 13577,
+      "populated_amounts": 13175,
+      "absolute_native_amount": 258268158790.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_AFN",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 4721000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_AUD",
+      "row_count": 16,
+      "populated_amounts": 12,
+      "absolute_native_amount": 468919000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_CAD",
+      "row_count": 34,
+      "populated_amounts": 34,
+      "absolute_native_amount": 254136000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 9968000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_EUR",
+      "row_count": 28,
+      "populated_amounts": 28,
+      "absolute_native_amount": 229092000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_GBP",
+      "row_count": 14,
+      "populated_amounts": 14,
+      "absolute_native_amount": 257160000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 132000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_RSD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3344000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "cost",
+      "currency": "U_USD",
+      "row_count": 14732,
+      "populated_amounts": 14628,
+      "absolute_native_amount": 125689309756.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "<blank>",
+      "row_count": 39,
+      "populated_amounts": 39,
+      "absolute_native_amount": 939627944.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "CAD",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 14185000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "EUR",
+      "row_count": 7,
+      "populated_amounts": 7,
+      "absolute_native_amount": 102761000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "GBP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3289000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_STANDARD_USD_BVO0A1W2CK-D1RKEV3HOGW",
+      "row_count": 326,
+      "populated_amounts": 326,
+      "absolute_native_amount": 405398306.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "UNIT_USD",
+      "row_count": 94,
+      "populated_amounts": 94,
+      "absolute_native_amount": 231598538.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "USD",
+      "row_count": 14100,
+      "populated_amounts": 14100,
+      "absolute_native_amount": 254641641921.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_AFN",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 5388000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_AUD",
+      "row_count": 16,
+      "populated_amounts": 16,
+      "absolute_native_amount": 470686000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_CAD",
+      "row_count": 35,
+      "populated_amounts": 35,
+      "absolute_native_amount": 252599000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_CHF",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 11568000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_EUR",
+      "row_count": 28,
+      "populated_amounts": 28,
+      "absolute_native_amount": 243047000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_GBP",
+      "row_count": 15,
+      "populated_amounts": 15,
+      "absolute_native_amount": 256649000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_JPY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 130000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_RSD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 3663000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "fair_value",
+      "currency": "U_USD",
+      "row_count": 15394,
+      "populated_amounts": 15394,
+      "absolute_native_amount": 124444593936.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "<blank>",
+      "row_count": 5590,
+      "populated_amounts": 34,
+      "absolute_native_amount": 824379000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "AUD",
+      "row_count": 23,
+      "populated_amounts": 23,
+      "absolute_native_amount": 774746000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "CAD",
+      "row_count": 38,
+      "populated_amounts": 38,
+      "absolute_native_amount": 1599353000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "CHF",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 61853000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "CNY",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 5854000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "DKK",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 560750000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "EUR",
+      "row_count": 216,
+      "populated_amounts": 214,
+      "absolute_native_amount": 5974468000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "GBP",
+      "row_count": 117,
+      "populated_amounts": 117,
+      "absolute_native_amount": 3910455000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "JPY",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 4093059000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "NOK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1326498000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 165065000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "SEK",
+      "row_count": 9,
+      "populated_amounts": 9,
+      "absolute_native_amount": 3650969000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "SGD",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 45400000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_EUR_2VZPVP3OSEQFFECVJOXWPQ",
+      "row_count": 3,
+      "populated_amounts": 3,
+      "absolute_native_amount": 5097744.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "UNIT_STANDARD_USD_BVO0A1W2CK-D1RKEV3HOGW",
+      "row_count": 254,
+      "populated_amounts": 239,
+      "absolute_native_amount": 375101347.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "UNIT_USD",
+      "row_count": 86,
+      "populated_amounts": 74,
+      "absolute_native_amount": 206913300.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "USD",
+      "row_count": 10952,
+      "populated_amounts": 10771,
+      "absolute_native_amount": 215041545793.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_AUD",
+      "row_count": 26,
+      "populated_amounts": 26,
+      "absolute_native_amount": 1468583331.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_CAD",
+      "row_count": 69,
+      "populated_amounts": 69,
+      "absolute_native_amount": 989456840.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_CHF",
+      "row_count": 8,
+      "populated_amounts": 8,
+      "absolute_native_amount": 199334000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_EGP",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 981000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_EUR",
+      "row_count": 163,
+      "populated_amounts": 163,
+      "absolute_native_amount": 2635607847.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_GBP",
+      "row_count": 112,
+      "populated_amounts": 112,
+      "absolute_native_amount": 2571315697.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_JPY",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 2572279000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_KRW",
+      "row_count": 1,
+      "populated_amounts": 1,
+      "absolute_native_amount": 194831194000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_NOK",
+      "row_count": 4,
+      "populated_amounts": 4,
+      "absolute_native_amount": 926152000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_NZD",
+      "row_count": 2,
+      "populated_amounts": 2,
+      "absolute_native_amount": 1197000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_SEK",
+      "row_count": 5,
+      "populated_amounts": 5,
+      "absolute_native_amount": 1174874000.0
+    },
+    {
+      "report_date": "2026-03-31",
+      "field": "principal",
+      "currency": "U_USD",
+      "row_count": 12369,
+      "populated_amounts": 12297,
+      "absolute_native_amount": 123775819115.0
+    }
+  ],
+  "principal_fx_profile": [
+    {
+      "report_date": "2023-03-31",
+      "status": "<blank>",
+      "row_count": 1419,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-03-31",
+      "status": "missing_reference_fx",
+      "row_count": 3029,
+      "populated_principal": 3029,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-03-31",
+      "status": "source_usd",
+      "row_count": 4992,
+      "populated_principal": 4992,
+      "populated_usd": 4992
+    },
+    {
+      "report_date": "2023-06-30",
+      "status": "<blank>",
+      "row_count": 1521,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-06-30",
+      "status": "missing_reference_fx",
+      "row_count": 3508,
+      "populated_principal": 3508,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-06-30",
+      "status": "source_usd",
+      "row_count": 5458,
+      "populated_principal": 5458,
+      "populated_usd": 5458
+    },
+    {
+      "report_date": "2023-09-30",
+      "status": "<blank>",
+      "row_count": 1741,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-09-30",
+      "status": "missing_reference_fx",
+      "row_count": 4324,
+      "populated_principal": 4324,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-09-30",
+      "status": "source_usd",
+      "row_count": 6446,
+      "populated_principal": 6446,
+      "populated_usd": 6446
+    },
+    {
+      "report_date": "2023-12-31",
+      "status": "<blank>",
+      "row_count": 2210,
+      "populated_principal": 7,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-12-31",
+      "status": "missing_reference_fx",
+      "row_count": 4471,
+      "populated_principal": 4471,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2023-12-31",
+      "status": "source_usd",
+      "row_count": 7692,
+      "populated_principal": 7692,
+      "populated_usd": 7692
+    },
+    {
+      "report_date": "2024-03-31",
+      "status": "<blank>",
+      "row_count": 2534,
+      "populated_principal": 1,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-03-31",
+      "status": "missing_reference_fx",
+      "row_count": 5452,
+      "populated_principal": 5452,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-03-31",
+      "status": "source_usd",
+      "row_count": 8320,
+      "populated_principal": 8320,
+      "populated_usd": 8320
+    },
+    {
+      "report_date": "2024-06-30",
+      "status": "<blank>",
+      "row_count": 2850,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-06-30",
+      "status": "missing_reference_fx",
+      "row_count": 6258,
+      "populated_principal": 6258,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-06-30",
+      "status": "source_usd",
+      "row_count": 9298,
+      "populated_principal": 9298,
+      "populated_usd": 9298
+    },
+    {
+      "report_date": "2024-09-30",
+      "status": "<blank>",
+      "row_count": 3207,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-09-30",
+      "status": "missing_reference_fx",
+      "row_count": 6963,
+      "populated_principal": 6963,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-09-30",
+      "status": "source_usd",
+      "row_count": 10004,
+      "populated_principal": 10004,
+      "populated_usd": 10004
+    },
+    {
+      "report_date": "2024-12-31",
+      "status": "<blank>",
+      "row_count": 3815,
+      "populated_principal": 0,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-12-31",
+      "status": "missing_reference_fx",
+      "row_count": 8298,
+      "populated_principal": 8298,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2024-12-31",
+      "status": "source_usd",
+      "row_count": 10221,
+      "populated_principal": 10221,
+      "populated_usd": 10221
+    },
+    {
+      "report_date": "2025-03-31",
+      "status": "<blank>",
+      "row_count": 4232,
+      "populated_principal": 1,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-03-31",
+      "status": "missing_reference_fx",
+      "row_count": 9371,
+      "populated_principal": 9371,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-03-31",
+      "status": "source_usd",
+      "row_count": 10792,
+      "populated_principal": 10792,
+      "populated_usd": 10792
+    },
+    {
+      "report_date": "2025-06-30",
+      "status": "<blank>",
+      "row_count": 4410,
+      "populated_principal": 19,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-06-30",
+      "status": "missing_reference_fx",
+      "row_count": 10002,
+      "populated_principal": 10002,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-06-30",
+      "status": "source_usd",
+      "row_count": 11624,
+      "populated_principal": 11624,
+      "populated_usd": 11624
+    },
+    {
+      "report_date": "2025-09-30",
+      "status": "<blank>",
+      "row_count": 4788,
+      "populated_principal": 14,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-09-30",
+      "status": "missing_reference_fx",
+      "row_count": 12146,
+      "populated_principal": 12146,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-09-30",
+      "status": "source_usd",
+      "row_count": 11212,
+      "populated_principal": 11212,
+      "populated_usd": 11212
+    },
+    {
+      "report_date": "2025-12-31",
+      "status": "<blank>",
+      "row_count": 4980,
+      "populated_principal": 215,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-12-31",
+      "status": "missing_reference_fx",
+      "row_count": 12736,
+      "populated_principal": 12733,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2025-12-31",
+      "status": "source_usd",
+      "row_count": 11222,
+      "populated_principal": 11222,
+      "populated_usd": 11222
+    },
+    {
+      "report_date": "2026-03-31",
+      "status": "<blank>",
+      "row_count": 5872,
+      "populated_principal": 34,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2026-03-31",
+      "status": "missing_reference_fx",
+      "row_count": 13424,
+      "populated_principal": 13424,
+      "populated_usd": 0
+    },
+    {
+      "report_date": "2026-03-31",
+      "status": "source_usd",
+      "row_count": 10771,
+      "populated_principal": 10771,
+      "populated_usd": 10771
+    }
+  ],
+  "key_collisions": [
+    {
+      "key_kind": "row_id",
+      "duplicate_groups": 0,
+      "excess_rows": 0
+    },
+    {
+      "key_kind": "source_context",
+      "duplicate_groups": 0,
+      "excess_rows": 0
+    },
+    {
+      "key_kind": "within_quarter_position_key",
+      "duplicate_groups": 4555,
+      "excess_rows": 5459
+    }
+  ],
+  "row_id_basis": [
+    {
+      "row_id_basis": "natural_key",
+      "row_count": 159
+    },
+    {
+      "row_id_basis": "src_anchor",
+      "row_count": 261454
+    }
+  ],
+  "subsidiary_flag_values": [
+    {
+      "is_subsidiary": "0",
+      "row_count": 259901
+    },
+    {
+      "is_subsidiary": "1",
+      "row_count": 1553
+    },
+    {
+      "is_subsidiary": null,
+      "row_count": 159
+    }
+  ],
+  "entity_lookup_multiplicity": [
+    {
+      "duplicate_join_keys": 0,
+      "excess_lookup_rows": 0,
+      "conflicting_ids": 0
+    }
+  ],
+  "spread_override_saved_matches": [
+    {
+      "cik": "0001633336",
+      "report_date": "2023-06-30",
+      "identifier": "Investments United States Debt Investments Materials A&A Global Imports, LLC Investment Type Senior Secured First Lien Term Loan Interest Term L + 850 Interest Rate 13.70% Maturity/ Dissolution Date 06/2026",
+      "new_value_decimal": 0.085,
+      "expected_percentage_points": 8.5,
+      "row_id": "ROW-10b9a6fac595070a",
+      "saved_spread": 0.085,
+      "fv": 1902000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2023-12-31",
+      "identifier": "Investments United States Debt Investments Consumer Services USA Hometown Experts, Inc Investment Type Senior Secured First Lien Term Loan Interest Term S + 660 (100 Floor) Interest Rate 12.00% Maturity/Dissolution Date 11/2029",
+      "new_value_decimal": 0.066,
+      "expected_percentage_points": 6.6000000000000005,
+      "row_id": "ROW-25c26d6c91c56ed7",
+      "saved_spread": 0.066,
+      "fv": 1485000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-06-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services CC Amulet Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 675 (100 Floor) Interest Rate 12.11% Maturity/Dissolution Date 08/2027",
+      "new_value_decimal": 0.0675,
+      "expected_percentage_points": 6.75,
+      "row_id": "ROW-09f300ddb7aa3acf",
+      "saved_spread": 0.0675,
+      "fv": 300000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services GrapeTree Medical Staffing, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.46% Maturity/Dissolution Date 04/2026",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": "ROW-db33c8b475da3717",
+      "saved_spread": 0.0525,
+      "fv": 3508000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services GrapeTree Medical Staffing, LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.46% Maturity / Dissolution Date 04/2026",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": "ROW-9fba7861b541b5cd",
+      "saved_spread": 0.0525,
+      "fv": 5987000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Homecare Partners Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.50% Maturity / Dissolution Date 05/2027",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": "ROW-0f9be5c57cb3240a",
+      "saved_spread": 0.0525,
+      "fv": 3302000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Homecare Partners Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.50% Maturity / Dissolution Date 06/2030",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": "ROW-3d69af42fcd8fdd6",
+      "saved_spread": 0.0525,
+      "fv": 805000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2025-12-31",
+      "identifier": "Investments United States Debt Investments Insurance Vantage Insurance Partners, Inc. Investment Type Unitranche First Lien Revolver Interest Term S + 600 (100 Floor) Interest Rate 10.17% Maturity/Dissolution Date 12/2028",
+      "new_value_decimal": 0.06,
+      "expected_percentage_points": 6.0,
+      "row_id": "ROW-612eed5c3f29eb8c",
+      "saved_spread": 0.06,
+      "fv": 33000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2026-03-31",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Great Lakes Dental Partners, LLC Investment Type Unitranche First Lien Revolver Interest Term S + 425 (100 Floor) (plus 300 PIK) Interest Rate 11.10% Maturity/ Dissolution Date 06/2027",
+      "new_value_decimal": 0.0425,
+      "expected_percentage_points": 4.25,
+      "row_id": "ROW-da375aab4d0ced10",
+      "saved_spread": 0.0425,
+      "fv": 341000.0
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2026-03-31",
+      "identifier": "Investments United States Debt Investments Software & Services Ontario Systems, LLC Investment Type Unitranche First Lien Term Loan Interest Term S + 550 (100 Floor) (plus 100 PIK) Interest Rate 10.35% Maturity/ Dissolution Date 09/2028",
+      "new_value_decimal": 0.055,
+      "expected_percentage_points": 5.5,
+      "row_id": "ROW-e10586bdd2e36ab1",
+      "saved_spread": 0.055,
+      "fv": 3117000.0
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Diversified Consumer Services CVP Holdco, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 5.00% Interest Rate Floor 0.75% Interest Rate 10.44% Maturity Date 6/28/2031",
+      "new_value_decimal": 0.05,
+      "expected_percentage_points": 5.0,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Professional Services HSI Halo Acquisition, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate Floor 0.00% Interest Rate 10.07% Maturity Date 6/28/2031",
+      "new_value_decimal": 0.0475,
+      "expected_percentage_points": 4.75,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-12-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Financial Services Cerity Partners Equity Holding LLC Asset Type First Lien Revolver Reference Rate and Spread S + 5.25% Interest Rate Floor 0.75% Interest Rate 10.06% Maturity Date 7/28/2028",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-12-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Professional Services USRP Holdings, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 5.00% Interest Rate Floor 0.00% Interest Rate 9.93% Maturity Date 12/31/2029",
+      "new_value_decimal": 0.05,
+      "expected_percentage_points": 5.0,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Capital Markets Edgeco Buyer, Inc. Asset Type First Lien Term Loan Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.79% Maturity Date 6/1/2028",
+      "new_value_decimal": 0.045,
+      "expected_percentage_points": 4.5,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Commercial Services and Supplies FL Hawk Intermediate Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.79% Maturity Date 2/22/2030",
+      "new_value_decimal": 0.045,
+      "expected_percentage_points": 4.5,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Machinery Merlin Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.75% Interest Rate 9.04% Maturity Date 12/14/2028",
+      "new_value_decimal": 0.0475,
+      "expected_percentage_points": 4.75,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-06-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Commercial Services and Supplies YLG Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate 9.04% Maturity Date 12/23/2030",
+      "new_value_decimal": 0.0475,
+      "expected_percentage_points": 4.75,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-06-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Insurance AMBA Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate 9.64% Maturity Date 7/30/2027",
+      "new_value_decimal": 0.0525,
+      "expected_percentage_points": 5.25,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Distributors Aurora BC Group Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.00% Interest Rate 8.98% Maturity Date 12/21/2027",
+      "new_value_decimal": 0.05,
+      "expected_percentage_points": 5.0,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Life Sciences Tools & Services Emmes Blocker, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.13% (Incl. 3.25% PIK) Maturity Date 7/7/2028",
+      "new_value_decimal": 0.0275,
+      "expected_percentage_points": 2.75,
+      "row_id": null,
+      "saved_spread": null,
+      "fv": null
+    }
+  ],
+  "raw_monetary_units": [
+    {
+      "field": "cost_unit",
+      "unit": "<blank>",
+      "row_count": 29964
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_AFN",
+      "row_count": 1
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_AUD",
+      "row_count": 59
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_CAD",
+      "row_count": 191
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_CHF",
+      "row_count": 17
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_EUR",
+      "row_count": 191
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_GBP",
+      "row_count": 126
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_JPY",
+      "row_count": 5
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_NOK",
+      "row_count": 4
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_RSD",
+      "row_count": 1
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_SEK",
+      "row_count": 1
+    },
+    {
+      "field": "cost_unit",
+      "unit": "U_USD",
+      "row_count": 191529
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_-N3tbOFhc0GxB9nq3RVjVg",
+      "row_count": 609
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_-Q8f-Zp5NEq4gvMXvXZTWA",
+      "row_count": 75
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_-Sv7PjPJEUOAxL3ASajntw",
+      "row_count": 398
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_-tfcnjXBJEGMoEZBjkD3OA",
+      "row_count": 91
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_9p-9F_c1IkSonJOTJb-zvA",
+      "row_count": 167
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_CT-SahfsX0-2cMhmwRP95g",
+      "row_count": 150
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_CiKPrNfZBUSwLCt-9uUKgw",
+      "row_count": 339
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_CuSgsLFy1ka176YT_r1asQ",
+      "row_count": 570
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_EB_hRZXYB0uP6uqE2qKgtg",
+      "row_count": 253
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_GYIaAupkrUCQgoaUdcFQTQ",
+      "row_count": 326
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_IaebSKPPvE2TAd5O5hT2rg",
+      "row_count": 284
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_JDhVhAqxuUyuyA4Oy65lvQ",
+      "row_count": 348
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_K5CWmI1_BU-1-I27yDnS8w",
+      "row_count": 499
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_KsDgcPCyDEaEqHFdLHZodw",
+      "row_count": 536
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_LeT8hzaVVUeD9fcwOYgJUw",
+      "row_count": 387
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_Lk2zO2A8WEmVYwdCSIahlQ",
+      "row_count": 295
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_LsNkgwMbd0itlxwetK7Arg",
+      "row_count": 232
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_PPliGPlGdkCxvLk4d1G25g",
+      "row_count": 154
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_T4ATxcB5iUeP8mXI6r_UPg",
+      "row_count": 353
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_TgZTyARHYk2Wz1RUYLprdA",
+      "row_count": 603
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_WAY6Gt-JdUmnOhDI54atXQ",
+      "row_count": 371
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_a_GqEvCGC0m5K8QD6SY5ig",
+      "row_count": 138
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_aagiSYJDWkCKt7Jh8XN7-Q",
+      "row_count": 113
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_bvo0a1w2Ck-d1RKeV3hogw",
+      "row_count": 658
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_cr9lp9eAXUC9l93m4DiW9Q",
+      "row_count": 364
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_e9S6NdWF-Eik_QhiNf4RDw",
+      "row_count": 106
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_eobzTaHQ7EWNAy-F6Hm7gA",
+      "row_count": 281
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_ftFM0lgSWE-SgUxg511BXA",
+      "row_count": 278
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_kqJvlDFGZ0e38p0j92lzqA",
+      "row_count": 502
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_tjGR_KXHI0CiJAMHOSYkxA",
+      "row_count": 627
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_Standard_USD_veD452FsyUyWOZrE_O3C6A",
+      "row_count": 412
+    },
+    {
+      "field": "cost_unit",
+      "unit": "Unit_USD",
+      "row_count": 14025
+    },
+    {
+      "field": "cost_unit",
+      "unit": "cad",
+      "row_count": 136
+    },
+    {
+      "field": "cost_unit",
+      "unit": "eur",
+      "row_count": 97
+    },
+    {
+      "field": "cost_unit",
+      "unit": "gbp",
+      "row_count": 25
+    },
+    {
+      "field": "cost_unit",
+      "unit": "usd",
+      "row_count": 238436
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "<blank>",
+      "row_count": 14751
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_AFN",
+      "row_count": 1
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_AUD",
+      "row_count": 60
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_CAD",
+      "row_count": 197
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_CHF",
+      "row_count": 12
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_EUR",
+      "row_count": 182
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_GBP",
+      "row_count": 126
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_JPY",
+      "row_count": 5
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_NOK",
+      "row_count": 4
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_RSD",
+      "row_count": 1
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_SEK",
+      "row_count": 1
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "U_USD",
+      "row_count": 199517
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_-N3tbOFhc0GxB9nq3RVjVg",
+      "row_count": 556
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_-Q8f-Zp5NEq4gvMXvXZTWA",
+      "row_count": 75
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_-Sv7PjPJEUOAxL3ASajntw",
+      "row_count": 390
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_-tfcnjXBJEGMoEZBjkD3OA",
+      "row_count": 90
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_9p-9F_c1IkSonJOTJb-zvA",
+      "row_count": 165
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_CT-SahfsX0-2cMhmwRP95g",
+      "row_count": 149
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_CiKPrNfZBUSwLCt-9uUKgw",
+      "row_count": 353
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_CuSgsLFy1ka176YT_r1asQ",
+      "row_count": 566
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_EB_hRZXYB0uP6uqE2qKgtg",
+      "row_count": 252
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_GYIaAupkrUCQgoaUdcFQTQ",
+      "row_count": 325
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_IaebSKPPvE2TAd5O5hT2rg",
+      "row_count": 261
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_JDhVhAqxuUyuyA4Oy65lvQ",
+      "row_count": 345
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_K5CWmI1_BU-1-I27yDnS8w",
+      "row_count": 495
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_KsDgcPCyDEaEqHFdLHZodw",
+      "row_count": 532
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_LeT8hzaVVUeD9fcwOYgJUw",
+      "row_count": 390
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_Lk2zO2A8WEmVYwdCSIahlQ",
+      "row_count": 267
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_LsNkgwMbd0itlxwetK7Arg",
+      "row_count": 232
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_PPliGPlGdkCxvLk4d1G25g",
+      "row_count": 153
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_T4ATxcB5iUeP8mXI6r_UPg",
+      "row_count": 352
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_TgZTyARHYk2Wz1RUYLprdA",
+      "row_count": 546
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_WAY6Gt-JdUmnOhDI54atXQ",
+      "row_count": 369
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_a_GqEvCGC0m5K8QD6SY5ig",
+      "row_count": 139
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_aagiSYJDWkCKt7Jh8XN7-Q",
+      "row_count": 113
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_bvo0a1w2Ck-d1RKeV3hogw",
+      "row_count": 655
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_cr9lp9eAXUC9l93m4DiW9Q",
+      "row_count": 371
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_e9S6NdWF-Eik_QhiNf4RDw",
+      "row_count": 106
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_eobzTaHQ7EWNAy-F6Hm7gA",
+      "row_count": 264
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_ftFM0lgSWE-SgUxg511BXA",
+      "row_count": 258
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_kqJvlDFGZ0e38p0j92lzqA",
+      "row_count": 498
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_tjGR_KXHI0CiJAMHOSYkxA",
+      "row_count": 575
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_Standard_USD_veD452FsyUyWOZrE_O3C6A",
+      "row_count": 402
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "Unit_USD",
+      "row_count": 14239
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "cad",
+      "row_count": 136
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "eur",
+      "row_count": 92
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "gbp",
+      "row_count": 25
+    },
+    {
+      "field": "fair_value_unit",
+      "unit": "usd",
+      "row_count": 245734
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "<blank>",
+      "row_count": 102652
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_AUD",
+      "row_count": 233
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_CAD",
+      "row_count": 657
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_CHF",
+      "row_count": 100
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_EGP",
+      "row_count": 5
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_EUR",
+      "row_count": 1635
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_GBP",
+      "row_count": 1413
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_JPY",
+      "row_count": 20
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_KPW",
+      "row_count": 1
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_KRW",
+      "row_count": 12
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_NOK",
+      "row_count": 38
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_NZD",
+      "row_count": 24
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_SEK",
+      "row_count": 45
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "U_USD",
+      "row_count": 146208
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_2VZPVP3OSEqFfecVJoXwPQ",
+      "row_count": 7
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_8G9Z-K292U66-F9Tu8PwPw",
+      "row_count": 15
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_DKzgrGqeEUCBe0ETx-39Qw",
+      "row_count": 2
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_L5ZfcO_2hU6N7tu24ipgkg",
+      "row_count": 2
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_Mkp_bH4mhUqwW9jCZ0JQ1w",
+      "row_count": 11
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_NHsU1YZ5YEKwGW_jJikCsw",
+      "row_count": 7
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR__uOVvTDBN0aePYgHXvpcoA",
+      "row_count": 12
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_a8EfFI1zD06SCUhys78Xcw",
+      "row_count": 2
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_efRIWW_W1US_ffnqB8EaDQ",
+      "row_count": 2
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_gGFjPVZuykOQfqPzBLERVQ",
+      "row_count": 3
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_jVHvPw4fVU-JMpI1lUf3SQ",
+      "row_count": 10
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_rzmleMeHNkKmtRz4EU7rVQ",
+      "row_count": 10
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_EUR_vGxS-84Wj0mORFlRXHS5aQ",
+      "row_count": 5
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_-N3tbOFhc0GxB9nq3RVjVg",
+      "row_count": 561
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_-Q8f-Zp5NEq4gvMXvXZTWA",
+      "row_count": 45
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_-Sv7PjPJEUOAxL3ASajntw",
+      "row_count": 304
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_-tfcnjXBJEGMoEZBjkD3OA",
+      "row_count": 52
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_9p-9F_c1IkSonJOTJb-zvA",
+      "row_count": 131
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_CT-SahfsX0-2cMhmwRP95g",
+      "row_count": 119
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_CiKPrNfZBUSwLCt-9uUKgw",
+      "row_count": 357
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_CuSgsLFy1ka176YT_r1asQ",
+      "row_count": 426
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_EB_hRZXYB0uP6uqE2qKgtg",
+      "row_count": 179
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_GYIaAupkrUCQgoaUdcFQTQ",
+      "row_count": 243
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_IaebSKPPvE2TAd5O5hT2rg",
+      "row_count": 261
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_JDhVhAqxuUyuyA4Oy65lvQ",
+      "row_count": 267
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_K5CWmI1_BU-1-I27yDnS8w",
+      "row_count": 363
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_KsDgcPCyDEaEqHFdLHZodw",
+      "row_count": 400
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_LeT8hzaVVUeD9fcwOYgJUw",
+      "row_count": 403
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_Lk2zO2A8WEmVYwdCSIahlQ",
+      "row_count": 269
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_LsNkgwMbd0itlxwetK7Arg",
+      "row_count": 155
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_PPliGPlGdkCxvLk4d1G25g",
+      "row_count": 122
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_T4ATxcB5iUeP8mXI6r_UPg",
+      "row_count": 247
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_TgZTyARHYk2Wz1RUYLprdA",
+      "row_count": 551
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_WAY6Gt-JdUmnOhDI54atXQ",
+      "row_count": 284
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_a_GqEvCGC0m5K8QD6SY5ig",
+      "row_count": 113
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_aagiSYJDWkCKt7Jh8XN7-Q",
+      "row_count": 68
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_bvo0a1w2Ck-d1RKeV3hogw",
+      "row_count": 530
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_cr9lp9eAXUC9l93m4DiW9Q",
+      "row_count": 382
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_e9S6NdWF-Eik_QhiNf4RDw",
+      "row_count": 69
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_eobzTaHQ7EWNAy-F6Hm7gA",
+      "row_count": 264
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_ftFM0lgSWE-SgUxg511BXA",
+      "row_count": 258
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_kqJvlDFGZ0e38p0j92lzqA",
+      "row_count": 371
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_tjGR_KXHI0CiJAMHOSYkxA",
+      "row_count": 580
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_Standard_USD_veD452FsyUyWOZrE_O3C6A",
+      "row_count": 318
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "Unit_USD",
+      "row_count": 12127
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "aud",
+      "row_count": 289
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "cad",
+      "row_count": 677
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "chf",
+      "row_count": 63
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "cny",
+      "row_count": 8
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "dkk",
+      "row_count": 35
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "eur",
+      "row_count": 2619
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "gbp",
+      "row_count": 1550
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "jpy",
+      "row_count": 12
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "nok",
+      "row_count": 46
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "nzd",
+      "row_count": 31
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "sek",
+      "row_count": 102
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "sgd",
+      "row_count": 14
+    },
+    {
+      "field": "principal_amount_unit",
+      "unit": "usd",
+      "row_count": 205931
+    }
+  ],
+  "obligation_summary": {
+    "total": 910,
+    "with_holdings": 779,
+    "without_holdings": 131,
+    "without_holdings_with_indexed_filing": 31
+  },
+  "rule_loader_counts": [
+    {
+      "family": "agent_anchor",
+      "path_eligible": 67,
+      "outside_loader_path": 0
+    },
+    {
+      "family": "agent_b2_corrections",
+      "path_eligible": 38,
+      "outside_loader_path": 1
+    },
+    {
+      "family": "agent_investigate_rules",
+      "path_eligible": 137,
+      "outside_loader_path": 7
+    },
+    {
+      "family": "bdc_xbrl_html_section_bridges",
+      "path_eligible": 1,
+      "outside_loader_path": 0
+    }
+  ],
+  "b2_order_inversions": [],
+  "all_pik_cash_writes": [
+    {
+      "cik": "0001287750",
+      "scope": {
+        "quarters": [
+          "2025-12-31"
+        ]
+      },
+      "template": {
+        "row_selector": {
+          "row_id": "ROW-62c19264d44492af"
+        },
+        "cash_rate": 0.0,
+        "pik_rate": 14.0,
+        "set_interest_to_cash": true
+      }
+    }
+  ],
+  "html_bridge": [
+    {
+      "path": "data/overrides/bdc_xbrl_html_section_bridges/0001838126.proposed.json",
+      "schema": "bdc-xbrl-html-section-bridge.v1",
+      "records": 41,
+      "records_with_required_key_fields": 41,
+      "source_correctness": "not checked; proposed suffix does not disable loader"
+    }
+  ],
+  "all_pik_cash_write_count": 1,
+  "artifacts_presence": {
+    "data/output/lien_cache.csv": false,
+    "data/output/fund_strategy_correction_candidates.pinned.csv": true,
+    "data/output/bdc_ixbrl_field_status.csv": true,
+    "data/output/unclassified_review_cache.csv": true
+  },
+  "input_changes_during_audit": [],
+  "finished_utc": "2026-09-09T10:03:17.833460+00:00"
+}

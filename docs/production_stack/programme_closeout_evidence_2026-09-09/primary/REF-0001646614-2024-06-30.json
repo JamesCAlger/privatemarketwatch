@@ -1,0 +1,587 @@
+{
+  "path": "data/raw/filings/bdc_html/1646614/000095017024095339.html",
+  "ref": "REF-0001646614-2024-06-30",
+  "rows": [
+    {
+      "cells": [
+        "Investments, at fair value:",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "facts": [],
+      "opening": " | June 30, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value:",
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[7]/tr[5]"
+    },
+    {
+      "cells": [
+        "Non-controlled, non-affiliated investments (amortized cost of $ 887,143,280 and $ 808,399,961 , respectively)",
+        "",
+        "$",
+        "879,384,323",
+        "",
+        "",
+        "$",
+        "808,932,858",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_0416fd30-d8f1-4569-bc65-7a749998bbaa",
+          "scale": null,
+          "text": "887,143,280",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ad93cf5f-1b3c-4f34-abdc-d61536415daa",
+          "scale": null,
+          "text": "808,399,961",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_0416fd30-d8f1-4569-bc65-7a749998bbaa",
+          "scale": null,
+          "text": "879,384,323",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ad93cf5f-1b3c-4f34-abdc-d61536415daa",
+          "scale": null,
+          "text": "808,932,858",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value:",
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[7]/tr[6]"
+    },
+    {
+      "cells": [
+        "Non-controlled, affiliated investments (amortized cost of $ 15,006,022 and 14,673,357 , respectively)",
+        "",
+        "",
+        "14,628,922",
+        "",
+        "",
+        "",
+        "14,315,483",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_8a1e8fd0-bb6b-4c54-8bf5-f427c5042ffb",
+          "scale": null,
+          "text": "15,006,022",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_9f142125-b4c1-41bc-817d-d046cc5907d4",
+          "scale": null,
+          "text": "14,673,357",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_8a1e8fd0-bb6b-4c54-8bf5-f427c5042ffb",
+          "scale": null,
+          "text": "14,628,922",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_9f142125-b4c1-41bc-817d-d046cc5907d4",
+          "scale": null,
+          "text": "14,315,483",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value:",
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[7]/tr[7]"
+    },
+    {
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 952,451,230 and $ 885,470,822 , respectively)",
+        "",
+        "",
+        "931,158,200",
+        "",
+        "",
+        "",
+        "876,197,259",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+          "scale": null,
+          "text": "952,451,230",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_3cac8c4b-611f-46e0-bdbb-0a1e5f5716a7",
+          "scale": null,
+          "text": "885,470,822",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_ca4f4ef6-b6ee-4d8f-a32e-641575bbd5ae",
+          "scale": null,
+          "text": "931,158,200",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_3cac8c4b-611f-46e0-bdbb-0a1e5f5716a7",
+          "scale": null,
+          "text": "876,197,259",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, 2024 December 31, 2023 | (Unaudited) | Assets | Investments, at fair value:",
+      "preceding": [
+        "Consolidated Statements of Assets and Liabilities",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "Item 1. Consolida ted Financial Statements",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[7]/tr[9]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "",
+        "30,685,111",
+        "",
+        "",
+        "",
+        "27,786,494",
+        "",
+        "",
+        "",
+        "61,115,026",
+        "",
+        "",
+        "",
+        "54,815,677",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_5a8f5f5f-8eff-4936-809b-11dabed474a2",
+          "scale": null,
+          "text": "30,685,111",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_78b6beb0-e284-4843-b8f5-eecde4b60748",
+          "scale": null,
+          "text": "27,786,494",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_90456946-d347-47a0-aafb-f6d8afea191f",
+          "scale": null,
+          "text": "61,115,026",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:GrossInvestmentIncomeOperating",
+          "context": "C_d8fbfce5-97ac-4c29-bec9-7d2c8944d445",
+          "scale": null,
+          "text": "54,815,677",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | 2024 2023 2024 2023 | Investment income: | Non-controlled/non-affiliated investments:",
+      "preceding": [
+        "(Unaudited)",
+        "Consolidated Statem ents of Operations",
+        "Silver Point Specialty Lending Fund",
+        "",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[8]/tr[15]"
+    },
+    {
+      "cells": [
+        "Total Investments, June 30, 2024",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$ 952,451,230",
+        "",
+        "$ 931,158,200",
+        "",
+        "171.54 %"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_8f6ec0c7-e7c5-4bc7-bb11-34dc3f93a4e6",
+          "scale": null,
+          "text": "952,451,230",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_8f6ec0c7-e7c5-4bc7-bb11-34dc3f93a4e6",
+          "scale": null,
+          "text": "931,158,200",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_8f6ec0c7-e7c5-4bc7-bb11-34dc3f93a4e6",
+          "scale": "-2",
+          "text": "171.54",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5) | Germany | Takko Fashion GmbH\u207d\u00b9\u2070\u207e\u207d\u00b3\u2070\u207e 1st Lien Term Loan Specialty Retail 12.50 % 12.50 % 8/8/2023 11/9/2026 \u20ac 9,995,793 $ 10,851,896 $ 10,494,323 1.93 % | Total 1st Lien/Secured Loans 10,851,896 10,494,323 1.93",
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments June 30, 2024 (Unaudited)",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 9",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[16]/tr[32]"
+    },
+    {
+      "cells": [
+        "Total Investments, December 31, 2023",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$ 885,470,822",
+        "",
+        "$ 876,197,259",
+        "",
+        "162.15 %"
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtCost",
+          "context": "C_6396cc77-16e5-4817-8e80-d17e189d7461",
+          "scale": null,
+          "text": "885,470,822",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_6396cc77-16e5-4817-8e80-d17e189d7461",
+          "scale": null,
+          "text": "876,197,259",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedPercentOfNetAssets",
+          "context": "C_6396cc77-16e5-4817-8e80-d17e189d7461",
+          "scale": "-2",
+          "text": "162.15",
+          "unit": "U_pure"
+        }
+      ],
+      "opening": " | Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (29) Maturity Date Par Amount (3) Cost / Amortized Cost (4) Fair Value % of Net Assets (5) | Non-Controlled/Affiliated Investments | 1st Lien/Secured Loans | Germany",
+      "preceding": [
+        "",
+        "Silver Point Specialty Lending Fund Consolidated Schedule of Investments December 31, 2023",
+        "",
+        "The accompanying notes are an integral part of these consolidated financial statements. 17",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[23]/tr[35]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "164,806,533",
+        "",
+        "",
+        "$",
+        "766,351,667",
+        "",
+        "",
+        "$",
+        "931,158,200",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_75d3db04-c07d-4530-8e53-f0408bb2ab60",
+          "scale": null,
+          "text": "\u2014",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_debf3638-4a2e-456e-a5ca-a59d69f2cdca",
+          "scale": null,
+          "text": "164,806,533",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_1370e545-90f9-4dab-b2d9-c9e929ce1cb4",
+          "scale": null,
+          "text": "766,351,667",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_f0c11d99-85eb-48de-933b-8487c837c411",
+          "scale": null,
+          "text": "931,158,200",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | June 30, 2024 | Level 1 Level 2 Level 3 Total | Investments: | Secured loans $ \u2014 $ 118,178,676 $ 746,498,754 $ 864,677,430",
+      "preceding": [
+        "",
+        "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of June 30, 2024.",
+        "5. Fair Value Measurements"
+      ],
+      "xpath": "/html/body/div[121]/ix:nonnumeric/div[2]/ix:nonnumeric/table[1]/tr[11]"
+    },
+    {
+      "cells": [
+        "Total investments",
+        "",
+        "$",
+        "\u2014",
+        "",
+        "",
+        "$",
+        "154,657,279",
+        "",
+        "",
+        "$",
+        "721,539,980",
+        "",
+        "",
+        "$",
+        "876,197,259",
+        ""
+      ],
+      "facts": [
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_10275bee-7da4-4ef3-8b50-08d10eb66fea",
+          "scale": null,
+          "text": "\u2014",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_bb168fa6-888e-43a2-8bb7-9f105e88f2a1",
+          "scale": null,
+          "text": "154,657,279",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_093f79cf-bbee-4432-aa38-dd01cb1db752",
+          "scale": null,
+          "text": "721,539,980",
+          "unit": "U_USD"
+        },
+        {
+          "concept": "us-gaap:InvestmentOwnedAtFairValue",
+          "context": "C_5448f33e-3edc-4b72-af27-c9787297d96f",
+          "scale": null,
+          "text": "876,197,259",
+          "unit": "U_USD"
+        }
+      ],
+      "opening": " | December 31, 2023 | Level 1 Level 2 Level 3 Total | Investments: | Secured loans $ \u2014 $ 101,647,800 $ 676,678,861 $ 778,326,661",
+      "preceding": [
+        "",
+        "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of December 31, 2023.",
+        "268,961 \u2014 \u2014 20,268,961 Foreign cash held at banks 95,900 \u2014 \u2014 95,900 Total $ 63,340,346 $ \u2014 $ \u2014 $ 63,340,346 Derivative Assets Interest rate swaps $ \u2014 $ 376,159 $ \u2014 $ 376,159 Foreign currency forward contracts \u2014 87,882 \u2014 87,882 Total $ \u2014 $ 464,041 $ \u2014 $ 464,041 Derivative Liabilities Interest rate swaps $ \u2014 $ ( 2,662,497 ) $ \u2014 $ ( 2,662,497 ) Foreign currency forward contracts \u2014 ( 25,217 ) \u2014 ( 25,217 ) Total $ \u2014 $ ( 2,687,714 ) $ \u2014 $ ( 2,687,714 )",
+        "",
+        "The following table presents the investments carried on the consolidated statements of assets and liabilities by level within the fair value hierarchy as of June 30, 2024.",
+        "5. Fair Value Measurements"
+      ],
+      "xpath": "/html/body/div[121]/ix:nonnumeric/div[2]/ix:nonnumeric/table[2]/tr[11]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "30.7",
+        "",
+        "",
+        "$",
+        "27.8",
+        "",
+        "",
+        "$",
+        "61.1",
+        "",
+        "",
+        "$",
+        "54.8",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | ($ in millions) 2024 2023 2024 2023 | Total investment income $ 30.7 $ 27.8 $ 61.1 $ 54.8 | Less: Total expenses 13.9 13.5 28.6 27.7",
+      "preceding": [
+        "",
+        "Operating results for the three and six months ended June 30, 2024 and June 30, 2023 were as follows:",
+        "Results of Operations",
+        "June 30, 2024 December 31, 2023 Weighted average yield of portfolio 12.4 % 12.5 % Weighted average yield of performing debt investments 12.9 % 13.4 % Weighted average interest rate of performing debt investments 12.2 % 12.5 % Weighted average spread over SOFR of floating rate performing investments 7.1 % 7.2 %",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[30]/tr[4]"
+    },
+    {
+      "cells": [
+        "Total investment income",
+        "",
+        "$",
+        "30.7",
+        "",
+        "",
+        "$",
+        "27.8",
+        "",
+        "",
+        "$",
+        "61.1",
+        "",
+        "",
+        "$",
+        "54.8",
+        ""
+      ],
+      "facts": [],
+      "opening": " | For the Three Months Ended June 30, For the Six Months Ended June 30, | ($ in millions) 2024 2023 2024 2023 | Interest income, excluding PIK interest $ 29.0 $ 26.5 $ 57.7 $ 53.0 | PIK interest income 1.7 0.9 3.4 1.4",
+      "preceding": [
+        "",
+        "Investment income is comprised primarily of interest from debt investments, which includes PIK, amortization of upfront fees and prepayment fees.",
+        "Investment Income",
+        "For the Three Months Ended June 30, For the Six Months Ended June 30, ($ in millions) 2024 2023 2024 2023 Total investment income $ 30.7 $ 27.8 $ 61.1 $ 54.8 Less: Total expenses 13.9 13.5 28.6 27.7 Net investment income 16.8 14.3 32.5 27.1 Net realized gain (loss) 8.4 (0.9 ) 6.9 (2.3 ) Net change in unrealized gain (loss) (13.6 ) (0.4 ) (11.1 ) 0.3 Net increase (decrease) in net assets resulting from operations $ 11.6 $ 13.0 $ 28.3 $ 25.1",
+        "",
+        "10-Q",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "xpath": "/html/body/table[31]/tr[8]"
+    }
+  ],
+  "sha256": "0149a016cd39916fb201dae4fab90ad8e8913f2d4de717efa348a6572750c4ee",
+  "status": "literal_primary_review_candidates"
+}

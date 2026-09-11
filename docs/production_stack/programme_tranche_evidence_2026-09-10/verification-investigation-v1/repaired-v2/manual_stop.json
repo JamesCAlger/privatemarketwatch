@@ -1,0 +1,6 @@
+{
+    "command":  "C:\\Users\\alger\\miniconda3\\python.exe -B -m scripts.programme_tranche.diagnose_tests profile --name repaired-v2 --seconds 900 --worker",
+    "stopped_worker_pid":  15068,
+    "reason":  "Measured staging cases take 65-82 seconds each; the full 59-case selection cannot fit the 900-second diagnostic budget. Preserve this partial run and use four representative staging cases.",
+    "requested_utc":  "2026-09-10T17:59:29.9711650Z"
+}

@@ -1,0 +1,578 @@
+{
+  "anchors": [
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "Total investments, at fair value (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 )",
+        "",
+        "",
+        "1,179,343,662",
+        "",
+        "",
+        "",
+        "1,122,517,095",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,179,343,662",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[5]/div/div[1]/div/table[2]/tr[8]",
+      "table_xpath": "/html/body/div[5]/div/div[1]/div/table[2]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "1179343662"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "id": "Fact_79503780",
+        "name": "us-gaap:InvestmentOwnedAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "TOTAL INVESTMENTS - 254.06% (14)",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "$",
+        "1,198,535,419",
+        "",
+        "",
+        "$",
+        "1,179,343,662",
+        ""
+      ],
+      "concept": "us-gaap:InvestmentOwnedAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "Fact_79503780",
+      "field": "fair_value",
+      "parse_status": "parsed",
+      "raw_text": "1,179,343,662",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]/tr[14]",
+      "table_xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "1179343662"
+    },
+    {
+      "attributes": {
+        "contextref": "PAsOn03_31_2023",
+        "decimals": "0",
+        "format": "ixt:num-dot-decimal",
+        "name": "us-gaap:RestrictedInvestmentsAtFairValue",
+        "scale": "0",
+        "unitref": "Unit_USD"
+      },
+      "cells": [
+        "(9)",
+        "Securities exempt from registration under the Securities Act of 1933, and may be deemed to be \u201crestricted securities\u201d. As of March 31, 2023, the aggregate fair value of these securities is $ 18,652,582 or 4.02 % of the Fund\u2019s net assets. The initial acquisition dates have been included for such securities."
+      ],
+      "concept": "us-gaap:RestrictedInvestmentsAtFairValue",
+      "context_id": "PAsOn03_31_2023",
+      "currency": "USD",
+      "fact_id": "",
+      "field": "anchor_candidate",
+      "parse_status": "parsed",
+      "raw_text": "18,652,582",
+      "rounding_bound": "0.5",
+      "row_xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[16]/tr",
+      "table_xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[16]",
+      "unit_measures": [
+        "iso4217:USD"
+      ],
+      "unit_ref": "Unit_USD",
+      "value": "18652582"
+    }
+  ],
+  "cik": "0001634452",
+  "component": "missing_output_census",
+  "path": "data/raw/filings/bdc_html/1634452/000119312523145163.html",
+  "reference_id": "REF-0001634452-2023-03-31",
+  "report_date": "2023-03-31",
+  "source_rows": 602,
+  "source_sha256": "fdcd47f337568a630db7f7815221f449eb51582898a4ccaf4561b960ae703bfd",
+  "source_status": "source_candidates_require_review; not acceptance labels",
+  "tables": [
+    {
+      "contexts": 3,
+      "first": [
+        "Non-controlled/non-affiliated investments (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 , respectively) | $ | 1,179,169,825 | $ | 1,122,343,258",
+        "Controlled affiliated investments (amortized cost of $ 0 and $ 0 ) | 173,837 | 173,837"
+      ],
+      "last": [
+        "Controlled affiliated investments (amortized cost of $ 0 and $ 0 ) | 173,837 | 173,837",
+        "Total investments, at fair value (amortized cost of $ 1,198,535,419 and $ 1,146,231,264 ) | 1,179,343,662 | 1,122,517,095"
+      ],
+      "opening_rows": [
+        "",
+        "As of March 31, 2023 (Unaudited) As of December 31, 2022",
+        "Assets",
+        "Investments, at fair value"
+      ],
+      "preceding": [
+        "",
+        "Consolidated Statements of Assets and Liabilities",
+        "AB Private Credit Investors Corporation",
+        "Item 1. Financial Statements"
+      ],
+      "rows": 3,
+      "table_xpath": "/html/body/div[5]/div/div[1]/div/table[2]"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "AmerCareRoyal, LLC (1) | Business Services | Delayed Draw Term Loan | 11.41% (S + 6.50%; 0.75% PIK; 1.00% Floor) | 11/25/2025 | $ | 496,070 | $ | 488,705 | $ | 491,109",
+        "AmerCareRoyal, LLC (1) (2) | Business Services | Term Loan | 11.35% (S + 6.50%; 0.75% PIK; 1.00% Floor) | 11/25/2025 | 1,998,536 | 1,978,551 | 1,978,551"
+      ],
+      "last": [
+        "Airwavz Solutions, Inc (2) (4) | Digital Infrastructure & Services | Delayed Draw Term Loan | 9.55% (S + 4.50%; 1.00% Floor) | 03/31/2027 | 1,305,480 | 1,271,088 | 1,264,683",
+        "Airwavz Solutions, Inc (4) (5) | Digital Infrastructure & Services | Revolver | 9.55% (S + 4.50%; 1.00% Floor) | 03/31/2027 | \u2014 | ( 9,194 | ) | ( 11,423 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Investments at Fair Value - 254.06% (++) + * # ^",
+        ""
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 47,
+      "table_xpath": "/html/body/div[10]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 37,
+      "first": [
+        "Airwavz Solutions, Inc (2) | Digital Infrastructure & Services | Term Loan | 9.55% (S + 4.50%; 1.00% Floor) | 03/31/2027 | $ | 5,221,919 | $ | 5,148,368 | $ | 5,130,535",
+        "Avant Communications, LLC (4) (5) | Digital Infrastructure & Services | Revolver | 10.40% (S + 5.50%; 1.00% Floor) | 11/30/2026 | \u2014 | ( 8,388 | ) | \u2014"
+      ],
+      "last": [
+        "Stratus Networks, Inc. (2) (4) | Digital Infrastructure & Services | Delayed Draw Term Loan | 9.69% (L + 4.50%; 1.00% Floor) | 12/15/2027 | 858,085 | 820,071 | 828,382",
+        "Stratus Networks, Inc. (4) | Digital Infrastructure & Services | Revolver | 9.35% (L + 4.50%; 1.00% Floor) | 12/15/2027 | 792,078 | 776,414 | 774,751"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Airwavz Solutions, Inc (2) Digital Infrastructure & Services Term Loan 9.55% (S + 4.50%; 1.00% Floor) 03/31/2027 $ 5,221,919 $ 5,148,368 $ 5,130,535",
+        "Avant Communications, LLC (4) (5) Digital Infrastructure & Services Revolver 10.40% (S + 5.50%; 1.00% Floor) 11/30/2026 \u2014 ( 8,388 ) \u2014"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 37,
+      "table_xpath": "/html/body/div[11]/div/div/div[1]/div/table"
+    },
+    {
+      "contexts": 41,
+      "first": [
+        "Stratus Networks, Inc. (3) | Digital Infrastructure & Services | Term Loan | 9.35% (L + 4.50%; 1.00% Floor) | 12/15/2027 | $ | 7,920,781 | $ | 7,791,516 | $ | 7,782,168",
+        "Thrive Buyer, Inc. (1) (3) | Digital Infrastructure & Services | Delayed Draw Term Loan | 11.16% (L + 6.00%; 1.00% Floor) | 01/22/2027 | 8,236,746 | 8,119,504 | 8,154,379"
+      ],
+      "last": [
+        "AOM Acquisition, LLC. (4) (5) | Healthcare & HCIT | Revolver | 9.80% (S + 4.75%; 1.00% Floor) | 02/18/2027 | \u2014 | ( 19,079 | ) | ( 6,093 | )",
+        "AOM Acquisition, LLC. (1) (3) | Healthcare & HCIT | Term Loan | 9.80% (S + 4.75%; 1.00% Floor) | 02/18/2027 | 7,052,170 | 6,938,730 | 7,016,909"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Stratus Networks, Inc. (3) Digital Infrastructure & Services Term Loan 9.35% (L + 4.50%; 1.00% Floor) 12/15/2027 $ 7,920,781 $ 7,791,516 $ 7,782,168",
+        "Thrive Buyer, Inc. (1) (3) Digital Infrastructure & Services Delayed Draw Term Loan 11.16% (L + 6.00%; 1.00% Floor) 01/22/2027 8,236,746 8,119,504 8,154,379"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 41,
+      "table_xpath": "/html/body/div[12]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 44,
+      "first": [
+        "BAART Programs, Inc. (1) | Healthcare & HCIT | Delayed Draw Term Loan | 10.16% (L + 5.00 %; 1.00% Floor) | 06/11/2027 | $ | 3,904,356 | $ | 3,874,780 | $ | 3,728,660",
+        "BAART Programs, Inc. (1) (3) | Healthcare & HCIT | Term Loan | 10.16% (L + 5.00%; 1.00% Floor) | 06/11/2027 | 4,709,898 | 4,678,760 | 4,497,952"
+      ],
+      "last": [
+        "OMH-HealthEdge Holdings, LLC (4) (5) | Healthcare & HCIT | Revolver | 10.03% (L + 5.25%; 1.00% Floor) | 10/24/2024 | \u2014 | ( 3,280 | ) | \u2014",
+        "OMH-HealthEdge Holdings, LLC (1) | Healthcare & HCIT | Term Loan | 10.03% (L + 5.25%; 1.00% Floor) | 10/24/2025 | 3,651,990 | 3,612,340 | 3,651,990"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "BAART Programs, Inc. (1) Healthcare & HCIT Delayed Draw Term Loan 10.16% (L + 5.00 %; 1.00% Floor) 06/11/2027 $ 3,904,356 $ 3,874,780 $ 3,728,660",
+        "BAART Programs, Inc. (1) (3) Healthcare & HCIT Term Loan 10.16% (L + 5.00%; 1.00% Floor) 06/11/2027 4,709,898 4,678,760 4,497,952"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 44,
+      "table_xpath": "/html/body/div[13]/div/div/div[1]/div/table"
+    },
+    {
+      "contexts": 46,
+      "first": [
+        "OMH-HealthEdge Holdings, LLC (3) | Healthcare & HCIT | Term Loan | 10.03% (L + 5.25%; 1.00% Floor) | 10/24/2025 | $ | 2,116,440 | $ | 2,089,511 | $ | 2,116,440",
+        "OMH-HealthEdge Holdings, LLC (3) | Healthcare & HCIT | Term Loan | 10.03% (L + 5.25%; 1.00% Floor) | 10/24/2025 | 961,210 | 945,806 | 961,210"
+      ],
+      "last": [
+        "West Dermatology (1) (2) (3) | Healthcare & HCIT | Term Loan | 10.70% (S + 5.75%; 1.00% Floor) | 03/17/2028 | 12,562,683 | 12,344,850 | 11,243,601",
+        "Activ Software Holdings, LLC | Software & Tech Services | Delayed Draw Term Loan | 11.32% (S + 6.25%; 1.00% Floor) | 05/04/2027 | 632,383 | 614,430 | 616,574"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "OMH-HealthEdge Holdings, LLC (3) Healthcare & HCIT Term Loan 10.03% (L + 5.25%; 1.00% Floor) 10/24/2025 $ 2,116,440 $ 2,089,511 $ 2,116,440",
+        "OMH-HealthEdge Holdings, LLC (3) Healthcare & HCIT Term Loan 10.03% (L + 5.25%; 1.00% Floor) 10/24/2025 961,210 945,806 961,210"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 46,
+      "table_xpath": "/html/body/div[14]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 56,
+      "first": [
+        "Activ Software Holdings, LLC (4) (5) | Software & Tech Services | Revolver | 11.79% (L + 6.25%; 1.00% Floor) | 05/04/2027 | $ | \u2014 | $ | ( 8,966 | ) | $ | ( 16,221 | )",
+        "Activ Software Holdings, LLC (1) | Software & Tech Services | Term Loan | 11.28% (S + 6.25%; 1.00% Floor) | 05/04/2027 | 2,529,533 | 2,457,720 | 2,466,294"
+      ],
+      "last": [
+        "Fusion Holding Corp (4) (5) | Software & Tech Services | Revolver | 11.15% (S + 6.25%; 0.75% Floor) | 09/15/2027 | \u2014 | ( 27,750 | ) | ( 31,032 | )",
+        "Fusion Holding Corp (1) (2) (3) | Software & Tech Services | Term Loan | 11.15% (S + 6.25%; 0.75% Floor) | 09/15/2029 | 16,852,823 | 16,489,410 | 16,473,635"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Activ Software Holdings, LLC (4) (5) Software & Tech Services Revolver 11.79% (L + 6.25%; 1.00% Floor) 05/04/2027 $ \u2014 $ ( 8,966 ) $ ( 16,221 )",
+        "Activ Software Holdings, LLC (1) Software & Tech Services Term Loan 11.28% (S + 6.25%; 1.00% Floor) 05/04/2027 2,529,533 2,457,720 2,466,294"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 56,
+      "table_xpath": "/html/body/div[15]/div/div/div/div[1]/table"
+    },
+    {
+      "contexts": 54,
+      "first": [
+        "Fusion Risk Management Inc (4) (5) | Software & Tech Services | Revolver | 8.14% (S + 6.50%; 1.00% Floor) | 08/30/2028 | $ | \u2014 | $ | ( 17,385 | ) | $ | ( 25,585 | )",
+        "Fusion Risk Management Inc (1) (2) | Software & Tech Services | Term Loan | 8.14% (S + 3.25%; 3.50% PIK; 1.00% Floor) | 08/30/2028 | 8,680,053 | 8,506,198 | 8,419,651"
+      ],
+      "last": [
+        "Smartlinx Solutions, LLC (2) | Software & Tech Services | Term Loan | 10.91% (L + 5.75%; 1.00% Floor) | 03/04/2026 | 491,897 | 483,947 | 491,897",
+        "Smartlinx Solutions, LLC (1) (2) (3) | Software & Tech Services | Term Loan | 10.91% (L + 5.75%; 1.00% Floor) | 03/04/2026 | 5,605,879 | 5,549,798 | 5,591,864"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Fusion Risk Management Inc (4) (5) Software & Tech Services Revolver 8.14% (S + 6.50%; 1.00% Floor) 08/30/2028 $ \u2014 $ ( 17,385 ) $ ( 25,585 )",
+        "Fusion Risk Management Inc (1) (2) Software & Tech Services Term Loan 8.14% (S + 3.25%; 3.50% PIK; 1.00% Floor) 08/30/2028 8,680,053 8,506,198 8,419,651"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 54,
+      "table_xpath": "/html/body/div[16]/div[1]/div[1]/div/div/table"
+    },
+    {
+      "contexts": 47,
+      "first": [
+        "Soladoc, LLC (4) (5) | Software & Tech Services | Delayed Draw Term Loan | 10.07% (S + 5.25%; 0.75% Floor) | 06/12/2028 | $ | \u2014 | $ | ( 20,483 | ) | $ | ( 53,003 | )",
+        "Soladoc, LLC (4) (5) | Software & Tech Services | Revolver | 10.07% (S + 5.25%; 0.75% Floor) | 06/12/2028 | \u2014 | ( 10,248 | ) | ( 19,140 | )"
+      ],
+      "last": [
+        "Zendesk, Inc. (2) (3) | Software & Tech Services | Term Loan | 11.88% (S + 3.50%; 3.50% PIK; 0.75% Floor) | 11/22/2028 | 13,334,101 | 13,082,937 | 13,200,760",
+        "Dillon Logistics, Inc. (7) | Transport & Logistics | Revolver | \u2014 (P + 6.00%; 1.00% Floor) | 12/11/2023 | 856,909 | 774,692 | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Soladoc, LLC (4) (5) Software & Tech Services Delayed Draw Term Loan 10.07% (S + 5.25%; 0.75% Floor) 06/12/2028 $ \u2014 $ ( 20,483 ) $ ( 53,003 )",
+        "Soladoc, LLC (4) (5) Software & Tech Services Revolver 10.07% (S + 5.25%; 0.75% Floor) 06/12/2028 \u2014 ( 10,248 ) ( 19,140 )"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 47,
+      "table_xpath": "/html/body/div[17]/div/div/div[1]/div/table"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "Dillon Logistics, Inc. (7) | Transport & Logistics | Term Loan | \u2014 (L + 7.00%; 1.00% Floor) | 12/11/2023 | $ | 2,941,825 | $ | 2,546,794 | $ | 30,307",
+        "Total U.S. 1st Lien/Senior Secured Debt | 1,143,249,575 | 1,120,293,597"
+      ],
+      "last": [
+        "Total Canadian 1st Lien/Senior Secured Debt | 24,048,383 | 23,487,410",
+        "Total Canadian Corporate Debt | 24,048,383 | 23,487,410"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Industry Facility Type Interest Maturity Funded Par Amount Cost Fair Value",
+        "Dillon Logistics, Inc. (7) Transport & Logistics Term Loan \u2014 (L + 7.00%; 1.00% Floor) 12/11/2023 $ 2,941,825 $ 2,546,794 $ 30,307",
+        ""
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[18]/div[1]/div[1]/div/div/table[1]"
+    },
+    {
+      "contexts": 19,
+      "first": [
+        "Ntiva Investments, LLC (MSP Global Holdings, Inc) (10) | Class A | Digital Infrastructure & Services | 01/24/2022 | 333,937 | $ | 272,826 | $ | 296,732",
+        "Bowline Topco LLC ^^ (10) (11) | LLC Units | Energy | 08/09/2021 | 2,946,390 | \u2014 | 173,837"
+      ],
+      "last": [
+        "Vectra AI, Inc (10) | Series F | Software & Tech Services | 05/28/2021 | 17,064 | 131,095 | 110,279",
+        "Total U.S. Preferred Stock | 8,115,829 | 9,410,941"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Initial Acquisition Date (9) Shares Cost Fair Value",
+        "U.S. Preferred Stock - 2.03 %",
+        "Ntiva Investments, LLC (MSP Global Holdings, Inc) (10) Class A Digital Infrastructure & Services 01/24/2022 333,937 $ 272,826 $ 296,732"
+      ],
+      "preceding": [
+        "",
+        "Digital Infrastructure & Services Delayed Draw Term Loan 10.59% (L + 5.75%; 0.75% Floor) 10/29/2028 \u2014 ( 19,549 ) ( 109,536 ) Banneker V Acquisition, Inc. (1) (2) (3) (6) (8) Software & Tech Services Term Loan 11.84% (S + 7.50%; 1.00% Floor) 12/04/2025 13,258,433 13,022,310 12,926,973 Banneker V Acquisition, Inc. (4) (5) (8) Software & Tech Services Revolver 11.84% (S + 7.50%; 1.00% Floor) 12/04/2025 \u2014 ( 18,744 ) ( 22,417 ) Banneker V Acquisition, Inc. (3) (8) Software & Tech Services Delayed Draw Term Loan 12.41% (S + 7.50%; 1.00% Floor) 12/04/2025 1,024,233 1,013,096 998,627 Total Canadian 1st Lien/Senior Secured Debt 24,048,383 23,487,410 Total Canadian Corporate Debt 24,048,383 23,487,410",
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 19,
+      "table_xpath": "/html/body/div[18]/div[1]/div[1]/div/div/table[2]"
+    },
+    {
+      "contexts": 42,
+      "first": [
+        "Global Radar Holdings, LLC (10) (11) | Earn Out | Business Services | 11/08/2022 | 125 | $ | \u2014 | $ | \u2014",
+        "AEG Holding Co mpan y, Inc. (10) | Class A | Consumer Discretionary | 11/20/2017 | 320 | 321,309 | 314,419"
+      ],
+      "last": [
+        "GlobalWebIndex, Inc., expire 12/30/2027 (10) | Preferred Units | Software & Tech Services | 12/30/2020 | 8,832 | 159,859 | $ 212,964",
+        "Total United Kingdom Warrants | 159,859 | 212,964"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Industry Initial Acquisition Date (9) Shares Cost Fair Value",
+        "U.S. Common Stock - 1.90 %",
+        "Global Radar Holdings, LLC (10) (11) Earn Out Business Services 11/08/2022 125 $ \u2014 $ \u2014"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 42,
+      "table_xpath": "/html/body/div[19]/div/div[1]/div/table"
+    },
+    {
+      "contexts": 13,
+      "first": [
+        "Orangewood WWB Co-Invest, L.P. (10) (13) | LP Interests | 829,314 | $ | 829,314 | $ | 995,177",
+        "ORCP III Triton Co-Investors, L.P. (10) (13) | LP Interests | 341,592 | 98,394 | 420,500"
+      ],
+      "last": [
+        "Total U.S. Investment Companies | 54,630,117 | 54,630,117",
+        "Total Cash Equivalents | 54,630,117 | 54,630,117"
+      ],
+      "opening_rows": [
+        "",
+        "Portfolio Company Class/Series Shares Cost Fair Value",
+        "Investment Companies - 1.23 %",
+        "Orangewood WWB Co-Invest, L.P. (10) (13) LP Interests 829,314 $ 829,314 $ 995,177"
+      ],
+      "preceding": [
+        "",
+        "(Unaudited)",
+        "Consolidated Schedule of Investments as of March 31, 2023 (continued)",
+        "AB Private Credit Investors Corporation"
+      ],
+      "rows": 14,
+      "table_xpath": "/html/body/div[20]/div[1]/div[1]/div/div/table[1]"
+    },
+    {
+      "contexts": 2,
+      "first": [
+        "Bowline Topco LLC | $ | 173,837 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 173,837 | $ | \u2014",
+        "$ | 173,837 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 173,837 | $ | \u2014"
+      ],
+      "last": [
+        "Bowline Topco LLC | $ | 173,837 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 173,837 | $ | \u2014",
+        "$ | 173,837 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | \u2014 | $ | 173,837 | $ | \u2014"
+      ],
+      "opening_rows": [
+        "",
+        "Beginning Fair Value Balance Gross Additions (1) Gross Reductions (2) Net Realized Gain/Loss Net Change in Unrealized Appreciation (Depreciation) Ending Fair Value Balance Dividend, Interest, PIK and Other Income",
+        "For the Three Months Ended March 31, 2023",
+        "Controlled Affiliates"
+      ],
+      "preceding": [
+        "",
+        "As defined in the Investment Company Act, the investment is deemed to be a \u201ccontrolled affiliated person\u201d of the Fund because the Fund owns, either directly or indirectly, 25% or more of the portfolio company\u2019s outstanding voting securities or has the power to exercise control over management or policies of such portfolio company. The table below presents the Fund\u2019s affiliated investments:"
+      ],
+      "rows": 2,
+      "table_xpath": "/html/body/div[37]/div/div/div[1]/div/ix:continuation/ix:nonnumeric/table[1]"
+    },
+    {
+      "contexts": 16,
+      "first": [
+        "AAH Topco, LLC | Delayed Draw Term Loan | 12/22/2023 | 2,344,916 | ( 70,347 | ) | 3,689,335 | ( 119,903 | )",
+        "AAH Topco, LLC | Revolver | 12/22/2027 | 787,273 | ( 27,555 | ) | 787,273 | ( 31,491 | )"
+      ],
+      "last": [
+        "Bridgepointe Technologies, LLC | Revolver | 12/31/2027 | 777,494 | ( 17,494 | ) | 777,494 | ( 29,156 | )",
+        "Brightspot Buyer, Inc | Revolver | 11/16/2027 | 680,292 | ( 15,307 | ) | 680,292 | ( 20,409 | )"
+      ],
+      "opening_rows": [
+        "",
+        "03/31/2023 12/31/2022",
+        "Investment Type Facility Type Commitment Expiration Date (1) Unfunded Commitment (2) Fair Value (3) Unfunded Commitment (2) Fair Value (3)",
+        "1st Lien/Senior Secured Debt 5 Bars, LLC Delayed Draw Term Loan 02/28/2023 \u2014 \u2014 2,845,273 ( 7,113 )"
+      ],
+      "preceding": [
+        ""
+      ],
+      "rows": 16,
+      "table_xpath": "/html/body/div[42]/div/div[1]/div/ix:nonnumeric/ix:continuation/table"
+    },
+    {
+      "contexts": 33,
+      "first": [
+        "BSI2 Hold Nettle, LLC | Revolver | 06/30/2028 | 588,922 | ( 8,834 | ) | 588,922 | ( 10,306 | )",
+        "BusinesSolver.com, Inc. | Delayed Draw Term Loan | 12/01/2023 | 1,816,606 | ( 40,874 | ) | 1,816,606 | ( 45,415 | )"
+      ],
+      "last": [
+        "Fusion Risk Management Inc | Revolver | 08/30/2028 | 852,848 | ( 25,585 | ) | 852,848 | ( 29,850 | )",
+        "Galway Borrower, LLC | Delayed Draw Term Loan | 09/29/2023 | 39,209 | ( 882 | ) | 39,209 | ( 1,274 | )"
+      ],
+      "opening_rows": [
+        "",
+        "BSI2 Hold Nettle, LLC Revolver 06/30/2028 588,922 ( 8,834 ) 588,922 ( 10,306 )",
+        "BusinesSolver.com, Inc. Delayed Draw Term Loan 12/01/2023 1,816,606 ( 40,874 ) 1,816,606 ( 45,415 )",
+        "BV EMS Buyer, Inc. Delayed Draw Term Loan 03/21/2024 1,706,075 ( 46,917 ) 2,765,018 ( 96,776 )"
+      ],
+      "preceding": [],
+      "rows": 33,
+      "table_xpath": "/html/body/div[42]/div/div[2]/div/ix:continuation/ix:continuation/table"
+    },
+    {
+      "contexts": 25,
+      "first": [
+        "Galway Borrower, LLC | Revolver | 09/30/2027 | 212,272 | ( 6,899 | ) | 270,410 | ( 11,492 | )",
+        "GHA Buyer, Inc. | Revolver | 06/24/2026 | 951,077 | ( 40,421 | ) | 951,077 | ( 40,421 | )"
+      ],
+      "last": [
+        "Netwrix Corporation And Concept Searching Inc. | Revolver | 06/11/2029 | 581,066 | ( 4,358 | ) | 774,755 | ( 7,748 | )",
+        "Pace Health Companies, LLC | Revolver | 08/02/2024 | 616,682 | ( 1,542 | ) | 616,682 | ( 1,542 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Galway Borrower, LLC Revolver 09/30/2027 212,272 ( 6,899 ) 270,410 ( 11,492 )",
+        "GHA Buyer, Inc. Revolver 06/24/2026 951,077 ( 40,421 ) 951,077 ( 40,421 )",
+        "Greenhouse Software, Inc. Revolver 09/01/2028 887,221 ( 15,526 ) 1,232,251 ( 30,806 )"
+      ],
+      "preceding": [],
+      "rows": 25,
+      "table_xpath": "/html/body/div[43]/div[1]/div/div/div/ix:continuation/ix:continuation/table"
+    },
+    {
+      "contexts": 36,
+      "first": [
+        "Ping Identity Corporation | Revolver | 10/17/2028 | 1,203,344 | ( 27,075 | ) | 1,203,344 | ( 30,084 | )",
+        "Pinnacle Dermatology Management, LLC | Delayed Draw Term Loan | 12/08/2023 | 606,828 | ( 18,205 | ) | 798,862 | ( 25,963 | )"
+      ],
+      "last": [
+        "SugarCRM, Inc. | Revolver | 07/31/2024 | 310,244 | ( 3,878 | ) | 310,244 | ( 4,654 | )",
+        "Sundance Group Holdings, Inc. | Revolver | 07/02/2027 | 1,277,011 | ( 28,733 | ) | 1,418,901 | ( 39,020 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Ping Identity Corporation Revolver 10/17/2028 1,203,344 ( 27,075 ) 1,203,344 ( 30,084 )",
+        "Pinnacle Dermatology Management, LLC Delayed Draw Term Loan 12/08/2023 606,828 ( 18,205 ) 798,862 ( 25,963 )",
+        "Pinnacle Dermatology Management, LLC Revolver 12/08/2026 337,980 ( 4,225 ) 384,068 ( 4,801 )"
+      ],
+      "preceding": [],
+      "rows": 36,
+      "table_xpath": "/html/body/div[43]/div[2]/div/div/div/ix:continuation/ix:continuation/table"
+    },
+    {
+      "contexts": 24,
+      "first": [
+        "Swiftpage, Inc. | Revolver | 06/13/2023 | 225,317 | ( 2,253 | ) | 225,317 | ( 9,576 | )",
+        "Syntax Systems Ltd | Delayed Draw Term Loan | 10/30/2023 | 2,434,137 | ( 109,536 | ) | 2,434,137 | ( 121,707 | )"
+      ],
+      "last": [
+        "Zendesk, Inc. | Revolver | 11/22/2028 | 1,372,628 | ( 13,726 | ) | 1,372,628 | ( 27,453 | )",
+        "Total | $ | 171,537,939 | $ | ( 3,483,621 | ) | $ | 193,536,127 | $ | ( 5,029,664 | )"
+      ],
+      "opening_rows": [
+        "",
+        "Swiftpage, Inc. Revolver 06/13/2023 225,317 ( 2,253 ) 225,317 ( 9,576 )",
+        "Syntax Systems Ltd Delayed Draw Term Loan 10/30/2023 2,434,137 ( 109,536 ) 2,434,137 ( 121,707 )",
+        "Syntax Systems Ltd Revolver 10/29/2026 324,552 ( 14,605 ) 324,552 ( 16,228 )"
+      ],
+      "preceding": [],
+      "rows": 24,
+      "table_xpath": "/html/body/div[44]/div[1]/div/div/div/ix:continuation/ix:continuation/table[1]"
+    }
+  ]
+}

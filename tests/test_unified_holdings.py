@@ -1274,6 +1274,16 @@ class TestReclassifyNamedFundPositions:
 class TestPrepareBdc:
     pytestmark = SLOW_STAGING_SQL_MARKS
 
+    @pytest.fixture(autouse=True)
+    def _isolate_field_status_overlay(self, monkeypatch, tmp_path):
+        """Synthetic staging rows must not load the full production overlay.
+
+        TestBuildUnifiedHoldings.test_ixbrl_lien_fills_blank_keyword_lien
+        exercises the real overlay using an explicit, file-backed fixture.
+        """
+        monkeypatch.setattr("pipeline.config.BDC_IXBRL_FIELD_STATUS_FILE",
+                            tmp_path / "absent_field_status.csv", raising=True)
+
     def _make_bdc_df(self, rows):
         """Helper to create a minimal BDC DataFrame."""
         cols = [
