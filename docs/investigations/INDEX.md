@@ -68,6 +68,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-13 - Coupon source vocabulary and independent all-in replay
 - 2026-09-14 - Trace the 18 missing subsidiary contexts after staging
 - 2026-09-14 - Foreign FV reached USD sums after source-unit resolution
+- 2026-09-15 - E3-v2: certifying no-filing lifecycle exclusions from positive EDGAR evidence
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals

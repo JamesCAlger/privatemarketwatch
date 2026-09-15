@@ -229,3 +229,13 @@ def test_public_exact_large_amounts_agree_for_text_and_typed_holdings(tmp_path,t
         con.execute("UPDATE h SET fair_value=CAST(fair_value AS DOUBLE)+0.01 WHERE CAST(fair_value AS DOUBLE)<0")
         collect_public(con,Evidence(manifest,hp),Q,result)
         assert result['public_partition_delta']['actual']==1
+
+
+def test_filing_exists_contradiction_counts_as_positive_facts(tmp_path):
+    # E3-v2 verdict name: EDGAR lists a periodic filing the exclusion said did not exist.
+    obligations=[dict(cik=CIK,report_date=Q,eligibility_status="eligible_source_investments"),
+        dict(cik="456",report_date=Q,eligibility_status="not_yet_investment_operating")]
+    exclusions=[dict(cik="456",quarter=Q,P=0,positive_total_observations=0,verdict="exclusion_contradicted_filing_exists")]
+    hp,manifest=evidence(tmp_path,dict(obligations=obligations,exclusions=exclusions))
+    result=collect(hp,manifest,Q,{CIK})["excluded_with_positive_facts"]
+    assert result["actual"]==1 and result["assessable"]

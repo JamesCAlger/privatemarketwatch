@@ -84,7 +84,7 @@ def collect_contexts(con, evidence, quarter, results):
     if exclusions:
         table(con,"exclusions",exclusions)
         n, contradicted, unresolved = con.execute("""SELECT count(*),
-          count(*) FILTER(WHERE verdict='exclusion_contradicted' OR TRY_CAST(P AS BIGINT)>0
+          count(*) FILTER(WHERE verdict LIKE 'exclusion_contradicted%' OR TRY_CAST(P AS BIGINT)>0
             OR TRY_CAST(positive_total_observations AS BIGINT)>0),
           count(*) FILTER(WHERE verdict='exclusion_unassessable') FROM exclusions WHERE quarter=?""", [quarter]).fetchone()
         expected = con.execute("SELECT count(*) FROM obligations WHERE report_date=? AND eligibility_status NOT LIKE 'eligible%'", [quarter]).fetchone()[0]
