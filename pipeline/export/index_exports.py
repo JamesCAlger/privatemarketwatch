@@ -299,68 +299,55 @@ def _export_index_summary(
     _write_json("index_summary.json", summaries)
 
 
-def _export_top_constituents(con: duckdb.DuckDBPyConnection) -> None:
-    """Top 20 positions per index by end_fair_value (latest quarter)."""
-    if not POSITION_RETURNS_CSV.exists():
-        _write_json("top_constituents.json", {})
-        return
+def _export_top_constituents(con: duckdb.DuckDBPyConnection, *, snapshot, limit: int = 20) -> None:
+    """Largest cohort positions by signed fair value, from the public snapshot.
 
-    rows = con.execute(f"""
-        WITH {_valid_positions_sql()},
-        ranked AS (
-            SELECT
-                pr.index_classification,
-                pr.issuer_name,
-                pr.asset_category,
-                pr.end_fair_value,
-                pr.end_cost,
-                CASE WHEN pr.end_cost > 0
-                     THEN (pr.end_fair_value - pr.end_cost) / pr.end_cost * 100
-                END AS unrealized_gl_pct,
-                pr.cik,
-                pr.entity_name,
-                pr.quarterly_total_return AS total_return,
-                CASE WHEN TRY_CAST(pr.begin_basis_spread AS DOUBLE) > 0 THEN 'Floating'
-                     WHEN TRY_CAST(pr.begin_interest_rate AS DOUBLE) > 0 THEN 'Fixed'
-                END AS rate_type,
-                ROW_NUMBER() OVER (
-                    PARTITION BY pr.index_classification
-                    ORDER BY
-                        pr.end_fair_value DESC NULLS LAST,
-                        pr.end_cost DESC NULLS LAST,
-                        pr.issuer_name ASC NULLS LAST,
-                        pr.cik ASC NULLS LAST,
-                        pr.entity_name ASC NULLS LAST,
-                        pr.asset_category ASC NULLS LAST
-                ) AS rn
-            FROM valid pr
+    Reads the ``public_holdings`` temp table that ``public_snapshot`` materialised
+    (cohort filter, latest public quarter, no sign filter), so the homepage table
+    is drawn from exactly the population behind the headline fair value. Not
+    keyed by index classification (v1 has no index surfaces) and not restricted
+    to lending: cash, equity and fund rows compete on the same footing and are
+    labelled via ``instrument``. Rate type is derived from the holdings columns:
+    basis_spread > 0 -> Floating, else interest_rate > 0 -> Fixed, else null.
+    """
+    if snapshot is None:
+        raise ValueError("_export_top_constituents requires the public snapshot")
+    rows = con.execute("""
+        WITH typed AS (
+            SELECT issuer_name, entity_name, instrument, cik, row_id,
+                CAST(public_fv AS DOUBLE) AS fv,
+                TRY_CAST(nullif(trim(cost), '') AS DOUBLE) AS cost_num,
+                CASE WHEN TRY_CAST(basis_spread AS DOUBLE) > 0 THEN 'Floating'
+                     WHEN TRY_CAST(interest_rate AS DOUBLE) > 0 THEN 'Fixed'
+                END AS rate_type
+            FROM public_holdings
         )
-        SELECT * FROM ranked WHERE rn <= 20
-        ORDER BY index_classification, rn
-    """).fetchall()
+        SELECT issuer_name, entity_name, instrument, fv, cost_num,
+            CASE WHEN cost_num > 0 THEN (fv - cost_num) / cost_num * 100 END AS unrealized_gl_pct,
+            rate_type
+        FROM typed
+        ORDER BY fv DESC NULLS LAST, cost_num DESC NULLS LAST,
+            issuer_name ASC NULLS LAST, cik ASC NULLS LAST, row_id ASC NULLS LAST
+        LIMIT ?
+    """, [limit]).fetchall()
 
-    cols = [
-        "index_classification", "issuer_name", "asset_category",
-        "end_fair_value", "end_cost", "unrealized_gl_pct",
-        "cik", "entity_name", "total_return", "rate_type", "rn",
-    ]
+    positions = [{
+        "issuerName": issuer_name,
+        "vehicleName": entity_name,
+        "instrument": instrument,
+        "fairValue": _safe_round(fv, 0),
+        "cost": _safe_round(cost_num, 0),
+        "unrealizedGlPct": _safe_round(gl_pct, 2),
+        "rateType": rate_type,
+    } for issuer_name, entity_name, instrument, fv, cost_num, gl_pct, rate_type in rows]
 
-    out: dict[str, list[dict]] = {}
-    for row in rows:
-        d = dict(zip(cols, row))
-        idx = d["index_classification"]
-        out.setdefault(idx, []).append({
-            "issuerName": d["issuer_name"],
-            "assetCategory": d["asset_category"],
-            "fairValue": _safe_round(d["end_fair_value"], 0),
-            "cost": _safe_round(d["end_cost"], 0),
-            "unrealizedGlPct": _safe_round(d["unrealized_gl_pct"], 2),
-            "vehicleName": d["entity_name"],
-            "totalReturn": _safe_round(d["total_return"], 6),
-            "rateType": d["rate_type"],
-        })
-
-    _write_json("top_constituents.json", out)
+    _write_json("top_constituents.json", {
+        "asOf": snapshot["asOf"],
+        "basis": snapshot["basis"],
+        "scope": "all_cohort_holdings",
+        "positionCount": snapshot["positionCount"],
+        "positions": positions,
+    })
 
 
 def _export_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
@@ -610,18 +597,38 @@ def _export_portfolio_characteristics(con: duckdb.DuckDBPyConnection, *, snapsho
     })
 
 
+def _date_to_quarter(rd: str) -> str | None:
+    """'2026-03-31' -> '2026q1'; None if the date is malformed."""
+    try:
+        yr = int(rd[:4])
+        mo = int(rd[5:7])
+    except (ValueError, IndexError, TypeError):
+        return None
+    return f"{yr}q{(mo - 1) // 3 + 1}"
+
+
 def _export_metadata(
     con: duckdb.DuckDBPyConnection,
     raw_returns: list[dict],
     *, snapshot=None,
 ) -> None:
-    """As-of date, total AUM, vehicle counts, data vintage."""
-    # Latest quarter from returns, or from holdings
+    """As-of date, total AUM, vehicle counts, data vintage.
+
+    When ``snapshot`` (from ``public_snapshot``) is given, the quarter, total
+    AUM, holdings count, CIK count and unique-issuer count all come from the
+    same ``public_holdings`` population as the headline. The read_csv path
+    below is retained only for ``snapshot=None``.
+    """
+    # Latest quarter from the snapshot, else returns, else holdings
     latest_quarter = None
-    if raw_returns:
+    as_of_date = None
+    if snapshot is not None:
+        as_of_date = snapshot.get("asOf")
+        latest_quarter = _date_to_quarter(as_of_date) if as_of_date else None
+    elif raw_returns:
         latest_quarter = max(r["quarter"] for r in raw_returns)
 
-    if latest_quarter is None and UNIFIED_HOLDINGS_CSV.exists():
+    if snapshot is None and latest_quarter is None and UNIFIED_HOLDINGS_CSV.exists():
         cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         result = con.execute(f"""
             SELECT MAX(report_date) FROM read_csv_auto(
@@ -631,15 +638,7 @@ def _export_metadata(
               {_unlisted_bdc_filter_sql('cik')}
         """).fetchone()
         if result and result[0]:
-            # Convert date to quarter format
-            rd = str(result[0])
-            try:
-                yr = int(rd[:4])
-                mo = int(rd[5:7])
-                qn = (mo - 1) // 3 + 1
-                latest_quarter = f"{yr}q{qn}"
-            except (ValueError, IndexError):
-                pass
+            latest_quarter = _date_to_quarter(str(result[0]))
 
     # Vehicle counts from universe
     vehicle_counts = {"bdc": 0, "interval_fund": 0, "tender_offer_fund": 0}
@@ -656,12 +655,23 @@ def _export_metadata(
             vehicle_counts[str(vt)] = n
             total_vehicles += n
 
-    # Total AUM from holdings (latest quarter)
+    # Total AUM / counts: snapshot population when available, else legacy read_csv
     total_aum = 0
     holdings_count = 0
     cik_count = 0
     issuer_count = 0
-    if UNIFIED_HOLDINGS_CSV.exists():
+    if snapshot is not None:
+        total_aum = snapshot["portfolioFv"]
+        holdings_count = snapshot["positionCount"]
+        # Issuer identity: entity_id when resolved, else the issuer name. The
+        # 'name:' prefix keeps an unresolved name from colliding with an id.
+        cik_count, issuer_count = con.execute("""
+            SELECT count(DISTINCT lpad(cik, 10, '0')),
+                   count(DISTINCT coalesce(nullif(trim(entity_id), ''),
+                                           'name:' || nullif(trim(issuer_name), '')))
+            FROM public_holdings
+        """).fetchone()
+    elif UNIFIED_HOLDINGS_CSV.exists():
         cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         aum_row = con.execute(f"""
             WITH raw AS (
@@ -687,8 +697,8 @@ def _export_metadata(
             holdings_count = aum_row[1] or 0
             cik_count = aum_row[2] or 0
 
-    # Unique issuers among index constituents (position_returns with begin_fv >= 100K)
-    if POSITION_RETURNS_CSV.exists():
+    # Legacy only: unique issuers among index constituents (position_returns)
+    if snapshot is None and POSITION_RETURNS_CSV.exists():
         ir_row = con.execute(f"""
             WITH pr AS (
                 SELECT * FROM read_csv_auto(
@@ -723,8 +733,8 @@ def _export_metadata(
 
     _write_json("metadata.json", {
         "asOfQuarter": latest_quarter,
-        "asOfDate": _quarter_to_date(latest_quarter) if latest_quarter else None,
-        "totalAum": snapshot["portfolioFv"] if snapshot is not None else total_aum,
+        "asOfDate": as_of_date or (_quarter_to_date(latest_quarter) if latest_quarter else None),
+        "totalAum": total_aum,
         "vehicleCount": total_vehicles,
         "bdcCount": vehicle_counts.get("bdc", 0),
         "intervalFundCount": vehicle_counts.get("interval_fund", 0),

@@ -76,7 +76,7 @@ def export_all() -> None:
 
     # Index surfaces (index_returns, index_summary, fund_index_returns) are out
     # of v1 scope and are no longer exported. Position-level analytics remain.
-    _export_top_constituents(con)
+    _export_top_constituents(con, snapshot=snapshot)
     _export_sector_breakdown(con)
     _export_vehicle_contribution(con)
     _export_manager_concentration(con)

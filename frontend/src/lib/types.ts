@@ -1,15 +1,24 @@
-/** Shape of top_constituents.json — keyed by index classification */
+/**
+ * Shape of top_constituents.json -- largest cohort positions by fair value,
+ * drawn from the same public holdings snapshot as the headline (all
+ * instruments, not keyed by index classification).
+ */
 export interface TopConstituent {
   issuerName: string;
-  assetCategory: string;
+  vehicleName: string;
+  instrument: string;
   fairValue: number | null;
   cost: number | null;
   unrealizedGlPct: number | null;
-  vehicleName: string;
-  totalReturn: number | null;
   rateType: string | null;
 }
-export type TopConstituentsData = Record<string, TopConstituent[]>;
+export interface TopConstituentsData {
+  asOf: string | null;
+  basis: string;
+  scope: string;
+  positionCount: number;
+  positions: TopConstituent[];
+}
 
 /** Shape of sector_breakdown.json — keyed by index classification */
 export interface SectorRow {

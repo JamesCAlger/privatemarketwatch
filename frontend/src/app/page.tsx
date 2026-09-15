@@ -417,9 +417,11 @@ export default function HomePage() {
 
         {/* Top Positions */}
         {(() => {
-          // Flatten top constituents across DIRECT_LENDING only (largest category)
-          const dlPositions = topConstituents['DIRECT_LENDING'] ?? [];
-          const topPositions = dlPositions.slice(0, 10);
+          // Largest positions across ALL cohort holdings in the public snapshot
+          // (same population as the headline fair value). The Array guard keeps a
+          // stale, index-keyed top_constituents.json from breaking the build.
+          const allPositions = Array.isArray(topConstituents.positions) ? topConstituents.positions : [];
+          const topPositions = allPositions.slice(0, 10);
 
           if (topPositions.length === 0) return null;
           return (
@@ -429,13 +431,17 @@ export default function HomePage() {
                 {topPositions.length > 0 && (
                   <div className="bg-white border border-rule p-7">
                     <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Largest positions</h3>
-                    <p className="text-xs text-ink3 mt-2 mb-4">Top {topPositions.length} direct lending positions by fair value</p>
+                    <p className="text-xs text-ink3 mt-2 mb-4">
+                      Top {topPositions.length} positions by fair value across all cohort holdings
+                      {topConstituents.asOf ? ` as of ${topConstituents.asOf}` : ''}
+                    </p>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
                         <thead>
                           <tr className="border-b border-rule text-[10px] uppercase tracking-[0.12em] text-ink3">
                             <th className="text-left py-2 pr-3 font-medium">Issuer</th>
                             <th className="text-left py-2 pr-3 font-medium">Fund</th>
+                            <th className="text-left py-2 pr-3 font-medium">Instrument</th>
                             <th className="text-right py-2 pr-3 font-medium">Fair Value</th>
                             <th className="text-right py-2 pr-3 font-medium">Unreal. G/L</th>
                             <th className="text-right py-2 font-medium">Rate</th>
@@ -452,6 +458,9 @@ export default function HomePage() {
                                 </td>
                                 <td className="py-2 pr-3 text-ink3" title={p.vehicleName}>
                                   {p.vehicleName}
+                                </td>
+                                <td className="py-2 pr-3 text-ink3">
+                                  {p.instrument ?? '--'}
                                 </td>
                                 <td className="py-2 pr-3 text-right font-mono tabular-nums text-ink">
                                   {formatDollar(p.fairValue ?? 0)}
