@@ -489,3 +489,16 @@ its own gated pass rather than riding along with a matcher rebuild.
 4. The amendment escape takes principal OR spread, with the spread-only leg gated
    on the principal not contradicting (band 1.5, fitted to the lost gold pairs).
 5. Tier F gap-quarter links, and the continuation metric, both off by default.
+## 2026-09-14 - Refactor identity comparison and cached-name representative regression
+
+Question: did the v8 deterministic entity-input choice preserve available cached-name evidence, and which measured changes are software defects versus unresolved legacy identity evidence?
+
+The immutable v8/v7 comparison scored all535validated mg3 packets and the exposed pair table. Pair results are1regression/0improvements/0unassessable; the complete packet table additionally flags7confirmedentitysplits and1negativecluster collapse. These are development-reference measures, not population accuracy. Negative-cluster separation means only that at least two IDs exist in the cluster; it does not certify all assignments.
+
+Evidence is under scratch/2026-09-12_programme_e0/identity-v8-versus-v7-v1/, v8-v7-delta-diagnosis-v1/ and v8-entity-input-review-v1/. The latter binds frozen holdings/cache hashes and covers12changed packets and393issuer/sourcevariants. Several regressions share one implementation mechanism: MIN(bdc_investment_identifier) chose an uncached identifier, discarding populated names attached to other identifiers for the exact same issuer/source. The affected examples include Artifact Bidco, Wealth Enhancement, Jeppesen, Kaseya, GC Waves, Azurite and Southern Veterinary. Clarience/Truck-Lite also has conflicting cached names and requires a separate ambiguity caveat.
+
+The root implementation now prefers a populated cached identifier, then observed identifier frequency and a lexical tie-break. This preserves deterministic selection and existing cache availability; frequency remains a representative heuristic, not source adjudication. The focused entity/durable-ID suite passed152tests in62.41seconds, with237627protectedfiles unchanged. A read-only full-input aggregation of135084variants followed by393selected extractions recovered the expected cached names for the eight examples. It did not run fuzzy clustering, position matching or durable allocation. A replacement immutable candidate and full comparison are still required; v8 was not edited.
+
+Two important residuals must not be hidden. Coupa's negative-cluster flag follows a punctuation variant of the single LLC joining a cluster that already combines single and joint borrowers; the stored verdict distinguishes Coupa Holdings, LLC from the joint Coupa Holdings/Coupa Software label. Cloud Software likewise has cached names that both retain and drop Picard Parent from an explicitly joint label. Deterministic selection does not resolve those contradictory legacy name decisions. Keep actual reference outcomes and source-review needs visible; do not add example-specific overrides or call a cache preference a verified legal-entity conclusion.
+
+No new LLM calls, agent campaign, source download, accepted-registry mutation or production adoption occurred. The repair's complete integration and semantic backstop remain pending at this checkpoint.

@@ -9,6 +9,7 @@ records old_value_xbrl. Matched on (cik, report_date, identifier). Vectorized.
 from __future__ import annotations
 
 import json
+from decimal import Decimal, InvalidOperation
 
 import pandas as pd
 
@@ -61,11 +62,24 @@ def apply_spread_corrections(df, identifier_col="bdc_investment_identifier",
     if "basis_spread" not in df.columns or identifier_col not in df.columns:
         return df, 0
 
+    for correction in corrections:
+        try:
+            value = Decimal(str(correction["agentA_value_pct"]))
+            raw = Decimal(str(correction["new_value_decimal"]))
+        except (KeyError, InvalidOperation) as exc:
+            raise ValueError("Spread correction must declare percentage-point and decimal values") from exc
+        if (not value.is_finite() or not raw.is_finite() or value != raw * 100
+                or correction.get("field", "basis_spread") != "basis_spread"):
+            raise ValueError("Spread correction has inconsistent units or field")
     corr_df = pd.DataFrame([
         {"_kc": str(c["cik"]).zfill(10), "_kr": str(c["report_date"])[:10],
-         "_ki": str(c["identifier"]), "_new": float(c["new_value_decimal"])}
+         "_ki": str(c["identifier"]), "_new": float(c["agentA_value_pct"])}
         for c in corrections
-    ]).drop_duplicates(["_kc", "_kr", "_ki"])
+    ]).drop_duplicates()
+    if corr_df.duplicated(["_kc", "_kr", "_ki"]).any():
+        raise ValueError("Conflicting spread corrections for the same position key")
+    from pipeline.rule_admission import record_spreads
+    record_spreads(corrections)
 
     tmp = pd.DataFrame({
         "_kc": df["cik"].astype(str).str.zfill(10),

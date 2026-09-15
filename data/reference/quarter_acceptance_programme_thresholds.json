@@ -1,0 +1,33 @@
+{
+  "version": "production-stack-working-2026-09-12",
+  "calibration": "provisional",
+  "note": "Working bars from docs/production_stack/04_acceptance.md. This extension is evaluated beside v3 on the same candidate. It does not adopt the eligibility denominator or field floors. Null bars remain UNASSESSABLE pending the recorded amendment.",
+  "checks": [
+    {"id":"fund_coverage_share","op":">=","value":0.95},
+    {"id":"excluded_with_positive_facts","op":"==","value":0},
+    {"id":"obligation_status_coverage","op":"==","value":1},
+    {"id":"reconciliation_coverage","op":">=","value":null},
+    {"id":"unrecognized_context_share","op":"==","value":null},
+    {"id":"roster_fv_recall","op":">=","value":0.99},
+    {"id":"roster_fv_precision","op":">=","value":0.99},
+    {"id":"roster_row_recall","op":">=","value":0.95},
+    {"id":"roster_row_precision","op":">=","value":0.95},
+    {"id":"fund_roster_floor_breaches","op":"==","value":0},
+    {"id":"amount_field_accuracy","op":">=","value":0.995},
+    {"id":"other_field_accuracy","op":">=","value":0.99},
+    {"id":"field_assessed_coverage","op":">=","value":null},
+    {"id":"primary_absolute_error_ratio","op":"<=","value":0.0025},
+    {"id":"fund_primary_error_ratio","op":"<=","value":0.01},
+    {"id":"primary_fund_coverage","op":">=","value":0.95},
+    {"id":"primary_source_fv_coverage","op":">=","value":0.99},
+    {"id":"public_partition_delta","op":"==","value":0},
+    {"id":"spread_unit_violations","op":"==","value":0},
+    {"id":"schema_violations_post_write","op":"==","value":0},
+    {"id":"position_id_fill","op":"==","value":1},
+    {"id":"companion_parity","op":"==","value":0},
+    {"id":"proposed_input_admission","op":"==","value":0},
+    {"id":"sector_fv_coverage","op":">=","value":0.95},
+    {"id":"sector_row_coverage","op":">=","value":0.90}
+  ],
+  "per_fund_roster_floors":{"fair_value":0.95,"rows":0.90}
+}

@@ -74,7 +74,7 @@ def lower_integrity():
         token.Close()
 
 
-def command(attempt, seconds, *, probe=False):
+def command(attempt, *, probe=False):
     attempt = Path(attempt).resolve()
     workspace = attempt / 'workspace'
     executable = codex_executable()
@@ -90,7 +90,7 @@ def command(attempt, seconds, *, probe=False):
             '-c', 'permissions.' + profile_name + '.network.enabled=false',
             '-c', 'windows.sandbox="elevated"', '-c', 'project_root_markers=[]',
             sys.executable, '-B', '-m', 'pipeline.programme.bootstrap',
-            '--attempt', str(attempt), '--seconds', str(seconds)]
+            '--attempt', str(attempt)]
     if probe:
         args.append('--probe')
     return args
@@ -133,19 +133,26 @@ def package_metadata_files(package_roots):
     return files
 
 
-def runtime_identity():
-    """Hash the physical environment, including files omitted by package manifests.
+def runtime_identity(*, policy='package-metadata-v1'):
+    """Pin package metadata and interpreter identity, not every environment file.
 
-    Windows system components remain an explicit trusted OS boundary. Existing
-    bytecode caches are excluded because lookup is redirected into each attempt.
+    The September 12 execution contract trusts installed package contents. Keep
+    the former physical inventory available only to verify historical evidence;
+    new candidates use the package fingerprint required by the amended plan.
     """
+    if policy not in ('package-metadata-v1', 'physical-content-v1'):
+        raise ContractError('Unsupported runtime identity policy: ' + str(policy))
     import importlib.metadata
     from pipeline.programme.runtime_content import hash_files
     started = time.monotonic()
     records = []
     runtime_root = Path(sys.executable).resolve().parent
     runtime_roots = [runtime_root, Path(site.getusersitepackages()).resolve()]
-    files = physical_runtime_files(runtime_roots)
+    if policy == 'physical-content-v1':
+        files = physical_runtime_files(runtime_roots)
+    else:
+        files = package_metadata_files([
+            runtime_root / 'Lib/site-packages', runtime_roots[1]])
     for distribution in importlib.metadata.distributions():
         name = distribution.metadata['Name']
         entries = list(distribution.files or [])
@@ -154,11 +161,10 @@ def runtime_identity():
                             record_sha256=sha(distribution.locate_file(manifest[0])) if manifest else None))
     executable = Path(sys.executable).resolve()
     native = [executable, *codex_executable().parent.glob('*.exe'), *executable.parent.glob('python*.dll')]
-    total = sum(path.stat().st_size for path in files)
-    if total > 20 * 1024**3 or len(files) > 300000:
+    if len(files) > 300000:
         raise ContractError('Runtime identity exceeds bounded inventory limit')
     content = hash_files(files, started)
-    return dict(python=sys.version, platform=sys.platform, os_build=platform.version(),
+    result = dict(python=sys.version, platform=sys.platform, os_build=platform.version(),
                 distributions=sorted(records, key=lambda x: (x['name'].lower(), x['version'])),
                 binaries=[{'path': str(p), 'sha256': sha(p)} for p in native],
                 content_roots=[str(root) for root in runtime_roots], content=content,
@@ -166,6 +172,16 @@ def runtime_identity():
                 trusted_boundary='Windows OS build and system components; native OS reads are not claimed as a complete trace',
                 environment_policy='os_allowlist; PATH restricted to pinned Python and sandbox binaries plus Windows; thread_limits=2; no network',
                 backend='codex-elevated-command+windows-low-integrity-v1')
+    if policy == 'package-metadata-v1':
+        result.update(identity_policy=policy,
+            inventory_policy='package metadata, distribution manifests and executable identity; no physical environment scan',
+            trusted_boundary='Installed package contents and Windows system components; observed Python reads are recorded after execution, not a complete native read trace')
+    return result
+
+
+def runtime_for_record(recorded):
+    """Historical records retain their original, explicitly different policy."""
+    return runtime_identity(policy=recorded.get('identity_policy', 'physical-content-v1'))
 
 
 def physical_runtime_files(roots):

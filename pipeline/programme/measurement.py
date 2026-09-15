@@ -1,4 +1,4 @@
-"""Versioned programme evaluation: absent evidence always stays non-pass."""
+"""Historical programme evaluation only; quarter_acceptance owns the live gate."""
 from __future__ import annotations
 
 import math
@@ -137,7 +137,9 @@ def evaluate_metric(metric, observation, contract, candidate, root, references):
                   scope=observation['scope'], quarter=observation['quarter'])
 
 
-def evaluate(contract, observations, candidate, root, references=None):
+def evaluate(contract, observations, candidate, root, references=None, *, historical_replay=False):
+    if not historical_replay:
+        raise ContractError('Programme evaluator retired; use pipeline.quarter_acceptance with candidate evidence')
     validate_contract(contract)
     expected = {metric for _, metrics in CRITERIA.values() for metric in metrics}
     if set(observations) - expected:
@@ -170,8 +172,8 @@ def compare_amendment(old, new, observations, candidate, root, references=None):
     if old['history'] != new['history'] or old['required_population_scope'] != new['required_population_scope']:
         raise ContractError('A changed population requires new scoped observations, not a same-observation comparison')
     verify_records(root, amendment['evidence'])
-    before = evaluate(old, observations, candidate, root, references)
-    after = evaluate(new, observations, candidate, root, references)
+    before = evaluate(old, observations, candidate, root, references,historical_replay=True)
+    after = evaluate(new, observations, candidate, root, references,historical_replay=True)
     changed = [{'metric_id': metric, 'old': old['targets'][metric], 'new': new['targets'][metric]}
                for metric in sorted(NUMERIC) if old['targets'][metric] != new['targets'][metric]]
     return dict(candidate_fingerprint=candidate, same_candidate=True, changed_targets=changed,

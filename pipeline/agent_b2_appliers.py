@@ -24,6 +24,7 @@ from typing import Callable
 import pandas as pd
 
 from pipeline.correction_leaf import stage_for
+from pipeline.correction_execution import scoped,claim,ordered
 
 
 def _fv_sum(df: pd.DataFrame, mask) -> float | None:
@@ -255,6 +256,11 @@ def apply_classification_fix(df: pd.DataFrame, template: dict) -> tuple[pd.DataF
     field, value = str(template.get("field") or ""), template.get("value")
     audit = _value_fix_audit("classification_fix", df, template)
     audit.update(field=field, value=value)
+    from pipeline.correction_leaf import classification_value_errors
+    errors = classification_value_errors(template)
+    if errors:
+        audit.update(status="error", rows_changed=0, message="; ".join(errors))
+        return df, audit
     if field not in df.columns or value is None or not str(value).strip():
         audit.update(status="error", rows_changed=0,
                      message=f"missing field column or empty value: {field!r}/{value!r}")
@@ -273,10 +279,9 @@ def apply_classification_fix(df: pd.DataFrame, template: dict) -> tuple[pd.DataF
 
 def apply_all_pik_normalization(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
     """Normalize a mis-parsed cash/PIK rate split for the selected rows, in the
-    pipeline's CURRENT storage convention (interest_rate = cash leg, pik_rate separate --
-    the all-in migration is a separate, atomic project; see
-    interest-rate-cashpay-convention). ``pik_rate`` sets the PIK leg;
-    ``cash_rate`` + ``set_interest_to_cash`` rewrites interest_rate to the cash leg."""
+    source-stage convention. ``pik_rate`` sets the PIK leg; ``cash_rate`` plus
+    ``set_interest_to_cash`` marks interest_rate as a cash observation. Final
+    financial preparation converts supported cash plus PIK to all-in storage."""
     audit = _value_fix_audit("all_pik_normalization", df, template)
     cash_rate, pik_rate = template.get("cash_rate"), template.get("pik_rate")
     set_cash = bool(template.get("set_interest_to_cash"))
@@ -295,6 +300,8 @@ def apply_all_pik_normalization(df: pd.DataFrame, template: dict) -> tuple[pd.Da
         out.loc[mask, "pik_rate"] = float(pik_rate)
     if set_cash and cash_rate is not None and "interest_rate" in out.columns:
         out.loc[mask, "interest_rate"] = float(cash_rate)
+        if 'interest_rate_kind' not in out.columns: out['interest_rate_kind']=''
+        out.loc[mask,'interest_rate_kind']='cash'
     audit.update(status="ok", rows_changed=int(mask.sum()), rows_out=int(len(out)),
                  fv_delta=0.0)
     return out, audit
@@ -472,6 +479,7 @@ POST_STAGING_APPLIERS: dict[str, Callable[[pd.DataFrame, dict], tuple[pd.DataFra
 }
 
 
+@scoped
 def apply_scoped(
     df: pd.DataFrame, correction: dict,
 ) -> tuple[pd.DataFrame, dict]:
@@ -493,15 +501,23 @@ def apply_scoped(
                 if q and str(q) != "all"]
     if not quarters or "report_date" not in df.columns:
         out, audit = applier(df, template)
+        if audit.get('status')=='ok': out=claim(df,out,correction)
         return out, audit
     in_scope = df["report_date"].astype(str).isin(quarters)
     applied, audit = applier(df.loc[in_scope], template)
     out = pd.concat([df.loc[~in_scope], applied]).sort_index(kind="mergesort")
+    if audit.get('status')=='ok': out=claim(df,out,correction)
     audit["scope_quarters"] = quarters
     audit["rows_out_of_scope_protected"] = int((~in_scope).sum())
     return out, audit
 
 
+def ordered_corrections(corrections: list[dict]) -> list[dict]:
+    """Shared production/verifier precedence; retain admission order within a stage."""
+    return ordered(corrections,lambda c:stage_for(str(c.get("fix_class") or "")))
+
+
+@scoped
 def run_corrections(
     df: pd.DataFrame, corrections: list[dict], *, stage: int | None = None,
 ) -> tuple[pd.DataFrame, list[dict]]:
@@ -511,7 +527,7 @@ def run_corrections(
     the B2 driver applies ONE stage, regenerates the ledger, re-triages, then advances.
     Corrections whose fix_class is not a post-staging applier are skipped (recorded)."""
     audits: list[dict] = []
-    ordered = sorted(corrections, key=lambda c: stage_for(str(c.get("fix_class") or "")))
+    ordered = ordered_corrections(corrections)
     for c in ordered:
         fc = str(c.get("fix_class") or "")
         if stage is not None and stage_for(fc) != stage:

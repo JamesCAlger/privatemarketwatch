@@ -11,7 +11,7 @@ from pipeline.programme.core import atomic_json
 
 
 def main():
-    timer=threading.Timer(180,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     start=time.monotonic(); groups=defaultdict(lambda:dict(files=0,bytes=0));aliases=[]
     roots=[Path(sys.executable).resolve().parent,Path(site.getusersitepackages()).resolve()]
     for index,root in enumerate(roots):
@@ -30,7 +30,7 @@ def main():
         files=sum(g['files'] for g in groups.values()),bytes=sum(g['bytes'] for g in groups.values()),
         excluded='__pycache__; worker redirects bytecode lookup/writes to a fresh local directory',
         elapsed_seconds=time.monotonic()-start)
-    atomic_json(output,result);timer.cancel()
+    atomic_json(output,result);
     print('Complete runtime tree: '+str(result['files'])+' files; '+str(round(result['bytes']/1024**3,2))+
         ' GiB; '+str(len(aliases))+' directory aliases',flush=True)
 

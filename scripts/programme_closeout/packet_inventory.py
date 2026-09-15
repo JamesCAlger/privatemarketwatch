@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/production_stack/programme_closeout_evidence_2026-09-09/packets'
 
 def main():
-    timer=threading.Timer(300,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     OUT.mkdir(parents=True,exist_ok=True)
     frame=list(csv.DictReader((ROOT/'docs/production_stack/programme_reference_evidence_2026-09-09/reference_pilot.csv').open()))
     assert len(frame)==61
@@ -37,6 +37,6 @@ def main():
                             for a in packet['anchors']],source_status=packet['source_status']))
     atomic_json(OUT/'index.json',packets)
     print(json.dumps(dict(packets=len(packets),rows=sum(x['source_rows'] for x in packets)),indent=2),flush=True)
-    timer.cancel()
+    
 
 if __name__=='__main__':main()

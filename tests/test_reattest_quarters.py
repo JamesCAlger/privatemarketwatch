@@ -15,6 +15,29 @@ import json
 from scripts.reattest_quarters import compare_attestation, ledger_row
 
 
+def test_candidate_reattestation_retains_signed_failure_and_separates_new_regression(tmp_path,monkeypatch):
+    from scripts import reattest_quarters as runner
+    attested=tmp_path/"attestations";attested.mkdir()
+    candidate=tmp_path/"candidate";candidate.mkdir()
+    prior=tmp_path/"prior";prior.mkdir()
+    q="2025-12-31"
+    signed=_acc()
+    now=_acc(verdict="UNASSESSABLE",checks=[*signed["checks"],
+        dict(id="other_field_accuracy",actual=None,**{"pass":False},status="UNASSESSABLE")])
+    for directory,payload in ((attested,dict(acceptance=signed,signoff_commit="signed")),(candidate,now),(prior,now)):
+        (directory/(q+".json")).write_text(json.dumps(payload))
+    monkeypatch.setattr(runner,"ATTEST_DIR",attested)
+    output=tmp_path/"comparison"
+    assert runner.check_candidate_results(candidate,output,prior_results_dir=prior)==0
+    report=json.loads((output/"reattestation.json").read_text())[0]
+    assert report["signed_comparison"]["regressed"]
+    assert not report["new_regression"]
+    # Existing extension rows remain part of future regression detection.
+    passed=_acc(checks=[*signed["checks"],dict(id="position_id_fill",actual=1,**{"pass":True})])
+    failed=_acc(verdict="FAIL",checks=[*signed["checks"],dict(id="position_id_fill",actual=.9,**{"pass":False})])
+    assert compare_attestation(passed,failed)["regressed"]
+
+
 def _acc(verdict="PASS", checks=None):
     return {
         "target_quarter": "2025-12-31",

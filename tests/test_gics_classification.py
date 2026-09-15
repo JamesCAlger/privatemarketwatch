@@ -466,7 +466,19 @@ class TestApplyEnrichment:
 # TestClassifyGicsE2E
 # ---------------------------------------------------------------------------
 
+def _final_gics_frame(count):
+    from tests.test_holdings_finalizer import holdings
+    return holdings([dict(row_id="ROW-"+str(i),position_id="",fair_value="100") for i in range(count)])
+
+
 class TestClassifyGicsE2E:
+    @pytest.fixture(autouse=True)
+    def isolated_matching_cache(self,tmp_path,monkeypatch):
+        from tests.test_position_matching import _make_bdc_raw
+        raw=tmp_path/"bdc_raw.csv"
+        _make_bdc_raw([]).to_csv(raw,index=False)
+        monkeypatch.setattr("pipeline.position_matching.BDC_HOLDINGS_FILE",raw)
+
     @patch("pipeline.gics_classification._run_llm_classification")
     def test_end_to_end_with_mock_llm(self, mock_llm, tmp_path, monkeypatch):
         from pipeline.unified_holdings import UNIFIED_COLUMNS
@@ -482,7 +494,7 @@ class TestClassifyGicsE2E:
         )
 
         # Build minimal DataFrame
-        df = pd.DataFrame({col: [""] for col in UNIFIED_COLUMNS})
+        df = _final_gics_frame(1)
         df["issuer_name"] = ["Summit Dental Partners, LLC"]
         df["issuer_category"] = ["CORPORATE"]
         df["extracted_industry"] = [""]
@@ -515,7 +527,7 @@ class TestClassifyGicsE2E:
             "pipeline.gics_classification.COMPANY_GICS_CACHE_FILE", cache_file
         )
 
-        df = pd.DataFrame({col: [""] for col in UNIFIED_COLUMNS})
+        df = _final_gics_frame(1)
         df["issuer_name"] = ["Acme Corp"]
         df["issuer_category"] = ["CORPORATE"]
         df["extracted_industry"] = [""]
@@ -541,7 +553,7 @@ class TestClassifyGicsE2E:
 
         _save_cache({"acme": ("Restaurants", "high", "review")})
 
-        df = pd.DataFrame({col: ["", ""] for col in UNIFIED_COLUMNS})
+        df = _final_gics_frame(2)
         df["issuer_name"] = ["Acme Corp", "Unknown Dental LLC"]
         df["issuer_category"] = ["CORPORATE", "CORPORATE"]
         df["extracted_industry"] = ["", ""]
@@ -550,6 +562,8 @@ class TestClassifyGicsE2E:
         result = classify_gics(unified_df=df, cache_only=True)
 
         assert result["gics_sub_industry"].tolist() == ["Restaurants", ""]
+        assert result["row_id"].tolist()==["ROW-0","ROW-1"]
+        assert result["row_id_basis"].eq("src_anchor").all()
         mock_llm.assert_not_called()
 
     @patch("pipeline.gics_classification._run_llm_classification")
@@ -565,7 +579,7 @@ class TestClassifyGicsE2E:
             "pipeline.gics_classification.UNIFIED_HOLDINGS_FILE", unified_file
         )
 
-        df = pd.DataFrame({col: [""] for col in UNIFIED_COLUMNS})
+        df = _final_gics_frame(1)
         df["issuer_name"] = ["Unknown Thing"]
         df["issuer_category"] = ["CORPORATE"]
         df["extracted_industry"] = [""]
@@ -590,7 +604,7 @@ class TestClassifyGicsE2E:
             "pipeline.gics_classification.UNIFIED_HOLDINGS_FILE", unified_file
         )
 
-        df = pd.DataFrame({col: ["", ""] for col in UNIFIED_COLUMNS})
+        df = _final_gics_frame(2)
         df["issuer_name"] = ["BlackRock Fund", "Acme Dental Inc"]
         df["issuer_category"] = ["FUND", "CORPORATE"]
         df["extracted_industry"] = ["", ""]
@@ -600,9 +614,9 @@ class TestClassifyGicsE2E:
 
         result = classify_gics(unified_df=df)
         # Fund row should be blank
-        assert result["gics_sub_industry"].iloc[0] == ""
+        assert result.set_index("issuer_name").loc["BlackRock Fund","gics_sub_industry"] == ""
         # Corporate row with keyword match should be classified
-        assert result["gics_sub_industry"].iloc[1] == "Health Care Services"
+        assert result.set_index("issuer_name").loc["Acme Dental Inc","gics_sub_industry"] == "Health Care Services"
 
 
 # ---------------------------------------------------------------------------

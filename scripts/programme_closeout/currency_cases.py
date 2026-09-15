@@ -46,8 +46,8 @@ def main():
         raise ValueError('Invalid output')
     out.mkdir(parents=True,exist_ok=True)
     if (out/'complete.json').exists():raise ValueError('Immutable completed evidence')
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();start=time.monotonic()
-    con=duckdb.connect(config={'memory_limit':'2GB','threads':2})
+    start=time.monotonic()
+    con=duckdb.connect(config={'memory_limit':'-1','threads':2})
     con.execute('CREATE TABLE r AS SELECT * FROM read_csv(?,all_varchar=true)',[str(a.resolution/'resolved_exceptions.csv')])
     con.execute("""CREATE TABLE selected AS SELECT * FROM r WHERE resolved_currency IS NOT NULL AND resolved_currency<>'USD'
         QUALIFY row_number() OVER(PARTITION BY resolved_currency,field ORDER BY report_date,cik,row_id)<=2""")
@@ -78,7 +78,7 @@ def main():
         print(f'Currency source documents {i+1}/{len(grouped)}; {result["status"]}',flush=True)
     atomic_json(out/'complete.json',dict(status='complete',documents=len(grouped),cases=len(cases),
         seconds=time.monotonic()-start,interpretation='Printed/tagged evidence requiring explicit source decisions'))
-    timer.cancel();con.close()
+    con.close()
 
 
 if __name__=='__main__':main()

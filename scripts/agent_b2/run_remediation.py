@@ -37,6 +37,7 @@ from pipeline.agent_b2_diagnose import diagnose, select_mechanism, _load_raw_cik
 from pipeline.agent_b2_wrapper_patch import PROD_WRAPPER_DIR, apply_subtotal_filter
 from pipeline.agent_b_held_out import gate_correction
 from pipeline.correction_leaf import stage_for
+from pipeline.programme.core import digest, sha, ContractError
 
 DEFAULT_BASE = config.OUTPUT_DIR / "agent_b2"
 DEFAULT_VERDICTS = config.OUTPUT_DIR / "review_queue" / "verdicts"
@@ -573,6 +574,7 @@ def gate_value_packet(
     """
     from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS, apply_scoped
 
+    correction_digest = digest(correction)
     fix_class = str(correction.get("fix_class") or "")
     template = correction.get("template") or {}
     checks: dict[str, bool] = {}
@@ -708,8 +710,11 @@ def gate_value_packet(
 
     checks.setdefault("replay_ok", True)
     verdict = "PASS" if all(checks.values()) else "FAIL"
+    if digest(correction)!=correction_digest:
+        raise ValueError('Correction changed during gate evaluation')
     return {"cik": cik, "target_quarter": target_quarter, "verdict": verdict,
             "gate_kind": "value", "fix_class": fix_class, "checks": checks,
+            "correction_digest": correction_digest,
             "reasons": reasons or ["all value-gate predicates clear"]}
 
 
@@ -744,6 +749,7 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
         src = corrections_dir / cik / f"{mech}.json"
         if not src.exists():
             continue
+        source_sha = sha(src)
         try:
             leaf = json.loads(src.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -773,8 +779,19 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
                                  "src": str(src), "dst": str(dst),
                                  "status": "refused_overwrite"})
                 continue
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dst)
+            if not g.get('correction_digest') or g['correction_digest']!=digest(leaf):
+                promoted.append(dict(cik=cik,mechanism=mech,layer='post_staging',src=str(src),dst=str(dst),
+                    status='refused_unbound_gate'))
+                continue
+            from pipeline.rule_promotion import publish
+            try:
+                publish(overrides_dir,[dict(source=src,path=dst.relative_to(overrides_dir).as_posix(),
+                    evidence=dict(gate=g,source_sha256=source_sha,source='B2 gate',batch_id=batch_id))],
+                    allow_overwrite=allow_overwrite)
+            except ContractError as error:
+                promoted.append(dict(cik=cik,mechanism=mech,layer='post_staging',src=str(src),dst=str(dst),
+                    status='refused_admission',reason=str(error)))
+                continue
             promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
                              "src": str(src), "dst": str(dst), "status": "ok"})
     return promoted
@@ -1116,6 +1133,7 @@ def main(argv=None) -> int:
                                      baseline_df=base_df, trial_df=trial_df,
                                      correction=correction, grounding_df=grounding_df)
             out["value_gate"] = {k: vres[k] for k in ("verdict", "checks", "reasons")}
+            out['correction_digest'] = vres.get('correction_digest')
             out["verdict"] = "PASS" if (res.verdict == "PASS"
                                         and vres["verdict"] == "PASS") else "FAIL"
             if is_diagnosis_refusal(vres):

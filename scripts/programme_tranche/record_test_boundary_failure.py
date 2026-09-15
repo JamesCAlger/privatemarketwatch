@@ -15,7 +15,7 @@ OUT = ROOT / 'docs/production_stack/programme_tranche_evidence_2026-09-10/test-b
 
 
 def main():
-    timer = threading.Timer(180, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     print('Read-only boundary diagnosis: two inventories and at most six small cache files', flush=True)
     result = read_json(JOB / 'result.json')
     if not result['worker_stopped'] or result['protected_unreadable_paths_changed']:
@@ -29,7 +29,7 @@ def main():
                               'data/output/agent_investigate/_qcache/999/')) for p in changed):
         raise ContractError('Change outside the diagnosed test-cache paths')
     OUT.mkdir(parents=True, exist_ok=False)
-    con = duckdb.connect(); con.execute('SET threads=1'); con.execute("SET memory_limit='128MB'")
+    con = duckdb.connect(); con.execute('SET threads=1'); con.execute("SET memory_limit='-1'")
     changes = []
     for relative in changed:
         path = ROOT / relative
@@ -64,7 +64,7 @@ def main():
             'scripts/programme_tranche/run_verification.py')]))
     atomic_json(OUT / 'complete.json', dict(status='forensic_record_complete',
         files=[record(OUT,p.relative_to(OUT).as_posix()) for p in sorted(OUT.rglob('*')) if p.is_file()]))
-    timer.cancel()
+    
     print('Preserved six cache artifacts; created=' + str(sum(c['kind']=='created' for c in changes))
           + '; total rows=' + str(sum(c['rows'] for c in changes)), flush=True)
 

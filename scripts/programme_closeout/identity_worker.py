@@ -16,7 +16,7 @@ def main():
     from unittest.mock import patch
     original_connect=duckdb.connect
     def connect(*args,**kwargs):
-        con=original_connect(*args,**kwargs);con.execute('SET threads=2');con.execute("SET memory_limit='4GB'")
+        con=original_connect(*args,**kwargs);con.execute('SET threads=2');con.execute("SET memory_limit='-1'")
         con.execute("SET temp_directory='"+(attempt/'temp').as_posix().replace("'","''")+"'");return con
     from pipeline import config,entity_resolution,position_matching,utils
     if config.PROJECT_ROOT.resolve()!=workspace:raise ValueError('Unpinned pipeline import')

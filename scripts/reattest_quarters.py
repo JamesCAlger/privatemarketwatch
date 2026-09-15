@@ -71,6 +71,40 @@ def compare_attestation(stored: dict, current: dict) -> dict:
     return {"verdict_flip": verdict_flip, "check_flips": flips, "regressed": regressed}
 
 
+def check_candidate_results(results_dir: Path, output_dir: Path, *, quarter=None,
+                            prior_results_dir: Path | None = None) -> int:
+    """Re-attest saved candidate gate results without rerunning/writing production.
+
+    Keep sign-off regressions visible. An optional same-contract pre-change run
+    distinguishes pre-existing failures from new regressions; it never replaces
+    the signed attestation. Extended rows participate in both comparisons.
+    """
+    results_dir,output_dir=Path(results_dir).resolve(),Path(output_dir).resolve()
+    protected=(config.OUTPUT_DIR.resolve(),(PROJECT_ROOT/"frontend/public/data").resolve())
+    if any(output_dir.is_relative_to(root) for root in protected):
+        raise ValueError("Candidate re-attestation must write to isolated evidence")
+    output_dir.mkdir(parents=True,exist_ok=False)
+    quarters=[quarter] if quarter else sorted(p.stem for p in ATTEST_DIR.glob("*.json"))
+    reports=[]
+    for q in quarters:
+        stored_record=json.loads((ATTEST_DIR/(q+".json")).read_text(encoding="utf-8-sig"))
+        current=json.loads((results_dir/(q+".json")).read_text(encoding="utf-8-sig"))
+        if current.get("target_quarter")!=q:
+            raise ValueError("Candidate acceptance quarter mismatch: "+q)
+        signed=compare_attestation(stored_record["acceptance"],current)
+        prior=None
+        if prior_results_dir is not None:
+            before=json.loads((Path(prior_results_dir)/(q+".json")).read_text(encoding="utf-8-sig"))
+            if before.get("target_quarter")!=q or before.get("thresholds_version")!=current.get("thresholds_version"):
+                raise ValueError("Pre-change comparison must use the same quarter and threshold version")
+            prior=compare_attestation(before,current)
+        reports.append(dict(quarter=q,stored_signoff_commit=stored_record.get("signoff_commit"),
+            signed_comparison=signed,pre_change_comparison=prior,
+            new_regression=prior["regressed"] if prior is not None else None))
+    (output_dir/"reattestation.json").write_text(json.dumps(reports,indent=2)+"\n",encoding="utf-8")
+    return int(any((r["pre_change_comparison"] or r["signed_comparison"])["regressed"] for r in reports))
+
+
 def ledger_row(quarter: str, diff: dict, *, stored_commit: str = "",
                current_commit: str = "", note: str = "") -> dict:
     vf = diff.get("verdict_flip")
@@ -171,10 +205,18 @@ def main(argv=None) -> int:
                    help="the signed acceptance_post.json (e.g. the pass dir's)")
     c = sub.add_parser("check")
     c.add_argument("--quarter", default=None)
+    c.add_argument("--results-dir",type=Path)
+    c.add_argument("--output-dir",type=Path)
+    c.add_argument("--prior-results-dir",type=Path)
     args = ap.parse_args(argv)
     if args.mode == "attest":
         attest(args.quarter, args.source)
         return 0
+    if args.results_dir is not None:
+        if args.output_dir is None:
+            ap.error("--results-dir requires isolated --output-dir")
+        return check_candidate_results(args.results_dir,args.output_dir,quarter=args.quarter,
+                                       prior_results_dir=args.prior_results_dir)
     return check(args.quarter)
 
 

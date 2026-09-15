@@ -109,6 +109,9 @@ def seal(attempt, expected_identity, required, *, artifacts_metadata=None):
         raise ContractError('Worker success and termination must be established')
     if process.get('input_fingerprint') != expected_identity['fingerprint']:
         raise ContractError('Worker result belongs to another dependency identity')
+    if expected_identity.get('controls', {}).get('protected_outputs') == 'size-mtime-v1':
+        from pipeline.programme.protection import verify
+        verify(attempt)
     body = {k: v for k, v in expected_identity.items() if k != 'fingerprint'}
     if digest(body) != expected_identity['fingerprint']:
         raise ContractError('Malformed dependency identity')
@@ -143,6 +146,9 @@ def read_stage(attempt, expected_identity, required):
         raise ContractError('Mixed stage dependencies')
     if result['process_result_sha256'] != sha(attempt / 'process_result.json'):
         raise ContractError('Process record changed')
+    if expected_identity.get('controls', {}).get('protected_outputs') == 'size-mtime-v1':
+        from pipeline.programme.protection import verify
+        verify(attempt)
     actual = {p.relative_to(attempt / 'bundle').as_posix()
               for p in (attempt / 'bundle').rglob('*') if p.is_file()}
     if actual != set(required) or {r['path'] for r in result['artifacts']} != set(required):

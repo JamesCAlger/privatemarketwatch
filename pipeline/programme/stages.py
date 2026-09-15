@@ -1,4 +1,4 @@
-"""Bounded compatibility stages; financial conventions remain unchanged."""
+"""Offline stages with finalized financial conventions and durable identity."""
 from __future__ import annotations
 
 from contextlib import ExitStack
@@ -9,7 +9,7 @@ import sys
 import time
 from unittest.mock import patch
 
-from pipeline.programme.artifacts import STAGE_CSVS, finalize_pair, verify_audit
+from pipeline.programme.artifacts import STAGE_CSVS, STAGE_FILES, finalize_pair, verify_audit
 from pipeline.programme.core import ContractError, atomic_json, read_json, sha
 
 
@@ -33,7 +33,7 @@ def execute(attempt, reads, *, preflight_stage=None):
     def connect(*args, **kwargs):
         connection = original_connect(*args, **kwargs)
         connection.execute('SET threads=' + ('4' if stage == 'unified' else '2'))
-        connection.execute("SET memory_limit='" + ('6GB' if stage == 'unified' else '4GB') + "'")
+        connection.execute("SET memory_limit='-1'")
         connection.execute("SET temp_directory='" + (attempt / 'temp').as_posix().replace("'", "''") + "'")
         # Closed native-read universe: frozen runtime workspace plus local outputs.
         # No HTTP/S3/extensions, parameterized path tricks, ATTACH or relation API bypass.
@@ -65,24 +65,18 @@ def execute(attempt, reads, *, preflight_stage=None):
                     agent_rules_dir=empty_rules, b2_corrections_dir=empty_rules)
                 times['sampling'] = sampling
             else:
+                # Fund-level inputs are already cached and pinned. Financial
+                # preparation independently checks NAV against the source cache.
+                from pipeline.programme.source_refresh import refresh_nexpoint
+                times['source_refresh']=refresh_nexpoint()
                 frame = build_unified_holdings()
             times['build_seconds'] = time.monotonic() - started
             row_count = len(frame)
             del frame
         elif stage == 'identity':
-            from pipeline import entity_resolution, position_matching
-            entity_resolution.build_entity_lookup(config.UNIFIED_HOLDINGS_FILE, enrich=True)
-            times['entity_seconds'] = time.monotonic() - started
-            frame = pd.read_csv(config.UNIFIED_HOLDINGS_FILE, dtype=str)
-            tick = time.monotonic()
-            matches = position_matching.match_positions(frame, contested_assignment=True)
-            times['matching_seconds'] = time.monotonic() - tick
-            tick = time.monotonic()
-            frame, matches = position_matching.assign_position_ids(frame, matches,
-                contested_assignment=True, use_registry=False)
-            times['position_ids_seconds'] = time.monotonic() - tick
-            frame.to_csv(config.UNIFIED_HOLDINGS_FILE, index=False)
-            matches.to_csv(config.POSITION_MATCHES_FILE, index=False)
+            from pipeline.holdings_finalizer import finalize_existing_holdings
+            frame, matches = finalize_existing_holdings(rebuild_entities=True)
+            times['identity_seconds'] = time.monotonic() - started
             row_count = len(frame)
             times['matches'] = len(matches)
             del frame, matches
@@ -95,9 +89,20 @@ def execute(attempt, reads, *, preflight_stage=None):
             row_count = len(status)
             times.update(summary_rows=len(summary), terms_transitions=len(transitions))
             del status, summary, transitions
+        elif stage == 'returns':
+            from pipeline.index_returns import compute_returns
+            returned,indexes=compute_returns()
+            row_count=len(returned)
+            times.update(index_rows=len(indexes),income_available=int(returned.income_return.notna().sum()))
+            del returned,indexes
+        elif stage == 'frontend':
+            from pipeline.programme.frontend_stage import export_candidate
+            exported=export_candidate(attempt)
+            row_count=exported['history']['rows']
+            times.update(exported['measurements'])
         else:
             raise ContractError('Unknown supported stage')
-        if preflight_stage and not 0 < row_count <= 2000:
+        if preflight_stage and stage != 'frontend' and not 0 < row_count <= 2000:
             raise ContractError('Preflight output outside its explicit 1-2000 row bound')
         for connection in connections:
             connection.close()
@@ -113,11 +118,16 @@ def execute(attempt, reads, *, preflight_stage=None):
                 metadata[name] = finalize_pair(source, connection)
                 shutil.copy2(source, bundle / name)
                 shutil.copy2(source.with_suffix('.parquet'), bundle / Path(name).with_suffix('.parquet'))
+        for name in STAGE_FILES[stage]:
+            if preflight_stage and name=='source_refresh.json': continue
+            source=config.OUTPUT_DIR/name
+            if not source.is_file(): raise ContractError('Required stage state missing: '+name)
+            shutil.copy2(source,bundle/name)
         atomic_json(bundle / 'summary.json', dict(stage=stage, rows=row_count, times=times,
             input_fingerprint=inputs['identity']['fingerprint'], parents=inputs['identity']['parents'],
             artifacts_metadata=metadata, elapsed_seconds=time.monotonic() - started,
-            identity_policy=dict(contested_assignment=True, use_registry=False),
-            financial_convention='legacy cash leg; no income formula migration', quality='not_evaluated'))
+            identity_policy=dict(contested_assignment=True, use_registry=True),
+            financial_convention='financial-contract.v2; supported all-in coupons; no imputation', quality='not_evaluated'))
     # Python imports that completed before the audit hook are included explicitly.
     imported = {str(Path(module.__file__).absolute()) for module in list(sys.modules.values())
                 if getattr(module, '__file__', None)}

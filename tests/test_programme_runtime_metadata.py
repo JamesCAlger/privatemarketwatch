@@ -28,7 +28,11 @@ def test_legacy_manifest_omission_is_covered_in_both_package_roots(tmp_path, mon
     # Installed legacy metadata is allowed to provide an incomplete file list.
     monkeypatch.setattr(importlib.metadata,'distributions',lambda: [
         SimpleNamespace(metadata={'Name':'example'},version='1.0',files=[])])
+    def forbid_full_scan(roots):
+        raise AssertionError('New candidates must not scan the complete environment')
+    monkeypatch.setattr(native, 'physical_runtime_files', forbid_full_scan)
     before=native.runtime_identity()
+    assert before['identity_policy'] == 'package-metadata-v1'
     declared={item['path']:item for item in before['content']}
     assert all(path.as_posix() in declared for path in paths)
     paths[0].write_text('[plugins]\nexample=different:main\n')
@@ -36,6 +40,11 @@ def test_legacy_manifest_omission_is_covered_in_both_package_roots(tmp_path, mon
     assert digest(before) != digest(after)
     extra=paths[1].parent/'plugin-policy.json'; extra.write_text('{"allow": false}')
     assert digest(after) != digest(native.runtime_identity())
+    package_data = environment/'unrelated-package-data.bin'
+    package_data.write_bytes(b'Not part of the package fingerprint')
+    stable = native.runtime_identity()
+    package_data.write_bytes(b'Installed contents are an explicit trust boundary')
+    assert digest(stable) == digest(native.runtime_identity())
 
 
 def test_single_file_egg_metadata_is_included_without_unrelated_data(tmp_path):
@@ -96,3 +105,52 @@ def test_runtime_change_during_hash_is_rejected(tmp_path, monkeypatch):
 def test_missing_runtime_tree_cannot_be_silently_skipped(tmp_path):
     with pytest.raises(ContractError, match='root is missing'):
         native.physical_runtime_files([tmp_path/'missing'])
+
+
+def test_package_read_guard_keeps_external_sources_outside_trusted_roots(tmp_path):
+    runtime = tmp_path/'runtime'; runtime.mkdir()
+    package_data = runtime/'package/data.json'; package_data.parent.mkdir()
+    package_data.write_text('{}')
+    attempt = tmp_path/'candidate'; attempt.mkdir()
+    policy = dict(identity_policy='package-metadata-v1', content_roots=[str(runtime)], content=[])
+    check = read_guard(attempt, policy)
+    assert check(package_data) == package_data.resolve()
+    assert check(attempt/'bundle/data.csv') == (attempt/'bundle/data.csv').resolve()
+    with pytest.raises(PermissionError, match='Undeclared Python input'):
+        check(runtime/'../source-filings.json')
+
+
+def test_unknown_runtime_policy_is_rejected(tmp_path):
+    with pytest.raises(ContractError, match='Unsupported runtime identity'):
+        native.runtime_identity(policy='unchecked')
+    with pytest.raises(ContractError, match='Unsupported runtime read'):
+        read_guard(tmp_path, dict(identity_policy='unchecked', content_roots=[], content=[]))
+
+
+def test_historical_runtime_proofs_keep_their_original_policy(monkeypatch):
+    monkeypatch.setattr(native, 'runtime_identity', lambda **kwargs: kwargs)
+    assert native.runtime_for_record({}) == dict(policy='physical-content-v1')
+    assert native.runtime_for_record(dict(identity_policy='package-metadata-v1')) == dict(policy='package-metadata-v1')
+
+
+def test_observed_runtime_reads_are_hash_bound_but_not_claimed_as_prevalidated(tmp_path):
+    from pipeline.programme import runner
+    from pipeline.programme.core import atomic_json, read_json, sha
+    candidate = tmp_path/'candidate'
+    attempt = candidate/'attempts/identity-01'
+    (attempt/'bundle').mkdir(parents=True)
+    runtime = tmp_path/'runtime'; runtime.mkdir()
+    dependency = runtime/'package-data.json'; dependency.write_text('{"value": 1}')
+    atomic_json(candidate/'runtime.json', dict(identity_policy='package-metadata-v1',
+        content_roots=[str(runtime)], content=[]))
+    atomic_json(attempt/'bundle/read_ledger.json', dict(python_paths=[str(dependency)]))
+    runner.capture_runtime_reads(attempt)
+    observed = read_json(attempt/'runtime_reads.json')
+    assert observed['identity_policy'] == 'package-metadata-v1'
+    assert 'after execution' in observed['role']
+    assert observed['records'][0]['sha256'] == sha(dependency)
+    atomic_json(attempt/'process_result.json', dict(runtime_reads_sha256=sha(attempt/'runtime_reads.json')))
+    runner.verify_runtime_reads(attempt)
+    dependency.write_text('{"value": 2}')
+    with pytest.raises(ContractError, match='dependency changed'):
+        runner.verify_runtime_reads(attempt)

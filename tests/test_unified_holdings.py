@@ -2703,7 +2703,10 @@ class TestPrepareBdc:
              "dedupe_filled_fields": "cost"},
         ])
         result = _prepare_bdc(df)
-        assert list(result["src_facts"]) == ['{"interest_rate":{"r":0.105}}']
+        import json
+        facts = json.loads(result.iloc[0]["src_facts"])
+        assert facts["interest_rate"] == {"r": 0.105}
+        assert facts["_financial_cost"] == {"state": "absent", "raw": ""}
         assert list(result["src_filled_fields"]) == ["cost"]
         assert list(result["corrected_fields"]) == [""]
 
@@ -3144,6 +3147,7 @@ class TestPrepareNport:
         bdc_row = {c: "" for c in bdc_cols}
         bdc_row.update({
             "investment_identifier": "X - Term Loan", "cik": "1",
+            "fair_value": 1000000,
         })
         bdc_result = _prepare_bdc(pd.DataFrame([bdc_row]))
 
@@ -3153,7 +3157,8 @@ class TestPrepareNport:
         }])
         nport_result = _prepare_nport(nport_df)
 
-        assert set(bdc_result.columns) == set(nport_result.columns)
+        assert len(bdc_result) == len(nport_result) == 1
+        assert set(bdc_result.columns) == set(nport_result.columns) == set(UNIFIED_COLUMNS)
 
 
 # ---------------------------------------------------------------------------
@@ -3479,6 +3484,19 @@ class TestBuildUnifiedHoldings:
                 "other_identifier": "", "currency_code": "USD",
             },
         ])
+
+    @pytest.mark.slow
+    @pytest.mark.integration
+    def test_late_cache_enum_error_blocks_final_write(self, tmp_path, monkeypatch):
+        from pipeline import unified_holdings as uh
+        path = tmp_path / "holdings.csv"
+        monkeypatch.setattr(uh, "UNIFIED_HOLDINGS_FILE", path)
+        monkeypatch.setattr(uh, "_apply_re_fund_gics_overrides", lambda df: df.assign(asset_class="INVALID_FROM_LAST_LAYER"))
+        with pytest.raises(ValueError, match="Final holdings schema violations"):
+            build_unified_holdings(bdc_df=self._make_bdc_df(), nport_df=self._make_nport_df(),
+                                   output_file=path, orphan_file=tmp_path / "orphans.csv")
+        assert not path.exists()
+        assert not path.with_suffix(".parquet").exists()
 
     @pytest.mark.slow
     @pytest.mark.integration
@@ -5495,8 +5513,8 @@ class TestCostProxy:
         ]
         return pd.DataFrame({c: pd.Series(dtype=str) for c in cols})
 
-    def test_nport_gets_first_fv_as_cost(self, tmp_path):
-        """N-PORT position with 2 periods: cost filled with earliest FV."""
+    def test_nport_cost_waits_for_position_identity(self, tmp_path):
+        """Source staging must not choose a donor before matching."""
         nport_df = self._make_nport_df([
             {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
              "issuer_type": "CORP", "issuer_name": "Borrower A",
@@ -5512,8 +5530,8 @@ class TestCostProxy:
             result = build_unified_holdings(
                 bdc_df=self._empty_bdc_df(), nport_df=nport_df)
         borrower = result[result["issuer_name"] == "Borrower A"]
-        # Both rows should have cost = 100000 (first observed FV)
-        assert (borrower["cost"] == 100000.0).all()
+        # No pre-identity borrower-level donor is permitted.
+        assert borrower["cost"].isna().all()
 
     def test_bdc_keeps_real_cost(self, tmp_path):
         """BDC position with real cost: cost stays unchanged."""
@@ -5529,8 +5547,8 @@ class TestCostProxy:
         acme = result[result["issuer_name"] == "Acme Corp"]
         assert acme.iloc[0]["cost"] == 50000.0
 
-    def test_nport_zero_fv_skipped(self, tmp_path):
-        """First period FV=0, second FV=100000 -> cost=100000."""
+    def test_nport_zero_fv_does_not_trigger_early_proxy(self, tmp_path):
+        """Zero is retained; donor assignment is a later identity-bound step."""
         nport_df = self._make_nport_df([
             {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
              "issuer_type": "CORP", "issuer_name": "Borrower B",
@@ -5546,7 +5564,7 @@ class TestCostProxy:
             result = build_unified_holdings(
                 bdc_df=self._empty_bdc_df(), nport_df=nport_df)
         borrower = result[result["issuer_name"] == "Borrower B"]
-        assert (borrower["cost"] == 100000.0).all()
+        assert borrower["cost"].isna().all()
 
     def test_nport_no_fv_stays_null(self, tmp_path):
         """All FV=0/NULL -> cost stays NULL."""
@@ -5563,8 +5581,8 @@ class TestCostProxy:
         borrower = result[result["issuer_name"] == "Borrower C"]
         assert pd.isna(borrower.iloc[0]["cost"]) or borrower.iloc[0]["cost"] == 0
 
-    def test_cost_proxy_fill_records_derived_proxy(self, tmp_path):
-        """N-PORT position with NULL cost: proxy fill sets cost_source and event."""
+    def test_staging_does_not_claim_a_proxy_event(self, tmp_path):
+        """Staging retains absent cost without claiming a donor or transform."""
         nport_df = self._make_nport_df([
             {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
              "issuer_type": "CORP", "issuer_name": "Borrower A",
@@ -5580,10 +5598,10 @@ class TestCostProxy:
             result = build_unified_holdings(
                 bdc_df=self._empty_bdc_df(), nport_df=nport_df)
         borrower = result[result["issuer_name"] == "Borrower A"]
-        # Both rows get a proxy cost (no real cost present)
+        # Identity-bound donor coverage lives in test_financial_migration.py.
         for _, row in borrower.iterrows():
-            assert row["cost_source"] == "derived_proxy"
-            assert "cost:cost_proxy_fv" in row["src_transforms"]
+            assert row["cost_source"] != "derived_proxy"
+            assert "cost:cost_proxy_fv" not in row["src_transforms"]
 
     def test_unproxied_cost_keeps_empty_source(self, tmp_path):
         """BDC position with real non-zero cost: cost_source stays empty."""
@@ -5601,19 +5619,8 @@ class TestCostProxy:
         assert row["cost_source"] == ""
         assert "cost:" not in row["src_transforms"]
 
-    def test_cost_proxy_fill_fires_on_zero_cost(self, tmp_path):
-        """BDC position with explicit cost=0 fires the proxy, unlike the NULL-cost case.
-
-        The prior version of this test used an N-PORT fixture with no cost column
-        at all -- N-PORT staging hard-codes NULL AS cost, so that test only
-        exercised the NULL path (same as test_cost_proxy_fill_records_derived_proxy).
-
-        This test uses _make_bdc_df with "cost": 0 (integer zero). BDC staging
-        passes it through as TRY_CAST(cost AS DOUBLE) = 0.0. In the with_cost CTE,
-        NULLIF(TRY_CAST(cost AS DOUBLE), 0) converts 0.0 to NULL and the proxy
-        fires: cost becomes the FIRST_VALUE of fair_value across the window and
-        cost_source is set to 'derived_proxy'.
-        """
+    def test_reported_zero_cost_never_uses_proxy(self, tmp_path):
+        """Reported zero remains zero through source staging."""
         bdc_df = self._make_bdc_df([
             {"cik": "200", "investment_identifier": "Zero Cost Co - Term Loan",
              "fair_value": 60000, "cost": 0,
@@ -5628,14 +5635,10 @@ class TestCostProxy:
                 bdc_df=bdc_df, nport_df=self._empty_nport_df())
         company = result[result["issuer_name"] == "Zero Cost Co"]
         assert len(company) == 2, "Expected both BDC rows in output"
-        # Both rows have explicit cost=0 -- proxy must fire for each
-        for _, row in company.iterrows():
-            assert row["cost_source"] == "derived_proxy", (
-                f"Expected derived_proxy, got {row['cost_source']!r}"
-            )
-            assert "cost:cost_proxy_fv" in row["src_transforms"], (
-                f"Expected cost:cost_proxy_fv in {row['src_transforms']!r}"
-            )
+        assert company.cost.eq(0).all()
+        assert company.cost_reported.eq(0).all()
+        assert not company.cost_source.eq("derived_proxy").any()
+        assert not company.src_transforms.str.contains("cost:cost_proxy_fv",regex=False).any()
 
 
 class TestSharesNormalization:
@@ -6228,6 +6231,11 @@ class TestEnforceSchema:
         violations = _enforce_schema(df)
         names = [v[0] for v in violations]
         assert "coupon_type_enum" in names
+
+    @pytest.mark.parametrize('value,accepted',[('Variable',True),('Varying',False)])
+    def test_nport_retains_disclosed_variable_coupon_vocabulary(self,value,accepted):
+        violations=_enforce_schema(_make_valid_row(source='nport',coupon_type=value))
+        assert ('coupon_type_enum' not in {name for name,_ in violations}) is accepted
 
     def test_interest_rate_too_high(self):
         df = _make_valid_row(interest_rate=60.0)
@@ -7807,8 +7815,8 @@ class TestSubsidiaryDedup:
             data.append(full_row)
         return pd.DataFrame(data)
 
-    def test_dedup_removes_duplicate_subsidiary(self, tmp_path):
-        """When same position exists under parent AND subsidiary, remove subsidiary."""
+    def test_equal_economics_preserve_parent_and_subsidiary_scopes(self, tmp_path):
+        """D08 keeps separate reporting scopes even when all amounts agree."""
         bdc_df = self._make_bdc_df([
             # Parent row
             {"cik": "100", "entity_name": "Test BDC",
@@ -7819,7 +7827,7 @@ class TestSubsidiaryDedup:
              "principal_amount": 1000000.0, "interest_rate": 8.5,
              "basis_spread": 3.5, "dimensions_raw": "investmentAxis=value",
              "period": "2023-03-31"},
-            # Subsidiary duplicate of same position
+            # Separate subsidiary observation with the same economics
             {"cik": "100", "entity_name": "Test BDC",
              "accession_number": "0001-23", "form_type": "10-K",
              "filing_date": "2023-06-01", "report_date": "2023-03-31",
@@ -7834,10 +7842,11 @@ class TestSubsidiaryDedup:
                     tmp_path / "test.csv"):
             result = build_unified_holdings(
                 bdc_df=bdc_df, nport_df=pd.DataFrame())
-        # Only 1 row: the parent. The subsidiary duplicate is removed.
         acme = result[result["issuer_name"] == "Acme Corp"]
-        assert len(acme) == 1
-        assert int(acme.iloc[0]["is_subsidiary"]) == 0
+        assert len(acme) == 2
+        assert set(acme["is_subsidiary"].astype(int)) == {0, 1}
+        assert acme["accounting_scope_id"].nunique() == 2
+        assert set(acme["accounting_record_class"]) == {'parent_schedule', 'underlying_schedule'}
 
     def test_preserves_subsidiary_only_position(self, tmp_path):
         """Subsidiary-only positions (no matching parent) are preserved."""
@@ -8507,295 +8516,14 @@ class TestBadIssuerNamesExpanded:
 
 
 class TestCorrectPctOfNetAssets:
-    """Tests for _correct_pct_of_net_assets() multi-entity BDC correction."""
+    @pytest.mark.parametrize("reported", [0, 5, 250, -200, None])
+    def test_legacy_entry_point_preserves_reported_percentage(self, reported):
+        from pipeline.unified_holdings import _correct_pct_of_net_assets
+        frame=pd.DataFrame([dict(cik="0000000123",source="bdc",report_date="2026-03-31",
+            fair_value=100,pct_of_net_assets=reported)])
+        result=_correct_pct_of_net_assets(frame)
+        pd.testing.assert_frame_equal(result,frame)
 
-    def _make_holdings_df(self, rows):
-        """Build a minimal unified holdings DataFrame."""
-        data = []
-        for row in rows:
-            full_row = {c: "" for c in UNIFIED_COLUMNS}
-            full_row.update(row)
-            data.append(full_row)
-        return pd.DataFrame(data)
-
-    def test_high_pct_corrected(self, tmp_path):
-        """CIK with pct_sum=300% + net_assets available -> pct recalculated."""
-        # Create a BDC with 3 positions, each showing 100% of sub-entity net assets
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 100.0},
-            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
-             "issuer_name": "Beta Inc", "fair_value": 2000000,
-             "pct_of_net_assets": 100.0},
-            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
-             "issuer_name": "Gamma LLC", "fair_value": 500000,
-             "pct_of_net_assets": 100.0},
-        ])
-
-        # Create a fund_financials CSV with net_assets = 5,000,000
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "100", "report_date": "2023-03-31",
-            "net_assets": "5000000",
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        assert len(result) == 3
-        # pct should be recalculated: fair_value / 5M * 100
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 20.0) < 0.01
-        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
-        assert abs(float(beta["pct_of_net_assets"]) - 40.0) < 0.01
-        gamma = result[result["issuer_name"] == "Gamma LLC"].iloc[0]
-        assert abs(float(gamma["pct_of_net_assets"]) - 10.0) < 0.01
-
-    def test_normal_pct_unchanged(self, tmp_path):
-        """CIK with pct_sum=120% -> pct unchanged (below 200% threshold)."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000200", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 600000,
-             "pct_of_net_assets": 60.0},
-            {"source": "bdc", "cik": "0000000200", "report_date": "2023-03-31",
-             "issuer_name": "Beta Inc", "fair_value": 600000,
-             "pct_of_net_assets": 60.0},
-        ])
-
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "200", "report_date": "2023-03-31",
-            "net_assets": "1000000",
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # pct should be unchanged (sum=120% < 200% threshold)
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 60.0) < 0.01
-
-    def test_no_fund_financials(self, tmp_path):
-        """No fund_financials file -> pct unchanged."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000300", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 150.0},
-            {"source": "bdc", "cik": "0000000300", "report_date": "2023-03-31",
-             "issuer_name": "Beta Inc", "fair_value": 1000000,
-             "pct_of_net_assets": 150.0},
-        ])
-
-        missing_path = tmp_path / "nonexistent_fund_financials.csv"
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", missing_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # Unchanged - no fund_financials file exists
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 150.0) < 0.01
-
-    def test_nport_rows_unchanged(self, tmp_path):
-        """N-PORT rows are never corrected, even in high-pct CIK-quarters."""
-        holdings = self._make_holdings_df([
-            {"source": "nport", "cik": "0000000400", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 250.0},
-        ])
-
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "400", "report_date": "2023-03-31",
-            "net_assets": "1000000",
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # N-PORT rows should be unchanged regardless
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 250.0) < 0.01
-
-    def test_bad_net_assets_skipped(self, tmp_path):
-        """CIK with pct_sum=334% but bad net_assets ($1M vs $335M FV) -> skipped."""
-        # Simulates CIK 0002012139: 30 positions totalling ~$335M, pct_sum=334%
-        # fund_financials has net_assets=$1M (garbage), which would make pct_sum
-        # 33,500% -- worse than 334%.  Guard should skip the correction.
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
-             "issuer_name": "Alpha Corp", "fair_value": 200000000,
-             "pct_of_net_assets": 200.0},
-            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
-             "issuer_name": "Beta Inc", "fair_value": 100000000,
-             "pct_of_net_assets": 100.0},
-            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
-             "issuer_name": "Gamma LLC", "fair_value": 35000000,
-             "pct_of_net_assets": 34.0},
-        ])
-
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "2012139", "report_date": "2025-06-30",
-            "net_assets": "1004000",  # Bad value: ~750x too low
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # Original pct values should be preserved (correction skipped)
-        alpha = result[result["issuer_name"] == "Alpha Corp"].iloc[0]
-        assert abs(float(alpha["pct_of_net_assets"]) - 200.0) < 0.01
-        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
-        assert abs(float(beta["pct_of_net_assets"]) - 100.0) < 0.01
-        gamma = result[result["issuer_name"] == "Gamma LLC"].iloc[0]
-        assert abs(float(gamma["pct_of_net_assets"]) - 34.0) < 0.01
-
-    def test_good_net_assets_applied(self, tmp_path):
-        """CIK with pct_sum=400% and good net_assets -> correction applied."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000500", "report_date": "2023-06-30",
-             "issuer_name": "Acme Corp", "fair_value": 2000000,
-             "pct_of_net_assets": 200.0},
-            {"source": "bdc", "cik": "0000000500", "report_date": "2023-06-30",
-             "issuer_name": "Beta Inc", "fair_value": 2000000,
-             "pct_of_net_assets": 200.0},
-        ])
-
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "500", "report_date": "2023-06-30",
-            "net_assets": "10000000",  # Good: recalculated pct_sum = 40% < 400%
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # pct should be recalculated: 2M / 10M * 100 = 20%
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 20.0) < 0.01
-        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
-        assert abs(float(beta["pct_of_net_assets"]) - 20.0) < 0.01
-
-    def test_below_threshold_no_correction(self, tmp_path):
-        """CIK with pct_sum=150% -> below 200% threshold, no correction."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000600", "report_date": "2023-06-30",
-             "issuer_name": "Acme Corp", "fair_value": 800000,
-             "pct_of_net_assets": 80.0},
-            {"source": "bdc", "cik": "0000000600", "report_date": "2023-06-30",
-             "issuer_name": "Beta Inc", "fair_value": 700000,
-             "pct_of_net_assets": 70.0},
-        ])
-
-        ff_path = tmp_path / "fund_financials.csv"
-        ff_df = pd.DataFrame([{
-            "cik": "600", "report_date": "2023-06-30",
-            "net_assets": "1000000",
-        }])
-        ff_df.to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        # pct unchanged (sum=150% < 200% threshold)
-        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert abs(float(acme["pct_of_net_assets"]) - 80.0) < 0.01
-
-    # -- corrected_fields stamping (2026-08-25: correction must be provenance-
-    #    visible; the silent overwrite caused the pct_sense_check warn flood) --
-
-    def test_corrected_rows_stamp_corrected_fields(self, tmp_path):
-        """Rows whose pct is recalculated get 'pct_of_net_assets' in corrected_fields."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000700", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 100.0},
-            {"source": "bdc", "cik": "0000000700", "report_date": "2023-03-31",
-             "issuer_name": "Beta Inc", "fair_value": 2000000,
-             "pct_of_net_assets": 150.0},
-        ])
-        ff_path = tmp_path / "fund_financials.csv"
-        pd.DataFrame([{
-            "cik": "700", "report_date": "2023-03-31", "net_assets": "5000000",
-        }]).to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        for name in ("Acme Corp", "Beta Inc"):
-            row = result[result["issuer_name"] == name].iloc[0]
-            assert "pct_of_net_assets" in str(row["corrected_fields"]), name
-
-    def test_uncorrected_rows_not_stamped(self, tmp_path):
-        """Below-threshold CIK-quarter: corrected_fields stays empty."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000701", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 800000,
-             "pct_of_net_assets": 80.0},
-        ])
-        ff_path = tmp_path / "fund_financials.csv"
-        pd.DataFrame([{
-            "cik": "701", "report_date": "2023-03-31", "net_assets": "1000000",
-        }]).to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert "pct_of_net_assets" not in str(row["corrected_fields"])
-
-    def test_null_fv_row_in_corrected_quarter_not_stamped(self, tmp_path):
-        """A row the CASE leaves unchanged (no fair_value) must NOT be stamped,
-        even inside a corrected CIK-quarter."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000702", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 150.0},
-            {"source": "bdc", "cik": "0000000702", "report_date": "2023-03-31",
-             "issuer_name": "NoFV LLC", "fair_value": "",
-             "pct_of_net_assets": 90.0},
-        ])
-        ff_path = tmp_path / "fund_financials.csv"
-        pd.DataFrame([{
-            "cik": "702", "report_date": "2023-03-31", "net_assets": "2000000",
-        }]).to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        stamped = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        assert "pct_of_net_assets" in str(stamped["corrected_fields"])
-        unstamped = result[result["issuer_name"] == "NoFV LLC"].iloc[0]
-        assert "pct_of_net_assets" not in str(unstamped["corrected_fields"])
-        assert abs(float(unstamped["pct_of_net_assets"]) - 90.0) < 0.01
-
-    def test_stamp_appends_to_existing_corrected_fields(self, tmp_path):
-        """Pre-existing corrected_fields entries are preserved (';'-joined append)."""
-        holdings = self._make_holdings_df([
-            {"source": "bdc", "cik": "0000000703", "report_date": "2023-03-31",
-             "issuer_name": "Acme Corp", "fair_value": 1000000,
-             "pct_of_net_assets": 150.0, "corrected_fields": "fair_value"},
-            {"source": "bdc", "cik": "0000000703", "report_date": "2023-03-31",
-             "issuer_name": "Beta Inc", "fair_value": 2000000,
-             "pct_of_net_assets": 120.0},
-        ])
-        ff_path = tmp_path / "fund_financials.csv"
-        pd.DataFrame([{
-            "cik": "703", "report_date": "2023-03-31", "net_assets": "6000000",
-        }]).to_csv(ff_path, index=False)
-
-        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
-            result = _correct_pct_of_net_assets(holdings)
-
-        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
-        cf = str(row["corrected_fields"])
-        assert "fair_value" in cf
-        assert "pct_of_net_assets" in cf
 
 
 # ---------------------------------------------------------------------------
@@ -9352,10 +9080,26 @@ def test_prepare_bdc_converts_non_usd_principal_with_reference_fx(tmp_path, monk
     )
     monkeypatch.setattr("pipeline.staging_bdc.FX_RATES_FILE", fx_file)
 
+    # Raw unit fields contain case-sensitive references to the source document,
+    # not currency declarations. Supply the document that establishes USD FV
+    # and cost independently of the CAD principal.
+    cache = tmp_path / "unit_sources"
+    source_dir = cache / "123"
+    source_dir.mkdir(parents=True)
+    (source_dir / "000000012324000001.xml").write_text(
+        '<xbrl xmlns="http://www.xbrl.org/2003/instance" '
+        'xmlns:iso="http://www.xbrl.org/2003/iso4217">'
+        '<context id="c1"><entity><identifier scheme="sec">123</identifier></entity></context>'
+        '<unit id="usd"><measure>iso:USD</measure></unit>'
+        '<unit id="cad"><measure>iso:CAD</measure></unit></xbrl>',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("pipeline.config.BDC_XBRL_CACHE_DIR", cache)
+
     df = pd.DataFrame([{
         "cik": "123",
         "entity_name": "Test BDC",
-        "accession_number": "0001-24",
+        "accession_number": "0000000123-24-000001",
         "form_type": "10-Q",
         "filing_date": "2024-05-01",
         "report_date": "2024-03-31",
@@ -13937,20 +13681,8 @@ class TestSqlTiebreakDeterminism:
     # S7: with_cost FIRST_VALUE window -- cost proxy donor stability
     # ------------------------------------------------------------------
 
-    def test_cost_proxy_donor_independent_of_order(self, tmp_path):
-        """Two BDC rows for the same position / same report_date, tied on all
-        with_cost window ORDER BY keys (report_date, fair_value, accession,
-        bdc_investment_identifier, nport_holding_id, shares_held) -- differ
-        ONLY in src_context_id and in cost.  The FIRST_VALUE proxy selects the
-        row with the lexicographically-smaller src_context_id as the donor.
-        The published cost must be identical regardless of frame order.
-
-        Arrange: two rows, cost=0 (proxy fires), same FV=500000, same accession,
-        same identifier -- only src_context_id differs (ctxA < ctxB).
-        After the anchor key ctxA must always be the FIRST_VALUE donor;
-        both rows get proxy=500000 (the FV).  The test asserts equal cost
-        lists from both frame orderings.
-        """
+    def test_reported_zero_cost_independent_of_order(self, tmp_path):
+        """Reordering source contexts cannot replace reported zero with FV."""
         rows_fwd = [
             {
                 "cik": "0000000002",
@@ -13990,7 +13722,8 @@ class TestSqlTiebreakDeterminism:
         assert len(donor_f) >= 1, "No DonorCo rows in fwd output"
         assert len(donor_r) >= 1, "No DonorCo rows in rev output"
 
-        # Both rows have cost=0 so the proxy fires and fills with FV=500000.
+        # Both rows have reported zero, which must survive either ordering.
+        assert donor_f.cost.eq(0).all() and donor_r.cost.eq(0).all()
         # The cost list must be identical from both frame orderings.
         costs_f = sorted(str(c) for c in donor_f["cost"].tolist())
         costs_r = sorted(str(c) for c in donor_r["cost"].tolist())

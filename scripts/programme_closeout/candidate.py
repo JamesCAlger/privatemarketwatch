@@ -127,8 +127,6 @@ def snapshot(candidate):
     # Cache/input templates are small; no SEC/raw-filing downloads or junctions.
     files.extend(p for p in (ROOT/'data/raw/filing_templates').glob('*.json'))
     total=sum(p.stat().st_size for p in files)
-    if total>12*1024**3:
-        raise ValueError('Snapshot exceeds 12 GiB bound')
     print(f'Freeze {len(files)} inputs; {total/1024**3:.2f} GiB',flush=True)
     records=[]
     for i,src in enumerate(sorted(set(files))):
@@ -143,7 +141,7 @@ def snapshot(candidate):
     manifest=dict(format_version=1,created_utc=now(),artifacts=records,
         code_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         dirty_worktree=subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).splitlines(),
-        python=sys.version,byte_limit=12*1024**3,original_root=str(ROOT),
+        python=sys.version,byte_limit=None,original_root=str(ROOT),
         snapshot_role='current cached output/input dependencies; raw source cache not replicated',
         existing_absent_controls=[str(p.relative_to(ROOT)) for p in
             (ROOT/'data/output/lien_cache.csv',ROOT/'data/overrides/fund_strategy_overrides.json') if not p.exists()])
@@ -153,7 +151,7 @@ def snapshot(candidate):
     print('Snapshot complete: '+manifest['input_fingerprint'],flush=True)
 
 
-def run(candidate, attempt_name, stage, seconds):
+def run(candidate, attempt_name, stage):
     candidate=Path(candidate).resolve()
     if not candidate.is_relative_to(ROOT/'data/programme/candidates'):
         raise ValueError('Invalid candidate root')
@@ -180,25 +178,17 @@ def run(candidate, attempt_name, stage, seconds):
         proc=subprocess.Popen(command,cwd=workspace,env=env,stdout=log,stderr=subprocess.STDOUT,
             creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
         atomic_json(attempt/'process.json',dict(pid=proc.pid,command=command,started_utc=now(),
-                                               timeout_seconds=seconds,stage=stage))
+                                               timeout_seconds=None,stage=stage))
         try:
             last=0;peak=0
             while proc.poll() is None:
                 elapsed=time.monotonic()-started
                 memory=process_private_bytes(proc)
                 peak=max(peak,memory or 0)
-                if memory and memory>12*1024**3:
-                    proc.kill();proc.wait()
-                    atomic_json(attempt/'interrupted.json',dict(reason='private_memory_limit',bytes=memory,seconds=elapsed))
-                    raise MemoryError('Candidate exceeded 12 GiB private bytes')
-                if elapsed>seconds:
-                    proc.kill();proc.wait()
-                    atomic_json(attempt/'interrupted.json',dict(reason='timeout',seconds=elapsed))
-                    raise TimeoutError('Candidate stage timed out')
                 if elapsed-last>=30:
                     last=elapsed
                     atomic_json(attempt/'resources.json',dict(elapsed_seconds=elapsed,private_bytes=memory,
-                                peak_private_bytes=peak,private_byte_limit=12*1024**3))
+                                peak_private_bytes=peak,private_byte_limit=None))
                     print(f'{stage}: running {elapsed:.0f}s, pid {proc.pid}; private {(memory or 0)/1024**3:.2f} GiB',flush=True)
                 time.sleep(1)
         finally:
@@ -218,10 +208,9 @@ def main():
     p.add_argument('--candidate',type=Path,required=True)
     p.add_argument('--attempt',default='unified-01')
     p.add_argument('--stage',choices=['unified'],default='unified')
-    p.add_argument('--timeout',type=int,default=1200)
     a=p.parse_args()
     if a.action=='snapshot':snapshot(a.candidate)
-    elif a.action=='run':run(a.candidate,a.attempt,a.stage,a.timeout)
+    elif a.action=='run':run(a.candidate,a.attempt,a.stage)
     else:
         manifest=json.loads((a.candidate/'snapshot.json').read_text())
         print(json.dumps(read_bundle(a.candidate/'attempts'/a.attempt/'bundle',manifest['input_fingerprint']),indent=2))

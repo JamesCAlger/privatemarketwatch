@@ -130,13 +130,17 @@ def identity_regression(connection, out):
 
 
 def main():
+    raise ContractError('This parallel evaluator is retired. Use pipeline.quarter_acceptance with --programme-evidence.')
+
+
+def historical_main():
+    """Archived orchestration; retained for interpreting old evidence only."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate', required=True)
     parser.add_argument('--evaluation', default='evaluation-v1')
     args = parser.parse_args()
     if any(char not in 'abcdefghijklmnopqrstuvwxyz0123456789-_' for char in args.evaluation):
         raise ContractError('Invalid evaluation name')
-    timer = threading.Timer(1200, lambda: os._exit(124)); timer.daemon = True; timer.start()
     started = time.monotonic()
     candidate = candidate_path(args.candidate)
     manifest = verify_snapshot(candidate)
@@ -172,7 +176,7 @@ def main():
     for reference in references.values():
         validate_reference(reference, ROOT)
     connection = duckdb.connect()
-    connection.execute('SET threads=2'); connection.execute("SET memory_limit='4GB'")
+    connection.execute('SET threads=2'); connection.execute("SET memory_limit='-1'")
     temporary = ROOT / 'scratch/2026-09-10_programme_tranche' / args.evaluation
     temporary.mkdir(exist_ok=True)
     connection.execute('SET temp_directory=' + literal(temporary.as_posix()))
@@ -302,7 +306,7 @@ def main():
         evaluator=record(ROOT, Path(__file__).relative_to(ROOT).as_posix()),
         files=[record(out, p.relative_to(out).as_posix()) for p in sorted(out.iterdir()) if p.is_file()],
         elapsed_seconds=time.monotonic()-started))
-    connection.close(); timer.cancel()
+    connection.close()
     print('Integrated evaluation: ' + result['verdict'] + '; all 28 criteria recorded', flush=True)
 
 

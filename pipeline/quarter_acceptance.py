@@ -28,6 +28,7 @@ import argparse
 import csv
 import json
 import logging
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -118,6 +119,7 @@ def _fund_fv_by_quarter(holdings_path: Path, cohort: set[str]) -> dict[tuple[str
             FROM ({published_fv_sum_sql(src)}) AS published
             WHERE cik IN (SELECT cik FROM cohort)"""
     ).fetchall()
+    con.close()
     return {(c, d): float(v) for c, d, v in rows if v is not None}
 
 
@@ -127,10 +129,11 @@ def _numeric(value) -> float | None:
     A check whose actual is not a number is not comparable, so it must fail closed
     rather than raise: an exception here would take the whole verdict down.
     """
-    if value is None or isinstance(value, (list, dict, tuple, set)):
+    if value is None or isinstance(value, (bool, list, dict, tuple, set)):
         return None
     try:
-        return float(value)
+        number = float(value)
+        return number if math.isfinite(number) else None
     except (TypeError, ValueError):
         return None
 
@@ -154,6 +157,8 @@ def compute_acceptance(
     manifest_path: Path | None = None,
     thresholds_path: Path | None = None,
     investigate_dir: Path | None = None,
+    programme_evidence: Path | None = None,
+    programme_thresholds: Path | None = None,
 ) -> dict[str, Any]:
     """Compute the acceptance metrics + threshold checks for one quarter.
 
@@ -378,7 +383,7 @@ def compute_acceptance(
         if a_actual is None or a_actual < float(assess["min"]):
             verdict = "NOT_ASSESSABLE"
 
-    return {
+    result = {
         "schema_version": 1,
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "target_quarter": target_quarter,
@@ -401,6 +406,62 @@ def compute_acceptance(
         },
         "_funds": funds,  # stripped before the JSON is written (goes to the CSV)
     }
+    if programme_evidence is not None:
+        from pipeline.quarter_evidence import Evidence,collect
+        evidence=Evidence(programme_evidence,holdings_path)
+        measured = collect(holdings_path,programme_evidence,target_quarter,set(cohort),evidence=evidence)
+        bound={name for name in ("ledger","queue","audit","investigate")
+               if evidence.path("legacy_"+name,candidate_bound=True)}
+        extend_acceptance(result,measured,thresholds_path=programme_thresholds,bound_legacy_inputs=bound)
+        result["inputs"]["programme_evidence"] = str(programme_evidence)
+    return result
+
+
+def extend_acceptance(result, observations, *, thresholds_path=None,bound_legacy_inputs=None):
+    """Evaluate all working extension rows here, retaining the v3 comparison.
+
+    This is the same acceptance mechanism used by re-attestation. Explicit
+    candidate evidence enables a staged amendment without silently adopting new
+    denominators/floors in the existing signed-quarter contract.
+    """
+    from pipeline.programme.core import ContractError, sha
+    path=Path(thresholds_path or config.REFERENCE_DIR / "quarter_acceptance_programme_thresholds.json")
+    spec=load_thresholds(path)
+    required={row["id"] for row in spec["checks"]}
+    if len(required)!=len(spec["checks"]) or set(observations)-required:
+        raise ContractError("Duplicate or unknown extended acceptance metrics")
+    result["v3_history"]={key:result[key] for key in ("verdict","checks","thresholds_version","calibration")}
+    checks=[dict(row,status="PASS" if row["pass"] else "FAIL")
+            for row in result["checks"] if row["id"]!="fund_coverage"]
+    dependencies={"reconcile_rate":{"ledger"},"flagged_fv_share":{"ledger"},
+        "source_blocking_fv_share":{"queue"},"verified_fv_share":{"ledger","queue"},
+        "promoted_rule_drift":{"audit"},"promoted_rule_health":{"audit"},
+        "over_inclusion_fv_share":{"ledger"},"unfinished_investigations":{"investigate"}}
+    if bound_legacy_inputs is not None:
+        for check in checks:
+            missing=dependencies.get(check["id"],set())-bound_legacy_inputs
+            if missing:
+                check.update(status="UNASSESSABLE",**{"pass":False},
+                    reason="Inputs not bound to candidate: "+", ".join(sorted(missing)))
+    for row in spec["checks"]:
+        observed=observations.get(row["id"],{})
+        actual=_numeric(observed.get("actual"))
+        threshold=_numeric(row["value"])
+        assessable=bool(observed.get("assessable")) and actual is not None and threshold is not None
+        exact_failure=observed.get("exact_failure") is True
+        passed=bool(not exact_failure and assessable and _OPS[row["op"]](actual,threshold))
+        checks.append(dict(id=row["id"],metric=row["id"],op=row["op"],value=row["value"],
+            actual=actual,**{"pass":passed},status="PASS" if passed else "FAIL" if assessable or exact_failure else "UNASSESSABLE",
+            reason=observed.get("reason") or ("Threshold amendment pending" if threshold is None
+                else "Collector absent or evidence unavailable" if not assessable else "Compared with working bar"),
+            details=observed.get("details",{})))
+    states={row["status"] for row in checks}
+    result.update(checks=checks,thresholds_version=spec["version"],calibration=spec["calibration"],
+        verdict="FAIL" if "FAIL" in states else "UNASSESSABLE" if "UNASSESSABLE" in states else "PASS",
+        unassessable_checks=[row["id"] for row in checks if row["status"]=="UNASSESSABLE"],
+        programme_thresholds_sha256=sha(path),readiness="blocked" if states!={"PASS"} else "data_gates_pass",
+        release_approval="not_granted")
+    return result
 
 
 def write_acceptance(
@@ -411,7 +472,8 @@ def write_acceptance(
 ) -> tuple[Path, Path]:
     json_path = json_path or config.QUARTER_ACCEPTANCE_FILE
     funds_path = funds_path or config.QUARTER_ACCEPTANCE_FUNDS_FILE
-    funds = result.pop("_funds", [])
+    funds = result.get("_funds", [])
+    result = {key:value for key,value in result.items() if key!="_funds"}
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     with funds_path.open("w", newline="", encoding="utf-8") as f:
@@ -434,6 +496,8 @@ def cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--holdings", type=Path, default=None)
     parser.add_argument("--thresholds", type=Path, default=None)
     parser.add_argument("--investigate-dir", type=Path, default=None)
+    parser.add_argument("--programme-evidence", type=Path, default=None)
+    parser.add_argument("--programme-thresholds", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=None, help="JSON output path override.")
     parser.add_argument("--funds-out", type=Path, default=None, help="Funds CSV path override.")
     args = parser.parse_args(argv)
@@ -446,6 +510,8 @@ def cli(argv: list[str] | None = None) -> int:
         holdings_path=args.holdings,
         thresholds_path=args.thresholds,
         investigate_dir=args.investigate_dir,
+        programme_evidence=args.programme_evidence,
+        programme_thresholds=args.programme_thresholds,
     )
     verdict, quarter = result["verdict"], result["target_quarter"]
     json_path, funds_path = write_acceptance(

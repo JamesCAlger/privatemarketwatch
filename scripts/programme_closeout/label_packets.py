@@ -8,7 +8,7 @@ from scripts.programme_reference.source_reader import clean,local
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/production_stack/programme_closeout_evidence_2026-09-09/labels'
 def main():
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();OUT.mkdir(parents=True,exist_ok=True)
+    OUT.mkdir(parents=True,exist_ok=True)
     comparison=list(csv.DictReader((ROOT/'docs/production_stack/programme_pilot_evidence_2026-09-09/legacy_label_comparison.csv').open()))
     selected={}
     for r in comparison:
@@ -57,5 +57,5 @@ def main():
     atomic_json(OUT/'packets.json',results)
     summary=[dict(key=r['key'],source=r['path'],needle=r['search_needle'],matches=r['match_count'],
         flags=[dict(field=f['field'],reference=f['reference'],candidate=f['candidate'],join=f['join_count']) for f in r['flagged_fields']]) for r in results]
-    atomic_json(OUT/'summary.json',summary);print(json.dumps(summary,ensure_ascii=True),flush=True);timer.cancel()
+    atomic_json(OUT/'summary.json',summary);print(json.dumps(summary,ensure_ascii=True),flush=True);
 if __name__=='__main__':main()

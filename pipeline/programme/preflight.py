@@ -37,7 +37,8 @@ def execute_preflight(attempt, reads):
     from pipeline.programme.stages import execute
     attempt = Path(attempt)
     results = {}
-    for stage in ('unified', 'identity', 'evidence'):
+    from pipeline.programme.runner import STAGES
+    for stage in STAGES:
         print('Representative workload: ' + stage, flush=True)
         execute(attempt, reads, preflight_stage=stage)
         results[stage] = read_json(attempt / 'bundle' / stage / 'summary.json')

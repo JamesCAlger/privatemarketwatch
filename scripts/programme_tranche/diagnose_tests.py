@@ -1,4 +1,4 @@
-"""Bounded offline test diagnosis with native write isolation and durable reports."""
+"""Offline test diagnosis with native write isolation and durable reports."""
 from __future__ import annotations
 
 import argparse
@@ -140,19 +140,18 @@ class Reports:
         self.append_event('reports.jsonl', item)
 
 
-def worker(job, seconds):
+def worker(job):
     native.lower_integrity()
     import win32api
     import win32job
     job_handle = win32job.CreateJobObject(None, '')
     limits = win32job.QueryInformationJobObject(job_handle, win32job.JobObjectExtendedLimitInformation)
     limits['BasicLimitInformation']['LimitFlags'] = (win32job.JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE |
-        win32job.JOB_OBJECT_LIMIT_JOB_MEMORY | win32job.JOB_OBJECT_LIMIT_ACTIVE_PROCESS)
+        win32job.JOB_OBJECT_LIMIT_ACTIVE_PROCESS)
     limits['BasicLimitInformation']['ActiveProcessLimit'] = 8
-    limits['JobMemoryLimit'] = 12 * 1024**3
     win32job.SetInformationJobObject(job_handle, win32job.JobObjectExtendedLimitInformation, limits)
     win32job.AssignProcessToJobObject(job_handle, win32api.GetCurrentProcess())
-    timer = threading.Timer(seconds, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     atomic_json(job/'telemetry/worker.json', dict(pid=os.getpid(), started_utc=now(), integrity='low'))
     sys.stdout.reconfigure(encoding='ascii', errors='backslashreplace')
     sys.stderr.reconfigure(encoding='ascii', errors='backslashreplace')
@@ -162,22 +161,18 @@ def worker(job, seconds):
     os.environ['OPENAI_API_KEY'] = 'ci-dummy-key-tests-mock-all-calls'
     with patch.object(dotenv, 'load_dotenv', lambda *a, **kw: False):
         if request['mode'] == 'semantic':
-            # Retain the prescribed full byte+semantic attempt as a separate
-            # bounded result. Its timeout is not a semantic pass.
+            # Retain the prescribed full byte+semantic attempt separately.
             command = [sys.executable, '-B', '-m', 'scripts.programme_tranche.semantic_backstop_child',
                        '--job-name', job.name]
             started = time.monotonic()
             with (job/'bundle/full_byte_process.log').open('w', encoding='ascii', errors='backslashreplace') as log:
-                try:
-                    full = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
-                                          timeout=210, creationflags=subprocess.CREATE_NO_WINDOW)
-                    full_code = full.returncode
-                except subprocess.TimeoutExpired:
-                    full_code = 124
+                full = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
+                                      creationflags=subprocess.CREATE_NO_WINDOW)
+                full_code = full.returncode
             atomic_json(job/'bundle/full_byte_attempt.json', dict(exit_code=full_code,
-                timed_out=full_code == 124, child_stopped=True, elapsed_seconds=time.monotonic()-started,
+                timed_out=False, child_stopped=True, elapsed_seconds=time.monotonic()-started,
                 command=command, semantics='scripts.diff_outputs.main with --semantic; report redirected only',
-                worker_cap_seconds=180, parent_cap_seconds=210,
+                worker_cap_seconds=None, parent_cap_seconds=None,
                 semantic_report_exists=(job/'bundle/full_byte_semantic_report.json').exists()))
             from scripts import diff_outputs
             diff_outputs.SEMANTIC_REPORT_FILE = job/'bundle/semantic_diff_report.json'
@@ -200,7 +195,7 @@ def worker(job, seconds):
             else:
                 code = pytest.main(arguments, plugins=[Reports(job)])
     atomic_json(job/'telemetry/finished.json', dict(exit_code=int(code), finished_utc=now()))
-    timer.cancel()
+    
     return int(code)
 
 
@@ -208,17 +203,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('mode', choices=['collect', 'tests', 'profile', 'semantic'])
     parser.add_argument('--name', required=True)
-    parser.add_argument('--seconds', type=int, default=600)
     parser.add_argument('--worker', action='store_true')
     parser.add_argument('nodes', nargs='*')
     args = parser.parse_intermixed_args()
     if not args.name or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-_' for c in args.name):
         raise ContractError('Portable unique job name required')
-    if not 1 <= args.seconds <= 900:
-        raise ContractError('Diagnostic worker cap is 900 seconds')
     job = BASE/args.name
     if args.worker:
-        return worker(job, args.seconds)
+        return worker(job)
     if args.mode in ('tests', 'profile') and not args.nodes:
         raise ContractError('Diagnosis requires explicit test selection; no full-suite fallback')
     with heavy_lock(candidate_path('t1-runtime-20260910-v5')):
@@ -231,7 +223,7 @@ def main():
         before = inventory(); atomic_json(job/'protected_before.json', before)
         atomic_json(job/'request.json', dict(mode=args.mode, nodes=args.nodes,
             code=record(ROOT, Path(__file__).relative_to(ROOT).as_posix()),
-            authority='Owner requested investigation after the stopped tranche; bounded diagnostics only'))
+            authority='Owner authorized uncapped continued implementation and verification'))
         fs = {':minimal':'read', str(ROOT):'read', str(Path(sys.executable).parent):'read',
               str(Path(__import__('site').getusersitepackages())):'read', ':tmpdir':'deny', ':slash_tmp':'deny'}
         for relative in ('bundle', 'temp', 'telemetry', 'workspace/data/output'):
@@ -243,17 +235,19 @@ def main():
             '-c', 'permissions.'+profile_name+'.network.enabled=false',
             '-c', 'windows.sandbox="elevated"', '-c', 'project_root_markers=[]',
             sys.executable, '-B', '-m', 'scripts.programme_tranche.diagnose_tests', args.mode,
-            '--name', args.name, '--seconds', str(args.seconds), '--worker']
+            '--name', args.name, '--worker']
         started = time.monotonic()
         with (job/'process.log').open('w', encoding='ascii', errors='backslashreplace') as log:
             process = subprocess.Popen(command, cwd=ROOT, env=native.environment(job), stdout=log,
                 stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
             atomic_json(job/'process.json', dict(controller_pid=os.getpid(), launcher_pid=process.pid,
-                started_utc=now(), seconds=args.seconds, command=command))
-            while process.poll() is None and time.monotonic()-started < args.seconds+30:
-                time.sleep(1)
-            if process.poll() is None:
-                process.kill(); process.wait(timeout=15)
+                started_utc=now(), seconds=None, command=command))
+            try:
+                while process.poll() is None:
+                    time.sleep(1)
+            finally:
+                if process.poll() is None:
+                    process.kill(); process.wait()
         import psutil
         telemetry = job/'telemetry/worker.json'
         stopped = not telemetry.exists() or not psutil.pid_exists(read_json(telemetry)['pid'])

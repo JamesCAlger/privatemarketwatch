@@ -667,14 +667,16 @@ def main() -> None:
         logger.info("")
         t7 = time.time()
         try:
-            from pipeline.unified_holdings import build_unified_holdings
+            from pipeline.holdings_finalizer import build_final_holdings
 
-            unified_df = build_unified_holdings(
+            unified_df, _ = build_final_holdings(
                 bdc_df=holdings_df,
                 nport_df=nport_holdings_df,
+                use_registry=getattr(args, "stable_position_ids", False),
             )
         except Exception as exc:
             logger.error("Unified holdings build failed: %s", exc, exc_info=True)
+            raise
         logger.info("Unified holdings step completed in %.1f s", time.time() - t7)
 
     # ── Step 7b: Fund financials (optional) ──
@@ -930,14 +932,16 @@ def main() -> None:
         logger.info("LLM review step completed in %.1f s", time.time() - t9)
 
     # ── Step 10: Entity resolution (optional) ──
-    if args.entities:
+    if args.entities and not args.unified:
         logger.info("")
         t10 = time.time()
         try:
-            from pipeline.entity_resolution import build_entity_lookup
-            build_entity_lookup()
+            from pipeline.holdings_finalizer import finalize_existing_holdings
+            unified_df, _ = finalize_existing_holdings(rebuild_entities=True,
+                use_registry=getattr(args, "stable_position_ids", False))
         except Exception as exc:
             logger.error("Entity resolution failed: %s", exc, exc_info=True)
+            raise
         logger.info("Entity resolution step completed in %.1f s", time.time() - t10)
 
     # ── Step 11: Position matching and index returns (optional) ──
@@ -948,42 +952,14 @@ def main() -> None:
         logger.info("")
         t11 = time.time()
         try:
-            from pipeline.position_matching import (
-                CONTESTED_ASSIGNMENT_DEFAULT, match_positions, assign_position_ids,
-            )
+            from pipeline.holdings_finalizer import finalize_existing_holdings
             from pipeline.index_returns import compute_returns
             from pipeline.match_reconciliation import (
                 build_position_match_reconciliation,
             )
 
-            matches_df = match_positions(
-                unified_df=unified_df,
-                contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
-            )
-
-            # Assign stable position IDs and re-save enriched files
-            if unified_df is None:
-                import pandas as _pd
-                unified_df = _pd.read_csv(
-                    OUTPUT_DIR / "private_markets_holdings.csv", dtype=str,
-                )
-            unified_df, matches_df = assign_position_ids(
-                unified_df, matches_df,
+            unified_df, matches_df = finalize_existing_holdings(
                 use_registry=getattr(args, "stable_position_ids", False),
-                contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
-            )
-            # assign_position_ids reorders to UNIFIED_COLUMNS, which drops the
-            # appended row_id/row_id_basis -- re-derive before the re-save
-            # (anchor-based ids are deterministic, so this is a pure re-add).
-            from pipeline.unified_holdings import _assign_row_ids
-            unified_df = _assign_row_ids(unified_df)
-            # Re-save unified holdings with position_id populated
-            unified_df.to_csv(
-                OUTPUT_DIR / "private_markets_holdings.csv", index=False,
-            )
-            # Re-save matches with position_id column
-            matches_df.to_csv(
-                OUTPUT_DIR / "position_matches.csv", index=False,
             )
             build_position_match_reconciliation(
                 holdings_df=unified_df,
@@ -1006,6 +982,7 @@ def main() -> None:
             )
         except Exception as exc:
             logger.error("Returns computation failed: %s", exc, exc_info=True)
+            raise
         logger.info("Returns step completed in %.1f s", time.time() - t11)
 
     # ── Step 12: Load into Postgres (optional) ──

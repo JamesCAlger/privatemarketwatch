@@ -15,9 +15,9 @@ BASE = ROOT / 'docs/production_stack/programme_closeout_evidence_2026-09-09'
 
 
 def main():
-    timer = threading.Timer(120, lambda: os._exit(124))
-    timer.daemon = True
-    timer.start()
+    
+    
+    
     docs = [ROOT / 'docs/production_stack' / name for name in (
         'programme_spec_closeout_2026-09-09.md',
         'programme_execution_tranche_2026-09-09.md',
@@ -101,7 +101,7 @@ def main():
                     final_inventory_at=datetime.datetime.now(datetime.timezone.utc).isoformat())
     previous['source_renditions']['builder_sha256'] = sha(ROOT / 'scripts/programme_closeout/citation_viewer.py')
     atomic_json(manifest_path, previous)
-    timer.cancel()
+    
     print(json.dumps(dict(documents=len(docs), links=links, syntax_files=len(code),
                          evidence_files=len(records), local_generated_files=len(local),
                          retained_bytes=sum(r['bytes'] for r in records if r['storage'] == 'retained_evidence'))), flush=True)

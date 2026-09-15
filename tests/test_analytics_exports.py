@@ -34,6 +34,8 @@ def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 
 def _write_rows(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.name == "private_markets_holdings.csv":
+        rows = [{"lien_position": "", **row} for row in rows]
     columns = list(rows[0].keys())
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -252,7 +254,17 @@ def test_credit_risk_nonaccrual_from_unified_columns(monkeypatch, tmp_path):
     assert q["byFv"]["nonAccrual"] == 1.0
 
 
-def test_gics_sector_export_uses_reconciled_bdc_before_holdings(monkeypatch, tmp_path):
+def _sector_fixture(monkeypatch, tmp_path):
+    from pipeline import config, public_partitions
+    hierarchy = tmp_path / "hierarchy.json"
+    hierarchy.write_text(json.dumps({name:{"sector":name} for name in
+        ("Energy", "Health Care", "Financials", "Industrials")}), encoding="utf-8")
+    monkeypatch.setattr(config, "GICS_HIERARCHY_FILE", hierarchy)
+    monkeypatch.setattr(public_partitions, "load_cohort_ciks", lambda: {"0000000001", "0000000002", "0000000003"})
+
+
+def test_gics_sector_export_ignores_even_accepted_fund_overlay(monkeypatch, tmp_path):
+    _sector_fixture(monkeypatch, tmp_path)
     holdings = tmp_path / "private_markets_holdings.csv"
     reconciliation = tmp_path / "bdc_sector_reconciliation.csv"
     reconciled = tmp_path / "bdc_sector_breakdown_reconciled.csv"
@@ -345,17 +357,17 @@ def test_gics_sector_export_uses_reconciled_bdc_before_holdings(monkeypatch, tmp
 
     exported = json.loads((frontend_dir / "gics_sector_breakdown.json").read_text(encoding="utf-8"))
     by_sector = {row["sector"]: row for row in exported}
-    assert by_sector["Industrials"]["totalFv"] == 100
-    assert by_sector["Industrials"]["sourceBreakdown"]["bdcSectorReconciledFv"] == 100
+    assert "Industrials" not in by_sector
+    assert by_sector["Energy"]["totalFv"] == 100
     assert by_sector["Health Care"]["totalFv"] == 200
-    assert by_sector["Health Care"]["sourceBreakdown"]["bdcHoldingsFallbackFv"] == 200
     assert by_sector["Financials"]["totalFv"] == 300
-    assert by_sector["Financials"]["sourceBreakdown"]["nportHoldingsFv"] == 300
+    assert all(row["basis"] == "cohort_holdings_signed_fair_value" for row in exported)
     assert sum(row["totalFv"] for row in exported) == 600
     assert sum(row["pctOfTotal"] for row in exported) == 1.0
 
 
 def test_gics_sector_export_falls_back_when_bdc_reconciliation_fails(monkeypatch, tmp_path):
+    _sector_fixture(monkeypatch, tmp_path)
     holdings = tmp_path / "private_markets_holdings.csv"
     reconciliation = tmp_path / "bdc_sector_reconciliation.csv"
     reconciled = tmp_path / "bdc_sector_breakdown_reconciled.csv"
@@ -416,20 +428,16 @@ def test_gics_sector_export_falls_back_when_bdc_reconciliation_fails(monkeypatch
     analytics_exports._export_gics_sector_breakdown(con)
 
     exported = json.loads((frontend_dir / "gics_sector_breakdown.json").read_text(encoding="utf-8"))
-    assert exported == [{
-        "sector": "Energy",
-        "totalFv": 100.0,
-        "pctOfTotal": 1.0,
-        "fundCount": 1,
-        "sourceBreakdown": {
-            "bdcSectorReconciledFv": 0.0,
-            "bdcHoldingsFallbackFv": 100.0,
-            "nportHoldingsFv": 0.0,
-        },
-    }]
+    assert len(exported) == 1
+    assert exported[0]["sector"] == "Energy"
+    assert exported[0]["totalFv"] == 100.0
+    assert exported[0]["pctOfTotal"] == 1.0
+    assert exported[0]["fundCount"] == 1
+    assert exported[0]["basis"] == "cohort_holdings_signed_fair_value"
 
 
 def test_gics_sector_export_labels_unknown_and_uses_total_denominator(monkeypatch, tmp_path):
+    _sector_fixture(monkeypatch, tmp_path)
     holdings = tmp_path / "private_markets_holdings.csv"
     missing_reconciliation = tmp_path / "missing_bdc_sector_reconciliation.csv"
     missing_reconciled = tmp_path / "missing_bdc_sector_breakdown_reconciled.csv"

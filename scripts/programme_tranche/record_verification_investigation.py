@@ -20,7 +20,7 @@ def reports(job):
 
 
 def main():
-    timer = threading.Timer(300, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     assert not OUT.exists(), 'Preserve previous evidence'
     job_names = ('collect-v1', 'collect-v2', 'reproduce-v1', 'repaired-v1', 'repaired-v2', 'repaired-v3', 'semantic-after-v1')
     jobs = {name: read_json(BASE/name/'result.json') for name in job_names}
@@ -124,7 +124,7 @@ def main():
         for path in sorted(OUT.rglob('*')) if path.is_file()]))
     print(json.dumps({key:result[key] for key in ('original_failure_markers','before_outcomes','repaired_outcomes',
          'cache_query_tests_passed','slow_test_comparison')}), flush=True)
-    timer.cancel()
+    
 
 
 if __name__ == '__main__':

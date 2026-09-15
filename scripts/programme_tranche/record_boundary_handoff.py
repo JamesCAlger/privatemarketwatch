@@ -30,7 +30,7 @@ def main():
     for value in vars(args).values():
         if not value or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-_' for c in value):
             raise ContractError('Use portable evidence names')
-    timer = threading.Timer(180, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     candidate = ROOT / 'data/programme/candidates/t1-runtime-20260910-v5'
     manifest = read_json(candidate / 'snapshot.json')
     if sha(candidate / 'snapshot.json') != read_json(candidate / 'snapshot_complete.json')['manifest_sha256']:
@@ -159,7 +159,7 @@ def main():
         artifacts=[record(output, path.name) for path in sorted(output.iterdir()) if path.is_file()],
         evaluation=record(ROOT, (evaluation_dir / 'evaluation_manifest.json').relative_to(ROOT).as_posix()),
         code=record(ROOT, Path(__file__).relative_to(ROOT).as_posix())))
-    timer.cancel()
+    
     print('Stopped handoff recorded; all 50 metrics remain unmeasured', flush=True)
 
 

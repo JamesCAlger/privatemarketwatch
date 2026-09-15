@@ -4327,7 +4327,7 @@ def _write_csv_atomic(df: pd.DataFrame, path: Path, columns: Optional[list[str]]
 #     gained MoneyMarketFundsAt*/CashEquivalentsAt* mappings -- cash rows enter
 #     through the regular investment path with no keyword gate (fixes the two
 #     v2 admission misses: no-'money market'-keyword names and filer typos).
-_SOURCE_FACT_EXTRACTION_VERSION = "3"
+_SOURCE_FACT_EXTRACTION_VERSION = "4"
 
 
 def _filing_metadata_hash(filing: dict[str, Any]) -> str:

@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/production_stack/programme_closeout_evidence_2026-09-09/primary'
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    timer=threading.Timer(900,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     frame=list(csv.DictReader((ROOT/'docs/production_stack/programme_reference_evidence_2026-09-09/reference_pilot.csv').open()))
     assert len(frame)==61
     for i,p in enumerate(frame):
@@ -39,5 +39,5 @@ def main():
             if len(matches)>300:raise ValueError('Primary candidate cap')
         atomic_json(dest,dict(ref=p['reference_id'],path=p['html_path'],sha256=digest,status='literal_primary_review_candidates',rows=matches))
         print(f'Primary source packet {i+1}/61: {len(matches)} candidate rows',flush=True)
-    timer.cancel()
+    
 if __name__=='__main__':main()

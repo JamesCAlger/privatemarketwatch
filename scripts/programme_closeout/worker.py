@@ -90,7 +90,7 @@ def main():
         if 'database' in kw and str(kw['database']) not in ('',':memory:'):check(kw['database'])
         con=original_connect(*args,**kw)
         con.execute("SET threads=4")
-        con.execute("SET memory_limit='6GB'")
+        con.execute("SET memory_limit='-1'")
         con.execute("SET temp_directory='"+(attempt/'temp').as_posix().replace("'","''")+"'")
         return Connection(con)
     rule_events=[]

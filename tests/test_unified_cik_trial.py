@@ -78,6 +78,8 @@ class TestAlternateOutputPaths:
         assert out_csv.exists(), "Trial CSV was not written"
         assert out_csv.with_suffix(".parquet").exists(), "Trial parquet was not written"
         assert out_orphan.exists(), "Trial orphan file was not written"
+        assert (out_csv.parent / "input_admission_audit.csv").exists()
+        assert (out_csv.parent / "spread_unit_audit.csv").exists()
         # Fixture CIKs may be removed by universe gate; the key assertion
         # is that files were written to the custom paths, not production.
 
@@ -93,6 +95,7 @@ class TestAlternateOutputPaths:
             )
 
         assert default_out.exists(), "Default path should be used when output_file is None"
+        assert (default_out.parent / "input_admission_audit.csv").exists()
         assert len(result) > 0
 
     def test_empty_input_writes_to_custom_path(self, tmp_path):
@@ -108,8 +111,21 @@ class TestAlternateOutputPaths:
         )
 
         assert out_csv.exists()
+        assert out_csv.with_suffix(".parquet").exists()
         assert out_orphan.exists()
+        assert (out_csv.parent / "input_admission_audit.csv").exists()
         assert len(result) == 0
+
+    def test_custom_output_defaults_all_sidecars_to_trial_directory(self, tmp_path):
+        out_csv = tmp_path / "trial" / "private_markets_holdings.csv"
+        result = build_unified_holdings(
+            bdc_df=pd.DataFrame(), nport_df=pd.DataFrame(), output_file=out_csv,
+        )
+        assert result.empty
+        assert out_csv.with_suffix(".parquet").exists()
+        assert (out_csv.parent / "universe_orphan_holdings.csv").exists()
+        assert (out_csv.parent / "input_admission_audit.csv").exists()
+        assert (out_csv.parent / "spread_unit_audit.csv").exists()
 
 
 # ---------------------------------------------------------------------------

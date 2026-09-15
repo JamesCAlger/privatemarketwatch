@@ -686,7 +686,8 @@ def discover(batch_id: str, *, source_worklist, verdicts_dir=DEFAULT_VERDICTS) -
     return {"batch_id": batch_id, "n_targets": len(targets), "worklist": str(wl)}
 
 
-def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -> dict:
+def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES,
+            allow_overwrite=False) -> dict:
     """Copy a CIK's gate-PASS rules to production overrides. REFUSES unless the held-out gate
     PASSes -- the un-gameable check is the promotion bar (mirrors run_remediation.promote_passes)."""
     g = gate(cik, target_quarter)
@@ -720,12 +721,27 @@ def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -
     if noops:
         return {"cik": _norm(cik), "status": "refused_noop_rules", "gate": "PASS",
                 "noop_rules": noops}
+    from pipeline.programme.core import ContractError,sha
+    from pipeline.rule_promotion import publish
+    # The gate evaluated a set, so publication and evidence registration must
+    # cover that same set. Never copy a partial set after checking its total.
+    fingerprint=rules_fingerprint(src)
+    if not fingerprint or g.get('rules_fingerprint')!=fingerprint:
+        return dict(cik=_norm(cik),status='refused_unbound_gate',gate='PASS',
+                    reasons=['Gate does not identify the current complete rule set'])
+    paths=sorted(src.glob('*.json'))
+    items=[dict(source=p,path=_norm(cik)+'/'+p.name,
+        evidence=dict(gate=g,source_sha256=sha(p),rules_fingerprint=fingerprint,
+                      source='investigate held-out gate')) for p in paths]
+    if rules_fingerprint(src)!=fingerprint:
+        return dict(cik=_norm(cik),status='refused_unbound_gate',gate='PASS',
+                    reasons=['Rules changed while preparing admission evidence'])
+    try:
+        publish(Path(overrides_dir),items,allow_overwrite=allow_overwrite)
+    except ContractError as error:
+        return dict(cik=_norm(cik),status='refused_admission',gate='PASS',reasons=[str(error)])
     dst = Path(overrides_dir) / _norm(cik)
-    dst.mkdir(parents=True, exist_ok=True)
-    copied = []
-    for r in (sorted(src.glob("*.json")) if src.exists() else []):
-        shutil.copy2(r, dst / r.name)
-        copied.append(r.name)
+    copied=[p.name for p in paths]
     return {"cik": _norm(cik), "status": "promoted", "n_rules": len(copied),
             "rules": copied, "overrides_dir": str(dst),
             "rules_fingerprint": g.get("rules_fingerprint", "")}
@@ -827,6 +843,9 @@ def main(argv=None) -> int:
             p.add_argument("--target-quarter", required=True)
         if m in ("prep", "status"):
             p.add_argument("--iteration", type=int, default=1)
+        if m == 'promote':
+            p.add_argument('--allow-overwrite',action='store_true',
+                           help='Explicitly replace live rules after a fresh bound gate')
         if m == "prep":
             p.add_argument("--allow-missing-bundle", action="store_true",
                            help="Skip bundle-present check (use only when filing bundle is genuinely unavailable).")
@@ -852,7 +871,7 @@ def main(argv=None) -> int:
         print(json.dumps(discover(args.batch_id, source_worklist=args.source_worklist,
                                   verdicts_dir=args.verdicts_dir), indent=2, default=str))
     elif args.mode == "promote":
-        res = promote(args.cik, args.target_quarter)
+        res = promote(args.cik, args.target_quarter,allow_overwrite=args.allow_overwrite)
         print(json.dumps(res, indent=2, default=str))
         return 0 if res.get("status") == "promoted" else 1
     elif args.mode == "escalations":

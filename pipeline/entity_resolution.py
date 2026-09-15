@@ -356,7 +356,9 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
     """Build variant table from unified holdings using DuckDB.
 
     Groups by (issuer_name, source) and aggregates occurrence count,
-    first non-null CUSIP, LEI, and bdc_investment_identifier.
+    stable CUSIP/LEI representatives and a deterministic identifier. Prefer
+    identifiers with a populated cached name, then observed frequency and a
+    lexical tie-break. Cache availability must not depend on CSV scan order.
 
     Filters out opaque numeric IDs (e.g. "1824445.SQ.RVR").
 
@@ -365,26 +367,53 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
     """
     con = duckdb.connect()
     try:
+        con.execute('CREATE TEMP TABLE cached_identifiers(identifier VARCHAR)')
+        if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists():
+            try:
+                con.execute("""INSERT INTO cached_identifiers
+                    SELECT DISTINCT bdc_investment_identifier
+                    FROM read_csv(?, header=true, all_varchar=true)
+                    WHERE coalesce(trim(extracted_company_name),'')<>''
+                      AND coalesce(bdc_investment_identifier,'')<>''""",
+                    [str(IDENTIFIER_EXTRACTION_LOOKUP_FILE)])
+            except Exception:
+                logger.warning("  Could not inspect extraction cache; choosing an uncached representative")
+        # FIRST depended on parallel scan order; bare MIN could select a cache
+        # miss and discard existing name evidence for this exact issuer/source.
+        # Frequency selects a representative disclosure, not an adjudicated
+        # truth among conflicting cached names. The final tie-break is stable.
         df = con.execute("""
+            WITH raw AS MATERIALIZED (
+                SELECT issuer_name,source,cusip,lei,bdc_investment_identifier
+                FROM read_csv_auto(?, header=true, all_varchar=true)
+                WHERE issuer_name IS NOT NULL AND issuer_name <> ''
+                  AND NOT regexp_matches(issuer_name, '^\\d{5,}\\.\\w{1,4}\\.\\w{2,4}$')
+            ), identifier_counts AS (
+                SELECT issuer_name,source,bdc_investment_identifier,count(*) AS identifier_count
+                FROM raw WHERE coalesce(bdc_investment_identifier,'')<>'' GROUP BY ALL
+            ), selected AS (
+                SELECT i.issuer_name,i.source,i.bdc_investment_identifier
+                FROM identifier_counts i LEFT JOIN cached_identifiers c
+                  ON i.source='bdc' AND i.bdc_investment_identifier=c.identifier
+                QUALIFY row_number() OVER (PARTITION BY i.issuer_name,i.source
+                    ORDER BY (c.identifier IS NOT NULL) DESC,identifier_count DESC,
+                             i.bdc_investment_identifier)=1
+            ), variants AS (
             SELECT
                 issuer_name,
                 source,
                 COUNT(*) as occurrence_count,
-                FIRST(cusip) FILTER (
+                MIN(cusip) FILTER (
                     WHERE cusip IS NOT NULL AND cusip <> ''
                 ) as cusip,
-                FIRST(lei) FILTER (
+                MIN(lei) FILTER (
                     WHERE lei IS NOT NULL AND lei <> ''
-                ) as lei,
-                FIRST(bdc_investment_identifier) FILTER (
-                    WHERE bdc_investment_identifier IS NOT NULL
-                    AND bdc_investment_identifier <> ''
-                ) as bdc_investment_identifier
-            FROM read_csv_auto(?, header=true, all_varchar=true)
-            WHERE issuer_name IS NOT NULL AND issuer_name <> ''
-              AND NOT regexp_matches(issuer_name, '^\\d{5,}\\.\\w{1,4}\\.\\w{2,4}$')
+                ) as lei
+            FROM raw
             GROUP BY issuer_name, source
-            ORDER BY occurrence_count DESC
+            ) SELECT v.*,s.bdc_investment_identifier
+            FROM variants v LEFT JOIN selected s USING(issuer_name,source)
+            ORDER BY occurrence_count DESC, issuer_name, source
         """, [str(holdings_path)]).fetchdf()
     finally:
         con.close()
@@ -482,9 +511,10 @@ def _pick_canonical(group: pd.DataFrame) -> str:
         lambda n: bool(_LEGAL_SUFFIX_RE.search(n)) if isinstance(n, str) else False
     )
     candidates = group[has_suffix] if has_suffix.any() else group
-    # Among candidates, pick highest occurrence_count
-    best_idx = candidates["occurrence_count"].idxmax()
-    return candidates.at[best_idx, "extracted_name"]
+    # Equal-frequency variants must not depend on a CSV scan/parallel GROUP BY
+    # order. This is a stable representative, not an adjudication of identity.
+    highest = candidates["occurrence_count"].max()
+    return min(candidates.loc[candidates["occurrence_count"] == highest, "extracted_name"])
 
 
 # ---------------------------------------------------------------------------
@@ -983,6 +1013,9 @@ def build_entity_lookup(
     fuzzy_threshold: int = 85,
     cross_source_threshold: int = 80,
     enrich: bool = True,
+    *,
+    lookup_path: Optional[Path] = None,
+    stats_path: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Build the entity lookup table from unified holdings.
 
@@ -992,6 +1025,8 @@ def build_entity_lookup(
         fuzzy_threshold: Similarity threshold for within-source fuzzy matching.
         cross_source_threshold: Similarity threshold for cross-source linking.
         enrich: If True, join entity_id/canonical_name onto holdings CSV.
+        lookup_path, stats_path: Explicit destinations for isolated builds.
+            The caller finalizes holdings after all identity writers finish.
 
     Returns:
         The entity lookup DataFrame.
@@ -999,6 +1034,10 @@ def build_entity_lookup(
     t0 = time.time()
     if holdings_path is None:
         holdings_path = UNIFIED_HOLDINGS_FILE
+    lookup_path = Path(lookup_path or ENTITY_LOOKUP_FILE)
+    stats_path = Path(stats_path or ENTITY_STATS_FILE)
+    lookup_path.parent.mkdir(parents=True, exist_ok=True)
+    stats_path.parent.mkdir(parents=True, exist_ok=True)
 
     logger.info("=" * 60)
     logger.info("ENTITY RESOLUTION")
@@ -1078,8 +1117,8 @@ def build_entity_lookup(
     # Step 6: Write outputs
     logger.info("")
     logger.info("Step 6: Writing outputs...")
-    _write_entity_lookup(variants, ENTITY_LOOKUP_FILE)
-    _write_stats(variants, ENTITY_STATS_FILE)
+    _write_entity_lookup(variants, lookup_path)
+    _write_stats(variants, stats_path)
 
     # Enrich holdings
     if enrich:
@@ -1087,9 +1126,8 @@ def build_entity_lookup(
         logger.info("Step 7: Enriching holdings...")
         t5 = time.time()
         # Write to temp file then replace (avoid reading and writing same file)
-        import tempfile
         tmp_path = holdings_path.parent / f".{holdings_path.name}.tmp"
-        _enrich_holdings(holdings_path, ENTITY_LOOKUP_FILE, tmp_path)
+        _enrich_holdings(holdings_path, lookup_path, tmp_path)
         tmp_path.replace(holdings_path)
         logger.info("  Enriched in %.1f s", time.time() - t5)
 

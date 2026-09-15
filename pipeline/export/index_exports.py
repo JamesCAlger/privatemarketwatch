@@ -545,282 +545,75 @@ def _layer_lien_split(pp_rows, sub_rows, pct):
     }
 
 
-def _export_portfolio_characteristics(
-    con: duckdb.DuckDBPyConnection,
-) -> None:
-    """DL-specific portfolio stats (WAC, WAS, WAM, lien/rate splits)."""
+def _export_portfolio_characteristics(con: duckdb.DuckDBPyConnection, *, snapshot=None) -> None:
+    """Holdings-only public partitions, plus separately scoped lending analytics."""
+    from pipeline.public_partitions import public_snapshot
     if not UNIFIED_HOLDINGS_CSV.exists():
         _write_json("portfolio_characteristics.json", {})
         return
-
-    # Latest quarter for DL holdings
-    # Use all_varchar=true then CAST to avoid type inference errors
-    # (some rows have "True" in numeric columns)
-    stats = con.execute(f"""
-        WITH raw AS (
-            SELECT * FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
-            WHERE 1=1
-              {_unlisted_bdc_filter_sql('cik')}
-        ),
-        dl AS (
-            SELECT
-                CAST(fair_value AS DOUBLE) AS fair_value,
-                TRY_CAST(interest_rate AS DOUBLE) AS interest_rate,
-                TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
-                maturity_date,
-                asset_category,
-                coupon_type,
-                lien_position,
-                issuer_name,
-                report_date
-            FROM raw
-            WHERE index_classification = 'DIRECT_LENDING'
-              AND TRY_CAST(fair_value AS DOUBLE) > 0
-        ),
-        cutoff AS (
-            SELECT CASE WHEN '{INDEX_DISPLAY_END_QUARTER}' = 'None' THEN NULL
-                        ELSE '{_quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else "9999-12-31"}'
-                   END AS max_date
-        ),
-        latest_q AS (
-            SELECT MAX(report_date) AS q FROM dl
-            WHERE report_date <= (SELECT COALESCE(max_date, '9999-12-31') FROM cutoff)
-        ),
-        cur AS (
-            SELECT * FROM dl
-            WHERE report_date = (SELECT q FROM latest_q)
-        )
-        SELECT
-            (SELECT q FROM latest_q) AS as_of,
-            COUNT(*) AS position_count,
-            SUM(fair_value) AS total_fv,
-
-            -- WAC (weighted avg coupon)
-            SUM(CASE WHEN interest_rate IS NOT NULL AND interest_rate > 0
-                     THEN interest_rate * fair_value END)
-            / NULLIF(SUM(CASE WHEN interest_rate IS NOT NULL AND interest_rate > 0
-                              THEN fair_value END), 0)
-            AS wac,
-
-            -- WAS (weighted avg spread)
-            SUM(CASE WHEN basis_spread IS NOT NULL AND basis_spread > 0
-                     THEN basis_spread * fair_value END)
-            / NULLIF(SUM(CASE WHEN basis_spread IS NOT NULL AND basis_spread > 0
-                              THEN fair_value END), 0)
-            AS was,
-
-            -- WAM (weighted avg maturity in years)
-            SUM(CASE WHEN maturity_date IS NOT NULL
-                          AND TRY_CAST(maturity_date AS DATE) IS NOT NULL
-                     THEN (TRY_CAST(maturity_date AS DATE)
-                           - CURRENT_DATE)::INTEGER / 365.25 * fair_value
-                END)
-            / NULLIF(SUM(CASE WHEN maturity_date IS NOT NULL
-                                   AND TRY_CAST(maturity_date AS DATE) IS NOT NULL
-                              THEN fair_value END), 0)
-            AS wam,
-
-            -- Lien split by FV (from pre-computed lien_position column)
-            SUM(CASE WHEN lien_position = 'Second Lien'
-                     THEN fair_value ELSE 0 END) AS second_lien_fv,
-            SUM(CASE WHEN lien_position = 'Unsecured'
-                     THEN fair_value ELSE 0 END) AS unsecured_fv,
-
-            -- Rate type split
-            SUM(CASE WHEN LOWER(coupon_type) IN ('floating', 'variable')
-                     THEN fair_value ELSE 0 END) AS floating_fv,
-            SUM(CASE WHEN LOWER(coupon_type) = 'fixed'
-                     THEN fair_value ELSE 0 END) AS fixed_fv,
-
-            -- Coverage counts
-            COUNT(CASE WHEN interest_rate IS NOT NULL AND interest_rate > 0
-                       THEN 1 END) AS wac_count,
-            COUNT(CASE WHEN basis_spread IS NOT NULL AND basis_spread > 0
-                       THEN 1 END) AS was_count,
-            COUNT(CASE WHEN maturity_date IS NOT NULL
-                         AND TRY_CAST(maturity_date AS DATE) IS NOT NULL
-                       THEN 1 END) AS wam_count
-        FROM cur
-    """).fetchone()
-
-    if stats is None or stats[0] is None:
+    snapshot = snapshot or public_snapshot(con, UNIFIED_HOLDINGS_CSV,
+        cutoff=_quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else "9999-12-31")
+    as_of = snapshot["asOf"]
+    if as_of is None:
         _write_json("portfolio_characteristics.json", {})
         return
-
-    (as_of, pos_count, total_fv,
-     wac, was, wam,
-     second_lien_fv, unsecured_fv,
-     floating_fv, fixed_fv,
-     wac_count, was_count, wam_count) = stats
-
-    total_fv_f = float(total_fv or 0)
-    # First lien = everything not classified as second lien or unsecured
-    first_lien_fv = total_fv_f - float(second_lien_fv or 0) - float(unsecured_fv or 0)
-
-    def _pct(val: Any) -> Any:
-        v = float(val or 0)
-        if total_fv_f == 0:
-            return 0
-        return _safe_round(v / total_fv_f, 4)
-
-    # Lien split: LAYERED.  Per filer, use the filer-reported lien subtotals
-    # (bdc_lien_breakdown) when they reconcile to that filer's DL FV; otherwise
-    # fall back to the already-populated per-position lien_position.  This
-    # captures both hierarchical-tagging filers (Blackstone/HPS, subtotals) and
-    # identifier-embedded-lien filers (Goldman/Oaktree, per-position) without
-    # double counting, and routes only the genuinely unestablished FV to
-    # Unknown.  Falls back to the cohort subtraction method on any failure.
-    lien_split = {
-        "firstLien": _pct(first_lien_fv),
-        "secondLien": _pct(second_lien_fv),
-        "unsecured": _pct(unsecured_fv),
-        "source": "position_lien_position",
-    }
-    if total_fv_f > 0 and as_of:
-        try:
-            uni = UNIFIED_HOLDINGS_CSV.as_posix()
-            pp_rows = con.execute(f"""
-                SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik,
-                    COALESCE(NULLIF(TRIM(CAST(lien_position AS VARCHAR)), ''), 'Unknown') AS lien,
-                    SUM(CAST(fair_value AS DOUBLE)) AS fv
-                FROM read_csv_auto('{uni}', all_varchar=true)
-                WHERE report_date = '{as_of}'
-                  AND index_classification = 'DIRECT_LENDING'
-                  AND TRY_CAST(fair_value AS DOUBLE) > 0
-                  {_unlisted_bdc_filter_sql('cik')}
-                GROUP BY 1, 2
-            """).fetchall()
-            sub_rows = []
-            if BDC_LIEN_BREAKDOWN_FILE.exists():
-                sub_rows = con.execute(f"""
-                    SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik, lien_tier,
-                        SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
-                    FROM read_csv_auto('{BDC_LIEN_BREAKDOWN_FILE.as_posix()}', all_varchar=true)
-                    WHERE report_date = '{as_of}'
-                      {_unlisted_bdc_filter_sql("lpad(CAST(cik AS VARCHAR), 10, '0')")}
-                    GROUP BY 1, 2
-                """).fetchall()
-            layered = _layer_lien_split(pp_rows, sub_rows, _pct)
-            if layered is not None:
-                lien_split = layered
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("layered lien split failed, using position method: %s", exc)
-
-    # Cash bucket (analytics-only): total fair value of cash equivalents
-    # (money market, treasury, cash deposits) at the same as-of quarter.
-    # Sourced from the unified holdings -- cash is intentionally excluded from
-    # position_returns / the indices, so it cannot come from the matched-position
-    # pipeline.  This feeds the holistic portfolio-composition donut.
-    cash_fv = 0.0
-    if as_of:
-        try:
-            uni = UNIFIED_HOLDINGS_CSV.as_posix()
-            cash_row = con.execute(f"""
-                SELECT SUM(CAST(fair_value AS DOUBLE)) AS fv
-                FROM read_csv_auto('{uni}', all_varchar=true)
-                WHERE report_date = '{as_of}'
-                  AND index_classification = 'CASH'
-                  AND TRY_CAST(fair_value AS DOUBLE) > 0
-                  {_unlisted_bdc_filter_sql('cik')}
-            """).fetchone()
-            cash_fv = float(cash_row[0] or 0) if cash_row else 0.0
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("cash bucket FV computation failed: %s", exc)
-
-    # Derivative buckets (analytics-only): net FV by role at the as-of quarter,
-    # from the separate fund-level bdc_derivatives.csv artifact (derivatives are
-    # never index constituents and never enter unified holdings / position
-    # returns).  portfolio = TRS, FX forwards, options; financing_hedge = the
-    # BDC's own interest-rate/ALM hedges (kept as data, not shown in the donut);
-    # `uncertain` rows are excluded here -- they are routed to the shadow
-    # validator for review.  Net FV never includes notional.
-    portfolio_deriv_fv = 0.0
-    financing_hedge_fv = 0.0
-    financing_hedge_notional = 0.0
-    if as_of and BDC_DERIVATIVES_FILE.exists():
-        try:
-            dv = BDC_DERIVATIVES_FILE.as_posix()
-            drow = con.execute(f"""
-                SELECT
-                    SUM(CASE WHEN derivative_role = 'portfolio'
-                             THEN TRY_CAST(net_fv AS DOUBLE) ELSE 0 END) AS port_fv,
-                    SUM(CASE WHEN derivative_role = 'financing_hedge'
-                             THEN TRY_CAST(net_fv AS DOUBLE) ELSE 0 END) AS hedge_fv,
-                    SUM(CASE WHEN derivative_role = 'financing_hedge'
-                             THEN TRY_CAST(notional AS DOUBLE) ELSE 0 END) AS hedge_notional
-                FROM read_csv_auto('{dv}', all_varchar=true)
-                WHERE report_date = '{as_of}'
-                  {_unlisted_bdc_filter_sql('cik')}
-            """).fetchone()
-            if drow:
-                portfolio_deriv_fv = float(drow[0] or 0)
-                financing_hedge_fv = float(drow[1] or 0)
-                financing_hedge_notional = float(drow[2] or 0)
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("derivative bucket computation failed: %s", exc)
-
-    # Full-portfolio fair value by index classification at the same as-of quarter
-    # (ALL classifications, not just direct lending), from unified holdings. This is
-    # the single canonical current-quarter portfolio total ($390B basis) that the
-    # headline FV and the instrument-composition donut reconcile to.  `totalFv`
-    # above stays direct-lending-only because it is the denominator for the
-    # DL-relative lien/rate/WAC metrics.
-    classification_fv: dict[str, float] = {}
-    portfolio_fv = 0.0
-    if as_of:
-        try:
-            uni = UNIFIED_HOLDINGS_CSV.as_posix()
-            cls_rows = con.execute(f"""
-                SELECT COALESCE(NULLIF(TRIM(index_classification), ''), 'UNCLASSIFIED') AS ic,
-                       SUM(CAST(fair_value AS DOUBLE)) AS fv
-                FROM read_csv_auto('{uni}', all_varchar=true)
-                WHERE report_date = '{as_of}'
-                  AND TRY_CAST(fair_value AS DOUBLE) > 0
-                  {_unlisted_bdc_filter_sql('cik')}
-                  {_exclude_consumer_lending_sql('cik')}
-                GROUP BY 1
-            """).fetchall()
-            for ic, fv in cls_rows:
-                classification_fv[ic] = _safe_round(float(fv or 0), 0)
-            # portfolioFv is exactly the sum of the rounded classification buckets
-            # so the headline FV and the instrument donut reconcile to the dollar.
-            portfolio_fv = sum(classification_fv.values())
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("classification FV computation failed: %s", exc)
-
+    # Analytics require a positive weighting basis. That eligibility is separate
+    # from headline/partition membership, which includes every retained row.
+    stats = con.execute("""SELECT count(*),coalesce(sum(public_fv),0),
+        sum(TRY_CAST(interest_rate AS DOUBLE)*public_fv) FILTER(WHERE public_fv>0 AND TRY_CAST(interest_rate AS DOUBLE)>0)
+          /nullif(sum(public_fv) FILTER(WHERE public_fv>0 AND TRY_CAST(interest_rate AS DOUBLE)>0),0),
+        sum(TRY_CAST(basis_spread AS DOUBLE)*public_fv) FILTER(WHERE public_fv>0 AND TRY_CAST(basis_spread AS DOUBLE)>0)
+          /nullif(sum(public_fv) FILTER(WHERE public_fv>0 AND TRY_CAST(basis_spread AS DOUBLE)>0),0),
+        sum((TRY_CAST(maturity_date AS DATE)-public_date)/365.25*public_fv)
+          FILTER(WHERE public_fv>0 AND TRY_CAST(maturity_date AS DATE) IS NOT NULL)
+          /nullif(sum(public_fv) FILTER(WHERE public_fv>0 AND TRY_CAST(maturity_date AS DATE) IS NOT NULL),0),
+        count(*) FILTER(WHERE public_fv>0 AND TRY_CAST(interest_rate AS DOUBLE)>0),
+        count(*) FILTER(WHERE public_fv>0 AND TRY_CAST(basis_spread AS DOUBLE)>0),
+        count(*) FILTER(WHERE public_fv>0 AND TRY_CAST(maturity_date AS DATE) IS NOT NULL),
+        coalesce(sum(public_fv) FILTER(WHERE lower(coupon_type) IN ('floating','variable')),0),
+        coalesce(sum(public_fv) FILTER(WHERE lower(coupon_type)='fixed'),0)
+        FROM public_holdings WHERE classification='DIRECT_LENDING'""").fetchone()
+    pos_count,total_fv,wac,was,wam,wac_count,was_count,wam_count,floating_fv,fixed_fv = stats
+    classification_fv = {r["label"]:r["totalFv"] for r in snapshot["partitions"]["classification"]}
+    instrument = snapshot["partitions"]["instrument"]
+    instrument_fv = {r["label"]:r["totalFv"] for r in instrument}
+    def pct(value):
+        return float(value)/float(total_fv) if total_fv else 0.0
+    lien_split = {key:pct(instrument_fv.get(label,0)) for key,label in (
+        ("firstLien","First Lien"),("secondLien","Second Lien"),("subordinated","Subordinated"),
+        ("unsecured","Unsecured"),("unknown","Other Lending"))}
+    lien_split["source"] = "position_lien_position"
+    # Derivatives remain a separate diagnostic; none enter holdings partitions.
+    portfolio_deriv_fv = financing_hedge_fv = financing_hedge_notional = 0.0
+    if BDC_DERIVATIVES_FILE.exists():
+        row = con.execute(f"""SELECT
+          sum(TRY_CAST(net_fv AS DOUBLE)) FILTER(WHERE derivative_role='portfolio'),
+          sum(TRY_CAST(net_fv AS DOUBLE)) FILTER(WHERE derivative_role='financing_hedge'),
+          sum(TRY_CAST(notional AS DOUBLE)) FILTER(WHERE derivative_role='financing_hedge')
+          FROM read_csv_auto('{BDC_DERIVATIVES_FILE.as_posix()}',all_varchar=true)
+          WHERE substr(report_date,1,10)=? {_unlisted_bdc_filter_sql('cik')}""", [as_of]).fetchone()
+        portfolio_deriv_fv,financing_hedge_fv,financing_hedge_notional = (float(v or 0) for v in row)
     _write_json("portfolio_characteristics.json", {
-        "asOf": as_of,
-        "positionCount": pos_count,
-        "totalFv": _safe_round(total_fv_f, 0),
-        # Full current-quarter portfolio (all classifications) and its breakdown.
-        "portfolioFv": _safe_round(portfolio_fv, 0),
-        "classificationFv": classification_fv,
-        "wac": _safe_round(wac, 2),
-        "was": _safe_round(was, 2),
-        "wam": _safe_round(wam, 1),
-        "wacCoverage": _safe_round(wac_count / pos_count, 4) if pos_count else 0,
-        "wasCoverage": _safe_round(was_count / pos_count, 4) if pos_count else 0,
-        "wamCoverage": _safe_round(wam_count / pos_count, 4) if pos_count else 0,
-        "lienSplit": lien_split,
-        "rateTypeSplit": {
-            "floating": _pct(floating_fv),
-            "fixed": _pct(fixed_fv),
-        },
-        # Analytics-only buckets (NOT index constituents).
-        "cashFv": _safe_round(cash_fv, 0),
-        # Net derivative fair value by role (portfolio shown in the donut;
-        # financingHedge kept as data). Notional kept separate from FV.
-        "portfolioDerivativeFv": _safe_round(portfolio_deriv_fv, 0),
-        "financingHedgeFv": _safe_round(financing_hedge_fv, 0),
-        "financingHedgeNotional": _safe_round(financing_hedge_notional, 0),
+        "asOf":as_of,"positionCount":pos_count,"totalFv":float(total_fv),
+        "portfolioPositionCount":snapshot["positionCount"],
+        "portfolioFv":snapshot["portfolioFv"],"fairValueExact":snapshot["fairValueExact"],
+        "missingFairValueCount":snapshot["missingFairValueCount"],
+        "classificationFv":classification_fv,"instrumentBreakdown":instrument,
+        "publicPartitionDelta":snapshot["publicPartitionDelta"],"basis":snapshot["basis"],
+        "wac":_safe_round(wac,2),"was":_safe_round(was,2),"wam":_safe_round(wam,1),
+        "wacCoverage":wac_count/pos_count if pos_count else 0,
+        "wasCoverage":was_count/pos_count if pos_count else 0,
+        "wamCoverage":wam_count/pos_count if pos_count else 0,
+        "lienSplit":lien_split,"rateTypeSplit":{"floating":pct(floating_fv),"fixed":pct(fixed_fv)},
+        "cashFv":classification_fv.get("CASH",0),"portfolioDerivativeFv":portfolio_deriv_fv,
+        "financingHedgeFv":financing_hedge_fv,"financingHedgeNotional":financing_hedge_notional,
     })
 
 
 def _export_metadata(
     con: duckdb.DuckDBPyConnection,
     raw_returns: list[dict],
+    *, snapshot=None,
 ) -> None:
     """As-of date, total AUM, vehicle counts, data vintage."""
     # Latest quarter from returns, or from holdings
@@ -931,7 +724,7 @@ def _export_metadata(
     _write_json("metadata.json", {
         "asOfQuarter": latest_quarter,
         "asOfDate": _quarter_to_date(latest_quarter) if latest_quarter else None,
-        "totalAum": _safe_round(total_aum, 0),
+        "totalAum": snapshot["portfolioFv"] if snapshot is not None else total_aum,
         "vehicleCount": total_vehicles,
         "bdcCount": vehicle_counts.get("bdc", 0),
         "intervalFundCount": vehicle_counts.get("interval_fund", 0),

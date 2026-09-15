@@ -6,7 +6,7 @@ Date: 2026-09-08; programme extension added 2026-09-09. Status: sections 1-18 ar
 
 The repository already has a substantial schema, financial conventions, per-CIK wrapper schemas, rate grammars, provenance contracts, validators and static benchmarks. The task is to reconcile these definitions with implementation and consumers, not design them again from scratch.
 
-The owner has now resolved all thirteen [programme decisions](../production_stack/programme_decision_sheet.md). Earlier audit questions and recommendations below are retained as dated findings, not open policy choices. Use [section 19](#19-programme-target-extension) and the linked target contract for the current design disposition.
+The owner has now resolved all thirteen [programme decisions](../production_stack/01_decisions.md). Earlier audit questions and recommendations below are retained as dated findings, not open policy choices. Use [section 19](#19-programme-target-extension) and the linked target contract for the current design disposition.
 
 This document maps **all 88 columns in the saved `private_markets_holdings.csv` header**, plus important related BDC artifacts. Interpretation is limited to **unlisted BDCs in the authoritative wrapper cohort**. N-PORT-only columns are explicitly accounted for, not proposed for removal from the shared pipeline.
 
@@ -421,7 +421,7 @@ Session diagnostics are in `scratch/2026-09-08_schema_availability/`: `profile_a
 
 ## 19. Programme target extension
 
-Added 2026-09-09 following owner resolution of D01-D13. The [target contract](../production_stack/programme_target_contract.md) extends this crosswalk with field-family meaning, proposed authoritative writers, explicit schema deltas, related-record keys, evidence categories and migration boundaries. The [field disposition CSV](programme_field_disposition.csv) maps all 88 existing columns in saved-header order to sixteen contract families, current physical type, disposition, target writer, delta, decisions and acceptance criteria. The [measurement register](../production_stack/programme_measurement_register.md) covers all 28 accepted criteria.
+Added 2026-09-09 following owner resolution of D01-D13. The [target contract](../production_stack/02_data_contract.md) extends this crosswalk with field-family meaning, proposed authoritative writers, explicit schema deltas, related-record keys, evidence categories and migration boundaries. The [field disposition CSV](programme_field_disposition.csv) maps all 88 existing columns in saved-header order to sixteen contract families, current physical type, disposition, target writer, delta, decisions and acceptance criteria. The [measurement register](../production_stack/04_acceptance.md) covers all 28 accepted criteria.
 
 This extension preserves the holding observation/lot grain. It does not require a replacement schema from scratch, make optional disclosures mandatory, or remove shared N-PORT columns. New fields and related records remain a versioned implementation design; current types and public data have not changed.
 
@@ -445,10 +445,10 @@ P2 now has an initial field/relationship authority map. Remaining work is identi
 Verification: 88 disposition rows match the current saved CSV header/order and physical schema; no existing field omitted or duplicated. All twelve findings and all 28 outcome criteria have design/measurement mappings. Local links and document consistency checked. No tests, rebuilds, exports, threshold changes or production writes.
 
 Subsequent trace, 2026-09-09: the
-[F01-F12 conflict resolution](../production_stack/programme_conflict_resolution.md)
+[F01-F12 conflict resolution](../production_stack/03_pipeline_design.md)
 now specifies actual writer/overlay order, existing incompatible test expectations,
 target dispositions and bounded implementation packets. Its
-[saved-input assessment](../production_stack/programme_contract_assessment_2026-09-09.md)
+[saved-input assessment](../production_stack/04_acceptance.md)
 records fresh thirteen-quarter profiles, the 910-slot obligation frame and
 correction-instance evidence. Findings remain implementation work; the completed
 design trace does not mean the conflicts are fixed or the programme has passed.

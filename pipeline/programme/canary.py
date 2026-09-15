@@ -57,5 +57,7 @@ def run_canary(attempt):
         raise ContractError('Guard allowed a new readonly cache directory')
     atomic_json(attempt / 'telemetry/config_smoke.json', dict(imports=True, existing_mkdir=True,
         new_readonly_mkdir_denied=True))
-    if (attempt / 'timeout_probe').exists():
-        time.sleep(120)
+    if (attempt / 'cancellation_probe').exists():
+        atomic_json(attempt / 'telemetry/cancellation_ready.json', dict(ready=True))
+        while True:
+            time.sleep(1)

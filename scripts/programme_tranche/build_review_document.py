@@ -299,7 +299,7 @@ def main():
     parser.add_argument('--verification',type=Path)
     parser.add_argument('--investigation',type=Path)
     args=parser.parse_args()
-    timer=threading.Timer(1200,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     request=freeze_request()
     evaluation=None
     if args.evaluation:
@@ -310,7 +310,7 @@ def main():
             criteria=read_json(directory / 'criterion_results.json'),stopped=execution.get('status') in ('blocked', 'stopped_protected_output'))
     render(request,evaluation,read_json(args.verification) if args.verification else None,
            read_json(args.investigation) if args.investigation else None)
-    timer.cancel()
+    
     print('Commentable review document written; no reference approval granted',flush=True)
 
 

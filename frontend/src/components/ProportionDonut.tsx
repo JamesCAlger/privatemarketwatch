@@ -14,6 +14,21 @@ interface ProportionDonutProps {
 export default function ProportionDonut({ items, centerStat }: ProportionDonutProps) {
   const total = items.reduce((s, x) => s + x.pct, 0);
   if (total === 0) return <p className="text-sm text-ink3">No data available.</p>;
+  if (items.some((item) => item.pct < 0)) {
+    return (
+      <div>
+        <p className="text-xs text-ink3 mb-3">Net exposures include negative fair values.</p>
+        <dl className="space-y-2">
+          {items.map((item) => (
+            <div key={item.label} className="flex justify-between gap-3 border-b border-rule2 py-1 text-xs">
+              <dt className="text-ink2">{item.label}</dt>
+              <dd className="font-mono tabular-nums">{item.pct.toFixed(1)}%</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    );
+  }
 
   const SIZE = 196;
   const THICKNESS = 26;
@@ -23,9 +38,9 @@ export default function ProportionDonut({ items, centerStat }: ProportionDonutPr
 
   let acc = 0;
   const arcs = items.map((item, i) => {
-    const startAngle = (acc / total) * Math.PI * 2 - Math.PI / 2;
+    const startAngle = (acc / 100) * Math.PI * 2 - Math.PI / 2;
     acc += item.pct;
-    const endAngle = (acc / total) * Math.PI * 2 - Math.PI / 2;
+    const endAngle = (acc / 100) * Math.PI * 2 - Math.PI / 2;
     const large = endAngle - startAngle > Math.PI ? 1 : 0;
     const x1 = cx + r * Math.cos(startAngle);
     const y1 = cy + r * Math.sin(startAngle);

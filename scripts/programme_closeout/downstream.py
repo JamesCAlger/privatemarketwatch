@@ -1,11 +1,11 @@
-"""Owned, bounded controller for a derivative candidate; no production writes."""
+"""Owned controller for a derivative candidate; no production writes."""
 import argparse,json,os,shutil,subprocess,sys,time
 from pathlib import Path
 from scripts.programme_closeout.candidate import atomic_json,sha,fingerprint,read_bundle,process_private_bytes,verify_files
 ROOT=Path(__file__).resolve().parents[2]
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--candidate',type=Path,required=True);p.add_argument('--timeout',type=int,default=3600);p.add_argument('--attempt',default='identity-01');p.add_argument('--parent',choices=['unified-01','identity-02'],default='unified-01');p.add_argument('--stage',choices=['identity','evidence'],default='identity');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--candidate',type=Path,required=True);p.add_argument('--attempt',default='identity-01');p.add_argument('--parent',choices=['unified-01','identity-02'],default='unified-01');p.add_argument('--stage',choices=['identity','evidence'],default='identity');a=p.parse_args()
     candidate=a.candidate.resolve();assert candidate.is_relative_to(ROOT/'data/programme/candidates')
     parent=candidate/'attempts'/a.parent/'bundle';snap=json.loads((candidate/'snapshot.json').read_text())
     parent_input=candidate/'attempts'/a.parent/'inputs.json'
@@ -28,12 +28,10 @@ def main():
     started=time.monotonic();peak=0;last=0
     with (attempt/'process.log').open('w',encoding='utf-8') as log:
         proc=subprocess.Popen(command,cwd=workspace,env=env,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
-        atomic_json(attempt/'process.json',dict(pid=proc.pid,command=command,timeout_seconds=a.timeout))
+        atomic_json(attempt/'process.json',dict(pid=proc.pid,command=command,timeout_seconds=None))
         try:
             while proc.poll() is None:
                 elapsed=time.monotonic()-started;memory=process_private_bytes(proc) or 0;peak=max(peak,memory)
-                if elapsed>a.timeout or memory>12*1024**3:
-                    proc.kill();proc.wait();atomic_json(attempt/'interrupted.json',dict(reason='time_or_memory_limit',seconds=elapsed,bytes=memory));raise RuntimeError('Identity stage exceeded bound')
                 if elapsed-last>=30:
                     last=elapsed;atomic_json(attempt/'resources.json',dict(seconds=elapsed,private_bytes=memory,peak_private_bytes=peak));print(f'Identity running {elapsed:.0f}s, pid {proc.pid}',flush=True)
                 time.sleep(1)

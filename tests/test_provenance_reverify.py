@@ -226,6 +226,50 @@ def _loader(cik, accession):
     return etree.ElementTree(etree.fromstring(_FIXTURE_XML.encode()))
 
 
+@pytest.mark.parametrize('pik,published', [(2,12.5),(0,10.5)])
+def test_financial_cash_plus_pik_replay_checks_both_source_facts(pik,published):
+    from lxml import etree
+    from pipeline.financial_conventions import prepare
+    frame=pd.DataFrame([_row(interest_rate=10.5,interest_rate_kind='cash',pik_rate=pik,
+        interest_rate_source='xbrl_field',pik_rate_source='xbrl_field',
+        src_facts=json.dumps({'interest_rate':{'r':.105,'c':'investmentinterestratepaidincash'},
+            'pik_rate':{'r':pik/100}}),src_transforms='interest_rate:rate_x100;pik_rate:rate_x100')])
+    frame,states=prepare(frame)
+    replay=cheap_tier(holdings_df=frame)
+    replay=replay[replay.field=='interest_rate']
+    assert replay.iloc[0].expected==pytest.approx(published)
+    assert replay.iloc[0].cheap_status=='pass'
+    def loader(cik,accession,ctx='ctx1'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            '<g:InvestmentInterestRatePaidInCash contextRef="ctx1">.105</g:InvestmentInterestRatePaidInCash>'
+            f'<g:InvestmentInterestRatePaidInKind contextRef="{ctx}">{pik/100}</g:InvestmentInterestRatePaidInKind></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
+    assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,'other-context')).iloc[0].full_status=='source_unavailable'
+    def conflicting(cik,accession):
+        tree=loader(cik,accession)
+        other=etree.SubElement(tree.getroot(),'{http://fasb.org/us-gaap/2024}InvestmentInterestRatePaidInKind',contextRef='ctx1')
+        other.text='0.99'
+        return tree
+    assert full_tier(replay,xml_loader=conflicting).iloc[0].full_status=='source_unavailable'
+    wrong=replay.copy();wrong['published']=published+pik+1
+    assert full_tier(wrong,xml_loader=loader).iloc[0].full_status=='published_mismatch'
+    again,_=prepare(frame,prior_states=states)
+    assert again.iloc[0].src_transforms.count('interest_rate:cash_plus_pik')==1
+
+
+def test_unresolved_coupon_and_identity_cost_proxy_are_not_source_verified():
+    from pipeline.financial_conventions import prepare
+    frame,_=prepare(pd.DataFrame([_row(interest_rate=10.5,interest_rate_kind='cash',pik_rate=None,
+        interest_rate_source='xbrl_field',src_facts=json.dumps({'interest_rate':{'r':.105}}),
+        src_transforms='interest_rate:rate_x100')]))
+    frame['cost']=100;frame['cost_source']='first_observed_fv_proxy'
+    replay=cheap_tier(holdings_df=frame).set_index('field')
+    assert replay.loc['interest_rate','cheap_status']=='unresolved_coupon'
+    assert replay.loc['cost','cheap_status']=='derived'
+    assert classify_reason('unresolved_coupon','not_checked')=='financial_convention_unresolved'
+
+
 class TestFullTier:
     def _cheap(self, **kw):
         base = {

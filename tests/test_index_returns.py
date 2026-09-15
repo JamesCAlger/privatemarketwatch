@@ -395,7 +395,6 @@ class TestEdgeCases:
         assert abs(float(pos.iloc[0]["match_score"]) - 0.92) < 0.001
 
     def test_missing_interest_rate(self):
-        """Position with NULL interest_rate -> income_return = 0 for lending."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
             "index_classification": "DIRECT_LENDING",
@@ -412,8 +411,9 @@ class TestEdgeCases:
         }])
         pos, _ = _compute(matches)
         row = pos.iloc[0]
-        assert row["income_return"] == 0  # COALESCE(NULL, 0)
-        assert abs(row["total_return"] - 0.01) < 0.001  # Capital only
+        assert pd.isna(row["income_return"])
+        assert pd.isna(row["total_return"])
+        assert row["capital_return"] == pytest.approx(.01)
 
 
 # ---------------------------------------------------------------------------
@@ -763,10 +763,7 @@ class TestPerUnitPriceReturn:
         # price_return = (1.5 - 1.25) / 1.25 = 0.20
         assert abs(row["capital_return"] - 0.20) < 0.001
 
-    def test_sofr_imputation_from_peers(self):
-        """Positions with spread-only get income via imputed SOFR from peers."""
-        # Two positions in same quarter: one with rate+spread (donor),
-        # one with spread-only (recipient)
+    def test_peer_rates_do_not_complete_missing_coupon(self):
         matches = _make_matches([
             {   # Donor: has both rate and spread -> implied SOFR = 10 - 5 = 5
                 "cik": "100", "entity_name": "BDC1", "source": "bdc",
@@ -802,15 +799,11 @@ class TestPerUnitPriceReturn:
         pos, _ = _compute(matches)
         donor = pos[pos["issuer_name"] == "Donor Co"].iloc[0]
         recip = pos[pos["issuer_name"] == "NoRate Co"].iloc[0]
-        # Donor: effective_rate = 10 (from interest_rate directly)
         assert abs(donor["income_rate"] - 10.0) < 0.01
-        # Recipient: effective_rate = 6.0 + 5.0 (SOFR) = 11.0
-        assert abs(recip["income_rate"] - 11.0) < 0.01
-        # Recipient income: 1M * 11/100 * 3/12 / 1M = 0.0275
-        assert abs(recip["income_return"] - 0.0275) < 0.001
+        assert pd.isna(recip["income_rate"])
+        assert pd.isna(recip["income_return"])
 
-    def test_sofr_imputation_no_donors(self):
-        """With no donors in the quarter, spread-only positions get no income."""
+    def test_spread_only_coupon_remains_unknown(self):
         matches = _make_matches([{
             "cik": "200", "entity_name": "BDC2", "source": "bdc",
             "index_classification": "DIRECT_LENDING",
@@ -828,11 +821,9 @@ class TestPerUnitPriceReturn:
         }])
         pos, _ = _compute(matches)
         row = pos.iloc[0]
-        # No donors -> SOFR is NULL -> effective_rate is NULL -> income = 0
-        assert row["income_return"] == 0
+        assert pd.isna(row["income_return"])
 
-    def test_sofr_imputation_output_columns(self):
-        """income_rate column appears in output."""
+    def test_income_rate_output_column(self):
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
             "index_classification": "DIRECT_LENDING",
@@ -850,9 +841,7 @@ class TestPerUnitPriceReturn:
         pos, _ = _compute(matches)
         assert "income_rate" in pos.columns
 
-    def test_filer_median_imputation_from_same_cik(self):
-        """Positions with neither rate nor spread get income from same-filer median."""
-        # Same CIK: two rated positions and one with no rate/spread
+    def test_same_filer_rates_do_not_complete_missing_coupon(self):
         matches = _make_matches([
             {   # Rated position 1: rate = 10
                 "cik": "100", "entity_name": "BDC1", "source": "bdc",
@@ -902,13 +891,10 @@ class TestPerUnitPriceReturn:
         ])
         pos, _ = _compute(matches)
         blind = pos[pos["issuer_name"] == "Blind Co"].iloc[0]
-        # Filer median of 10 and 12 = 11
-        assert abs(blind["income_rate"] - 11.0) < 0.01
-        # Income: 1M * 11/100 * 3/12 / 1M = 0.0275
-        assert abs(blind["income_return"] - 0.0275) < 0.001
+        assert pd.isna(blind["income_rate"])
+        assert pd.isna(blind["income_return"])
 
-    def test_filer_median_not_applied_cross_cik(self):
-        """Filer median only applies within the same CIK, not across filers."""
+    def test_other_filer_rates_do_not_complete_missing_coupon(self):
         matches = _make_matches([
             {   # CIK 100: has rate
                 "cik": "100", "entity_name": "BDC1", "source": "bdc",
@@ -943,11 +929,9 @@ class TestPerUnitPriceReturn:
         ])
         pos, _ = _compute(matches)
         orphan = pos[pos["issuer_name"] == "Orphan Co"].iloc[0]
-        # CIK 200 has no rated positions -> no filer median -> income = 0
-        assert orphan["income_return"] == 0
+        assert pd.isna(orphan["income_return"])
 
-    def test_filer_median_tier3_after_sofr_tier2(self):
-        """SOFR imputation (tier 2) takes priority; filer median is tier 3."""
+    def test_neither_spread_nor_filer_median_completes_coupon(self):
         matches = _make_matches([
             {   # Donor: rate=10, spread=5 -> SOFR=5
                 "cik": "100", "entity_name": "BDC1", "source": "bdc",
@@ -982,8 +966,7 @@ class TestPerUnitPriceReturn:
         ])
         pos, _ = _compute(matches)
         spread = pos[pos["issuer_name"] == "Spread Co"].iloc[0]
-        # Should use SOFR tier (spread + SOFR = 6 + 5 = 11), NOT filer median (10)
-        assert abs(spread["income_rate"] - 11.0) < 0.01
+        assert pd.isna(spread["income_rate"])
 
     def test_begin_basis_spread_in_output(self):
         """begin_basis_spread column appears in position returns output."""
@@ -1052,8 +1035,7 @@ class TestPIKRate:
         pos, _ = _compute(matches)
         assert "pik_rate_pct" in pos.columns
 
-    def test_pik_zero_when_not_present(self):
-        """Without PIK data, pik_rate_pct defaults to 0."""
+    def test_pik_unknown_when_not_present(self):
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
             "index_classification": "DIRECT_LENDING",
@@ -1069,7 +1051,7 @@ class TestPIKRate:
             "asset_category": "LOAN_FIRST_LIEN",
         }])
         pos, _ = _compute(matches)
-        assert pos.iloc[0]["pik_rate_pct"] == 0
+        assert pd.isna(pos.iloc[0]["pik_rate_pct"])
 
 
 class TestAllInPIKSuppression:
@@ -1086,7 +1068,7 @@ class TestAllInPIKSuppression:
             "begin_fair_value": "1000000", "end_fair_value": "1000000",
             "begin_cost": "1000000", "end_cost": "1000000",
             "begin_principal_amount": "1000000",
-            "begin_interest_rate": "8",
+            "begin_interest_rate": "8", "position_id":"P1",
             "span_months": "3",
             "match_method": "A_within_filing",
             "asset_category": "LOAN_FIRST_LIEN",
@@ -1094,20 +1076,16 @@ class TestAllInPIKSuppression:
 
     _PIK = pd.DataFrame([{
         "cik": "100", "report_date": "2024-03-31",
-        "issuer_name": "PIK Co", "pik_rate": "2",
+        "issuer_name": "PIK Co", "pik_rate": "2", "position_id":"P1", "source":"bdc",
     }])
 
-    def test_pik_added_when_not_all_in(self):
-        # default all_in set is empty -> PIK added: (8+2)%/yr * 3/12 = 0.025
+    def test_pik_not_added_to_stored_allin_without_filer_flag(self):
         pos, _ = _compute(self._match(), unified_pik_df=self._PIK)
         row = pos.iloc[0]
         assert row["pik_rate_pct"] == 2
-        assert abs(row["income_return"] - 0.025) < 1e-6
+        assert abs(row["income_return"] - 0.020) < 1e-6
 
     def test_pik_suppressed_when_all_in(self):
-        # cik 100 -> 10-digit '0000000100' flagged all_in -> PIK excluded from
-        # income: 8%/yr * 3/12 = 0.020. The disclosed pik_rate_pct is still
-        # reported in the column (provenance preserved), only the income changes.
         allin = pd.DataFrame({"cik": ["0000000100"]})
         pos, _ = _compute(self._match(), unified_pik_df=self._PIK, all_in_ciks_df=allin)
         row = pos.iloc[0]

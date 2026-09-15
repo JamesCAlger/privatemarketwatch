@@ -33,6 +33,12 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-09: Programme pilot distinguishes candidate errors from reference errors
 - 2026-09-09: Programme preparation closeout and synchronized candidate
 - 2026-09-10: Why programme verification failed and ran slowly
+- 2026-09-13 - Missing CIK metadata in a cached NAV source
+- 2026-09-13 - Invalid correction vocabularies block the complete holdings build
+- 2026-09-13 - Explicit schema fixes sparse-text history readback
+- 2026-09-13 - Financial conventions expose an unsupported remap and unit-reference errors
+- 2026-09-13: Current staged evidence behind legacy rule admission
+- 2026-09-13: Retention decision D08 versus legacy exclusions and duplicate removal
 
 ## Source reconciliation & blocker chains ([source_reconciliation.md](source_reconciliation.md))
 - BDC source reconciliation blockers - 2026-05-19
@@ -52,6 +58,16 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-07-22 (part 7) - Attribution of the rule-unexplained E1 drops (Ares $14.8B solved)
 - 2026-07-22 (part 8) - Global JV-axis staging drop REJECTED by evidence; the pipeline already has a retain-and-flag design the conservation engine ignores
 - 2026-08-25: pct_sense_check "context-to-position pairing defect" -- resolved, no pairing defect exists
+- 2026-09-12: E0 source-context collector and corrected NexPoint control
+- 2026-09-12: E1 census, source-scope review and bounded retry
+- 2026-09-12: E2 source frame saved; aggregation stopped at retry limit
+- 2026-09-12: NexPoint omission path and cache invalidation requirement
+- 2026-09-12: Approved E2 recovery loaded cohort; full SQL control added
+- 2026-09-12: Completed cohort context coverage and exclusion audit
+- 2026-09-12 - E4 field assessment and E5 public-total evaluation
+- 2026-09-13 - Coupon source vocabulary and independent all-in replay
+- 2026-09-14 - Trace the 18 missing subsidiary contexts after staging
+- 2026-09-14 - Foreign FV reached USD sums after source-unit resolution
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals
@@ -102,4 +118,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-07 (evening) - Production result of the contested promotion
 - 2026-09-07 (night) - What still blocks the mg5 missed links
 - 2026-09-08 - E13-E16: where the remaining completeness gap actually is
+- 2026-09-14 - Refactor identity comparison and cached-name representative regression
 

@@ -1236,7 +1236,7 @@ class TestBdcSourceReconciliation:
         row = detail.iloc[0]
         assert row["blocking_issue"] == False
         assert row["source_wrapper_disposition"] == "debt_issuer_rollup"
-        assert row["source_wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V3"
+        assert row["source_wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V5"
         assert "child_output_count=2" in row["evidence"]
         assert metrics.iloc[0]["blocking_issue_count"] == 0
 

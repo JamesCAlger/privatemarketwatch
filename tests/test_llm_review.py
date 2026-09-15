@@ -465,9 +465,22 @@ class TestApplyLlmClassifications:
 # run_llm_review
 # ---------------------------------------------------------------------------
 
+def _final_review_df(rows):
+    from tests.test_holdings_finalizer import holdings
+    return holdings([{**row,"cik":str(row.get("cik","123")).zfill(10),
+        "row_id":"ROW-"+str(index),"position_id":""} for index,row in enumerate(rows)])
+
+
 class TestRunLlmReview:
+    @pytest.fixture(autouse=True)
+    def isolated_matching_cache(self,tmp_path,monkeypatch):
+        from tests.test_position_matching import _make_bdc_raw
+        raw=tmp_path/"bdc_raw.csv"
+        _make_bdc_raw([]).to_csv(raw,index=False)
+        monkeypatch.setattr("pipeline.position_matching.BDC_HOLDINGS_FILE",raw)
+
     def test_dry_run_produces_candidates(self, tmp_path):
-        df = _make_unified_df([
+        df = _final_review_df([
             {"source": "bdc", "cik": "100", "issuer_name": "Unknown",
              "bdc_investment_identifier": "Unknown",
              "asset_category": "OTHER", "index_classification": "UNCLASSIFIED"},
@@ -489,7 +502,7 @@ class TestRunLlmReview:
         assert len(result) == 1
 
     def test_full_run_with_mocked_api(self, tmp_path):
-        df = _make_unified_df([
+        df = _final_review_df([
             {"source": "bdc", "cik": "100", "issuer_name": "Acme",
              "instrument_description": "", "bdc_investment_identifier": "Acme",
              "asset_category": "OTHER", "issuer_category": "CORPORATE",
@@ -518,7 +531,7 @@ class TestRunLlmReview:
 
     def test_full_run_structured_output(self, tmp_path):
         """Structured output (list of dicts) from _call_llm_api works end-to-end."""
-        df = _make_unified_df([
+        df = _final_review_df([
             {"source": "bdc", "cik": "100", "issuer_name": "Acme",
              "instrument_description": "", "bdc_investment_identifier": "Acme",
              "asset_category": "OTHER", "issuer_category": "CORPORATE",
@@ -546,7 +559,7 @@ class TestRunLlmReview:
 
     def test_resumability_existing_lookup(self, tmp_path):
         """Existing lookup table should be reused without API calls."""
-        df = _make_unified_df([
+        df = _final_review_df([
             {"source": "bdc", "cik": "100", "issuer_name": "Acme",
              "instrument_description": "", "bdc_investment_identifier": "Acme",
              "asset_category": "OTHER", "issuer_category": "CORPORATE",

@@ -8,7 +8,7 @@ BASE=ROOT/'docs/production_stack/programme_closeout_evidence_2026-09-09'
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--candidate',type=Path,required=True);a=p.parse_args();candidate=a.candidate.resolve()
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();start=time.monotonic()
+    start=time.monotonic()
     snap=json.loads((candidate/'snapshot.json').read_text());stages={};bundles={}
     for name in ('unified-01','identity-02','evidence-01'):
         attempt=candidate/'attempts'/name;bundle=attempt/'bundle';inp=attempt/'inputs.json'
@@ -19,7 +19,7 @@ def main():
     assert identity_summary['parent_holdings_sha256']==expected_parent
     evidence_summary=json.loads((bundles['evidence-01']/'summary.json').read_text())
     assert evidence_summary['parent_holdings_sha256']==sha(bundles['identity-02']/'private_markets_holdings.csv')
-    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='4GB'")
+    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='-1'")
     temp=ROOT/'scratch/2026-09-09_programme_closeout/finalize_temp';temp.mkdir(exist_ok=True)
     literal=lambda p:"'"+str(p).replace("'","''")+"'"
     con.execute('SET temp_directory='+literal(temp))
@@ -91,5 +91,5 @@ def main():
         source_renditions=dict(builder='scripts/programme_closeout/citation_viewer.py',builder_sha256=sha(ROOT/'scripts/programme_closeout/citation_viewer.py'),
             regenerate='python -m scripts.programme_closeout.citation_viewer',original_sources='viewer/build.json'),
         elapsed_seconds=time.monotonic()-start,role='Specification preparation evidence, not production acceptance'))
-    print(json.dumps(dict(compatibility='pass',original_files=len(original),reference_files=len(identity_manifest['reference_files']),evidence_files=len(records),seconds=time.monotonic()-start)),flush=True);timer.cancel()
+    print(json.dumps(dict(compatibility='pass',original_files=len(original),reference_files=len(identity_manifest['reference_files']),evidence_files=len(records),seconds=time.monotonic()-start)),flush=True);
 if __name__=='__main__':main()

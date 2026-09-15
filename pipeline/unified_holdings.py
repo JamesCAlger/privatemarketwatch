@@ -127,7 +127,9 @@ UNIFIED_COLUMNS = [
     # Position tracking (populated by --returns step)
     "position_id",
 ]
-# NOTE: the saved artifact carries one column beyond UNIFIED_COLUMNS: row_id,
+from pipeline.financial_conventions import ADDITIONS as FINANCIAL_ADDITIONS
+UNIFIED_COLUMNS += list(FINANCIAL_ADDITIONS)
+# NOTE: the saved artifact carries provenance columns beyond UNIFIED_COLUMNS: row_id,
 # appended by _assign_row_ids as the last step of build_unified_holdings.
 # It is deliberately NOT in UNIFIED_COLUMNS -- that list doubles as the
 # in-flight SQL schema (union/stabilization passes) where row_id does not
@@ -402,164 +404,14 @@ def _restore_deterministic_classification_rules(df: pd.DataFrame) -> pd.DataFram
 
 
 def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
-    """Correct pct_of_net_assets for multi-entity BDCs using consolidated net_assets.
+    """Compatibility entry point: reported percentages are never recomputed.
 
-    Multi-entity BDCs (holding companies with multiple subsidiaries) report
-    pct_of_net_assets per sub-entity rather than consolidated, causing
-    pct_sum per CIK-quarter to reach 200-5000%.  Where consolidated
-    net_assets is available from fund_financials.csv, recalculate
-    pct_of_net_assets = fair_value / net_assets * 100.
+    Financial finalization writes the independently supported NAV ratio to
+    pct_of_net_assets_calculated. Keeping this no-op prevents old callers from
+    overwriting the disclosure while they migrate to that explicit field.
     """
-    if not FUND_FINANCIALS_FILE.exists():
-        logger.info("pct_of_net_assets correction: no fund_financials file, skipping")
-        return df
+    return df
 
-    con = duckdb.connect()
-    con.register("holdings", df)
-    ff_path = str(FUND_FINANCIALS_FILE).replace("\\", "/")
-
-    # Step 1: Find BDC CIK-quarters with pct_sum > 200%
-    # Step 2: Join to fund_financials for net_assets
-    # Step 3: Recalculate pct_of_net_assets where possible
-    sql = f"""
-    WITH pct_sums AS (
-        SELECT cik, report_date,
-               SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum
-        FROM holdings
-        WHERE source = 'bdc'
-          AND pct_of_net_assets IS NOT NULL
-          AND CAST(pct_of_net_assets AS VARCHAR) != ''
-        GROUP BY cik, report_date
-    ),
-    high_pct AS (
-        SELECT cik, report_date, pct_sum
-        FROM pct_sums
-        WHERE pct_sum > 200
-    ),
-    ff AS (
-        SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
-               CAST(report_date AS VARCHAR) AS report_date,
-               TRY_CAST(net_assets AS DOUBLE) AS net_assets
-        FROM read_csv_auto('{ff_path}', header=true, all_varchar=true)
-        WHERE net_assets IS NOT NULL
-          AND CAST(net_assets AS VARCHAR) != ''
-          AND TRY_CAST(net_assets AS DOUBLE) > 0
-    ),
-    -- Total FV per CIK-quarter to sanity-check net_assets
-    fv_totals AS (
-        SELECT cik, report_date,
-               SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
-        FROM holdings
-        WHERE source = 'bdc'
-          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
-        GROUP BY cik, report_date
-    ),
-    corrections AS (
-        SELECT h.cik, h.report_date, ff.net_assets
-        FROM high_pct h
-        INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
-        INNER JOIN fv_totals fv ON h.cik = fv.cik AND h.report_date = fv.report_date
-        -- Guard: reject net_assets that would make pct_sum worse (higher)
-        -- than the original.  If net_assets is implausibly small (e.g. $1M
-        -- against $335M in holdings), the recalculated pct_sum would be
-        -- enormous and the correction is skipped.
-        WHERE (fv.total_fv / ff.net_assets * 100) < h.pct_sum
-    )
-    SELECT h.* EXCLUDE (pct_of_net_assets),
-        CASE
-            WHEN c.net_assets IS NOT NULL
-                 AND TRY_CAST(h.fair_value AS DOUBLE) IS NOT NULL
-                 AND TRY_CAST(h.fair_value AS DOUBLE) != 0
-            THEN TRY_CAST(h.fair_value AS DOUBLE) / c.net_assets * 100
-            ELSE TRY_CAST(h.pct_of_net_assets AS DOUBLE)
-        END AS pct_of_net_assets,
-        (c.net_assets IS NOT NULL
-         AND TRY_CAST(h.fair_value AS DOUBLE) IS NOT NULL
-         AND TRY_CAST(h.fair_value AS DOUBLE) != 0) AS _pct_corrected_flag
-    FROM holdings h
-    LEFT JOIN corrections c
-        ON h.cik = c.cik AND h.report_date = c.report_date
-        AND h.source = 'bdc'
-    """
-
-    result = con.execute(sql).fetchdf()
-
-    # Provenance stamp (2026-08-25): the recompute must be declared in
-    # corrected_fields or the provenance re-verifier sees an unexplained
-    # declared-vs-published mismatch (the pct_sense_check warn flood).
-    flag = result.pop("_pct_corrected_flag").fillna(False).astype(bool)
-    if flag.any():
-        from pipeline.agent_promoted import append_corrected_fields
-        append_corrected_fields(result, result.index[flag], ["pct_of_net_assets"])
-
-    # Log stats
-    try:
-        stats = con.execute(f"""
-        WITH pct_sums AS (
-            SELECT cik, report_date,
-                   SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum
-            FROM holdings
-            WHERE source = 'bdc'
-              AND pct_of_net_assets IS NOT NULL
-              AND CAST(pct_of_net_assets AS VARCHAR) != ''
-            GROUP BY cik, report_date
-        ),
-        high_pct AS (
-            SELECT cik, report_date FROM pct_sums WHERE pct_sum > 200
-        ),
-        ff AS (
-            SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
-                   CAST(report_date AS VARCHAR) AS report_date,
-                   TRY_CAST(net_assets AS DOUBLE) AS net_assets
-            FROM read_csv_auto('{ff_path}', header=true, all_varchar=true)
-            WHERE net_assets IS NOT NULL
-              AND CAST(net_assets AS VARCHAR) != ''
-              AND TRY_CAST(net_assets AS DOUBLE) > 0
-        ),
-        fv_totals AS (
-            SELECT cik, report_date,
-                   SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
-            FROM holdings
-            WHERE source = 'bdc'
-              AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
-            GROUP BY cik, report_date
-        ),
-        correctable AS (
-            SELECT h.cik, h.report_date
-            FROM high_pct h
-            INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
-            INNER JOIN fv_totals fv ON h.cik = fv.cik AND h.report_date = fv.report_date
-            INNER JOIN pct_sums ps ON h.cik = ps.cik AND h.report_date = ps.report_date
-            WHERE (fv.total_fv / ff.net_assets * 100) < ps.pct_sum
-        ),
-        affected_rows AS (
-            SELECT COUNT(*) AS n
-            FROM holdings h
-            INNER JOIN correctable c ON h.cik = c.cik AND h.report_date = c.report_date
-            WHERE h.source = 'bdc'
-        )
-        SELECT
-            (SELECT COUNT(*) FROM high_pct) AS n_high_pct,
-            (SELECT COUNT(*) FROM correctable) AS n_correctable,
-            (SELECT n FROM affected_rows) AS n_rows_affected
-        """).fetchone()
-        if stats:
-            logger.info("pct_of_net_assets correction: %d high-pct CIK-quarters, "
-                        "%d correctable (have net_assets), %d rows affected",
-                        stats[0], stats[1], stats[2])
-    except Exception:
-        pass  # Diagnostic only
-
-    con.close()
-
-    # Restore column order
-    result = result[[c for c in UNIFIED_COLUMNS if c in result.columns]]
-    for col in UNIFIED_COLUMNS:
-        if col not in result.columns:
-            result[col] = ""
-    result = result[UNIFIED_COLUMNS]
-
-    return result
 
 
 # ---------------------------------------------------------------------------
@@ -785,6 +637,10 @@ def _apply_unclassified_cache(combined: pd.DataFrame) -> pd.DataFrame:
 # Public entry point
 # ---------------------------------------------------------------------------
 
+from pipeline.rule_admission import capture_inputs
+
+
+@capture_inputs(lambda: UNIFIED_HOLDINGS_FILE.parent, output_parameter='output_file')
 def build_unified_holdings(
     bdc_df: Optional[pd.DataFrame] = None,
     nport_df: Optional[pd.DataFrame] = None,
@@ -805,8 +661,8 @@ def build_unified_holdings(
         Write the unified CSV (and parquet companion) to this path instead
         of the default ``UNIFIED_HOLDINGS_FILE``.
     orphan_file : Path, optional
-        Write orphan holdings to this path instead of the default
-        ``UNIVERSE_ORPHAN_HOLDINGS_FILE``.
+        Write orphan holdings to this path instead of beside the selected
+        holdings output using ``UNIVERSE_ORPHAN_HOLDINGS_FILE.name``.
     agent_rules_dir, b2_corrections_dir : Path, optional
         Promoted agent-fix stores (gap 1). Default to the config stores
         (``AGENT_INVESTIGATE_RULES_DIR`` / ``AGENT_B2_CORRECTIONS_DIR``);
@@ -859,13 +715,22 @@ def build_unified_holdings(
     else:
         nport_input = nport_df
     nport_unified = staging_nport._prepare_nport(nport_input)
+    for staged in (bdc_unified,nport_unified):
+        for field,kind in FINANCIAL_ADDITIONS.items():
+            if field not in staged:
+                staged[field]=None if kind=='DOUBLE' else ''
     _out_file = output_file or UNIFIED_HOLDINGS_FILE
-    _orphan_file = orphan_file or (UNIFIED_HOLDINGS_FILE.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
+    _orphan_file = orphan_file or (_out_file.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
     if bdc_unified.empty and nport_unified.empty:
-        combined = pd.DataFrame(columns=UNIFIED_COLUMNS)
+        combined = _assign_row_ids(pd.DataFrame(columns=UNIFIED_COLUMNS))
+        from pipeline.financial_finalization import prepare_artifact
+        combined,_ = prepare_artifact(combined,_out_file.parent,source_frame=True)
+        validate_final_holdings_schema(combined)
         _write_empty_orphan_report(_orphan_file)
         _out_file.parent.mkdir(parents=True, exist_ok=True)
         combined.to_csv(_out_file, index=False)
+        from pipeline.utils import write_parquet_companion
+        write_parquet_companion(_out_file)
         logger.info("Unified holdings built with no eligible rows")
         return combined
 
@@ -887,6 +752,12 @@ def build_unified_holdings(
     col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
     # Use explicit column list for UNION ALL to avoid positional mismatch
     union_cols = ", ".join(UNIFIED_COLUMNS)
+    from pipeline.accounting_scope import scope_expression
+    dedup_scope = scope_expression(
+        'cik', 'bdc_dimensions_raw', 'is_subsidiary',
+        "coalesce(nullif(CAST(src_context_id AS VARCHAR),''),"
+        "nullif(CAST(nport_holding_id AS VARCHAR),''),'row:'||CAST(row_number() OVER () AS VARCHAR))",
+    )
 
     sql = f"""
     WITH nport_deduped AS (
@@ -938,6 +809,9 @@ def build_unified_holdings(
         UNION ALL
         SELECT {union_cols} FROM nport_deduped
     ),
+    scoped_combined AS (
+        SELECT *, {dedup_scope} AS _dedup_scope FROM combined
+    ),
     -- Cross-source dedup: if the same holding appears in both BDC and N-PORT
     -- (same CIK + period + similar issuer name + similar fair_value),
     -- keep the BDC source row.  The _source_count guard preserves
@@ -946,7 +820,7 @@ def build_unified_holdings(
     deduped AS (
         SELECT *,
             COUNT(DISTINCT source) OVER (
-                PARTITION BY cik, report_date,
+                PARTITION BY cik, report_date, _dedup_scope,
                     regexp_replace(
                         lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
                         '[^a-z0-9]+', ' ', 'g'
@@ -960,7 +834,7 @@ def build_unified_holdings(
                     ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
             ) AS _source_count,
             ROW_NUMBER() OVER (
-                PARTITION BY cik, report_date,
+                PARTITION BY cik, report_date, _dedup_scope,
                     regexp_replace(
                         lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
                         '[^a-z0-9]+', ' ', 'g'
@@ -984,48 +858,13 @@ def build_unified_holdings(
                     COALESCE(CAST(src_context_id AS VARCHAR), ''),
                     COALESCE(CAST(nport_holding_id AS VARCHAR), '')
             ) AS _dedup_rank
-        FROM combined
+        FROM scoped_combined
     ),
     no_dupes AS (
         SELECT * FROM deduped WHERE _source_count = 1 OR _dedup_rank = 1
     ),
-    -- Within-filing subsidiary dedup: when the same position appears under
-    -- both parent entity and subsidiary/JV contexts, keep the parent row and
-    -- discard the subsidiary duplicate.  The match must be position-level:
-    -- same accession/report date, same issuer, same instrument, and matching
-    -- economics.  Subsidiary/JV rows for the same issuer but different
-    -- tranches or fair values are separate positions and must be preserved.
-    no_sub_dupes AS (
-        SELECT * FROM no_dupes
-        WHERE COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 0
-           OR NOT EXISTS (
-               SELECT 1 FROM no_dupes nd2
-               WHERE nd2.cik = no_dupes.cik
-                 AND nd2.accession_number = no_dupes.accession_number
-                 AND nd2.report_date = no_dupes.report_date
-                 AND regexp_replace(
-                         lower(trim(COALESCE(CAST(nd2.issuer_name AS VARCHAR), ''))),
-                         '[^a-z0-9]+', ' ', 'g'
-                     ) = regexp_replace(
-                         lower(trim(COALESCE(CAST(no_dupes.issuer_name AS VARCHAR), ''))),
-                         '[^a-z0-9]+', ' ', 'g'
-                     )
-                 AND regexp_replace(
-                         lower(trim(COALESCE(CAST(nd2.instrument_description AS VARCHAR), ''))),
-                         '[^a-z0-9]+', ' ', 'g'
-                     ) = regexp_replace(
-                         lower(trim(COALESCE(CAST(no_dupes.instrument_description AS VARCHAR), ''))),
-                         '[^a-z0-9]+', ' ', 'g'
-                     )
-                 AND ROUND(COALESCE(TRY_CAST(nd2.fair_value AS DOUBLE), 0), 0)
-                     = ROUND(COALESCE(TRY_CAST(no_dupes.fair_value AS DOUBLE), 0), 0)
-                 AND ROUND(COALESCE(TRY_CAST(nd2.principal_amount AS DOUBLE), 0), 0)
-                     = ROUND(COALESCE(TRY_CAST(no_dupes.principal_amount AS DOUBLE), 0), 0)
-                 AND ROUND(COALESCE(TRY_CAST(nd2.shares_held AS DOUBLE), 0), 0)
-                     = ROUND(COALESCE(TRY_CAST(no_dupes.shares_held AS DOUBLE), 0), 0)
-                 AND COALESCE(TRY_CAST(nd2.is_subsidiary AS INT), 0) = 0
-           )
-    ),
+    -- D08: equal economics in a parent and an underlying schedule do not
+    -- establish duplicate observations. Only deduplicate within a scope.
     -- BDC-only dimension-path dedup: same XBRL position can appear under
     -- multiple dimension paths with case/punctuation issuer variants and
     -- occasionally different cost values. Keep cost out of this key so the
@@ -1033,7 +872,7 @@ def build_unified_holdings(
     bdc_dim_ranked AS (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY cik, accession_number, report_date,
+                PARTITION BY cik, accession_number, report_date, _dedup_scope,
                     regexp_replace(
                         lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
                         '[^a-z0-9]+', ' ', 'g'
@@ -1052,7 +891,7 @@ def build_unified_holdings(
                     COALESCE(CAST(accession_number AS VARCHAR), ''),
                     COALESCE(CAST(src_context_id AS VARCHAR), '')
             ) AS _dim_rank
-        FROM no_sub_dupes
+        FROM no_dupes
         WHERE source = 'bdc'
     ),
     no_dim_dupes AS (
@@ -1061,7 +900,7 @@ def build_unified_holdings(
         WHERE _dim_rank = 1
         UNION ALL
         SELECT *
-        FROM no_sub_dupes
+        FROM no_dupes
         WHERE source != 'bdc'
     ),
     with_fund_text AS (
@@ -1085,58 +924,9 @@ def build_unified_holdings(
             COALESCE(NULLIF(TRIM({instr_case}), ''), NULLIF(TRIM(instrument_type), '')) AS _instr_raw
         FROM with_fund_text
     ),
-    -- Cost proxy: fill NULL/zero cost with first observed fair_value
-    -- for that specific position, ordered by report_date.  The partition
-    -- key includes instrument_description and cusip so each tranche gets
-    -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
-    -- fair_value and the anchor keys src_context_id / nport_holding_id
-    -- make the result deterministic when multiple rows share the earliest
-    -- report_date.  (Amended per tiebreak-hardening plan to append anchor
-    -- keys after the existing ORDER BY keys.)
-    --
-    -- Provenance: when the proxy fires (original cost NULL/zero but a
-    -- non-zero FV proxy is available), cost_source is set to
-    -- 'derived_proxy' and 'cost:cost_proxy_fv' is appended to
-    -- src_transforms.  Rows with a real non-zero cost keep cost_source
-    -- and src_transforms unchanged.
-    with_cost AS (
-        SELECT * EXCLUDE (cost, cost_source, src_transforms, _cost_orig, _cost_proxy),
-            COALESCE(_cost_orig, _cost_proxy) AS cost,
-            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
-                 THEN 'derived_proxy'
-                 ELSE cost_source
-            END AS cost_source,
-            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
-                 THEN concat_ws(';', NULLIF(src_transforms, ''), 'cost:cost_proxy_fv')
-                 ELSE src_transforms
-            END AS src_transforms
-        FROM (
-            SELECT *,
-                NULLIF(TRY_CAST(cost AS DOUBLE), 0) AS _cost_orig,
-                FIRST_VALUE(
-                    NULLIF(TRY_CAST(fair_value AS DOUBLE), 0)
-                    IGNORE NULLS
-                ) OVER (
-                    PARTITION BY cik, issuer_name,
-                        regexp_replace(
-                            lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
-                            '[^a-z0-9]+', ' ', 'g'
-                        ),
-                        COALESCE(NULLIF(CAST(cusip AS VARCHAR), ''), '')
-                    ORDER BY
-                        report_date,
-                        fair_value,
-                        COALESCE(CAST(accession_number AS VARCHAR), ''),
-                        COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
-                        COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                        COALESCE(CAST(shares_held AS VARCHAR), ''),
-                        COALESCE(CAST(src_context_id AS VARCHAR), ''),
-                        COALESCE(CAST(nport_holding_id AS VARCHAR), '')
-                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                ) AS _cost_proxy
-            FROM classified
-        )
-    ),
+    -- Cost remains reported through matching. The finalizer computes labelled
+    -- proxies only after the durable position registry establishes continuity.
+    with_cost AS (SELECT * FROM classified),
     -- Shares normalization: detect power-of-10 unit mismatches within
     -- the same position (cik + issuer_name) by comparing each row's
     -- per-unit price (fair_value / shares_held) against the group median.
@@ -1268,10 +1058,13 @@ def build_unified_holdings(
             UNION ALL
             SELECT * FROM nport_part
         ),
+        scoped_combined AS (
+            SELECT *, {dedup_scope} AS _dedup_scope FROM combined
+        ),
         deduped AS (
             SELECT *,
                 COUNT(DISTINCT source) OVER (
-                    PARTITION BY cik, report_date,
+                    PARTITION BY cik, report_date, _dedup_scope,
                         regexp_replace(
                             lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
                             '[^a-z0-9]+', ' ', 'g'
@@ -1285,7 +1078,7 @@ def build_unified_holdings(
                         ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
                 ) AS _source_count,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cik, report_date,
+                    PARTITION BY cik, report_date, _dedup_scope,
                         regexp_replace(
                             lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
                             '[^a-z0-9]+', ' ', 'g'
@@ -1307,7 +1100,7 @@ def build_unified_holdings(
                         COALESCE(CAST(cost AS VARCHAR), ''),
                         COALESCE(CAST(shares_held AS VARCHAR), '')
                 ) AS _dedup_rank
-            FROM combined
+            FROM scoped_combined
         ),
         no_dupes AS (
             SELECT * FROM deduped WHERE _source_count = 1 OR _dedup_rank = 1
@@ -1423,8 +1216,8 @@ def build_unified_holdings(
     combined = _stabilize_classification(combined)
     combined = _restore_deterministic_classification_rules(combined)
 
-    # Correct pct_of_net_assets for multi-entity BDCs
-    combined = _correct_pct_of_net_assets(combined)
+    # Keep the reported NAV percentage unchanged. The financial contract adds
+    # an independently supported calculated percentage in a separate field.
 
     # Apply manual row corrections
     combined = _apply_row_corrections(combined)
@@ -1441,10 +1234,6 @@ def build_unified_holdings(
     # BDC rows only -- BEFORE Layer C rules so rules see corrected values. The
     # comparative_period_filter family already applied at raw staging above.
     _promoted_corrections = agent_promoted.load_promoted_corrections(b2_corrections_dir)
-    if _promoted_corrections:
-        combined, _b2_audits = agent_promoted.apply_promoted_stage2_corrections(
-            combined, _promoted_corrections)
-        _agent_fix_audits.extend(_b2_audits)
 
     # Promoted investigator rules (gap 1 Layer C): gate-PASS rules from the audited
     # override store, applied per CIK to BDC-source rows only. Runs after
@@ -1452,23 +1241,15 @@ def build_unified_holdings(
     # write, so validation, position matching, and frontend export all see corrected
     # data -- no forked views.
     _promoted_rules = agent_promoted.load_promoted_rules(agent_rules_dir)
-    if _promoted_rules:
-        combined, _rule_audits = agent_promoted.apply_promoted_rules(combined, _promoted_rules)
-        _agent_fix_audits.extend(_rule_audits)
+    if _promoted_rules or _promoted_corrections:
+        combined, _plan_audits = agent_promoted.apply_promoted_plan(
+            combined, _promoted_corrections, _promoted_rules)
+        _agent_fix_audits.extend(_plan_audits)
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",
                 cost_filled.sum(), 100 * cost_filled.sum() / len(combined) if len(combined) else 0)
-
-    # Schema enforcement
-    violations = _enforce_schema(combined)
-    if violations:
-        logger.warning("Schema enforcement: %d check(s) failed", len(violations))
-        for name, count in violations:
-            logger.warning("  FAIL %s: %d rows", name, count)
-    else:
-        logger.info("Schema enforcement: all checks passed")
 
     # Keep downstream position IDs stable across DuckDB/pandas incidental
     # ordering changes.  These columns identify source row identity before
@@ -1504,13 +1285,19 @@ def build_unified_holdings(
     # Rebuild-time agent-fix audit: per-rule matched rows + FV deltas vs the rule's
     # authoring-time measured_impact. Written whenever any promoted store is non-empty
     # (drift there is the re-validation trigger; nothing promoted -> no artifact).
-    if _raw_exclusions or _promoted_rules:
+    if _raw_exclusions or _promoted_rules or _promoted_corrections:
         agent_promoted.write_application_audit(
             _agent_fix_audits, _out_file.parent / "agent_fix_application_audit.csv")
 
     # Rebuild-stable per-row identifier, computed on the FINAL frame (after all
     # correction/cache layers) so the id reflects the row as published.
     combined = _assign_row_ids(combined)
+    from pipeline.financial_finalization import prepare_artifact
+    combined,_ = prepare_artifact(combined,_out_file.parent,source_frame=True)
+    from pipeline.accounting_scope import OUTPUT_COLUMNS as SCOPE_COLUMNS
+    combined=combined[UNIFIED_COLUMNS+['row_id','row_id_basis']+list(SCOPE_COLUMNS)]
+
+    validate_final_holdings_schema(combined)
 
     # Save CSV + Parquet companion
     _out_file.parent.mkdir(parents=True, exist_ok=True)
@@ -2088,6 +1875,24 @@ def _apply_row_corrections(
     return df
 
 
+def validate_final_holdings_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
+    """Block structural violations after all value writers; retain domain flags."""
+    missing = sorted(set(UNIFIED_COLUMNS) - set(df.columns))
+    if missing:
+        raise ValueError("Final holdings schema missing columns: " + ", ".join(missing))
+    violations = _enforce_schema(df)
+    from pipeline.financial_validation import violations as financial_violations
+    violations += financial_violations(df)
+    structural = [(name, count) for name, count in violations
+                  if name.endswith("_enum") or name.startswith('financial_')
+                  or name in {"cik_format", "report_date_parseable", "cash_classification_consistency"}]
+    if structural:
+        raise ValueError("Final holdings schema violations: " + repr(structural))
+    for name, count in violations:
+        logger.warning("Final holdings domain flag %s: %d rows", name, count)
+    return violations
+
+
 def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
     """Run schema assertions on the unified output.
 
@@ -2118,7 +1923,11 @@ def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
         ("asset_category_enum",
          "SELECT COUNT(*) FROM unified"
          " WHERE CAST(asset_category AS VARCHAR) NOT IN"
-         " ('LOAN','DEBT','EQUITY_COMMON','EQUITY_PREFERRED','FUND','OTHER')"),
+         " ('LOAN','DEBT','EQUITY_COMMON','EQUITY_PREFERRED','FUND','OTHER','CASH')"),
+        ("cash_classification_consistency",
+         "SELECT COUNT(*) FROM unified WHERE asset_category='CASH' AND ("
+         " index_classification IS DISTINCT FROM 'CASH' OR asset_class IS DISTINCT FROM 'CASH'"
+         " OR exposure_type IS DISTINCT FROM 'LIQUID')"),
         ("issuer_category_enum",
          "SELECT COUNT(*) FROM unified"
          " WHERE CAST(issuer_category AS VARCHAR) NOT IN"
@@ -2149,7 +1958,8 @@ def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
          " WHERE TRY_CAST(fair_value AS DOUBLE) IS NULL"),
         ("coupon_type_enum",
          "SELECT COUNT(*) FROM unified"
-         " WHERE CAST(coupon_type AS VARCHAR) NOT IN ('Fixed', 'Floating', '')"),
+         " WHERE CAST(coupon_type AS VARCHAR) NOT IN ('Fixed', 'Floating', '')"
+         " AND NOT (coalesce(CAST(source AS VARCHAR),'')='nport' AND CAST(coupon_type AS VARCHAR)='Variable')"),
 
         # --- Layer 2: Domain range (catches transform errors) ---
         ("interest_rate_range",

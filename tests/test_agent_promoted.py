@@ -681,6 +681,33 @@ def test_apply_promoted_stage2_skips_comparative_class():
     assert len(out) == 1 and audits == []  # raw-staging family is not applied here
 
 
+def test_production_b2_precedence_matches_verifier_when_alphabetical_order_would_differ(monkeypatch):
+    from pipeline import agent_b2_appliers as b2
+    frame = pd.DataFrame([dict(cik="0000000123",source="bdc",issuer_name="Original",fair_value=1.,asset_class="OTHER")])
+    corrections = [dict(cik="123",fix_class="classification_fix",template={}),
+                   dict(cik="123",fix_class="missing_position_add",template={})]
+    def execute(df, correction):
+        out = df.copy()
+        if correction["fix_class"] == "missing_position_add":
+            out.loc[1] = dict(cik="0000000123",source="bdc",issuer_name="Added",fair_value=2.,asset_class="OTHER")
+        else:
+            out.loc[out["issuer_name"].eq("Added"),"asset_class"] = "PRIVATE_CREDIT"
+        return out, dict(status="ok",rows_changed=1)
+    monkeypatch.setattr(b2,"apply_scoped",execute)
+    production, audits = ap.apply_promoted_stage2_corrections(frame, corrections)
+    verified, _ = b2.run_corrections(frame, corrections)
+    pd.testing.assert_frame_equal(production[verified.columns], verified)
+    assert production.loc[production.issuer_name.eq("Added"),"asset_class"].iloc[0] == "PRIVATE_CREDIT"
+    assert [r["rule_id"] for r in audits] == ["missing_position_add","classification_fix"]
+
+
+def test_promoted_b2_execution_failure_blocks_publication():
+    frame = pd.DataFrame([dict(cik="0000000123",source="bdc",issuer_name="Original",fair_value=1.)])
+    corrections = [dict(cik="123",fix_class="rate_rescale",template=dict(field="interest_rate",factor=100))]
+    with pytest.raises(ValueError, match="Promoted B2 correction failed"):
+        ap.apply_promoted_stage2_corrections(frame, corrections)
+
+
 class TestCorrectedFieldsMarking:
     def _frames(self):
         before = pd.DataFrame(

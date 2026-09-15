@@ -157,7 +157,7 @@ def main(argv=None) -> int:
             res = rr.gate_value_packet(cik=cik, target_quarter=tq, baseline_df=base,
                                        trial_df=trial, correction=leaf)
             rec.update(status="gated", verdict=res["verdict"], checks=res["checks"],
-                       reasons=res["reasons"])
+                       reasons=res["reasons"],correction_digest=res.get('correction_digest'))
         results.append(rec)
     print(json.dumps(results, indent=2, default=str))
     if args.out is not None:

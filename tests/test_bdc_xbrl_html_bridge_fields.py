@@ -61,9 +61,9 @@ def test_search_terms_plain_identifier_unchanged():
 
 # --- overlay: blank-only, exact-keyed, no clobber ---
 def _write_bridge(tmp_path, rows):
-    data = {"schema_version": BRIDGE_SCHEMA_VERSION, "cik": "0001803498",
+    data = {"schema_version": BRIDGE_SCHEMA_VERSION, "admission_status": "promoted", "cik": "0001803498",
             "version": 1, "source": "bdc_xbrl", "bridges": rows}
-    (tmp_path / "0001803498.proposed.json").write_text(json.dumps(data), encoding="utf-8")
+    (tmp_path / "0001803498.json").write_text(json.dumps(data), encoding="utf-8")
     return tmp_path
 
 
@@ -564,7 +564,7 @@ def _bridge_record(family, sha, table_index, row_index):
 def _write_bridge_file(path, records):
     path.write_text(
         json.dumps({
-            "schema_version": BRIDGE_SCHEMA_VERSION,
+            "schema_version": BRIDGE_SCHEMA_VERSION, "admission_status": "promoted",
             "cik": "0000000123",
             "version": 1,
             "source": "bdc_xbrl",

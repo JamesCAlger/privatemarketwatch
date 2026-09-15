@@ -14,7 +14,7 @@ def main():
     candidate=a.candidate.resolve();attempt=candidate/'attempts/identity-02';bundle=attempt/'bundle'
     inputs=json.loads((attempt/'inputs.json').read_text());read_bundle(bundle,inputs['fingerprint'])
     out=BASE/'identity';out.mkdir(exist_ok=True)
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();start=time.monotonic()
+    start=time.monotonic()
     gold=ROOT/'data/output/match_quality/gold/mg3';work=list(csv.DictReader((gold/'worklist.csv').open()))
     assert len(work)<=600
     pairs=[];entities=[];packets=[];manifest=[];invalid=[];ids=set()
@@ -44,7 +44,7 @@ def main():
             pairs.append(dict(base,row_a=pl.get('row_id_a'),row_b=pl.get('row_id_b'),expected='CONFIRMED',kind='entity' if packet['packet_type']=='entity' else 'position',label_role='proposed_continuation'))
         packets.append(dict(base,packet_type=packet['packet_type'],rows=len(packet.get('rows',[])),evidence_entries=len(verdict.get('evidence',[]))))
     assert len(ids)<=10000 and len(pairs)<=10000
-    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='3GB'")
+    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='-1'")
     path=bundle/'private_markets_holdings.parquet'
     con.execute("CREATE VIEW h AS SELECT * FROM read_parquet('"+str(path).replace("'","''")+"')")
     selected=con.execute('SELECT row_id,cik,report_date,issuer_name,position_id,entity_id,position_key,fair_value,src_context_id,accession_number FROM h WHERE row_id IN (SELECT unnest(?))',[sorted(ids)]).df().fillna('')
@@ -105,5 +105,5 @@ def main():
         legal_entity_limit='Legacy benchmark legal-entity wording and group/name inference require governance review; no full source census.',
         full_chain_completeness='UNASSESSABLE: observed edge/subchain review does not establish complete source-selected life histories.',
         source_selected_esdec_mapping=mapping,elapsed_seconds=time.monotonic()-start))
-    print('Identity regression and durable mapping complete',flush=True);timer.cancel()
+    print('Identity regression and durable mapping complete',flush=True);
 if __name__=='__main__':main()

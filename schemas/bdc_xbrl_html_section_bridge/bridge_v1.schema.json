@@ -6,6 +6,7 @@
   "required": ["schema_version", "cik", "version", "source", "bridges"],
   "properties": {
     "schema_version": {"const": "bdc-xbrl-html-section-bridge.v1"},
+    "admission_status": {"type": "string", "enum": ["proposed", "promoted", "rejected"]},
     "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
     "entity_name": {"type": "string"},
     "version": {"type": "integer", "minimum": 1},

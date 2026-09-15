@@ -11,6 +11,11 @@ import pytest
 from scripts.agent_b2 import run_remediation as rr
 
 
+def _bound_pass(path):
+    return dict(cik=path.parent.name,mechanism=path.stem,verdict='PASS',
+                correction_digest=rr.digest(json.loads(path.read_text(encoding='utf-8'))))
+
+
 # --------------------------------------------------------------- group_real_errors
 
 def test_group_real_errors_packets_by_cik_and_fix_class():
@@ -266,13 +271,15 @@ def test_promote_copies_only_pass(tmp_path):
     (corr / "rate_scale.json").write_text(json.dumps({"cik": "0001743415"}), encoding="utf-8")
     overrides = tmp_path / "overrides"
     promoted = rr.promote_passes(
-        [{"cik": "0001743415", "mechanism": "subtotal_leak", "verdict": "PASS"},
+        [_bound_pass(corr/'subtotal_leak.json'),
          {"cik": "0001743415", "mechanism": "rate_scale", "verdict": "FAIL"}],
         corrections_dir=tmp_path / "corrections", overrides_dir=overrides,
         wrapper_dir=tmp_path / "wrappers")
     assert len(promoted) == 1
     assert (overrides / "0001743415" / "subtotal_leak.json").exists()
     assert not (overrides / "0001743415" / "rate_scale.json").exists()
+    from pipeline.rule_admission import admitted
+    assert admitted(overrides/'0001743415/subtotal_leak.json',overrides,allow_legacy=False)
 
 
 def test_promote_wrapper_patch_applies_to_production_wrapper(tmp_path):
@@ -825,6 +832,15 @@ class TestReadjudicationWorklist:
 # ---------------------------------------------------------------------------
 
 class TestPromoteGuards:
+    def test_promote_refuses_gate_for_different_staged_rule(self,tmp_path):
+        corrections,overrides=self._stage(tmp_path)
+        path=corrections/'0001743415/unit_rescale.json'
+        gate=_bound_pass(path)
+        path.write_text(json.dumps(dict(cik='0001743415',fix_class='column_remap')))
+        result=rr.promote_passes([gate],corrections_dir=corrections,overrides_dir=overrides)
+        assert result[0]['status']=='refused_unbound_gate'
+        assert not overrides.exists()
+
     def _stage(self, tmp_path, mech="unit_rescale", content=None):
         corr = tmp_path / "corrections" / "0001743415"
         corr.mkdir(parents=True, exist_ok=True)
@@ -852,7 +868,7 @@ class TestPromoteGuards:
         live.parent.mkdir(parents=True)
         live.write_text(json.dumps({"old": True}), encoding="utf-8")
         promoted = rr.promote_passes(
-            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            [_bound_pass(corrections/'0001743415/unit_rescale.json')],
             corrections_dir=corrections, overrides_dir=overrides,
             wrapper_dir=tmp_path / "wrappers", allow_overwrite=True)
         assert promoted[0]["status"] == "ok"
@@ -868,7 +884,7 @@ class TestPromoteGuards:
     def test_promote_enforce_off_ignores_missing_artifact(self, tmp_path):
         corrections, overrides = self._stage(tmp_path)
         promoted = rr.promote_passes(
-            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            [_bound_pass(corrections/'0001743415/unit_rescale.json')],
             corrections_dir=corrections, overrides_dir=overrides,
             wrapper_dir=tmp_path / "wrappers", batch_id="bX",
             fleet_thresholds_path=self._thresholds(tmp_path, enforce=False))
@@ -901,7 +917,7 @@ class TestPromoteGuards:
         art.write_text(json.dumps({"batch_id": "bX", "verdict": "PASS", "checks": []}),
                        encoding="utf-8")
         promoted = rr.promote_passes(
-            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            [_bound_pass(corrections/'0001743415/unit_rescale.json')],
             corrections_dir=corrections, overrides_dir=overrides,
             wrapper_dir=tmp_path / "wrappers", batch_id="bX",
             fleet_thresholds_path=tp)

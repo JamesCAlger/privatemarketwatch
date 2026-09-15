@@ -8,6 +8,7 @@ from typing import Union
 
 import duckdb
 import pandas as pd
+from pipeline.financial_conventions import ADDITIONS
 
 from pipeline.classification import (
     _NPORT_ASSET_MAP,
@@ -287,9 +288,9 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                 WHEN TRY_CAST(exchange_rate AS DOUBLE) > 0 THEN 'nport_exchange_rate'
                 ELSE 'invalid_nport_exchange_rate'
             END AS principal_fx_status,
-            CASE WHEN upper(trim(unit)) = 'PA'
-                 THEN COALESCE(NULLIF(upper(trim(CAST(currency_code AS VARCHAR))), ''), 'USD')
-                 ELSE '' END AS fair_value_currency,
+            -- N-PORT C.2.c value is reported in USD. C.2.b denomination is
+            -- the investment/principal currency and does not denominate FV.
+            'USD' AS fair_value_currency,
             '' AS cost_currency,
             '' AS bdc_investment_identifier,
             '' AS bdc_form_type,
@@ -303,12 +304,14 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS src_field_overrides,
             '' AS cost_source,
             '' AS shares_held_source,
-            '' AS fair_value_source,
+            CASE WHEN nullif(trim(CAST(holding_id AS VARCHAR)),'') IS NOT NULL
+                 THEN 'nport' ELSE '' END AS fair_value_source,
             '' AS principal_amount_source,
             '' AS pct_of_net_assets_source,
             '' AS pik_rate_source,
             '' AS bdc_unrealized_gain_loss_source,
-            '' AS src_facts,
+            CAST(json_object('fair_value',json_object('r',TRY_CAST(currency_value AS DOUBLE),
+                'field','CURRENCY_VALUE','source_item','N-PORT C.2.c','currency','USD')) AS VARCHAR) AS src_facts,
             '' AS src_filled_fields,
             '' AS corrected_fields,
             holding_id AS nport_holding_id,
@@ -373,17 +376,17 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
 
     result = con.execute(sql).fetchdf()
 
-    # Log rate cap stats (count from input, since SQL already capped)
+    # Report unavailable source rates; the SQL retains NULL rather than capping.
     if _nport_loaded_from_file:
-        rate_capped = con.execute(
+        rate_unavailable = con.execute(
             "SELECT COUNT(*) FROM nport_raw "
-            "WHERE TRY_CAST(annualized_rate AS DOUBLE) > 50"
+            "WHERE TRY_CAST(annualized_rate AS DOUBLE) >= 50"
         ).fetchone()[0]
     else:
-        rate_capped = 0
+        rate_unavailable = 0
         if "annualized_rate" in nport_df.columns:
             raw_rates = pd.to_numeric(nport_df["annualized_rate"], errors="coerce")
-            rate_capped = int((raw_rates > 50).sum())
+            rate_unavailable = int((raw_rates >= 50).sum())
 
     con.close()
 
@@ -392,8 +395,8 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
 
     logger.info("  After Level 3 filter: %d rows", len(result))
 
-    if rate_capped > 0:
-        logger.info("  N-PORT rates capped at 50%%: %d rows", rate_capped)
+    if rate_unavailable > 0:
+        logger.info("  N-PORT input rates >= 50%% retained as unavailable: %d rows", rate_unavailable)
 
     if result.empty:
         return pd.DataFrame(columns=UNIFIED_COLUMNS)
@@ -402,6 +405,10 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     for cat, count in result["asset_category"].value_counts().items():
         logger.info("    %s: %d (%.1f%%)", cat, count, 100 * count / len(result))
 
+    # Match BDC staging; identity-dependent values remain unset here.
+    for field, kind in ADDITIONS.items():
+        if field not in result:
+            result[field] = None if kind == 'DOUBLE' else ''
     return result
 
 

@@ -16,10 +16,13 @@ from pipeline.programme.native import lower_integrity
 
 
 def read_guard(attempt, runtime):
-    """Construct a testable read policy; existing unlisted runtime files fail early."""
+    """Allow frozen inputs and the explicitly trusted installed package roots."""
     attempt = Path(attempt).resolve()
     roots = [Path(root).resolve() for root in runtime['content_roots']]
     declared = {os.path.normcase(str(Path(item['path']))) for item in runtime['content']}
+    policy = runtime.get('identity_policy', 'physical-content-v1')
+    if policy not in ('package-metadata-v1', 'physical-content-v1'):
+        raise ContractError('Unsupported runtime read policy: ' + str(policy))
 
     def check_read(path):
         resolved = Path(os.fsdecode(path)).resolve()
@@ -28,7 +31,7 @@ def read_guard(attempt, runtime):
         if not any(resolved.is_relative_to(root) for root in roots):
             raise PermissionError('Undeclared Python input: ' + str(resolved))
         # A failed optional open of a nonexistent path does not consume an input.
-        if os.path.normcase(str(resolved)) not in declared and resolved.exists():
+        if policy == 'physical-content-v1' and os.path.normcase(str(resolved)) not in declared and resolved.exists():
             raise PermissionError('Unrecorded runtime input: ' + str(resolved))
         return resolved
     return check_read
@@ -74,7 +77,6 @@ def guard(attempt):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--attempt', type=Path, required=True)
-    parser.add_argument('--seconds', type=int, required=True)
     parser.add_argument('--probe', action='store_true')
     args = parser.parse_args()
     attempt = args.attempt.resolve()
@@ -87,10 +89,9 @@ def main():
     import win32process
     job = win32job.CreateJobObject(None, '')
     limits = win32job.QueryInformationJobObject(job, win32job.JobObjectExtendedLimitInformation)
-    limits['BasicLimitInformation']['LimitFlags'] = (win32job.JOB_OBJECT_LIMIT_PROCESS_MEMORY |
+    limits['BasicLimitInformation']['LimitFlags'] = (
         win32job.JOB_OBJECT_LIMIT_ACTIVE_PROCESS | win32job.JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE)
     limits['BasicLimitInformation']['ActiveProcessLimit'] = 1
-    limits['ProcessMemoryLimit'] = 12 * 1024**3
     win32job.SetInformationJobObject(job, win32job.JobObjectExtendedLimitInformation, limits)
     win32job.AssignProcessToJobObject(job, win32api.GetCurrentProcess())
     start = time.monotonic()
@@ -104,12 +105,12 @@ def main():
             memory = counters.get('PrivateUsage', counters['PagefileUsage'])
             peak = max(peak, memory)
             atomic_json(attempt / 'telemetry/resources.json', dict(pid=os.getpid(), elapsed_seconds=elapsed,
-                        private_bytes=memory, peak_private_bytes=peak, limit_bytes=12 * 1024**3,
+                        private_bytes=memory, peak_private_bytes=peak, limit_bytes=None,
                         integrity='low', updated_utc=now()))
-            if elapsed > args.seconds:
-                os._exit(124)
-            done.wait(min(5, max(.1, args.seconds - elapsed)))
-    atomic_json(attempt / 'telemetry/worker.json', dict(pid=os.getpid(), started_utc=now(), integrity='low'))
+            done.wait(5)
+    import psutil
+    atomic_json(attempt / 'telemetry/worker.json', dict(pid=os.getpid(),
+        process_created=psutil.Process().create_time(), started_utc=now(), integrity='low'))
     monitor = threading.Thread(target=heartbeat, daemon=True)
     monitor.start()
     try:

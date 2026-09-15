@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 import jsonschema
+import pytest
 
 from pipeline.bdc_xbrl_html_bridge import (
     BRIDGE_SCHEMA_VERSION,
@@ -20,7 +21,7 @@ def test_load_html_section_bridge_rows_normalizes_exact_keys(tmp_path):
     (bridge_dir / "0000000123.json").write_text(
         json.dumps(
             {
-                "schema_version": BRIDGE_SCHEMA_VERSION,
+                "schema_version": BRIDGE_SCHEMA_VERSION, "admission_status": "promoted",
                 "cik": "0000000123",
                 "version": 1,
                 "source": "bdc_xbrl",
@@ -53,6 +54,21 @@ def test_load_html_section_bridge_rows_normalizes_exact_keys(tmp_path):
     assert rows.to_dict("records")[0]["raw_id_lower"] == "acme corp"
 
 
+@pytest.mark.parametrize("filename,status", [("123.proposed.json","promoted"),
+    ("123.json",None),("123.json","proposed"),("123.json","rejected")])
+def test_unadmitted_bridge_never_loads(tmp_path, filename, status):
+    test_load_html_section_bridge_rows_normalizes_exact_keys(tmp_path)
+    original = tmp_path / "bridges/0000000123.json"
+    payload = json.loads(original.read_text())
+    if status is None:
+        payload.pop("admission_status")
+    else:
+        payload["admission_status"] = status
+    original.unlink()
+    (original.parent / filename).write_text(json.dumps(payload))
+    assert load_html_section_bridge_rows(original.parent).empty
+
+
 def test_bridge_schema_accepts_valid_instance():
     schema = json.loads(
         Path("schemas/bdc_xbrl_html_section_bridge/bridge_v1.schema.json").read_text(
@@ -60,7 +76,7 @@ def test_bridge_schema_accepts_valid_instance():
         )
     )
     instance = {
-        "schema_version": BRIDGE_SCHEMA_VERSION,
+        "schema_version": BRIDGE_SCHEMA_VERSION, "admission_status": "promoted",
         "cik": "0000000123",
         "version": 1,
         "source": "bdc_xbrl",
@@ -95,7 +111,7 @@ def test_apply_html_section_bridge_wrapper_columns_is_accession_scoped(tmp_path)
     (bridge_dir / "0000000123.json").write_text(
         json.dumps(
             {
-                "schema_version": BRIDGE_SCHEMA_VERSION,
+                "schema_version": BRIDGE_SCHEMA_VERSION, "admission_status": "promoted",
                 "cik": "0000000123",
                 "version": 1,
                 "source": "bdc_xbrl",

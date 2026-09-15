@@ -20,8 +20,8 @@ def main():
         raise ValueError('Invalid output')
     if out.exists():raise ValueError('New output required')
     out.mkdir(parents=True)
-    t=threading.Timer(180,lambda:os._exit(124));t.daemon=True;t.start();start=time.monotonic()
-    con=duckdb.connect(config={'memory_limit':'2GB','threads':2})
+    start=time.monotonic()
+    con=duckdb.connect(config={'memory_limit':'-1','threads':2})
     paths=[a.source/'document_units.csv',a.source/'unit_exceptions.csv']
     con.execute('CREATE TABLE u AS SELECT * FROM read_csv(?,all_varchar=true)',[str(paths[0])])
     con.execute('CREATE TABLE f AS SELECT * FROM read_csv(?,all_varchar=true)',[str(paths[1])])
@@ -59,7 +59,7 @@ def main():
                  candidate_sha256=json.loads((a.source/'complete.json').read_text())['candidate_sha256'],
                  inputs=[dict(path=str(p),sha256=sha(p)) for p in paths],
                  scope='Refinement of non-USD/missing/unknown token exceptions; exact USD rows remain in original inventory')
-    atomic_json(out/'complete.json',summary);con.close();t.cancel()
+    atomic_json(out/'complete.json',summary);con.close();
     print(json.dumps(summary,sort_keys=True),flush=True)
 
 

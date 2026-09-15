@@ -1,0 +1,35 @@
+{
+    "status":  "retired",
+    "reviewed_date":  "2026-09-14",
+    "previous_file":  "exclude_cash_from_investments_fv.json",
+    "original_file":  "_retired_exclude_cash_from_investments_fv.json",
+    "original_sha256":  "430f59814a8b72dec8a5274db38224777ca29c004665f0a27064942ee3cf7370",
+    "mechanism":  "The rule deletes CASH-classified positions to approach an investments-only anchor. Cached XBRL discloses these money-market holdings. D08 requires cash records to remain in canonical holdings; reconciliation membership is a separate calculation.",
+    "decision":  {
+                     "path":  "docs/production_stack/01_decisions.md",
+                     "sha256":  "4413c0633e8da211e12d52c1513afad6ed4ccbca4294e16d624ccaf0bd90d67e",
+                     "id":  "D08",
+                     "text":  "Retain cash, JV, subsidiary and underlying records with explicit accounting scope. Public headline is the canonical holdings sum, not a consolidated or look-through total."
+                 },
+    "sources":  [
+                    {
+                        "path":  "data/raw/filings/bdc_xbrl/1803498/000180349826000031.xml",
+                        "sha256":  "73c6e0e487a25147a459cabe36e246b44088906a596367b01f00d965ad9a9a15",
+                        "target_quarter":  "2026-03-31"
+                    }
+                ],
+    "measured_v7_exclusion":  {
+                                  "fair_value_usd":  681375000,
+                                  "artifact":  "agent_fix_application_audit.csv",
+                                  "artifact_sha256":  "fdcb1c20c833fbb4f365e9020d1b0bd7d09d993725b7cc7f3762c152771170aa",
+                                  "stage":  "unified-01",
+                                  "candidate":  "production-20260913-v7",
+                                  "rows":  6
+                              },
+    "source_review":  "Seven source cash-management contexts total USD692837000. The v7 rule deleted six CASH-classified rows totalling USD681375000; the USD11462000 Dreyfus Government Cash Management row was outside that predicate. No source row is added by an override.",
+    "action":  "Retire the exclusion, preserve original bytes, retain existing position/scoping transformations; no replacement numerical override and no ownership scaling.",
+    "confidence":  "High for the D08 policy conflict and cited source disclosures; fresh candidate effects remain unverified.",
+    "residual_risk":  "Fresh full build, source reconciliation, accounting-scope and quarter gates remain required. Public canonical FV is not consolidated fund exposure; this does not certify other legacy rules.",
+    "evidence_directory":  "scratch/2026-09-12_programme_e0/retention-source-review-v1",
+    "prior_prepared_review_sha256":  "edddeb4f03db39b5c7d6f4372e5c2c60e640bf16ec8b2a3c474409b3fded4792"
+}

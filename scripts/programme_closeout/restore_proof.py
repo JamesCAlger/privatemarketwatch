@@ -11,7 +11,6 @@ def main():
     dest=ROOT/'data/programme/restores'/candidate.name/'unified-bundle'
     if dest.exists():raise ValueError('Choose a new restore, never overwrite it')
     total=sum(p.stat().st_size for p in source.iterdir() if p.is_file())
-    if total>4*1024**3:raise ValueError('Restore exceeds bounded 4 GiB workload')
     started=time.monotonic();shutil.copytree(source,dest)
     restored=read_bundle(dest,manifest['input_fingerprint'])
     assert sha(source/'result.json')==sha(dest/'result.json')

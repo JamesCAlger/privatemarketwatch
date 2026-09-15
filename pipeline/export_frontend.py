@@ -1,8 +1,8 @@
 """Export pre-computed JSON for the static Next.js frontend.
 
 Reads pipeline output CSVs with DuckDB, writes aggregated JSON files to
-``frontend/public/data/``.  No position-level data is exposed -- only
-index-level time-series and aggregated summaries.
+``frontend/public/data/``. The public BDC cohort includes complete position
+history, source status and portfolio summaries.
 
 Usage:
     python -m pipeline.main --export-frontend
@@ -54,6 +54,10 @@ logger = logging.getLogger(__name__)
 
 def export_all() -> None:
     """Run all exports.  Called by ``pipeline.main --export-frontend``."""
+    from pipeline.holdings_finalizer import require_exportable_identity
+    require_exportable_identity()
+    from pipeline.export import helpers
+    from pipeline.public_partitions import public_snapshot, write_public_contributors
     logger.info("")
     logger.info("=" * 60)
     logger.info("EXPORTING FRONTEND JSON")
@@ -61,6 +65,17 @@ def export_all() -> None:
 
     FRONTEND_DATA_DIR.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect()
+    snapshot = public_snapshot(con, helpers.UNIFIED_HOLDINGS_CSV,
+        cutoff=helpers._quarter_to_date(helpers.INDEX_DISPLAY_END_QUARTER)
+        if helpers.INDEX_DISPLAY_END_QUARTER else "9999-12-31")
+    write_public_contributors(con,FRONTEND_DATA_DIR/"public_partition_contributors.json",snapshot["asOf"])
+    from pipeline.cohort_guard import load_cohort_ciks
+    from pipeline.holdings_history import export_history
+    from pipeline import config
+    export_history(con,helpers.UNIFIED_HOLDINGS_CSV,FRONTEND_DATA_DIR/"holdings_history",
+        cohort=load_cohort_ciks(),end=snapshot["asOf"],source_cache=config.BDC_HTML_CACHE_DIR,
+        sector_bundle=config.GICS_ENRICHMENT_DECISIONS_FILE,taxonomy=config.GICS_REFERENCE_FILE,
+        sector_audit=config.OUTPUT_DIR/'sector_enrichment_audit.csv',cost_donors=config.OUTPUT_DIR/'cost_donor_audit.csv')
 
     ir = _export_index_returns(con)
     _export_index_summary(ir, con)
@@ -72,8 +87,8 @@ def export_all() -> None:
     _export_investee_concentration(con)
     _export_position_concentration(con)
     _export_concentration_curve(con)
-    _export_portfolio_characteristics(con)
-    _export_metadata(con, ir)
+    _export_portfolio_characteristics(con, snapshot=snapshot)
+    _export_metadata(con, ir, snapshot=snapshot)
     _export_fund_list(con)
     _export_fund_details(con)
     _export_fund_summary(con)
@@ -83,7 +98,7 @@ def export_all() -> None:
     # Landing page visualizations
     _export_fund_index_returns(con)
     _export_aum_time_series(con)
-    _export_gics_sector_breakdown(con)
+    _export_gics_sector_breakdown(con, snapshot=snapshot)
     _export_credit_risk(con)
     _export_pik_eligibility(con)
     _export_distribution_histogram(con)

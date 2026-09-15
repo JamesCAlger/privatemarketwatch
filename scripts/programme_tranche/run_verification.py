@@ -1,9 +1,8 @@
-"""Bounded full-suite/backstop jobs with durable logs; no production report writes."""
+"""Monitored full-suite/backstop jobs with durable logs; no execution caps."""
 from __future__ import annotations
 
 import argparse
 import contextlib
-from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -16,7 +15,7 @@ from pipeline.programme.core import ContractError, atomic_json, now, read_json, 
 from pipeline.programme.runner import candidate_path, heavy_lock
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRATCH = ROOT / 'scratch/2026-09-10_programme_tranche/verification'
+SCRATCH = ROOT / 'scratch/2026-09-12_programme_e0/verification'
 
 
 def protected_inventory():
@@ -34,7 +33,7 @@ def protected_inventory():
     return dict(records=records, unreadable=sorted(unreadable))
 
 
-def worker(mode, output):
+def worker(mode, output, selection=None):
     # These test jobs use the repository's production-open guard and native-IO
     # before/after backstop, not the candidate worker's low-integrity sandbox.
     # Prevent accidental external network use even if a test forgets its mock.
@@ -50,9 +49,9 @@ def worker(mode, output):
     with patch.object(dotenv, 'load_dotenv', lambda *args, **kwargs: False):
         if mode in ('tests', 'focused'):
             import pytest
-            selection = [] if mode == 'tests' else ['tests/test_programme_runtime.py',
+            selection = selection or ([] if mode == 'tests' else ['tests/test_programme_runtime.py',
                 'tests/test_programme_measurement.py','tests/test_programme_tranche.py',
-                'tests/test_programme_runtime_metadata.py']
+                'tests/test_programme_runtime_metadata.py'])
             return pytest.main(['-q', '--durations=50', '--durations-min=0.5',
                                 '--junitxml=' + str(output / 'junit.xml'), *selection])
         from scripts import diff_outputs
@@ -63,7 +62,7 @@ def worker(mode, output):
         return diff_outputs.main()
 
 
-def launch(mode, output, seconds):
+def launch(mode, output, selection=None):
     import psutil
     import win32api
     import win32con
@@ -71,18 +70,17 @@ def launch(mode, output, seconds):
     output.mkdir(parents=True, exist_ok=False)
     command = [sys.executable, '-m', 'scripts.programme_tranche.run_verification', mode,
                '--worker', '--output', str(output)]
+    for test in selection or []:
+        command.extend(['--test', test])
     job = win32job.CreateJobObject(None, '')
     limits = win32job.QueryInformationJobObject(job, win32job.JobObjectExtendedLimitInformation)
-    limits['BasicLimitInformation']['LimitFlags'] = (win32job.JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE |
-                                                     win32job.JOB_OBJECT_LIMIT_JOB_MEMORY)
-    limits['JobMemoryLimit'] = 12 * 1024**3
+    limits['BasicLimitInformation']['LimitFlags'] = win32job.JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
     win32job.SetInformationJobObject(job, win32job.JobObjectExtendedLimitInformation, limits)
     started = time.monotonic()
     before = record(ROOT, Path(__file__).relative_to(ROOT).as_posix())
     protected_before = protected_inventory()
     atomic_json(output / 'protected_before.json', protected_before)
     process = None
-    timed_out = False
     last_print = 0
     try:
         with (output / 'process.log').open('w', encoding='utf-8') as log:
@@ -96,15 +94,10 @@ def launch(mode, output, seconds):
                 handle.Close()
             created = psutil.Process(process.pid).create_time()
             atomic_json(output / 'process.json', dict(controller_pid=os.getpid(), worker_pid=process.pid,
-                worker_created=created, command=command, started_utc=now(), limit_seconds=seconds,
-                limit_job_memory_bytes=12 * 1024**3, code=before, network='external denied; loopback allowed'))
+                worker_created=created, command=command, started_utc=now(), limit_seconds=None,
+                limit_job_memory_bytes=None, code=before, network='external denied; loopback allowed'))
             while process.poll() is None:
                 elapsed = time.monotonic() - started
-                if elapsed >= seconds:
-                    timed_out = True
-                    win32job.TerminateJobObject(job, 124)
-                    process.wait(timeout=30)
-                    break
                 if elapsed - last_print >= 30:
                     last_print = elapsed
                     try:
@@ -127,15 +120,15 @@ def launch(mode, output, seconds):
                            if protected_before['records'].get(path) != protected_after['records'].get(path))
     unreadable_changed = protected_before['unreadable'] != protected_after['unreadable']
     result = dict(mode=mode, started_code=before, code_unchanged=sha(Path(__file__)) == before['sha256'],
-                  exit_code=process.returncode, timed_out=timed_out,
+                  exit_code=process.returncode, timed_out=False,
                   worker_stopped=process.poll() is not None, elapsed_seconds=time.monotonic()-started,
                   protected_readable_files=len(protected_before['records']), protected_changes=changed_paths,
                   protected_unreadable_paths_changed=unreadable_changed,
                   consistently_unreadable_paths=protected_before['unreadable'] if not unreadable_changed else None,
                   log=record(ROOT,(output / 'process.log').relative_to(ROOT).as_posix()))
     atomic_json(output / 'result.json', result)
-    print(mode + ': exit ' + str(process.returncode) + '; timed_out=' + str(timed_out), flush=True)
-    return 124 if timed_out else (process.returncode or (1 if changed_paths or unreadable_changed else 0))
+    print(mode + ': exit ' + str(process.returncode), flush=True)
+    return process.returncode or (1 if changed_paths or unreadable_changed else 0)
 
 
 def main():
@@ -144,24 +137,17 @@ def main():
     parser.add_argument('--worker',action='store_true')
     parser.add_argument('--output',type=Path)
     parser.add_argument('--name')
-    parser.add_argument('--candidate',default='t1-runtime-20260910-v3')
-    parser.add_argument('--seconds',type=int)
-    parser.add_argument('--deadline',default='2026-09-10T16:43:01+00:00')
+    parser.add_argument('--candidate',default='t1-runtime-20260910-v5')
+    parser.add_argument('--test',action='append',dest='selection')
     args=parser.parse_args()
     if args.worker:
         if args.output is None or not args.output.resolve().is_relative_to(SCRATCH.resolve()):
             raise ContractError('Invalid verification output')
-        raise SystemExit(worker(args.mode,args.output))
-    maximum=5400 if args.mode=='tests' else 900 if args.mode=='focused' else 600
-    seconds=args.seconds or maximum
-    if seconds<=0 or seconds>maximum:
-        raise ContractError('Verification exceeds its allowance')
-    if (datetime.fromisoformat(args.deadline)-datetime.now(timezone.utc)).total_seconds()<seconds+60:
-        raise ContractError('Verification cannot fit before deadline')
+        raise SystemExit(worker(args.mode,args.output,args.selection))
     if not args.name or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-_' for c in args.name):
         raise ContractError('Use a new portable job name')
     with heavy_lock(candidate_path(args.candidate)):
-        raise SystemExit(launch(args.mode,SCRATCH/args.name,seconds))
+        raise SystemExit(launch(args.mode,SCRATCH/args.name,args.selection))
 
 
 if __name__=='__main__':

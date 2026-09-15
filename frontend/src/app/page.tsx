@@ -40,6 +40,7 @@ export default function HomePage() {
 
   // Aggregate BDC portfolio fair value (current quarter, all classifications)
   const portfolioFv = portfolioCharacteristics?.portfolioFv ?? portfolioCharacteristics?.totalFv ?? 0;
+  const missingFairValueCount = portfolioCharacteristics?.missingFairValueCount ?? 0;
 
   // Combine manager concentration across the direct-lending and equity books
   const combinedManagers = combineConcentration(
@@ -84,42 +85,10 @@ export default function HomePage() {
   const managerTop5Pct = namedManagers.slice(0, 5).reduce((s, m) => s + m.pctOfIndex, 0) * 100;
   const managerMax = managerItems.reduce((m, x) => Math.max(m, x.pct), 0);
 
-  // Instrument type donut — split direct lending by lien, then other classifications.
-  // Sourced from the holdings-based classificationFv so the slices reconcile to the
-  // headline portfolio fair value (same current-quarter, all-classification basis).
-  const cfv = portfolioCharacteristics?.classificationFv ?? {};
-  const dlFv = cfv['DIRECT_LENDING'] ?? 0;
-  const lien = portfolioCharacteristics?.lienSplit;
-  // DL lien tiers — First Lien is the remainder so the five DL slices sum to exactly dlFv.
-  const secondFv = lien ? dlFv * lien.secondLien : 0;
-  const subFv = lien ? dlFv * (lien.subordinated ?? 0) : 0;
-  const unsecFv = lien ? dlFv * lien.unsecured : 0;
-  const otherDlFv = lien ? dlFv * (lien.unknown ?? 0) : 0;
-  const firstLienFv = lien ? Math.max(0, dlFv - secondFv - subFv - unsecFv - otherDlFv) : dlFv;
-  const structuredFv = cfv['STRUCTURED_CREDIT'] ?? 0;
-  const preferredFv = cfv['PREFERRED_EQUITY'] ?? 0;
-  const commonFv = cfv['COMMON_EQUITY'] ?? 0;
-  const cashFv = cfv['CASH'] ?? 0;
-  // Everything else (funds, real estate, unclassified) as the remainder, so the
-  // whole donut sums to EXACTLY portfolioFv — the same figure as the headline.
-  const otherFv = Math.max(0, portfolioFv - dlFv - structuredFv - preferredFv - commonFv - cashFv);
-  const instrumentRaw: { label: string; fv: number }[] = [
-    { label: 'First Lien', fv: firstLienFv },
-    { label: 'Second Lien', fv: secondFv },
-    { label: 'Subordinated', fv: subFv },
-    { label: 'Unsecured', fv: unsecFv },
-    { label: 'Other Lending', fv: otherDlFv },
-    { label: 'Structured', fv: structuredFv },
-    { label: 'Preferred', fv: preferredFv },
-    { label: 'Common Equity', fv: commonFv },
-    // Cash & equivalents — analytics-only classification, included for a holistic view.
-    { label: 'Cash', fv: cashFv },
-    { label: 'Other', fv: otherFv },
-  ].filter((x) => x.fv > 0);
-  const instrumentTotal = instrumentRaw.reduce((s, x) => s + x.fv, 0);
-  const instrumentDonutItems = instrumentRaw.map((x) => ({
-    label: x.label,
-    pct: instrumentTotal > 0 ? (x.fv / instrumentTotal) * 100 : 0,
+  // The server computes the partition from the same holdings as the headline.
+  const instrumentDonutItems = (portfolioCharacteristics?.instrumentBreakdown ?? []).map((item) => ({
+    label: item.label,
+    pct: item.pctOfTotal * 100,
   }));
   const firstLienPct = instrumentDonutItems.find((x) => x.label === 'First Lien')?.pct ?? 0;
   const instrumentCenterStat = { label: 'First Lien', value: firstLienPct.toFixed(0) + '%', note: 'of fair value' };
@@ -181,6 +150,12 @@ export default function HomePage() {
             avgSpread={portfolioCharacteristics?.was ?? null}
             quarters={spreadTimeSeries.length}
           />
+          {missingFairValueCount > 0 && (
+            <p className="mt-4 text-sm text-ink2">
+              USD fair value is unavailable for {formatNumber(missingFairValueCount)} positions.
+              {' '}Totals and portfolio shares use the available amounts.
+            </p>
+          )}
         </div>
       </div>
 

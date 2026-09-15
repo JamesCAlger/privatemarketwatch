@@ -27,13 +27,13 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--candidate',type=Path,required=True);a=p.parse_args()
     attempt=a.candidate.resolve()/'attempts/unified-01';bundle=attempt/'bundle';workspace=attempt/'workspace'
     assert attempt.is_relative_to(ROOT/'data/programme/candidates')
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();start=time.monotonic();OUT.mkdir(exist_ok=True)
+    start=time.monotonic();OUT.mkdir(exist_ok=True)
     sys.path.insert(0,str(workspace))
     from pipeline.agent_b2_appliers import apply_scoped
     from pipeline.unified_holdings import _assign_row_ids
     assert Path(sys.modules['pipeline'].__file__).resolve().is_relative_to(workspace)
     events=json.loads((bundle/'rule_events.json').read_text());ciks=sorted({e['cik'] for e in events})
-    con=duckdb.connect();con.execute("SET threads=2");con.execute("SET memory_limit='3GB'")
+    con=duckdb.connect();con.execute("SET threads=2");con.execute("SET memory_limit='-1'")
     for name in ('before','after'):
         path=bundle/(name+'_b2.csv')
         literal="'"+str(path).replace("'","''")+"'"
@@ -93,5 +93,5 @@ def main():
       source_files=[dict(path=str((bundle/f).relative_to(ROOT)),sha256=sha(bundle/f)) for f in ('before_b2.csv','after_b2.csv','rule_events.json')],
       elapsed_seconds=time.monotonic()-start,scope='B2 admitted post-staging leaves only; frozen full population. Global, wrapper, cache and Layer C cross-layer order is not certified.',
       correctness='Measured impact is not proof a rule is financially correct; source reconciliation remains required.'))
-    print('B2 accounting complete',flush=True);con.close();timer.cancel()
+    print('B2 accounting complete',flush=True);con.close();
 if __name__=='__main__':main()

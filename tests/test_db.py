@@ -293,14 +293,22 @@ class TestLoadAll:
                  "bdc", "active", "active", "", "", "", "", "", "",
                  "bdc_dataset", "bdc_dataset", "", "", ""],
             ])
+            holding = {
+                "source": "bdc", "cik": "0001234567", "entity_name": "Test BDC",
+                "accession_number": "0001234567-25-000001", "filing_date": "2025-01-15",
+                "report_date": "2025-01-01", "issuer_name": "Acme Corp",
+                "instrument_description": "Term Loan", "fair_value": "1000000",
+                "cost": "1000000", "pct_of_net_assets": "5.0", "principal_amount": "1000000",
+                "asset_category": "LOAN", "issuer_category": "CORPORATE",
+                "index_classification": "DIRECT_LENDING", "interest_rate": "10.5",
+                "interest_rate_source": "xbrl_field", "basis_spread": "5.0",
+                "basis_spread_source": "xbrl_field", "reference_rate_type": "SOFR",
+                "coupon_type": "FLOATING", "maturity_date": "2027-01-01",
+                "bdc_investment_identifier": "Acme Corp | Loan", "bdc_form_type": "10-K",
+                "entity_id": "ENT-1", "position_id": "POS-1",
+            }
             _write_csv(tmpdir / "holdings.csv", _HOLDINGS_COLS, [
-                ["bdc", "0001234567", "Test BDC", "0001234567-25-000001",
-                 "2025-01-15", "2025-01-01", "Acme Corp", "Term Loan",
-                 "", "", "", "", "1000000", "1000000", "5.0", "", "1000000",
-                 "LOAN", "CORPORATE", "DIRECT_LENDING", "", "10.5", "5.0",
-                 "SOFR", "FLOATING", "", "2027-01-01", "Acme Corp | Loan",
-                 "10-K", "", "", "", "", "", "", "", "", "", "", "",
-                 "ENT-1", "", "", "POS-1"],
+                [holding.get(column, "") for column in _HOLDINGS_COLS],
             ])
             _write_csv(tmpdir / "matches.csv", _POSITION_MATCHES_COLS, [
                 ["0001234567", "Test BDC", "bdc", "DIRECT_LENDING",
@@ -347,6 +355,9 @@ class TestLoadAll:
                 "SELECT entity_name FROM pmi_entities WHERE cik = '0001234567';"
             )
             assert cur.fetchone()[0] == "Test BDC"
+
+            cur.execute("SELECT fair_value, interest_rate, basis_spread, entity_id, position_id FROM pmi_holdings;")
+            assert cur.fetchone() == (1000000, 10.5, 5.0, "ENT-1", "POS-1")
 
             cur.execute(
                 "SELECT span_adjusted FROM pmi_position_returns WHERE position_id = 'POS-1';"

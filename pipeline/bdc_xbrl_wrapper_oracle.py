@@ -2825,7 +2825,9 @@ def validate_wrapper_json_coherence(raw: dict[str, Any]) -> list[str]:
         "type_industry_prefix_re",
     ]
 
-    for section_key, field_key in _REGEX_FIELDS_DISPATCH + _REGEX_FIELDS_STAGING:
+    # Dispatch runs in Python; staging runs in DuckDB/RE2 after the existing
+    # Unicode escape decoding. Validate each pattern with its actual engine.
+    for section_key, field_key in _REGEX_FIELDS_DISPATCH:
         section = raw.get(section_key) or {}
         value = section.get(field_key)
         if isinstance(value, str) and value:
@@ -2836,17 +2838,24 @@ def validate_wrapper_json_coherence(raw: dict[str, Any]) -> list[str]:
                     f"{section_key}.{field_key} is not a valid regex: {exc}"
                 )
 
-    leaf_guard = (raw.get("staging") or {}).get("leaf_guard") or {}
-    for field_key in _REGEX_FIELDS_LEAF_GUARD:
-        value = leaf_guard.get(field_key)
-        if isinstance(value, str) and value:
-            try:
-                re.compile(value)
-            except re.error as exc:
-                issues.append(
-                    f"staging.leaf_guard.{field_key} is not a valid regex: "
-                    f"{exc}"
-                )
+    staging_patterns = [("staging." + field_key, staging.get(field_key))
+                        for _, field_key in _REGEX_FIELDS_STAGING]
+    leaf_guard = staging.get("leaf_guard") or {}
+    staging_patterns.extend(("staging.leaf_guard." + key, leaf_guard.get(key))
+                            for key in _REGEX_FIELDS_LEAF_GUARD)
+    staging_patterns = [(name, value) for name, value in staging_patterns
+                        if isinstance(value, str) and value]
+    if staging_patterns:
+        import duckdb
+        from pipeline.staging_bdc import _expand_placeholders
+        with duckdb.connect() as con:
+            for name, value in staging_patterns:
+                try:
+                    con.execute("SELECT regexp_matches(?, ?)",
+                                ["", _expand_placeholders(value, {})]).fetchone()
+                except duckdb.Error as exc:
+                    detail = str(exc).encode("ascii", "backslashreplace").decode("ascii")
+                    issues.append(f"{name} is not a valid regex for DuckDB: {detail}")
 
     # Fallback family patterns regexes
     for i, pat in enumerate(dispatch.get("fallback_family_patterns") or []):

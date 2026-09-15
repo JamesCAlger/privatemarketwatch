@@ -608,7 +608,8 @@ def run_llm_review(
     result = apply_llm_classifications(unified_df, lookup_df)
 
     # Save updated unified
-    result.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
+    from pipeline.holdings_finalizer import finalize_enriched_holdings
+    result, _ = finalize_enriched_holdings(result, holdings_file=UNIFIED_HOLDINGS_FILE)
     logger.info("  Saved updated unified holdings to %s", UNIFIED_HOLDINGS_FILE.name)
 
     # Log final stats

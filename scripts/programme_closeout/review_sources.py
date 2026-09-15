@@ -45,7 +45,7 @@ def write_csv(path,rows):
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
 
 def main():
-    timer=threading.Timer(120,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     out=BASE/'review';out.mkdir(exist_ok=True)
     index=json.loads((BASE/'packets/index.json').read_text());totals={r['reference_id']:r for r in csv.DictReader((PILOT/'pilot_candidate_totals.csv').open())}
     records=[]
@@ -91,5 +91,5 @@ def main():
         cohort_source_accuracy='NOT_ASSESSABLE',unknown_FV_dashes=6,
         unresolved_dash_action='Obtain explicit convention/source evidence; preserve unresolved and fail assessability meanwhile. No guessed numeric value.',
         primary_scope_coverage='Not yet certified across cohort; packet review is not a portfolio accuracy claim.'))
-    print(json.dumps(dict(packets=len(records),states=dict(Counter(r['disposition'] for r in records)),new_rosters=2)),flush=True);timer.cancel()
+    print(json.dumps(dict(packets=len(records),states=dict(Counter(r['disposition'] for r in records)),new_rosters=2)),flush=True);
 if __name__=='__main__':main()

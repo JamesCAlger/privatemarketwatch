@@ -74,6 +74,10 @@ def _make_unified(rows: list[dict]) -> pd.DataFrame:
     """Create a minimal unified holdings DataFrame."""
     from pipeline.unified_holdings import UNIFIED_COLUMNS
     df = pd.DataFrame(rows)
+    # Legacy fixture literals denote exact maturity dates and reported costs.
+    # Production migrated rows supply these fields through source interpretation.
+    if 'maturity_precision' not in df: df['maturity_precision']='day'
+    if 'cost_reported' not in df: df['cost_reported']=df.get('cost',None)
     for c in UNIFIED_COLUMNS:
         if c not in df.columns:
             df[c] = None

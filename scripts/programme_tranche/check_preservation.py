@@ -69,7 +69,7 @@ def main():
     out = OUTPUT / args.name
     if out.exists():
         raise ContractError('Preserve previous verification results')
-    timer = threading.Timer(600, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     start = time.monotonic()
     base = ROOT / 'data/programme/candidates/spec-close-20260909-v2'
     manifest = read_json(base / 'snapshot.json')
@@ -112,7 +112,7 @@ def main():
         source_reference_freezes_unchanged=True, elapsed_seconds=time.monotonic()-start,
         scope='Frozen original pipeline/data/controls and used match references/gold; compare five semantic artifacts to the active official baseline. Other historical files are covered only to the extent the separate full byte backstop completes.',
         code=record(ROOT, Path(__file__).relative_to(ROOT).as_posix())))
-    timer.cancel()
+    
     if differences:
         raise ContractError('Semantic backstop changed since preparation: ' + repr(differences[:10]))
     print('Original inputs/references preserved; existing semantic baseline differences unchanged', flush=True)

@@ -14,28 +14,36 @@
       "issuer_name": "BlackRock Liquidity Funds T-Fund Institutional Class",
       "bdc_investment_identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
       "instrument_description": "Cash equivalent",
-      "asset_category": "Cash Equivalents",
+      "asset_category": "CASH",
       "fair_value": 61067000.0,
       "cost": 61067000.0,
       "shares_held": 61066744.0,
       "interest_rate": 4.0,
       "pct_of_net_assets": 4.85,
       "bdc_dimensions_raw": "investmentidentifieraxis=BlackRock Liquidity Funds T-Fund Institutional Class",
-      "source_row_id": "filing_table_41_row_3"
+      "source_row_id": "filing_table_41_row_3",
+      "index_classification": "CASH",
+      "asset_class": "CASH",
+      "exposure_type": "LIQUID",
+      "issuer_category": "FUND"
     },
     {
       "report_date": "2025-09-30",
       "issuer_name": "First American Government Obligations Fund - Class Z",
       "bdc_investment_identifier": "First American Government Obligations Fund - Class Z",
       "instrument_description": "Cash equivalent",
-      "asset_category": "Cash Equivalents",
+      "asset_category": "CASH",
       "fair_value": 164000.0,
       "cost": 164000.0,
       "shares_held": 164240.0,
       "interest_rate": 4.0,
       "pct_of_net_assets": 0.01,
       "bdc_dimensions_raw": "investmentidentifieraxis=First American Government Obligations Fund - Class Z",
-      "source_row_id": "filing_table_41_row_4"
+      "source_row_id": "filing_table_41_row_4",
+      "index_classification": "CASH",
+      "asset_class": "CASH",
+      "exposure_type": "LIQUID",
+      "issuer_category": "FUND"
     }
   ],
   "evidence": [
@@ -64,7 +72,7 @@
       "quote": "holdings for 2025-09-30 contain 0 rows matching BlackRock Liquidity Funds or First American Government Obligations; extracted fair_value sum is 1,957,256,000 versus anchor 2,018,487,000"
     }
   ],
-  "rationale": "The extracted holdings stop at the filing's Total Investments subtotal and omit the immediately following Cash Equivalents section. The validated anchor is the filer's Total Investments and Cash Equivalents fair value, so the two printed cash-equivalent positions are real rows that must be added rather than deleting or rescaling investment rows.",
+  "rationale": "The extracted holdings stop at the filing's Total Investments subtotal and omit the immediately following Cash Equivalents section. The validated anchor is the filer's Total Investments and Cash Equivalents fair value, so the two printed cash-equivalent positions are real rows that must be added rather than deleting or rescaling investment rows. Reviewed 2026-09-13: use the existing CASH/LIQUID classification for the two individually named money-market fund positions; no row or value change.",
   "confidence": 0.98,
   "measured_impact": {
     "2025-09-30": {

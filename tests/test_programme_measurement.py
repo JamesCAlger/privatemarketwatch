@@ -24,11 +24,16 @@ def observation(tmp_path):
 
 
 def test_empty_observations_emit_all_28_criteria_without_pass(contract, tmp_path):
-    result = evaluate(contract, {}, 'a' * 64, tmp_path)
+    result = evaluate(contract, {}, 'a' * 64, tmp_path,historical_replay=True)
     assert len(result['criteria']) == 28
     assert len({c['criterion_id'] for c in result['criteria']}) == 28
     assert {c['status'] for c in result['criteria']} == {'UNASSESSABLE'}
     assert all(r['status'] == 'UNMEASURED' for c in result['criteria'] for r in c['results'])
+
+
+def test_retired_evaluator_cannot_be_used_as_the_live_gate(contract,tmp_path):
+    with pytest.raises(ContractError,match='retired'):
+        evaluate(contract,{},'a'*64,tmp_path)
 
 
 @pytest.mark.parametrize('change', [dict(denominator_known=False), dict(missing_weight=1),

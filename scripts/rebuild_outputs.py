@@ -56,11 +56,11 @@ def rebuild_bdc_holdings(ciks=None):
 
 def rebuild_unified():
     """Rebuild unified holdings from cached BDC + N-PORT data."""
-    from pipeline.unified_holdings import build_unified_holdings
+    from pipeline.holdings_finalizer import build_final_holdings
 
     logger.info("=== Rebuilding unified holdings ===")
     t0 = time.time()
-    df = build_unified_holdings()
+    df, _ = build_final_holdings()
     logger.info("Unified holdings: %d rows in %.1f s", len(df), time.time() - t0)
     return df
 
@@ -99,43 +99,26 @@ def rebuild_derivatives():
 
 
 def rebuild_entities():
-    """Rebuild entity resolution lookup from unified holdings."""
-    from pipeline.entity_resolution import build_entity_lookup
+    """Rebuild entity and position identity, then finalize both typed pairs."""
+    from pipeline.holdings_finalizer import finalize_existing_holdings
 
     logger.info("=== Rebuilding entity resolution ===")
     t0 = time.time()
-    variants = build_entity_lookup()
-    entity_count = variants["entity_num"].nunique()
+    holdings, _ = finalize_existing_holdings(rebuild_entities=True)
+    entity_count = holdings["entity_id"].nunique()
     logger.info("Entity resolution: %d entities in %.1f s", entity_count, time.time() - t0)
-    return variants
+    return holdings
 
 
 def rebuild_returns():
     """Rebuild position matches, position IDs, and index returns."""
-    import pandas as pd
-
+    from pipeline.holdings_finalizer import finalize_existing_holdings
     from pipeline.index_returns import compute_returns
     from pipeline.match_reconciliation import build_position_match_reconciliation
-    from pipeline.position_matching import (
-        CONTESTED_ASSIGNMENT_DEFAULT, assign_position_ids, match_positions,
-    )
-
     logger.info("=== Rebuilding position matches ===")
     t0 = time.time()
-    matches_df = match_positions(contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT)
+    unified_df, matches_df = finalize_existing_holdings()
     logger.info("Matches: %d pairs in %.1f s", len(matches_df), time.time() - t0)
-
-    logger.info("=== Assigning position IDs ===")
-    t1 = time.time()
-    unified_df = pd.read_csv("data/output/private_markets_holdings.csv", dtype=str)
-    unified_df, matches_df = assign_position_ids(
-        unified_df, matches_df, contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
-    )
-    # Save unified holdings with position_ids populated
-    unified_df.to_csv("data/output/private_markets_holdings.csv", index=False)
-    # Save matches with position_ids populated
-    matches_df.to_csv("data/output/position_matches.csv", index=False)
-    logger.info("Position IDs assigned in %.1f s", time.time() - t1)
 
     logger.info("=== Rebuilding position match reconciliation ===")
     t1b = time.time()
@@ -556,7 +539,8 @@ def main():
     if rebuild_all or args.unified:
         rebuild_unified()
 
-    if rebuild_all or args.entities:
+    # Unified now resolves entities and positions before its final write.
+    if args.entities and not (rebuild_all or args.unified):
         rebuild_entities()
 
     if rebuild_all or args.income:

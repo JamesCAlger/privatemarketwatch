@@ -1,10 +1,10 @@
-// Bounded offline browser proof; Playwright must already be installed locally.
+// Offline browser proof; Playwright must already be installed locally.
 const fs=require('node:fs'), path=require('node:path'), {pathToFileURL}=require('node:url');
 const {chromium}=require(process.env.PROGRAMME_PLAYWRIGHT || 'C:/Users/alger/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright');
 const dir=path.join(process.cwd(),'docs/production_stack/programme_closeout_evidence_2026-09-09/viewer');
 const scratch=path.join(process.cwd(),'scratch/2026-09-09_programme_closeout');fs.mkdirSync(scratch,{recursive:true});
 const assert=(ok,msg)=>{if(!ok)throw Error(msg)};
-let browser;const timer=setTimeout(()=>{console.error('Viewer deadline 240 seconds');if(browser)browser.close().finally(()=>process.exit(124));else process.exit(124)},240000);
+let browser;
 (async()=>{
  browser=await chromium.launch({headless:true,executablePath:process.env.PROGRAMME_CHROMIUM || 'C:/Users/alger/AppData/Local/ms-playwright/chromium-1223/chrome-win64/chrome.exe'});const context=await browser.newContext({viewport:{width:1440,height:960}});
  const page=await context.newPage(), errors=[],external=[];page.on('pageerror',e=>errors.push(String(e)));
@@ -58,5 +58,5 @@ let browser;const timer=setTimeout(()=>{console.error('Viewer deadline 240 secon
     real_cases:cases.filter(c=>c.rendition).length,indirect_cases:4,navigations:navigation.length,p50_ms:quant(.5),p95_ms:quant(.95),max_ms:sorted.at(-1),
     observations:navigation,external_requests:external,errors,keyboard:true,mobile_outer_overflow:false};
  fs.writeFileSync(path.join(dir,'browser_result.json'),JSON.stringify(result,null,2));console.log(JSON.stringify({status:result.status,navigations:result.navigations,p50_ms:result.p50_ms,p95_ms:result.p95_ms}));
- await browser.close();clearTimeout(timer);
-})().catch(async e=>{console.error(e);if(browser)await browser.close();clearTimeout(timer);process.exit(1)});
+ await browser.close();
+})().catch(async e=>{console.error(e);if(browser)await browser.close();process.exit(1)});

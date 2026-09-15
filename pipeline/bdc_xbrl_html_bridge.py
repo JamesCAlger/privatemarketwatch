@@ -273,6 +273,10 @@ def load_html_section_bridge_rows(
 
     rows: list[dict[str, Any]] = []
     for path in sorted(root.glob("*.json")):
+        from pipeline.rule_admission import record as record_admission
+        if ".proposed" in path.name.lower():
+            record_admission(path,'proposed',False,'Proposed HTML bridge excluded')
+            continue
         try:
             with open(path, encoding="utf-8") as fh:
                 data = json.load(fh)
@@ -280,10 +284,15 @@ def load_html_section_bridge_rows(
             logger.warning("Skipping invalid HTML bridge file %s: %s", path.name, exc)
             continue
         if data.get("schema_version") != BRIDGE_SCHEMA_VERSION:
+            record_admission(path,'invalid_schema',False,'Unsupported bridge schema')
+            continue
+        if data.get("admission_status") != "promoted":
+            record_admission(path,str(data.get('admission_status','missing')),False,'No promoted bridge status')
             continue
         cik = normalize_cik(data.get("cik"))
         if not cik or (wanted and cik not in wanted):
             continue
+        record_admission(path,'promoted',True,'Explicit bridge admission status and schema accepted')
         for record in data.get("bridges") or []:
             row = _record_to_row(cik, record)
             if row is not None:

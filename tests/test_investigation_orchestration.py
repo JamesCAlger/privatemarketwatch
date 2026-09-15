@@ -130,7 +130,8 @@ def _promote_fixture(tmp_path, monkeypatch, rules):
     rules_dir.mkdir(parents=True)
     for r in rules:
         (rules_dir / f"{r['rule_id']}.json").write_text(json.dumps(r), encoding="utf-8")
-    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "PASS"})
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "PASS",
+        "rules_fingerprint": ri.rules_fingerprint(rules_dir)})
     monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame({
         "cik": ["2083477", "2083477"], "report_date": ["2026-03-31", "2026-03-31"],
         "issuer_name": ["Acme Corp", "Total Investments"],
@@ -164,6 +165,17 @@ def test_promote_copies_valid_effective_rules(tmp_path, monkeypatch):
     res = promote("2083477", "2026-03-31", overrides_dir=ov)
     assert res["status"] == "promoted" and res["n_rules"] == 1
     assert (ov / "2083477" / "exclude_total.json").exists()
+    from pipeline.rule_admission import admitted
+    assert admitted(ov/'2083477/exclude_total.json',ov,allow_legacy=False)
+
+
+def test_promote_cannot_register_an_unbound_passing_gate(tmp_path,monkeypatch):
+    ov = _promote_fixture(tmp_path, monkeypatch,
+                          [_valid_rule('exclude_total', "issuer_name = 'Total Investments'")])
+    monkeypatch.setattr(ri,'gate',lambda *args: dict(verdict='PASS',rules_fingerprint='earlier-rules'))
+    result=promote('2083477','2026-03-31',overrides_dir=ov)
+    assert result['status']=='refused_unbound_gate'
+    assert not ov.exists()
 
 
 # --- escalation handling: workers who escalate get one post-escalation iteration ---

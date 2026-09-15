@@ -53,13 +53,13 @@ def main():
     out.mkdir(parents=True,exist_ok=True)
     if (out/'complete.json').exists():
         raise ValueError('Completed evidence is immutable')
-    timer=threading.Timer(900,lambda:os._exit(124));timer.daemon=True;timer.start()
+    
     started=time.monotonic()
     candidate=ROOT/'data/output/private_markets_holdings.csv'
     candidate_sha=sha(candidate)
     cohort=ROOT/'data/overrides/wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json'
     ids=[e['cik'] for e in json.loads(cohort.read_text())['entries']]
-    con=duckdb.connect(config={'memory_limit':'2GB','threads':2})
+    con=duckdb.connect(config={'memory_limit':'-1','threads':2})
     con.execute('SET temp_directory=?',[str(out/'temp')])
     con.execute("CREATE TABLE scope(cik VARCHAR)")
     con.executemany("INSERT INTO scope VALUES (?)",[(c,) for c in ids])
@@ -143,7 +143,7 @@ def main():
                  script_sha256=sha(Path(__file__)),interpretation='Actual XBRL unit definitions; printed/tagged conflicts still require source adjudication')
     (out/'input_manifest.json').write_text(json.dumps(inputs,indent=2),encoding='utf-8')
     (out/'complete.json').write_text(json.dumps(summary,indent=2,sort_keys=True),encoding='utf-8')
-    con.close();timer.cancel();print(json.dumps(summary,sort_keys=True),flush=True)
+    con.close();print(json.dumps(summary,sort_keys=True),flush=True)
 
 
 if __name__=='__main__':main()

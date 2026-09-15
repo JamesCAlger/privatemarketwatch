@@ -1,0 +1,38 @@
+{
+  "status": "retired",
+  "reviewed_date": "2026-09-13",
+  "original_file": "_retired_column_remap.json",
+  "previous_file": "column_remap.json",
+  "original_sha256": "1d18582390d9d2381a26dc7d16c91d7c7b4665c9df1b2fb7c6265869803a5702",
+  "mechanism": "The alleged extraction gap is contradicted by both cached XBRL and the cited printed schedule. The raw cost and fair value are already in their correct columns. An issuer-only selector also includes a separate first-lien loan. Preserving reported zero cost exposed the old remap's destruction of negative fair value.",
+  "action": "Retire the whole unsupported remap, preserving its original bytes. No replacement numerical override, global filter or borrower aggregation.",
+  "sources": [
+    {
+      "path": "data/raw/filings/bdc_xbrl/1911066/000191106626000012.xml",
+      "sha256": "ca6b0c98b8206e3341310ef332e1120c786f657393cc2e545e30276e07025d32",
+      "contexts": ["c-499", "c-500"],
+      "unit_ref": "usd",
+      "unit_measure": "iso4217:USD"
+    },
+    {
+      "path": "data/raw/filings/bdc_html/1911066/000191106626000012.html",
+      "sha256": "86bf5c2c88af19c1cf4eadfa891228029b2c309b531c842c3ec045875f390d81",
+      "table_index": 63,
+      "row_indices": [13, 14],
+      "scale": "thousands"
+    }
+  ],
+  "source_values_usd": [
+    {"context": "c-499", "instrument": "First Lien Debt", "cost": 3918000, "fair_value": 3902000},
+    {"context": "c-500", "instrument": "First Lien Debt (Delayed Draw)", "cost": 0, "fair_value": -32000}
+  ],
+  "local_replay_before_retirement": {
+    "selected_positions": 2,
+    "fair_values_usd": [3918000, 0],
+    "source_fair_values_usd": [3902000, -32000],
+    "excess_fair_value_usd": 48000
+  },
+  "confidence": "High for these two source facts and retirement of this mechanism.",
+  "residual_risk": "The fresh complete candidate and source/quarter evaluations remain required. This does not certify other legacy corrections or the fund as a whole.",
+  "evidence_directory": "scratch/2026-09-12_programme_e0/source-boundary-diagnosis-v4"
+}

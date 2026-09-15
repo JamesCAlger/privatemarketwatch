@@ -39,7 +39,7 @@
       "shares_held": 200.0,
       "fair_value_currency": "USD",
       "cost_currency": "USD",
-      "asset_category": "EQUITY",
+      "asset_category": "OTHER",
       "issuer_category": "CORPORATE"
     },
     {
@@ -70,7 +70,7 @@
       "shares_held": 200.0,
       "fair_value_currency": "USD",
       "cost_currency": "USD",
-      "asset_category": "EQUITY",
+      "asset_category": "OTHER",
       "issuer_category": "CORPORATE"
     },
     {
@@ -85,7 +85,7 @@
       "shares_held": 200.0,
       "fair_value_currency": "USD",
       "cost_currency": "USD",
-      "asset_category": "EQUITY",
+      "asset_category": "OTHER",
       "issuer_category": "CORPORATE"
     }
   ],
@@ -107,7 +107,7 @@
       "quote": "Holdings already contains Apryse Software Corp Revolving Credit Facility rows and S4T Holdings Corp. Delayed Draw Term Loan rows, but not the missing Apryse term loan or S4T equity rows. In 2025-12-31, the Apryse term loan appears in holdings with clean dimensions and principal_amount=14775510, confirming the June and September Apryse term-loan staging rows are real positions whose earlier axis text was malformed."
     }
   ],
-  "rationale": "The target-quarter residual is an undercount caused by real source rows present in staging but absent from unified holdings. The two missing 2025-06-30 fair-value rows exactly bridge the validated anchor gap without deleting or rescaling any existing holding. The same extraction defect leaves the same S4T equity row out in 2025-09-30 and 2025-12-31 and leaves the Apryse term loan out in 2025-09-30; adding only these source-backed rows fixes the affected quarters and avoids touching earlier quarters where staging anti-joins are dominated by unrelated subtotal or axis artifacts.",
+  "rationale": "The target-quarter residual is an undercount caused by real source rows present in staging but absent from unified holdings. The two missing 2025-06-30 fair-value rows exactly bridge the validated anchor gap without deleting or rescaling any existing holding. The same extraction defect leaves the same S4T equity row out in 2025-09-30 and 2025-12-31 and leaves the Apryse term loan out in 2025-09-30; adding only these source-backed rows fixes the affected quarters and avoids touching earlier quarters where staging anti-joins are dominated by unrelated subtotal or axis artifacts. Reviewed 2026-09-13: Equity Units does not establish common versus preferred. Preserve the instrument description and values, and use OTHER pending source adjudication instead of an invalid enum or an unsupported common-equity assertion.",
   "confidence": 0.93,
   "measured_impact": {
     "2025-06-30": {

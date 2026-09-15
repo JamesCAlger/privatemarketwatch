@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
-from datetime import datetime, timezone
 import os
 from pathlib import Path
 import shutil
@@ -16,8 +15,8 @@ from pipeline.programme.core import (ContractError, atomic_json, contained, dige
                                      now, read_json, read_stage, record, seal, sha, verify_records)
 
 ROOT = Path(__file__).resolve().parents[2]
-LIMITS = {'unified': 5400, 'identity': 3600, 'evidence': 900}
-PARENTS = {'unified': None, 'identity': 'unified', 'evidence': 'identity'}
+STAGES = ('unified', 'identity', 'evidence','returns','frontend')
+PARENTS = {'unified': None, 'identity': 'unified', 'evidence': 'identity','returns':'identity','frontend':'returns'}
 LEGACY_DIRECTORIES = (
     'data/raw/sec_datasets/nport_quarterly', 'data/raw/filings/bdc_xbrl',
     'data/raw/filings/nport_xml', 'data/raw/filings/bdc_html',
@@ -35,6 +34,7 @@ def controller_code():
         'pipeline/programme/runner.py', 'pipeline/programme/core.py',
         'pipeline/programme/native.py', 'pipeline/programme/artifacts.py',
         'pipeline/programme/runtime_content.py',
+        'pipeline/programme/protection.py',
         'pipeline/output_schemas.py', 'pipeline/utils.py')}
 
 
@@ -85,11 +85,9 @@ def heavy_lock(candidate):
             path.unlink()
 
 
-def snapshot(candidate, base):
+def snapshot(candidate, base, *, current_code=False, sector_decisions=None,identity_registry=None,rule_inputs=(),retired_rules=()):
     if candidate.exists():
         raise ContractError('Snapshot already exists; choose a new immutable candidate')
-    if shutil.disk_usage(ROOT).free < 100 * 1024**3:
-        raise ContractError('Less than 100 GiB free disk')
     legacy = read_json(base / 'snapshot.json')
     if sha(base / 'snapshot.json') != read_json(base / 'snapshot_complete.json')['manifest_sha256']:
         raise ContractError('Starting snapshot manifest changed')
@@ -106,22 +104,96 @@ def snapshot(candidate, base):
         shutil.copy2(source, destination)
         if index % 200 == 0:
             print('Frozen inputs copied: ' + str(index + 1), flush=True)
-    for source in (ROOT / 'pipeline/programme').rglob('*'):
-        if source.is_file() and '__pycache__' not in source.parts and source.suffix in ('.py', '.json'):
-            relative = source.relative_to(ROOT).as_posix()
-            destination = contained(frozen, relative, existing=False)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
+    roots=('pipeline','schemas','scripts') if current_code else ('pipeline/programme',)
+    overlay=[]
+    for directory in roots:
+        if current_code:
+            # Remove only stale code copies inside this newly created candidate;
+            # cached data and the original frozen snapshot remain untouched.
+            for prior in (frozen/directory).rglob('*'):
+                if prior.is_file() and prior.suffix in ('.py','.json'):
+                    resolved=prior.resolve()
+                    if not resolved.is_relative_to(frozen.resolve()):
+                        raise ContractError('Frozen code path escaped candidate')
+                    if not (ROOT/prior.relative_to(frozen)).is_file():
+                        prior.unlink()
+        for source in (ROOT / directory).rglob('*'):
+            if source.is_file() and '__pycache__' not in source.parts and source.suffix in ('.py', '.json'):
+                relative = source.relative_to(ROOT).as_posix()
+                destination = contained(frozen, relative, existing=False)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                before=sha(source)
+                shutil.copy2(source, destination)
+                if sha(destination)!=before or sha(source)!=before:
+                    raise ContractError('Source changed during current-code snapshot: '+relative)
+                overlay.append(dict(path=relative,sha256=before))
+    if current_code:
+        relative='data/reference/quarter_acceptance_programme_thresholds.json'
+        (frozen/relative).parent.mkdir(parents=True,exist_ok=True)
+        shutil.copy2(ROOT/relative,frozen/relative)
+        overlay.append(dict(path=relative,sha256=sha(ROOT/relative)))
+        from pipeline.programme.source_snapshot import include_sources
+        source_inventory=include_sources(ROOT,frozen)
+        atomic_json(frozen/'data/reference/programme_source_inventory.json',source_inventory)
+    for review in retired_rules:
+        if not current_code: raise ContractError('Reviewed retirement requires current-code mode')
+        from pipeline.programme.rule_snapshot import include_retirement
+        overlay.append(include_retirement(ROOT,frozen,review))
+    for value in rule_inputs:
+        if not current_code: raise ContractError('Reviewed rule overlay requires current-code mode')
+        source=Path(value).resolve()
+        allowed=(ROOT/'data/overrides/agent_investigate_rules').resolve()
+        if not source.is_relative_to(allowed) or source.suffix!='.json':
+            raise ContractError('Rule overlay must name an existing investigate-rule JSON')
+        from pipeline.agent_rule import validate_rule
+        errors=validate_rule(read_json(source))
+        if errors: raise ContractError('Invalid reviewed rule overlay: '+repr(errors))
+        relative=source.relative_to(ROOT).as_posix()
+        destination=contained(frozen,relative)
+        prior=sha(destination);before=sha(source)
+        shutil.copy2(source,destination)
+        if sha(source)!=before or sha(destination)!=before: raise ContractError('Reviewed rule input changed during snapshot')
+        overlay.append(dict(path=relative,sha256=before,prior_sha256=prior,role='reviewed rule amendment; admission evaluated separately'))
+    if sector_decisions is not None:
+        if not current_code:
+            raise ContractError('Decision overlay requires current-code mode')
+        from pipeline.sector_enrichment import load_decisions
+        decision_path=Path(sector_decisions).resolve()
+        decision_bundle,membership=load_decisions(decision_path,frozen/'data/reference/gics_sub_industries.json')
+        for source,relative in ((decision_path,'data/reference/sector_enrichment/sector_decisions.json'),
+                                (membership,'data/reference/sector_enrichment/'+decision_bundle['membership']['path'])):
+            before=sha(source)
+            destination=contained(frozen,relative,existing=False)
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(source,destination)
+            if sha(source)!=before or sha(destination)!=before:
+                raise ContractError('Sector decision input changed during snapshot')
+            overlay.append(dict(path=relative,sha256=before))
+    if identity_registry is not None:
+        if not current_code: raise ContractError('Registry input requires current-code mode')
+        from pipeline.durable_identity import VERSION
+        import duckdb
+        source=Path(identity_registry).resolve()
+        before=sha(source)
+        with duckdb.connect(str(source),read_only=True) as con:
+            if con.execute('SELECT version FROM registry_meta').fetchall()!=[(VERSION,)]:
+                raise ContractError('Unsupported pinned identity registry')
+        relative='data/reference/identity_registry.duckdb'
+        destination=contained(frozen,relative,existing=False)
+        shutil.copy2(source,destination)
+        if sha(source)!=before or sha(destination)!=before:
+            raise ContractError('Registry input changed during snapshot')
+        overlay.append(dict(path=relative,sha256=before))
     shutil.copy2(ROOT / 'requirements-programme-windows.txt', frozen / 'requirements-programme-windows.txt')
     records = [record(frozen, p.relative_to(frozen).as_posix()) for p in sorted(frozen.rglob('*')) if p.is_file()]
-    if sum(item['bytes'] for item in records) > 12 * 1024**3:
-        raise ContractError('Snapshot exceeds 12 GiB')
     runtime = native.runtime_identity()
     atomic_json(candidate / 'runtime.json', runtime)
     manifest = dict(format_version=1, created_utc=now(), artifacts=records,
                     input_fingerprint=digest(records), starting_snapshot=legacy['input_fingerprint'],
                     existing_absent_controls=legacy.get('existing_absent_controls', []),
-                    runtime_fingerprint=digest(runtime), role='frozen legacy inputs plus supported runner; no financial rule changes')
+                    runtime_fingerprint=digest(runtime), current_code=current_code,code_overlay=overlay,
+                    role='frozen data plus current governed code; candidate only' if current_code
+                    else 'frozen legacy inputs plus supported runner; no financial rule changes')
     atomic_json(candidate / 'snapshot.json', manifest)
     atomic_json(candidate / 'snapshot_complete.json', dict(manifest_sha256=sha(candidate / 'snapshot.json')))
     print('Snapshot sealed: ' + manifest['input_fingerprint'], flush=True)
@@ -134,7 +206,10 @@ def verify_snapshot(candidate):
     if digest(manifest['artifacts']) != manifest['input_fingerprint']:
         raise ContractError('Snapshot content identity is malformed')
     verify_records(candidate / 'frozen', manifest['artifacts'], exact=True)
-    if digest(native.runtime_identity()) != manifest['runtime_fingerprint']:
+    runtime = read_json(candidate / 'runtime.json')
+    if digest(runtime) != manifest['runtime_fingerprint']:
+        raise ContractError('Recorded runtime identity changed')
+    if digest(native.runtime_for_record(runtime)) != manifest['runtime_fingerprint']:
         raise ContractError('Runtime changed since snapshot')
     return manifest
 
@@ -143,12 +218,16 @@ def stage_identity(candidate, stage, manifest, parent=None):
     parents = {} if parent is None else {PARENTS[stage]: {
         'attempt': parent.name, 'result_sha256': sha(parent / 'result.json'),
         'holdings_sha256': sha(parent / 'bundle/private_markets_holdings.csv')}}
+    if stage == 'frontend':
+        evidence=latest(candidate,'evidence',manifest)
+        parents['evidence']={'attempt':evidence.name,'result_sha256':sha(evidence/'result.json')}
     return identity(stage, manifest['input_fingerprint'], manifest['runtime_fingerprint'],
                     artifacts.contract_identity(stage), parents,
-                    dict(cash_leg_unchanged=True, contested_assignment=True, use_registry=False,
+                    dict(financial_contract='financial-contract.v2', contested_assignment=True, use_registry=True,
                          dotenv='empty candidate-local file; no ambient dotenv values',
                          controller_code=controller_code(),
-                         network=False, memory_limit_bytes=12 * 1024**3))
+                         protected_outputs='size-mtime-v1',
+                         network=False, memory_limit_bytes=None, time_limit_seconds=None))
 
 
 def latest(candidate, stage, manifest):
@@ -189,23 +268,50 @@ def prepare_attempt(candidate, name, *, minimal=False):
     return attempt
 
 
-def launch(attempt, seconds, fingerprint, *, probe=False):
+def stop_owned_worker(attempt):
+    """Wait for the identified worker, including explicit controller cancellation.
+
+    Killing the sandbox launcher alone does not prove its worker exited. PID
+    creation time prevents cleanup from terminating a later unrelated process.
+    """
     import psutil
-    command = native.command(attempt, seconds, probe=probe)
+    telemetry=Path(attempt)/'telemetry/worker.json'
+    if not telemetry.is_file(): return True
+    worker=read_json(telemetry)
+    try:
+        process=psutil.Process(worker['pid'])
+        if process.create_time()!=worker.get('process_created'):
+            if 'process_created' not in worker:
+                raise ContractError('Worker creation identity is missing; termination cannot be certified')
+            return True
+        process.kill()
+        process.wait()
+    except psutil.NoSuchProcess:
+        pass
+    return True
+
+
+def launch(attempt, fingerprint, *, probe=False, cancellation_probe=False):
+    import psutil
+    from pipeline.programme.protection import inventory, compare
+    command = native.command(attempt, probe=probe)
+    protected_before = inventory(ROOT)
+    atomic_json(attempt / 'protected_before.json', protected_before)
     started = time.monotonic()
     with (attempt / 'process.log').open('w', encoding='utf-8') as log:
         process = subprocess.Popen(command, cwd=attempt / 'workspace', env=native.environment(attempt),
             stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
         atomic_json(attempt / 'process.json', dict(controller_pid=os.getpid(), launcher_pid=process.pid,
-                    command=command, started_utc=now(), seconds=seconds, input_fingerprint=fingerprint))
+                    command=command, started_utc=now(), seconds=None, input_fingerprint=fingerprint))
         last = 0
         try:
             while process.poll() is None:
                 elapsed = time.monotonic() - started
-                if elapsed > seconds + 30:
+                if cancellation_probe and (attempt / 'telemetry/cancellation_ready.json').exists():
+                    stop_owned_worker(attempt)
                     process.kill()
-                    process.wait(timeout=15)
-                    raise TimeoutError('Native worker exceeded its shutdown allowance')
+                    process.wait()
+                    break
                 if elapsed - last >= 30:
                     last = elapsed
                     telemetry = attempt / 'telemetry/resources.json'
@@ -214,16 +320,32 @@ def launch(attempt, seconds, fingerprint, *, probe=False):
                           str(round(stats.get('private_bytes', 0) / 1024**3, 2)), flush=True)
                 time.sleep(1)
         finally:
+            cleanup_error=None
+            try:
+                stopped=stop_owned_worker(attempt)
+            except Exception as error:
+                stopped=False
+                cleanup_error=str(error)
             if process.poll() is None:
                 process.kill()
-                process.wait(timeout=15)
+                process.wait()
             telemetry = attempt / 'telemetry/worker.json'
             worker = read_json(telemetry) if telemetry.exists() else {}
-            stopped = not worker or not psutil.pid_exists(worker['pid'])
+            protected_after = inventory(ROOT)
+            atomic_json(attempt / 'protected_after.json', protected_after)
+            protected_result = compare(protected_before, protected_after)
+            protected_result.update(before_sha256=sha(attempt / 'protected_before.json'),
+                                    after_sha256=sha(attempt / 'protected_after.json'))
+            atomic_json(attempt / 'protected_result.json', protected_result)
             atomic_json(attempt / 'process_result.json', dict(exit_code=process.returncode,
                 elapsed_seconds=time.monotonic() - started, worker_stopped=stopped,
                 input_fingerprint=fingerprint, worker_pid=worker.get('pid'),
+                cleanup_error=cleanup_error,
+                protected_result_sha256=sha(attempt / 'protected_result.json'),
+                protected_outputs_unchanged=protected_result['unchanged'],
                 usage=dict(agent_tokens=None, reason='command-only process; agent telemetry unavailable')))
+    if not protected_result['unchanged']:
+        raise ContractError('Protected output inventory changed; attempt cannot complete')
     if process.returncode or not stopped:
         print((attempt / 'process.log').read_text(encoding='utf-8', errors='replace')[-5000:], flush=True)
         raise ContractError('Worker failed or termination not established; incomplete attempt retained')
@@ -235,6 +357,9 @@ def capture_runtime_reads(attempt):
     frozen_runtime = read_json(attempt.parents[1] / 'runtime.json')
     runtime_roots = [Path(root).resolve() for root in frozen_runtime['content_roots']]
     declared = {item['path']: item for item in frozen_runtime['content']}
+    policy = frozen_runtime.get('identity_policy', 'physical-content-v1')
+    if policy not in ('package-metadata-v1', 'physical-content-v1'):
+        raise ContractError('Unsupported runtime read ledger policy: ' + str(policy))
     for value in ledger['python_paths']:
         path = Path(value).resolve()
         if path.is_relative_to(attempt.resolve()) or not path.is_file():
@@ -242,15 +367,22 @@ def capture_runtime_reads(attempt):
         if not any(path.is_relative_to(root) for root in runtime_roots):
             raise ContractError('Undeclared external read: ' + str(path))
         item = dict(path=path.as_posix(), bytes=path.stat().st_size, sha256=sha(path))
-        if declared.get(item['path']) != item:
+        if ((policy == 'physical-content-v1' or item['path'] in declared)
+                and declared.get(item['path']) != item):
             raise ContractError('Runtime read was not pinned before execution: ' + str(path))
         results.append(item)
-    atomic_json(attempt / 'runtime_reads.json', dict(roots=[str(root) for root in runtime_roots], records=results))
+    atomic_json(attempt / 'runtime_reads.json', dict(roots=[str(root) for root in runtime_roots], records=results,
+        identity_policy=policy,
+        role='observed Python reads captured after execution; installed package contents are trusted'
+             if policy == 'package-metadata-v1' else 'observed Python reads verified against frozen physical inventory'))
 
 
 def verify_runtime_reads(attempt):
     record_set = read_json(attempt / 'runtime_reads.json')
     result = read_json(attempt / 'process_result.json')
+    if 'protected_result_sha256' in result:
+        from pipeline.programme.protection import verify
+        verify(attempt)
     if sha(attempt / 'runtime_reads.json') != result['runtime_reads_sha256']:
         raise ContractError('Runtime dependency ledger changed')
     runtime_roots = [Path(root).resolve() for root in record_set['roots']]
@@ -260,11 +392,7 @@ def verify_runtime_reads(attempt):
             raise ContractError('A consumed runtime dependency changed: ' + item['path'])
 
 
-def run(candidate, stage, seconds, *, deadline=None):
-    if seconds <= 0 or seconds > LIMITS[stage]:
-        raise ContractError('Invalid stage time allowance')
-    if deadline and (datetime.fromisoformat(deadline) - datetime.now(timezone.utc)).total_seconds() < seconds + 60:
-        raise ContractError('Stage cannot fit before the tranche deadline')
+def run(candidate, stage):
     with heavy_lock(candidate):
         manifest = verify_snapshot(candidate)
         canaries = list((candidate / 'attempts').glob('canary-*/canary_verified.json'))
@@ -272,7 +400,7 @@ def run(candidate, stage, seconds, *, deadline=None):
         if not any(proof.get('snapshot_fingerprint') == manifest['input_fingerprint'] and
                    proof.get('runtime_fingerprint') == manifest['runtime_fingerprint'] and
                    proof.get('controller_code') == controller_code() and
-                   proof.get('timeout_test') is False for proof in proofs):
+                   proof.get('cancellation_test') is False for proof in proofs):
             raise ContractError('This exact candidate/runtime needs a successful native canary first')
         verify_preflight(candidate, manifest)
         parent = latest(candidate, PARENTS[stage], manifest) if PARENTS[stage] else None
@@ -284,14 +412,18 @@ def run(candidate, stage, seconds, *, deadline=None):
                 verify_runtime_reads(previous)
                 print('Reused complete verified stage: ' + str(previous), flush=True)
                 return previous
-        if len(existing) >= 2:
-            raise ContractError('Initial attempt and one diagnosed retry already consumed')
         attempt = prepare_attempt(candidate, stage + '-' + str(len(existing) + 1).zfill(2))
         if parent:
-            shutil.copy2(parent / 'bundle/private_markets_holdings.csv', attempt / 'workspace/data/output/private_markets_holdings.csv')
-            shutil.copy2(parent / 'bundle/private_markets_holdings.parquet', attempt / 'workspace/data/output/private_markets_holdings.parquet')
+            for name in artifacts.required(PARENTS[stage]):
+                if name not in ('summary.json','read_ledger.json'):
+                    shutil.copy2(parent/'bundle'/name,attempt/'workspace/data/output'/name)
+        if stage == 'frontend':
+            evidence=latest(candidate,'evidence',manifest)
+            for name in artifacts.required('evidence'):
+                if name not in ('summary.json','read_ledger.json'):
+                    shutil.copy2(evidence/'bundle'/name,attempt/'workspace/data/output'/name)
         atomic_json(attempt / 'inputs.json', dict(stage=stage, identity=expected))
-        launch(attempt, seconds, expected['fingerprint'])
+        launch(attempt, expected['fingerprint'])
         if controller_code() != expected['controls']['controller_code']:
             raise ContractError('Controller code changed during execution; cannot seal')
         summary = read_json(attempt / 'bundle/summary.json')
@@ -310,7 +442,7 @@ def run(candidate, stage, seconds, *, deadline=None):
         import duckdb
         with duckdb.connect() as connection:
             connection.execute('SET threads=2')
-            connection.execute("SET memory_limit='4GB'")
+            connection.execute("SET memory_limit='-1'")
             connection.execute("SET temp_directory='" + (attempt / 'temp').as_posix().replace("'", "''") + "'")
             metadata = {name: artifacts.verify_pair(attempt / 'bundle' / name, connection)
                         for name in artifacts.STAGE_CSVS[stage]}
@@ -322,9 +454,10 @@ def run(candidate, stage, seconds, *, deadline=None):
 
 
 def verify_runtime_identity(candidate, manifest):
-    if digest(native.runtime_identity()) != manifest['runtime_fingerprint']:
-        raise ContractError('Complete runtime identity changed during execution')
-    if digest(read_json(candidate / 'runtime.json')) != manifest['runtime_fingerprint']:
+    runtime = read_json(candidate / 'runtime.json')
+    if digest(native.runtime_for_record(runtime)) != manifest['runtime_fingerprint']:
+        raise ContractError('Runtime identity changed during execution')
+    if digest(runtime) != manifest['runtime_fingerprint']:
         raise ContractError('Recorded runtime inventory changed')
 
 
@@ -338,7 +471,7 @@ def verify_preflight(candidate, manifest):
             verify_records(path.parent / 'bundle', proof['artifacts'], exact=True)
             verify_runtime_reads(path.parent)
             return proof
-    raise ContractError('This exact candidate needs a verified three-stage representative preflight')
+    raise ContractError('This exact candidate needs a verified representative preflight')
 
 
 def preflight(candidate):
@@ -348,7 +481,7 @@ def preflight(candidate):
         attempt = prepare_attempt(candidate, 'preflight-' + str(time.time_ns()))
         atomic_json(attempt / 'inputs.json', dict(stage='preflight',
             identity=dict(fingerprint=manifest['input_fingerprint'], parents={})))
-        launch(attempt, 600, manifest['input_fingerprint'])
+        launch(attempt, manifest['input_fingerprint'])
         if controller_code() != code:
             raise ContractError('Controller changed during preflight')
         verify_records(candidate / 'frozen', manifest['artifacts'], exact=True)
@@ -361,7 +494,7 @@ def preflight(candidate):
         process['runtime_reads_sha256'] = sha(attempt / 'runtime_reads.json')
         atomic_json(attempt / 'process_result.json', process)
         summary = read_json(attempt / 'bundle/preflight_summary.json')
-        if set(summary['stages']) != set(LIMITS):
+        if set(summary['stages']) != set(STAGES):
             raise ContractError('Representative preflight omitted a required stage')
         import duckdb
         with duckdb.connect() as connection:
@@ -374,7 +507,7 @@ def preflight(candidate):
         atomic_json(attempt / 'preflight_verified.json', dict(verified_utc=now(), controller_code=code,
             snapshot_fingerprint=manifest['input_fingerprint'], runtime_fingerprint=manifest['runtime_fingerprint'],
             artifacts=records, role='preflight only; not a candidate completion marker'))
-        print('Three-stage representative preflight verified: ' + str(attempt), flush=True)
+        print('Representative preflight verified: ' + str(attempt), flush=True)
 
 
 def digest_empty_file():
@@ -382,20 +515,21 @@ def digest_empty_file():
     return hashlib.sha256(b'').hexdigest()
 
 
-def canary(candidate, *, timeout=False):
+def canary(candidate, *, cancellation=False):
     code = controller_code()
     manifest = verify_snapshot(candidate)
     attempt = prepare_attempt(candidate, 'canary-' + str(time.time_ns()), minimal=True)
     names = ['protected-' + name for name in ('python', 'duckdb', 'arrow', 'delete', 'rename')]
     for name in names:
         (attempt / name).write_bytes(b'preserve me')
-    if timeout:
-        (attempt / 'timeout_probe').touch()
+    if cancellation:
+        (attempt / 'cancellation_probe').touch()
     try:
-        launch(attempt, 30 if timeout else 60, manifest['input_fingerprint'], probe=True)
+        launch(attempt, manifest['input_fingerprint'], probe=True, cancellation_probe=cancellation)
     except ContractError:
         result = read_json(attempt / 'process_result.json')
-        if not timeout or result['exit_code'] == 0 or result['worker_stopped'] is not True:
+        if (not cancellation or result['exit_code'] == 0 or result['worker_stopped'] is not True
+                or result.get('protected_outputs_unchanged') is not True):
             raise
     if not all((attempt / name).read_bytes() == b'preserve me' for name in names):
         raise ContractError('Canary protection failed: original content changed')
@@ -405,7 +539,7 @@ def canary(candidate, *, timeout=False):
         raise ContractError('Canary did not complete configuration smoke checks')
     if controller_code() != code:
         raise ContractError('Controller code changed during canary')
-    atomic_json(attempt / 'canary_verified.json', dict(verified_utc=now(), timeout_test=timeout,
+    atomic_json(attempt / 'canary_verified.json', dict(verified_utc=now(), cancellation_test=cancellation,
                 controller_code=code,
                 snapshot_fingerprint=manifest['input_fingerprint'], runtime_fingerprint=manifest['runtime_fingerprint'],
                 protected_canaries_unchanged=True, native_results=read_json(attempt / 'telemetry/canary.json'),
@@ -422,6 +556,9 @@ def restore(candidate, stage):
     shutil.copytree(source / 'bundle', target / 'bundle')
     for name in ('complete.json', 'result.json', 'process_result.json', 'runtime_reads.json'):
         shutil.copy2(source / name, target / name)
+    if read_json(source / 'process_result.json').get('protected_result_sha256'):
+        for name in ('protected_before.json', 'protected_after.json', 'protected_result.json'):
+            shutil.copy2(source / name, target / name)
     expected = read_json(source / 'result.json')['identity']
     read_stage(target, expected, artifacts.required(stage))
     verify_runtime_reads(target)
@@ -437,20 +574,24 @@ def main():
     parser.add_argument('action', choices=['snapshot', 'canary', 'preflight', 'run', 'verify', 'restore'])
     parser.add_argument('--candidate', required=True)
     parser.add_argument('--base', default='spec-close-20260909-v2')
-    parser.add_argument('--stage', choices=list(LIMITS), default='unified')
-    parser.add_argument('--seconds', type=int)
-    parser.add_argument('--deadline')
-    parser.add_argument('--timeout-probe', action='store_true')
+    parser.add_argument('--stage', choices=STAGES, default='unified')
+    parser.add_argument('--cancellation-probe', action='store_true')
+    parser.add_argument('--current-code', action='store_true',help='Freeze current pipeline/scripts/schemas over the recorded cached data')
+    parser.add_argument('--sector-decisions',type=Path,help='Pin an admitted P5 bundle and its observation membership')
+    parser.add_argument('--identity-registry',type=Path,help='Pin an immutable prior durable registry snapshot')
+    parser.add_argument('--rule-input',type=Path,action='append',default=[],help='Explicitly freeze a reviewed amendment to an existing investigate rule')
+    parser.add_argument('--retired-rule',type=Path,action='append',default=[],help='Explicitly freeze a source-reviewed B2 retirement, retaining original bytes')
     args = parser.parse_args()
     candidate = candidate_path(args.candidate)
     if args.action == 'snapshot':
-        snapshot(candidate, candidate_path(args.base))
+        snapshot(candidate, candidate_path(args.base),current_code=args.current_code,sector_decisions=args.sector_decisions,
+            identity_registry=args.identity_registry,rule_inputs=args.rule_input,retired_rules=args.retired_rule)
     elif args.action == 'canary':
-        canary(candidate, timeout=args.timeout_probe)
+        canary(candidate, cancellation=args.cancellation_probe)
     elif args.action == 'preflight':
         preflight(candidate)
     elif args.action == 'run':
-        run(candidate, args.stage, args.seconds or LIMITS[args.stage], deadline=args.deadline)
+        run(candidate, args.stage)
     elif args.action == 'restore':
         restore(candidate, args.stage)
     else:

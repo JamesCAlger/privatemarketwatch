@@ -227,16 +227,32 @@ def load_promoted_corrections(corrections_dir: Optional[Path] = None) -> list[di
             else config.AGENT_B2_CORRECTIONS_DIR)
     out: list[dict] = []
     for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        from pipeline.rule_admission import admitted
+        if not admitted(p,base):
+            continue
         try:
             leaf = json.loads(p.read_text(encoding="utf-8-sig"))
         except (OSError, json.JSONDecodeError) as exc:
             logger.warning("promoted correction unreadable, skipped: %s (%s)", p, exc)
             continue
         if isinstance(leaf, dict):
+            if leaf.get("fix_class") == "classification_fix":
+                from pipeline.correction_leaf import classification_value_errors
+                errors = classification_value_errors(leaf.get("template"))
+                if errors:
+                    from pipeline.rule_admission import reject_contract
+                    reject_contract(p, "; ".join(errors))
+                    logger.warning("promoted classification correction rejected: %s (%s)",
+                                   p, "; ".join(errors))
+                    continue
             out.append(leaf)
     return out
 
 
+from pipeline.correction_execution import scoped,ordered_rules
+
+
+@scoped
 def apply_promoted_stage2_corrections(
     combined: pd.DataFrame, corrections: list[dict],
 ) -> tuple[pd.DataFrame, list[dict]]:
@@ -304,7 +320,8 @@ def apply_promoted_stage2_corrections(
             from pipeline.unified_holdings import _assign_row_ids
             corrected = _assign_row_ids(corrected.copy())
             _jit_row_id = True
-        for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
+        from pipeline.agent_b2_appliers import ordered_corrections
+        for c in ordered_corrections(by_cik[cik]):
             fc = str(c.get("fix_class"))
             from pipeline.agent_b2_appliers import apply_scoped
             _before = corrected[
@@ -328,8 +345,8 @@ def apply_promoted_stage2_corrections(
                            "drift": ("noop" if status == "ok" and rows == 0 else ""),
                            "message": str(audit.get("message") or "")})
             if status != "ok":
-                logger.warning("promoted b2 correction %s (cik=%s) did not apply: %s",
-                               fc, cik, audit.get("message"))
+                raise ValueError("Promoted B2 correction failed: " + fc + " (cik=" + cik + "): "
+                                 + str(audit.get("message") or status))
         if _jit_row_id:
             # transient selector anchor only -- the end-of-build assignment owns the
             # published column; keeping it here would raggedly concat with untouched rows
@@ -421,13 +438,15 @@ def apply_raw_staging_exclusions(con, exclusions: list[dict]) -> list[dict]:
 def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict]]:
     """{cik10: [rules]} from ``<dir>/<cik>/<rule_id>.json``.
 
-    Within a CIK, rules apply in sorted-filename order -- the same order
-    ``agent_rule.load_rules`` used when B3 gated them, so production application
-    preserves gate-time semantics.
+    Production and verifier use the same semantic order in agent_rule.apply_rules;
+    explicit dependencies govern overlapping value writers.
     """
     base = Path(rules_dir) if rules_dir is not None else config.AGENT_INVESTIGATE_RULES_DIR
     out: dict[str, list[dict]] = {}
     for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        from pipeline.rule_admission import admitted
+        if not admitted(p,base):
+            continue
         # Operator pull convention: rules quarantined into `_pulled_<reason>_<date>/`
         # are retired from production application. Without this guard the dir name
         # normalizes into a garbage CIK (e.g. 0020260722) and the pulled rule keeps
@@ -481,6 +500,7 @@ def _drift(rule: dict, applied_rows: int) -> str:
     return ""
 
 
+@scoped
 def apply_promoted_rules(
     combined: pd.DataFrame, rules_by_cik: dict[str, list[dict]],
 ) -> tuple[pd.DataFrame, list[dict]]:
@@ -503,7 +523,7 @@ def apply_promoted_rules(
     replaced_parts: list[pd.DataFrame] = []
     drop_mask = pd.Series(False, index=combined.index)
     for cik in sorted(rules_by_cik):
-        rules = rules_by_cik[cik]
+        rules = ordered_rules(rules_by_cik[cik])
         mask = (cik_norm == cik) & is_bdc
         sub = combined.loc[mask]
         if sub.empty:
@@ -543,11 +563,20 @@ def apply_promoted_rules(
         # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
         # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
         # added row can never orphan out of its filer.
-        added = corrected["cik"].isna()
+        # An added row may already carry its CIK. Detect it from the ordinal
+        # rather than using missing CIK as a proxy for row creation.
+        added = corrected["_cf_ord"].isna()
         if added.any():
+            supplied_cik = corrected["cik"].fillna("").astype(str).str.replace(r"\D", "", regex=True)
+            wrong_cik = added & supplied_cik.ne("") & supplied_cik.str.zfill(10).ne(cik)
+            if wrong_cik.any():
+                raise ValueError("Added position CIK conflicts with promoted rule scope: " + cik)
             corrected.loc[added, "cik"] = cik
             if "source" in corrected.columns:
-                corrected.loc[added & corrected["source"].isna(), "source"] = "bdc"
+                source = corrected["source"].fillna("").astype(str)
+                if (added & source.ne("") & source.ne("bdc")).any():
+                    raise ValueError("Added position source conflicts with promoted BDC rule scope: " + cik)
+                corrected.loc[added & source.eq(""), "source"] = "bdc"
             if "entity_name" in corrected.columns:
                 names = sub["entity_name"].dropna() if "entity_name" in sub.columns else []
                 if len(names):
@@ -624,6 +653,33 @@ def apply_promoted_rules(
 
 
 # --------------------------------------------------------------------------- audit artifact
+
+@scoped
+def apply_promoted_plan(combined,corrections,rules_by_cik):
+    """Shared mixed-family plan: roster, values, then matching classification."""
+    from pipeline.correction_leaf import stage_for
+    def b2_rank(c):
+        kind=c.get('fix_class')
+        if kind=='missing_position_add': return 2
+        if stage_for(str(kind))==1: return 1
+        if kind=='classification_fix': return 4
+        return 3
+    def rule_rank(r):
+        if r.get('rule_type') in ('row_exclusion','dedup'): return 1
+        return 2 if r.get('rule_type')=='row_add' else 3
+    audits=[]
+    for rank in (1,2,3,4):
+        selected=[c for c in corrections if b2_rank(c)==rank]
+        if selected:
+            combined,rows=apply_promoted_stage2_corrections(combined,selected)
+            audits.extend(rows)
+        selected_rules={cik:[r for r in rules if rule_rank(r)==rank] for cik,rules in rules_by_cik.items()}
+        selected_rules={cik:rules for cik,rules in selected_rules.items() if rules}
+        if selected_rules:
+            combined,rows=apply_promoted_rules(combined,selected_rules)
+            audits.extend(rows)
+    return combined,audits
+
 
 def write_application_audit(audit_rows: list[dict], path: Path) -> None:
     """Persist the per-rebuild application audit (small frame; pandas is fine)."""

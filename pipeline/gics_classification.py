@@ -736,7 +736,12 @@ def _apply_gics_to_holdings(
     for col in UNIFIED_COLUMNS:
         if col not in result.columns:
             result[col] = ""
-    result = result[[c for c in UNIFIED_COLUMNS if c in result.columns]]
+    # The enrichment command also consumes finalized observations. Preserve
+    # their immutable source anchors; rebuilding identity cannot recover them
+    # after a projection drops these two post-staging columns.
+    ordered=[c for c in UNIFIED_COLUMNS if c in result.columns]
+    ordered.extend(c for c in ("row_id","row_id_basis") if c in result.columns and c not in ordered)
+    result = result[ordered]
 
     return result
 
@@ -883,7 +888,11 @@ def classify_gics(
                 classified, total, 100 * classified / total if total else 0)
 
     # Save
-    result.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
+    from pipeline.holdings_finalizer import finalize_enriched_holdings
+    result, _ = finalize_enriched_holdings(result, holdings_file=UNIFIED_HOLDINGS_FILE)
+    # Keep this API's established empty-string representation. The written CSV
+    # and typed Parquet already represent the same missing classification.
+    result["gics_sub_industry"] = result["gics_sub_industry"].fillna("")
     logger.info("  Saved to %s", UNIFIED_HOLDINGS_FILE.name)
 
     elapsed = time.time() - t0

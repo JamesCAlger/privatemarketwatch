@@ -12,6 +12,15 @@ def columns(text, overrides=None):
 
 
 EXTRA_SCHEMAS = {
+    'sector_enrichment_audit.csv': columns('row_id,decision_id,value,status,derivation'),
+    'input_admission_audit.csv': columns('path,admission_status,loaded,reason,sha256',{'loaded':'BOOLEAN'}),
+    'spread_unit_audit.csv': columns('row_id,cik,report_date,identifier,expected_pct,actual_pct',
+        {'report_date':'DATE','expected_pct':'DOUBLE','actual_pct':'DOUBLE'}),
+    'financial_state_audit.csv': columns('row_id,cost_state,donor_valid,source_cost_value,source_rate_value,rate_kind,coupon_state,maturity_precision',
+        {'donor_valid':'BOOLEAN','source_cost_value':'DOUBLE','source_rate_value':'DOUBLE'}),
+    'financial_nav_audit.csv': columns('cik,report_date,net_assets,source_sha256,status',{'report_date':'DATE','net_assets':'DOUBLE'}),
+    'cost_donor_audit.csv': columns('row_id,method,donor_row_id,donor_date,donor_release,proxy_value',{'donor_date':'DATE','proxy_value':'DOUBLE'}),
+    'identity_aliases.csv': columns('kind,scope,legacy_id,identity_id'),
     'agent_fix_application_audit.csv': columns(
         'layer,cik,rule_id,rule_type,status,rows_changed,fv_affected,authoring_rows,authoring_fv,drift,message',
         {'rows_changed': 'BIGINT', 'fv_affected': 'DOUBLE', 'authoring_rows': 'BIGINT', 'authoring_fv': 'DOUBLE'}),
@@ -30,20 +39,34 @@ EXTRA_SCHEMAS = {
 }
 SCHEMAS = {**OUTPUT_SCHEMAS, **EXTRA_SCHEMAS}
 STAGE_CSVS = {
-    'unified': ('private_markets_holdings.csv', 'agent_fix_application_audit.csv'),
+    'unified': ('private_markets_holdings.csv', 'bdc_holdings.csv','agent_fix_application_audit.csv',
+                'financial_state_audit.csv','financial_nav_audit.csv','input_admission_audit.csv','spread_unit_audit.csv'),
     'identity': ('private_markets_holdings.csv', 'position_matches.csv', 'position_id_edges.csv',
-                 'entity_lookup.csv', 'entity_resolution_stats.csv'),
+                 'entity_lookup.csv', 'entity_resolution_stats.csv','financial_state_audit.csv',
+                 'financial_nav_audit.csv','cost_donor_audit.csv','identity_aliases.csv','sector_enrichment_audit.csv'),
     'evidence': ('position_pik_status.csv', 'pik_transitions.csv', 'pik_schedule_proxy_summary.csv',
                  'pik_schedule_proxy_transitions.csv'),
+    'returns': ('private_markets_holdings.csv','position_returns.csv'),
+    'frontend': (),
 }
+STAGE_FILES={
+    'unified':('financial_contract.json','fund_financials.csv','source_refresh.json'),
+    'identity':('financial_contract.json','identity_contract.json','identity_registry.duckdb','holdings_release.json','fund_financials.csv'),
+    'evidence':(),
+    'returns':('holdings_release.json','index_returns.csv','fund_financials.csv'),
+    'frontend':('frontend_data.zip','frontend_export.json'),
+}
+# Export consumes the identity-bound provenance alongside the return series.
+STAGE_FILES['returns'] += tuple(name for name in STAGE_FILES['identity']
+    if name not in STAGE_FILES['returns']) + ('cost_donor_audit.csv','sector_enrichment_audit.csv')
 
 
 def contract_identity(stage):
-    return digest({name: list(SCHEMAS[name].items()) for name in STAGE_CSVS[stage]})
+    return digest(dict(csv={name:list(SCHEMAS[name].items()) for name in STAGE_CSVS[stage]},files=STAGE_FILES[stage]))
 
 
 def required(stage):
-    return ['summary.json', 'read_ledger.json'] + [name for csv_name in STAGE_CSVS[stage]
+    return ['summary.json', 'read_ledger.json'] + list(STAGE_FILES[stage]) + [name for csv_name in STAGE_CSVS[stage]
             for name in (csv_name, str(Path(csv_name).with_suffix('.parquet')))]
 
 

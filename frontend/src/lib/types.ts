@@ -88,6 +88,11 @@ export interface PortfolioCharacteristics {
   portfolioFv?: number | null;
   /** Fair value by index classification at the as-of quarter (sums to portfolioFv). */
   classificationFv?: Record<string, number> | null;
+  /** Server-side partition of every cohort holding, including signed FV. */
+  instrumentBreakdown?: { label: string; totalFv: number; fairValueExact: string; pctOfTotal: number; positionCount: number }[];
+  fairValueExact?: string;
+  portfolioPositionCount?: number;
+  missingFairValueCount?: number;
   wac: number | null;
   was: number | null;
   wam: number | null;

@@ -16,7 +16,7 @@ OUTPUT = ROOT / 'docs/production_stack/programme_tranche_evidence_2026-09-10/run
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=False)
-    timer = threading.Timer(600, lambda: os._exit(124)); timer.daemon=True; timer.start()
+    
     started=time.monotonic()
     runtime=read_json(CANDIDATE/'runtime.json')
     ledger=read_json(ATTEMPT/'bundle/read_ledger.json')
@@ -58,7 +58,7 @@ def main():
         inputs=[record(ROOT,path.relative_to(ROOT).as_posix()) for path in
             (CANDIDATE/'runtime.json',ATTEMPT/'bundle/read_ledger.json',ATTEMPT/'process_result.json')])
     atomic_json(OUTPUT/'result.json',report)
-    timer.cancel()
+    
     print('Runtime closure: '+str(checked)+' external paths; '+str(len(omissions))+
         ' omitted; '+str(len(changes))+' changed declared paths. Result remains unsealed.',flush=True)
 

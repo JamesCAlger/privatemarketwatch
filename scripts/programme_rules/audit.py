@@ -2,7 +2,7 @@
 
 Usage: python scripts/programme_rules/audit.py --output scratch/<session>/run1
 Outputs: static authority register, asset inventory, code sites, runtime probes.
-Max 240 seconds, 1 GB/two threads per in-memory DuckDB connection, <=20 fixture
+No elapsed or memory cap; two threads per in-memory DuckDB connection, <=20 fixture
 rows per replay, <=10,000 inventory rows. Not a full rebuild or acceptance test.
 """
 from __future__ import annotations
@@ -414,9 +414,6 @@ def main():
         raise ValueError('Use a new output directory; evidence is immutable')
     OUT.mkdir(parents=True)
     started = datetime.now(timezone.utc).isoformat()
-    timer = threading.Timer(240,lambda: os._exit(124))
-    timer.daemon=True
-    timer.start()
     print('Snapshot protected artifact metadata',flush=True)
     before = protected_stats()
     real_open, real_io_open = builtins.open, io.open
@@ -462,7 +459,7 @@ def main():
                     raise RuntimeError('Only in-memory DuckDB permitted')
                 con=original_connect(*args,**kwargs)
                 con.execute("SET threads=2")
-                con.execute("SET memory_limit='1GB'")
+                con.execute("SET memory_limit='-1'")
                 con.execute("SET temp_directory=''")
                 return GuardedConnection(con)
             guard.enter_context(patch.object(duckdb,'connect',limited_connect))
@@ -505,7 +502,6 @@ def main():
         emit('input_manifest.csv',list(INPUTS.values()))
         emit('run_summary.json',summary)
         emit('worktree.json',subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).splitlines())
-        timer.cancel()
     print(json.dumps({k:summary[k] for k in ('status','protected_files','protected_artifact_drift','pinned_input_drift')},sort_keys=True),flush=True)
     if summary['status']!='complete' or drift or input_drift or summary.get('unresolved_function_names'):
         print(summary.get('error') or str(summary.get('unresolved_function_names')),flush=True)

@@ -3016,6 +3016,23 @@ def test_coherence_catches_bad_fallback_regex():
     assert any("fallback_family_patterns[0]" in i for i in issues)
 
 
+@pytest.mark.parametrize("pattern", [r"[\x{2013}\x{2014}]", r"\u2013", r"(?:loan|equity)"])
+def test_coherence_staging_uses_duckdb_regex_and_runtime_unicode_decode(pattern):
+    raw = {"staging": {"strategy": "prefix_strip", "hierarchy_prefix_re": pattern}}
+    assert validate_wrapper_json_coherence(raw) == []
+
+
+@pytest.mark.parametrize("pattern", [r"(?<=a)b", r"(a)\1", r"\x{NOT_HEX}", "[broken("])
+def test_coherence_rejects_unsupported_staging_regex_features(pattern):
+    raw = {"staging": {"strategy": "prefix_strip", "hierarchy_prefix_re": pattern}}
+    assert any("hierarchy_prefix_re is not a valid regex for DuckDB" in issue
+               for issue in validate_wrapper_json_coherence(raw))
+
+
+def test_coherence_dispatch_keeps_python_regex_features():
+    assert validate_wrapper_json_coherence({"dispatch": {"canonical_strip_re": r"(?<=a)b"}}) == []
+
+
 def test_coherence_catches_fallback_family_missing_leaf_markers():
     """Fallback family with no leaf markers is flagged as warning."""
     raw = {

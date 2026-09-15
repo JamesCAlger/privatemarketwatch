@@ -117,6 +117,12 @@ def _field_sql(field: str, source_col: str) -> str:
 
     published = f"TRY_CAST({field} AS DOUBLE)"
     expected = f"({raw} * {dec} * {cik_fix} * {stag})"
+    if field == 'interest_rate':
+        expected = f"({expected} + CASE WHEN {ev} LIKE '%interest_rate:cash_plus_pik%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
+    unresolved_coupon = (
+        f"WHEN {ev} LIKE '%interest_rate:coupon_unresolved%' THEN CASE WHEN {published} IS NULL THEN 'unresolved_coupon' ELSE 'fail' END"
+        if field == 'interest_rate' else ''
+    )
 
     # marker: match field name in comma-joined or semicolon-joined list columns
     def marker(col: str) -> str:
@@ -156,12 +162,13 @@ def _field_sql(field: str, source_col: str) -> str:
            {expected} AS expected,
            CASE
              WHEN {marker('corrected_fields')}    THEN 'corrected'
-             WHEN {pathway} = 'derived_proxy'     THEN 'derived'
+             WHEN {pathway} IN ('derived_proxy','first_observed_fv_proxy') THEN 'derived'
              WHEN {pathway} = 'identifier_text'   THEN 'text_pathway'
              WHEN {marker('src_filled_fields')}   THEN 'filled_field'
              WHEN {marker('src_conflict_fields')} THEN 'merged_conflict'
              WHEN COALESCE(CAST(src_context_id AS VARCHAR), '') = ''
                THEN 'no_provenance'
+             {unresolved_coupon}
              WHEN {published} IS NULL AND {raw} IS NULL AND NOT {has_event}
                THEN 'pass_trivial'
              WHEN {neg_null}
@@ -255,7 +262,7 @@ def cheap_tier(
 # ---------------------------------------------------------------------------
 
 # cheap_status values that short-circuit full-tier (no filing access needed).
-_SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway",
+_SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway", "unresolved_coupon",
                              "filled_field", "merged_conflict", "no_provenance",
                              "undeclared"})
 
@@ -352,6 +359,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
         wanted_ctx = set(grp["src_context_id"].astype(str))
         # facts[ctx][col] = (local_name, raw_text)  first-wins per col
         facts: dict[str, dict[str, tuple[str, str]]] = {}
+        fact_variants: dict[tuple[str,str],set[tuple[str,str]]] = {}
         seen_ctx: set[str] = set()
 
         for elem in tree.getroot().iter():
@@ -367,6 +375,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
             if col is None:
                 continue
             ctx_facts = facts.setdefault(ctx, {})
+            fact_variants.setdefault((ctx,local),set()).add((raw_text,elem.get('unitRef','')))
             # first-wins by column name (extractor rule)
             ctx_facts.setdefault(col, (local, raw_text))
             # also index by exact localname so declared-c lookups work
@@ -384,6 +393,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 # Resolve declared concept + x events from src_facts JSON.
                 declared_c = ""
                 x_events: list = []
+                sf = {}
                 try:
                     sf = json.loads(str(r.get("src_facts") or "") or "{}")
                     field_sf = sf.get(field) or {}
@@ -414,12 +424,26 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                         * _staging_multiplier(field, str(r.get("declared_events") or "")))
                 neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
                 published = r["published"]
+                expected_value=instance_raw*mult
+                if field=='interest_rate' and 'interest_rate:cash_plus_pik' in str(r.get('declared_events') or ''):
+                    pik_sf=sf.get('pik_rate') or {}
+                    pik_concept=str(pik_sf.get('c') or '').lower()
+                    pik_hit=ctx_facts.get('__local__'+pik_concept) if pik_concept else ctx_facts.get('pik_rate')
+                    if pik_hit is None or len(fact_variants.get((ctx,pik_hit[0]),set()))!=1:
+                        out.at[i,'full_status']='source_unavailable'
+                        continue
+                    pik_raw=_parse_fact_value('pik_rate',pik_hit[1])
+                    if not isinstance(pik_raw,(int,float)):
+                        out.at[i,'full_status']='source_unavailable'
+                        continue
+                    expected_value += (pik_raw*_extractor_multiplier(list(pik_sf.get('x') or []))
+                        *_staging_multiplier('pik_rate',str(r.get('declared_events') or '')))
 
                 if neg_null:
                     pub_ok = pd.isna(published) and instance_raw < 0
                 else:
                     pub_ok = (not pd.isna(published)
-                              and _numbers_close(instance_raw * mult, float(published)))
+                              and _numbers_close(expected_value, float(published)))
                     if (not pub_ok and field == "pct_of_net_assets"
                             and not pd.isna(published)):
                         # Rounding-aware sense-check tolerance (see PCT_SENSE_TOL_PP)
@@ -462,6 +486,7 @@ _CHEAP_REASON: dict[str, str] = {
     "merged_conflict": "merged_context_excluded",
     "no_provenance":   "no_provenance",
     "undeclared":      "no_provenance",
+    "unresolved_coupon": "financial_convention_unresolved",
 }
 
 _FULL_REASON: dict[str, str] = {

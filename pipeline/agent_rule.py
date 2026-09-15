@@ -32,6 +32,7 @@ from pathlib import Path
 
 import duckdb
 import pandas as pd
+from pipeline.correction_execution import scoped,claim,ordered_rules,CorrectionConflict
 
 from pipeline.agent_b_held_out import GateResult, gate_correction
 
@@ -491,6 +492,7 @@ _APPLIERS = {"row_exclusion": _apply_exclusion, "value_rescale": _apply_rescale,
              "value_expression": _apply_value_expression}
 
 
+@scoped
 def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list[dict]]:
     """Apply validated rules (row_exclusion / value_rescale / dedup) to one CIK's holdings, in
     order. Pure; trial-only. Per-rule PER-QUARTER audit -- never a blanket cross-quarter number.
@@ -500,7 +502,7 @@ def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list
     work = df.reset_index(drop=True).copy()
     work["_rid"] = range(len(work))
     audits: list[dict] = []
-    for r in rules:
+    for r in ordered_rules(rules):
         errs = validate_rule(r)
         if errs:
             audits.append({"rule_id": r.get("rule_id"), "status": "invalid", "errors": errs})
@@ -511,7 +513,11 @@ def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list
                            "message": f"unsupported rule_type {r.get('rule_type')!r}"})
             continue
         try:
+            previous=work.copy()
             work, audit = applier(work, r)
+            if audit.get('status')=='ok': work=claim(previous,work,r)
+        except CorrectionConflict:
+            raise
         except Exception as exc:
             audit = {"rule_id": r.get("rule_id"), "status": "error", "message": str(exc)}
         # No-op flag: a rule that matched/changed ZERO rows is a non-fix. Surfaced so the loop can

@@ -16,7 +16,7 @@ SCRATCH = ROOT/'scratch/2026-09-10_verification_investigation'
 
 
 def main():
-    timer = threading.Timer(180, lambda: os._exit(124)); timer.daemon = True; timer.start()
+    
     investigation = EVIDENCE/'verification-investigation-v1'
     verify_records(investigation, read_json(investigation/'complete.json')['artifacts'],
                    exact=True, ignored_prefixes=('complete.json',))
@@ -68,7 +68,7 @@ def main():
     atomic_json(out/'complete.json', dict(recorded_utc=now(), artifacts=[record(out, path.relative_to(out).as_posix())
         for path in sorted(out.rglob('*')) if path.is_file()]))
     print('Investigation evidence, documents, syntax, browser and owner comments verified.', flush=True)
-    timer.cancel()
+    
 
 
 if __name__ == '__main__':

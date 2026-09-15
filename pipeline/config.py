@@ -350,6 +350,7 @@ PIK_SCHEDULE_PROXY_TRANSITIONS_FILE = OUTPUT_DIR / "pik_schedule_proxy_transitio
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
 GICS_HIERARCHY_FILE = REFERENCE_DIR / "gics_hierarchy.json"
+GICS_ENRICHMENT_DECISIONS_FILE = REFERENCE_DIR / "sector_enrichment" / "sector_decisions.json"
 GICS_LABEL_CACHE_FILE = OUTPUT_DIR / "gics_label_cache.csv"
 COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
 

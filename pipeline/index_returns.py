@@ -24,28 +24,9 @@ from pipeline.config import (
 
 logger = logging.getLogger(__name__)
 
-# All-in-coupon classification from the FRED-anchored rate-convention gate.
-# For these CIKs interest_rate already includes disclosed PIK, so the additive
-# PIK term in the income formula would double-count. (Shadow diagnostic input;
-# the classification should eventually graduate to first-class fund metadata.)
-RATE_CONVENTION_GATE_FILE = OUTPUT_DIR / "shadow" / "bdc_rate_convention_gate.csv"
-
-
-def _load_all_in_ciks() -> pd.DataFrame:
-    """Return a one-column ('cik', 10-digit) frame of all_in_coupon filers.
-
-    Empty (no suppression) if the gate output is absent, so production never
-    hard-depends on the shadow artifact being present.
-    """
-    if RATE_CONVENTION_GATE_FILE.exists():
-        g = pd.read_csv(RATE_CONVENTION_GATE_FILE, dtype=str)
-        allin = g.loc[g["status"] == "all_in_coupon", ["cik"]].copy()
-        allin["cik"] = allin["cik"].str.zfill(10)
-        logger.info("Loaded %d all_in_coupon filers from %s (PIK suppressed in income)",
-                    len(allin), RATE_CONVENTION_GATE_FILE.name)
-        return allin
-    logger.info("No rate-convention gate output; additive PIK applied to all filers")
-    return pd.DataFrame(columns=["cik"])
+# All final matched rates follow financial-contract.v2: supported all-in coupon.
+# Legacy convention and PIK arguments remain accepted for diagnostic callers;
+# they cannot alter, complete, or add to the stored all-in coupon.
 
 
 # Minimum constituents for a valid index quarter
@@ -107,85 +88,33 @@ def compute_returns(
             "cik", "quarter", "effective_uplift",
         ])
 
-    # Load unified holdings PIK data from disk if not provided
+    # PIK is diagnostic only and joins on position identity. Borrower names
+    # would fan out a single return across distinct loan tranches.
     if unified_pik_df is None:
-        unified_pik_df = pd.DataFrame(columns=[
-            "cik", "report_date", "issuer_name", "pik_rate",
-        ])
+        unified_pik_df=pd.DataFrame(columns=['cik','source','report_date','position_id','pik_rate'])
         if UNIFIED_HOLDINGS_FILE.exists():
-            _udf = pd.read_csv(
-                UNIFIED_HOLDINGS_FILE, dtype=str,
-                usecols=["cik", "report_date", "issuer_name", "pik_rate"],
-            )
-            # Only keep rows with non-null pik_rate for efficiency
-            _udf = _udf[_udf["pik_rate"].notna() & (_udf["pik_rate"] != "")]
-            if not _udf.empty:
-                unified_pik_df = _udf
-                logger.info("Loaded %d rows with pik_rate from unified holdings",
-                            len(unified_pik_df))
-
-    con = duckdb.connect()
-    # Floating-point reductions can vary at the last digits under parallel
-    # aggregation.  The refactor parity gate is byte-level, so keep this
-    # deterministic.
-    con.execute("PRAGMA threads=1")
-    if all_in_ciks_df is None:
-        all_in_ciks_df = _load_all_in_ciks()
-
-    con.register("matches", matches_df)
-    con.register("fee_uplift", fee_uplift_df)
-    con.register("unified_pik", unified_pik_df)
-    con.register("rate_convention", all_in_ciks_df)
+            unified_pik_df=pd.read_csv(UNIFIED_HOLDINGS_FILE,dtype=str,
+                usecols=['cik','source','report_date','position_id','pik_rate'])
+    if not {'source','position_id'}.issubset(unified_pik_df.columns):
+        unified_pik_df=pd.DataFrame(columns=['cik','source','report_date','position_id','pik_rate'])
+    con=duckdb.connect(config={'threads':1,'memory_limit':'-1'})
+    con.register('matches',matches_df);con.register('fee_uplift',fee_uplift_df);con.register('unified_pik',unified_pik_df)
+    if con.execute("SELECT count(*) FROM (SELECT cik,quarter FROM fee_uplift GROUP BY ALL HAVING count(*)>1)").fetchone()[0]:
+        raise ValueError('Repeated fee uplift denominator')
+    if con.execute("""SELECT count(*) FROM (SELECT cik,source,position_id,report_date FROM unified_pik
+        WHERE coalesce(position_id,'')<>'' GROUP BY ALL HAVING count(*)>1)""").fetchone()[0]:
+        raise ValueError('Repeated position/date PIK diagnostics')
 
     # ------------------------------------------------------------------
     # Position-level returns
     # ------------------------------------------------------------------
     position_sql = f"""
     WITH
-    -- Derive implied SOFR per quarter from filers reporting both rate and spread
-    implied_sofr AS (
-        SELECT
-            begin_quarter,
-            MEDIAN(TRY_CAST(begin_interest_rate AS DOUBLE)
-                   - TRY_CAST(begin_basis_spread AS DOUBLE)) AS sofr
-        FROM matches
-        WHERE index_classification = 'DIRECT_LENDING'
-          AND TRY_CAST(begin_interest_rate AS DOUBLE) > 0
-          AND TRY_CAST(begin_basis_spread AS DOUBLE) > 0
-          AND TRY_CAST(begin_interest_rate AS DOUBLE)
-              > TRY_CAST(begin_basis_spread AS DOUBLE)
-        GROUP BY begin_quarter
-    ),
-    -- PIK rate lookup: pre-compute for join
     pik_lookup AS (
-        SELECT CAST(cik AS VARCHAR) AS _pk_cik,
-               CAST(report_date AS VARCHAR) AS _pk_date,
-               LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _pk_name,
-               TRY_CAST(pik_rate AS DOUBLE) AS pik_val
-        FROM unified_pik
-    ),
-    -- Same-filer median rate: fallback for positions with neither rate nor spread
-    -- Includes PIK so the median captures total coupon yield
-    filer_median_rate AS (
-        SELECT
-            m.cik,
-            m.begin_quarter,
-            MEDIAN(COALESCE(
-                TRY_CAST(m.begin_interest_rate AS DOUBLE),
-                TRY_CAST(m.begin_basis_spread AS DOUBLE) + s.sofr
-            ) + COALESCE(pk.pik_val, 0)) AS filer_rate
-        FROM matches m
-        LEFT JOIN implied_sofr s ON m.begin_quarter = s.begin_quarter
-        LEFT JOIN pik_lookup pk
-          ON m.cik = pk._pk_cik
-         AND m.begin_report_date = pk._pk_date
-         AND LOWER(TRIM(m.begin_issuer_name)) = pk._pk_name
-        WHERE m.index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY')
-          AND COALESCE(
-                TRY_CAST(m.begin_interest_rate AS DOUBLE),
-                TRY_CAST(m.begin_basis_spread AS DOUBLE) + s.sofr
-              ) > 0
-        GROUP BY m.cik, m.begin_quarter
+        SELECT lpad(CAST(cik AS VARCHAR),10,'0') AS _pk_cik,
+            CAST(source AS VARCHAR) AS _pk_source,CAST(position_id AS VARCHAR) AS _pk_position,
+            TRY_CAST(report_date AS DATE) AS _pk_date,TRY_CAST(pik_rate AS DOUBLE) AS pik_val
+        FROM unified_pik WHERE coalesce(CAST(position_id AS VARCHAR),'')<>''
     ),
     typed AS (
         SELECT m.*,
@@ -197,26 +126,9 @@ def compute_returns(
             TRY_CAST(m.end_principal_amount AS DOUBLE) AS epa,
             TRY_CAST(m.begin_interest_rate AS DOUBLE) AS bir,
             TRY_CAST(m.begin_basis_spread AS DOUBLE) AS bbs,
-            -- Effective income rate: direct > spread+SOFR > same-filer median
-            -- Capped at 50% to match unified_holdings rate cap
-            -- (CASE not LEAST: DuckDB LEAST skips NULLs so LEAST(NULL,50)=50)
-            (CASE WHEN COALESCE(
-                    TRY_CAST(m.begin_interest_rate AS DOUBLE),
-                    TRY_CAST(m.begin_basis_spread AS DOUBLE) + s.sofr,
-                    f.filer_rate
-                ) > 50 THEN 50.0
-            ELSE COALESCE(
-                    TRY_CAST(m.begin_interest_rate AS DOUBLE),
-                    TRY_CAST(m.begin_basis_spread AS DOUBLE) + s.sofr,
-                    f.filer_rate
-                )
-            END) AS effective_rate,
-            -- PIK rate from unified holdings
-            COALESCE(pk.pik_val, 0) AS pik_rate_pct,
-            -- All-in-coupon filer (FRED-anchored rate-convention gate): the
-            -- disclosed interest_rate already INCLUDES PIK, so adding pik below
-            -- would double-count. Suppress the additive PIK term for these CIKs.
-            (rc.cik IS NOT NULL) AS rate_all_in,
+            CASE WHEN isfinite(TRY_CAST(m.begin_interest_rate AS DOUBLE))
+                THEN TRY_CAST(m.begin_interest_rate AS DOUBLE) END AS effective_rate,
+            pk.pik_val AS pik_rate_pct,
             -- Fee/OID uplift from fund-level income analysis
             COALESCE(TRY_CAST(u_fee.effective_uplift AS DOUBLE), 0) AS fee_uplift_pct,
             TRY_CAST(m.begin_shares_held AS DOUBLE) AS bsh,
@@ -224,18 +136,12 @@ def compute_returns(
             TRY_CAST(m.span_months AS INT) AS sm,
             TRY_CAST(m.match_score AS DOUBLE) AS mscore
         FROM matches m
-        LEFT JOIN implied_sofr s ON m.begin_quarter = s.begin_quarter
-        LEFT JOIN filer_median_rate f
-            ON m.cik = f.cik AND m.begin_quarter = f.begin_quarter
         LEFT JOIN pik_lookup pk
-            ON m.cik = pk._pk_cik
-           AND m.begin_report_date = pk._pk_date
-           AND LOWER(TRIM(m.begin_issuer_name)) = pk._pk_name
+            ON lpad(CAST(m.cik AS VARCHAR),10,'0')=pk._pk_cik
+           AND m.source=pk._pk_source AND m.position_id=pk._pk_position
+           AND TRY_CAST(m.begin_report_date AS DATE)=pk._pk_date
         LEFT JOIN fee_uplift u_fee
-            ON m.cik = CAST(u_fee.cik AS VARCHAR)
-           AND m.begin_quarter = CAST(u_fee.quarter AS VARCHAR)
-        LEFT JOIN rate_convention rc
-            ON LPAD(CAST(m.cik AS VARCHAR), 10, '0') = rc.cik
+            ON m.cik=CAST(u_fee.cik AS VARCHAR) AND m.begin_quarter=CAST(u_fee.quarter AS VARCHAR)
         -- A price observation needs a positive mark at BOTH ends.
         --
         -- This used to be enforced by accident: every matcher tier required
@@ -287,12 +193,10 @@ def compute_returns(
 
             -- Income return: depends on index classification
             CASE
-                -- Direct Lending + Preferred Equity: coupon/dividend + PIK + fee/OID uplift, scaled by span
+                -- Supported all-in coupon plus separately labelled fee/OID proxy, scaled by span
                 WHEN index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY')
                 THEN (COALESCE(bpa, bfv)
-                      * (COALESCE(effective_rate, 0)
-                         + CASE WHEN rate_all_in THEN 0 ELSE pik_rate_pct END
-                         + fee_uplift_pct)
+                      * (effective_rate + fee_uplift_pct)
                       / 100.0 * COALESCE(sm, 3) / 12.0) / bfv
                 -- Fund vehicles: return-of-capital proxy
                 WHEN index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND')
@@ -305,8 +209,8 @@ def compute_returns(
     with_total AS (
         SELECT *,
             -- Cap income_return before summing into total
-            LEAST(income_return, {MAX_INCOME_RETURN}) AS guarded_income,
-            capital_return + LEAST(income_return, {MAX_INCOME_RETURN}) AS total_return
+            CASE WHEN income_return IS NOT NULL THEN LEAST(income_return, {MAX_INCOME_RETURN}) END AS guarded_income,
+            capital_return + CASE WHEN income_return IS NOT NULL THEN LEAST(income_return, {MAX_INCOME_RETURN}) END AS total_return
         FROM with_returns
     ),
     with_guards AS (
@@ -357,38 +261,17 @@ def compute_returns(
     position_returns = con.execute(position_sql).fetchdf()
     logger.info("Position returns: %d rows", len(position_returns))
 
-    # Log outlier and imputation stats
+    # Log observed rate availability and outlier guards
     if len(position_returns) > 0:
-        outliers = position_returns["quarterly_total_return"].isna().sum()
+        outliers = (position_returns["total_return"] > MAX_RETURN).sum()
         capped = (position_returns["total_return"] < MIN_RETURN).sum()
         income_capped = (position_returns["income_return"] >= MAX_INCOME_RETURN - 1e-9).sum()
         logger.info("  Outliers excluded (>200%%): %d", outliers)
         logger.info("  Capped at -99%%: %d", capped)
         logger.info("  Income capped at %.0f%%: %d", MAX_INCOME_RETURN * 100, income_capped)
 
-        dl = position_returns[position_returns["index_classification"] == "DIRECT_LENDING"]
-        if len(dl) > 0:
-            has_bir = dl["begin_interest_rate"].notna() & (dl["begin_interest_rate"] > 0)
-            has_bbs = dl["begin_basis_spread"].notna() & (dl["begin_basis_spread"] > 0)
-            has_erate = dl["income_rate"].notna() & (dl["income_rate"] > 0)
-            # Tier 1: direct interest rate
-            tier1 = has_bir.sum()
-            # Tier 2: no direct rate, has basis_spread, got effective rate
-            tier2 = (~has_bir & has_bbs & has_erate).sum()
-            # Tier 3: no direct rate, no spread, got effective rate (filer median)
-            tier3 = (~has_bir & ~has_bbs & has_erate).sum()
-            # Still missing
-            no_rate = len(dl) - has_erate.sum()
-            logger.info("  DL income rates: %d direct, %d spread+SOFR, %d filer-median, %d missing",
-                         tier1, tier2, tier3, no_rate)
-            has_pik = dl["pik_rate_pct"].notna() & (dl["pik_rate_pct"] > 0)
-            has_uplift = dl["fee_uplift_pct"].notna() & (dl["fee_uplift_pct"] > 0)
-            logger.info("  DL PIK: %d positions (%.1f%%), median %.1f%%",
-                         has_pik.sum(), 100 * has_pik.mean(),
-                         dl.loc[has_pik, "pik_rate_pct"].median() if has_pik.any() else 0)
-            logger.info("  DL fee uplift: %d positions (%.1f%%), median %.1f%%",
-                         has_uplift.sum(), 100 * has_uplift.mean(),
-                         dl.loc[has_uplift, "fee_uplift_pct"].median() if has_uplift.any() else 0)
+        supported=position_returns['income_rate'].notna().sum()
+        logger.info('  Supported all-in income rates: %d; unavailable: %d',supported,len(position_returns)-supported)
 
     # Save position returns in deterministic order. The aggregation is order
     # independent, but byte-parity checks and downstream reviews are not.

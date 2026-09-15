@@ -181,15 +181,15 @@ def packets(labels):
 
 
 def main():
-    timeout = threading.Timer(1200, lambda: os._exit(124))
-    timeout.daemon = True; timeout.start()
+    
+    
     started = time.monotonic()
     labels = freeze()
     packets(labels)
     atomic_json(DEST / 'freeze_manifest.json', dict(schema_version=1, role='development references; no acceptance promotion',
         files=[record(DEST, p.relative_to(DEST).as_posix()) for p in sorted(DEST.rglob('*')) if p.is_file()],
         elapsed_seconds=time.monotonic() - started))
-    timeout.cancel()
+    
     print('Frozen 61 schedule dispositions, 20 label proposals and four remediation packets', flush=True)
 
 

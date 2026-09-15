@@ -54,9 +54,6 @@ def main():
     if not out.is_relative_to(ROOT / 'scratch'):
         raise ValueError('Measurement outputs must be under scratch/')
     out.mkdir(parents=True, exist_ok=True)
-    timer = threading.Timer(240, lambda: os._exit(124))
-    timer.daemon = True
-    timer.start()
     candidate = ROOT / 'data/output/private_markets_holdings.csv'
     input_paths = [candidate, REFERENCE / 'reference_pilot.csv', REFERENCE / 'obligations.csv',
                    ROOT / 'data/gold/labels/position_labels.jsonl',
@@ -117,7 +114,7 @@ def main():
     write_csv(out / 'pilot_status.csv', packets)
     write_csv(out / 'source_units.csv', [{'reference_id': k[0], 'unit_ref': k[1], 'currency': v} for k, v in unit_map.items()])
     del source_rows, facts, anchors
-    db = duckdb.connect(config={'memory_limit': '2GB', 'threads': 2})
+    db = duckdb.connect(config={'memory_limit': '-1', 'threads': 2})
     db.execute('SET temp_directory=' + sql_string(out / 'duckdb_temp'))
 
     def load(name, path):
@@ -237,7 +234,6 @@ def main():
     (out / 'verification.json').write_text(json.dumps({'candidate_hash_unchanged': True,
         'pinned_input_stats_unchanged': True, 'source_documents_rehashed': len(sources),
         'pilot_clusters': len(pilot), 'legacy_labels': len(labels), 'programme_verdict': 'NOT_ASSESSABLE'}, indent=2), encoding='utf-8')
-    timer.cancel()
     print('Pilot completed; isolated results at ' + str(out), flush=True)
 
 

@@ -141,14 +141,15 @@ def _sort_existing(
     ).reset_index(drop=True)
 
 
-def _write_position_id_edges(edges: list[dict]) -> None:
+def _write_position_id_edges(edges: list[dict], output_file=None) -> None:
     """Persist auditable edges used to form position_id chains."""
     edges_df = pd.DataFrame(edges, columns=POSITION_ID_EDGE_COLUMNS)
     edges_df = _sort_existing(edges_df, POSITION_ID_EDGE_COLUMNS)
-    POSITION_ID_EDGES_FILE.parent.mkdir(parents=True, exist_ok=True)
-    edges_df.to_csv(POSITION_ID_EDGES_FILE, index=False)
+    output_file = Path(output_file or POSITION_ID_EDGES_FILE)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    edges_df.to_csv(output_file, index=False)
     from pipeline.utils import write_parquet_companion
-    write_parquet_companion(POSITION_ID_EDGES_FILE)
+    write_parquet_companion(output_file)
 
 
 def _validate_unique_position_ids(unified_df: pd.DataFrame) -> None:
@@ -300,14 +301,16 @@ def _name_key_sql(col: str) -> str:
     return f"TRIM(regexp_replace({s}, '\\s+', ' ', 'g'))"
 
 
+def _maturity_gap_sql(b: str, e: str) -> str:
+    from pipeline.matching_contract import interval_gap_sql
+    return interval_gap_sql(b+'._mat_low',b+'._mat_high',e+'._mat_low',e+'._mat_high')
+
+
 def _maturity_rank_sql(begin_alias: str, end_alias: str) -> str:
-    """0 = both maturities known and equal, 1 = either unknown, 2 = differ."""
-    b = f"TRY_CAST({begin_alias}.maturity_date AS DATE)"
-    e = f"TRY_CAST({end_alias}.maturity_date AS DATE)"
-    return (
-        f"CASE WHEN {b} IS NOT NULL AND {e} IS NOT NULL "
-        f"THEN CASE WHEN {b} = {e} THEN 0 ELSE 2 END ELSE 1 END"
-    )
+    """0 = intervals overlap, 1 = either unknown, 2 = disjoint."""
+    from pipeline.matching_contract import interval_rank_sql
+    return interval_rank_sql(begin_alias+'._mat_low',begin_alias+'._mat_high',
+        end_alias+'._mat_low',end_alias+'._mat_high')
 
 
 def _principal_prox_sql(begin_pa: str, end_pa: str) -> str:
@@ -359,7 +362,7 @@ CONTESTED_AMENDMENT_SPREAD_PA_BAND = 1.5
 
 
 def _maturity_veto_sql(mat_b: str, mat_e: str, pa_b: str, pa_e: str,
-                       spr_b: str, spr_e: str) -> str:
+                       spr_b: str, spr_e: str, *, overlap: str | None = None) -> str:
     """TRUE when the pair passes the maturity veto: either maturity unknown,
     maturities equal, or the change is an amendment on the same lot.
 
@@ -396,7 +399,7 @@ def _maturity_veto_sql(mat_b: str, mat_e: str, pa_b: str, pa_e: str,
     )
     same_lot = f"({pa_same} OR {spread_same})"
     return (
-        f"({mat_b} IS NULL OR {mat_e} IS NULL OR {mat_b} = {mat_e} OR {same_lot})"
+        f"({mat_b} IS NULL OR {mat_e} IS NULL OR {overlap or (mat_b + ' = ' + mat_e)} OR {same_lot})"
     )
 
 
@@ -761,8 +764,8 @@ def _match_exact_name(
     # Maturity veto with amendment escape on the B2 name contest (contested only).
     name_mat_veto = (
         "AND " + _maturity_veto_sql(
-            "TRY_CAST(b.maturity_date AS DATE)", "TRY_CAST(e.maturity_date AS DATE)",
-            "b.pa", "e.pa", "b.bs", "e.bs",
+            "b._mat_low", "e._mat_low",
+            "b.pa", "e.pa", "b.bs", "e.bs", overlap=_maturity_rank_sql("b","e")+"=0",
         )
         if contested else ""
     )
@@ -859,7 +862,7 @@ def _match_exact_name(
             {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox
         FROM with_cusip b
         JOIN with_cusip e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b.clean_cusip IS NOT NULL
          AND b.clean_cusip = e.clean_cusip
@@ -945,7 +948,7 @@ def _match_exact_name(
             {_name_exact_sql('b', 'e')} AS _name_exact
         FROM poskey_remaining b
         JOIN poskey_remaining e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b._position_key = e._position_key
          AND b._position_key != ''
@@ -1049,10 +1052,7 @@ def _match_exact_name(
                         AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
                     THEN 1 ELSE 0 END)
             AS _attr_penalty,
-            COALESCE(ABS(DATEDIFF('day',
-                TRY_CAST(b.maturity_date AS DATE),
-                TRY_CAST(e.maturity_date AS DATE)
-            )), 999999) AS _maturity_prox,
+            COALESCE({_maturity_gap_sql('b','e')},999999) AS _maturity_prox,
             {_principal_prox_sql('b.pa', 'e.pa')} AS _pa_prox_c,
             {_maturity_rank_sql('b', 'e')} AS _mat_rank,
             {_pa_band_sql('b', 'e')} AS _pa_band,
@@ -1065,7 +1065,7 @@ def _match_exact_name(
                  THEN 1 ELSE 0 END AS _suffix_match
         FROM name_remaining b
         JOIN name_remaining e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b.{name_col} = e.{name_col}
          AND b.{name_col} != ''
@@ -1243,7 +1243,7 @@ def _match_exact_name_leftover_rounds(
             {_name_exact_sql('b', 'e')} AS _name_exact
         FROM eligible b
         JOIN eligible e
-          ON b.cik = e.cik AND b.source = e.source
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope AND b.source = e.source
          AND e.quarter = ({next_qtr})
          AND b._name_key = e._name_key
         WHERE {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
@@ -1358,10 +1358,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
                     AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
                 THEN 1 ELSE 0 END)
         AS _attr_penalty,
-        COALESCE(ABS(DATEDIFF('day',
-            TRY_CAST(b.maturity_date AS DATE),
-            TRY_CAST(e.maturity_date AS DATE)
-        )), 999999) AS _maturity_prox,
+        COALESCE({_maturity_gap_sql('b','e')},999999) AS _maturity_prox,
         -- Suffix coexistence: prefer matching trailing numbers
         CASE WHEN b._trailing_num IS NOT NULL
                   AND e._trailing_num IS NOT NULL
@@ -1369,7 +1366,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
              THEN 1 ELSE 0 END AS _suffix_match
     FROM remaining b
     JOIN remaining e
-      ON b.cik = e.cik
+      ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
      AND e.quarter = ({next_qtr})
      AND b._norm_name = e._norm_name
      AND b._norm_name != ''
@@ -1391,11 +1388,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
     AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
          OR b._inst_subtype = e._inst_subtype)
     -- Maturity mismatch veto (C/D/E only)
-    AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
-         OR TRY_CAST(e.maturity_date AS DATE) IS NULL
-         OR ABS(DATEDIFF('day',
-             TRY_CAST(b.maturity_date AS DATE),
-             TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
+    AND (b._mat_low IS NULL OR e._mat_low IS NULL OR {_maturity_gap_sql('b','e')} <= {MAX_MATURITY_GAP_DAYS})
     """
     con.execute(sql_candidates)
 
@@ -1516,21 +1509,17 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
                         AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
                     THEN 1 ELSE 0 END)
             AS _attr_penalty,
-            COALESCE(ABS(DATEDIFF('day',
-                TRY_CAST(b.maturity_date AS DATE),
-                TRY_CAST(e.maturity_date AS DATE)
-            )), 999999) AS _maturity_prox,
+            COALESCE({_maturity_gap_sql('b','e')},999999) AS _maturity_prox,
             COALESCE(CAST(b.index_classification AS VARCHAR), '') AS b_index_classification,
             COALESCE(CAST(e.index_classification AS VARCHAR), '') AS e_index_classification,
-            TRY_CAST(b.maturity_date AS DATE) AS b_maturity_dt,
-            TRY_CAST(e.maturity_date AS DATE) AS e_maturity_dt,
+            b._mat_low AS b_maturity_dt, e._mat_low AS e_maturity_dt,
             b._inst_subtype AS b_inst_subtype,
             e._inst_subtype AS e_inst_subtype,
             b._trailing_num AS b_trailing_num,
             e._trailing_num AS e_trailing_num
         FROM remaining b
         JOIN remaining e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._norm_name != ''
@@ -1561,7 +1550,7 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
                OR b_inst_subtype = e_inst_subtype)
           -- Maturity mismatch veto
           AND (b_maturity_dt IS NULL OR e_maturity_dt IS NULL
-               OR ABS(DATEDIFF('day', b_maturity_dt, e_maturity_dt)) <= {MAX_MATURITY_GAP_DAYS})
+               OR _maturity_prox <= {MAX_MATURITY_GAP_DAYS})
     )
     SELECT
         cik, entity_name, source,
@@ -1712,7 +1701,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
                 AS _pa_prox
         FROM remaining b
         JOIN remaining e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1722,11 +1711,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
               OR b._inst_subtype = e._inst_subtype)
          -- Maturity mismatch veto
-         AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
-              OR TRY_CAST(e.maturity_date AS DATE) IS NULL
-              OR ABS(DATEDIFF('day',
-                  TRY_CAST(b.maturity_date AS DATE),
-                  TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
+         AND (b._mat_low IS NULL OR e._mat_low IS NULL OR {_maturity_gap_sql('b','e')} <= {MAX_MATURITY_GAP_DAYS})
         -- Both sides must be single-position for this entity+classification
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
@@ -1768,7 +1753,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
                 AS _pa_prox
         FROM remaining b
         JOIN remaining e
-          ON b.cik = e.cik
+          ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1779,11 +1764,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
               OR b._inst_subtype = e._inst_subtype)
          -- Maturity mismatch veto
-         AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
-              OR TRY_CAST(e.maturity_date AS DATE) IS NULL
-              OR ABS(DATEDIFF('day',
-                  TRY_CAST(b.maturity_date AS DATE),
-                  TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
+         AND (b._mat_low IS NULL OR e._mat_low IS NULL OR {_maturity_gap_sql('b','e')} <= {MAX_MATURITY_GAP_DAYS})
         -- At least one side is multi-position (not caught by E1)
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
@@ -1879,8 +1860,8 @@ def _match_gap_quarter(con: duckdb.DuckDBPyConnection, *, enabled: bool) -> str:
         return "tier_f"
 
     mat_veto = _maturity_veto_sql(
-        "TRY_CAST(b.maturity_date AS DATE)", "TRY_CAST(e.maturity_date AS DATE)",
-        "b.pa", "e.pa", "b.bs", "e.bs")
+        "b._mat_low", "e._mat_low",
+        "b.pa", "e.pa", "b.bs", "e.bs", overlap=_maturity_rank_sql("b","e")+"=0")
     con.execute(f"""
     CREATE OR REPLACE TEMP TABLE tier_f_candidates AS
     WITH all_used AS (
@@ -2260,6 +2241,10 @@ def match_positions(
     con.register("unified", unified_df)
     con.register("bdc_raw", bdc_raw_df)
 
+    from pipeline.matching_contract import bounds_sql,scope_sql
+    mat_low,mat_high=bounds_sql(unified_df.columns)
+    reported_cost='cost_reported' if 'cost_reported' in unified_df.columns else 'cost'
+    accounting_scope=scope_sql(unified_df.columns,row_id='row_id' if 'row_id' in unified_df.columns else '_row_id')
     # --- Prepare unified base table with row IDs and typed columns ---
     sql = f"""
     CREATE OR REPLACE TEMP TABLE unified_base AS
@@ -2276,17 +2261,18 @@ def match_positions(
                 CAST(issuer_name AS VARCHAR),
                 CAST(instrument_description AS VARCHAR),
                 TRY_CAST(fair_value AS DOUBLE),
-                TRY_CAST(cost AS DOUBLE),
-                TRY_CAST(COALESCE(principal_amount_usd, principal_amount) AS DOUBLE),
+                TRY_CAST({reported_cost} AS DOUBLE),
+                COALESCE(TRY_CAST(principal_amount_usd AS DOUBLE), TRY_CAST(principal_amount AS DOUBLE)),
                 TRY_CAST(shares_held AS DOUBLE)
         ) AS _row_id,
         {_quarter_label_sql('report_date')} AS quarter,
         TRY_CAST(fair_value AS DOUBLE) AS fv,
-        TRY_CAST(cost AS DOUBLE) AS cost_val,
+        TRY_CAST({reported_cost} AS DOUBLE) AS cost_val,
         COALESCE(
             TRY_CAST(principal_amount_usd AS DOUBLE),
             TRY_CAST(principal_amount AS DOUBLE)
         ) AS pa,
+        {mat_low} AS _mat_low,{mat_high} AS _mat_high,{accounting_scope} AS _accounting_scope,
         TRY_CAST(interest_rate AS DOUBLE) AS ir,
         TRY_CAST(basis_spread AS DOUBLE) AS bs,
         TRY_CAST(shares_held AS DOUBLE) AS sh,
@@ -2655,6 +2641,7 @@ def assign_position_ids(
     use_registry: bool = False,
     registry_path=None,
     retirements_path=None,
+    edges_file=None,
     contested_assignment: bool = False,
     contested_leftover_rounds: int = CONTESTED_LEFTOVER_ROUNDS,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -2702,7 +2689,7 @@ def assign_position_ids(
             unified_df["position_id"] = [
                 f"POS-{i:08d}" for i in range(1, len(unified_df) + 1)
             ]
-        _write_position_id_edges([])
+        _write_position_id_edges([], edges_file)
         logger.info("No match pairs -- assigned %d singleton position IDs", len(unified_df))
         return unified_df, matches_df
 
@@ -2721,6 +2708,11 @@ def assign_position_ids(
     con = duckdb.connect()
     con.register("u", unified_df)
     con.register("m", matches_df)
+    from pipeline.matching_contract import scope_sql,bounds_sql,interval_rank_sql
+    scope_expression=scope_sql(unified_df.columns,row_id='row_id' if 'row_id' in unified_df.columns else '_uid')
+    row_scopes=con.execute('SELECT '+scope_expression+' AS scope FROM u ORDER BY _uid').fetchnumpy()['scope']
+    supp_mat_low,supp_mat_high=bounds_sql(unified_df.columns)
+    reported_cost='cost_reported' if 'cost_reported' in unified_df.columns else 'cost'
 
     def _map_side_sql(side: str) -> str:
         """SQL to map one side (begin/end) of match pairs to unified _uid.
@@ -2853,6 +2845,8 @@ def assign_position_ids(
 
     def _guarded_union(a: int, b: int) -> bool:
         """Union two rows only if the component remains date-unique."""
+        if row_scopes[a]!=row_scopes[b]:
+            return False
         root_a = _register_component(a)
         root_b = _register_component(b)
         if root_a == root_b:
@@ -2950,7 +2944,7 @@ def assign_position_ids(
         supp_order_a = supp_order_b.replace("uid_b ASC", "uid_a ASC")
         supp_extra_base = (
             ", LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _raw"
-            ", TRY_CAST(cost AS DOUBLE) AS cost"
+            f", TRY_CAST({reported_cost} AS DOUBLE) AS cost"
             ", TRY_CAST(basis_spread AS DOUBLE) AS bs"
             f", {_inst_subtype_sql('instrument_description')} AS _inst_subtype"
             f", {_inst_subtype_sql('issuer_name')} AS _inst_subtype_name"
@@ -2964,7 +2958,7 @@ def assign_position_ids(
             "AND (a._inst_subtype IS NULL OR b._inst_subtype IS NULL "
             "OR a._inst_subtype = b._inst_subtype) "
             # Maturity veto with amendment escape (E5), as in the B2 contest.
-            "AND " + _maturity_veto_sql("a.mat", "b.mat", "a.pa", "b.pa", "a.bs", "b.bs")
+            "AND " + _maturity_veto_sql("a._mat_low", "b._mat_low", "a.pa", "b.pa", "a.bs", "b.bs", overlap=_maturity_rank_sql("a","b")+"=0")
         )
     else:
         # Only use names that appear exactly once per CIK/quarter.
@@ -2993,7 +2987,8 @@ def assign_position_ids(
             {supp_name_sql} AS _name,
             TRY_CAST(fair_value AS DOUBLE) AS fv,
             {supp_pa_expr} AS pa,
-            TRY_CAST(maturity_date AS DATE) AS mat
+            TRY_CAST(maturity_date AS DATE) AS mat,
+            {supp_mat_low} AS _mat_low,{supp_mat_high} AS _mat_high,{scope_expression} AS _accounting_scope
             {supp_extra_base}
         FROM u
         WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
@@ -3015,12 +3010,11 @@ def assign_position_ids(
         SELECT a._uid AS uid_a, b._uid AS uid_b,
             ABS(LN(GREATEST(ABS(a.fv), 1.0) / GREATEST(ABS(b.fv), 1.0))) AS fv_prox,
             CASE WHEN a.pa > 0 AND b.pa > 0 THEN ABS(LN(a.pa / b.pa)) END AS pa_prox,
-            CASE WHEN a.mat IS NOT NULL AND b.mat IS NOT NULL
-                 THEN CASE WHEN a.mat = b.mat THEN 0 ELSE 2 END ELSE 1 END AS mat_rank
+            {_maturity_rank_sql('a','b')} AS mat_rank
             {supp_extra_pairs}
         FROM unique_base a
         JOIN unique_base b
-          ON a.cik = b.cik AND a.source = b.source
+          ON a.cik = b.cik AND a.source = b.source AND a._accounting_scope=b._accounting_scope
          AND b.qtr = ({next_qtr})
          AND a._name = b._name
          AND ABS(a.fv) / GREATEST(ABS(b.fv), 1.0) BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
@@ -3190,7 +3184,10 @@ def assign_position_ids(
     for midx in range(n_match):
         e = end_uid.get(midx)
         b = begin_uid.get(midx)
-        if e is not None:
+        if b is not None and e is not None and row_scopes[b]!=row_scopes[e]:
+            match_pids.append("")
+            n_unlinked+=1
+        elif e is not None:
             match_pids.append(uid_to_pid[e])
         elif b is not None:
             match_pids.append(uid_to_pid[b])
@@ -3289,7 +3286,7 @@ def assign_position_ids(
             "match_score": "1.0",
             "span_months": "3",
         })
-    _write_position_id_edges(edge_rows)
+    _write_position_id_edges(edge_rows, edges_file)
     logger.info("  Position ID edge artifact: %d edges", len(edge_rows))
 
     if n_unlinked:

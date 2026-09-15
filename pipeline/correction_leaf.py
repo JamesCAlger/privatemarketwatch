@@ -395,6 +395,26 @@ def _validate_layer_exclusion(template: dict, rep: CorrectionReport) -> None:
         rep.errors.append("template.anchor_proof.citation is required")
 
 
+def classification_value_errors(template: Any) -> list[str]:
+    """A classification correction must use the target column's vocabulary.
+
+    Filing headings, reference rates and accrual status are different fields;
+    their strings cannot become classification values through a correction.
+    """
+    from pipeline.column_validation import ENUM_VALUES
+
+    if not isinstance(template, dict):
+        return ["classification_fix template must be an object"]
+    target = template.get("field")
+    if not isinstance(target, str) or target not in _CLASS_FIELDS:
+        return ["classification_fix field must name a governed classification column"]
+    value = template.get("value")
+    if not isinstance(value, str) or value not in ENUM_VALUES[target]:
+        return [f"classification_fix value {ascii(value)} is not valid for {target}; "
+                f"expected one of {sorted(ENUM_VALUES[target])}"]
+    return []
+
+
 def _validate_template(fix_class: str, template: Any, tpl: Template, rep: CorrectionReport) -> None:
     if not isinstance(template, dict):
         rep.errors.append("template must be an object")
@@ -413,6 +433,8 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
         if k in keys and str(template.get(k)) not in allowed_vals:
             rep.errors.append(f"template.{k} must be one of {sorted(allowed_vals)}, got {template.get(k)!r}")
     # Nested structures.
+    if fix_class == "classification_fix":
+        rep.errors.extend(classification_value_errors(template))
     if fix_class == "layer_exclusion":
         _validate_layer_exclusion(template, rep)
     if "row_selector" in keys:

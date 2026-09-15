@@ -37,6 +37,9 @@ def sanitize(tree):
             continue
         if tag=='meta' and (node.get('http-equiv') or '').lower()=='refresh':
             node.getparent().remove(node);continue
+        if tag=='meta' and ('charset' in node.attrib or (node.get('http-equiv') or '').lower()=='content-type'):
+            # Renditions are serialized as UTF-8, irrespective of input encoding.
+            node.getparent().remove(node);continue
         if tag=='style' and node.text:
             node.text=re.sub(r'(?is)@import[^;]+;|url\([^)]*\)','',node.text)
         for attr in list(node.attrib):
@@ -47,13 +50,15 @@ def sanitize(tree):
             elif attr.lower()=='style':
                 node.attrib[attr]=re.sub(r'(?is)url\([^)]*\)|expression\([^)]*\)','',node.attrib[attr])
     head=tree.find('head')
-    if head is None:head=etree.SubElement(tree.getroot(),'head')
+    if head is None:
+        head=etree.Element('head');tree.getroot().insert(0,head)
+    head.insert(0,etree.Element('meta',{'charset':'utf-8'}))
     csp=etree.Element('meta',{'http-equiv':'Content-Security-Policy','content':"default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; script-src 'none'; base-uri 'none'; form-action 'none'"})
-    head.insert(0,csp)
+    head.insert(1,csp)
     style=etree.SubElement(head,'style');style.text=':target{background:#ffdf70!important;outline:4px solid #a45500!important;scroll-margin-top:70px} .citation-banner{position:sticky;top:0;background:#162c41;color:white;padding:12px;font:14px sans-serif;z-index:9999} body{margin:18px} '
 
 def main():
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();started=time.monotonic()
+    started=time.monotonic()
     OUT.mkdir(parents=True,exist_ok=True)
     docs=json.loads((BASE/'currency_cases/cases.json').read_text())
     byacc={d['accession']:d for d in docs};built={};records=[]
@@ -105,6 +110,6 @@ for(const c of cases){const b=document.createElement('button');b.dataset.id=c.id
     atomic_json(OUT/'citations.json',all_cases)
     atomic_json(OUT/'build.json',dict(source_documents=built,cases=len(all_cases),real_highlights=len(records),seconds=time.monotonic()-started,
                 status='built; browser validation separate',builder_sha256=sha(Path(__file__))))
-    print(json.dumps(dict(documents=len(built),highlights=len(records),seconds=time.monotonic()-started)),flush=True);timer.cancel()
+    print(json.dumps(dict(documents=len(built),highlights=len(records),seconds=time.monotonic()-started)),flush=True);
 
 if __name__=='__main__':main()

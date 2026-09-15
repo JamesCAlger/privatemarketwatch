@@ -622,6 +622,16 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
         if company_id and _is_non_position_identifier(investment_id):
             investment_id = company_id
 
+        if not is_investment:
+            from pipeline.explicit_contexts import nexpoint_position
+            explicit = nexpoint_position(ctx)
+            if explicit:
+                parts=[explicit['legalentityaxis'],explicit['investmenttypeaxis']]
+                parts.extend(explicit[axis] for axis in ('investmentsecondarycategorizationaxis',
+                    'debtinstrumentaxis','statementclassofstockaxis') if axis in explicit)
+                investment_id=' - '.join(_humanize_member_local_name(value) for value in parts)
+                is_investment=True
+
         # Cash-equivalents-axis rescue: filer-extension members on the cash
         # axis name a specific schedule position (Dreyfus/State Street MMF
         # class, 2026-09-02 escalation deep-dive). Generic us-gaap members and

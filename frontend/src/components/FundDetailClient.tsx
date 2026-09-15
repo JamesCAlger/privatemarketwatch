@@ -5,7 +5,7 @@ import type { FundDetail, FundPeerDistributions, FundAumPeerBandRow, GicsSectorR
 import FundTabBar from './FundTabBar';
 import FundOverviewTab from './FundOverviewTab';
 import FundPeersTab from './FundPeersTab';
-import FundHoldingsTab from './FundHoldingsTab';
+import FundHoldingsHistory from './FundHoldingsHistory';
 import FundPerformanceTab from './FundPerformanceTab';
 import FundFilingsTab from './FundFilingsTab';
 
@@ -19,13 +19,11 @@ interface FundDetailClientProps {
 export default function FundDetailClient({ fund, peerDistributions, aumPeerBand, universeSectors }: FundDetailClientProps) {
   const [activeTab, setActiveTab] = useState('overview');
 
-  const holdingsCount = fund.topHoldings?.length ?? 0;
-
   const tabs = [
     { id: 'overview', label: 'Overview' },
     { id: 'peers', label: 'Peer comparison' },
     { id: 'performance', label: 'Performance' },
-    { id: 'holdings', label: 'Top Holdings', count: holdingsCount > 0 ? holdingsCount : undefined },
+    { id: 'holdings', label: 'Holdings' },
     { id: 'filings', label: 'Filings' },
   ];
 
@@ -49,7 +47,7 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
           />
         )}
         {activeTab === 'holdings' && (
-          <FundHoldingsTab holdings={fund.topHoldings} />
+          <FundHoldingsHistory cik={fund.cik} />
         )}
         {activeTab === 'performance' && (
           <FundPerformanceTab series={fund.series} vehicleType={fund.vehicleType} aumPeerBand={aumPeerBand} />

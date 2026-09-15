@@ -13,10 +13,10 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--candidate',type=Path,required=True);a=p.parse_args()
     candidate=a.candidate.resolve();bundle=candidate/'attempts/unified-01/bundle';snap=json.loads((candidate/'snapshot.json').read_text())
     read_bundle(bundle,snap['input_fingerprint']);out=BASE/'baseline';out.mkdir(exist_ok=True)
-    timer=threading.Timer(600,lambda:os._exit(124));timer.daemon=True;timer.start();start=time.monotonic()
+    start=time.monotonic()
     path=bundle/'private_markets_holdings.csv';csvsha=sha(path)
     assert csvsha=='f175956d07649ed77dd3ec11c0ffd92f1af8074824d15ab881bc8495f4e81b68','Pilot reuse requires exact input bytes'
-    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='3GB'")
+    con=duckdb.connect();con.execute('SET threads=2');con.execute("SET memory_limit='-1'")
     temp=ROOT/'scratch/2026-09-09_programme_closeout/baseline_temp';temp.mkdir(exist_ok=True)
     con.execute("SET temp_directory='"+temp.as_posix().replace("'","''")+"'")
     q=lambda p:"'"+str(p).replace("'","''")+"'"
@@ -84,5 +84,5 @@ def main():
        reused_pilot_summary=prior,new_development_rosters=results,typed_parity_different_cells=int(parity.drop(columns=['rows_compared']).sum(axis=1).iloc[0]),
        proposal_evaluation=programme_verdict(metrics),population_accuracy='UNASSESSABLE; no complete independent cohort reference',
        elapsed_seconds=time.monotonic()-start))
-    print('Candidate baseline complete',flush=True);con.close();timer.cancel()
+    print('Candidate baseline complete',flush=True);con.close();
 if __name__=='__main__':main()

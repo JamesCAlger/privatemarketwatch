@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+from pipeline.financial_conventions import ADDITIONS, raw_cost_state_sql
+
 import logging
 import re
 import time
@@ -476,6 +478,9 @@ def _prepare_bdc(
     else:
         raise ValueError("Either bdc_df or bdc_file must be provided")
     # --- end data source selection --------------------------------------------
+    from pipeline import config as unit_config
+    from pipeline.monetary_units import resolve_bdc_units
+    resolve_bdc_units(con, unit_config.BDC_XBRL_CACHE_DIR)
     if raw_exclusions:
         from pipeline.agent_promoted import apply_raw_staging_exclusions
         audits = apply_raw_staging_exclusions(con, raw_exclusions)
@@ -1691,6 +1696,13 @@ def _prepare_bdc(
     # Reads from materialized _bdc_phase_a, writes to _bdc_phase_b.
     # =========================================================================
     _t_phase = time.time()
+    from pipeline.accounting_scope import scope_expression
+    _raw_scope = scope_expression(
+        'cik', 'dimensions_raw',
+        "regexp_matches(lower(coalesce(CAST(dimensions_raw AS VARCHAR),'')),"
+        "'nonconsolidatedsubsidiar|equitymethodinvestmentequitymethodinvesteenameaxis')",
+        "coalesce(nullif(CAST(src_context_id AS VARCHAR),''),CAST(_row_id AS VARCHAR))",
+    )
     sql_phase_b = f"""
     CREATE TEMP TABLE _bdc_phase_b AS
     WITH
@@ -2134,11 +2146,14 @@ def _prepare_bdc(
     -- affiliation dimension members (e.g. Non-Controlled vs Affiliated) in
     -- the same filing.  This must stay position-level: distinct instruments
     -- for the same issuer and FV are separate holdings.
+    scoped_for_dedup AS (
+        SELECT *, {_raw_scope} AS _accounting_scope FROM {_affil_dedup_source}
+    ),
     no_affil_dupes AS (
         SELECT * FROM (
             SELECT *,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cik, accession_number, report_date,
+                    PARTITION BY cik, accession_number, report_date, _accounting_scope,
                                  regexp_replace(
                                      lower(trim(CAST(issuer_name AS VARCHAR))),
                                      '[^a-z0-9]+', ' ', 'g'
@@ -2167,7 +2182,7 @@ def _prepare_bdc(
                         COALESCE(CAST(src_context_id AS VARCHAR), ''),
                         _row_id
                 ) AS _affil_rank
-            FROM {_affil_dedup_source}
+            FROM scoped_for_dedup
         ) sub
         WHERE _affil_rank = 1
     )
@@ -2201,6 +2216,8 @@ def _prepare_bdc(
               AND EXISTS (
                 SELECT 1 FROM _bdc_phase_b p2
                 WHERE p2.cik = p1.cik
+                  AND p2.accession_number = p1.accession_number
+                  AND p2._accounting_scope = p1._accounting_scope
                   AND CAST(p2.report_date AS VARCHAR) = CAST(p1.report_date AS VARCHAR)
                   AND CAST(p2._raw_id AS VARCHAR) <> CAST(p1._raw_id AS VARCHAR)
                   AND starts_with(
@@ -2462,8 +2479,8 @@ def _prepare_bdc(
             '' AS ticker,
             _fv AS fair_value,
             _cost AS cost,
-            upper(trim(regexp_replace(COALESCE(CAST(fair_value_unit AS VARCHAR), ''), '^.*:', ''))) AS fair_value_currency,
-            upper(trim(regexp_replace(COALESCE(CAST(cost_unit AS VARCHAR), ''), '^.*:', ''))) AS cost_currency,
+            _resolved_fv_currency AS fair_value_currency,
+            _resolved_cost_currency AS cost_currency,
             CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN _pct * 100
                  WHEN _pct IS NOT NULL AND _pct > 50 THEN _pct / 100
                  ELSE _pct END AS pct_of_net_assets,
@@ -2642,7 +2659,7 @@ def _prepare_bdc(
                  WHEN _pik IS NULL AND _text_pik_rate IS NOT NULL THEN 'identifier_text'
                  ELSE '' END AS pik_rate_source,
             CASE WHEN _ugl IS NOT NULL THEN 'xbrl_field' ELSE '' END AS bdc_unrealized_gain_loss_source,
-            COALESCE(CAST(src_facts AS VARCHAR), '') AS src_facts,
+            {raw_cost_state_sql('cost','src_facts')} AS src_facts,
             COALESCE(CAST(dedupe_filled_fields AS VARCHAR), '') AS src_filled_fields,
             concat_ws(';',
                 CASE WHEN _scale_div1000 AND _fv IS NOT NULL THEN 'fair_value' END,
@@ -2864,6 +2881,11 @@ def _prepare_bdc(
                 ref_filled, 100 * ref_filled / n if n else 0,
                 mat_filled, 100 * mat_filled / n if n else 0)
 
+    # Financial values are prepared after correction replay. Keep the staging
+    # schema complete without migrating the source values at this boundary.
+    for field, kind in ADDITIONS.items():
+        if field not in result:
+            result[field] = None if kind == 'DOUBLE' else ''
     return result
 
 
