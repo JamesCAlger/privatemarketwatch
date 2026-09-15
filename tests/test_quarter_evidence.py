@@ -106,6 +106,41 @@ def test_excluded_positive_facts_fail_even_with_other_unresolved_cases(tmp_path)
     assert result["actual"]==1 and result["assessable"]
 
 
+@pytest.mark.parametrize("status,earliest,expected", [
+    ("not_yet_reporting", "2026-06-30", 0),
+    ("not_yet_investment_operating", "2026-06-30", 1),
+    ("not_yet_reporting", "2026-03-31", 1),
+])
+def test_reporting_exclusion_keeps_comparatives_without_claiming_no_investments(tmp_path, status, earliest, expected):
+    obligations = [dict(cik=CIK,report_date=Q,eligibility_status="eligible_source_investments"),
+        dict(cik="456",report_date=Q,eligibility_status=status)]
+    exclusions = [dict(cik="456",quarter=Q,P=0,positive_total_observations=1,
+        verdict="no_periodic_filing_confirmed",filing_gap_status="no_filing_for_quarter",
+        earliest_periodic_report_date=earliest,indexed_primary_filings=0,accession="")]
+    hp,manifest = evidence(tmp_path,dict(obligations=obligations,exclusions=exclusions))
+    result = collect(hp,manifest,Q,{CIK})["excluded_with_positive_facts"]
+    assert result["actual"] == expected and result["assessable"]
+
+
+def test_reporting_exclusion_without_filing_evidence_cannot_pass(tmp_path):
+    obligations = [dict(cik=CIK,report_date=Q,eligibility_status="eligible_source_investments"),
+        dict(cik="456",report_date=Q,eligibility_status="not_yet_reporting")]
+    exclusions = [dict(cik="456",quarter=Q,P=0,positive_total_observations=0,verdict="no_periodic_filing_confirmed")]
+    hp,manifest = evidence(tmp_path,dict(obligations=obligations,exclusions=exclusions))
+    result = collect(hp,manifest,Q,{CIK})["excluded_with_positive_facts"]
+    assert not result["assessable"]
+
+
+def test_duplicate_exclusions_cannot_cover_an_unassessed_fund(tmp_path):
+    obligations = [dict(cik=CIK,report_date=Q,eligibility_status="eligible_source_investments"),
+        dict(cik="456",report_date=Q,eligibility_status="not_yet_investment_operating"),
+        dict(cik="789",report_date=Q,eligibility_status="not_yet_investment_operating")]
+    row = dict(cik="456",quarter=Q,P=0,positive_total_observations=0,verdict="no_contradiction_observed")
+    hp,manifest = evidence(tmp_path,dict(obligations=obligations,exclusions=[row,row]))
+    with pytest.raises(ContractError,match="repeats"):
+        collect(hp,manifest,Q,{CIK})
+
+
 def test_field_weight_currencies_separate_and_accuracy_withheld(tmp_path):
     rows=[dict(quarter=Q,field="fair_value",source_fv_currency=currency,source_fv=100,
         category=category,reference_origin="selected_source_roster")

@@ -20,7 +20,7 @@ from pipeline.bdc_filings import CONCEPT_MAP, _parse_xbrl_contexts
 from pipeline.explicit_contexts import explicit_member_dimensions
 
 
-POLICY_VERSION = "context-inventory.v3"
+POLICY_VERSION = "context-inventory.v4"
 XBRLI = "http://www.xbrl.org/2003/instance"
 XBRLDI = "http://xbrl.org/2006/xbrldi"
 VALUE_FIELDS = frozenset({"fair_value", "cost", "principal_amount", "face_amount", "shares_held"})
@@ -36,6 +36,23 @@ STANDARD_CATEGORY_AXES = frozenset({
 })
 NON_IDENTITIES = frozenset({"", "total", "total investments", "investments", "various", "n/a",
     "none", "other", "debt", "equity", "software", "first lien", "second lien"})
+# Cash-equivalent balance concepts (us-gaap local names, lowercase). A context
+# whose ONLY captured monetary facts are these is a cash/money-market balance,
+# not a position, even when a typed investment-identifier member names the
+# sweep fund (Golub 0001930087-23-000010 context c-13: MMF carrying value
+# 650,323,000 on "Morgan Stanley Institutional Liquidity Funds"). Owner
+# decision 2026-09-15. Only the MoneyMarketFundsAt* names reach ``facts``
+# today (CONCEPT_MAP maps them to fair_value/cost); the remaining names are
+# listed so the rule stays correct if CONCEPT_MAP ever admits them. The
+# extractor's cash-equivalents rescue (bdc_filings) is deliberately untouched.
+CASH_EQUIVALENT_CONCEPTS = frozenset({
+    "moneymarketfundsatfairvalue", "moneymarketfundsatcarryingvalue",
+    "cashandcashequivalentsatcarryingvalue", "cashandcashequivalentsfairvaluedisclosure",
+    "cashequivalentsatcarryingvalue", "cash", "restrictedcash",
+    "restrictedcashandcashequivalents", "restrictedcashandcashequivalentsatcarryingvalue",
+    "cashcashequivalentsrestrictedcashandrestrictedcashequivalents",
+})
+CASH_ONLY_PUBLIC_WORDING = "No portfolio positions disclosed; cash and money-market holdings only."
 
 
 def local(value: str) -> str:
@@ -62,6 +79,17 @@ def _identity_text(value: str) -> bool:
     return normalized not in NON_IDENTITIES and bool(re.search(r"[a-z]", normalized))
 
 
+def _concept_namespace(concept: str) -> str:
+    return concept[1:].split("}", 1)[0] if concept.startswith("{") else ""
+
+
+def _is_cash_equivalent_fact(fact: dict) -> bool:
+    """Standard-taxonomy cash-equivalent concept; filer lookalikes are not excused."""
+    concept = fact["concept"]
+    return (local(concept).lower() in CASH_EQUIVALENT_CONCEPTS and
+            _is_standard(_concept_namespace(concept)))
+
+
 def classify_context(context: dict, cik: str, *, basis_concepts: set[str]) -> tuple[str, str]:
     """Return one source role and its mechanism; extractor recognition is not an input."""
     dims = context["dimensions"]
@@ -73,6 +101,12 @@ def classify_context(context: dict, cik: str, *, basis_concepts: set[str]) -> tu
     # fund accounting scope even if an investment amount concept is unmapped.
     if not dims and basis_concepts & FUND_BASIS_CONCEPTS:
         return "aggregate", "fund_balance_sheet_context"
+    # A money-market/cash-equivalent carrying value alone is a balance, not an
+    # investment fact (acceptance section 2). Any non-cash monetary fact in the
+    # same context (e.g. InvestmentOwnedAtFairValue) keeps the context on the
+    # ordinary position path below.
+    if context["facts"] and all(_is_cash_equivalent_fact(f) for f in context["facts"]):
+        return "aggregate", "cash_equivalent_balance"
     if context.get("unknown_concepts"):
         return "unresolved", "unmapped_investment_concept"
     typed_ids = [d for d in dims if d["kind"] == "typed" and
@@ -123,9 +157,23 @@ def classify_context(context: dict, cik: str, *, basis_concepts: set[str]) -> tu
     return "unresolved", "unsupported_source_dimension_pattern"
 
 
+def _positive(total: Decimal | None) -> bool:
+    return total is not None and total.is_finite() and total > 0
+
+
 def fund_quarter_class(*, complete: bool, positions: int, unresolved: int,
-                       investment_total: Decimal | None) -> str:
-    """Disjoint classification for an eligible fund-quarter with zero output."""
+                       investment_total: Decimal | None,
+                       cash_equivalent_total: Decimal | None = None) -> str:
+    """Disjoint classification for an eligible fund-quarter with zero output.
+
+    ``cash_equivalent_total`` is the fund-level cash/money-market balance
+    resolved from the same instance (``scan_instance`` result key). It is
+    consulted only when no positive investment total exists, so a fund that
+    raised capital but holds only cash equivalents is
+    ``eligible_no_position_facts`` (owner decision 2026-09-15, Golub Q2-2023).
+    It is kept separate from the register's positive-investment concept, which
+    the exclusion audit treats as a contradiction of lifecycle exclusions.
+    """
     if positions < 0 or unresolved < 0:
         raise ValueError("Context counts cannot be negative")
     if not complete:
@@ -134,7 +182,7 @@ def fund_quarter_class(*, complete: bool, positions: int, unresolved: int,
         return "extraction_failure"
     if unresolved:
         return "unresolved_context_pattern"
-    if investment_total is not None and investment_total.is_finite() and investment_total > 0:
+    if _positive(investment_total) or _positive(cash_equivalent_total):
         return "eligible_no_position_facts"
     return "eligible_empty_candidate"
 
@@ -278,6 +326,21 @@ def scan_instance(path: Path, cik: str, quarter: str, *, max_bytes: int = 55_000
             ctx["fair_value_status"] = "conflicting_facts" if len(fv) > 1 else (
                 "reported" if ctx["fair_value"] is not None and ctx["fair_value_currency"] else "unavailable")
             result["contexts"].append(ctx)
+        # Fund-level cash-equivalent balance: the single reported value carried
+        # by undimensioned target-quarter cash facts. Distinct conflicting
+        # values are unassessable; dimensioned sweep-fund rows are not totals.
+        cash = {(f["value"], f["currency"]) for ctx in result["contexts"]
+                if not ctx["dimensions"] and ctx["period_kind"] == "instant" and ctx["entity_cik"] == cik
+                for f in ctx["facts"] if _is_cash_equivalent_fact(f)}
+        if len(cash) == 1 and all(value is not None and currency for value, currency in cash):
+            result["cash_equivalent_total"], result["cash_equivalent_currency"] = next(iter(cash))
+            result["cash_equivalent_status"] = "reported"
+        else:
+            result["cash_equivalent_total"], result["cash_equivalent_currency"] = None, None
+            result["cash_equivalent_status"] = "conflicting_facts" if len(cash) > 1 else "unavailable"
+        result["cash_only_contexts"] = bool(result["contexts"]) and all(
+            ctx["role"] == "aggregate" and all(_is_cash_equivalent_fact(f) for f in ctx["facts"])
+            for ctx in result["contexts"])
         bounded()
         after = path.stat()
         with path.open("rb") as stream:

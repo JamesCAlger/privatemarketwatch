@@ -83,14 +83,37 @@ def collect_contexts(con, evidence, quarter, results):
     exclusions = evidence.path("exclusions")
     if exclusions:
         table(con,"exclusions",exclusions)
+        # Reporting exclusions are distinct from absence of investment
+        # activity. Only an EDGAR-certified primary-filing absence can excuse
+        # comparative positives, and the register must authorize that basis.
+        columns = {r[0] for r in con.execute("DESCRIBE exclusions").fetchall()}
+        required = {"filing_gap_status", "earliest_periodic_report_date", "indexed_primary_filings", "accession"}
+        no_reporting = "false"
+        if required <= columns:
+            no_reporting = """(o.eligibility_status='not_yet_reporting'
+              AND e.verdict='no_periodic_filing_confirmed'
+              AND e.filing_gap_status='no_filing_for_quarter'
+              AND e.earliest_periodic_report_date>e.quarter
+              AND TRY_CAST(e.indexed_primary_filings AS BIGINT)=0
+              AND nullif(e.accession,'') IS NULL)"""
+        con.execute("""CREATE TEMP TABLE eq AS SELECT e.*, o.eligibility_status AS registered_exclusion_status,
+          coalesce(""" + no_reporting + """, false) AS certified_reporting_absence
+          FROM exclusions e JOIN obligations o ON lpad(e.cik,10,'0')=lpad(o.cik,10,'0')
+          AND e.quarter=o.report_date WHERE e.quarter=? AND o.eligibility_status NOT LIKE 'eligible%'""", [quarter])
+        n, unique_n = con.execute("SELECT count(*),count(DISTINCT cik) FROM eq").fetchone()
+        supplied = con.execute("SELECT count(*) FROM exclusions WHERE quarter=?", [quarter]).fetchone()[0]
+        if n != unique_n or n != supplied:
+            raise ContractError("Exclusion evidence repeats or is outside the obligation register")
         n, contradicted, unresolved = con.execute("""SELECT count(*),
-          count(*) FILTER(WHERE verdict LIKE 'exclusion_contradicted%' OR TRY_CAST(P AS BIGINT)>0
-            OR TRY_CAST(positive_total_observations AS BIGINT)>0),
-          count(*) FILTER(WHERE verdict='exclusion_unassessable') FROM exclusions WHERE quarter=?""", [quarter]).fetchone()
+          count(*) FILTER(WHERE verdict LIKE 'exclusion_contradicted%' OR
+            (NOT certified_reporting_absence AND (TRY_CAST(P AS BIGINT)>0
+              OR TRY_CAST(positive_total_observations AS BIGINT)>0))),
+          count(*) FILTER(WHERE verdict='exclusion_unassessable' OR
+            (registered_exclusion_status='not_yet_reporting' AND NOT certified_reporting_absence)) FROM eq""").fetchone()
         expected = con.execute("SELECT count(*) FROM obligations WHERE report_date=? AND eligibility_status NOT LIKE 'eligible%'", [quarter]).fetchone()[0]
         results["excluded_with_positive_facts"] = observation(contradicted,
             assessable=bool(contradicted) or (n == expected and unresolved == 0),
-            reason="Contradictions fail; unresolved or absent exclusions prevent certification",
+            reason="Contradictions fail; reporting exclusions require certified primary-filing absence; unresolved or absent records prevent certification",
             details=dict(assessed_records=n,expected_records=expected,unresolved=unresolved))
     contexts = evidence.path("contexts")
     if not contexts:

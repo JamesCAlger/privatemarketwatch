@@ -1,4 +1,4 @@
-"""E2: bounded cache-only context coverage across the 812 eligible obligations."""
+"""E2: bounded cache-only context coverage across all eligible obligations."""
 from __future__ import annotations
 
 import argparse
@@ -15,7 +15,7 @@ import duckdb
 from pipeline.context_inventory import scan_instance
 from pipeline.programme.core import atomic_json, now, read_json, sha
 from pipeline.programme.runner import candidate_path, heavy_lock
-from scripts.run_context_census import INDEX, REGISTER, select_source
+from scripts.run_context_census import ELIGIBLE_OBLIGATIONS, INDEX, REGISTER, select_source
 
 RECONCILIATION = ROOT / "data/output/source_reconciliation_detail.csv"
 
@@ -61,8 +61,8 @@ def resume_source_assessments(prior, inputs, obligations):
     with (prior / "source_assessments.csv").open(encoding="utf-8", newline="") as stream:
         rows = list(csv.DictReader(stream))
     expected = {(r["cik"], r["report_date"]) for r in obligations}
-    if len(rows) != 812 or {(r["cik"], r["quarter"]) for r in rows} != expected:
-        raise ValueError("Saved source frame does not cover all 812 obligations")
+    if len(expected) != len(obligations) or len(rows) != len(expected) or {(r["cik"], r["quarter"]) for r in rows} != expected:
+        raise ValueError("Saved source frame does not cover every distinct eligible obligation")
     for row in rows:
         if row["source_complete"] not in {"True", "False"}:
             raise ValueError("Invalid saved source-completeness flag")
@@ -140,10 +140,11 @@ def run(dest, resume_sources=None, *, reconciliation=None):
         inputs = {str(p.relative_to(ROOT)): sha(p) for p in paths}
         with REGISTER.open(encoding="utf-8-sig", newline="") as stream:
             obligations = [r for r in csv.DictReader(stream) if r["eligibility_status"].startswith("eligible")]
-        if len(obligations) != 812 or len({(r["cik"], r["report_date"]) for r in obligations}) != 812:
-            raise ValueError("E2 expected 812 distinct eligible obligations")
+        if (len(obligations) != ELIGIBLE_OBLIGATIONS or
+                len({(r["cik"], r["report_date"]) for r in obligations}) != ELIGIBLE_OBLIGATIONS):
+            raise ValueError(f"E2 expected {ELIGIBLE_OBLIGATIONS} distinct eligible obligations")
         atomic_json(dest / "request.json", dict(experiment="E2", started_utc=now(), pid=os.getpid(),
-            input_sha256=inputs, seconds=None, obligation_count=812, memory_limit="unlimited", threads=2))
+            input_sha256=inputs, seconds=None, obligation_count=len(obligations), memory_limit="unlimited", threads=2))
         filings = con.execute("""SELECT cik,report_date,filing_date,accession_number
             FROM read_csv(?,all_varchar=true) WHERE substr(report_date,1,10) BETWEEN '2023-01-01' AND '2026-03-31'
             AND form_type IN ('10-K','10-Q','10-K/A','10-Q/A')
@@ -180,7 +181,7 @@ def run(dest, resume_sources=None, *, reconciliation=None):
                 P=counts["confirmed_position"], A=counts["aggregate"], U=counts["unresolved"],
                 errors=" | ".join(result["errors"]), document=filename, evidence_sha256=sha(documents / filename)))
             if index % 10 == 0 or index == len(obligations):
-                print(f"E2 cached sources {index}/812; elapsed={time.monotonic()-started:.1f}s", flush=True)
+                print(f"E2 cached sources {index}/{len(obligations)}; elapsed={time.monotonic()-started:.1f}s", flush=True)
         with (dest / "source_assessments.csv").open("w", encoding="utf-8", newline="") as stream:
             writer = csv.DictWriter(stream, fieldnames=list(summaries[0]))
             writer.writeheader()
@@ -200,7 +201,7 @@ def run(dest, resume_sources=None, *, reconciliation=None):
         for relative, expected in inputs.items():
             if sha(ROOT / relative) != expected:
                 raise ValueError("E2 input changed: " + relative)
-        atomic_json(dest / "summary.json", dict(experiment="E2", obligations=812, contexts=count,
+        atomic_json(dest / "summary.json", dict(experiment="E2", obligations=len(obligations), contexts=count,
             source_complete=sum(r["source_complete"] for r in summaries),
             input_sha256=inputs, completed_utc=now(), elapsed_seconds=time.monotonic()-started,
             caveat="Context FV may duplicate positions; separate P/A/U and currency. Not portfolio FV or a roster-accuracy pass."))
@@ -208,7 +209,7 @@ def run(dest, resume_sources=None, *, reconciliation=None):
         if resume_sources:
             outputs.append("source_resume.json")
         atomic_json(dest / "complete.json", {name: sha(dest / name) for name in outputs})
-        print("E2 complete; 812 obligations retained", flush=True)
+        print(f"E2 complete; {len(obligations)} obligations retained", flush=True)
     finally:
         con.close()
 

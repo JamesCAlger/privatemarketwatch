@@ -196,6 +196,100 @@ def test_census_missing_primary_retains_explicit_fallback_basis():
     assert select_source(obligation, []) == ("", "no_selected_accession", 0)
 
 
+def test_cash_sweep_is_aggregate_and_primary_census_reports_cash_only(tmp_path):
+    from scripts.run_context_census import classify_selected_source
+    from pipeline.context_inventory import CASH_ONLY_PUBLIC_WORDING
+    body = context("fund") + fact("fund", "500", "gaap:MoneyMarketFundsAtCarryingValue")
+    body += context("sweep", typed("Morgan Stanley Institutional Liquidity Funds"))
+    body += fact("sweep", "500", "gaap:MoneyMarketFundsAtCarryingValue")
+    body += '<dei:DocumentPeriodEndDate contextRef="fund">2023-03-31</dei:DocumentPeriodEndDate>'
+    result = scan(tmp_path, body)
+    assert result["counts"] == {"confirmed_position": 0, "aggregate": 2, "unresolved": 0}
+    assert result["cash_equivalent_total"] == "500"
+    assert classify_selected_source(result, None) == "eligible_no_position_facts"
+    assert result["public_status_wording"] == CASH_ONLY_PUBLIC_WORDING
+
+
+@pytest.mark.parametrize("other,expected", [
+    ("gaap:InvestmentOwnedAtFairValue", "confirmed_position"),
+    ("f:NovelInvestmentFairValue", "unresolved"),
+])
+def test_cash_fact_does_not_excuse_non_cash_in_same_context(tmp_path, other, expected):
+    result = scan(tmp_path, context("mixed", typed("Acme First Lien")) +
+        fact("mixed", concept="gaap:MoneyMarketFundsAtCarryingValue") + fact("mixed", concept=other))
+    assert result["contexts"][0]["role"] == expected
+    assert not result["cash_only_contexts"]
+
+
+def test_extension_cash_lookalike_is_not_excused(tmp_path):
+    result = scan(tmp_path, context("sweep", typed("Acme First Lien")) +
+        fact("sweep", concept="f:MoneyMarketFundsAtCarryingValue"))
+    assert result["counts"]["confirmed_position"] == 1
+    assert result["cash_equivalent_status"] == "unavailable"
+
+
+@pytest.mark.parametrize("value,unit", [("200", "USD"), ("NaN", "USD"), ("100", "missing")])
+def test_conflicting_or_invalid_cash_total_does_not_certify_absence(tmp_path, value, unit):
+    from scripts.run_context_census import classify_selected_source
+    body = context("fund") + fact("fund", concept="gaap:MoneyMarketFundsAtCarryingValue")
+    body += fact("fund", value, "gaap:MoneyMarketFundsAtCarryingValue", unit)
+    body += '<dei:DocumentPeriodEndDate contextRef="fund">2023-03-31</dei:DocumentPeriodEndDate>'
+    result = scan(tmp_path, body)
+    assert result["cash_equivalent_status"] == "conflicting_facts"
+    assert classify_selected_source(result, None) == "eligible_empty_candidate"
+
+
+@pytest.mark.parametrize("complete,primary", [(False, True), (True, False)])
+def test_cash_does_not_excuse_incomplete_or_comparative_only_source(complete, primary):
+    from scripts.run_context_census import classify_selected_source
+    result = dict(counts=dict(confirmed_position=0, aggregate=1, unresolved=0), source_complete=complete,
+        target_instant_contexts=1, quarter="2023-03-31", errors=[],
+        document_period_ends=["2023-03-31" if primary else "2023-06-30"],
+        cash_equivalent_total="500", cash_equivalent_status="reported", cash_only_contexts=True)
+    assert classify_selected_source(result, None) == "source_unavailable"
+    assert not result["public_status_wording"]
+
+
+@pytest.mark.needs_cache
+def test_golub_cash_only_primary_source():
+    from scripts.run_context_census import classify_selected_source
+    from pipeline.context_inventory import CASH_ONLY_PUBLIC_WORDING
+    source = Path(__file__).resolve().parents[1] / "data/raw/filings/bdc_xbrl/1930087/000193008723000010.xml"
+    if not source.is_file():
+        pytest.skip("Golub primary source not cached")
+    result = scan_instance(source, "1930087", "2023-06-30")
+    assert result["source_complete"]
+    assert result["counts"]["confirmed_position"] == result["counts"]["unresolved"] == 0
+    assert result["cash_equivalent_total"] == "650323000"
+    assert classify_selected_source(result, None) == "eligible_no_position_facts"
+    assert result["public_status_wording"] == CASH_ONLY_PUBLIC_WORDING
+
+
+def test_aggregate_investments_are_not_labelled_cash_only(tmp_path):
+    from scripts.run_context_census import classify_selected_source
+    result = scan(tmp_path, context("fund") + fact("fund") + fact("fund", "150", "gaap:Assets") +
+        '<dei:DocumentPeriodEndDate contextRef="fund">2023-03-31</dei:DocumentPeriodEndDate>')
+    assert classify_selected_source(result, Decimal("100")) == "eligible_no_position_facts"
+    assert result["public_status_wording"] == "No portfolio position facts disclosed."
+
+
+def test_active_obligation_register_conserves_the_owner_approved_cohort():
+    import csv
+    from scripts.run_context_census import REGISTER, ELIGIBLE_OBLIGATIONS, EXCLUDED_OBLIGATIONS, ZERO_OUTPUT_OBLIGATIONS
+    with REGISTER.open(encoding="utf-8-sig", newline="") as stream:
+        rows = list(csv.DictReader(stream))
+    assert len(rows) == len({(r["cik"], r["report_date"]) for r in rows}) == 70 * 13
+    assert len({r["cik"] for r in rows}) == 70
+    eligible = [r for r in rows if r["eligibility_status"].startswith("eligible")]
+    excluded = [r for r in rows if r["eligibility_status"] in {"not_yet_investment_operating", "not_yet_reporting"}]
+    assert len(eligible) == ELIGIBLE_OBLIGATIONS == 804
+    assert len(excluded) == EXCLUDED_OBLIGATIONS == 106
+    assert sum(int(r["holdings_rows"]) == 0 for r in eligible) == ZERO_OUTPUT_OBLIGATIONS == 25
+    reporting = [r for r in excluded if r["eligibility_status"] == "not_yet_reporting"]
+    assert len(reporting) == 8
+    assert all("EDGAR-" in r["evidence_ids"] and int(r["holdings_rows"]) == 0 for r in reporting)
+
+
 @pytest.mark.parametrize("primary", [False, True])
 def test_comparative_aggregate_cannot_establish_exception(primary):
     from scripts.run_context_census import classify_selected_source

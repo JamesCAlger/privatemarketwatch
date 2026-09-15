@@ -3,9 +3,28 @@ import json
 
 import duckdb
 import pandas as pd
+import pytest
 
 from scripts.run_production_acceptance import primary_evidence
 from tests.test_holdings_finalizer import holdings
+
+
+@pytest.mark.parametrize('current', [True, False])
+def test_completed_collector_must_name_the_current_register(tmp_path, current):
+    from scripts.run_production_acceptance import verify_registered_experiment
+    from pipeline.programme.core import ContractError, sha
+    register = tmp_path / 'obligations.csv'
+    register.write_text('cik,report_date,eligibility_status\n123,2026-03-31,eligible_source_investments\n')
+    directory = tmp_path / 'collector'
+    directory.mkdir()
+    summary = directory / 'summary.json'
+    summary.write_text(json.dumps(dict(input_sha256={str(register.resolve()): sha(register) if current else '0' * 64})))
+    (directory / 'complete.json').write_text(json.dumps({'summary.json': sha(summary)}))
+    if current:
+        verify_registered_experiment(directory, register)
+    else:
+        with pytest.raises(ContractError, match='different obligation register'):
+            verify_registered_experiment(directory, register)
 
 
 def test_primary_driver_runs_existing_engine_in_isolated_files(tmp_path):

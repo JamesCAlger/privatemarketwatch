@@ -1,4 +1,4 @@
-"""E1: inventory the 33 missing-output obligations using cached primary XML only."""
+"""E1: inventory missing-output obligations using cached primary XML only."""
 from __future__ import annotations
 
 import argparse
@@ -13,10 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import duckdb
-from pipeline.context_inventory import fund_quarter_class, scan_instance
+from pipeline.context_inventory import CASH_ONLY_PUBLIC_WORDING, fund_quarter_class, scan_instance
 from pipeline.programme.core import atomic_json, now, sha
 
-REGISTER = ROOT / "docs/production_stack/programme_pilot_evidence_2026-09-09/obligations_v2.csv"
+REGISTER = ROOT / "docs/production_stack/programme_pilot_evidence_2026-09-09/obligations_v3.csv"
+ELIGIBLE_OBLIGATIONS = 804
+ZERO_OUTPUT_OBLIGATIONS = 25
+EXCLUDED_OBLIGATIONS = 106
 INDEX = ROOT / "data/output/bdc_filings_index.csv"
 
 
@@ -43,8 +46,14 @@ def classify_selected_source(result, investment_total):
         complete = False
         result["errors"].append("Comparative-only or undated source cannot certify absence; primary-quarter source scope unverified")
     result["assessment_complete"] = complete
-    return fund_quarter_class(complete=complete, positions=counts["confirmed_position"],
-                             unresolved=counts["unresolved"], investment_total=investment_total)
+    cash = (Decimal(result["cash_equivalent_total"])
+            if result.get("cash_equivalent_status") == "reported" else None)
+    status = fund_quarter_class(complete=complete, positions=counts["confirmed_position"],
+        unresolved=counts["unresolved"], investment_total=investment_total, cash_equivalent_total=cash)
+    result["public_status_wording"] = (
+        CASH_ONLY_PUBLIC_WORDING if status == "eligible_no_position_facts" and result.get("cash_only_contexts")
+        else "No portfolio position facts disclosed." if status == "eligible_no_position_facts" else "")
+    return status
 
 
 def main():
@@ -62,8 +71,11 @@ def main():
     with REGISTER.open(encoding="utf-8-sig", newline="") as stream:
         obligations = [r for r in csv.DictReader(stream) if
             r["eligibility_status"].startswith("eligible") and int(r["holdings_rows"]) == 0]
-    if len(obligations) != 33:
-        raise ValueError("E1 register population changed; expected 33")
+    # Register v3 (2026-09-15): 8 of v2's 33 eligible zero-output rows moved to
+    # not_yet_reporting on EDGAR no-filing evidence, leaving 25 for E1.
+    if (len(obligations) != ZERO_OUTPUT_OBLIGATIONS or
+            len({(r["cik"], r["report_date"]) for r in obligations}) != ZERO_OUTPUT_OBLIGATIONS):
+        raise ValueError(f"E1 register population changed; expected {ZERO_OUTPUT_OBLIGATIONS} distinct obligations")
     con = duckdb.connect(config={"threads": 2, "memory_limit": "-1"})
     try:
         table = con.execute("""SELECT cik, report_date, filing_date, accession_number
@@ -77,7 +89,7 @@ def main():
     if len(filings) > 5000:
         raise ValueError("E1 narrow filing-index row bound exceeded")
     atomic_json(dest / "request.json", dict(experiment="E1", started_utc=now(), pid=os.getpid(),
-        timeout_seconds=None, memory_limit="unlimited", obligations=33, input_sha256=inputs,
+        timeout_seconds=None, memory_limit="unlimited", obligations=len(obligations), input_sha256=inputs,
         selection="latest indexed primary for target quarter, else positive-companyfacts accession; target instant required"))
     rows = []
     try:
@@ -99,9 +111,12 @@ def main():
                 P=counts["confirmed_position"], A=counts["aggregate"], U=counts["unresolved"],
                 unrecognized_P=result["unrecognized_position_contexts"], classification=status,
                 positive_investment_amount=obligation["positive_investment_amount"],
+                cash_equivalent_total=result.get("cash_equivalent_total"),
+                cash_equivalent_status=result.get("cash_equivalent_status", "unavailable"),
+                public_status_wording=result["public_status_wording"],
                 errors=" | ".join(result["errors"]), evidence_file=key + ".json")
             rows.append(row)
-            print(f"E1 {index}/33 {cik} {quarter}: P={row['P']} A={row['A']} U={row['U']} {status}", flush=True)
+            print(f"E1 {index}/{len(obligations)} {cik} {quarter}: P={row['P']} A={row['A']} U={row['U']} {status}", flush=True)
         for relative, expected in inputs.items():
             if sha(ROOT / relative) != expected:
                 raise ValueError("Census input changed: " + relative)

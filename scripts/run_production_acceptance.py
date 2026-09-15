@@ -19,7 +19,7 @@ from pipeline.programme.core import ContractError,atomic_json,read_json,read_sta
 from pipeline.programme.runner import candidate_path,heavy_lock
 
 SCRATCH=ROOT/"scratch/2026-09-12_programme_e0"
-REGISTER=ROOT/"docs/production_stack/programme_pilot_evidence_2026-09-09/obligations_v2.csv"
+REGISTER=ROOT/"docs/production_stack/programme_pilot_evidence_2026-09-09/obligations_v3.csv"
 
 
 def verify_completion(directory):
@@ -27,6 +27,18 @@ def verify_completion(directory):
     for name,expected in records.items():
         if not isinstance(expected,str) or sha(directory/name)!=expected:
             raise ContractError("Experiment output changed: "+str(directory/name))
+
+
+def verify_registered_experiment(directory, register):
+    """A completed collector on an older denominator is not current evidence."""
+    directory, register = Path(directory), Path(register).resolve()
+    verify_completion(directory)
+    if 'summary.json' not in read_json(directory / 'complete.json'):
+        raise ContractError('Collector summary is not sealed: ' + str(directory))
+    summary = read_json(directory / 'summary.json')
+    key = str(register.relative_to(ROOT)) if register.is_relative_to(ROOT) else str(register)
+    if summary.get('input_sha256', {}).get(key) != sha(register):
+        raise ContractError('Collector used a different obligation register: ' + str(directory))
 
 
 def primary_evidence(holdings,frozen,output,cohort,*,financials=None):
@@ -102,7 +114,7 @@ def primary_evidence(holdings,frozen,output,cohort,*,financials=None):
 
 
 def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,source_directory=None,
-        context_directory=None,acceptance_policy=None):
+        context_directory=None,exclusion_directory=None,acceptance_policy=None):
     started=time.monotonic()
     result=read_json(attempt/"result.json")
     read_stage(attempt,result["identity"],artifacts.required("identity"))
@@ -115,14 +127,14 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
     hp_sha=sha(holdings)
     source_directory=Path(source_directory) if source_directory else None
     context_directory=Path(context_directory) if context_directory else SCRATCH/'e2-recovery-v2'
-    verify_completion(context_directory)
+    exclusion_directory=Path(exclusion_directory) if exclusion_directory else SCRATCH/'e3-v1'
+    verify_registered_experiment(context_directory, REGISTER)
+    verify_registered_experiment(exclusion_directory, REGISTER)
     if source_directory:
         verify_completion(source_directory)
         if read_json(source_directory/'summary.json')['holdings_sha256']!=hp_sha:
             raise ContractError('Independent source evaluation belongs to different holdings')
     field_directory=Path(field_directory) if field_directory else SCRATCH/'e4-v2'
-    for name in ("e2-recovery-v2","e3-v1"):
-        verify_completion(SCRATCH/name)
     verify_completion(field_directory)
     e4_request=read_json(field_directory/"request.json")
     if Path(e4_request["candidate"]).resolve()!=attempt.resolve():
@@ -170,7 +182,7 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
             files[name]["holdings_sha256"]=hp_sha
     add("obligations",REGISTER)
     add("contexts",context_directory/"fund_quarters.csv")
-    add("exclusions",SCRATCH/"e3-v1/exclusions.csv")
+    add("exclusions",exclusion_directory/"exclusions.csv")
     add("fields",field_directory/"assessments.parquet",True)
     if (field_directory/'other_assessments.parquet').is_file():
         add('other_fields',field_directory/'other_assessments.parquet',True)
@@ -255,6 +267,7 @@ def main():
     parser.add_argument('--frontend-directory',type=Path,help='Unpacked candidate frontend data with a bound history manifest')
     parser.add_argument('--source-directory',type=Path,help='Completed independent source and companion evaluation')
     parser.add_argument('--context-directory',type=Path,help='Completed context inventory using the fresh reconciliation')
+    parser.add_argument('--exclusion-directory',type=Path,help='Completed E3 audit bound to the current obligation register')
     parser.add_argument('--acceptance-policy',type=Path,
         help='Versioned evidence-bound owner adoptions; otherwise read the frozen policy if present')
     args=parser.parse_args()
@@ -268,6 +281,7 @@ def main():
     with heavy_lock(candidate):
         run(candidate,attempt,output,field_directory=args.field_directory,frontend_directory=args.frontend_directory,
             source_directory=args.source_directory,context_directory=args.context_directory,
+            exclusion_directory=args.exclusion_directory,
             acceptance_policy=args.acceptance_policy)
 
 

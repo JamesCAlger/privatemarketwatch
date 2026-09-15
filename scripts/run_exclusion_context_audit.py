@@ -1,4 +1,4 @@
-"""E3: cache-only evidence audit of 98 lifecycle exclusions; never edits eligibility.
+"""E3: cache-only evidence audit of lifecycle/reporting exclusions; never edits eligibility.
 
 E3-v2 (2026-09-15, owner standing waiver): an exclusion with no cached filing
 may reach a certified verdict from POSITIVE EDGAR evidence supplied through
@@ -7,6 +7,16 @@ submissions JSON). Cached companyfacts is the secondary contradiction source.
 Absence of evidence never certifies anything: a missing row, a submissions
 error, or a CSV row that disagrees with its own submissions JSON stays
 ``exclusion_unassessable``.
+
+E3-v3 (2026-09-15, owner decision): an investment-FV concept outside
+INVESTMENT_TOTAL blocks certification only when it carries at least one fact
+whose period end is at or before the excluded quarter (or a fact with no period
+end at all). Those facts are recorded in the evidence. A concept whose facts all
+postdate the quarter cannot carry evidence about it and no longer blocks.
+
+The v3 register also excludes not_yet_reporting obligations. These require
+verified EDGAR absence of a primary filing, irrespective of comparative
+investment facts in a later filing. All such facts remain in the evidence.
 """
 from __future__ import annotations
 
@@ -27,7 +37,7 @@ import duckdb
 from pipeline.context_inventory import scan_instance
 from pipeline.programme.core import atomic_json, now, sha
 from pipeline.programme.runner import candidate_path, heavy_lock
-from scripts.run_context_census import INDEX, REGISTER, select_source
+from scripts.run_context_census import EXCLUDED_OBLIGATIONS, INDEX, REGISTER, select_source
 
 INVESTMENT_TOTAL = re.compile(r"^(InvestmentOwnedAtFairValue|InvestmentsAtFairValue|"
     r"InvestmentsFairValueDisclosure|InvestmentCompanyInvestmentsFairValue|InvestmentsAndOtherFinancialInstruments)$")
@@ -44,12 +54,38 @@ POLICY = ("No eligibility or threshold edits; ambiguity blocks certification. "
           "no_periodic_filing_confirmed certifies that EDGAR lists no 10-K/10-Q for the quarter and the "
           "entity's first periodic report is later; it is not proof the fund was not investing. "
           "exclusion_contradicted_filing_exists means EDGAR lists a periodic filing for the quarter, so the "
-          "no-filing premise fails and the instance must be inventoried before the exclusion can stand.")
+          "no-filing premise fails and the instance must be inventoried before the exclusion can stand. "
+          "An unmapped investment-FV companyfacts concept blocks a verdict only when it carries a fact with "
+          "period end at or before the quarter (or no period end); those facts are recorded in the evidence.")
 
 
 def _display(path):
     path = Path(path).resolve()
     return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
+
+
+def unknown_concept_facts(meta):
+    """Every fact on an unmapped investment-FV concept: any unit, form or period."""
+    facts = []
+    for unit, events in meta.get("units", {}).items():
+        for event in events:
+            facts.append(dict(unit=unit, start=event.get("start"), end=event.get("end"), val=event.get("val"),
+                              accn=event.get("accn"), filed=event.get("filed"), form=event.get("form")))
+    return sorted(facts, key=lambda f: (f["end"] or "", f["filed"] or "", f["accn"] or ""))
+
+
+def blocking_unknown_facts(facts_by_concept, quarter):
+    """Facts on unmapped concepts that could bear on the quarter: end <= quarter, or no end.
+
+    Only these block certification. A concept whose facts all postdate the
+    quarter cannot contradict or certify anything about it.
+    """
+    blocking = {}
+    for concept, facts in facts_by_concept.items():
+        hits = [f for f in facts if not f["end"] or f["end"] <= quarter]
+        if hits:
+            blocking[concept] = hits
+    return blocking
 
 
 def load_filing_gaps(path):
@@ -121,7 +157,7 @@ def assess_filing_gap(cik, quarter, gaps):
 
 
 def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_DIR,
-        instances_dir=INSTANCES_DIR, expected=98, filing_gaps=None, filing_gaps_sha256=None):
+        instances_dir=INSTANCES_DIR, expected=EXCLUDED_OBLIGATIONS, filing_gaps=None, filing_gaps_sha256=None):
     started = time.monotonic()
     dest.mkdir(parents=True, exist_ok=False)
     con = duckdb.connect(config={"threads": 2, "memory_limit": "-1", "temp_directory": str(dest / "temp")})
@@ -139,7 +175,8 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             sources.extend(sub["path"] for sub in gaps["submissions"].values())
         inputs = {_display(p): sha(p) for p in sources}
         with Path(register).open(encoding="utf-8-sig", newline="") as stream:
-            obligations = [r for r in csv.DictReader(stream) if r["eligibility_status"] == "not_yet_investment_operating"]
+            obligations = [r for r in csv.DictReader(stream) if r["eligibility_status"] in
+                           {"not_yet_investment_operating", "not_yet_reporting"}]
         total = len(obligations)
         if total != expected or len({(r["cik"], r["report_date"]) for r in obligations}) != expected:
             raise ValueError("E3 expected %d distinct lifecycle exclusions" % expected)
@@ -156,9 +193,12 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             raise ValueError("Narrow filing-index row bound exceeded")
         con.execute("CREATE TABLE cf(cik VARCHAR,concept VARCHAR,currency VARCHAR,quarter VARCHAR,accession VARCHAR,filed VARCHAR,amount DOUBLE)")
         cf_status = {}
+        cf_unknown = {}
         for cik in ciks:
             path = Path(companyfacts_dir) / (cik + ".json")
-            status = dict(path=str(path), complete=False, errors=[], unknown_concepts=[], unresolved_total_units=[])
+            status = dict(path=str(path), complete=False, errors=[], unknown_concepts=[],
+                          unknown_concept_facts={}, unresolved_total_units=[])
+            cf_unknown[cik] = {}
             try:
                 if path.stat().st_size > 30_000_000:
                     raise ValueError("Companyfacts source exceeds 30 MB bound")
@@ -170,7 +210,14 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
                     for concept, meta in tags.items():
                         if not INVESTMENT_TOTAL.fullmatch(concept):
                             if "investment" in concept.lower() and "fairvalue" in concept.lower():
-                                status["unknown_concepts"].append(namespace + ":" + concept)
+                                name = namespace + ":" + concept
+                                facts_on_concept = unknown_concept_facts(meta)
+                                status["unknown_concepts"].append(name)
+                                status["unknown_concept_facts"][name] = dict(
+                                    facts=len(facts_on_concept),
+                                    earliest_period_end=min((f["end"] for f in facts_on_concept if f["end"]), default=None),
+                                    facts_without_period_end=sum(1 for f in facts_on_concept if not f["end"]))
+                                cf_unknown[cik][name] = facts_on_concept
                             continue
                         for unit, events in meta.get("units", {}).items():
                             if not re.fullmatch(r"[A-Z]{3}", unit):
@@ -201,8 +248,11 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             totals = [dict(zip(names, values)) for values in table.fetchall()]
             positives = [r for r in totals if r["distinct_amounts"] == 1 and
                          r["amount"] is not None and math.isfinite(r["amount"]) and r["amount"] > 0]
+            reporting_exclusion = obligation["eligibility_status"] == "not_yet_reporting"
             source_obligation = dict(obligation)
-            if not source_obligation["positive_source_accession"] and positives:
+            if reporting_exclusion:
+                source_obligation["positive_source_accession"] = ""
+            elif not source_obligation["positive_source_accession"] and positives:
                 source_obligation["positive_source_accession"] = max(positives, key=lambda r: (r["filed"], r["accession"]))["accession"]
             accession, selection, choices = select_source(source_obligation, filings)
             compact = accession.replace("-", "")
@@ -220,17 +270,31 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             prior_count, prior_earliest, prior_max = con.execute("""SELECT count(*),min(quarter),max(amount)
                 FROM cf WHERE cik=? AND quarter<=? AND amount>0 AND isfinite(amount)""", [cik, quarter]).fetchone()
             prior_positive = dict(facts=int(prior_count), earliest_period_end=prior_earliest, max_amount=prior_max)
-            cf_ok = cf["complete"] and not cf["unknown_concepts"] and not cf["unresolved_total_units"]
+            # E3-v3: an unmapped investment-FV concept blocks only through facts
+            # that could bear on this quarter (end <= quarter, or no end).
+            unknown_blocking = blocking_unknown_facts(cf_unknown[cik], quarter)
+            cf_ok = cf["complete"] and not unknown_blocking and not cf["unresolved_total_units"]
             filing_gap = None
             secondary = "not_applied"
-            if counts["confirmed_position"] or positives:
+            if reporting_exclusion:
+                # A comparative investment total does not establish a primary
+                # filing. The index or verified submissions must establish it.
+                if choices:
+                    verdict = "exclusion_contradicted_filing_exists"
+                elif gaps is not None:
+                    gap_verdict, filing_gap = assess_filing_gap(cik, quarter, gaps)
+                    verdict = gap_verdict or "exclusion_unassessable"
+                else:
+                    verdict = "exclusion_unassessable"
+                secondary = "comparative_facts_retained"
+            elif counts["confirmed_position"] or positives:
                 verdict = "exclusion_contradicted"
             elif (not full_scope or counts["unresolved"] or not cf["complete"] or
-                  cf["unknown_concepts"] or cf["unresolved_total_units"] or conflict):
+                  unknown_blocking or cf["unresolved_total_units"] or conflict):
                 verdict = "exclusion_unassessable"
             else:
                 verdict = "no_contradiction_observed"
-            if not accession and gaps is not None:
+            if not reporting_exclusion and not accession and gaps is not None:
                 gap_verdict, filing_gap = assess_filing_gap(cik, quarter, gaps)
                 if gap_verdict == "no_periodic_filing_confirmed":
                     if prior_count:
@@ -251,11 +315,15 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             atomic_json(dest / (key + ".json"), dict(obligation=obligation, accession=accession,
                 selection=selection, indexed_choices=choices, inventory=inventory,
                 companyfacts=cf, latest_investment_totals=totals, prior_positive_facts=prior_positive,
+                unknown_concept_facts_at_or_before_quarter=unknown_blocking,
                 filing_gap=filing_gap, secondary_check=secondary, verdict=verdict))
             results.append(dict(cik=cik, quarter=quarter, verdict=verdict, accession=accession,
+                eligibility_status=obligation["eligibility_status"], indexed_primary_filings=choices,
                 P=counts["confirmed_position"], A=counts["aggregate"], U=counts["unresolved"],
                 primary_scope_complete=full_scope, positive_total_observations=len(positives),
                 companyfacts_complete=cf["complete"], companyfacts_conflict=conflict,
+                unknown_concepts=len(cf["unknown_concepts"]),
+                unknown_concept_blocking_facts=sum(len(v) for v in unknown_blocking.values()),
                 prior_positive_facts=prior_count, prior_positive_earliest=prior_earliest or "",
                 filing_gap_status="" if filing_gap is None or filing_gap["row"] is None else filing_gap["row"]["status"],
                 filing_gap_reason="" if filing_gap is None else filing_gap["reason"] or "",
@@ -279,7 +347,7 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
             filing_gaps=None if gaps is None else dict(path=str(gaps["path"]), sha256=gaps["sha256"],
                 submissions_json_sha256={cik: sub["sha256"] for cik, sub in gaps["submissions"].items()}),
             secondary_check={s: sum(r["secondary_check"] == s for r in results)
-                             for s in ("not_applied", "clear", "contradicted", "unavailable")},
+                             for s in ("not_applied", "clear", "contradicted", "unavailable", "comparative_facts_retained")},
             elapsed_seconds=time.monotonic()-started, policy=POLICY))
         atomic_json(dest / "complete.json", {name: sha(dest / name) for name in ("summary.json", "exclusions.csv")})
         print(str(verdicts), flush=True)

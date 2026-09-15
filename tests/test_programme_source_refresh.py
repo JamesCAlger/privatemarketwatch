@@ -54,6 +54,29 @@ def test_refresh_registry_entries_are_well_formed():
 
 
 @pytest.mark.needs_cache
+@pytest.mark.parametrize('entry', source_refresh.REFRESHES[2:], ids=lambda e: e['accession'])
+def test_explicit_member_refreshes_reproduce_pinned_source_counts(tmp_path, monkeypatch, entry):
+    """Reject a multi-hour candidate before launch if a diagnosed reparse drifted."""
+    from decimal import Decimal
+    from pipeline.programme.core import sha
+    source = config.BDC_XBRL_CACHE_DIR / entry['cik'] / (entry['accession'].replace('-', '') + '.xml')
+    if not source.is_file():
+        pytest.skip('Diagnosed cached filing unavailable')
+    assert sha(source) == entry['source_sha256']
+    with duckdb.connect() as con:
+        metadata = con.execute('SELECT * FROM read_csv(?,all_varchar=true) WHERE accession_number=?',
+            [str(config.BDC_FILINGS_INDEX_FILE), entry['accession']]).fetchdf()
+    assert len(metadata) == 1
+    monkeypatch.setattr(bdc_filings, 'BDC_DEDUPE_AXIS_SPLITS_FILE', tmp_path / 'splits.csv')
+    rows = bdc_filings._parse_single_filing(str(source), metadata.iloc[0].to_dict())
+    assert len(rows) <= 5000
+    frame = bdc_filings._deduplicate_bdc_holdings(pd.DataFrame(rows))
+    total = sum(Decimal(str(v)) for v in frame.fair_value if str(v) not in ('', 'nan', 'None'))
+    assert len(frame) == entry['expected_rows']
+    assert total == Decimal(entry['expected_fair_value'])
+
+
+@pytest.mark.needs_cache
 def test_cached_midcap_reparse_recovers_fy2025_schedule(tmp_path,monkeypatch):
     entry=next(e for e in source_refresh.REFRESHES if e['cik']=='2006758')
     source=config.BDC_XBRL_CACHE_DIR/'2006758'/(entry['accession'].replace('-','')+'.xml')

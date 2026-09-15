@@ -34,9 +34,12 @@ def write_gaps(directory, status="no_filing_for_quarter", matching="", earliest=
     return path
 
 
-def companyfacts(directory, events):
-    (directory / (CIK + ".json")).write_text(json.dumps(dict(cik=int(CIK), facts={"us-gaap": {
-        "InvestmentOwnedAtFairValue": {"units": {"USD": events}}}})), encoding="utf-8")
+def companyfacts(directory, events, extra=None):
+    concepts = {"InvestmentOwnedAtFairValue": {"units": {"USD": events}}}
+    for concept, concept_events in (extra or {}).items():
+        concepts[concept] = {"units": {"USD": concept_events}}
+    (directory / (CIK + ".json")).write_text(json.dumps(dict(cik=int(CIK), facts={"us-gaap": concepts})),
+                                             encoding="utf-8")
 
 
 def fact(end, val, filed="2023-08-10", accn="0001234567-23-000010"):
@@ -92,6 +95,41 @@ def test_edgar_absence_with_later_first_report_certifies(fixture):
     assert summary["filing_gaps"]["path"] == str(gaps.resolve())
     assert record["filing_gap"]["submissions_json_sha256"] == summary["filing_gaps"]["submissions_json_sha256"][CIK]
     assert record["filing_gap"]["json_periodic_filings_total"] == 2
+
+
+@pytest.mark.parametrize("positive", [False, True])
+def test_not_yet_reporting_is_certified_by_primary_filing_absence(fixture, positive):
+    register = fixture["register"]
+    register.write_text(register.read_text().replace("not_yet_investment_operating", "not_yet_reporting"))
+    if positive:
+        companyfacts(fixture["companyfacts_dir"], [fact(Q, 250_000), fact("2023-06-30", 5_000_000)])
+    gaps = write_gaps(fixture["gaps_dir"])
+    summary, row, record = audit(fixture, filing_gaps=gaps)
+    assert row["verdict"] == "no_periodic_filing_confirmed"
+    assert row["positive_total_observations"] == str(int(positive))
+    assert row["indexed_primary_filings"] == "0" and row["accession"] == ""
+    assert row["secondary_check"] == "comparative_facts_retained"
+    assert summary["denominator_certifiable"]
+    assert len(record["latest_investment_totals"]) == int(positive)
+
+
+def test_not_yet_reporting_cannot_self_certify_from_register(fixture):
+    register = fixture["register"]
+    register.write_text(register.read_text().replace("not_yet_investment_operating", "not_yet_reporting"))
+    summary, row, _ = audit(fixture)
+    assert row["verdict"] == "exclusion_unassessable"
+    assert not summary["denominator_certifiable"]
+
+
+def test_not_yet_reporting_with_indexed_primary_filing_is_contradicted(fixture):
+    register = fixture["register"]
+    register.write_text(register.read_text().replace("not_yet_investment_operating", "not_yet_reporting"))
+    index = fixture["index"]
+    index.write_text(index.read_text() + f"{CIK},{Q},2023-05-01,0001234567-23-000010,10-Q\n")
+    gaps = write_gaps(fixture["gaps_dir"])
+    summary, row, _ = audit(fixture, filing_gaps=gaps)
+    assert row["verdict"] == "exclusion_contradicted_filing_exists"
+    assert not summary["denominator_certifiable"]
 
 
 def test_filing_exists_not_indexed_contradicts(fixture):
@@ -150,6 +188,61 @@ def test_incomplete_companyfacts_blocks_certification(fixture):
     _, row, _ = audit(fixture, filing_gaps=gaps)
     assert row["verdict"] == "exclusion_unassessable" and row["secondary_check"] == "unavailable"
     assert row["filing_gap_reason"] == "companyfacts_secondary_check_unavailable"
+
+
+UNKNOWN = "RestrictedInvestmentsAtFairValue"
+
+
+def test_unknown_concept_with_only_later_facts_does_not_block(fixture):
+    # E3-v3: a concept outside INVESTMENT_TOTAL whose facts all postdate the
+    # quarter cannot carry evidence about it, so it no longer blocks.
+    companyfacts(fixture["companyfacts_dir"], [fact("2023-06-30", 5_000_000)],
+                 extra={UNKNOWN: [fact("2023-06-30", 900_000), fact("2023-09-30", 1_200_000, accn="0001234567-23-000020")]})
+    gaps = write_gaps(fixture["gaps_dir"])
+    summary, row, record = audit(fixture, filing_gaps=gaps)
+    assert row["verdict"] == "no_periodic_filing_confirmed" and row["secondary_check"] == "clear"
+    assert row["unknown_concepts"] == "1" and row["unknown_concept_blocking_facts"] == "0"
+    assert record["companyfacts"]["unknown_concepts"] == ["us-gaap:" + UNKNOWN]
+    assert record["companyfacts"]["unknown_concept_facts"]["us-gaap:" + UNKNOWN] == dict(
+        facts=2, earliest_period_end="2023-06-30", facts_without_period_end=0)
+    assert record["unknown_concept_facts_at_or_before_quarter"] == {}
+    assert summary["denominator_certifiable"] is True
+
+
+def test_unknown_concept_with_fact_at_or_before_quarter_still_blocks(fixture):
+    # A fact at the quarter on an unmapped concept is evidence the audit cannot
+    # read: it blocks certification (it does not contradict) and is recorded.
+    companyfacts(fixture["companyfacts_dir"], [fact("2023-06-30", 5_000_000)],
+                 extra={UNKNOWN: [fact(Q, 750_000), fact("2023-06-30", 900_000)]})
+    gaps = write_gaps(fixture["gaps_dir"])
+    summary, row, record = audit(fixture, filing_gaps=gaps)
+    assert row["verdict"] == "exclusion_unassessable" and row["secondary_check"] == "unavailable"
+    assert row["filing_gap_reason"] == "companyfacts_secondary_check_unavailable"
+    assert row["unknown_concept_blocking_facts"] == "1" and row["prior_positive_facts"] == "0"
+    blocking = record["unknown_concept_facts_at_or_before_quarter"]["us-gaap:" + UNKNOWN]
+    assert [(f["end"], f["val"], f["unit"], f["accn"]) for f in blocking] == [(Q, 750_000, "USD", "0001234567-23-000010")]
+    assert summary["denominator_certifiable"] is False
+    assert summary["companyfacts_sources"][CIK]["unknown_concept_facts"]["us-gaap:" + UNKNOWN]["earliest_period_end"] == Q
+
+
+def test_unknown_concept_fact_before_quarter_is_recorded_without_filing_gaps(fixture):
+    # The primary (non-EDGAR) path records the same blocking facts: an earlier
+    # fact on an unmapped concept keeps the verdict unassessable.
+    companyfacts(fixture["companyfacts_dir"], [fact("2023-06-30", 5_000_000)],
+                 extra={UNKNOWN: [fact("2022-12-31", 10)]})
+    _, row, record = audit(fixture)
+    assert row["verdict"] == "exclusion_unassessable" and row["unknown_concept_blocking_facts"] == "1"
+    assert record["unknown_concept_facts_at_or_before_quarter"]["us-gaap:" + UNKNOWN][0]["end"] == "2022-12-31"
+
+
+def test_unknown_concept_fact_without_period_end_blocks(fixture):
+    # A fact that cannot be placed in time is treated as potentially bearing on the quarter.
+    companyfacts(fixture["companyfacts_dir"], [fact("2023-06-30", 5_000_000)],
+                 extra={UNKNOWN: [dict(val=1, accn="0001234567-23-000010", filed="2023-08-10", form="10-Q")]})
+    gaps = write_gaps(fixture["gaps_dir"])
+    _, row, record = audit(fixture, filing_gaps=gaps)
+    assert row["verdict"] == "exclusion_unassessable" and row["unknown_concept_blocking_facts"] == "1"
+    assert record["companyfacts"]["unknown_concept_facts"]["us-gaap:" + UNKNOWN]["facts_without_period_end"] == 1
 
 
 def test_csv_row_must_agree_with_its_submissions_json(tmp_path):
