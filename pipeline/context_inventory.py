@@ -109,7 +109,7 @@ def classify_context(context: dict, cik: str, *, basis_concepts: set[str]) -> tu
     # the extractor (pipeline.explicit_contexts.EXPLICIT_MEMBER_RULES).
     matched = explicit_member_dimensions(cik, [
         (d["kind"], d["axis_namespace"], local(d["axis"]), d["member_namespace"], local(d["value"]))
-        for d in dims])
+        for d in dims], period=context["period"])
     if matched:
         return "confirmed_position", matched[0].name
 

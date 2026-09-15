@@ -94,6 +94,10 @@ class ExplicitMemberRule:
     required_axes: frozenset = frozenset()          # beyond identity_axis
     other_axes: frozenset = frozenset()             # permitted, not used for identity
     excluded_members: frozenset = frozenset()       # lowercased identity member local names
+    # (axis_local_lower, member_local_lower, instant) triples; instant '' means
+    # every period. Excludes a context on any axis member, e.g. a whole member
+    # family the filer mis-dated. Each triple needs a documented mechanism.
+    excluded_axis_members: frozenset = frozenset()
     humanize: str = 'camel'                         # 'camel' (split CamelCase) | 'none'
     instant_only: bool = True
     periods: frozenset | None = None                # pin to these instants when set
@@ -126,6 +130,94 @@ EXPLICIT_MEMBER_RULES={
                                     'lordabbettprivatecreditfundmember',
                                     'stifelbanktrustmember'}),
     ),
+    # AB Private Credit Investors Corp, first-year explicit-member quarters.
+    # Position identity is the portfolio-company member on dei:LegalEntityAxis
+    # (extension namespace http://www.abpcic.com/YYYYMMDD; the filer already
+    # mints one member per tranche, e.g. AmerCareRoyalLlcFourMember) combined
+    # with DebtInstrumentAxis (lien family, label carries the family's pct of
+    # net assets), CreditFacilityAxis (term loan / DDTL / revolver),
+    # InvestmentTypeAxis and StatementClassOfStockAxis (preferred vs warrant
+    # of the same series, e.g. Vectra AI Series F). Industry is the filer's
+    # abpcic:InvestmentServiceTypeAxis.
+    # Evidence 0001193125-23-145163 (Q1-2023): 448 instant contexts (383 debt,
+    # 65 equity) sum to 1,179,343,662 = the undimensioned
+    # InvestmentOwnedAtFairValue exactly; the 440 2022-12-31 comparatives in
+    # the same instance also reconcile exactly (1,122,517,095). Not admitted by
+    # the axis set: 133 abpcic:InvesteeAxis/FacilityTypeAxis unfunded-
+    # commitment contexts (-3,483,621, outside the total), 2 money-market
+    # contexts on CashAndCashEquivalentsAxis (54,630,117, cash equivalents),
+    # Bowline Topco srt:ConsolidatedEntitiesAxis affiliate rollups (173,837,
+    # already a position), DebtInstrumentAxis-only / InvestmentTypeAxis-only
+    # family subtotals, and the 65 duration equity contexts (share
+    # descriptions).
+    # Evidence 0001193125-23-212335 (Q2-2023): 499 contexts at 2023-06-30 sum
+    # to 1,369,247,302 vs the filer total 1,227,572,852 (+141,674,450), while
+    # the instance's own 2022-12-31 comparatives are short by exactly
+    # -141,674,450. The 38 contexts on
+    # DebtInstrumentAxis=FirstLienSeniorSecuredDebtAt234.31Member (the
+    # 12/31/2022 lien-family label; 288 rows carry it at 12/31/2022) are the
+    # 12/31/2022 rows of 38 positions tagged with the 6/30/2023 instant: 34
+    # of 38 pair with a live 6/30 row of the same borrower and facility, same
+    # face amount, cost/FV drifting the way OID accretion and revolver draws
+    # do. Excluding that member family at 2023-06-30 only restores exact
+    # conservation (461 contexts = 1,227,572,852). The same label is genuine
+    # at 2023-03-31 (41 rows, inside the Q1 total), hence the period scope.
+    # Pinned to the two evidenced instants; the FY2022 10-K and the 12/31
+    # comparatives are a follow-up once checked against the FY2022 total.
+    '0001634452': ExplicitMemberRule(
+        name='abpcic_explicit_legal_entity_and_instrument',
+        identity_axis='legalentityaxis',
+        member_namespace_pattern=r'https?://www\.abpcic\.com/\d{8}$',
+        industry_axis='investmentservicetypeaxis',
+        instrument_axes=('debtinstrumentaxis','creditfacilityaxis',
+                         'investmenttypeaxis','statementclassofstockaxis'),
+        required_axes=frozenset({'investmenttypeaxis'}),
+        excluded_members=frozenset({'abprivatecreditinvestorscorpmember',
+                                    'abprivatecreditinvestorscorporationmember',
+                                    'abpcicmember'}),
+        excluded_axis_members=frozenset({
+            ('debtinstrumentaxis','firstlienseniorsecureddebtat234.31member','2023-06-30'),
+        }),
+        periods=frozenset({'2023-03-31','2023-06-30'}),
+    ),
+    # Onex Direct Lending BDC Fund (Onex Falcon), Q1-2023. The filer put the
+    # portfolio company on us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis
+    # (extension namespace http://onexfalcondirectlending.com/YYYYMMDD) for its
+    # own directly held loans -- not equity-method investees -- and the tranche
+    # on us-gaap:LongtermDebtTypeAxis (InitialTermLoan / DelayedDrawTermLoan /
+    # RevolvingLoan / CommonEquity / EquityUnits; one member is the standard
+    # us-gaap:RevolvingCreditFacilityMember). DebtInstrumentAxis carries the
+    # affiliation category (NonControlledAndNonAffiliatedInvestmentsMember)
+    # and InvestmentTypeAxis the debt/equity split; neither is identity.
+    # Evidence 0000950170-23-021345: 56 five-axis contexts at 2023-03-31 (53
+    # with FV, 3 unfunded DDTL/revolver rows with cost only) sum to
+    # 521,760,590 vs the undimensioned total 526,177,088 (-0.839%). The
+    # residual is source omission: the Automotive (-479,070) and Healthcare
+    # (-3,937,428) industry subtotals exceed their tagged tranche rows and no
+    # context in the instance carries the difference. The 2022-12-31
+    # comparatives in the same instance reconcile exactly (504,942,593).
+    # Not admitted: the Foundation Risk Partners 4-axis context (19,065,681 =
+    # its term loan + DDTL, a borrower subtotal; LongtermDebtTypeAxis is
+    # required), 18 investee+tranche spread-only contexts (no industry axis),
+    # 51 contexts that add VariableRateAxis (rate facts only; not an allowed
+    # axis, so interest rates stay unattached for this quarter), industry /
+    # type / fair-value-level subtotals. The axis name does not match the
+    # staging is_subsidiary patterns (nonconsolidatedsubsidiar,
+    # equitymethodinvestmentequitymethodinvesteenameaxis), so these rows are
+    # own-book, not flagged. Pinned to the evidenced instant.
+    '0001860424': ExplicitMemberRule(
+        name='onex_explicit_investee_and_debt_type',
+        identity_axis='equitymethodinvestmentnonconsolidatedinvesteeaxis',
+        member_namespace_pattern=r'https?://onexfalcondirectlending\.com/\d{8}$',
+        industry_axis='equitysecuritiesbyindustryaxis',
+        instrument_axes=('longtermdebttypeaxis',),
+        required_axes=frozenset({'longtermdebttypeaxis','equitysecuritiesbyindustryaxis',
+                                 'investmenttypeaxis'}),
+        other_axes=frozenset({'debtinstrumentaxis'}),
+        excluded_members=frozenset({'onexdirectlendingbdcfundmember',
+                                    'onexfalcondirectlendingbdcfundmember'}),
+        periods=frozenset({'2023-03-31'}),
+    ),
 }
 
 
@@ -135,11 +227,13 @@ def rule_for(cik):
     return EXPLICIT_MEMBER_RULES.get(digits.zfill(10)) if digits else None
 
 
-def explicit_member_dimensions(cik,dimensions):
+def explicit_member_dimensions(cik,dimensions,period=None):
     """Pure predicate shared by the extractor and the context inventory.
 
     ``dimensions`` is an iterable of ``(kind, axis_namespace, axis_local,
-    member_namespace, member_local)`` tuples. Returns ``(rule, {axis_local_lower:
+    member_namespace, member_local)`` tuples. ``period`` is the context instant
+    (used only by period-scoped ``excluded_axis_members``; a None period never
+    matches a period-scoped exclusion). Returns ``(rule, {axis_local_lower:
     member_local})`` for a position context, else None.
     """
     rule=rule_for(cik)
@@ -162,6 +256,12 @@ def explicit_member_dimensions(cik,dimensions):
     if rule.identity_axis not in found or not rule.required_axes<=found.keys(): return None
     identity=found[rule.identity_axis]
     if not re.search('[a-zA-Z]',identity) or identity.lower() in rule.excluded_members: return None
+    if rule.excluded_axis_members:
+        instant=str(period or '').strip()
+        for axis,member in found.items():
+            key=(axis,member.lower())
+            if key+('',) in rule.excluded_axis_members or (instant and key+(instant,) in rule.excluded_axis_members):
+                return None
     return rule,found
 
 
@@ -196,7 +296,8 @@ def explicit_member_position(context):
         axis_namespace,axis=_qname(node,node.get('dimension',''))
         member_namespace,member=_qname(node,(node.text or '').strip())
         dimensions.append(('explicit',axis_namespace,axis,member_namespace,member))
-    matched=explicit_member_dimensions(identifier,dimensions)
+    instant=(instants[0].text or '').strip() if len(instants)==1 else None
+    matched=explicit_member_dimensions(identifier,dimensions,period=instant)
     if matched is None: return None
     rule,found=matched
     parts=[found[rule.identity_axis]]+[found[axis] for axis in rule.instrument_axes if axis in found]

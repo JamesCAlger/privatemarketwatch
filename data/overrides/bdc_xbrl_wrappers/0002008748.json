@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0002008748",
   "entity_name": "Lord Abbett Private Credit Fund",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "LORD_ABBETT_PRIVATE_CREDIT",
@@ -24,7 +24,9 @@
       "debt": [
         "revolver",
         "delayed draw",
-        "delayed draw term"
+        "delayed draw term",
+        "term loan",
+        "incremental"
       ],
       "equity": [
         "equity interest",
@@ -62,6 +64,10 @@
         "family": "debt"
       },
       {
+        "regex": "(?i)^\\s*(?!(?:sub[-\\s]*)?total\\b)\\S.*?\\s(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Incremental)\\b",
+        "family": "debt"
+      },
+      {
         "regex": "(?i)^\\s*(?:First|Second)\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?\\s*$",
         "family": "debt"
       },
@@ -75,8 +81,7 @@
       }
     ],
     "category_marker_re": "(?i)^\\s*(?:First\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Second\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Equity\\s+\\[Member\\]|Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?))\\s*$",
-    "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\s+\\d+\\s*$"
+    "category_marker_before_total": true
   },
   "identifier_format": {
     "delimiter": " ",
@@ -92,12 +97,14 @@
   },
   "archetypes": {
     "debt": {
-      "description": "Lord Abbett borrower debt rows when the identifier contains explicit revolver or delayed-draw instrument text.",
+      "description": "Lord Abbett borrower debt rows: explicit srt:OwnershipAxis members humanised as '<issuer> Term Loan|Delayed Draw|Revolver|Incremental ...' (optionally followed by a vintage year, lot ordinal, amendment label or currency), plus the older typed-axis '<issuer> (Revolver)' / '(Delayed Draw)' rows.",
       "detection_rules": {
         "keywords": [
           "Revolver",
           "Delayed Draw",
-          "Delayed Draw Term"
+          "Delayed Draw Term",
+          "Term Loan",
+          "Incremental"
         ],
         "keyword_mode": "any"
       },
@@ -153,10 +160,52 @@
     },
     {
       "id": "LORD_ABBETT_BORROWER_ROWS_WITHOUT_FV",
-      "description": "Many borrower identifiers contain maturity evidence and instrument hints such as Revolver or Delayed Draw, but cached XBRL rows currently have blank fair value. The wrapper recognizes the identifier shape but does not synthesize missing FV.",
-      "first_seen_quarter": "2025-06-30",
+      "description": "Typed InvestmentIdentifierAxis rows such as '<issuer>, Inc. (Revolver)' / '(Delayed Draw)' (2024-12-31 through 2025-09-30) carry commitment text but blank fair value in the cached XBRL. The wrapper recognizes the identifier shape but does not synthesize missing FV. From 2025-12-31 the filer moved to explicit srt:OwnershipAxis members and these typed rows stop.",
+      "first_seen_quarter": "2024-12-31",
       "detection_pattern": "<issuer> (Revolver) or <issuer> (Delayed Draw) with blank FV",
       "disposition": "warn"
+    },
+    {
+      "id": "LORD_ABBETT_EXPLICIT_MEMBER_TRANCHE_SUFFIX",
+      "description": "Wrapper v2 (2026-09-15). Positions are explicit srt:OwnershipAxis members (extension namespace lordabbett.com) humanised by pipeline.explicit_contexts as '<issuer> Term Loan' / 'Delayed Draw' / 'Revolver' / 'Incremental ...', optionally followed by a vintage year ('Delayed Draw 2024'), a lot ordinal ('Delayed Draw 1'), an amendment label ('Term Loan 20252 nd Amendment' is the humaniser's rendering of '2025 2nd Amendment') or a currency ('Term Loan 2025 USD/EUR/AUD'). The second fallback_family_patterns entry routes any identifier with an issuer stem followed by one of these tokens to the debt family, and 'term loan' / 'incremental' were added to leaf_markers_by_family.debt so they classify as debt_position_leaf. JV look-through rows share this shape and carry investmentcompanynonconsolidatedsubsidiaryaxis in dimensions_raw (retain-and-flag, not aggregates).",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "^<issuer> (Term Loan|Delayed Draw|Revolver|Incremental)( <year>| <ordinal>| <amendment>| <currency>)*$",
+      "disposition": "expected"
+    },
+    {
+      "id": "LORD_ABBETT_TRAILING_LOT_LABELS_ARE_DISTINCT_TRANCHES",
+      "description": "Wrapper v2 (2026-09-15). Trailing years and lot ordinals denote distinct coexisting positions, not volatile decoration: e.g. 'RSC Acquisition Inc Delayed Draw', '... Delayed Draw 1' and '... Delayed Draw 2' all exist in 2024-12-31; 'RJW Logistics Group Inc Term Loan 2024' and '... Term Loan 2025' coexist from 2025-12-31. The v1 canonical_strip_re '\\s+\\d+\\s*$' collapsed 20 such same-quarter groups into one position key, so it was removed. Cross-quarter renames (e.g. 'Applied Aerospace Structures Corp Delayed Draw' split into 'Delayed Draw 2024' + 'Delayed Draw 2025' at 2025-12-31) are genuine taxonomy re-cuts and are left to the position matcher.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "<issuer> <tranche> [1|2|2024|2025]",
+      "disposition": "expected"
+    },
+    {
+      "id": "LORD_ABBETT_BARE_ISSUER_MEMBERS_EARLY_TAXONOMY",
+      "description": "Bare '<issuer>' members without a tranche token (e.g. 'BCM One Inc', 'Transnet YX Inc', 'Vensure Employer Services Inc', 'GCOM', 'Databricks Inc') appear as own-book rows in the 2024-09-30, 2024-12-31 and 2025-03-31 filings (a few persist to 2025-09-30) and as JV look-through comparatives. They carry interest_rate and maturity_date, i.e. they are the term loans before the filer added 'Term Loan' to the member name; later filings restate the same period under '<issuer> Term Loan'. The wrapper deliberately leaves them uncovered (no family): routing them through a bare-name fallback would classify them as debt_issuer_rollup, which source reconciliation excuses as an issuer-level subtotal and would hide real positions. They remain visible as unclassified source rows.",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "^<issuer entity name>$ with interest_rate and maturity_date populated",
+      "disposition": "warn"
+    },
+    {
+      "id": "LORD_ABBETT_BARE_EQUITY_MEMBERS",
+      "description": "'Arkas Bidco Limited' and 'Arkas Bidco Limited Two' (2025-12-31; industry axis 'Personal Care Products Equity'; FV 888,000 and 2,000) are equity positions whose member names carry no instrument text. They are left uncovered for the same reason as the bare debt members (issuer_rollup would excuse them). Candidate for a same-accession HTML-section bridge (docs/wrapper/WRAPPER_PROFILE.md step 1f) rather than a name-specific wrapper rule.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "Arkas Bidco Limited / Arkas Bidco Limited Two",
+      "disposition": "warn"
+    },
+    {
+      "id": "LORD_ABBETT_AXIS_SWAP_MEMBERS",
+      "description": "Two filer tagging quirks put the position member on the industry axis: 'Commercial Services Supplies' (2025-12-31, two rows, FV 379,000 and 308,000) carries 'Ambient Enterprises Holdco LLC Term Loan 2025 2nd/3rd Amendment' as its industry, and 'Databricks Inc' (2025-06-30, 2025-09-30) carries 'Databricks Inc Term Loan' as its industry. The wrapper classifies identifier text only and cannot repair the swap; a fix belongs in pipeline.explicit_contexts, not here.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "ownershipaxis member is an industry label while equitysecuritiesbyindustryaxis member ends in Term Loan",
+      "disposition": "warn"
+    },
+    {
+      "id": "LORD_ABBETT_JV_INTEREST_IS_A_POSITION",
+      "description": "'SBLA Private Credit LLC' (industry 'Investments In Joint Venture') is the fund's own JV interest and a real position (FV 33.2m at 2024-12-31 rising to 64.2m at 2026-03-31). It must not be added to aggregate_markers; only the 'Total Investments in Joint Venture' rollup is an aggregate. The identifier has no instrument token so it stays uncovered by dispatch.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "SBLA Private Credit LLC",
+      "disposition": "expected"
     }
   ],
   "invariants": {

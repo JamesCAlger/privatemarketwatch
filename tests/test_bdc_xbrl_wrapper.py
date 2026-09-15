@@ -5561,7 +5561,7 @@ def test_lord_abbett_private_credit_revolver_leaf_classified():
 
     assert result["wrapper_family"] == "debt"
     assert result["wrapper_disposition"] == "debt_position_leaf"
-    assert result["wrapper_rule_id"] == "LORD_ABBETT_PRIVATE_CREDIT_DEBT_LEAF_V1"
+    assert result["wrapper_rule_id"] == "LORD_ABBETT_PRIVATE_CREDIT_DEBT_LEAF_V2"
     assert result["wrapper_position_key"]
 
 
@@ -5631,7 +5631,14 @@ def test_lord_abbett_private_credit_bare_issuer_not_forced_to_leaf():
     assert result["wrapper_position_key"] == ""
 
 
-def test_lord_abbett_private_credit_position_key_ignores_trailing_lot_number():
+def test_lord_abbett_private_credit_position_key_keeps_trailing_lot_number():
+    """Wrapper v2: trailing lot ordinals are distinct coexisting tranches.
+
+    'RJW Logistics Group, Inc (Delayed Draw)' and '... (Delayed Draw) 2' both
+    exist in the 2025-09-30 instance (and 'RSC Acquisition Inc Delayed Draw',
+    '... 1', '... 2' all in 2024-12-31), so the v1 canonical_strip_re that
+    collapsed them into one position key was removed.
+    """
     first = classify_identifier(
         LORD_ABBETT_PRIVATE_CREDIT_CIK,
         "RJW Logistics Group, Inc (Delayed Draw)",
@@ -5647,8 +5654,93 @@ def test_lord_abbett_private_credit_position_key_ignores_trailing_lot_number():
 
     assert first["wrapper_disposition"] == "debt_position_leaf"
     assert second["wrapper_disposition"] == "debt_position_leaf"
-    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != second["wrapper_position_key"]
     assert first["wrapper_position_key"] != different["wrapper_position_key"]
+
+
+def test_lord_abbett_private_credit_explicit_member_term_loan_leaf_classified():
+    """Explicit srt:OwnershipAxis members are humanised without parentheses."""
+    result = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "AAD Midco Inc Term Loan",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "LORD_ABBETT_PRIVATE_CREDIT_DEBT_LEAF_V2"
+    assert result["wrapper_position_key"] == "aad midco inc term loan"
+
+
+def test_lord_abbett_private_credit_explicit_member_tranche_variants_are_debt_leaves():
+    variants = [
+        "AAD Midco Inc Delayed Draw 2024",
+        "AAD Midco Inc Incremental Delayed Draw 2025",
+        "AAD Midco Inc Revolver",
+        "Security 101 Revolver",
+        "RSC Acquisition Inc Delayed Draw 1",
+        "Meta Buyer LLC Term Loan 2025 EUR",
+        "Lighthouse Technologies Holding Corp Term Loan One",
+        "Ambient Enterprises Holdco LLC Term Loan 20252 nd Amendment",
+        "Continental Buyer Inc 2 Incremental Term Loan 2025",
+        "Qualus Power Services Corp Delayed Draw 2025 Term Loan 2",
+    ]
+    for identifier in variants:
+        result = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, identifier)
+        assert result["wrapper_family"] == "debt", identifier
+        assert result["wrapper_disposition"] == "debt_position_leaf", identifier
+        assert result["wrapper_position_key"], identifier
+
+
+def test_lord_abbett_private_credit_vintage_years_are_distinct_position_keys():
+    """'Delayed Draw 2024' and 'Delayed Draw 2025' coexist from 2025-12-31."""
+    base = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, "RJW Logistics Group Inc Delayed Draw")
+    y2024 = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, "RJW Logistics Group Inc Delayed Draw 2024")
+    y2025 = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, "RJW Logistics Group Inc Delayed Draw 2025")
+
+    keys = {base["wrapper_position_key"], y2024["wrapper_position_key"], y2025["wrapper_position_key"]}
+    assert all(keys)
+    assert len(keys) == 3
+
+
+def test_lord_abbett_private_credit_typed_and_explicit_forms_share_position_key():
+    """Typed-axis '(Revolver)' rows (blank FV) and explicit 'Revolver' members
+    describe the same tranche in the same filing and normalise to one key."""
+    typed = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, "BCM One, Inc. (Revolver)")
+    explicit = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, "BCM One Inc Revolver")
+
+    assert typed["wrapper_disposition"] == "debt_position_leaf"
+    assert explicit["wrapper_disposition"] == "debt_position_leaf"
+    assert typed["wrapper_position_key"] == explicit["wrapper_position_key"] == "bcm one inc revolver"
+
+
+def test_lord_abbett_private_credit_bare_issuer_members_stay_uncovered():
+    """Bare members (early-taxonomy term loans, bare equity, the SBLA JV
+    interest) carry no instrument text.  They must stay uncovered rather than
+    be routed to *_issuer_rollup, which source reconciliation would excuse as
+    an issuer-level subtotal and thereby hide real positions."""
+    for identifier in [
+        "BCM One Inc",
+        "Transnet YX Inc",
+        "Vensure Employer Services Inc",
+        "GCOM",
+        "Arkas Bidco Limited",
+        "Arkas Bidco Limited Two",
+        "SBLA Private Credit LLC",
+    ]:
+        result = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, identifier)
+        assert result["wrapper_family"] == "", identifier
+        assert result["wrapper_disposition"] == "", identifier
+        assert result["wrapper_position_key"] == "", identifier
+
+
+def test_lord_abbett_private_credit_total_with_tranche_token_is_not_a_leaf():
+    """False-positive guard: a total/sub-total that happens to contain a
+    tranche token must not be promoted to a position leaf by the explicit
+    member fallback."""
+    for identifier in ["Total Term Loan Commitments", "Sub-total Delayed Draw", "Total Revolver"]:
+        result = classify_identifier(LORD_ABBETT_PRIVATE_CREDIT_CIK, identifier)
+        assert not result["wrapper_disposition"].endswith("_position_leaf"), identifier
+        assert result["wrapper_position_key"] == "", identifier
 
 
 def test_lord_abbett_private_credit_registered_in_supported_ciks():
