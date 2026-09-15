@@ -88,6 +88,9 @@ def heavy_lock(candidate):
 def snapshot(candidate, base, *, current_code=False, sector_decisions=None,identity_registry=None,rule_inputs=(),retired_rules=()):
     if candidate.exists():
         raise ContractError('Snapshot already exists; choose a new immutable candidate')
+    if current_code:
+        from pipeline.programme.source_snapshot import freeze_refresh_support
+        freeze_refresh_support(ROOT)
     legacy = read_json(base / 'snapshot.json')
     if sha(base / 'snapshot.json') != read_json(base / 'snapshot_complete.json')['manifest_sha256']:
         raise ContractError('Starting snapshot manifest changed')
@@ -135,6 +138,7 @@ def snapshot(candidate, base, *, current_code=False, sector_decisions=None,ident
         from pipeline.programme.source_snapshot import include_sources
         source_inventory=include_sources(ROOT,frozen)
         atomic_json(frozen/'data/reference/programme_source_inventory.json',source_inventory)
+        overlay.extend(freeze_refresh_support(ROOT,frozen))
         # The admitted FX reference package (quotes, retained provider source and
         # admission manifest) is governed reference data: freeze it with the
         # code so financial preparation inside the candidate sees exactly the

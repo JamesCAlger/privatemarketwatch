@@ -78,7 +78,7 @@ def collect_contexts(con, evidence, quarter, results):
     present = con.execute("SELECT count(DISTINCT cik) FROM h SEMI JOIN eligible USING(cik)").fetchone()[0]
     adopted = bool(evidence.data.get("denominator_adoption"))
     results["fund_coverage_share"] = observation(_ratio(present, eligible), assessable=adopted,
-        reason="Adopted obligation register" if adopted else "Provisional: exclusion audit has not certified the denominator",
+        reason="Adopted obligation register" if adopted else "Provisional: coverage denominator has not been adopted",
         details=dict(funds_with_holdings=present, eligible_funds=eligible, register_sha256=sha(register), provisional=not adopted))
     exclusions = evidence.path("exclusions")
     if exclusions:
@@ -288,7 +288,10 @@ def collect_primary(con,evidence,quarter,results):
             details=dict(absolute_error=str(numerator),absolute_anchor=str(denominator),funds=valid))
         zero_mismatch=any(r["ratio"] is None for r in valid)
         results["fund_primary_error_ratio"]=observation(max((r["ratio"] for r in valid if r["ratio"] is not None),default=None),
-            assessable=not zero_mismatch,reason="Zero anchors require exact zero; a nonzero published balance cannot pass",details=dict(funds=valid))
+            assessable=not zero_mismatch,
+            reason=("Zero anchors require exact zero; a nonzero published balance cannot pass" if zero_mismatch
+                    else "Maximum absolute relative error across comparable independent fund anchors"),
+            details=dict(funds=valid))
         results["fund_primary_error_ratio"]["exact_failure"] = zero_mismatch
     if evidence.path("reconciliation",candidate_bound=True) and evidence.data.get("source_roster_certified"):
         ciks=[r["cik"] for r in valid]

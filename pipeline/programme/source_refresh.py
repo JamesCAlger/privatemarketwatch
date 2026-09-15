@@ -19,6 +19,17 @@ from pipeline.programme.core import ContractError, atomic_json, sha
 ACCESSION='0001193125-23-145196'
 SOURCE_SHA='d972ff4b49a5d32174cd525a4e506b0b96a59defb9ef5732f86590429a6e6520'
 
+# These reviewed files are necessary to stage the reparsed rows correctly.
+# Freezing current Python alone would retain the base candidate's old wrapper.
+REFRESH_SUPPORT=(
+    dict(path='data/overrides/bdc_xbrl_wrappers/0002008748.json',
+         sha256='034e45de3cc88751e7543e3b808d3d68ec986fff3c2fa34a422aa614f0c7bec8',
+         reason='Approved Lord Abbett wrapper v2 for the seven diagnosed accession refreshes'),
+    dict(path='data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json',
+         sha256='6641614a571385f2e3d9413ade46ab7e8b94c4867c1fa0327c31e54903b1d5c3',
+         reason='Same cohort and metadata; Lord Abbett wrapper_version changes from 1 to 2'),
+)
+
 REFRESHES=(
     dict(cik='1588272',accession=ACCESSION,source_sha256=SOURCE_SHA,
          reason='dei:LegalEntityAxis explicit members were not recognised by the legacy extractor',

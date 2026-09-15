@@ -1,6 +1,13 @@
 """A repair candidate freezes current code without changing its source data."""
 from pipeline.programme import runner
 from pipeline.programme.core import atomic_json,digest,read_json,record,sha
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def synthetic_refresh_support(monkeypatch):
+    from pipeline.programme import source_refresh
+    monkeypatch.setattr(source_refresh,'REFRESH_SUPPORT',())
 
 
 def test_current_snapshot_includes_repairs_new_modules_and_schema(tmp_path,monkeypatch):
@@ -22,8 +29,13 @@ def test_current_snapshot_includes_repairs_new_modules_and_schema(tmp_path,monke
         "data/reference/quarter_acceptance_programme_thresholds.json":"{}",
         "requirements-programme-windows.txt":"fixture"}
     current[rule_name]=json.dumps(_rule(rationale='Source-reviewed amendment'))
+    wrapper_name='data/overrides/bdc_xbrl_wrappers/0000000123.json'
+    current[wrapper_name]='{"version":2}'
     for name,body in current.items():
         path=root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(body)
+    from pipeline.programme import source_refresh
+    monkeypatch.setattr(source_refresh,'REFRESH_SUPPORT',(
+        dict(path=wrapper_name,sha256=sha(root/wrapper_name),reason='Reviewed fixture wrapper'),))
     monkeypatch.setattr(runner,"ROOT",root)
     monkeypatch.setattr(runner.native,"runtime_identity",lambda **kwargs:dict(runtime="fixture"))
     candidate=root/"candidate"
@@ -36,6 +48,9 @@ def test_current_snapshot_includes_repairs_new_modules_and_schema(tmp_path,monke
     assert read_json(candidate/"snapshot.json")["current_code"] is True
     assert read_json(candidate/'frozen'/rule_name)['rationale']=='Source-reviewed amendment'
     assert (frozen/rule_name).read_text()==original[rule_name]
+    assert read_json(candidate/'frozen'/wrapper_name)['version']==2
+    assert any(r['path']==wrapper_name and r['role']=='reviewed diagnosed-refresh support'
+               for r in read_json(candidate/'snapshot.json')['code_overlay'])
     runner.verify_snapshot(candidate)
 
 

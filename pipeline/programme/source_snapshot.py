@@ -1,10 +1,45 @@
 """Freeze cached NAV and citation sources required by the current programme."""
 from pathlib import Path
+import re
 import shutil
 
 import duckdb
 
-from pipeline.programme.core import ContractError,sha
+from pipeline.programme.core import ContractError,contained,sha
+
+
+def freeze_refresh_support(root, frozen=None, *, support_files=None):
+    """Validate reviewed wrapper dependencies before copying any candidate data.
+
+    With a destination, overlay only those exact reviewed bytes. A cold twin
+    keeps its base snapshot unchanged and never calls this function.
+    """
+    if support_files is None:
+        from pipeline.programme.source_refresh import REFRESH_SUPPORT
+        support_files=REFRESH_SUPPORT
+    verified=[]
+    seen=set()
+    for item in support_files:
+        relative=item['path']
+        if (not re.fullmatch(r'data/overrides/bdc_xbrl_wrappers/(?:[0-9]{10}|unlisted_bdc_xbrl_reference)\.json',relative)
+                or relative in seen or not re.fullmatch(r'[0-9a-f]{64}',item['sha256'])):
+            raise ContractError('Invalid or repeated refresh support input: '+relative)
+        seen.add(relative)
+        source=contained(root,relative)
+        if sha(source)!=item['sha256']:
+            raise ContractError('Reviewed refresh support changed: '+relative)
+        verified.append((source,item))
+    records=[]
+    for source,item in verified:
+        if frozen is not None:
+            destination=contained(frozen,item['path'],existing=False)
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(source,destination)
+            if sha(source)!=item['sha256'] or sha(destination)!=item['sha256']:
+                raise ContractError('Refresh support changed during snapshot: '+item['path'])
+        records.append(dict(path=item['path'],sha256=item['sha256'],
+            role='reviewed diagnosed-refresh support',reason=item['reason']))
+    return records
 
 
 def include_sources(root,frozen):
