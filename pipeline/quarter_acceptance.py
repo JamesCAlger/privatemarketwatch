@@ -410,8 +410,8 @@ def compute_acceptance(
         from pipeline.quarter_evidence import Evidence,collect
         evidence=Evidence(programme_evidence,holdings_path)
         measured = collect(holdings_path,programme_evidence,target_quarter,set(cohort),evidence=evidence)
-        bound={name for name in ("ledger","queue","audit","investigate")
-               if evidence.path("legacy_"+name,candidate_bound=True)}
+        from pipeline.legacy_acceptance_inputs import bound_legacy_inputs
+        bound=bound_legacy_inputs(evidence,holdings_path,set(cohort),result['inputs'])
         extend_acceptance(result,measured,thresholds_path=programme_thresholds,bound_legacy_inputs=bound)
         result["inputs"]["programme_evidence"] = str(programme_evidence)
     return result

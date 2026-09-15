@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
 import duckdb
-from pipeline import config,quarter_acceptance
+from pipeline import config,quarter_acceptance,legacy_acceptance_inputs
 from pipeline.programme import artifacts
 from pipeline.programme.artifacts import literal
 from pipeline.programme.core import ContractError,atomic_json,read_json,read_stage,sha,verify_records
@@ -132,6 +132,8 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
         raise ContractError("E4 candidate identity changed")
     code=[Path(__file__),ROOT/"pipeline/quarter_acceptance.py",ROOT/"pipeline/quarter_evidence.py",
           ROOT/'pipeline/acceptance_policy.py',
+          ROOT/'pipeline/legacy_acceptance_inputs.py',ROOT/'pipeline/review_queue.py',
+          ROOT/'pipeline/investigation_state.py',ROOT/'scripts/shadow_adapter.py',
           ROOT/"data/reference/quarter_acceptance_programme_thresholds.json"]
     code_hashes={str(p):sha(p) for p in code}
     atomic_json(output/"request.json",dict(candidate=str(candidate),identity_sha256=sha(attempt/"result.json"),
@@ -151,6 +153,16 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
     candidate_financials=attempt/'bundle/fund_financials.csv'
     primary_evidence(holdings,frozen,output,cohort,
         financials=candidate_financials if candidate_financials.is_file() else None)
+    queue=output/'uncollected_review_queue.csv'
+    if source_directory:
+        print('P4 collect existing source-blocker queue from sealed source results',flush=True)
+        legacy_acceptance_inputs.collect_source_queue(holdings,source_directory,output/'legacy_source')
+        queue=output/'legacy_source/review_queue.csv'
+    print('P4 snapshot existing cohort investigation records without applying rules',flush=True)
+    legacy_acceptance_inputs.snapshot_investigations(quarter_acceptance.INVESTIGATE_DIR,
+        output/'legacy_investigations',holdings,set(cohort))
+    investigation_manifest=output/'legacy_investigations/investigation_inputs.json'
+    investigation_store=output/'legacy_investigations/store'
     files={}
     def add(name,path,bound=False):
         files[name]=dict(path=str(path.resolve()),sha256=sha(path))
@@ -167,6 +179,9 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
     add('accounting_membership',output/'accounting_membership.parquet',True)
     add('accounting_anchor_summaries',output/'accounting_anchor_summaries.csv',True)
     add("legacy_ledger",output/"conservation_ledger.csv",True)
+    if source_directory:
+        add('legacy_queue',queue,True)
+    add('legacy_investigate',investigation_manifest,True)
     # Reconciliation supplies nominated source/output links only. Collectors
     # reread candidate row IDs and values; no complete-roster claim is made.
     add("reconciliation",source_directory/'pairs/source_reconciliation_detail.csv'
@@ -211,8 +226,8 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
         print("P4 evaluate "+quarter,flush=True)
         verdict=quarter_acceptance.compute_acceptance(target_quarter=quarter,
             holdings_path=holdings,manifest_path=manifest_path,
-            ledger_path=output/"conservation_ledger.csv",queue_path=output/"uncollected_review_queue.csv",
-            audit_path=parent,investigate_dir=output/"uncollected_investigations",
+            ledger_path=output/"conservation_ledger.csv",queue_path=queue,
+            audit_path=parent,investigate_dir=investigation_store,
             programme_evidence=evidence)
         quarter_acceptance.write_acceptance(verdict,json_path=output/(quarter+".json"),funds_path=output/(quarter+"-funds.csv"))
         summaries.append(dict(quarter=quarter,verdict=verdict["verdict"],
@@ -222,6 +237,9 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
         if sha(Path(path))!=expected:
             raise ContractError("P4 code changed during evaluation")
     policy.verify(policy_inputs)
+    legacy_acceptance_inputs.verify_investigations(investigation_manifest,holdings,set(cohort))
+    if source_directory:
+        verify_completion(output/'legacy_source')
     atomic_json(output/"summary.json",dict(quarters=summaries,elapsed_seconds=time.monotonic()-started,
         release_readiness="blocked",scope="13-quarter candidate evaluation; missing evidence remains explicit"))
     atomic_json(output/"complete.json",{p.name:sha(p) for p in output.iterdir() if p.is_file()})
