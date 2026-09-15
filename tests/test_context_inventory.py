@@ -212,3 +212,47 @@ def test_comparative_positive_positions_still_prove_omission():
                   source_complete=True, target_instant_contexts=3, quarter="2023-12-31", errors=[],
                   document_period_ends=["2024-12-31"])
     assert classify_selected_source(result, Decimal("100")) == "extraction_failure"
+
+
+# ---------------------------------------------------------------------------
+# Lord Abbett (CIK 2008748): explicit srt:OwnershipAxis positions
+# ---------------------------------------------------------------------------
+LA_HEADER = HEADER.replace('xmlns:n="http://www.npci.com/20230331">',
+    'xmlns:n="http://www.npci.com/20230331" xmlns:srt="http://fasb.org/srt/2026"'
+    ' xmlns:la="http://www.lordabbett.com/20260331">')
+
+
+def la_scan(tmp_path, body):
+    path = tmp_path / "instance.xml"
+    path.write_text(LA_HEADER + body + "</xbrli:xbrl>", encoding="utf-8")
+    return scan_instance(path, "2008748", "2026-03-31")
+
+
+def test_lordabbett_ownership_axis_positions_are_confirmed_and_recognized(tmp_path):
+    own = explicit("srt:OwnershipAxis", "la:AADMidcoIncTermLoanMember")
+    ind = explicit("gaap:EquitySecuritiesByIndustryAxis", "la:AerospaceAndDefenseMember")
+    jv = explicit("gaap:InvestmentCompanyNonconsolidatedSubsidiaryAxis", "la:SBLAPrivateCreditLLCMember")
+    cp = explicit("srt:OwnershipAxis", "la:StifelBankTrustMember")
+    body = (context("pos", own + ind, "2026-03-31", "2008748") + fact("pos", "1000")
+            + context("jv", own + ind + jv, "2026-03-31", "2008748") + fact("jv", "500")
+            + context("ind", ind, "2026-03-31", "2008748") + fact("ind", "1500")
+            + context("cp", cp, "2026-03-31", "2008748") + fact("cp", "1"))
+    result = la_scan(tmp_path, body)
+    roles = {c["context_id"]: (c["role"], c["role_reason"]) for c in result["contexts"]}
+    assert roles["pos"] == ("confirmed_position", "lordabbett_explicit_ownership_and_industry")
+    assert roles["jv"] == ("confirmed_position", "lordabbett_explicit_ownership_and_industry")
+    assert roles["ind"][0] != "confirmed_position"
+    assert roles["cp"][0] != "confirmed_position"
+    assert all(c["extractor_recognized"] for c in result["contexts"] if c["role"] == "confirmed_position")
+    assert result["counts"]["confirmed_position"] == 2
+
+
+def test_lordabbett_rule_does_not_rescue_other_filers_ownership_axis(tmp_path):
+    own = explicit("srt:OwnershipAxis", "f:CrimsonMidstreamHoldingsLLCMember")
+    ind = explicit("gaap:EquitySecuritiesByIndustryAxis", "gaap:AerospaceSectorMember")
+    path = tmp_path / "instance.xml"
+    path.write_text(LA_HEADER + context("own", own + ind, "2024-06-30", "1347652")
+                    + fact("own", "100") + "</xbrli:xbrl>", encoding="utf-8")
+    result = scan_instance(path, "1347652", "2024-06-30")
+    assert result["counts"]["confirmed_position"] == 0
+    assert not result["contexts"][0]["extractor_recognized"]

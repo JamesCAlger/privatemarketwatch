@@ -17,6 +17,7 @@ import time
 from lxml import etree
 
 from pipeline.bdc_filings import CONCEPT_MAP, _parse_xbrl_contexts
+from pipeline.explicit_contexts import explicit_member_dimensions
 
 
 POLICY_VERSION = "context-inventory.v3"
@@ -101,6 +102,16 @@ def classify_context(context: dict, cik: str, *, basis_concepts: set[str]) -> tu
                 (d["member_namespace"] == NEXPOINT_NAMESPACE or _is_standard(d["member_namespace"]))
                 for d in dims)):
         return "confirmed_position", "nexpoint_explicit_investee_and_instrument"
+
+    # Per-CIK explicit-member identity table (e.g. Lord Abbett on
+    # srt:OwnershipAxis). JV look-through contexts on a subsidiary axis are
+    # positions too and are flagged downstream, not dropped. Same predicate as
+    # the extractor (pipeline.explicit_contexts.EXPLICIT_MEMBER_RULES).
+    matched = explicit_member_dimensions(cik, [
+        (d["kind"], d["axis_namespace"], local(d["axis"]), d["member_namespace"], local(d["value"]))
+        for d in dims])
+    if matched:
+        return "confirmed_position", matched[0].name
 
     # An undimensioned investment fact alone is not sufficient. Independent
     # balance-sheet concepts in the same reporting context establish its basis.

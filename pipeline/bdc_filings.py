@@ -632,6 +632,19 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
                 investment_id=' - '.join(_humanize_member_local_name(value) for value in parts)
                 is_investment=True
 
+        # Per-CIK explicit-member identity table (explicit_contexts.
+        # EXPLICIT_MEMBER_RULES; Lord Abbett srt:OwnershipAxis first entry).
+        # JV look-through contexts keep their subsidiary axis in
+        # dimensions_raw so staging flags is_subsidiary (retain-and-flag).
+        if not is_investment:
+            from pipeline.explicit_contexts import explicit_member_position
+            explicit = explicit_member_position(ctx)
+            if explicit:
+                investment_id = explicit["investment_identifier"]
+                if explicit["industry"]:
+                    industry = explicit["industry"]
+                is_investment = True
+
         # Cash-equivalents-axis rescue: filer-extension members on the cash
         # axis name a specific schedule position (Dreyfus/State Street MMF
         # class, 2026-09-02 escalation deep-dive). Generic us-gaap members and
