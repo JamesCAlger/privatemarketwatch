@@ -367,21 +367,30 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
     """
     con = duckdb.connect()
     try:
-        con.execute('CREATE TEMP TABLE cached_identifiers(identifier VARCHAR)')
+        con.execute('CREATE TEMP TABLE cached_identifiers(identifier VARCHAR,cached_name VARCHAR)')
         if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists():
             try:
+                # One cached name per identifier; cache row multiplicity must
+                # not influence selection, so pairs are made distinct first.
                 con.execute("""INSERT INTO cached_identifiers
-                    SELECT DISTINCT bdc_investment_identifier
-                    FROM read_csv(?, header=true, all_varchar=true)
-                    WHERE coalesce(trim(extracted_company_name),'')<>''
-                      AND coalesce(bdc_investment_identifier,'')<>''""",
+                    SELECT identifier,cached_name FROM (
+                        SELECT DISTINCT bdc_investment_identifier AS identifier,
+                               trim(extracted_company_name) AS cached_name
+                        FROM read_csv(?, header=true, all_varchar=true)
+                        WHERE coalesce(trim(extracted_company_name),'')<>''
+                          AND coalesce(bdc_investment_identifier,'')<>'')
+                    QUALIFY row_number() OVER (PARTITION BY identifier ORDER BY cached_name)=1""",
                     [str(IDENTIFIER_EXTRACTION_LOOKUP_FILE)])
             except Exception:
                 logger.warning("  Could not inspect extraction cache; choosing an uncached representative")
         # FIRST depended on parallel scan order; bare MIN could select a cache
         # miss and discard existing name evidence for this exact issuer/source.
-        # Frequency selects a representative disclosure, not an adjudicated
-        # truth among conflicting cached names. The final tie-break is stable.
+        # Selection order (2026-09-15): cached name first; a joint-borrower
+        # label ("X and Y") beats its own single-borrower prefix "X"; then the
+        # cached NAME with the most supporting rows across identifiers (so a
+        # header-contaminated name carried by one frequent identifier loses);
+        # then identifier frequency; the final lexical tie-break is stable.
+        # This selects a representative disclosure, not an adjudicated truth.
         df = con.execute("""
             WITH raw AS MATERIALIZED (
                 SELECT issuer_name,source,cusip,lei,bdc_investment_identifier
@@ -391,13 +400,30 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
             ), identifier_counts AS (
                 SELECT issuer_name,source,bdc_investment_identifier,count(*) AS identifier_count
                 FROM raw WHERE coalesce(bdc_investment_identifier,'')<>'' GROUP BY ALL
-            ), selected AS (
-                SELECT i.issuer_name,i.source,i.bdc_investment_identifier
+            ), cached_counts AS (
+                SELECT i.issuer_name,i.source,i.bdc_investment_identifier,i.identifier_count,
+                       c.cached_name
                 FROM identifier_counts i LEFT JOIN cached_identifiers c
                   ON i.source='bdc' AND i.bdc_investment_identifier=c.identifier
-                QUALIFY row_number() OVER (PARTITION BY i.issuer_name,i.source
-                    ORDER BY (c.identifier IS NOT NULL) DESC,identifier_count DESC,
-                             i.bdc_investment_identifier)=1
+            ), name_counts AS (
+                SELECT issuer_name,source,cached_name,sum(identifier_count) AS name_count
+                FROM cached_counts WHERE cached_name IS NOT NULL GROUP BY ALL
+            ), joint_labels AS (
+                SELECT DISTINCT a.issuer_name,a.source,a.cached_name
+                FROM name_counts a JOIN name_counts b USING(issuer_name,source)
+                WHERE a.cached_name<>b.cached_name
+                  AND starts_with(a.cached_name, b.cached_name||' and ')
+            ), selected AS (
+                SELECT cc.issuer_name,cc.source,cc.bdc_investment_identifier
+                FROM cached_counts cc
+                LEFT JOIN name_counts n ON n.issuer_name=cc.issuer_name AND n.source=cc.source
+                  AND n.cached_name=cc.cached_name
+                LEFT JOIN joint_labels j ON j.issuer_name=cc.issuer_name AND j.source=cc.source
+                  AND j.cached_name=cc.cached_name
+                QUALIFY row_number() OVER (PARTITION BY cc.issuer_name,cc.source
+                    ORDER BY (cc.cached_name IS NOT NULL) DESC,(j.cached_name IS NOT NULL) DESC,
+                             coalesce(n.name_count,0) DESC,cc.identifier_count DESC,
+                             cc.bdc_investment_identifier)=1
             ), variants AS (
             SELECT
                 issuer_name,

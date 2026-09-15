@@ -51,8 +51,10 @@ def normalize(con,*,quotes=(),decisions=()):
         source_leg=usd_leg=None
         if selected['method']=='already_USD': source_leg=usd_leg='1'
         elif selected['method']=='report_date_reference_conversion':
-            source_leg='1' if currency=='EUR' else str(quote['per_EUR'][currency])
-            usd_leg=str(quote['per_EUR']['USD'])
+            # FRED H.10 quotes are direct USD-per-unit observations: the source
+            # leg is one unit of the resolved currency, the USD leg is the quote.
+            source_leg='1'
+            usd_leg=str(quote['usd_per_unit'][currency])
         references.append((currency,quarter,source_leg,usd_leg,selected['method'],
             selected.get('quote_id'),quote['source_sha256'] if quote else None))
     columns=['resolved_currency','quarter','source_leg','usd_leg','method','quote_id','quote_source_sha256']

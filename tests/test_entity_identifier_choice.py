@@ -57,3 +57,33 @@ def test_bdc_cache_does_not_control_nport_representative(tmp_path,monkeypatch):
     variants=build(tmp_path,monkeypatch,['a-common']*3+['z-cached'],
         [('z-cached','Another entity')],source='nport')
     assert variants.iloc[0].bdc_investment_identifier=='a-common'
+
+
+def test_joint_borrower_label_beats_its_single_borrower_prefix(tmp_path,monkeypatch):
+    # "X" and "X and Y" are two cached names for one disclosed variant. The
+    # joint label is the more specific disclosure and must not be flattened
+    # to the single borrower merely because the short name has more rows.
+    variants=build(tmp_path,monkeypatch,['id-short']*10+['id-joint']*3,
+        [('id-short','Cloud Software Group, Inc.'),
+         ('id-joint','Cloud Software Group, Inc. and Picard Parent, Inc.')])
+    assert variants.iloc[0].bdc_investment_identifier=='id-joint'
+    assert er._exact_dedup(variants).iloc[0].extracted_name=='Cloud Software Group, Inc. and Picard Parent, Inc.'
+
+
+def test_prefix_without_joint_conjunction_does_not_trigger_joint_rule(tmp_path,monkeypatch):
+    # False-positive guard: a longer cached name that merely extends the short
+    # one (no " and ") gets no preference; frequency still decides.
+    variants=build(tmp_path,monkeypatch,['id-a']*5+['id-b']*2,
+        [('id-a','Acme Inc.'),('id-b','Acme Inc. Holdings')])
+    assert variants.iloc[0].bdc_investment_identifier=='id-a'
+    assert er._exact_dedup(variants).iloc[0].extracted_name=='Acme Inc.'
+
+
+def test_cached_name_frequency_aggregates_across_identifiers(tmp_path,monkeypatch):
+    # A header-contaminated cache entry carried by one frequent identifier
+    # must lose to a clean name supported by more rows across identifiers.
+    variants=build(tmp_path,monkeypatch,['id-header']*8+['id-clean-a']*5+['id-clean-b']*5,
+        [('id-header','Portfolio Company Apex Service Partners, LLC'),
+         ('id-clean-a','Apex Service Partners, LLC'),('id-clean-b','Apex Service Partners, LLC')])
+    assert variants.iloc[0].bdc_investment_identifier=='id-clean-a'
+    assert er._exact_dedup(variants).iloc[0].extracted_name=='Apex Service Partners, LLC'

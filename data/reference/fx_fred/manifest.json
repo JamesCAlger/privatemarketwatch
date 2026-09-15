@@ -1,0 +1,227 @@
+{
+  "provider": "FRED",
+  "release": "H.10",
+  "fetched_utc": "2026-09-15T10:40:17Z",
+  "series": {
+    "EUR": {
+      "series": "DEXUSEU",
+      "direction": "usd_per_unit",
+      "observations": 6945,
+      "first": "1999-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "4675fbdf1deb0012da97400c8293fec1ca283791199a885505953d62c21f2a53",
+      "normalized_sha256": "fcc9a8dcec04f948924e15c9bb28d39b146c02c7af59bb77d8b84badf94a66d1",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU"
+    },
+    "GBP": {
+      "series": "DEXUSUK",
+      "direction": "usd_per_unit",
+      "observations": 13966,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "6ea8ccee9b3881c4d3c07b4e267a78860d222062369e7ef1c530d56dc3fd34bf",
+      "normalized_sha256": "c280ac642bed21d736fc61603ce3e5572983486778883d5e7ef85e2263418040",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSUK"
+    },
+    "AUD": {
+      "series": "DEXUSAL",
+      "direction": "usd_per_unit",
+      "observations": 13959,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "a16d9de6d79544fb45eea74250ce47b2c72d44da59961b960aae6e22132f6002",
+      "normalized_sha256": "c81f4252e028e638a015ea7d782b47e7b9ee5d0da212d1bcff6620d22b8b20be",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSAL"
+    },
+    "NZD": {
+      "series": "DEXUSNZ",
+      "direction": "usd_per_unit",
+      "observations": 13950,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "2d545ea246620f426e730cd26c9f903fb90b94dde4a5f94c455f92ecc3ba3d3d",
+      "normalized_sha256": "475319d96b10865fd13deadfd6f100b3cf2030365cf2b686380880fbbc036111",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSNZ"
+    },
+    "CAD": {
+      "series": "DEXCAUS",
+      "direction": "units_per_usd",
+      "observations": 13972,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "8fc9b155088912d6e1c7bbcc69ef22a5c25f76f133733e92ca1773465b46f40b",
+      "normalized_sha256": "9c10bc76cc25b81b15b4b66a277721197c31b2ff793e58bf6715bb18c53cb6e6",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCAUS"
+    },
+    "CHF": {
+      "series": "DEXSZUS",
+      "direction": "units_per_usd",
+      "observations": 13966,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "43c016079516d804df7049176281da21ee2b466fc6c97c4f440a18545a7e94e4",
+      "normalized_sha256": "4acf24e5ab21a6ff4be413285545914afe66d4851d3cba176306d041aa47d94e",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSZUS"
+    },
+    "JPY": {
+      "series": "DEXJPUS",
+      "direction": "units_per_usd",
+      "observations": 13960,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "8266abafd2aeb0c3529d3bcac68c8a73daa932f8b4969788cb1b4fa5debb08f4",
+      "normalized_sha256": "269e348fb386980c61454cb7dceab1d5b208b8e48b9bee84b6b22672c53e8965",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS"
+    },
+    "NOK": {
+      "series": "DEXNOUS",
+      "direction": "units_per_usd",
+      "observations": 13965,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "72ede87e851b9c8882feecef6b037c4ce0a85481d2b3e17d9c2fdd3b19672f9f",
+      "normalized_sha256": "7099dc5195bb0a5dbcc85108bae051732654110e952e7fd287c230ea30b05865",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXNOUS"
+    },
+    "SEK": {
+      "series": "DEXSDUS",
+      "direction": "units_per_usd",
+      "observations": 13965,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "6264ca23e8f7d89e016802b797b6f71791c998a6e7a2d141704e52ee7c58d7b3",
+      "normalized_sha256": "6590049db55e0ddecab7b7829f132adb62d65d6bcdb023558b8eb824730f5e87",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSDUS"
+    },
+    "DKK": {
+      "series": "DEXDNUS",
+      "direction": "units_per_usd",
+      "observations": 13965,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "df0ebd142b918c80908091a8550ed57aa84ef973026f0f5bf171c8c8e2478f92",
+      "normalized_sha256": "bf030cdd2808b7a666936b2b08350edc86d6c835ece146074e79e01dda4760f3",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXDNUS"
+    },
+    "MXN": {
+      "series": "DEXMXUS",
+      "direction": "units_per_usd",
+      "observations": 8234,
+      "first": "1993-11-08",
+      "last": "2026-09-11",
+      "raw_sha256": "dddf105c5f4eafce3f512af37b72a54ff9fc1fefb3f0abf03127c7a89e3e5197",
+      "normalized_sha256": "72d0b1d8822df7c7f06653e9ee6b90da20fdc6fcc500238c0c8a14ee8945df74",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXMXUS"
+    },
+    "SGD": {
+      "series": "DEXSIUS",
+      "direction": "units_per_usd",
+      "observations": 11465,
+      "first": "1981-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "3eb5a7e336847498dadc33a984b6d0dde2c708f77c42850aab33a0835df1fa00",
+      "normalized_sha256": "2b6f2c5af2c29336c4ca1e35dabc4a52226b2b6cd2f37a35960690a9e8cd26f9",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSIUS"
+    },
+    "HKD": {
+      "series": "DEXHKUS",
+      "direction": "units_per_usd",
+      "observations": 11466,
+      "first": "1981-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "4f718dbfd4c7a8072b63b6372c33d6844bf483a33d615c7eef2416851c9c2ad9",
+      "normalized_sha256": "775f91128d49f8996fe37640e2e175a8ed88c3e616c74018a833e7b242893c89",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXHKUS"
+    },
+    "INR": {
+      "series": "DEXINUS",
+      "direction": "units_per_usd",
+      "observations": 13458,
+      "first": "1973-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "e5ea87bcb4ae42a51339ed8e56251f81752ea18cf9d0bd4a04caa2e34f5166f7",
+      "normalized_sha256": "2970a5c9e7a76bbe094498bb40464236dfec0c56923836e7a5ddd5e58c42459f",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXINUS"
+    },
+    "BRL": {
+      "series": "DEXBZUS",
+      "direction": "units_per_usd",
+      "observations": 7949,
+      "first": "1995-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "637a6894c13c61d4ad37e4198c70ad877c20b7ff7bfce3bb9067b8a9158b13a8",
+      "normalized_sha256": "423c9cc3120806fa62c6776e092179dc957e6af00ebb785e499a782a77716995",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXBZUS"
+    },
+    "ZAR": {
+      "series": "DEXSFUS",
+      "direction": "units_per_usd",
+      "observations": 11709,
+      "first": "1980-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "a84985d510fc8c50631e7fc55a805c793cbc0db646e81265d0e4025d93e5d685",
+      "normalized_sha256": "f1225173b13e296dd915cb8b93c0691205d730270783e8f5fde2dcceea358a22",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSFUS"
+    },
+    "KRW": {
+      "series": "DEXKOUS",
+      "direction": "units_per_usd",
+      "observations": 11352,
+      "first": "1981-04-13",
+      "last": "2026-09-11",
+      "raw_sha256": "ed1a5a1a514dedc239637749405904dc642b81023b8556e8d7f09958554ddafb",
+      "normalized_sha256": "789ee6b12a4e539b637ccfeccf8ed842246516b9632ec4a67f3b904a808d05e7",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXKOUS"
+    },
+    "CNY": {
+      "series": "DEXCHUS",
+      "direction": "units_per_usd",
+      "observations": 11406,
+      "first": "1981-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "91addcf5b45e281f4fbf972210129b86ecd0cbc50d96afcd53c7c4f34dd11ca3",
+      "normalized_sha256": "007e99004be1c5894e3ea6a063f92234b678d2daaf415beb97dab534688da21c",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCHUS"
+    },
+    "TWD": {
+      "series": "DEXTAUS",
+      "direction": "units_per_usd",
+      "observations": 10479,
+      "first": "1983-10-03",
+      "last": "2026-09-11",
+      "raw_sha256": "3e753ecdc53900031f88eb8b1984d1e301ff0fef518d5adb78d3ec5feb7306a7",
+      "normalized_sha256": "88fff95512b88bb5068a7b87da8a4272b38db4802f0ae34089dd1f46ce76b6a4",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXTAUS"
+    },
+    "THB": {
+      "series": "DEXTHUS",
+      "direction": "units_per_usd",
+      "observations": 11385,
+      "first": "1981-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "0fc7514d08880db95a29335ae671105842032a645792a718251286891384d995",
+      "normalized_sha256": "3173983a54f74645558e5ef6a77471ae122edfcee76be3ab4bccd4446c90570e",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXTHUS"
+    },
+    "MYR": {
+      "series": "DEXMAUS",
+      "direction": "units_per_usd",
+      "observations": 13944,
+      "first": "1971-01-04",
+      "last": "2026-09-11",
+      "raw_sha256": "c0446388f8b0b3c53101fa87b2df67001df3e6b379c94832abd673c8ad6c23e3",
+      "normalized_sha256": "bcd485c8f44bc7b7471bb03e2ae621f15149fd0a1221b08c8332134e985ad012",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXMAUS"
+    },
+    "LKR": {
+      "series": "DEXSLUS",
+      "direction": "units_per_usd",
+      "observations": 13106,
+      "first": "1973-01-02",
+      "last": "2026-09-11",
+      "raw_sha256": "7a38523708f47526ebe83f899eedc020aa82f107342ef0e5f9f9517895da5f49",
+      "normalized_sha256": "c81fd5fa7ec5d73b3e4764522d57c6b0e3718553f972cb5cb07a168d711a62ec",
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSLUS"
+    }
+  }
+}

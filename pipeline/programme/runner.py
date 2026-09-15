@@ -135,6 +135,21 @@ def snapshot(candidate, base, *, current_code=False, sector_decisions=None,ident
         from pipeline.programme.source_snapshot import include_sources
         source_inventory=include_sources(ROOT,frozen)
         atomic_json(frozen/'data/reference/programme_source_inventory.json',source_inventory)
+        # The admitted FX reference package (quotes, retained provider source and
+        # admission manifest) is governed reference data: freeze it with the
+        # code so financial preparation inside the candidate sees exactly the
+        # package that was reviewed. Absent package leaves foreign FV unavailable.
+        monetary=ROOT/'data/reference/monetary_conversion'
+        if monetary.is_dir():
+            for source in sorted(p for p in monetary.rglob('*') if p.is_file()):
+                relative=source.relative_to(ROOT).as_posix()
+                destination=contained(frozen,relative,existing=False)
+                destination.parent.mkdir(parents=True,exist_ok=True)
+                before=sha(source)
+                shutil.copy2(source,destination)
+                if sha(source)!=before or sha(destination)!=before:
+                    raise ContractError('Monetary package changed during snapshot: '+relative)
+                overlay.append(dict(path=relative,sha256=before,role='admitted FX reference package'))
     for review in retired_rules:
         if not current_code: raise ContractError('Reviewed retirement requires current-code mode')
         from pipeline.programme.rule_snapshot import include_retirement

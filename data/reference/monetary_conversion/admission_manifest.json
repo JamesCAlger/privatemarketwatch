@@ -1,0 +1,52 @@
+{
+  "entries": {
+    "quotes.json": {
+      "admission_status": "promoted",
+      "evidence": {
+        "authorization": "owner decision 2026-09-15: single canonical FX source (FRED H.10), replaces ECB contract",
+        "built_utc": "2026-09-15T10:49:00Z",
+        "currencies": [
+          "AUD",
+          "BRL",
+          "CAD",
+          "CHF",
+          "CNY",
+          "DKK",
+          "EUR",
+          "GBP",
+          "HKD",
+          "INR",
+          "JPY",
+          "KRW",
+          "LKR",
+          "MXN",
+          "MYR",
+          "NOK",
+          "NZD",
+          "SEK",
+          "SGD",
+          "THB",
+          "TWD",
+          "ZAR"
+        ],
+        "fetch_manifest_sha256": "371fde5ec86b6eff392dbcb7d4c8f65b001cac229c1f4fe6f432fa6c072b2e1e",
+        "fetched_utc": "2026-09-15T10:40:17Z",
+        "gate": {
+          "checks": [
+            "cached_series_hash_matches_fetch_manifest",
+            "positive_finite_rates",
+            "one_quote_per_date"
+          ],
+          "verdict": "PASS"
+        },
+        "kind": "fx_reference_package",
+        "provider": "FRED",
+        "quote_dates": 1983,
+        "release": "H.10",
+        "source_sha256": "aaf8f86e8749f328d838a3fd2e3ba4e85bd7a21a027c661c70b380324e4bd88e"
+      },
+      "sha256": "1b29f8dfe5c5fc0f3b6a451e8af7f46c91b2ff67ceec8f34a62f0b691d864456"
+    }
+  },
+  "format_version": 1
+}

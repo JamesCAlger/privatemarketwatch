@@ -2867,3 +2867,20 @@ class TestCashAxisContexts:
         _, ctxs = self._parse(xml)
         assert ctxs["c_dreyfus"]["investment_identifier"] == "Real Co | First Lien"
         assert ctxs["c_dreyfus"]["is_investment"] is True
+
+
+def test_parse_single_filing_survives_huge_text_block(tmp_dir):
+    """A 10-K with a >10 MB embedded text block (risk factors) must still parse.
+
+    Regression for MidCap Apollo FY2025 (0001193125-26-104070): libxml2's
+    default 10,000,000-byte text-node limit raised, the exception was swallowed
+    and the filing was recorded as parsed with zero records.
+    """
+    from pipeline.bdc_filings import _parse_single_filing
+    blob = "<cef:RiskTextBlock xmlns:cef=\"http://xbrl.sec.gov/cef/2024\" contextRef=\"c-dur\">" \
+           + ("risk " * 2_200_000) + "</cef:RiskTextBlock>\n"
+    content = XBRL_MINIMAL.replace("</xbrl>", blob + "</xbrl>")
+    assert len(blob) > 10_000_000
+    xml_path = _write_xml(tmp_dir, content, "huge.xml")
+    results = _parse_single_filing(str(xml_path), {"cik": "1418076", "report_date": "2023-12-31"})
+    assert len(results) == 2

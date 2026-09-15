@@ -123,17 +123,17 @@ def test_cost_donor_is_identity_scope_safe_retains_zero_and_rejects_ties():
 
 def test_fx_cross_direction_weekend_zero_sign_and_no_lookahead():
     # Deliberately synthetic values, not market observations.
-    q=dict(date='2023-03-31',per_EUR={'USD':'1.2','GBP':'0.8'},quote_id='synthetic',source_sha256='fixture')
-    future=dict(q,date='2023-04-03',quote_id='future',per_EUR={'USD':'9','GBP':'1'})
-    assert convert(80,'GBP','2023-04-02',[q,future])['value']=='120'
-    assert convert(-80,'GBP','2023-04-02',[q])['value']=='-120'
-    assert convert(0,'GBP','2023-04-02',[q])['value']=='0'
+    q=dict(date='2023-03-31',usd_per_unit={'GBP':'1.5','EUR':'1.2'},quote_id='synthetic',source_sha256='fixture')
+    future=dict(q,date='2023-04-03',quote_id='future',usd_per_unit={'GBP':'9','EUR':'9'})
+    assert convert(80,'GBP','2023-04-02',[q,future])['value']=='120.0'
+    assert convert(-80,'GBP','2023-04-02',[q])['value']=='-120.0'
+    assert convert(0,'GBP','2023-04-02',[q])['value']=='0.0'
     assert convert(100,'EUR','2023-04-02',[q])['value']=='120.0'
     assert convert(100,'USD','2023-04-02',[])['method']=='already_USD'
 
 
 def test_fx_missing_stale_conflicted_and_duplicate_are_not_assumed():
-    q=dict(date='2023-03-31',per_EUR={'USD':'1.2','GBP':'0.8'},quote_id='synthetic',source_sha256='fixture')
+    q=dict(date='2023-03-31',usd_per_unit={'GBP':'1.5','EUR':'1.2'},quote_id='synthetic',source_sha256='fixture')
     assert convert(80,'GBP','2023-04-09',[q])['method']=='FX_stale'
     assert convert(80,'KPW','2023-04-02',[q])['method']=='FX_unavailable'
     with pytest.raises(ValueError):convert(80,'unresolved','2023-04-02',[q])

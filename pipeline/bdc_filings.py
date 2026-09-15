@@ -994,10 +994,16 @@ def _parse_single_filing(
     filing_meta: dict[str, str],
 ) -> list[dict[str, Any]]:
     """Parse one XBRL instance file and return investee-level records."""
+    # huge_tree: 10-K instances can embed >10 MB text blocks (risk factors as
+    # escaped XHTML). Without it libxml2 raises "huge text node" and the filing
+    # was silently recorded as parsed with zero records (MidCap Apollo FY2025,
+    # 298 positions lost). Mirrors context_inventory.py; no network, no DTD.
+    parser = etree.XMLParser(huge_tree=True, resolve_entities=False,
+                             no_network=True, load_dtd=False)
     try:
-        tree = etree.parse(xml_path)
+        tree = etree.parse(xml_path, parser)
     except Exception as exc:
-        logger.debug("XML parse error for %s: %s", xml_path, exc)
+        logger.warning("XML parse error for %s: %s", xml_path, exc)
         return []
 
     contexts = _parse_xbrl_contexts(tree)

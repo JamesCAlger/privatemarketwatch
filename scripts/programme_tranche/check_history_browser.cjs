@@ -126,7 +126,7 @@ let browser;
       expected:'No FX quote within seven days',also:['Source amount: GBP -80.']},
     {name:'converted_fx_fixture',evidence:{status:'calculated',method:'report_date_reference_conversion',
       calculation:{source_value:'80',resolved_currency:'GBP',conversion:{quote_date:'2026-03-30'}}},
-      expected:'Calculated USD fair value',also:['Source amount: GBP 80.','ECB observation: 2026-03-30.']},
+      expected:'Calculated USD fair value',also:['Source amount: GBP 80.','FRED H.10 observation: 2026-03-30.']},
     {name:'reviewed_usd_fixture',evidence:{status:'calculated',method:'already_USD',
       calculation:{source_value:'0',resolved_currency:'USD'}},expected:'Reviewed USD denomination',also:['Source amount: USD 0.']},
     {name:'amended_accession_rejected',evidence:{...direct,accession_number:'0000000123-26-000002'},expected:'Source evidence unavailable'},

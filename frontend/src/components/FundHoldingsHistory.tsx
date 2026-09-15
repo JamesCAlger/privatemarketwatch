@@ -164,7 +164,7 @@ export default function FundHoldingsHistory({ cik }: { cik: string }) {
       {citation?.source_amount && <p className="text-sm">Source amount: {citation.source_currency} {citation.source_amount}.</p>}
       {citation?.calculation && <p className="text-sm">
         Source amount: {citation.calculation.resolved_currency} {citation.calculation.source_value}.
-        {citation.calculation.conversion?.quote_date && <> ECB observation: {citation.calculation.conversion.quote_date}.</>}
+        {citation.calculation.conversion?.quote_date && <> FRED H.10 observation: {citation.calculation.conversion.quote_date}.</>}
       </p>}
       {citation?.donor_row_id && <p className="text-sm">Donor observation: {citation.donor_date} ({citation.donor_row_id})</p>}
       {donorHref && <a className="text-teal underline" href={donorHref} target="_blank" rel="noopener noreferrer">Open donor fair value evidence</a>}

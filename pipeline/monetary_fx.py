@@ -1,8 +1,13 @@
-"""Admitted source-unit decisions and pinned, offline ECB FV conversions.
+"""Admitted source-unit decisions and pinned, offline FRED H.10 FV conversions.
 
-Unit spelling is not an adjudication. Only manifest-admitted decisions bound
-to the original observation, value and document can unlock conversion. The
-legacy fx_rates.csv does not contain the two provider legs required here.
+Unit spelling is not an adjudication. Conversion is unlocked either by a
+manifest-admitted decision bound to the original observation, value and
+document, or (owner decision 2026-09-15) automatically when the cached XBRL
+instance itself defines the fact's unit as a single ISO-4217 measure other
+than USD. That automatic decision is derived from the document's unit
+definition and hash, never from unit-reference spelling; unresolved units
+still require a manual decision. The single FX provider is the Federal
+Reserve H.10 release as published by FRED (USD per unit, one date per quote).
 """
 from __future__ import annotations
 
@@ -17,11 +22,46 @@ import pandas as pd
 from pipeline.programme.core import digest, sha
 from pipeline.rule_admission import admitted, reject_contract
 
+PROVIDER='FRED'
+
+
+def resolved_unit_decisions(frame):
+    """Derive automatic FV unit adjudications from the document's own unit definitions.
+
+    A row qualifies only when staging resolved the fact's unit from the cached
+    XBRL instance to one ISO-4217 monetary measure other than USD and the
+    instance hash is recorded. The decision id is deterministic per row so a
+    retained conversion replays byte-identically; for retained rows the source
+    value is taken from the retained event rather than the converted amount.
+    """
+    if frame.empty or 'src_facts' not in frame: return []
+    with duckdb.connect(config={'threads':2,'memory_limit':'-1'}) as con:
+        con.register('h',frame[['row_id','fair_value','src_facts']])
+        rows=con.execute("""WITH facts AS (
+                SELECT row_id,fair_value,TRY_CAST(src_facts AS JSON) AS facts FROM h
+            ), units AS (
+                SELECT row_id,fair_value,
+                    json_extract(facts,'$._financial_fx.fair_value') AS previous,
+                    json_extract_string(facts,'$._financial_units.fair_value.status') AS status,
+                    json_extract_string(facts,'$._financial_units.fair_value.currency') AS currency,
+                    json_extract_string(facts,'$._financial_units.source_sha256') AS document_sha256
+                FROM facts)
+            SELECT row_id,'unit:'||row_id AS decision_id,'fair_value' AS field,
+                coalesce(json_extract_string(previous,'$.source_value'),CAST(fair_value AS VARCHAR)) AS source_value,
+                currency,document_sha256
+            FROM units
+            WHERE status='resolved' AND regexp_full_match(coalesce(currency,''),'[A-Z]{3}') AND currency<>'USD'
+              AND regexp_full_match(coalesce(document_sha256,''),'[0-9a-f]{64}')
+              AND (previous IS NOT NULL OR TRY_CAST(fair_value AS DECIMAL(38,12)) IS NOT NULL)
+            ORDER BY row_id""").fetchall()
+    keys=('row_id','decision_id','field','source_value','currency','document_sha256')
+    return [dict(zip(keys,row)) for row in rows]
+
 
 def load_inputs(directory):
     """Read optional promoted inputs; never infer approval from file placement.
 
-    A quote contains date, quote_id, per_EUR and a relative source path/hash.
+    A quote contains date, quote_id, usd_per_unit and a relative source path/hash.
     An adjudication contains decision_id, row_id, field, source_value, currency and
     document_sha256. Empty or absent inputs leave foreign FV unavailable.
     """
@@ -47,12 +87,12 @@ def load_inputs(directory):
                 seen=set()
                 for quote in result[key]:
                     date.fromisoformat(quote['date'])
-                    if quote.get('provider')!='ECB' or not quote.get('quote_id') or quote['quote_id'] in seen:
+                    if quote.get('provider')!=PROVIDER or not quote.get('quote_id') or quote['quote_id'] in seen:
                         raise ValueError('Invalid provider or duplicate quote identity')
                     seen.add(quote['quote_id'])
-                    if not isinstance(quote.get('per_EUR'),dict) or 'USD' not in quote['per_EUR']:
+                    if not isinstance(quote.get('usd_per_unit'),dict) or not quote['usd_per_unit']:
                         raise ValueError('Provider observation lacks currency legs')
-                    for currency,value in quote['per_EUR'].items():
+                    for currency,value in quote['usd_per_unit'].items():
                         rate=Decimal(str(value))
                         if not re.fullmatch('[A-Z]{3}',currency) or not rate.is_finite() or rate<=0:
                             raise ValueError('Invalid provider currency/rate')
@@ -92,6 +132,9 @@ def apply_fair_value(frame,*,quotes=(),decisions=()):
     """
     if frame.empty: return frame
     retained=frame['src_facts'].astype('string').str.contains('"_financial_fx"',regex=False,na=False)
+    # Manual decisions win; document-resolved units fill the rest automatically.
+    explicit={d.get('row_id') for d in decisions if isinstance(d,dict)}
+    decisions=list(decisions)+[d for d in resolved_unit_decisions(frame) if d['row_id'] not in explicit]
     if not decisions:
         if retained.any():
             raise ValueError('Retained FX conversion has no admitted decision; rebuild from cached source')
@@ -112,12 +155,13 @@ def apply_fair_value(frame,*,quotes=(),decisions=()):
     quote_ids=set()
     for q in quotes:
         date.fromisoformat(q['date'])
-        if q.get('provider')!='ECB': raise ValueError('Unsupported FX provider')
+        if q.get('provider')!=PROVIDER: raise ValueError('Unsupported FX provider')
         if not q.get('quote_id') or q['quote_id'] in quote_ids or not q.get('source_sha256'):
             raise ValueError('Unpinned or duplicate FX quote identity')
         quote_ids.add(q['quote_id'])
-        if 'USD' not in q['per_EUR']: raise ValueError('FX observation lacks the USD leg')
-        for currency,value in q['per_EUR'].items():
+        if not isinstance(q.get('usd_per_unit'),dict) or not q['usd_per_unit']:
+            raise ValueError('FX observation lacks currency legs')
+        for currency,value in q['usd_per_unit'].items():
             rate=Decimal(str(value))
             if not re.fullmatch('[A-Z]{3}',currency) or not rate.is_finite() or rate<=0:
                 raise ValueError('Invalid provider currency/rate')
@@ -157,8 +201,8 @@ def apply_fair_value(frame,*,quotes=(),decisions=()):
                     chosen=next(q for q in quotes if q['quote_id']==conversion['quote_id'])
                     conversion['quote_inputs']=dict(source_sha256=chosen['source_sha256'],
                         provider=chosen['provider'],quote_date=chosen['date'],
-                        source_units_per_EUR='1' if currency=='EUR' else str(chosen['per_EUR'][currency]),
-                        USD_per_EUR=str(chosen['per_EUR']['USD']))
+                        usd_per_unit=str(chosen['usd_per_unit'][currency]),
+                        series=str((chosen.get('series') or {}).get(currency,'')))
                 factor=conversion.get('value')
                 # 28 fractional decimal places precede the final DOUBLE cast.
                 factor=str(Decimal(factor).quantize(Decimal('1e-28'))) if factor is not None else None
@@ -168,7 +212,7 @@ def apply_fair_value(frame,*,quotes=(),decisions=()):
         reference_schema=json.dumps(dict(value='VARCHAR',method='VARCHAR',quote_id='VARCHAR',
             quote_date='VARCHAR',age_days='BIGINT',rate_USD_per_source='VARCHAR',quote_inputs=dict(
                 source_sha256='VARCHAR',provider='VARCHAR',quote_date='VARCHAR',
-                source_units_per_EUR='VARCHAR',USD_per_EUR='VARCHAR')))
+                usd_per_unit='VARCHAR',series='VARCHAR')))
         changed=con.execute("""SELECT count(*) FROM selected s JOIN factors f USING(currency,report_date)
             WHERE s.previous IS NOT NULL AND (
                 json_extract_string(s.previous,'$.reference_sha256') IS DISTINCT FROM f.reference_sha256

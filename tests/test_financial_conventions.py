@@ -187,9 +187,50 @@ def fx_fixture(amount='80',currency='GBP',report_date='2026-03-31'):
         cost='',src_facts=json.dumps(facts)))
     decision=dict(decision_id='synthetic-review',row_id='R1',field='fair_value',source_value=amount,
         currency=currency,document_sha256='a'*64)
-    quote=dict(provider='ECB',date='2026-03-30',per_EUR={'GBP':'0.8','USD':'1.2'},
-        quote_id='synthetic-quote',source_sha256='b'*64)
+    quote=dict(provider='FRED',date='2026-03-30',usd_per_unit={'GBP':'1.5','EUR':'1.2'},
+        series={'GBP':'DEXUSUK','EUR':'DEXUSEU'},quote_id='synthetic-quote',source_sha256='b'*64)
     return frame,decision,quote
+
+
+def resolved_unit_fixture(amount='80',currency='GBP',status='resolved',report_date='2026-03-31'):
+    # Staging recorded the document's own unit definition for this fact.
+    facts={'_financial_units':{'source_sha256':'a'*64,
+        'fair_value':{'unit_ref':'gbp','currency':currency if status=='resolved' else None,'status':status}},
+        'fair_value':{'r':amount}}
+    frame=rows(dict(fair_value=amount,fair_value_currency=currency if status=='resolved' else 'UNRESOLVED',
+        report_date=report_date,cost='',src_facts=json.dumps(facts)))
+    quote=dict(provider='FRED',date='2026-03-30',usd_per_unit={'GBP':'1.5'},series={'GBP':'DEXUSUK'},
+        quote_id='synthetic-quote',source_sha256='b'*64)
+    return frame,quote
+
+
+def test_document_resolved_iso_unit_auto_adjudicates_and_replays():
+    frame,quote=resolved_unit_fixture()
+    result,states=prepare(frame,fx_quotes=[quote])
+    row=result.iloc[0]
+    assert row.fair_value==120 and row.fair_value_currency=='USD'
+    event=json.loads(row.src_facts)['_financial_fx']['fair_value']
+    assert event['decision_id']=='unit:R1' and event['document_sha256']=='a'*64
+    assert event['source_value']=='80' and event['resolved_currency']=='GBP'
+    assert event['conversion']['quote_inputs']['usd_per_unit']=='1.5'
+    again,_=prepare(result,prior_states=states,fx_quotes=[quote])
+    assert again.iloc[0].fair_value==120
+    assert json.loads(again.iloc[0].src_facts)['_financial_fx']['fair_value']==event
+
+
+def test_unresolved_document_unit_is_not_auto_adjudicated():
+    frame,quote=resolved_unit_fixture(status='unit_unresolved')
+    result,_=prepare(frame,fx_quotes=[quote])
+    assert pd.isna(result.iloc[0].fair_value)
+    assert '_financial_fx' not in json.loads(result.iloc[0].src_facts)
+
+
+def test_manual_decision_overrides_automatic_unit_decision():
+    frame,quote=resolved_unit_fixture()
+    manual=dict(decision_id='reviewed-override',row_id='R1',field='fair_value',source_value='80',
+        currency='GBP',document_sha256='a'*64)
+    result,_=prepare(frame,fx_quotes=[quote],unit_adjudications=[manual])
+    assert json.loads(result.iloc[0].src_facts)['_financial_fx']['fair_value']['decision_id']=='reviewed-override'
 
 
 @pytest.mark.parametrize('amount,expected',[('80',120),('-80',-120),('0',0),('0.125',0.1875)])
@@ -214,7 +255,7 @@ def test_changed_fx_reference_requires_source_rebuild_instead_of_stale_replay(ch
     frame,decision,quote=fx_fixture()
     result,states=prepare(frame,fx_quotes=[quote],unit_adjudications=[decision])
     changed=dict(quote)
-    if change=='rate': changed['per_EUR']={'GBP':'0.8','USD':'2.0'}
+    if change=='rate': changed['usd_per_unit']={'GBP':'2.5','EUR':'1.2'}
     if change=='source_hash': changed['source_sha256']='c'*64
     if change=='date': changed['date']='2026-03-29'
     quotes=[] if change=='withdrawn_quote' else [changed]
@@ -288,11 +329,11 @@ def test_quotes_alone_cannot_convert_unadjudicated_foreign_unit():
 def test_seven_day_quote_boundary_and_same_observation_legs():
     frame,decision,quote=fx_fixture()
     quote['date']='2026-03-24'
-    future=dict(quote,date='2026-04-01',quote_id='future',per_EUR={'GBP':'1','USD':'9'})
+    future=dict(quote,date='2026-04-01',quote_id='future',usd_per_unit={'GBP':'9'})
     result,_=prepare(frame,fx_quotes=[quote,future],unit_adjudications=[decision])
     assert result.iloc[0].fair_value==120
     event=json.loads(result.iloc[0].src_facts)['_financial_fx']['fair_value']['conversion']
-    assert event['age_days']==7 and event['quote_inputs']['USD_per_EUR']=='1.2'
+    assert event['age_days']==7 and event['quote_inputs']['usd_per_unit']=='1.5'
     assert event['quote_inputs']['source_sha256']=='b'*64
 
 
