@@ -368,6 +368,30 @@ class TestMatchConcept:
             "investmentownedbalancesharesornumberofcontractsorprincipalamount"
         ) == "principal_amount"
 
+    def test_underlying_face_amount_maps_to_principal(self):
+        """us-gaap InvestmentOwnedUnderlyingFaceAmountAtMarketValue is the
+        position par (AB Private Credit 1634452 and 5 other cached filers tag
+        principal ONLY with it)."""
+        from pipeline.bdc_filings import _match_concept
+        assert _match_concept(
+            "investmentownedunderlyingfaceamountatmarketvalue"
+        ) == "principal_amount"
+        # filer-prefixed variant, same as other concepts
+        assert _match_concept(
+            "abpci_investmentownedunderlyingfaceamountatmarketvalue"
+        ) == "principal_amount"
+
+    def test_extension_spread_rate_maps_to_basis_spread(self):
+        """Filer-extension InvestmentSpreadRate (Lord Abbett 2008748, Star
+        Mountain 1786835, Chicago Atlantic 1843162) is the spread over the
+        reference rate, tagged as a decimal like the us-gaap concept."""
+        from pipeline.bdc_filings import _match_concept
+        assert _match_concept("investmentspreadrate") == "basis_spread"
+        assert _match_concept("lordabbett_investmentspreadrate") == "basis_spread"
+        # Must not shadow the interest-rate family.
+        assert _match_concept("investmentinterestrate") == "interest_rate"
+        assert _match_concept("investmentinterestratefloor") == "interest_rate_floor"
+
 
 # ---------------------------------------------------------------------------
 # 3. _parse_fact_value
@@ -2520,6 +2544,62 @@ class TestSrcFactsCapture:
         prov = json.loads(recs[0]["src_facts"])
         assert prov["principal_amount"]["c"] == (
             "investmentownedbalancesharesornumberofcontractsorprincipalamount")
+
+    def test_underlying_face_amount_fills_principal_with_provenance(self):
+        # AB Private Credit (1634452) shape: par tagged only as
+        # InvestmentOwnedUnderlyingFaceAmountAtMarketValue, unitRef carried.
+        tree = _tree(
+            '<us-gaap:InvestmentOwnedUnderlyingFaceAmountAtMarketValue '
+            'contextRef="c1" unitRef="Unit_EUR" decimals="-3">496070'
+            '</us-gaap:InvestmentOwnedUnderlyingFaceAmountAtMarketValue>'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" unitRef="usd" '
+            'decimals="-3">491109</us-gaap:InvestmentOwnedAtFairValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        assert recs[0]["principal_amount"] == 496070.0
+        assert recs[0]["principal_amount_unit"] == "Unit_EUR"
+        assert recs[0]["face_amount"] is None
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["principal_amount"]["c"] == (
+            "investmentownedunderlyingfaceamountatmarketvalue")
+
+    def test_underlying_face_amount_does_not_override_canonical_principal(self):
+        # 81955 tags BOTH concepts on 11 contexts (always equal).  Dedupe is
+        # first-non-None-per-column in DOCUMENT order, so the canonical concept
+        # wins when it appears first and no "c" is recorded.
+        tree = _tree(
+            '<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="c1" '
+            'unitRef="usd" decimals="0">3380000'
+            '</us-gaap:InvestmentOwnedBalancePrincipalAmount>'
+            '<us-gaap:InvestmentOwnedUnderlyingFaceAmountAtMarketValue '
+            'contextRef="c1" unitRef="usd" decimals="0">3380000'
+            '</us-gaap:InvestmentOwnedUnderlyingFaceAmountAtMarketValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        assert recs[0]["principal_amount"] == 3380000.0
+        prov = json.loads(recs[0]["src_facts"] or "{}")
+        assert "principal_amount" not in prov
+
+    def test_extension_spread_rate_fills_basis_spread_with_raw_value(self):
+        # Lord Abbett (2008748) shape: extension namespace, unit pure, decimal
+        # convention (0.0475 for S+475) identical to the us-gaap concept so
+        # staging S04 (<= 0.50 -> x100) rescales it the same way.
+        tree = etree.ElementTree(etree.fromstring(
+            '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024" '
+            'xmlns:lab="http://www.lordabbett.com/20260331">'
+            '<lab:InvestmentSpreadRate contextRef="c1" unitRef="pure" '
+            'decimals="4">0.0475</lab:InvestmentSpreadRate>'
+            '<us-gaap:InvestmentInterestRate contextRef="c1" unitRef="pure" '
+            'decimals="4">0.0845</us-gaap:InvestmentInterestRate>'
+            '</xbrl>'
+        ))
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        assert recs[0]["basis_spread"] == 0.0475
+        assert recs[0]["interest_rate"] == 0.0845
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["basis_spread"] == {"c": "investmentspreadrate", "r": 0.0475}
+        # interest_rate untouched by the new pattern (canonical, no "c")
+        assert "c" not in prov["interest_rate"]
 
     def test_decimals_rescale_records_raw_and_event(self):
         # 5+ facts at decimals=-3, one outlier at -6 and >100x the median:

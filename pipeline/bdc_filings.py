@@ -57,6 +57,14 @@ CONCEPT_MAP: list[tuple[str, str]] = [
     # Principal / par / face
     ("investmentownedbalanceprincipalamount", "principal_amount"),
     ("investmentownedbalancesharesornumberofcontractsorprincipalamount", "principal_amount"),
+    # us-gaap InvestmentOwnedUnderlyingFaceAmountAtMarketValue: par/face of
+    # the position.  Verified 2026-09-15 against identifier text on 6 cached
+    # filers (e.g. "$38,340 par" -> 38340000; "$3,250,000 Term Note" ->
+    # 3250000); unitRef carries the currency (EUR seen) so principal_amount_unit
+    # FX handling applies.  Kept AFTER the canonical patterns so it is recorded
+    # as a non-canonical concept in src_facts.  Only one filer (81955) tags
+    # both this and BalancePrincipalAmount on the same context, always equal.
+    ("investmentownedunderlyingfaceamountatmarketvalue", "principal_amount"),
     ("investmentobtainedfaceamount", "face_amount"),
     ("investmentownedfaceamount", "face_amount"),
     # Shares
@@ -77,6 +85,13 @@ CONCEPT_MAP: list[tuple[str, str]] = [
     # Spread / variable rate
     ("investmentbasisspreadvariablerate", "basis_spread"),
     ("investmentbasisspreadofvariablerate", "basis_spread"),
+    # Filer-extension InvestmentSpreadRate (Lord Abbett 2008748, Star Mountain
+    # 1786835, Chicago Atlantic 1843162; no us-gaap concept of this name).
+    # Same decimal convention as the us-gaap concept (unit pure, 0.0475 for
+    # S+475; verified 2026-09-15 against identifier text "SOFR Spread 7.00%"
+    # -> 0.07 and InvestmentInterestRate - spread ~= SOFR), so staging S04
+    # (<= 0.50 -> x100) rescales it identically.  No cached filer tags both.
+    ("investmentspreadrate", "basis_spread"),
     # Reference rate type (SOFR / PRIME / etc.)
     ("investmentreferencerateandspread", "reference_rate_type"),
     # Maturity date
