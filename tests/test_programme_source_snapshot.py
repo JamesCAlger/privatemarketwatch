@@ -29,3 +29,18 @@ def test_raw_bdc_unit_documents_are_frozen_outside_public_history(tmp_path):
     assert (frozen/relative).read_bytes()==source.read_bytes()
     record=next(r for r in records if r.get('path')==relative)
     assert record['status']=='frozen' and len(record['sha256'])==64
+
+
+def test_every_diagnosed_refresh_accession_is_frozen_when_cached(tmp_path):
+    from pipeline.programme.source_refresh import REFRESHES
+    root=tmp_path/'root';frozen=tmp_path/'frozen'
+    (frozen/'data/output').mkdir(parents=True)
+    expected=[]
+    for entry in REFRESHES:
+        relative='data/raw/filings/bdc_xbrl/'+entry['cik']+'/'+entry['accession'].replace('-','')+'.xml'
+        source=root/relative;source.parent.mkdir(parents=True,exist_ok=True);source.write_text('<instance/>')
+        expected.append(relative)
+    records=include_sources(root,frozen)
+    for relative in expected:
+        record=next(r for r in records if r.get('path')==relative)
+        assert record['status']=='frozen' and (frozen/relative).is_file()

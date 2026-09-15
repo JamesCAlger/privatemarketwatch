@@ -67,8 +67,8 @@ def execute(attempt, reads, *, preflight_stage=None):
             else:
                 # Fund-level inputs are already cached and pinned. Financial
                 # preparation independently checks NAV against the source cache.
-                from pipeline.programme.source_refresh import refresh_nexpoint
-                times['source_refresh']=refresh_nexpoint()
+                from pipeline.programme.source_refresh import refresh_diagnosed
+                times['source_refresh']=refresh_diagnosed()
                 frame = build_unified_holdings()
             times['build_seconds'] = time.monotonic() - started
             row_count = len(frame)

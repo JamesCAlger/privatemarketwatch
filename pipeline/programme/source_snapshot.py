@@ -40,9 +40,12 @@ def include_sources(root,frozen):
                         reason='Missing or invalid BDC source identity; no unit path constructed'))
                     continue
                 inputs.add('data/raw/filings/bdc_xbrl/'+str(int(cik))+'/'+accession.replace('-','')+'.xml')
-    # This accession is absent from the old holdings, precisely the diagnosed defect.
-    for kind,extension in (('bdc_xbrl','xml'),('bdc_html','html')):
-        inputs.add('data/raw/filings/'+kind+'/1588272/000119312523145196.'+extension)
+    # Diagnosed refresh accessions may be absent from the old holdings (that is
+    # the defect); freeze their instances and HTML so the candidate can reparse.
+    from pipeline.programme.source_refresh import REFRESHES
+    for entry in REFRESHES:
+        for kind,extension in (('bdc_xbrl','xml'),('bdc_html','html')):
+            inputs.add('data/raw/filings/'+kind+'/'+entry['cik']+'/'+entry['accession'].replace('-','')+'.'+extension)
     records=unavailable
     for index,name in enumerate(sorted(inputs),1):
         source=root/name
