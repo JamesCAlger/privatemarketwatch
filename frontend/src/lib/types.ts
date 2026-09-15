@@ -1,50 +1,3 @@
-/** Shape of index_returns.json — keyed by index classification */
-export interface IndexReturnRow {
-  quarter: string;
-  fvReturn: number | null;
-  eqReturn: number | null;
-  costReturn: number | null;
-  constituents: number | null;
-  totalBeginFv: number | null;
-  totalEndFv: number | null;
-  levelFv: number | null;
-  levelEqual: number | null;
-  levelCost: number | null;
-}
-export type IndexReturnsData = Record<string, IndexReturnRow[]>;
-
-/** Risk statistics for an index (volatility, Sharpe, drawdown, etc.) */
-export interface IndexRiskStats {
-  volatility: number | null;
-  sharpe: number | null;
-  maxDrawdown: number | null;
-  maxDrawdownQuarter: string | null;
-  bestQuarter: number | null;
-  bestQuarterLabel: string | null;
-  worstQuarter: number | null;
-  worstQuarterLabel: string | null;
-  pctPositiveQuarters: number | null;
-  positiveQuarters: number | null;
-  totalQuarters: number;
-}
-
-/** Shape of index_summary.json — array of per-index summaries */
-export interface IndexSummary {
-  index: string;
-  level: number | null;
-  levelEqual: number | null;
-  qoqReturn: number | null;
-  trailing12m: number | null;
-  ytd: number | null;
-  annualized: number | null;
-  constituents: number | null;
-  uniqueCompanies: number | null;
-  totalFv: number | null;
-  latestQuarter: string;
-  sparkline: number[];
-  riskStats?: IndexRiskStats;
-}
-
 /** Shape of top_constituents.json — keyed by index classification */
 export interface TopConstituent {
   issuerName: string;
@@ -438,16 +391,6 @@ export interface DataQuality {
   reconciliationHistograms?: ReconciliationHistogram[];
   llmFundValidation?: LlmFundValidation;
 }
-
-/** Fund-level index return row from fund_index_returns.json */
-export interface FundIndexReturnRow {
-  quarter: string;
-  return: number;
-  level: number;
-  fundCount: number;
-  totalAum: number;
-}
-export type FundIndexReturnsData = Record<string, FundIndexReturnRow[]>;
 
 /** AUM time series row from aum_time_series.json */
 export interface AumTimeSeriesRow {

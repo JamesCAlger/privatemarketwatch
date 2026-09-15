@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import type {
-  IndexReturnsData,
-  IndexSummary,
   TopConstituentsData,
   SectorBreakdownData,
   VehicleContributionData,
@@ -14,7 +12,6 @@ import type {
   FundSummary,
   FundDetail,
   DataQuality,
-  FundIndexReturnsData,
   AumTimeSeriesRow,
   GicsSectorRow,
   CreditRiskRow,
@@ -33,14 +30,6 @@ function readJson<T>(filename: string): T {
   const filePath = path.join(DATA_DIR, filename);
   const raw = fs.readFileSync(filePath, 'utf-8');
   return JSON.parse(raw) as T;
-}
-
-export function getIndexReturns(): IndexReturnsData {
-  return readJson<IndexReturnsData>('index_returns.json');
-}
-
-export function getIndexSummary(): IndexSummary[] {
-  return readJson<IndexSummary[]>('index_summary.json');
 }
 
 export function getTopConstituents(): TopConstituentsData {
@@ -124,12 +113,6 @@ export function getDataQuality(): DataQuality {
   const filePath = path.join(DATA_DIR, 'data_quality.json');
   if (!fs.existsSync(filePath)) return {};
   return readJson<DataQuality>('data_quality.json');
-}
-
-export function getFundIndexReturns(): FundIndexReturnsData {
-  const filePath = path.join(DATA_DIR, 'fund_index_returns.json');
-  if (!fs.existsSync(filePath)) return {};
-  return readJson<FundIndexReturnsData>('fund_index_returns.json');
 }
 
 export function getAumTimeSeries(): AumTimeSeriesRow[] {

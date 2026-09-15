@@ -35,8 +35,6 @@ from pipeline.export.fund_exports import (
 )
 from pipeline.export.helpers import FRONTEND_DATA_DIR
 from pipeline.export.index_exports import (
-    _export_index_returns,
-    _export_index_summary,
     _export_metadata,
     _export_portfolio_characteristics,
     _export_sector_breakdown,
@@ -45,7 +43,6 @@ from pipeline.export.index_exports import (
 )
 from pipeline.export.timeseries_exports import (
     _export_aum_time_series,
-    _export_fund_index_returns,
     _export_industry_breakdown,
 )
 
@@ -77,8 +74,8 @@ def export_all() -> None:
         sector_bundle=config.GICS_ENRICHMENT_DECISIONS_FILE,taxonomy=config.GICS_REFERENCE_FILE,
         sector_audit=config.OUTPUT_DIR/'sector_enrichment_audit.csv',cost_donors=config.OUTPUT_DIR/'cost_donor_audit.csv')
 
-    ir = _export_index_returns(con)
-    _export_index_summary(ir, con)
+    # Index surfaces (index_returns, index_summary, fund_index_returns) are out
+    # of v1 scope and are no longer exported. Position-level analytics remain.
     _export_top_constituents(con)
     _export_sector_breakdown(con)
     _export_vehicle_contribution(con)
@@ -88,7 +85,7 @@ def export_all() -> None:
     _export_position_concentration(con)
     _export_concentration_curve(con)
     _export_portfolio_characteristics(con, snapshot=snapshot)
-    _export_metadata(con, ir, snapshot=snapshot)
+    _export_metadata(con, [], snapshot=snapshot)
     _export_fund_list(con)
     _export_fund_details(con)
     _export_fund_summary(con)
@@ -96,7 +93,6 @@ def export_all() -> None:
     _export_data_quality(con)
 
     # Landing page visualizations
-    _export_fund_index_returns(con)
     _export_aum_time_series(con)
     _export_gics_sector_breakdown(con, snapshot=snapshot)
     _export_credit_risk(con)
