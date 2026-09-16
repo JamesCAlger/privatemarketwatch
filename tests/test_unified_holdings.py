@@ -3512,9 +3512,10 @@ class TestBuildUnifiedHoldings:
         # 2 BDC (Acme Corp + Growth Fund) + 1 N-PORT (Private Borrower) = 3
         assert len(result) == 3
 
-        # Check column count matches schema (row_id/row_id_basis are appended
-        # as the final build step and live outside UNIFIED_COLUMNS by design)
-        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id", "row_id_basis"]
+        # Final identity and accounting-scope columns follow the normalized schema.
+        assert list(result.columns) == UNIFIED_COLUMNS + [
+            "row_id", "row_id_basis", "accounting_scope_id", "accounting_record_class"
+        ]
         assert result["row_id"].str.match(r"^ROW-[0-9a-f]{16}$").all()
         assert result["row_id"].nunique() == len(result)
 
@@ -3759,9 +3760,10 @@ class TestEntityEnrichment:
                     lookup_path):
             result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
 
-        # row_id/row_id_basis are appended after all enrichment layers,
-        # outside UNIFIED_COLUMNS
-        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id", "row_id_basis"]
+        # Identity and accounting scope are finalized after enrichment.
+        assert list(result.columns) == UNIFIED_COLUMNS + [
+            "row_id", "row_id_basis", "accounting_scope_id", "accounting_record_class"
+        ]
 
 
 # ---------------------------------------------------------------------------

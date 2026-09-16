@@ -573,6 +573,10 @@ def _prepare_bdc(
         "|| lower(trim(CAST(instrument_description AS VARCHAR))))",
         _cash_identity_keywords,
     )
+    from pipeline.source_encodings import cash_identifier_expression
+    _reviewed_cash = cash_identifier_expression('cik', '_raw_id')
+    mm_check = "(" + mm_check + " OR " + _reviewed_cash + ")"
+    cash_identity_check = "(" + cash_identity_check + " OR " + _reviewed_cash + ")"
     industry_in = _sql_industry_label_in()
     pipe_parts = "regexp_split_to_array(_raw_id, '\\s*\\|\\s*')"
     has_pipe = "regexp_matches(_raw_id, '\\|')"
@@ -2682,22 +2686,9 @@ def _prepare_bdc(
             '' AS nport_liquidity_classification,
             COALESCE(TRY_CAST(nonaccrual_footnote AS BOOLEAN), FALSE) AS nonaccrual_footnote,
             COALESCE(TRY_CAST(nonaccrual_dimension AS BOOLEAN), FALSE) AS nonaccrual_dimension,
-            -- Two PRECISE axis patterns only. The broad '%subsidiar%' catch-all was
-            -- removed 2026-08-30: cohort-wide it contributed ZERO axis-name matches
-            -- beyond these two and 568 FALSE positives ($1.79B / 14 CIKs) where the
-            -- word sits inside a borrower's legal name in an investmentidentifieraxis
-            -- member value ('AVG Subsidiary Holdings LLC', '... & Subsidiaries') --
-            -- ordinary in-total positions wrongly excluded from conservation sums
-            -- (the 1633336/1930087 flags incl. the Q4-2025 regression).
-            CASE WHEN lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
-                          LIKE '%nonconsolidatedsubsidiar%'
-                      -- Equity-method investee (JV) look-through facts: same
-                      -- retain-and-flag treatment as the subsidiary axes
-                      -- (adjudicated 2026-07-21/22, data_investigation_results
-                      -- parts 5-8: JV note portfolios are not fund holdings).
-                      OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
-                          LIKE '%equitymethodinvestmentequitymethodinvesteenameaxis%'
-                 THEN 1 ELSE 0 END AS is_subsidiary,
+            -- Use the same reporting scope that protected raw deduplication.
+            CASE WHEN ends_with(_accounting_scope,'|parent')
+                 THEN 0 ELSE 1 END AS is_subsidiary,
             -- Row provenance (spec 2026-08-30): the row's normalized presentation
             -- profile. Lowercase, '='-attached member values stripped, segments
             -- trimmed and SORTED for order stability. Plain (no '=') member-label

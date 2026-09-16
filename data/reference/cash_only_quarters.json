@@ -1,0 +1,12 @@
+{
+  "schema_version": "cash-only-quarter-exceptions.v1",
+  "records": [
+    {
+      "cik": "0001930087",
+      "quarter": "2023-06-30",
+      "accession": "0001930087-23-000010",
+      "source_sha256": "ba3c44eada527dfb48b97117098f46e1326e8abea822b01b155d1f406bbc7500",
+      "decision": "Owner 2026-09-15; docs/production_stack/01_decisions.md section 1"
+    }
+  ]
+}

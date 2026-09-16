@@ -1,0 +1,98 @@
+"""Regression fixtures for reviewed cash and reporting-portfolio encodings."""
+import json
+
+import duckdb
+import pandas as pd
+import pytest
+
+from pipeline import source_encodings
+from pipeline.accounting_scope import annotate, scope_expression
+
+CASH = 'Dreyfus Government Cash Management - Institutional Shares | Emerald JV LP'
+ENCODINGS = {'0001803498': {
+    'cash_identifiers': [CASH],
+    'reporting_entity_suffixes': ['Emerald JV LP', 'Verdelite JV LP'],
+    'reporting_entity_identifier_suffixes': ['Emerald JV LP', 'Verdelite JV LP'],
+}}
+
+
+@pytest.mark.parametrize('cik,name,expected', [
+    ('0001803498', CASH, True),
+    ('1803498', '  ' + CASH.upper() + '  ', True),
+    ('0001772704', CASH, False),
+    ('0001803498', 'Total ' + CASH, False),
+    ('0001803498', CASH + ' - Term Loan', False),
+    ('0001803498', 'Acme Corp - Cash + PIK Interest Rate 5%', False),
+    ('0001803498', None, False),
+])
+def test_cash_identity_requires_exact_disclosed_instrument_and_filer(cik, name, expected):
+    expression = source_encodings.cash_identifier_expression('cik', 'identifier', ENCODINGS)
+    with duckdb.connect() as con:
+        assert con.execute('SELECT ' + expression + ' FROM (SELECT ? AS cik, ? AS identifier)',
+                           [cik, name]).fetchone()[0] is expected
+
+
+@pytest.mark.parametrize('dimensions,expected', [
+    ('investmentidentifieraxis=Acme LLC | Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Acme LLC | Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=BCRED Emerald JV LP', 'parent'),
+    ('investmentidentifieraxis=Emerald JV LP Services LLC', 'parent'),
+    ('investmentidentifieraxis=Acme LLC | industryaxis=Emerald JV LP', 'parent'),
+    ('investmentidentifieraxis=Acme LLC | Emerald JV LP Holdings', 'parent'),
+    ('investmentidentifieraxis=MH Sub I, LLC 1 Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=MH Sub I, LLC, Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=ADCS Clinics, LLC, Emerald JV LP 3', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Acme LLC and Verdelite JV LP', 'parent'),
+    ('investmentidentifieraxis=Acme IncEmerald JV LP', 'parent'),
+])
+def test_reporting_suffix_does_not_turn_borrower_names_into_subsidiaries(monkeypatch, dimensions, expected):
+    monkeypatch.setattr(source_encodings, 'load_encodings', lambda: ENCODINGS)
+    expression = scope_expression('cik', 'dimensions', 'false', "'row'")
+    with duckdb.connect() as con:
+        actual = con.execute('SELECT ' + expression + " FROM (SELECT '0001803498' AS cik, ? AS dimensions)",
+                             [dimensions]).fetchone()[0]
+    assert actual == '0001803498|' + expected
+
+
+def test_annotation_keeps_parent_and_two_portfolios_separate_without_changing_money(monkeypatch):
+    monkeypatch.setattr(source_encodings, 'load_encodings', lambda: ENCODINGS)
+    frame = pd.DataFrame([
+        dict(cik='0001803498', row_id='parent', is_subsidiary=0, fair_value=100,
+             bdc_dimensions_raw='investmentidentifieraxis=BCRED Emerald JV LP'),
+        dict(cik='0001803498', row_id='emerald', is_subsidiary=0, fair_value=100,
+             bdc_dimensions_raw='investmentidentifieraxis=Acme LLC | Emerald JV LP'),
+        dict(cik='0001803498', row_id='verdelite', is_subsidiary=0, fair_value=-5,
+             bdc_dimensions_raw='investmentidentifieraxis=Acme LLC | Verdelite JV LP'),
+    ])
+    result = annotate(frame)
+    assert result.row_id.tolist() == frame.row_id.tolist()
+    assert result.fair_value.tolist() == [100, 100, -5]
+    assert result.is_subsidiary.tolist() == [0, 1, 1]
+    assert result.accounting_scope_id.nunique() == 3
+    assert result.accounting_record_class.tolist() == ['parent_schedule', 'underlying_schedule', 'underlying_schedule']
+    pd.testing.assert_frame_equal(annotate(result), result)
+    assert frame.is_subsidiary.tolist() == [0, 0, 0]
+
+
+@pytest.mark.parametrize('encoding', [
+    {'reporting_entity_suffixes': ['Emerald JV LP', ' emerald jv lp ']},
+    {'reporting_entity_suffixes': ['axis=Emerald JV LP']},
+    {'reporting_entity_suffixes': ['Emerald JV LP|Other']},
+    {'cash_identifiers': ['']},
+    {'cash_identifiers': CASH},
+    {'unknown_rule': ['anything']},
+])
+def test_malformed_encoding_fails_instead_of_silently_changing_scope(tmp_path, encoding):
+    (tmp_path / '0001803498.json').write_text(json.dumps({
+        'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001803498', 'source_encodings': encoding,
+    }), encoding='utf-8')
+    with pytest.raises(ValueError):
+        source_encodings.load_encodings(tmp_path)
+
+
+def test_unconfigured_wrapper_preserves_old_scope_and_empty_annotation(tmp_path):
+    (tmp_path / 'reference.json').write_text(json.dumps({'entries': []}), encoding='utf-8')
+    assert source_encodings.load_encodings(tmp_path) == {}
+    assert source_encodings.cash_identifier_expression('cik', 'identifier', {}) == 'false'
+    result = annotate(pd.DataFrame(columns=['cik', 'row_id']))
+    assert list(result.columns) == ['cik', 'row_id', 'accounting_scope_id', 'accounting_record_class']

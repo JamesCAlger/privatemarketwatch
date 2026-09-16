@@ -218,3 +218,122 @@ def test_pinned_document_inventory_creates_browser_requests_without_reading_html
             # This fixture intentionally has no anchor. Only the browser can
             # establish actual target availability; metadata is not DOM proof.
             assert 'until the complete browser anchor census passes' in result['interpretation']
+
+
+def fx_observation(row='fx', amount='100', *, currency='GBP'):
+    from decimal import Decimal
+    value = Decimal(amount) * Decimal('1.2')
+    event = dict(decision_id='unit:' + row, document_sha256='c' * 64, reference_sha256='d' * 64,
+        source_value=amount, resolved_currency=currency, tagged_currency=currency,
+        final_value=str(value),
+        # The financial writer emits the typed decimal zero as 0E-48.
+        decimal_value='0E-48' if value == 0 else format(value, '.48f'),
+        conversion=dict(method='report_date_reference_conversion', value='1.2',
+            quote_id='FRED-H10-2026-03-31', quote_date='2026-03-31', age_days=0,
+            rate_USD_per_source='1.2', quote_inputs=dict(provider='FRED', source_sha256='a' * 64,
+                quote_date='2026-03-31', usd_per_unit='1.2', series='DEXUSUK')))
+    payload = dict(status='calculated', release_id='R', row_id=row, field='fair_value',
+        method='report_date_reference_conversion', calculation=event,
+        input=dict(status='unavailable', reason='Original monetary fact has no verified locator'))
+    return observation(row, fair_value=float(value), fair_value_currency='USD',
+        src_facts=json.dumps({'_financial_fx': {'fair_value': event},
+            '_financial_units': {'source_sha256': 'c' * 64}}), evidence={'fair_value': payload})
+
+
+@pytest.mark.parametrize('amount', ['100', '-100', '0'])
+def test_fx_calculation_is_valid_but_does_not_claim_a_direct_citation(tmp_path, amount):
+    root = history(tmp_path, [fx_observation(amount=amount)])
+    with duckdb.connect() as con:
+        result = census(con, root)
+        assert con.execute('SELECT count(*) FROM delivery_graph_errors').fetchone()[0] == 0
+        assert con.execute('SELECT count(*) FROM delivery_links').fetchone()[0] == 0
+    fair_value = next(f for f in result['fields'] if f['quarter'] is None and f['field'] == 'fair_value')
+    assert fair_value['calculated_values'] == 1
+    assert fair_value['reported_or_unknown'] == 0
+
+
+@pytest.mark.parametrize('problem', ['wrong_amount', 'wrong_rate', 'wrong_provider', 'stale',
+    'future', 'wrong_age', 'wrong_document', 'missing_reference', 'broken_binding', 'fake_direct_input'])
+def test_broken_fx_event_cannot_validate_its_own_output(tmp_path, problem):
+    row = fx_observation()
+    payload = row['evidence']['fair_value']
+    event = payload['calculation']
+    conversion = event['conversion']
+    if problem == 'wrong_amount':
+        row['fair_value'] = 121
+    elif problem == 'wrong_rate':
+        conversion.update(value='1.3', rate_USD_per_source='1.3')
+        conversion['quote_inputs']['usd_per_unit'] = '1.3'
+    elif problem == 'wrong_provider':
+        conversion['quote_inputs']['provider'] = 'another_provider'
+    elif problem in {'stale', 'future'}:
+        date = '2026-03-01' if problem == 'stale' else '2026-04-01'
+        conversion.update(quote_date=date, age_days=30 if problem == 'stale' else -1)
+        conversion['quote_inputs']['quote_date'] = date
+    elif problem == 'wrong_age':
+        conversion['age_days'] = 1
+    elif problem == 'wrong_document':
+        event['document_sha256'] = 'e' * 64
+    elif problem == 'missing_reference':
+        event['reference_sha256'] = ''
+    elif problem == 'broken_binding':
+        event['decision_id'] = 'another-decision'
+    else:
+        payload['input'] = direct('fx')
+    # Except for the binding control, also corrupt the stored event: arithmetic,
+    # provider, time and document checks must not rely only on equality to it.
+    if problem != 'broken_binding':
+        facts = json.loads(row['src_facts'])
+        facts['_financial_fx']['fair_value'] = event
+        row['src_facts'] = json.dumps(facts)
+    with duckdb.connect() as con:
+        census(con, history(tmp_path, [row]))
+        assert con.execute("SELECT count(*) FROM delivery_graph_errors WHERE reason='invalid_fx_calculation'").fetchone()[0] == 1
+
+
+@pytest.mark.parametrize('broken', [False, True])
+def test_cost_proxy_can_use_a_verified_fx_donor_but_not_an_altered_copy(tmp_path, broken):
+    import copy
+    donor = fx_observation()
+    nested = copy.deepcopy(donor['evidence']['fair_value'])
+    if broken:
+        nested['calculation']['final_value'] = '121'
+    cost = dict(status='calculated', release_id='R', row_id='cost', field='cost',
+        method='first_observed_fv_proxy', donor_row_id='fx', donor_date='2026-03-31',
+        donor_release='R', input=nested)
+    owner = observation('cost', cost=120, cost_source='first_observed_fv_proxy', evidence={'cost': cost})
+    with duckdb.connect() as con:
+        census(con, history(tmp_path, [donor, owner]))
+        assert con.execute("SELECT count(*) FROM delivery_graph_errors WHERE reason='invalid_cost_donor'").fetchone()[0] == int(broken)
+
+
+def test_bad_fx_donor_invalidates_dependent_cost_even_when_nested_copy_matches(tmp_path):
+    donor = fx_observation()
+    donor['fair_value'] = 121
+    cost = dict(status='calculated', release_id='R', row_id='cost', field='cost',
+        method='first_observed_fv_proxy', donor_row_id='fx', donor_date='2026-03-31',
+        donor_release='R', input=donor['evidence']['fair_value'])
+    owner = observation('cost', cost=121, cost_source='first_observed_fv_proxy', evidence={'cost': cost})
+    with duckdb.connect() as con:
+        census(con, history(tmp_path, [donor, owner]))
+        assert con.execute('SELECT count(*) FROM delivery_graph_errors').fetchone()[0] == 2
+
+
+def test_unknown_calculation_field_cannot_bypass_the_graph(tmp_path):
+    row = observation('r', interest_rate=10, evidence={'interest_rate': dict(
+        status='calculated', release_id='R', row_id='r', field='interest_rate', method='invented')})
+    with duckdb.connect() as con:
+        census(con, history(tmp_path, [row]))
+        assert con.execute("SELECT count(*) FROM delivery_graph_errors WHERE reason='unsupported_calculation_field'").fetchone()[0] == 1
+
+
+def test_zero_fx_cannot_hide_a_nonzero_decimal_result(tmp_path):
+    row = fx_observation(amount='0')
+    event = row['evidence']['fair_value']['calculation']
+    event['decimal_value'] = '1E-48'
+    facts = json.loads(row['src_facts'])
+    facts['_financial_fx']['fair_value'] = event
+    row['src_facts'] = json.dumps(facts)
+    with duckdb.connect() as con:
+        census(con, history(tmp_path, [row]))
+        assert con.execute("SELECT count(*) FROM delivery_graph_errors WHERE reason='invalid_fx_calculation'").fetchone()[0] == 1

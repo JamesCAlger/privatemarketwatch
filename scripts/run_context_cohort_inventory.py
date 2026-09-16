@@ -15,7 +15,8 @@ import duckdb
 from pipeline.context_inventory import scan_instance
 from pipeline.programme.core import atomic_json, now, read_json, sha
 from pipeline.programme.runner import candidate_path, heavy_lock
-from scripts.run_context_census import ELIGIBLE_OBLIGATIONS, INDEX, REGISTER, select_source
+from scripts.run_context_census import (ELIGIBLE_OBLIGATIONS, INDEX, REGISTER,
+    scan_selected_source, verify_source_selection)
 
 RECONCILIATION = ROOT / "data/output/source_reconciliation_detail.csv"
 
@@ -73,8 +74,12 @@ def resume_source_assessments(prior, inputs, obligations):
         if not path.is_relative_to((prior / "documents").resolve()) or sha(path) != row["evidence_sha256"]:
             raise ValueError("Saved source document changed")
         document = read_json(path)
+        verify_source_selection(document)
         if ((document["cik"], document["quarter"], document["accession"]) !=
                 (row["cik"], row["quarter"], row["accession"]) or
+                document["source_complete"] != row["source_complete"] or
+                (document["sha256"] or "") != row["source_sha256"] or
+                document["selection"] != row["selection"] or
                 document["counts"] != dict(confirmed_position=row["P"], aggregate=row["A"], unresolved=row["U"]) or
                 len(document["contexts"]) != row["P"] + row["A"] + row["U"]):
             raise ValueError("Saved source assessment identity/count mismatch")
@@ -145,7 +150,7 @@ def run(dest, resume_sources=None, *, reconciliation=None):
             raise ValueError(f"E2 expected {ELIGIBLE_OBLIGATIONS} distinct eligible obligations")
         atomic_json(dest / "request.json", dict(experiment="E2", started_utc=now(), pid=os.getpid(),
             input_sha256=inputs, seconds=None, obligation_count=len(obligations), memory_limit="unlimited", threads=2))
-        filings = con.execute("""SELECT cik,report_date,filing_date,accession_number
+        filings = con.execute("""SELECT cik,report_date,filing_date,accession_number,form_type
             FROM read_csv(?,all_varchar=true) WHERE substr(report_date,1,10) BETWEEN '2023-01-01' AND '2026-03-31'
             AND form_type IN ('10-K','10-Q','10-K/A','10-Q/A')
             AND lpad(cik,10,'0') IN (SELECT unnest(?))""",
@@ -163,12 +168,8 @@ def run(dest, resume_sources=None, *, reconciliation=None):
         # are DuckDB SQL, including pattern grouping and actual reconciliation joins.
         for index, obligation in enumerate([] if resume_sources else obligations, 1):
             cik, quarter = obligation["cik"], obligation["report_date"]
-            accession, selection, choices = select_source(obligation, filings)
-            compact = accession.replace("-", "")
-            if compact and (len(compact) != 18 or not compact.isdigit()):
-                raise ValueError("Invalid selected accession identity")
-            source = ROOT / "data/raw/filings/bdc_xbrl" / str(int(cik)) / (compact + ".xml")
-            result = scan_instance(source, cik, quarter)
+            result = scan_selected_source(obligation, filings)
+            accession, selection, choices = (result[k] for k in ("accession", "selection", "indexed_choices"))
             if result["source_complete"] and not result.get("target_instant_contexts"):
                 result["source_complete"] = False
                 result["errors"].append("Selected source has no target-quarter instant context")

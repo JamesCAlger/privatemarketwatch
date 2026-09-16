@@ -18,7 +18,7 @@ from pipeline.programme.core import sha
 from pipeline.provenance_reverify import CHEAP_FIELDS
 from pipeline.monetary_units import unit_definition
 
-POLICY_VERSION = "field-assessment.v2"
+POLICY_VERSION = "field-assessment.v3"
 FIELDS = tuple(CHEAP_FIELDS)
 MONEY = frozenset({"fair_value", "cost", "principal_amount"})
 RATES = frozenset({"interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets"})
@@ -65,7 +65,7 @@ def source_meaning(field, concept, unit_kind, raw):
     return "ready", 100
 
 
-def read_field_document(path: Path, cik: str, *, max_bytes=55_000_000,
+def read_field_document(path: Path, cik: str, *, max_bytes=100_000_000,
                         max_contexts=25_000, max_facts=300_000):
     """One source parse; no network, correction, default timer or memory cap."""
     path = Path(path)

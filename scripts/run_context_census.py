@@ -34,6 +34,98 @@ def select_source(obligation, filings):
     return accession, "companyfacts_accession_fallback" if accession else "no_selected_accession", 0
 
 
+def _source_path(cache_root, cik, accession):
+    compact = accession.replace("-", "")
+    if not cik.isdigit() or (compact and (len(compact) != 18 or not compact.isdigit())):
+        raise ValueError("Invalid selected source identity")
+    return Path(cache_root) / str(int(cik)) / (compact + ".xml")
+
+
+def scan_selected_source(obligation, filings, *, cache_root=None, scanner=None):
+    """Read the target-quarter XML, retaining any cover-only amendment evidence.
+
+    A later amendment without a target-quarter instant does not replace the
+    original schedule. This only selects among cached filings for the SAME
+    report date and form family; it never substitutes a later comparative.
+    Missing, invalid, incomplete or financially populated amendments stop the
+    search. Narrative changes in an amendment are outside this XML assessment.
+    """
+    cache_root = cache_root or ROOT / "data/raw/filings/bdc_xbrl"
+    scanner = scanner or scan_instance
+    cik, quarter = obligation["cik"], obligation["report_date"]
+    accession, selection, _ = select_source(obligation, filings)
+    exact = {}
+    for row in filings:
+        if row["cik"].zfill(10) != cik or row["report_date"][:10] != quarter:
+            continue
+        key = row["accession_number"]
+        value = (row["filing_date"], row.get("form_type", ""))
+        if key in exact and exact[key] != value:
+            raise ValueError("Conflicting filing metadata for one source accession")
+        exact[key] = value
+    if len(exact) > 20:
+        raise ValueError("Target-quarter source selection exceeds 20 distinct filings")
+    choices = sorted(exact, key=lambda a: (exact[a][0], a), reverse=True) or [accession]
+    trace = []
+    result = None
+    for index, accession in enumerate(choices):
+        form = exact.get(accession, ("", ""))[1]
+        result = scanner(_source_path(cache_root, cik, accession), cik, quarter)
+        entry = dict(accession=accession, form_type=form, path=result["path"],
+            sha256=result["sha256"], source_complete=result["source_complete"],
+            document_period_ends=result.get("document_period_ends", []),
+            target_instant_contexts=result.get("target_instant_contexts", 0),
+            disposition="selected")
+        trace.append(entry)
+        can_skip = (form in {"10-K/A", "10-Q/A"} and result["source_complete"]
+            and result.get("document_period_ends") == [quarter]
+            and result.get("target_instant_contexts") == 0)
+        next_form = exact[choices[index + 1]][1] if index + 1 < len(choices) else ""
+        if can_skip and next_form in {form.removesuffix("/A"), form}:
+            entry["disposition"] = "amendment_without_target_instant"
+            continue
+        break
+    if len(trace) > 1:
+        selection = "same_quarter_source_after_cover_only_amendment"
+        if result.get("document_period_ends") != [quarter]:
+            result["source_complete"] = False
+            result["errors"].append("Earlier source does not prove the same primary economic quarter")
+    result.update(accession=accession, selection=selection, indexed_choices=len(exact),
+                  source_selection=trace)
+    return result
+
+
+def verify_source_selection(document, *, cache_root=None):
+    """A resumed assessment must still refer to the same cached source bytes.
+
+    This includes skipped amendments: changing one could change which schedule
+    should have been selected. Unhashed existing files cannot be safely reused.
+    """
+    cache_root = cache_root or ROOT / "data/raw/filings/bdc_xbrl"
+    trace = document.get("source_selection")
+    if trace is None:
+        trace = [dict(accession=document["accession"], path=document["path"],
+                      sha256=document["sha256"], disposition="selected")]
+    if not trace or len(trace) > 20 or len({r["accession"] for r in trace}) != len(trace):
+        raise ValueError("Invalid saved source selection trace")
+    if (trace[-1]["accession"] != document["accession"] or
+            trace[-1]["sha256"] != document["sha256"] or
+            trace[-1]["disposition"] != "selected" or
+            any(r["disposition"] != "amendment_without_target_instant" for r in trace[:-1])):
+        raise ValueError("Saved source selection differs from the selected document")
+    for item in trace:
+        path = _source_path(cache_root, document["cik"], item["accession"])
+        if Path(item["path"]).resolve() != path.resolve():
+            raise ValueError("Saved source path does not match its accession")
+        expected = item["sha256"]
+        if expected:
+            if not path.is_file() or sha(path) != expected:
+                raise ValueError("Cached source changed since assessment")
+        elif path.exists():
+            raise ValueError("Unhashed or newly available source requires a fresh assessment")
+
+
+
 def classify_selected_source(result, investment_total):
     """Comparative totals prove investment activity, not a complete position absence."""
     counts = result["counts"]
@@ -78,7 +170,7 @@ def main():
         raise ValueError(f"E1 register population changed; expected {ZERO_OUTPUT_OBLIGATIONS} distinct obligations")
     con = duckdb.connect(config={"threads": 2, "memory_limit": "-1"})
     try:
-        table = con.execute("""SELECT cik, report_date, filing_date, accession_number
+        table = con.execute("""SELECT cik, report_date, filing_date, accession_number, form_type
             FROM read_csv(?, all_varchar=true) WHERE report_date >= '2023-01-01'
             AND report_date <= '2026-03-31' AND form_type IN ('10-K','10-Q','10-K/A','10-Q/A')
             AND lpad(cik,10,'0') IN (SELECT unnest(?))""",
@@ -90,16 +182,13 @@ def main():
         raise ValueError("E1 narrow filing-index row bound exceeded")
     atomic_json(dest / "request.json", dict(experiment="E1", started_utc=now(), pid=os.getpid(),
         timeout_seconds=None, memory_limit="unlimited", obligations=len(obligations), input_sha256=inputs,
-        selection="latest indexed primary for target quarter, else positive-companyfacts accession; target instant required"))
+        selection="latest indexed same-quarter XML, with evidenced cover-only amendment fallback; target instant required"))
     rows = []
     try:
         for index, obligation in enumerate(obligations, 1):
             cik, quarter = obligation["cik"], obligation["report_date"]
-            accession, selection, choices = select_source(obligation, filings)
-            if accession and not (len(accession.replace("-", "")) == 18 and accession.replace("-", "").isdigit()):
-                raise ValueError("Invalid source accession identity")
-            source = ROOT / "data/raw/filings/bdc_xbrl" / str(int(cik)) / (accession.replace("-", "") + ".xml")
-            result = scan_instance(source, cik, quarter)
+            result = scan_selected_source(obligation, filings)
+            accession, selection, choices = (result[k] for k in ("accession", "selection", "indexed_choices"))
             total = Decimal(obligation["positive_investment_amount"]) if obligation["positive_investment_amount"] else None
             counts = result["counts"]
             status = classify_selected_source(result, total)

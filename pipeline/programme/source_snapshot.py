@@ -21,7 +21,7 @@ def freeze_refresh_support(root, frozen=None, *, support_files=None):
     seen=set()
     for item in support_files:
         relative=item['path']
-        if (not re.fullmatch(r'data/overrides/bdc_xbrl_wrappers/(?:[0-9]{10}|unlisted_bdc_xbrl_reference)\.json',relative)
+        if (not re.fullmatch(r'(?:data/overrides/bdc_xbrl_wrappers/(?:[0-9]{10}|unlisted_bdc_xbrl_reference)|data/reference/cash_only_quarters)\.json',relative)
                 or relative in seen or not re.fullmatch(r'[0-9a-f]{64}',item['sha256'])):
             raise ContractError('Invalid or repeated refresh support input: '+relative)
         seen.add(relative)
@@ -81,6 +81,23 @@ def include_sources(root,frozen):
     for entry in REFRESHES:
         for kind,extension in (('bdc_xbrl','xml'),('bdc_html','html')):
             inputs.add('data/raw/filings/'+kind+'/'+entry['cik']+'/'+entry['accession'].replace('-','')+'.'+extension)
+    # A zero-position exception need not appear in the holdings source list.
+    # Freeze its explicitly reviewed instance so public wording can replay it.
+    exceptions=Path(root)/'data/reference/cash_only_quarters.json'
+    if exceptions.is_file():
+        from pipeline.programme.core import read_json
+        package=read_json(exceptions)
+        if package.get('schema_version')!='cash-only-quarter-exceptions.v1':
+            raise ContractError('Unknown cash-only source package')
+        for item in package['records']:
+            cik,accession=item['cik'],item['accession']
+            if not re.fullmatch(r'[0-9]{10}',cik) or not re.fullmatch(r'[0-9]{10}-[0-9]{2}-[0-9]{6}',accession):
+                raise ContractError('Invalid cash-only source identity')
+            relative='data/raw/filings/bdc_xbrl/'+str(int(cik))+'/'+accession.replace('-','')+'.xml'
+            source=contained(root,relative)
+            if sha(source)!=item['source_sha256']:
+                raise ContractError('Cash-only source changed before snapshot')
+            inputs.add(relative)
     records=unavailable
     for index,name in enumerate(sorted(inputs),1):
         source=root/name

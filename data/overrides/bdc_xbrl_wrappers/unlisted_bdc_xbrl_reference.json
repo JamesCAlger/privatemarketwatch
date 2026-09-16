@@ -398,16 +398,19 @@
       "cik": "0001803498",
       "entity_name": "Blackstone Private Credit Fund",
       "wrapper_status": "exists",
-      "wrapper_version": 1,
+      "wrapper_version": 2,
       "wrapper_sections": [
         "dispatch",
-        "archetypes"
+        "archetypes",
+        "invariants",
+        "source_encodings"
       ],
       "has_holdings_data": true,
       "holdings_rows": 43705,
       "holdings_quarters": 15,
       "holdings_latest": "2026-03-31",
-      "holdings_earliest": "2022-09-30"
+      "holdings_earliest": "2022-09-30",
+      "wrapper_staging_strategy": null
     },
     {
       "cik": "0002049733",
@@ -602,10 +605,10 @@
       "cik": "0001772704",
       "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
       "wrapper_status": "exists",
-      "wrapper_version": 1,
+      "wrapper_version": 2,
       "wrapper_sections": [
         "dispatch",
-        "identifier_parser",
+        "staging",
         "archetypes",
         "invariants"
       ],
@@ -613,7 +616,8 @@
       "holdings_rows": 7197,
       "holdings_quarters": 13,
       "holdings_latest": "2026-03-31",
-      "holdings_earliest": "2023-03-31"
+      "holdings_earliest": "2023-03-31",
+      "wrapper_staging_strategy": "hierarchy_extract"
     },
     {
       "cik": "0001674760",

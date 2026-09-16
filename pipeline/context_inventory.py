@@ -20,7 +20,7 @@ from pipeline.bdc_filings import CONCEPT_MAP, _parse_xbrl_contexts
 from pipeline.explicit_contexts import explicit_member_dimensions
 
 
-POLICY_VERSION = "context-inventory.v4"
+POLICY_VERSION = "context-inventory.v5"
 XBRLI = "http://www.xbrl.org/2003/instance"
 XBRLDI = "http://xbrl.org/2006/xbrldi"
 VALUE_FIELDS = frozenset({"fair_value", "cost", "principal_amount", "face_amount", "shares_held"})
@@ -197,7 +197,7 @@ def _number(node) -> tuple[str | None, str]:
         return None, "invalid_numeric_lexical_value"
 
 
-def scan_instance(path: Path, cik: str, quarter: str, *, max_bytes: int = 55_000_000,
+def scan_instance(path: Path, cik: str, quarter: str, *, max_bytes: int = 100_000_000,
                   max_contexts: int = 25_000, max_facts: int = 300_000,
                   timeout_seconds: float | None = None) -> dict:
     """Inspect one bounded XML source, preserving amounts/units without correction.

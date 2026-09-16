@@ -78,6 +78,7 @@ def test_missing_or_changed_wrapper_cannot_overwrite_frozen_input(tmp_path,chang
 @pytest.mark.parametrize('relative',[
     '../outside.json','data/overrides/bdc_xbrl_wrappers/../../outside.json',
     'data/overrides/agent_b2_corrections/0000000123.json',
+    'data/reference/unreviewed.json',
 ])
 def test_refresh_support_is_limited_to_explicit_wrapper_paths(tmp_path,relative):
     with pytest.raises(ContractError,match='Invalid'):
@@ -100,7 +101,7 @@ def test_registered_refresh_support_matches_reviewed_cached_wrapper():
     from pipeline import config
     from pipeline.programme.source_refresh import REFRESH_SUPPORT
     records=freeze_refresh_support(config.PROJECT_ROOT)
-    assert len(records)==len(REFRESH_SUPPORT)==2
+    assert len(records)==len(REFRESH_SUPPORT)==5
     assert records[0]['path'].endswith('/0002008748.json')
     assert records[1]['path'].endswith('/unlisted_bdc_xbrl_reference.json')
 
@@ -112,3 +113,25 @@ def test_wrapper_version_reference_is_an_explicit_pinned_dependency(tmp_path):
     frozen=tmp_path/'frozen'
     freeze_refresh_support(tmp_path/'root',frozen,support_files=[entry])
     assert (frozen/relative).read_bytes()==source.read_bytes()
+
+
+def test_cash_only_source_and_reference_are_frozen_without_holdings(tmp_path, monkeypatch):
+    import json
+    from pipeline.programme import source_refresh
+    from pipeline.programme.source_snapshot import include_sources
+    monkeypatch.setattr(source_refresh, 'REFRESHES', ())
+    root=tmp_path/'root'; frozen=tmp_path/'frozen'
+    source=root/'data/raw/filings/bdc_xbrl/123/000000012326000001.xml'
+    source.parent.mkdir(parents=True); source.write_text('<source/>')
+    relative='data/reference/cash_only_quarters.json'
+    reference=root/relative; reference.parent.mkdir(parents=True)
+    reference.write_text(json.dumps(dict(schema_version='cash-only-quarter-exceptions.v1',records=[
+        dict(cik='0000000123',accession='0000000123-26-000001',source_sha256=sha(source))])))
+    records=include_sources(root,frozen)
+    assert len(records)==1 and records[0]['status']=='frozen'
+    assert (frozen/source.relative_to(root)).read_bytes()==source.read_bytes()
+    freeze_refresh_support(root,frozen,support_files=[dict(path=relative,sha256=sha(reference),reason='review')])
+    assert (frozen/relative).read_bytes()==reference.read_bytes()
+    source.write_text('<changed/>')
+    with pytest.raises(ContractError,match='Cash-only source changed'):
+        include_sources(root,tmp_path/'changed')

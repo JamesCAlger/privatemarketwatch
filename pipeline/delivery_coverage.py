@@ -14,7 +14,7 @@ from pipeline.programme.core import ContractError, read_json, sha
 DISPLAY_FIELDS = ('fair_value', 'cost', 'interest_rate', 'maturity_date', 'gics_sub_industry')
 NUMERIC_FIELDS = ('fair_value', 'cost', 'principal_amount', 'shares_held', 'interest_rate',
                   'basis_spread', 'pik_rate', 'pct_of_net_assets')
-VERSION = 'delivery-coverage.v1'
+VERSION = 'delivery-coverage.v2'
 
 
 def load_history(con, directory):
@@ -43,6 +43,15 @@ def load_history(con, directory):
             files.append(str(path))
             quarters.append((path.as_posix(), cik, quarter['quarter'], quarter['rows']))
             expected += quarter['rows']
+            if quarter['rows']==0:
+                payload=read_json(path)
+                if (payload.get('release_id')!=manifest['release_id'] or payload.get('cik')!=cik
+                        or payload.get('quarter')!=quarter['quarter'] or payload.get('rows')!=[]):
+                    raise ContractError('Empty history quarter identity differs')
+                matches=[item for item in manifest.get('source_statuses',[])
+                    if item['cik']==cik and item['quarter']==quarter['quarter']]
+                if len(matches)!=1 or payload.get('source_status')!=matches[0]:
+                    raise ContractError('Empty history quarter source status differs')
     if not files:
         raise ContractError('Empty history cannot establish delivery coverage')
     # Parse declared types, avoiding sparse JSON/VARCHAR inference differences.
@@ -71,8 +80,8 @@ def load_history(con, directory):
         raise ContractError('History row lies outside declared quarters')
     if con.execute("""SELECT count(*) FROM delivery_quarters q LEFT JOIN
         (SELECT payload_file,payload_cik,payload_quarter,count(*) AS rows FROM delivery_rows GROUP BY ALL) h
-        ON h.payload_file=q.path WHERE h.rows IS DISTINCT FROM q.rows
-          OR h.payload_cik IS DISTINCT FROM q.cik OR h.payload_quarter IS DISTINCT FROM q.quarter""").fetchone()[0]:
+        ON h.payload_file=q.path WHERE coalesce(h.rows,0) IS DISTINCT FROM q.rows
+          OR (q.rows>0 AND (h.payload_cik IS DISTINCT FROM q.cik OR h.payload_quarter IS DISTINCT FROM q.quarter))""").fetchone()[0]:
         raise ContractError('Delivery quarter population differs')
     return manifest, inputs
 
@@ -99,6 +108,8 @@ def build_census(con, release_id):
             json_extract(payload,'$.input') FROM delivery_evidence
         WHERE json_extract_string(payload,'$.status')='calculated'
           AND json_extract_string(payload,'$.input.status')='direct'""")
+    from pipeline.delivery_calculations import validate_fx_evidence
+    validate_fx_evidence(con)
     con.execute("""CREATE TEMP TABLE delivery_graph_errors AS
         SELECT e.row_id,e.field,'invalid_evidence_identity_or_status' AS reason FROM delivery_evidence e
         WHERE json_extract_string(payload,'$.release_id') IS DISTINCT FROM ?
@@ -116,15 +127,23 @@ def build_census(con, release_id):
         UNION ALL SELECT e.row_id,e.field,'invalid_cost_donor' FROM delivery_evidence e
           JOIN delivery_rows h USING(row_id)
           LEFT JOIN delivery_rows d ON d.row_id=json_extract_string(payload,'$.donor_row_id')
-        WHERE json_extract_string(payload,'$.status')='calculated' AND
-          (e.field<>'cost' OR json_extract_string(payload,'$.method') IS DISTINCT FROM 'first_observed_fv_proxy'
+        WHERE e.field='cost' AND json_extract_string(payload,'$.status')='calculated' AND
+          (json_extract_string(payload,'$.method') IS DISTINCT FROM 'first_observed_fv_proxy'
            OR h.cost_source IS DISTINCT FROM 'first_observed_fv_proxy'
            OR d.row_id IS NULL OR d.cik IS DISTINCT FROM h.cik
            OR d.position_id IS DISTINCT FROM h.position_id OR d.source IS DISTINCT FROM h.source
            OR CAST(d.report_date AS VARCHAR) IS DISTINCT FROM json_extract_string(payload,'$.donor_date')
            OR d.fair_value IS DISTINCT FROM h.cost
            OR json_extract_string(payload,'$.donor_release') IS DISTINCT FROM ?
-           OR coalesce(json_extract_string(payload,'$.input.status'),'') NOT IN ('direct','unavailable'))""",
+           OR coalesce(json_extract_string(payload,'$.input.status'),'') NOT IN ('direct','unavailable','calculated')
+           OR (json_extract_string(payload,'$.input.status')='calculated' AND NOT EXISTS(
+               SELECT 1 FROM delivery_evidence de JOIN delivery_fx_checks fx USING(row_id)
+               WHERE de.row_id=d.row_id AND de.field='fair_value' AND fx.valid
+                 AND json_contains(de.payload,json_extract(e.payload,'$.input'))
+                 AND json_contains(json_extract(e.payload,'$.input'),de.payload))))
+        UNION ALL SELECT row_id,'fair_value','invalid_fx_calculation' FROM delivery_fx_checks WHERE NOT valid
+        UNION ALL SELECT row_id,field,'unsupported_calculation_field' FROM delivery_evidence
+          WHERE json_extract_string(payload,'$.status')='calculated' AND field NOT IN ('cost','fair_value')""",
         [release_id, release_id])
     con.execute("""CREATE TEMP TABLE delivery_link_errors AS
         SELECT l.owner_row AS row_id,l.owner_field AS field,'invalid_direct_link_identity' AS reason
@@ -158,7 +177,9 @@ def build_census(con, release_id):
         numeric = field in NUMERIC_FIELDS
         populated = f'isfinite(h."{field}")' if numeric else f'coalesce(CAST(h."{field}" AS VARCHAR),\'\')<>\'\''
         calculated = 'false'
-        if field == 'cost':
+        if field == 'fair_value':
+            calculated = 'EXISTS(SELECT 1 FROM delivery_fx_checks fx WHERE fx.row_id=h.row_id AND fx.valid)'
+        elif field == 'cost':
             calculated = "coalesce(h.cost_source,'') IN ('derived_proxy','first_observed_fv_proxy')"
         elif field == 'interest_rate':
             calculated = """coalesce(h.interest_rate_kind='cash'

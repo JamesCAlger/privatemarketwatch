@@ -72,7 +72,9 @@ def export_all() -> None:
     export_history(con,helpers.UNIFIED_HOLDINGS_CSV,FRONTEND_DATA_DIR/"holdings_history",
         cohort=load_cohort_ciks(),end=snapshot["asOf"],source_cache=config.BDC_HTML_CACHE_DIR,
         sector_bundle=config.GICS_ENRICHMENT_DECISIONS_FILE,taxonomy=config.GICS_REFERENCE_FILE,
-        sector_audit=config.OUTPUT_DIR/'sector_enrichment_audit.csv',cost_donors=config.OUTPUT_DIR/'cost_donor_audit.csv')
+        sector_audit=config.OUTPUT_DIR/'sector_enrichment_audit.csv',cost_donors=config.OUTPUT_DIR/'cost_donor_audit.csv',
+        cash_status_reference=config.PROJECT_ROOT/'data/reference/cash_only_quarters.json',
+        xbrl_cache=config.BDC_XBRL_CACHE_DIR)
 
     # Index surfaces (index_returns, index_summary, fund_index_returns) are out
     # of v1 scope and are no longer exported. Position-level analytics remain.

@@ -1807,7 +1807,7 @@ def test_gs_middle_market_ii_debt_key_strips_display_pct_and_current_coupon():
 
     assert first["wrapper_family"] == "debt"
     assert first["wrapper_disposition"] == "debt_position_leaf"
-    assert first["wrapper_rule_id"] == "GS_PRIVATE_MIDDLE_MARKET_II_DEBT_LEAF_V1"
+    assert first["wrapper_rule_id"] == "GS_PRIVATE_MIDDLE_MARKET_II_DEBT_LEAF_V2"
     assert first["wrapper_position_key"] == second["wrapper_position_key"]
     assert first["wrapper_position_key"] != changed_spread["wrapper_position_key"]
     assert "152 1" not in first["wrapper_position_key"]

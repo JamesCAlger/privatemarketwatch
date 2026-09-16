@@ -35,7 +35,7 @@ def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 def _write_rows(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.name == "private_markets_holdings.csv":
-        rows = [{"lien_position": "", **row} for row in rows]
+        rows = [{"lien_position": "", "fair_value_currency": "USD", **row} for row in rows]
     columns = list(rows[0].keys())
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=columns)

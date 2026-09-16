@@ -9,7 +9,8 @@ from pipeline.programme.core import sha
 
 
 def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end="2026-03-31",release_id=None,source_cache=None,
-                   sector_bundle=None,sector_audit=None,taxonomy=None,cost_donors=None):
+                   sector_bundle=None,sector_audit=None,taxonomy=None,cost_donors=None,
+                   cash_status_reference=None,xbrl_cache=None):
     holdings_file=Path(holdings_file)
     output=Path(output_dir);output.mkdir(parents=True,exist_ok=True)
     source_hash=sha(holdings_file)
@@ -65,7 +66,26 @@ def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end=
         target.write_text(payload+"\n",encoding="utf-8")
         indexes[cik]["quarters"].append(dict(quarter=str(date),rows=count,path=cik+"/"+str(date)+".json",sha256=sha(target)))
         exported+=count
+    source_statuses=[]
+    if cash_status_reference is not None:
+        if xbrl_cache is None:
+            raise ValueError('Source-status wording requires the pinned XBRL cache')
+        from pipeline.public_cash_status import collect_cash_only_statuses
+        source_statuses=collect_cash_only_statuses(con,reference=cash_status_reference,
+            cache=xbrl_cache,cohort=cohort,start=start,end=end)
+        for status in source_statuses:
+            cik,quarter=status['cik'],status['quarter']
+            directory=output/cik;directory.mkdir(exist_ok=True)
+            target=directory/(quarter+'.json')
+            payload=dict(release_id=release,cik=cik,quarter=quarter,rows=[],source_status=status)
+            target.write_text(json.dumps(payload,indent=2)+'\n',encoding='utf-8')
+            # Empty-quarter identity is checked explicitly; row multiset readback
+            # below continues to verify every actual observation unchanged.
+            if json.loads(target.read_text(encoding='utf-8'))!=payload:
+                raise ValueError('Empty-quarter source-status payload changed during export')
+            indexes[cik]['quarters'].append(dict(quarter=quarter,rows=0,path=cik+'/'+quarter+'.json',sha256=sha(target)))
     for cik,index in indexes.items():
+        index['quarters'].sort(key=lambda item:item['quarter'])
         directory=output/cik;directory.mkdir(exist_ok=True)
         (directory/"index.json").write_text(json.dumps(index,indent=2)+"\n",encoding="utf-8")
     expected=con.execute("SELECT count(*) FROM history").fetchone()[0]
@@ -94,6 +114,7 @@ def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end=
     evidence_statuses['default_unavailable']=field_population-linked
     manifest=dict(release_id=release,holdings_sha256=source_hash,funds=sorted(cohort),start=start,end=end,
         rows=expected,exported_rows=exported,accessible_holdings_difference=difference,evidence=evidence,
+        source_statuses=source_statuses,
         evidence_default=dict(status="unavailable",reason="No verified field locator in this release"),
         evidence_path_or_unavailable=sum(evidence_statuses.values())/field_population if field_population else None,
         evidence_field_population=field_population,evidence_statuses=evidence_statuses,

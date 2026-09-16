@@ -3,13 +3,32 @@
   "$id": "bdc-xbrl-wrapper.v3",
   "title": "BDC XBRL per-CIK unified wrapper (dispatch + staging + content signatures)",
   "type": "object",
-  "required": ["schema_version", "cik", "entity_name", "version", "source"],
+  "required": [
+    "schema_version",
+    "cik",
+    "entity_name",
+    "version",
+    "source"
+  ],
   "properties": {
-    "schema_version": {"const": "bdc-xbrl-wrapper.v3"},
-    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
-    "entity_name": {"type": "string", "minLength": 1},
-    "version": {"type": "integer", "minimum": 1},
-    "source": {"const": "bdc_xbrl"},
+    "schema_version": {
+      "const": "bdc-xbrl-wrapper.v3"
+    },
+    "cik": {
+      "type": "string",
+      "pattern": "^[0-9]{10}$"
+    },
+    "entity_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source": {
+      "const": "bdc_xbrl"
+    },
     "dispatch": {
       "type": "object",
       "description": "Identifier classification rules for source reconciliation wrappers",
@@ -21,25 +40,33 @@
         },
         "prefix_rules": {
           "type": "object",
-          "additionalProperties": {"type": "string"},
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Map of identifier prefix text to family name (debt/equity/warrant/mixed)"
         },
         "leaf_markers_by_family": {
           "type": "object",
           "additionalProperties": {
             "type": "array",
-            "items": {"type": "string"}
+            "items": {
+              "type": "string"
+            }
           },
           "description": "Per-family list of leaf-level marker strings. Omit to use defaults."
         },
         "aggregate_markers": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Strings in identifiers that indicate aggregate/subtotal rows"
         },
         "non_private_markers": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Strings indicating non-private-market instruments (cash, money market, etc.)"
         },
         "entity_signals_re": {
@@ -54,10 +81,19 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["regex", "family"],
+            "required": [
+              "regex",
+              "family"
+            ],
             "properties": {
-              "regex": {"type": "string", "minLength": 1},
-              "family": {"type": "string", "minLength": 1}
+              "regex": {
+                "type": "string",
+                "minLength": 1
+              },
+              "family": {
+                "type": "string",
+                "minLength": 1
+              }
             },
             "additionalProperties": false
           },
@@ -81,11 +117,19 @@
     "staging": {
       "type": "object",
       "description": "BDC staging SQL configuration for per-CIK extraction patterns",
-      "required": ["strategy"],
+      "required": [
+        "strategy"
+      ],
       "properties": {
         "strategy": {
           "type": "string",
-          "enum": ["prefix_strip", "hierarchy_extract", "hierarchy_leaf_guard", "issuer_bridge", "default"]
+          "enum": [
+            "prefix_strip",
+            "hierarchy_extract",
+            "hierarchy_leaf_guard",
+            "issuer_bridge",
+            "default"
+          ]
         },
         "hierarchy_prefix_re": {
           "type": "string",
@@ -137,12 +181,25 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["report_date", "raw_id_lower", "issuer_name", "instrument_description"],
+            "required": [
+              "report_date",
+              "raw_id_lower",
+              "issuer_name",
+              "instrument_description"
+            ],
             "properties": {
-              "report_date": {"type": "string"},
-              "raw_id_lower": {"type": "string"},
-              "issuer_name": {"type": "string"},
-              "instrument_description": {"type": "string"}
+              "report_date": {
+                "type": "string"
+              },
+              "raw_id_lower": {
+                "type": "string"
+              },
+              "issuer_name": {
+                "type": "string"
+              },
+              "instrument_description": {
+                "type": "string"
+              }
             },
             "additionalProperties": false
           },
@@ -150,7 +207,9 @@
         },
         "extra_industry_labels": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Additional industry labels beyond the built-in set, used to expand the MSD_INDUSTRY_LABELS placeholder"
         },
         "pipe_field_map": {
@@ -164,7 +223,10 @@
             },
             "instrument_segments": {
               "type": "array",
-              "items": {"type": "integer", "minimum": 1},
+              "items": {
+                "type": "integer",
+                "minimum": 1
+              },
               "description": "1-based indices of pipe segments to concatenate for instrument description"
             },
             "industry_segment": {
@@ -178,7 +240,9 @@
               "description": "1-based index of the pipe segment containing lien type / seniority"
             }
           },
-          "required": ["issuer_segment"],
+          "required": [
+            "issuer_segment"
+          ],
           "additionalProperties": false
         }
       },
@@ -193,12 +257,16 @@
         },
         "field_order": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Expected order of fields in identifier strings"
         },
         "alternate_delimiters": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Known alternate delimiters seen in some quarters"
         }
       },
@@ -210,12 +278,16 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["hierarchical_pct"],
+          "enum": [
+            "hierarchical_pct"
+          ],
           "description": "Parser type. hierarchical_pct: dash-separated segments with pct prefixes"
         },
         "issuer_boundary_keywords": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Keywords that mark end of issuer name in leaf segment"
         },
         "industry_keyword": {
@@ -224,35 +296,51 @@
         },
         "rate_shorthand": {
           "type": "object",
-          "additionalProperties": {"type": "string"},
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Map of rate shorthand prefix to reference rate type (e.g. S + -> SOFR)"
         },
         "country_list": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Known country names for extraction from segment text"
         }
       },
-      "required": ["type"],
+      "required": [
+        "type"
+      ],
       "additionalProperties": false
     },
     "archetypes": {
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["detection_rules", "field_signatures"],
+        "required": [
+          "detection_rules",
+          "field_signatures"
+        ],
         "properties": {
-          "description": {"type": "string"},
+          "description": {
+            "type": "string"
+          },
           "detection_rules": {
             "type": "object",
             "properties": {
               "keywords": {
                 "type": "array",
-                "items": {"type": "string"}
+                "items": {
+                  "type": "string"
+                }
               },
               "keyword_mode": {
                 "type": "string",
-                "enum": ["any", "all"],
+                "enum": [
+                  "any",
+                  "all"
+                ],
                 "default": "any"
               }
             },
@@ -265,22 +353,42 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": ["numeric_range", "regex", "enum", "presence"]
+                  "enum": [
+                    "numeric_range",
+                    "regex",
+                    "enum",
+                    "presence"
+                  ]
                 },
                 "constraint": {
                   "type": "string",
-                  "enum": ["required", "forbidden", "optional"],
+                  "enum": [
+                    "required",
+                    "forbidden",
+                    "optional"
+                  ],
                   "default": "optional"
                 },
-                "min": {"type": "number"},
-                "max": {"type": "number"},
-                "pattern": {"type": "string"},
+                "min": {
+                  "type": "number"
+                },
+                "max": {
+                  "type": "number"
+                },
+                "pattern": {
+                  "type": "string"
+                },
                 "values": {
                   "type": "array",
-                  "items": {"type": "string"}
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
-              "required": ["type", "constraint"],
+              "required": [
+                "type",
+                "constraint"
+              ],
               "additionalProperties": false
             }
           }
@@ -294,25 +402,39 @@
         "fv_reconciliation": {
           "type": "object",
           "properties": {
-            "source_field": {"type": "string"},
-            "tolerance_pct": {"type": "number"},
-            "tolerance_abs": {"type": "number"}
+            "source_field": {
+              "type": "string"
+            },
+            "tolerance_pct": {
+              "type": "number"
+            },
+            "tolerance_abs": {
+              "type": "number"
+            }
           },
           "additionalProperties": false
         },
         "position_count_qoq": {
           "type": "object",
           "properties": {
-            "max_increase_pct": {"type": "number"},
-            "max_decrease_pct": {"type": "number"}
+            "max_increase_pct": {
+              "type": "number"
+            },
+            "max_decrease_pct": {
+              "type": "number"
+            }
           },
           "additionalProperties": false
         },
         "rate_sanity": {
           "type": "object",
           "properties": {
-            "min_pct": {"type": "number"},
-            "max_pct": {"type": "number"}
+            "min_pct": {
+              "type": "number"
+            },
+            "max_pct": {
+              "type": "number"
+            }
           },
           "additionalProperties": false
         },
@@ -333,15 +455,32 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "description"],
+        "required": [
+          "id",
+          "description"
+        ],
         "properties": {
-          "id": {"type": "string", "minLength": 1},
-          "description": {"type": "string", "minLength": 1},
-          "first_seen_quarter": {"type": "string"},
-          "detection_pattern": {"type": "string"},
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_seen_quarter": {
+            "type": "string"
+          },
+          "detection_pattern": {
+            "type": "string"
+          },
           "disposition": {
             "type": "string",
-            "enum": ["expected", "warn", "fail"]
+            "enum": [
+              "expected",
+              "warn",
+              "fail"
+            ]
           }
         },
         "additionalProperties": false
@@ -352,7 +491,9 @@
       "description": "Canary assertions for pipe-delimited segment content. Used by I08 oracle check to detect format drift.",
       "items": {
         "type": "object",
-        "required": ["description"],
+        "required": [
+          "description"
+        ],
         "properties": {
           "segment_index": {
             "type": "integer",
@@ -365,7 +506,13 @@
           },
           "expected_pattern": {
             "type": "string",
-            "enum": ["entity_name_like", "rate_like", "date_like", "gics_sector_like", "instrument_like"],
+            "enum": [
+              "entity_name_like",
+              "rate_like",
+              "date_like",
+              "gics_sector_like",
+              "instrument_like"
+            ],
             "description": "Content-type pattern to validate against"
           },
           "segment_count": {
@@ -386,6 +533,45 @@
         },
         "additionalProperties": false
       }
+    },
+    "source_encodings": {
+      "type": "object",
+      "description": "Source-backed filer encodings shared by staging and accounting scope.",
+      "properties": {
+        "cash_identifiers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Exact full identifiers that disclose cash positions; normalized whitespace and case only."
+        },
+        "reporting_entity_suffixes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[^|=]+$"
+          },
+          "description": "Exact bare pipe segments naming a reporting portfolio after the investment identifier."
+        },
+        "reporting_entity_identifier_suffixes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[^|=]+$"
+          },
+          "description": "Exact portfolio labels at the end of InvestmentIdentifierAxis, after a legal borrower suffix and optional ordinal/comma; a trailing position ordinal is allowed and retained in the raw identifier."
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

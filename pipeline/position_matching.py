@@ -1635,41 +1635,44 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     """
     next_qtr = _next_quarter_sql("b.quarter")
 
+    # A row has independent incoming and outgoing continuity slots. A
+    # later-quarter match must not remove its ability to link to an earlier
+    # quarter. Tier A contributes only its mapped current-period end slot.
+    # Count available positions by direction so a claimed slot does not alter
+    # the opposite side's single/multiple-position classification.
     # Statement 1: save all candidate pairs (before greedy dedup)
     sql_candidates = f"""
     CREATE OR REPLACE TEMP TABLE tier_e_candidates AS
     WITH
-    all_used AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION
+    used_begin AS (
         SELECT _begin_row_id AS _row_id FROM tier_b
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_b
-        UNION
-        SELECT _begin_row_id AS _row_id FROM tier_c
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_c
-        UNION
-        SELECT _begin_row_id AS _row_id FROM tier_d
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_d
+        UNION SELECT _begin_row_id FROM tier_c
+        UNION SELECT _begin_row_id FROM tier_d
+    ),
+    used_end AS (
+        SELECT _row_id FROM tier_a_unified_ids
+        UNION SELECT _end_row_id FROM tier_b
+        UNION SELECT _end_row_id FROM tier_c
+        UNION SELECT _end_row_id FROM tier_d
     ),
     remaining AS (
         SELECT u.*,
+            u._row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
+            u._row_id NOT IN (SELECT _row_id FROM used_end) AS _end_available,
             CAST(entity_id AS VARCHAR) AS _entity_id,
             CAST(ROUND(COALESCE(pa, 0) / 500000.0, 0) AS INTEGER) AS _prin_bucket
         FROM unified_base u
-        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
-          AND CAST(entity_id AS VARCHAR) IS NOT NULL
+        WHERE CAST(entity_id AS VARCHAR) IS NOT NULL
           AND CAST(entity_id AS VARCHAR) != ''
     ),
     -- Count positions per entity_id + CIK + quarter + classification
     entity_counts AS (
-        SELECT cik, source, quarter, _entity_id,
+        SELECT cik, source, quarter, _entity_id, _accounting_scope,
             CAST(index_classification AS VARCHAR) AS _ic,
-            COUNT(*) AS n
+            COUNT(*) FILTER (WHERE _begin_available) AS n_begin,
+            COUNT(*) FILTER (WHERE _end_available) AS n_end
         FROM remaining
-        GROUP BY cik, source, quarter, _entity_id,
+        GROUP BY cik, source, quarter, _entity_id, _accounting_scope,
             CAST(index_classification AS VARCHAR)
     ),
     -- E1: Single-position entities -- no principal bucket needed
@@ -1702,6 +1705,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
+         AND b._begin_available AND e._end_available
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1715,14 +1719,16 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         -- Both sides must be single-position for this entity+classification
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
+         AND b._accounting_scope = bc._accounting_scope
          AND b.quarter = bc.quarter AND b._entity_id = bc._entity_id
          AND CAST(b.index_classification AS VARCHAR) = bc._ic
-         AND bc.n = 1
+         AND bc.n_begin = 1
         JOIN entity_counts ec
           ON e.cik = ec.cik AND e.source = ec.source
+         AND e._accounting_scope = ec._accounting_scope
          AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
          AND CAST(e.index_classification AS VARCHAR) = ec._ic
-         AND ec.n = 1
+         AND ec.n_end = 1
     ),
     -- E2: Multi-position entities -- require principal bucket match
     pairs_multi AS (
@@ -1754,6 +1760,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
+         AND b._begin_available AND e._end_available
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1768,13 +1775,15 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         -- At least one side is multi-position (not caught by E1)
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
+         AND b._accounting_scope = bc._accounting_scope
          AND b.quarter = bc.quarter AND b._entity_id = bc._entity_id
          AND CAST(b.index_classification AS VARCHAR) = bc._ic
         JOIN entity_counts ec
           ON e.cik = ec.cik AND e.source = ec.source
+         AND e._accounting_scope = ec._accounting_scope
          AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
          AND CAST(e.index_classification AS VARCHAR) = ec._ic
-        WHERE bc.n > 1 OR ec.n > 1
+        WHERE bc.n_begin > 1 OR ec.n_end > 1
     )
     SELECT * FROM pairs_single
     UNION ALL

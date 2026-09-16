@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001772704",
   "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "GS_PRIVATE_MIDDLE_MARKET_II",
@@ -87,7 +87,7 @@
         "family": "cash"
       },
       {
-        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-–])",
+        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-\u2013])",
         "family": "debt"
       },
       {
@@ -103,7 +103,7 @@
         "family": "debt"
       },
       {
-        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-–])",
+        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-\u2013])",
         "family": "debt"
       }
     ],
@@ -124,7 +124,7 @@
       "maturity"
     ],
     "alternate_delimiters": [
-      " – ",
+      " \u2013 ",
       ", "
     ]
   },
@@ -269,11 +269,24 @@
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "^Non-Controlled Affiliates <issuer>",
       "disposition": "warn"
+    },
+    {
+      "id": "goldman_pmmc_ii_flat_tagged_issuer",
+      "description": "The 2023-03-31 flat Investment/Industry layout has no portfolio percentage prefix. Extract the named borrower before Industry; an interest-rate percentage must not strip the borrower.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Investment ([^%|]+) Industry .+? (?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) ",
+      "disposition": "expected"
     }
   ],
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '^Investment ([^%|]+) Industry .+? (?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) ')",
+    "hierarchy_issuer_re": "^Investment ([^%|]+) Industry .+? (?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) ",
+    "hierarchy_instrument_re": "^Investment [^%|]+ Industry .+? ((?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) .+)$"
   }
 }

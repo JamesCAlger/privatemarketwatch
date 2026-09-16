@@ -11,6 +11,9 @@ from pipeline.programme.runner import ROOT, candidate_path, heavy_lock
 
 
 def evaluate(candidate, history, output):
+    from pipeline import delivery_coverage, delivery_calculations, public_cash_status
+    evaluator_code = {str(p): sha(p) for p in (Path(__file__), Path(delivery_coverage.__file__),
+        Path(delivery_calculations.__file__), Path(public_cash_status.__file__))}
     candidate, history, output = Path(candidate), Path(history).resolve(), Path(output).resolve()
     attempt = candidate / 'attempts/frontend-01'
     stage = read_json(attempt / 'result.json')
@@ -58,8 +61,9 @@ def evaluate(candidate, history, output):
             adoption='not_adopted')
     if any(sha(path) != expected for path, expected in inputs.items()):
         raise ContractError('Delivery input changed during evaluation')
-    from pipeline import delivery_coverage
-    result['evaluator_code'] = {str(p): sha(p) for p in (Path(__file__), Path(delivery_coverage.__file__))}
+    if any(sha(path) != expected for path, expected in evaluator_code.items()):
+        raise ContractError('Delivery evaluator code changed during evaluation')
+    result['evaluator_code'] = evaluator_code
     atomic_json(output / 'inputs.json', inputs)
     atomic_json(requests / 'manifest.json',dict(release_id=manifest['release_id'],documents=documents,
         metadata_errors=errors))

@@ -6,6 +6,7 @@ by the source observation. No borrower aggregation or ownership inference.
 """
 
 import duckdb
+from pipeline.source_encodings import reporting_suffix_expression
 
 
 OUTPUT_COLUMNS = ('accounting_scope_id', 'accounting_record_class')
@@ -21,8 +22,10 @@ def scope_expression(cik,dimensions,subsidiary,observation):
         " AS VARCHAR),'')),'|'),x -> regexp_matches(split_part(x,'=',1),"
         "'nonconsolidatedsubsidiar|equitymethodinvestmentequitymethodinvesteenameaxis') "
         "AND contains(x,'=') AND trim(split_part(x,'=',2))<>'')),'|')")
-    return ("lpad(CAST("+cik+" AS VARCHAR),10,'0')||'|'||CASE WHEN TRY_CAST("+subsidiary+
-        " AS BOOLEAN) THEN coalesce(nullif("+members+",''),'unresolved:'||CAST("+observation+
+    suffix = reporting_suffix_expression(cik, dimensions)
+    underlying = "(coalesce(TRY_CAST("+subsidiary+" AS BOOLEAN),false) OR "+suffix+"<>'')"
+    return ("lpad(CAST("+cik+" AS VARCHAR),10,'0')||'|'||CASE WHEN "+underlying+
+        " THEN coalesce(nullif("+members+",''),nullif("+suffix+",''),'unresolved:'||CAST("+observation+
         " AS VARCHAR)) ELSE 'parent' END")
 
 
@@ -44,8 +47,8 @@ def annotate(frame):
         return con.execute('''WITH scoped AS (
             SELECT *, ''' + expression + ''' AS accounting_scope_id
             FROM observations)
-            SELECT *, CASE
-                WHEN NOT coalesce(TRY_CAST(''' + subsidiary + ''' AS BOOLEAN),false)
+            SELECT * ''' + ("EXCLUDE (is_subsidiary), CASE WHEN ends_with(accounting_scope_id,'|parent') THEN 0 ELSE 1 END AS is_subsidiary" if 'is_subsidiary' in base else '') + ''',
+                CASE WHEN ends_with(accounting_scope_id,'|parent')
                     THEN 'parent_schedule'
                 WHEN contains(accounting_scope_id,'|unresolved:')
                     THEN 'unresolved_underlying_schedule'

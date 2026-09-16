@@ -26,8 +26,17 @@ REFRESH_SUPPORT=(
          sha256='034e45de3cc88751e7543e3b808d3d68ec986fff3c2fa34a422aa614f0c7bec8',
          reason='Approved Lord Abbett wrapper v2 for the seven diagnosed accession refreshes'),
     dict(path='data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json',
-         sha256='6641614a571385f2e3d9413ade46ab7e8b94c4867c1fa0327c31e54903b1d5c3',
-         reason='Same cohort and metadata; Lord Abbett wrapper_version changes from 1 to 2'),
+         sha256='34783057ceda62fb56ea4eb8dd25782c8c5b0e6ebd2b08bfd5bb1bbc64f08371',
+         reason='Same cohort; reviewed Lord Abbett, BCRED and Goldman II wrapper version and section metadata'),
+    dict(path='data/overrides/bdc_xbrl_wrappers/0001803498.json',
+         sha256='f2f51b6a82149731e32f3bed60436dc078dd0d60b27c3af5a86461435998c724',
+         reason='D08 exact cash identity and Emerald/Verdelite reporting-portfolio suffixes'),
+    dict(path='data/overrides/bdc_xbrl_wrappers/0001772704.json',
+         sha256='4953177464e3b5d360959edbb9af80250edc4f83fe1baca9e1b22d8c11397393',
+         reason='Goldman II flat tagged identifier parsing; preserve disclosed borrower names'),
+    dict(path='data/reference/cash_only_quarters.json',
+         sha256='c2059a30e342bc4c7e1d3e5d266d890adaab9539bd7bdcf9ba3842c64f51e5d9',
+         reason='Approved Golub Q2-2023 cash-only primary-source exception and public wording'),
 )
 
 REFRESHES=(

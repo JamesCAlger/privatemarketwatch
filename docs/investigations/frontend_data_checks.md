@@ -147,3 +147,13 @@ Residual uncertainty:
 - Current validation tier labels are fund-quarter/GAV oriented and can overstate individual position-level evidence when `source_reconciliation_detail.csv` is absent for a CIK.
 - GICS cache quality needs a separate false-positive review because malformed entity strings can still receive confident sector labels.
 
+
+## 2026-09-16 - V11b calculated evidence and the Golub cash-only quarter
+
+Question: do V11b delivery failures indicate bad monetary arithmetic, a broken evidence validator, or genuinely unavailable source locators?
+
+The delivery census found 519 graph errors: 506 FX fair-value calculations and 13 cost proxies with FX-calculated donors. The validator only understood simple cost calculations. All 13 donor amounts matched; an 18-observation actual-export probe reduced 26 errors to zero after checking FX event/observation binding, document/reference hashes, FRED metadata, quote age, decimal arithmetic and the actual donor dependency. Calculated evidence stays distinct from a direct citation; a matching self-authored event alone is insufficient. Corrupted arithmetic, wrong provider/date, changed document binding and altered donor copies have prepared negative controls. The integrated suite is running and has failures; the bounded probe is not a full delivery pass.
+
+Golub Private Credit 0001930087 Q2-2023 source 0001930087-23-000010 has no confirmed positions or unresolved investment contexts, two aggregate contexts, 14 target-quarter instants and cash equivalents USD 650,323,000. XML SHA256 ba3c44eada527dfb48b97117098f46e1326e8abea822b01b155d1f406bbc7500. Its zero-row quarter may display the approved wording: "No portfolio positions disclosed; cash and money-market holdings only." The exporter replays that exact primary source before adding the empty payload; ordinary zero-output or unresolved quarters cannot use it. The public manifest and delivery reader validate the empty-quarter identity independently of the observation multiset.
+
+The UI repair labels cost as estimated from first observed FV and shows the converted donor's source currency and FRED date. Actual V12 browser checks must prove desktop/mobile cash-only wording, complete-quarter download, actual FX donor display, no misleading direct link, and declared local response time. No HTML recovery, external source campaign or production publication was performed. Evidence: scratch/2026-09-16_refactor_continuation/{delivery-calculation-probe-v1.json,public-status-probe-v1.json,check_repaired_history_browser.cjs}; original delivery FAIL remains at scratch/2026-09-15_refactor_closeout/delivery-v11b-v1/.

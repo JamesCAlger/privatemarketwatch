@@ -15,6 +15,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-05-17: BDC Credit Stress Chart Validation
 - Blackstone Private Credit Fund return chart drop - 2026-05-17
 - 2026-05-24 - Frontend Fund and Position Data Source Spot Check
+- 2026-09-16 - V11b calculated evidence and the Golub cash-only quarter
 
 ## Data-quality audits & triage ([data_quality_audits.md](data_quality_audits.md))
 - Fund financials schema flags audit - 2026-05-17
@@ -69,6 +70,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-14 - Trace the 18 missing subsidiary contexts after staging
 - 2026-09-14 - Foreign FV reached USD sums after source-unit resolution
 - 2026-09-15 - E3-v2: certifying no-filing lifecycle exclusions from positive EDGAR evidence
+- 2026-09-16 - V11b source selection, cash retention and quarterly failure attribution
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals
@@ -120,4 +122,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-07 (night) - What still blocks the mg5 missed links
 - 2026-09-08 - E13-E16: where the remaining completeness gap actually is
 - 2026-09-14 - Refactor identity comparison and cached-name representative regression
+- 2026-09-16 - V11b named identity regressions and source-defined scope
 

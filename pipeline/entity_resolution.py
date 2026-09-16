@@ -33,6 +33,7 @@ from pipeline.config import (
     UNIFIED_HOLDINGS_FILE,
 )
 from pipeline.utils import UnionFind
+from pipeline.joint_borrowers import joint_label_sql, compatible_names
 
 logger = logging.getLogger(__name__)
 
@@ -499,15 +500,38 @@ def _exact_dedup(variants: pd.DataFrame) -> pd.DataFrame:
         bdc_id = row.get("bdc_investment_identifier", "")
 
         # For BDC variants, prefer LLM-extracted name
-        if source == "bdc" and bdc_id and pd.notna(bdc_id) and bdc_id in llm_lookup:
+        if source == "bdc" and pd.notna(bdc_id) and bdc_id and bdc_id in llm_lookup:
             extracted_names.append(llm_lookup[bdc_id])
         else:
             extracted_names.append(extract_company_name(issuer, source))
 
     variants["extracted_name"] = extracted_names
+    # Preserve a source-disclosed borrower list before exact deduplication.
+    # Column SQL keeps this check vectorized across the variant population.
+    inputs = ['issuer_name', 'source']
+    if 'bdc_investment_identifier' in variants:
+        inputs.append('bdc_investment_identifier')
+    # Only derived names cross this SQL boundary. Roundtripping every column
+    # coerces all-null text IDs to nullable integers and breaks CSV writing.
+    sql_inputs = variants[inputs].assign(_source_row=range(len(variants)))
+    with duckdb.connect(config={'threads': 2}) as con:
+        con.register('source_variants', sql_inputs)
+        raw = 'bdc_investment_identifier' if 'bdc_investment_identifier' in variants else "''"
+        joint = "coalesce(" + joint_label_sql('issuer_name') + "," + joint_label_sql(raw) + ")"
+        labels = con.execute("""SELECT CASE WHEN source='bdc' THEN """ + joint +
+            """ ELSE """ + joint_label_sql('issuer_name') + """ END AS _joint_label
+            FROM source_variants ORDER BY _source_row""").fetchdf()['_joint_label']
+    labels = pd.Series(labels.to_numpy(), index=variants.index, dtype=object)
+    variants['extracted_name'] = labels.fillna(variants['extracted_name'])
+    variants['_joint_borrower'] = labels.notna()
     variants["normalized_name"] = variants["extracted_name"].apply(
         normalise_entity_name
     )
+
+    # A co-borrower set is not the same entity as any of its named members.
+    variants.loc[variants['_joint_borrower'], 'normalized_name'] = (
+        'joint:' + variants.loc[variants['_joint_borrower'], 'normalized_name'])
+    variants = variants.drop(columns=['_joint_borrower'])
 
     # Group by normalized_name: assign entity_num and pick canonical
     # Canonical = extracted_name with highest occurrence_count, preferring
@@ -604,7 +628,7 @@ def _fuzzy_cluster(
                 total_comparisons += 1
                 score = fuzz.token_sort_ratio(names[a], names[b])
                 effective = _numeric_suffix_guard(names[a], names[b], threshold)
-                if score >= effective:
+                if score >= effective and compatible_names(names[a], names[b]):
                     uf.union(a, b)
                     total_merges += 1
                 elif effective > threshold:
@@ -649,7 +673,7 @@ def _fuzzy_cluster(
                     total_comparisons += 1
                     score = fuzz.token_sort_ratio(names[a], names[b])
                     effective = _numeric_suffix_guard(names[a], names[b], pass2_threshold)
-                    if score >= effective:
+                    if score >= effective and compatible_names(names[a], names[b]):
                         uf.union(a, b)
                         total_merges += 1
                     elif effective > pass2_threshold:
@@ -733,21 +757,25 @@ def _cross_source_link(
     uf = UnionFind()
     merges = 0
 
+    entity_names = dict(zip(entity_df["entity_num"], entity_df["normalized_name"]))
+
     # Phase 1: Structured ID matching (CUSIP, LEI)
     # Build lookup from NPORT structured IDs
     cusip_to_nport = {}
     lei_to_nport = {}
     for _, row in nport_only.iterrows():
-        if row["cusip"] and pd.notna(row["cusip"]):
+        if pd.notna(row["cusip"]) and row["cusip"]:
             cusip_to_nport[row["cusip"]] = row["entity_num"]
-        if row["lei"] and pd.notna(row["lei"]):
+        if pd.notna(row["lei"]) and row["lei"]:
             lei_to_nport[row["lei"]] = row["entity_num"]
 
     for _, row in bdc_only.iterrows():
-        if row["cusip"] and pd.notna(row["cusip"]) and row["cusip"] in cusip_to_nport:
+        if (pd.notna(row["cusip"]) and row["cusip"] and row["cusip"] in cusip_to_nport
+                and compatible_names(row["normalized_name"], entity_names[cusip_to_nport[row["cusip"]]])):
             uf.union(row["entity_num"], cusip_to_nport[row["cusip"]])
             merges += 1
-        if row["lei"] and pd.notna(row["lei"]) and row["lei"] in lei_to_nport:
+        if (pd.notna(row["lei"]) and row["lei"] and row["lei"] in lei_to_nport
+                and compatible_names(row["normalized_name"], entity_names[lei_to_nport[row["lei"]]])):
             uf.union(row["entity_num"], lei_to_nport[row["lei"]])
             merges += 1
 
@@ -776,7 +804,7 @@ def _cross_source_link(
             score = fuzz.token_sort_ratio(
                 bdc_row["normalized_name"], nport_name
             )
-            if score >= threshold:
+            if score >= threshold and compatible_names(bdc_row["normalized_name"], nport_name):
                 uf.union(bdc_row["entity_num"], nport_num)
                 merges += 1
 

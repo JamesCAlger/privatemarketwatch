@@ -88,3 +88,5 @@ Refactor completion requires working collectors and controls, accurate PASS/FAIL
 - A parallel programme evaluator. The live quarter gate is extended instead.
 - A human reviewer appointment or manual labelling queue.
 - dbt migration before the writer graph is fixed. Arelle adoption. R2 backup as a programme deliverable.
+
+**Continuous execution amendment, 2026-09-16.** The owner instructed "run continuously without a time limit". This supersedes the September15 twelve-hour cutoff. Continue routine implementation diagnosis, repair and required verification without further routine-retry approval. One heavy job, preserved source evidence, protected production data and the refactor/operations boundary remain. Production adoption, publication, baseline refresh, numeric threshold adoption, dbt and remediation/enrichment campaigns are not authorized by this amendment.

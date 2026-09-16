@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001803498",
   "entity_name": "Blackstone Private Credit Fund",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "BCRED",
@@ -227,11 +227,42 @@
       "first_seen_quarter": "2022-09-30",
       "detection_pattern": "(?i)^BCRED (Emerald|Verdelite) JV",
       "disposition": "expected"
+    },
+    {
+      "id": "bcred_government_cash_management",
+      "description": "The Dreyfus Government Cash Management Institutional Shares identifier is a retained cash position. Source context c-6032 in accession 0001803498-26-000031 reports FV and cost of USD 11,462,000.",
+      "first_seen_quarter": "2026-03-31",
+      "disposition": "expected"
+    },
+    {
+      "id": "bcred_typed_identifier_reporting_portfolio",
+      "description": "Standalone Emerald JV LP and Verdelite JV LP pipe suffixes within InvestmentIdentifierAxis identify the underlying reporting portfolio. Parent LP-interest names without this suffix remain parent records.",
+      "first_seen_quarter": "2024-12-31",
+      "disposition": "expected"
+    },
+    {
+      "id": "bcred_legacy_typed_reporting_portfolio",
+      "description": "Earlier InvestmentIdentifierAxis members place the reporting portfolio after a legal borrower name, with comma/space separators and optional position ordinals. Reviewed MH Sub I contexts c-4761 in 0001803498-24-000007 and c-4323 in 0001803498-24-000022 name Verdelite JV LP. This scope interpretation does not strip the ordinal from the position identifier. Unsupported suffix forms remain outside this conservative rule.",
+      "first_seen_quarter": "2023-03-31",
+      "disposition": "expected"
     }
   ],
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.15
     }
+  },
+  "source_encodings": {
+    "cash_identifiers": [
+      "Dreyfus Government Cash Management - Institutional Shares | Emerald JV LP"
+    ],
+    "reporting_entity_suffixes": [
+      "Emerald JV LP",
+      "Verdelite JV LP"
+    ],
+    "reporting_entity_identifier_suffixes": [
+      "Emerald JV LP",
+      "Verdelite JV LP"
+    ]
   }
 }

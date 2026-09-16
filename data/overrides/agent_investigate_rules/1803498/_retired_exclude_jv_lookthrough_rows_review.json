@@ -1,0 +1,25 @@
+{
+  "status": "retired",
+  "cik": "1803498",
+  "previous_file": "exclude_jv_lookthrough_rows.json",
+  "original_file": "_retired_exclude_jv_lookthrough_rows_original.json",
+  "original_sha256": "0c82a403a77d74f088f28af397690191b3df752057b58013b4e0a6a2e928a7a3",
+  "mechanism": "D08 retains disclosed underlying records with an explicit reporting-portfolio scope. The prior exclusion implemented consolidation in the base holdings table. Exact Emerald/Verdelite suffix metadata now marks these records as underlying; the conservation gate excludes them by the existing is_subsidiary contract while public holdings retain them. Parent LP interests remain separate parent records. No ownership or consolidated-exposure calculation is inferred.",
+  "sources": [
+    {
+      "path": "data/raw/filings/bdc_xbrl/1803498/000180349826000031.xml",
+      "sha256": "73c6e0e487a25147a459cabe36e246b44088906a596367b01f00d965ad9a9a15"
+    }
+  ],
+  "decision": {
+    "path": "docs/production_stack/01_decisions.md",
+    "sha256": "3f3048852b1c92cee61e48a1fd16c4b69b62efdf5bc8fcbae293224c404c2cb9"
+  },
+  "review_authority": "Owner D08; engineering migration of an incompatible legacy exclusion",
+  "pre_migration": {
+    "candidate": "production-20260915-v11b",
+    "retained_contexts_pass": 97,
+    "retained_contexts_required": 98
+  },
+  "validation": "Proposed only. Requires focused tests and final candidate retention, scope, financial and identity review."
+}

@@ -33,7 +33,8 @@ const monetaryReasons: Record<string, string> = {
 type Quarter = { quarter: string; rows: number; path: string; sha256: string };
 type HistoryIndex = { release_id: string; cik: string; quarters: Quarter[] };
 type History = { release_id: string; cik: string; quarter: string; rows: Observation[];
-  citations?: Record<string, Partial<Record<Field, Citation>>> };
+  citations?: Record<string, Partial<Record<Field, Citation>>>;
+  source_status?: { code: 'eligible_no_position_facts'; message: string } };
 
 const PAGE_SIZE = 100;
 
@@ -126,7 +127,9 @@ export default function FundHoldingsHistory({ cik }: { cik: string }) {
     {!history && !error && <p role="status" className="text-sm text-ink3">{index?.quarters.length === 0
       ? 'No holdings observations are available for this fund in this release.' : 'Loading holdings history...'}</p>}
     {history && <>
-      <p className="text-sm text-ink3">{filtered.length.toLocaleString()} of {history.rows.length.toLocaleString()} disclosed positions. Select a value to inspect its evidence.</p>
+      {history.rows.length === 0 && history.source_status
+        ? <p role="status" className="text-sm text-ink3">{history.source_status.message}</p>
+        : <p className="text-sm text-ink3">{filtered.length.toLocaleString()} of {history.rows.length.toLocaleString()} disclosed positions. Select a value to inspect its evidence.</p>}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-navy text-white"><tr>{['Company / instrument', 'Fair value', 'Cost', 'All-in coupon', 'Maturity', 'Industry'].map(label =>
@@ -157,6 +160,7 @@ export default function FundHoldingsHistory({ cik }: { cik: string }) {
       <p className="text-sm">{citation?.status === 'inferred' ? 'Inferred classification' : citation?.status === 'calculated'
         ? citation.method === 'report_date_reference_conversion' ? 'Calculated USD fair value'
           : citation.method === 'already_USD' ? 'Reviewed USD denomination'
+          : citation.method === 'first_observed_fv_proxy' ? 'Estimated cost from first observed fair value'
           : `Calculated: ${citation.method ?? 'method unavailable'}` : citation?.status === 'direct' && safeHref
           ? 'Cached source filing' : 'Source evidence unavailable'}</p>
       {safeHref && citation?.status === 'direct' ? <a className="text-teal underline" href={safeHref} target="_blank" rel="noopener noreferrer">Open highlighted filing</a>
@@ -167,6 +171,10 @@ export default function FundHoldingsHistory({ cik }: { cik: string }) {
         {citation.calculation.conversion?.quote_date && <> FRED H.10 observation: {citation.calculation.conversion.quote_date}.</>}
       </p>}
       {citation?.donor_row_id && <p className="text-sm">Donor observation: {citation.donor_date} ({citation.donor_row_id})</p>}
+      {donor?.status === 'calculated' && donor.method === 'report_date_reference_conversion' && donor.calculation &&
+        <p className="text-sm">The donor fair value was converted from {donor.calculation.resolved_currency}
+          {donor.calculation.conversion?.quote_date && <> using the FRED H.10 observation dated {donor.calculation.conversion.quote_date}</>}.
+        </p>}
       {donorHref && <a className="text-teal underline" href={donorHref} target="_blank" rel="noopener noreferrer">Open donor fair value evidence</a>}
       {citation?.status === 'inferred' && <p className="text-sm text-ink3">Input: {citation.input_text}. Model: {citation.model}. Decision: {citation.decision_id}.</p>}
       <details className="text-xs text-ink3"><summary>Observation provenance</summary>
