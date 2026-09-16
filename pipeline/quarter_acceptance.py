@@ -159,6 +159,7 @@ def compute_acceptance(
     investigate_dir: Path | None = None,
     programme_evidence: Path | None = None,
     programme_thresholds: Path | None = None,
+    programme_pair_cache: set | None = None,
 ) -> dict[str, Any]:
     """Compute the acceptance metrics + threshold checks for one quarter.
 
@@ -409,7 +410,8 @@ def compute_acceptance(
     if programme_evidence is not None:
         from pipeline.quarter_evidence import Evidence,collect
         evidence=Evidence(programme_evidence,holdings_path)
-        measured = collect(holdings_path,programme_evidence,target_quarter,set(cohort),evidence=evidence)
+        measured = collect(holdings_path,programme_evidence,target_quarter,set(cohort),
+                           evidence=evidence,pair_cache=programme_pair_cache)
         from pipeline.legacy_acceptance_inputs import bound_legacy_inputs
         bound=bound_legacy_inputs(evidence,holdings_path,set(cohort),result['inputs'])
         extend_acceptance(result,measured,thresholds_path=programme_thresholds,bound_legacy_inputs=bound)

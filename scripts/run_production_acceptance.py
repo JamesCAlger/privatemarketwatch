@@ -234,13 +234,14 @@ def run(candidate,attempt,output,*,field_directory=None,frontend_directory=None,
     with REGISTER.open(newline="",encoding="utf-8-sig") as stream:
         quarters=sorted({r["report_date"] for r in csv.DictReader(stream)})
     summaries=[]
+    pair_cache=set()  # Only this run; file hashes are rechecked each quarter.
     for quarter in quarters:
         print("P4 evaluate "+quarter,flush=True)
         verdict=quarter_acceptance.compute_acceptance(target_quarter=quarter,
             holdings_path=holdings,manifest_path=manifest_path,
             ledger_path=output/"conservation_ledger.csv",queue_path=queue,
             audit_path=parent,investigate_dir=investigation_store,
-            programme_evidence=evidence)
+            programme_evidence=evidence,programme_pair_cache=pair_cache)
         quarter_acceptance.write_acceptance(verdict,json_path=output/(quarter+".json"),funds_path=output/(quarter+"-funds.csv"))
         summaries.append(dict(quarter=quarter,verdict=verdict["verdict"],
             statuses={status:sum(c["status"]==status for c in verdict["checks"]) for status in ("PASS","FAIL","UNASSESSABLE")},

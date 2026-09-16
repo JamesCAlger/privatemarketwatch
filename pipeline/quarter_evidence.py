@@ -305,7 +305,7 @@ def collect_primary(con,evidence,quarter,results):
     # cannot be substituted with candidate weights or duplicated context FV.
 
 
-def collect_pairs(con,evidence,results):
+def collect_pairs(con,evidence,results,*,cache=None):
     from pipeline.output_schemas import OUTPUT_SCHEMAS
     from pipeline.programme.artifacts import verify_pair
     missing, failures, verified = [], [], []
@@ -317,12 +317,24 @@ def collect_pairs(con,evidence,results):
             missing.append(name); continue
         if csv_path.with_suffix(".parquet")!=parquet_path:
             raise ContractError("Companion is not beside its canonical CSV: "+name)
+        # The caller may reuse successful representation checks within this
+        # evaluation only. Evidence() rehashes all inputs for EVERY quarter,
+        # and collect() verifies them again before returning. No mtime-only or
+        # persistent cache can establish equality; failures are never cached.
+        key = (evidence.candidate, str(csv_path), str(parquet_path),
+            evidence.data['files'][name]['sha256'],
+            evidence.data['files'][parquet_name]['sha256'], tuple(OUTPUT_SCHEMAS[name].items()))
+        if cache is not None and key in cache:
+            verified.append(name)
+            continue
         try:
             verify_pair(csv_path,con)
         except (ContractError,duckdb.Error) as error:
             failures.append(dict(artifact=name,reason=str(error)))
         else:
             verified.append(name)
+            if cache is not None:
+                cache.add(key)
     results["companion_parity"]=observation(len(failures),assessable=bool(failures) or not missing,
         reason="All eleven governed artifacts must be supplied from the same candidate",
         details=dict(verified=verified,failures=failures,missing=missing))
@@ -446,7 +458,7 @@ def collect_roster(con,evidence,quarter,results):
         details=dict(funds=details,unresolved_fv_precision=bool(extras)))
 
 
-def collect(holdings,manifest,quarter,cohort,*,evidence=None):
+def collect(holdings,manifest,quarter,cohort,*,evidence=None,pair_cache=None):
     evidence=evidence or Evidence(manifest,holdings)
     results={}
     with duckdb.connect(config={"threads":2,"memory_limit":"-1"}) as con:
@@ -459,7 +471,7 @@ def collect(holdings,manifest,quarter,cohort,*,evidence=None):
         collect_roster(con,evidence,quarter,results)
         if evidence.path("obligations"):
             collect_primary(con,evidence,quarter,results)
-        collect_pairs(con,evidence,results)
+        collect_pairs(con,evidence,results,cache=pair_cache)
         collect_public(con,evidence,quarter,results)
         collect_rule_audits(con,evidence,results)
     evidence.verify()
