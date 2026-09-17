@@ -526,3 +526,33 @@ Question: are the five V12-vs-V11b mg3 regressions implementation defects, inten
 - Named obligations: Pavement retained, MidwestVision regression cleared, Nouryon unchanged.
 
 Result: three software defects require V13 (scope recognition completeness + cross-quarter scope-consistency test; directional slots in B2-leftover/C/D; Tier E must defer to contested assignment or carry maturity veto and rate cost). Two are recorded precision-over-recall costs with the gold disagreement retained. Full review and evidence: scratch/2026-09-17_v12_review/v12_identity_regression_review_v1.md. No fix applied; V12 remains immutable; no adoption.
+
+## 2026-09-17 - Joint-borrower rule recorded as intentional
+
+**Objective:** determine whether joint-borrower identity rule (source-disclosed co-borrower lists become their own entity keys and never fuzzy-merge) is an intentional precision-over-recall tradeoff or a defect requiring repair.
+
+**Basis:** V12 against V11b on the 535-packet mg3 gold set; joint entities tracked in candidate snapshot; source disclosure review of IRI Holdings -> Circana and Truck-Lite.
+
+### Finding
+
+The joint-borrower rule is intentional and recorded as owned precision over recall (decision D14, section 3, production_stack/01_decisions.md).
+
+**Rule effect:** 647 distinct joint entity ids, 2,485 name variants, 14,634 holdings rows, USD 231.75 billion fair value.
+
+**Gold impact:**
+- Entity false_merge: 14 to 4 (10 merges prevented)
+- Entity false_split: 2 to 3 (1 split introduced)
+- Position missed_same_identity: 22 to 19 (3 missed recoveries)
+- Position correct: 719 to 722 (3 corrections)
+
+**Gold disagreements retained:** Two mg3 packets now disagree on V12 vs V11b as owned intentional regressions, recorded for later operational work:
+
+1. MGP-5625e98fbdb8 (CIK 0001287750): IRI Holdings renamed to Circana mid-period. Same instrument tracked by 11,242 Class A units and USD 11.6 million amortized cost; name change unifies into a single-member entity in V11b and splits into joint+single in V12.
+
+2. MGP-3fb3d33c5cb2 (CIK 0001287750): Truck-Lite inventory splits. V11b chains as one position; V12 splits into a single-borrower entity (224 rows), a joint "Truck-Lite, Ecco, Clarience" entity (31 rows), and a 3-row variant carrying a "Clarity" vs "Clarience" typo that exact-only joint matching cannot merge.
+
+### Recovery pathway (later operational work, not refactor gate)
+
+1. Position-level continuation: exact shares plus amortized cost when entities differ, narrowing misses without reopening false merges.
+2. Typo-tolerant joint-key merge: between two joint keys sharing the first legal member (e.g., "Truck-Lite, Ecco, Clarity" vs "Truck-Lite, Ecco, Clarience"), apply edit-distance tolerance on the second+ members.
+
