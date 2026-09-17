@@ -10,7 +10,7 @@ ENC = {'0001803498': {'reporting_entity_suffixes': ['Emerald JV LP'],
                       'reporting_entity_identifier_suffixes': ['Emerald JV LP']}}
 
 
-def _bundle(tmp_path, name, e_pairs, labelled_parent=0):
+def _bundle(tmp_path, name, e_pairs, labelled_parent=0, own_interest=0):
     b = tmp_path / name / 'bundle'
     b.mkdir(parents=True)
     with duckdb.connect() as con:
@@ -20,11 +20,14 @@ def _bundle(tmp_path, name, e_pairs, labelled_parent=0):
             for i in range(10)] + [
             dict(row_id=f'L{i}', cik='0001803498', issuer_name='Beta Co., Emerald JV LP', fair_value=5.0,
                  accounting_record_class='parent_schedule', position_id=f'L{i}', entity_id='E2')
-            for i in range(labelled_parent)])
+            for i in range(labelled_parent)] + [
+            dict(row_id=f'O{i}', cik='0001803498', issuer_name='Bcred Emerald JV LP', fair_value=10.0,
+                 accounting_record_class='parent_schedule', position_id=f'O{i}', entity_id='E3')
+            for i in range(own_interest)])
         matches = pd.DataFrame([dict(match_method='E_entity_fingerprint', begin_fair_value=100.0, end_fair_value=100.0)] * e_pairs
                                + [dict(match_method='B1b_position_key', begin_fair_value=100.0, end_fair_value=100.0)] * 100)
         edges = pd.DataFrame([dict(edge_type='match_pair')] * 500)
-        lookup = pd.DataFrame([dict(entity_id='E1', normalized_name='acme'), dict(entity_id='E2', normalized_name='joint:beta co and gamma')])
+        lookup = pd.DataFrame([dict(entity_id='E1', normalized_name='acme'), dict(entity_id='E2', normalized_name='joint:beta co and gamma'), dict(entity_id='E3', normalized_name='bcred')])
         for frame, fname in ((holdings, 'private_markets_holdings'), (matches, 'position_matches'),
                              (edges, 'position_id_edges'), (lookup, 'entity_lookup')):
             con.register('f', frame)
@@ -66,3 +69,14 @@ def test_footprint_reports_joint_entities_and_singletons(tmp_path):
     assert fp['joint_entities'] == 1
     assert fp['positions'] == 10 and fp['singletons'] == 10
     assert fp['scope_rows']['parent_schedule'] == 10
+
+
+def test_fund_own_lp_interest_is_not_a_labelled_parent_row(tmp_path):
+    # Own-interest rows (fund_prefix + label, e.g. 'Bcred Emerald JV LP') should be excluded
+    prior = compute_footprint(_bundle(tmp_path, 'prior', 10), ENC)
+    current = compute_footprint(_bundle(tmp_path, 'current', 10, own_interest=3), ENC)
+    assert current['labelled_parent_rows']['0001803498'] == 0
+    assert compare_footprints(current, prior) == []
+    # With mixed labelled + own-interest rows, only the labelled row is counted
+    mixed = compute_footprint(_bundle(tmp_path, 'mixed', 10, labelled_parent=1, own_interest=3), ENC)
+    assert mixed['labelled_parent_rows']['0001803498'] == 1
