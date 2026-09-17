@@ -63,3 +63,30 @@ def test_other_accounting_scopes_do_not_change_within_scope_position_counts(extr
     # bucket tolerance still permit the single-position tier. Two positions in the SAME
     # scope remain ambiguous and must retain the multi-position bucket test.
     assert run_tier_e([], {2: {'pa': 2000000}}, extra_scope=extra_scope) == expected
+
+
+from pipeline.position_matching import _slot_availability_ctes
+
+
+def test_slot_helper_claims_tier_a_on_end_side_only():
+    with duckdb.connect() as con:
+        con.execute('CREATE TABLE tier_a_unified_ids(_row_id BIGINT)')
+        con.execute('INSERT INTO tier_a_unified_ids VALUES (7)')
+        con.execute('CREATE TABLE tier_b(_begin_row_id BIGINT,_end_row_id BIGINT)')
+        con.execute('INSERT INTO tier_b VALUES (1,2)')
+        con.execute('CREATE TABLE tier_c(_begin_row_id BIGINT,_end_row_id BIGINT)')
+        con.execute('INSERT INTO tier_c VALUES (3,4)')
+        sql = 'WITH ' + _slot_availability_ctes(('tier_b', 'tier_c'))
+        begins = {r[0] for r in con.execute(sql + ' SELECT _row_id FROM used_begin').fetchall()}
+        ends = {r[0] for r in con.execute(sql + ' SELECT _row_id FROM used_end').fetchall()}
+    assert begins == {1, 3}
+    assert ends == {2, 4, 7}
+
+
+def test_slot_helper_with_no_prior_tiers_only_claims_tier_a_ends():
+    with duckdb.connect() as con:
+        con.execute('CREATE TABLE tier_a_unified_ids(_row_id BIGINT)')
+        con.execute('INSERT INTO tier_a_unified_ids VALUES (9)')
+        sql = 'WITH ' + _slot_availability_ctes(())
+        assert con.execute(sql + ' SELECT count(*) FROM used_begin').fetchone()[0] == 0
+        assert con.execute(sql + ' SELECT _row_id FROM used_end').fetchall() == [(9,)]

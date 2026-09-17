@@ -301,6 +301,24 @@ def _name_key_sql(col: str) -> str:
     return f"TRIM(regexp_replace({s}, '\\s+', ' ', 'g'))"
 
 
+def _slot_availability_ctes(prior_tiers: tuple[str, ...]) -> str:
+    """CTE text ``used_begin AS (...), used_end AS (...)`` for cascade exclusion.
+
+    A row has independent incoming (end) and outgoing (begin) continuity
+    slots. A tier may claim a row's END slot without removing its BEGIN slot
+    and vice versa. Tier A contributes only its mapped current-period END
+    slot (see ``_map_tier_a_end_side_ids``). Introduced for Tier E in the
+    V12 repair; extended to B2-leftover, C, D and F after the Resideo review
+    (docs/investigations/position_matching.md, 2026-09-17).
+    """
+    begins = " UNION ".join(f"SELECT _begin_row_id AS _row_id FROM {t}" for t in prior_tiers)
+    ends = " UNION ".join(["SELECT _row_id FROM tier_a_unified_ids"] +
+                          [f"SELECT _end_row_id AS _row_id FROM {t}" for t in prior_tiers])
+    if not begins:
+        begins = "SELECT CAST(NULL AS BIGINT) AS _row_id WHERE FALSE"
+    return f"used_begin AS ({begins}), used_end AS ({ends})"
+
+
 def _maturity_gap_sql(b: str, e: str) -> str:
     from pipeline.matching_contract import interval_gap_sql
     return interval_gap_sql(b+'._mat_low',b+'._mat_high',e+'._mat_low',e+'._mat_high')
@@ -1192,26 +1210,33 @@ def _match_exact_name_leftover_rounds(
     sql = f"""
     CREATE OR REPLACE TEMP TABLE b2_leftover AS
     WITH
-    used AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION SELECT _begin_row_id FROM tier_b
-        UNION SELECT _end_row_id FROM tier_b
-    ),
+    {_slot_availability_ctes(('tier_b',))},
     remaining AS (
-        SELECT * FROM unified_base
-        WHERE _row_id NOT IN (SELECT _row_id FROM used)
-          AND _name_key IS NOT NULL AND _name_key != ''
+        SELECT *,
+            _row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
+            _row_id NOT IN (SELECT _row_id FROM used_end) AS _end_available
+        FROM unified_base
+        WHERE _name_key IS NOT NULL AND _name_key != ''
     ),
     name_counts AS (
-        SELECT cik, source, quarter, _name_key, COUNT(*) AS n
+        SELECT cik, source, quarter, _name_key,
+            COUNT(*) FILTER (WHERE _begin_available) AS n_begin,
+            COUNT(*) FILTER (WHERE _end_available) AS n_end
         FROM remaining GROUP BY cik, source, quarter, _name_key
     ),
-    eligible AS (
+    eligible_begin AS (
         SELECT r.* FROM remaining r
         JOIN name_counts nc
           ON r.cik = nc.cik AND r.source = nc.source
          AND r.quarter = nc.quarter AND r._name_key = nc._name_key
-        WHERE nc.n <= {MAX_NAME_MULTIPLICITY}
+        WHERE r._begin_available AND nc.n_begin <= {MAX_NAME_MULTIPLICITY}
+    ),
+    eligible_end AS (
+        SELECT r.* FROM remaining r
+        JOIN name_counts nc
+          ON r.cik = nc.cik AND r.source = nc.source
+         AND r.quarter = nc.quarter AND r._name_key = nc._name_key
+        WHERE r._end_available AND nc.n_end <= {MAX_NAME_MULTIPLICITY}
     ),
     pairs AS (
         SELECT
@@ -1241,8 +1266,8 @@ def _match_exact_name_leftover_rounds(
             {_pa_band_sql('b', 'e')} AS _pa_band,
             {_cost_prox_sql('b.cost_val', 'e.cost_val')} AS _cost_prox,
             {_name_exact_sql('b', 'e')} AS _name_exact
-        FROM eligible b
-        JOIN eligible e
+        FROM eligible_begin b
+        JOIN eligible_end e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope AND b.source = e.source
          AND e.quarter = ({next_qtr})
          AND b._name_key = e._name_key
@@ -1294,34 +1319,33 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
     sql_candidates = f"""
     CREATE OR REPLACE TEMP TABLE tier_c_candidates AS
     WITH
-    all_used AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION
-        SELECT _begin_row_id AS _row_id FROM tier_b
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_b
-    ),
+    {_slot_availability_ctes(('tier_b',))},
     remaining AS (
         SELECT u.*,
-            {norm_sql} AS _norm_name
+            {norm_sql} AS _norm_name,
+            u._row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
+            u._row_id NOT IN (SELECT _row_id FROM used_end) AS _end_available
         FROM unified_base u
-        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
     ),
-    -- Normalized-name multiplicity cap
+    -- Normalized-name multiplicity cap, counted per direction so a row whose
+    -- opposite slot is already claimed does not change this side's ambiguity.
     norm_name_counts AS (
-        SELECT cik, quarter, _norm_name, COUNT(*) AS n
-        FROM (
-            SELECT cik, quarter, {norm_sql} AS _norm_name
-            FROM unified_base
-            WHERE _row_id NOT IN (SELECT _row_id FROM all_used)
-        )
+        SELECT cik, quarter, _norm_name,
+            COUNT(*) FILTER (WHERE _begin_available) AS n_begin,
+            COUNT(*) FILTER (WHERE _end_available) AS n_end
+        FROM remaining
         WHERE _norm_name IS NOT NULL AND _norm_name != ''
         GROUP BY cik, quarter, _norm_name
     ),
-    high_mult_norm AS (
+    high_mult_begin AS (
         SELECT cik, quarter, _norm_name
         FROM norm_name_counts
-        WHERE n > {MAX_NAME_MULTIPLICITY}
+        WHERE n_begin > {MAX_NAME_MULTIPLICITY}
+    ),
+    high_mult_end AS (
+        SELECT cik, quarter, _norm_name
+        FROM norm_name_counts
+        WHERE n_end > {MAX_NAME_MULTIPLICITY}
     )
     SELECT
         e.cik, e.entity_name, e.source,
@@ -1367,16 +1391,17 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
     FROM remaining b
     JOIN remaining e
       ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
+     AND b._begin_available AND e._end_available
      AND e.quarter = ({next_qtr})
      AND b._norm_name = e._norm_name
      AND b._norm_name != ''
      AND b.source = e.source
     WHERE b._norm_name NOT IN (
-        SELECT _norm_name FROM high_mult_norm
+        SELECT _norm_name FROM high_mult_begin
         WHERE cik = b.cik AND quarter = b.quarter
     )
     AND e._norm_name NOT IN (
-        SELECT _norm_name FROM high_mult_norm
+        SELECT _norm_name FROM high_mult_end
         WHERE cik = e.cik AND quarter = e.quarter
     )
     AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
@@ -1444,38 +1469,32 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
     sql_candidates = f"""
     CREATE OR REPLACE TEMP TABLE tier_d_candidates AS
     WITH
-    all_used AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION
-        SELECT _begin_row_id AS _row_id FROM tier_b
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_b
-        UNION
-        SELECT _begin_row_id AS _row_id FROM tier_c
-        UNION
-        SELECT _end_row_id AS _row_id FROM tier_c
-    ),
+    {_slot_availability_ctes(('tier_b','tier_c'))},
     remaining AS (
         SELECT u.*,
-            {norm_sql} AS _norm_name
+            {norm_sql} AS _norm_name,
+            u._row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
+            u._row_id NOT IN (SELECT _row_id FROM used_end) AS _end_available
         FROM unified_base u
-        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
     ),
-    -- Normalized-name multiplicity cap for fuzzy matching
+    -- Directional multiplicity cap for fuzzy matching.
     d_norm_counts AS (
-        SELECT cik, quarter, _norm_name, COUNT(*) AS n
-        FROM (
-            SELECT cik, quarter, {norm_sql} AS _norm_name
-            FROM unified_base
-            WHERE _row_id NOT IN (SELECT _row_id FROM all_used)
-        )
+        SELECT cik, quarter, _norm_name,
+            COUNT(*) FILTER (WHERE _begin_available) AS n_begin,
+            COUNT(*) FILTER (WHERE _end_available) AS n_end
+        FROM remaining
         WHERE _norm_name IS NOT NULL AND _norm_name != ''
         GROUP BY cik, quarter, _norm_name
     ),
-    d_high_mult_norm AS (
+    d_high_mult_begin AS (
         SELECT cik, quarter, _norm_name
         FROM d_norm_counts
-        WHERE n > {MAX_NAME_MULTIPLICITY}
+        WHERE n_begin > {MAX_NAME_MULTIPLICITY}
+    ),
+    d_high_mult_end AS (
+        SELECT cik, quarter, _norm_name
+        FROM d_norm_counts
+        WHERE n_end > {MAX_NAME_MULTIPLICITY}
     ),
     -- Prefix-blocking: only compare pairs sharing first 4 chars
     blocked AS (
@@ -1520,17 +1539,18 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
+         AND b._begin_available AND e._end_available
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._norm_name != ''
          AND e._norm_name != ''
          AND LEFT(b._norm_name, 4) = LEFT(e._norm_name, 4)
         WHERE b._norm_name NOT IN (
-            SELECT _norm_name FROM d_high_mult_norm
+            SELECT _norm_name FROM d_high_mult_begin
             WHERE cik = b.cik AND quarter = b.quarter
         )
         AND e._norm_name NOT IN (
-            SELECT _norm_name FROM d_high_mult_norm
+            SELECT _norm_name FROM d_high_mult_end
             WHERE cik = e.cik AND quarter = e.quarter
         )
     ),
@@ -1644,17 +1664,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     sql_candidates = f"""
     CREATE OR REPLACE TEMP TABLE tier_e_candidates AS
     WITH
-    used_begin AS (
-        SELECT _begin_row_id AS _row_id FROM tier_b
-        UNION SELECT _begin_row_id FROM tier_c
-        UNION SELECT _begin_row_id FROM tier_d
-    ),
-    used_end AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION SELECT _end_row_id FROM tier_b
-        UNION SELECT _end_row_id FROM tier_c
-        UNION SELECT _end_row_id FROM tier_d
-    ),
+    {_slot_availability_ctes(('tier_b','tier_c','tier_d'))},
     remaining AS (
         SELECT u.*,
             u._row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
@@ -1873,26 +1883,18 @@ def _match_gap_quarter(con: duckdb.DuckDBPyConnection, *, enabled: bool) -> str:
         "b.pa", "e.pa", "b.bs", "e.bs", overlap=_maturity_rank_sql("b","e")+"=0")
     con.execute(f"""
     CREATE OR REPLACE TEMP TABLE tier_f_candidates AS
-    WITH all_used AS (
-        SELECT _row_id FROM tier_a_unified_ids
-        UNION SELECT _begin_row_id FROM tier_b
-        UNION SELECT _end_row_id FROM tier_b
-        UNION SELECT _begin_row_id FROM tier_c
-        UNION SELECT _end_row_id FROM tier_c
-        UNION SELECT _begin_row_id FROM tier_d
-        UNION SELECT _end_row_id FROM tier_d
-        UNION SELECT _begin_row_id FROM tier_e
-        UNION SELECT _end_row_id FROM tier_e
-    ),
+    WITH {_slot_availability_ctes(('tier_b','tier_c','tier_d','tier_e'))},
     name_counts AS (
         SELECT cik, source, quarter, _name_lower, COUNT(*) AS n
         FROM unified_base GROUP BY cik, source, quarter, _name_lower
     ),
     filed AS (SELECT DISTINCT cik, source, quarter FROM unified_base),
     remaining AS (
-        SELECT u.* FROM unified_base u
-        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
-          AND COALESCE(u._name_lower, '') != ''
+        SELECT u.*,
+            u._row_id NOT IN (SELECT _row_id FROM used_begin) AS _begin_available,
+            u._row_id NOT IN (SELECT _row_id FROM used_end) AS _end_available
+        FROM unified_base u
+        WHERE COALESCE(u._name_lower, '') != ''
     )
     SELECT
         b.cik, b.entity_name, b.source,
@@ -1920,6 +1922,7 @@ def _match_gap_quarter(con: duckdb.DuckDBPyConnection, *, enabled: bool) -> str:
     FROM remaining b
     JOIN remaining e
       ON e.cik = b.cik AND e.source = b.source
+     AND b._begin_available AND e._end_available
      AND e.quarter = ({_quarter_plus_two_sql('b.quarter')})
      AND e._name_lower = b._name_lower
     JOIN name_counts nb

@@ -3125,3 +3125,27 @@ class TestGapQuarterTier:
         out = match_positions(unified_df=_make_unified([a, c]),
                               bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
         assert not out["match_method"].astype(str).str.startswith("F_gap_").any()
+
+
+class TestDirectionalSlots:
+    def test_begin_claim_by_exact_name_leaves_end_slot_open_for_later_tiers(self):
+        """Resideo shape (V12 review): Q3 row is the BEGIN of a B2 pair to Q4 and
+        must still be the END of a C/D pair from Q2."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "300", "entity_name": "BDC3", "report_date": "2025-06-30",
+             "issuer_name": "Resideo Funding, Inc.", "fair_value": "545000",
+             "index_classification": "DIRECT_LENDING", "maturity_date": "2031-06-13"},
+            {"source": "bdc", "cik": "300", "entity_name": "BDC3", "report_date": "2025-09-30",
+             "issuer_name": "Resideo Funding, Inc. 1", "fair_value": "545000",
+             "index_classification": "DIRECT_LENDING", "maturity_date": "2031-06-13"},
+            {"source": "bdc", "cik": "300", "entity_name": "BDC3", "report_date": "2025-12-31",
+             "issuer_name": "Resideo Funding, Inc. 1", "fair_value": "544000",
+             "index_classification": "DIRECT_LENDING", "maturity_date": "2031-06-13"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        spans = set(zip(result["begin_report_date"].astype(str), result["end_report_date"].astype(str)))
+        assert ("2025-09-30", "2025-12-31") in spans
+        assert ("2025-06-30", "2025-09-30") in spans
+        later = result[(result["begin_report_date"].astype(str) == "2025-06-30")]
+        assert later["match_method"].iloc[0] in ("C_normalized_name", "D_fuzzy")
