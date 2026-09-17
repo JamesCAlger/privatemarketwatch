@@ -90,3 +90,50 @@ def test_slot_helper_with_no_prior_tiers_only_claims_tier_a_ends():
         sql = 'WITH ' + _slot_availability_ctes(())
         assert con.execute(sql + ' SELECT count(*) FROM used_begin').fetchone()[0] == 0
         assert con.execute(sql + ' SELECT _row_id FROM used_end').fetchall() == [(9,)]
+
+
+def run_tier_e_rows(rows, claims=(), tier_a=()):
+    """rows: (uid, quarter, date, fv, maturity_or_None). One entity, PREFERRED_EQUITY, no principal."""
+    with duckdb.connect(config={'threads': 1, 'memory_limit': '256MB'}) as con:
+        con.execute('''CREATE TABLE unified_base(_row_id BIGINT, cik VARCHAR,
+            source VARCHAR,entity_name VARCHAR,issuer_name VARCHAR,quarter VARCHAR,
+            report_date DATE,entity_id VARCHAR,index_classification VARCHAR,
+            _accounting_scope VARCHAR,_inst_subtype VARCHAR,_mat_low DATE,_mat_high DATE,
+            fv DOUBLE,pa DOUBLE,cost_val DOUBLE,ir DOUBLE,bs DOUBLE,sh DOUBLE)''')
+        con.executemany('INSERT INTO unified_base VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [
+            (uid, '100', 'bdc', 'Fund', 'Metropolis Technologies, Inc.', q, d, 'entity-1',
+             'PREFERRED_EQUITY', '100|parent', 'PREFERRED', mat, mat, fv, None, fv, None, None, None)
+            for uid, q, d, fv, mat in rows])
+        for table in ('tier_b', 'tier_c', 'tier_d'):
+            con.execute('CREATE TABLE ' + table + '(_begin_row_id BIGINT,_end_row_id BIGINT)')
+        if claims:
+            con.executemany('INSERT INTO tier_b VALUES (?,?)', claims)
+        con.execute('CREATE TABLE tier_a_unified_ids(_row_id BIGINT)')
+        if tier_a:
+            con.executemany('INSERT INTO tier_a_unified_ids VALUES (?)', [(i,) for i in tier_a])
+        _match_entity_fingerprint(con)
+        return set(con.execute('SELECT _begin_row_id,_end_row_id FROM tier_e').fetchall())
+
+
+METROPOLIS = [(1, '2025q3', '2025-09-30', 480000.0, '2034-05-16'),
+              (2, '2025q4', '2025-12-31', 480000.0, '2034-05-16'),
+              (3, '2025q4', '2025-12-31', 362000.0, None)]
+
+
+def test_tier_e_pairs_the_best_filed_candidate_when_it_is_free():
+    assert run_tier_e_rows(METROPOLIS) == {(1, 2)}
+
+
+@pytest.mark.parametrize('taken', [dict(tier_a=(2,)), dict(claims=[(0, 2)])])
+def test_tier_e_emits_nothing_when_the_best_filed_candidate_is_taken(taken):
+    # V12 paired 1->3 (17.50%/2034 pref with a 12.00%/no-maturity pref) because
+    # the true sibling 2 was end-unavailable. Second best is not a match.
+    assert run_tier_e_rows(METROPOLIS, **taken) == set()
+
+
+def test_tier_e_symmetric_best_on_the_begin_side():
+    rows = [(1, '2025q3', '2025-09-30', 480000.0, '2034-05-16'),
+            (4, '2025q3', '2025-09-30', 362000.0, None),
+            (2, '2025q4', '2025-12-31', 480000.0, '2034-05-16')]
+    # Begin 1 is the best begin for end 2; if 1's begin slot is taken, 4 must not inherit 2.
+    assert run_tier_e_rows(rows, claims=[(1, 0)]) == set()

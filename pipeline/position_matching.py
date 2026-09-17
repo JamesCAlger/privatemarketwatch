@@ -1655,11 +1655,12 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     """
     next_qtr = _next_quarter_sql("b.quarter")
 
-    # A row has independent incoming and outgoing continuity slots. A
-    # later-quarter match must not remove its ability to link to an earlier
-    # quarter. Tier A contributes only its mapped current-period end slot.
-    # Count available positions by direction so a claimed slot does not alter
-    # the opposite side's single/multiple-position classification.
+    # Independent begin/end slots (see _slot_availability_ctes). Single/multi
+    # classification uses the FILED population so a claimed sibling still
+    # counts. Candidates are ranked against every filed same-entity row, and a
+    # pair is emitted only if each side is the other's best AND both slots are
+    # free. If the best is taken, nothing is emitted: second best is not a
+    # match (Metropolis, V12 review 2026-09-17).
     # Statement 1: save all candidate pairs (before greedy dedup)
     sql_candidates = f"""
     CREATE OR REPLACE TEMP TABLE tier_e_candidates AS
@@ -1679,8 +1680,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     entity_counts AS (
         SELECT cik, source, quarter, _entity_id, _accounting_scope,
             CAST(index_classification AS VARCHAR) AS _ic,
-            COUNT(*) FILTER (WHERE _begin_available) AS n_begin,
-            COUNT(*) FILTER (WHERE _end_available) AS n_end
+            COUNT(*) AS n
         FROM remaining
         GROUP BY cik, source, quarter, _entity_id, _accounting_scope,
             CAST(index_classification AS VARCHAR)
@@ -1711,11 +1711,12 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
             {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
             ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
             {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
-                AS _pa_prox
+                AS _pa_prox,
+            b._begin_available AS _begin_available,
+            e._end_available AS _end_available
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
-         AND b._begin_available AND e._end_available
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1732,13 +1733,13 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND b._accounting_scope = bc._accounting_scope
          AND b.quarter = bc.quarter AND b._entity_id = bc._entity_id
          AND CAST(b.index_classification AS VARCHAR) = bc._ic
-         AND bc.n_begin = 1
+         AND bc.n = 1
         JOIN entity_counts ec
           ON e.cik = ec.cik AND e.source = ec.source
          AND e._accounting_scope = ec._accounting_scope
          AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
          AND CAST(e.index_classification AS VARCHAR) = ec._ic
-         AND ec.n_end = 1
+         AND ec.n = 1
     ),
     -- E2: Multi-position entities -- require principal bucket match
     pairs_multi AS (
@@ -1766,11 +1767,12 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
             {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
             ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
             {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
-                AS _pa_prox
+                AS _pa_prox,
+            b._begin_available AS _begin_available,
+            e._end_available AS _end_available
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik AND b._accounting_scope=e._accounting_scope
-         AND b._begin_available AND e._end_available
          AND e.quarter = ({next_qtr})
          AND b.source = e.source
          AND b._entity_id = e._entity_id
@@ -1793,7 +1795,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND e._accounting_scope = ec._accounting_scope
          AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
          AND CAST(e.index_classification AS VARCHAR) = ec._ic
-        WHERE bc.n_begin > 1 OR ec.n_end > 1
+        WHERE bc.n > 1 OR ec.n > 1
     )
     SELECT * FROM pairs_single
     UNION ALL
@@ -1831,7 +1833,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         end_interest_rate, end_basis_spread, end_shares_held,
         match_method, match_key, match_score, span_months,
         _begin_row_id, _end_row_id
-    FROM rn_end WHERE rn_e = 1
+    FROM rn_end WHERE rn_e = 1 AND _begin_available AND _end_available
     """
     con.execute(sql_dedup)
     return "tier_e"
