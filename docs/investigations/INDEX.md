@@ -123,4 +123,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-08 - E13-E16: where the remaining completeness gap actually is
 - 2026-09-14 - Refactor identity comparison and cached-name representative regression
 - 2026-09-16 - V11b named identity regressions and source-defined scope
+- 2026-09-17 - V12 identity regressions: five packets attributed
 
