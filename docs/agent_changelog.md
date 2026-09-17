@@ -12599,3 +12599,55 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Measured: offline font replay emitted 41 matching cached font files with no Google downloads; static public scope PASS at 70 funds; anchor census 612,547 anchor expectations across 775+ documents with zero misleading links; 8 browser scenarios PASS at 4,011 ms local p95 (inferred_sector unobserved, as designed); repaired history (Golub cash-only quarter) PASS at 593 ms p95.
 - Two prerequisite ordering defects were found in the controllers, not the product: the public controller requires a materialized isolated frontend and a delivery-collector result under `scratch/2026-09-16_refactor_continuation/delivery-v12-v1/`. Both are now satisfied; the chain script records the order at scratch/2026-09-16_refactor_continuation/task0_v12_public_chain.ps1.
 - This validates the P3/P8 machinery ahead of V13 so a first-contact failure cannot cost an extra candidate. It is not a V12 acceptance result: V12's identity comparison still FAILS with three implementation defects under repair, and no production adoption, publication or baseline refresh occurred.
+
+## 2026-09-17 - Oxford Ledge comparison + remediation-loop assessment (docs only)
+
+- New folder `docs/oxford_ledge_review/` with
+  `2026-09-17_oxford_ledge_comparison_and_remediation_loop.md`: Oxford Ledge
+  (oxfordledge.com) methodology review; fund-total reconciliation on 4 listed BDCs
+  (OL 4/4 match filing; ours ARCC PASS, MAIN +12.4%, OBDC +14.5%, FSK +47.3% via
+  dimension-path duplicates); listed x wrapper segment analysis (wrapper, not
+  listing, is the difference); v1 cohort stats at 2026-03-31 (57 PASS / 6 WARN /
+  6 FAIL, dup FV 0.014%); ranked adoption list (non-accrual determinate coverage
+  first); validation-rule comparison; Q4+Q1 cohort ledger remediation accounting
+  (1,730 findings: 39% FA, 29% real-unremediated, 7% fixed); the 500 unremediated
+  pool (zero cited by any correction); B2 track split + 49% correction pull rate;
+  quarter carry-forward layers; 6-step loop-closure recommendation; section 11
+  maps each item against the parallel refactor programme (recs 2/6 and adoption
+  items 1/4/6/8 covered or half-covered by the programme; recs 1/3/4/5 and the
+  ledger accounting are out of programme scope under D13; durable identity is a
+  precondition for cross-quarter finding memory). Section 12 adds three
+  architectural accuracy levers (field-level anchors, dimension-lattice roles
+  upstream of extraction, durable-identity temporal consistency), a
+  field-by-field anchor inventory (3 fields gated independently, 6 with an
+  unwired independent anchor, 2 corroboration-only), and a worked v1 example
+  (TCW DL VII affiliation duplicates, AG Twin Brook DemandTec column remap,
+  Senior Credit Investments Arax comparative-period maturity merge). Section 13
+  specifies a complete filer profile: what the v3 wrapper covers (identifier
+  text only; TCW DL VII case), two declarations it cannot make (dated scope
+  change, dated rate-convention change; no per-CIK layer carries time
+  validity: 0/78 wrappers, 0/70 grammars, 0/42 rate_convention; rate_convention
+  recorded but not applied), the three-way split of per-column mapping, nine
+  profile sections with status and the defect each would have caught, and the
+  three cross-cutting properties (time validity, evidence per entry, derived by
+  default). Section 14 (marked NOT FINALISED) records the design discussion:
+  current wrapper creation flow vs a census-derived initialisation; rule
+  precedence (invariant / mechanism / default; 124 CIK literals in
+  `pipeline/*.py`, Stepstone 2025q4 function in `bdc_filings.py`); the
+  refactor supplies the boundary but not the migration; a worked convention
+  change (base+400 -> 12% all-in) showing no dated detector exists and T05 is
+  silent to it; per-column contracts as a candidate mechanism built from
+  existing fragments (C-rules, rate grammars, wrapper invariants,
+  `segment_assertions`) plus a withholding path; open items.
+- No pipeline, data, or test changes. Scratch scripts under
+  `scratch/2026-09-17_oxford_ledge/`.
+
+### 2026-09-17 - BCRED reporting-portfolio recognition covers every reviewed form (Task 2, v13 repairs)
+
+- `pipeline/source_encodings.py` legacy branch of `reporting_suffix_expression` replaced the legal-suffix (Inc/LLC/Ltd/LP/...) requirement with a pure separator requirement: the label must be its own comma- or ordinal(space-digit-space)-separated segment, trailing or leading. Borrower legal-form words (LLLP, LLP, Co., S.a r.l., S.p.A, bare Bidco, plain names) are no longer required. Controller ruling dropped the brief's `own_interest` guard as unreachable dead code (the terminal pattern already requires a comma/ordinal immediately before the label, so bare "BCRED Emerald JV LP" and trailing joint forms never match it) and kept only the leading-form joint-"and" veto, which is load-bearing because "Emerald JV LP, and Acme LLC" matches the leading pattern. `legal=` line removed.
+- `tests/test_source_encodings.py`: added 10 positive fixtures (prefix form, LLLP/LLP/Co./S.a r.l./S.p.A/bare-Bidco/plain-name borrowers, ordinal-space form) and 5 negative fixtures (bare label, `BCRED Verdelite JV LP 2`, leading+joint "and", trailing+joint "and", label-inside-longer-name). RED confirmed exactly the 10 positive cases failed as `0001803498|parent` before the fix; all 41 cases pass after. `tests/test_source_encodings.py` (41), `tests/test_refactor_staging.py`, `tests/test_unified_holdings.py` (978 total) and `tests/test_bdc_xbrl_wrapper.py` (523) all pass unchanged — no fixture encoded the old legal-suffix rule, so no test needed updating for D08.
+- `data/overrides/bdc_xbrl_wrappers/0001803498.json` quirk `bcred_legacy_typed_reporting_portfolio` description rewritten to cite the reviewed evidence contexts (MH Sub I, 2U prefix form, Freeport LNG/Monk Holding/Confine Visual/Symphony Technology, AlixPartners, Auris Luxembourg/Tangerine Bidco) and drop the legal-suffix framing.
+- Real-data verification (`scratch/2026-09-17_v13_repairs/verify_scope_forms_v2.py`, read-only against the immutable V12 identity bundle `data/programme/candidates/production-20260916-v12/attempts/identity-01/bundle/private_markets_holdings.parquet`): of 16,088 CIK-0001803498 rows V12 classified `parent_schedule`, the new expression flips **874 rows / USD 10,409.764 million** to underlying (513 rows / $6.24B at 2023-03-31, exactly matching the documented count). This is close to but not identical to the "791 rows / $10,474.5M" figure recorded against `scripts/candidate_footprint.py`'s independently-built own-interest-exclusion regex in the "Candidate footprint gate added" entry above — the two mechanisms are structurally different (footprint gate matches the label anywhere via `(^|[ ,])`+label with an own-interest guard; this fix anchors the label at the absolute start or end of the identifier with no guard needed for the terminal case), so a small population difference between them is expected and not a red flag by itself.
+- **Residual finding (out of scope for this task, not fixed):** the verification script's issuer_name-based check found 41 rows still parent-scoped while containing a JV label (top patterns: `BCRED Emerald/Verdelite JV LP`, correctly still-parent). A deeper diagnostic against `bdc_dimensions_raw` directly (not run as part of the committed script) found a materially larger residual: **53 rows / USD 13,156,885,000** remain `parent_schedule` under the new rule because the borrower and label are joined by a bare space with no comma and no ordinal digit (e.g. `Polyphase Elevator Holding Co. Emerald JV LP`, `Auris Luxembourg III Sarl Verdelite JV LP`, `TeamSystem SpA Emerald JV LP`), concentrated in 2023-12-31 through 2026-03-31 ($1.6-1.9B per quarter in the later periods). This bare-space form is not among the forms enumerated in the Task 2 brief or the controller's ruling and was not implemented — flagging for owner review rather than widening the regex without a reviewed evidence basis, per the anti-sycophancy guardrail against chasing a number without a mechanism. It is larger in dollar terms than the entire fix implemented here and should be scoped as a follow-up (a fourth legacy separator form, or a possible convention change partway through 2023).
+- `python scripts/diff_outputs.py --semantic`: reported the pre-existing baseline divergence (161 divergent artifacts total, matching the count other 2026-09-17 tasks recorded against the same September-10 divergence baseline), non-zero exit. This task made zero `data/output/`/`frontend/public/data/` writes (no rebuild was run), so none of the reported divergence is attributable to this change.
+- Changes BCRED 2023 conservation sums: Q1-2023 (2023-03-31) previously had zero underlying rows and now has 513; downstream FV-conservation and quarter-acceptance artifacts for CIK 0001803498 will shift on the next rebuild/quarter pass.

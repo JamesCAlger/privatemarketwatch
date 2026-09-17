@@ -44,6 +44,23 @@ def test_cash_identity_requires_exact_disclosed_instrument_and_filer(cik, name, 
     ('investmentidentifieraxis=ADCS Clinics, LLC, Emerald JV LP 3', 'reporting_entity=emerald jv lp'),
     ('investmentidentifieraxis=Acme LLC and Verdelite JV LP', 'parent'),
     ('investmentidentifieraxis=Acme IncEmerald JV LP', 'parent'),
+    # Reviewed 2026-09-17 (V12 review): prefix form, unlisted legal suffixes, ordinal-space form.
+    ('investmentidentifieraxis=Emerald JV LP, 2U, Inc.', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Freeport LNG Investments, LLLP, Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=AlixPartners, LLP, Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=Monk Holding Co., Emerald JV LP 1', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Auris Luxembourg III S.a r.l., Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Tangerine Bidco S.p.A, Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Confine Visual Bidco, Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Symphony Technology Group 1 Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=Air Canada, Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=TRC Companies, Inc (fka Bolt Infrastructure Merger Sub, Inc.), Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    # Still parent: bare label, fund's own interest, joint "and", label inside a longer name.
+    ('investmentidentifieraxis=Emerald JV LP', 'parent'),
+    ('investmentidentifieraxis=BCRED Verdelite JV LP 2', 'parent'),
+    ('investmentidentifieraxis=Emerald JV LP, and Acme LLC', 'parent'),
+    ('investmentidentifieraxis=Acme LLC and Emerald JV LP 1', 'parent'),
+    ('investmentidentifieraxis=Emerald JV LP Holdings, Acme LLC', 'parent'),
 ])
 def test_reporting_suffix_does_not_turn_borrower_names_into_subsidiaries(monkeypatch, dimensions, expected):
     monkeypatch.setattr(source_encodings, 'load_encodings', lambda: ENCODINGS)

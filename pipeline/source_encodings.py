@@ -76,15 +76,28 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
             segments="string_split(coalesce(CAST("+dimensions+" AS VARCHAR),''),'|')[2:]"
             matched.append('list_filter(list_transform('+segments+',x -> '+_normal('x')+'),x -> x IN ('+values+'))')
         if legacy:
-            # Older reviewed filings place the portfolio after a legal borrower,
-            # optionally separated by an ordinal/comma. A parent LP-interest
-            # name, another axis, or an explicit joint-borrower "and" fails.
-            legal=r'(?:incorporated|corporation|limited|l\.?l\.?c\.?|inc\.?|corp\.?|ltd\.?|l\.?p\.?|plc|gmbh)'
+            # Reviewed legacy InvestmentIdentifierAxis forms (BCRED wrapper quirk
+            # bcred_legacy_typed_reporting_portfolio): the portfolio label is its
+            # own segment, separated from a non-empty borrower by a comma or by a
+            # space-ordinal-space, at the end or (2023-03-31 only) at the start.
+            # Borrower legal-form words are NOT required: LLLP, LLP, Co., S.a r.l.,
+            # S.p.A, bare Bidco and plain names all appear in reviewed contexts.
+            # The separator requirement alone keeps the fund's own LP interest
+            # ("BCRED Emerald JV LP") and trailing joint-borrower forms
+            # ("Acme LLC and Verdelite JV LP") parent: neither has a comma or an
+            # ordinal immediately before the label. Only the leading form needs an
+            # explicit veto, because "Emerald JV LP, and Acme LLC" matches it.
+            # RE2: no lookaround.
             member=_normal("split_part(CAST("+dimensions+" AS VARCHAR),'|',1)")
             for label in legacy:
                 label=' '.join(label.lower().split())
-                pattern=r'^investmentidentifieraxis=.+\b'+legal+r'(?:[, ]+[0-9]+)?[, ]+'+re.escape(label)+r'(?: [0-9]+)?$'
-                matched.append('CASE WHEN regexp_matches('+member+','+_literal(pattern)+') THEN ['+_literal(label)+'] ELSE []::VARCHAR[] END')
+                lab=re.escape(label)
+                terminal=r'^investmentidentifieraxis=.+?(?:,\s*|,?\s+[0-9]+\s+)'+lab+r'(?: [0-9]+)?$'
+                leading=r'^investmentidentifieraxis='+lab+r',\s*.+$'
+                leading_joint=r'^investmentidentifieraxis='+lab+r',\s*and\b'
+                matched.append('CASE WHEN (regexp_matches('+member+','+_literal(terminal)+') OR regexp_matches('+member+','+_literal(leading)+'))'
+                    ' AND NOT regexp_matches('+member+','+_literal(leading_joint)+')'
+                    ' THEN ['+_literal(label)+'] ELSE []::VARCHAR[] END')
         matching='list_concat('+','.join(matched)+')' if len(matched)>1 else matched[0]
         members="array_to_string(list_transform(list_sort(list_distinct("+matching+")),x -> 'reporting_entity='||x),'|')"
         cases.append('WHEN '+_cik_condition(cik,key)+" THEN coalesce("+members+",'')")
