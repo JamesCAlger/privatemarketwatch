@@ -78,25 +78,35 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
         if legacy:
             # Reviewed legacy InvestmentIdentifierAxis forms (BCRED wrapper quirk
             # bcred_legacy_typed_reporting_portfolio): the portfolio label is its
-            # own segment, separated from a non-empty borrower by a comma or by a
-            # space-ordinal-space, at the end or (2023-03-31 only) at the start.
-            # Borrower legal-form words are NOT required: LLLP, LLP, Co., S.a r.l.,
-            # S.p.A, bare Bidco and plain names all appear in reviewed contexts.
-            # The separator requirement alone keeps the fund's own LP interest
-            # ("BCRED Emerald JV LP") and trailing joint-borrower forms
-            # ("Acme LLC and Verdelite JV LP") parent: neither has a comma or an
-            # ordinal immediately before the label. Only the leading form needs an
-            # explicit veto, because "Emerald JV LP, and Acme LLC" matches it.
+            # own segment, separated from a non-empty borrower by a comma, by a
+            # space-ordinal-space, or (2023-09-30 through 2024-03-31 only) by a
+            # bare single space with no comma/digit/space immediately before it --
+            # at the end, or (2023-03-31 only) at the start. Borrower legal-form
+            # words are NOT required: LLLP, LLP, Co., S.a r.l., S.p.A, bare Bidco
+            # and plain names all appear in reviewed contexts.
+            # Admitting the bare-space form makes BOTH guards below load-bearing
+            # for that form specifically (they were dead against comma/ordinal
+            # alone, which is why an earlier pass at this dropped them): without
+            # the own-interest guard, the fund's own "BCRED Emerald JV LP" would
+            # match the bare-space alternative; without the trailing joint guard,
+            # "Acme LLC and Verdelite JV LP" would too. The leading-form joint
+            # veto is unrelated and was already needed, because
+            # "Emerald JV LP, and Acme LLC" matches the leading pattern.
             # RE2: no lookaround.
             member=_normal("split_part(CAST("+dimensions+" AS VARCHAR),'|',1)")
             for label in legacy:
                 label=' '.join(label.lower().split())
                 lab=re.escape(label)
                 terminal=r'^investmentidentifieraxis=.+?(?:,\s*|,?\s+[0-9]+\s+)'+lab+r'(?: [0-9]+)?$'
+                bare=r'^investmentidentifieraxis=.+[^,0-9 ] '+lab+r'(?: [0-9]+)?$'
                 leading=r'^investmentidentifieraxis='+lab+r',\s*.+$'
+                own_interest=r'^investmentidentifieraxis=[a-z]+ '+lab+r'(?: [0-9]+)?$'
                 leading_joint=r'^investmentidentifieraxis='+lab+r',\s*and\b'
-                matched.append('CASE WHEN (regexp_matches('+member+','+_literal(terminal)+') OR regexp_matches('+member+','+_literal(leading)+'))'
+                trailing_joint=r'\band,?\s+'+lab+r'(?: [0-9]+)?$'
+                matched.append('CASE WHEN (regexp_matches('+member+','+_literal(terminal)+') OR regexp_matches('+member+','+_literal(bare)+') OR regexp_matches('+member+','+_literal(leading)+'))'
+                    ' AND NOT regexp_matches('+member+','+_literal(own_interest)+')'
                     ' AND NOT regexp_matches('+member+','+_literal(leading_joint)+')'
+                    ' AND NOT regexp_matches('+member+','+_literal(trailing_joint)+')'
                     ' THEN ['+_literal(label)+'] ELSE []::VARCHAR[] END')
         matching='list_concat('+','.join(matched)+')' if len(matched)>1 else matched[0]
         members="array_to_string(list_transform(list_sort(list_distinct("+matching+")),x -> 'reporting_entity='||x),'|')"

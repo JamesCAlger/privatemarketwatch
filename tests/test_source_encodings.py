@@ -56,11 +56,29 @@ def test_cash_identity_requires_exact_disclosed_instrument_and_filer(cik, name, 
     ('investmentidentifieraxis=Air Canada, Emerald JV LP', 'reporting_entity=emerald jv lp'),
     ('investmentidentifieraxis=TRC Companies, Inc (fka Bolt Infrastructure Merger Sub, Inc.), Emerald JV LP', 'reporting_entity=emerald jv lp'),
     # Still parent: bare label, fund's own interest, joint "and", label inside a longer name.
+    # BCRED Emerald JV LP / BCRED Verdelite JV LP 2 (own-interest) and
+    # Acme LLC and Verdelite JV LP / Acme LLC and Emerald JV LP 1 (trailing
+    # joint) are re-asserted below as guard-load-bearing: reviewed 2026-09-17
+    # round 2 admits a bare-space terminal form (borrower + single space +
+    # label, no comma/digit before it), and without the own-interest or
+    # trailing-joint guard each of these four would incorrectly match that
+    # bare-space alternative and flip to underlying. They are not dead checks.
     ('investmentidentifieraxis=Emerald JV LP', 'parent'),
     ('investmentidentifieraxis=BCRED Verdelite JV LP 2', 'parent'),
     ('investmentidentifieraxis=Emerald JV LP, and Acme LLC', 'parent'),
     ('investmentidentifieraxis=Acme LLC and Emerald JV LP 1', 'parent'),
     ('investmentidentifieraxis=Emerald JV LP Holdings, Acme LLC', 'parent'),
+    # Reviewed 2026-09-17 round 2 (bare-space form, 2023-09-30 through
+    # 2024-03-31 only): borrower + single space + label, no comma/digit/space
+    # immediately before the label. Source: 0001803498-23-000021 c-3367 and
+    # 0001803498-24-000007 c-3689/c-4713/c-3813/c-4730/c-3831/c-3801/c-3928/
+    # c-3923/c-3924.
+    ('investmentidentifieraxis=Polyphase Elevator Holding Co. Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Auris Luxembourg III Sarl Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=Confine Visual Bidco Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Corporation Service Company Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Freeport LNG Investments, LLLP Emerald JV LP', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Alterra Mountain Company  Verdelite JV LP', 'reporting_entity=verdelite jv lp'),
 ])
 def test_reporting_suffix_does_not_turn_borrower_names_into_subsidiaries(monkeypatch, dimensions, expected):
     monkeypatch.setattr(source_encodings, 'load_encodings', lambda: ENCODINGS)
