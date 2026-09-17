@@ -17,10 +17,13 @@ MIN_POPULATION = 100
 
 
 def _label_regex(label):
-    # RE2: no lookaround. Label as a comma-separated leading or trailing segment,
-    # optionally followed by an ordinal. Parent LP interests start with the fund prefix.
+    # RE2: no lookaround. Label at string start or after comma/space, optionally
+    # followed by a space-separated ordinal or a comma. Admits both "Borrower, Label"
+    # and "<borrower> <ordinal> <label>" forms. The own-interest exclusion removes
+    # the fund's own LP wrapper (e.g. "BCRED Emerald JV LP"), keeping only true
+    # labelled parent-scope positions.
     lab = ' '.join(label.lower().split()).replace('.', '\\.')
-    return '(^|, )' + lab + '(,| [0-9]+$|$)'
+    return '(^|[ ,])' + lab + '(,| [0-9]+$|$)'
 
 
 def _own_interest_exclusion_pattern(labels):
