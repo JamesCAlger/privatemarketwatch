@@ -805,7 +805,22 @@ Inside the stage loop, immediately after `Invoke-Step "build-$stage" ...` add, g
 
 Launch detached with the quoted `-File` path. Expected timeline: snapshot 35 min, canary 8, preflight 25, unified about 2.5 h, gates 5 min, identity 55 min, evidence 35, returns 30, frontend 60, comparisons 2. Monitor `architecture-v13-sequence-v1/` and `build_v13-controller-v1.log`.
 
-Expected gate outcomes: footprint `labelled_parent_rows.0001803498` = 0; `match_method.E_entity_fingerprint` within 2x of V12's 54,435 is NOT the target, the target is that Tier E is back near the V11b level plus genuine directional recoveries. If the ratio flag fires on E because it DROPS more than 2x from V12, that is the intended correction: rerun the footprint with `--report-only`, record the numbers, and let the build continue by re-invoking the controller from the evidence stage (write a resume controller that skips completed stages; do not edit the sealed attempts). Zero packet regressions vs V12 required. Packets vs V11b may still show IRI and Truck-Lite (recorded in Task 5) and nothing else.
+Expected gate outcomes: footprint `labelled_parent_rows.0001803498` = 0 (measured, not assumed: `scratch/2026-09-17_v13_repairs/predict_v13_labelled_parent_v1.py` evaluates the repaired `pipeline.accounting_scope.scope_expression` against the immutable V12 bundle and then applies the gate's own `_label_regex`/`_own_interest_exclusion_pattern` predicate to the rows that remain parent-scoped; predicted value 0 -- the 14 rows that still match the label regex are the fund's own correctly-parent BCRED Emerald/Verdelite JV LP interests, all excluded by the gate's own-interest pattern, and no other row matches the label regex at all). `match_method.E_entity_fingerprint` within 2x of V12's 54,435 is NOT the target, the target is that Tier E is back near the V11b level plus genuine directional recoveries.
+
+TWO ratio flags are expected on this run, not one, and both are expected consequences of the named repairs -- not defects:
+1. Tier E contracting more than 2x from V12's 54,435 (Task 4: Tier E no longer settles for second best).
+2. `match_method.B2_leftover_round` growing more than 2x, because the Task 3 directional-slot repair releases tier-A-claimed end rows to B2-leftover's begin side.
+
+If the ratio flag fires on either or both of these two metrics for exactly the reasons above, that is the intended correction. Handle it like this, in order:
+
+1. Read the written JSON report at `footprint-vs-v12.json` (or the `--out` path used).
+2. Confirm `labelled_parent_rows.0001803498` equals the value finding 3 measured (0). Any other value is a stop: do not resume the build. A nonzero value means the repaired scope rule left a JV-labelled row in parent scope that the gate's own predicate also catches, which is exactly the zero-tolerance scope defect this gate exists to catch -- investigate the mechanism before touching the build again.
+3. Confirm every OTHER flag present is one of the two named ratio flags above (tier E contraction, `B2_leftover_round` growth) and, if any additional metric is flagged, treat that as a stop and investigate it on its own terms rather than folding it into the expected pair.
+4. Only after both checks pass, resume the build from the next stage by re-invoking the controller (write a resume controller that skips completed stages; do not edit the sealed attempts).
+
+Do NOT use `--report-only` to get past a flagged run. `--report-only` suppresses the exit code for every metric at once, including the zero-tolerance scope check (`labelled_parent_rows`), so using it to wave through an expected ratio flag would also silently wave through a real scope regression if one happened to land on the same run. Read the JSON report and reason about each flag by name instead; never disarm the whole gate to get past one metric.
+
+Zero packet regressions vs V12 required. Packets vs V11b may still show IRI and Truck-Lite (recorded in Task 5) and nothing else.
 
 - [ ] **Step 4: Record**
 
