@@ -344,6 +344,21 @@ def test_unified_transform_effect_attributes_live_corrections():
     assert check["literal"]["equal"] is False and check["attributed"]["equal"] is True
 
 
+def test_unified_transform_effect_replays_only_what_production_applies_to_that_quarter():
+    frame = dup_quarter(Q2)
+    add = dict(rule("x", [Q3], rule_id="add_q3"), rule_type="row_add", action="add",
+               positions=[dict(report_date=Q3, fair_value=5.0, bdc_dimensions_raw="investmentidentifieraxis=New",
+                               bdc_investment_identifier="New", issuer_name="New", source_row_id="s1")])
+    add.pop("predicate_sql")
+    pinned = dict(cik=CIK, fix_class="all_pik_normalization", scope=dict(quarters=[Q3]),
+                  template=dict(row_selector=dict(row_id="ROW-0000000000000000"), cash_rate=0.0,
+                                pik_rate=14.0, set_interest_to_cash=True))
+    check = g.unified_transform_effect(frame, published(frame), cik=CIK, corrections=[pinned],
+                                       rules=[rule(AFF_PRED, [Q2]), add])
+    assert check["ok"] is True, check
+    assert check["replayed"] == dict(corrections=[], rules=["dup_rule"])
+
+
 def test_heavy_reconstruction_is_insufficient_and_not_executed():
     calls = []
 

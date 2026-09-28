@@ -671,30 +671,58 @@ def _frame_diff(left: pd.DataFrame, right: pd.DataFrame) -> dict:
                              unkeyed_right_only=[list(p) for p in list((ub - ua).elements())[:5]]))
 
 
+def _in_scope(body: dict, quarter: str | None) -> bool:
+    quarters = [str(q) for q in (body.get("scope") or {}).get("quarters") or []]
+    return quarter is None or not quarters or "all" in quarters or quarter in quarters
+
+
+def _single_quarter(frame: pd.DataFrame) -> str | None:
+    quarters = set(frame["report_date"].astype(str).str[:10]) if "report_date" in frame else set()
+    return next(iter(quarters)) if len(quarters) == 1 else None
+
+
+def replay_quarter(staged: pd.DataFrame, *, cik: str, corrections: list, rules: list,
+                   quarter: str | None) -> tuple[pd.DataFrame, list, dict]:
+    """Production plan on ONE fund-quarter: only leaves/rules whose scope covers it.
+
+    Production runs the plan over every quarter at once; out-of-scope leaves cannot
+    touch this quarter's rows, and rows they add for other quarters are dropped here.
+    """
+    from pipeline.agent_promoted import apply_promoted_plan
+    leaves = [c for c in corrections if _in_scope(c, quarter)]
+    kept = [r for r in rules if _in_scope(r, quarter)]
+    out, audits = apply_promoted_plan(staged.copy(), leaves, {cik: kept} if kept else {})
+    if quarter is not None:
+        out = out.loc[out["report_date"].astype(str).str[:10] == quarter]
+    return out, audits, dict(corrections=[str(c.get("fix_class")) for c in leaves],
+                             rules=[str(r.get("rule_id")) for r in kept])
+
+
 def unified_transform_effect(staged: pd.DataFrame, reference, *, cik: str, corrections: list,
-                             rules: list) -> dict:
+                             rules: list, quarter: str | None = None) -> dict:
     """Staged source keys/FV vs the reference slice (spec 6.4), once per fund-quarter.
 
     `literal` is the ruling's comparison with no replay. The reference is published
     output, so live corrections alone make it differ; `attributed` replays the live
     corrections through the production plan and gates on exact equality.
     """
-    from pipeline.agent_promoted import apply_promoted_plan
     base = dict(canonicalisation=CANON_VERSION, key=list(KEY_COLUMNS),
                 gated=["row multiplicity", "fair_value", *GATED_COLUMNS],
                 diagnostic=list(DIAGNOSTIC_COLUMNS))
     if reference is None:
         return dict(base, ok=False, cause="reference_slice_missing")
     staged = staged.drop(columns=[RID], errors="ignore")
+    quarter = quarter or _single_quarter(staged)
     literal = _frame_diff(staged, reference)
     try:
-        replayed, audits = apply_promoted_plan(staged.copy(), corrections, {cik: rules} if rules else {})
+        replayed, audits, used = replay_quarter(staged, cik=cik, corrections=corrections, rules=rules,
+                                                quarter=quarter)
     except Exception as exc:  # recorded, never approximated
         return dict(base, ok=False, cause="replay_error", literal=literal,
                     error=type(exc).__name__ + ": " + str(exc)[:300])
     attributed = _frame_diff(replayed, reference)
     return dict(base, ok=attributed["equal"], cause=None if attributed["equal"] else
-                "unified_transform_effect", literal=literal, attributed=attributed,
+                "unified_transform_effect", literal=literal, attributed=attributed, replayed=used,
                 replay_audits=[{k: a.get(k) for k in ("rule_id", "status", "rows_changed", "drift")}
                                for a in audits])
 
@@ -800,7 +828,7 @@ class SliceProvider:
                 staged, seconds = self._stage(cik, raw, lease)
                 leaves, rules, _ = self._for(cik)
                 check = unified_transform_effect(staged, self.reference.get((cik, quarter)), cik=cik,
-                                                 corrections=leaves, rules=rules)
+                                                 corrections=leaves, rules=rules, quarter=quarter)
                 result = dict(status="ok", frame=with_rids(staged), check=check,
                               lease=dict(lease, seconds=seconds))
             self.log.append(dict(cik=cik, quarter=quarter, status=result["status"],
@@ -809,11 +837,10 @@ class SliceProvider:
         self._cache[slot] = result
         return result
 
-    def _replay(self, cik, staged):
-        from pipeline.agent_promoted import apply_promoted_plan
+    def _replay(self, cik, quarter, staged):
         leaves, rules, _ = self._for(cik)
-        out, _ = apply_promoted_plan(staged.drop(columns=[RID], errors="ignore"), leaves,
-                                     {cik: rules} if rules else {})
+        out, _, _ = replay_quarter(staged.drop(columns=[RID], errors="ignore"), cik=cik,
+                                   corrections=leaves, rules=rules, quarter=quarter)
         return out
 
     def anchor_frames(self, cik, quarter, stage, frame, rids):
@@ -822,7 +849,7 @@ class SliceProvider:
             return dict(status="unavailable", cause=unified["cause"])
         if not unified["check"]["ok"]:
             return dict(status="unavailable", cause="unified_transform_effect")
-        pre = self._replay(cik, unified["frame"])
+        pre = self._replay(cik, quarter, unified["frame"])
         if stage == UNIFIED:
             drop = {_key(r, UNIFIED) for r in _records(frame.loc[frame[RID].isin(list(rids))])}
             if any(None in k for k in drop):
@@ -833,7 +860,7 @@ class SliceProvider:
         if lease["requires_lease"]:
             return dict(status="unavailable", cause="heavy_reconstruction_not_executed")
         staged, _ = self._stage(cik, remaining, lease)
-        return dict(status="ok", pre=pre, post=self._replay(cik, with_rids(staged)))
+        return dict(status="ok", pre=pre, post=self._replay(cik, quarter, with_rids(staged)))
 
 
 # ------------------------------------------------------------------ graduation
@@ -1089,7 +1116,8 @@ def run_m3(paths) -> dict:
     checks = [dict(cik=e["cik"], quarter=e["quarter"], status=e["status"], cause=e["cause"],
                    lease=e["lease"], ok=(e["check"] or {}).get("ok"),
                    literal=(e["check"] or {}).get("literal"), attributed=(e["check"] or {}).get("attributed"),
-                   check_cause=(e["check"] or {}).get("cause")) for e in provider.log]
+                   check_cause=(e["check"] or {}).get("cause"), error=(e["check"] or {}).get("error"),
+                   replayed=(e["check"] or {}).get("replayed")) for e in provider.log]
     labels = {r["label"]: r for r in man["inputs"]}
     summary.update(
         run_id=paths.run_id, stage="m3-light", version=GRADUATE_VERSION, band=band,
