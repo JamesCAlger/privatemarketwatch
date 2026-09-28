@@ -81,6 +81,9 @@
         "sha256_before": {
           "$ref": "#/$defs/sha_or_null"
         },
+        "sha256_parsed": {
+          "$ref": "#/$defs/sha_or_null"
+        },
         "sha256_after": {
           "$ref": "#/$defs/sha_or_null"
         },
@@ -154,6 +157,13 @@
         },
         "elapsed_seconds": {
           "type": "number",
+          "minimum": 0
+        },
+        "nested_facts": {
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         }
       }

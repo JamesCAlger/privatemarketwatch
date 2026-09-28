@@ -25,7 +25,7 @@ from scripts.profile_pilot.census_collect import (  # noqa: F401  (Bounds re-exp
 
 SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "census_v0.schema.json"
 ROLE_SOURCE = "pipeline/context_inventory.py:classify_context"
-CENSUS_VERSION = "census.v0.2"
+CENSUS_VERSION = "census.v0.3"  # v0.3: fed parse + whole-collection time bound + nested-item scan
 _STANDARD_NS = re.compile(r"https?://(?:fasb\.org/(?:us-gaap|srt|us-gaap-sup)|xbrl\.sec\.gov/dei)/")
 
 
@@ -332,16 +332,18 @@ def _metric(name: str, value, depends: list, channels: dict) -> dict:
 
 
 def build_census(path, meta: dict, *, bounds: Bounds = Bounds(), aggregate_markers: dict | None = None,
-                 learned_predicates: list | None = None, grammar: dict | None = None) -> dict:
+                 learned_predicates: list | None = None, grammar: dict | None = None,
+                 clock=None) -> dict:
     """Collect, classify, assemble and run the detectors for one instance.
 
     `meta` holds cik, report_date, accession_number, form_type, role. The wrapper
     `aggregate_markers` (optional) reach only the subtotal detector as inherited
     corroboration. `grammar` ({path, sha256, body}: the authored identifier_rate_grammars
     file, optional) reaches only the partition detector's grammar_dialect discriminator.
+    `clock` (tests only) replaces the collection time bound's clock.
     """
     from scripts.profile_pilot import census_detect
-    collected = collect_instance(path, bounds=bounds)
+    collected = collect_instance(path, bounds=bounds, clock=clock)
     channels = collected["channels"]
     mappings = classify_with_dependencies(collected, meta["cik"])
     facts, contexts = collected["facts"], collected["contexts"]
@@ -367,11 +369,13 @@ def build_census(path, meta: dict, *, bounds: Bounds = Bounds(), aggregate_marke
                       accession_number=meta.get("accession_number"), form_type=meta.get("form_type"),
                       role=meta.get("role"), path=collected["source"]["path"],
                       sha256_before=collected["source"]["sha256_before"],
+                      sha256_parsed=collected["source"]["sha256_parsed"],
                       sha256_after=collected["source"]["sha256_after"],
                       bytes=collected["source"]["bytes"]),
         bounds=asdict(bounds),
         collection=dict(state=collection_state(channels, errors), errors=errors,
-                        elapsed_seconds=collected["elapsed_seconds"]),
+                        elapsed_seconds=collected["elapsed_seconds"],
+                        nested_facts=collected["nested_facts"]),
         channels=channels,
         document_metadata=dict(
             document_period_end_dates=dped,

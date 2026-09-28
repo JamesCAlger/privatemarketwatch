@@ -70,13 +70,36 @@ def _ascii(text: str) -> str:
 
 # ---------------------------------------------------------------- collection
 
+PARSE_CHUNK_BYTES = 1 << 20
+CLOCK_EVERY = 256
+# Collection stages in order; a time bound at a stage truncates it and every later channel.
+STAGE_CHANNELS = (("parse", CHANNELS), ("contexts", ("contexts", "identifiers")), ("units", ("units",)),
+                  ("facts", ("numeric_facts", "text_facts")), ("nested_scan", ("numeric_facts", "text_facts")),
+                  ("text_facts", ("text_facts",)), ("footnotes", ("footnotes",)))
+
+
+class TimeBound(Exception):
+    """The collection time bound expired at `stage` (every stage checks the clock)."""
+
+    def __init__(self, stage: str, seconds: float):
+        super().__init__("time bound " + str(seconds) + " s exceeded during " + stage)
+        self.stage, self.seconds = stage, seconds
+
+
 class _Clock:
+    """Wall-clock bound for the WHOLE collection: parse (per fed chunk), context and unit
+    enumeration, fact and text loops, the nested-item scan and footnote arcs."""
+
     def __init__(self, seconds: float):
         self.started = time.monotonic()
         self.seconds = seconds
 
     def expired(self) -> bool:
-        return time.monotonic() - self.started > self.seconds
+        return time.monotonic() - self.started >= self.seconds
+
+    def check(self, stage: str) -> None:
+        if self.expired():
+            raise TimeBound(stage, self.seconds)
 
 
 def _channels(state: str, reason: str | None = None) -> dict:
@@ -98,15 +121,18 @@ def _prefixed(node) -> str:
     return (prefix + ":" + local) if prefix else local
 
 
-def _collect_contexts(root, bounds: Bounds, channels: dict, internal: dict) -> list:
+def _collect_contexts(root, bounds: Bounds, channels: dict, internal: dict, clock) -> list:
     contexts = []
+    clock.check("contexts")
     nodes = root.findall("{%s}context" % XBRLI)
     channels["contexts"]["count"] = len(nodes)
     if len(nodes) > bounds.max_contexts:
         channels["contexts"].update(state="truncated", reason="context bound " + str(bounds.max_contexts))
         nodes = nodes[: bounds.max_contexts]
     seen = set()
-    for node in nodes:
+    for number, node in enumerate(nodes):
+        if number % CLOCK_EVERY == 0:
+            clock.check("contexts")
         cid = node.get("id", "")
         if not cid or cid in seen:
             channels["contexts"].update(state="failed", reason="missing or duplicate context id")
@@ -149,10 +175,13 @@ def _collect_contexts(root, bounds: Bounds, channels: dict, internal: dict) -> l
     return contexts
 
 
-def _collect_units(root, channels: dict) -> dict:
+def _collect_units(root, channels: dict, clock) -> dict:
     from pipeline.monetary_units import unit_definition
     units = {}
-    for unit in root.findall("{%s}unit" % XBRLI):
+    clock.check("units")
+    for number, unit in enumerate(root.findall("{%s}unit" % XBRLI)):
+        if number % CLOCK_EVERY == 0:
+            clock.check("units")
         uid = unit.get("id", "")
         measures = [" ".join(" ".join(m.itertext()).split()) for m in unit.iter("{%s}measure" % XBRLI)]
         definition = unit_definition(unit)
@@ -185,6 +214,7 @@ def collect_facts(root, contexts: dict, units: dict, bounds: Bounds, channels: d
     """
     facts, pending = [], []
     total = 0
+    clock.check("facts")
     for node in root:
         if not isinstance(node.tag, str):
             continue
@@ -192,11 +222,11 @@ def collect_facts(root, contexts: dict, units: dict, bounds: Bounds, channels: d
         if context_ref is None:
             continue
         total += 1
-        if total > bounds.max_facts or (total % 1000 == 0 and clock.expired()):
-            reason = ("fact bound " + str(bounds.max_facts) if total > bounds.max_facts
-                      else "time bound " + str(bounds.timeout_seconds) + " s")
+        if total % CLOCK_EVERY == 0:
+            clock.check("facts")
+        if total > bounds.max_facts:
             for name in ("numeric_facts", "text_facts"):
-                channels[name].update(state="truncated", reason=reason)
+                channels[name].update(state="truncated", reason="fact bound " + str(bounds.max_facts))
             break
         record = dict(i=len(facts), id=node.get("id"), qname=_prefixed(node), namespace=_ns(node.tag),
                       context_id=context_ref, context_resolved=context_ref in contexts,
@@ -217,6 +247,20 @@ def collect_facts(root, contexts: dict, units: dict, bounds: Bounds, channels: d
             pending.append((len(facts), node))
         facts.append(record)
     return facts, pending
+
+
+def scan_nested_facts(root, root_level: int, channels: dict, clock) -> int:
+    """Ruling R21: facts are read at root level only (EDGAR forbids tuples). Any element
+    carrying contextRef below root level is an unread fact, so both fact channels are
+    downgraded to truncated and absence becomes unobservable."""
+    clock.check("nested_scan")
+    nested = int(root.xpath("count(//*[@contextRef])")) - root_level
+    clock.check("nested_scan")
+    if nested > 0:
+        for name in ("numeric_facts", "text_facts"):
+            channels[name].update(state="truncated", reason="nested item facts not collected: "
+                                  + str(nested) + " (root-level fact iteration only; ruling R21)")
+    return nested
 
 
 def _text_kind(text: str) -> tuple[str, object]:
@@ -245,11 +289,10 @@ def collect_text_facts(pending: list, facts: list, root, bounds: Bounds, channel
     arc was read; otherwise `unsupported` (no footnote linkbase resolver is built).
     """
     budget = bounds.max_text_chars
+    clock.check("text_facts")
     for index, node in pending:
         record = facts[index]
-        if clock.expired():
-            channels["text_facts"].update(state="truncated", reason="time bound")
-            break
+        clock.check("text_facts")
         if node.get(XSI_NIL) in ("true", "1"):
             record.update(value_kind="text", status="nil", value=None, raw="")
             channels["text_facts"]["count"] += 1
@@ -273,10 +316,11 @@ def collect_text_facts(pending: list, facts: list, root, bounds: Bounds, channel
         else:
             record["raw"] = text
         channels["text_facts"]["count"] += 1
-    return _collect_footnotes(root, facts, bounds, channels, texts)
+    return _collect_footnotes(root, facts, bounds, channels, texts, clock)
 
 
-def _collect_footnotes(root, facts: list, bounds: Bounds, channels: dict, texts: dict) -> dict:
+def _collect_footnotes(root, facts: list, bounds: Bounds, channels: dict, texts: dict, clock) -> dict:
+    clock.check("footnotes")
     links = root.findall("{%s}footnoteLink" % LINK)
     empty = dict(resources=[], arcs=0, unresolved_locators=0, links=len(links))
     if not links:
@@ -287,8 +331,12 @@ def _collect_footnotes(root, facts: list, bounds: Bounds, channels: dict, texts:
     resources, arcs, unresolved = {}, 0, 0
     locators: dict[str, str] = {}
     pairs = []
+    seen_nodes = 0
     for link in links:
         for node in link:
+            seen_nodes += 1
+            if seen_nodes % CLOCK_EVERY == 0:
+                clock.check("footnotes")
             if not isinstance(node.tag, str):
                 continue
             local = _local(node.tag)
@@ -328,62 +376,99 @@ def _collect_footnotes(root, facts: list, bounds: Bounds, channels: dict, texts:
                 unresolved_locators=unresolved, links=len(links))
 
 
-def collect_instance(path, *, bounds: Bounds = Bounds()) -> dict:
+def _parse_fed(path: Path, clock) -> tuple:
+    """Feed the file to lxml in chunks, hashing exactly the bytes parsed and checking the
+    clock after every chunk, so the time bound covers the parse itself."""
+    from lxml import etree
+    parser = etree.XMLParser(no_network=True, resolve_entities=False, load_dtd=False,
+                             dtd_validation=False, recover=False, huge_tree=True)
+    digest = hashlib.sha256()
+    clock.check("parse")
+    with open(path, "rb") as stream:
+        for chunk in iter(lambda: stream.read(PARSE_CHUNK_BYTES), b""):
+            digest.update(chunk)
+            parser.feed(chunk)
+            clock.check("parse")
+    root = parser.close()
+    return root, digest.hexdigest()
+
+
+def collect_instance(path, *, bounds: Bounds = Bounds(), clock=None) -> dict:
     """Parse ONE instance once; return the raw collection plus in-memory texts.
 
     Never raises for source problems: a failed or bounded collection is returned
     with explicit channel states so no caller can mistake it for a complete census.
+    The time bound covers every stage (parse chunks, contexts, units, facts, the
+    nested-item scan, text typing, footnote arcs); when it expires, the stage in
+    progress and every channel not yet finished are `truncated`.
     """
     from lxml import etree
-    clock = _Clock(bounds.timeout_seconds)
+    started = time.monotonic()
+    clock = clock or _Clock(bounds.timeout_seconds)
     path = Path(path)
     channels = _channels("not_collected")
-    out = dict(source=dict(path=str(path), sha256_before=None, sha256_after=None, bytes=None),
+    out = dict(source=dict(path=str(path), sha256_before=None, sha256_parsed=None, sha256_after=None,
+                           bytes=None),
                errors=[], contexts=[], units={}, facts=[], footnotes=dict(resources=[], arcs=0,
-               unresolved_locators=0, links=0), channels=channels, _internal={}, _texts={})
+               unresolved_locators=0, links=0), channels=channels, _internal={}, _texts={},
+               nested_facts=None)
+    done: set[str] = set()
     try:
         before = path.stat()
         out["source"]["bytes"] = before.st_size
         if before.st_size > bounds.max_bytes:
             raise ValueError("source exceeds byte bound " + str(bounds.max_bytes))
         out["source"]["sha256_before"] = _sha256_file(path)
-        parser = etree.XMLParser(no_network=True, resolve_entities=False, load_dtd=False,
-                                 dtd_validation=False, recover=False, huge_tree=True)
-        tree = etree.parse(str(path), parser)
+        root, parsed = _parse_fed(path, clock)
+        out["source"]["sha256_parsed"] = parsed
+        if parsed != out["source"]["sha256_before"]:
+            raise ValueError("source changed between hashing and parsing")
+        tree = root.getroottree()
         if tree.docinfo.doctype or tree.docinfo.internalDTD is not None:
             raise ValueError("DTD is not permitted in an XBRL instance")
-        root = tree.getroot()
         if root.tag != "{%s}xbrl" % XBRLI:
             raise ValueError("root element is not xbrli:xbrl")
         for name in CHANNELS:
             channels[name].update(state="not_collected", reason=None)
         channels["contexts"]["state"] = "complete"
-        out["contexts"] = _collect_contexts(root, bounds, channels, out["_internal"])
+        out["contexts"] = _collect_contexts(root, bounds, channels, out["_internal"], clock)
         channels["identifiers"].update(state=channels["contexts"]["state"],
                                        reason=channels["contexts"]["reason"],
                                        count=sum(len(c["typed_dimensions"]) for c in out["contexts"]))
+        done |= {"contexts", "identifiers"}
         channels["units"]["state"] = "complete"
-        out["units"] = _collect_units(root, channels)
+        out["units"] = _collect_units(root, channels, clock)
+        done.add("units")
         context_ids = {c["id"] for c in out["contexts"]}
         for name in ("numeric_facts", "text_facts"):
             channels[name]["state"] = "complete"
         facts, pending = collect_facts(root, context_ids, out["units"], bounds, channels, clock)
         out["facts"] = facts
+        if channels["numeric_facts"]["state"] == "complete":
+            out["nested_facts"] = scan_nested_facts(root, len(facts), channels, clock)
+        done.add("numeric_facts")
         out["footnotes"] = collect_text_facts(pending, facts, root, bounds, channels,
                                               out["_texts"], clock)
+        done |= {"text_facts", "footnotes"}
         del tree, root
         after = path.stat()
         out["source"]["sha256_after"] = _sha256_file(path)
         if (before.st_size, before.st_mtime_ns, out["source"]["sha256_before"]) != (
                 after.st_size, after.st_mtime_ns, out["source"]["sha256_after"]):
             raise ValueError("source changed during collection")
+    except TimeBound as exc:
+        for name in CHANNELS:
+            if name not in done:
+                channels[name].update(state="truncated", reason=_ascii(str(exc)))
+        if exc.stage == "parse":
+            out.update(contexts=[], facts=[], units={}, _internal={}, _texts={})
     except (OSError, ValueError, etree.XMLSyntaxError) as exc:
         out["errors"].append(_ascii(type(exc).__name__ + ": " + str(exc))[:500])
         for name in CHANNELS:
             channels[name].update(state="failed", reason="collection failed")
         out.update(contexts=[], facts=[], units={}, _internal={}, _texts={})
         out["footnotes"] = dict(resources=[], arcs=0, unresolved_locators=0, links=0)
-    out["elapsed_seconds"] = round(time.monotonic() - clock.started, 3)
+    out["elapsed_seconds"] = round(time.monotonic() - started, 3)
     return out
 
 

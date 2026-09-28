@@ -796,7 +796,7 @@ def test_light_fund_quarter_runs_through_the_cached_stage(tmp_path):
     entry = _entry(paths, CIK, "0000000000-23-000001", document(contexts, facts))
     first = census_run.census_fund_quarter(paths, entry, lease_factory=None)
     assert first["status"] == "collected" and first["cache"] == "miss"
-    written = json.loads((paths.run_root / "census" / CIK / (Q + ".json")).read_text(encoding="ascii"))
+    written = json.loads(Path(first["path"]).read_text(encoding="ascii"))  # census/{cik}/{date}/{fp}.json
     assert written["complete"] is True
     assert census.validate_census(written["result"])["ok"] is True
     again = census_run.census_fund_quarter(paths, entry, lease_factory=None)
@@ -808,8 +808,9 @@ def test_runner_passes_the_authored_grammar_as_an_inherited_dependency(tmp_path)
     contexts, facts = position("p1", "Acme Corp", "100")
     tcw = "0001715933"  # has data/overrides/identifier_rate_grammars/0001715933.json
     entry = _entry(paths, tcw, "0000950170-23-000001", document(contexts, facts).replace(CIK, tcw))
-    assert census_run.census_fund_quarter(paths, entry, lease_factory=None)["status"] == "collected"
-    body = json.loads((paths.run_root / "census" / tcw / (Q + ".json")).read_text(encoding="ascii"))
+    got = census_run.census_fund_quarter(paths, entry, lease_factory=None)
+    assert got["status"] == "collected"
+    body = json.loads(Path(got["path"]).read_text(encoding="ascii"))
     assert body["identity"]["dependencies"]["grammar"]["status"] == "present"
     deps = {d["name"]: d for d in body["result"]["dependencies"]}
     assert deps["identifier_rate_grammar"]["path"].endswith(tcw + ".json")
@@ -817,8 +818,8 @@ def test_runner_passes_the_authored_grammar_as_an_inherited_dependency(tmp_path)
     assert grammar["provenance"] == "inherited" and grammar["inherited_from"].endswith(tcw + ".json")
     # Stellus has no authored grammar: the discriminator is insufficient with that cause.
     stellus = _entry(paths, CIK, "0000000000-23-000001", document(contexts, facts))
-    census_run.census_fund_quarter(paths, stellus, lease_factory=None)
-    body = json.loads((paths.run_root / "census" / CIK / (Q + ".json")).read_text(encoding="ascii"))
+    got = census_run.census_fund_quarter(paths, stellus, lease_factory=None)
+    body = json.loads(Path(got["path"]).read_text(encoding="ascii"))
     grammar = body["result"]["detectors"]["partition"]["outcomes"][0]["evidence"]["grammar_dialect"]
     assert grammar["cause"] == "no_authored_grammar"
 
