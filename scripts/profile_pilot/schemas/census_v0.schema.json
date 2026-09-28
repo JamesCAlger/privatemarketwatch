@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "census_v0.schema.json",
+  "title": "Filer-profile pilot census v0 (one instance, one fund-quarter)",
+  "type": "object",
+  "required": ["census_version", "schema", "document", "bounds", "collection", "channels",
+               "document_metadata", "periods", "units", "contexts", "facts", "footnotes",
+               "concept_mappings", "dependencies", "positions", "conflicts", "fund_income",
+               "fund_balance", "detectors", "metrics", "summary", "notes"],
+  "properties": {
+    "census_version": {"type": "string", "pattern": "^census\\.v0\\."},
+    "schema": {"const": "census_v0"},
+    "document": {
+      "type": "object",
+      "required": ["cik", "report_date", "accession_number", "form_type", "role", "path",
+                   "sha256_before", "sha256_after", "bytes"],
+      "properties": {
+        "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
+        "report_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "accession_number": {"type": ["string", "null"]},
+        "form_type": {"type": ["string", "null"]},
+        "role": {"type": ["string", "null"]},
+        "path": {"type": "string"},
+        "sha256_before": {"$ref": "#/$defs/sha_or_null"},
+        "sha256_after": {"$ref": "#/$defs/sha_or_null"},
+        "bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "bounds": {
+      "type": "object",
+      "required": ["max_bytes", "max_contexts", "max_facts", "max_text_chars", "max_footnote_arcs",
+                   "timeout_seconds"],
+      "additionalProperties": false,
+      "properties": {
+        "max_bytes": {"type": "integer", "minimum": 1},
+        "max_contexts": {"type": "integer", "minimum": 1},
+        "max_facts": {"type": "integer", "minimum": 1},
+        "max_text_chars": {"type": "integer", "minimum": 1},
+        "max_footnote_arcs": {"type": "integer", "minimum": 1},
+        "timeout_seconds": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "collection": {
+      "type": "object",
+      "required": ["state", "errors", "elapsed_seconds"],
+      "properties": {
+        "state": {"enum": ["complete", "incomplete", "failed"]},
+        "errors": {"type": "array", "items": {"type": "string"}},
+        "elapsed_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "channels": {
+      "type": "object",
+      "required": ["contexts", "units", "numeric_facts", "text_facts", "footnotes", "identifiers"],
+      "additionalProperties": false,
+      "patternProperties": {"^[a-z_]+$": {"$ref": "#/$defs/channel"}}
+    },
+    "document_metadata": {
+      "type": "object",
+      "required": ["document_period_end_dates", "document_types", "entity_identifiers", "note"],
+      "properties": {
+        "document_period_end_dates": {"type": "array", "items": {"type": "string"}},
+        "document_types": {"type": "array", "items": {"type": "string"}},
+        "entity_identifiers": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "periods": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "contexts", "facts", "relation"],
+        "properties": {
+          "kind": {"enum": ["instant", "duration", "forever", "unresolved"]},
+          "relation": {"enum": ["document_period_end", "comparative", "no_document_period_end",
+                                "forever", "unresolved"]},
+          "contexts": {"type": "integer", "minimum": 0},
+          "facts": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["unit_kind", "currency", "measures"],
+        "properties": {
+          "unit_kind": {"enum": ["monetary", "pure", "shares", "unresolved"]},
+          "currency": {"type": ["string", "null"]},
+          "measures": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "contexts": {"type": "array", "items": {"$ref": "#/$defs/context"}},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/fact"}},
+    "footnotes": {
+      "type": "object",
+      "required": ["resources", "arcs", "unresolved_locators", "links"],
+      "properties": {
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "text_chars", "text_sha256", "preview", "fact_indices"],
+            "properties": {
+              "fact_indices": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+              "text_sha256": {"$ref": "#/$defs/sha"}
+            }
+          }
+        },
+        "arcs": {"type": "integer", "minimum": 0},
+        "unresolved_locators": {"type": "integer", "minimum": 0},
+        "links": {"type": "integer", "minimum": 0}
+      }
+    },
+    "concept_mappings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["field", "group", "provenance", "inherited_from", "rule"],
+        "properties": {
+          "field": {"type": ["string", "null"]},
+          "group": {"type": "string"},
+          "provenance": {"$ref": "#/$defs/provenance"},
+          "inherited_from": {"type": ["string", "null"]}
+        },
+        "if": {"properties": {"provenance": {"const": "inherited"}}},
+        "then": {"properties": {"inherited_from": {"type": "string", "minLength": 1}}}
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "sha256", "provenance", "used_for"],
+        "properties": {"provenance": {"const": "inherited"}}
+      }
+    },
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["observation_id", "context_id", "period", "identity", "dimension_fields", "fields"],
+        "properties": {
+          "identity": {
+            "type": "object",
+            "required": ["typed_identifier", "dimensions", "typed_dimensions"],
+            "properties": {"dimensions": {"$ref": "#/$defs/qname_pairs"}}
+          },
+          "fields": {"type": "object", "additionalProperties": {"$ref": "#/$defs/field_value"}}
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["context_id", "field", "reason", "fact_indices"],
+        "properties": {"reason": {"$ref": "#/$defs/conflict_reason"}}
+      }
+    },
+    "fund_income": {"type": "array", "items": {"$ref": "#/$defs/fund_fact"}},
+    "fund_balance": {"type": "array", "items": {"$ref": "#/$defs/fund_fact"}},
+    "detectors": {
+      "type": "object",
+      "required": ["subtotal", "alternate_view", "non_disclosure", "partition"],
+      "additionalProperties": false,
+      "patternProperties": {"^[a-z_]+$": {"$ref": "#/$defs/detector"}}
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "depends_on_channels", "completeness"],
+        "properties": {
+          "completeness": {"enum": ["complete", "incomplete"]},
+          "depends_on_channels": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/channel_name"}}
+        }
+      }
+    },
+    "summary": {"type": "object"},
+    "notes": {"type": "array", "items": {"type": "string"}},
+    "measurement": {"type": "object"}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sha_or_null": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]},
+    "provenance": {"enum": ["derived", "inherited"]},
+    "channel_name": {"enum": ["contexts", "units", "numeric_facts", "text_facts", "footnotes", "identifiers"]},
+    "channel": {
+      "type": "object",
+      "required": ["state", "reason", "count"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {"enum": ["complete", "truncated", "failed", "unsupported", "not_collected"]},
+        "reason": {"type": ["string", "null"]},
+        "count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "qname": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*:[A-Za-z_][A-Za-z0-9_.-]*$"},
+    "qname_pairs": {
+      "type": "array",
+      "items": {"type": "array", "prefixItems": [{"$ref": "#/$defs/qname"}, {"$ref": "#/$defs/qname"}],
+                "minItems": 2, "maxItems": 2}
+    },
+    "context": {
+      "type": "object",
+      "required": ["id", "entity", "period", "dimensions", "typed_dimensions", "role", "role_reason",
+                   "role_provenance"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "period": {
+          "type": "object",
+          "required": ["kind"],
+          "properties": {"kind": {"enum": ["instant", "duration", "forever", "unresolved"]}}
+        },
+        "dimensions": {"$ref": "#/$defs/qname_pairs"},
+        "typed_dimensions": {
+          "type": "array",
+          "items": {"type": "object", "required": ["axis", "value"], "additionalProperties": false,
+                    "properties": {"axis": {"type": "string"}, "value": {"type": "string"}}}
+        },
+        "role": {"enum": ["confirmed_position", "aggregate", "unresolved", "no_investment_facts"]},
+        "role_provenance": {"$ref": "#/$defs/provenance"}
+      }
+    },
+    "fact": {
+      "type": "object",
+      "required": ["i", "id", "qname", "namespace", "context_id", "context_resolved", "decimals",
+                   "precision", "unit_ref", "lang", "field", "group", "value_kind", "status", "value", "raw"],
+      "properties": {
+        "i": {"type": "integer", "minimum": 0},
+        "value_kind": {"enum": ["numeric", "text", "date", "boolean", "enumeration"]},
+        "status": {"enum": ["reported", "nil", "invalid", "not_collected"]},
+        "value": {"type": ["string", "boolean", "null"]},
+        "raw": {"type": "string"},
+        "text_stored": {"enum": ["full", "preview"]},
+        "text_sha256": {"$ref": "#/$defs/sha"},
+        "unit_kind": {"enum": ["monetary", "pure", "shares", "unresolved"]}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"enum": ["nil", "invalid", "not_collected"]}}},
+         "then": {"properties": {"value": {"type": "null"}}}},
+        {"if": {"properties": {"value_kind": {"const": "numeric"}}, "required": ["value_kind"]},
+         "then": {"required": ["unit_kind", "currency"]}}
+      ]
+    },
+    "conflict_reason": {"enum": ["status_differs", "unit_differs", "decimals_differ", "value_differs"]},
+    "field_value": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["reported", "consistent_duplicate", "nil", "invalid", "not_collected",
+                            "conflict", "absent", "unobservable"]},
+        "reason": {"type": ["string", "null"]},
+        "fact_indices": {"type": "array", "items": {"type": "integer", "minimum": 0}}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"const": "conflict"}}},
+         "then": {"required": ["reason", "value", "fact_indices"],
+                  "properties": {"value": {"type": "null"}, "reason": {"$ref": "#/$defs/conflict_reason"},
+                                 "fact_indices": {"minItems": 2}}}}
+      ]
+    },
+    "fund_fact": {
+      "type": "object",
+      "required": ["fact_index", "field", "qname", "context_id", "period", "scope", "status", "value"],
+      "properties": {"scope": {"enum": ["fund", "dimensioned"]}}
+    },
+    "outcome": {
+      "type": "object",
+      "required": ["detector", "subject", "outcome", "finding", "evidence", "provenance",
+                   "depends_on_channels"],
+      "additionalProperties": false,
+      "properties": {
+        "detector": {"enum": ["subtotal", "alternate_view", "non_disclosure", "partition"]},
+        "subject": {"type": "object"},
+        "outcome": {"enum": ["candidate", "resolved", "insufficient_evidence"]},
+        "finding": {"type": "string", "minLength": 1},
+        "evidence": {"type": "object"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "depends_on_channels": {"type": "array", "items": {"$ref": "#/$defs/channel_name"}}
+      },
+      "not": {"properties": {"finding": {"pattern": "full_filing"}}}
+    },
+    "detector": {
+      "type": "object",
+      "required": ["version", "depends_on_channels", "channel_states", "outcomes", "counts"],
+      "properties": {
+        "outcomes": {"type": "array", "items": {"$ref": "#/$defs/outcome"}},
+        "counts": {
+          "type": "object",
+          "required": ["candidate", "resolved", "insufficient_evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "candidate": {"type": "integer", "minimum": 0},
+            "resolved": {"type": "integer", "minimum": 0},
+            "insufficient_evidence": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}
