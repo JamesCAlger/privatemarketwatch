@@ -12,13 +12,21 @@ same entity/date/currency/scope basis plus heading evidence is required; no subs
 search); a missing concept is `not_observed_in_complete_instance` only when the
 concept, identifier, text and footnote channels are all complete; partitions are
 structural predicates in the envelope vocabulary, never row positions.
+
+Subtotal: a "Total ..." label that matches no sum is never resolved as not-a-subtotal;
+only position-level tranche facts (maturity, rate, spread) on the context rule it out.
+Partition: the candidate signature is two delimiters each above 20% prevalence, or a
+multi-modal segment count on one delimiter; the discriminator search then runs
+(punctuation inside one segment, axis member, carrying concept, segment count, shared
+prefix vocabulary, and the inherited authored grammar dialect). Every outcome carries
+provenance/inherited_from; an outcome resting only on inherited input is `inherited`.
 """
 from __future__ import annotations
 
 from decimal import Decimal
 import re
 
-DETECTOR_VERSION = "census-detect.v0.1"
+DETECTOR_VERSION = "census-detect.v0.2"
 OUTCOMES = ("candidate", "resolved", "insufficient_evidence")
 SCOPE_AXES = frozenset({"consolidatedentitiesaxis", "consolidationitemsaxis"})
 LABEL_RE = re.compile(r"^\s*(sub-?\s*)?totals?\b", re.IGNORECASE)
@@ -58,10 +66,13 @@ def _local(tag: str) -> str:
     return str(tag).rsplit("}", 1)[-1].rsplit(":", 1)[-1]
 
 
-def _outcome(detector, subject, outcome, finding, evidence, *, provenance="derived") -> dict:
+def _outcome(detector, subject, outcome, finding, evidence, *, provenance="derived",
+             inherited_from=None) -> dict:
+    """One detector outcome. `inherited` only when the outcome rests solely on inherited input."""
     assert outcome in OUTCOMES
+    assert (provenance == "inherited") == bool(inherited_from), "inherited outcomes name their source"
     return dict(detector=detector, subject=subject, outcome=outcome, finding=finding,
-                evidence=evidence, provenance=provenance,
+                evidence=evidence, provenance=provenance, inherited_from=inherited_from,
                 depends_on_channels=list(DEPENDS[detector]))
 
 
@@ -121,6 +132,10 @@ def detect_subtotals(doc: dict, aggregate_markers: dict | None) -> list:
     for context in contexts.values():
         groups.setdefault((context["entity"]["identifier"], _period_key(context)), []).append(context)
     markers = (aggregate_markers or {}).get("markers") or []
+    reported: dict[str, set] = {}
+    for fact in doc["facts"]:
+        if fact["field"] in NON_BALANCE and fact["status"] == "reported":
+            reported.setdefault(fact["context_id"], set()).add(fact["field"])
     out = []
     for members in groups.values():
         dims = {c["id"]: _dims(c) for c in members}
@@ -183,7 +198,15 @@ def detect_subtotals(doc: dict, aggregate_markers: dict | None) -> list:
                             evaluated_sets=[dict(set=k, size=len(i)) for k, i in sets],
                             wrapper_marker=marker_evidence)
             structural = [m for m in matches if m["set"] != "labelled_peer_group"]
-            if structural:
+            tranche = sorted(reported.get(pid, ()))
+            evidence["position_tranche_fields"] = tranche
+            if labelled and tranche and not structural:
+                # A "Total ..." label on a context that carries position-level tranche facts
+                # (maturity, rate, spread) is a position (e.g. Total Safety), even if a peer
+                # sum happens to match.
+                out.append(_outcome("subtotal", subject, "resolved", "not_subtotal",
+                                    dict(evidence, reason="label carries position-level tranche facts")))
+            elif structural:
                 evidence["children"] = structural[0]["children"]
                 if heading in ("undimensioned_fund_context", "category_only_dimensions"):
                     out.append(_outcome("subtotal", subject, "resolved", "structural_subtotal", evidence))
@@ -199,9 +222,16 @@ def detect_subtotals(doc: dict, aggregate_markers: dict | None) -> list:
             elif heading in ("undimensioned_fund_context", "category_only_dimensions"):
                 out.append(_outcome("subtotal", subject, "candidate", "heading_without_sum_match", evidence))
             elif marker_evidence:
-                out.append(_outcome("subtotal", subject, "candidate", "wrapper_marker_only", evidence))
+                out.append(_outcome("subtotal", subject, "candidate", "wrapper_marker_only", evidence,
+                                    provenance="inherited", inherited_from=marker_evidence["inherited_from"]))
+            elif labelled:
+                # Missing one fixed peer sum is not evidence against a subtotal.
+                out.append(_outcome("subtotal", subject, "insufficient_evidence",
+                                    "total_label_without_sum_match", evidence))
             else:
-                out.append(_outcome("subtotal", subject, "resolved", "not_subtotal", evidence))
+                out.append(_outcome("subtotal", subject, "resolved", "not_subtotal",
+                                    dict(evidence, reason="inherited role is confirmed_position and no "
+                                         "structural child set sums to it")))
     return out
 
 
@@ -323,6 +353,7 @@ def detect_non_disclosure(doc: dict, texts: dict) -> list:
     return out
 
 
+
 # ---------------------------------------------------------------- partition
 
 def _profile(rows: list) -> dict:
@@ -347,26 +378,169 @@ def _matches(predicate: dict, row: dict) -> bool | None:
         return None
 
 
-def _candidates_for(group: list, delims: tuple) -> list:
+def _candidates_for(group: list, defining: tuple) -> list:
     preds = []
     pairs = sorted({tuple(p) for r in group for p in r["dimensions"]})
     preds += [dict(kind="axis_member", axis=a, member=m) for a, m in pairs]
     concepts = sorted({r["fair_value_concept"] for r in group if r["fair_value_concept"]})
     preds += [dict(kind="carrying_concept", field="fair_value", concept=c) for c in concepts]
-    # Segment counts on the delimiters that DEFINE the split only restate the signature
+    # Segment counts on the delimiters that DEFINE the signature only restate it
     # (e.g. count 1 = "delimiter absent"); they are not independent discriminators.
     for delim in DELIMITERS:
-        if delim in delims:
+        if delim in defining:
             continue
         counts = sorted({len(r["investment_identifier"].split(delim)) for r in group})
         preds += [dict(kind="segment_count", delimiter=delim, count=k) for k in counts if k > 1]
-    tokens = sorted({(r["investment_identifier"].split() or [""])[0] for r in group})
-    if tokens and "" not in tokens and len(tokens) <= MAX_PREFIX_VOCABULARY:
-        preds.append(dict(kind="prefix", vocabulary=tokens))
+    # A prefix vocabulary must be SHARED (each entry on >= 2 rows): unique borrower
+    # names are not a vocabulary.
+    tokens: dict[str, int] = {}
+    for r in group:
+        token = (r["investment_identifier"].split() or [""])[0]
+        tokens[token] = tokens.get(token, 0) + 1
+    if tokens and "" not in tokens and len(tokens) <= MAX_PREFIX_VOCABULARY and min(tokens.values()) >= 2:
+        preds.append(dict(kind="prefix", vocabulary=sorted(tokens)))
+    dialects = sorted({r["grammar_dialect"] for r in group if r.get("grammar_dialect")})
+    preds += [dict(kind="grammar_dialect", dialect=d) for d in dialects]
     return preds
 
 
-def detect_partitions(doc: dict, learned_predicates: list | None) -> list:
+def _grammar_rows(rows: list, grammar: dict | None) -> dict:
+    """Label each row with the inherited grammar dialect that parses it (or `unparsed:`)."""
+    if not grammar:
+        return dict(status="insufficient_evidence", cause="no_authored_grammar",
+                    note="no identifier_rate_grammars file for this CIK; grammar_dialect not searchable")
+    from pipeline.identifier_rate import apply_grammar
+    body = grammar["body"]
+    applies = body.get("applies_to") or {}
+    name = str(applies.get("signature") or body.get("dominant_signature") or "grammar")
+    required = list(body.get("required_fields") or [])
+    counts: dict[str, int] = {}
+    for row in rows:
+        try:
+            parsed = apply_grammar(row["investment_identifier"], body)
+        except Exception as exc:  # a malformed inherited grammar is evidence, not a crash
+            return dict(status="insufficient_evidence", cause="grammar_not_applicable",
+                        error=type(exc).__name__, provenance="inherited",
+                        inherited_from=grammar["path"], sha256=grammar["sha256"])
+        ok = (all(parsed.get(f) is not None for f in required) if required
+              else any(v is not None for v in parsed.values()))
+        row["grammar_dialect"] = name if ok else "unparsed:" + name
+        counts[row["grammar_dialect"]] = counts.get(row["grammar_dialect"], 0) + 1
+    return dict(status="evaluated", dialect=name, required_fields=required, rows_by_dialect=counts,
+                provenance="inherited", inherited_from=grammar["path"], sha256=grammar["sha256"],
+                parser="pipeline/identifier_rate.py:apply_grammar")
+
+
+def _signatures(rows: list, profile: dict) -> list:
+    n = len(rows)
+    prevalent = sorted((d for d in DELIMITERS if profile[d]["prevalence"] > DIALECT_SHARE),
+                       key=lambda d: (-profile[d]["prevalence"], DELIMITERS.index(d)))
+    out = [dict(kind="delimiters", delimiters=[d1, d2])
+           for i, d1 in enumerate(prevalent) for d2 in prevalent[i + 1:]]
+    for delim in DELIMITERS:
+        modes = sorted(((int(k), v) for k, v in profile[delim]["segment_counts"].items()
+                        if v / n > DIALECT_SHARE), key=lambda kv: (-kv[1], kv[0]))
+        if len(modes) >= 2:
+            out.append(dict(kind="segment_counts", delimiter=delim, counts=sorted([modes[0][0], modes[1][0]])))
+    return out
+
+
+def _inside_segment(rows: list, outer: str, inner: str) -> dict | None:
+    """`inner` occurs only inside one fixed segment of the `outer` split (e.g. a comma in
+    the borrower name before ' - '): punctuation, not a second dialect."""
+    having = [r["investment_identifier"] for r in rows if inner in r["investment_identifier"]]
+    if not having or any(outer not in text for text in having):
+        return None
+    positions = set()
+    for text in having:
+        positions |= {i for i, seg in enumerate(text.split(outer)) if inner in seg}
+        if len(positions) > 1:
+            return None
+    return dict(outer=outer, inner=inner, segment_index=positions.pop(), rows=len(having))
+
+
+def _search(g1: list, g2: list, others: list, defining: tuple) -> tuple[list, list]:
+    exact, near = [], []
+    for mine, theirs in ((g1, g2), (g2, g1)):
+        for predicate in _candidates_for(mine, defining):
+            hit_mine = [_matches(predicate, r) for r in mine]
+            hit_theirs = [_matches(predicate, r) for r in theirs]
+            if None in hit_mine or None in hit_theirs:
+                continue
+            share_mine = sum(hit_mine) / len(mine)
+            share_theirs = sum(hit_theirs) / len(theirs)
+            record = dict(predicate=predicate, selects_share=round(share_mine, 4),
+                          other_share=round(share_theirs, 4),
+                          other_group_rows_matched=sum(bool(_matches(predicate, r)) for r in others))
+            if share_mine == 1 and share_theirs == 0:
+                exact.append(record)
+            elif share_mine >= NEAR_SHARE and share_theirs <= 1 - NEAR_SHARE:
+                near.append(dict(record, exceptions=[r["context_id"] for r, h in zip(mine, hit_mine) if not h]
+                                 + [r["context_id"] for r, h in zip(theirs, hit_theirs) if h]))
+    return exact, near
+
+
+def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_evidence: dict,
+                        grammar_record: dict) -> dict:
+    subject = dict(base_subject, signature=signature)
+    evidence = dict(base_evidence, grammar_dialect=grammar_record,
+                    searched_kinds=["axis_member", "carrying_concept", "segment_count", "prefix",
+                                    "grammar_dialect"])
+    if signature["kind"] == "delimiters":
+        d1, d2 = signature["delimiters"]
+        defining = (d1, d2)
+        for outer, inner in ((d1, d2), (d2, d1)):
+            inside = _inside_segment(rows, outer, inner)
+            if inside:
+                evidence.update(inside_segment=inside)
+                return _outcome("partition", subject, "resolved", "secondary_delimiter_inside_segment",
+                                evidence)
+        only1 = [r for r in rows if d1 in r["investment_identifier"] and d2 not in r["investment_identifier"]]
+        with2 = [r for r in rows if d2 in r["investment_identifier"]]
+        both = sum(d1 in r["investment_identifier"] for r in with2)
+        g1, g2 = only1, with2
+        labels = [dict(group=repr(d1) + " without " + repr(d2), rows=len(g1)),
+                  dict(group="with " + repr(d2), rows=len(g2), of_which_also_contain=both)]
+        evidence.update(disjoint=both == 0)
+    else:
+        delim, (k1, k2) = signature["delimiter"], signature["counts"]
+        defining = (delim,)
+        g1 = [r for r in rows if delim in r["investment_identifier"]
+              and len(r["investment_identifier"].split(delim)) == k1]
+        g2 = [r for r in rows if delim in r["investment_identifier"]
+              and len(r["investment_identifier"].split(delim)) == k2]
+        labels = [dict(group="%d segments on %r" % (k1, delim), rows=len(g1)),
+                  dict(group="%d segments on %r" % (k2, delim), rows=len(g2))]
+    evidence.update(groups=labels,
+                    excluded_as_tautological="segment_count on the signature delimiter(s) " + repr(list(defining)))
+    if not g1 or not g2:
+        evidence["packet_stub"] = dict(question="Overlapping signature " + repr(signature)
+                                       + " leaves one side empty and is not punctuation inside one segment.",
+                                       groups=labels)
+        return _outcome("partition", subject, "insufficient_evidence", "overlapping_signature_unexplained",
+                        evidence)
+    ids = {r["context_id"] for r in g1} | {r["context_id"] for r in g2}
+    others = [r for r in rows if r["context_id"] not in ids]
+    exact, near = _search(g1, g2, others, defining)
+    if exact:
+        evidence.update(predicates=[e["predicate"] for e in exact], discriminators=exact, disjoint_partition=True)
+        if all(e["predicate"]["kind"] == "grammar_dialect" for e in exact):
+            return _outcome("partition", subject, "resolved", "evidenced_partition", evidence,
+                            provenance="inherited", inherited_from=grammar_record["inherited_from"])
+        return _outcome("partition", subject, "resolved", "evidenced_partition", evidence)
+    if near:
+        evidence.update(near_discriminators=near)
+        return _outcome("partition", subject, "candidate", "near_discriminator", evidence)
+    evidence["packet_stub"] = dict(
+        question="Signature " + repr(signature) + " has no structural discriminator: one grammar with "
+                 "optional segments or two filer dialects?",
+        groups=[dict(label, examples=[dict(context_id=r["context_id"], identifier=r["investment_identifier"])
+                                     for r in g[:5]])
+                for label, g in zip(labels, (g1, g2))])
+    return _outcome("partition", subject, "insufficient_evidence", "no_structural_discriminator", evidence)
+
+
+def detect_partitions(doc: dict, learned_predicates: list | None, grammar: dict | None = None) -> list:
     dped = set(doc["document_metadata"]["document_period_end_dates"])
     fv_concepts: dict[str, set] = {}
     for fact in doc["facts"]:
@@ -383,73 +557,27 @@ def detect_partitions(doc: dict, learned_predicates: list | None) -> list:
     subject = dict(field="investment_identifier", rows=len(rows), basis=basis)
     profile = _profile(rows)
     evidence = dict(delimiter_profile=profile)
+    grammar_record = _grammar_rows(rows, grammar)
     if learned_predicates:
         evidence["learned_checks"] = [dict(predicate=p, matched=sum(bool(_matches(p, r)) for r in rows),
                                            unevaluable=sum(_matches(p, r) is None for r in rows))
                                       for p in learned_predicates]
     if len(rows) < MIN_PARTITION_ROWS:
-        return [_outcome("partition", subject, "insufficient_evidence", "too_few_identifiers", evidence)]
-    n = len(rows)
-    best = None
-    for i, d1 in enumerate(DELIMITERS):
-        for d2 in DELIMITERS[i + 1:]:
-            only1 = [r for r in rows if d1 in r["investment_identifier"] and d2 not in r["investment_identifier"]]
-            only2 = [r for r in rows if d2 in r["investment_identifier"] and d1 not in r["investment_identifier"]]
-            if len(only1) / n > DIALECT_SHARE and len(only2) / n > DIALECT_SHARE:
-                score = min(len(only1), len(only2))
-                if best is None or score > best[0]:
-                    best = (score, (d1, only1), (d2, only2))
-    if best is None:
-        return [_outcome("partition", subject, "resolved", "single_dialect",
-                         dict(evidence, note="no two delimiters used in disjoint identifier sets above "
-                              + str(DIALECT_SHARE) + "; co-occurring punctuation is not a dialect"))]
-    (_, (d1, g1), (d2, g2)) = best
-    grouped = {r["context_id"] for r in g1} | {r["context_id"] for r in g2}
-    others = [r for r in rows if r["context_id"] not in grouped]
-    groups = [dict(delimiter=d1, rows=len(g1)), dict(delimiter=d2, rows=len(g2)),
-              dict(delimiter=None, rows=len(others), note="identifiers with both or neither delimiter")]
-    exact, near = [], []
-    for mine, theirs in ((g1, g2), (g2, g1)):
-        for predicate in _candidates_for(mine, (d1, d2)):
-            hit_mine = [_matches(predicate, r) for r in mine]
-            hit_theirs = [_matches(predicate, r) for r in theirs]
-            if None in hit_mine or None in hit_theirs:
-                continue
-            share_mine = sum(hit_mine) / len(mine)
-            share_theirs = sum(hit_theirs) / len(theirs)
-            record = dict(predicate=predicate, selects_share=round(share_mine, 4),
-                          other_share=round(share_theirs, 4),
-                          other_group_rows_matched=sum(bool(_matches(predicate, r)) for r in others))
-            if share_mine == 1 and share_theirs == 0:
-                exact.append(record)
-            elif share_mine >= NEAR_SHARE and share_theirs <= 1 - NEAR_SHARE:
-                near.append(dict(record, exceptions=[r["context_id"] for r, h in zip(mine, hit_mine) if not h]
-                                 + [r["context_id"] for r, h in zip(theirs, hit_theirs) if h]))
-    evidence.update(groups=groups, searched_kinds=["axis_member", "carrying_concept", "segment_count",
-                                                   "prefix"],
-                    excluded_as_tautological="segment_count on the split-defining delimiters " + repr([d1, d2]),
-                    grammar_dialect="not evaluated: needs an authored grammar (inherited)")
-    if exact:
-        evidence.update(predicates=[e["predicate"] for e in exact], discriminators=exact,
-                        disjoint=True)
-        return [_outcome("partition", subject, "resolved", "evidenced_partition", evidence)]
-    if near:
-        evidence.update(near_discriminators=near)
-        return [_outcome("partition", subject, "candidate", "near_discriminator", evidence)]
-    evidence["packet_stub"] = dict(
-        question="Two identifier dialects (" + repr(d1) + " vs " + repr(d2) + ") with no structural "
-                 "discriminator: is this one grammar with optional segments or two filer dialects?",
-        groups=[dict(delimiter=d, rows=len(g), examples=[dict(context_id=r["context_id"],
-                                                              identifier=r["investment_identifier"])
-                                                         for r in g[:5]])
-                for d, g in ((d1, g1), (d2, g2))])
-    return [_outcome("partition", subject, "insufficient_evidence", "no_structural_discriminator", evidence)]
+        return [_outcome("partition", dict(subject, signature=dict(kind="none")), "insufficient_evidence",
+                         "too_few_identifiers", dict(evidence, grammar_dialect=grammar_record))]
+    signatures = _signatures(rows, profile)
+    if not signatures:
+        return [_outcome("partition", dict(subject, signature=dict(kind="none")), "resolved", "single_dialect",
+                         dict(evidence, grammar_dialect=grammar_record,
+                              note="no two delimiters above " + str(DIALECT_SHARE)
+                              + " prevalence and no multi-modal segment count"))]
+    return [_evaluate_signature(sig, rows, subject, evidence, grammar_record) for sig in signatures]
 
 
 # ---------------------------------------------------------------- entry point
 
 def detect_structure(doc: dict, texts: dict, *, aggregate_markers: dict | None = None,
-                     learned_predicates: list | None = None) -> dict:
+                     learned_predicates: list | None = None, grammar: dict | None = None) -> dict:
     channels = doc["channels"]
     if doc["collection"]["state"] == "failed":
         return {name: _finish(name, [_outcome(name, dict(scope="instance"), "insufficient_evidence",
@@ -465,4 +593,5 @@ def detect_structure(doc: dict, texts: dict, *, aggregate_markers: dict | None =
         alternate_view=_finish("alternate_view", views, channels,
                                dict(not_evaluated_without_typed_identifier=not_evaluated)),
         non_disclosure=_finish("non_disclosure", detect_non_disclosure(doc, texts), channels),
-        partition=_finish("partition", detect_partitions(doc, learned_predicates), channels))
+        partition=_finish("partition", detect_partitions(doc, learned_predicates, grammar), channels,
+                          dict(grammar="supplied (inherited)" if grammar else "no authored grammar")))

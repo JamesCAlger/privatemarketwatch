@@ -201,7 +201,7 @@ def test_dimensions_are_qname_pairs_and_typed_members_kept_apart(tmp_path):
     context = next(c for c in doc["contexts"] if c["id"] == "p1")
     assert context["dimensions"] == [[TYPE_AXIS, "us-gaap:FirstLienMember"]]
     assert context["typed_dimensions"] == [dict(axis=IDENT, value="Acme Corp")]
-    assert context["role"] == "confirmed_position" and context["role_provenance"] == "inherited"
+    assert context["role"] == "confirmed_position" and context["provenance"] == "inherited"
 
 
 # ---------------------------------------------------------------- facts, values, mapping
@@ -374,16 +374,35 @@ def test_subtotal_positive_structural_parent_with_heading_evidence(tmp_path):
     assert resolved["fl_total"]["evidence"]["heading"] == "category_only_dimensions"
 
 
-def test_subtotal_false_positive_total_safety_and_coincidental_labelled_sum(tmp_path):
+def test_subtotal_total_safety_is_told_apart_by_position_level_tranche_fields(tmp_path):
+    # Negative control: the label starts with "Total", but the context carries position-level
+    # tranche facts (maturity, rate), which a subtotal row does not. 30 == 10 + 20 is a
+    # coincidental subset sum; no subset search is performed.
+    tranche = [fact("us-gaap:InvestmentMaturityDate", "ts", "2028-06-30"),
+               fact("us-gaap:InvestmentInterestRate", "ts", "0.11", unit="pure", decimals="4")]
     contexts, facts = assemble(
-        position("ts", "Total Safety U.S., Inc. First Lien Term Loan", "30"),
+        position("ts", "Total Safety U.S., Inc. First Lien Term Loan", "30", extra=tranche),
         position("x", "Xeno Corp", "10"), position("y", "Yolo Corp", "20"),
         position("z", "Zeta Corp", "5"))
     doc = collect(tmp_path, document(contexts, facts))
     ts = [o for o in outcomes(doc, "subtotal") if o["subject"]["context_id"] == "ts"]
     assert ts and ts[0]["outcome"] == "resolved" and ts[0]["finding"] == "not_subtotal"
-    # 30 == 10 + 20 is a coincidental subset sum; no subset search is performed.
+    assert set(ts[0]["evidence"]["position_tranche_fields"]) == {"maturity_date", "interest_rate"}
     assert not [o for o in outcomes(doc, "subtotal") if o["outcome"] == "candidate"]
+
+
+def test_subtotal_total_label_without_sum_match_is_never_resolved(tmp_path):
+    # "Total Warehouses" is a category row (no tranche fields) whose fixed peer set does not
+    # sum to it: failing one peer sum is not evidence against a subtotal.
+    contexts, facts = assemble(
+        position("tw", "Total Warehouses", "30"),
+        position("x", "Xeno Corp", "10"), position("y", "Yolo Corp", "20"),
+        position("z", "Zeta Corp", "5"))
+    doc = collect(tmp_path, document(contexts, facts))
+    tw = [o for o in outcomes(doc, "subtotal") if o["subject"]["context_id"] == "tw"]
+    assert tw and tw[0]["outcome"] in ("insufficient_evidence", "candidate")
+    assert tw[0]["finding"] == "total_label_without_sum_match"
+    assert not by_finding(doc, "subtotal", "not_subtotal")
 
 
 def test_subtotal_insufficient_when_children_are_not_comparable(tmp_path):
@@ -489,12 +508,20 @@ def test_partition_true_mixed_format_emits_an_axis_member_predicate(tmp_path):
                                               (TYPE_AXIS, "us-gaap:SecondLienMember")}
 
 
-def test_partition_false_positive_punctuation_inside_borrower_is_one_dialect(tmp_path):
+def test_partition_false_positive_punctuation_inside_borrower_is_a_recorded_discriminator(tmp_path):
+    # ' - ' 100% and ',' 50%: two delimiters above 20% ARE a candidate signature and the
+    # search runs; the comma sits only inside the first ' - ' segment (the borrower), which
+    # is recorded as the discriminating evidence rather than skipping the search.
     texts = ["Acme%d, Inc. - First Lien - SOFR+5" % i for i in range(5)] + \
             ["Beta%d LLC - Second Lien - SOFR+7" % i for i in range(5)]
     doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
     got = outcomes(doc, "partition")
-    assert got[0]["outcome"] == "resolved" and got[0]["finding"] == "single_dialect"
+    assert len(got) == 1
+    assert got[0]["subject"]["signature"]["delimiters"] == [" - ", ","]
+    assert got[0]["outcome"] == "resolved"
+    assert got[0]["finding"] == "secondary_delimiter_inside_segment"
+    assert got[0]["evidence"]["inside_segment"] == dict(outer=" - ", inner=",", segment_index=0,
+                                                        rows=5)
 
 
 def test_partition_insufficient_without_a_structural_discriminator(tmp_path):
@@ -504,10 +531,121 @@ def test_partition_insufficient_without_a_structural_discriminator(tmp_path):
     texts = [forms[i % 4] % i for i in range(12)]
     doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
     got = outcomes(doc, "partition")
-    assert got[0]["outcome"] == "insufficient_evidence"
-    assert got[0]["finding"] == "no_structural_discriminator"
-    stub = got[0]["evidence"]["packet_stub"]
+    assert got and all(o["outcome"] != "resolved" for o in got)
+    delimiter = [o for o in got if o["subject"]["signature"]["kind"] == "delimiters"][0]
+    assert delimiter["outcome"] == "insufficient_evidence"
+    assert delimiter["finding"] == "no_structural_discriminator"
+    stub = delimiter["evidence"]["packet_stub"]
     assert stub["groups"] and "question" in stub
+    assert delimiter["evidence"]["grammar_dialect"]["status"] == "insufficient_evidence"
+    assert delimiter["evidence"]["grammar_dialect"]["cause"] == "no_authored_grammar"
+
+
+def test_partition_overlapping_signature_without_discriminator_is_not_single_dialect(tmp_path):
+    # ',' and '|' both above 20% and overlapping; the comma moves between segments, so it
+    # is not punctuation inside one segment, and nothing structural separates the rows.
+    texts = []
+    for i in range(12):
+        texts.append(["Co%d | A, B | L+5" % i, "Co%d, Inc | A | L+5" % i, "Co%d | A | L+5" % i][i % 3])
+    doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
+    got = outcomes(doc, "partition")
+    assert got and not by_finding(doc, "partition", "single_dialect")
+    assert all(o["outcome"] in ("candidate", "insufficient_evidence") for o in got)
+
+
+def test_partition_multimodal_segment_counts_are_a_signature(tmp_path):
+    # One delimiter, two segment-count modes (3 and 5), separated by an investment-type axis.
+    debt = ["Debt%d | First Lien | SOFR+5 | 5%% | 2028" % i for i in range(6)]
+    equity = ["Eq%d | Common | Units" % i for i in range(6)]
+    parts = (_many("d", debt, dims=[("explicit", TYPE_AXIS, "us-gaap:DebtSecuritiesMember")])
+             + _many("e", equity, dims=[("explicit", TYPE_AXIS, "us-gaap:EquitySecuritiesMember")]))
+    doc = collect(tmp_path, document(*assemble(*parts)))
+    got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "segment_counts"]
+    assert got and got[0]["outcome"] == "resolved" and got[0]["finding"] == "evidenced_partition"
+    assert "axis_member" in {p["kind"] for p in got[0]["evidence"]["predicates"]}
+
+
+GRAMMAR = dict(
+    path="data/overrides/identifier_rate_grammars/0001901037.json", sha256="a" * 64,
+    body=dict(applies_to=dict(signature="ISSUER TYPE REFRATE"), required_fields=["basis_spread"],
+              extractors=[dict(field="basis_spread", regex=r"\|\s*SOFR\+(\d+)\s*$", group=1, type="bps")]))
+
+
+def test_partition_grammar_dialect_discriminator_is_inherited(tmp_path):
+    # The authored grammar parses only the pipe dialect: grammar_dialect separates the groups.
+    pipe = ["Borrower%d | First Lien | SOFR+%d" % (i, 400 + i) for i in range(6)]
+    comma = ["Lender%d, Second Lien, 9.00%%" % i for i in range(6)]
+    doc = collect(tmp_path, document(*assemble(*_many("a", pipe), *_many("b", comma))), grammar=GRAMMAR)
+    got = outcomes(doc, "partition")[0]
+    assert got["outcome"] == "resolved" and got["finding"] == "evidenced_partition"
+    grammar = [p for p in got["evidence"]["predicates"] if p["kind"] == "grammar_dialect"]
+    assert grammar and grammar[0]["dialect"] in ("ISSUER TYPE REFRATE", "unparsed:ISSUER TYPE REFRATE")
+    record = got["evidence"]["grammar_dialect"]
+    assert record["provenance"] == "inherited" and record["inherited_from"] == GRAMMAR["path"]
+    assert record["sha256"] == GRAMMAR["sha256"]
+    # The only exact discriminator is the inherited grammar, so the outcome itself is inherited.
+    assert got["provenance"] == "inherited" and got["inherited_from"] == GRAMMAR["path"]
+
+
+# ---------------------------------------------------------------- provenance on every entry
+
+def _check_provenance(item, where):
+    assert item.get("provenance") in ("derived", "inherited"), where
+    assert "inherited_from" in item, where
+    if item["provenance"] == "inherited":
+        assert isinstance(item["inherited_from"], str) and item["inherited_from"], where
+    else:
+        assert item["inherited_from"] is None, where
+
+
+def test_every_census_entry_and_outcome_carries_provenance(tmp_path):
+    extra = [fact("us-gaap:InvestmentMaturityDate", "p1", "2028-06-30")]
+    contexts, facts = assemble(
+        position("p1", "Acme Corp", "100", extra=extra), position("p2", "Beta Corp", "100"),
+        ([ctx("fund_dur", ("2023-01-01", Q))],
+         [fact("us-gaap:InvestmentIncomeInterest", "fund_dur", "12", unit="usd", decimals="0")]),
+        ([ctx("fund_bs")], [fact("us-gaap:AssetsNet", "fund_bs", "500", unit="usd", decimals="0")]))
+    doc = collect(tmp_path, document(contexts, facts, extra=FOOTNOTE_LINK))
+    for context in doc["contexts"]:
+        _check_provenance(context, "context " + context["id"])
+    assert next(c for c in doc["contexts"] if c["id"] == "p1")["inherited_from"].startswith(
+        "pipeline/context_inventory.py")
+    for item in doc["facts"]:
+        _check_provenance(item, "fact")
+    for name, unit in doc["units"].items():
+        _check_provenance(unit, "unit " + name)
+    for period in doc["periods"]:
+        _check_provenance(period, "period")
+    for pos in doc["positions"]:
+        _check_provenance(pos, "position")
+        for field, value in pos["fields"].items():
+            _check_provenance(value, "field " + field)
+    assert doc["positions"][0]["fields"]["fair_value"]["provenance"] == "inherited"
+    for row in doc["fund_income"] + doc["fund_balance"] + doc["conflicts"]:
+        _check_provenance(row, "fund/conflict row")
+    for resource in doc["footnotes"]["resources"]:
+        _check_provenance(resource, "footnote")
+    for detector in doc["detectors"].values():
+        for outcome in detector["outcomes"]:
+            _check_provenance(outcome, "outcome " + outcome["detector"])
+    assert census.validate_census(doc)["ok"] is True
+    bad = json.loads(json.dumps(doc))
+    del bad["positions"][0]["inherited_from"]
+    assert census.validate_census(bad)["ok"] is False
+    bad = json.loads(json.dumps(doc))
+    bad["contexts"][0].update(provenance="inherited", inherited_from=None)
+    assert census.validate_census(bad)["ok"] is False
+
+
+def test_wrapper_marker_only_outcome_is_inherited_at_the_outcome_level(tmp_path):
+    contexts, facts = assemble(
+        position("t", "Total Investments", "100"),
+        position("a", "Alpha Corp", "60"), position("b", "Beta Corp", "30"))
+    marker = dict(markers=["total investments"], path="wrapper.json", sha256="0" * 64)
+    doc = collect(tmp_path, document(contexts, facts), aggregate_markers=marker)
+    got = [o for o in outcomes(doc, "subtotal") if o["subject"]["context_id"] == "t"][0]
+    assert got["outcome"] == "candidate" and got["finding"] == "wrapper_marker_only"
+    assert got["provenance"] == "inherited" and got["inherited_from"] == "wrapper.json"
 
 
 # ---------------------------------------------------------------- schema, propagation, validation
@@ -573,6 +711,26 @@ def test_light_fund_quarter_runs_through_the_cached_stage(tmp_path):
     assert census.validate_census(written["result"])["ok"] is True
     again = census_run.census_fund_quarter(paths, entry, lease_factory=None)
     assert again["cache"] == "hit"
+
+
+def test_runner_passes_the_authored_grammar_as_an_inherited_dependency(tmp_path):
+    paths = fake_paths(tmp_path, run_id="stageb-test")
+    contexts, facts = position("p1", "Acme Corp", "100")
+    tcw = "0001715933"  # has data/overrides/identifier_rate_grammars/0001715933.json
+    entry = _entry(paths, tcw, "0000950170-23-000001", document(contexts, facts).replace(CIK, tcw))
+    assert census_run.census_fund_quarter(paths, entry, lease_factory=None)["status"] == "collected"
+    body = json.loads((paths.run_root / "census" / tcw / (Q + ".json")).read_text(encoding="ascii"))
+    assert body["identity"]["dependencies"]["grammar"]["status"] == "present"
+    deps = {d["name"]: d for d in body["result"]["dependencies"]}
+    assert deps["identifier_rate_grammar"]["path"].endswith(tcw + ".json")
+    grammar = body["result"]["detectors"]["partition"]["outcomes"][0]["evidence"]["grammar_dialect"]
+    assert grammar["provenance"] == "inherited" and grammar["inherited_from"].endswith(tcw + ".json")
+    # Stellus has no authored grammar: the discriminator is insufficient with that cause.
+    stellus = _entry(paths, CIK, "0000000000-23-000001", document(contexts, facts))
+    census_run.census_fund_quarter(paths, stellus, lease_factory=None)
+    body = json.loads((paths.run_root / "census" / CIK / (Q + ".json")).read_text(encoding="ascii"))
+    grammar = body["result"]["detectors"]["partition"]["outcomes"][0]["evidence"]["grammar_dialect"]
+    assert grammar["cause"] == "no_authored_grammar"
 
 
 def test_heavy_fund_quarter_without_a_lease_is_lease_refused_not_insufficient(tmp_path):

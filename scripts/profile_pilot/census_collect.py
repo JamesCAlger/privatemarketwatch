@@ -159,7 +159,8 @@ def _collect_units(root, channels: dict) -> dict:
         if uid in units:
             definition = dict(unit_kind="unresolved", currency=None)
         units[uid] = dict(unit_kind=definition["unit_kind"], currency=definition["currency"],
-                          measures=measures)
+                          measures=measures, provenance="inherited",
+                          inherited_from="pipeline/monetary_units.py:unit_definition")
     channels["units"]["count"] = len(units)
     return units
 
@@ -201,7 +202,7 @@ def collect_facts(root, contexts: dict, units: dict, bounds: Bounds, channels: d
                       context_id=context_ref, context_resolved=context_ref in contexts,
                       decimals=node.get("decimals"), precision=node.get("precision"),
                       unit_ref=node.get("unitRef"), lang=node.get(XML_LANG), field=None,
-                      group="unknown")
+                      group="unknown", provenance="derived", inherited_from=None)
         if record["unit_ref"] is not None:
             status, value = _numeric(node)
             unit = units.get(record["unit_ref"])
@@ -299,7 +300,8 @@ def _collect_footnotes(root, facts: list, bounds: Bounds, channels: dict, texts:
                 resources[label] = dict(label=label, id=node.get("id"),
                                         role=node.get("{%s}role" % XLINK), lang=node.get(XML_LANG),
                                         text_chars=len(text), text_sha256=_sha_text(text),
-                                        preview=text[:TEXT_PREVIEW_CHARS], fact_indices=[])
+                                        preview=text[:TEXT_PREVIEW_CHARS], fact_indices=[],
+                                        provenance="derived", inherited_from=None)
                 texts["footnote:" + label] = text
             elif local == "footnoteArc":
                 arcs += 1

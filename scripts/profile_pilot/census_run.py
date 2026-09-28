@@ -49,6 +49,17 @@ def _wrapper_markers(paths, cik: str, role: str) -> dict | None:
     return dict(markers=markers, path=str(path), sha256=record["sha256"], record=record)
 
 
+def _grammar(paths, cik: str) -> dict | None:
+    """The authored identifier_rate_grammars file for this CIK (inherited), or None."""
+    from scripts.profile_pilot.manifest import file_record
+    path = paths.code_root / "data" / "overrides" / "identifier_rate_grammars" / (cik + ".json")
+    record = file_record(path, "grammar/" + cik)
+    if record["status"] != "present":
+        return None
+    return dict(path="data/overrides/identifier_rate_grammars/" + cik + ".json", sha256=record["sha256"],
+                body=json.loads(path.read_text(encoding="utf-8")), record=record)
+
+
 class _PeakMemory:
     """Sample this process's RSS while the census runs (lxml memory is not in tracemalloc)."""
 
@@ -96,9 +107,11 @@ def census_fund_quarter(paths, entry: dict, *, lease_factory, bounds: Bounds = B
     if source_record["status"] != "present":
         return dict(base, status="unavailable", reason="source_not_cached")
     markers = _wrapper_markers(paths, entry["cik"], entry.get("role") or "")
+    grammar = _grammar(paths, entry["cik"])
     deps = dict(source=source_record,
                 code=[manifest.file_record(paths.code_root / rel, "code/" + rel) for rel in CODE_DEPENDENCIES],
                 wrapper=markers["record"] if markers else dict(status="absent_no_wrapper"),
+                grammar=grammar["record"] if grammar else dict(status="absent_no_grammar"),
                 bounds=asdict(bounds))
     identity = manifest.cache_identity("census", deps, collector_version=CENSUS_VERSION)
     est_seconds, est_bytes = estimate(source_record["bytes"])
@@ -114,7 +127,9 @@ def census_fund_quarter(paths, entry: dict, *, lease_factory, bounds: Bounds = B
             doc = build_census(source, dict(cik=entry["cik"], report_date=entry["quarter"],
                                             accession_number=entry["accession_number"],
                                             form_type=entry.get("form_type"), role=entry.get("role")),
-                               bounds=bounds, aggregate_markers=marker_input)
+                               bounds=bounds, aggregate_markers=marker_input,
+                               grammar=None if grammar is None else
+                               {k: grammar[k] for k in ("path", "sha256", "body")})
         measured.update(wall_seconds=round(time.perf_counter() - started, 2),
                         peak_rss_bytes=memory.peak, start_rss_bytes=memory.start_rss)
         if doc["collection"]["state"] != "complete":
