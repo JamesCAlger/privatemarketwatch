@@ -26,7 +26,7 @@ from __future__ import annotations
 from decimal import Decimal
 import re
 
-DETECTOR_VERSION = "census-detect.v0.4"
+DETECTOR_VERSION = "census-detect.v0.5"
 OUTCOMES = ("candidate", "resolved", "insufficient_evidence")
 SCOPE_AXES = frozenset({"consolidatedentitiesaxis", "consolidationitemsaxis"})
 LABEL_RE = re.compile(r"^\s*(sub-?\s*)?totals?\b", re.IGNORECASE)
@@ -584,9 +584,11 @@ def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_ev
     if coverage < 1:
         causes.append("partition_incomplete_coverage")
     evidence["causes"] = causes
-    if "optional_trailing_segments" in causes:
+    if "optional_trailing_segments" in causes and (exact or near):
         # One grammar with optional trailing fields: any separating predicate is the
-        # instrument class itself, not independent dialect evidence.
+        # instrument class itself, not independent dialect evidence. Without any
+        # discriminator the nesting is only an explanation: fall through to
+        # insufficient_evidence + packet stub (causes/nested_modes stay as evidence).
         evidence.update(discriminators=exact, near_discriminators=near)
         return _outcome("partition", subject, "candidate", "optional_trailing_segments", evidence)
     if exact and causes:

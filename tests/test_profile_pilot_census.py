@@ -619,6 +619,22 @@ def test_partition_nested_optional_trailing_segments_is_a_candidate_not_a_partit
     assert not by_finding(doc, "partition", "evidenced_partition")
 
 
+def test_partition_nested_modes_without_discriminator_is_insufficient_with_packet_stub(tmp_path):
+    # Nested 3- vs 4-segment modes on one grammar, with NO separating predicate (same
+    # asset-type prefix, no axis member, same carrying concept). A matching segment class
+    # is a structural explanation, not a discriminator: insufficient_evidence + packet stub.
+    texts = (["Senior Secured Loans | Healthcare | Co%d Inc." % i for i in range(6)]
+             + ["Senior Secured Loans | Healthcare | Lo%d Inc. | 10.00%%" % i for i in range(6)])
+    doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
+    got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "segment_counts"]
+    assert got and got[0]["outcome"] == "insufficient_evidence"
+    assert got[0]["finding"] == "no_structural_discriminator"
+    assert "packet_stub" in got[0]["evidence"]
+    assert "optional_trailing_segments" in got[0]["evidence"]["causes"]
+    assert got[0]["evidence"]["nested_modes"]["shared_leading_segments"] == 3
+    assert not by_finding(doc, "partition", "optional_trailing_segments")
+
+
 def test_partition_discriminator_matching_an_outside_row_is_not_exact(tmp_path):
     # 6 pipe rows (First Lien) vs 6 comma rows (Second Lien) plus 2 rows with neither
     # delimiter that ALSO carry First Lien: that axis member is not exact.
