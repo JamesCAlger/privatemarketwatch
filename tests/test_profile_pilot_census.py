@@ -497,6 +497,8 @@ def test_partition_true_mixed_format_emits_an_axis_member_predicate(tmp_path):
     doc = collect(tmp_path, document(*assemble(*parts)))
     got = outcomes(doc, "partition")
     assert got[0]["outcome"] == "resolved" and got[0]["finding"] == "evidenced_partition"
+    assert got[0]["evidence"]["coverage"] == 1 and got[0]["evidence"]["rows_outside_groups"] == 0
+    assert all(d["other_group_rows_matched"] == 0 for d in got[0]["evidence"]["discriminators"])
     predicates = got[0]["evidence"]["predicates"]
     kinds = {p["kind"] for p in predicates}
     assert "axis_member" in kinds
@@ -563,6 +565,8 @@ def test_partition_multimodal_segment_counts_are_a_signature(tmp_path):
     got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "segment_counts"]
     assert got and got[0]["outcome"] == "resolved" and got[0]["finding"] == "evidenced_partition"
     assert "axis_member" in {p["kind"] for p in got[0]["evidence"]["predicates"]}
+    assert got[0]["evidence"]["coverage"] == 1 and got[0]["evidence"]["matches_outside_groups"] == []
+    assert got[0]["evidence"]["causes"] == []
 
 
 HEADING = "Investments, Investments - non-controlled / non-affiliated, First Lien Debt, Co%d Term Loan"
@@ -594,6 +598,45 @@ def test_partition_minority_group_below_share_never_resolves(tmp_path):
     minority = [o for o in got if o["finding"] == "minority_group_below_share"]
     assert minority and minority[0]["outcome"] == "candidate"
     assert minority[0]["evidence"]["minimum_group_share"] == 0.2
+
+
+def test_partition_nested_optional_trailing_segments_is_a_candidate_not_a_partition(tmp_path):
+    # NexPoint shape: ONE grammar (ASSETTYPE | INDUSTRY | ISSUER, then trailing fields only
+    # when the instrument has them). Modes 3 and 6 each hold 5 of 14 rows; the 4- and
+    # 5-segment rows fall in neither group. The asset-type prefix separates the two modes
+    # exactly, but that is the instrument class, not a dialect.
+    texts = (["Common Stocks | Real Estate | Eq%d Inc." % i for i in range(5)]
+             + ["Preferred Stocks | Financials | Pref%d LLC | 10.00%%" % i for i in range(2)]
+             + ["Corporate Bonds | Media | Bond%d Inc. | 9.13%% | 5/1/2029" % i for i in range(2)]
+             + ["Senior Secured Loans | Healthcare | Loan%d Inc. (First Lien) | SOFR + 400 | 5.37%% | 4/7/2026" % i
+                for i in range(5)])
+    doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
+    got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "segment_counts"]
+    assert got and got[0]["outcome"] == "candidate"
+    assert got[0]["finding"] == "optional_trailing_segments"
+    assert set(got[0]["evidence"]["causes"]) == {"optional_trailing_segments", "partition_incomplete_coverage"}
+    assert got[0]["evidence"]["coverage"] < 1
+    assert not by_finding(doc, "partition", "evidenced_partition")
+
+
+def test_partition_discriminator_matching_an_outside_row_is_not_exact(tmp_path):
+    # 6 pipe rows (First Lien) vs 6 comma rows (Second Lien) plus 2 rows with neither
+    # delimiter that ALSO carry First Lien: that axis member is not exact.
+    parts = (_many("a", ["Borrower%d | First Lien | SOFR+5" % i for i in range(6)],
+                   dims=[("explicit", TYPE_AXIS, "us-gaap:FirstLienMember")])
+             + _many("b", ["Lender%d, Second Lien, 9.00%%" % i for i in range(6)],
+                     dims=[("explicit", TYPE_AXIS, "us-gaap:SecondLienMember")])
+             + _many("c", ["Plain%d Term Loan" % i for i in range(2)],
+                     dims=[("explicit", TYPE_AXIS, "us-gaap:FirstLienMember")]))
+    doc = collect(tmp_path, document(*assemble(*parts)))
+    got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "delimiters"][0]
+    assert got["outcome"] != "resolved"
+    exact = [d["predicate"] for d in got["evidence"].get("discriminators", [])]
+    assert dict(kind="axis_member", axis=TYPE_AXIS, member="us-gaap:FirstLienMember") not in exact
+    rejected = got["evidence"]["matches_outside_groups"]
+    assert any(r["predicate"].get("member") == "us-gaap:FirstLienMember"
+               and r["other_group_rows_matched"] == 2 for r in rejected)
+    assert got["finding"] == "partition_incomplete_coverage"
 
 
 GRAMMAR = dict(

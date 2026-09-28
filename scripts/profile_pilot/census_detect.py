@@ -26,7 +26,7 @@ from __future__ import annotations
 from decimal import Decimal
 import re
 
-DETECTOR_VERSION = "census-detect.v0.3"
+DETECTOR_VERSION = "census-detect.v0.4"
 OUTCOMES = ("candidate", "resolved", "insufficient_evidence")
 SCOPE_AXES = frozenset({"consolidatedentitiesaxis", "consolidationitemsaxis"})
 LABEL_RE = re.compile(r"^\s*(sub-?\s*)?totals?\b", re.IGNORECASE)
@@ -459,8 +459,42 @@ def _inside_segment(rows: list, outer: str, inner: str) -> dict | None:
     return dict(outer=outer, inner=inner, segment_index=positions.pop(), rows=len(having))
 
 
-def _search(g1: list, g2: list, others: list, defining: tuple) -> tuple[list, list]:
-    exact, near = [], []
+_DATE_SEGMENT = re.compile(r"^\s*(\d{1,2}/\d{1,2}/\d{2,4}|\d{4}-\d{2}-\d{2}|\d{4})\s*$")
+_NUMERIC_SEGMENT = re.compile(r"^\s*(?:[A-Za-z]+\s*\+\s*)?\d[\d.,]*\s*%?(?:\s*[A-Za-z]+)?\s*$")
+
+
+def _segment_class(segment: str) -> str:
+    if _DATE_SEGMENT.match(segment):
+        return "date"
+    if _NUMERIC_SEGMENT.match(segment):
+        return "numeric"
+    return "text"
+
+
+def _nested_modes(g_short: list, g_long: list, delim: str, k_short: int) -> dict | None:
+    """The shorter mode's segments line up with the start of the longer mode's: every
+    leading position has the same majority segment class (text/numeric/date) in both
+    groups, i.e. one grammar whose trailing fields appear only when present."""
+    classes = []
+    for i in range(k_short):
+        majority = []
+        for group in (g_short, g_long):
+            counts: dict[str, int] = {}
+            for r in group:
+                cls = _segment_class(r["investment_identifier"].split(delim)[i])
+                counts[cls] = counts.get(cls, 0) + 1
+            majority.append(max(sorted(counts), key=lambda c: counts[c]))
+        if majority[0] != majority[1]:
+            return None
+        classes.append(majority[0])
+    return dict(delimiter=delim, shared_leading_segments=k_short, leading_classes=classes)
+
+
+def _search(g1: list, g2: list, others: list, defining: tuple) -> tuple[list, list, list]:
+    """Exact = selects all of one group, none of the other group AND none of the rows
+    outside both groups. A predicate that separates the groups but also fires outside
+    them is recorded in `outside`, never counted as exact."""
+    exact, near, outside = [], [], []
     for mine, theirs in ((g1, g2), (g2, g1)):
         for predicate in _candidates_for(mine, defining):
             hit_mine = [_matches(predicate, r) for r in mine]
@@ -472,12 +506,14 @@ def _search(g1: list, g2: list, others: list, defining: tuple) -> tuple[list, li
             record = dict(predicate=predicate, selects_share=round(share_mine, 4),
                           other_share=round(share_theirs, 4),
                           other_group_rows_matched=sum(bool(_matches(predicate, r)) for r in others))
-            if share_mine == 1 and share_theirs == 0:
+            if share_mine == 1 and share_theirs == 0 and record["other_group_rows_matched"] == 0:
                 exact.append(record)
+            elif share_mine == 1 and share_theirs == 0:
+                outside.append(record)
             elif share_mine >= NEAR_SHARE and share_theirs <= 1 - NEAR_SHARE:
                 near.append(dict(record, exceptions=[r["context_id"] for r, h in zip(mine, hit_mine) if not h]
                                  + [r["context_id"] for r, h in zip(theirs, hit_theirs) if h]))
-    return exact, near
+    return exact, near, outside
 
 
 def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_evidence: dict,
@@ -521,9 +557,11 @@ def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_ev
                         evidence)
     ids = {r["context_id"] for r in g1} | {r["context_id"] for r in g2}
     others = [r for r in rows if r["context_id"] not in ids]
-    exact, near = _search(g1, g2, others, defining)
+    exact, near, outside = _search(g1, g2, others, defining)
     shares = [round(len(g) / len(rows), 4) for g in (g1, g2)]
-    evidence.update(group_shares=shares, minimum_group_share=DIALECT_SHARE)
+    coverage = round((len(g1) + len(g2)) / len(rows), 4)
+    evidence.update(group_shares=shares, minimum_group_share=DIALECT_SHARE, coverage=coverage,
+                    rows_outside_groups=len(others), matches_outside_groups=outside)
     if min(shares) <= DIALECT_SHARE:
         # A group at or below the minimum share (e.g. one row) is not a dialect: a
         # discriminator for it is at most a candidate, never an evidenced partition.
@@ -534,6 +572,27 @@ def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_ev
         evidence["packet_stub"] = dict(question="Minority group below the minimum share with no discriminator.",
                                        groups=labels)
         return _outcome("partition", subject, "insufficient_evidence", "minority_group_below_share", evidence)
+    causes = []
+    if signature["kind"] == "segment_counts":
+        k_short = min(signature["counts"])
+        short, long_ = (g1, g2) if len(g1[0]["investment_identifier"].split(signature["delimiter"])) == k_short \
+            else (g2, g1)
+        nested = _nested_modes(short, long_, signature["delimiter"], k_short)
+        if nested:
+            causes.append("optional_trailing_segments")
+            evidence["nested_modes"] = nested
+    if coverage < 1:
+        causes.append("partition_incomplete_coverage")
+    evidence["causes"] = causes
+    if "optional_trailing_segments" in causes:
+        # One grammar with optional trailing fields: any separating predicate is the
+        # instrument class itself, not independent dialect evidence.
+        evidence.update(discriminators=exact, near_discriminators=near)
+        return _outcome("partition", subject, "candidate", "optional_trailing_segments", evidence)
+    if exact and causes:
+        evidence.update(discriminators=exact, near_discriminators=near,
+                        note="groups do not cover every row; a partial split is not a partition")
+        return _outcome("partition", subject, "candidate", "partition_incomplete_coverage", evidence)
     if exact:
         evidence.update(predicates=[e["predicate"] for e in exact], discriminators=exact, disjoint_partition=True)
         if all(e["predicate"]["kind"] == "grammar_dialect" for e in exact):
