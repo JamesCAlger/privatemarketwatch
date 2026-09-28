@@ -1,6 +1,7 @@
 # Filer Profile Pilot: census-derived, bitemporal per-CIK knowledge store
 
-Status: DRAFT v2 for owner review, 2026-09-28. Supersedes nothing; extends
+Status: v3, APPROVED TO START 2026-09-28 (owner rulings on the seven
+pre-start decisions, section 14). Supersedes nothing; extends
 `docs/oxford_ledge_review/2026-09-17_oxford_ledge_comparison_and_remediation_loop.md`
 sections 13-14 (which remain NOT FINALISED) with a bounded, measured pilot.
 
@@ -43,8 +44,19 @@ the next.
 
 Architectural direction, executed as a **measurement pilot**. Shadow only.
 
-- Branch `filer-profile-pilot` off `ensemble-fp-experiment`. No edits under
-  `pipeline/`.
+- Branch `filer-profile-pilot` off `ensemble-fp-experiment`. Build on that
+  base now; rebase onto `main` after the V13 merge (the pilot only adds new
+  files, so conflict risk is low). No edits under `pipeline/`.
+- **Start ruling (owner, 2026-09-28).** The pilot starts now, in the
+  worktree, under the heavy-job restriction. The V13 build in flight is the
+  LAST refactor rebuild before the pilot's heavy stages. If that run does not
+  finalise V13, the refactor programme PAUSES rather than starting another
+  build; the pilot takes the heavy lock. This ruling is recorded here and in
+  the changelog; the closeout rubric lives on the sealed branch and is not
+  edited from the pilot worktree.
+- Pilot artifacts live under `data/pilot/` (git-ignored, added to
+  `.gitignore` in this commit), not `scratch/`, so profiles and results
+  outlive the session-scratch convention and can feed the migration spec.
 - **Isolation from the V13 closeout.** Avoiding `pipeline/` is not enough.
   The closeout rubric
   (`docs/production_stack/2026-09-28_v13_closeout_rubric.md`, rule 1) freezes
@@ -61,7 +73,7 @@ Architectural direction, executed as a **measurement pilot**. Shadow only.
   (`context_inventory`, `bdc_xbrl_wrapper`, `config`, cache readers).
 - Reads: cached XBRL instances, `data/output/bdc_holdings.csv`,
   `data/output/private_markets_holdings.csv`, `data/overrides/**`.
-- Writes: `scratch/2026-09-28_profile_pilot/` only. No `data/output/`,
+- Writes: `data/pilot/filer_profile/` only. No `data/output/`,
   `frontend/public/data/`, baseline, threshold, registry or wrapper change.
 - No network. No model calls on any path. Residuals are recorded as packet
   stubs, not dispatched.
@@ -128,6 +140,18 @@ re-use test available and is intentional; results are split by form type
 Alternate control if Stellus proves unusable: 0001377936 Saratoga
 (`issuer_bridge` strategy, wrapper only, first quarter 2024-11-30).
 
+**Quarter count (owner ruling).** The pilot runs on two quarters per CIK as
+tabled. A follow-on extends the same CIKs to three, then four quarters to
+validate time-constancy; that extension reuses the pilot modules unchanged
+and is not part of the pilot's deliverable.
+
+**Same-era derivation (owner ruling).** In addition to the Q1 profile, a
+second profile is derived from each wrapper's own authoring quarter (the
+quarter the hand-authored wrapper was written against, read from the wrapper
+file or its git history). M1 is reported for both, so a low Q1 derivation
+rate can be attributed to three years of filer drift or to the census, not
+left ambiguous. Roughly eight extra census runs.
+
 ## 6. Pilot architecture
 
 ```
@@ -162,7 +186,7 @@ own JSON output. No box calls a model.
 ### 6.1 [A] Census (`census.py`)
 
 Deterministic structural fingerprint of one cached instance, stored as
-`scratch/2026-09-28_profile_pilot/census/{cik}/{report_date}.json`.
+`data/pilot/filer_profile/census/{cik}/{report_date}.json`.
 
 Content, per instance:
 
@@ -256,6 +280,7 @@ Every entry uses one envelope:
   "key": "identifier_format.delimiter",
   "value": " | ",
   "form_type": null,
+  "applies_to": null,
   "valid_from": "2022-09-30",
   "valid_to": null,
   "recorded_at": "2026-09-28T14:02:11Z",
@@ -275,7 +300,27 @@ Every entry uses one envelope:
 - `author` in {census, agent, human}. `status` in {derived, proposed,
   verified, promoted, retired}. Pilot only writes `census` / `derived`.
 - `form_type` null means all forms; a non-null value narrows the entry.
-  Resolution order: (filer, form_type, dated) -> (filer, dated) -> default.
+- **`applies_to` (partition predicate).** Null means every row of the
+  filing. A non-null value is a structural predicate naming the sub-population
+  the entry governs: an axis member, a concept carrying the field, a segment
+  count, a prefix vocabulary, or the grammar dialect that parses the row.
+  This is how one filing that uses format A for part of a schedule and
+  format B for the rest is represented: two entries with the same `key`,
+  disjoint `applies_to`, same valid range. Rules:
+  - Row position in the instance is never a predicate. XBRL contexts are
+    unordered and instance order is tooling-dependent.
+  - The census emits a multi-modal signature (for example two delimiter
+    candidates each above 20% prevalence) as a **partition candidate** and
+    searches the structural discriminators above. If none separates the
+    modes, the result is `insufficient_evidence` and a packet stub, never a
+    row list.
+  - Three problems, three mechanisms: change across quarters uses
+    `valid_from`; change across filing types uses `form_type`; mixed format
+    within one filing uses `applies_to`.
+  - Resolution order: (filer, applies_to, form_type, dated) ->
+    (filer, form_type, dated) -> (filer, dated) -> default. Two
+    transaction-current entries with the same `key` and overlapping
+    `applies_to` are a validator error.
 - **Two clocks, kept apart.** `valid_from` / `valid_to` are report dates
   (valid time: when the filer's behaviour held). `recorded_at` /
   `recorded_until` are wall clock (transaction time: when we believed the
@@ -302,7 +347,7 @@ Every entry uses one envelope:
 - `regression_pin` is null in the pilot and documented as the slot for the
   later migration's per-entry regression test reference; it is not populated.
 - Profile JSON is written to
-  `scratch/2026-09-28_profile_pilot/profiles/{cik}.json`. Schema at
+  `data/pilot/filer_profile/profiles/{cik}.json`. Schema at
   `scripts/profile_pilot/schemas/filer_profile_v0.schema.json`.
 
 **Derivation-rate comparison**: for each key in the hand-authored wrapper
@@ -325,11 +370,29 @@ and per section.
 
 ### 6.3 [C] Contracts (`contracts.py`)
 
-Per filer, per canonical field, expectations learned from Q1 census + profile:
-source concept(s), fill-rate band, format grammar (from the existing rate
-grammar if present), scale, value range, form_type. Evaluated on the Q2 census
-and Q2 interpreted rows. Output per (cik, field): `holds`, `holds_with_form_type`,
-`breach`, with expected vs observed.
+Per filer, per canonical field, **per partition** (`applies_to`, section
+6.2), expectations learned from Q1 census + profile: source concept(s),
+fill-rate band, format grammar (from the existing rate grammar if present),
+scale, value range, form_type. Evaluated on the Q2 census and Q2 interpreted
+rows. Output per (cik, field, partition): `holds`, `holds_with_form_type`,
+`breach`, with expected vs observed. Without the partition dimension a filing
+that is half format A and half format B would read as a 50% grammar breach
+when both halves are regular.
+
+**Minimal suite (owner ruling: minimal now, extend if the pilot works).**
+The pilot ships exactly these contract kinds:
+
+| Contract | What it catches | Exists today? |
+|---|---|---|
+| source concept set | field moved to a different concept | no per-filer form; `CONCEPT_MAP` is global |
+| fill rate band | field silently stopped being tagged | no |
+| scale | percent vs decimal vs bps for the whole partition | partly: `F12` in `oracle_checks.py` is a global median test for rates > 100; rate grammars coerce a `bps` field type |
+| **format grammar per row** | "this field is expected as XX.XX% but this row reads as base + XXX bps" (or the reverse); any row whose text does not parse under the partition's declared dialect is flagged, and a cluster of such rows is a partition candidate | partly: `identifier_rate.apply_grammar` + `evaluate_invariants` parse per row and compare to the XBRL twin, but only for CIKs with an authored grammar and never as a declared per-filer expectation. No production check today says "declared format for this filer is A, this row is B" |
+| value range | rate/spread outside the filer's own history | partly: `C05` global max-rate cap |
+| **fund-income yield** | rate semantics (cash leg vs all-in) drifting: portfolio yield implied by the rates vs interest income from `bdc_fund_income` | yes as a signal (`rate_convention` S2), reused not rebuilt |
+
+Deferred, listed as unchecked in section 11: non-accrual count against
+filing text; footnote-location contracts; position-identity contracts.
 
 Pilot does not gate or withhold anything; it records. Tolerances are fixed
 before any Q2 evaluation and written to `results/contract_tolerances.json`:
@@ -496,7 +559,7 @@ Measurement rules:
    than the v1 draft priced. Run [E] graduation first: it needs only the
    override files and `bdc_holdings.csv`, touches none of the new collectors,
    and delivers M3 on its own.
-3. Results: `scratch/2026-09-28_profile_pilot/results/summary.json` and
+3. Results: `data/pilot/filer_profile/results/summary.json` and
    `docs/investigations/filer_profile_pilot.md` (dated heading, question,
    results), indexed via `python scripts/split_investigations.py --reindex`.
 4. Changelog entry per the agent update protocol.
@@ -540,6 +603,12 @@ contracts as per-CIK parameters). This spec does not authorise that work.
 - One heavy job at a time; check for running pytest / rebuild processes
   first. The V13 controllers hold the programme heavy lock; census over the
   large instances (Ares, BCRED) and the all-quarter extension wait for it.
+- **Last-rebuild rule (owner, 2026-09-28).** The V13 build in flight is the
+  last refactor rebuild before the pilot's heavy stages. If it does not
+  finalise V13, no V14 build starts; the refactor programme pauses and the
+  pilot takes the lock. Light pilot work (graduation [E], schemas, synthetic
+  tests, small-instance census on Stellus / NexPoint / Fidelity) proceeds
+  regardless, since none of it trips the heavy-lock scan.
 - Census over a 1,000-row instance must complete in < 60 s and < 2 GiB; use
   DuckDB SQL or vectorised operations for any per-row work.
 - ASCII-only logs.
@@ -574,6 +643,22 @@ contracts as per-CIK parameters). This spec does not authorise that work.
 - **Seal breach.** Adding pilot code in the sealed checkout voids V13.
   Mitigation: worktree-only execution (section 2); recorded in the rubric's
   section 5 if it ever happens.
+- **Sections with no independent correctness check in the pilot.**
+  Reconciliation against the filer's reported totals covers subtotals,
+  presentation views, comparative periods and accounting scope, because each
+  error moves the FV sum. It does not cover: rate semantics and scale
+  (checked only by the fund-income yield contract, a signal not a gate),
+  footnote conventions (non-accrual location; no check in the pilot),
+  and position identity (no check in the pilot). Derived entries in those
+  sections are reported as `derived`, never as verified, and the induction
+  review (an agent citing source evidence per entry, section 6.2 status
+  flow) is where they would be checked in a migration. Row-level sampled
+  audits remain advisory.
+- **Mixed formats inside one filing.** Handled by `applies_to` partitions
+  (6.2) and per-partition contracts (6.3). Residual risk: a partition with no
+  structural discriminator is `insufficient_evidence` and needs an agent to
+  find the predicate; the agent's output is still a predicate, never a row
+  list.
 - **Scope creep into detectors.** Mitigation: section 4; halflife records, it
   does not gate.
 
@@ -601,7 +686,21 @@ and accepted by the owner the same day.
 | 5 | Metrics: `partial` folded into M1; no fixed denominators; tolerances undefined; M5 lacked censoring and over-claimed stabilisation | reading of v1 section 9 | 6.2 (classes), 6.3 (tolerance table), 6.6 (censoring), 8 (pinned inventories), 9 |
 | 6 | Isolation claim wrong: the V13 closeout rubric freezes `scripts/` and `tests/` too | rubric rule 1, `docs/production_stack/2026-09-28_v13_closeout_rubric.md` | 2, 10, 11 |
 
-Not folded in (raised in the same review, not yet ruled on by the owner):
-derive a second profile from each wrapper's own authoring quarter so M1
-separates three-year filer drift from derivability; extend each CIK to three
-quarters so every filer has one same-form and one cross-form step.
+The two items left open in v2 (same-era derivation, three quarters per CIK)
+were ruled on in v3; see section 14.
+
+## 14. Pre-start decisions (owner rulings, 2026-09-28)
+
+| # | Decision | Ruling | Landed in |
+|---|---|---|---|
+| 1 | Start now or wait for V13 handoff | Start now in the worktree, heavy-lock kept. The V13 build in flight is the last refactor rebuild; if it does not finalise, pause the refactor, pilot takes the lock | 2, 10 |
+| 2 | Branch base | Build on `ensemble-fp-experiment`, rebase onto `main` after the V13 merge | 2 |
+| 3 | Artifact home | `data/pilot/` git-ignored | 2, 6.x paths, 8 |
+| 4 | Partition predicate | Add `applies_to` to the envelope; contracts per partition | 6.2, 6.3, 11 |
+| 5 | Non-reconciliation checks in contracts | Minimal suite now: fund-income yield included, per-row format-grammar contract included, non-accrual count deferred. Extend if the pilot works | 6.3, 11 |
+| 6 | Same-era M1 | Yes: second profile from each wrapper's authoring quarter | 5, 9 |
+| 7 | Quarters per CIK | Two in the pilot; follow-on extends to three then four to validate time-constancy | 5 |
+
+Still open: extra controls (decide after the Stellus census); whether the
+write-up proposes the v1 schema (decide at the end; recommendation is
+numbers only).
