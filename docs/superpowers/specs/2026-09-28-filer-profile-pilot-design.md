@@ -1,7 +1,9 @@
 # Filer Profile Pilot: census-derived, bitemporal per-CIK knowledge store
 
-Status: v3, APPROVED TO START 2026-09-28 (owner rulings on the seven
-pre-start decisions, section 14). Supersedes nothing; extends
+Status: v4, implementation-contract corrections requested 2026-09-28.
+The v3 approval and seven owner scope rulings (section 14) remain in force;
+this revision corrects measurement and execution requirements, not scope.
+Supersedes nothing; extends
 `docs/oxford_ledge_review/2026-09-17_oxford_ledge_comparison_and_remediation_loop.md`
 sections 13-14 (which remain NOT FINALISED) with a bounded, measured pilot.
 
@@ -15,6 +17,21 @@ end so retrospective corrections and real convention changes are distinct
 `insufficient_evidence` outcome (6.2, 6.5); metrics are reported against fixed
 denominators with censoring (9); and the pilot runs in a separate worktree
 because the V13 closeout rubric freezes `scripts/` and `tests/` (2, 10).
+
+Revision v4 (2026-09-28): implements the second review. The plan is an
+acceptance-driven implementation sequence rather than untested source-code
+templates. Complete fact collection, executable partition contracts,
+source-backed graduation, connected parity, historical as-of semantics,
+literal metric definitions and protection of the real data roots are required.
+Neither the pilot nor its tests have run as part of this document revision.
+
+Revision v4.1 (2026-09-28): four integration corrections verified against the
+repo after the v4 review: the shared lease is `heavy_lock(candidate)` and
+needs a pilot pseudo-candidate directory (2, 10); D1 is a pinning boundary
+because the production parser takes no profile parameters (6.4); decimal
+exactness is defined after a stated canonicalisation (6.4); the amendment
+selection policy lives in `scripts/run_context_census.py`, not the pipeline
+(6.4). Adds staged go/no-go checkpoints (8) and two open questions (12).
 
 ## 1. Problem
 
@@ -73,8 +90,15 @@ Architectural direction, executed as a **measurement pilot**. Shadow only.
   (`context_inventory`, `bdc_xbrl_wrapper`, `config`, cache readers).
 - Reads: cached XBRL instances, `data/output/bdc_holdings.csv`,
   `data/output/private_markets_holdings.csv`, `data/overrides/**`.
-- Writes: `data/pilot/filer_profile/` only. No `data/output/`,
-  `frontend/public/data/`, baseline, threshold, registry or wrapper change.
+- Measurement writes: `<data_root>/pilot/filer_profile/<run_id>/` only.
+  Artifact paths below are relative to that resolved per-run root. Two
+  coordination writes outside it are permitted and nothing else: the
+  existing shared programme lock file (`data/programme/heavy.lock` in the
+  main checkout) and the pilot pseudo-candidate directory
+  `data/programme/candidates/pilot-filer-profile-<run_id>/` that
+  `pipeline.programme.runner.heavy_lock(candidate)` requires (section 10).
+  No `data/output/`, `frontend/public/data/`, baseline, threshold, registry
+  or wrapper change.
 - No network. No model calls on any path. Residuals are recorded as packet
   stubs, not dispatched.
 
@@ -104,7 +128,7 @@ Output is five numbers and a recommendation (section 9), not production code.
 - Change detection on real convention transitions. The known dated events
   (BCRED 2025-12-31 identifier suffix, Stepstone 2025q4 scale, TCW 2026-Q1
   affiliation axis) fall outside the pilot fund-quarters. The all-quarter
-  extension (section 8.4) records where a Q1-derived profile first breaks, but
+  extension (section 6.6) records where a Q1-derived profile first breaks, but
   the pilot does not build detectors 2-3 as gating machinery.
 - Withholding in the public export.
 - Position registry on the production path.
@@ -140,17 +164,31 @@ re-use test available and is intentional; results are split by form type
 Alternate control if Stellus proves unusable: 0001377936 Saratoga
 (`issuer_bridge` strategy, wrapper only, first quarter 2024-11-30).
 
-**Quarter count (owner ruling).** The pilot runs on two quarters per CIK as
-tabled. A follow-on extends the same CIKs to three, then four quarters to
-validate time-constancy; that extension reuses the pilot modules unchanged
-and is not part of the pilot's deliverable.
+**Quarter count (owner ruling).** Primary M2/M4 measurement uses the two
+quarters per CIK tabled above. M1 additionally uses the authoring quarter;
+M3 checks available out-of-scope quarters and M5 observes the fixed Q1
+profile over later quarters. These observational scans do not add primary
+training/evaluation pairs. A follow-on extends the primary experiment to
+three, then four quarters to validate time-constancy.
 
 **Same-era derivation (owner ruling).** In addition to the Q1 profile, a
 second profile is derived from each wrapper's own authoring quarter (the
 quarter the hand-authored wrapper was written against, read from the wrapper
-file or its git history). M1 is reported for both, so a low Q1 derivation
+file or its git history). Pin the wrapper version and the source accession
+it was authored against. A first-commit date alone is not proof of the
+authoring quarter; if evidence is missing, label that comparison unavailable.
+Do not compare a revised wrapper to the first version's authoring quarter
+and call that same-era. M1 is reported for both, so a low Q1 derivation
 rate can be attributed to three years of filer drift or to the census, not
 left ambiguous. Roughly eight extra census runs.
+
+Evidence check (2026-09-28): wrapper v3 JSON carries `version` and
+`source: bdc_xbrl` but no target accession or quarter; `known_edge_cases[*]
+.first_seen_quarter` names an edge case, not the authoring instance. Under the
+rule above, same-era M1 is expected to be `unavailable` for most or all eight
+CIKs. Section 12 question 4 asks the owner whether "latest cached filing whose
+filing_date precedes the wrapper's last version-bump commit" may be admitted
+as a labelled lower evidence tier, or whether same-era M1 is dropped.
 
 ## 6. Pilot architecture
 
@@ -186,7 +224,7 @@ own JSON output. No box calls a model.
 ### 6.1 [A] Census (`census.py`)
 
 Deterministic structural fingerprint of one cached instance, stored as
-`data/pilot/filer_profile/census/{cik}/{report_date}.json`.
+`census/{cik}/{report_date}.json` under the per-run root.
 
 Content, per instance:
 
@@ -208,6 +246,24 @@ Content, per instance:
   member, text, or absent.
 - fund-level totals present (total investments FV, total assets, net assets,
   interest income) and their concepts.
+
+The new collector reads the complete cached instance once using bounded,
+network-disabled XML parsing. It enumerates every context's instant or
+duration dates; `DocumentPeriodEndDate` identifies the filing, not its
+comparative periods. Retain fact QName, context, raw value, nil/invalid
+status, unit/currency, decimals, duration, dimensions and source identity.
+Capture rates, dates, text/status facts, footnote resources and their links,
+and fund-level facts in addition to monetary facts. Use the pipeline's
+canonical field names (`principal_amount`, `maturity_date`, `shares_held`)
+consistently. A collector failure, unsupported text channel or unmapped
+concept is explicit missing evidence, never evidence of non-disclosure.
+
+Imported context roles and concept mappings are inherited interpretations.
+Keep raw facts independently of whether the existing classifier recognises
+them; an unresolved source context cannot vanish from the census. Record
+dependencies at entry level so an inherited selector cannot silently become
+unaided derivation. Source-role conflicts and conflicting same-field facts
+remain unresolved rather than taking the first fact in document order.
 
 Reuses `pipeline/context_inventory.py` for context classification and the
 existing cache readers.
@@ -237,15 +293,23 @@ the original "nothing here is new analysis" claim:
 
 - Equal fact values under different axes do NOT establish duplicate
   positions; two tranches can carry identical balances. A presentation-view
-  group stays `candidate` until position identity (issuer + instrument +
-  maturity where present) agrees across the group.
+  group stays `candidate` until source evidence establishes the same
+  position/tranche, economic date, currency and accounting scope, and the
+  differing dimension is an alternate presentation. Equal borrower text,
+  instrument type and maturity alone are insufficient. Never choose the
+  canonical view by context-ID order or fewest dimensions.
 - Sum equality does NOT establish a subtotal. A sum-of-others context stays
   `candidate` until the identifier text or member label also reads as a
   heading/total, or the wrapper's aggregate markers agree (that agreement is
-  then `inherited`).
-- A missing concept does NOT establish non-disclosure. `non_disclosure` is
-  `insufficient_evidence` unless the field is also absent from identifier text
-  segments and footnote/text facts in the instance.
+  then `inherited`). The children must also have a demonstrated structural
+  relationship on the same entity/date/currency/scope basis. Arbitrary
+  subset-sum searches are not evidence of that relationship.
+- A missing concept does NOT establish non-disclosure. Absence may be
+  recorded only as `not_observed_in_complete_instance` after the supported
+  concept, identifier, text and footnote channels have been inspected.
+  It is not a statement about the full filing or HTML schedule. If any
+  relevant channel is unsupported or incomplete, `non_disclosure` is
+  `insufficient_evidence`; a failed regex match is not a completeness proof.
 
 Unresolved candidates are recorded as packet stubs, not promoted to profile
 entries.
@@ -266,7 +330,7 @@ time and a regression pin to the doc's three properties:
 | column_contract | concept -> field with fill rates | derived |
 | footnote_conventions | non-accrual / PIK location | derived |
 | position_identity | axis carrying the position member | derived |
-| non_disclosure | fields with zero carrying concept | derived |
+| non_disclosure | complete-instance absence with an explicit evidence boundary | derived or insufficient_evidence |
 | fund_level_concepts | fund-total concepts | derived |
 | accounting_scope | -- | stub (structure cannot settle; packet) |
 | anchors | -- | copied from `agent_anchor` if present, else stub |
@@ -317,37 +381,50 @@ Every entry uses one envelope:
   - Three problems, three mechanisms: change across quarters uses
     `valid_from`; change across filing types uses `form_type`; mixed format
     within one filing uses `applies_to`.
-  - Resolution order: (filer, applies_to, form_type, dated) ->
-    (filer, form_type, dated) -> (filer, dated) -> default. Two
-    transaction-current entries with the same `key` and overlapping
-    `applies_to` are a validator error.
+  - Evaluate predicates against source rows, not by JSON equality. Resolve
+    matching partition-specific entries before the null-partition fallback;
+    within that tier prefer the exact form over the all-form fallback.
+    Valid-time and transaction-time intervals must both match. The null
+    partition/form entries are explicit fallbacks, not conflicts with their
+    more specific entries. Two equally specific applicable entries are an
+    error, including different predicate objects that select the same rows.
+    Unsupported or unprovably disjoint predicates remain unresolved.
 - **Two clocks, kept apart.** `valid_from` / `valid_to` are report dates
   (valid time: when the filer's behaviour held). `recorded_at` /
   `recorded_until` are wall clock (transaction time: when we believed the
-  entry). Entries are immutable versions; nothing is edited in place or
-  deleted. Two distinct events, which the v1 envelope conflated:
+  entry). Use half-open intervals on both clocks (`from <= query < to`),
+  with null ends meaning unbounded. Assertion bodies and source evidence
+  are immutable. Append assertion/retraction events with a transaction
+  timestamp; interval end fields in JSON are materialized views of that
+  history, not in-place rewrites of the original assertion. Two events:
   - **Retrospective correction** ("we were wrong about this filer all
-    along"): the new version copies the old valid range, the old version gets
-    `recorded_until` set, `supersession_kind = "correction"`. Valid time does
-    not move.
+    along"): retract the old assertion at transaction time T and append its
+    replacement covering the same valid interval, with fresh evidence and
+    `supersession_kind = "correction"`. A query before T still sees the
+    original assertion.
   - **Genuine convention change** ("the filer changed in quarter Q"): the old
-    version gets `valid_to = Q-1` and stays current in transaction time
-    (`recorded_until` stays null); the new version starts at `valid_from = Q`,
-    `supersession_kind = "change"`.
-  - Overlap rule: at most one version per (`key`, `form_type`) may be current
-    in transaction time for any report date; the schema validator rejects
-    overlapping valid ranges among transaction-current versions.
+    open-ended assertion is retracted at transaction time T. Append a
+    replacement for its historical interval ending at Q (exclusive), and
+    an assertion for the new value starting at Q, both recorded at T. The
+    original unbounded assertion remains visible to queries before T.
+    Preserve any pre-existing finite end and require Q to be inside the
+    affected interval. Do not compute `Q-1` as a day or quarter.
+  - Validate unique version IDs, evidence references, ordered clock bounds
+    and unambiguous resolution for every historical transaction slice,
+    including form and partition applicability. Do not validate only the
+    currently live entries.
   - The schema supports an as-of query ("what did we believe about report
     date R at wall-clock time T"), and the pilot ships synthetic tests for
-    both events plus one as-of query. The pilot does NOT build a query engine
-    or a resolver beyond the validator.
+    both events, their exact boundaries, and a correction after a change.
+    A small pure resolver supports validation, contracts and translation;
+    a database query service is out of scope.
 - `confidence` is replaced by `support`, a measured quantity with a named
   estimator (prevalence numerator/denominator, or a context count). Census
   entries carry no unmeasured score.
 - `regression_pin` is null in the pilot and documented as the slot for the
   later migration's per-entry regression test reference; it is not populated.
-- Profile JSON is written to
-  `data/pilot/filer_profile/profiles/{cik}.json`. Schema at
+- Profile JSON is written to `profiles/{cik}/{era}.json` under the per-run
+  root, with separate `q1` and `same_era` artifacts. Schema at
   `scripts/profile_pilot/schemas/filer_profile_v0.schema.json`.
 
 **Derivation-rate comparison**: for each key in the hand-authored wrapper
@@ -355,7 +432,8 @@ Every entry uses one envelope:
 `archetypes`, `invariants`, `segment_assertions`), classify the census
 proposal as exactly one of:
 
-- `exact` (census value equals the wrapper value),
+- `exact` (independently derived value and executable meaning equal the
+  wrapper value under a predeclared canonical representation),
 - `partial` (same shape, different value or subset),
 - `inherited` (census reproduces the key only via inherited code or files,
   section 6.1),
@@ -365,8 +443,16 @@ proposal as exactly one of:
   `known_edge_cases` prose).
 
 The denominator is fixed as all wrapper keys for that CIK, listed once in
-`results/wrapper_key_inventory.json` before any census runs. Report per CIK
+`inventories/wrapper_key_inventory.json` before any census runs. Report per CIK
 and per section.
+
+Prefix presence is not an exact prefix-to-family mapping; observing a fund
+total is not derivation of its reconciliation field, basis or tolerance.
+Do not look at the comparison wrapper while generating a derived value.
+Freeze supported key comparisons before measurement. Keys not implemented
+by this pilot are `unresolved` with reason `not_implemented`, not inherently
+`not_derivable`. Same-era and Q1 results have separate artifact keys and
+cannot overwrite each other in the summary.
 
 ### 6.3 [C] Contracts (`contracts.py`)
 
@@ -375,9 +461,20 @@ Per filer, per canonical field, **per partition** (`applies_to`, section
 fill-rate band, format grammar (from the existing rate grammar if present),
 scale, value range, form_type. Evaluated on the Q2 census and Q2 interpreted
 rows. Output per (cik, field, partition): `holds`, `holds_with_form_type`,
-`breach`, with expected vs observed. Without the partition dimension a filing
+`breach` or `insufficient_evidence`, with expected vs observed. Without the
+partition dimension a filing
 that is half format A and half format B would read as a 50% grammar breach
 when both halves are regular.
+
+Learn partitions and their predicates from Q1 only, freeze them, then apply
+those predicates to Q2 rows before computing every expectation. A mixed
+format without an evidenced discriminator is unresolved, not a default
+whole-filing contract. Numerical scale must describe the field's units and
+deterministic conversion to its canonical unit; standard versus extension
+namespace does not identify scale. Ambiguous unit/scale evidence is
+`insufficient_evidence`. Format contracts name the field and dialect and
+retain violating source-row keys; delimiter/segment-count compatibility alone
+does not prove a rate grammar.
 
 **Minimal suite (owner ruling: minimal now, extend if the pilot works).**
 The pilot ships exactly these contract kinds:
@@ -394,8 +491,16 @@ The pilot ships exactly these contract kinds:
 Deferred, listed as unchecked in section 11: non-accrual count against
 filing text; footnote-location contracts; position-identity contracts.
 
+Fund-income yield reuses the existing S2 calculation and its evidence limits
+with explicit pinned inputs. It must align duration, currency, accounting
+scope and rated-book coverage, and use the declared cash/all-in convention
+without adding PIK twice. A new simplified formula is not a substitute.
+Unknown semantics or insufficient coverage produce `insufficient_evidence`.
+Any form-type qualifier must be evidenced before evaluating Q2: an observed
+form change does not grant an extra tolerance allowance after a breach.
+
 Pilot does not gate or withhold anything; it records. Tolerances are fixed
-before any Q2 evaluation and written to `results/contract_tolerances.json`:
+before any Q2 evaluation and written to `inventories/contract_tolerances.json`:
 
 | Expectation | Tolerance (Q1 >= 50 positions) | Tolerance (Q1 < 50 positions, `low_history`) |
 |---|---|---|
@@ -406,8 +511,9 @@ before any Q2 evaluation and written to `results/contract_tolerances.json`:
 | format grammar | every Q2 identifier parses | >= 90% parse |
 
 These are reporting bands, not pass/fail bars; the pilot is measurement.
-Changing a band after seeing Q2 results is recorded as a change to the
-tolerances file with the reason, never applied silently.
+Changing a band after seeing Q2 results requires a new run/version with the
+reason and prior results preserved. It cannot overwrite the frozen primary
+measurement or be presented as a predeclared result.
 
 ### 6.4 [D] Interpretation and compatibility parity (`interpret.py`, `parity.py`)
 
@@ -425,37 +531,75 @@ reference artifact whose path, git HEAD and SHA-256 are recorded in the result:
 
 | Boundary | Profile side | Reference artifact | Row key | Compared |
 |---|---|---|---|---|
-| D1 extraction | profile-driven read of the cached instance | `data/output/bdc_holdings.csv` slice for (cik, report_date) | (`accession_number`, `src_context_id`) | row set, `fair_value`, cost, principal, raw rate fields, raw identifier |
-| D2 staging | D1 output through the profile's identifier_format / subtotals / presentation_views sections | the staged BDC frame as produced by `staging_bdc` for that slice (materialised to scratch during the run; exact production function pinned at implementation) | (`accession_number`, `src_context_id`) | row set after aggregate/subtotal exclusion, parsed issuer, instrument, industry, affiliation |
-| D3 unified | D2 output plus explicit replay of the production corrections that touch the slice | `data/output/private_markets_holdings.csv` slice | `row_id` | row set, FV, classification |
+| D1 extraction | cached-only production extraction (`bdc_filings._parse_single_filing` + `_deduplicate_bdc_holdings`) with explicit inherited mechanisms; the parser accepts NO profile parameters, so the profile side equals production | pinned `bdc_holdings.csv` accession slice, including comparative facts | accession/context/period with collision checks | row multiset, FV, cost, principal, raw rates and identifier |
+| D2 staging | the actual D1 frame through the profile wrapper adapter and production staging, including raw-stage corrections | independently materialised production staging from the pinned raw slice | source observation key with period lineage | row multiset, FV, parsed issuer, instrument, industry, affiliation |
+| D3 unified | the actual D2 frame through ordinary unified transformations, ordered correction replay and final ID assignment | pinned `private_markets_holdings.csv` slice | independently generated `row_id`, checked against source lineage | row multiset, per-row FV, classification |
 
 Rules:
 
-- Corrections are replayed explicitly at D3, never inferred: the run lists
-  each B2 leaf and investigate rule applied to the slice in production
-  (`agent_promoted` loaders, read-only) and applies the same row selections.
-  D3 is reported twice, with and without replay, so the profile is not
-  penalised for corrections it is not meant to hold and the size of the
-  correction layer is visible.
+- **D1 is a pinning boundary, not a profile metric.** Wrappers apply at
+  staging, and `_parse_single_filing` has no profile input, so D1 is exact by
+  construction unless the pinned accession, the cached instance, or the
+  parser version differs from the one that built `bdc_holdings.csv`. M4 must
+  label D1 as "reproducibility of the pinned extraction" and report any D1
+  divergence as a source-selection or parser-version finding. A 16/16 D1 is
+  not evidence about the profile. Profile effects are first visible at D2.
+- Corrections are replayed at their real production stages and in their real
+  order, never inferred: raw comparative selectors run before staging loses
+  `period`, and post-staging corrections run at the unified boundary. D3
+  has two complete branches with otherwise identical inputs, one with all
+  applicable corrections enabled and one without. List the selectors,
+  selected source rows, additions and audit evidence for each application.
+  Never attach reference output rows or borrow their IDs to force agreement.
 - `interpret.py` does not re-implement extraction. Where a profile section
   has a wrapper-v3 equivalent, the profile is translated to wrapper form and
-  the existing loaders are pointed at the scratch directory
+  the existing loaders are pointed at an isolated pilot directory
   (`reload_wrapper_specs(override_dir=...)`, staging config loader). Sections
   with no wrapper equivalent (presentation_views, accounting_scope) are
-  reported at D2 as `not_expressible`, which is itself a finding.
+  reported at D2 as `not_expressible`, which is itself a finding. They must
+  not be applied at D1 instead to make a downstream comparison pass. List
+  every unchanged base-wrapper field as inherited; parity with a mostly
+  inherited wrapper does not measure full profile replacement.
 - Per-CIK code that production applies (`explicit_contexts.py` for NexPoint
   and Onex, the Stepstone rescale, Ares literals; 6 of 8 pilot CIKs appear as
   literals in `pipeline/*.py`) is inherited at D1 and listed in the result,
   so a D1 pass on those CIKs is read as "compatible given inherited code".
-- Parity = exact equality on row set and FV at each boundary; per-column
-  agreement reported separately. Row-key collisions or nulls are reported as
-  `unkeyed` rows, never dropped.
+- Parity requires exact row multiplicity and exact per-row FV, including
+  null-versus-zero and currency distinctions, plus exact aggregate FV.
+  Compare decimal values without tolerance or rounding, under one stated
+  canonicalisation applied to BOTH sides: read the reference CSV columns as
+  VARCHAR (never through float inference), and convert each side's text to
+  `decimal.Decimal` via `Decimal(text)` then `.normalize()`, so that
+  `14700000.0`, `1.47e7` and `14700000` are one value and `0` and `null`
+  remain distinct. Pilot-side values come from the parser's own numeric
+  output converted with `Decimal(str(value))` before normalisation. The
+  canonicalisation function and its version are recorded in the parity
+  result; a value that fails to parse as Decimal on either side is
+  `unkeyed/ambiguous`, never coerced.
+  Other columns have separate typed agreement counts. Null/empty keys and
+  collisions are reported as unkeyed/ambiguous and prevent an exact verdict;
+  they cannot disappear in a merge or a set comparison.
+- Pin the source accession selection, code/configuration hashes and each
+  boundary frame before comparison. Verify inputs before and after use.
+  A cover-only amendment does not automatically supersede a populated
+  primary. The pipeline has no amendment-selection policy of its own; the
+  only existing evidenced policy is the one in
+  `scripts/run_context_census.py`, which the pilot reuses by reference (pin
+  its git blob hash in the manifest). Where that script does not settle a
+  case, the fund-quarter is `unavailable` with all candidate accessions
+  listed. Source-selection differences and legacy/current-parser changes
+  are named divergences, not profile failures or silent exclusions.
+- If an existing production path cannot be invoked with all writes confined
+  to the pilot workspace, record `not_expressible`/`insufficient_evidence`
+  with the missing integration boundary. Do not replace it with an
+  approximation while claiming D1-D3 compatibility.
 
 **What parity means.** Parity measures compatibility with production output
 today. It does not measure whether production is correct, and it is not an
 independent check on the census (the wrapper author and the census may share
-the same cues). Independent correctness lives in the existing anchor and
-fund-total reconciliation, which the pilot reads but does not re-derive.
+the same cues). Correctness evidence comes from source-row witnesses and
+existing anchor/fund-total reconciliation on a pinned basis. Aggregate
+reconciliation alone cannot prove position-level completeness or identity.
 
 ### 6.5 [E] Graduation test (`graduate.py`)
 
@@ -466,26 +610,40 @@ generalisability filter, deterministically:
    `comparative_period_filter` on rows with `period < report_date` becomes a
    `comparative_periods` declaration; a `row_exclusion` naming a subtotal
    string becomes a `subtotals_and_headings` marker).
-2. **Fidelity on the origin quarter first**: the candidate must select
-   exactly the row set the leaf or rule touches on its own quarter. A
-   candidate that fails fidelity is `not_expressible` and goes no further.
-3. Apply the candidate to every other quarter of that filer in
-   `bdc_holdings.csv` and count rows it would touch.
+2. **Fidelity on every origin quarter first**: independently execute the
+   original correction and candidate on the pinned pre-correction frame at
+   its actual stage. Compare source-row multisets and the action/value
+   effects exactly, including null periods and additions. Non-empty overlap
+   is not fidelity. A demonstrated mismatch is `not_expressible`; inability
+   to recover the pre-correction frame is `insufficient_evidence`. Already
+   corrected published output cannot establish which rows were removed.
+3. Apply the candidate to every available out-of-scope quarter at the same
+   boundary. Preserve all structural predicates; never strip date clauses
+   by string replacement. A supported translation must distinguish temporal
+   scope from the mechanism, or remain `not_expressible`.
 4. Classify, with an explicit unresolved outcome:
    - `generalises`: touches the same class of rows in >= 2 other quarters,
      AND on each touched quarter the affected positions pass a source-backed
-     check: the filer's reported schedule total (anchor / fund-total
-     reconciliation on the same basis the gate uses, subsidiary- and
-     JV-aware) moves toward the reported figure or stays within band, AND no
-     touched row is a current-period position with a non-zero FV that the
-     schedule total needs. Recurrence plus unchanged FV conservation alone is
+     check, with a witness for every selected observation: comparative
+     period/source identity, structural subtotal membership, or a duplicate
+     view's retained counterpart of the same position. The filer's reported
+     schedule total must also reconcile on the gate's pinned basis,
+     including currency, subsidiaries and JVs; its band is reused, not a
+     new pilot-wide 1% tolerance. Every touched out-of-scope quarter must be
+     assessable and supported, with at least two such quarters. No required
+     position may be lost, including zero-FV positions. Recurrence plus
+     unchanged FV conservation alone is
      NOT sufficient: a wrong deletion can pass through zero balances or
      offsetting errors.
-   - `quarter_bound`: touches nothing elsewhere.
-   - `conflicts`: touches rows the filer total contradicts.
+   - `quarter_bound`: supported translation touches nothing in assessed
+     out-of-scope quarters. An already-all-quarters rule has no holdout and
+     is `insufficient_evidence`, not a demonstrated quarter-bound rule.
+   - `conflicts`: a source-row witness or the filer's total contradicts the
+     candidate on an assessed out-of-scope quarter.
    - `insufficient_evidence`: touches rows elsewhere but the source-backed
      check cannot be evaluated (no anchor for the quarter, basis mismatch,
-     fewer than 2 other quarters available for the filer). Reported, never
+     fewer than 2 supported other quarters, incomplete row witnesses, or
+     any touched quarter that remains unassessable). Reported, never
      folded into `generalises`.
    - `not_expressible`: row_id-pinned value fix, or fidelity failure.
 
@@ -511,12 +669,20 @@ instead of a single Q1->Q2 point.
 Measurement rules:
 
 - Time is measured in **quarters since derivation**, not calendar quarter, so
-  CIKs with different Q1 dates pool correctly.
+  CIKs with different Q1 dates pool correctly. Compute elapsed time from
+  the fund's reporting calendar, not the number of cached files. Skipped
+  filings do not shorten time.
 - A section that never breaches within the available quarters is a
   **censored** observation at its last observed quarter, not a "no break" or
-  a break at the horizon. The half-life is the Kaplan-Meier median (or
-  "not reached" if fewer than half the sections break), with the censored
-  count reported beside it.
+  a break at the horizon. An unassessable check is not evidence of survival:
+  conservatively censor at the last continuously assessable passing quarter,
+  and retain later results as diagnostics outside that survival observation.
+  Contracts never assessable are separately `unassessable`, not long-lived.
+  The half-life is the Kaplan-Meier median when the estimated survival curve
+  reaches 0.5; otherwise report "not reached". Include risk-set, event,
+  censored and unassessable counts. Use the same frozen contracts, including
+  value-range and partition contracts, as M2. State the aggregation unit;
+  repeated field checks are not independent section observations.
 - The pilot derives from a fixed Q1 profile. Its first-break quarter says how
   long a Q1 profile lasts; it does NOT show whether a profile derived from a
   later quarter would stabilise. That claim needs re-derivation at later
@@ -537,58 +703,89 @@ Measurement rules:
 
 ## 8. Deliverables
 
-1. `scripts/profile_pilot/` package: `census.py`, `profile.py`,
-   `contracts.py`, `interpret.py`, `parity.py`, `graduate.py`, `halflife.py`,
-   `run.py` (CLI: `--cik`, `--quarters first2|all`, `--out`), and
-   `schemas/filer_profile_v0.schema.json`, `schemas/census_v0.schema.json`.
+1. `scripts/profile_pilot/` package: census, profile/envelope, translation,
+   contracts, interpretation/parity, graduation, half-life and reporting
+   modules, plus path/manifest and protection/verification helpers. The plan
+   lists the complete module inventory. `run.py` accepts `--cik`,
+   `--quarters first2|all`, `--run-id`, `--data-root` and a confined `--out`.
+   Schemas live inside the package at `schemas/filer_profile_v0.schema.json`
+   and `schemas/census_v0.schema.json`.
 2. Tests: one file per module, fixtures from two small cached instances
    (Stellus Q1, NexPoint Q1; these tests are cache-dependent and skipped in
    CI) plus synthetic instances for subtotal, presentation-view and
    comparative-period detection, at least one false-positive case per
    detector, one `insufficient_evidence` case per detector, and schema tests
-   for both supersession kinds (retrospective correction, genuine change)
-   plus one as-of query.
-5. Pinned inputs written before any measurement:
-   `results/wrapper_key_inventory.json` (M1 denominator),
-   `results/correction_inventory.json` (M3 denominator),
-   `results/contract_tolerances.json` (M2 bands), and the reference-artifact
-   manifest for D1-D3 (paths, git HEAD, SHA-256).
-6. Cost note: the census collectors for comparative periods, rates, footnote
+   for both supersession kinds (retrospective correction, genuine change).
+   Verify historical queries before/at/after recording time and effective
+   time for both kinds, finite intervals and correction-after-change.
+3. Pinned inputs written before their measurement:
+   `inventories/wrapper_key_inventory.json` (M1 denominator),
+   `inventories/correction_inventory.json` (M3 denominator),
+   `inventories/contract_tolerances.json` (M2 bands), primary-quarter and
+   contract inventories, and `manifest.json` for the exact inputs,
+   configuration and D1-D3 reference artifacts (paths, git HEAD, dirty-source
+   digest, SHA-256). Q1 contract learning precedes freezing the M2 inventory;
+   Q2 evaluation cannot change it.
+4. Cost note: the census collectors for comparative periods, rates, footnote
    markers and fund-level income are new code (6.1), and the three-boundary
    parity needs a staged-frame materialisation (6.4). The pilot is larger
-   than the v1 draft priced. Run [E] graduation first: it needs only the
-   override files and `bdc_holdings.csv`, touches none of the new collectors,
-   and delivers M3 on its own.
-3. Results: `data/pilot/filer_profile/results/summary.json` and
+   than the v1 draft priced. Start [E] graduation with pinned overrides,
+   recoverable pre-correction stage inputs and source evidence. It can
+   report M3 independently; missing origin frames or row witnesses remain
+   insufficient-evidence results. Reconstruction that triggers heavy work
+   must acquire the shared lease, even when invoked from graduation.
+5. Results: `results/summary.json` under the per-run root and
    `docs/investigations/filer_profile_pilot.md` (dated heading, question,
    results), indexed via `python scripts/split_investigations.py --reindex`.
-4. Changelog entry per the agent update protocol.
+6. Changelog entry per the agent update protocol.
+
+**Staged delivery with go/no-go checkpoints.** The v4 requirements raise the
+build cost well above the v3 estimate (see section 12 question 5). Execution
+is therefore staged, and each stage ends with a report the owner reads before
+the next starts:
+
+| Stage | Tasks | Delivers | Owner reads |
+|---|---|---|---|
+| A | 1-3 | protection, lease adapter, envelope, graduation | M3 with denominator; count of `insufficient_evidence` items and their causes; measured cost of Tasks 1-3 |
+| B | 4-8 | census, profile, translate, contracts | M1 (Q1 and, if evidenced, same-era), M2, partition candidates; collector completeness states per CIK |
+| C | 9-11 | connected parity, half-life, runner | M4 per boundary with D1 labelled as pinning, M5 with censoring and unassessable counts |
+| D | 12 | execution on all eight, write-up | the five numbers and the decision-table reading |
+
+A stage that reports mostly `insufficient_evidence` or an integration gap is
+a valid stopping point; the owner decides whether the next stage is worth
+its cost.
 
 ## 9. Metrics and decision
 
 | # | Metric | Definition | Informs |
 |---|---|---|---|
 | M1 | Derivation rate | `exact` / all wrapper keys, with `partial`, `inherited`, `unresolved`, `miss`, `not_derivable` each reported as its own share of the same fixed denominator (`wrapper_key_inventory.json`); per CIK and section. `partial` is never added to `exact`. | how much agent authoring the profile removes |
-| M2 | Re-use rate | Q2 contracts `holds` / all contracts; `holds_with_form_type` and `breach` reported separately; bands fixed in `contract_tolerances.json` before evaluation | whether a profile survives a quarter |
+| M2 | Re-use rate | Q2 contracts `holds` / all contracts; `holds_with_form_type`, `breach` and `insufficient_evidence` reported separately; bands fixed in `contract_tolerances.json` before evaluation | whether a profile survives a quarter |
 | M3 | Graduation yield | corrections `generalises` / all live corrections for the eight CIKs (`correction_inventory.json`), with `insufficient_evidence`, `quarter_bound`, `conflicts`, `not_expressible` each as its own share; per fix class | whether corrections and semantics need one system |
-| M4 | Compatibility parity | fund-quarters with exact row-set and FV equality at D1, D2, D3 (each / 16, D3 with and without correction replay); `unkeyed` and `not_expressible` counts beside each | whether a profile can drive production as it stands, and how much of production output is inherited code or corrections |
-| M5 | Half-life | Kaplan-Meier median first-break, in quarters since derivation, across sections and CIKs; censored count; share of observed breaks coinciding with a form-type change or a known dated event | how often detectors would fire, and whether on real changes |
+| M4 | Compatibility parity | fund-quarters with exact row-multiset, per-row FV and aggregate decimal FV equality at D1, D2, D3 (each / 16, D3 with and without correction replay); missing/ambiguous keys, unsupported integration and missing results reported explicitly | whether a profile can drive production as it stands, and how much of production output is inherited code or corrections |
+| M5 | Half-life | Kaplan-Meier median first-break in elapsed fund quarters since derivation; stated CIK/section/partition unit, risk-set/event/censored/unassessable counts, and share of observed breaks coinciding with a form-type change or known event | how long fixed-Q1 contracts remain assessably valid; coincidence does not prove the cause of a break |
 
 No pass/fail thresholds are set in advance; the pilot is measurement. The
 decision it informs, in order:
 
-- M1 `exact` low (< ~50% on structural sections) and `inherited` +
-  `unresolved` high -> the store stays agent-authored; add time validity to
-  the existing wrapper schema and stop.
-- M1 high, M2 low even after form-type split -> filers drift faster than
-  assumed; contracts must be per form type and per year before any
-  carry-forward claim.
+- First distinguish incomplete measurement from a negative result. Missing
+  implementations, source channels or same-era evidence cannot establish
+  that the architecture fails; report that limitation before a recommendation.
+- With adequate measurement, M1 `exact` low (< ~50% on structural sections)
+  and `inherited` high -> consider retaining agent authoring and adding time
+  validity to the wrapper schema. `unresolved` is not evidence that a field
+  cannot be derived.
+- M1 high, M2 low even after form-type split -> investigate source drift,
+  extraction defects and contract design before attributing the breaks.
+  Use supported causes to decide whether form/year-specific contracts are
+  needed before making a carry-forward claim.
 - M3 high (> ~50% of comparative/exclusion rules `generalises`, not counting
   `insufficient_evidence`) -> build the graduation path in B2 verify/promote;
   corrections and semantics share a system with distinct objects.
 - M4 D1 or D2 < 16/16 -> list the exact divergences before any migration
-  plan. A D3 gap between with-replay and without-replay is the size of the
-  correction layer, not a profile defect.
+  plan. Attribute a D3 gap to corrections only after the complete connected
+  transformation and ordered replay are demonstrated with all other inputs
+  fixed; unsupported unification or source selection remains a separate gap.
 - M5 says how long a Q1 profile lasts. Whether later-derived profiles last
   longer is not measured here and must not be inferred from it.
 
@@ -603,34 +800,67 @@ contracts as per-CIK parameters). This spec does not authorise that work.
 - One heavy job at a time; check for running pytest / rebuild processes
   first. The V13 controllers hold the programme heavy lock; census over the
   large instances (Ares, BCRED) and the all-quarter extension wait for it.
+  Acquire the existing cross-worktree programme lock for the entire heavy
+  operation; process discovery alone is not mutual exclusion. A failed or
+  unavailable process/lock inspection blocks heavy work. There is no
+  `--allow-heavy` bypass. Every entry point that can trigger a heavy census,
+  including profile/contracts/cache misses, must pass the same guard.
+  **Lease mechanics (verified 2026-09-28):** the lease is
+  `pipeline.programme.runner.heavy_lock(candidate)`, a context manager. It
+  scans processes with psutil for `pytest`, `rebuild_outputs.py` and
+  `pipeline.programme.bootstrap`, then reads or writes `ROOT /
+  'data/programme/heavy.lock'` with `controller_pid`, `controller_created`
+  and `candidate`, and refuses if the prior candidate's worker telemetry
+  PIDs are alive. `ROOT` resolves from the importing module's file, so the
+  pilot adapter must bind the MAIN checkout root, not the worktree. The
+  `candidate` argument must be a directory under the main checkout's
+  `data/programme/candidates/`; the pilot creates
+  `pilot-filer-profile-<run_id>/` there (the second permitted external
+  write, section 2) containing only `pilot.json` with the run id and pilot
+  root. It never creates `attempts/` or `frozen/` trees. If the programme
+  later exposes a candidate-free lease, the adapter switches to it.
 - **Last-rebuild rule (owner, 2026-09-28).** The V13 build in flight is the
   last refactor rebuild before the pilot's heavy stages. If it does not
   finalise V13, no V14 build starts; the refactor programme pauses and the
-  pilot takes the lock. Light pilot work (graduation [E], schemas, synthetic
-  tests, small-instance census on Stellus / NexPoint / Fidelity) proceeds
-  regardless, since none of it trips the heavy-lock scan.
+  pilot takes the lock. Light pilot work (schemas, synthetic tests,
+  small-instance census and graduation using already-materialised small
+  frames) can proceed. Any nested operation that triggers a heavy census or
+  stage reconstruction must acquire the same lease; the calling module's
+  name does not exempt it.
 - Census over a 1,000-row instance must complete in < 60 s and < 2 GiB; use
   DuckDB SQL or vectorised operations for any per-row work.
 - ASCII-only logs.
 - `python scripts/diff_outputs.py --semantic` after the test run as the
   protected-file backstop, even though the pilot writes nothing there.
-- Every result JSON records git HEAD, input file hashes, and wall clock.
+  Protect the resolved data root's `output/` and the main checkout's
+  `frontend/public/data/`, as well as worktree output roots, before any
+  cache-backed tests import pipeline code. Cover both Python writes and
+  native-IO changes with before/after inventories. Empty worktree output
+  directories do not waive this requirement. Invoke the existing semantic
+  diff script against the main checkout read-only, recording its baseline
+  differences separately from the pilot preservation result; never refresh
+  a baseline. Inspection failure is a failed protection check.
+- Every result JSON records a run ID, git HEAD and dirty-source digest,
+  exact input/configuration hashes, schema/collector versions and wall clock.
+  Cache reuse requires the full dependency identity and a complete prior
+  result. Missing result files remain explicit in fixed denominators.
 
 ## 11. Risks
 
 - **First-quarter weakness.** Earliest quarters are the weakest XBRL and, for
   young funds, ramp-up books (Fidelity Q1 = 26 rows). Low M1/M2 on those CIKs
-  may reflect thin evidence rather than a bad design. Mitigation: M5 shows
-  whether later quarters stabilise; report per CIK, never pooled only.
+  may reflect thin evidence rather than a bad design. Mitigation: same-era
+  M1, explicit low-history flags, and per-CIK reporting. M5 cannot establish
+  stability of profiles learned at later dates.
 - **Form-type confound.** Five pairs cross into a 10-K. Mitigation: split
   reporting; record actual form type from the accession.
 - **Census reproduces the wrapper because the wrapper author used the same
   cues.** M1 may overstate independence. M4 does NOT resolve this: it
   measures compatibility with production, which the same wrapper shaped.
-  Mitigation: the `inherited` tag makes shared cues visible; the only
-  independent correctness signal available is the anchor / fund-total
-  reconciliation, which the pilot reads. Report M1 as derivability, not
-  correctness.
+  Mitigation: the `inherited` tag makes shared cues visible; source-row
+  witnesses and the existing anchor/fund-total reconciliation provide
+  correctness evidence within their stated coverage. Totals cannot replace
+  position-level witnesses. Report M1 as derivability, not correctness.
 - **Graduation test leniency.** "Touches rows elsewhere" is a weak
   generalisability proxy. Mitigation: origin-quarter fidelity, the
   source-backed check on affected positions, an explicit
@@ -644,10 +874,11 @@ contracts as per-CIK parameters). This spec does not authorise that work.
   Mitigation: worktree-only execution (section 2); recorded in the rubric's
   section 5 if it ever happens.
 - **Sections with no independent correctness check in the pilot.**
-  Reconciliation against the filer's reported totals covers subtotals,
-  presentation views, comparative periods and accounting scope, because each
-  error moves the FV sum. It does not cover: rate semantics and scale
-  (checked only by the fund-income yield contract, a signal not a gate),
+  Reconciliation against the filer's reported totals is an aggregate check
+  on subtotals, presentation views, comparative periods and accounting
+  scope. Compensating errors and zero-FV omissions can leave totals unchanged;
+  it cannot replace source-row witnesses. It does not cover rate semantics
+  and scale (checked only by the fund-income yield contract, a signal not a gate),
   footnote conventions (non-accrual location; no check in the pilot),
   and position identity (no check in the pilot). Derived entries in those
   sections are reported as `derived`, never as verified, and the induction
@@ -666,11 +897,21 @@ contracts as per-CIK parameters). This spec does not authorise that work.
 
 1. Should the pilot also run the two wrapper-only alternates (Saratoga, Lord
    Abbett) as extra controls, at the cost of two more census fixtures?
-2. Is `scratch/` the right home for pilot profiles, or should a
-   `data/pilot/` directory (git-ignored) be created so results outlive the
-   session-scratch convention?
+2. Artifact home: resolved by the v3 owner ruling as `data/pilot/` (section 14).
 3. Whether the investigation write-up should propose the v1 profile schema or
    stop at the numbers.
+4. **Same-era M1 evidence tier.** Wrappers record no authoring accession
+   (section 5). Options: (a) admit "latest cached filing whose filing_date
+   precedes the wrapper's last version-bump commit" as a labelled lower tier
+   and report it as such; (b) drop same-era M1 and rely on M5 plus the
+   low-history flags for the drift-versus-derivability question. Default if
+   unanswered: (b), with the comparison reported as `unavailable`.
+5. **Cost acceptance.** The v4 requirements (complete collector, connected
+   D1-D3 through the unified build, per-correction origin reconstruction,
+   protection plugin, lease adapter, event-sourced envelope) are estimated at
+   two to three times the v3 build. Ruling 5 asked for a minimal suite. The
+   staged checkpoints in section 8 let the owner stop after Stage A or B;
+   confirm that this is acceptable, or name the requirements to trim.
 
 ## 13. Review log
 
@@ -704,3 +945,23 @@ were ruled on in v3; see section 14.
 Still open: extra controls (decide after the Stellus census); whether the
 write-up proposes the v1 schema (decide at the end; recommendation is
 numbers only).
+
+## 15. Implementation review corrections (v4, 2026-09-28)
+
+The owner requested these changes after review of the v3 spec and its first
+implementation plan. They refine the existing scope; they do not record a
+new approval to migrate or promote production behavior.
+
+| Review finding | Required correction | Spec / plan |
+|---|---|---|
+| Monetary-only census and incorrect comparative/absence evidence | complete bounded source collection; context dates, missing-channel states and source-pinned negative controls | 6.1 / Tasks 4-5 |
+| Namespace used as scale; partitions were placeholders | executable Q1 structural predicates, actual unit conversion and existing S2 evidence limits | 6.2-6.3 / Tasks 2, 8 |
+| Graduation could pass on overlap and aggregate totals | exact origin effects; witnesses for every affected row and every touched quarter; unknown evidence blocks graduation | 6.5 / Task 3 |
+| Parity stages disconnected; unified IDs borrowed; duplicate/tolerance gaps | connected production boundaries, independent IDs and exact row-multiset/decimal comparisons | 6.4 / Task 9 |
+| Genuine changes rewrote historical beliefs | immutable assertions/retractions and historical queries for both supersession kinds | 6.2 / Task 2 |
+| M1 compared cues; M5 counted files and unknown survival | executable-value comparison; real elapsed quarters, frozen contracts and explicit censoring | 6.2, 6.6, 9 / Tasks 6, 10-11 |
+| Empty-worktree protection and fail-open heavy inspection | actual-root protection, semantic backstop and exclusive shared lease on every heavy entry path | 2, 10 / Tasks 1, 12 |
+
+The revised plan preserves twelve implementation tasks and replaces untested
+code templates with acceptance requirements and adversarial test cases.
+This revision changes documents only; all implementation checkboxes remain open.
