@@ -41,7 +41,6 @@ CANON_VERSION = "Decimal(text).normalize() v1; null distinct from zero"
 RID = "_pilot_rid"
 STAGING, UNIFIED = "staging", "unified"
 CLASSES = ("generalises", "quarter_bound", "conflicts", "insufficient_evidence", "not_expressible")
-BASES = ("published_rows", "investments_ex_cash")
 AXIS_PREFIX = "investmentidentifieraxis="
 KEY_COLUMNS = ("accession_number", "src_context_id")
 GATED_COLUMNS = ("bdc_dimensions_raw", "bdc_investment_identifier")
@@ -158,7 +157,7 @@ def correction_inventory(code_root, *, ciks=PILOT_CIKS) -> dict:
     loaded_b2 = agent_promoted.load_promoted_corrections(b2_base)
     loaded_rules = agent_promoted.load_promoted_rules(rule_base)
     wanted = set(ciks)
-    items, excluded, matched = [], [], Counter()
+    items, excluded, matched, explained = [], [], Counter(), Counter()
     for base, family in ((b2_base, "b2"), (rule_base, "rule")):
         pilot_dirs = [d for d in sorted(base.iterdir()) if d.is_dir() and cik10(d.name) in wanted
                       and not d.name.startswith("_")]
@@ -173,6 +172,7 @@ def correction_inventory(code_root, *, ciks=PILOT_CIKS) -> dict:
                     continue
                 if ".review." in path.name.lower():  # controller ruling R2
                     excluded.append(dict(path=rel, reason="review_record_not_a_correction"))
+                    explained[json.dumps(_read(path), sort_keys=True)] += 1
                     continue
                 body = _read(path)
                 pool = loaded_b2 if family == "b2" else loaded_rules.get(cik10(directory.name), [])
@@ -184,6 +184,16 @@ def correction_inventory(code_root, *, ciks=PILOT_CIKS) -> dict:
                 if item["cik"] != cik10(directory.name):
                     raise StageInvalidated("correction cik disagrees with its directory: " + rel)
                 items.append(item)
+    # Reverse liveness: every body the loaders return for the pilot CIKs must be an
+    # inventory item or an explained (.review.) exclusion; the M3 denominator is the metric.
+    returned = Counter(json.dumps(b, sort_keys=True) for b in loaded_b2 if cik10(b.get("cik")) in wanted)
+    returned.update(json.dumps(b, sort_keys=True) for c, bodies in loaded_rules.items() if c in wanted
+                    for b in bodies)
+    remainder = returned - matched - explained
+    if remainder:
+        ids_left = sorted(body_id(json.loads(k)) for k in remainder.elements())
+        raise StageInvalidated("loader returned " + str(sum(remainder.values())) + " live pilot-CIK "
+                               "correction(s) the inventory did not enumerate: " + ", ".join(ids_left[:10]))
     ids = [i["item_id"] for i in items]
     if len(ids) != len(set(ids)):
         raise StageInvalidated("duplicate correction ids in the inventory")
@@ -584,50 +594,102 @@ def gate_band() -> dict:
                        "consumed by pipeline.quarter_acceptance)")
 
 
-def _members(frame: pd.DataFrame, basis: str):
-    if basis == "published_rows":
-        return frame, None
-    needed = {"index_classification", "is_subsidiary"}
-    if not needed <= set(frame.columns):
-        return None, "anchor_membership_unresolved"
-    cash = frame["index_classification"].astype(str).str.upper() == "CASH"
-    sub = frame["is_subsidiary"].astype(str).str.lower().isin(("1", "true", "1.0"))
-    return frame.loc[~cash & ~sub], None
+MEMBERSHIP_SOURCE = "pipeline.accounting_membership.build (called unchanged)"
+MEMBERSHIP_COLUMNS = ("accounting_scope_id", "accounting_record_class")
+MEMBERSHIP_HOLDING_COLUMNS = ("cik", "report_date", *MEMBERSHIP_COLUMNS, "fair_value",
+                              "fair_value_currency", "index_classification")
+ANCHOR_LEVEL_REASONS = ("anchor_evidence_unavailable", "anchor_basis_unresolved")
 
 
-def _total(frame: pd.DataFrame, basis: str):
-    members, problem = _members(frame, basis)
-    if problem:
-        return None, problem
-    currencies = set(members["fair_value_currency"].astype(str)) if "fair_value_currency" in members \
-        else {"missing"}
-    if currencies - {"USD"}:
-        return None, ("currency_unresolved" if currencies & {"UNRESOLVED", "", "None", "nan", "missing"}
-                      else "currency_not_comparable")
-    values = [canon(v) for v in members["fair_value"]]
-    if any(v is None or v.startswith("unparseable") for v in values):
-        return None, "holding_value_unavailable"
-    return sum((Decimal(v) for v in values), Decimal(0)), None
+def _anchor_row(anchor: dict) -> dict:
+    """The anchor contract fields exactly as recorded; nothing absent is defaulted."""
+    return dict(cik=cik10(anchor.get("cik")), quarter=str(anchor.get("target_quarter") or ""),
+                anchor_basis=anchor.get("basis"), anchor_kind=anchor.get("anchor_kind"),
+                source_evidence=anchor.get("source_evidence"), currency=anchor.get("currency"))
+
+
+def production_membership(anchor: dict, frame: pd.DataFrame) -> dict:
+    """Per-row anchor membership from the production gate module, not a paraphrase.
+
+    `pipeline.accounting_membership.build` reads CSV paths; the holdings and the one
+    anchor row are handed to it on an in-memory fsspec filesystem (no disk write).
+    Holdings lacking accounting_scope_id/accounting_record_class are passed with those
+    columns NULL and the result is `anchor_membership_unresolved`: no proxy (such as
+    is_subsidiary) is ever substituted. Anchor-level reasons take production's precedence.
+    """
+    import uuid
+    import duckdb
+    import fsspec
+    from pipeline.accounting_membership import build
+    absent = [c for c in MEMBERSHIP_COLUMNS if c not in frame.columns]
+    counts = dict(included=0, excluded=0, unknown=0)
+    out = dict(source=MEMBERSHIP_SOURCE, missing_holding_columns=absent, membership=counts, reasons={})
+    if frame.empty:
+        return dict(out, total=Decimal(0), cause="anchor_membership_unresolved" if absent else None)
+    holdings = pd.DataFrame({c: (frame[c].to_numpy() if c in frame.columns else None)
+                             for c in MEMBERSHIP_HOLDING_COLUMNS})
+    holdings.insert(0, "row_id", ["pilot-" + str(i) for i in range(len(frame))])  # call-local identity
+    fs = fsspec.filesystem("memory")
+    root = "memory://pilot-membership-" + uuid.uuid4().hex
+    con = duckdb.connect()
+    try:
+        con.register_filesystem(fs)
+        fs.pipe(root + "/holdings.csv", holdings.to_csv(index=False).encode("ascii", "replace"))
+        fs.pipe(root + "/anchors.csv", pd.DataFrame([_anchor_row(anchor)]).to_csv(index=False).encode("ascii"))
+        build(con, release_id="pilot", holdings=root + "/holdings.csv", anchors=root + "/anchors.csv")
+        rows = con.execute("SELECT membership, reason, count(*), sum(fair_value) FROM accounting_membership "
+                           "GROUP BY 1, 2 ORDER BY 1, 2").fetchall()
+    finally:
+        con.close()
+        if fs.exists(root):
+            fs.rm(root, recursive=True)
+    reasons = Counter()
+    total = Decimal(0)
+    for membership, reason, n, value in rows:
+        counts[membership] += n
+        reasons[reason] += n
+        if membership == "included":
+            total += Decimal(str(value))
+    out = dict(out, membership=counts, reasons=dict(sorted(reasons.items())))
+    anchor_level = [r for r in ANCHOR_LEVEL_REASONS if r in reasons]
+    if sum(counts.values()) != len(frame):
+        cause = "membership_rows_unjoined"
+    elif anchor_level:
+        cause = anchor_level[0]
+    elif absent:
+        cause = "anchor_membership_unresolved"
+    elif counts["unknown"]:
+        unknown = Counter({r: n for r, n in reasons.items()
+                           if r not in ("declared_anchor_population", "outside_parent_anchor",
+                                        "outside_investments_anchor")})
+        cause = sorted(unknown.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+    else:
+        cause = None
+    return dict(out, total=None if cause else total, cause=cause)
 
 
 def reconcile(anchor: dict, pre: pd.DataFrame, post: pd.DataFrame, band_pct: float) -> dict:
-    """The gate's basis and band; the anchor currency is implicit USD (no currency field)."""
+    """The gate's anchor contract and membership (accounting_membership) and its band."""
     basis = anchor.get("basis")
     base = dict(basis=basis, band_pct=band_pct, anchor_path=anchor.get("_path"),
-                grand_total=anchor.get("grand_total"), anchor_currency="implicit_usd")
-    if basis not in BASES:
-        return dict(base, status="unassessable", cause="anchor_basis_unresolved")
+                grand_total=anchor.get("grand_total"), anchor_currency=anchor.get("currency") or None,
+                anchor_kind=anchor.get("anchor_kind") or None, membership_source=MEMBERSHIP_SOURCE)
+    sides = {}
+    for label, frame in (("pre", pre), ("post", post)):
+        sides[label] = production_membership(anchor, frame)
+        if sides[label]["cause"]:
+            side = {k: v for k, v in sides[label].items() if k != "total"}
+            return dict(base, status="unassessable", cause=side["cause"], failed_side=label, **{label: side})
     if not isinstance(anchor.get("grand_total"), (int, float)) or not anchor["grand_total"]:
         return dict(base, status="unassessable", cause="anchor_total_missing")
     total = Decimal(str(anchor["grand_total"]))
     results = {}
-    for label, frame in (("pre", pre), ("post", post)):
-        value, problem = _total(frame, basis)
-        if problem:
-            return dict(base, status="unassessable", cause=problem, failed_side=label)
+    for label, side in sides.items():
+        value = side["total"]
         residual = (value - total) / total * 100
         results[label] = dict(total=str(value.normalize()), residual_pct=float(residual),
-                              within_band=abs(residual) <= Decimal(str(band_pct)))
+                              within_band=abs(residual) <= Decimal(str(band_pct)),
+                              membership=side["membership"], reasons=side["reasons"])
     status = ("reconciles" if results["post"]["within_band"] else
               "contradicted" if results["pre"]["within_band"] else "unassessable")
     return dict(base, status=status, cause=None if status != "unassessable"

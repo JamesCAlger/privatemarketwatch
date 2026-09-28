@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+from decimal import Decimal
 from pathlib import Path
 
 import pandas as pd
@@ -46,7 +47,8 @@ def staged(rows, rd=Q2, cik=CIK, acc=ACC, dims=None):
                         bdc_dimensions_raw=(dims[i] if dims else "investmentidentifieraxis=" + ident),
                         issuer_name=ident, fair_value=fv, cost=cost, principal_amount=None,
                         maturity_date=None, asset_category="LOAN", index_classification="LOAN",
-                        is_subsidiary="0", fair_value_currency="USD"))
+                        is_subsidiary="0", fair_value_currency="USD",
+                        accounting_scope_id=cik + ":parent", accounting_record_class="parent_schedule"))
     return g.with_rids(pd.DataFrame(out))
 
 
@@ -72,7 +74,10 @@ def anchor(q, total, basis="published_rows"):
     return dict(cik=str(int(CIK)), target_quarter=q, grand_total=total, method="total_row",
                 components=[dict(label="Total Investments", value=total, source="synthetic")],
                 evidence=[dict(source="filing", quote="Total Investments")], rationale="r",
-                companyfacts_fv=total, basis=basis)
+                companyfacts_fv=total, basis=basis,
+                # the production anchor contract (accounting_membership): kind, evidence, currency
+                anchor_kind="verified_override", currency="USD",
+                source_evidence="synthetic.json#sha256=" + "0" * 64)
 
 
 def dup_quarter(rd, *, fv=100.0, extra=()):
@@ -269,6 +274,47 @@ def test_currency_and_basis_mismatch_are_insufficient():
     assert {"anchor_basis_unresolved", "currency_not_comparable"} <= set(out["causes"])
 
 
+def _anchor_frame(rows):
+    """Published-shaped rows: (fair_value, index_classification, accounting_record_class, is_subsidiary)."""
+    frame = staged([("P%d" % i, row[0], "c%d" % i) for i, row in enumerate(rows)]).drop(columns=[g.RID])
+    frame["index_classification"] = [row[1] for row in rows]
+    frame["accounting_record_class"] = [row[2] for row in rows]
+    frame["is_subsidiary"] = [row[3] for row in rows]
+    return frame
+
+
+def test_missing_anchor_currency_is_currency_not_comparable():
+    frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "0")])
+    no_currency = anchor(Q2, 10.0, basis="investments_ex_cash")
+    no_currency.pop("currency")
+    rec = g.reconcile(no_currency, frame, frame, 0.5)
+    assert rec["status"] == "unassessable" and rec["cause"] == "currency_not_comparable"
+    assert rec["anchor_currency"] is None  # never an assumed implicit USD
+    no_kind = anchor(Q2, 10.0, basis="investments_ex_cash")
+    no_kind.pop("anchor_kind")
+    assert g.reconcile(no_kind, frame, frame, 0.5)["cause"] == "anchor_evidence_unavailable"
+    # the same anchor with its declared currency reconciles (false-positive guard)
+    assert g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5)["status"] == "reconciles"
+
+
+def test_missing_accounting_record_class_is_membership_unresolved_not_a_proxy():
+    frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "0"), (5.0, "LOAN", "parent_schedule", "1")])
+    frame = frame.drop(columns=["accounting_scope_id", "accounting_record_class"])
+    for basis in ("investments_ex_cash", "published_rows"):
+        rec = g.reconcile(anchor(Q2, 10.0, basis=basis), frame, frame, 0.5)
+        assert rec["status"] == "unassessable" and rec["cause"] == "anchor_membership_unresolved", rec
+
+
+def test_investments_ex_cash_membership_is_the_production_accounting_membership():
+    # is_subsidiary is not the gate's membership signal; underlying schedules and CASH are excluded.
+    frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "1"), (7.0, "LOAN", "underlying_schedule", "0"),
+                           (3.0, "CASH", "parent_schedule", "0")])
+    rec = g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5)
+    assert rec["status"] == "reconciles", rec
+    assert Decimal(rec["post"]["total"]) == 10
+    assert rec["post"]["membership"] == dict(included=1, excluded=2, unknown=0)
+
+
 def test_filer_total_contradicted_by_candidate_is_conflicts():
     provider, anchors = _dup_provider([Q1, Q2, Q3], anchored=[Q2, Q3])
     # Q3: production keeps the affiliated row (anchor = total WITH it), so deleting it breaks the total.
@@ -405,11 +451,37 @@ def test_correction_inventory_uses_the_loader_contract_and_excludes_retired():
     assert any(e["reason"] == "proposed_or_retired" for e in inv["excluded"])
     for entry in inv["items"]:
         assert g.sha256_file(code_root / entry["path"]) == entry["sha256"]
+    # the M3 denominator frozen in stagea-m3-20260928t151422z (4 B2 leaves + 14 rules)
+    assert inv["denominator"] == 18
+    assert sum(1 for i in inv["items"] if i["family"] == "b2_leaf") == 4
+
+
+def _write_leaf(path, body):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(body), encoding="utf-8")
+
+
+def test_correction_inventory_rejects_a_live_loader_body_it_did_not_enumerate(tmp_path):
+    pilot = g.PILOT_CIKS[0]
+    b2 = tmp_path / g.B2_DIR
+    (tmp_path / g.INVESTIGATE_DIR).mkdir(parents=True)
+    _write_leaf(b2 / pilot / "comparative_period_filter.json", comparative_leaf(cik=pilot))
+    inv = g.correction_inventory(tmp_path)
+    assert inv["denominator"] == 1
+    # The B2 loader keys a leaf by its body, not its directory: a pilot-CIK body in another
+    # CIK's directory is live in production but outside this module's enumeration.
+    _write_leaf(b2 / "0000000009" / "unit_rescale.json",
+                dict(cik=pilot, fix_class="unit_rescale", template=dict(report_date=Q4)))
+    with pytest.raises(g.StageInvalidated, match="did not enumerate"):
+        g.correction_inventory(tmp_path)
 
 
 # ------------------------------------------------------------------ cached slices
 
 @pytest.mark.needs_cache
+# Ruling R14: the sealed pipeline/agent_rule.py:481 raises a pandas FutureWarning on this
+# real TCW replay; filtered for this ONE test only.
+@pytest.mark.filterwarnings("ignore::FutureWarning:pipeline.agent_rule")
 def test_real_tcw_quarter_stages_and_attributes_live_corrections():
     data_root = os.environ.get("PROFILE_PILOT_DATA_ROOT")
     if not data_root:
