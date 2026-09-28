@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "filer_profile_v0.schema.json",
+  "title": "Filer profile v0 (filer-profile pilot, spec 6.2)",
+  "description": "A profile document holds materialized entry envelopes. recorded_until, supersedes and supersession_kind are materialized views of an append-only assertion/retraction log (scripts/profile_pilot/envelope.py); they are never in-place rewrites. Both clocks are half-open (from <= q < to) with null meaning unbounded.",
+  "type": "object",
+  "required": ["entries"],
+  "properties": {
+    "entries": {"type": "array", "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "report_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "qname": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*:[A-Za-z_][A-Za-z0-9_.-]*$"},
+    "predicate": {
+      "description": "Restricted structural applicability predicates. Row ordinals, row ranges and context-ID lists are evidence, never predicates.",
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["kind", "axis", "member"],
+         "properties": {"kind": {"const": "axis_member"}, "axis": {"$ref": "#/$defs/qname"},
+                        "member": {"$ref": "#/$defs/qname"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "field", "concept"],
+         "properties": {"kind": {"const": "carrying_concept"},
+                        "field": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+                        "concept": {"$ref": "#/$defs/qname"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "delimiter", "count"],
+         "properties": {"kind": {"const": "segment_count"},
+                        "delimiter": {"type": "string", "minLength": 1},
+                        "count": {"type": "integer", "minimum": 1}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "vocabulary"],
+         "properties": {"kind": {"const": "prefix"},
+                        "vocabulary": {"type": "array", "minItems": 1, "uniqueItems": true,
+                                       "items": {"type": "string", "minLength": 1}}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "dialect"],
+         "properties": {"kind": {"const": "grammar_dialect"},
+                        "dialect": {"type": "string", "minLength": 1}}}
+      ]
+    },
+    "support": {
+      "description": "A measured quantity with a named estimator. No free-floating confidence or score.",
+      "oneOf": [
+        {"type": "object", "additionalProperties": false,
+         "required": ["kind", "numerator", "denominator"],
+         "properties": {"kind": {"const": "prevalence"},
+                        "numerator": {"type": "integer", "minimum": 0},
+                        "denominator": {"type": "integer", "minimum": 1}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "count"],
+         "properties": {"kind": {"const": "context_count"},
+                        "count": {"type": "integer", "minimum": 0}}}
+      ]
+    },
+    "evidence_item": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {"kind": {"type": "string", "minLength": 1}}
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry_id", "key", "value", "form_type", "applies_to", "valid_from",
+                   "valid_to", "recorded_at", "recorded_until", "supersedes",
+                   "supersession_kind", "author", "status", "provenance", "inherited_from",
+                   "support", "evidence", "regression_pin"],
+      "properties": {
+        "entry_id": {"type": "string", "minLength": 1},
+        "key": {"type": "string", "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)*$"},
+        "value": {},
+        "form_type": {"type": ["string", "null"], "minLength": 1},
+        "applies_to": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/predicate"}]},
+        "valid_from": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/report_date"}]},
+        "valid_to": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/report_date"}]},
+        "recorded_at": {"$ref": "#/$defs/timestamp"},
+        "recorded_until": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/timestamp"}]},
+        "supersedes": {"type": ["string", "null"], "minLength": 1},
+        "supersession_kind": {"enum": [null, "correction", "change"]},
+        "author": {"enum": ["census", "agent", "human"]},
+        "status": {"enum": ["derived", "proposed", "verified", "promoted", "retired"]},
+        "provenance": {"enum": ["derived", "inherited"]},
+        "inherited_from": {"type": ["string", "null"], "minLength": 1},
+        "support": {"$ref": "#/$defs/support"},
+        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence_item"}},
+        "regression_pin": {"type": "null",
+                           "description": "Slot for the later migration's per-entry regression test reference; always null in the pilot."}
+      }
+    }
+  }
+}
