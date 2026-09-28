@@ -1,8 +1,10 @@
 """Filer-profile pilot: explicit paths, run confinement and primary-quarter pinning."""
 from __future__ import annotations
 
+from contextlib import contextmanager
 import csv
 import hashlib
+import os
 import shutil
 from pathlib import Path
 
@@ -54,6 +56,25 @@ def put_instance(main: Path, cik: str, accession: str, text: str = "<xbrl/>") ->
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
     return path
+
+
+@contextmanager
+def held_lease(paths):
+    """The REAL lease adapter against the fake main root, with discovery limited to self."""
+    import psutil
+    from scripts.profile_pilot.protection import shared_heavy_lease
+
+    class Self:
+        pid = os.getpid()
+        info = dict(pid=os.getpid(), name="python.exe", cmdline=["python", "-m", "pytest"])
+
+    original = psutil.process_iter
+    psutil.process_iter = lambda attrs=None: iter([Self()])
+    try:
+        with shared_heavy_lease(paths, head="test") as lease:
+            yield lease
+    finally:
+        psutil.process_iter = original
 
 
 def index_row(cik, accession, form, filing_date, report_date, status="cached"):
@@ -227,7 +248,9 @@ def test_populated_primary_plus_cover_only_amendment_selects_primary(tmp_path):
                     document_period_ends=[quarter], target_instant_contexts=0 if cover else 900)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
-    result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner)
+    with held_lease(paths) as lease:
+        result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner,
+                                         lease=lease)
     assert result["status"] == "selected"
     assert result["accession_number"] == "0001287750-23-000010"
     assert result["form_type"] == "10-K"
@@ -250,7 +273,9 @@ def test_financially_populated_amendment_is_ambiguous_unavailable(tmp_path):
                     document_period_ends=[quarter], target_instant_contexts=12)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
-    result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner)
+    with held_lease(paths) as lease:
+        result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner,
+                                         lease=lease)
     assert result["status"] == "unavailable"
     assert result["reason"] == "ambiguous_same_quarter_candidates"
     assert {c["accession_number"] for c in result["candidates"]} == {
@@ -270,7 +295,9 @@ def test_two_originals_are_not_resolved_by_picking_the_last(tmp_path):
                     document_period_ends=[quarter], target_instant_contexts=5)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001715933"], quarters=["2023-03-31"])
-    result = cohort.select_accession(paths, "0001715933", "2023-03-31", candidates, scanner=scanner)
+    with held_lease(paths) as lease:
+        result = cohort.select_accession(paths, "0001715933", "2023-03-31", candidates, scanner=scanner,
+                                         lease=lease)
     assert result["status"] == "unavailable"
     assert len(result["candidates"]) == 2
 
@@ -286,6 +313,36 @@ def test_multiple_candidates_without_a_scan_are_deferred_not_guessed(tmp_path):
     assert result["status"] == "unavailable"
     assert result["reason"] == "selection_requires_amendment_scan"
     assert all(c["sha256"] for c in result["candidates"])
+
+
+@pytest.mark.parametrize("handle", ["none", "released", "forged"])
+def test_scanner_without_a_held_lease_is_refused_before_parsing(tmp_path, handle):
+    from scripts.profile_pilot.protection import LeaseInfo, LeaseRefused
+    rows = [index_row("1287750", "0001287750-23-000010", "10-K", "2023-02-07", "2022-12-31"),
+            index_row("1287750", "0001628280-23-010219", "10-K/A", "2023-03-31", "2022-12-31")]
+    paths = fake_paths(tmp_path, index_rows=rows)
+    put_instance(paths.main_repo_root, "1287750", "0001287750-23-000010")
+    put_instance(paths.main_repo_root, "1287750", "0001628280-23-010219")
+    scanned = []
+
+    def scanner(path, cik, quarter):
+        scanned.append(path)
+        raise AssertionError("must not parse without the lease")
+
+    lease = None
+    if handle == "released":
+        with held_lease(paths) as held:
+            lease = held
+    elif handle == "forged":
+        lease = LeaseInfo(candidate=tmp_path / "c", lock_path=tmp_path / "heavy.lock",
+                          acquired_utc="x")
+    candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
+    with pytest.raises(LeaseRefused):
+        cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner,
+                                lease=lease)
+    with pytest.raises(LeaseRefused):
+        cohort.primary_quarter_inventory(paths, scanner=scanner, lease=lease)
+    assert scanned == []
 
 
 def test_uncached_or_unindexed_quarter_is_unavailable(tmp_path):

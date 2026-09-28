@@ -220,3 +220,46 @@ def test_cache_miss_is_blocked_when_the_lease_is_refused(tmp_path, monkeypatch):
         manifest.run_cached_stage(paths, "census/b.json", identity, lambda: {"x": 1},
                                   heavy=True, lease=lambda: shared_heavy_lease(paths, head="h"))
     assert not (paths.run_root / "census" / "b.json").exists()
+
+
+# ---------------------------------------------------------------- real coordination-path check
+
+def test_lease_check_command_records_the_held_lock_and_cleans_up(tmp_path, quiet_discovery):
+    paths = fake_paths(tmp_path)
+    code = verify.main(["lease-check", "--main-root", str(paths.main_repo_root), "--data-root",
+                        str(paths.data_root), "--run-id", "stagea-test"])
+    assert code == 0
+    receipt = json.loads(next((paths.run_root / "verification").glob("*_lease_check.json")).read_text())
+    assert receipt["status"] == "acquired"
+    assert receipt["candidate"] == str(_candidate(paths))
+    assert receipt["candidate_entries"] == ["pilot.json"]
+    assert receipt["heavy_lock_contents"]["controller_pid"] == os.getpid()
+    assert Path(receipt["heavy_lock_contents"]["candidate"]) == _candidate(paths)
+    assert receipt["released_utc"] and receipt["lock_present_after"] is False
+    assert receipt["pilot_candidates_after"] == []
+    assert not _lock(paths).exists() and not _candidate(paths).exists()
+
+
+def test_lease_check_records_a_refusal_verbatim(tmp_path, monkeypatch):
+    paths = fake_paths(tmp_path)
+    monkeypatch.setattr(psutil, "process_iter", lambda attrs=None: iter([
+        FakeProcess(424242, "python.exe", ["python", "-m", "pytest", "tests"])]))
+    code = verify.main(["lease-check", "--main-root", str(paths.main_repo_root), "--data-root",
+                        str(paths.data_root), "--run-id", "stagea-test"])
+    assert code == verify.EXIT_LEASE_REFUSED
+    receipt = json.loads(next((paths.run_root / "verification").glob("*_lease_check.json")).read_text())
+    assert receipt["status"] == "refused" and "Another heavy job" in receipt["reason"]
+
+
+def test_protocol_check_ignores_line_endings_but_not_content(tmp_path, quiet_discovery):
+    paths = fake_paths(tmp_path)
+    main_runner = paths.main_repo_root / "pipeline" / "programme" / "runner.py"
+    text = (CODE_ROOT / "pipeline" / "programme" / "runner.py").read_bytes().replace(b"\r\n", b"\n")
+    main_runner.write_bytes(text.replace(b"\n", b"\r\n"))  # opposite line endings: same protocol
+    with shared_heavy_lease(paths, head="h"):
+        pass
+    main_runner.write_bytes(text + b"\n# drift\n")
+    with pytest.raises(LeaseRefused, match="differs"):
+        with shared_heavy_lease(paths, head="h"):
+            pytest.fail("must not run")
+    assert not _candidate(paths).exists()

@@ -204,7 +204,18 @@ def protected_session(paths, *, receipt: str):
 
 def requires_lease(*, ciks=(), instance_count=0, full_cache_scan=False, pipeline_cik_count=0,
                    est_seconds=0, est_bytes=0) -> bool:
-    """Ruling R3. Pinned-slice DuckDB reads and file hashing are light by definition."""
+    """Ruling R3 (amended by R9): True when an operation must hold the shared lease.
+
+    Heavy: parsing any Ares/BCRED instance, parsing more than one instance per call,
+    a full raw-cache scan, a staging/unified run over more than the eight pilot CIKs,
+    or a parse/staging/census operation estimated above 60 s or 2 GiB.
+    Light by enumeration (the estimate does NOT apply): DuckDB reads of pinned
+    holdings/index slices for the eight CIKs and file hashing, including the
+    freeze command (measured 62.5 s).
+    Exempt (R9): the launcher's pytest run and the read-only semantic backstop. They
+    are guarded instead by the launcher's process check, which refuses when any
+    pytest/rebuild/bootstrap process exists or discovery fails.
+    """
     from scripts.profile_pilot.cohort import LARGE_INSTANCE_CIKS
     if instance_count and any(c in LARGE_INSTANCE_CIKS for c in ciks):
         return True
@@ -222,6 +233,23 @@ class LeaseInfo:
 
 
 _PROCESS_LEASE = threading.Lock()
+
+
+def assert_lease_held(lease) -> None:
+    """Refuse unless `lease` is a live handle: its lock file names this process and candidate."""
+    if not isinstance(lease, LeaseInfo):
+        raise LeaseRefused("heavy work requires a held shared lease handle; none was given")
+    try:
+        held = json.loads(Path(lease.lock_path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise LeaseRefused("shared lease is not held: " + type(exc).__name__) from exc
+    if held.get("controller_pid") != os.getpid() or held.get("candidate") != str(lease.candidate):
+        raise LeaseRefused("shared lease lock does not belong to this process and candidate")
+
+
+def _normalised(path: Path) -> bytes:
+    with open(path, "rb") as stream:
+        return stream.read().replace(b"\r\n", b"\n")
 
 
 def _remove_candidate(candidate: Path) -> None:
@@ -246,10 +274,12 @@ def shared_heavy_lease(paths, *, head: str):
         raise LeaseRefused("the pilot lease is already held in this process")
     try:
         runner = importlib.import_module("pipeline.programme.runner")
-        from pipeline.programme.core import ContractError, sha
+        from pipeline.programme.core import ContractError
         main_runner = paths.main_repo_root / "pipeline" / "programme" / "runner.py"
         try:
-            same_protocol = sha(main_runner) == sha(Path(runner.__file__))
+            # Checkouts differ in line endings (main LF, worktree CRLF; same git blob),
+            # so compare content with CRLF normalised, not raw bytes.
+            same_protocol = (_normalised(main_runner) == _normalised(Path(runner.__file__)))
         except OSError as exc:
             raise LeaseRefused("cannot inspect the main lease protocol: " + str(exc)) from exc
         if not same_protocol:

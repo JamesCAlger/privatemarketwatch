@@ -4,8 +4,20 @@
     python -m scripts.profile_pilot.verify freeze --main-root M --data-root D --run-id R
     python -m scripts.profile_pilot.verify measure-inventory --main-root M --data-root D --run-id R
 
-Every command writes only under <data_root>/pilot/filer_profile/<run_id>/.
+    python -m scripts.profile_pilot.verify lease-check --main-root M --data-root D --run-id R
+
+Every command writes only under <data_root>/pilot/filer_profile/<run_id>/ (lease-check
+also makes the two permitted coordination writes: heavy.lock and the pseudo-candidate).
 Exit codes: 0 ok, 1 tests failed, 3 preservation failed, 4 refused (busy/lease).
+
+Lease exemption (controller ruling R9, deliberate): the launcher's pytest run and the
+read-only semantic backstop do NOT take the shared programme lease. They are guarded
+by the launcher's process check instead, which refuses to start when any
+pytest/rebuild_outputs.py/pipeline.programme.bootstrap process exists or when process
+discovery fails. Also deliberate: the string "pytest" is kept out of the backstop's
+command line (its report path travels in PROFILE_PILOT_BACKSTOP_REPORT), because
+heavy_lock treats any python command line containing "pytest" as a heavy job, and a
+~13-minute read-only backstop must not block the programme controller's lease.
 """
 from __future__ import annotations
 
@@ -287,12 +299,55 @@ def cmd_lease_probe(args) -> int:
         return EXIT_LEASE_REFUSED
 
 
+def cmd_lease_check(args) -> int:
+    """Acquire and release the REAL shared lease once; record the coordination path."""
+    from scripts.profile_pilot import manifest
+    paths = _paths(args)
+    relative = "verification/" + _stamp() + "_lease_check.json"
+    candidates_dir = paths.main_repo_root / "data" / "programme" / "candidates"
+    lock_path = paths.main_repo_root / "data" / "programme" / "heavy.lock"
+    head = manifest.git_head(paths.code_root)
+    body = dict(run_id=paths.run_id, main_repo_root=str(paths.main_repo_root), git_head=head,
+                expected_candidate=str(candidates_dir / paths.candidate_name),
+                expected_lock=str(lock_path), lock_present_before=lock_path.exists())
+    status = 0
+    with protection.protected_session(paths, receipt=relative.replace(".json", "_preservation.json")):
+        try:
+            with protection.shared_heavy_lease(paths, head=head) as lease:
+                body.update(status="acquired", acquired_utc=lease.acquired_utc,
+                            candidate=str(lease.candidate), lock_path=str(lease.lock_path),
+                            heavy_lock_contents=json.loads(lease.lock_path.read_text(encoding="utf-8")),
+                            candidate_entries=sorted(p.name for p in lease.candidate.iterdir()),
+                            pilot_json=json.loads((lease.candidate / "pilot.json").read_text(encoding="ascii")))
+                protection.assert_lease_held(lease)
+            body["released_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        except protection.LeaseRefused as exc:
+            body.update(status="refused", reason=_ascii(str(exc)))
+            status = EXIT_LEASE_REFUSED
+    body.update(lock_present_after=lock_path.exists(),
+                pilot_candidates_after=sorted(p.name for p in candidates_dir.glob("pilot-filer-profile-*")))
+    target = write_json(paths, relative, body)
+    print("lease-check: " + body["status"] + " | lock after: " + str(body["lock_present_after"])
+          + " | pilot candidates after: " + str(body["pilot_candidates_after"]))
+    print("receipt: " + str(target))
+    ours_left = False
+    if lock_path.exists():  # another controller may legitimately hold it now; ours must not
+        try:
+            ours_left = json.loads(lock_path.read_text(encoding="utf-8")).get("controller_pid") == os.getpid()
+        except (OSError, ValueError):
+            ours_left = True
+    if ours_left or paths.candidate_name in body["pilot_candidates_after"]:
+        return EXIT_PRESERVATION_FAILED
+    return status
+
+
 def main(argv=None) -> int:
-    sys.stdout.reconfigure(encoding="ascii", errors="backslashreplace")
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="ascii", errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("test", "freeze", "measure-inventory"):
+    for name in ("test", "freeze", "measure-inventory", "lease-check"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--main-root", type=Path, default=None,
                          help="main checkout; default = git common dir of the code root (validated)")
@@ -309,7 +364,8 @@ def main(argv=None) -> int:
     args.run_id = args.run_id or default_run_id()
     try:
         return {"test": cmd_test, "freeze": cmd_freeze,
-                "measure-inventory": cmd_measure_inventory}[args.command](args)
+                "measure-inventory": cmd_measure_inventory,
+                "lease-check": cmd_lease_check}[args.command](args)
     except PathError as exc:
         print("PATH ERROR: " + _ascii(str(exc)))
         return EXIT_REFUSED

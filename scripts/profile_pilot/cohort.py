@@ -131,12 +131,17 @@ def _census():
 
 
 def select_accession(paths: PilotPaths, cik: str, quarter: str, candidates: list[dict], *,
-                     scanner=None) -> dict:
+                     scanner=None, lease=None) -> dict:
     """Pin one primary accession for (cik, quarter) or return `unavailable` with evidence.
 
-    `scanner(path, cik, quarter)` is only needed when amendments compete; it parses
-    XML, so a caller must hold the shared lease for large instances.
+    `scanner(path, cik, quarter)` is only needed when amendments compete. It parses
+    more than one instance (heavy under ruling R3), so passing a scanner requires a
+    HELD shared-lease handle (`lease`, from protection.shared_heavy_lease); without
+    one the call is refused before any work.
     """
+    if scanner is not None:
+        from scripts.profile_pilot.protection import assert_lease_held
+        assert_lease_held(lease)
     exact = [r for r in candidates if r["cik"] == cik and r["report_date"] == quarter]
     records = [_candidate_record(paths, r) for r in exact]
     base = dict(cik=cik, quarter=quarter, candidates=records)
@@ -181,13 +186,14 @@ def select_accession(paths: PilotPaths, cik: str, quarter: str, candidates: list
                 source_selection=trace)
 
 
-def primary_quarter_inventory(paths: PilotPaths, *, scanner=None) -> dict:
+def primary_quarter_inventory(paths: PilotPaths, *, scanner=None, lease=None) -> dict:
     """Content of inventories/primary_quarter_inventory.json (16 primary + 8 verified-era)."""
     wanted = fund_quarters(include_verified_era=True)
     candidates = load_index_candidates(paths, quarters={r["quarter"] for r in wanted})
     entries = []
     for row in wanted:
-        selected = select_accession(paths, row["cik"], row["quarter"], candidates, scanner=scanner)
+        selected = select_accession(paths, row["cik"], row["quarter"], candidates,
+                                    scanner=scanner, lease=lease)
         entries.append(dict(selected, role=row["role"]))
     counts = {}
     for entry in entries:

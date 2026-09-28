@@ -153,11 +153,28 @@ def test_incomplete_prior_result_is_not_reused(tmp_path):
         manifest.run_cached_stage(paths, "census/z.json", identity, lambda: {"n": 1}, heavy=False)
 
 
-def test_heavy_stage_without_a_lease_is_refused(tmp_path):
+def test_heavy_classified_stage_without_a_lease_is_refused_not_run(tmp_path):
+    from contextlib import contextmanager
+    from scripts.profile_pilot import protection
     paths = fake_paths(tmp_path)
     identity = manifest.cache_identity("census", {}, collector_version="c1")
-    with pytest.raises(ValueError, match="lease"):
-        manifest.run_cached_stage(paths, "census/h.json", identity, lambda: {}, heavy=True)
+    heavy = protection.requires_lease(ciks=["0001287750"], instance_count=1)  # Ares parse, R3
+    assert heavy is True
+    ran = []
+    with pytest.raises(protection.LeaseRefused):
+        manifest.run_cached_stage(paths, "census/h.json", identity, lambda: ran.append(1) or {},
+                                  heavy=heavy)
+
+    @contextmanager
+    def pretend_lease():  # yields a handle whose lock is not actually held
+        yield protection.LeaseInfo(candidate=tmp_path / "c", lock_path=tmp_path / "heavy.lock",
+                                   acquired_utc="x")
+
+    with pytest.raises(protection.LeaseRefused):
+        manifest.run_cached_stage(paths, "census/h.json", identity, lambda: ran.append(1) or {},
+                                  heavy=heavy, lease=pretend_lease)
+    assert ran == []
+    assert not (paths.run_root / "census" / "h.json").exists()
 
 
 # ---------------------------------------------------------------- verified-era evidence
@@ -222,3 +239,23 @@ def test_build_manifest_records_head_dirty_digest_and_input_hashes(tmp_path):
     assert built["verified_era"]["signoff_commit"] == "eed082b"
     assert manifest.verify_inputs(built)["ok"] is True
     json.dumps(built).encode("ascii")
+
+
+def test_manifest_freezes_source_mappings_and_anchor_basis(tmp_path):
+    paths = fake_paths(tmp_path)
+    primary = dict(fund_quarters=[])
+    built = manifest.build_manifest(paths, primary_inventory=primary)
+    mapped = {r["label"]: r for r in built["source_mappings"]}
+    assert set(mapped) == {"source_mappings/" + p for p in manifest.SOURCE_MAPPING_FILES}
+    assert all(r["status"] == "present" and len(r["git_blob"]) == 40 for r in mapped.values())
+    assert set(built["anchor_basis"]) == set(cohort.PILOT_CIKS)
+    tcw = {r["label"] for r in built["anchor_basis"]["0001715933"]}
+    assert tcw == {"anchor_basis/0001715933/2025-06-30.json", "anchor_basis/0001715933/2026-03-31.json"}
+    for records in built["anchor_basis"].values():
+        assert records and all(r["status"] in ("present", "missing", "empty") for r in records)
+
+
+def test_absent_anchor_directory_is_explicit(tmp_path):
+    records = manifest._directory_records(tmp_path / "absent", "anchor_basis/0000000009")
+    assert records == [dict(label="anchor_basis/0000000009", path=str(tmp_path / "absent"),
+                            status="missing")]

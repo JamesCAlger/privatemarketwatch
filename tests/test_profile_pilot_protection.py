@@ -272,6 +272,46 @@ def test_backstop_crash_is_failed_inspection(tmp_path):
     assert verify.backstop_verdict(None, post)["ok"] is False
 
 
+def _launch_with_discovery(tmp_path, monkeypatch, discovery):
+    paths = fake_paths(tmp_path)
+    monkeypatch.setattr(protection, "process_conflicts", discovery)
+
+    def no_subprocess(*args, **kwargs):
+        raise AssertionError("launcher started a subprocess despite refusing")
+
+    monkeypatch.setattr(verify.subprocess, "run", no_subprocess)
+    code = verify.main(["test", "--main-root", str(paths.main_repo_root), "--data-root",
+                        str(paths.data_root), "--run-id", "stagea-test",
+                        "tests/test_profile_pilot_paths.py"])
+    refusals = list((paths.run_root / "verification").rglob("refused.json"))
+    return code, refusals
+
+
+def test_launcher_refuses_when_another_heavy_process_exists(tmp_path, monkeypatch):
+    code, refusals = _launch_with_discovery(
+        tmp_path, monkeypatch,
+        lambda: [dict(pid=4242, command="python scripts/rebuild_outputs.py")])
+    assert code == verify.EXIT_REFUSED
+    assert len(refusals) == 1 and "other heavy jobs" in refusals[0].read_text()
+
+
+def test_launcher_refuses_when_process_discovery_fails(tmp_path, monkeypatch):
+    import psutil
+
+    def broken():
+        raise psutil.AccessDenied(pid=4)
+
+    code, refusals = _launch_with_discovery(tmp_path, monkeypatch, broken)
+    assert code == verify.EXIT_REFUSED
+    assert len(refusals) == 1 and "process discovery failed" in refusals[0].read_text()
+
+
+def test_launcher_documents_the_r9_lease_exemption():
+    doc = verify.__doc__
+    assert "R9" in doc and "process check" in doc and "pytest" in doc
+    assert "R9" in protection.requires_lease.__doc__
+
+
 def test_launcher_refuses_non_pilot_test_targets(tmp_path):
     with pytest.raises(SystemExit):
         verify.validate_test_targets(["tests/test_unified_holdings.py"])

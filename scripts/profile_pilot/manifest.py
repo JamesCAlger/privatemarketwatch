@@ -13,6 +13,7 @@ import subprocess
 
 from scripts.profile_pilot import cohort
 from scripts.profile_pilot.paths import PathError, PilotPaths, confined, write_json, write_once_json
+from scripts.profile_pilot.protection import LeaseRefused, assert_lease_held
 
 MANIFEST_VERSION = 1
 INVENTORY_NAMES = ("primary_quarter_inventory", "wrapper_key_inventory",
@@ -26,8 +27,12 @@ OUTPUT_INPUTS = ("bdc_holdings.csv", "private_markets_holdings.csv", "bdc_filing
                  "bdc_fund_income.csv")
 CODE_INPUTS = ("scripts/run_context_census.py", "scripts/diff_outputs.py",
                "pipeline/programme/runner.py", "pipeline/programme/core.py",
-               "pipeline/context_inventory.py", "pipeline/explicit_contexts.py",
                "pipeline/bdc_filings.py", "tests/conftest.py")
+# Ruling R11: "source mappings" are the inherited concept/role mapping code files;
+# "basis metadata" is every anchor JSON per pilot CIK (all quarters, or explicit absence).
+SOURCE_MAPPING_FILES = ("pipeline/context_inventory.py", "pipeline/explicit_contexts.py",
+                        "pipeline/staging_bdc.py", "pipeline/agent_promoted.py",
+                        "pipeline/agent_rule.py")
 # Verified-era ledger rule: a blocker-lane finding at the verified quarter that is not
 # in a closed state means the CIK was not reconciled there.
 CLOSED_LEDGER_STATES = ("adjudicated_false_alarm", "resolved_upstream", "remediated_promoted",
@@ -298,7 +303,12 @@ def collect_inputs(paths: PilotPaths, primary_inventory: dict) -> list[dict]:
         records.append(file_record(code / GRAMMAR_DIR / (cik + ".json"), "grammar/" + cik))
         records.extend(_directory_records(code / B2_DIR / cik, "b2/" + cik))
         records.extend(_directory_records(code / INVESTIGATE_DIR / stripped, "investigate/" + cik))
-        records.extend(_directory_records(code / ANCHOR_DIR / stripped, "anchor/" + cik))
+        records.extend(_directory_records(code / ANCHOR_DIR / stripped, "anchor_basis/" + cik))
+    for relative in SOURCE_MAPPING_FILES:
+        record = file_record(code / relative, "source_mappings/" + relative)
+        if record["status"] == "present":
+            record["git_blob"] = cohort.git_blob(code, relative)
+        records.append(record)
     pilot_code = sorted((code / "scripts" / "profile_pilot").rglob("*.py"))
     for path in [code / p for p in CODE_INPUTS] + pilot_code:
         record = file_record(path, "code/" + path.relative_to(code).as_posix())
@@ -328,7 +338,11 @@ def build_manifest(paths: PilotPaths, *, primary_inventory: dict) -> dict:
                 protected_roots=[str(r) for r in paths.protected_roots],
                 git=dict(head=git_head(paths.code_root),
                          dirty_source_digest=dirty_source_digest(paths.code_root)["sha256"]),
-                inputs=inputs, inventories=inventory_states(paths), verified_era=evidence)
+                inputs=inputs, inventories=inventory_states(paths), verified_era=evidence,
+                source_mappings=[r for r in inputs if r["label"].startswith("source_mappings/")],
+                anchor_basis={cik: [r for r in inputs
+                                    if r["label"].startswith("anchor_basis/" + cik)]
+                              for cik in cohort.PILOT_CIKS})
 
 
 # ---------------------------------------------------------------- stage cache
@@ -360,9 +374,10 @@ def run_cached_stage(paths: PilotPaths, relative: str, identity: dict, compute, 
             raise StageInvalidated("prior result is incomplete; refusing to reuse: " + relative)
         return dict(cache="hit", result=prior["result"], path=str(target))
     if heavy and lease is None:
-        raise ValueError("a heavy stage needs the shared lease")
+        raise LeaseRefused("heavy stage " + identity["stage"] + " refused: no shared lease")
     if heavy:
-        with lease():
+        with lease() as handle:
+            assert_lease_held(handle)  # a callable that does not really hold the lease is refused
             result = compute()
             assert_inputs_unchanged(records, "during stage " + identity["stage"])
     else:
