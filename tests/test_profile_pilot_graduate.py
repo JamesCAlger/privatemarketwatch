@@ -6,6 +6,7 @@ source is synthetic. The cached-slice tests at the bottom are `needs_cache`.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 import json
 import os
 from decimal import Decimal
@@ -15,12 +16,22 @@ import pandas as pd
 import pytest
 
 from scripts.profile_pilot import graduate as g
+from scripts.profile_pilot.paths import PilotPaths, resolve_paths
 
 CIK = "0000000001"
 ACC = "0000000001-25-000001"
 Q1, Q2, Q3, Q4 = "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"
 T0 = "2026-09-28T00:00:00Z"
 AFF = "Controlled Affiliated Investments"
+PP = None  # per-test PilotPaths (fake main + run root under tmp_path), set by the fixture
+
+
+@pytest.fixture(autouse=True)
+def _pilot_paths(tmp_path, monkeypatch):
+    """Every DuckDB/applier call in these tests spills under a tmp run root, never the cwd."""
+    from tests.test_profile_pilot_paths import fake_paths
+    (tmp_path / "pp").mkdir()
+    monkeypatch.setitem(globals(), "PP", fake_paths(tmp_path / "pp"))
 
 
 # ------------------------------------------------------------------ helpers
@@ -144,7 +155,7 @@ def test_null_and_empty_periods_match_the_actual_raw_staging_applier():
                  ("D", 4, "2024-12-31", "c4"), ("E", 0, "2024-12-31", "c5")])
     body = comparative_leaf()
     cand = g.express_candidate(item_for(body), body, recorded_at=T0)
-    original = g.original_selection(item_for(body), body, frame)
+    original = g.original_selection(item_for(body), body, frame, paths=PP)
     assert sorted(frame.loc[frame[g.RID].isin(original["rids"]), "src_context_id"]) == ["c2", "c3", "c4", "c5"]
     result = g.compare_effects(frame, original, g.candidate_selection(cand, frame, cik=CIK), stage="staging")
     assert result["fidelity"] is True
@@ -157,7 +168,7 @@ def test_partial_origin_overlap_is_not_fidelity():
     frame = staged([(AFF + " X", 10.0, "c1"), (AFF + " Z", 20.0, "c2"), ("Plain", 5.0, "c3")], dims=dims)
     body = rule(AFF_PRED, [Q2])
     cand = g.express_candidate(item_for(body), body, recorded_at=T0)
-    original = g.original_selection(item_for(body), body, frame)
+    original = g.original_selection(item_for(body), body, frame, paths=PP)
     result = g.compare_effects(frame, original, g.candidate_selection(cand, frame, cik=CIK), stage="unified")
     assert result["fidelity"] is False
     assert result["overlap"] == 1 and result["only_candidate"] == [[ACC, "c2"]]
@@ -178,7 +189,7 @@ def test_zero_fv_wrong_deletion_is_detected_at_origin():
                    dims=["investmentidentifieraxis=" + AFF + " X", "axis2=q|investmentidentifieraxis=" + AFF + " Y"])
     body = rule(AFF_PRED, [Q2])
     cand = g.express_candidate(item_for(body), body, recorded_at=T0)
-    original = g.original_selection(item_for(body), body, frame)
+    original = g.original_selection(item_for(body), body, frame, paths=PP)
     result = g.compare_effects(frame, original, g.candidate_selection(cand, frame, cik=CIK), stage="unified")
     assert result["selected_fv_original"] == result["selected_fv_candidate"]  # aggregate blind
     assert result["fidelity"] is False and result["only_candidate"] == [[ACC, "c2"]]
@@ -187,7 +198,7 @@ def test_zero_fv_wrong_deletion_is_detected_at_origin():
 def test_already_deleted_origin_rows_make_the_frame_unrecoverable():
     body = rule(AFF_PRED, [Q2])
     corrected = published(dup_quarter(Q2))  # the correction already ran: nothing to select
-    provider = g.StaticProvider({(CIK, Q2, "unified"): g.with_rids(corrected)})
+    provider = g.StaticProvider(paths=PP, frames={(CIK, Q2, "unified"): g.with_rids(corrected)})
     out = g.graduate_item(item_for(body), body, provider, anchors={}, band_pct=0.5, recorded_at=T0)
     assert out["class"] == "insufficient_evidence"
     assert out["cause"] == "origin_rows_absent"
@@ -201,7 +212,7 @@ def test_candidate_keeps_the_per_cik_restriction():
     cand = g.express_candidate(item_for(body), body, recorded_at=T0)
     selected = g.candidate_selection(cand, frame, cik=CIK)
     assert frame.loc[frame[g.RID].isin(selected["rids"]), "cik"].tolist() == [CIK]
-    original = g.original_selection(item_for(body), body, frame)
+    original = g.original_selection(item_for(body), body, frame, paths=PP)
     assert g.compare_effects(frame, original, selected, stage="unified")["fidelity"] is True
 
 
@@ -234,7 +245,7 @@ def _dup_provider(quarters, *, anchored, extra=None):
         frames[(CIK, q, "unified")] = frame
         pubs[(CIK, q)] = published(frame)
     anchors = {(CIK, q): anchor(q, float(pubs[(CIK, q)]["fair_value"].sum())) for q in anchored}
-    return g.StaticProvider(frames, published=pubs), anchors
+    return g.StaticProvider(paths=PP, frames=frames, published=pubs), anchors
 
 
 def test_positive_duplicate_view_case_generalises():
@@ -287,21 +298,21 @@ def test_missing_anchor_currency_is_currency_not_comparable():
     frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "0")])
     no_currency = anchor(Q2, 10.0, basis="investments_ex_cash")
     no_currency.pop("currency")
-    rec = g.reconcile(no_currency, frame, frame, 0.5)
+    rec = g.reconcile(no_currency, frame, frame, 0.5, paths=PP)
     assert rec["status"] == "unassessable" and rec["cause"] == "currency_not_comparable"
     assert rec["anchor_currency"] is None  # never an assumed implicit USD
     no_kind = anchor(Q2, 10.0, basis="investments_ex_cash")
     no_kind.pop("anchor_kind")
-    assert g.reconcile(no_kind, frame, frame, 0.5)["cause"] == "anchor_evidence_unavailable"
+    assert g.reconcile(no_kind, frame, frame, 0.5, paths=PP)["cause"] == "anchor_evidence_unavailable"
     # the same anchor with its declared currency reconciles (false-positive guard)
-    assert g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5)["status"] == "reconciles"
+    assert g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5, paths=PP)["status"] == "reconciles"
 
 
 def test_missing_accounting_record_class_is_membership_unresolved_not_a_proxy():
     frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "0"), (5.0, "LOAN", "parent_schedule", "1")])
     frame = frame.drop(columns=["accounting_scope_id", "accounting_record_class"])
     for basis in ("investments_ex_cash", "published_rows"):
-        rec = g.reconcile(anchor(Q2, 10.0, basis=basis), frame, frame, 0.5)
+        rec = g.reconcile(anchor(Q2, 10.0, basis=basis), frame, frame, 0.5, paths=PP)
         assert rec["status"] == "unassessable" and rec["cause"] == "anchor_membership_unresolved", rec
 
 
@@ -309,7 +320,7 @@ def test_investments_ex_cash_membership_is_the_production_accounting_membership(
     # is_subsidiary is not the gate's membership signal; underlying schedules and CASH are excluded.
     frame = _anchor_frame([(10.0, "LOAN", "parent_schedule", "1"), (7.0, "LOAN", "underlying_schedule", "0"),
                            (3.0, "CASH", "parent_schedule", "0")])
-    rec = g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5)
+    rec = g.reconcile(anchor(Q2, 10.0, basis="investments_ex_cash"), frame, frame, 0.5, paths=PP)
     assert rec["status"] == "reconciles", rec
     assert Decimal(rec["post"]["total"]) == 10
     assert rec["post"]["membership"] == dict(included=1, excluded=2, unknown=0)
@@ -350,7 +361,7 @@ def test_positive_comparative_case_generalises_with_date_witnesses():
         frames[(CIK, q, "staging")] = frame
         pubs[(CIK, q)] = staged([("A", 10.0, "a" + q)], rd=q).drop(columns=[g.RID])
     anchors = {(CIK, q): anchor(q, 10.0) for q in (Q2, Q3)}
-    provider = g.StaticProvider(frames, published=pubs)
+    provider = g.StaticProvider(paths=PP, frames=frames, published=pubs)
     body = comparative_leaf(rd=Q4)
     out = g.graduate_item(item_for(body), body, provider, anchors=anchors, band_pct=0.5, recorded_at=T0)
     assert out["class"] == "generalises", out
@@ -364,7 +375,7 @@ def test_comparative_null_period_in_holdout_has_no_witness():
         pubs[(CIK, q)] = staged([("A", 10.0, "a" + q)], rd=q).drop(columns=[g.RID])
     anchors = {(CIK, q): anchor(q, 10.0) for q in (Q2, Q3)}
     body = comparative_leaf(rd=Q4)
-    out = g.graduate_item(item_for(body), body, g.StaticProvider(frames, published=pubs),
+    out = g.graduate_item(item_for(body), body, g.StaticProvider(paths=PP, frames=frames, published=pubs),
                           anchors=anchors, band_pct=0.5, recorded_at=T0)
     assert out["class"] == "insufficient_evidence" and "missing_witness" in out["causes"]
 
@@ -377,7 +388,7 @@ def test_unified_transform_effect_difference_blocks_origin_fidelity():
     check = g.unified_transform_effect(frame, reference, cik=CIK, corrections=[], rules=[body])
     assert check["ok"] is False and check["attributed"]["fv_differences"] == 1
     assert check["literal"]["staged_only_keys"] == 1  # the literal (no replay) view differs too
-    provider = g.StaticProvider({(CIK, Q2, "unified"): frame}, checks={(CIK, Q2): check})
+    provider = g.StaticProvider(paths=PP, frames={(CIK, Q2, "unified"): frame}, checks={(CIK, Q2): check})
     out = g.graduate_item(item_for(body), body, provider, anchors={}, band_pct=0.5, recorded_at=T0)
     assert out["class"] == "insufficient_evidence" and out["cause"] == "unified_transform_effect"
 
@@ -408,7 +419,7 @@ def test_unified_transform_effect_replays_only_what_production_applies_to_that_q
 def test_heavy_reconstruction_is_insufficient_and_not_executed():
     calls = []
 
-    def stager(frame, raw_exclusions, cache_dir):
+    def stager(frame, raw_exclusions, cache_dir, *, paths):
         calls.append(len(frame))
         raise AssertionError("heavy staging must not run")
 
@@ -416,7 +427,7 @@ def test_heavy_reconstruction_is_insufficient_and_not_executed():
                             accession_number=[ACC] * 9000, src_context_id=[str(i) for i in range(9000)],
                             fair_value=["1"] * 9000, fair_value_unit=["U_USD"] * 9000))
     provider = g.SliceProvider(raw_frames={(CIK, Q2): big}, reference={}, stager=stager,
-                               corrections=[], rules_by_cik={}, cache_dir=None)
+                               corrections=[], rules_by_cik={}, cache_dir=None, paths=PP)
     got = provider.frame(CIK, Q2, "unified")
     assert got["status"] == "unavailable" and got["cause"] == "heavy_reconstruction_not_executed"
     assert got["lease"]["requires_lease"] is True and calls == []
@@ -543,26 +554,94 @@ def test_main_exits_non_zero_when_the_stage_is_invalid(tmp_path, monkeypatch, co
     assert code == g.EXIT_STAGE_INVALIDATED != 0
 
 
+# ------------------------------------------------------------------ DuckDB spill confinement
+
+@dataclass(frozen=True)
+class TmpRunPaths(PilotPaths):
+    """PilotPaths whose run root is redirected (cached tests read real data, write to tmp)."""
+    tmp_run_root: Path = None
+
+    @property
+    def run_root(self) -> Path:
+        return self.tmp_run_root
+
+
+def test_production_stager_confines_spill_to_the_run_root_whatever_the_cwd(tmp_path, monkeypatch):
+    from pipeline import staging_bdc
+    seen = []
+
+    def spilling_prepare_bdc(*, bdc_df, raw_exclusions, raw_exclusion_audits):
+        seen.append(Path(os.getcwd()))
+        Path(".tmp").mkdir(exist_ok=True)  # what an in-memory DuckDB spill does: ./.tmp
+        return bdc_df
+
+    monkeypatch.setattr(staging_bdc, "_prepare_bdc", spilling_prepare_bdc)
+    cwd = tmp_path / "caller_cwd"
+    cwd.mkdir()
+    monkeypatch.chdir(cwd)
+    g.production_stager(raw([("A", 1, Q4, "c1")]), [], None, paths=PP)
+    assert [p.resolve() for p in seen] == [PP.run_root.resolve()]
+    assert not (cwd / ".tmp").exists() and (PP.run_root / ".tmp").is_dir()
+    assert Path(os.getcwd()) == cwd
+    # SliceProvider enforces it too, for the stager AND the replayed production plan.
+    seen.clear()
+    provider = g.SliceProvider(raw_frames={(CIK, Q2): raw([("A", 1, Q2, "c1")], rd=Q2)}, reference={},
+                               stager=lambda frame, exc, cache, *, paths: (
+                                   seen.append(Path(os.getcwd())) or frame),
+                               corrections=[], rules_by_cik={}, cache_dir=None, paths=PP)
+    provider.frame(CIK, Q2, "unified")
+    assert [p.resolve() for p in seen] == [PP.run_root.resolve()]
+    assert Path(os.getcwd()) == cwd and list(cwd.iterdir()) == []
+
+
+def test_original_selection_runs_the_appliers_inside_the_run_root(tmp_path, monkeypatch):
+    from pipeline import agent_promoted
+    seen = []
+    real = agent_promoted.apply_promoted_plan
+
+    def recording(*args, **kwargs):
+        seen.append(Path(os.getcwd()).resolve())
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(agent_promoted, "apply_promoted_plan", recording)
+    cwd = tmp_path / "caller_cwd"
+    cwd.mkdir()
+    monkeypatch.chdir(cwd)
+    body = rule(AFF_PRED, [Q2])
+    g.original_selection(item_for(body), body, dup_quarter(Q2), paths=PP)
+    assert seen == [PP.run_root.resolve()] and Path(os.getcwd()) == cwd
+
+
 # ------------------------------------------------------------------ cached slices
 
 @pytest.mark.needs_cache
 # Ruling R14: the sealed pipeline/agent_rule.py:481 raises a pandas FutureWarning on this
 # real TCW replay; filtered for this ONE test only.
 @pytest.mark.filterwarnings("ignore::FutureWarning:pipeline.agent_rule")
-def test_real_tcw_quarter_stages_and_attributes_live_corrections(tmp_path):
+def test_real_tcw_quarter_stages_and_attributes_live_corrections(tmp_path, monkeypatch):
     data_root = os.environ.get("PROFILE_PILOT_DATA_ROOT")
-    if not data_root:
+    main_root = os.environ.get("PROFILE_PILOT_MAIN_ROOT")
+    if not (data_root and main_root):
         pytest.skip("PROFILE_PILOT_DATA_ROOT not set (run through the pilot launcher)")
     code_root = Path(__file__).resolve().parents[1]
+    real = resolve_paths(main_repo_root=main_root, data_root=data_root, code_root=code_root,
+                         run_id="stagea-cached-test")
+    # Real data root for reads; the run root (spill, cwd) is redirected into tmp_path so the
+    # test never creates a run root under the real data directory.
+    paths = TmpRunPaths(main_repo_root=real.main_repo_root, code_root=real.code_root,
+                        data_root=real.data_root, run_id=real.run_id, tmp_run_root=tmp_path / "run")
+    cwd = tmp_path / "cwd"
+    cwd.mkdir()
+    monkeypatch.chdir(cwd)
     tcw, quarter = "0001715933", "2025-06-30"
     inv = g.correction_inventory(code_root)
     corrections, rules = g.live_bodies(code_root, inv, cik=tcw)
-    raw_q, ref_q = g.read_output_slice(Path(data_root) / "output", tcw, quarter,
-                                       temp_directory=tmp_path)
+    raw_q, ref_q = g.read_output_slice(paths, tcw, quarter)
     provider = g.SliceProvider(raw_frames={(tcw, quarter): raw_q}, reference={(tcw, quarter): ref_q},
                                stager=g.production_stager, corrections=corrections,
-                               rules_by_cik={tcw: rules}, cache_dir=None)
+                               rules_by_cik={tcw: rules}, cache_dir=None, paths=paths)
     got = provider.frame(tcw, quarter, "unified")
+    assert Path(os.getcwd()) == cwd and list(cwd.iterdir()) == []  # nothing spilled into the cwd
     assert got["status"] == "ok" and got["lease"]["requires_lease"] is False
     literal, attributed = got["check"]["literal"], got["check"]["attributed"]
     assert literal["staged_only_keys"] > 0  # the live exclusions explain the literal gap ...

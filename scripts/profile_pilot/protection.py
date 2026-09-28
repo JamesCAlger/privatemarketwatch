@@ -202,6 +202,27 @@ def protected_session(paths, *, receipt: str):
 
 # ---------------------------------------------------------------- heavy classification (R3)
 
+def _check_workload_types(*, ciks, instance_count, full_cache_scan, pipeline_cik_count,
+                          est_seconds, est_bytes) -> None:
+    """Fail closed on mistyped workloads: a str ciks would be iterated per character (the
+    Ares/BCRED check never fires) and a None/bool count is silently falsy."""
+    import numbers
+    problems = []
+    if not (isinstance(ciks, (list, tuple))
+            and all(isinstance(c, str) and c for c in ciks)):
+        problems.append("ciks must be a list/tuple of non-empty str, got " + repr(ciks)[:80])
+    for name, value in (("instance_count", instance_count), ("pipeline_cik_count", pipeline_cik_count)):
+        if isinstance(value, bool) or not isinstance(value, numbers.Integral) or value < 0:
+            problems.append(name + " must be a non-negative int, got " + repr(value))
+    if not isinstance(full_cache_scan, bool):
+        problems.append("full_cache_scan must be bool, got " + repr(full_cache_scan))
+    for name, value in (("est_seconds", est_seconds), ("est_bytes", est_bytes)):
+        if isinstance(value, bool) or not isinstance(value, numbers.Real) or value != value or value < 0:
+            problems.append(name + " must be a non-negative number, got " + repr(value))
+    if problems:
+        raise ValueError("invalid workload: " + "; ".join(problems))
+
+
 def requires_lease(*, ciks=(), instance_count=0, full_cache_scan=False, pipeline_cik_count=0,
                    est_seconds=0, est_bytes=0) -> bool:
     """Ruling R3 (amended by R9): True when an operation must hold the shared lease.
@@ -217,6 +238,9 @@ def requires_lease(*, ciks=(), instance_count=0, full_cache_scan=False, pipeline
     pytest/rebuild/bootstrap process exists or discovery fails.
     """
     from scripts.profile_pilot.cohort import LARGE_INSTANCE_CIKS
+    _check_workload_types(ciks=ciks, instance_count=instance_count, full_cache_scan=full_cache_scan,
+                          pipeline_cik_count=pipeline_cik_count, est_seconds=est_seconds,
+                          est_bytes=est_bytes)
     if instance_count and any(c in LARGE_INSTANCE_CIKS for c in ciks):
         return True
     return (instance_count > 1 or full_cache_scan or pipeline_cik_count > PIPELINE_CIK_LIMIT

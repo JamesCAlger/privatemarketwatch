@@ -169,7 +169,7 @@ def pilot_temp_dir(paths: PilotPaths) -> Path:
 def pilot_duckdb(paths: PilotPaths, *, threads: int = 2, memory_limit: str | None = "2GB"):
     """The one DuckDB factory for pilot code: spill (temp_directory) stays under the run root.
 
-    An in-memory duckdb.connect() otherwise spills to ./.tmp in the current working
+    An in-memory DuckDB connection otherwise spills to ./.tmp in the current working
     directory, which is outside the run root.
     """
     import duckdb

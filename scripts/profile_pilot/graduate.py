@@ -392,12 +392,22 @@ def express_candidate(item: dict, body: dict, *, recorded_at: str) -> dict:
 
 # ------------------------------------------------------------------ selections
 
-def original_selection(item: dict, body: dict, frame: pd.DataFrame) -> dict:
-    """Execute the ORIGINAL correction through its real production applier."""
+def original_selection(item: dict, body: dict, frame: pd.DataFrame, *, paths) -> dict:
+    """Execute the ORIGINAL correction through its real production applier.
+
+    Runs with cwd = run root: the production appliers (agent_rule, correction_execution,
+    rule_admission) open their own in-memory DuckDB, whose spill default is ./.tmp.
+    """
+    from scripts.profile_pilot.paths import pilot_cwd
+    with pilot_cwd(paths):
+        return _original_selection(item, body, frame, paths=paths)
+
+
+def _original_selection(item: dict, body: dict, frame: pd.DataFrame, *, paths) -> dict:
     from pipeline import agent_promoted
     if item["stage"] == STAGING:
-        import duckdb
-        con = duckdb.connect()
+        from scripts.profile_pilot.paths import pilot_duckdb
+        con = pilot_duckdb(paths, memory_limit=None)
         try:
             con.register("_pilot_frame", frame)
             con.execute("CREATE TABLE bdc_raw AS SELECT * FROM _pilot_frame")
@@ -609,7 +619,7 @@ def _anchor_row(anchor: dict) -> dict:
                 source_evidence=anchor.get("source_evidence"), currency=anchor.get("currency"))
 
 
-def production_membership(anchor: dict, frame: pd.DataFrame) -> dict:
+def production_membership(anchor: dict, frame: pd.DataFrame, *, paths) -> dict:
     """Per-row anchor membership from the production gate module, not a paraphrase.
 
     `pipeline.accounting_membership.build` reads CSV paths; the holdings and the one
@@ -619,9 +629,9 @@ def production_membership(anchor: dict, frame: pd.DataFrame) -> dict:
     is_subsidiary) is ever substituted. Anchor-level reasons take production's precedence.
     """
     import uuid
-    import duckdb
     import fsspec
     from pipeline.accounting_membership import build
+    from scripts.profile_pilot.paths import pilot_duckdb
     absent = [c for c in MEMBERSHIP_COLUMNS if c not in frame.columns]
     counts = dict(included=0, excluded=0, unknown=0)
     out = dict(source=MEMBERSHIP_SOURCE, missing_holding_columns=absent, membership=counts, reasons={})
@@ -632,7 +642,7 @@ def production_membership(anchor: dict, frame: pd.DataFrame) -> dict:
     holdings.insert(0, "row_id", ["pilot-" + str(i) for i in range(len(frame))])  # call-local identity
     fs = fsspec.filesystem("memory")
     root = "memory://pilot-membership-" + uuid.uuid4().hex
-    con = duckdb.connect()
+    con = pilot_duckdb(paths, memory_limit=None)
     try:
         con.register_filesystem(fs)
         fs.pipe(root + "/holdings.csv", holdings.to_csv(index=False).encode("ascii", "replace"))
@@ -669,7 +679,7 @@ def production_membership(anchor: dict, frame: pd.DataFrame) -> dict:
     return dict(out, total=None if cause else total, cause=cause)
 
 
-def reconcile(anchor: dict, pre: pd.DataFrame, post: pd.DataFrame, band_pct: float) -> dict:
+def reconcile(anchor: dict, pre: pd.DataFrame, post: pd.DataFrame, band_pct: float, *, paths) -> dict:
     """The gate's anchor contract and membership (accounting_membership) and its band."""
     basis = anchor.get("basis")
     base = dict(basis=basis, band_pct=band_pct, anchor_path=anchor.get("_path"),
@@ -677,7 +687,7 @@ def reconcile(anchor: dict, pre: pd.DataFrame, post: pd.DataFrame, band_pct: flo
                 anchor_kind=anchor.get("anchor_kind") or None, membership_source=MEMBERSHIP_SOURCE)
     sides = {}
     for label, frame in (("pre", pre), ("post", post)):
-        sides[label] = production_membership(anchor, frame)
+        sides[label] = production_membership(anchor, frame, paths=paths)
         if sides[label]["cause"]:
             side = {k: v for k, v in sides[label].items() if k != "total"}
             return dict(base, status="unassessable", cause=side["cause"], failed_side=label, **{label: side})
@@ -795,8 +805,9 @@ def unified_transform_effect(staged: pd.DataFrame, reference, *, cik: str, corre
 class StaticProvider:
     """Explicit frames (tests and replays). Checks default to supplied-frame acceptance."""
 
-    def __init__(self, frames: dict, *, published: dict | None = None, checks: dict | None = None):
+    def __init__(self, frames: dict, *, paths, published: dict | None = None, checks: dict | None = None):
         self.frames, self.published, self.checks = frames, published or {}, checks or {}
+        self.paths = paths  # run root for DuckDB spill of the appliers run on these frames
 
     def quarters(self, cik):
         return sorted({q for c, q, _ in self.frames if c == cik})
@@ -817,28 +828,41 @@ class StaticProvider:
         return dict(status="ok", pre=pre, post=pre.loc[keep])
 
 
-def production_stager(frame: pd.DataFrame, raw_exclusions: list, cache_dir) -> pd.DataFrame:
-    """staging_bdc._prepare_bdc with the instance cache bound explicitly (restored after)."""
+def production_stager(frame: pd.DataFrame, raw_exclusions: list, cache_dir, *, paths) -> pd.DataFrame:
+    """staging_bdc._prepare_bdc with the instance cache bound explicitly (restored after).
+
+    Always runs with cwd = run root (pilot_cwd): _prepare_bdc opens its own in-memory
+    DuckDB whose spill default is ./.tmp. Confinement is enforced here, not by callers.
+    """
     from pipeline import config, staging_bdc
+    from scripts.profile_pilot.paths import pilot_cwd
     bound = Path(cache_dir) if cache_dir else _NO_CACHE
     if not cache_dir and bound.exists():
         raise StageInvalidated("the no-cache binding must not exist: " + str(bound))
     original = config.BDC_XBRL_CACHE_DIR
     config.BDC_XBRL_CACHE_DIR = bound
     try:
-        return staging_bdc._prepare_bdc(bdc_df=frame.drop(columns=[RID], errors="ignore"),
-                                        raw_exclusions=raw_exclusions or None, raw_exclusion_audits=[])
+        with pilot_cwd(paths):
+            return staging_bdc._prepare_bdc(bdc_df=frame.drop(columns=[RID], errors="ignore"),
+                                            raw_exclusions=raw_exclusions or None,
+                                            raw_exclusion_audits=[])
     finally:
         config.BDC_XBRL_CACHE_DIR = original
 
 
 class SliceProvider:
-    """Pinned-slice frames; staging through the production stager with heavy derivation."""
+    """Pinned-slice frames; staging through the production stager with heavy derivation.
+
+    Every public method runs with cwd = run root (pilot_cwd), because the stager and the
+    replayed production plan open their own in-memory DuckDB connections. The stager is
+    called as ``stager(raw, raw_exclusions, cache_dir, paths=paths)``.
+    """
 
     def __init__(self, *, raw_frames: dict, reference: dict, stager, corrections: list,
-                 rules_by_cik: dict, cache_dir):
+                 rules_by_cik: dict, cache_dir, paths):
         self.raw, self.reference, self.stager = raw_frames, reference, stager
         self.corrections, self.rules_by_cik, self.cache_dir = corrections, rules_by_cik, cache_dir
+        self.paths = paths
         self._cache: dict = {}
         self.log: list = []
 
@@ -870,10 +894,16 @@ class SliceProvider:
         _, _, exclusions = self._for(cik)
         t0 = time.perf_counter()
         staged = self.stager(raw, exclusions,
-                             self.cache_dir if lease["currency_resolution"] == "main_instance_cache" else None)
+                             self.cache_dir if lease["currency_resolution"] == "main_instance_cache" else None,
+                             paths=self.paths)
         return staged, round(time.perf_counter() - t0, 1)
 
     def frame(self, cik, quarter, stage):
+        from scripts.profile_pilot.paths import pilot_cwd
+        with pilot_cwd(self.paths):
+            return self._frame(cik, quarter, stage)
+
+    def _frame(self, cik, quarter, stage):
         slot = (cik, quarter, stage)
         if slot in self._cache:
             return self._cache[slot]
@@ -907,6 +937,11 @@ class SliceProvider:
         return out
 
     def anchor_frames(self, cik, quarter, stage, frame, rids):
+        from scripts.profile_pilot.paths import pilot_cwd
+        with pilot_cwd(self.paths):
+            return self._anchor_frames(cik, quarter, stage, frame, rids)
+
+    def _anchor_frames(self, cik, quarter, stage, frame, rids):
         unified = self.frame(cik, quarter, UNIFIED)
         if unified["status"] != "ok":
             return dict(status="unavailable", cause=unified["cause"])
@@ -937,7 +972,7 @@ def materialize_origin(item: dict, body: dict, candidate: dict, provider, quarte
     if item["stage"] == UNIFIED and not got["check"]["ok"]:
         return dict(base, status="unassessable", cause="unified_transform_effect")
     frame = got["frame"].loc[lambda f: f["report_date"].astype(str).str[:10] == quarter]
-    original = original_selection(item, body, frame)
+    original = original_selection(item, body, frame, paths=provider.paths)
     if not original["rids"]:
         return dict(base, status="unassessable", cause="origin_rows_absent")
     authored = ((body.get("measured_impact") or {}).get(quarter) or {}).get("rows")
@@ -975,7 +1010,7 @@ def assess_holdout(item: dict, candidate: dict, provider, quarter: str, *, ancho
     frames = provider.anchor_frames(cik, quarter, stage, frame, selected)
     if frames["status"] != "ok":
         return dict(base, status="touched_unassessable", cause=frames["cause"])
-    rec = reconcile(anchor, frames["pre"], frames["post"], band_pct)
+    rec = reconcile(anchor, frames["pre"], frames["post"], band_pct, paths=provider.paths)
     base["reconciliation"] = rec
     if rec["status"] == "reconciles":
         return dict(base, status="supported")
@@ -1055,19 +1090,17 @@ def yield_summary(results: list, *, denominator: int) -> dict:
 
 # ------------------------------------------------------------------ light M3 stage
 
-def read_output_slice(output_root: Path, cik: str, quarter: str, *,
-                      temp_directory: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """One fund-quarter straight from the output CSVs (all VARCHAR); used by cached tests.
+def read_output_slice(paths, cik: str, quarter: str) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """One fund-quarter straight from paths.output_root CSVs (all VARCHAR); used by cached tests.
 
-    `temp_directory` is explicit so DuckDB spill never lands in the cwd's ./.tmp.
+    Opened through pilot_duckdb, so spill lands under paths.run_root/tmp.
     """
-    import duckdb
-    con = duckdb.connect(config={"threads": 2, "memory_limit": "2GB",
-                                 "temp_directory": str(Path(temp_directory))})
+    from scripts.profile_pilot.paths import pilot_duckdb
+    con = pilot_duckdb(paths)
     try:
         frames = [con.execute("SELECT * FROM read_csv(?, all_varchar=true, header=true) WHERE "
                               "lpad(cik, 10, '0') = ? AND substr(report_date, 1, 10) = ? LIMIT 10001",
-                              [str(Path(output_root) / name), cik, quarter]).fetchdf()
+                              [str(Path(paths.output_root) / name), cik, quarter]).fetchdf()
                   for name in ("bdc_holdings.csv", "private_markets_holdings.csv")]
     finally:
         con.close()
@@ -1176,7 +1209,7 @@ def _run_m3(paths) -> dict:
                              corrections=[b for i, b in pairs if i["family"] == "b2_leaf"],
                              rules_by_cik={c: [b for i, b in pairs if i["family"] == "investigate_rule"
                                                and i["cik"] == c] for c in expressible},
-                             cache_dir=paths.cache_root)
+                             cache_dir=paths.cache_root, paths=paths)
     anchors, band = load_anchor_contracts(paths.code_root), gate_band()
     results, gaps = [], []
     for item, body in pairs:

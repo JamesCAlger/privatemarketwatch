@@ -196,6 +196,33 @@ def test_run_cached_stage_derives_heaviness_from_a_complete_workload(tmp_path, w
     assert ran == [] and not (paths.run_root / "census" / "w.json").exists()
 
 
+@pytest.mark.parametrize("bad", [
+    dict(ARES_PARSE, ciks="0001287750"),  # a str is iterated per character: Ares check never fires
+    dict(ARES_PARSE, ciks=[""]),
+    dict(ARES_PARSE, ciks=[1287750]),
+    dict(ARES_PARSE, instance_count=None),  # None is falsy: would read as "no parse"
+    dict(ARES_PARSE, instance_count=True),  # bool is not a count
+    dict(LIGHT, pipeline_cik_count=None),
+    dict(LIGHT, pipeline_cik_count=False),
+    dict(LIGHT, full_cache_scan=1),
+    dict(LIGHT, full_cache_scan=None),
+    dict(LIGHT, est_seconds=None),
+])
+def test_mistyped_workload_raises_instead_of_classifying_light(tmp_path, bad):
+    from scripts.profile_pilot import protection
+    with pytest.raises(ValueError, match="invalid workload"):
+        manifest.classify_workload(bad)
+    with pytest.raises(ValueError, match="invalid workload"):
+        protection.requires_lease(**bad)
+    paths = fake_paths(tmp_path)
+    identity = manifest.cache_identity("census", {}, collector_version="c1")
+    ran = []
+    with pytest.raises(ValueError):
+        manifest.run_cached_stage(paths, "census/t.json", identity, lambda: ran.append(1) or {},
+                                  workload=bad)
+    assert ran == []
+
+
 def test_run_cached_stage_records_the_derived_classification(tmp_path):
     paths = fake_paths(tmp_path)
     identity = manifest.cache_identity("census", {}, collector_version="c1")
