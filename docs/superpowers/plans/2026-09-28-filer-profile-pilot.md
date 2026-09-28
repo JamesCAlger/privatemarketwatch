@@ -9,13 +9,21 @@ repo (lease needs a pseudo-candidate; D1 has no profile input; decimal
 canonicalisation; amendment policy lives in a script), the verified-facts
 block restored from the v3 plan, and staged go/no-go checkpoints (spec 8).
 
+Revision v4.2 (2026-09-28): owner rulings 8 and 9 (spec section 14).
+Same-era M1 becomes verified-era M1 (2026-03-31 instance, wrapper version at
+sign-off commit `eed082b`, per-CIK evidence from the `q1p3_20260831` pass).
+Minimal suite first: footnote-link resolution optional (Task 4), graduation
+origin frames from the raw and staging stages (Task 3), D3 measured as
+D3-partial with full unified D3 deferred (Task 9). Protection, lease, exact
+comparison and the immutable envelope are unchanged.
+
 ## Staged delivery (spec section 8)
 
 | Stage | Tasks | Stop-and-report deliverable |
 |---|---|---|
 | A | 1-3 | protection receipts, lease adapter, envelope tests, M3 with denominator and `insufficient_evidence` causes, measured cost |
-| B | 4-8 | M1 (Q1; same-era only if spec 12 q4 admits evidence), M2, partition candidates, collector completeness per CIK |
-| C | 9-11 | M4 per boundary (D1 labelled pinning), M5 with censoring and unassessable counts, runner |
+| B | 4-8 | M1 (Q1 and verified-era, separate keys), M2, partition candidates, collector completeness per CIK |
+| C | 9-11 | M4 per boundary (D1 labelled pinning, D3 as D3-partial), M5 with censoring and unassessable counts, runner |
 | D | 12 | all eight CIKs, write-up, changelog |
 
 Do not start a stage before the owner has read the previous stage's report.
@@ -222,9 +230,17 @@ protected_session; shared_heavy_lease; guarded pytest/backstop launcher.
   `scripts/run_context_census.py` by reference (read its selection rules,
   pin its git blob hash in the manifest, do not copy-edit it). Ambiguous
   selection is unavailable evidence with all candidates listed.
-- [ ] Pin the exact wrapper version and evidenced authoring accession for
-  same-era M1. A git add date is supporting metadata only. If the source
-  quarter is unknown, record unavailable without selecting a convenient date.
+- [ ] Pin the verified-era inputs for the second M1 comparison (spec 5,
+  ruling 8): quarter `2026-03-31`; wrapper content from
+  `git show eed082b:data/overrides/bdc_xbrl_wrappers/{cik10}.json` with its
+  blob hash (seven pilot wrappers are identical to HEAD there; BCRED is
+  not, so pin both versions with separate hashes); the attestation
+  `data/reference/acceptance_attestations/2026-03-31.json`; and the per-CIK
+  rows for the eight CIKs from
+  `<data_root>/output/quarter_pass/q1p3_20260831/findings_ledger_post.csv`
+  and `acceptance_post.json` (record their sha256). A CIK whose ledger shows
+  a blocking or unreconciled state at that quarter is labelled
+  `verified_era_unreconciled` in M1. Git add dates are metadata only.
 - [ ] Freeze all inputs actually used: holdings, index, income, XML,
   wrappers, grammars, corrections, anchors/basis metadata, source mappings,
   tolerances and relevant code/schema versions. Record git HEAD plus a dirty
@@ -321,12 +337,20 @@ compare_effects; gather_witnesses; classify; run_graduation.
   Separate effective scope from the predicate through a supported parser/
   template; never remove date strings with replacement heuristics. Preserve
   original null semantics, per-CIK restrictions and action type.
-- [ ] Reconstruct the actual pre-correction origin frame and preceding
-  correction order using pinned cached inputs and production functions.
-  Compare original and candidate source-row MULTISETS and action/value
-  effects on every origin quarter. Non-empty intersection is insufficient.
-  Missing pre-correction evidence is insufficient_evidence; a demonstrated
-  difference is not_expressible.
+- [ ] Reconstruct the pre-correction origin frame at the correction's own
+  stage using pinned cached inputs and production functions (ruling 9,
+  spec 6.5). Staging-stage corrections (`comparative_period_filter`, raw
+  exclusions via `apply_raw_staging_exclusions`) use the pinned
+  `bdc_holdings.csv` slice. Unified-stage corrections (`row_exclusion` rules
+  and the other B2 classes applied by `apply_promoted_plan`) use
+  `staging_bdc._prepare_bdc` output for that slice. Do NOT run
+  `build_unified_holdings`. Record once per fund-quarter the
+  `unified_transform_effect` check: staged source keys and FV versus the
+  reference slice without replay; if they differ, fidelity for that quarter
+  is insufficient_evidence. Compare original and candidate source-row
+  MULTISETS and action/value effects on every origin quarter. Non-empty
+  intersection is insufficient. Missing pre-correction evidence is
+  insufficient_evidence; a demonstrated difference is not_expressible.
 - [ ] Comparative declarations describe the current/prior-period views;
   they do not delete legitimate historical facts from the knowledge store.
   Test null/empty periods against the actual original applier.
@@ -356,7 +380,8 @@ compare_effects; gather_witnesses; classify; run_graduation.
 
 ## Task 4: Complete bounded census collection
 
-Interfaces: collect_instance; collect_facts; collect_text_and_footnotes;
+Interfaces: collect_instance; collect_facts; collect_text_facts (footnote
+link resolution is optional per ruling 9; see below);
 classify_with_dependencies; detect_structure; validate_census.
 
 - [ ] Parse each cached instance once with DTD/entity expansion and network
@@ -365,9 +390,13 @@ classify_with_dependencies; detect_structure; validate_census.
   including all comparative dates. DocumentPeriodEndDate is filing metadata.
 - [ ] Retain each fact's source QName, context ID, raw and typed values,
   nil/invalid status, unit/currency, decimals, date/duration, dimensions and
-  document identity. Preserve text/date/boolean facts and linked footnote
-  resources, not only numeric investment concepts. Missing channels and
-  truncated/incomplete collection invalidate absence claims.
+  document identity. Preserve text/date/boolean facts, not only numeric
+  investment concepts. Footnote resources are optional in the minimal suite
+  (ruling 9): if `link:footnote` arcs are present and the elements are
+  already parsed, record them; otherwise set the footnote channel to
+  `unsupported`, which makes every dependent absence claim
+  insufficient_evidence. Do not build a footnote linkbase resolver. Missing
+  channels and truncated/incomplete collection invalidate absence claims.
 - [ ] Map monetary, rate/spread/PIK, maturity, shares, industry/affiliation,
   status and fund-income fields using canonical names consistently. Record
   imported concept/role mappings as inherited dependencies. Retain unknown
@@ -383,9 +412,11 @@ classify_with_dependencies; detect_structure; validate_census.
   accounting scope and the differing presentation axis. Matching borrower,
   instrument type or balances alone is insufficient. Do not select a
   canonical view by context order or number of dimensions.
-- [ ] Inspect concepts, identifiers, text and linked footnotes before
-  reporting not_observed_in_complete_instance. Never claim full-filing
-  non-disclosure from XBRL absence. Unsupported channels remain unresolved.
+- [ ] Inspect concepts, identifiers, text and, where collected, linked
+  footnotes before reporting not_observed_in_complete_instance. With the
+  footnote channel `unsupported`, non_disclosure can only be
+  insufficient_evidence. Never claim full-filing non-disclosure from XBRL
+  absence. Unsupported channels remain unresolved.
 - [ ] Collect delimiter/segment modes and search structural discriminators
   learned from Q1. A second delimiter may be punctuation inside a borrower,
   not another dialect. Emit evidenced disjoint partition predicates or
@@ -522,11 +553,18 @@ input identities, lineage and inherited/unexpressible mechanisms.
   reference staged frame from the pinned production raw slice. Run raw
   comparative selectors while period exists. Do not remove subtotals/views
   in D1 as a substitute for their true production-stage handling.
-- [ ] D3 consumes the ACTUAL D2 frame through ordinary unified logic,
-  including scope, classification, normalization, correction ordering and
-  final ID assignment. Produce with-corrections and without-corrections
-  branches from otherwise identical inputs. Use source keys and independently
-  generated IDs; never join reference row IDs onto pilot rows.
+- [ ] D3 in the minimal suite is **D3-partial** (ruling 9, spec 6.4): the
+  ACTUAL D2 frame with production corrections replayed in production order
+  through `agent_promoted.apply_promoted_plan`, two branches (with and
+  without corrections) from otherwise identical inputs, compared to the
+  pinned `private_markets_holdings.csv` slice on the source key
+  (`accession_number`, `src_context_id`). Reference `row_id` may be carried
+  for display; never join it onto pilot rows. Record once per fund-quarter
+  the `unified_transform_effect` check (staged source keys and FV versus the
+  reference without replay) and report any difference beside D3-partial,
+  not as a profile or correction effect. Do NOT run
+  `build_unified_holdings`; full unified D3 with independent `row_id`
+  assignment is deferred to a later stage and listed as such in M4.
 - [ ] Invoke existing functions through an isolated adapter only after
   proving every write goes to the run root. Pin all supplementary inputs.
   If a safe exact integration cannot be invoked without a pipeline change,
@@ -637,7 +675,7 @@ input identities, lineage and inherited/unexpressible mechanisms.
 
 | Review issue | Required evidence before reporting the metric |
 |---|---|
-| Incomplete census | source-pinned non-monetary, comparative and footnote fixtures plus completeness states (Tasks 4-5) |
+| Incomplete census | source-pinned non-monetary and comparative fixtures plus completeness states; footnote channel recorded as `unsupported` unless arcs are already parsed (Tasks 4-5, ruling 9) |
 | Fake scale / missing partitions | unit conversion and mixed-format positive/negative controls (Tasks 2, 8) |
 | Weak graduation | exact origin effects and every touched row's witness/basis, including unknown quarters (Task 3) |
 | Disconnected parity | actual D1-to-D2-to-D3 lineage and strict multiset/decimal controls (Task 9) |

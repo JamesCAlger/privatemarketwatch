@@ -33,6 +33,15 @@ exactness is defined after a stated canonicalisation (6.4); the amendment
 selection policy lives in `scripts/run_context_census.py`, not the pipeline
 (6.4). Adds staged go/no-go checkpoints (8) and two open questions (12).
 
+Revision v4.2 (2026-09-28): owner rulings on the two open questions. Q4:
+same-era M1 is redefined as **verified-era** M1, derived from the quarter at
+which the wrapper version was gate-verified (the Q1-2026 sign-off commit
+`eed082b`), with per-CIK evidence from that pass's ledger (5, 14). Q5:
+**minimal suite first**: footnote-link collection is optional, graduation
+origin frames come from the staging stage, and D3 is measured as staged
+frame plus ordered correction replay with the unified boundary labelled
+partial (6.1, 6.4, 6.5, 8, 14).
+
 ## 1. Problem
 
 Per-CIK knowledge is spread across thirteen override layers plus 124 CIK
@@ -185,10 +194,38 @@ left ambiguous. Roughly eight extra census runs.
 Evidence check (2026-09-28): wrapper v3 JSON carries `version` and
 `source: bdc_xbrl` but no target accession or quarter; `known_edge_cases[*]
 .first_seen_quarter` names an edge case, not the authoring instance. Under the
-rule above, same-era M1 is expected to be `unavailable` for most or all eight
-CIKs. Section 12 question 4 asks the owner whether "latest cached filing whose
-filing_date precedes the wrapper's last version-bump commit" may be admitted
-as a labelled lower evidence tier, or whether same-era M1 is dropped.
+authoring rule alone, same-era M1 would be `unavailable` for all eight CIKs.
+
+**Verified-era rule (owner ruling, 2026-09-28, replaces the authoring
+rule).** The second profile is derived from the most recent quarter at which
+the wrapper version is evidenced to have worked in production, not the
+quarter it was written against. Evidence chain:
+
+- Quarter: `2026-03-31`, signed off 2026-09-05 under thresholds v2, git tag
+  `signoff-2026-03-31`, attestation
+  `data/reference/acceptance_attestations/2026-03-31.json` with
+  `signoff_commit = eed082b`.
+- Wrapper version: the file content at `eed082b`
+  (`git show eed082b:data/overrides/bdc_xbrl_wrappers/{cik10}.json`), pinned
+  by blob hash in the manifest. Seven pilot wrappers are byte-identical at
+  `eed082b` and HEAD; BCRED (`0001803498`) changed on 2026-09-17 (+32/-1
+  lines), so its verified-era comparison uses the `eed082b` version and the
+  Q1 comparison uses HEAD, each labelled with its blob hash.
+- Per-CIK evidence: the pass artifacts under
+  `data/output/quarter_pass/q1p3_20260831/` (`findings_ledger_post.csv`,
+  `acceptance_post.json`) record that quarter's per-CIK reconciliation and
+  gate result. A CIK whose ledger shows a blocking or unreconciled state at
+  that quarter has its verified-era M1 labelled `verified_era_unreconciled`
+  and reported separately, not pooled.
+- Instance: the cached `2026-03-31` filing for each CIK (all eight cached).
+
+This answers the drift-versus-derivability question at least as well as the
+authoring quarter would: the wrapper is known to have produced a gate-passing
+result on that instance, so a low derivation rate there cannot be blamed on
+filer drift. It does not prove the wrapper was correct in every detail on
+that quarter; the gate is cohort-level with per-CIK reconciliation evidence.
+M1 is reported for Q1 and for the verified era with separate artifact keys.
+Roughly eight extra census runs, all on recent instances that are cached.
 
 ## 6. Pilot architecture
 
@@ -252,8 +289,13 @@ network-disabled XML parsing. It enumerates every context's instant or
 duration dates; `DocumentPeriodEndDate` identifies the filing, not its
 comparative periods. Retain fact QName, context, raw value, nil/invalid
 status, unit/currency, decimals, duration, dimensions and source identity.
-Capture rates, dates, text/status facts, footnote resources and their links,
-and fund-level facts in addition to monetary facts. Use the pipeline's
+Capture rates, dates, text/status facts and fund-level facts in addition to
+monetary facts. Footnote resources and their links are OPTIONAL in the
+minimal suite (owner ruling Q5): collect them when the instance carries
+`link:footnote` arcs and the collector already has the element in hand;
+otherwise mark the footnote channel `unsupported` so every dependent
+absence claim resolves to `insufficient_evidence`. Do not build a footnote
+linkbase resolver for the pilot. Use the pipeline's
 canonical field names (`principal_amount`, `maturity_date`, `shares_held`)
 consistently. A collector failure, unsupported text channel or unmapped
 concept is explicit missing evidence, never evidence of non-disclosure.
@@ -533,7 +575,20 @@ reference artifact whose path, git HEAD and SHA-256 are recorded in the result:
 |---|---|---|---|---|
 | D1 extraction | cached-only production extraction (`bdc_filings._parse_single_filing` + `_deduplicate_bdc_holdings`) with explicit inherited mechanisms; the parser accepts NO profile parameters, so the profile side equals production | pinned `bdc_holdings.csv` accession slice, including comparative facts | accession/context/period with collision checks | row multiset, FV, cost, principal, raw rates and identifier |
 | D2 staging | the actual D1 frame through the profile wrapper adapter and production staging, including raw-stage corrections | independently materialised production staging from the pinned raw slice | source observation key with period lineage | row multiset, FV, parsed issuer, instrument, industry, affiliation |
-| D3 unified | the actual D2 frame through ordinary unified transformations, ordered correction replay and final ID assignment | pinned `private_markets_holdings.csv` slice | independently generated `row_id`, checked against source lineage | row multiset, per-row FV, classification |
+| D3 replay (minimal suite, owner ruling Q5) | the actual D2 frame with the production corrections replayed in production order via `agent_promoted.apply_promoted_plan`, two branches (with / without corrections) | pinned `private_markets_holdings.csv` slice | source key (`accession_number`, `src_context_id`); reference `row_id` is carried for display only, never joined onto pilot rows | row multiset, per-row FV, classification |
+| D3 unified (deferred) | the actual D2 frame through `build_unified_holdings` with all supplementary inputs pinned and independent `row_id` assignment | same | independently generated `row_id`, checked against source lineage | same |
+
+The minimal suite measures D3 replay and labels the result **D3-partial
+(pre-unification)**. The unified transformations that production runs between
+staging and correction application (cross-source dedupe, cost proxy, shares
+normalisation, fund-strategy asset-class override) are NOT reproduced. They
+are asserted not to change BDC row membership or the columns the correction
+predicates reference (`bdc_dimensions_raw`, `report_date`, `issuer_name`,
+`fair_value`); that assertion is checked once per fund-quarter by comparing
+the staged frame's source keys and FV with the reference slice WITHOUT
+replay, and any difference is reported as `unified_transform_effect` beside
+D3-partial rather than attributed to the profile or to corrections. Full D3
+unified is a Stage C+ item if D3-partial proves informative.
 
 Rules:
 
@@ -617,6 +672,18 @@ generalisability filter, deterministically:
    is not fidelity. A demonstrated mismatch is `not_expressible`; inability
    to recover the pre-correction frame is `insufficient_evidence`. Already
    corrected published output cannot establish which rows were removed.
+   **Origin frames in the minimal suite (owner ruling Q5):** for
+   staging-stage corrections (`comparative_period_filter`, raw exclusions)
+   the pre-correction frame is the pinned `bdc_holdings.csv` slice, which
+   production has not yet corrected at that stage. For unified-stage
+   corrections (`row_exclusion` rules, other B2 classes) the pre-correction
+   frame is `staging_bdc._prepare_bdc` output for that slice; production
+   applies these corrections to the unified frame after cross-source dedupe,
+   cost proxy, shares normalisation and the fund-strategy override, none of
+   which is reproduced here. The same once-per-fund-quarter
+   `unified_transform_effect` check as in 6.4 records whether those steps
+   changed BDC row membership or predicate columns; if they did, fidelity for
+   that quarter is `insufficient_evidence`, not approximated.
 3. Apply the candidate to every available out-of-scope quarter at the same
    boundary. Preserve all structural predicates; never strip date clauses
    by string replacement. A supported translation must distinguish temporal
@@ -729,7 +796,16 @@ Measurement rules:
 4. Cost note: the census collectors for comparative periods, rates, footnote
    markers and fund-level income are new code (6.1), and the three-boundary
    parity needs a staged-frame materialisation (6.4). The pilot is larger
-   than the v1 draft priced. Start [E] graduation with pinned overrides,
+   than the v1 draft priced. **Minimal suite (owner ruling Q5, 2026-09-28):**
+   the v4 requirements stand as acceptance criteria, but three items are
+   trimmed for the first pass and listed as deferred, each with its labelled
+   substitute: (i) footnote-link resolution is optional, channel marked
+   `unsupported` (6.1); (ii) graduation origin frames come from the raw and
+   staging stages with the `unified_transform_effect` check, not from a
+   unified rebuild (6.5); (iii) D3 is D3-partial (staged frame plus ordered
+   replay), with full unified D3 deferred (6.4). Everything that protects
+   real data (protection plugin, shared lease, exact multiset comparison,
+   immutable envelope) stays in scope. Start [E] graduation with pinned overrides,
    recoverable pre-correction stage inputs and source evidence. It can
    report M3 independently; missing origin frames or row witnesses remain
    insufficient-evidence results. Reconstruction that triggers heavy work
@@ -900,18 +976,14 @@ contracts as per-CIK parameters). This spec does not authorise that work.
 2. Artifact home: resolved by the v3 owner ruling as `data/pilot/` (section 14).
 3. Whether the investigation write-up should propose the v1 profile schema or
    stop at the numbers.
-4. **Same-era M1 evidence tier.** Wrappers record no authoring accession
-   (section 5). Options: (a) admit "latest cached filing whose filing_date
-   precedes the wrapper's last version-bump commit" as a labelled lower tier
-   and report it as such; (b) drop same-era M1 and rely on M5 plus the
-   low-history flags for the drift-versus-derivability question. Default if
-   unanswered: (b), with the comparison reported as `unavailable`.
-5. **Cost acceptance.** The v4 requirements (complete collector, connected
-   D1-D3 through the unified build, per-correction origin reconstruction,
-   protection plugin, lease adapter, event-sourced envelope) are estimated at
-   two to three times the v3 build. Ruling 5 asked for a minimal suite. The
-   staged checkpoints in section 8 let the owner stop after Stage A or B;
-   confirm that this is acceptable, or name the requirements to trim.
+4. **Same-era M1 evidence tier.** ANSWERED 2026-09-28 (owner: use later
+   quarters where the wrapper is in verified use). Adopted as the
+   verified-era rule in section 5: quarter `2026-03-31`, wrapper version at
+   sign-off commit `eed082b`, per-CIK evidence from the `q1p3_20260831` pass.
+5. **Cost acceptance.** ANSWERED 2026-09-28 (owner: minimal suite to start).
+   Trims and their labelled substitutes are in section 8; deferred items are
+   footnote-link resolution, unified-stage origin reconstruction, and full
+   unified D3. Stage checkpoints remain.
 
 ## 13. Review log
 
@@ -941,6 +1013,8 @@ were ruled on in v3; see section 14.
 | 5 | Non-reconciliation checks in contracts | Minimal suite now: fund-income yield included, per-row format-grammar contract included, non-accrual count deferred. Extend if the pilot works | 6.3, 11 |
 | 6 | Same-era M1 | Yes: second profile from each wrapper's authoring quarter | 5, 9 |
 | 7 | Quarters per CIK | Two in the pilot; follow-on extends to three then four to validate time-constancy | 5 |
+| 8 | Same-era M1 evidence (s12 q4) | Verified-era rule: derive from the 2026-03-31 instance using the wrapper version at sign-off commit `eed082b`, with per-CIK evidence from the `q1p3_20260831` pass ledger; BCRED uses its `eed082b` version for this comparison | 5, 12 |
+| 9 | Cost (s12 q5) | Minimal suite first: footnote-link resolution optional, origin frames from raw/staging stages, D3 measured as D3-partial (staged frame + ordered replay) with full unified D3 deferred; protection, lease, exact comparison and immutable envelope stay | 6.1, 6.4, 6.5, 8, 12 |
 
 Still open: extra controls (decide after the Stellus census); whether the
 write-up proposes the v1 schema (decide at the end; recommendation is
