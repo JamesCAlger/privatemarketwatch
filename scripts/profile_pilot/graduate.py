@@ -47,6 +47,7 @@ GATED_COLUMNS = ("bdc_dimensions_raw", "bdc_investment_identifier")
 DIAGNOSTIC_COLUMNS = ("issuer_name", "asset_category", "fair_value_currency")
 VALUE_FIELDS = ("fair_value", "cost", "principal_amount", "shares_held", "interest_rate", "pik_rate",
                 "basis_spread", "asset_category", "bdc_dimensions_raw", "bdc_investment_identifier")
+EXIT_STAGE_INVALIDATED = 3  # same code verify.cmd_freeze uses for failed input verification
 MAX_FRAME_ROWS = 10000  # per fund-quarter frames only; never a row loop above this
 LIST_CAP = 200
 # Staging-cost estimate calibrated on 2026-09-28 diagnostics (222 rows 16.2 s,
@@ -1054,10 +1055,15 @@ def yield_summary(results: list, *, denominator: int) -> dict:
 
 # ------------------------------------------------------------------ light M3 stage
 
-def read_output_slice(output_root: Path, cik: str, quarter: str) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """One fund-quarter straight from the output CSVs (all VARCHAR); used by cached tests."""
+def read_output_slice(output_root: Path, cik: str, quarter: str, *,
+                      temp_directory: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """One fund-quarter straight from the output CSVs (all VARCHAR); used by cached tests.
+
+    `temp_directory` is explicit so DuckDB spill never lands in the cwd's ./.tmp.
+    """
     import duckdb
-    con = duckdb.connect(config={"threads": 2, "memory_limit": "2GB"})
+    con = duckdb.connect(config={"threads": 2, "memory_limit": "2GB",
+                                 "temp_directory": str(Path(temp_directory))})
     try:
         frames = [con.execute("SELECT * FROM read_csv(?, all_varchar=true, header=true) WHERE "
                               "lpad(cik, 10, '0') = ? AND substr(report_date, 1, 10) = ? LIMIT 10001",
@@ -1090,7 +1096,7 @@ def inherited_staging_inputs(paths) -> list:
 
 def freeze_m3(paths) -> dict:
     """Correction inventory FIRST, then the Task 1 freeze sequence plus inherited inputs."""
-    from scripts.profile_pilot import cohort, manifest, verify
+    from scripts.profile_pilot import cohort, manifest
     from scripts.profile_pilot.paths import write_once_json
     inventory = correction_inventory(paths.code_root)
     manifest.freeze_inventory(paths, "correction_inventory", inventory)
@@ -1100,7 +1106,7 @@ def freeze_m3(paths) -> dict:
                               manifest.wrapper_key_inventory(paths.code_root))
     built = manifest.build_manifest(paths, primary_inventory=primary)
     built["materialised"] = (manifest.materialise_verified_era_wrappers(paths, built["verified_era"])
-                             + verify._materialise_slices(paths))
+                             + manifest.materialise_slices(paths))
     built["inherited_staging_inputs"] = inherited_staging_inputs(paths)
     built["inputs"] = built["inputs"] + built["inherited_staging_inputs"]
     built["unbound_staging_inputs"] = list(UNBOUND_STAGING_INPUTS)
@@ -1114,13 +1120,13 @@ def freeze_m3(paths) -> dict:
 
 
 def _load_slices(paths, man: dict, ciks) -> tuple[dict, dict]:
-    import duckdb
+    from scripts.profile_pilot.paths import pilot_duckdb
     frames = []
     for name in ("bdc_holdings", "private_markets_holdings"):
         record = next(r for r in man["materialised"] if r["label"] == "run/inputs/" + name + "_pilot8.parquet")
         if sha256_file(record["path"]) != record["sha256"]:
             raise StageInvalidated("pinned slice changed: " + record["path"])
-        con = duckdb.connect(config={"threads": 2, "memory_limit": "2GB"})
+        con = pilot_duckdb(paths)
         try:
             frame = con.execute("SELECT * FROM read_parquet(?) WHERE lpad(cik, 10, '0') IN (SELECT unnest(?))",
                                 [record["path"], sorted(ciks)]).fetchdf()
@@ -1137,10 +1143,21 @@ def _slim(out: dict) -> dict:
 
 
 def run_m3(paths) -> dict:
+    """The light M3 stage. cwd = run root throughout, so production code that opens its
+    own in-memory DuckDB (staging_bdc._prepare_bdc, the appliers, accounting_membership)
+    spills under the run root, never into the caller's ./.tmp."""
+    from scripts.profile_pilot.paths import pilot_cwd
+    with pilot_cwd(paths):
+        return _run_m3(paths)
+
+
+def _run_m3(paths) -> dict:
     from scripts.profile_pilot import manifest
     from scripts.profile_pilot.paths import confined, write_json
     t0 = time.perf_counter()
     man = json.loads(confined(paths, "manifest.json").read_text(encoding="ascii"))
+    if (man.get("input_verification") or {}).get("ok") is not True:
+        raise StageInvalidated("manifest was frozen with failed input verification; refusing M3")
     verification = manifest.verify_inputs(man)
     if not verification["ok"]:
         raise StageInvalidated("manifest inputs changed before M3: " + json.dumps(verification))
@@ -1195,6 +1212,16 @@ def run_m3(paths) -> dict:
                            for k in ("output/bdc_holdings.csv", "output/private_markets_holdings.csv")},
         seconds=round(time.perf_counter() - t0, 1),
         input_verification_after=manifest.verify_inputs(man))
+    if not summary["input_verification_after"]["ok"]:
+        # Spec s10: changed inputs invalidate the stage. The per-item files already
+        # written are superseded by this marker; no summary is written.
+        write_json(paths, "results/m3_invalidated.json",
+                   dict(run_id=paths.run_id, stage="m3-light", version=GRADUATE_VERSION,
+                        reason="inputs changed during the stage",
+                        input_verification_after=summary["input_verification_after"],
+                        invalidated_utc=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")))
+        raise StageInvalidated("inputs changed during M3: "
+                               + json.dumps(summary["input_verification_after"]))
     write_json(paths, "results/m3_summary.json", summary)
     return summary
 
@@ -1217,14 +1244,19 @@ def main(argv=None) -> int:
                           run_id=args.run_id)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     receipt = "verification/" + stamp + "_m3_" + args.command + "_preservation.json"
-    with protection.protected_session(paths, receipt=receipt):
-        result = freeze_m3(paths) if args.command == "freeze" else run_m3(paths)
-    if args.command == "freeze":
-        print("frozen: denominator " + str(result["denominator"]) + " | inputs ok "
-              + str(result["input_verification"]["ok"]))
-    else:
-        print("M3: denominator " + str(result["denominator"]) + " | " + json.dumps(result["overall"]))
+    try:
+        with protection.protected_session(paths, receipt=receipt):
+            result = freeze_m3(paths) if args.command == "freeze" else run_m3(paths)
+    except StageInvalidated as exc:
+        print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
+        print("receipt: " + str(paths.run_root / receipt))
+        return EXIT_STAGE_INVALIDATED
     print("receipt: " + str(paths.run_root / receipt))
+    if args.command == "freeze":
+        ok = result["input_verification"]["ok"] is True
+        print("frozen: denominator " + str(result["denominator"]) + " | inputs ok " + str(ok))
+        return 0 if ok else EXIT_STAGE_INVALIDATED
+    print("M3: denominator " + str(result["denominator"]) + " | " + json.dumps(result["overall"]))
     return 0
 
 

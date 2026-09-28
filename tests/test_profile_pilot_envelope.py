@@ -584,6 +584,58 @@ def test_structural_predicate_vocabulary_evaluates_against_raw_rows():
         ev.check_predicate({"kind": "segment_count", "delimiter": " | ", "count": 0})
 
 
+@pytest.mark.parametrize("predicate, row", [
+    ({"kind": "grammar_dialect", "dialect": "pipe3"}, {"grammar_dialect": None}),
+    ({"kind": "grammar_dialect", "dialect": "pipe3"}, {"grammar_dialect": float("nan")}),
+    (PREFIX_LIEN, {"investment_identifier": None}),
+    ({"kind": "segment_count", "delimiter": " | ", "count": 3}, {"investment_identifier": None}),
+    ({"kind": "carrying_concept", "field": "interest_rate",
+      "concept": "us-gaap:InvestmentInterestRate"}, {"interest_rate_concept": None}),
+    (AXIS_EQUITY, {"dimensions_raw": None}),
+    (AXIS_EQUITY, {"dimensions": None}),
+])
+def test_null_predicate_field_is_unresolved_not_a_silent_non_match(predicate, row):
+    with pytest.raises(PredicateEvaluationError, match="null"):
+        ev.predicate_matches(predicate, row)
+
+
+def test_null_dialect_never_falls_back_to_the_null_partition():
+    dialect = {"kind": "grammar_dialect", "dialect": "pipe3"}
+    events = _assert([], applies_to=dialect, value=" | ")
+    events = _assert(events, value=" / ")  # the null-partition fallback
+    entries = ev.materialize_entries(events)
+    assert ev.resolve_for_row(entries, {"grammar_dialect": "dash2"}, KEY, "2024-06-30", "10-K",
+                              T1).entry["value"] == " / "
+    with pytest.raises(PredicateEvaluationError):
+        ev.resolve_for_row(entries, {"grammar_dialect": None}, KEY, "2024-06-30", "10-K", T1)
+
+
+def test_overlap_validation_scopes_rows_to_the_key_under_check():
+    dialect_a = {"kind": "grammar_dialect", "dialect": "pipe3"}
+    dialect_b = {"kind": "grammar_dialect", "dialect": "dash2"}
+    other_key = "rate_convention.scale"
+    events = _assert([], applies_to=dialect_a, value=" | ")
+    events = _assert(events, applies_to=dialect_b, value=" - ",
+                     evidence=[{"kind": "sample_rows", "rows": [{"grammar_dialect": "dash2"}]}])
+    # An unrelated key whose evidence row has no grammar_dialect at all.
+    events = _assert(events, key=other_key, value="percent",
+                     evidence=[{"kind": "sample_rows", "rows": [ROW_LIEN]}])
+    ev.validate_profile(events)
+    # Per-key caller rows are scoped the same way; rows for another key are not evaluated.
+    ev.validate_profile(events, sample_rows={KEY: [{"grammar_dialect": "pipe3"}],
+                                             other_key: [ROW_OTHER]})
+    # Rows for the key under check that lack the field still fail loudly.
+    with pytest.raises(PredicateEvaluationError):
+        ev.validate_profile(events, sample_rows={KEY: [ROW_LIEN]})
+    with pytest.raises(EnvelopeError, match="does not have"):
+        ev.validate_profile(events, sample_rows={"no.such_key": [ROW_LIEN]})
+    # And a same-key row selected by both partitions is still an overlap.
+    both = _assert(events, applies_to={"kind": "prefix", "vocabulary": ["First Lien"]},
+                   value=" p ")
+    with pytest.raises(OverlapError):
+        ev.validate_profile(both, sample_rows={KEY: [dict(ROW_LIEN, grammar_dialect="pipe3")]})
+
+
 def test_resolve_filters_both_clocks_and_rejects_mixed_clock_arguments():
     events = _assert([], valid_to="2024-03-31")
     entries = ev.materialize_entries(events)

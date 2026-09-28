@@ -98,7 +98,7 @@ class ForbiddenPredicateError(InvalidPredicateError):
 
 
 class PredicateEvaluationError(PredicateError):
-    """The row lacks the field a predicate needs; never read as 'no match'."""
+    """The row lacks (or has a null in) the field a predicate needs; never read as 'no match'."""
 
 
 class AmbiguousResolutionError(EnvelopeError):
@@ -226,7 +226,10 @@ def _row_text(row: dict, field: str, kind: str) -> str:
         raise PredicateEvaluationError("row has no " + repr(field) + " for " + kind)
     value = row[field]
     if value is None or (isinstance(value, float) and value != value):
-        return ""
+        # A null is unknown, not "does not match": falling through here would send the
+        # row silently to the null partition. Same explicit outcome as a missing field.
+        raise PredicateEvaluationError(repr(field) + " is null; " + kind + " is unresolved "
+                                       "for this row")
     if not isinstance(value, str):
         raise PredicateEvaluationError(repr(field) + " must be text for " + kind)
     return value
@@ -235,8 +238,11 @@ def _row_text(row: dict, field: str, kind: str) -> str:
 def _axis_member_matches(predicate: dict, row: dict) -> bool:
     axis, member = predicate["axis"], predicate["member"]
     if "dimensions" in row:
-        pairs = row["dimensions"] or []
-        if not all(isinstance(p, (list, tuple)) and len(p) == 2 for p in pairs):
+        pairs = row["dimensions"]
+        if pairs is None:
+            raise PredicateEvaluationError("'dimensions' is null; axis_member is unresolved "
+                                           "for this row")
+        if not isinstance(pairs, (list, tuple)) or not all(isinstance(p, (list, tuple)) and len(p) == 2 for p in pairs):
             raise PredicateEvaluationError("row dimensions must be [axis, member] QName pairs")
         return any(p[0] == axis and p[1] == member for p in pairs)
     # dimensions_raw (bdc_holdings.csv) stores lower-cased axis and member local names.
@@ -605,7 +611,13 @@ def _entry_schema_validator():
     return jsonschema.Draft202012Validator(sub)
 
 
-def _check_slice(live: list, stamp: str, rows: list) -> None:
+def _check_slice(live: list, stamp: str, rows_by_key: dict) -> None:
+    """Overlap check for one transaction slice.
+
+    Only rows scoped to the key under check are evaluated: a row gathered for (or
+    evidenced by) another key may legitimately lack the fields this key's predicates
+    need, and must not abort validation of an unrelated key.
+    """
     for i, a in enumerate(live):
         for b in live[i + 1:]:
             if a["key"] != b["key"] or a["form_type"] != b["form_type"]:
@@ -619,6 +631,7 @@ def _check_slice(live: list, stamp: str, rows: list) -> None:
             if pa is None or _canon_predicate(pa) == _canon_predicate(pb):
                 raise OverlapError("slice " + stamp + ": " + pair + " are equally specific and "
                                    "overlap in valid time")
+            rows = rows_by_key.get(a["key"], [])
             if not rows:
                 raise OverlapError("slice " + stamp + ": " + pair + " overlap in valid time and "
                                    "are unprovably disjoint (no sample or evidence rows)")
@@ -628,14 +641,16 @@ def _check_slice(live: list, stamp: str, rows: list) -> None:
                                        + pair)
 
 
-def validate_profile(events: list, sample_rows: list | None = None) -> dict:
+def validate_profile(events: list, sample_rows: list | dict | None = None) -> dict:
     """Validate the log, every materialized envelope and every transaction slice.
 
     The live set only changes at event timestamps, so checking the live set at
     each distinct timestamp also covers the state just before it (the previous
     slice, or the empty set before the first event). Partition overlap is
-    checked by evaluating both predicates on ``sample_rows`` plus any
-    ``sample_rows`` evidence carried by the profile's own entries.
+    checked by evaluating both predicates on the rows scoped to that key:
+    ``sample_rows`` given as ``{key: [rows]}`` (per key), or as a plain list
+    (rows for every key), plus the ``sample_rows`` evidence carried by the
+    profile's own entries OF THAT KEY. Rows of other keys are never evaluated.
     """
     entries = materialize_entries(events)
     validator = _entry_schema_validator()
@@ -643,18 +658,27 @@ def validate_profile(events: list, sample_rows: list | None = None) -> dict:
         errors = sorted(validator.iter_errors(entry), key=lambda e: list(e.path))
         if errors:
             raise EnvelopeError("schema: " + entry["entry_id"] + ": " + errors[0].message)
-    rows = list(sample_rows or [])
+    keys = {e["key"] for e in entries}
+    if isinstance(sample_rows, dict):
+        unknown = sorted(set(sample_rows) - keys)
+        if unknown:
+            raise EnvelopeError("sample_rows scoped to keys the profile does not have: "
+                                + repr(unknown))
+        rows_by_key = {k: list(sample_rows.get(k) or []) for k in keys}
+    else:
+        common = list(sample_rows or [])
+        rows_by_key = {k: list(common) for k in keys}
     for entry in entries:
         for item in entry["evidence"]:
             if item["kind"] == "sample_rows":
-                rows.extend(item["rows"])
-    if not all(isinstance(r, dict) for r in rows):
+                rows_by_key[entry["key"]].extend(item["rows"])
+    if not all(isinstance(r, dict) for rows in rows_by_key.values() for r in rows):
         raise EnvelopeError("sample rows must be dicts")
     stamps = sorted({e["recorded_at"] for e in entries}
                     | {e["recorded_until"] for e in entries if e["recorded_until"]})
     for stamp in stamps:
         live = [e for e in entries if _contains(e["recorded_at"], e["recorded_until"], stamp)]
-        _check_slice(live, stamp, rows)
+        _check_slice(live, stamp, rows_by_key)
     return {"events": len(events), "entries": len(entries), "slices": len(stamps)}
 
 

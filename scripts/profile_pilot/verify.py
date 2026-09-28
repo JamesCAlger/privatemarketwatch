@@ -216,35 +216,6 @@ def cmd_test(args) -> int:
     return 0 if done.returncode == 0 else EXIT_TESTS_FAILED
 
 
-def _materialise_slices(paths) -> list[dict]:
-    """Pinned 8-CIK slices of the holdings CSVs (ruling R3: light DuckDB reads)."""
-    import duckdb
-    from scripts.profile_pilot import cohort, manifest
-    out = []
-    for name in ("bdc_holdings", "private_markets_holdings"):
-        source = paths.output_root / (name + ".csv")
-        before = manifest.file_record(source, "output/" + name + ".csv")
-        target = confined(paths, "inputs/" + name + "_pilot8.parquet")
-        target.parent.mkdir(parents=True, exist_ok=True)
-        if target.exists():
-            raise PathError("refusing to overwrite frozen slice: " + str(target))
-        con = duckdb.connect(config={"threads": 2, "memory_limit": "2GB"})
-        try:
-            con.execute("COPY (SELECT * FROM read_csv(?, all_varchar=true, header=true) "
-                        "WHERE lpad(cik, 10, '0') IN (SELECT unnest(?))) TO '"
-                        + target.as_posix().replace("'", "''") + "' (FORMAT parquet)",
-                        [str(source), list(cohort.PILOT_CIKS)])
-            rows = con.execute("SELECT lpad(cik, 10, '0'), count(*) FROM read_parquet(?) "
-                               "GROUP BY 1 ORDER BY 1", [str(target)]).fetchall()
-        finally:
-            con.close()
-        manifest.assert_inputs_unchanged([before], "while slicing " + name)
-        record = manifest.file_record(target, "run/inputs/" + name + "_pilot8.parquet")
-        record.update(source=before, rows_by_cik={c: n for c, n in rows})
-        out.append(record)
-    return out
-
-
 def cmd_freeze(args) -> int:
     from scripts.profile_pilot import cohort, manifest
     paths = _paths(args)
@@ -257,7 +228,7 @@ def cmd_freeze(args) -> int:
                                   manifest.wrapper_key_inventory(paths.code_root))
         built = manifest.build_manifest(paths, primary_inventory=primary)
         built["materialised"] = (manifest.materialise_verified_era_wrappers(paths, built["verified_era"])
-                                 + _materialise_slices(paths))
+                                 + manifest.materialise_slices(paths))
         built["inventories"] = manifest.inventory_states(paths)
         built["input_verification"] = manifest.verify_inputs(built)
         built["frozen_utc"] = datetime.now(timezone.utc).isoformat()

@@ -12,8 +12,9 @@ from pathlib import Path
 import subprocess
 
 from scripts.profile_pilot import cohort
-from scripts.profile_pilot.paths import PathError, PilotPaths, confined, write_json, write_once_json
-from scripts.profile_pilot.protection import LeaseRefused, assert_lease_held
+from scripts.profile_pilot.paths import (PathError, PilotPaths, confined, pilot_duckdb, write_json,
+                                         write_once_json)
+from scripts.profile_pilot.protection import LeaseRefused, assert_lease_held, requires_lease
 
 MANIFEST_VERSION = 1
 INVENTORY_NAMES = ("primary_quarter_inventory", "wrapper_key_inventory",
@@ -198,13 +199,12 @@ def historical_wrapper(code_root: Path, cik: str, commit: str) -> dict:
                 sha256=hashlib.sha256(content).hexdigest(), bytes=len(content))
 
 
-def verified_era_ledger(ledger: Path, ciks) -> dict:
+def verified_era_ledger(ledger: Path, ciks, *, paths: PilotPaths) -> dict:
     ledger = Path(ledger)
     if not ledger.is_file():
         return dict(status="missing", path=str(ledger), ciks={
             cik: dict(label="verified_era_evidence_missing", rows=0) for cik in ciks})
-    import duckdb
-    con = duckdb.connect(config={"threads": 2})
+    con = pilot_duckdb(paths, memory_limit=None)
     try:
         rows = con.execute("""
             SELECT lpad(cik, 10, '0') AS cik, lane, engine, state, count(*) AS n
@@ -253,7 +253,8 @@ def verified_era_evidence(paths: PilotPaths) -> dict:
     return dict(quarter=cohort.VERIFIED_ERA_QUARTER, signoff_commit=cohort.SIGNOFF_COMMIT,
                 pass_id=cohort.VERIFIED_PASS_ID, attestation=attestation,
                 acceptance_post=acceptance, wrappers=wrappers,
-                ledger=verified_era_ledger(pass_dir / "findings_ledger_post.csv", cohort.PILOT_CIKS),
+                ledger=verified_era_ledger(pass_dir / "findings_ledger_post.csv", cohort.PILOT_CIKS,
+                                           paths=paths),
                 note="git add dates are metadata only")
 
 
@@ -273,6 +274,33 @@ def materialise_verified_era_wrappers(paths: PilotPaths, evidence: dict) -> list
             stream.write(content)
         written.append(file_record(target, "run/inputs/verified_era_wrappers/" + cik + ".json"))
     return written
+
+
+def materialise_slices(paths: PilotPaths) -> list[dict]:
+    """Pinned 8-CIK Parquet slices of the holdings CSVs (ruling R3: light DuckDB reads)."""
+    out = []
+    for name in ("bdc_holdings", "private_markets_holdings"):
+        source = paths.output_root / (name + ".csv")
+        before = file_record(source, "output/" + name + ".csv")
+        target = confined(paths, "inputs/" + name + "_pilot8.parquet")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            raise PathError("refusing to overwrite frozen slice: " + str(target))
+        con = pilot_duckdb(paths)
+        try:
+            con.execute("COPY (SELECT * FROM read_csv(?, all_varchar=true, header=true) "
+                        "WHERE lpad(cik, 10, '0') IN (SELECT unnest(?))) TO '"
+                        + target.as_posix().replace("'", "''") + "' (FORMAT parquet)",
+                        [str(source), list(cohort.PILOT_CIKS)])
+            rows = con.execute("SELECT lpad(cik, 10, '0'), count(*) FROM read_parquet(?) "
+                               "GROUP BY 1 ORDER BY 1", [str(target)]).fetchall()
+        finally:
+            con.close()
+        assert_inputs_unchanged([before], "while slicing " + name)
+        record = file_record(target, "run/inputs/" + name + "_pilot8.parquet")
+        record.update(source=before, rows_by_cik={c: n for c, n in rows})
+        out.append(record)
+    return out
 
 
 # ---------------------------------------------------------------- manifest
@@ -353,16 +381,51 @@ def cache_identity(stage: str, dependencies: dict, *, collector_version: str) ->
 
 
 def _identity_records(identity: dict) -> list[dict]:
-    records = []
-    for value in identity["dependencies"].values():
-        if isinstance(value, list):
-            records.extend(r for r in value if isinstance(r, dict) and "path" in r and "status" in r)
+    """Every file record anywhere in the dependencies: single dicts, lists, nested values.
+
+    A file record is a dict with "path" and "status"; its own children (e.g. a slice
+    record's `source`) are walked too, so no nested input escapes re-hashing.
+    """
+    records: list[dict] = []
+
+    def walk(value) -> None:
+        if isinstance(value, dict):
+            if "path" in value and "status" in value:
+                records.append(value)
+            for child in value.values():
+                walk(child)
+        elif isinstance(value, (list, tuple)):
+            for child in value:
+                walk(child)
+
+    walk(identity["dependencies"])
     return records
 
 
-def run_cached_stage(paths: PilotPaths, relative: str, identity: dict, compute, *, heavy: bool,
+WORKLOAD_FIELDS = ("ciks", "instance_count", "full_cache_scan", "pipeline_cik_count",
+                   "est_seconds", "est_bytes")
+
+
+def classify_workload(workload: dict) -> bool:
+    """requires_lease over an explicit, complete workload description (ruling R3).
+
+    Every field must be stated: an omitted field would silently default to "light".
+    """
+    if not isinstance(workload, dict) or set(workload) != set(WORKLOAD_FIELDS):
+        got = sorted(workload) if isinstance(workload, dict) else type(workload).__name__
+        raise ValueError("workload must state exactly " + repr(list(WORKLOAD_FIELDS)) + ", got "
+                         + repr(got))
+    return requires_lease(**workload)
+
+
+def run_cached_stage(paths: PilotPaths, relative: str, identity: dict, compute, *, workload: dict,
                      lease=None) -> dict:
-    """Reuse a complete result with the same identity, else compute (under the lease if heavy)."""
+    """Reuse a complete result with the same identity, else compute (under the lease if heavy).
+
+    Heaviness is derived here from `workload` (the requires_lease keyword arguments);
+    callers cannot pass a bare heavy/light flag.
+    """
+    heavy = classify_workload(workload)
     records = _identity_records(identity)
     assert_inputs_unchanged(records, "before stage " + identity["stage"])
     target = confined(paths, relative)
@@ -372,7 +435,7 @@ def run_cached_stage(paths: PilotPaths, relative: str, identity: dict, compute, 
             raise StageInvalidated("result exists with a different dependency identity: " + relative)
         if prior.get("complete") is not True:
             raise StageInvalidated("prior result is incomplete; refusing to reuse: " + relative)
-        return dict(cache="hit", result=prior["result"], path=str(target))
+        return dict(cache="hit", result=prior["result"], path=str(target), requires_lease=heavy)
     if heavy and lease is None:
         raise LeaseRefused("heavy stage " + identity["stage"] + " refused: no shared lease")
     if heavy:
@@ -384,7 +447,8 @@ def run_cached_stage(paths: PilotPaths, relative: str, identity: dict, compute, 
         result = compute()
         assert_inputs_unchanged(records, "during stage " + identity["stage"])
     try:
-        write_once_json(paths, relative, dict(identity=identity, complete=True, result=result))
+        write_once_json(paths, relative, dict(identity=identity, complete=True, result=result,
+                                              workload=workload, requires_lease=heavy))
     except PathError as exc:
         raise StageInvalidated(str(exc)) from exc
-    return dict(cache="miss", result=result, path=str(target))
+    return dict(cache="miss", result=result, path=str(target), requires_lease=heavy)

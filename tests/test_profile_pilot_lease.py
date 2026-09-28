@@ -19,6 +19,7 @@ import pytest
 import pipeline.programme.runner as runner
 from scripts.profile_pilot import manifest, protection, verify
 from scripts.profile_pilot.protection import LeaseRefused, shared_heavy_lease
+from tests.test_profile_pilot_manifest import ARES_PARSE
 from tests.test_profile_pilot_paths import CODE_ROOT, fake_paths
 
 
@@ -66,6 +67,7 @@ def test_lease_binds_main_root_and_writes_only_pilot_json(tmp_path, quiet_discov
 
 def test_occupied_lease_is_refused_and_leaves_the_holder_alone(tmp_path, quiet_discovery):
     paths = fake_paths(tmp_path)
+    original_root = runner.ROOT
     holder = psutil.Process(os.getppid())
     _lock(paths).write_text(json.dumps(dict(
         controller_pid=holder.pid, controller_created=holder.create_time(),
@@ -76,7 +78,7 @@ def test_occupied_lease_is_refused_and_leaves_the_holder_alone(tmp_path, quiet_d
             pytest.fail("must not run")
     assert _lock(paths).read_text() == before
     assert not _candidate(paths).exists()
-    assert runner.ROOT != paths.main_repo_root
+    assert runner.ROOT == original_root
 
 
 def test_concurrent_acquisition_in_one_process_is_refused(tmp_path, quiet_discovery):
@@ -203,10 +205,10 @@ def test_cache_miss_that_is_heavy_takes_the_real_lease(tmp_path, quiet_discovery
 
     lease = lambda: shared_heavy_lease(paths, head="h")  # noqa: E731
     first = manifest.run_cached_stage(paths, "census/a.json", identity, compute,
-                                      heavy=True, lease=lease)
-    assert first["cache"] == "miss" and seen == [True]
+                                      workload=ARES_PARSE, lease=lease)
+    assert first["cache"] == "miss" and first["requires_lease"] is True and seen == [True]
     second = manifest.run_cached_stage(paths, "census/a.json", identity, compute,
-                                       heavy=True, lease=lease)
+                                       workload=ARES_PARSE, lease=lease)
     assert second["cache"] == "hit" and seen == [True]
     assert not _lock(paths).exists()
 
@@ -218,7 +220,8 @@ def test_cache_miss_is_blocked_when_the_lease_is_refused(tmp_path, monkeypatch):
     identity = manifest.cache_identity("census", {}, collector_version="c1")
     with pytest.raises(LeaseRefused):
         manifest.run_cached_stage(paths, "census/b.json", identity, lambda: {"x": 1},
-                                  heavy=True, lease=lambda: shared_heavy_lease(paths, head="h"))
+                                  workload=ARES_PARSE,
+                                  lease=lambda: shared_heavy_lease(paths, head="h"))
     assert not (paths.run_root / "census" / "b.json").exists()
 
 

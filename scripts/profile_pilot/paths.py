@@ -5,6 +5,7 @@ data/output, so a silent fallback would read an empty or different dataset.
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -155,6 +156,43 @@ def write_json(paths: PilotPaths, relative: str, value) -> Path:
         os.fsync(stream.fileno())
     os.replace(pending, target)
     return target
+
+
+TMP_SUBDIR = "tmp"
+
+
+def pilot_temp_dir(paths: PilotPaths) -> Path:
+    """<run_root>/tmp, created and re-confined: the only place pilot spill files may land."""
+    return _prepare(paths, TMP_SUBDIR + "/.keep").parent
+
+
+def pilot_duckdb(paths: PilotPaths, *, threads: int = 2, memory_limit: str | None = "2GB"):
+    """The one DuckDB factory for pilot code: spill (temp_directory) stays under the run root.
+
+    An in-memory duckdb.connect() otherwise spills to ./.tmp in the current working
+    directory, which is outside the run root.
+    """
+    import duckdb
+    config = {"threads": threads, "temp_directory": str(pilot_temp_dir(paths))}
+    if memory_limit is not None:
+        config["memory_limit"] = memory_limit
+    return duckdb.connect(config=config)
+
+
+@contextmanager
+def pilot_cwd(paths: PilotPaths):
+    """Run a block (e.g. production staging that opens its own DuckDB) with cwd = run root.
+
+    Production code is not edited; its default ./.tmp spill then lands under the run
+    root. The previous cwd is restored in `finally`.
+    """
+    _prepare(paths, TMP_SUBDIR + "/.keep")
+    previous = os.getcwd()
+    os.chdir(paths.run_root)
+    try:
+        yield paths.run_root
+    finally:
+        os.chdir(previous)
 
 
 def write_once_json(paths: PilotPaths, relative: str, value) -> Path:

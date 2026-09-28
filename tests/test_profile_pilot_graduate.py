@@ -476,13 +476,80 @@ def test_correction_inventory_rejects_a_live_loader_body_it_did_not_enumerate(tm
         g.correction_inventory(tmp_path)
 
 
+# ------------------------------------------------------------------ stage invalidation (spec s10)
+
+def _m3_run_root(tmp_path, *, frozen_ok=True):
+    from scripts.profile_pilot import manifest
+    from scripts.profile_pilot.paths import write_once_json
+    from tests.test_profile_pilot_paths import fake_paths
+    paths = fake_paths(tmp_path)
+    watched = tmp_path / "watched_input.csv"
+    watched.write_text("v1", encoding="utf-8")
+    manifest.freeze_inventory(paths, "correction_inventory",
+                              dict(items=[], denominator=0, per_cik={}))
+    inputs = [manifest.file_record(watched, "watched")]
+    write_once_json(paths, "manifest.json", dict(
+        inputs=inputs, materialised=[], frozen_utc=T0,
+        input_verification=dict(manifest.verify_inputs({"inputs": inputs}), ok=frozen_ok)))
+    return paths, watched
+
+
+def test_input_change_during_m3_invalidates_the_stage_and_writes_no_summary(tmp_path, monkeypatch):
+    paths, watched = _m3_run_root(tmp_path)
+    monkeypatch.setattr(g, "_load_slices", lambda paths, man, ciks: ({}, {}))
+
+    def anchors_and_mutate(code_root):
+        watched.write_text("v2 changed mid-stage", encoding="utf-8")
+        return {}
+
+    monkeypatch.setattr(g, "load_anchor_contracts", anchors_and_mutate)
+    cwd = os.getcwd()
+    with pytest.raises(g.StageInvalidated, match="during M3"):
+        g.run_m3(paths)
+    assert os.getcwd() == cwd  # the run-root cwd is restored on failure
+    assert not (paths.run_root / "results" / "m3_summary.json").exists()
+    marker = json.loads((paths.run_root / "results" / "m3_invalidated.json").read_text())
+    assert marker["input_verification_after"]["changed"] == [str(watched)]
+
+
+def test_unchanged_inputs_let_m3_write_its_summary(tmp_path, monkeypatch):
+    paths, _ = _m3_run_root(tmp_path)
+    monkeypatch.setattr(g, "_load_slices", lambda paths, man, ciks: ({}, {}))
+    summary = g.run_m3(paths)
+    assert summary["input_verification_after"]["ok"] is True
+    assert (paths.run_root / "results" / "m3_summary.json").is_file()
+    assert not (paths.run_root / "results" / "m3_invalidated.json").exists()
+
+
+def test_m3_refuses_a_manifest_frozen_with_failed_verification(tmp_path):
+    paths, _ = _m3_run_root(tmp_path, frozen_ok=False)
+    with pytest.raises(g.StageInvalidated, match="frozen with failed"):
+        g.run_m3(paths)
+    assert not (paths.run_root / "results").exists()
+
+
+@pytest.mark.parametrize("command", ["freeze", "run"])
+def test_main_exits_non_zero_when_the_stage_is_invalid(tmp_path, monkeypatch, command):
+    from tests.test_profile_pilot_paths import fake_paths
+    paths = fake_paths(tmp_path)
+    if command == "freeze":
+        monkeypatch.setattr(g, "freeze_m3", lambda p: dict(denominator=0, input_verification=dict(ok=False)))
+    else:
+        def invalid(p):
+            raise g.StageInvalidated("inputs changed during M3: x")
+        monkeypatch.setattr(g, "run_m3", invalid)
+    code = g.main([command, "--main-root", str(paths.main_repo_root), "--data-root",
+                   str(paths.data_root), "--run-id", paths.run_id])
+    assert code == g.EXIT_STAGE_INVALIDATED != 0
+
+
 # ------------------------------------------------------------------ cached slices
 
 @pytest.mark.needs_cache
 # Ruling R14: the sealed pipeline/agent_rule.py:481 raises a pandas FutureWarning on this
 # real TCW replay; filtered for this ONE test only.
 @pytest.mark.filterwarnings("ignore::FutureWarning:pipeline.agent_rule")
-def test_real_tcw_quarter_stages_and_attributes_live_corrections():
+def test_real_tcw_quarter_stages_and_attributes_live_corrections(tmp_path):
     data_root = os.environ.get("PROFILE_PILOT_DATA_ROOT")
     if not data_root:
         pytest.skip("PROFILE_PILOT_DATA_ROOT not set (run through the pilot launcher)")
@@ -490,7 +557,8 @@ def test_real_tcw_quarter_stages_and_attributes_live_corrections():
     tcw, quarter = "0001715933", "2025-06-30"
     inv = g.correction_inventory(code_root)
     corrections, rules = g.live_bodies(code_root, inv, cik=tcw)
-    raw_q, ref_q = g.read_output_slice(Path(data_root) / "output", tcw, quarter)
+    raw_q, ref_q = g.read_output_slice(Path(data_root) / "output", tcw, quarter,
+                                       temp_directory=tmp_path)
     provider = g.SliceProvider(raw_frames={(tcw, quarter): raw_q}, reference={(tcw, quarter): ref_q},
                                stager=g.production_stager, corrections=corrections,
                                rules_by_cik={tcw: rules}, cache_dir=None)

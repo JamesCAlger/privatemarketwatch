@@ -85,7 +85,7 @@ def load_index_candidates(paths: PilotPaths, *, ciks=PILOT_CIKS, quarters=None) 
     The index carries some filers twice (padded and unpadded CIK); identical rows
     collapse, conflicting metadata for one accession is kept and surfaces later.
     """
-    import duckdb
+    from scripts.profile_pilot.paths import pilot_duckdb
     index = paths.output_root / "bdc_filings_index.csv"
     wanted = sorted(ciks)
     query = """SELECT DISTINCT lpad(cik, 10, '0') AS cik, accession_number, form_type,
@@ -99,7 +99,7 @@ def load_index_candidates(paths: PilotPaths, *, ciks=PILOT_CIKS, quarters=None) 
         query += " AND substr(report_date, 1, 10) IN (SELECT unnest(?))"
         params.append(sorted(quarters))
     query += " ORDER BY 1, 5, 4, 2"
-    con = duckdb.connect(config={"threads": 2})
+    con = pilot_duckdb(paths, memory_limit=None)
     try:
         cursor = con.execute(query, params)
         names = [d[0] for d in cursor.description]
