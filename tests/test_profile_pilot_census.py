@@ -565,6 +565,37 @@ def test_partition_multimodal_segment_counts_are_a_signature(tmp_path):
     assert "axis_member" in {p["kind"] for p in got[0]["evidence"]["predicates"]}
 
 
+HEADING = "Investments, Investments - non-controlled / non-affiliated, First Lien Debt, Co%d Term Loan"
+
+
+def test_partition_single_total_row_with_shared_heading_prefix_does_not_resolve(tmp_path):
+    # Fidelity 2023-06-30 shape: every position repeats the filer's heading path, one
+    # labelled Total row leaks in. The Total row is set aside with evidence, and the shared
+    # heading prefix is never a dialect discriminator.
+    texts = [HEADING % i for i in range(11)] + ["Total Investments -- non-controlled / affiliated"]
+    doc = collect(tmp_path, document(*assemble(*_many("p", texts))))
+    got = outcomes(doc, "partition")
+    assert not by_finding(doc, "partition", "evidenced_partition")
+    for outcome in got:
+        assert outcome["evidence"]["excluded_label_rows"]["rows"] == 1
+        assert outcome["evidence"]["excluded_label_rows"]["examples"][0]["identifier"].startswith("Total")
+
+
+def test_partition_minority_group_below_share_never_resolves(tmp_path):
+    # 11 rows vs 1 row, separated exactly by an axis member: one row is not a dialect.
+    # '|' and ',' are both above 20%; neither sits inside one fixed segment of the other
+    # (a comma-only row exists), so the group split is 1 ('|' without ',') vs 11.
+    texts = ["Co%d | First Lien, SOFR+5" % i for i in range(10)] + ["Solo Co, Equity"] + ["Odd Co | Second Lien"]
+    parts = (_many("a", texts[:11], dims=[("explicit", TYPE_AXIS, "us-gaap:FirstLienMember")])
+             + _many("b", texts[11:], dims=[("explicit", TYPE_AXIS, "us-gaap:SecondLienMember")]))
+    doc = collect(tmp_path, document(*assemble(*parts)))
+    got = [o for o in outcomes(doc, "partition") if o["subject"]["signature"]["kind"] == "delimiters"]
+    assert got and all(o["outcome"] != "resolved" or o["finding"] != "evidenced_partition" for o in got)
+    minority = [o for o in got if o["finding"] == "minority_group_below_share"]
+    assert minority and minority[0]["outcome"] == "candidate"
+    assert minority[0]["evidence"]["minimum_group_share"] == 0.2
+
+
 GRAMMAR = dict(
     path="data/overrides/identifier_rate_grammars/0001901037.json", sha256="a" * 64,
     body=dict(applies_to=dict(signature="ISSUER TYPE REFRATE"), required_fields=["basis_spread"],

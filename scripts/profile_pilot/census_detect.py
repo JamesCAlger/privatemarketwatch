@@ -26,7 +26,7 @@ from __future__ import annotations
 from decimal import Decimal
 import re
 
-DETECTOR_VERSION = "census-detect.v0.2"
+DETECTOR_VERSION = "census-detect.v0.3"
 OUTCOMES = ("candidate", "resolved", "insufficient_evidence")
 SCOPE_AXES = frozenset({"consolidatedentitiesaxis", "consolidationitemsaxis"})
 LABEL_RE = re.compile(r"^\s*(sub-?\s*)?totals?\b", re.IGNORECASE)
@@ -522,6 +522,18 @@ def _evaluate_signature(signature: dict, rows: list, base_subject: dict, base_ev
     ids = {r["context_id"] for r in g1} | {r["context_id"] for r in g2}
     others = [r for r in rows if r["context_id"] not in ids]
     exact, near = _search(g1, g2, others, defining)
+    shares = [round(len(g) / len(rows), 4) for g in (g1, g2)]
+    evidence.update(group_shares=shares, minimum_group_share=DIALECT_SHARE)
+    if min(shares) <= DIALECT_SHARE:
+        # A group at or below the minimum share (e.g. one row) is not a dialect: a
+        # discriminator for it is at most a candidate, never an evidenced partition.
+        if exact or near:
+            evidence.update(discriminators=exact, near_discriminators=near,
+                            note="discriminator found, but the minority group is too small to be a dialect")
+            return _outcome("partition", subject, "candidate", "minority_group_below_share", evidence)
+        evidence["packet_stub"] = dict(question="Minority group below the minimum share with no discriminator.",
+                                       groups=labels)
+        return _outcome("partition", subject, "insufficient_evidence", "minority_group_below_share", evidence)
     if exact:
         evidence.update(predicates=[e["predicate"] for e in exact], discriminators=exact, disjoint_partition=True)
         if all(e["predicate"]["kind"] == "grammar_dialect" for e in exact):
@@ -549,14 +561,21 @@ def detect_partitions(doc: dict, learned_predicates: list | None, grammar: dict 
     positions = [p for p in doc["positions"] if p["identity"]["typed_identifier"]]
     current = [p for p in positions if p["period"].get("instant") in dped]
     basis = "document_period_end" if current else "all_periods"
+    # Labelled Total/Subtotal rows are headings for the subtotal detector, not dialect
+    # evidence: they are set aside here and recorded.
+    labelled = [p for p in (current or positions) if LABEL_RE.match(p["identity"]["typed_identifier"])]
+    labelled_ids = {p["context_id"] for p in labelled}
     rows = [dict(context_id=p["context_id"], investment_identifier=p["identity"]["typed_identifier"],
                  dimensions=[list(x) for x in p["identity"]["dimensions"]],
                  fair_value_concept=(next(iter(fv_concepts[p["context_id"]]))
                                      if len(fv_concepts.get(p["context_id"], ())) == 1 else None))
-            for p in (current or positions)]
+            for p in (current or positions) if p["context_id"] not in labelled_ids]
     subject = dict(field="investment_identifier", rows=len(rows), basis=basis)
     profile = _profile(rows)
-    evidence = dict(delimiter_profile=profile)
+    evidence = dict(delimiter_profile=profile, excluded_label_rows=dict(
+        rows=len(labelled), rule="LABEL_RE (^(sub)?total) rows go to the subtotal detector",
+        examples=[dict(context_id=p["context_id"], identifier=p["identity"]["typed_identifier"])
+                  for p in labelled[:5]]))
     grammar_record = _grammar_rows(rows, grammar)
     if learned_predicates:
         evidence["learned_checks"] = [dict(predicate=p, matched=sum(bool(_matches(p, r)) for r in rows),
