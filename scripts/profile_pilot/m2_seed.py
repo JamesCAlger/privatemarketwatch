@@ -243,6 +243,22 @@ def _check_args(kind: str, fraction: float, delta) -> None:
         raise ValueError("delta applies only to range_shift")
 
 
+def _filled_rows(doc: dict, field: str) -> int:
+    """Denominator for eligibility: current positions carrying the target field (or a non-label identifier)."""
+    if field == IDENTIFIER_FIELD:
+        from scripts.profile_pilot.census_detect import LABEL_RE
+        texts = [doc["positions"][n]["identity"].get("typed_identifier") for n in _current_indices(doc)]
+        return sum(1 for t in texts if t and not LABEL_RE.match(t))
+    return sum(1 for n in _current_indices(doc) if _filled(doc["positions"][n], field))
+
+
+def finish_timing(raw: dict) -> dict:
+    """Round each part once; measured_seconds is the rounded sum of the RECORDED parts (R35 bound)."""
+    out = {k: round(v, 3) for k, v in sorted(raw.items())}
+    out["measured_seconds"] = round(out.get("perturb_seconds", 0.0) + out.get("evaluate_seconds", 0.0), 3)
+    return out
+
+
 def _set_value(ed: _Editor, index: int, field: str, new: str) -> list:
     position = ed.position(index)
     value = position["fields"][field]
@@ -344,6 +360,7 @@ def perturb(doc: dict, kind: str, fraction: float, *, seed: int, field: str = FI
                "identifier_format": _identifier_format}[kind]
     handler(ed, receipt, field, fraction, seed, delta)
     receipt["touched"] = len(receipt["rows"])
+    receipt["filled"] = _filled_rows(ed.src, receipt["field"])
     return ed.out, receipt
 
 
@@ -616,9 +633,13 @@ def realism_errors(before: dict, after: dict, receipt: dict, *, full: bool = Fal
 
 # ---------------------------------------------------------------- the matrix for one CIK
 
-def outcome(baseline: str, status: str) -> str:
+def outcome(baseline: str, status: str, *, fraction: float | None = None) -> str:
+    """Target outcome. Fraction 0 is the null control: 'null_control' when unchanged (never 'missed'),
+    'null_control_changed' otherwise (a harness bug or self-inconsistency)."""
     if baseline != "holds":
         return "not_applicable"
+    if fraction == 0:
+        return "null_control" if status == baseline else "null_control_changed"
     return {"breach": "detected", "insufficient_evidence": "abstained"}.get(status, "missed")
 
 
@@ -676,12 +697,14 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                     r = next(x for x in results if x["contract_id"] == cid)
                     tgt[key] = dict(contract_id=cid, status=r["status"], cause=r["cause"],
                                     baseline_status=base[cid]["status"], baseline_cause=base[cid]["cause"],
-                                    outcome=outcome(base[cid]["status"], r["status"]),
-                                    violating=len(r["violating_keys"]))
+                                    outcome=outcome(base[cid]["status"], r["status"], fraction=fraction),
+                                    violating=len(r["violating_keys"]), expected=contracts._brief(r["expected"]),
+                                    observed=contracts._brief(r["observed"]))
                 receipt_sha = hashlib.sha256(json.dumps(receipt, sort_keys=True).encode("ascii")).hexdigest()
                 evaluations.append(dict(
                     cik=cik, variant=name, kind=kind, delta=delta, fraction=fraction, seed=seed,
-                    eligible=receipt["eligible"], touched=receipt["touched"], receipt_sha256=receipt_sha,
+                    eligible=receipt["eligible"], filled=receipt["filled"], touched=receipt["touched"],
+                    receipt_sha256=receipt_sha,
                     statuses=[[r["status"], r["cause"]] for r in results],
                     changed=[r["contract_id"] for r in changed], targets=tgt,
                     collateral=[dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"],
@@ -703,8 +726,7 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                                     if r["status"] == "breach"],
                           statuses=[[r["status"], r["cause"]] for r in null]),
         evaluations=evaluations, receipts=receipts, original_unchanged=unchanged,
-        timing=dict({k: round(v, 3) for k, v in sorted(timing.items())},
-                    measured_seconds=round(timing["perturb_seconds"] + timing["evaluate_seconds"], 3)))
+        timing=finish_timing(timing))
 
 
 # ---------------------------------------------------------------- aggregation
@@ -725,9 +747,19 @@ def sensitivity(evaluations: list, *, variants=VARIANT_NAMES, kinds=CONTRACT_KIN
     """Per variant x kind: per CIK the smallest fraction the seed majority detects (and abstains on);
     median over applicable CIKs with 'never' ranked above every fraction (median_high)."""
     grouped: dict = {}
+    eligibility: dict = {}
     for e in evaluations:
         for kind, t in e["targets"].items():
             grouped.setdefault((e["variant"], kind, e["cik"], e["fraction"]), []).append(t["outcome"])
+        if "eligible" in e:
+            slot = eligibility.setdefault(e["variant"], {}).setdefault(
+                e["cik"], dict(eligible=e["eligible"], filled=e.get("filled")))
+            if (slot["eligible"], slot["filled"]) != (e["eligible"], e.get("filled")):
+                raise ValueError("eligibility differs across evaluations: " + e["variant"] + " " + e["cik"])
+    for variant, by_cik in eligibility.items():
+        for slot in by_cik.values():
+            slot["reason"] = None if slot["eligible"] else (
+                "0 eligible rows (of " + str(slot["filled"]) + " filled): nothing was perturbed")
     cells = {}
     for variant in variants:
         cells[variant] = {}
@@ -737,10 +769,14 @@ def sensitivity(evaluations: list, *, variants=VARIANT_NAMES, kinds=CONTRACT_KIN
             for cik in ciks:
                 by_f = {f: o for (v, k, c, f), o in grouped.items() if (v, k, c) == (variant, kind, cik)}
                 applicable = any(o != "not_applicable" for os_ in by_f.values() for o in os_)
+                elig = (eligibility.get(variant) or {}).get(cik)
+                reason = None if applicable else "contract does not hold in the null control"
+                if elig is not None and not elig["eligible"]:
+                    applicable, reason = False, elig["reason"]
                 pos = sorted(f for f in by_f if f > 0)
                 first = lambda wanted, rule: next((f for f in pos if rule(by_f[f], wanted)), None)
                 per_cik[cik] = dict(
-                    applicable=applicable,
+                    applicable=applicable, reason=reason,
                     smallest_detected=first("detected", _majority) if applicable else None,
                     smallest_detected_any_seed=first("detected", lambda os_, w: w in os_) if applicable else None,
                     smallest_detected_all_seeds=first("detected", lambda os_, w: all(o == w for o in os_))
@@ -756,8 +792,9 @@ def sensitivity(evaluations: list, *, variants=VARIANT_NAMES, kinds=CONTRACT_KIN
                 median_smallest_detected=_median_fraction([c["smallest_detected"] for c in applicable]),
                 median_smallest_abstained=_median_fraction([c["smallest_abstained"] for c in applicable]))
     return dict(cells=cells, rule="detected at a fraction = at least 2 of the 3 seeds flip holds -> breach; "
-                                  "median over applicable CIKs uses median_high with 'never' ranked above 1.0",
-                variants=list(variants), kinds=list(kinds))
+                                  "median over applicable CIKs uses median_high with 'never' ranked above 1.0; a "
+                                  "CIK with 0 eligible rows for a class is not applicable for every kind of it",
+                variants=list(variants), kinds=list(kinds), eligibility=eligibility)
 
 
 def blind_spots(evaluations: list, sens: dict) -> list:
@@ -801,6 +838,16 @@ def render_summary(*, run_id: str, sens: dict, spots: list, per_cik: dict, timin
             lines.append("| " + variant + " | " + " | ".join(
                 _cell(row[k][key], row[k]["applicable_ciks"], row[k][count]) for k in kinds) + " |")
         lines.append("")
+    ciks = sorted({c for by_cik in sens.get("eligibility", {}).values() for c in by_cik})
+    lines += ["## Eligibility (eligible rows / filled rows of the target field; 0 eligible = not applicable "
+              "for every kind of that class)", "", "| drift class | " + " | ".join(ciks) + " |",
+              "|---|" + "---|" * len(ciks)]
+    for variant in sens["variants"]:
+        by_cik = sens.get("eligibility", {}).get(variant, {})
+        lines.append("| " + variant + " | " + " | ".join(
+            (str(by_cik[c]["eligible"]) + "/" + str(by_cik[c]["filled"])) if c in by_cik else "-" for c in ciks)
+            + " |")
+    lines.append("")
     lines += ["## Null control (fraction 0, unperturbed Q1 as its own Q2)", "",
               "| cik | breaches | holds | insufficient_evidence |", "|---|---|---|---|"]
     for cik, info in per_cik.items():

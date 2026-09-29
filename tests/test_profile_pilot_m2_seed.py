@@ -335,3 +335,51 @@ def test_realism_self_check_runs_on_seed_one_only_and_is_timed_apart_from_the_me
     t = matrix["timing"]
     assert t["measured_seconds"] == round(t["perturb_seconds"] + t["evaluate_seconds"], 3)
     assert "validate_seconds" in t and "R35" in m2_seed.LIMIT_RULE
+
+
+# ---------------------------------------------------------------- review fix round 1
+
+def test_fraction_zero_is_labelled_null_control_never_missed():
+    matrix = small_matrix(q1())
+    zero = [e for e in matrix["evaluations"] if e["fraction"] == 0.0]
+    assert zero and all(t["outcome"] == "null_control" for e in zero for t in e["targets"].values()
+                        if t["baseline_status"] == "holds")
+    sens = m2_seed.sensitivity(matrix["evaluations"])
+    for row in sens["cells"].values():
+        for cell in row.values():
+            for c in cell["per_cik"].values():
+                assert "missed" not in c["by_fraction"].get("0.0", {})
+
+
+def test_target_records_keep_the_observed_block_for_mechanism_checks():
+    matrix = small_matrix(q1())
+    ev = next(e for e in matrix["evaluations"] if e["variant"] == "range_shift_0.6" and e["fraction"] == 1.0)
+    rng = ev["targets"]["value_range"]
+    assert {"p5", "p95"} <= set(rng["observed"]) and rng["expected"]["widened"]
+    fill = next(e for e in matrix["evaluations"] if e["variant"] == "fill_drop" and e["fraction"] == 0.2)
+    assert "fill_share" in fill["targets"]["fill_rate"]["observed"]
+    concept = next(e for e in matrix["evaluations"] if e["variant"] == "concept_move_local" and e["fraction"] == 0.2)
+    assert "concepts" in concept["targets"]["source_concept_set"]["observed"]
+    json.dumps(matrix["evaluations"], allow_nan=False).encode("ascii")
+
+
+def test_zero_eligible_variants_are_not_applicable_in_every_denominator_with_the_reason():
+    doc = mk_doc([debt(i) for i in range(60)])  # no basis_spread: spread_for_coupon has 0 eligible rows
+    matrix = small_matrix(doc)
+    receipt_rows = [e for e in matrix["evaluations"] if e["variant"] == "spread_for_coupon"]
+    assert all(e["eligible"] == 0 and e["filled"] == 60 for e in receipt_rows)
+    sens = m2_seed.sensitivity(matrix["evaluations"])
+    elig = sens["eligibility"]["spread_for_coupon"][CIK]
+    assert (elig["eligible"], elig["filled"]) == (0, 60) and "0 eligible" in elig["reason"]
+    for kind, cell in sens["cells"]["spread_for_coupon"].items():
+        c = cell["per_cik"][CIK]
+        assert c["applicable"] is False and "0 eligible" in c["reason"], kind
+        assert cell["applicable_ciks"] == 0
+    assert sens["cells"]["fill_drop"]["fill_rate"]["applicable_ciks"] == 1
+    assert sens["eligibility"]["fill_drop"][CIK]["eligible"] == 60
+
+
+def test_measured_seconds_is_the_rounded_sum_of_the_recorded_rounded_parts():
+    t = m2_seed.finish_timing(dict(perturb_seconds=0.3184999, evaluate_seconds=0.3184999, validate_seconds=1.0))
+    assert t["perturb_seconds"] == 0.318 and t["evaluate_seconds"] == 0.318
+    assert t["measured_seconds"] == round(t["perturb_seconds"] + t["evaluate_seconds"], 3) == 0.636
