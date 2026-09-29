@@ -574,3 +574,11 @@ def test_real_stellus_semantic_seed_through_the_cli(tmp_path, monkeypatch):
     matrix = json.loads((root / "results" / "seed_matrix.json").read_text(encoding="ascii"))
     assert matrix["ciks"]["0001901037"]["null_control"]["breaches"] == []
     (root / "results" / "semantic_summary.md").read_text(encoding="ascii")
+
+
+def test_semantic_families_record_the_fixed_coupon_criterion_per_share_band():
+    grid = m2_seed.semantic_grid(contracts.tolerance_content_v2())
+    families = m2_seed._semantic_families(grid)
+    fixed = [(key, point) for family, key, point, kind, criterion in families if family == "fixed_share"]
+    assert fixed == [(str(s), "c:s%s_i2.0" % s) for s in m2_seed.CANDIDATES["share_pp"]]
+    assert {criterion for family, _, _, _, criterion in families if family == "fixed_share"} == {"fixed"}

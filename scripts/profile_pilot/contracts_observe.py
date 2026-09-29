@@ -422,16 +422,54 @@ def canonical_one(number: Decimal, cls: str, conventions: dict) -> float:
     return float(number * Decimal(str(conventions[cls]["factor"])))
 
 
-def observe_composition(doc: dict, positions: list, facts_by_i: dict, conventions: dict) -> dict:
-    """Implied base (rate - spread) per row carrying both fields, with magnitude resolved PER ROW.
+RATE_TYPE_FIELDS = ("variable_rate_type", "reference_rate_type")
+RE_FIXED = re.compile(r"\bfixed\b", re.I)
+RATE_TYPE_RULE = (
+    "ruling R38: explicit markers first. Floating marker = a filled variable_rate_type / reference_rate_type not "
+    "reading 'fixed', an identifier base-plus-spread (authored grammar where one applies, else the generic "
+    "patterns) or a filled interest_rate_floor; fixed marker = a rate-type field reading 'fixed' or the word "
+    "'fixed' in the identifier. Both markers = unresolved. No marker: the row's own values decide: rate == spread "
+    "(a spread fact carrying the coupon, no floating marker) = fixed; rate > spread = floating (a base "
+    "component exists); rate < spread = unresolved. Counts per basis (marker / value) are reported.")
 
-    Same magnitude class on the row (or a zero): computed (canonical percent when both declared
-    units are ratio classes; raw when both carry the same non-ratio unit class). Different
-    magnitudes: computed only when the two declared ratio classes differ (the declared units
-    explain it); otherwise the row is `unresolved_pair` (never guessed). A 0 rate is an
+
+def _rate_type_markers(position: dict, text_parse) -> tuple[bool, bool]:
+    fields = position["fields"]
+    floating = fixed = False
+    for name in RATE_TYPE_FIELDS:
+        value = fields.get(name) or {}
+        if value.get("status") in FILLED and value.get("value") not in (None, ""):
+            if "fix" in str(value.get("value")).lower():
+                fixed = True
+            else:
+                floating = True
+    if (fields.get("interest_rate_floor") or {}).get("status") in FILLED:
+        floating = True
+    text = position["identity"].get("typed_identifier")
+    if text and not LABEL_RE.match(text):
+        if RE_FIXED.search(text):
+            fixed = True
+        if text_parse(text)["category"] == "base_plus_spread":
+            floating = True
+    return floating, fixed
+
+
+def observe_composition(doc: dict, positions: list, facts_by_i: dict, conventions: dict,
+                        grammar: dict | None = None) -> dict:
+    """Implied base (rate - spread) per row carrying both fields, magnitude resolved PER ROW, split by
+    rate type (R38): the share and the IQR are computed on FLOATING rows only; fixed rows (the coupon in
+    the spread field) are the separate evidence share fixed_coupon_in_spread.
+
+    Magnitude: same magnitude class on the row (or a zero) computes (canonical percent when both declared
+    units are ratio classes; raw when both carry the same non-ratio unit class); different magnitudes
+    compute only when the two declared ratio classes differ; otherwise `unresolved_pair`. Rate type:
+    RATE_TYPE_RULE; an undeterminable rate type is `unresolved_pair` too. A 0 rate is an
     undrawn/unfunded placeholder, not a composition: counted apart."""
     units = doc.get("units") or {}
-    out = dict(pair_rows=0, resolved=[], basis={}, unresolved_keys=[], unobservable_keys=[], zero_rate_keys=[])
+    text_parse = (lambda t: grammar_rate_text(t, grammar)) if grammar is not None else parse_rate_text
+    out = dict(pair_rows=0, resolved=[], floating=[], fixed_keys=[], rate_types=[], basis={}, unresolved_keys=[],
+               magnitude_unresolved_keys=[], unobservable_keys=[], zero_rate_keys=[],
+               type_basis=dict(marker=0, value=0), rule=RATE_TYPE_RULE)
     for p in positions:
         ctx = p["context_id"]
         rs, rv, rc = row_value(p, "interest_rate", facts_by_i, units)
@@ -452,13 +490,39 @@ def observe_composition(doc: dict, positions: list, facts_by_i: dict, convention
         elif same and rc == sc and rc not in RATIO_CLASSES:
             base, basis = float(rv - sv), "raw_" + str(rc)
         else:
+            out["magnitude_unresolved_keys"].append(ctx)
+            out["unresolved_keys"].append(ctx)
+            out["rate_types"].append((ctx, "unresolved", None))
+            continue
+        base = round(base, 10)
+        floating_m, fixed_m = _rate_type_markers(p, text_parse)
+        if floating_m and fixed_m:
+            rtype = "unresolved"
+        elif floating_m or fixed_m:
+            rtype = ("floating" if floating_m else "fixed") + ":marker"
+        elif abs(base) <= 1e-9:
+            rtype = "fixed:value"
+        elif base > 0:
+            rtype = "floating:value"
+        else:
+            rtype = "unresolved"
+        out["rate_types"].append((ctx, rtype, base))
+        if rtype == "unresolved":
             out["unresolved_keys"].append(ctx)
             continue
-        out["resolved"].append((ctx, round(base, 10)))
+        out["type_basis"][rtype.split(":")[1]] += 1
+        out["resolved"].append((ctx, base))
         out["basis"][basis] = out["basis"].get(basis, 0) + 1
+        if rtype.startswith("floating"):
+            out["floating"].append((ctx, base))
+        else:
+            out["fixed_keys"].append(ctx)
     out["n"] = len(out["resolved"])
-    out["unresolved_share"] = round(len(out["unresolved_keys"]) / out["pair_rows"], 6) if out["pair_rows"] else 0.0
-    ordered = sorted(v for _, v in out["resolved"])
+    out["floating_n"], out["fixed_n"] = len(out["floating"]), len(out["fixed_keys"])
+    out["unresolved_n"] = len(out["unresolved_keys"])
+    out["unresolved_share"] = round(out["unresolved_n"] / out["pair_rows"], 6) if out["pair_rows"] else 0.0
+    out["fixed_coupon_in_spread"] = round(out["fixed_n"] / out["n"], 6) if out["n"] else None
+    ordered = sorted(v for _, v in out["floating"])
     out["share_rate_le_spread"] = round(sum(v <= 0 for v in ordered) / len(ordered), 6) if ordered else None
     for name, q in (("p25", 0.25), ("p50", 0.5), ("p75", 0.75)):
         out[name] = round(quantile(ordered, q), 10) if ordered else None

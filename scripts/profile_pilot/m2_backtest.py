@@ -712,14 +712,20 @@ def median_shift_scores(pairs: list, ms: dict, positives: list, *, fields: dict,
     return out
 
 
-CALIBRATION_RULE = ("per band, the smallest candidate whose negatives breach rate (upper bound, pooled across CIKs, "
-                    "rolling / as-evaluated) is <= 10% while the seeded detection fraction (median over applicable "
-                    "CIKs of the smallest fraction >= 2 of 3 seeds detect) for the drift class it targets is <= 0.30; "
-                    "no such candidate = uncalibrated (the curve is reported; no v2 band is widened)")
+TIER_BASIS = "pooled"
+CALIBRATION_RULE = (
+    "per CONTRACT (fix round 1, review I1): rate_composition is chosen on the joint share_pp x iqr_widen grid as the "
+    "smallest point (ordered by share_pp, then iqr_widen) whose COMPOSITION-CONTRACT breach rate on negatives (upper "
+    "bound, rolling / as-evaluated) is <= 10% and whose seeded detection fraction for spread_for_coupon (median over "
+    "applicable CIKs of the smallest fraction >= 2 of 3 seeds breach the contract) is <= 0.30; text_agreement is "
+    "chosen on text_share_pp by the same rule (target text_numeric_divergence). One tier basis for every band: "
+    "pooled (all CIKs and tiers; both tiers take the chosen value). None = uncalibrated (curve reported); no v2 band "
+    "is widened. Per-criterion rates (share, iqr, fixed) are recorded for the record, never used to choose")
 
 
-def choose_band(curve: list, *, max_neg: float = 0.10, max_detection: float = 0.30) -> dict:
-    ok = [row for row in sorted(curve, key=lambda r: r["value"])
+def choose_band(curve: list, *, max_neg: float = 0.10, max_detection: float = 0.30, key=None) -> dict:
+    key = key or (lambda r: r["value"])
+    ok = [row for row in sorted(curve, key=key)
           if row["neg_rate"] is not None and row["neg_rate"] <= max_neg + 1e-12
           and row["detection"] is not None and row["detection"] <= max_detection + 1e-12]
     chosen = ok[0]["value"] if ok else None
@@ -760,7 +766,7 @@ def newly_abstained_summary(pairs: list, results: dict, scoring: dict) -> dict:
 def _curve(seed_curves: dict, negatives: dict, family: str, variant: str, det_tier: str, neg_tier: str,
            others=()) -> dict:
     rows = []
-    for value in m2_seed.CANDIDATES[family]:
+    for value in m2_seed.CANDIDATES["share_pp" if family == "fixed_share" else family]:
         key = str(value)
         cell = seed_curves[family][key][variant]
         neg = negatives[family][key][neg_tier]
@@ -774,25 +780,44 @@ def _curve(seed_curves: dict, negatives: dict, family: str, variant: str, det_ti
     return out
 
 
+def _joint_curve(seed_curves: dict, negatives: dict, tier: str) -> dict:
+    """rate_composition on the joint grid: the CONTRACT status decides; per-criterion rates recorded."""
+    rows = []
+    for s in m2_seed.CANDIDATES["share_pp"]:
+        for i in m2_seed.CANDIDATES["iqr_widen"]:
+            point = "c:s%s_i%s" % (s, i)
+            cell = seed_curves["composition_status"][point]["spread_for_coupon"]
+            neg = negatives["composition_status"][point][tier]
+            per = dict(share=negatives["share_pp"][str(s)][tier]["breach_rate_upper_bound"],
+                       iqr=negatives["iqr_widen"][str(i)][tier]["breach_rate_upper_bound"],
+                       fixed=negatives["fixed_share"][str(s)][tier]["breach_rate_upper_bound"])
+            rows.append(dict(value="s%s_i%s" % (s, i), share_pp=s, iqr_widen=i, detection=cell["median"][tier],
+                             detected=cell["detected"][tier], applicable=cell["applicable"][tier],
+                             neg_rate=neg["breach_rate_upper_bound"], neg_n=neg["n"], neg_breach=neg["breach"],
+                             per_criterion=per))
+    out = choose_band(rows, key=lambda r: (r["share_pp"], r["iqr_widen"]))
+    if out["chosen"] is not None:
+        row = next(r for r in rows if r["value"] == out["chosen"])
+        out["chosen"] = dict(share_pp=row["share_pp"], iqr_widen=row["iqr_widen"])
+    out.update(family="composition_status", target="spread_for_coupon", detection_tier=tier, negatives_tier=tier)
+    return out
+
+
 def assemble_calibration(seed_body: dict, negatives: dict, median_shift: dict, scoring: dict, *,
                          seed_run_id: str) -> dict:
-    """The in-sample calibration: seeded detection (seed root) x negatives breach rate (this root)."""
-    curves = seed_body["curves"]
-    bands = {
-        "share_pp.standard": _curve(curves, negatives, "share_pp", "spread_for_coupon", "standard", "standard",
-                                    others=("bps_spread_scale", "text_numeric_divergence")),
-        "share_pp.low_history": _curve(curves, negatives, "share_pp", "spread_for_coupon", "low_history",
-                                       "low_history"),
-        "iqr_widen": _curve(curves, negatives, "iqr_widen", "spread_for_coupon", "all", "all",
-                            others=("bps_spread_scale",)),
-        "text_share_pp": _curve(curves, negatives, "text_share_pp", "text_numeric_divergence", "all", "all",
-                                others=("bps_spread_scale", "spread_for_coupon"))}
-    share, iqr = bands["share_pp.standard"]["chosen"], bands["iqr_widen"]["chosen"]
-    combined = None
-    if share is not None and iqr is not None:
-        point = "c:s%s_i%s" % (share, iqr)
-        combined = dict(point=point, negatives=negatives["composition_status"][point]["all"],
-                        seeded=curves["composition_status"][point]["spread_for_coupon"]["median"])
+    """The in-sample calibration per CONTRACT: seeded detection (seed root) x negatives breach rate (this root),
+    on one tier basis (TIER_BASIS) for every band."""
+    curves, tier = seed_body["curves"], {"pooled": "all"}[TIER_BASIS]
+    bands = {"rate_composition": _joint_curve(curves, negatives, tier),
+             "text_share_pp": _curve(curves, negatives, "text_share_pp", "text_numeric_divergence", tier, tier,
+                                     others=("bps_spread_scale", "spread_for_coupon"))}
+    criteria = {"share_pp": _curve(curves, negatives, "share_pp", "spread_for_coupon", tier, tier,
+                                   others=("bps_spread_scale", "text_numeric_divergence")),
+                "iqr_widen": _curve(curves, negatives, "iqr_widen", "spread_for_coupon", tier, tier,
+                                    others=("bps_spread_scale",)),
+                "fixed_share": _curve(curves, negatives, "fixed_share", "spread_for_coupon", tier, tier)}
+    for c in criteria.values():
+        c.update(status="record_only", chosen=None, reason="per-criterion curve, recorded; the contract decides")
     v2_range = scoring["rolling"]["as_evaluated"]["all"]["by_kind"].get("value_range", {}).get("negatives", {})
     ms = dict(label=m2_seed.IN_SAMPLE, adopted=False, note="calibration-only experiment (addendum 3): never in v3",
               v2_band=dict(seeded={v: seed_body["median_shift"][v]["v2_band"]["median"]["all"]
@@ -802,16 +827,19 @@ def assemble_calibration(seed_body: dict, negatives: dict, median_shift: dict, s
                                              for v in seed_body["median_shift"] if name in seed_body["median_shift"][v]},
                                      negatives=cell["negatives"], positives=cell["positives"])
                           for name, cell in median_shift.items()})
-    block = dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, seed_run_id=seed_run_id,
+
+    def slim(b):
+        return [dict(value=r["value"], seeded_detection_fraction=r["detection"], negatives_breach_rate=r["neg_rate"],
+                     negatives_n=r["neg_n"], **({"negatives_breach_rate_per_criterion": r["per_criterion"]}
+                                                if "per_criterion" in r else {}))
+                for r in b["curve"]]
+    block = dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, tier_basis=TIER_BASIS, seed_run_id=seed_run_id,
                  bands={name: dict(target=b["target"], status=b["status"], chosen=b["chosen"], reason=b["reason"],
-                                   curve=[dict(value=r["value"], seeded_detection_fraction=r["detection"],
-                                               negatives_breach_rate=r["neg_rate"], negatives_n=r["neg_n"])
-                                          for r in b["curve"]])
-                        for name, b in bands.items()},
-                 combined_composition=combined, median_shift_experiment=dict(adopted=False, candidates=list(ms[
-                     "candidates"])))
-    return dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, seed_run_id=seed_run_id, bands=bands,
-                combined_composition=combined, median_shift=ms, tolerances_block=block)
+                                   curve=slim(b)) for name, b in bands.items()},
+                 criteria_record_only={name: dict(target=b["target"], curve=slim(b)) for name, b in criteria.items()},
+                 median_shift_experiment=dict(adopted=False, candidates=list(ms["candidates"])))
+    return dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, tier_basis=TIER_BASIS, seed_run_id=seed_run_id,
+                bands=bands, criteria=criteria, median_shift=ms, tolerances_block=block)
 
 
 def render_semantic(sem: dict, calibration: dict | None) -> str:
@@ -819,7 +847,7 @@ def render_semantic(sem: dict, calibration: dict | None) -> str:
     lines = ["# M2 back-test: semantic kinds, newly-abstained events and the median_shift experiment ("
              + sem["run_id"] + ")", "", "Label: " + m2_seed.IN_SAMPLE + ".", "", "Caveat: " + NEGATIVES_CAVEAT, ""]
     neg = sem["negatives"]["rolling"]
-    for family in ("share_pp", "iqr_widen", "text_share_pp", "composition_status"):
+    for family in ("share_pp", "fixed_share", "iqr_widen", "text_share_pp", "composition_status"):
         lines += ["## Negatives per candidate: " + family + " (rolling / as-evaluated)", "",
                   "| band | n | breach | abstain | breach rate UB | std n/breach | low n/breach | positives d/a/m |",
                   "|---|---|---|---|---|---|---|---|"]
@@ -832,17 +860,17 @@ def render_semantic(sem: dict, calibration: dict | None) -> str:
         lines.append("")
     if calibration:
         lines += ["## Calibration (" + m2_seed.IN_SAMPLE + ")", "", CALIBRATION_RULE, ""]
-        for name, band in calibration["bands"].items():
+        lines += ["Tier basis: " + calibration["tier_basis"], ""]
+        for name, band in list(calibration["bands"].items()) + [("criterion:" + k, v) for k, v in
+                                                               calibration["criteria"].items()]:
             lines += ["### " + name + " (target " + band["target"] + "): " + band["status"] + ", chosen "
                       + fmt(band["chosen"]), "", "| value | seeded detection | d/n | negatives breach rate | neg n | "
-                      "other classes |", "|---|---|---|---|---|---|"]
+                      "per-criterion rates or other classes |", "|---|---|---|---|---|---|"]
             for r in band["curve"]:
                 lines.append("| " + " | ".join(fmt(x) for x in (
                     r["value"], r["detection"], "%s/%s" % (r["detected"], r["applicable"]), r["neg_rate"], r["neg_n"],
-                    json.dumps(r["other_classes"], sort_keys=True))) + " |")
+                    json.dumps(r.get("per_criterion") or r.get("other_classes"), sort_keys=True))) + " |")
             lines.append("")
-        lines += ["Combined composition at the chosen pair: " + json.dumps(calibration["combined_composition"],
-                                                                          sort_keys=True), ""]
         ms = calibration["median_shift"]
         lines += ["## median_shift experiment (NOT adopted; beside the v2 value_range band)", "",
                   "v2 band: seeded " + json.dumps(ms["v2_band"]["seeded"], sort_keys=True) + "; negatives breach rate "

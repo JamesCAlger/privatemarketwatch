@@ -1037,7 +1037,7 @@ def test_composition_dispersion_widening_breaches_on_the_iqr_criterion():
                                             q2_listing=Q2_LISTING, grammar=None,
                                             yield_q2=dict(VOTE_CASH, report_date=Q2)),
                "rate_composition", contracts.COMPOSITION_FIELD)
-    assert res["observed"]["criteria"] == dict(share="holds", iqr="breach") and res["status"] == "breach"
+    assert res["observed"]["criteria"] == dict(share="holds", iqr="breach", fixed="holds") and res["status"] == "breach"
     assert set(res["violating_keys"]) >= {"f0", "f3"}
 
 
@@ -1261,3 +1261,70 @@ def test_v2_subset_check_reports_evidence_noise_apart_from_the_identity_verdict(
     wrong["contracts"][0]["expectation"] = dict(concepts=["x:y"])
     check = contracts_run.v2_subset_check({CIK: wrong}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: r2})
     assert check["identical"] is False and check["by_cik"][CIK]["contracts"] is False
+
+
+# ---------------------------------------------------------------- ruling R38: fixed / floating split in rate_composition
+
+def bond(i, *, coupon="0.0450", ident=None, extra=None):
+    """A fixed-rate bond whose filer tags the coupon under BOTH interest_rate and basis_spread (BCRED)."""
+    return floater(100 + i, rate=coupon, spread=coupon, ident=ident or "Bondco %d Senior Notes" % i, extra=extra)
+
+
+def plain(i, **kw):
+    """A floating row with no identifier rate text and no rate-type field (value evidence only)."""
+    return floater(i, ident="Loanco %d First Lien Term Loan" % i, **kw)
+
+
+def test_rate_type_split_uses_markers_first_and_values_only_without_a_marker():
+    from scripts.profile_pilot import contracts_observe as co
+    doc = mk_doc([plain(0), bond(0), floater(1, rate="0.05"), bond(1, ident="Bondco 1 | 4.50% Fixed | 1/1/2030"),
+                  plain(2, rate="0.04"),
+                  floater(3, ident="Loanco 3 First Lien", extra=dict(variable_rate_type=val("SOFR", None, kind="text")))])
+    positions = contracts.current_positions(doc)
+    obs = co.observe_composition(doc, positions, {f["i"]: f for f in doc["facts"]},
+                                 contracts.tolerance_content()["scale_conventions"])
+    kinds = {k: t for k, t, _ in obs["rate_types"]}
+    assert kinds == {"f0": "floating:value", "f100": "fixed:value", "f1": "floating:marker", "f101": "fixed:marker",
+                     "f2": "unresolved", "f3": "floating:marker"}
+    assert (obs["floating_n"], obs["fixed_n"]) == (3, 2) and obs["unresolved_keys"] == ["f2"]
+    assert obs["fixed_coupon_in_spread"] == 0.4 and obs["share_rate_le_spread"] == round(1 / 3, 6)
+
+
+def test_a_fixed_bond_sleeve_breaches_under_its_own_cause_not_as_a_meaning_change():
+    block = learn(mk_doc([plain(i) for i in range(50)] + [bond(i) for i in range(2)]))
+    comp = pick(block["contracts"], "rate_composition", contracts.COMPOSITION_FIELD)
+    exp = comp["expectation"]
+    assert (exp["floating_n"], exp["fixed_n"], exp["share_rate_le_spread"]) == (50, 2, 0.0)
+    assert exp["fixed_coupon_in_spread"] == round(2 / 52, 6)
+    grown = mk_doc([plain(i) for i in range(50)] + [bond(i) for i in range(14)], date=Q2)
+    res = pick(evaluate(block, grown), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["status"] == "breach" and res["cause"] == "fixed_coupon_in_spread_share_changed"
+    assert res["observed"]["criteria"] == dict(share="holds", iqr="holds", fixed="breach")
+    assert res["violating_keys"] == sorted("f%d" % (100 + i) for i in range(14))
+    assert (res["observed"]["floating_n"], res["observed"]["fixed_n"], res["observed"]["unresolved_n"]) == (50, 14, 0)
+
+
+def test_spread_for_coupon_on_marked_floating_rows_still_breaches_the_floating_share():
+    block = learn(mk_doc(floaters()))
+    swapped = mk_doc([floater(i, rate="0.05") for i in range(60)], date=Q2)
+    res = pick(evaluate(block, swapped), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["cause"] == "implied_base_share_moved" and res["observed"]["criteria"]["share"] == "breach"
+    assert res["observed"]["fixed_n"] == 0
+
+
+def test_rate_type_unresolved_rows_count_toward_the_unresolved_floor():
+    block = learn(mk_doc([plain(i) for i in range(60)]))
+    below = mk_doc([plain(i, rate="0.04") if i < 36 else plain(i) for i in range(60)], date=Q2)
+    res = pick(evaluate(block, below), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["status"] == "insufficient_evidence" and res["cause"] == "unresolved_pair_majority_in_q2"
+    assert res["observed"]["unresolved_n"] == 36
+
+
+def test_floating_share_is_not_assessed_below_the_row_floor_while_the_fixed_share_is():
+    block = learn(mk_doc([plain(i) for i in range(5)] + [bond(i) for i in range(20)]))
+    comp = pick(block["contracts"], "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["learn_status"] == "learned" and comp["expectation"]["share_rate_le_spread"] is None
+    res = pick(evaluate(block, mk_doc([plain(i) for i in range(5)] + [bond(i) for i in range(20)], date=Q2)),
+               "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["status"] == "holds"
+    assert res["observed"]["criteria"] == dict(share="not_assessed", iqr="not_assessed", fixed="holds")

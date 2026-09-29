@@ -891,6 +891,7 @@ def _semantic_families(grid: list) -> list:
         if g["family"] == "composition":
             if g["iqr_widen"] == REFERENCE["iqr_widen"]:
                 out.append(("share_pp", str(g["share_pp"]), g["name"], "rate_composition", "share"))
+                out.append(("fixed_share", str(g["share_pp"]), g["name"], "rate_composition", "fixed"))
             if g["share_pp"] == REFERENCE["share_pp"]:
                 out.append(("iqr_widen", str(g["iqr_widen"]), g["name"], "rate_composition", "iqr"))
             out.append(("composition_status", g["name"], g["name"], "rate_composition", None))
@@ -1169,7 +1170,7 @@ def render_semantic_summary(*, run_id: str, curves: dict, ms_curves: dict, meta:
              "fraction at which >= 2 of 3 seeds detect (never = not at 1.0); (d/n) CIKs detecting / applicable; std/low "
              "= tier medians. share_pp and iqr_widen cells count their own criterion; text_share_pp and the "
              "composition grid count the contract status.", ""]
-    for family in ("share_pp", "iqr_widen", "text_share_pp", "composition_status"):
+    for family in ("share_pp", "fixed_share", "iqr_widen", "text_share_pp", "composition_status"):
         table = curves.get(family) or {}
         if not table:
             continue

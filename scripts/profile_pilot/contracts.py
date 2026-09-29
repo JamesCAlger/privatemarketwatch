@@ -523,15 +523,26 @@ def _text_parser(applies_to, grammars) -> tuple[dict | None, str | None]:
 def _inception(q1_date: str, comp: dict, text: dict) -> dict:
     brief = lambda slot: dict(share=slot["share"], n=slot["n"])
     return dict(report_date=q1_date, share_rate_le_spread=comp["share_rate_le_spread"], implied_base_p50=comp["p50"],
-                composition_n=comp["n"], rate_equals_text_spread=brief(text["shares"]["rate_equals_text_spread"]),
+                composition_n=comp["n"], floating_n=comp["floating_n"], fixed_n=comp["fixed_n"],
+                unresolved_n=comp["unresolved_n"], fixed_coupon_in_spread=comp["fixed_coupon_in_spread"],
+                rate_equals_text_spread=brief(text["shares"]["rate_equals_text_spread"]),
                 rate_equals_text_spread_magnitude_normalised=text["rate_equals_text_spread_magnitude_normalised"],
                 rate_equals_text_pct=brief(text["shares"]["rate_equals_text_pct"]), note=INCEPTION_NOTE)
 
 
-def _composition_brief(obs: dict) -> dict:
-    return dict(n=obs["n"], pair_rows=obs["pair_rows"], share_rate_le_spread=obs["share_rate_le_spread"],
-                p25=obs["p25"], p50=obs["p50"], p75=obs["p75"], iqr=obs["iqr"], basis=sorted(obs["basis"]),
-                unresolved_share=obs["unresolved_share"])
+FLOATING_STATS = ("share_rate_le_spread", "p25", "p50", "p75", "iqr")
+
+
+def _composition_brief(obs: dict, min_rows: int | None = None) -> dict:
+    """R38: counts per rate type always; the floating statistics only when floating_n >= min_rows."""
+    out = dict(n=obs["n"], pair_rows=obs["pair_rows"], floating_n=obs["floating_n"], fixed_n=obs["fixed_n"],
+               unresolved_n=obs["unresolved_n"], magnitude_unresolved_n=len(obs["magnitude_unresolved_keys"]),
+               type_basis=dict(obs["type_basis"]), fixed_coupon_in_spread=obs["fixed_coupon_in_spread"],
+               basis=sorted(obs["basis"]), unresolved_share=obs["unresolved_share"],
+               **{k: obs[k] for k in FLOATING_STATS})
+    if min_rows is not None and obs["floating_n"] < min_rows:
+        out.update({k: None for k in FLOATING_STATS}, floating_stats="not_assessed_below_min_rows")
+    return out
 
 
 def _composition_gate(obs: dict, gaps: list, band: dict, constants: dict, suffix: str) -> str | None:
@@ -572,17 +583,22 @@ def _learn_semantic(cik, partition, tier, tolerances, q1_doc, members, grammars,
     comp_gaps = channel_gaps(q1_doc, SEMANTIC_CHANNELS)
     text_gaps = channel_gaps(q1_doc, _channels("contexts", "identifiers", *SEMANTIC_CHANNELS[1:]))
     grammar, grammar_cause = _text_parser(partition["applies_to"], grammars)
-    comp = observe_composition(q1_doc, members, facts_by_i, conventions)
+    comp = observe_composition(q1_doc, members, facts_by_i, conventions, grammar)
     text = observe_text(q1_doc, members, facts_by_i, conventions, grammar,
                         tol_pct=constants["text_match_tolerance_pct"])
     inception = _inception(q1_date, comp, text)
     cause = block_cause or _composition_gate(comp, comp_gaps, comp_band, constants, "")
+    marker_parser = text["parser"]
     out = [_contract(cik, "rate_composition", COMPOSITION_FIELD, partition, tier, comp_band,
-                     expectation=None if cause else _composition_brief(comp), cause=cause,
+                     expectation=None if cause else dict(_composition_brief(comp, comp_band["min_rows"]),
+                                                         marker_parser=marker_parser),
+                     cause=cause,
                      evidence=dict(inception=inception, observed=_composition_brief(comp), channel_gaps=comp_gaps,
                                    zero_rate_rows=len(comp["zero_rate_keys"]),
                                    unresolved_pair_rows=len(comp["unresolved_keys"]), basis_counts=comp["basis"],
-                                   rule="magnitude resolved per row; never gated on the scale contract"))]
+                                   marker_parser=marker_parser, rate_type_rule=comp["rule"],
+                                   rule="magnitude resolved per row; never gated on the scale contract; share and "
+                                        "IQR on floating rows only (R38)"))]
     cause = block_cause or _text_gate(text, text_gaps, text_band, "")
     assessed = {k: dict(share=v["share"], n=v["n"]) for k, v in text["shares"].items() if v["n"] >= text_band["min_rows"]}
     out.append(_contract(
@@ -871,16 +887,17 @@ def _evaluate_yield(c, q2, yield_q2) -> dict:
 def observe_semantic(c, q2_doc, members, grammars, facts_by_i, conventions, tolerances) -> dict:
     """The band-free Q2 observation of one learned semantic contract (shared across candidate bands)."""
     constants = semantic_constants(tolerances)
-    if c["kind"] == "rate_composition":
-        return dict(members=len(members), gaps=channel_gaps(q2_doc, SEMANTIC_CHANNELS),
-                    obs=observe_composition(q2_doc, members, facts_by_i, conventions))
-    parser = _req(c["expectation"], "parser", c["contract_id"])
+    key = "marker_parser" if c["kind"] == "rate_composition" else "parser"
+    parser = _req(c["expectation"], key, c["contract_id"])
     grammar = None
     if parser["kind"] == "grammar":
         pinned = [g for g in grammars if g["sha256"] == parser["grammar_sha256"] and g["dialect"] == parser["dialect"]]
         if len(pinned) != 1:
-            raise ContractError("text contract evaluated without its pinned grammar: " + c["contract_id"])
+            raise ContractError(c["kind"] + " contract evaluated without its pinned grammar: " + c["contract_id"])
         grammar = pinned[0]
+    if c["kind"] == "rate_composition":
+        return dict(members=len(members), gaps=channel_gaps(q2_doc, SEMANTIC_CHANNELS),
+                    obs=observe_composition(q2_doc, members, facts_by_i, conventions, grammar))
     return dict(members=len(members),
                 gaps=channel_gaps(q2_doc, _channels("contexts", "identifiers", *SEMANTIC_CHANNELS[1:])),
                 obs=observe_text(q2_doc, members, facts_by_i, conventions, grammar,
@@ -893,31 +910,41 @@ def semantic_verdict(c: dict, q2: dict, sem: dict, tolerances: dict) -> dict:
         return _result(c, "insufficient_evidence", q2, cause="no_q2_positions_in_partition", expected=exp)
     obs = sem["obs"]
     if c["kind"] == "rate_composition":
-        brief = dict(_composition_brief(obs), zero_rate_rows=len(obs["zero_rate_keys"]))
+        brief = dict(_composition_brief(obs, band["min_rows"]), zero_rate_rows=len(obs["zero_rate_keys"]))
         cause = _composition_gate(obs, sem["gaps"], band, semantic_constants(tolerances), "_in_q2")
         if cause is None and brief["basis"] != _req(exp, "basis", c["contract_id"]):
             cause = "composition_basis_changed"
         if cause:
             return _result(c, "insufficient_evidence", q2, cause=cause, expected=exp,
                            observed=dict(brief, channel_gaps=sem["gaps"]), keys=obs["unobservable_keys"])
-        delta = (obs["share_rate_le_spread"] - exp["share_rate_le_spread"]) * 100
-        limit = exp["iqr"] * band["iqr_widen"]
-        criteria = dict(share="breach" if abs(delta) > band["share_pp"] + 1e-9 else "holds",
-                        iqr="breach" if obs["iqr"] > limit + 1e-9 else "holds")
-        observed = dict(brief, share_delta_pp=round(delta, 6),
-                        iqr_ratio=round(obs["iqr"] / exp["iqr"], 6) if exp["iqr"] else None,
-                        p50_shift=round(obs["p50"] - exp["p50"], 10), criteria=criteria,
-                        p50_rule="evidence only: the reference rate moves every quarter; the level is never a criterion")
-        keys = set()
-        if criteria["share"] == "breach":
-            keys |= {k for k, v in obs["resolved"] if v <= 0}
-        if criteria["iqr"] == "breach":
-            keys |= {k for k, v in obs["resolved"] if abs(v - obs["p50"]) > limit + 1e-9}
+        floating = exp["share_rate_le_spread"] is not None and brief["share_rate_le_spread"] is not None
+        criteria, observed, keys = {}, dict(brief), set()
+        if floating:
+            delta = (obs["share_rate_le_spread"] - exp["share_rate_le_spread"]) * 100
+            limit = exp["iqr"] * band["iqr_widen"]
+            criteria.update(share="breach" if abs(delta) > band["share_pp"] + 1e-9 else "holds",
+                            iqr="breach" if obs["iqr"] > limit + 1e-9 else "holds")
+            observed.update(share_delta_pp=round(delta, 6),
+                            iqr_ratio=round(obs["iqr"] / exp["iqr"], 6) if exp["iqr"] else None,
+                            p50_shift=round(obs["p50"] - exp["p50"], 10),
+                            p50_rule="evidence only: the reference rate moves every quarter; the level is never a "
+                                     "criterion")
+            if criteria["share"] == "breach":
+                keys |= {k for k, v in obs["floating"] if v <= 0}
+            if criteria["iqr"] == "breach":
+                keys |= {k for k, v in obs["floating"] if abs(v - obs["p50"]) > limit + 1e-9}
+        else:
+            criteria.update(share="not_assessed", iqr="not_assessed")
+        fixed_delta = (obs["fixed_coupon_in_spread"] - exp["fixed_coupon_in_spread"]) * 100
+        criteria["fixed"] = "breach" if abs(fixed_delta) > band["share_pp"] + 1e-9 else "holds"
+        observed.update(fixed_delta_pp=round(fixed_delta, 6), criteria=criteria)
+        if criteria["fixed"] == "breach":
+            keys |= set(obs["fixed_keys"])
         failed = [name for name, verdict in criteria.items() if verdict == "breach"]
         if not failed:
             return _result(c, "holds", q2, expected=exp, observed=observed)
-        cause = "+".join({"share": "implied_base_share_moved", "iqr": "implied_base_dispersion_widened"}[f]
-                         for f in failed)
+        cause = "+".join({"share": "implied_base_share_moved", "iqr": "implied_base_dispersion_widened",
+                          "fixed": "fixed_coupon_in_spread_share_changed"}[f] for f in failed)
         return _result(c, "breach", q2, cause=cause, expected=exp, observed=observed, keys=keys)
     brief = _text_brief(obs)
     cause = _text_gate(obs, sem["gaps"], band, "_in_q2")

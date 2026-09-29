@@ -487,58 +487,78 @@ def test_median_shift_negatives_and_positives_per_candidate():
     assert out["x0.25_y0.1"]["positives"]["missed"] == 1
 
 
-def _seed_body():
+def _seed_body(comp_det=lambda s, i: 0.1):
     cell = lambda det: dict(median=dict(all=det, standard=det, low_history=None),
                             detected=dict(all=1, standard=1, low_history=0), applicable=dict(all=1, standard=1,
                                                                                              low_history=0))
     curves = {"share_pp": {str(v): {"spread_for_coupon": cell(v / 100.0), "bps_spread_scale": cell(None)}
                            for v in m2_seed.CANDIDATES["share_pp"]},
+              "fixed_share": {str(v): {"spread_for_coupon": cell(None)} for v in m2_seed.CANDIDATES["share_pp"]},
               "iqr_widen": {str(v): {"spread_for_coupon": cell(0.3)} for v in m2_seed.CANDIDATES["iqr_widen"]},
               "text_share_pp": {str(v): {"text_numeric_divergence": cell(0.05)}
                                 for v in m2_seed.CANDIDATES["text_share_pp"]},
-              "composition_status": {"c:s%s_i%s" % (s, i): {"spread_for_coupon": cell(0.1)}
+              "composition_status": {"c:s%s_i%s" % (s, i): {"spread_for_coupon": cell(comp_det(s, i))}
                                      for s in m2_seed.CANDIDATES["share_pp"] for i in m2_seed.CANDIDATES["iqr_widen"]}}
     ms = {"range_shift_0.6": {name: dict(median=dict(all=0.1)) for name in ["v2_band"] + [
         m2_seed.ms_name(x, y) for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]]}}
     return dict(label=m2_seed.IN_SAMPLE, curves=curves, median_shift=ms)
 
 
-def _negatives(rate_for):
-    def cell(rate):
+def _negatives(comp_rate, text_rate=lambda t: 0.2):
+    def cell(rate, std=None):
+        std = rate if std is None else std
         return dict(all=dict(n=100, breach=int(rate * 100), insufficient_evidence=0, breach_rate_upper_bound=rate),
-                    standard=dict(n=100, breach=int(rate * 100), insufficient_evidence=0,
-                                  breach_rate_upper_bound=rate),
-                    low_history=dict(n=0, breach=0, insufficient_evidence=0, breach_rate_upper_bound=None),
+                    standard=dict(n=80, breach=int(std * 80), insufficient_evidence=0, breach_rate_upper_bound=std),
+                    low_history=dict(n=20, breach=0, insufficient_evidence=0, breach_rate_upper_bound=0.0),
                     unadjudicated=[], positives=dict(units=0, detected=0, abstained=0, missed=0))
-    out = {"share_pp": {str(v): cell(rate_for(v)) for v in m2_seed.CANDIDATES["share_pp"]},
-           "iqr_widen": {str(v): cell(0.02) for v in m2_seed.CANDIDATES["iqr_widen"]},
-           "text_share_pp": {str(v): cell(0.2) for v in m2_seed.CANDIDATES["text_share_pp"]}}
-    out["composition_status"] = {"c:s%s_i%s" % (s, i): cell(0.05) for s in m2_seed.CANDIDATES["share_pp"]
-                                 for i in m2_seed.CANDIDATES["iqr_widen"]}
+    out = {"share_pp": {str(v): cell(0.02) for v in m2_seed.CANDIDATES["share_pp"]},
+           "fixed_share": {str(v): cell(0.01) for v in m2_seed.CANDIDATES["share_pp"]},
+           "iqr_widen": {str(v): cell(0.03) for v in m2_seed.CANDIDATES["iqr_widen"]},
+           "text_share_pp": {str(v): cell(text_rate(v)) for v in m2_seed.CANDIDATES["text_share_pp"]}}
+    out["composition_status"] = {"c:s%s_i%s" % (s, i): cell(comp_rate(s, i), std=0.5)
+                                 for s in m2_seed.CANDIDATES["share_pp"] for i in m2_seed.CANDIDATES["iqr_widen"]}
     return out
 
 
-def test_calibration_assembles_curves_chooses_per_band_and_reports_uncalibrated_bands():
-    scoring = {"rolling": {"as_evaluated": {"all": {"by_kind": {"value_range": {"negatives": dict(
-        breach_rate_upper_bound=0.061)}}}}}}
-    ms = {m2_seed.ms_name(x, y): dict(negatives=dict(n=10, breach=1, insufficient_evidence=0,
-                                                     breach_rate_upper_bound=0.1),
-                                      positives=dict(units=1, detected=1, abstained=0, missed=0))
-          for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]}
-    cal = bt.assemble_calibration(_seed_body(), _negatives(lambda v: 0.5 if v < 15 else 0.05), ms, scoring,
+def _ms():
+    return {m2_seed.ms_name(x, y): dict(negatives=dict(n=10, breach=1, insufficient_evidence=0,
+                                                       breach_rate_upper_bound=0.1),
+                                        positives=dict(units=1, detected=1, abstained=0, missed=0))
+            for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]}
+
+
+SCORING = {"rolling": {"as_evaluated": {"all": {"by_kind": {"value_range": {"negatives": dict(
+    breach_rate_upper_bound=0.061)}}}}}}
+
+
+def test_calibration_binds_to_the_contract_status_on_the_joint_grid_with_one_pooled_basis():
+    # criteria alone would pass at s5; the CONTRACT (either criterion) only passes from s15_i3.0 on
+    comp = lambda s, i: 0.05 if (s, i) in ((15, 3.0), (20, 2.0), (20, 3.0), (25, 3.0)) else 0.12
+    cal = bt.assemble_calibration(_seed_body(), _negatives(comp, text_rate=lambda t: 0.08), _ms(), SCORING,
                                   seed_run_id="stageb2-seed-v3-x")
-    assert cal["bands"]["share_pp.standard"]["chosen"] == 15                  # 5/10: too many negatives
-    assert cal["bands"]["share_pp.low_history"]["status"] == "uncalibrated"   # no low-history evidence
-    assert cal["bands"]["iqr_widen"]["chosen"] == 1.5
-    assert cal["bands"]["text_share_pp"]["status"] == "uncalibrated"          # every negatives rate 20%
-    assert cal["combined_composition"]["point"] == "c:s15_i1.5"
-    assert cal["median_shift"]["adopted"] is False and cal["median_shift"]["v2_band"]["negatives_rate"] == 0.061
+    assert cal["tier_basis"] == "pooled"
+    joint = cal["bands"]["rate_composition"]
+    assert joint["status"] == "calibrated" and joint["chosen"] == dict(share_pp=15, iqr_widen=3.0)
+    assert [r["value"] for r in joint["curve"]][:4] == ["s5_i1.5", "s5_i2.0", "s5_i3.0", "s10_i1.5"]
+    row = next(r for r in joint["curve"] if r["value"] == "s15_i3.0")
+    assert row["neg_rate"] == 0.05 and row["per_criterion"] == dict(share=0.02, iqr=0.03, fixed=0.01)
+    assert cal["bands"]["text_share_pp"]["chosen"] == 5 and cal["bands"]["text_share_pp"]["detection_tier"] == "all"
+    assert set(cal["criteria"]) == {"share_pp", "iqr_widen", "fixed_share"}
     block = cal["tolerances_block"]
-    assert block["label"] == m2_seed.IN_SAMPLE and set(block["bands"]) == set(cal["bands"])
-    assert block["bands"]["share_pp.standard"]["curve"][0] == dict(value=5, seeded_detection_fraction=0.05,
-                                                                   negatives_breach_rate=0.5, negatives_n=100)
+    assert block["tier_basis"] == "pooled" and block["bands"]["rate_composition"]["chosen"] == dict(
+        share_pp=15, iqr_widen=3.0)
+    assert block["bands"]["rate_composition"]["curve"][0]["negatives_breach_rate_per_criterion"] == dict(
+        share=0.02, iqr=0.03, fixed=0.01)
     json.dumps(block).encode("ascii")
-    sem = dict(run_id="r", negatives=dict(rolling=_negatives(lambda v: 0.05)),
+
+
+def test_calibration_marks_the_contract_uncalibrated_when_no_joint_point_meets_the_rule():
+    cal = bt.assemble_calibration(_seed_body(comp_det=lambda s, i: 0.5), _negatives(lambda s, i: 0.05), _ms(), SCORING,
+                                  seed_run_id="x")
+    assert cal["bands"]["rate_composition"]["status"] == "uncalibrated"
+    assert cal["bands"]["rate_composition"]["chosen"] is None and len(cal["bands"]["rate_composition"]["curve"]) == 15
+    assert cal["bands"]["text_share_pp"]["status"] == "uncalibrated"             # every negatives rate 20%
+    sem = dict(run_id="r", negatives=dict(rolling=_negatives(lambda s, i: 0.05)),
                newly_abstained=dict(totals=dict(newly=1, carried=2), recogniser_format_units=dict(newly=1, carried=0),
                                     x100_magnitude_causes=dict(newly=0, carried=0), by_kind={}),
                inception={"C": {"2023-03-31": [dict(kind="rate_composition", learn_status="learned", learn_cause=None,
