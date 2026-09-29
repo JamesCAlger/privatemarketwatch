@@ -834,8 +834,8 @@ def main(argv=None) -> int:
     cmd.add_argument("--scope", choices=("light", "heavy", "all"), default="light")
     cmd.add_argument("--only", action="append", default=None, help="CIK:YYYY-MM-DD (repeatable)")
     args = parser.parse_args(argv)
-    if not args.run_id.startswith("stageb-"):
-        print("run id must start with stageb- (ruling R18)")
+    if not args.run_id.startswith(("stageb-", "stageb2-")):
+        print("run id must start with stageb- or stageb2- (ruling R18; stageb2- per Task B2-2a)")
         return 4
     code_root = Path(__file__).resolve().parents[2]
     try:

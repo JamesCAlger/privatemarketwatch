@@ -202,13 +202,83 @@ def primary_quarter_inventory(paths: PilotPaths, *, scanner=None, lease=None) ->
     return dict(
         fund_quarters=entries, counts=counts,
         filings_index=dict(path=str(index), sha256=_sha256(index)),
-        selection_policy=dict(
-            reference=CENSUS_SCRIPT, git_blob=git_blob(paths.code_root, CENSUS_SCRIPT),
-            functions=["select_source", "scan_selected_source"],
-            pilot_restrictions=[
-                "form_type is read from the filings index, never inferred from the month",
-                "two same-quarter original filings are ambiguous, never settled by filing date",
-                "an amendment is skipped only when the census scan proves it cover-only",
-                "a populated or incomplete amendment makes the quarter unavailable",
-                "multiple candidates without a scan are unavailable (scan may need the lease)",
-            ]))
+        selection_policy=_selection_policy(paths))
+
+
+def _selection_policy(paths: PilotPaths) -> dict:
+    return dict(
+        reference=CENSUS_SCRIPT, git_blob=git_blob(paths.code_root, CENSUS_SCRIPT),
+        functions=["select_source", "scan_selected_source"],
+        pilot_restrictions=[
+            "form_type is read from the filings index, never inferred from the month",
+            "two same-quarter original filings are ambiguous, never settled by filing date",
+            "an amendment is skipped only when the census scan proves it cover-only",
+            "a populated or incomplete amendment makes the quarter unavailable",
+            "multiple candidates without a scan are unavailable (scan may need the lease)",
+        ])
+
+
+ALL_ROLE_PREFIX = "all:"
+ALL_QUARTERS_THROUGH = VERIFIED_ERA_QUARTER
+MAX_CACHED_FILES_PER_CIK = 500
+
+
+def all_quarter_inventory(paths: PilotPaths, *, scanner=None, lease=None) -> dict:
+    """Every indexed 10-K/10-Q fund-quarter of the eight pilot CIKs (Task B2-2a).
+
+    Window per CIK: from its earliest quarter with a cached instance of an indexed
+    filing through ALL_QUARTERS_THROUGH; the Stage B cohort quarters are always
+    included (so q1 / q2 / verified_era stay identifiable), every other quarter has
+    role `all:<report_date>`. Selection is `select_accession` unchanged: one instance
+    per fund-quarter, amendments without a (leased) scan are unavailable with reason
+    `selection_requires_amendment_scan`. Indexed quarters outside the window and
+    cached instances that match no indexed accession are recorded, never dropped
+    silently. Rows are sorted by (cik, quarter); (cik, role) is unique.
+    """
+    if scanner is not None:
+        from scripts.profile_pilot.protection import assert_lease_held
+        assert_lease_held(lease)
+    candidates = load_index_candidates(paths)
+    cohort_roles = {(r["cik"], r["quarter"]): r["role"] for r in fund_quarters(include_verified_era=True)}
+    wanted, window, reconciliation = [], {}, {}
+    for cik in sorted(PILOT_CIKS):
+        mine = [r for r in candidates if r["cik"] == cik]
+        indexed = sorted({r["report_date"] for r in mine})
+        cached = sorted({r["report_date"] for r in mine
+                         if _instance_path(paths, cik, r["accession_number"]).is_file()
+                         and r["report_date"] <= ALL_QUARTERS_THROUGH})
+        first = cached[0] if cached else None
+        inside = {q for q in indexed if first is not None and first <= q <= ALL_QUARTERS_THROUGH}
+        quarters = sorted(inside | {q for (c, q) in cohort_roles if c == cik})
+        window[cik] = dict(first=first, last=ALL_QUARTERS_THROUGH,
+                           rule="earliest quarter with a cached indexed instance through "
+                                + ALL_QUARTERS_THROUGH + "; cohort quarters always included",
+                           indexed_quarters_before_window=[q for q in indexed if first is None or q < first],
+                           indexed_quarters_after_window=[q for q in indexed if q > ALL_QUARTERS_THROUGH])
+        known = {_instance_path(paths, cik, r["accession_number"]).name for r in mine}
+        folder = paths.cache_root / str(int(cik))
+        files = sorted(folder.glob("*.xml")) if folder.is_dir() else []
+        if len(files) > MAX_CACHED_FILES_PER_CIK:
+            raise ValueError("pilot cached-instance bound exceeded for " + cik)
+        reconciliation[cik] = dict(cached_files=len(files),
+                                   unindexed_cached_files=[str(f) for f in files if f.name not in known])
+        for quarter in quarters:
+            wanted.append(dict(cik=cik, quarter=quarter,
+                               role=cohort_roles.get((cik, quarter), ALL_ROLE_PREFIX + quarter)))
+    entries = []
+    for row in wanted:
+        selected = select_accession(paths, row["cik"], row["quarter"], candidates,
+                                    scanner=scanner, lease=lease)
+        entries.append(dict(selected, role=row["role"]))
+    keys = [(e["cik"], e["role"]) for e in entries]
+    if len(keys) != len(set(keys)):
+        raise ValueError("all-quarter inventory produced a duplicate (cik, role)")
+    counts = {}
+    for entry in entries:
+        counts[entry["status"]] = counts.get(entry["status"], 0) + 1
+    index = paths.output_root / "bdc_filings_index.csv"
+    return dict(
+        fund_quarters=entries, counts=counts, quarters_mode="all", window=window,
+        cache_reconciliation=reconciliation,
+        filings_index=dict(path=str(index), sha256=_sha256(index)),
+        selection_policy=_selection_policy(paths))

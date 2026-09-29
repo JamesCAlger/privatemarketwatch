@@ -1,7 +1,7 @@
 """Guarded launcher: pilot pytest runs, the semantic-diff backstop, freezing, lease probe.
 
     python -m scripts.profile_pilot.verify test --main-root M --data-root D --run-id R tests/test_profile_pilot_paths.py ...
-    python -m scripts.profile_pilot.verify freeze --main-root M --data-root D --run-id R
+    python -m scripts.profile_pilot.verify freeze --main-root M --data-root D --run-id R [--quarters cohort|all]
     python -m scripts.profile_pilot.verify measure-inventory --main-root M --data-root D --run-id R
 
     python -m scripts.profile_pilot.verify lease-check --main-root M --data-root D --run-id R
@@ -217,13 +217,26 @@ def cmd_test(args) -> int:
     return 0 if done.returncode == 0 else EXIT_TESTS_FAILED
 
 
+QUARTERS_MODES = ("cohort", "all")
+
+
+def freeze_inventory_content(paths, quarters: str) -> dict:
+    """primary_quarter_inventory content: the Stage B cohort (default) or every cached quarter."""
+    from scripts.profile_pilot import cohort
+    if quarters == "cohort":
+        return cohort.primary_quarter_inventory(paths)
+    if quarters == "all":
+        return cohort.all_quarter_inventory(paths)
+    raise ValueError("quarters must be one of " + repr(QUARTERS_MODES) + ", got " + repr(quarters))
+
+
 def cmd_freeze(args) -> int:
-    from scripts.profile_pilot import cohort, manifest
+    from scripts.profile_pilot import manifest
     paths = _paths(args)
     stamp = _stamp()
     with protection.protected_session(paths, receipt="verification/" + stamp + "_freeze_preservation.json"):
         t0 = time.perf_counter()
-        primary = cohort.primary_quarter_inventory(paths)
+        primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"))
         manifest.freeze_inventory(paths, "primary_quarter_inventory", primary)
         manifest.freeze_inventory(paths, "wrapper_key_inventory",
                                   manifest.wrapper_key_inventory(paths.code_root))
@@ -326,6 +339,9 @@ def main(argv=None) -> int:
         cmd.add_argument("--data-root", type=Path, required=True)
         cmd.add_argument("--code-root", type=Path, default=None)
         cmd.add_argument("--run-id", default=None)
+        if name == "freeze":
+            cmd.add_argument("--quarters", choices=QUARTERS_MODES, default="cohort",
+                             help="cohort = the Stage B fund-quarters (default); all = every cached quarter")
         if name == "test":
             cmd.add_argument("--no-pre-backstop", action="store_true")
             cmd.add_argument("targets", nargs="*")

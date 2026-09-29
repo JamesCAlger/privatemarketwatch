@@ -525,8 +525,8 @@ def main(argv=None) -> int:
     cmd.add_argument("--timeout-seconds", type=float, default=None,
                      help="collection time bound (a bounds change is a new cache identity)")
     args = parser.parse_args(argv)
-    if not args.run_id.startswith("stageb-"):
-        print("run id must start with stageb- (ruling R18)")
+    if not args.run_id.startswith(("stageb-", "stageb2-")):
+        print("run id must start with stageb- or stageb2- (ruling R18; stageb2- per Task B2-2a)")
         return 4
     code_root = Path(__file__).resolve().parents[2]
     try:
