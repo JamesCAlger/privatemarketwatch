@@ -114,3 +114,8 @@ Anything the V13 sequence adds is appended here with its evidence path.
 
 Free space on C: at rubric time: 51 GiB (build requires 35 at start, 20 per
 stage; archives release each completed working copy).
+
+## 2026-09-29 ruling: V13 retired (owner, in session)
+- V13 attempt 2 failed at the snapshot stage on a Codex CLI runtime delta (0.158.0). The owner ruled on 2026-09-29 that V13 is RETIRED, not deferred: no V14, the refactor build cadence ends, and the runtime ruling (pin back vs record a launcher-only deviation) is moot.
+- Why: per the 2026-09-28 LAST-REBUILD rule a failed V13 pauses the refactor; the source seal is already void (pipeline/identifier_spread_corrections.py changed in e379e8a on 2026-09-29); the per-CIK issues these builds surfaced are absorbed by the filer-profile programme (docs/superpowers/specs/2026-09-29-filer-profile-programme-design.md on branch filer-profile-pilot).
+- Consequence: the twelve matching repairs (91ef3cd..d6e5cce) stay unpublished until the first profile-era quarter build (programme sub-project 4), which needs a fresh focused + full-suite verification. Candidate, tranche and scratch evidence directories stay as evidence; no controller is to be restarted.
