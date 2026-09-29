@@ -532,7 +532,8 @@ def _validators() -> dict:
 
     def make(sub):
         return jsonschema.Draft202012Validator(dict(sub, **{"$defs": defs}))
-    return dict(position=make(props["positions"]["items"]), fact=make(props["facts"]["items"]),
+    return dict(field_value=make({"$ref": "#/$defs/field_value"}),
+                identity=make(props["positions"]["items"]["properties"]["identity"]), fact=make(props["facts"]["items"]),
                 context=make(props["contexts"]["items"]), unit=make(props["units"]["additionalProperties"]),
                 mapping=make(props["concept_mappings"]["additionalProperties"]), channels=make(props["channels"]))
 
@@ -577,7 +578,15 @@ def realism_errors(before: dict, after: dict, receipt: dict, *, full: bool = Fal
     for p in after["positions"]:
         if p["context_id"] not in touched:
             continue
-        errors += sorted(_errs("position", p) - _errs("position", old_pos.get(p["context_id"])))
+        old = old_pos.get(p["context_id"])
+        if old is None or sorted(p) != sorted(old) or sorted(p["fields"]) != sorted(old["fields"]):
+            errors.append("position " + p["context_id"] + ": keys or field names changed")
+            continue
+        for name, value in p["fields"].items():
+            if value != old["fields"][name]:
+                errors += sorted(_errs("field_value", value) - _errs("field_value", old["fields"][name]))
+        if p["identity"] != old["identity"]:
+            errors += sorted(_errs("identity", p["identity"]) - _errs("identity", old["identity"]))
         for value in p["fields"].values():
             missing = [i for i in value.get("fact_indices") or [] if i not in present]
             if missing:
