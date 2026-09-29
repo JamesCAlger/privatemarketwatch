@@ -55,39 +55,45 @@ class PerformanceLimits:
 LIMITS = PerformanceLimits()
 
 # Calibration of the heavy/light estimate (Task 4 carry-forward: the old 5 s + bytes/1.5 MB,
-# 400 MB + 20x model was 5-40x too conservative). Points are the build measurements of the
-# authoritative Task 4 run; the model is an upper envelope with about 2x headroom over the
-# largest observed per-MB cost and process peak. The Task 5 run records estimate vs measured
-# per instance (`calibration` in the run summary). The estimate only decides heaviness for
-# CIKs outside the R3 list: Ares/BCRED are heavy by CIK whatever the estimate.
+# 400 MB + 20x model was an unfitted guess). Points are FULL-STAGE measurements (build +
+# schema/semantic validation + serialisation) from the Task 5 calibration run: the Task 4
+# numbers were build-only and missed validation, which is 75-85% of the stage (about 0.7 ms
+# per fact). Seconds scale with facts, not bytes, so a byte model must carry the worst
+# per-MB cost: the fit is 2 s + 2.0 s/MB, about 1.6x the largest observed 1.24 s/MB (Ares
+# 2026-03-31); it is 5-7x conservative for byte-heavy, fact-light files (Stepstone
+# 2026-03-31, 66 MB, is estimated heavy and so runs under the lease). Memory uses only
+# `exact` points (the OS peak rose during that instance): 350 MB + 15 x bytes. The run
+# summary records estimate vs measured per instance. The estimate only decides heaviness
+# for CIKs outside the R3 list: Ares/BCRED are heavy by CIK whatever the estimate.
 CALIBRATION = dict(
-    source_run="stageb-20260928t231648z",
+    source_run="stageb-20260928t235741z",
     model="seconds = seconds_base + seconds_per_source_mb * MB; bytes = bytes_base + bytes_per_source_byte * bytes",
-    seconds_base=2.0, seconds_per_source_mb=0.25, bytes_base=350_000_000, bytes_per_source_byte=15,
-    points=[dict(cik=c, report_date=d, source_bytes=b, wall_seconds=w, peak_rss_bytes=p) for c, d, b, w, p in (
-        ("0001287750", "2022-09-30", 26804027, 1.86, 323923968),
-        ("0001287750", "2026-03-31", 14005717, 1.7, 346562560),
-        ("0001803498", "2022-09-30", 45476291, 1.36, 396673024),
-        ("0001803498", "2022-12-31", 22165169, 1.23, 365232128),
-        ("0001803498", "2026-03-31", 43793401, 2.86, 520937472),
-        ("0001901037", "2022-09-30", 1530993, 0.75, 214339584),
-        ("0001901037", "2022-12-31", 2273729, 0.1, 223768576),
-        ("0001901037", "2026-03-31", 7907216, 0.58, 261881856),
-        ("0001715933", "2023-03-31", 3783731, 0.17, 245166080),
-        ("0001715933", "2023-06-30", 4199455, 0.17, 246026240),
-        ("0001715933", "2026-03-31", 3971940, 0.17, 247812096),
-        ("0001920453", "2023-03-31", 1238108, 0.05, 236474368),
-        ("0001920453", "2023-06-30", 2290334, 0.09, 239583232),
-        ("0001920453", "2026-03-31", 14060799, 0.61, 295886848),
-        ("0001860424", "2023-06-30", 4133212, 0.16, 247263232),
-        ("0001860424", "2023-09-30", 3848739, 0.16, 247713792),
-        ("0001860424", "2026-03-31", 5000727, 0.24, 256036864),
-        ("0001950803", "2023-09-30", 2928267, 0.14, 250048512),
-        ("0001950803", "2023-12-31", 5024112, 0.29, 261349376),
-        ("0001950803", "2026-03-31", 66454503, 2.99, 621797376),
-        ("0001588272", "2023-09-30", 3344206, 0.16, 277663744),
-        ("0001588272", "2023-12-31", 4032193, 0.19, 278212608),
-        ("0001588272", "2026-03-31", 2647573, 0.13, 277245952))])
+    seconds_base=2.0, seconds_per_source_mb=2.0, bytes_base=350_000_000, bytes_per_source_byte=15,
+    points=[dict(cik=c, report_date=d, source_bytes=b, wall_seconds=w, peak_bytes_upper=p, peak_exact=x)
+            for c, d, b, w, p, x in (
+        ("0001287750", "2022-09-30", 26804027, 12.82, 327196672, True),
+        ("0001287750", "2026-03-31", 14005717, 17.305, 619499520, False),
+        ("0001588272", "2023-09-30", 3344206, 1.221, 619499520, False),
+        ("0001588272", "2023-12-31", 4032193, 1.286, 619499520, False),
+        ("0001588272", "2026-03-31", 2647573, 0.815, 619499520, False),
+        ("0001715933", "2023-03-31", 3783731, 1.375, 281202688, False),
+        ("0001715933", "2023-06-30", 4199455, 1.423, 281202688, False),
+        ("0001715933", "2026-03-31", 3971940, 1.712, 281202688, False),
+        ("0001803498", "2022-09-30", 45476291, 11.237, 619499520, False),
+        ("0001803498", "2022-12-31", 22165169, 12.267, 619499520, False),
+        ("0001803498", "2026-03-31", 43793401, 25.432, 619499520, False),
+        ("0001860424", "2023-06-30", 4133212, 1.301, 295026688, False),
+        ("0001860424", "2023-09-30", 3848739, 1.368, 295026688, False),
+        ("0001860424", "2026-03-31", 5000727, 1.731, 295026688, False),
+        ("0001901037", "2022-09-30", 1530993, 1.522, 218877952, True),
+        ("0001901037", "2022-12-31", 2273729, 0.839, 223784960, True),
+        ("0001901037", "2026-03-31", 7907216, 5.917, 276492288, True),
+        ("0001920453", "2023-03-31", 1238108, 0.312, 281202688, False),
+        ("0001920453", "2023-06-30", 2290334, 0.56, 281202688, False),
+        ("0001920453", "2026-03-31", 14060799, 5.086, 295026688, True),
+        ("0001950803", "2023-09-30", 2928267, 1.171, 295026688, False),
+        ("0001950803", "2023-12-31", 5024112, 2.091, 295026688, False),
+        ("0001950803", "2026-03-31", 66454503, 19.786, 619499520, True))])
 
 FAILURE_STATUSES = ("incomplete", "limit_exceeded", "validation_failed", "stage_invalidated",
                     "lease_refused")
@@ -420,10 +426,13 @@ def calibration_check(results: list) -> list:
                          estimate_seconds=m["estimate_seconds"], measured_wall_seconds=m["wall_seconds"],
                          measured_stage_seconds=m.get("stage_seconds"),
                          estimate_bytes=m["estimate_bytes"], measured_peak_bytes_upper=m["peak_bytes_upper"],
+                         peak_exact=m.get("peak_exact"),
                          seconds_ratio=round(m["estimate_seconds"] / max(m["wall_seconds"], 1e-3), 2),
                          bytes_ratio=round(m["estimate_bytes"] / max(m["peak_bytes_upper"], 1), 2),
-                         envelope_holds=(m["estimate_seconds"] >= m["wall_seconds"]
-                                         and m["estimate_bytes"] >= m["peak_bytes_upper"])))
+                         seconds_envelope_holds=m["estimate_seconds"] >= m["wall_seconds"],
+                         # a non-exact peak is the process lifetime peak, not this instance's
+                         bytes_envelope_holds=(m["estimate_bytes"] >= m["peak_bytes_upper"]
+                                               if m.get("peak_exact") else "not_exact")))
     return rows
 
 

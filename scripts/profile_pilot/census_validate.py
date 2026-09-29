@@ -391,8 +391,14 @@ def check_numeric_facts(doc: dict, matcher: _Matcher) -> dict:
 def check_rates(doc: dict, source: dict, matcher: _Matcher) -> dict:
     check = _check("rates")
     rate_facts = [f for f in doc["facts"] if f.get("field") in RATE_FIELDS]
+    text_valued = 0
     for fact in rate_facts:
-        _compare_numeric(check, fact, matcher.raw(fact))
+        if fact.get("unit_ref") is None:  # e.g. Onex "1M SOFR + 7.00%" on a rate-named text concept
+            text_valued += 1
+            _compare_text(check, fact, matcher.raw(fact))
+        else:
+            _compare_numeric(check, fact, matcher.raw(fact))
+    check["text_valued_rate_facts"] = text_valued
     qnames = {((f.get("namespace") or ""), _local(f["qname"])) for f in rate_facts}
     raw_count = sum(1 for f in source["facts"] if (f["namespace"], f["local"]) in qnames)
     check["source_facts_with_rate_qnames"] = raw_count
@@ -411,8 +417,12 @@ def check_rates(doc: dict, source: dict, matcher: _Matcher) -> dict:
             for index in entry.get("fact_indices", []):
                 fact = by_i.get(index)
                 raw = matcher.raw(fact) if fact is not None else None
-                if raw is None or raw["context"] != position["context_id"] or raw["nil"] or \
-                        value is None or _dec(raw["text"]) != value:
+                if raw is not None and raw["unit"] is None:  # text-valued rate fact: exact text
+                    backed = not raw["nil"] and raw["full"] == entry.get("value")
+                else:
+                    backed = (raw is not None and not raw["nil"] and value is not None
+                              and _dec(raw["text"]) == value)
+                if raw is None or raw["context"] != position["context_id"] or not backed:
                     _fail(check, problem="position_rate_not_backed", context_id=position["context_id"],
                           field=field, census_value=entry.get("value"),
                           source_value=None if raw is None else raw["text"][:60])
@@ -423,37 +433,46 @@ def check_rates(doc: dict, source: dict, matcher: _Matcher) -> dict:
     return check
 
 
+def _compare_text(check: dict, fact: dict, raw) -> bool:
+    """Text/date/boolean/enumeration fact vs its source element; True when it matches."""
+    check["checked"] += 1
+    ident = dict(fact_id=fact.get("id"), qname=fact["qname"], context_id=fact["context_id"])
+    if raw is None:
+        _fail(check, problem="no_source_fact", **ident)
+        return False
+    if raw["nil"]:
+        if fact.get("status") != "nil":
+            _fail(check, problem="nil_status", census=fact.get("status"), **ident)
+            return False
+        return True
+    if fact.get("status") != "reported" or raw["context"] != fact["context_id"]:
+        _fail(check, problem="status_or_context", census=fact.get("status"), **ident)
+        return False
+    full = raw["full"]
+    if fact.get("value_kind") == "text":
+        ok = (hashlib.sha256(full.encode("utf-8")).hexdigest() == fact.get("text_sha256")
+              and len(full) == fact.get("text_chars")
+              and fact.get("raw") == (full if fact.get("text_stored") == "full" else full[:200]))
+    else:
+        ok = fact.get("raw") == full
+    if not ok:
+        _fail(check, problem="text", source_chars=len(full), census_chars=fact.get("text_chars"),
+              source_prefix=full[:60], census_prefix=str(fact.get("raw"))[:60], **ident)
+    return ok
+
+
 def check_text_facts(doc: dict, matcher: _Matcher) -> dict:
     check = _check("text_facts")
     preferred = []
     for fact in doc["facts"]:
         if fact.get("unit_ref") is not None:
             continue
-        check["checked"] += 1
         raw = matcher.raw(fact)
-        ident = dict(fact_id=fact.get("id"), qname=fact["qname"], context_id=fact["context_id"])
-        if raw is None:
-            _fail(check, problem="no_source_fact", **ident)
-            continue
-        if raw["nil"]:
-            if fact.get("status") != "nil":
-                _fail(check, problem="nil_status", census=fact.get("status"), **ident)
-            continue
-        if fact.get("status") != "reported":
-            _fail(check, problem="status", census=fact.get("status"), **ident)
-            continue
-        full = raw["full"]
-        if fact.get("value_kind") == "text":
-            ok = (hashlib.sha256(full.encode("utf-8")).hexdigest() == fact.get("text_sha256")
-                  and len(full) == fact.get("text_chars")
-                  and fact.get("raw") == (full if fact.get("text_stored") == "full" else full[:200]))
-        else:
-            ok = fact.get("raw") == full
-        if not ok:
-            _fail(check, problem="text", source_chars=len(full), census_chars=fact.get("text_chars"), **ident)
-        elif fact.get("value_kind") == "text" and fact.get("id"):
-            preferred.append(dict(ident, chars=len(full), sha256=fact.get("text_sha256"),
-                                  prefix=_ascii(full[:60])))
+        if _compare_text(check, fact, raw) and raw is not None and not raw["nil"] \
+                and fact.get("value_kind") == "text" and fact.get("id"):
+            preferred.append(dict(fact_id=fact.get("id"), qname=fact["qname"], context_id=fact["context_id"],
+                                  chars=len(raw["full"]), sha256=fact.get("text_sha256"),
+                                  prefix=_ascii(raw["full"][:60])))
     check["examples"] = sorted(preferred, key=lambda e: -e["chars"])[:5]
     return check
 

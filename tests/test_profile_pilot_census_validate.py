@@ -77,6 +77,22 @@ def test_validator_passes_a_faithful_census_on_identified_facts(tmp_path):
     assert notes["resources"][0]["fact_ids"] == ["r1"]
 
 
+def test_text_valued_rate_concept_is_compared_as_text(tmp_path):
+    # Onex tags "1M SOFR + 7.00%" on an extension InvestmentInterestRateTerms concept; the
+    # inherited CONCEPT_MAP substring maps it to interest_rate although it has no unit.
+    terms = fact("fake:InvestmentInterestRateTerms", "p1", "1M SOFR + 7.00%", fid="terms1")
+    contexts, facts = position("p1", "Acme Corp Term Loan", "100", extra=[terms])
+    doc, path = build(tmp_path, document(contexts, facts))
+    assert next(f for f in doc["facts"] if f["id"] == "terms1")["field"] == "interest_rate"
+    report = _v().validate_against_source(doc, path)
+    assert check(report, "rates")["status"] == "pass", check(report, "rates")["mismatches"]
+    assert check(report, "rates")["text_valued_rate_facts"] == 1
+    next(f for f in doc["facts"] if f["id"] == "terms1")["raw"] = "1M SOFR + 7.50%"
+    doc["positions"][0]["fields"]["interest_rate"]["value"] = "1M SOFR + 7.50%"
+    report = _v().validate_against_source(doc, path)
+    assert check(report, "rates")["status"] == "fail"
+
+
 def test_validator_detects_a_changed_rate_value(tmp_path):
     doc, path = build(tmp_path)
     target = next(f for f in doc["facts"] if f["id"] == "r1")
@@ -293,12 +309,14 @@ def test_measurement_records_wall_peak_and_serialised_size(tmp_path):
 
 def test_calibrated_estimate_envelopes_every_calibration_point():
     cal = census_run.CALIBRATION
-    assert cal["source_run"] == "stageb-20260928t231648z" and len(cal["points"]) >= 20
+    assert cal["source_run"] == "stageb-20260928t235741z" and len(cal["points"]) >= 20
     for point in cal["points"]:
         seconds, peak = census_run.estimate(point["source_bytes"])
-        assert seconds >= point["wall_seconds"] and peak >= point["peak_rss_bytes"], point
-    old_seconds = 5.0 + 66_454_503 / 1_500_000
-    assert census_run.estimate(66_454_503)[0] < old_seconds / 2  # no longer 5-40x conservative
+        assert seconds >= point["wall_seconds"], point
+        if point["peak_exact"]:  # a non-exact peak is the process lifetime peak
+            assert peak >= point["peak_bytes_upper"], point
+    worst = max(p["wall_seconds"] / (p["source_bytes"] / 1e6) for p in cal["points"] if p["source_bytes"] > 5e6)
+    assert worst <= cal["seconds_per_source_mb"] <= 2 * worst  # fitted headroom, not a guess
 
 
 def test_heavy_cik_never_bypasses_the_lease_whatever_the_estimate():
