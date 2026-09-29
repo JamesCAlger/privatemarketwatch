@@ -343,55 +343,76 @@ def test_performance_summary_assesses_the_thousand_position_target():
     assert census_run.performance_summary(results[1:])["target"]["status"] == "not_assessed"
 
 
-# ---------------------------------------------------------------- cache identity and regeneration
+# ---------------------------------------------------------------- cache identity and regeneration (R23)
 
-def test_cache_hit_on_identical_dependencies(tmp_path):
+def _second_run(paths, run_id="stageb-test2"):
+    from scripts.profile_pilot.paths import resolve_paths
+    return resolve_paths(main_repo_root=paths.main_repo_root, data_root=paths.data_root,
+                         code_root=paths.code_root, run_id=run_id)
+
+
+def test_census_path_is_the_constraint_path_and_the_fingerprint_is_inside(tmp_path):
     paths = fake_paths(tmp_path, run_id="stageb-test")
     entry = _entry(paths)
     first = census_run.census_fund_quarter(paths, entry, lease_factory=None)
     again = census_run.census_fund_quarter(paths, entry, lease_factory=None)
     assert (first["cache"], again["cache"]) == ("miss", "hit")
-    assert first["path"] == again["path"] and first["fingerprint"][:16] in first["path"].replace("\\", "/")
+    assert Path(first["path"]) == paths.run_root / "census" / CIK / (Q + ".json")
+    body = json.loads(Path(first["path"]).read_text(encoding="ascii"))
+    assert body["identity"]["fingerprint"] == first["fingerprint"]
+    assert body["result"]["cache_identity"]["fingerprint"] == first["fingerprint"]
+    assert body["result"]["cache_identity"]["detector_version"] == census_run.DETECTOR_VERSION
+    assert _census_files(paths) == [Path(first["path"])]
 
 
-def _regenerates(paths, entry, change):
+def _refused_then_regenerated(paths, entry, change):
+    """A dependency change is refused inside the run root and regenerates in a new run id."""
     first = census_run.census_fund_quarter(paths, entry, lease_factory=None)
     before = Path(first["path"]).read_bytes()
     change()
-    second = census_run.census_fund_quarter(paths, entry, lease_factory=None)
+    with pytest.raises(manifest.StageInvalidated, match="new run id"):
+        census_run.census_fund_quarter(paths, entry, lease_factory=None)
+    assert Path(first["path"]).read_bytes() == before and _census_files(paths) == [Path(first["path"])]
+    other = _second_run(paths)
+    second = census_run.census_fund_quarter(other, entry, lease_factory=None)
     assert second["status"] == "collected" and second["cache"] == "miss"
-    assert second["fingerprint"] != first["fingerprint"] and second["path"] != first["path"]
-    assert Path(first["path"]).read_bytes() == before  # the old complete result is preserved
+    assert second["fingerprint"] != first["fingerprint"]
+    assert Path(second["path"]) == other.run_root / "census" / CIK / (Q + ".json")
     return first, second
 
 
-def test_code_dependency_change_forces_regeneration(tmp_path, monkeypatch):
+def test_code_dependency_change_is_refused_in_the_run_and_regenerates_in_a_new_run(tmp_path, monkeypatch):
     paths = fake_paths(tmp_path, run_id="stageb-test")
     dep = tmp_path / "extra_dependency.py"
     dep.write_text("A = 1\n", encoding="ascii")
     monkeypatch.setattr(census_run, "CODE_DEPENDENCIES", census_run.CODE_DEPENDENCIES + (str(dep),))
-    _regenerates(paths, _entry(paths), lambda: dep.write_text("A = 2\n", encoding="ascii"))
+    _refused_then_regenerated(paths, _entry(paths), lambda: dep.write_text("A = 2\n", encoding="ascii"))
 
 
-def test_bounds_change_forces_regeneration(tmp_path):
+def test_bounds_change_is_refused_in_the_same_run(tmp_path):
     paths = fake_paths(tmp_path, run_id="stageb-test")
     entry = _entry(paths)
-    first = census_run.census_fund_quarter(paths, entry, lease_factory=None)
-    second = census_run.census_fund_quarter(paths, entry, lease_factory=None,
-                                            bounds=census.Bounds(max_contexts=39_999))
-    assert second["cache"] == "miss" and second["fingerprint"] != first["fingerprint"]
+    census_run.census_fund_quarter(paths, entry, lease_factory=None)
+    with pytest.raises(manifest.StageInvalidated, match="new run id"):
+        census_run.census_fund_quarter(paths, entry, lease_factory=None,
+                                       bounds=census.Bounds(max_contexts=39_999))
+    other = _second_run(paths)
+    got = census_run.census_fund_quarter(other, entry, lease_factory=None,
+                                         bounds=census.Bounds(max_contexts=39_999))
+    assert got["status"] == "collected" and got["cache"] == "miss"
 
 
-def test_collector_version_change_forces_regeneration(tmp_path, monkeypatch):
+def test_collector_version_change_regenerates_only_in_a_new_run(tmp_path, monkeypatch):
     paths = fake_paths(tmp_path, run_id="stageb-test")
-    _regenerates(paths, _entry(paths),
-                 lambda: monkeypatch.setattr(census_run, "COLLECTOR_VERSION", "census.test+changed"))
+    _refused_then_regenerated(paths, _entry(paths),
+                              lambda: monkeypatch.setattr(census_run, "COLLECTOR_VERSION",
+                                                          "census.test+changed"))
 
 
-def test_source_change_forces_regeneration(tmp_path):
+def test_source_change_regenerates_only_in_a_new_run(tmp_path):
     paths = fake_paths(tmp_path, run_id="stageb-test")
     entry = _entry(paths)
-    _regenerates(paths, entry, lambda: Path(entry["source_path"]).write_text(
+    _refused_then_regenerated(paths, entry, lambda: Path(entry["source_path"]).write_text(
         rich_instance().replace("0.1050", "0.1075"), encoding="utf-8"))
 
 
@@ -414,6 +435,7 @@ def test_prior_incomplete_result_at_the_identity_path_is_never_reused(tmp_path):
     paths = fake_paths(tmp_path, run_id="stageb-test")
     entry = _entry(paths)
     plan = census_run.plan(paths, entry)
+    assert plan["relative"] == "census/" + CIK + "/" + Q + ".json"
     target = paths.run_root / plan["relative"]
     target.parent.mkdir(parents=True)
     target.write_text(json.dumps(dict(identity=plan["identity"], complete=False, result={})),
@@ -432,15 +454,13 @@ def test_failed_runs_leave_separate_receipts_and_no_cached_result(tmp_path):
     assert first["receipt"] != second["receipt"]
     receipts = sorted((paths.run_root / "census_failures").rglob("*.json"))
     assert len(receipts) == 2 and _census_files(paths) == []
-    kept = [r.read_bytes() for r in receipts]
-    ok = census_run.census_fund_quarter(paths, entry, lease_factory=None)
-    assert ok["status"] == "collected" and ok["cache"] == "miss"
-    assert [r.read_bytes() for r in receipts] == kept
     body = json.loads(receipts[0].read_text(encoding="ascii"))
     assert body["collection"]["state"] == "incomplete" and body["fingerprint"] == first["fingerprint"]
+    ok = census_run.census_fund_quarter(_second_run(paths), entry, lease_factory=None)
+    assert ok["status"] == "collected" and ok["cache"] == "miss"
 
 
-def test_validation_stage_is_cached_on_the_census_file_and_regenerates_with_it(tmp_path, monkeypatch):
+def test_validation_is_cached_at_one_path_and_follows_the_census_across_runs(tmp_path, monkeypatch):
     v = _v()
     paths = fake_paths(tmp_path, run_id="stageb-test")
     entry = _entry(paths)
@@ -449,12 +469,94 @@ def test_validation_stage_is_cached_on_the_census_file_and_regenerates_with_it(t
     again = v.validate_fund_quarter(paths, entry, lease_factory=None)
     assert first["status"] == "validated" and first["verdict"] == "pass"
     assert (first["cache"], again["cache"]) == ("miss", "hit")
+    assert Path(first["path"]) == paths.run_root / "validation" / CIK / (Q + ".json")
     monkeypatch.setattr(census_run, "COLLECTOR_VERSION", "census.test+changed")
-    missing = v.validate_fund_quarter(paths, entry, lease_factory=None)
-    assert missing["status"] == "census_missing"
-    census_run.census_fund_quarter(paths, entry, lease_factory=None)
-    third = v.validate_fund_quarter(paths, entry, lease_factory=None)
-    assert third["cache"] == "miss" and third["path"] != first["path"]
+    stale = v.validate_fund_quarter(paths, entry, lease_factory=None)
+    assert stale["status"] == "census_identity_mismatch"
+    other = _second_run(paths)
+    census_run.census_fund_quarter(other, entry, lease_factory=None)
+    third = v.validate_fund_quarter(other, entry, lease_factory=None)
+    assert third["status"] == "validated" and third["cache"] == "miss"
+
+
+# ---------------------------------------------------------------- fail-closed validation (R24)
+
+def _tamper_rate(census_path: Path, fact_id="r1", value="0.1051"):
+    body = json.loads(census_path.read_text(encoding="ascii"))
+    next(f for f in body["result"]["facts"] if f["id"] == fact_id)["value"] = value
+    census_path.write_text(json.dumps(body), encoding="ascii")
+
+
+def test_failed_source_cross_check_is_not_cached_and_leaves_a_receipt(tmp_path):
+    v = _v()
+    paths = fake_paths(tmp_path, run_id="stageb-test")
+    entry = _entry(paths)
+    got = census_run.census_fund_quarter(paths, entry, lease_factory=None)
+    _tamper_rate(Path(got["path"]))
+    failed = v.validate_fund_quarter(paths, entry, lease_factory=None)
+    assert failed["status"] == "validation_failed" and failed["verdict"] == "fail"
+    assert not (paths.run_root / "validation" / CIK).exists()
+    receipt = json.loads((paths.run_root / failed["receipt"]).read_text(encoding="ascii"))
+    assert receipt["status"] == "validation_failed" and "rates" in receipt["failed_checks"]
+    mismatch = receipt["mismatches"]["rates"][0]
+    assert mismatch["fact_id"] == "r1" and mismatch["census_value"] == "0.1051"
+    assert mismatch["source_value"] == "0.1050"
+
+
+def _cli_setup(tmp_path, monkeypatch):
+    from scripts.profile_pilot import protection
+    paths = fake_paths(tmp_path, run_id="stageb-test")
+    entry = _entry(paths)
+    manifest.freeze_inventory(paths, "primary_quarter_inventory", dict(fund_quarters=[entry]))
+    monkeypatch.setattr(protection, "process_conflicts", lambda: [])
+    argv = ["run", "--main-root", str(paths.main_repo_root), "--data-root", str(paths.data_root),
+            "--run-id", paths.run_id, "--scope", "all"]
+    return paths, argv
+
+
+def test_passing_fund_quarter_is_listed_in_authoritative_json(tmp_path, monkeypatch):
+    v = _v()
+    paths, argv = _cli_setup(tmp_path, monkeypatch)
+    assert census_run.main(argv) == 0
+    assert v.main(argv) == 0
+    listed = json.loads((paths.run_root / "results" / "authoritative.json").read_text(encoding="ascii"))
+    excluded = json.loads((paths.run_root / "results" / "excluded.json").read_text(encoding="ascii"))
+    assert [(r["cik"], r["report_date"]) for r in listed["fund_quarters"]] == [(CIK, Q)]
+    row = listed["fund_quarters"][0]
+    assert row["validation_verdict"] == "pass" and row["census_path"].endswith(Q + ".json")
+    assert row["fingerprint"] and row["collector_version"] == census_run.COLLECTOR_VERSION
+    assert row["detector_version"] == census_run.DETECTOR_VERSION
+    assert row["census_run_summary"].startswith("census/run_summary_all_")
+    assert row["validation_path"].endswith(Q + ".json")
+    assert excluded["fund_quarters"] == []
+
+
+def test_tampered_census_fails_exits_nonzero_and_is_excluded(tmp_path, monkeypatch):
+    v = _v()
+    paths, argv = _cli_setup(tmp_path, monkeypatch)
+    assert census_run.main(argv) == 0
+    _tamper_rate(paths.run_root / "census" / CIK / (Q + ".json"))
+    assert v.main(argv) != 0
+    listed = json.loads((paths.run_root / "results" / "authoritative.json").read_text(encoding="ascii"))
+    excluded = json.loads((paths.run_root / "results" / "excluded.json").read_text(encoding="ascii"))
+    assert listed["fund_quarters"] == []
+    assert excluded["fund_quarters"][0]["cik"] == CIK
+    assert excluded["fund_quarters"][0]["reason"] == "validation_failed"
+    assert list((paths.run_root / "validation_failures").rglob("*.json"))
+
+
+def test_census_cli_exits_nonzero_when_performance_fails(tmp_path, monkeypatch):
+    paths, argv = _cli_setup(tmp_path, monkeypatch)
+    monkeypatch.setattr(census_run, "LIMITS", census_run.PerformanceLimits(
+        max_wall_seconds=0.0, max_peak_bytes=2 * 2 ** 30, target_positions=1000))
+    assert census_run.main(argv) != 0
+
+
+def test_same_run_rerun_with_other_bounds_is_refused_by_the_cli(tmp_path, monkeypatch):
+    paths, argv = _cli_setup(tmp_path, monkeypatch)
+    assert census_run.main(argv) == 0
+    assert census_run.main(argv + ["--timeout-seconds", "599"]) != 0
+    assert _census_files(paths) == [paths.run_root / "census" / CIK / (Q + ".json")]
 
 
 def test_heavy_validation_runs_only_under_the_lease(tmp_path, monkeypatch):

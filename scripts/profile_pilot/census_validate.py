@@ -65,6 +65,15 @@ class SourceRefused(ValueError):
     """The source cannot be read safely (DTD/entities, byte bound, not an XBRL instance)."""
 
 
+class ValidationFailed(RuntimeError):
+    """A source cross-check failed: a stage failure, never cached as validated (ruling R24)."""
+
+    def __init__(self, report: dict):
+        super().__init__("source cross-check failed: " + ", ".join(
+            sorted(n for n, c in report["checks"].items() if c["status"] == "fail")))
+        self.report = report
+
+
 def _ascii(text) -> str:
     return str(text).encode("ascii", "backslashreplace").decode("ascii")
 
@@ -665,13 +674,19 @@ def validate_fund_quarter(paths, entry: dict, *, lease_factory, bounds=None) -> 
     census_path = paths.run_root / planned["relative"]
     if not census_path.is_file():
         return dict(base, status="census_missing", census_fingerprint=planned["fingerprint"])
+    census_fingerprint = json.loads(census_path.read_text(encoding="ascii")).get(
+        "identity", {}).get("fingerprint")
+    if census_fingerprint != planned["fingerprint"]:
+        return dict(base, status="census_identity_mismatch", census_path=str(census_path),
+                    reason="census at " + planned["relative"] + " has identity " + str(census_fingerprint)[:16]
+                    + ", current code/config gives " + planned["fingerprint"][:16] + "; use a new run id")
     census_record = manifest.file_record(census_path, "run/" + planned["relative"])
     code = [manifest.file_record(paths.code_root / rel, "code/" + rel) for rel in VALIDATE_CODE]
     deps = dict(source=planned["source_record"], census=census_record, code=code,
                 runtime=dict(python=sys.version.split()[0]))
     identity = manifest.cache_identity("census_validation", deps, collector_version=VALIDATE_VERSION)
-    relative = ("validation/" + entry["cik"] + "/" + entry["quarter"] + "/"
-                + identity["fingerprint"][:census_run.FINGERPRINT_CHARS] + ".json")
+    relative = "validation/" + entry["cik"] + "/" + entry["quarter"] + ".json"  # ruling R23
+    census_run.refuse_other_identity(paths, relative, identity["fingerprint"])
     measured: dict = {}
 
     def compute():
@@ -684,6 +699,9 @@ def validate_fund_quarter(paths, entry: dict, *, lease_factory, bounds=None) -> 
         measured.update(wall_seconds=round(time.perf_counter() - started, 3), **memory.result())
         report["measurement"] = dict(measured)
         report["census_path"] = str(census_path)
+        report["census_fingerprint"] = census_fingerprint
+        if report["verdict"] != "pass":  # ruling R24: a failed cross-check is never cached
+            raise ValidationFailed(report)
         return report
 
     lease_state: dict = {}
@@ -701,6 +719,16 @@ def validate_fund_quarter(paths, entry: dict, *, lease_factory, bounds=None) -> 
                                            lease=lease if (heavy and lease_factory is not None) else None)
     except LeaseRefused as exc:
         return dict(common, status="lease_refused", reason=_ascii(str(exc)), lease=lease_state or None)
+    except ValidationFailed as exc:
+        report = exc.report
+        failed = sorted(name for name, c in report["checks"].items() if c["status"] == "fail")
+        receipt = census_run.write_receipt(paths, "validation_failures", entry, identity["fingerprint"], dict(
+            status="validation_failed", verdict=report["verdict"], failed_checks=failed,
+            mismatches={name: report["checks"][name]["mismatches"] for name in failed},
+            tally=report["tally"], census_path=str(census_path), census_fingerprint=census_fingerprint,
+            source=report["source"]))
+        return dict(common, status="validation_failed", verdict=report["verdict"], receipt=receipt,
+                    failed_checks=failed, tally=report["tally"], lease=lease_state or None)
     except (PathError, manifest.StageInvalidated) as exc:
         return dict(common, status="stage_invalidated", reason=_ascii(str(exc)))
     report = result["result"]
@@ -727,13 +755,67 @@ def run(paths, *, scope: str, only=None) -> dict:
                      + (" verdict=" + got["verdict"] + " cache=" + got["cache"] + " "
                         + json.dumps({k: [v["checked"], v["failed"]] for k, v in got["tally"].items()},
                                      sort_keys=True)
-                        if got["status"] == "validated" else " (" + str(got.get("reason"))[:160] + ")")),
+                        if got["status"] == "validated" else
+                        " (" + str(got.get("reason") or got.get("failed_checks"))[:160] + ")")),
               flush=True)
         if got["status"] == "lease_refused" and not stopped:
             stopped = "lease refused earlier in this run: " + str(got.get("reason"))[:200]
     counts = Counter(r["status"] + (":" + r["verdict"] if r.get("verdict") else "") for r in results)
     return dict(run_id=paths.run_id, scope=scope, only=list(only or []), git_head=head,
                 validate_version=VALIDATE_VERSION, counts=dict(counts), results=results)
+
+
+def _census_summaries(paths) -> dict:
+    """census path -> the census run summary that COMPUTED it (cache miss)."""
+    found: dict[str, str] = {}
+    for summary in sorted((paths.run_root / "census").glob("run_summary_*.json")):
+        body = json.loads(summary.read_text(encoding="ascii"))
+        for item in body.get("results", []):
+            if item.get("status") == "collected" and item.get("cache") == "miss":
+                found.setdefault(str(Path(item["path"])), "census/" + summary.name)
+    return found
+
+
+def publish_results(paths, summary: dict, summary_relative: str) -> dict:
+    """Write-once results/authoritative.json (validation verdict pass ONLY) and
+    results/excluded.json (every other fund-quarter, with its reason). Task 6 reads only
+    authoritative.json (ruling R23/R24)."""
+    from scripts.profile_pilot import census_run
+    from scripts.profile_pilot.paths import write_once_json
+    computed_by = _census_summaries(paths)
+    listed, excluded = [], []
+    for item in summary["results"]:
+        key = dict(cik=item["cik"], report_date=item["report_date"], role=item.get("role"))
+        if item["status"] == "validated" and item.get("verdict") == "pass":
+            census_path = Path(item["census_path"])
+            body = json.loads(census_path.read_text(encoding="ascii"))
+            ident = body["result"].get("cache_identity") or {}
+            listed.append(dict(key, census_path=str(census_path),
+                               census_relative="census/" + item["cik"] + "/" + item["report_date"] + ".json",
+                               fingerprint=body["identity"]["fingerprint"],
+                               collector_version=body["identity"]["collector_version"],
+                               census_version=ident.get("census_version"),
+                               detector_version=ident.get("detector_version"),
+                               census_sha256=manifest_sha(census_path),
+                               census_run_summary=computed_by.get(str(census_path)),
+                               validation_verdict="pass", validation_path=item["path"],
+                               validation_fingerprint=item["fingerprint"],
+                               validation_run_summary=summary_relative))
+        else:
+            excluded.append(dict(key, reason=item["status"], detail=item.get("reason"),
+                                 failed_checks=item.get("failed_checks"), receipt=item.get("receipt")))
+    common = dict(run_id=paths.run_id, git_head=summary["git_head"], validate_version=VALIDATE_VERSION,
+                  collector_version=census_run.COLLECTOR_VERSION)
+    write_once_json(paths, "results/authoritative.json", dict(
+        common, rule="validation verdict pass only; one census per fund-quarter at census/{cik}/{date}.json",
+        fund_quarters=listed))
+    write_once_json(paths, "results/excluded.json", dict(common, fund_quarters=excluded))
+    return dict(listed=len(listed), excluded=len(excluded))
+
+
+def manifest_sha(path) -> str:
+    from scripts.profile_pilot.manifest import sha256_file
+    return sha256_file(path)
 
 
 def main(argv=None) -> int:
@@ -770,14 +852,31 @@ def main(argv=None) -> int:
     if conflicts:
         print("REFUSED: other pytest/rebuild processes: " + _ascii(json.dumps(conflicts)))
         return 4
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     started = time.perf_counter()
+    published = None
     with protection.protected_session(paths, receipt="verification/" + stamp + "_validate_"
                                       + args.scope + "_preservation.json"):
         summary = run(paths, scope=args.scope, only=args.only)
         summary["seconds"] = round(time.perf_counter() - started, 1)
-        target = write_json(paths, "validation/run_summary_" + args.scope + "_" + stamp + ".json", summary)
+        relative = "validation/run_summary_" + args.scope + "_" + stamp + ".json"
+        summary["summary_path"] = relative
+        target = write_json(paths, relative, summary)
+        if args.scope == "all" and not args.only:
+            try:
+                published = publish_results(paths, summary, relative)
+            except PathError as exc:
+                print("REFUSED: results already published in this run root: " + _ascii(str(exc)))
+                return 4
     print("summary: " + json.dumps(summary["counts"], sort_keys=True) + " | " + str(target))
+    if published is not None:
+        print("published: authoritative " + str(published["listed"]) + " | excluded "
+              + str(published["excluded"]))
+    bad = [r for r in summary["results"] if r["status"] not in ("validated", "unavailable")
+           or r.get("verdict", "pass") != "pass"]
+    if bad:
+        print("FAILED: " + ", ".join(r["cik"] + ":" + r["report_date"] + "=" + r["status"] for r in bad))
+        return 1
     return 0
 
 

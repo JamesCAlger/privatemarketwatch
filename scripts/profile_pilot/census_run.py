@@ -233,11 +233,28 @@ def plan(paths, entry: dict, bounds: Bounds = Bounds()) -> dict:
     workload = dict(ciks=[entry["cik"]], instance_count=1, full_cache_scan=False, pipeline_cik_count=0,
                     est_seconds=est_seconds, est_bytes=est_bytes)
     fingerprint = identity["fingerprint"]
-    relative = ("census/" + entry["cik"] + "/" + entry["quarter"] + "/"
-                + fingerprint[:FINGERPRINT_CHARS] + ".json")
+    relative = "census/" + entry["cik"] + "/" + entry["quarter"] + ".json"  # ruling R23: one per run root
     return dict(status="planned", source=source, source_record=source_record, markers=markers,
                 grammar=grammar, identity=identity, fingerprint=fingerprint, relative=relative,
                 workload=workload, estimate=dict(seconds=est_seconds, bytes=est_bytes))
+
+
+def refuse_other_identity(paths, relative: str, fingerprint: str) -> None:
+    """Ruling R23: a run root holds ONE result per fund-quarter at the constraint path.
+
+    A different dependency identity inside the same run id is refused (never a second
+    result beside it); regeneration happens in a new run id.
+    """
+    from scripts.profile_pilot import manifest
+    from scripts.profile_pilot.paths import confined
+    target = confined(paths, relative)
+    if not target.is_file():
+        return
+    prior = json.loads(target.read_text(encoding="ascii")).get("identity", {}).get("fingerprint")
+    if prior != fingerprint:
+        raise manifest.StageInvalidated(
+            relative + " already holds a result with dependency identity " + str(prior)[:16]
+            + " (requested " + fingerprint[:16] + "); run roots are write-once: use a new run id")
 
 
 def write_receipt(paths, kind: str, entry: dict, fingerprint: str | None, body: dict) -> str:
@@ -312,6 +329,8 @@ def census_fund_quarter(paths, entry: dict, *, lease_factory, bounds: Bounds = B
             raise LimitExceeded(doc, assessment)
         doc["measurement"] = dict(measured)
         doc["performance"] = assessment
+        doc["cache_identity"] = dict(fingerprint=fingerprint, collector_version=COLLECTOR_VERSION,
+                                     census_version=CENSUS_VERSION, detector_version=DETECTOR_VERSION)
         return doc
 
     lease_state: dict = {}
@@ -326,6 +345,7 @@ def census_fund_quarter(paths, entry: dict, *, lease_factory, bounds: Bounds = B
         return dict(base, status="lease_refused", reason="not attempted: " + refuse_heavy, heavy=True,
                     lease=None, fingerprint=fingerprint)
     common = dict(base, heavy=heavy, fingerprint=fingerprint)
+    refuse_other_identity(paths, planned["relative"], fingerprint)
     stage_started = time.perf_counter()
     try:
         result = manifest.run_cached_stage(paths, planned["relative"], identity, compute, workload=workload,
@@ -520,17 +540,32 @@ def main(argv=None) -> int:
     if conflicts:
         print("REFUSED: other pytest/rebuild processes: " + _ascii(json.dumps(conflicts)))
         return 4
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    from scripts.profile_pilot.manifest import StageInvalidated
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     started = time.perf_counter()
+    refused = None
     with protection.protected_session(paths, receipt="verification/" + stamp + "_census_"
                                       + args.scope + "_preservation.json"):
         bounds = Bounds() if args.timeout_seconds is None else Bounds(timeout_seconds=args.timeout_seconds)
-        summary = run(paths, scope=args.scope, only=args.only, bounds=bounds)
-        summary["seconds"] = round(time.perf_counter() - started, 1)
-        target = write_json(paths, "census/run_summary_" + args.scope + "_" + stamp + ".json", summary)
+        try:
+            summary = run(paths, scope=args.scope, only=args.only, bounds=bounds)
+        except StageInvalidated as exc:  # ruling R23: another identity in this run root
+            refused = _ascii(str(exc))
+        else:
+            summary["seconds"] = round(time.perf_counter() - started, 1)
+            relative = "census/run_summary_" + args.scope + "_" + stamp + ".json"
+            summary["summary_path"] = relative
+            target = write_json(paths, relative, summary)
+    if refused is not None:
+        print("REFUSED: " + refused)
+        return 4
     print("summary: " + json.dumps(summary["counts"], sort_keys=True) + " | performance "
           + summary["performance"]["status"] + " | target " + summary["performance"]["target"]["status"]
           + " | " + str(target))
+    failed = [s for s in summary["counts"] if s in FAILURE_STATUSES]
+    if failed or summary["performance"]["status"] != "pass":
+        print("FAILED: " + ",".join(failed or ["performance " + summary["performance"]["status"]]))
+        return 1
     return 0
 
 
