@@ -1,0 +1,388 @@
+"""Task 8 stage: learn contracts from Q1, freeze them, evaluate on Q2 and publish M2.
+
+    python -m scripts.profile_pilot.contracts_run run --data-root D
+        --census-run-id stageb-20260929t004819z --profile-run-id stageb-profile-20260929t015742z
+        [--run-id stageb-contracts-<stamp>] [--main-root M] [--cik C ...]
+
+Order (spec 6.3 / s8; R18/R26 pattern), all in a NEW write-once run root:
+  1. freeze inventories/contract_tolerances.json from the spec table (before anything is read);
+  2. pin the census root (authoritative listing, excluded listing, every Q1/Q2 census file:
+     bytes hashed and checked against the listing, not parsed), the profile root (summary,
+     manifest, every Q1 profile), the authored grammars and anchors, the code (incl.
+     pipeline/rate_convention.py and pipeline/identifier_rate.py), and materialise the
+     pinned slices (bdc_holdings + private_markets_holdings via manifest.materialise_slices,
+     bdc_fund_income here); write manifest.json;
+  3. learn every CIK's contracts from its Q1 census + Q1 profile (+ Q1 S2 evidence) as a
+     cached light stage (learning/{cik}.json);
+  4. freeze inventories/contract_inventory.json (the fixed M2 denominator);
+  5. only then parse each Q2 census and evaluate from the FROZEN files (results/contracts/{cik}.json);
+  6. publish results/m2.json, re-verify every pinned input, write results/contracts_summary.json
+     with the wall-clock order proof.
+Reading census/profile JSON and 8-CIK slices is light; no XBRL instance is parsed.
+Exit codes: 0 ok, 2 stage invalidated, 3 contract/adapter error, 4 refused.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+import sys
+import time
+
+from scripts.profile_pilot import cohort, contracts, contracts_income, manifest, protection
+from scripts.profile_pilot.manifest import StageInvalidated
+from scripts.profile_pilot.paths import (PathError, PilotPaths, confined, discover_main_root, pilot_duckdb,
+                                         resolve_paths, write_once_json)
+
+CODE_ROOT = Path(__file__).resolve().parents[2]
+EXIT_INVALIDATED, EXIT_CONTRACT, EXIT_REFUSED = 2, 3, 4
+RUN_PREFIX = "stageb-contracts-"
+ANCHOR_DIR = "data/overrides/identifier_anchors"
+CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_income.py",
+              "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/envelope.py",
+              "scripts/profile_pilot/census.py", "scripts/profile_pilot/census_detect.py",
+              "scripts/profile_pilot/manifest.py", "pipeline/rate_convention.py", "pipeline/identifier_rate.py",
+              "pipeline/identifier_signature.py")
+INCOME_SLICE = "inputs/bdc_fund_income_pilot8.parquet"
+KEEP = ("label", "path", "status", "sha256", "bytes")
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def default_run_id(now: datetime | None = None) -> str:
+    return RUN_PREFIX + (now or datetime.now(timezone.utc)).strftime("%Y%m%dt%H%M%Sz")
+
+
+def _record(path, label: str, *, required: bool = True, blob_of: str | None = None, code_root=None) -> dict:
+    record = manifest.file_record(path, label)
+    if required and record["status"] != "present":
+        raise StageInvalidated("pinned input missing: " + label + " (" + str(path) + ")")
+    if blob_of is not None and record["status"] == "present":
+        record["git_blob"] = cohort.git_blob(code_root, blob_of)
+    return record
+
+
+def _other_root(paths: PilotPaths, run_id: str) -> PilotPaths:
+    return resolve_paths(main_repo_root=paths.main_repo_root, data_root=paths.data_root,
+                         code_root=paths.code_root, run_id=run_id)
+
+
+# ---------------------------------------------------------------- pins (hash only; nothing parsed from Q2)
+
+def pin_census(paths: PilotPaths, census_run_id: str, ciks) -> dict:
+    other = _other_root(paths, census_run_id)
+    root = other.run_root
+    authoritative = _record(root / "results" / "authoritative.json", "census_root/results/authoritative.json")
+    excluded = _record(root / "results" / "excluded.json", "census_root/results/excluded.json")
+    listing = json.loads(Path(authoritative["path"]).read_text(encoding="ascii"))
+    missing = json.loads(Path(excluded["path"]).read_text(encoding="ascii"))
+    selected, files = {}, []
+    for row in listing["fund_quarters"]:
+        if row["cik"] not in ciks or row["role"] not in ("q1", "q2"):
+            continue
+        if row.get("validation_verdict") != "pass":
+            raise StageInvalidated("authoritative listing holds a non-pass census: " + row["census_relative"])
+        record = _record(root / row["census_relative"], "census_root/" + row["census_relative"])
+        if record["sha256"] != row["census_sha256"]:
+            raise StageInvalidated("census file differs from the authoritative listing: " + row["census_relative"])
+        selected[(row["cik"], row["role"])] = dict(row, record=record)
+        files.append(record)
+    unavailable = {(r["cik"], r["role"]): r for r in missing["fund_quarters"] if r["cik"] in ciks}
+    for cik in ciks:
+        if (cik, "q1") not in selected:
+            raise StageInvalidated("no authoritative Q1 census for " + cik)
+    return dict(run_id=census_run_id, run_root=str(root), authoritative=authoritative, excluded=excluded,
+                files=files, selected=selected, unavailable=unavailable, paths=other)
+
+
+def pin_profiles(paths: PilotPaths, profile_run_id: str, ciks) -> dict:
+    root = _other_root(paths, profile_run_id).run_root
+    summary = _record(root / "results" / "profile_summary.json", "profile_root/results/profile_summary.json")
+    built = _record(root / "manifest.json", "profile_root/manifest.json")
+    listed = json.loads(Path(summary["path"]).read_text(encoding="ascii"))["profiles"]
+    profiles = {}
+    for cik in ciks:
+        entry = listed.get(cik + "/q1") or {}
+        if entry.get("status") != "derived":
+            raise StageInvalidated("Q1 profile not derived for " + cik)
+        record = _record(root / "profiles" / cik / "q1.json", "profile_root/profiles/" + cik + "/q1.json")
+        if record["sha256"] != entry.get("sha256"):
+            raise StageInvalidated("profile file differs from profile_summary: " + cik)
+        profiles[cik] = record
+    return dict(run_id=profile_run_id, run_root=str(root), summary=summary, manifest=built, profiles=profiles)
+
+
+def pin_grammar(paths: PilotPaths, cik: str) -> tuple[dict | None, list]:
+    """Authored grammar (inherited) + the per-CIK keyword anchors its scope uses."""
+    from pipeline.identifier_rate import load_grammar
+    from pipeline.identifier_signature import load_anchors
+    code = paths.code_root
+    relative = manifest.GRAMMAR_DIR + "/" + cik + ".json"
+    grammar = _record(code / relative, "grammar/" + cik, required=False, blob_of=relative, code_root=code)
+    anchor_rel = ANCHOR_DIR + "/" + cik + ".json"
+    anchors = _record(code / anchor_rel, "anchors/" + cik, required=False, blob_of=anchor_rel, code_root=code)
+    if grammar["status"] != "present":
+        return None, [grammar, anchors]
+    body = json.loads((code / relative).read_text(encoding="utf-8"))
+    if load_grammar(cik) != body:
+        raise StageInvalidated("pipeline.identifier_rate.load_grammar reads a different file than " + relative)
+    compiled = load_anchors(cik, anchor_dir=code / ANCHOR_DIR)
+    info = contracts.grammar_info(body, path=relative, sha256=grammar["sha256"], anchors=compiled)
+    info["anchors_source"] = anchor_rel if anchors["status"] == "present" else "identifier_signature.STARTER_ANCHORS"
+    return info, [grammar, anchors]
+
+
+def materialise_income_slice(paths: PilotPaths) -> dict:
+    source = paths.output_root / "bdc_fund_income.csv"
+    before = manifest.file_record(source, "output/bdc_fund_income.csv")
+    target = confined(paths, INCOME_SLICE)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        raise PathError("refusing to overwrite frozen slice: " + str(target))
+    con = pilot_duckdb(paths)
+    try:
+        con.execute("COPY (SELECT * FROM read_csv(?, all_varchar=true, header=true) "
+                    "WHERE lpad(cik, 10, '0') IN (SELECT unnest(?))) TO '"
+                    + target.as_posix().replace("'", "''") + "' (FORMAT parquet)",
+                    [str(source), list(cohort.PILOT_CIKS)])
+        rows = con.execute("SELECT lpad(cik, 10, '0'), count(*) FROM read_parquet(?) GROUP BY 1 ORDER BY 1",
+                           [str(target)]).fetchall()
+    finally:
+        con.close()
+    manifest.assert_inputs_unchanged([before], "while slicing bdc_fund_income")
+    record = manifest.file_record(target, "run/" + INCOME_SLICE)
+    record.update(source=before, rows_by_cik={c: n for c, n in rows})
+    return record
+
+
+# ---------------------------------------------------------------- loading pinned JSON
+
+def load_census(row: dict) -> dict:
+    path = Path(row["record"]["path"])
+    if manifest.sha256_file(path) != row["census_sha256"]:
+        raise StageInvalidated("census file changed before use: " + row["census_relative"])
+    outer = json.loads(path.read_text(encoding="ascii"))
+    if outer.get("identity", {}).get("fingerprint") != row["fingerprint"] or outer.get("complete") is not True:
+        raise StageInvalidated("census identity differs from the authoritative listing: " + row["census_relative"])
+    return outer["result"]
+
+
+def load_profile(record: dict) -> dict:
+    path = Path(record["path"])
+    if manifest.sha256_file(path) != record["sha256"]:
+        raise StageInvalidated("profile file changed before use: " + str(path))
+    outer = json.loads(path.read_text(encoding="ascii"))
+    if outer.get("complete") is not True:
+        raise StageInvalidated("profile result incomplete: " + str(path))
+    return outer["result"]
+
+
+def _workload(cik: str, size: int) -> dict:
+    return dict(ciks=[cik], instance_count=0, full_cache_scan=False, pipeline_cik_count=1,
+                est_seconds=round(3 + size / 5e6, 1), est_bytes=int(350e6 + 20 * size))
+
+
+def _q2_listing(census: dict, cik: str) -> dict:
+    row = census["selected"].get((cik, "q2"))
+    if row:
+        return dict(status="available", report_date=row["report_date"], census_relative=row["census_relative"],
+                    census_sha256=row["census_sha256"])
+    gone = census["unavailable"].get((cik, "q2")) or {}
+    return dict(status="unavailable", report_date=gone.get("report_date"), reason=gone.get("reason"),
+                detail=gone.get("detail") or "no authoritative Q2 census")
+
+
+def _yield_brief(ev: dict | None) -> dict | None:
+    if not ev:
+        return None
+    s2 = ev.get("s2") or {}
+    return dict(report_date=ev.get("report_date"), status=ev.get("status"), vote=ev.get("vote"),
+                cause=ev.get("cause"), interpreted=ev.get("interpreted"), src=s2.get("src"), r=s2.get("r"),
+                coverage_ratio=s2.get("coverage_ratio"), interest_income=s2.get("interest_income"),
+                total_investment_income=s2.get("total_investment_income"),
+                base=(s2.get("mirror") or {}).get("base"), pik_add=(s2.get("mirror") or {}).get("pik_add"),
+                pik_share=(s2.get("mirror") or {}).get("pik_share"),
+                preconditions={k: v.get("ok") for k, v in (ev.get("preconditions") or {}).items()},
+                durations_months=((ev.get("preconditions") or {}).get("duration") or {}).get("durations_months"))
+
+
+# ---------------------------------------------------------------- the stage
+
+def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, ciks=None,
+              recorded_at: str | None = None) -> dict:
+    ciks = list(ciks or cohort.PILOT_CIKS)
+    recorded_at = recorded_at or _now()
+    started = time.perf_counter()
+    clock = dict(started_utc=_now())
+    tolerances_state = contracts.freeze_tolerances(paths)
+    clock["tolerances_frozen_utc"] = _now()
+
+    census = pin_census(paths, census_run_id, ciks)
+    profiles = pin_profiles(paths, profile_run_id, ciks)
+    grammars, grammar_records = {}, []
+    for cik in ciks:
+        grammars[cik], records = pin_grammar(paths, cik)
+        grammar_records += records
+    code = [_record(paths.code_root / rel, "code/" + rel, blob_of=rel, code_root=paths.code_root)
+            for rel in CODE_FILES]
+    slices = manifest.materialise_slices(paths)
+    income_slice = materialise_income_slice(paths)
+    holdings_path = next(s["path"] for s in slices if s["label"].endswith("private_markets_holdings_pilot8.parquet"))
+
+    primary = manifest.load_inventory(census["paths"], "primary_quarter_inventory")
+    built = manifest.build_manifest(paths, primary_inventory=primary)
+    tol_record = manifest.file_record(tolerances_state["path"], "run/inventories/contract_tolerances.json")
+    pinned = ([census["authoritative"], census["excluded"], profiles["summary"], profiles["manifest"], tol_record]
+              + census["files"] + list(profiles["profiles"].values()) + grammar_records + code + slices
+              + [income_slice])
+    built["inputs"] += [{k: r[k] for k in KEEP if k in r} for r in pinned]
+    built["inputs"] += [s["source"] for s in slices + [income_slice]]
+    built.update(stage="contracts", census_source=dict(run_id=census_run_id, run_root=census["run_root"]),
+                 profile_source=dict(run_id=profile_run_id, run_root=profiles["run_root"]),
+                 grammars={c: (None if g is None else dict(path=g["path"], sha256=g["sha256"], dialect=g["dialect"],
+                                                           signatures=g["signatures"],
+                                                           anchors_source=g["anchors_source"], provenance="inherited"))
+                           for c, g in grammars.items()},
+                 slices=slices + [income_slice], code=code, s2_constants=contracts_income.s2_constants(),
+                 stage_config=dict(ciks=ciks, recorded_at=recorded_at, contracts_version=contracts.CONTRACTS_VERSION,
+                                   tolerances_version=contracts.TOLERANCES_VERSION, kinds=list(contracts.KINDS),
+                                   yield_holdings="private_markets_holdings slice (S2's production input); "
+                                                  "bdc_holdings is pinned but is not S2-shaped"))
+    built["inventories"] = manifest.inventory_states(paths)
+    built["input_verification"] = manifest.verify_inputs(built)
+    if not built["input_verification"]["ok"]:
+        raise StageInvalidated("pinned inputs changed while building the manifest")
+    built["frozen_utc"] = _now()
+    write_once_json(paths, "manifest.json", built)
+    clock["manifest_written_utc"] = _now()
+
+    # The parquet slices are what the stages read; their CSV sources are pinned in the manifest
+    # (re-hashing 1.3 GB of CSV around every cached stage would add nothing).
+    slice_deps = [{k: s[k] for k in KEEP} for s in slices + [income_slice]]
+    blocks, deps_common = {}, dict(tolerances=tol_record, code=code, slices=slice_deps)
+    for cik in ciks:
+        row = census["selected"][(cik, "q1")]
+        profile_record = profiles["profiles"][cik]
+        identity = manifest.cache_identity("contracts_learn", dict(
+            deps_common, cik=cik, census=row["record"], census_fingerprint=row["fingerprint"], profile=profile_record,
+            grammar=[r for r in grammar_records if r["label"].endswith("/" + cik)], recorded_at=recorded_at),
+            collector_version=contracts.CONTRACTS_VERSION)
+        tolerances = manifest.load_inventory(paths, "contract_tolerances")
+
+        def learn(cik=cik, row=row, profile_record=profile_record, tolerances=tolerances):
+            q1_doc = load_census(row)
+            yield_q1 = contracts_income.load_income_evidence(
+                paths, cik=cik, report_date=row["report_date"], holdings_path=holdings_path,
+                income_path=income_slice["path"], census_doc=q1_doc)
+            return contracts.learn_contracts(cik=cik, q1_doc=q1_doc, q1_profile=load_profile(profile_record),
+                                             grammar=grammars[cik], yield_q1=yield_q1, tolerances=tolerances,
+                                             q2_listing=_q2_listing(census, cik), recorded_at=recorded_at)
+
+        out = manifest.run_cached_stage(paths, "learning/" + cik + ".json", identity, learn,
+                                        workload=_workload(cik, row["record"]["bytes"]))
+        blocks[cik] = out["result"]
+    clock["learning_done_utc"] = _now()
+    inventory_state = contracts.freeze_contracts(paths, blocks, tolerances_state=tolerances_state)
+    clock["inventory_frozen_utc"] = _now()
+
+    tolerances = manifest.load_inventory(paths, "contract_tolerances")
+    inventory = manifest.load_inventory(paths, "contract_inventory")
+    inv_record = manifest.file_record(inventory_state["path"], "run/inventories/contract_inventory.json")
+    results, yields = [], {}
+    for cik in ciks:
+        row = census["selected"].get((cik, "q2"))
+        block = inventory["ciks"][cik]
+        identity = manifest.cache_identity("contracts_evaluate", dict(
+            deps_common, cik=cik, inventory=inv_record, census=row["record"] if row else None,
+            census_fingerprint=row["fingerprint"] if row else None,
+            grammar=[r for r in grammar_records if r["label"].endswith("/" + cik)]),
+            collector_version=contracts.CONTRACTS_VERSION)
+
+        def evaluate(cik=cik, row=row, block=block):
+            clock.setdefault("first_q2_parse_utc", _now())
+            q2_doc = load_census(row) if row else None
+            yield_q2 = None if row is None else contracts_income.load_income_evidence(
+                paths, cik=cik, report_date=row["report_date"], holdings_path=holdings_path,
+                income_path=income_slice["path"], census_doc=q2_doc)
+            listing = block["q2_listing"]
+            return dict(yield_q2=yield_q2, results=contracts.evaluate_contracts(
+                block, tolerances, q2_doc=q2_doc, q2_listing=listing, grammar=grammars[cik], yield_q2=yield_q2))
+
+        size = row["record"]["bytes"] if row else 0
+        out = manifest.run_cached_stage(paths, "results/contracts/" + cik + ".json", identity, evaluate,
+                                        workload=_workload(cik, size))
+        results += out["result"]["results"]
+        q1_yield = next(c for c in block["contracts"] if c["kind"] == "fund_income_yield")["evidence"]["q1_yield"]
+        verdict = next(r for r in out["result"]["results"] if r["kind"] == "fund_income_yield")
+        yields[cik] = dict(q1=_yield_brief(q1_yield), q2=_yield_brief(out["result"]["yield_q2"]),
+                           verdict=verdict["status"], cause=verdict["cause"])
+    clock["evaluation_done_utc"] = _now()
+    m2 = contracts.summarise_m2(results, denominator=inventory["denominator"]["total"])
+    m2.update(run_id=paths.run_id, inventory=dict(content_sha256=inventory_state["content_sha256"],
+                                                  denominator=inventory["denominator"]),
+              tolerances=dict(content_sha256=tolerances_state["content_sha256"]), yield_evidence=yields,
+              partition_statement={c: inventory["ciks"][c]["partition_statement"] for c in ciks},
+              partitions_evidenced={c: inventory["ciks"][c]["partitions_evidenced"] for c in ciks},
+              tiers={c: inventory["ciks"][c]["tier"] for c in ciks})
+    write_once_json(paths, "results/m2.json", m2)
+    after = manifest.verify_inputs(built)
+    if not after["ok"]:
+        raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
+    order_ok = (clock["tolerances_frozen_utc"] <= clock["manifest_written_utc"] <= clock["learning_done_utc"]
+                <= clock["inventory_frozen_utc"] <= clock.get("first_q2_parse_utc", "9"))
+    summary = dict(run_id=paths.run_id, git_head=built["git"]["head"],
+                   dirty_source_digest=built["git"]["dirty_source_digest"], census_run_id=census_run_id,
+                   profile_run_id=profile_run_id, recorded_at=recorded_at, clock=clock, order_ok=order_ok,
+                   seconds=round(time.perf_counter() - started, 1), counts=m2["counts"],
+                   by_q2_form_type=m2["by_q2_form_type"], denominator=m2["denominator"],
+                   input_verification_after=after, results="results/m2.json", claim=contracts.CLAIM,
+                   stage_b_note=contracts.STAGE_B_NOTE)
+    write_once_json(paths, "results/contracts_summary.json", summary)
+    return summary
+
+
+def main(argv=None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="ascii", errors="backslashreplace")
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="command", required=True)
+    cmd = sub.add_parser("run")
+    cmd.add_argument("--main-root", type=Path, default=None)
+    cmd.add_argument("--data-root", type=Path, required=True)
+    cmd.add_argument("--code-root", type=Path, default=None)
+    cmd.add_argument("--run-id", default=None)
+    cmd.add_argument("--census-run-id", required=True)
+    cmd.add_argument("--profile-run-id", required=True)
+    cmd.add_argument("--cik", action="append", default=None)
+    args = parser.parse_args(argv)
+    try:
+        main_root = args.main_root or discover_main_root(CODE_ROOT)
+        paths = resolve_paths(main_repo_root=main_root, data_root=args.data_root,
+                              code_root=args.code_root or CODE_ROOT, run_id=args.run_id or default_run_id())
+        receipt = ("verification/" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+                   + "_contracts_preservation.json")
+        with protection.protected_session(paths, receipt=receipt):
+            summary = run_stage(paths, census_run_id=args.census_run_id, profile_run_id=args.profile_run_id,
+                                ciks=args.cik)
+    except StageInvalidated as exc:
+        print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
+        return EXIT_INVALIDATED
+    except (contracts.ContractError, contracts_income.IncomeEvidenceError) as exc:
+        print("CONTRACT ERROR: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
+        return EXIT_CONTRACT
+    except PathError as exc:
+        print("REFUSED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
+        return EXIT_REFUSED
+    print("run: " + summary["run_id"] + " | git_head " + summary["git_head"] + " | " + str(summary["seconds"])
+          + " s | order_ok " + str(summary["order_ok"]))
+    print("M2 (denominator " + str(summary["denominator"]) + "): " + json.dumps(summary["counts"], sort_keys=True))
+    for form, counts in summary["by_q2_form_type"].items():
+        print("  Q2 " + form + ": " + json.dumps(counts, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

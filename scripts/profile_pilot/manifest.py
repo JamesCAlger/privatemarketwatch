@@ -18,7 +18,7 @@ from scripts.profile_pilot.protection import LeaseRefused, assert_lease_held, re
 
 MANIFEST_VERSION = 1
 INVENTORY_NAMES = ("primary_quarter_inventory", "wrapper_key_inventory",
-                   "correction_inventory", "contract_inventory")
+                   "correction_inventory", "contract_inventory", "contract_tolerances")
 WRAPPER_DIR = "data/overrides/bdc_xbrl_wrappers"
 GRAMMAR_DIR = "data/overrides/identifier_rate_grammars"
 B2_DIR = "data/overrides/agent_b2_corrections"
