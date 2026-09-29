@@ -195,7 +195,7 @@ def test_tolerance_file_carries_the_spec_table_verbatim_and_operational_bands():
 
 
 def test_tolerance_version_2_records_the_evidence_limit_correction_and_interpretation():
-    tol = tolerances()
+    tol = contracts.tolerance_content_v2()
     assert tol["version"] == "contract-tolerances.v2"
     assert tol["supersedes"]["version"] == "contract-tolerances.v1"
     assert tol["supersedes"]["run_id"] == "stageb-contracts-20260929t032414z"
@@ -215,7 +215,7 @@ def test_every_expected_contract_is_in_the_fixed_denominator_with_exactly_one_st
         kinds[c["kind"]] = kinds.get(c["kind"], 0) + 1
     assert kinds == dict(source_concept_set=len(POSITION_FIELDS), fill_rate=len(POSITION_FIELDS),
                          scale=len(contracts.SCALE_FIELDS), value_range=len(contracts.RANGE_FIELDS),
-                         format_grammar=1, fund_income_yield=1)
+                         format_grammar=1, fund_income_yield=1, rate_composition=1, text_agreement=1)
     results = evaluate(block, mk_doc(book(), date=Q2), gram=grammar())
     assert [r["contract_id"] for r in results] == [c["contract_id"] for c in block["contracts"]]
     assert all(r["status"] in contracts.STATUSES for r in results)
@@ -897,8 +897,9 @@ def test_real_census_pairs_for_all_eight_ciks_learn_and_evaluate():
             q2 = json.loads((base / CENSUS_RUN / q2_row["census_relative"]).read_text(encoding="ascii"))["result"]
         results = contracts.evaluate_contracts(block, tol, q2_doc=q2, q2_listing=listing_q2, grammar=gram,
                                                yield_q2=dict(stub, report_date=listing_q2["report_date"]))
-        expected = 2 * len(POSITION_FIELDS) + len(contracts.SCALE_FIELDS) + len(contracts.RANGE_FIELDS) + 2
-        assert len(results) == len(block["contracts"]) == expected == 57, cik
+        expected = 2 * len(POSITION_FIELDS) + len(contracts.SCALE_FIELDS) + len(contracts.RANGE_FIELDS) + 2 + 2
+        assert len(results) == len(block["contracts"]) == expected == 59, cik
+        assert len([c for c in block["contracts"] if c["kind"] in contracts.KINDS]) == 57, cik
         assert all(r["status"] in contracts.STATUSES and r["status"] != "holds_with_form_type" for r in results)
         json.dumps(results, allow_nan=False).encode("ascii")
         del q1, q2, profile
@@ -928,3 +929,297 @@ def test_real_s2_evidence_for_onex_and_stellus(tmp_path):
                                               census_doc=doc, cwd=lambda: chdir(tmp_path))
         assert ev["status"] in ("vote", "insufficient_evidence") and (ev["status"] == "vote") == (ev["cause"] is None)
         json.dumps(ev, allow_nan=False).encode("ascii")
+
+
+
+# ================================================================ Task B2-3: tolerances v3, semantic kinds
+
+V2_RUN = "stageb-contracts-20260929t053506z"
+V2_SHA = "bf15c296caf581617436b50c932d59c87164767eb77e79902c2a34584bb934ec"
+SEMANTIC = ("rate_composition", "text_agreement")
+
+
+def floater(i, *, rate=None, spread="0.05", unit="pure", spread_unit=None, ident=None, extra=None):
+    """A floating-rate row: base = rate - spread varies a little across rows (IQR > 0)."""
+    rate = rate if rate is not None else "%.4f" % (0.09 + (i % 10) * 0.001)
+    fields = dict(fair_value=val("1000000", "usd", decimals="0"), principal_amount=val("1000000", "usd", decimals="0"),
+                  interest_rate=val(rate, unit), basis_spread=val(spread, spread_unit or unit))
+    fields.update(extra or {})
+    pct = "%.2f" % (float(spread) * (100 if (spread_unit or unit) == "pure" else 1))
+    return dict(ctx="f%d" % i, ident=ident or ("Acme %d | First Lien | S + %s%% | 1/1/2029" % (i, pct)), dims=(),
+                fields=fields)
+
+
+def floaters(n=60, **kw):
+    return [floater(i, **kw) for i in range(n)]
+
+
+def v2_tol():
+    return contracts.tolerance_content_v2()
+
+
+def strip_flag(results):
+    return [{k: v for k, v in r.items() if k != "newly_abstained"} for r in results]
+
+
+def test_v2_tolerance_content_reproduces_the_frozen_v2_digest():
+    assert manifest.digest(contracts.tolerance_content_v2()) == V2_SHA
+    assert contracts.tolerance_content_v2()["version"] == "contract-tolerances.v2"
+
+
+def test_v3_tolerance_content_carries_v2_verbatim_and_the_new_bands():
+    v2, v3 = contracts.tolerance_content_v2(), contracts.tolerance_content()
+    assert v3["version"] == contracts.TOLERANCES_VERSION == "contract-tolerances.v3"
+    assert v3["v2_verbatim"] == v2 and v3["v2_content_sha256"] == V2_SHA
+    for tier in ("standard", "low_history"):
+        assert {k: v3["bands"][tier][k] for k in v2["bands"][tier]} == v2["bands"][tier]
+        assert set(v3["bands"][tier]) - set(v2["bands"][tier]) == {"share_pp", "iqr_widen", "text_share_pp",
+                                                                   "min_rows", "min_parse_share"}
+    assert v3["supersedes"]["version"] == "contract-tolerances.v2" and v3["supersedes"]["run_id"] == V2_RUN
+    assert "adds rate_composition and text_agreement" in v3["supersedes"]["reason"]
+    assert "in-sample" in v3["supersedes"]["reason"]
+    assert "in-sample (bands chosen after Q2 and the history were read)" in json.dumps(v3["calibration"])
+    assert "not a fifth status" in v3["operationalisation"]["newly_abstained"]
+    for key in ("rate_composition", "text_agreement"):
+        assert v3["operationalisation"][key]
+    for name in ("spec_table_verbatim", "scale_conventions", "fund_income_yield", "low_history_below_positions",
+                 "form_type_qualifiers", "identifier_format_interpretation"):
+        assert v3[name] == v2[name]
+    json.dumps(v3).encode("ascii")
+
+
+def test_v3_adds_exactly_two_contracts_per_learned_partition_and_keeps_the_v2_subset_identical():
+    q1, q2 = mk_doc(book() + floaters()), mk_doc(book() + floaters(), date=Q2)
+    b2, b3 = learn(q1, gram=grammar(), tol=v2_tol()), learn(q1, gram=grammar())
+    assert len(b3["contracts"]) == len(b2["contracts"]) + 2
+    assert [c for c in b3["contracts"] if c["kind"] not in SEMANTIC] == b2["contracts"]
+    assert [c["kind"] for c in b3["contracts"][-2:]] == list(SEMANTIC)
+    r2 = evaluate(b2, q2, gram=grammar(), tol=v2_tol())
+    r3 = evaluate(b3, q2, gram=grammar())
+    assert strip_flag([r for r in r3 if r["kind"] not in SEMANTIC]) == strip_flag(r2)
+    assert b2["version"] == "contracts.v0.2" and b3["version"] == "contracts.v0.3"
+    parts = learn(mk_doc(book(dims=[("abc:TypeAxis", "abc:DebtMember")]) + floaters(),
+                         partition=(evidenced(DEBT),)))
+    per = {}
+    for c in parts["contracts"]:
+        if c["kind"] in SEMANTIC:
+            per.setdefault(c["partition_id"], []).append(c["kind"])
+    assert len(per) == 2 and all(sorted(v) == sorted(SEMANTIC) for v in per.values())
+
+
+# ---------------------------------------------------------------- rate_composition
+
+def test_composition_spread_for_coupon_breaches_with_every_row_as_violating_key():
+    block = learn(mk_doc(floaters()))
+    comp = pick(block["contracts"], "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["learn_status"] == "learned"
+    assert comp["expectation"]["share_rate_le_spread"] == 0.0 and comp["expectation"]["n"] == 60
+    swapped = mk_doc([floater(i, rate="0.05") for i in range(60)], date=Q2)
+    res = pick(evaluate(block, swapped), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["status"] == "breach" and res["observed"]["share_rate_le_spread"] == 1.0
+    assert res["observed"]["criteria"]["share"] == "breach"
+    assert res["violating_keys"] == sorted("f%d" % i for i in range(60))
+
+
+def test_composition_pure_level_shift_with_unchanged_dispersion_holds():
+    block = learn(mk_doc(floaters()))
+    shifted = mk_doc([floater(i, rate="%.4f" % (0.10 + (i % 10) * 0.001)) for i in range(60)], date=Q2)
+    res = pick(evaluate(block, shifted), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["status"] == "holds"
+    assert abs(res["observed"]["p50_shift"] - 1.0) < 1e-6        # evidence only, never a criterion
+
+
+def test_composition_dispersion_widening_breaches_on_the_iqr_criterion():
+    block = learn(mk_doc(floaters()))
+    mixed = mk_doc([floater(i, rate="0.05" if i % 3 == 0 else None) for i in range(60)], date=Q2)
+    wide = contracts.semantic_tolerances(v2_tol(), share_pp=90, iqr_widen=2.0, text_share_pp=10)
+    res = pick(contracts.evaluate_contracts(contracts.rebanded_block(block, wide), wide, q2_doc=mixed,
+                                            q2_listing=Q2_LISTING, grammar=None,
+                                            yield_q2=dict(VOTE_CASH, report_date=Q2)),
+               "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["observed"]["criteria"] == dict(share="holds", iqr="breach") and res["status"] == "breach"
+    assert set(res["violating_keys"]) >= {"f0", "f3"}
+
+
+def test_composition_low_n_abstains_on_either_side():
+    few = learn(mk_doc(book() + floaters(5)))
+    comp = pick(few["contracts"], "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["learn_status"] == "insufficient_evidence"
+    assert comp["learn_cause"] == "fewer_than_min_rows_with_both_fields"
+    block = learn(mk_doc(floaters()))
+    res = pick(evaluate(block, mk_doc(book() + floaters(5), date=Q2)), "rate_composition",
+               contracts.COMPOSITION_FIELD)
+    assert res["status"] == "insufficient_evidence"
+    assert res["cause"] == "fewer_than_min_rows_with_both_fields_in_q2" and res["newly_abstained"] is True
+
+
+def test_composition_is_not_gated_on_scale_and_resolves_magnitude_per_row():
+    block = learn(mk_doc(floaters()))
+    # declared units differ (rate percent, spread pure): the declared conversion resolves the row
+    declared = mk_doc([floater(i, rate="%.2f" % (9 + (i % 10) * 0.1), unit="pct", spread_unit="pure")
+                       for i in range(60)], date=Q2)
+    results = evaluate(block, declared)
+    assert pick(results, "scale", "interest_rate")["status"] == "breach"
+    comp = pick(results, "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["status"] == "holds" and comp["observed"]["unresolved_share"] == 0.0
+    # same declared unit, magnitudes differ (spread 5.0 under pure) on 20% of rows: excluded, reported
+    some = mk_doc([floater(i, spread="5.0" if i < 12 else "0.05") for i in range(60)], date=Q2)
+    comp = pick(evaluate(block, some), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["status"] == "holds" and comp["observed"]["unresolved_share"] == 0.2
+    most = mk_doc([floater(i, spread="5.0" if i < 36 else "0.05") for i in range(60)], date=Q2)
+    comp = pick(evaluate(block, most), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["status"] == "insufficient_evidence" and comp["cause"] == "unresolved_pair_majority_in_q2"
+    assert comp["observed"]["unresolved_share"] == 0.6 and comp["newly_abstained"] is True
+
+
+def test_composition_excludes_zero_rate_rows_and_counts_them():
+    rows = floaters() + [floater(100 + i, rate="0", spread="0") for i in range(5)]
+    block = learn(mk_doc(rows))
+    comp = pick(block["contracts"], "rate_composition", contracts.COMPOSITION_FIELD)
+    assert comp["expectation"]["n"] == 60 and comp["evidence"]["zero_rate_rows"] == 5
+
+
+# ---------------------------------------------------------------- text_agreement and its patterns
+
+@pytest.mark.parametrize("text, category, spread, cash, pik", [
+    ("Acme | SOFR + 750 | 1/1/2029", "base_plus_spread", 7.50, [], []),
+    ("Acme | S + 5.50% | 1/1/2029", "base_plus_spread", 5.50, [], []),
+    ("Acme Notes | 12.00% | 1/1/2029", "bare_pct", None, [12.0], []),
+    ("Carestream (First Lien) | L + 675 | 12.18 % | 9/30/2027", "base_plus_spread", 6.75, [12.18], []),
+    ("Acme | TERM SOFR (3M) + 6.25% | 1/1/2030", "base_plus_spread", 6.25, [], []),
+    # negatives
+    ("S+S Worldwide Inc, First Lien Term Loan", "no_rate_text", None, [], []),
+    ("S+S Worldwide Inc | S + 4.75% | 1/1/2029", "base_plus_spread", 4.75, [], []),
+    ("Series S+ 2023 Notes", "no_rate_text", None, [], []),
+    ("1.5% Club Holdings LLC, Common Units", "no_rate_text", None, [], []),
+    ("Acme 7.5% Holdings LLC, Class A Units", "no_rate_text", None, [], []),
+    ("Acme Second Lien | 12.00% PIK | 1/1/2029", "pik_pct_only", None, [], [12.0]),
+    ("Acme | 10.00% Cash / 2.00% PIK | 1/1/2029", "bare_pct", None, [10.0], [2.0]),
+    ("Terrestar (First Lien Term Loan H) | 11% PIK | 2/28/2024", "pik_pct_only", None, [], [11.0]),
+    ("CCS Medical Inc (First Lien Term Loan) | 15% Fixed | 4/7/2026", "bare_pct", None, [15.0], []),
+])
+def test_generic_rate_text_patterns_on_the_owner_session_examples_and_negatives(text, category, spread, cash, pik):
+    from scripts.profile_pilot import contracts_observe as co
+    out = co.parse_rate_text(text)
+    assert out["category"] == category and out["parser"] == "generic"
+    assert out["spread"] == spread and out["cash_pcts"] == cash and out["pik_pcts"] == pik
+
+
+def test_generic_patterns_are_named_constants():
+    from scripts.profile_pilot import contracts_observe as co
+    for name in ("RE_BASE_PLUS_PCT", "RE_BASE_PLUS_BPS", "RE_PCT", "RE_UNDRAWN", "BASE_TOKENS"):
+        assert getattr(co, name)
+    assert set(co.BASE_TOKENS) == {"SOFR", "S", "LIBOR", "L", "SONIA", "EURIBOR", "E", "PRIME", "P", "TERM SOFR",
+                                   "BSBY", "CDOR"}
+    assert co.RE_BASE_PLUS_BPS.search("SOFR + 750") and not co.RE_BASE_PLUS_BPS.search("SOFR + 7.50%")
+
+
+def test_text_agreement_generic_path_learns_shares_and_breaches_on_a_numeric_divergence():
+    block = learn(mk_doc(floaters()))
+    text = pick(block["contracts"], "text_agreement", contracts.TEXT_FIELD)
+    assert text["learn_status"] == "learned" and text["expectation"]["parser"]["kind"] == "generic"
+    shares = text["expectation"]["shares"]
+    assert shares["spread_text_matches_numeric"] == dict(share=1.0, n=60)
+    assert shares["rate_equals_text_spread"] == dict(share=0.0, n=60)
+    moved = mk_doc([floater(i, spread="0.06", ident="Acme %d | First Lien | S + 5.00%% | 1/1/2029" % i)
+                    for i in range(60)], date=Q2)
+    res = pick(evaluate(block, moved), "text_agreement", contracts.TEXT_FIELD)
+    assert res["status"] == "breach" and res["cause"] == "text_share_moved"
+    assert res["observed"]["criteria"]["spread_text_matches_numeric"] == "breach"
+    assert res["violating_keys"] == sorted("f%d" % i for i in range(60))      # rows whose category flipped
+
+
+def test_text_agreement_category_flip_keys_only_the_flipped_rows():
+    block = learn(mk_doc(floaters()))
+    rows = [floater(i, rate="0.05") if i < 20 else floater(i) for i in range(60)]
+    res = pick(evaluate(block, mk_doc(rows, date=Q2)), "text_agreement", contracts.TEXT_FIELD)
+    assert res["status"] == "breach" and res["observed"]["criteria"]["rate_equals_text_spread"] == "breach"
+    assert res["violating_keys"] == sorted("f%d" % i for i in range(20))
+
+
+def test_text_agreement_grammar_path_uses_the_pinned_authored_grammar():
+    block = learn(mk_doc(book()), gram=grammar())
+    text = pick(block["contracts"], "text_agreement", contracts.TEXT_FIELD)
+    assert text["expectation"]["parser"] == dict(kind="grammar", grammar_sha256="0" * 64, dialect="RATE",
+                                                 path="test/grammar.json", provenance="inherited")
+    assert text["expectation"]["shares"]["rate_equals_text_pct"] == dict(share=1.0, n=60)
+    res = pick(evaluate(block, mk_doc(book(rate="0.12"), date=Q2), gram=grammar()), "text_agreement",
+               contracts.TEXT_FIELD)
+    assert res["status"] == "breach" and len(res["violating_keys"]) == 60
+    with pytest.raises(contracts.ContractError):
+        evaluate(block, mk_doc(book(), date=Q2), gram=None)
+
+
+def test_text_agreement_excludes_undrawn_zero_rate_rows_and_counts_them():
+    undrawn = [floater(100 + i, rate="0", spread="0",
+                       ident="Acme %d Delayed Draw Term Loan | SOFR + 0.00%% | 1/1/2029" % i) for i in range(8)]
+    block = learn(mk_doc(floaters() + undrawn))
+    text = pick(block["contracts"], "text_agreement", contracts.TEXT_FIELD)
+    assert text["expectation"]["shares"]["rate_equals_text_spread"] == dict(share=0.0, n=60)
+    assert text["evidence"]["undrawn_zero_rate_rows"] == 8
+
+
+def test_text_agreement_abstains_below_the_parse_share_floor():
+    bare = [debt(i, ident="Acme %d First Lien Term Loan" % i) for i in range(40)]
+    block = learn(mk_doc(bare + floaters(20)))
+    text = pick(block["contracts"], "text_agreement", contracts.TEXT_FIELD)
+    assert text["learn_status"] == "insufficient_evidence"
+    assert text["learn_cause"] == "identifier_rate_text_parse_share_below_min"
+    assert text["evidence"]["parse_share"] == round(20 / 60, 6)
+    ok = learn(mk_doc(floaters()))
+    res = pick(evaluate(ok, mk_doc(bare + floaters(20), date=Q2)), "text_agreement", contracts.TEXT_FIELD)
+    assert res["status"] == "insufficient_evidence" and res["cause"] == \
+        "identifier_rate_text_parse_share_below_min_in_q2"
+
+
+def test_inception_block_is_recorded_on_the_learning_quarter_as_evidence():
+    nexpoint_like = [floater(i, rate="0.05") for i in range(60)]           # spread-as-rate from inception
+    block = learn(mk_doc(nexpoint_like))
+    for kind, field in (("rate_composition", contracts.COMPOSITION_FIELD), ("text_agreement", contracts.TEXT_FIELD)):
+        inception = pick(block["contracts"], kind, field)["evidence"]["inception"]
+        assert inception["report_date"] == Q1 and inception["share_rate_le_spread"] == 1.0
+        assert inception["rate_equals_text_spread"]["share"] == 1.0 and inception["implied_base_p50"] == 0.0
+        assert "evidence, not a contract status" in inception["note"]
+
+
+# ---------------------------------------------------------------- newly_abstained (a flag, not a status)
+
+def test_newly_abstained_flags_learned_contracts_that_abstain_and_summarise_counts_them():
+    block = learn(mk_doc(book() + floaters()))
+    results = evaluate(block, mk_doc([], date=Q2))
+    learned = {c["contract_id"] for c in block["contracts"] if c["learn_status"] == "learned"}
+    for r in results:
+        assert r["newly_abstained"] is (r["contract_id"] in learned and r["status"] == "insufficient_evidence")
+    m2 = contracts.summarise_m2(results, denominator=len(results))
+    assert set(m2["counts"]) == set(contracts.STATUSES)
+    newly = sum(r["newly_abstained"] for r in results)
+    assert newly > 0 and m2["newly_abstained"]["count"] == newly
+    assert m2["newly_abstained"]["share"] == round(newly / len(results), 6)
+    assert "newly_abstained" in m2["strict_6_3"]
+
+
+def test_prior_pair_marks_a_carried_abstention_as_newly_only_after_a_decided_status():
+    prior = [dict(contract_id="a", status="holds"), dict(contract_id="b", status="insufficient_evidence"),
+             dict(contract_id="c", status="breach")]
+    now = [dict(contract_id="a", status="insufficient_evidence", newly_abstained=False),
+           dict(contract_id="b", status="insufficient_evidence", newly_abstained=False),
+           dict(contract_id="c", status="breach", newly_abstained=False),
+           dict(contract_id="d", status="insufficient_evidence", newly_abstained=True)]
+    out = contracts.mark_prior_abstentions(now, prior)
+    assert [r["newly_abstained"] for r in out] == [True, False, False, True]
+
+
+def test_v2_subset_check_compares_v2_contracts_and_results_without_the_flag():
+    from scripts.profile_pilot import contracts_run
+    q1, q2 = mk_doc(book() + floaters()), mk_doc(book() + floaters(), date=Q2)
+    b2, b3 = learn(q1, tol=v2_tol()), learn(q1)
+    r2 = json.loads(json.dumps(strip_flag(evaluate(b2, q2, tol=v2_tol()))))
+    r3 = evaluate(b3, q2)
+    check = contracts_run.v2_subset_check({CIK: b3}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: r2})
+    assert check["identical"] is True and check["by_cik"][CIK] == dict(contracts=True, results=True, v2_contracts=57,
+                                                                       semantic_contracts=2)
+    bad = copy.deepcopy(r2)
+    bad[0]["status"] = "breach"
+    check = contracts_run.v2_subset_check({CIK: b3}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: bad})
+    assert check["identical"] is False and check["by_cik"][CIK]["results"] is False
+    assert check["differences"][CIK]

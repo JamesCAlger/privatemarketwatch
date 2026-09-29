@@ -383,3 +383,194 @@ def test_measured_seconds_is_the_rounded_sum_of_the_recorded_rounded_parts():
     t = m2_seed.finish_timing(dict(perturb_seconds=0.3184999, evaluate_seconds=0.3184999, validate_seconds=1.0))
     assert t["perturb_seconds"] == 0.318 and t["evaluate_seconds"] == 0.318
     assert t["measured_seconds"] == round(t["perturb_seconds"] + t["evaluate_seconds"], 3) == 0.636
+
+
+
+# ================================================================ Task B2-3: semantic kinds in the seed harness
+
+from scripts.profile_pilot import contracts  # noqa: E402
+from tests.test_profile_pilot_contracts import floater, floaters  # noqa: E402
+
+
+def fdoc(n=60):
+    return mk_doc(floaters(n))
+
+
+def v3_blocks(doc, gram=None):
+    v2 = contracts.tolerance_content_v2()
+    return learn(doc, gram=gram, tol=v2), learn(doc, gram=gram), v2
+
+
+def test_text_numeric_divergence_moves_rate_and_spread_one_point_and_leaves_the_text():
+    doc = fdoc()
+    out, receipt = run(doc, "text_numeric_divergence", 1.0)
+    assert receipt["eligible"] == 60 and receipt["touched"] == 60
+    p0, q0 = doc["positions"][0], out["positions"][0]
+    assert q0["identity"] == p0["identity"]
+    assert q0["fields"]["basis_spread"]["value"] == "0.06" and q0["fields"]["interest_rate"]["value"] == "0.1"
+    assert receipt["rows"][0]["delta_pp"] == 1.0
+
+
+def test_bps_spread_scale_multiplies_the_spread_by_100_under_the_same_unit():
+    doc = fdoc()
+    out, receipt = run(doc, "bps_spread_scale", 1.0)
+    fields = out["positions"][3]["fields"]["basis_spread"]
+    assert fields["value"] == "5" and fields["unit_kind"] == doc["positions"][3]["fields"]["basis_spread"]["unit_kind"]
+    fact = next(f for f in out["facts"] if f["i"] == fields["fact_indices"][0])
+    assert fact["unit_ref"] == "pure" and fact["value"] == "5"
+
+
+@pytest.mark.parametrize("kind", ("text_numeric_divergence", "bps_spread_scale"))
+def test_new_perturbations_are_seeded_copy_on_write_and_schema_clean(kind):
+    doc = fdoc()
+    before = copy.deepcopy(doc)
+    a, ra = run(doc, kind, 0.3, seed=7)
+    b, rb = run(doc, kind, 0.3, seed=7, deep=False)
+    assert a == b and ra == rb and doc == before and ra["touched"] == math.ceil(0.3 * 60)
+    assert m2_seed.realism_errors(doc, a, ra) == []
+    zero, rz = run(doc, kind, 0.0)
+    assert zero == doc and rz["touched"] == 0
+
+
+def test_semantic_grid_covers_every_candidate_band_over_the_v2_content_verbatim():
+    v2 = contracts.tolerance_content_v2()
+    grid = m2_seed.semantic_grid(v2)
+    assert len(grid) == 15 + 5 and len({g["name"] for g in grid}) == 20
+    comp = [g for g in grid if g["family"] == "composition"]
+    assert {(g["share_pp"], g["iqr_widen"]) for g in comp} == {(s, i) for s in (5, 10, 15, 20, 25)
+                                                              for i in (1.5, 2.0, 3.0)}
+    assert {g["text_share_pp"] for g in grid if g["family"] == "text"} == {5, 10, 15, 20, 25}
+    for g in grid:
+        for tier in ("standard", "low_history"):
+            assert {k: g["tolerances"]["bands"][tier][k] for k in v2["bands"][tier]} == v2["bands"][tier]
+    assert m2_seed.CANDIDATES == dict(share_pp=(5, 10, 15, 20, 25), iqr_widen=(1.5, 2.0, 3.0),
+                                      text_share_pp=(5, 10, 15, 20, 25))
+
+
+def semantic_matrix(doc, variants=("spread_for_coupon",), fractions=(0.0, 0.05, 0.2, 1.0)):
+    b2, b3, v2 = v3_blocks(doc)
+    return m2_seed.evaluate_matrix(
+        cik=CIK, block=b2, tolerances=v2, q1_doc=doc, grammar=None,
+        yield_q2=dict(status="vote", vote="cash_leg", cause=None, report_date=doc["document"]["report_date"]),
+        variants=[v for v in m2_seed.SEMANTIC_VARIANTS if v[0] in variants], fractions=fractions, seeds=(1, 2, 3),
+        semantic=dict(block=b3, grid=m2_seed.semantic_grid(v2), range_stats=True))
+
+
+def test_spread_for_coupon_is_seen_by_composition_and_text_and_the_null_control_holds():
+    matrix = semantic_matrix(fdoc())
+    comp_id = next(c for c in matrix["semantic"]["contracts"] if c["kind"] == "rate_composition")["contract_id"]
+    text_id = next(c for c in matrix["semantic"]["contracts"] if c["kind"] == "text_agreement")["contract_id"]
+    null = matrix["semantic"]["null_control"]
+    assert all(null[name][comp_id][0] == "holds" and null[name][text_id][0] == "holds" for name in null)
+    full = [e for e in matrix["evaluations"] if e["fraction"] == 1.0]
+    for e in full:
+        for name, per in e["semantic"].items():
+            if name.startswith("c:"):
+                assert per[comp_id][0] == "breach" and per[comp_id][2]["share"] == "breach"
+            else:
+                assert per[text_id][0] == "breach"
+    part = [e for e in matrix["evaluations"] if e["fraction"] == 0.2]
+    for e in part:                      # 12 of 60 rows swapped: share moves 20 points
+        assert e["semantic"]["c:s15_i2.0"][comp_id][2]["share"] == "breach"
+        assert e["semantic"]["c:s20_i2.0"][comp_id][2]["share"] == "holds"
+
+
+def test_semantic_curves_take_the_seed_majority_and_the_median_over_applicable_ciks():
+    def ev(cik, fraction, flags, tier="standard"):
+        out = []
+        for seed, flag in zip((1, 2, 3), flags):
+            status = "breach" if flag else "holds"
+            out.append(dict(cik=cik, tier=tier, variant="spread_for_coupon", fraction=fraction, seed=seed, semantic={
+                "c:s10_i2.0": {"k": [status, None, dict(share=status, iqr="holds"), 0]}}))
+        return out
+    evaluations = (ev("a", 0.05, [0, 1, 1]) + ev("a", 0.2, [1, 1, 1]) + ev("b", 0.05, [0, 0, 0])
+                   + ev("b", 0.2, [1, 1, 0]) + ev("c", 0.05, [0, 0, 0]) + ev("c", 0.2, [0, 0, 0]))
+    meta = {"a": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}}),
+            "b": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}}),
+            "c": dict(tier="low_history", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}})}
+    grid = [dict(name="c:s10_i2.0", family="composition", share_pp=10, iqr_widen=2.0, text_share_pp=10)]
+    curves = m2_seed.semantic_curves(evaluations, grid=grid, meta=meta)
+    cell = curves["share_pp"]["10"]["spread_for_coupon"]
+    assert cell["per_cik"] == {"a": 0.05, "b": 0.2, "c": None}
+    assert cell["median"]["all"] == 0.2 and cell["median"]["standard"] == 0.2
+    assert cell["median"]["low_history"] is None and cell["applicable"] == dict(all=3, standard=2, low_history=1)
+
+
+def test_median_shift_experiment_needs_both_the_median_move_and_the_outside_share():
+    learned = dict(p50=10.0, min=5.0, max=15.0, n=100)
+    inside = [10.0 + 0.02 * i for i in range(100)]                 # median +10%, nothing outside
+    moved = [12.0 + 0.1 * i for i in range(100)]                   # median +71%, many outside
+    assert m2_seed.median_shift_verdict(learned, inside, x=0.10, y=0.05) == "holds"
+    assert m2_seed.median_shift_verdict(learned, moved, x=0.10, y=0.05) == "breach"
+    assert m2_seed.median_shift_verdict(learned, moved, x=0.10, y=0.90) == "holds"
+    assert m2_seed.median_shift_verdict(learned, [], x=0.10, y=0.05) == "insufficient_evidence"
+    assert m2_seed.MEDIAN_SHIFT == dict(x=(0.10, 0.15, 0.25), y=(0.05, 0.10))
+
+
+def test_range_samples_route_rows_by_the_frozen_partitions_under_the_learned_scale():
+    doc = fdoc()
+    b2, _, v2 = v3_blocks(doc)
+    samples = m2_seed.range_samples(b2, doc, grammar=None, tolerances=v2)
+    rate_id = next(c["contract_id"] for c in b2["contracts"] if c["kind"] == "value_range"
+                   and c["field"] == "interest_rate")
+    assert len(samples[rate_id]) == 60 and abs(samples[rate_id][0] - 9.0) < 1e-9
+
+
+def test_relearned_block_must_equal_the_frozen_v2_block_on_the_v2_subset():
+    doc = fdoc()
+    b2, b3, _ = v3_blocks(doc)
+    assert m2_seed.compare_relearned(b2, b3)["equal"] is True
+    tampered = copy.deepcopy(b3)
+    tampered["contracts"][0]["expectation"] = dict(concepts=["x:y"])
+    check = m2_seed.compare_relearned(b2, tampered)
+    assert check["equal"] is False and check["differences"]
+
+
+def test_semantic_meta_curves_and_summary_from_a_real_matrix_shape():
+    matrix = semantic_matrix(fdoc(), variants=("spread_for_coupon", "range_shift_0.6"))
+    meta, ms_meta = m2_seed.semantic_meta({CIK: matrix})
+    assert meta[CIK]["tier"] == "standard" and sorted(meta[CIK]["contracts"].values()) == ["rate_composition",
+                                                                                            "text_agreement"]
+    curves = m2_seed.semantic_curves(matrix["evaluations"], grid=m2_seed.semantic_grid(
+        contracts.tolerance_content_v2()), meta=meta)
+    assert curves["share_pp"]["15"]["spread_for_coupon"]["per_cik"][CIK] == 0.2
+    assert curves["share_pp"]["25"]["spread_for_coupon"]["per_cik"][CIK] == 1.0
+    ms = m2_seed.median_shift_curves(matrix["evaluations"], meta=ms_meta)
+    assert set(ms["range_shift_0.6"]) == {m2_seed.ms_name(x, y) for x in (0.10, 0.15, 0.25) for y in (0.05, 0.10)} | {
+        "v2_band"}
+    text = m2_seed.render_semantic_summary(run_id="stageb2-seed-v3-test", curves=curves, ms_curves=ms, meta=meta,
+                                           contracts_by_cik={CIK: matrix["semantic"]["contracts"]})
+    assert m2_seed.IN_SAMPLE in text and "NOT in v3" in text
+    text.encode("ascii")
+
+
+@pytest.mark.needs_cache
+def test_real_stellus_semantic_seed_through_the_cli(tmp_path, monkeypatch):
+    data_root = os.environ.get("PROFILE_PILOT_DATA_ROOT")
+    main_root = os.environ.get("PROFILE_PILOT_MAIN_ROOT")
+    if not (data_root and main_root):
+        pytest.skip("PROFILE_PILOT_DATA_ROOT not set (run through the pilot launcher)")
+    real_resolve = m2_seed.resolve_paths
+
+    def redirected(**kw):
+        real = real_resolve(**kw)
+        return TmpRunPaths(main_repo_root=real.main_repo_root, code_root=real.code_root,
+                           data_root=real.data_root, run_id=real.run_id, tmp_run_root=tmp_path / "run")
+
+    monkeypatch.setattr(m2_seed, "resolve_paths", redirected)
+    code = m2_seed.main(["run", "--main-root", main_root, "--data-root", data_root,
+                         "--census-run-id", "stageb-20260929t004819z",
+                         "--profile-run-id", "stageb-profile-20260929t053308z",
+                         "--contracts-run-id", "stageb-contracts-20260929t053506z",
+                         "--cik", "0001901037", "--run-id", "stageb2-seed-v3-test", "--semantic",
+                         "--scratch-dir", str(tmp_path / "scratch")])
+    assert code == 0
+    root = tmp_path / "run"
+    body = json.loads((root / "results" / "semantic_curves.json").read_text(encoding="ascii"))
+    assert body["label"] == m2_seed.IN_SAMPLE
+    assert body["relearn_checks"]["0001901037"]["equal"] is True
+    assert body["relearn_checks"]["0001901037"]["semantic_contracts"] == 2
+    assert set(body["curves"]) >= {"share_pp", "iqr_widen", "text_share_pp"}
+    matrix = json.loads((root / "results" / "seed_matrix.json").read_text(encoding="ascii"))
+    assert matrix["ciks"]["0001901037"]["null_control"]["breaches"] == []
+    (root / "results" / "semantic_summary.md").read_text(encoding="ascii")

@@ -40,12 +40,15 @@ from scripts.profile_pilot import envelope
 from scripts.profile_pilot.census import POSITION_FIELDS, POSITION_RATE, field_channel
 from scripts.profile_pilot.contracts_observe import (  # noqa: F401  (current_positions, grammar_info re-exported)
     IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, UNIT_NOT_OBSERVABLE, WHOLE_FILING, as_grammars, canonical, channel_gaps,
-    current_positions, grammar_for, grammar_info, grammar_observation, learn_partitions, observe_field, quantile,
-    route, routing_rows, widened)
+    current_positions, grammar_for, grammar_info, grammar_observation, learn_partitions, observe_composition,
+    observe_field, observe_text, quantile, route, routing_rows, widened)
 
 CONTRACTS_VERSION = "contracts.v0.2"
-TOLERANCES_VERSION = "contract-tolerances.v2"
+CONTRACTS_VERSION_V3 = "contracts.v0.3"
+TOLERANCES_VERSION = "contract-tolerances.v3"
+TOLERANCES_VERSION_V2 = "contract-tolerances.v2"
 V1_RUN_ID = "stageb-contracts-20260929t032414z"
+V2_RUN_ID = "stageb-contracts-20260929t053506z"
 IDENTIFIER_FORMAT_INTERPRETATION = (
     "as-evaluated: an unresolved mixed identifier format in Q1 (partition candidate / insufficient_evidence "
     "with a real signature) blocks only the identifier format contract; concept, fill, scale and range stay "
@@ -75,7 +78,34 @@ SPEC_BANDS = {
                         value_range_quantiles=[0.05, 0.95], format_grammar_min_parse_share=0.9)}
 KIND_BAND_KEYS = {"source_concept_set": ("source_concept_set",), "fill_rate": ("fill_rate_pp",),
                   "scale": ("scale",), "value_range": ("value_range_widen", "value_range_quantiles"),
-                  "format_grammar": ("format_grammar_min_parse_share",), "fund_income_yield": ()}
+                  "format_grammar": ("format_grammar_min_parse_share",), "fund_income_yield": (),
+                  "rate_composition": ("share_pp", "iqr_widen", "min_rows"),
+                  "text_agreement": ("text_share_pp", "min_rows", "min_parse_share")}
+# ---- Task B2-3 (tolerances v3): two semantic kinds, learned per partition after the v2 suite.
+SEMANTIC_KINDS = ("rate_composition", "text_agreement")
+ALL_KINDS = KINDS + SEMANTIC_KINDS
+COMPOSITION_FIELD = "interest_rate-basis_spread"
+TEXT_FIELD = "investment_identifier-rate_text"
+SEMANTIC_BAND_KEYS = ("share_pp", "iqr_widen", "text_share_pp", "min_rows", "min_parse_share")
+SEMANTIC_CONSTANTS = dict(
+    max_unresolved_pair_share=0.5, text_match_tolerance_pct=0.011,
+    rule="fixed operational constants (not swept): a composition abstains when unresolved pair rows exceed "
+         "max_unresolved_pair_share of the pair rows (addendum 1); text and numeric agree within "
+         "text_match_tolerance_pct percentage points (the owner-session census tolerance)")
+# The v3 bands. IN-SAMPLE: chosen after the Stage B Q2 censuses, the seeded drift of B2-1 and the
+# recorded history of B2-2b were read; see CALIBRATION.
+SEMANTIC_BANDS = {"standard": dict(share_pp=10, iqr_widen=2.0, text_share_pp=10, min_rows=10, min_parse_share=0.5),
+                  "low_history": dict(share_pp=25, iqr_widen=2.0, text_share_pp=10, min_rows=10, min_parse_share=0.5)}
+CALIBRATION = dict(
+    label="in-sample (bands chosen after Q2 and the history were read)", status="pending",
+    note="provisional values (share_pp mirrors the v2 fill-rate tiers); replaced by the in-sample calibration "
+         "before any v3 file is frozen")
+V3_REASON = ("adds rate_composition and text_agreement (owner ask 2026-09-29, M2 assessment); bands calibrated "
+             "in-sample on B2-1 seeds and B2-2b negatives")
+NEWLY_ABSTAINED_RULE = (
+    "a reporting flag inside the existing status model, not a fifth status: newly_abstained is true when a "
+    "contract that was decided on the learning side (learned, i.e. it held on the learning quarter) or holds/"
+    "breach in the prior pair (rolling mode) evaluates to insufficient_evidence; the four statuses are unchanged")
 DEFERRED = [dict(kind="non_accrual_count", status="unchecked", reason="deferred by the minimal-suite ruling"),
             dict(kind="footnote_location", status="unchecked", reason="deferred; footnote channel unsupported"),
             dict(kind="position_identity", status="unchecked", reason="deferred by the minimal-suite ruling")]
@@ -101,9 +131,85 @@ def _req(mapping, key, where: str):
 # ---------------------------------------------------------------- tolerances (frozen first)
 
 def tolerance_content() -> dict:
+    """The current tolerance file: v3 = the v2 content verbatim + the two semantic kinds' bands."""
+    return semantic_tolerances(tolerance_content_v2(), bands=SEMANTIC_BANDS, calibration=CALIBRATION)
+
+
+def semantic_tolerances(v2: dict, *, bands: dict | None = None, share_pp=None, iqr_widen=None, text_share_pp=None,
+                        min_rows=10, min_parse_share=0.5, calibration: dict | None = None) -> dict:
+    """v3 content from a v2 content (the frozen file's, or tolerance_content_v2()): every v2 band and
+    section verbatim, plus the semantic bands. Calibration passes one candidate per call (both tiers
+    take the candidate unless a per-tier dict is given); the frozen v3 file uses SEMANTIC_BANDS."""
+    from scripts.profile_pilot import manifest
+    if v2.get("version") != TOLERANCES_VERSION_V2:
+        raise ContractError("semantic tolerances extend only the v2 content, got " + repr(v2.get("version")))
+    if bands is None:
+        tier_value = lambda value, tier: value[tier] if isinstance(value, dict) else value
+        bands = {tier: dict(share_pp=tier_value(share_pp, tier), iqr_widen=tier_value(iqr_widen, tier),
+                            text_share_pp=tier_value(text_share_pp, tier), min_rows=min_rows,
+                            min_parse_share=min_parse_share) for tier in ("standard", "low_history")}
+    out = copy.deepcopy(v2)
+    for tier in ("standard", "low_history"):
+        extra = {k: _req(bands[tier], k, "semantic bands." + tier) for k in SEMANTIC_BAND_KEYS}
+        if set(extra) & set(out["bands"][tier]):
+            raise ContractError("a semantic band would overwrite a v2 band")
+        out["bands"][tier].update(extra)
+    out["version"] = TOLERANCES_VERSION
+    out["operationalisation"].update(
+        rate_composition=(
+            "field pair interest_rate / basis_spread on rows carrying both (a 0 rate is an undrawn placeholder, "
+            "counted apart); implied base = canonical(rate) - canonical(spread) in percent, magnitude resolved PER "
+            "ROW (same magnitude class, or declared ratio units that differ, compute; otherwise unresolved_pair); "
+            "NOT gated on the scale contract. Learn share_rate_le_spread (implied base <= 0), p25/p50/p75, n. "
+            "Breach when |share - learned| * 100 > share_pp, or when the IQR exceeds learned IQR x iqr_widen. The "
+            "level of the implied base is never a criterion (p50_shift is evidence). Abstain when n < min_rows or "
+            "unresolved pair rows exceed max_unresolved_pair_share in either quarter. Violating keys: rows with "
+            "implied base <= 0 (share) and rows farther than iqr_widen x learned IQR from the Q2 median (dispersion)"),
+        text_agreement=(
+            "identifier text parsed with the filer's authored grammar (inherited, hash pinned) where one applies to "
+            "the partition, else the generic patterns (contracts_observe RE_BASE_PLUS_PCT / RE_BASE_PLUS_BPS / "
+            "RE_PCT). Numeric values are canonical percent under the declared unit. Denominator of the parse share = "
+            "non-label identifier rows carrying a filled numeric interest_rate or basis_spread. Shares per row "
+            "category: spread_text_matches_numeric, rate_equals_text_spread (0 rates on undrawn/unfunded rows "
+            "excluded and counted), rate_equals_text_pct. Breach when a share assessed on both sides moves by more "
+            "than text_share_pp; a share with n < min_rows on either side is not assessed; abstain when no share is "
+            "assessable or the parse share < min_parse_share. Violating keys: rows on the side the share moved to"),
+        newly_abstained=NEWLY_ABSTAINED_RULE,
+        inception=("both semantic kinds record an inception block on the LEARNING quarter (share_rate_le_spread, "
+                   "rate_equals_text_spread share, implied base p50): evidence, not a contract status"))
+    out["semantic_constants"] = copy.deepcopy(SEMANTIC_CONSTANTS)
+    out["v2_verbatim"] = copy.deepcopy(v2)
+    out["v2_content_sha256"] = manifest.digest(v2)
+    out["supersedes"] = dict(version=TOLERANCES_VERSION_V2, run_id=V2_RUN_ID, reason=V3_REASON,
+                             v2_results="unchanged: v2 contract ids, expectations and results are byte-for-byte "
+                                        "the v2 run's; only the newly_abstained flag and its summary line are added")
+    out["calibration"] = copy.deepcopy(calibration if calibration is not None else CALIBRATION)
+    return out
+
+
+def has_semantic_bands(tolerances: dict) -> bool:
+    return "share_pp" in (((tolerances or {}).get("bands") or {}).get("standard") or {})
+
+
+def semantic_constants(tolerances: dict) -> dict:
+    section = _req(tolerances, "semantic_constants", "tolerances")
+    return {k: _req(section, k, "tolerances.semantic_constants") for k in
+            ("max_unresolved_pair_share", "text_match_tolerance_pct")}
+
+
+def rebanded_block(block: dict, tolerances: dict) -> dict:
+    """Calibration only: the same learned block with the semantic contracts' bands taken from a
+    candidate tolerance content (expectations are band-free; the v2 contracts are untouched)."""
+    out = dict(block, contracts=[dict(c, band=band_for(tolerances, c["tier"], c["kind"]))
+                                 if c["kind"] in SEMANTIC_KINDS else c for c in block["contracts"]])
+    return out
+
+
+def tolerance_content_v2() -> dict:
+    """The frozen v2 content, reproduced exactly (its digest is the frozen bf15c296...)."""
     from scripts.profile_pilot.contracts_income import S2_FUNCTION, s2_constants
     return dict(
-        version=TOLERANCES_VERSION, source="docs/superpowers/specs/2026-09-28-filer-profile-pilot-design.md s6.3",
+        version=TOLERANCES_VERSION_V2, source="docs/superpowers/specs/2026-09-28-filer-profile-pilot-design.md s6.3",
         spec_table_verbatim=copy.deepcopy(SPEC_TABLE), bands=copy.deepcopy(SPEC_BANDS),
         low_history_below_positions=LOW_HISTORY_BELOW,
         operationalisation=dict(
@@ -254,7 +360,8 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
     if routing["unroutable"]:
         blocked |= {p["partition_id"] for p in partitions}
     facts_by_i = {f["i"]: f for f in q1_doc["facts"]}
-    contracts, partition_records = [], []
+    contracts, partition_records, semantic = [], [], []
+    semantic_on = has_semantic_bands(tolerances)
     for partition in partitions:
         pid = partition["partition_id"]
         keys = routing["routed"][pid]
@@ -306,6 +413,9 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
                                                evidence=dict(scale_learn_cause=scale_cause)))
         contracts.append(_learn_format(cik, partition, tier, tolerances, q1_doc, member_rows, grammars,
                                        learned["identifier_format"], block_cause))
+        if semantic_on:
+            semantic += _learn_semantic(cik, partition, tier, tolerances, q1_doc, members, grammars, facts_by_i,
+                                        conventions, block_cause, q1_date)
     whole = next(p for p in partitions if p["partition_id"] == WHOLE_FILING)
     vote_ok = yield_q1.get("status") == "vote" and yield_q1.get("vote") in ("cash_leg", "all_in")
     contracts.append(_contract(
@@ -314,7 +424,8 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
                          src=(yield_q1.get("s2") or {}).get("src"), quarter=q1_date) if vote_ok else None,
         cause=None if vote_ok else str(yield_q1.get("cause") or "q1_yield_without_vote"),
         evidence=dict(q1_yield=yield_q1)))
-    return dict(cik=cik, version=CONTRACTS_VERSION, tier=tier,
+    contracts += semantic
+    return dict(cik=cik, version=CONTRACTS_VERSION_V3 if semantic_on else CONTRACTS_VERSION, tier=tier,
                 q1=dict(report_date=q1_date, form_type=q1_form, positions=len(positions),
                         accession_number=q1_doc["document"].get("accession_number")),
                 q2_listing=q2_listing, partitions=partition_records, partitions_evidenced=learned["evidenced"],
@@ -363,6 +474,98 @@ def _learn_format(cik, partition, tier, tolerances, q1_doc, rows, grammars, iden
                      cause=cause, evidence=evidence)
 
 
+# ---------------------------------------------------------------- semantic kinds (Task B2-3, v3)
+
+INCEPTION_NOTE = ("evidence, not a contract status: a meaning wrong from inception (e.g. spread carried as the "
+                  "coupon) is visible here although no pair test can flag it")
+SEMANTIC_CHANNELS = ("contexts", field_channel("interest_rate"), field_channel("basis_spread"))
+
+
+def _channels(*names) -> tuple:
+    return tuple(dict.fromkeys(names))
+
+
+def _text_parser(applies_to, grammars) -> tuple[dict | None, str | None]:
+    grammar, missing = grammar_for(applies_to, grammars)
+    return grammar, (None if grammar else missing)
+
+
+def _inception(q1_date: str, comp: dict, text: dict) -> dict:
+    brief = lambda slot: dict(share=slot["share"], n=slot["n"])
+    return dict(report_date=q1_date, share_rate_le_spread=comp["share_rate_le_spread"], implied_base_p50=comp["p50"],
+                composition_n=comp["n"], rate_equals_text_spread=brief(text["shares"]["rate_equals_text_spread"]),
+                rate_equals_text_spread_magnitude_normalised=text["rate_equals_text_spread_magnitude_normalised"],
+                rate_equals_text_pct=brief(text["shares"]["rate_equals_text_pct"]), note=INCEPTION_NOTE)
+
+
+def _composition_brief(obs: dict) -> dict:
+    return dict(n=obs["n"], pair_rows=obs["pair_rows"], share_rate_le_spread=obs["share_rate_le_spread"],
+                p25=obs["p25"], p50=obs["p50"], p75=obs["p75"], iqr=obs["iqr"], basis=sorted(obs["basis"]),
+                unresolved_share=obs["unresolved_share"])
+
+
+def _composition_gate(obs: dict, gaps: list, band: dict, constants: dict, suffix: str) -> str | None:
+    if gaps or obs["unobservable_keys"]:
+        return "q" + ("2" if suffix else "1") + "_channel_incomplete"
+    if not obs["pair_rows"]:
+        return "no_rows_with_both_fields" + suffix
+    if obs["unresolved_share"] > constants["max_unresolved_pair_share"]:
+        return "unresolved_pair_majority" + suffix
+    if obs["n"] < band["min_rows"]:
+        return "fewer_than_min_rows_with_both_fields" + suffix
+    return None
+
+
+def _text_gate(obs: dict, gaps: list, band: dict, suffix: str) -> str | None:
+    if gaps or obs["unobservable_keys"]:
+        return "q" + ("2" if suffix else "1") + "_channel_incomplete"
+    if not obs["debt_rows"]:
+        return "no_identifier_rows_with_rate_fields" + suffix
+    if obs["parse_share"] < band["min_parse_share"]:
+        return "identifier_rate_text_parse_share_below_min" + suffix
+    if not any(s["n"] >= band["min_rows"] for s in obs["shares"].values()):
+        return "fewer_than_min_rows_parseable" + suffix
+    return None
+
+
+def _text_brief(obs: dict) -> dict:
+    return dict(parse_share=obs["parse_share"], debt_rows=obs["debt_rows"], parsed_rows=obs["parsed_rows"],
+                categories=dict(sorted(obs["categories"].items())), numeric_unit_unresolved=obs["numeric_unit_unresolved"],
+                undrawn_zero_rate_rows=len(obs["undrawn_zero_rate_keys"]),
+                shares={k: dict(share=v["share"], n=v["n"]) for k, v in obs["shares"].items()})
+
+
+def _learn_semantic(cik, partition, tier, tolerances, q1_doc, members, grammars, facts_by_i, conventions,
+                    block_cause, q1_date) -> list:
+    constants = semantic_constants(tolerances)
+    comp_band, text_band = band_for(tolerances, tier, "rate_composition"), band_for(tolerances, tier, "text_agreement")
+    comp_gaps = channel_gaps(q1_doc, SEMANTIC_CHANNELS)
+    text_gaps = channel_gaps(q1_doc, _channels("contexts", "identifiers", *SEMANTIC_CHANNELS[1:]))
+    grammar, grammar_cause = _text_parser(partition["applies_to"], grammars)
+    comp = observe_composition(q1_doc, members, facts_by_i, conventions)
+    text = observe_text(q1_doc, members, facts_by_i, conventions, grammar,
+                        tol_pct=constants["text_match_tolerance_pct"])
+    inception = _inception(q1_date, comp, text)
+    cause = block_cause or _composition_gate(comp, comp_gaps, comp_band, constants, "")
+    out = [_contract(cik, "rate_composition", COMPOSITION_FIELD, partition, tier, comp_band,
+                     expectation=None if cause else _composition_brief(comp), cause=cause,
+                     evidence=dict(inception=inception, observed=_composition_brief(comp), channel_gaps=comp_gaps,
+                                   zero_rate_rows=len(comp["zero_rate_keys"]),
+                                   unresolved_pair_rows=len(comp["unresolved_keys"]), basis_counts=comp["basis"],
+                                   rule="magnitude resolved per row; never gated on the scale contract"))]
+    cause = block_cause or _text_gate(text, text_gaps, text_band, "")
+    assessed = {k: dict(share=v["share"], n=v["n"]) for k, v in text["shares"].items() if v["n"] >= text_band["min_rows"]}
+    out.append(_contract(
+        cik, "text_agreement", TEXT_FIELD, partition, tier, text_band,
+        expectation=None if cause else dict(parser=text["parser"], parse_share=text["parse_share"], shares=assessed,
+                                            unassessed={k: v["n"] for k, v in text["shares"].items()
+                                                        if k not in assessed}),
+        cause=cause, evidence=dict(inception=inception, parse_share=text["parse_share"], parser=text["parser"],
+                                   grammar_cause=grammar_cause, observed=_text_brief(text), channel_gaps=text_gaps,
+                                   undrawn_zero_rate_rows=len(text["undrawn_zero_rate_keys"]))))
+    return out
+
+
 def freeze_contracts(paths, blocks: dict, *, tolerances_state: dict) -> dict:
     """Write-once contract_inventory: the full fixed M2 denominator with expectations and bands."""
     from scripts.profile_pilot import manifest
@@ -375,7 +578,7 @@ def freeze_contracts(paths, blocks: dict, *, tolerances_state: dict) -> dict:
                                                              path=tolerances_state["path"]),
                    learning="Q1 census + Q1 profile + authored grammar (inherited) + Q1 S2 evidence; no Q2 read",
                    ciks=blocks, denominator=dict(total=sum(by_cik.values()), by_cik=by_cik, by_kind=by_kind),
-                   kinds=list(KINDS), deferred_unchecked=DEFERRED, stage_b_note=STAGE_B_NOTE, claim=CLAIM)
+                   kinds=[k for k in ALL_KINDS if k in by_kind], deferred_unchecked=DEFERRED, stage_b_note=STAGE_B_NOTE, claim=CLAIM)
     return manifest.freeze_inventory(paths, "contract_inventory", content)
 
 
@@ -415,9 +618,36 @@ def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2
     results = _evaluate(block, tolerances, q2_doc=q2_doc, q2_listing=q2_listing, grammar=grammar,
                         yield_q2=yield_q2)
     status = _req(_req(block, "identifier_format", "inventory block"), "status", "inventory block.identifier_format")
+    learned = {c["contract_id"] for c in block["contracts"] if c["learn_status"] == "learned"}
     for r in results:
         r["identifier_format_unresolved"] = status == "unresolved_mixed"
+        # a reporting flag, not a fifth status (NEWLY_ABSTAINED_RULE); rolling mode adds the prior pair
+        r["newly_abstained"] = r["contract_id"] in learned and r["status"] == "insufficient_evidence"
     return results
+
+
+def mark_prior_abstentions(results: list, prior: list | None) -> list:
+    """Rolling mode: an abstention whose contract was holds/breach in the prior pair is newly abstained."""
+    before = {r["contract_id"]: r["status"] for r in prior or []}
+    return [dict(r, newly_abstained=True) if r["status"] == "insufficient_evidence" and not r["newly_abstained"]
+            and before.get(r["contract_id"]) in ("holds", "breach") else r for r in results]
+
+
+def _q2_frame(block: dict, q2_doc: dict, q2_listing: dict, grammars: list) -> dict:
+    q2 = dict(report_date=q2_doc["document"]["report_date"], form_type=q2_doc["document"].get("form_type"),
+              status="available", census_relative=q2_listing.get("census_relative"))
+    positions = current_positions(q2_doc)
+    partitions = [dict(partition_id=p["partition_id"], applies_to=p["applies_to"])
+                  for p in _req(block, "partitions", "inventory block")]
+    rows = routing_rows(q2_doc, positions, grammars)
+    routing = route(partitions, rows, q2["report_date"], q2["form_type"], _req(block, "recorded_at", "block"))
+    ambiguous = {}
+    for item in routing["ambiguous"]:
+        for pid in item["partitions"]:
+            ambiguous.setdefault(pid, []).append(item["context_id"])
+    return dict(q2=q2, routing=routing, by_ctx={p["context_id"]: p for p in positions},
+                rows_by_ctx={r["context_id"]: r for r in rows}, facts_by_i={f["i"]: f for f in q2_doc["facts"]},
+                ambiguous=ambiguous, unroutable=[u["context_id"] for u in routing["unroutable"]])
 
 
 def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yield_q2) -> list:
@@ -432,23 +662,12 @@ def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yie
                   detail=q2_listing.get("detail"))
         return [_result(c, "insufficient_evidence", q2, cause="q2_census_unavailable",
                         observed=dict(detail=q2_listing.get("detail"))) for c in contracts]
-    q2 = dict(report_date=q2_doc["document"]["report_date"], form_type=q2_doc["document"].get("form_type"),
-              status="available", census_relative=q2_listing.get("census_relative"))
-    positions = current_positions(q2_doc)
-    partitions = [dict(partition_id=p["partition_id"], applies_to=p["applies_to"])
-                  for p in _req(block, "partitions", "inventory block")]
-    rows = routing_rows(q2_doc, positions, grammars)
-    routing = route(partitions, rows, q2["report_date"], q2["form_type"], _req(block, "recorded_at", "block"))
-    by_ctx = {p["context_id"]: p for p in positions}
-    rows_by_ctx = {r["context_id"]: r for r in rows}
-    facts_by_i = {f["i"]: f for f in q2_doc["facts"]}
-    ambiguous = {}
-    for item in routing["ambiguous"]:
-        for pid in item["partitions"]:
-            ambiguous.setdefault(pid, []).append(item["context_id"])
-    unroutable = [u["context_id"] for u in routing["unroutable"]]
+    frame = _q2_frame(block, q2_doc, q2_listing, grammars)
+    q2, routing, by_ctx, rows_by_ctx, facts_by_i = (frame[k] for k in ("q2", "routing", "by_ctx", "rows_by_ctx",
+                                                                       "facts_by_i"))
+    ambiguous, unroutable = frame["ambiguous"], frame["unroutable"]
     cache, scale_status, results = {}, {}, []
-    for c in sorted(contracts, key=lambda c: KINDS.index(c["kind"])):
+    for c in sorted(contracts, key=lambda c: ALL_KINDS.index(c["kind"])):
         pid = c["partition_id"]
         if c["learn_status"] != "learned":
             results.append(_result(c, "insufficient_evidence", q2, cause="not_learned_in_q1: " + str(c["learn_cause"])))
@@ -462,6 +681,10 @@ def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yie
                                    if pid in ambiguous else "rows_not_routable"))
             continue
         members = [by_ctx[k] for k in routing["routed"].get(pid, [])]
+        if c["kind"] in SEMANTIC_KINDS:
+            obs = observe_semantic(c, q2_doc, members, grammars, facts_by_i, conventions, tolerances)
+            results.append(semantic_verdict(c, q2, obs, tolerances))
+            continue
         if c["kind"] == "format_grammar":
             results.append(_evaluate_format(c, q2, q2_doc, [rows_by_ctx[k] for k in routing["routed"].get(pid, [])],
                                             grammars))
@@ -613,6 +836,135 @@ def _evaluate_yield(c, q2, yield_q2) -> dict:
     return _result(c, "breach", q2, cause="s2_convention_vote_changed", expected=exp, observed=observed, keys=keys)
 
 
+# ---------------------------------------------------------------- semantic kinds: observe once, verdict per band
+
+def observe_semantic(c, q2_doc, members, grammars, facts_by_i, conventions, tolerances) -> dict:
+    """The band-free Q2 observation of one learned semantic contract (shared across candidate bands)."""
+    constants = semantic_constants(tolerances)
+    if c["kind"] == "rate_composition":
+        return dict(members=len(members), gaps=channel_gaps(q2_doc, SEMANTIC_CHANNELS),
+                    obs=observe_composition(q2_doc, members, facts_by_i, conventions))
+    parser = _req(c["expectation"], "parser", c["contract_id"])
+    grammar = None
+    if parser["kind"] == "grammar":
+        pinned = [g for g in grammars if g["sha256"] == parser["grammar_sha256"] and g["dialect"] == parser["dialect"]]
+        if len(pinned) != 1:
+            raise ContractError("text contract evaluated without its pinned grammar: " + c["contract_id"])
+        grammar = pinned[0]
+    return dict(members=len(members),
+                gaps=channel_gaps(q2_doc, _channels("contexts", "identifiers", *SEMANTIC_CHANNELS[1:])),
+                obs=observe_text(q2_doc, members, facts_by_i, conventions, grammar,
+                                 tol_pct=constants["text_match_tolerance_pct"]))
+
+
+def semantic_verdict(c: dict, q2: dict, sem: dict, tolerances: dict) -> dict:
+    exp, band = c["expectation"], c["band"]
+    if not sem["members"]:
+        return _result(c, "insufficient_evidence", q2, cause="no_q2_positions_in_partition", expected=exp)
+    obs = sem["obs"]
+    if c["kind"] == "rate_composition":
+        brief = dict(_composition_brief(obs), zero_rate_rows=len(obs["zero_rate_keys"]))
+        cause = _composition_gate(obs, sem["gaps"], band, semantic_constants(tolerances), "_in_q2")
+        if cause is None and brief["basis"] != _req(exp, "basis", c["contract_id"]):
+            cause = "composition_basis_changed"
+        if cause:
+            return _result(c, "insufficient_evidence", q2, cause=cause, expected=exp,
+                           observed=dict(brief, channel_gaps=sem["gaps"]), keys=obs["unobservable_keys"])
+        delta = (obs["share_rate_le_spread"] - exp["share_rate_le_spread"]) * 100
+        limit = exp["iqr"] * band["iqr_widen"]
+        criteria = dict(share="breach" if abs(delta) > band["share_pp"] + 1e-9 else "holds",
+                        iqr="breach" if obs["iqr"] > limit + 1e-9 else "holds")
+        observed = dict(brief, share_delta_pp=round(delta, 6),
+                        iqr_ratio=round(obs["iqr"] / exp["iqr"], 6) if exp["iqr"] else None,
+                        p50_shift=round(obs["p50"] - exp["p50"], 10), criteria=criteria,
+                        p50_rule="evidence only: the reference rate moves every quarter; the level is never a criterion")
+        keys = set()
+        if criteria["share"] == "breach":
+            keys |= {k for k, v in obs["resolved"] if v <= 0}
+        if criteria["iqr"] == "breach":
+            keys |= {k for k, v in obs["resolved"] if abs(v - obs["p50"]) > limit + 1e-9}
+        failed = [name for name, verdict in criteria.items() if verdict == "breach"]
+        if not failed:
+            return _result(c, "holds", q2, expected=exp, observed=observed)
+        cause = "+".join({"share": "implied_base_share_moved", "iqr": "implied_base_dispersion_widened"}[f]
+                         for f in failed)
+        return _result(c, "breach", q2, cause=cause, expected=exp, observed=observed, keys=keys)
+    brief = _text_brief(obs)
+    cause = _text_gate(obs, sem["gaps"], band, "_in_q2")
+    if cause:
+        return _result(c, "insufficient_evidence", q2, cause=cause, expected=exp,
+                       observed=dict(brief, channel_gaps=sem["gaps"]), keys=obs["unobservable_keys"])
+    criteria, deltas, keys = {}, {}, set()
+    for name, learned in sorted(_req(exp, "shares", c["contract_id"]).items()):
+        now = obs["shares"][name]
+        if now["n"] < band["min_rows"]:
+            criteria[name] = "not_assessed"
+            continue
+        delta = (now["share"] - learned["share"]) * 100
+        deltas[name] = round(delta, 6)
+        criteria[name] = "breach" if abs(delta) > band["text_share_pp"] + 1e-9 else "holds"
+        if criteria[name] == "breach":
+            keys |= set(now["hit_keys"] if delta > 0 else now["miss_keys"])
+    observed = dict(brief, criteria=criteria, delta_pp=deltas)
+    if not any(v != "not_assessed" for v in criteria.values()):
+        return _result(c, "insufficient_evidence", q2, cause="fewer_than_min_rows_parseable_in_q2", expected=exp,
+                       observed=observed)
+    if "breach" in criteria.values():
+        return _result(c, "breach", q2, cause="text_share_moved", expected=exp, observed=observed, keys=keys)
+    return _result(c, "holds", q2, expected=exp, observed=observed)
+
+
+def evaluate_semantic_grid(block: dict, grid: list, *, q2_doc, q2_listing, grammar) -> list:
+    """Calibration only: the semantic contracts of `block` at every candidate tolerance in `grid`.
+
+    One routing and one observation per contract; each candidate's verdict uses that candidate's
+    bands (rebanded_block). Returns one result list per grid entry, in grid order, with the same
+    newly_abstained flag as evaluate_contracts."""
+    grammars = as_grammars(grammar)
+    semantic = [c for c in _req(block, "contracts", "inventory block") if c["kind"] in SEMANTIC_KINDS]
+    per_grid = [[dict(c, band=band_for(tol, c["tier"], c["kind"])) for c in semantic] for tol in grid]
+    for tol, contracts in zip(grid, per_grid):
+        for c in contracts:
+            _check_frozen(c, tol)
+        if frozen_scale_conventions(tol) != frozen_scale_conventions(grid[0]) or \
+                semantic_constants(tol) != semantic_constants(grid[0]):
+            raise ContractError("candidate tolerances differ outside the semantic bands")
+    out = [[] for _ in grid]
+    if q2_doc is None:
+        q2 = dict(report_date=q2_listing.get("report_date"), form_type=None, status=q2_listing.get("status"),
+                  detail=q2_listing.get("detail"))
+        for k, contracts in enumerate(per_grid):
+            out[k] = [_result(c, "insufficient_evidence", q2, cause="q2_census_unavailable") for c in contracts]
+    else:
+        frame = _q2_frame(block, q2_doc, q2_listing, grammars)
+        q2, routed = frame["q2"], frame["routing"]["routed"]
+        for idx, c in enumerate(semantic):
+            pid = c["partition_id"]
+            if c["learn_status"] != "learned":
+                for k in range(len(grid)):
+                    out[k].append(_result(per_grid[k][idx], "insufficient_evidence", q2,
+                                          cause="not_learned_in_q1: " + str(c["learn_cause"])))
+                continue
+            if pid in frame["ambiguous"] or frame["unroutable"]:
+                keys = frame["ambiguous"].get(pid, []) + frame["unroutable"]
+                for k in range(len(grid)):
+                    out[k].append(_result(per_grid[k][idx], "insufficient_evidence", q2, keys=keys,
+                                          cause="ambiguous_partition_overlap" if pid in frame["ambiguous"]
+                                          else "rows_not_routable"))
+                continue
+            members = [frame["by_ctx"][k] for k in routed.get(pid, [])]
+            sem = observe_semantic(c, q2_doc, members, grammars, frame["facts_by_i"],
+                                   frozen_scale_conventions(grid[0]), grid[0])
+            for k, tol in enumerate(grid):
+                out[k].append(semantic_verdict(per_grid[k][idx], q2, sem, tol))
+    status = _req(_req(block, "identifier_format", "inventory block"), "status", "inventory block.identifier_format")
+    for results in out:
+        for r, c in zip(results, semantic):
+            r["identifier_format_unresolved"] = status == "unresolved_mixed"
+            r["newly_abstained"] = c["learn_status"] == "learned" and r["status"] == "insufficient_evidence"
+    return out
+
+
 # ---------------------------------------------------------------- M2
 
 def _counts(results) -> dict:
@@ -629,13 +981,16 @@ def _tables(results: list) -> dict:
         if r["status"] == "insufficient_evidence":
             causes[r["cause"]] = causes.get(r["cause"], 0) + 1
     counts = _counts(results)
+    newly = sum(bool(r.get("newly_abstained")) for r in results)
     return dict(denominator=len(results), counts=counts,
                 holds_share=round(counts["holds"] / len(results), 6) if results else None,
                 by_cik=by(lambda r: r["cik"]), by_kind=by(lambda r: r["kind"]),
                 by_q2_form_type=by(lambda r: r["q2"]["form_type"] or "unavailable"),
                 by_cik_and_kind=by(lambda r: r["cik"] + ":" + r["kind"]),
                 by_q2_form_type_and_kind=by(lambda r: (r["q2"]["form_type"] or "unavailable") + ":" + r["kind"]),
-                insufficient_causes=dict(sorted(causes.items())))
+                insufficient_causes=dict(sorted(causes.items())),
+                newly_abstained=dict(count=newly, share=round(newly / len(results), 6) if results else None,
+                                     rule=NEWLY_ABSTAINED_RULE))
 
 
 def strict_results(results: list) -> list:

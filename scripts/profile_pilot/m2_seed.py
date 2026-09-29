@@ -69,7 +69,8 @@ FRACTIONS = (0.0, 0.05, 0.10, 0.20, 0.30, 0.50, 1.0)
 SEEDS = (1, 2, 3)
 RANGE_DELTAS = (0.15, 0.3, 0.6)
 PERTURB_KINDS = ("scale_flip", "scale_flip_declared", "concept_move_namespace", "concept_move_local",
-                 "spread_for_coupon", "fill_drop", "range_shift", "identifier_format")
+                 "spread_for_coupon", "fill_drop", "range_shift", "identifier_format", "text_numeric_divergence",
+                 "bps_spread_scale")
 VARIANTS = (("scale_flip", "scale_flip", None), ("scale_flip_declared", "scale_flip_declared", None),
             ("concept_move_namespace", "concept_move_namespace", None),
             ("concept_move_local", "concept_move_local", None), ("spread_for_coupon", "spread_for_coupon", None),
@@ -83,6 +84,20 @@ EXPECTED_DETECTOR = {"scale_flip": "scale", "scale_flip_declared": "scale",
                      "spread_for_coupon": "value_range", "fill_drop": "fill_rate",
                      "range_shift_0.15": "value_range", "range_shift_0.3": "value_range",
                      "range_shift_0.6": "value_range", "identifier_format": "format_grammar"}
+# ---- Task B2-3 (semantic mode): the drift classes the two new kinds target, plus the range shifts
+# for the median_shift calibration-only experiment (addendum 3; never adopted into v3).
+SEMANTIC_VARIANTS = (("spread_for_coupon", "spread_for_coupon", None),
+                     ("text_numeric_divergence", "text_numeric_divergence", None),
+                     ("bps_spread_scale", "bps_spread_scale", None)) + tuple(
+    ("range_shift_" + str(d), "range_shift", d) for d in RANGE_DELTAS)
+SEMANTIC_TARGETS = {"share_pp": "spread_for_coupon", "iqr_widen": "spread_for_coupon",
+                    "text_share_pp": "text_numeric_divergence"}
+CANDIDATES = dict(share_pp=(5, 10, 15, 20, 25), iqr_widen=(1.5, 2.0, 3.0), text_share_pp=(5, 10, 15, 20, 25))
+REFERENCE = dict(share_pp=10, iqr_widen=2.0, text_share_pp=10)
+MEDIAN_SHIFT = dict(x=(0.10, 0.15, 0.25), y=(0.05, 0.10))
+IN_SAMPLE = "in-sample (bands chosen after Q2 and the history were read)"
+DIVERGENCE_PP = Decimal(1)
+DIVERGENCE_STEP = {"pure": Decimal("0.01"), "percent": Decimal(1), "bps": Decimal(100)}
 # Other local names pipeline.bdc_filings.CONCEPT_MAP maps to the same field (checked per move).
 ALT_LOCAL = {"interest_rate": ("InvestmentInterestRate", "InvestmentInterestRatePaidInCash"),
              "basis_spread": ("InvestmentBasisSpreadVariableRate", "InvestmentSpreadRate"),
@@ -249,7 +264,8 @@ def _filled_rows(doc: dict, field: str) -> int:
         from scripts.profile_pilot.census_detect import LABEL_RE
         texts = [doc["positions"][n]["identity"].get("typed_identifier") for n in _current_indices(doc)]
         return sum(1 for t in texts if t and not LABEL_RE.match(t))
-    return sum(1 for n in _current_indices(doc) if _filled(doc["positions"][n], field))
+    return sum(1 for n in _current_indices(doc)
+               if any(_filled(doc["positions"][n], f) for f in field.split("+")))
 
 
 def finish_timing(raw: dict) -> dict:
@@ -357,7 +373,8 @@ def perturb(doc: dict, kind: str, fraction: float, *, seed: int, field: str = FI
     handler = {"scale_flip": _scale_flip, "scale_flip_declared": _scale_flip_declared,
                "concept_move_namespace": _concept_move, "concept_move_local": _concept_move,
                "spread_for_coupon": _spread_for_coupon, "fill_drop": _fill_drop, "range_shift": _range_shift,
-               "identifier_format": _identifier_format}[kind]
+               "identifier_format": _identifier_format, "text_numeric_divergence": _text_numeric_divergence,
+               "bps_spread_scale": _bps_spread_scale}[kind]
     handler(ed, receipt, field, fraction, seed, delta)
     receipt["touched"] = len(receipt["rows"])
     receipt["filled"] = _filled_rows(ed.src, receipt["field"])
@@ -510,6 +527,39 @@ def _range_shift(ed, receipt, field, fraction, seed, delta):
                                     after=new, declared_class=cls, fact_indices=facts))
 
 
+def _text_numeric_divergence(ed, receipt, _field, fraction, seed, _delta):
+    rates, spreads = _ratio_rows(ed.src, "interest_rate"), _ratio_rows(ed.src, "basis_spread")
+    rows = sorted(set(rates) | set(spreads))
+    receipt.update(eligible=len(rows), field="interest_rate+basis_spread",
+                   rule="interest_rate and basis_spread each + 1.00 percentage point in their declared ratio class "
+                        "(pure +0.01, percent +1, bps +100); identifier text, units and concepts unchanged")
+    for ctx in _select({c: None for c in rows}, fraction, seed):
+        before, after, facts = {}, {}, []
+        for field, table in (("interest_rate", rates), ("basis_spread", spreads)):
+            if ctx not in table:
+                continue
+            n, cls, number = table[ctx]
+            new = _fmt(number + DIVERGENCE_STEP[cls])
+            before[field] = ed.src["positions"][n]["fields"][field]["value"]
+            after[field] = new
+            facts += _set_value(ed, n, field, new)
+        receipt["rows"].append(dict(context_id=ctx, before=before, after=after, delta_pp=float(DIVERGENCE_PP),
+                                    fact_indices=facts))
+
+
+def _bps_spread_scale(ed, receipt, _field, fraction, seed, _delta):
+    rows = _ratio_rows(ed.src, "basis_spread")
+    receipt.update(eligible=len(rows), field="basis_spread",
+                   rule="basis_spread raw value x100 with the declared unit kept (pure 0.055 -> 5.5: a percent-point "
+                        "number under a decimal unit; percent 5.5 -> 550: a bps number under a percent unit)")
+    for ctx in _select(rows, fraction, seed):
+        n, cls, number = rows[ctx]
+        new = _fmt(number * 100)
+        facts = _set_value(ed, n, "basis_spread", new)
+        receipt["rows"].append(dict(context_id=ctx, before=ed.src["positions"][n]["fields"]["basis_spread"]["value"],
+                                    after=new, declared_class=cls, fact_indices=facts))
+
+
 def rewrite_identifier(text: str) -> str:
     return DATE_RE.sub(r"\1-\2-\3", text).replace("%", " pct")
 
@@ -655,8 +705,13 @@ def _target_ids(results: list) -> dict:
 
 
 def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, grammar, yield_q2,
-                    variants=VARIANTS, fractions=FRACTIONS, seeds=SEEDS, full_validation: bool = False) -> dict:
-    """Null control + every variant x fraction x seed, evaluated against the frozen block."""
+                    variants=VARIANTS, fractions=FRACTIONS, seeds=SEEDS, full_validation: bool = False,
+                    semantic: dict | None = None) -> dict:
+    """Null control + every variant x fraction x seed, evaluated against the frozen block.
+
+    semantic (Task B2-3): dict(block=<v3 block learned from the unperturbed Q1>, grid=semantic_grid(...),
+    range_stats=bool). Each evaluation then also carries the semantic contracts' status at every
+    candidate band (`semantic`) and, with range_stats, the median_shift experiment verdicts."""
     variants = list(variants)
     before_digest = manifest.digest(q1_doc)
     listing = dict(status="available", report_date=q1_doc["document"]["report_date"],
@@ -666,9 +721,37 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
         return contracts.evaluate_contracts(block, tolerances, q2_doc=doc, q2_listing=listing, grammar=grammar,
                                             yield_q2=yield_q2)
 
+    sem_eval = ms_eval = None
+    learn_stats = {}
+    if semantic:
+        sem_block, grid = semantic["block"], semantic["grid"]
+        tols = [g["tolerances"] for g in grid]
+
+        def sem_eval(doc):
+            out = contracts.evaluate_semantic_grid(sem_block, tols, q2_doc=doc, q2_listing=listing, grammar=grammar)
+            return {g["name"]: {r["contract_id"]: [r["status"], r["cause"], (r.get("observed") or {}).get("criteria"),
+                                                   len(r["violating_keys"])] for r in res}
+                    for g, res in zip(grid, out)}
+        if semantic.get("range_stats"):
+            learn_stats = range_stats(range_samples(block, q1_doc, grammar=grammar, tolerances=tolerances))
+            meta = {c["contract_id"]: c for c in block["contracts"]}
+
+            def ms_eval(doc, results):
+                samples = range_samples(block, doc, grammar=grammar, tolerances=tolerances)
+                scale = {(r["partition_id"], r["field"]): r["status"] for r in results if r["kind"] == "scale"}
+                out = {}
+                for cid, stats in learn_stats.items():
+                    gate = scale.get((meta[cid]["partition_id"], meta[cid]["field"])) == "holds"
+                    out[cid] = {ms_name(x, y): median_shift_verdict(stats, samples.get(cid, []), x=x, y=y)
+                                if gate else "insufficient_evidence"
+                                for x in MEDIAN_SHIFT["x"] for y in MEDIAN_SHIFT["y"]}
+                return out
+
     timing = Counter()
     t0 = time.perf_counter()
     null = ev(q1_doc)
+    sem_null = sem_eval(q1_doc) if sem_eval else None
+    ms_null = ms_eval(q1_doc, null) if ms_eval else None
     timing["evaluate_seconds"] += time.perf_counter() - t0
     ids = [r["contract_id"] for r in null]
     base = {r["contract_id"]: r for r in null}
@@ -688,6 +771,8 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                 timing["validate_seconds"] += time.perf_counter() - t
                 t = time.perf_counter()
                 results = ev(doc)
+                sem_out = sem_eval(doc) if sem_eval else None
+                ms_out = ms_eval(doc, results) if ms_eval else None
                 timing["evaluate_seconds"] += time.perf_counter() - t
                 if [r["contract_id"] for r in results] != ids:
                     raise contracts.ContractError("contract order/denominator changed under perturbation: " + cik)
@@ -710,13 +795,24 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                     collateral=[dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"],
                                      before=base[r["contract_id"]]["status"], after=r["status"], cause=r["cause"])
                                 for r in changed if r["contract_id"] not in target_set],
-                    realism_errors=problems, realism_checked=checked, full_validation=full))
+                    realism_errors=problems, realism_checked=checked, full_validation=full,
+                    **({"semantic": sem_out} if sem_eval else {}),
+                    **({"median_shift": ms_out} if ms_eval else {})))
                 receipts.append(dict(variant=name, fraction=fraction, seed=seed, receipt_sha256=receipt_sha,
                                      receipt=receipt))
                 del doc
     unchanged = manifest.digest(q1_doc) == before_digest
     counts = Counter(r["status"] for r in null)
-    return dict(
+    extra = {}
+    if semantic:
+        extra["semantic"] = dict(
+            tier=semantic["block"]["tier"], null_control=sem_null, median_shift_null=ms_null, range_stats=learn_stats,
+            grid=[{k: v for k, v in g.items() if k != "tolerances"} for g in semantic["grid"]],
+            contracts=[dict(contract_id=c["contract_id"], kind=c["kind"], partition_id=c["partition_id"],
+                            tier=c["tier"], learn_status=c["learn_status"], learn_cause=c["learn_cause"],
+                            expectation=c["expectation"], inception=(c.get("evidence") or {}).get("inception"))
+                       for c in semantic["block"]["contracts"] if c["kind"] in contracts.SEMANTIC_KINDS])
+    return dict(extra,
         cik=cik, contract_ids=ids,
         contract_meta=[dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"],
                             partition_id=r["partition_id"]) for r in null],
@@ -727,6 +823,178 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                           statuses=[[r["status"], r["cause"]] for r in null]),
         evaluations=evaluations, receipts=receipts, original_unchanged=unchanged,
         timing=finish_timing(timing))
+
+
+# ---------------------------------------------------------------- Task B2-3: candidate bands and experiments
+
+def semantic_grid(v2: dict) -> list:
+    """Every candidate band as a v3 tolerance over the (frozen) v2 content: 15 composition points
+    (share_pp x iqr_widen) and 5 text points; the other family's bands sit at REFERENCE."""
+    point = lambda **kw: contracts.semantic_tolerances(v2, calibration=dict(label=IN_SAMPLE, status="candidate grid "
+                                                                           "point (calibration only)"), **kw)
+    grid = [dict(name="c:s%s_i%s" % (s, i), family="composition", share_pp=s, iqr_widen=i,
+                 text_share_pp=REFERENCE["text_share_pp"],
+                 tolerances=point(share_pp=s, iqr_widen=i, text_share_pp=REFERENCE["text_share_pp"]))
+            for s in CANDIDATES["share_pp"] for i in CANDIDATES["iqr_widen"]]
+    grid += [dict(name="t:%s" % t, family="text", share_pp=REFERENCE["share_pp"], iqr_widen=REFERENCE["iqr_widen"],
+                  text_share_pp=t, tolerances=point(share_pp=REFERENCE["share_pp"], iqr_widen=REFERENCE["iqr_widen"],
+                                                    text_share_pp=t))
+             for t in CANDIDATES["text_share_pp"]]
+    return grid
+
+
+def ms_name(x: float, y: float) -> str:
+    return "x%s_y%s" % (x, y)
+
+
+def range_samples(block: dict, doc: dict, *, grammar, tolerances: dict) -> dict:
+    """Canonical percent values per LEARNED value_range contract, routed by the block's frozen partitions."""
+    from scripts.profile_pilot.contracts_observe import canonical, observe_field
+    grammars = contracts.as_grammars(grammar)
+    frame = contracts._q2_frame(block, doc, dict(census_relative="range_samples"), grammars)
+    conventions = contracts.frozen_scale_conventions(tolerances)
+    out = {}
+    for c in block["contracts"]:
+        if c["kind"] != "value_range" or c["learn_status"] != "learned":
+            continue
+        pid = c["partition_id"]
+        if pid in frame["ambiguous"] or frame["unroutable"]:
+            continue
+        members = [frame["by_ctx"][k] for k in frame["routing"]["routed"].get(pid, [])]
+        obs = observe_field(doc, members, c["field"], frame["facts_by_i"])
+        out[c["contract_id"]] = sorted(v for _, v in canonical(obs["values"], c["expectation"]["scale_class"],
+                                                               conventions))
+    return out
+
+
+def range_stats(samples: dict) -> dict:
+    from scripts.profile_pilot.contracts_observe import quantile
+    return {cid: dict(p50=round(quantile(v, 0.5), 10), min=v[0], max=v[-1], n=len(v)) for cid, v in samples.items() if v}
+
+
+def median_shift_verdict(learned: dict, values: list, *, x: float, y: float) -> str:
+    """Calibration-only alternative value_range band (addendum 3, never adopted into v3): breach when
+    |Q2 p50 - Q1 p50| / |Q1 p50| > x AND the share of Q2 values outside the Q1 min-max exceeds y."""
+    from scripts.profile_pilot.contracts_observe import quantile
+    if not values or not learned.get("p50"):
+        return "insufficient_evidence"
+    ordered = sorted(values)
+    shift = abs(quantile(ordered, 0.5) - learned["p50"]) / abs(learned["p50"])
+    outside = sum(v < learned["min"] or v > learned["max"] for v in ordered) / len(ordered)
+    return "breach" if shift > x + 1e-12 and outside > y + 1e-12 else "holds"
+
+
+def _semantic_families(grid: list) -> list:
+    """(family, value key, grid point, contract kind, criterion or None for the status) per curve cell."""
+    out = []
+    for g in grid:
+        if g["family"] == "composition":
+            if g["iqr_widen"] == REFERENCE["iqr_widen"]:
+                out.append(("share_pp", str(g["share_pp"]), g["name"], "rate_composition", "share"))
+            if g["share_pp"] == REFERENCE["share_pp"]:
+                out.append(("iqr_widen", str(g["iqr_widen"]), g["name"], "rate_composition", "iqr"))
+            out.append(("composition_status", g["name"], g["name"], "rate_composition", None))
+        else:
+            out.append(("text_share_pp", str(g["text_share_pp"]), g["name"], "text_agreement", None))
+    return out
+
+
+def _tier_medians(per_cik: dict, tiers: dict) -> tuple[dict, dict, dict]:
+    median, applicable, detected = {}, {}, {}
+    for tier in ("all", "standard", "low_history"):
+        ciks = [c for c in per_cik if tier == "all" or tiers[c] == tier]
+        median[tier] = _median_fraction([per_cik[c] for c in ciks])
+        applicable[tier] = len(ciks)
+        detected[tier] = sum(per_cik[c] is not None for c in ciks)
+    return median, applicable, detected
+
+
+def semantic_curves(evaluations: list, *, grid: list, meta: dict) -> dict:
+    """Seeded detection per candidate band: per CIK the smallest fraction at which >= 2 of 3 seeds detect
+    (criterion breach, or status breach for whole-contract cells), median over CIKs where the contract
+    holds in the null control at that band (median_high, never ranked above 1.0), by tier."""
+    grouped: dict = {}
+    for e in evaluations:
+        grouped.setdefault((e["variant"], e["cik"]), []).append(e)
+    variants = sorted({e["variant"] for e in evaluations})
+    curves: dict = {}
+    for family, key, point, kind, criterion in _semantic_families(grid):
+        for variant in variants:
+            per_cik, abstained, tiers = {}, {}, {}
+            for cik, info in sorted(meta.items()):
+                cids = [cid for cid, k in info["contracts"].items() if k == kind
+                        and (info["null"].get(point) or {}).get(cid) == "holds"]
+                if not cids:
+                    continue
+                by_f: dict = {}
+                for e in grouped.get((variant, cik), []):
+                    if e["fraction"] <= 0:
+                        continue
+                    per = e["semantic"][point]
+                    flags = []
+                    for cid in cids:
+                        status, _, crit = per[cid][0], per[cid][1], per[cid][2] or {}
+                        hit = crit.get(criterion) == "breach" if criterion else status == "breach"
+                        flags.append("detected" if hit else ("abstained" if status == "insufficient_evidence"
+                                                            else "missed"))
+                    outcome = "detected" if "detected" in flags else ("abstained" if "abstained" in flags else "missed")
+                    by_f.setdefault(e["fraction"], []).append(outcome)
+                first = lambda wanted: next((f for f in sorted(by_f) if _majority(by_f[f], wanted)), None)
+                per_cik[cik], abstained[cik], tiers[cik] = first("detected"), first("abstained"), info["tier"]
+            median, applicable, detected = _tier_medians(per_cik, tiers)
+            curves.setdefault(family, {}).setdefault(key, {})[variant] = dict(
+                point=point, criterion=criterion or "status", per_cik=per_cik, per_cik_abstained=abstained,
+                median=median, applicable=applicable, detected=detected)
+    return curves
+
+
+def median_shift_curves(evaluations: list, *, meta: dict) -> dict:
+    """The median_shift experiment beside the v2 band, on the interest_rate value_range contract."""
+    grouped: dict = {}
+    for e in evaluations:
+        grouped.setdefault((e["variant"], e["cik"]), []).append(e)
+    names = [ms_name(x, y) for x in MEDIAN_SHIFT["x"] for y in MEDIAN_SHIFT["y"]]
+    out: dict = {}
+    for variant in sorted({e["variant"] for e in evaluations}):
+        for name in names + ["v2_band"]:
+            per_cik, tiers = {}, {}
+            for cik, info in sorted(meta.items()):
+                cid = info.get("range_contract")
+                if not cid:
+                    continue
+                if name != "v2_band" and (info["ms_null"].get(cid) or {}).get(name) != "holds":
+                    continue
+                if name == "v2_band" and info.get("v2_null") != "holds":
+                    continue
+                by_f: dict = {}
+                for e in grouped.get((variant, cik), []):
+                    if e["fraction"] <= 0:
+                        continue
+                    if name == "v2_band":
+                        o = (e["targets"].get("value_range") or {}).get("outcome")
+                    else:
+                        o = {"breach": "detected", "insufficient_evidence": "abstained"}.get(
+                            ((e.get("median_shift") or {}).get(cid) or {}).get(name), "missed")
+                    by_f.setdefault(e["fraction"], []).append(o)
+                per_cik[cik] = next((f for f in sorted(by_f) if _majority(by_f[f], "detected")), None)
+                tiers[cik] = info["tier"]
+            median, applicable, detected = _tier_medians(per_cik, tiers)
+            out.setdefault(variant, {})[name] = dict(per_cik=per_cik, median=median, applicable=applicable,
+                                                     detected=detected)
+    return out
+
+
+def compare_relearned(frozen: dict, relearned: dict) -> dict:
+    """The block re-learned with the current code must equal the frozen block on every v2 contract and
+    every block field except the version (a v3 block adds only the semantic contracts)."""
+    diffs = ["block." + k for k in sorted(set(frozen) | set(relearned))
+             if k not in ("version", "contracts") and frozen.get(k) != relearned.get(k)]
+    v2 = [c for c in relearned["contracts"] if c["kind"] in contracts.KINDS]
+    if len(v2) != len(frozen["contracts"]):
+        diffs.append("v2 contract count %d != %d" % (len(v2), len(frozen["contracts"])))
+    diffs += [a["contract_id"] for a, b in zip(frozen["contracts"], v2) if a != b]
+    return dict(equal=not diffs, differences=diffs[:40], v2_contracts=len(v2),
+                semantic_contracts=len(relearned["contracts"]) - len(v2))
 
 
 # ---------------------------------------------------------------- aggregation
@@ -870,6 +1138,69 @@ def render_summary(*, run_id: str, sens: dict, spots: list, per_cik: dict, timin
     return text
 
 
+def semantic_meta(per_cik: dict) -> tuple[dict, dict]:
+    """Per CIK: tier, learned semantic contracts and their null-control status per band; and the
+    median_shift inputs (interest_rate value_range contract, its null verdicts, the v2 null status)."""
+    meta, ms = {}, {}
+    for cik, info in per_cik.items():
+        sem = info["semantic"]
+        meta[cik] = dict(tier=sem["tier"],
+                         contracts={c["contract_id"]: c["kind"] for c in sem["contracts"] if c["learn_status"] == "learned"},
+                         null={name: {cid: v[0] for cid, v in per.items()} for name, per in sem["null_control"].items()})
+        rc = info["targets"].get("value_range")
+        null = dict(zip(info["contract_ids"], (s[0] for s in info["null_control"]["statuses"])))
+        ms[cik] = dict(tier=sem["tier"], range_contract=rc, ms_null=sem.get("median_shift_null") or {},
+                       v2_null=null.get(rc))
+    return meta, ms
+
+
+def _fmt_median(cell: dict) -> str:
+    med = cell["median"]
+    show = lambda v: "never" if v is None else "%g" % v
+    return (show(med["all"]) + " (" + str(cell["detected"]["all"]) + "/" + str(cell["applicable"]["all"]) + ")"
+            + "; std " + show(med["standard"]) + ", low " + (show(med["low_history"])
+                                                              if cell["applicable"]["low_history"] else "n/a"))
+
+
+def render_semantic_summary(*, run_id: str, curves: dict, ms_curves: dict, meta: dict, contracts_by_cik: dict) -> str:
+    lines = ["# M2 semantic kinds: seeded sensitivity per candidate band (" + run_id + ")", "",
+             "Label: " + IN_SAMPLE + ". Bands swept on the B2-1 seeds after the Stage B Q2 and the history were read.",
+             "Cell = median over CIKs where the contract holds in the null control at that band of the smallest "
+             "fraction at which >= 2 of 3 seeds detect (never = not at 1.0); (d/n) CIKs detecting / applicable; std/low "
+             "= tier medians. share_pp and iqr_widen cells count their own criterion; text_share_pp and the "
+             "composition grid count the contract status.", ""]
+    for family in ("share_pp", "iqr_widen", "text_share_pp", "composition_status"):
+        table = curves.get(family) or {}
+        if not table:
+            continue
+        variants = sorted({v for cells in table.values() for v in cells})
+        lines += ["## " + family, "", "| band | " + " | ".join(variants) + " |", "|---|" + "---|" * len(variants)]
+        for key in table:
+            lines.append("| " + key + " | " + " | ".join(_fmt_median(table[key][v]) if v in table[key] else "-"
+                                                          for v in variants) + " |")
+        lines.append("")
+    lines += ["## median_shift experiment (calibration only, NOT in v3) beside the v2 value_range band", "",
+              "interest_rate value_range; x = relative median move, y = share of rows outside the Q1 min-max.", ""]
+    names = sorted({n for by in ms_curves.values() for n in by})
+    lines += ["| variant | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
+    for variant, by in sorted(ms_curves.items()):
+        lines.append("| " + variant + " | " + " | ".join(_fmt_median(by[n]) if n in by else "-" for n in names) + " |")
+    lines += ["", "## Semantic contracts learned from the unperturbed Q1 (with the inception block)", "",
+              "| cik | tier | kind | learn | cause | inception share_rate_le_spread | rate_equals_text_spread | "
+              "(magnitude-normalised) | implied base p50 |", "|---|---|---|---|---|---|---|---|---|"]
+    for cik, items in sorted(contracts_by_cik.items()):
+        for c in items:
+            inc = c.get("inception") or {}
+            lines.append("| " + " | ".join(str(x) for x in (
+                cik, meta.get(cik, {}).get("tier"), c["kind"], c["learn_status"], c["learn_cause"],
+                inc.get("share_rate_le_spread"), inc.get("rate_equals_text_spread"),
+                (inc.get("rate_equals_text_spread_magnitude_normalised") or {}).get("share"),
+                inc.get("implied_base_p50"))) + " |")
+    text = "\n".join(lines) + "\n"
+    text.encode("ascii")
+    return text
+
+
 CSV_FIELDS = ("cik", "variant", "fraction", "seed", "eligible", "touched", "contract_id", "kind", "field",
               "status", "cause", "null_status", "role", "outcome")
 
@@ -939,8 +1270,8 @@ def pin_tolerances(tol_path: Path) -> tuple[dict, dict]:
                                + ")")
     if manifest.digest(body["content"]) != body["content_sha256"]:
         raise StageInvalidated("tolerances content does not match its content_sha256")
-    if body["content"].get("version") != contracts.TOLERANCES_VERSION:
-        raise StageInvalidated("tolerances version is not " + contracts.TOLERANCES_VERSION)
+    if body["content"].get("version") != contracts.TOLERANCES_VERSION_V2:
+        raise StageInvalidated("tolerances version is not " + contracts.TOLERANCES_VERSION_V2)
     return body["content"], dict(record, content_sha256=body["content_sha256"], run_id=body.get("run_id"),
                                  version=body["content"]["version"])
 
@@ -965,15 +1296,23 @@ def pin_block(paths, croot: Path, cik: str, row: dict, inventory: dict) -> tuple
         now = manifest.file_record(paths.code_root / rel, rec["label"])
         if now.get("sha256") != rec["sha256"]:
             drift.append(rel)
-    if drift:
-        raise StageInvalidated("contract code changed since the block was learned: " + ", ".join(drift))
-    return block, dict(record, learned_code_checked=len(deps["code"]), block_source="reused_frozen_learning_block")
+    # Code drift (Task B2-3 changed contracts.py) no longer fails here: the stage re-learns the block
+    # from the same Q1 inputs with the current code and requires equality (compare_relearned) before
+    # any evaluation; the frozen block is still the one evaluated.
+    return block, dict(record, learned_code_checked=len(deps["code"]), code_drift=drift,
+                       block_source="reused_frozen_learning_block",
+                       drift_rule="code drift -> re-learn with the current code and require equality with the frozen "
+                                  "block (v2 subset for a v3 re-learn) before evaluating; mismatch invalidates")
 
 
 def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_id: str, ciks=None,
-              scratch_dir: Path | None = None, fractions=FRACTIONS, seeds=SEEDS) -> dict:
+              scratch_dir: Path | None = None, fractions=FRACTIONS, seeds=SEEDS, semantic: bool = False) -> dict:
+    """semantic=True (Task B2-3): the semantic drift classes + range shifts, the v3 semantic contracts at
+    every candidate band (IN-SAMPLE calibration) and the median_shift experiment; the v2 block is still
+    the frozen one and the re-learned block must equal it on the v2 subset."""
     from scripts.profile_pilot import contracts_run
     ciks = list(ciks or cohort.PILOT_CIKS)
+    run_variants = SEMANTIC_VARIANTS if semantic else VARIANTS
     started = time.perf_counter()
     clock = dict(started_utc=_now())
     census = lineage.load_authoritative_census(paths, census_run_id, roles=("q1",), ciks=ciks,
@@ -1012,10 +1351,26 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
         if want != got:
             raise StageInvalidated("authored grammar differs from the one pinned in the learned block: " + cik)
     code = [_record(paths.code_root / rel, "code/" + rel, code_root=paths.code_root, blob_of=rel) for rel in CODE_FILES]
-    config = dict(fractions=list(fractions), seeds=list(seeds), variants=[list(v) for v in VARIANTS], field=FIELD,
+    config = dict(fractions=list(fractions), seeds=list(seeds), variants=[list(v) for v in run_variants], field=FIELD,
                   contract_kinds=list(CONTRACT_KINDS), expected_detector=EXPECTED_DETECTOR,
                   full_validation_max_bytes=FULL_VALIDATION_MAX_BYTES, limit_rule=LIMIT_RULE, limits=dict(seconds=LIMIT_SECONDS,
                                                                                    bytes=LIMIT_BYTES))
+    grid = ref_tol = None
+    if semantic:
+        grid = semantic_grid(tolerances)
+        ref_tol = contracts.semantic_tolerances(tolerances, bands=contracts.SEMANTIC_BANDS,
+                                                calibration=dict(label=IN_SAMPLE, status="learning reference only"))
+        config.update(semantic=True, label=IN_SAMPLE, candidates={k: list(v) for k, v in CANDIDATES.items()},
+                      reference=REFERENCE, targets=SEMANTIC_TARGETS,
+                      median_shift=dict(MEDIAN_SHIFT, note="calibration-only experiment (addendum 3); not in v3"),
+                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"], iqr_widen=g["iqr_widen"],
+                                 text_share_pp=g["text_share_pp"], content_sha256=manifest.digest(g["tolerances"]))
+                            for g in grid],
+                      learning_reference=dict(content_sha256=manifest.digest(ref_tol),
+                                              rule="the semantic block is learned once from the unperturbed Q1 "
+                                                   "(expectations are band-free); every grid point re-bands it"),
+                      v2_subset_rule="the re-learned block equals the frozen v2 block on every v2 contract "
+                                     "(compare_relearned); a mismatch invalidates the stage")
     inputs = ([census["authoritative"]] + census["files"] + [summary_rec] + list(profile_recs.values())
               + [cman_rec, tol_rec, inv_rec] + list(block_recs.values())
               + [r for recs in grammar_recs.values() for r in recs] + code)
@@ -1060,11 +1415,31 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
             t0 = time.perf_counter()
             q1_doc = contracts_run.load_census(row)
             yield_q1 = next(c for c in block["contracts"] if c["kind"] == "fund_income_yield")["evidence"]["q1_yield"]
+            check, relearned, learn_seconds = None, None, 0.0
+            if semantic or block_recs[cik]["code_drift"]:
+                t = time.perf_counter()
+                profile = contracts_run.load_profile(
+                    profile_recs[cik], census_sha256=summary_body["profiles"][cik + "/q1"]["census_sha256"])
+                relearned = contracts.learn_contracts(
+                    cik=cik, q1_doc=q1_doc, q1_profile=profile, grammar=grammars[cik], yield_q1=yield_q1,
+                    tolerances=ref_tol if semantic else tolerances, q2_listing=block["q2_listing"],
+                    recorded_at=block["recorded_at"])
+                check = compare_relearned(block, relearned)
+                learn_seconds = time.perf_counter() - t
+                if not check["equal"]:
+                    raise StageInvalidated("the current code does not re-learn the frozen v2 block for " + cik + ": "
+                                           + ", ".join(check["differences"][:10]))
             matrix = evaluate_matrix(cik=cik, block=block, tolerances=tolerances, q1_doc=q1_doc,
                                      grammar=grammars[cik], yield_q2=yield_q1, fractions=fractions, seeds=seeds,
-                                     full_validation=row["record"]["bytes"] <= FULL_VALIDATION_MAX_BYTES)
+                                     full_validation=row["record"]["bytes"] <= FULL_VALIDATION_MAX_BYTES,
+                                     variants=run_variants,
+                                     semantic=dict(block=relearned, grid=grid, range_stats=True) if semantic else None)
             matrix["timing"].update(wall_seconds=round(time.perf_counter() - t0, 2), peak_wset_bytes=_peak_bytes(),
-                                    census_bytes=row["record"]["bytes"], q1_positions=block["q1"]["positions"])
+                                    census_bytes=row["record"]["bytes"], q1_positions=block["q1"]["positions"],
+                                    learn_seconds=round(learn_seconds, 3))
+            # R35 bound: the re-learn is measured work too (added to perturb + evaluate)
+            matrix["timing"]["measured_seconds"] = round(matrix["timing"]["measured_seconds"] + learn_seconds, 3)
+            matrix["relearn_check"] = check
             matrix["block_source"] = block_recs[cik]["block_source"]
             matrix["yield_q2"] = "the frozen Q1 yield evidence (the yield contract is not perturbed)"
             return matrix
@@ -1084,15 +1459,35 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
             raise LimitExceeded(cik + " exceeded the measured bound: " + json.dumps(matrix["timing"]))
     clock["evaluation_done_utc"] = _now()
     evaluations = [e for info in per_cik.values() for e in info["evaluations"]]
-    sens = sensitivity(evaluations)
+    names = tuple(v[0] for v in run_variants)
+    sens = sensitivity(evaluations, variants=names)
     spots = blind_spots(evaluations, sens)
+    semantic_copies = []
+    if semantic:
+        meta, ms_meta = semantic_meta(per_cik)
+        curves = semantic_curves(evaluations, grid=grid, meta=meta)
+        ms_curves = median_shift_curves(evaluations, meta=ms_meta)
+        body = dict(run_id=paths.run_id, label=IN_SAMPLE, candidates={k: list(v) for k, v in CANDIDATES.items()},
+                    reference=REFERENCE, targets=SEMANTIC_TARGETS, curves=curves, median_shift=ms_curves,
+                    tiers={c: m["tier"] for c, m in meta.items()},
+                    contracts={c: info["semantic"]["contracts"] for c, info in per_cik.items()},
+                    relearn_checks={c: info["relearn_check"] for c, info in per_cik.items()},
+                    eligibility=sens.get("eligibility"),
+                    rule="detected at a band = >= 2 of 3 seeds breach (the named criterion for share_pp / iqr_widen, "
+                         "the contract status otherwise); applicable = the contract holds in the null control at that "
+                         "band; median over applicable CIKs (median_high, never ranked above 1.0)")
+        write_once_json(paths, "results/semantic_curves.json", body)
+        semantic_md = render_semantic_summary(run_id=paths.run_id, curves=curves, ms_curves=ms_curves, meta=meta,
+                                              contracts_by_cik=body["contracts"])
+        _write_text_once(confined(paths, "results/semantic_summary.md"), semantic_md)
+        semantic_copies.append(semantic_md)
     collateral = Counter()
     for e in evaluations:
         for c in e["collateral"]:
             collateral[(e["variant"], c["kind"], c["field"], c["before"], c["after"], str(c["cause"]))] += 1
     realism = sum(len(e["realism_errors"]) for e in evaluations)
     write_once_json(paths, "results/seed_matrix.json", dict(
-        run_id=paths.run_id, fractions=list(fractions), seeds=list(seeds), variants=list(VARIANT_NAMES),
+        run_id=paths.run_id, fractions=list(fractions), seeds=list(seeds), variants=list(names),
         synthetic_q2=SYNTHETIC_Q2_NOTE, receipts=receipts_rel, ciks=per_cik))
     write_once_json(paths, "results/sensitivity.json", dict(
         sens, run_id=paths.run_id, blind_spots=spots, expected_detector=EXPECTED_DETECTOR,
@@ -1107,6 +1502,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
     scratch = Path(scratch_dir) if scratch_dir else paths.code_root / "scratch" / "2026-09-29_m2_assessment"
     copies = [str(_write_text_once(scratch / ("seed_summary_" + paths.run_id + ".md"), summary_md)),
               str(_write_text_once(scratch / ("seed_matrix_" + paths.run_id + ".csv"), matrix_csv))]
+    copies += [str(_write_text_once(scratch / ("seed_semantic_" + paths.run_id + ".md"), text))
+               for text in semantic_copies]
     after = manifest.verify_inputs(dict(inputs=[{k: r[k] for k in keep if k in r} for r in inputs]))
     if not after["ok"]:
         raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
@@ -1134,6 +1531,8 @@ def main(argv=None) -> int:
     cmd.add_argument("--contracts-run-id", required=True)
     cmd.add_argument("--cik", action="append", default=None)
     cmd.add_argument("--scratch-dir", type=Path, default=None)
+    cmd.add_argument("--semantic", action="store_true",
+                     help="Task B2-3: semantic drift classes, v3 semantic contracts at every candidate band")
     args = parser.parse_args(argv)
     try:
         main_root = args.main_root or discover_main_root(CODE_ROOT)
@@ -1142,7 +1541,8 @@ def main(argv=None) -> int:
         receipt = "verification/" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "_m2_seed_preservation.json"
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, profile_run_id=args.profile_run_id,
-                                contracts_run_id=args.contracts_run_id, ciks=args.cik, scratch_dir=args.scratch_dir)
+                                contracts_run_id=args.contracts_run_id, ciks=args.cik, scratch_dir=args.scratch_dir,
+                                semantic=args.semantic)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
         return EXIT_INVALIDATED

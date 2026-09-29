@@ -223,9 +223,55 @@ def _yield_brief(ev: dict | None) -> dict | None:
                 durations_months=((ev.get("preconditions") or {}).get("duration") or {}).get("durations_months"))
 
 
+# ---------------------------------------------------------------- Task B2-3: the v2 subset under v3
+
+def v2_subset_check(blocks: dict, results: dict, *, v2_blocks: dict, v2_results: dict) -> dict:
+    """v2 contract ids, expectations and results must be byte-for-byte the v2 run's under v3: the v3
+    block's v2 contracts equal the v2 inventory's, and the v3 results of those contracts (without the
+    newly_abstained flag, which v2 results do not carry) equal the v2 results after a JSON round trip."""
+    by_cik, diffs = {}, {}
+    for cik in sorted(blocks):
+        v2c = [c for c in blocks[cik]["contracts"] if c["kind"] in contracts.KINDS]
+        mine = json.loads(json.dumps([{k: v for k, v in r.items() if k != "newly_abstained"}
+                                      for r in results[cik] if r["kind"] in contracts.KINDS]))
+        theirs = json.loads(json.dumps([{k: v for k, v in r.items() if k != "newly_abstained"}
+                                        for r in v2_results[cik]]))
+        same_c = json.loads(json.dumps(v2c)) == json.loads(json.dumps(v2_blocks[cik]["contracts"]))
+        same_r = mine == theirs
+        by_cik[cik] = dict(contracts=same_c, results=same_r, v2_contracts=len(v2c),
+                           semantic_contracts=len(blocks[cik]["contracts"]) - len(v2c))
+        bad = [a.get("contract_id") for a, b in zip(mine, theirs) if a != b]
+        if len(mine) != len(theirs):
+            bad.append("result count %d != %d" % (len(mine), len(theirs)))
+        if not same_c:
+            bad.append("v2 contracts differ from the v2 inventory")
+        if bad:
+            diffs[cik] = bad[:20]
+    return dict(identical=not diffs, by_cik=by_cik, differences=diffs,
+                rule="v2 subset = contracts of the v2 kinds; results compared without newly_abstained")
+
+
+def load_v2_run(paths: PilotPaths, run_id: str, ciks) -> dict:
+    """The v2 contracts root's frozen inventory and per-CIK results (read only, hashed)."""
+    other = _other_root(paths, run_id)
+    inv = manifest.load_inventory(other, "contract_inventory")
+    records, results = [_record(other.run_root / "inventories" / "contract_inventory.json",
+                                "v2_root/inventories/contract_inventory.json")], {}
+    for cik in ciks:
+        rec = _record(other.run_root / "results" / "contracts" / (cik + ".json"),
+                      "v2_root/results/contracts/" + cik + ".json")
+        outer = json.loads(Path(rec["path"]).read_text(encoding="ascii"))
+        if outer.get("complete") is not True:
+            raise StageInvalidated("v2 result file incomplete: " + cik)
+        results[cik] = outer["result"]["results"]
+        records.append(rec)
+    return dict(run_id=run_id, blocks={c: inv["ciks"][c] for c in ciks}, results=results, records=records,
+                tolerances_sha256=inv["tolerances"]["content_sha256"])
+
+
 # ---------------------------------------------------------------- the stage
 
-def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, ciks=None,
+def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, ciks=None, v2_run_id: str | None = None,
               recorded_at: str | None = None) -> dict:
     ciks = list(ciks or cohort.PILOT_CIKS)
     recorded_at = recorded_at or _now()
@@ -240,6 +286,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     for cik in ciks:
         grammars[cik], records = pin_grammar(paths, cik)
         grammar_records += records
+    v2 = load_v2_run(paths, v2_run_id, ciks) if v2_run_id else None
     code = [_record(paths.code_root / rel, "code/" + rel, blob_of=rel, code_root=paths.code_root)
             for rel in CODE_FILES]
     slices = manifest.materialise_slices(paths)
@@ -251,7 +298,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     tol_record = manifest.file_record(tolerances_state["path"], "run/inventories/contract_tolerances.json")
     pinned = ([census["authoritative"], census["excluded"], profiles["summary"], profiles["manifest"], tol_record]
               + census["files"] + list(profiles["profiles"].values()) + grammar_records + code + slices
-              + [income_slice])
+              + [income_slice] + (v2["records"] if v2 else []))
     built["inputs"] += [{k: r[k] for k in KEEP if k in r} for r in pinned]
     built["inputs"] += [s["source"] for s in slices + [income_slice]]
     built.update(stage="contracts", census_source=dict(run_id=census_run_id, run_root=census["run_root"]),
@@ -263,7 +310,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                            for c, g in grammars.items()},
                  slices=slices + [income_slice], code=code, s2_constants=contracts_income.s2_constants(),
                  stage_config=dict(ciks=ciks, recorded_at=recorded_at, contracts_version=contracts.CONTRACTS_VERSION,
-                                   tolerances_version=contracts.TOLERANCES_VERSION, kinds=list(contracts.KINDS),
+                                   tolerances_version=contracts.TOLERANCES_VERSION, kinds=list(contracts.ALL_KINDS),
                                    yield_holdings="private_markets_holdings slice (S2's production input); "
                                                   "bdc_holdings is pinned but is not S2-shaped"))
     built["inventories"] = manifest.inventory_states(paths)
@@ -349,9 +396,21 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
               partitions_evidenced={c: inventory["ciks"][c]["partitions_evidenced"] for c in ciks},
               tiers={c: inventory["ciks"][c]["tier"] for c in ciks})
     write_once_json(paths, "results/m2.json", m2)
+    subset = None
+    if v2:
+        per_cik = {}
+        for r in results:
+            per_cik.setdefault(r["cik"], []).append(r)
+        subset = v2_subset_check({c: inventory["ciks"][c] for c in ciks}, per_cik, v2_blocks=v2["blocks"],
+                                 v2_results=v2["results"])
+        subset.update(v2_run_id=v2["run_id"], v2_tolerances_sha256=v2["tolerances_sha256"])
+        write_once_json(paths, "results/v2_subset_check.json", subset)
     after = manifest.verify_inputs(built)
     if not after["ok"]:
         raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
+    if subset is not None and not subset["identical"]:
+        raise contracts.ContractError("the v2 subset under v3 differs from " + v2["run_id"] + ": "
+                                      + json.dumps(subset["differences"])[:400])
     order_ok = order_proof(clock, cached_q2_stamps=cached_stamps)
     strict = m2["strict_6_3"]
     summary = dict(run_id=paths.run_id, git_head=built["git"]["head"],
@@ -364,7 +423,9 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                    strict_6_3=dict(counts=strict["counts"], by_q2_form_type=strict["by_q2_form_type"],
                                    holds_share=strict["holds_share"], interpretation=strict["interpretation"]),
                    input_verification_after=after, results="results/m2.json", claim=contracts.CLAIM,
-                   stage_b_note=contracts.STAGE_B_NOTE)
+                   stage_b_note=contracts.STAGE_B_NOTE, newly_abstained=m2["newly_abstained"],
+                   by_kind=m2["by_kind"], v2_subset=None if subset is None else dict(
+                       identical=subset["identical"], v2_run_id=subset["v2_run_id"], by_cik=subset["by_cik"]))
     write_once_json(paths, "results/contracts_summary.json", summary)
     return summary
 
@@ -382,6 +443,7 @@ def main(argv=None) -> int:
     cmd.add_argument("--census-run-id", required=True)
     cmd.add_argument("--profile-run-id", required=True)
     cmd.add_argument("--cik", action="append", default=None)
+    cmd.add_argument("--v2-run-id", default=None, help="Task B2-3: assert the v2 subset equals this v2 run")
     args = parser.parse_args(argv)
     try:
         main_root = args.main_root or discover_main_root(CODE_ROOT)
@@ -391,7 +453,7 @@ def main(argv=None) -> int:
                    + "_contracts_preservation.json")
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, profile_run_id=args.profile_run_id,
-                                ciks=args.cik)
+                                ciks=args.cik, v2_run_id=args.v2_run_id)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
         return EXIT_INVALIDATED
@@ -408,6 +470,10 @@ def main(argv=None) -> int:
         print("  Q2 " + form + ": " + json.dumps(counts, sort_keys=True))
     strict = summary["strict_6_3"]
     print("M2 strict 6.3: " + json.dumps(strict["counts"], sort_keys=True))
+    print("newly_abstained (a flag, not a status): " + json.dumps({k: v for k, v in summary["newly_abstained"].items()
+                                                                  if k != "rule"}, sort_keys=True))
+    if summary["v2_subset"] is not None:
+        print("v2 subset identical to " + summary["v2_subset"]["v2_run_id"] + ": " + str(summary["v2_subset"]["identical"]))
     for form, counts in strict["by_q2_form_type"].items():
         print("  Q2 " + form + ": " + json.dumps(counts, sort_keys=True))
     return 0

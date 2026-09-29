@@ -145,10 +145,10 @@ def test_findings_ledger_rows_map_to_kinds_and_false_alarms_are_negative_evidenc
     assert by["ledger:R2"]["targets"] == {"format_grammar": ["investment_identifier"], "value_range": ["basis_spread"]}
     assert by["ledger:R3"]["targets"]["value_range"] == ["pik_rate"]
     assert all("findings_ledger_post.csv" in p["source"] for p in out)
-    # no v2 kind tests identifier text against the XBRL value (review I2b): not covered until B2-3
+    # no v2 kind tests identifier text against the XBRL value (review I2b): covered by text_agreement (B2-3)
     [agent] = bt.ledger_positives([dict(review_id="R4", state="real_error_unremediated", cik="0001860424",
                                         rule_name="agentA_spread_vs_xbrl", report_date="2025-12-31")])
-    assert agent["polarity"] == "positive" and "text_agreement" in agent["not_covered_reason"]
+    assert agent["polarity"] == "positive" and "text_agreement" in agent["not_covered_kinds"]["value_range"]
     assert by["ledger:R1"].get("not_covered_reason") is None
 
 
@@ -284,14 +284,15 @@ def test_zero_position_learning_quarter_keeps_the_full_denominator_as_insufficie
     empty = mk_doc([], date="2023-03-31")
     block = bt.learn_block(CIK, empty, tolerances=tolerances(), grammar=None, yield_ev=NO_VOTE,
                            recorded_at="2026-09-29T00:00:00Z", derive=mk_profile)
-    assert len(block["contracts"]) == 57
+    assert len(block["contracts"]) == 59
     assert all(c["learn_status"] == "insufficient_evidence" for c in block["contracts"])
     causes = {c["learn_cause"] for c in block["contracts"] if c["kind"] != "fund_income_yield"}
     assert causes == {bt.ZERO_LEARN_CAUSE}
     q2 = mk_doc([debt(i) for i in range(60)], date="2023-06-30")
     out = contracts.evaluate_contracts(block, tolerances(), q2_doc=q2, q2_listing=dict(status="available"),
                                        grammar=None, yield_q2=NO_VOTE)
-    assert len(out) == 57 and {r["status"] for r in out} == {"insufficient_evidence"}
+    assert len(out) == 59 and {r["status"] for r in out} == {"insufficient_evidence"}
+    assert not any(r["newly_abstained"] for r in out)          # never learned: a carried abstention
 
 
 def test_learn_block_with_positions_is_learn_contracts_with_the_derived_profile():
@@ -300,7 +301,7 @@ def test_learn_block_with_positions_is_learn_contracts_with_the_derived_profile(
                            recorded_at="2026-09-29T00:00:00Z", derive=mk_profile)
     ref = learn(doc, yield_q1=NO_VOTE)
     strip = lambda b: [(c["contract_id"], c["learn_status"], c["learn_cause"], c["expectation"]) for c in b["contracts"]]
-    assert strip(block) == strip(ref) and len(block["contracts"]) == 57
+    assert strip(block) == strip(ref) and len(block["contracts"]) == 59
 
 
 def test_slim_view_yields_the_same_income_evidence_as_the_full_census(tmp_path):
@@ -384,3 +385,213 @@ def test_real_nexpoint_backtest_through_the_cli(tmp_path, monkeypatch):
     assert bt.NEGATIVES_CAVEAT in text
     assert list((tmp_path / "scratch").glob("backtest_recall_*.md"))
     assert list((tmp_path / "scratch").glob("backtest_unadjudicated_*.csv"))
+
+
+# ================================================================ Task B2-3: semantic kinds in the back-test
+
+from scripts.profile_pilot import m2_seed  # noqa: E402
+
+COMP, TEXT = contracts.COMPOSITION_FIELD, contracts.TEXT_FIELD
+
+
+def test_zero_position_learning_quarter_under_v3_keeps_the_semantic_contracts_in_the_denominator():
+    empty = mk_doc([], date="2023-03-31")
+    block = bt.learn_block(CIK, empty, tolerances=tolerances(), grammar=None, yield_ev=NO_VOTE,
+                           recorded_at="2026-09-29T00:00:00Z", derive=mk_profile)
+    assert len(block["contracts"]) == 59
+    assert [c["kind"] for c in block["contracts"][-2:]] == ["rate_composition", "text_agreement"]
+    assert {c["learn_cause"] for c in block["contracts"][-2:]} == {bt.ZERO_LEARN_CAUSE}
+    v2 = bt.learn_block(CIK, empty, tolerances=contracts.tolerance_content_v2(), grammar=None, yield_ev=NO_VOTE,
+                        recorded_at="2026-09-29T00:00:00Z", derive=mk_profile)
+    assert len(v2["contracts"]) == 57 and v2["contracts"] == block["contracts"][:57]
+
+
+def test_agenta_rows_are_covered_by_text_agreement_and_not_by_the_v2_kinds():
+    [agent] = bt.ledger_positives([dict(review_id="R4", state="real_error_unremediated", cik="0001860424",
+                                        rule_name="agentA_spread_vs_xbrl", report_date="2025-12-31")])
+    assert agent["targets"]["text_agreement"] == [TEXT] and agent["expect"] == "covered"
+    assert set(agent["not_covered_kinds"]) == {"format_grammar", "value_range"}
+    pairs = [_pair("p", "2025-09-30", "2025-12-31", cik="0001860424")]
+    results = {"p": [_res("format_grammar", "investment_identifier", "breach", ["k"]),
+                     _res("value_range", "basis_spread", "holds"), _res("text_agreement", TEXT, "breach", ["k"])]}
+    s = bt.score(pairs, results, [agent], mode="rolling")
+    got = sorted((u["kind"], u["outcome"]) for u in s["positive_units"])
+    assert got == [("format_grammar", "not_covered"), ("text_agreement", "detected"), ("value_range", "not_covered")]
+    assert s["by_kind"]["format_grammar"]["negatives"]["breach"] == 1
+
+
+def test_scoring_splits_abstentions_into_newly_and_carried():
+    pairs = [_pair("p1", "2024-03-31", "2024-06-30"), _pair("p2", "2024-06-30", "2024-09-30")]
+    results = {"p1": [dict(_res("fill_rate", "interest_rate", "insufficient_evidence"), newly_abstained=True),
+                      dict(_res("scale", "interest_rate", "insufficient_evidence"), newly_abstained=True)],
+               "p2": [dict(_res("fill_rate", "interest_rate", "insufficient_evidence"), newly_abstained=False),
+                      dict(_res("scale", "interest_rate", "insufficient_evidence"), newly_abstained=False)]}
+    positives = [_pos("Z", "2024-06-30", {"fill_rate": ["interest_rate"]}, category="recogniser_format",
+                      attach="eval_and_learn")]
+    s = bt.score(pairs, results, positives, mode="rolling")
+    pos = s["by_kind"]["fill_rate"]["positives"]
+    assert (pos["abstained"], pos["abstained_newly"], pos["abstained_carried"]) == (2, 1, 1)
+    neg = s["by_kind"]["scale"]["negatives"]
+    assert (neg["insufficient_evidence"], neg["insufficient_newly"]) == (2, 1)
+
+
+def _grid_res(cid, kind, status, criteria=None, keys=()):
+    return [cid, kind, status, None, criteria, list(keys)]
+
+
+def test_semantic_negatives_count_criterion_breaches_per_candidate_band_and_skip_targeted_results():
+    grid = [dict(name="c:s5_i2.0", family="composition", share_pp=5, iqr_widen=2.0, text_share_pp=10),
+            dict(name="c:s10_i2.0", family="composition", share_pp=10, iqr_widen=2.0, text_share_pp=10),
+            dict(name="t:10", family="text", share_pp=10, iqr_widen=2.0, text_share_pp=10)]
+    pairs = [_pair("p", "2024-03-31", "2024-06-30"), _pair("q", "2024-06-30", "2024-09-30", cik="D")]
+    grid_results = {
+        "p": {"c:s5_i2.0": [_grid_res("C:rc", "rate_composition", "breach", dict(share="breach", iqr="holds"), ["a"])],
+              "c:s10_i2.0": [_grid_res("C:rc", "rate_composition", "holds", dict(share="holds", iqr="holds"))],
+              "t:10": [_grid_res("C:ta", "text_agreement", "breach", None, ["b"])]},
+        "q": {"c:s5_i2.0": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
+              "c:s10_i2.0": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
+              "t:10": [_grid_res("D:ta", "text_agreement", "breach", None, ["z"])]}}
+    tiers = {"p": "standard", "q": "low_history"}
+    positives = [_pos("T", "2024-09-30", {"text_agreement": [TEXT]}, cik="D")]
+    out = bt.semantic_negatives(pairs, grid_results, positives, grid=grid, tiers=tiers)
+    share5 = out["share_pp"]["5"]
+    assert (share5["all"]["n"], share5["all"]["breach"], share5["all"]["insufficient_evidence"]) == (2, 1, 1)
+    assert share5["standard"]["breach_rate_upper_bound"] == 1.0 and share5["low_history"]["breach"] == 0
+    assert out["share_pp"]["10"]["all"]["breach"] == 0
+    text = out["text_share_pp"]["10"]["all"]
+    assert (text["n"], text["breach"]) == (1, 1)                      # D's text result is a targeted positive
+    assert [u["pair_id"] for u in out["text_share_pp"]["10"]["unadjudicated"]] == ["p"]
+    assert out["text_share_pp"]["10"]["positives"] == dict(units=1, detected=1, abstained=0, missed=0)
+
+
+def test_choose_band_takes_the_smallest_value_meeting_both_criteria_or_marks_it_uncalibrated():
+    curve = [dict(value=5, detection=0.05, neg_rate=0.20), dict(value=10, detection=0.10, neg_rate=0.08),
+             dict(value=15, detection=0.20, neg_rate=0.05), dict(value=20, detection=0.5, neg_rate=0.01)]
+    out = bt.choose_band(curve)
+    assert out["chosen"] == 10 and out["status"] == "calibrated" and "in-sample" in out["label"]
+    none = bt.choose_band([dict(value=5, detection=0.05, neg_rate=0.2), dict(value=10, detection=None, neg_rate=0.0),
+                           dict(value=15, detection=0.5, neg_rate=0.0)])
+    assert none["chosen"] is None and none["status"] == "uncalibrated" and len(none["curve"]) == 3
+    assert bt.choose_band([dict(value=5, detection=0.3, neg_rate=0.10)])["chosen"] == 5
+
+
+def test_median_shift_negatives_and_positives_per_candidate():
+    pairs = [_pair("p", "2024-03-31", "2024-06-30")]
+    ms = {"p": {"C:vr:interest_rate": {"x0.1_y0.05": "breach", "x0.25_y0.1": "holds"},
+                "C:vr:basis_spread": {"x0.1_y0.05": "holds", "x0.25_y0.1": "holds"}}}
+    fields = {"C:vr:interest_rate": "interest_rate", "C:vr:basis_spread": "basis_spread"}
+    positives = [_pos("D07", "2024-06-30", {"value_range": ["interest_rate"]}, category="oracle_D07")]
+    out = bt.median_shift_scores(pairs, ms, positives, fields=fields)
+    assert out["x0.1_y0.05"]["negatives"] == dict(n=1, breach=0, insufficient_evidence=0, breach_rate_upper_bound=0.0)
+    assert out["x0.1_y0.05"]["positives"] == dict(units=1, detected=1, abstained=0, missed=0)
+    assert out["x0.25_y0.1"]["positives"]["missed"] == 1
+
+
+def _seed_body():
+    cell = lambda det: dict(median=dict(all=det, standard=det, low_history=None),
+                            detected=dict(all=1, standard=1, low_history=0), applicable=dict(all=1, standard=1,
+                                                                                             low_history=0))
+    curves = {"share_pp": {str(v): {"spread_for_coupon": cell(v / 100.0), "bps_spread_scale": cell(None)}
+                           for v in m2_seed.CANDIDATES["share_pp"]},
+              "iqr_widen": {str(v): {"spread_for_coupon": cell(0.3)} for v in m2_seed.CANDIDATES["iqr_widen"]},
+              "text_share_pp": {str(v): {"text_numeric_divergence": cell(0.05)}
+                                for v in m2_seed.CANDIDATES["text_share_pp"]},
+              "composition_status": {"c:s%s_i%s" % (s, i): {"spread_for_coupon": cell(0.1)}
+                                     for s in m2_seed.CANDIDATES["share_pp"] for i in m2_seed.CANDIDATES["iqr_widen"]}}
+    ms = {"range_shift_0.6": {name: dict(median=dict(all=0.1)) for name in ["v2_band"] + [
+        m2_seed.ms_name(x, y) for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]]}}
+    return dict(label=m2_seed.IN_SAMPLE, curves=curves, median_shift=ms)
+
+
+def _negatives(rate_for):
+    def cell(rate):
+        return dict(all=dict(n=100, breach=int(rate * 100), insufficient_evidence=0, breach_rate_upper_bound=rate),
+                    standard=dict(n=100, breach=int(rate * 100), insufficient_evidence=0,
+                                  breach_rate_upper_bound=rate),
+                    low_history=dict(n=0, breach=0, insufficient_evidence=0, breach_rate_upper_bound=None),
+                    unadjudicated=[], positives=dict(units=0, detected=0, abstained=0, missed=0))
+    out = {"share_pp": {str(v): cell(rate_for(v)) for v in m2_seed.CANDIDATES["share_pp"]},
+           "iqr_widen": {str(v): cell(0.02) for v in m2_seed.CANDIDATES["iqr_widen"]},
+           "text_share_pp": {str(v): cell(0.2) for v in m2_seed.CANDIDATES["text_share_pp"]}}
+    out["composition_status"] = {"c:s%s_i%s" % (s, i): cell(0.05) for s in m2_seed.CANDIDATES["share_pp"]
+                                 for i in m2_seed.CANDIDATES["iqr_widen"]}
+    return out
+
+
+def test_calibration_assembles_curves_chooses_per_band_and_reports_uncalibrated_bands():
+    scoring = {"rolling": {"as_evaluated": {"all": {"by_kind": {"value_range": {"negatives": dict(
+        breach_rate_upper_bound=0.061)}}}}}}
+    ms = {m2_seed.ms_name(x, y): dict(negatives=dict(n=10, breach=1, insufficient_evidence=0,
+                                                     breach_rate_upper_bound=0.1),
+                                      positives=dict(units=1, detected=1, abstained=0, missed=0))
+          for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]}
+    cal = bt.assemble_calibration(_seed_body(), _negatives(lambda v: 0.5 if v < 15 else 0.05), ms, scoring,
+                                  seed_run_id="stageb2-seed-v3-x")
+    assert cal["bands"]["share_pp.standard"]["chosen"] == 15                  # 5/10: too many negatives
+    assert cal["bands"]["share_pp.low_history"]["status"] == "uncalibrated"   # no low-history evidence
+    assert cal["bands"]["iqr_widen"]["chosen"] == 1.5
+    assert cal["bands"]["text_share_pp"]["status"] == "uncalibrated"          # every negatives rate 20%
+    assert cal["combined_composition"]["point"] == "c:s15_i1.5"
+    assert cal["median_shift"]["adopted"] is False and cal["median_shift"]["v2_band"]["negatives_rate"] == 0.061
+    block = cal["tolerances_block"]
+    assert block["label"] == m2_seed.IN_SAMPLE and set(block["bands"]) == set(cal["bands"])
+    assert block["bands"]["share_pp.standard"]["curve"][0] == dict(value=5, seeded_detection_fraction=0.05,
+                                                                   negatives_breach_rate=0.5, negatives_n=100)
+    json.dumps(block).encode("ascii")
+    sem = dict(run_id="r", negatives=dict(rolling=_negatives(lambda v: 0.05)),
+               newly_abstained=dict(totals=dict(newly=1, carried=2), recogniser_format_units=dict(newly=1, carried=0),
+                                    x100_magnitude_causes=dict(newly=0, carried=0), by_kind={}),
+               inception={"C": {"2023-03-31": [dict(kind="rate_composition", learn_status="learned", learn_cause=None,
+                                                    inception=dict(share_rate_le_spread=0.0))]}})
+    text = bt.render_semantic(sem, cal)
+    assert m2_seed.IN_SAMPLE in text and "NOT adopted" in text and "uncalibrated" in text
+    text.encode("ascii")
+
+
+def test_newly_abstained_summary_splits_by_kind_recogniser_units_and_x100_causes():
+    pairs = [_pair("p", "2024-03-31", "2024-06-30"), _pair("a", "2023-03-31", "2024-06-30", mode="anchored")]
+    results = {"p": [dict(_res("scale", "interest_rate", "insufficient_evidence"), newly_abstained=True,
+                          cause="magnitude_regime_changed_under_same_declared_unit"),
+                     dict(_res("fill_rate", "interest_rate", "insufficient_evidence"), newly_abstained=False),
+                     dict(_res("fill_rate", "pik_rate", "holds"), newly_abstained=False)],
+               "a": [dict(_res("scale", "interest_rate", "insufficient_evidence"), newly_abstained=True)]}
+    scoring = {"rolling": {"as_evaluated": {"all": {"positive_units": [
+        dict(category="recogniser_format", outcome="abstained", abstained="newly"),
+        dict(category="recogniser_format", outcome="abstained", abstained="carried"),
+        dict(category="override", outcome="abstained", abstained="newly")]}}}}
+    out = bt.newly_abstained_summary(pairs, results, scoring)
+    assert out["totals"] == dict(newly=1, carried=1)
+    assert out["by_kind"] == {"fill_rate": dict(newly=0, carried=1), "scale": dict(newly=1, carried=0)}
+    assert out["x100_magnitude_causes"] == dict(newly=1, carried=0)
+    assert out["recogniser_format_units"] == dict(newly=1, carried=1)
+
+
+@pytest.mark.needs_cache
+def test_real_nexpoint_semantic_backtest_through_the_cli(tmp_path, monkeypatch):
+    data_root = os.environ.get("PROFILE_PILOT_DATA_ROOT")
+    main_root = os.environ.get("PROFILE_PILOT_MAIN_ROOT")
+    if not (data_root and main_root):
+        pytest.skip("PROFILE_PILOT_DATA_ROOT not set (run through the pilot launcher)")
+    real_resolve = bt.resolve_paths
+
+    def redirected(**kw):
+        real = real_resolve(**kw)
+        return TmpRunPaths(main_repo_root=real.main_repo_root, code_root=real.code_root,
+                           data_root=real.data_root, run_id=real.run_id, tmp_run_root=tmp_path / "run")
+
+    monkeypatch.setattr(bt, "resolve_paths", redirected)
+    code = bt.main(["run", "--main-root", main_root, "--data-root", data_root,
+                    "--census-run-id", "stageb2-census-20260929t094408z",
+                    "--contracts-run-id", "stageb-contracts-20260929t053506z",
+                    "--cik", "0001588272", "--run-id", "stageb2-backtest-v3-test", "--semantic",
+                    "--scratch-dir", str(tmp_path / "scratch")])
+    assert code == 0
+    root = tmp_path / "run"
+    sem = json.loads((root / "results" / "semantic.json").read_text(encoding="ascii"))
+    assert sem["label"] == m2_seed.IN_SAMPLE and set(sem["negatives"]["rolling"]) >= {"share_pp", "text_share_pp"}
+    assert "0001588272" in sem["inception"] and sem["newly_abstained"]["totals"]["newly"] > 0
+    pairs = json.loads((root / "results" / "pairs.json").read_text(encoding="ascii"))["pairs"]
+    assert all(p["timing"]["within_bound"] for p in pairs if p["status"] == "evaluated")
+    results = json.loads((root / "results" / "backtest_results.json").read_text(encoding="ascii"))["results"]
+    assert all(len(v) == 59 for v in results.values())
+    (root / "results" / "backtest_semantic.md").read_text(encoding="ascii")

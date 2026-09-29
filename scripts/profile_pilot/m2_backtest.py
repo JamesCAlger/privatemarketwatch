@@ -96,7 +96,8 @@ PROFILE_NOTE = ("learning profile derived in memory per learning quarter with pr
                 "recorded (every filled field then abstains)")
 SUITE = {"source_concept_set": tuple(contracts.CONCEPT_FIELDS), "fill_rate": tuple(contracts.CONCEPT_FIELDS),
          "scale": tuple(contracts.SCALE_FIELDS), "value_range": tuple(contracts.RANGE_FIELDS),
-         "format_grammar": (IDENTIFIER_FIELD,), "fund_income_yield": (contracts.YIELD_FIELD,)}
+         "format_grammar": (IDENTIFIER_FIELD,), "fund_income_yield": (contracts.YIELD_FIELD,),
+         "rate_composition": (contracts.COMPOSITION_FIELD,), "text_agreement": (contracts.TEXT_FIELD,)}
 KNOWN_KINDS = tuple(SUITE) + ("position_identity",)
 FIELD_GROUPS = (tuple(POSITION_RATE) + ("pct_of_net_assets",), tuple(POSITION_VALUE), (IDENTIFIER_FIELD,))
 CHECK_TYPES = ("d07", "json_scope", "csv_row", "doc_line")
@@ -109,8 +110,8 @@ FINGERPRINT_CLASSES = (("bare", "n_bare", ("interest_rate",)), ("cash", "n_cash"
                        ("ext", "n_ext_rate_facts", None))
 EXT_REASON = ("extension-namespace rate facts are not position concepts (review I2a: Stepstone's are SOFR benchmark "
               "levels on VariableRateAxis contexts that never enter a position concept set): recorded, never scored")
-AGENTA_REASON = ("no v2 contract kind tests identifier text against the XBRL value (review I2b); B2-3 adds "
-                 "text_agreement")
+AGENTA_REASON = ("no v2 contract kind tests identifier text against the XBRL value (review I2b); the v3 "
+                 "text_agreement kind (B2-3) covers it")
 COMPARATIVE_REASON = ("owner-session semantic census counted comparative facts; M2 reads current positions by design "
                       "(review I1: the 488 values >= 1 sit on the FY2022 10-K's 2021-12-31 comparative contexts; all "
                       "current-period spreads are < 1 under pure)")
@@ -121,9 +122,11 @@ LEDGER_RULES = {
     "fmt_interest_rate": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["interest_rate"]},
     "fmt_pik_rate": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["pik_rate"]},
     "dl_rate_fill": {"fill_rate": ["interest_rate"]},
-    # identifier-text spread vs XBRL spread: targets kept for the record, scored not_covered (AGENTA_REASON)
-    "agentA_spread_vs_xbrl": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["basis_spread"]}}
-LEDGER_NOT_COVERED = {"agentA_spread_vs_xbrl": AGENTA_REASON}
+    # identifier-text spread vs XBRL spread: the v2 targets are kept for the record and scored not_covered
+    # (AGENTA_REASON); the v3 text_agreement kind is the covered target (Task B2-3)
+    "agentA_spread_vs_xbrl": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["basis_spread"],
+                              "text_agreement": [contracts.TEXT_FIELD]}}
+LEDGER_NOT_COVERED_KINDS = {"agentA_spread_vs_xbrl": {"format_grammar": AGENTA_REASON, "value_range": AGENTA_REASON}}
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",
@@ -307,10 +310,15 @@ def ledger_positives(rows) -> list:
                         category="findings_ledger", polarity="recorded_negative" if negative else "positive",
                         attach="eval", source="data/" + LEDGER_CSV + " review_id=" + r["review_id"] + " state="
                         + r["state"] + " rule=" + r["rule_name"], note=r["rule_name"],
-                        expect="not_covered" if r["rule_name"] in LEDGER_NOT_COVERED else "covered",
-                        **({"not_covered_reason": LEDGER_NOT_COVERED[r["rule_name"]]}
-                           if r["rule_name"] in LEDGER_NOT_COVERED else {})))
+                        expect="covered",
+                        **({"not_covered_kinds": dict(LEDGER_NOT_COVERED_KINDS[r["rule_name"]])}
+                           if r["rule_name"] in LEDGER_NOT_COVERED_KINDS else {})))
     return out
+
+
+def _not_covered(p: dict, kind: str):
+    """Why a positive row claims no result for this kind (whole row or per kind), or None."""
+    return p.get("not_covered_reason") or (p.get("not_covered_kinds") or {}).get(kind)
 
 
 def recogniser_positives(classes: dict) -> list:
@@ -381,7 +389,8 @@ def learn_block(cik: str, doc: dict, *, tolerances: dict, grammar, yield_ev: dic
     have = {(c["kind"], c["field"], c["partition_id"]) for c in block["contracts"]}
     tier = block["tier"]
     added = []
-    for kind in contracts.KINDS:
+    kinds = contracts.ALL_KINDS if contracts.has_semantic_bands(tolerances) else contracts.KINDS
+    for kind in kinds:
         for field in SUITE[kind]:
             if (kind, field, WHOLE_FILING) in have:
                 continue
@@ -389,7 +398,7 @@ def learn_block(cik: str, doc: dict, *, tolerances: dict, grammar, yield_ev: dic
                                              cause=ZERO_LEARN_CAUSE,
                                              evidence=dict(note="0 recognised current positions in the learning "
                                                                 "quarter (R37): every contract abstains")))
-    order = {k: i for i, k in enumerate(contracts.KINDS)}
+    order = {k: i for i, k in enumerate(contracts.ALL_KINDS)}
     block["contracts"] = sorted(added + block["contracts"], key=lambda c: order[c["kind"]])
     block["zero_position_learning"] = True
     return block
@@ -448,7 +457,8 @@ def _trim(r: dict) -> dict:
                 status=r["status"], cause=r["cause"], n_violating=len(keys),
                 violating_keys=keys if r["status"] == "breach" else [],
                 expected=contracts._brief(r["expected"]), observed=contracts._brief(r["observed"]),
-                identifier_format_unresolved=r["identifier_format_unresolved"], q2_form_type=r["q2"].get("form_type"))
+                identifier_format_unresolved=r["identifier_format_unresolved"], q2_form_type=r["q2"].get("form_type"),
+                newly_abstained=bool(r.get("newly_abstained")))
 
 
 def strict(results: list) -> list:
@@ -479,16 +489,19 @@ def _attached(pair: dict, positives: list) -> tuple:
 
 
 def _targets(items: list) -> set:
-    return {(kind, field) for p in items for kind, fields in p["targets"].items() for field in fields}
+    """(kind, field) targets the rows claim a result for (a not-covered row or kind claims none)."""
+    return {(kind, field) for p in items for kind, fields in p["targets"].items() if not _not_covered(p, kind)
+            for field in fields}
 
 
 def _blank_pos() -> dict:
-    return dict(units=0, not_covered=0, no_contract=0, detected=0, abstained=0, missed=0, field_mismatch=0)
+    return dict(units=0, not_covered=0, no_contract=0, detected=0, abstained=0, missed=0, field_mismatch=0,
+                abstained_newly=0, abstained_carried=0)
 
 
 def _blank_neg() -> dict:
     return dict(n=0, holds=0, breach=0, insufficient_evidence=0, holds_with_form_type=0, recorded_negative=0,
-                recorded_negative_breach=0)
+                recorded_negative_breach=0, insufficient_newly=0)
 
 
 def _finish(block: dict) -> dict:
@@ -521,22 +534,24 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
         hits, carried = _attached(pair, pos_rows)
         negs, _ = _attached(pair, neg_rows)
         for p in hits:
-            others = _targets([q for q in hits if q is not p and not q.get("not_covered_reason")])
+            others = _targets([q for q in hits if q is not p])
             for kind, fields in sorted(p["targets"].items()):
-                covered = [] if p.get("not_covered_reason") else [f for f in fields if f in SUITE.get(kind, ())]
+                covered = [] if _not_covered(p, kind) else [f for f in fields if f in SUITE.get(kind, ())]
                 unit = dict(positive_id=p["positive_id"], category=p["category"], pair_id=pair["pair_id"],
                             cik=pair["cik"], learn_date=pair["learn_date"], eval_date=pair["eval_date"],
                             gapped=pair["gapped"], kind=kind, fields=list(fields), field_mismatch=[])
                 matched = [r for r in res if r["kind"] == kind and r["field"] in covered]
                 if not covered:
                     unit["outcome"] = "not_covered"
-                    unit["not_covered_reason"] = p.get("not_covered_reason") or "no contract kind covers the field"
+                    unit["not_covered_reason"] = _not_covered(p, kind) or "no contract kind covers the field"
                 elif not matched:
                     unit["outcome"] = "no_contract"
                 elif any(r["status"] == "breach" for r in matched):
                     unit["outcome"] = "detected"
                 elif any(r["status"] == "insufficient_evidence" for r in matched):
                     unit["outcome"] = "abstained"
+                    unit["abstained"] = "newly" if any(r.get("newly_abstained") for r in matched
+                                                       if r["status"] == "insufficient_evidence") else "carried"
                 else:
                     unit["outcome"] = "missed"
                 unit["statuses"] = [[r["field"], r["status"], r["cause"]] for r in matched]
@@ -551,10 +566,12 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
                     b = block["positives"]
                     b["units"] += 1
                     b[unit["outcome"]] += 1
+                    if unit["outcome"] == "abstained":
+                        b["abstained_" + unit["abstained"]] += 1
                     b["field_mismatch"] += bool(unit["field_mismatch"])
         # a not_covered row claims no result: its target results stay negatives
-        targeted = _targets([p for p in hits if not p.get("not_covered_reason")])
-        carried_targets = _targets([p for p in carried if not p.get("not_covered_reason")])
+        targeted = _targets(hits)
+        carried_targets = _targets(carried)
         neg_targets = {}
         for p in negs:
             for kind, fields in p["targets"].items():
@@ -574,6 +591,7 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
                 n = block["negatives"]
                 n["n"] += 1
                 n[r["status"]] += 1
+                n["insufficient_newly"] += r["status"] == "insufficient_evidence" and bool(r.get("newly_abstained"))
                 n["recorded_negative"] += bool(recorded)
                 n["recorded_negative_breach"] += bool(recorded) and r["status"] == "breach"
             if r["status"] == "breach":
@@ -601,6 +619,261 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
                 by_kind_cik={k: _finish(v) for k, v in sorted(by_kind_cik.items())},
                 positive_units=units, unadjudicated=unadjudicated, adjudicated_false_alarm_breaches=adjudicated,
                 unscorable=unscorable)
+
+
+def _neg_cell() -> dict:
+    return dict(n=0, breach=0, insufficient_evidence=0)
+
+
+def _neg_finish(cell: dict) -> dict:
+    cell["breach_rate_upper_bound"] = round(cell["breach"] / cell["n"], 4) if cell["n"] else None
+    return cell
+
+
+def _pos_cell() -> dict:
+    return dict(units=0, detected=0, abstained=0, missed=0)
+
+
+def semantic_negatives(pairs: list, grid_results: dict, positives: list, *, grid: list, tiers: dict,
+                       mode: str = "rolling") -> dict:
+    """Per candidate band (m2_seed._semantic_families): negatives n / breach / abstain (the named
+    criterion for share_pp and iqr_widen, the status otherwise), split by the learning block's tier,
+    the unadjudicated breaches with their keys, and the positive units the new kinds cover.
+
+    grid_results: pair_id -> grid point name -> [[contract_id, kind, status, cause, criteria, keys]]."""
+    pos_rows = [p for p in positives if p["polarity"] == "positive"]
+    out: dict = {}
+    for family, key, point, kind, criterion in m2_seed._semantic_families(grid):
+        field = SUITE[kind][0]
+        cell = dict(point=point, criterion=criterion or "status", all=_neg_cell(), standard=_neg_cell(),
+                    low_history=_neg_cell(), unadjudicated=[], positives=_pos_cell(), positive_units=[])
+        for pair in pairs:
+            if pair["mode"] != mode or pair["status"] != "evaluated":
+                continue
+            hits, _ = _attached(pair, pos_rows)
+            covered = _targets(hits)
+            for cid, k, status, cause, criteria, keys in (grid_results.get(pair["pair_id"]) or {}).get(point, []):
+                if k != kind:
+                    continue
+                hit = (criteria or {}).get(criterion) == "breach" if criterion else status == "breach"
+                if (kind, field) in covered:
+                    outcome = "detected" if hit else ("abstained" if status == "insufficient_evidence" else "missed")
+                    cell["positives"]["units"] += 1
+                    cell["positives"][outcome] += 1
+                    cell["positive_units"].append(dict(pair_id=pair["pair_id"], contract_id=cid, outcome=outcome,
+                                                       positives=[p["positive_id"] for p in hits]))
+                    continue
+                for tier in ("all", tiers.get(pair["pair_id"])):
+                    if tier in cell:
+                        c = cell[tier]
+                        c["n"] += 1
+                        c["breach"] += hit
+                        c["insufficient_evidence"] += status == "insufficient_evidence"
+                if hit:
+                    cell["unadjudicated"].append(dict(pair_id=pair["pair_id"], cik=pair["cik"],
+                                                      learn_date=pair["learn_date"], eval_date=pair["eval_date"],
+                                                      gapped=pair["gapped"], contract_id=cid, cause=cause,
+                                                      criteria=criteria, n_violating=len(keys),
+                                                      violating_keys=list(keys)))
+        for tier in ("all", "standard", "low_history"):
+            _neg_finish(cell[tier])
+        if not cell["positive_units"]:
+            del cell["positive_units"]
+        out.setdefault(family, {})[key] = cell
+    return out
+
+
+def median_shift_scores(pairs: list, ms: dict, positives: list, *, fields: dict, mode: str = "rolling") -> dict:
+    """The median_shift experiment (calibration only, never in v3) on the value_range contracts:
+    negatives and positive units per (x, y) candidate; ms: pair_id -> contract_id -> name -> verdict."""
+    pos_rows = [p for p in positives if p["polarity"] == "positive"]
+    names = sorted({n for per in ms.values() for verdicts in per.values() for n in verdicts})
+    out = {n: dict(negatives=_neg_cell(), positives=_pos_cell()) for n in names}
+    for pair in pairs:
+        if pair["mode"] != mode or pair["status"] != "evaluated":
+            continue
+        hits, _ = _attached(pair, pos_rows)
+        covered = _targets(hits)
+        for cid, verdicts in sorted((ms.get(pair["pair_id"]) or {}).items()):
+            targeted = ("value_range", fields[cid]) in covered
+            for name in names:
+                verdict = verdicts.get(name, "insufficient_evidence")
+                if targeted:
+                    p = out[name]["positives"]
+                    p["units"] += 1
+                    p[{"breach": "detected", "insufficient_evidence": "abstained"}.get(verdict, "missed")] += 1
+                else:
+                    n = out[name]["negatives"]
+                    n["n"] += 1
+                    n["breach"] += verdict == "breach"
+                    n["insufficient_evidence"] += verdict == "insufficient_evidence"
+    for name in names:
+        _neg_finish(out[name]["negatives"])
+    return out
+
+
+CALIBRATION_RULE = ("per band, the smallest candidate whose negatives breach rate (upper bound, pooled across CIKs, "
+                    "rolling / as-evaluated) is <= 10% while the seeded detection fraction (median over applicable "
+                    "CIKs of the smallest fraction >= 2 of 3 seeds detect) for the drift class it targets is <= 0.30; "
+                    "no such candidate = uncalibrated (the curve is reported; no v2 band is widened)")
+
+
+def choose_band(curve: list, *, max_neg: float = 0.10, max_detection: float = 0.30) -> dict:
+    ok = [row for row in sorted(curve, key=lambda r: r["value"])
+          if row["neg_rate"] is not None and row["neg_rate"] <= max_neg + 1e-12
+          and row["detection"] is not None and row["detection"] <= max_detection + 1e-12]
+    chosen = ok[0]["value"] if ok else None
+    return dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, curve=curve, chosen=chosen,
+                status="calibrated" if ok else "uncalibrated",
+                reason=("smallest candidate meeting both criteria" if ok else
+                        "no candidate meets both criteria: uncalibrated, curve reported"))
+
+
+X100_CAUSES = ("magnitude_regime_changed_under_same_declared_unit", "magnitude_mixed_under_one_declared_unit")
+
+
+def newly_abstained_summary(pairs: list, results: dict, scoring: dict) -> dict:
+    """Addendum 2: abstentions split newly / carried (rolling, as-evaluated), by kind, and for the
+    recogniser-format positives and the x100 magnitude causes."""
+    by_kind: dict = {}
+    x100 = dict(newly=0, carried=0)
+    for pair in pairs:
+        if pair["mode"] != "rolling" or pair["status"] != "evaluated":
+            continue
+        for r in results.get(pair["pair_id"], []):
+            if r["status"] != "insufficient_evidence":
+                continue
+            which = "newly" if r.get("newly_abstained") else "carried"
+            by_kind.setdefault(r["kind"], dict(newly=0, carried=0))[which] += 1
+            if r["cause"] in X100_CAUSES:
+                x100[which] += 1
+    units = scoring["rolling"]["as_evaluated"]["all"]["positive_units"]
+    rf = dict(newly=0, carried=0)
+    for u in units:
+        if u["category"] == "recogniser_format" and u["outcome"] == "abstained":
+            rf[u.get("abstained", "carried")] += 1
+    totals = dict(newly=sum(v["newly"] for v in by_kind.values()), carried=sum(v["carried"] for v in by_kind.values()))
+    return dict(by_kind=dict(sorted(by_kind.items())), recogniser_format_units=rf, x100_magnitude_causes=x100,
+                totals=totals, rule=contracts.NEWLY_ABSTAINED_RULE)
+
+
+def _curve(seed_curves: dict, negatives: dict, family: str, variant: str, det_tier: str, neg_tier: str,
+           others=()) -> dict:
+    rows = []
+    for value in m2_seed.CANDIDATES[family]:
+        key = str(value)
+        cell = seed_curves[family][key][variant]
+        neg = negatives[family][key][neg_tier]
+        rows.append(dict(value=value, detection=cell["median"][det_tier], detected=cell["detected"][det_tier],
+                         applicable=cell["applicable"][det_tier], neg_rate=neg["breach_rate_upper_bound"],
+                         neg_n=neg["n"], neg_breach=neg["breach"],
+                         other_classes={o: seed_curves[family][key][o]["median"][det_tier] for o in others
+                                        if o in seed_curves[family][key]}))
+    out = choose_band(rows)
+    out.update(family=family, target=variant, detection_tier=det_tier, negatives_tier=neg_tier)
+    return out
+
+
+def assemble_calibration(seed_body: dict, negatives: dict, median_shift: dict, scoring: dict, *,
+                         seed_run_id: str) -> dict:
+    """The in-sample calibration: seeded detection (seed root) x negatives breach rate (this root)."""
+    curves = seed_body["curves"]
+    bands = {
+        "share_pp.standard": _curve(curves, negatives, "share_pp", "spread_for_coupon", "standard", "standard",
+                                    others=("bps_spread_scale", "text_numeric_divergence")),
+        "share_pp.low_history": _curve(curves, negatives, "share_pp", "spread_for_coupon", "low_history",
+                                       "low_history"),
+        "iqr_widen": _curve(curves, negatives, "iqr_widen", "spread_for_coupon", "all", "all",
+                            others=("bps_spread_scale",)),
+        "text_share_pp": _curve(curves, negatives, "text_share_pp", "text_numeric_divergence", "all", "all",
+                                others=("bps_spread_scale", "spread_for_coupon"))}
+    share, iqr = bands["share_pp.standard"]["chosen"], bands["iqr_widen"]["chosen"]
+    combined = None
+    if share is not None and iqr is not None:
+        point = "c:s%s_i%s" % (share, iqr)
+        combined = dict(point=point, negatives=negatives["composition_status"][point]["all"],
+                        seeded=curves["composition_status"][point]["spread_for_coupon"]["median"])
+    v2_range = scoring["rolling"]["as_evaluated"]["all"]["by_kind"].get("value_range", {}).get("negatives", {})
+    ms = dict(label=m2_seed.IN_SAMPLE, adopted=False, note="calibration-only experiment (addendum 3): never in v3",
+              v2_band=dict(seeded={v: seed_body["median_shift"][v]["v2_band"]["median"]["all"]
+                                   for v in seed_body["median_shift"]},
+                           negatives_rate=v2_range.get("breach_rate_upper_bound")),
+              candidates={name: dict(seeded={v: seed_body["median_shift"][v][name]["median"]["all"]
+                                             for v in seed_body["median_shift"] if name in seed_body["median_shift"][v]},
+                                     negatives=cell["negatives"], positives=cell["positives"])
+                          for name, cell in median_shift.items()})
+    block = dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, seed_run_id=seed_run_id,
+                 bands={name: dict(target=b["target"], status=b["status"], chosen=b["chosen"], reason=b["reason"],
+                                   curve=[dict(value=r["value"], seeded_detection_fraction=r["detection"],
+                                               negatives_breach_rate=r["neg_rate"], negatives_n=r["neg_n"])
+                                          for r in b["curve"]])
+                        for name, b in bands.items()},
+                 combined_composition=combined, median_shift_experiment=dict(adopted=False, candidates=list(ms[
+                     "candidates"])))
+    return dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, seed_run_id=seed_run_id, bands=bands,
+                combined_composition=combined, median_shift=ms, tolerances_block=block)
+
+
+def render_semantic(sem: dict, calibration: dict | None) -> str:
+    fmt = lambda v: "-" if v is None else ("%g" % v if isinstance(v, (int, float)) else str(v))
+    lines = ["# M2 back-test: semantic kinds, newly-abstained events and the median_shift experiment ("
+             + sem["run_id"] + ")", "", "Label: " + m2_seed.IN_SAMPLE + ".", "", "Caveat: " + NEGATIVES_CAVEAT, ""]
+    neg = sem["negatives"]["rolling"]
+    for family in ("share_pp", "iqr_widen", "text_share_pp", "composition_status"):
+        lines += ["## Negatives per candidate: " + family + " (rolling / as-evaluated)", "",
+                  "| band | n | breach | abstain | breach rate UB | std n/breach | low n/breach | positives d/a/m |",
+                  "|---|---|---|---|---|---|---|---|"]
+        for key, cell in (neg.get(family) or {}).items():
+            a, s, lo, p = cell["all"], cell["standard"], cell["low_history"], cell["positives"]
+            lines.append("| " + " | ".join(fmt(x) for x in (
+                key, a["n"], a["breach"], a["insufficient_evidence"], a["breach_rate_upper_bound"],
+                "%d/%d" % (s["n"], s["breach"]), "%d/%d" % (lo["n"], lo["breach"]),
+                "%d/%d/%d" % (p["detected"], p["abstained"], p["missed"]))) + " |")
+        lines.append("")
+    if calibration:
+        lines += ["## Calibration (" + m2_seed.IN_SAMPLE + ")", "", CALIBRATION_RULE, ""]
+        for name, band in calibration["bands"].items():
+            lines += ["### " + name + " (target " + band["target"] + "): " + band["status"] + ", chosen "
+                      + fmt(band["chosen"]), "", "| value | seeded detection | d/n | negatives breach rate | neg n | "
+                      "other classes |", "|---|---|---|---|---|---|"]
+            for r in band["curve"]:
+                lines.append("| " + " | ".join(fmt(x) for x in (
+                    r["value"], r["detection"], "%s/%s" % (r["detected"], r["applicable"]), r["neg_rate"], r["neg_n"],
+                    json.dumps(r["other_classes"], sort_keys=True))) + " |")
+            lines.append("")
+        lines += ["Combined composition at the chosen pair: " + json.dumps(calibration["combined_composition"],
+                                                                          sort_keys=True), ""]
+        ms = calibration["median_shift"]
+        lines += ["## median_shift experiment (NOT adopted; beside the v2 value_range band)", "",
+                  "v2 band: seeded " + json.dumps(ms["v2_band"]["seeded"], sort_keys=True) + "; negatives breach rate "
+                  + fmt(ms["v2_band"]["negatives_rate"]), "", "| candidate | seeded (by class) | neg n | neg breach | "
+                  "rate UB | positives d/a/m |", "|---|---|---|---|---|---|"]
+        for name, c in ms["candidates"].items():
+            p = c["positives"]
+            lines.append("| " + " | ".join(fmt(x) for x in (
+                name, json.dumps(c["seeded"], sort_keys=True), c["negatives"]["n"], c["negatives"]["breach"],
+                c["negatives"]["breach_rate_upper_bound"], "%d/%d/%d" % (p["detected"], p["abstained"],
+                                                                        p["missed"]))) + " |")
+        lines.append("")
+    newly = sem["newly_abstained"]
+    lines += ["## Newly abstained vs carried (rolling / as-evaluated)", "", contracts.NEWLY_ABSTAINED_RULE, "",
+              "- totals: " + json.dumps(newly["totals"], sort_keys=True),
+              "- recogniser_format positive units: " + json.dumps(newly["recogniser_format_units"], sort_keys=True),
+              "- x100 magnitude causes: " + json.dumps(newly["x100_magnitude_causes"], sort_keys=True),
+              "- by kind: " + json.dumps(newly["by_kind"], sort_keys=True), "",
+              "## Inception blocks (first learned quarter per CIK; evidence, not a status)", ""]
+    for cik, by_day in sorted(sem["inception"].items()):
+        day = sorted(by_day)[0]
+        for item in by_day[day]:
+            inc = item.get("inception") or {}
+            lines.append("- " + cik + " " + day + " " + item["kind"] + ": share_rate_le_spread "
+                         + fmt(inc.get("share_rate_le_spread")) + ", rate_equals_text_spread "
+                         + json.dumps(inc.get("rate_equals_text_spread"), sort_keys=True) + ", magnitude-normalised "
+                         + json.dumps((inc.get("rate_equals_text_spread_magnitude_normalised") or {}).get("share"))
+                         + ", implied base p50 " + fmt(inc.get("implied_base_p50")))
+    text = "\n".join(lines) + "\n"
+    text.encode("ascii")
+    return text
 
 
 def score_all(pairs: list, results_by_reading: dict, positives: list, *, modes=MODES) -> dict:
@@ -790,7 +1063,8 @@ def _stage_timing(timing: dict) -> dict:
     return out
 
 
-def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, scratch_dir: Path | None = None) -> dict:
+def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, scratch_dir: Path | None = None,
+              semantic: bool = False, seed_run_id: str | None = None) -> dict:
     ciks = list(ciks or cohort.PILOT_CIKS)
     started = time.perf_counter()
     clock = dict(started_utc=_now())
@@ -854,9 +1128,33 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                   position_like_min=POSITION_LIKE_MIN, cover_only_max_facts=COVER_ONLY_MAX_FACTS,
                   limits=dict(seconds=LIMIT_SECONDS, bytes=LIMIT_BYTES), negatives_caveat=NEGATIVES_CAVEAT,
                   suite={k: list(v) for k, v in SUITE.items()}, ledger_rules=LEDGER_RULES)
+    grid = learn_tol = sem_arg = None
+    learn_tol = tolerances
+    if semantic:
+        grid = m2_seed.semantic_grid(tolerances)
+        learn_tol = contracts.semantic_tolerances(tolerances, bands=contracts.SEMANTIC_BANDS, calibration=dict(
+            label=m2_seed.IN_SAMPLE, status="learning reference only"))
+        sem_arg = dict(grid=grid)
+        config.update(semantic=True, label=m2_seed.IN_SAMPLE, learning_reference=manifest.digest(learn_tol),
+                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"], iqr_widen=g["iqr_widen"],
+                                 text_share_pp=g["text_share_pp"], content_sha256=manifest.digest(g["tolerances"]))
+                            for g in grid],
+                      median_shift=dict(m2_seed.MEDIAN_SHIFT, note="calibration-only experiment; not in v3"),
+                      calibration_rule=CALIBRATION_RULE, seed_run_id=seed_run_id)
+    seed_rec = seed_body = None
+    if seed_run_id:
+        if not semantic:
+            raise StageInvalidated("--seed-run-id needs --semantic (calibration assembles the semantic curves)")
+        sroot = lineage.sibling_root(paths, seed_run_id).run_root
+        seed_rec = m2_seed._record(sroot / "results" / "semantic_curves.json", "seed_root/results/semantic_curves.json")
+        seed_body = json.loads(Path(seed_rec["path"]).read_text(encoding="ascii"))
+        if seed_body.get("label") != m2_seed.IN_SAMPLE or seed_body.get("candidates") != {
+                k: list(v) for k, v in m2_seed.CANDIDATES.items()}:
+            raise StageInvalidated("seed root semantic curves were not swept over the same candidates")
     keep = ("label", "path", "status", "sha256", "bytes")
     inputs = ([census["authoritative"], census["excluded"]] + census["files"] + [cman_rec, tol_rec, inv_rec]
-              + list(slices.values()) + [r for recs in grammar_recs.values() for r in recs] + sources["records"] + code)
+              + list(slices.values()) + [r for recs in grammar_recs.values() for r in recs] + sources["records"] + code
+              + ([seed_rec] if seed_rec else []))
     built = dict(
         run_id=paths.run_id, stage="m2_backtest", version=BACKTEST_VERSION, created_utc=_now(),
         git=dict(head=manifest.git_head(paths.code_root),
@@ -887,6 +1185,7 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
     holdings_path = slices["private_markets_holdings_pilot8.parquet"]["path"]
     income_path = slices["bdc_fund_income_pilot8.parquet"]["path"]
     all_pairs, results_json, classes, yields_by, repro, timing_rows = [], {}, {}, {}, {}, []
+    semantic_by, inception_by = dict(semantic_grid={}, median_shift={}, tier={}), {}
     for cik in ciks:
         rows = rows_by_cik[cik]
         dates = [r["report_date"] for r in rows]
@@ -903,9 +1202,9 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
 
             def compute(row=row, day=day, prev=prev, gapped=gapped, prev_out=prev_out, q1_out=q1_out, cik=cik):
                 return _quarter(paths, cik=cik, row=row, day=day, prev=prev, gapped=gapped, prev_out=prev_out,
-                                q1_out=q1_out, q1_date=q1[cik], tolerances=tolerances, grammar=grammars[cik],
+                                q1_out=q1_out, q1_date=q1[cik], tolerances=learn_tol, grammar=grammars[cik],
                                 holdings_path=holdings_path, income_path=income_path, min_quarters=min_quarters,
-                                recorded_at=recorded_at, frozen_block=inventory["ciks"][cik])
+                                recorded_at=recorded_at, frozen_block=inventory["ciks"][cik], semantic=sem_arg)
 
             rel = "stages/" + cik + "/" + day + ".json"
             out = manifest.run_cached_stage(paths, rel, identity, compute,
@@ -921,7 +1220,8 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
             for mode, ev in result["evaluations"].items():
                 learn_out = prev_out if mode == "rolling" else q1_out
                 t = pair_timing(learn_out["timing"], ev["timing"], peak=result["timing"]["peak_bytes"])
-                cik_pairs[(mode, ev["learn_date"], day)] = dict(timing=t, results=ev["results"])
+                cik_pairs[(mode, ev["learn_date"], day)] = dict(timing=t, results=ev["results"], **{
+                    k: ev[k] for k in ("semantic_grid", "median_shift", "tier") if k in ev})
                 timing_rows.append(dict(cik=cik, mode=mode, learn_date=ev["learn_date"], eval_date=day, **t))
                 if not t["within_bound"]:
                     write_once_json(paths, "results/limit_exceeded.json", dict(cik=cik, mode=mode, day=day, timing=t))
@@ -930,6 +1230,8 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                   + str(result["quarter_class"]["positions"]) + ", load " + str(result["timing"].get("load_seconds"))
                   + " s, learn " + str(result["timing"].get("learn_seconds")) + " s, evaluations "
                   + str(len(result["evaluations"])) + " (" + out["cache"] + ")")
+            if result.get("inception"):
+                inception_by.setdefault(cik, {})[day] = result["inception"]
             prev_out, prev_rec = result, rec
             if day == q1[cik]:
                 q1_out, q1_rec = result, rec
@@ -941,6 +1243,9 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
             if got is not None:
                 pair["timing"] = got["timing"]
                 results_json[pair["pair_id"]] = got["results"]
+                for name in ("semantic_grid", "median_shift", "tier"):
+                    if name in got:
+                        semantic_by[name][pair["pair_id"]] = got[name]
             all_pairs.append(pair)
     clock["evaluation_done_utc"] = _now()
 
@@ -1022,6 +1327,28 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
     after = manifest.verify_inputs(dict(inputs=[{k: r[k] for k in keep if k in r} for r in inputs]))
     if not after["ok"]:
         raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
+    semantic_out = None
+    if semantic:
+        sem_neg = {mode: semantic_negatives(all_pairs, semantic_by["semantic_grid"], positives, grid=grid,
+                                            tiers=semantic_by["tier"], mode=mode) for mode in MODES}
+        fields = {r["contract_id"]: r["field"] for res in results_json.values() for r in res
+                  if r["kind"] == "value_range"}
+        ms_scores = {mode: median_shift_scores(all_pairs, semantic_by["median_shift"], positives, fields=fields,
+                                               mode=mode) for mode in MODES}
+        newly = newly_abstained_summary(all_pairs, results_json, scoring)
+        calibration = assemble_calibration(seed_body, sem_neg["rolling"], ms_scores["rolling"], scoring,
+                                           seed_run_id=seed_run_id) if seed_body else None
+        semantic_out = dict(run_id=paths.run_id, label=m2_seed.IN_SAMPLE, negatives=sem_neg,
+                            median_shift=ms_scores, newly_abstained=newly, inception=inception_by,
+                            grid=[{k: v for k, v in g.items() if k != "tolerances"} for g in grid],
+                            negatives_caveat=NEGATIVES_CAVEAT)
+        write_once_json(paths, "results/semantic.json", semantic_out)
+        texts = [("backtest_semantic", render_semantic(semantic_out, calibration))]
+        if calibration:
+            write_once_json(paths, "results/calibration.json", calibration)
+        for name, text in texts:
+            m2_seed._write_text_once(confined(paths, "results/" + name + ".md"), text)
+            copies.append(str(m2_seed._write_text_once(scratch / (name + "_" + paths.run_id + ".md"), text)))
     main_s = scoring["rolling"]["as_evaluated"]["all"]
     headline = {k: dict(pos=v["positives"]["covered"], detected=v["positives"]["detected"],
                         abstained=v["positives"]["abstained"], missed=v["positives"]["missed"],
@@ -1033,14 +1360,49 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                    evaluated_pairs=len(evaluated), headline_rolling_as_evaluated=headline,
                    unadjudicated_rolling_as_evaluated=len(main_s["unadjudicated"]), timing_extremes=extremes,
                    yield_learnable={c: y["learnable"] for c, y in yield_summary.items()},
-                   scratch_copies=copies, input_verification_after=after)
+                   scratch_copies=copies, input_verification_after=after,
+                   **({} if not semantic_out else dict(newly_abstained=semantic_out["newly_abstained"]["totals"])))
     write_once_json(paths, "results/run_summary.json", summary)
     return summary
 
 
+def _grid_slim(block: dict, grid: list, doc: dict, listing: dict, grammar) -> dict:
+    """The semantic contracts at every candidate band: point -> [[cid, kind, status, cause, criteria, keys]]."""
+    out = contracts.evaluate_semantic_grid(block, [g["tolerances"] for g in grid], q2_doc=doc, q2_listing=listing,
+                                           grammar=grammar)
+    return {g["name"]: [[r["contract_id"], r["kind"], r["status"], r["cause"],
+                         (r.get("observed") or {}).get("criteria"),
+                         list(r["violating_keys"]) if r["status"] == "breach" else []] for r in res]
+            for g, res in zip(grid, out)}
+
+
+def _median_shift(learn_out: dict, doc: dict, results: list, *, grammar, tolerances) -> dict:
+    stats = learn_out.get("range_stats") or {}
+    if not stats:
+        return {}
+    samples = m2_seed.range_samples(learn_out["block"], doc, grammar=grammar, tolerances=tolerances)
+    scale = {(r["partition_id"], r["field"]): r["status"] for r in results if r["kind"] == "scale"}
+    meta = {c["contract_id"]: c for c in learn_out["block"]["contracts"]}
+    return {cid: {m2_seed.ms_name(x, y): (m2_seed.median_shift_verdict(st, samples.get(cid, []), x=x, y=y)
+                                          if scale.get((meta[cid]["partition_id"], meta[cid]["field"])) == "holds"
+                                          else "insufficient_evidence")
+                  for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]}
+            for cid, st in sorted(stats.items())}
+
+
+def _inception(block: dict | None) -> list:
+    return [dict(kind=c["kind"], learn_status=c["learn_status"], learn_cause=c["learn_cause"],
+                 inception=(c.get("evidence") or {}).get("inception"))
+            for c in (block or {}).get("contracts", []) if c["kind"] in contracts.SEMANTIC_KINDS]
+
+
 def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, tolerances, grammar, holdings_path,
-             income_path, min_quarters, recorded_at, frozen_block) -> dict:
-    """One quarter: classify, slim view, yield evidence, learn, evaluate the rolling and anchored pairs ending here."""
+             income_path, min_quarters, recorded_at, frozen_block, semantic=None) -> dict:
+    """One quarter: classify, slim view, yield evidence, learn, evaluate the rolling and anchored pairs ending here.
+
+    semantic (Task B2-3): dict(grid=m2_seed.semantic_grid(v2)); `tolerances` is then the v3 learning
+    reference. Each pair also carries the semantic contracts at every candidate band, the median_shift
+    experiment and (rolling) the prior-pair newly_abstained marks."""
     from scripts.profile_pilot import profile
     timing: dict = {}
     t = time.perf_counter()
@@ -1089,9 +1451,17 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
         t = time.perf_counter()
         res = contracts.evaluate_contracts(learn_out["block"], tolerances, q2_doc=doc, q2_listing=listing,
                                            grammar=grammar, yield_q2=ev_yield)
+        extra = {}
+        if mode == "rolling":
+            prior = ((prev_out.get("evaluations") or {}).get("rolling") or {}).get("results")
+            res = contracts.mark_prior_abstentions(res, prior)
+        if semantic:
+            extra = dict(semantic_grid=_grid_slim(learn_out["block"], semantic["grid"], doc, listing, grammar),
+                         median_shift=_median_shift(learn_out, doc, res, grammar=grammar, tolerances=tolerances),
+                         tier=learn_out["block"]["tier"])
         spent = time.perf_counter() - t + timing["yield_seconds"]
         evaluations[mode] = dict(learn_date=learn_out["day"], results=[_trim(r) for r in res],
-                                 timing=dict(evaluate_seconds=round(spent, 3)))
+                                 timing=dict(evaluate_seconds=round(spent, 3)), **extra)
     reproduction = None
     if day == q1_date and block is not None:
         single = yield_evidence(paths, cik=cik, day=day, window=[day], slims={day: slim}, holdings_path=holdings_path,
@@ -1103,19 +1473,28 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
         timing.clear()
         timing.update(saved)
         key = lambda c: (c["contract_id"], c["learn_status"], c["learn_cause"], c["expectation"])
-        mine, frozen = [key(c) for c in again["contracts"]], [key(c) for c in frozen_block["contracts"]]
+        # the frozen block is v2: compare the v2 subset (a v3 learn adds only the semantic contracts)
+        mine = [key(c) for c in again["contracts"] if c["kind"] in contracts.KINDS]
+        frozen = [key(c) for c in frozen_block["contracts"]]
         diffs = [dict(contract_id=a[0], backtest=list(a[1:3]), frozen=list(b[1:3]), expectation_equal=a[3] == b[3])
                  for a, b in zip(mine, frozen) if a != b]
         reproduction = dict(equal=mine == frozen, contracts=[len(mine), len(frozen)], differences=diffs[:60],
                             note="learned again at q1 with the frozen recorded_at and a one-quarter yield window "
                                  "(the Stage B learning inputs) and compared per contract with contract_inventory")
+    extra = {}
+    if semantic and block is not None:
+        t = time.perf_counter()
+        extra = dict(range_stats=m2_seed.range_stats(m2_seed.range_samples(block, doc, grammar=grammar,
+                                                                           tolerances=tolerances)),
+                     inception=_inception(block))
+        timing["learn_contracts_seconds"] = timing.get("learn_contracts_seconds", 0.0) + time.perf_counter() - t
     peak = m2_seed._peak_bytes()
     stage_timing = _stage_timing(timing)
     stage_timing["peak_bytes"] = peak
     return dict(cik=cik, day=day, form_type=doc["document"].get("form_type"),
                 accession_number=doc["document"].get("accession_number"), quarter_class=qclass, slim=slim,
                 **{"yield": ev_yield}, profile=profile_state,
-                block=block, evaluations=evaluations, reproduction=reproduction, timing=stage_timing)
+                block=block, evaluations=evaluations, reproduction=reproduction, timing=stage_timing, **extra)
 
 
 def main(argv=None) -> int:
@@ -1132,6 +1511,8 @@ def main(argv=None) -> int:
     cmd.add_argument("--contracts-run-id", required=True)
     cmd.add_argument("--cik", action="append", default=None)
     cmd.add_argument("--scratch-dir", type=Path, default=None)
+    cmd.add_argument("--semantic", action="store_true", help="Task B2-3: v3 semantic kinds at every candidate band")
+    cmd.add_argument("--seed-run-id", default=None, help="Task B2-3: seed root whose semantic curves calibrate")
     args = parser.parse_args(argv)
     try:
         main_root = args.main_root or discover_main_root(CODE_ROOT)
@@ -1141,7 +1522,8 @@ def main(argv=None) -> int:
                    + "_m2_backtest_preservation.json")
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, contracts_run_id=args.contracts_run_id,
-                                ciks=args.cik, scratch_dir=args.scratch_dir)
+                                ciks=args.cik, scratch_dir=args.scratch_dir, semantic=args.semantic,
+                                seed_run_id=args.seed_run_id)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
         return EXIT_INVALIDATED
