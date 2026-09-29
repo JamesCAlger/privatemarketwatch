@@ -324,3 +324,14 @@ def test_real_stellus_seed_matrix_through_the_cli(tmp_path, monkeypatch):
     assert built["tolerances"]["content_sha256"] == m2_seed.TOLERANCES_V2_SHA256
     assert list((tmp_path / "scratch").glob("seed_*.md")) and list((tmp_path / "scratch").glob("seed_*.csv"))
     (root / "results" / "summary.md").read_text(encoding="ascii")
+
+
+def test_realism_self_check_runs_on_seed_one_only_and_is_timed_apart_from_the_measured_work():
+    matrix = small_matrix(q1())
+    for e in matrix["evaluations"]:
+        assert e["realism_checked"] is (e["seed"] == 1)
+        if not e["realism_checked"]:
+            assert e["realism_errors"] == []
+    t = matrix["timing"]
+    assert t["measured_seconds"] == round(t["perturb_seconds"] + t["evaluate_seconds"], 3)
+    assert "validate_seconds" in t and "R35" in m2_seed.LIMIT_RULE

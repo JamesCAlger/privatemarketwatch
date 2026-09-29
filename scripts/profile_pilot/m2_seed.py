@@ -96,6 +96,9 @@ DATE_RE = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{2,4})\b")
 FULL_VALIDATION_MAX_BYTES = 5_000_000
 LIMIT_SECONDS = 60
 LIMIT_BYTES = 2 * 2 ** 30
+LIMIT_RULE = ("ruling R35: the 60 s / 2 GiB bound applies to the measured work (perturbation + contract "
+              "evaluation, timed per step and per CIK); the realism self-check runs on seed 1 only per class x "
+              "fraction and is timed separately (validate_seconds)")
 CODE_FILES = ("scripts/profile_pilot/m2_seed.py", "scripts/profile_pilot/contracts.py",
               "scripts/profile_pilot/contracts_observe.py", "scripts/profile_pilot/contracts_run.py",
               "scripts/profile_pilot/envelope.py", "scripts/profile_pilot/census.py",
@@ -658,8 +661,9 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                 doc, receipt = perturb(q1_doc, kind, fraction, seed=seed, delta=delta, deep=False)
                 timing["perturb_seconds"] += time.perf_counter() - t
                 t = time.perf_counter()
-                full = full_validation and fraction == max(fractions) and s_i == 0
-                problems = realism_errors(q1_doc, doc, receipt, full=full)
+                checked = s_i == 0  # ruling R35: the realism self-check runs on the first seed only
+                full = full_validation and fraction == max(fractions) and checked
+                problems = realism_errors(q1_doc, doc, receipt, full=full) if checked else []
                 timing["validate_seconds"] += time.perf_counter() - t
                 t = time.perf_counter()
                 results = ev(doc)
@@ -683,7 +687,7 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                     collateral=[dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"],
                                      before=base[r["contract_id"]]["status"], after=r["status"], cause=r["cause"])
                                 for r in changed if r["contract_id"] not in target_set],
-                    realism_errors=problems, full_validation=full))
+                    realism_errors=problems, realism_checked=checked, full_validation=full))
                 receipts.append(dict(variant=name, fraction=fraction, seed=seed, receipt_sha256=receipt_sha,
                                      receipt=receipt))
                 del doc
@@ -699,7 +703,8 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                                     if r["status"] == "breach"],
                           statuses=[[r["status"], r["cause"]] for r in null]),
         evaluations=evaluations, receipts=receipts, original_unchanged=unchanged,
-        timing={k: round(v, 3) for k, v in sorted(timing.items())})
+        timing=dict({k: round(v, 3) for k, v in sorted(timing.items())},
+                    measured_seconds=round(timing["perturb_seconds"] + timing["evaluate_seconds"], 3)))
 
 
 # ---------------------------------------------------------------- aggregation
@@ -808,10 +813,10 @@ def render_summary(*, run_id: str, sens: dict, spots: list, per_cik: dict, timin
               + " (" + "; ".join(s["causes"]) + ")" for s in expected] or ["- none"]
     lines += ["", "Other applicable (class, kind, CIK) not detected at 1.0: " + str(len(spots) - len(expected))
               + " (listed in sensitivity.json)", "", "## Timing per CIK", "",
-              "| cik | wall s | evaluate s | perturb s | validate s | peak wset MiB |", "|---|---|---|---|---|---|"]
+              "| cik | measured s (perturb + evaluate; R35 bound) | evaluate s | perturb s | validate s (seed-1 self-check) | wall s | peak wset MiB |", "|---|---|---|---|---|---|---|"]
     for cik, t in timing.items():
-        lines.append("| " + cik + " | " + str(t["wall_seconds"]) + " | " + str(t.get("evaluate_seconds")) + " | "
-                     + str(t.get("perturb_seconds")) + " | " + str(t.get("validate_seconds")) + " | "
+        lines.append("| " + cik + " | " + str(t["measured_seconds"]) + " | " + str(t.get("evaluate_seconds")) + " | "
+                     + str(t.get("perturb_seconds")) + " | " + str(t.get("validate_seconds")) + " | " + str(t["wall_seconds"]) + " | "
                      + str(t["peak_wset_bytes"] // 2 ** 20) + " |")
     text = "\n".join(lines) + "\n"
     text.encode("ascii")
@@ -962,7 +967,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
     code = [_record(paths.code_root / rel, "code/" + rel, code_root=paths.code_root, blob_of=rel) for rel in CODE_FILES]
     config = dict(fractions=list(fractions), seeds=list(seeds), variants=[list(v) for v in VARIANTS], field=FIELD,
                   contract_kinds=list(CONTRACT_KINDS), expected_detector=EXPECTED_DETECTOR,
-                  full_validation_max_bytes=FULL_VALIDATION_MAX_BYTES, limits=dict(seconds=LIMIT_SECONDS,
+                  full_validation_max_bytes=FULL_VALIDATION_MAX_BYTES, limit_rule=LIMIT_RULE, limits=dict(seconds=LIMIT_SECONDS,
                                                                                    bytes=LIMIT_BYTES))
     inputs = ([census["authoritative"]] + census["files"] + [summary_rec] + list(profile_recs.values())
               + [cman_rec, tol_rec, inv_rec] + list(block_recs.values())
@@ -1026,7 +1031,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
         print("  " + cik + ": " + str(len(matrix["evaluations"])) + " evaluations, " + str(
             matrix["timing"]["wall_seconds"]) + " s, peak " + str(matrix["timing"]["peak_wset_bytes"] // 2 ** 20)
               + " MiB, null breaches " + str(len(matrix["null_control"]["breaches"])) + " (" + out["cache"] + ")")
-        if matrix["timing"]["wall_seconds"] > LIMIT_SECONDS or matrix["timing"]["peak_wset_bytes"] > LIMIT_BYTES:
+        if matrix["timing"]["measured_seconds"] > LIMIT_SECONDS or matrix["timing"]["peak_wset_bytes"] > LIMIT_BYTES:
             write_once_json(paths, "results/limit_exceeded.json", dict(cik=cik, timing=matrix["timing"],
                                                                        done=list(per_cik)))
             raise LimitExceeded(cik + " exceeded the measured bound: " + json.dumps(matrix["timing"]))
