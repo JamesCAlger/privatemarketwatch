@@ -155,31 +155,40 @@ def translate_one(paths: PilotPaths, cik: str, era: str, pin: dict, base: dict, 
         profile.validate_document(prof)
         base_wrapper = m1.load_wrapper(base["path"], expected_sha256=base["sha256"])
         result = translate.to_wrapper_v3(prof, base_wrapper, prof["report_date"], prof["form_type"], as_of=as_of)
-        written = translate.write_overlay(paths, cik, era, result, extra=dict(
+        wrapper = translate.write_wrapper(paths, cik, era, result["wrapper"])
+        # The sidecar is written after loader admission (it carries consumer_parity).
+        return dict(wrapper=wrapper, sidecar=result["sidecar"], extra=dict(
             profile_file=dict(relative=pin["relative"], sha256=pin["record"]["sha256"]),
             base_wrapper={k: base.get(k) for k in ("label", "commit", "git_blob", "sha256", "path")}))
-        return dict(written={k: written[k] for k in ("wrapper", "sidecar")},
-                    sidecar={k: v for k, v in written["sidecar_body"].items()
-                             if k not in ("inherited_overlay",)} | dict(
-                        inherited_overlay_field_count=result["sidecar"]["inherited_overlay"]["field_count"]))
 
     out = manifest.run_cached_stage(paths, "translate/" + cik + "/" + era + ".stage.json", identity, compute,
                                     workload=workload)
     return out["result"]
 
 
-def _row(result: dict, admission: dict) -> dict:
+def finish_sidecar(paths: PilotPaths, cik: str, era: str, result: dict, admission: dict) -> dict:
+    parity = translate.consumer_parity(admission.get("spec_parity"), result["sidecar"]["created_objects"])
+    extra = dict(result["extra"], loader_admission={k: v for k, v in admission.items() if k != "spec"},
+                 consumer_parity=parity)
+    written = translate.write_sidecar(paths, cik, era, result["sidecar"], result["wrapper"], extra=extra)
+    return dict(written, consumer_parity=parity)
+
+
+def _row(result: dict, admission: dict, sidecar: dict) -> dict:
     side = result["sidecar"]
-    return dict(wrapper=result["written"]["wrapper"], sidecar=result["written"]["sidecar"],
+    return dict(wrapper=result["wrapper"], sidecar={k: sidecar[k] for k in ("path", "relative", "sha256")},
+                fields_added=side["fields_added"], created_objects=side["created_objects"],
+                consumer_parity=sidecar["consumer_parity"],
                 sections_translated=side["sections_translated"], entries_used=side["entries_used"],
                 translated=[dict(profile_key=t["profile_key"], wrapper_pointer=t["wrapper_pointer"], via=t["via"],
                                  equal_to_base=t["equal_to_base"]) for t in side["translated"]],
                 not_expressible=[dict(profile_key=n["profile_key"], reasons=n["reasons"], entry_ids=n["entry_ids"],
-                                      wrapper_pointer=n["wrapper_pointer"], detail=n["detail"])
+                                      wrapper_pointer=n["wrapper_pointer"], detail=n["detail"],
+                                      would_create=n.get("would_create", []))
                                  for n in side["not_expressible"]],
                 no_wrapper_field_keys=len(side["no_wrapper_field"]),
-                inherited_overlay=dict(field_count=side["inherited_overlay_field_count"],
-                                       sidecar=result["written"]["sidecar"]["relative"]),
+                inherited_overlay=dict(field_count=side["inherited_overlay"]["field_count"],
+                                       sidecar=sidecar["relative"]),
                 coverage=side["coverage"], parity=side["parity"], schema_validation=side["schema_validation"],
                 loader_admission=admission)
 
@@ -219,13 +228,25 @@ def run_stage(paths: PilotPaths, *, profile_run_id: str, ciks=None, as_of: str |
             if result.get("status") == "unavailable":
                 per_cik[cik][era] = result
                 continue
-            per_cik[cik][era] = _row(result, admissions[era]["ciks"][cik])
+            admission = admissions[era]["ciks"][cik]
+            sidecar = finish_sidecar(paths, cik, era, result, admission)
+            per_cik[cik][era] = _row(result, admission, sidecar)
     for era in profile.ERAS:
         rows = [per_cik[c][era] for c in ciks if "coverage" in per_cik[c][era]]
+        by_reason: dict = {}
+        for r in rows:
+            for n in r["not_expressible"]:
+                for reason in n["reasons"]:
+                    by_reason[reason] = by_reason.get(reason, 0) + 1
         totals[era] = dict(
             ciks=len(rows), admitted=sum(1 for r in rows if r["loader_admission"]["admitted"]),
             schema_pass=sum(1 for r in rows if r["schema_validation"]["verdict"] == "pass"),
             not_expressible=sum(len(r["not_expressible"]) for r in rows),
+            not_expressible_by_reason=dict(sorted(by_reason.items())),
+            fields_added=sum(len(r["fields_added"]) for r in rows),
+            created_objects=sum(len(r["created_objects"]) for r in rows),
+            consumer_parity_true=sum(1 for r in rows if r["consumer_parity"]["verdict"]),
+            spec_parity_true=sum(1 for r in rows if r["consumer_parity"]["spec_parity"]),
             entries_used=sum(r["entries_used"] for r in rows),
             mean_coverage=round(sum(r["coverage"]["ratio"] for r in rows) / len(rows), 6) if rows else None,
             profile_driven_fields=sum(r["coverage"]["profile_driven"] for r in rows),
@@ -271,8 +292,10 @@ def main(argv=None) -> int:
         return EXIT_REFUSED
     print("run: " + summary["run_id"] + " | git_head " + summary["git_head"] + " | " + str(summary["seconds"]) + " s")
     for era, row in summary["totals"].items():
-        print(era + ": " + json.dumps({k: row[k] for k in ("ciks", "admitted", "schema_pass", "not_expressible",
-                                                             "entries_used", "mean_coverage")}, sort_keys=True))
+        print(era + ": " + json.dumps({k: row[k] for k in (
+            "ciks", "admitted", "schema_pass", "not_expressible", "not_expressible_by_reason", "entries_used",
+            "mean_coverage", "fields_added", "created_objects", "consumer_parity_true", "spec_parity_true")},
+            sort_keys=True))
     return 0
 
 

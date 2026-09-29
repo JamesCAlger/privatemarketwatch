@@ -195,9 +195,11 @@ def test_translatable_key_without_entry_lists_its_stubs():
 
 def test_inherited_overlay_lists_every_retained_field_with_its_hash():
     base = base_wrapper()
-    base.pop("identifier_format")
+    base["identifier_format"].pop("delimiter")  # the parent object exists; only the leaf is filled
     prof = make_profile(BASIC)
     out = translate.to_wrapper_v3(prof, base, Q, "10-Q")
+    assert out["sidecar"]["fields_added"] == ["/identifier_format/delimiter"]
+    assert out["sidecar"]["created_objects"] == []
     generated = leaves(out["wrapper"])
     driven = {"/cik", "/entity_name", "/identifier_format/delimiter"}
     overlay = {f["pointer"]: f["sha256"] for f in out["sidecar"]["inherited_overlay"]["fields"]}
@@ -214,6 +216,66 @@ def test_inherited_overlay_lists_every_retained_field_with_its_hash():
     parity = out["sidecar"]["parity"]
     assert parity["profile_driven_equal_to_base"] == 1 and parity["profile_driven_total"] == 3
     assert parity["fields_equal_to_base"] == len(generated) - 2
+
+
+FV_ENTRY = entry("fund_level_concepts.investments_at_fair_value_concept", "us-gaap:InvestmentOwnedAtFairValue")
+
+
+@pytest.mark.parametrize("strip", ["invariants", "fv_reconciliation"])
+def test_creating_an_invariant_parent_is_not_expressible(strip):
+    base = base_wrapper()
+    if strip == "invariants":
+        base.pop("invariants")
+    else:
+        base["invariants"] = {"rate_sanity": {"min_pct": 0.0, "max_pct": 30.0}}
+    out = translate.to_wrapper_v3(make_profile((FV_ENTRY,)), base, Q, "10-Q")
+    [item] = out["sidecar"]["not_expressible"]
+    assert item["reasons"] == ["would_create_invariant"]
+    assert item["would_create"] == (["/invariants", "/invariants/fv_reconciliation"] if strip == "invariants"
+                                    else ["/invariants/fv_reconciliation"])
+    assert out["wrapper"] == base  # no key created, production check not switched on
+    assert out["sidecar"]["translated"] == [] and out["sidecar"]["fields_added"] == []
+    assert out["sidecar"]["created_objects"] == []
+
+
+def test_filling_a_leaf_of_an_existing_invariant_is_translated():
+    base = base_wrapper()
+    base["invariants"]["fv_reconciliation"].pop("source_field")
+    out = translate.to_wrapper_v3(make_profile((FV_ENTRY,)), base, Q, "10-Q")
+    [item] = out["sidecar"]["translated"]
+    assert item["wrapper_pointer"] == "/invariants/fv_reconciliation/source_field" and item["base_present"] is False
+    assert out["wrapper"]["invariants"]["fv_reconciliation"]["source_field"] == "investments_at_fair_value"
+    assert out["sidecar"]["fields_added"] == ["/invariants/fv_reconciliation/source_field"]
+    assert out["sidecar"]["created_objects"] == [] and out["sidecar"]["not_expressible"] == []
+
+
+def test_creating_any_other_parent_object_is_not_expressible():
+    base = base_wrapper()
+    base.pop("identifier_format")
+    out = translate.to_wrapper_v3(make_profile(BASIC), base, Q, "10-Q")
+    [item] = out["sidecar"]["not_expressible"]
+    assert item["reasons"] == ["would_create_object"] and item["would_create"] == ["/identifier_format"]
+    assert "identifier_format" not in out["wrapper"] and out["sidecar"]["fields_added"] == []
+
+
+def test_consumer_parity_needs_spec_parity_and_no_created_objects():
+    assert translate.consumer_parity(dict(equal=True), []) == dict(verdict=True, spec_parity=True,
+                                                                     created_objects=[])
+    assert translate.consumer_parity(dict(equal=True), ["/invariants"])["verdict"] is False
+    assert translate.consumer_parity(dict(equal=False), [])["verdict"] is False
+    assert translate.consumer_parity(None, [])["verdict"] is False
+
+
+def test_stale_entries_are_rejected_with_and_without_as_of():
+    prof = make_profile(BASIC)
+    stale = dict(prof, entries=prof["entries"][:-1])
+    for as_of in (None, NOW, LATER):
+        with pytest.raises(translate.TranslateError, match="materialized view"):
+            translate.to_wrapper_v3(stale, base_wrapper(), Q, "10-Q", as_of=as_of)
+    edited = copy.deepcopy(prof)
+    edited["entries"][0]["value"] = "0000000001"
+    with pytest.raises(translate.TranslateError, match="materialized view"):
+        translate.to_wrapper_v3(edited, base_wrapper(), Q, "10-Q", as_of=LATER)
 
 
 def test_a_mostly_copied_wrapper_reports_low_coverage_beside_high_parity():
@@ -347,13 +409,33 @@ def test_stage_writes_wrappers_sidecars_and_summary_under_the_run_root(tmp_path)
     paths = sibling(census_paths, run_id="stageb-translate-test")
     summary = translate_run.run_stage(paths, profile_run_id="stageb-profile-test", ciks=[CIK], as_of=PNOW)
     root = paths.run_root
+    bases = dict(q1=CODE_ROOT / "data" / "overrides" / "bdc_xbrl_wrappers" / (CIK + ".json"),
+                 same_era=prof_paths.run_root / "inputs" / "verified_era_wrappers" / (CIK + ".json"))
     for era in ("q1", "same_era"):
-        assert (root / "translate" / ("wrappers_" + era) / (CIK + ".json")).is_file()
-        assert (root / "translate" / CIK / (era + ".sidecar.json")).is_file()
+        # The fixture census yields entity_cik and a " | " delimiter entry; the Stellus wrapper has
+        # identifier_format (delimiter ", ") and invariants, so both translate and nothing is created.
+        base = json.loads(bases[era].read_text(encoding="utf-8"))
+        n = len(leaves(base))
+        generated = json.loads((root / "translate" / ("wrappers_" + era) / (CIK + ".json")).read_text("ascii"))
+        assert generated["identifier_format"]["delimiter"] == " | " and generated["cik"] == CIK
+        sidecar = json.loads((root / "translate" / CIK / (era + ".sidecar.json")).read_text(encoding="ascii"))
         row = summary["ciks"][CIK][era]
-        assert row["schema_validation"]["verdict"] in ("pass", "fail")
-        assert row["loader_admission"]["admitted"] in (True, False)
-        assert 0 <= row["coverage"]["ratio"] <= 1
+        assert [(t["wrapper_pointer"], t["equal_to_base"]) for t in row["translated"]] == [
+            ("/cik", True), ("/identifier_format/delimiter", False)]
+        assert row["not_expressible"] == [] and row["entries_used"] == 2
+        assert row["schema_validation"] == dict(verdict="pass", errors=[])
+        assert row["loader_admission"]["admitted"] is True and row["loader_admission"]["error"] is None
+        assert row["coverage"] == dict(fields_total=n, profile_driven=2, profile_driven_via_inherited=0,
+                                       inherited=n - 2, ratio=round(2 / n, 6))
+        assert row["inherited_overlay"]["field_count"] == n - 2
+        assert row["fields_added"] == [] and row["created_objects"] == []
+        assert row["consumer_parity"] == dict(verdict=True, spec_parity=True, created_objects=[])
+        assert sidecar["consumer_parity"] == row["consumer_parity"]
+        assert sidecar["fields_added"] == [] and sidecar["inherited_overlay"]["field_count"] == n - 2
+        totals = summary["totals"][era]
+        assert (totals["admitted"], totals["schema_pass"], totals["not_expressible"]) == (1, 1, 0)
+        assert totals["not_expressible_by_reason"] == {}
+        assert (totals["fields_added"], totals["consumer_parity_true"]) == (0, 1)
     manifest_body = json.loads((root / "manifest.json").read_text(encoding="ascii"))
     labels = {r["label"] for r in manifest_body["inputs"]}
     assert "code/schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json" in labels

@@ -12,7 +12,12 @@ What the wrapper cannot express is recorded, never flattened or dropped:
   - form_specific: an entry for the key carries a `form_type` (wrapper v3 has no form
     qualifier; the value would leak to every other form);
   - presentation_view_declaration: any `presentation_views.*` entry;
-  - no_wrapper_representation: a value the translation vocabulary cannot map.
+  - no_wrapper_representation: a value the translation vocabulary cannot map;
+  - would_create_invariant / would_create_object (ruling R27): the target's parent object is
+    absent from the base wrapper. An entry may fill a field of an existing object, never
+    create one: any `invariants.fv_reconciliation` key switches on a production check
+    (pipeline/wrapper_content_signatures.py). `fields_added`, `created_objects` and
+    `consumer_parity` (loader-spec parity AND no created object) are published beside it.
 In every such case the base value stays and is listed in the inherited overlay.
 
 Every generated field NOT set from a profile entry is an inherited-overlay field (JSON
@@ -110,10 +115,30 @@ def _get(wrapper: dict, path):
     return True, node
 
 
+def _missing_parents(wrapper: dict, path) -> list:
+    """Pointers of the parent objects of `path` that the wrapper does not have."""
+    return [pointer(path[:i]) for i in range(1, len(path)) if not _get(wrapper, path[:i])[0]]
+
+
+def objects(value, path=()) -> list:
+    """Pointers of every object node (the root excluded)."""
+    out = [pointer(path)] if path and isinstance(value, dict) else []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            out += objects(child, path + (key,))
+    return out
+
+
+def consumer_parity(spec_parity: dict | None, created_objects: list) -> dict:
+    """Loader-spec parity AND no object the base lacks (an invariants.* object is a live check)."""
+    spec = bool(spec_parity and spec_parity.get("equal") is True)
+    return dict(verdict=spec and not created_objects, spec_parity=spec, created_objects=list(created_objects))
+
+
 def _set(wrapper: dict, path, value) -> None:
     node = wrapper
     for part in path[:-1]:
-        node = node.setdefault(part, {})
+        node = node[part]  # never creates a parent (ruling R27); callers check _missing_parents first
     node[path[-1]] = value
 
 
@@ -203,11 +228,18 @@ def _canonical(value) -> str:
 
 
 def _entries(profile: dict, as_of) -> list:
-    entries = envelope.materialize_entries(profile["events"], as_of)
-    if as_of is None and "entries" in profile and sorted(map(_canonical, entries)) != sorted(
-            map(_canonical, profile["entries"])):
-        raise TranslateError("profile entries are not the materialized view of its events")
-    return entries
+    """Entries known at `as_of`, after checking the stored view against the event log.
+
+    The stored `entries` is the full materialized view (the Task 6 document contract), so it
+    is compared with materialize_entries(events) for EVERY as_of; comparing it with the
+    as_of view instead would reject any profile holding a retraction recorded after as_of.
+    Resolution then uses materialize_entries(events, as_of).
+    """
+    if "entries" in profile:
+        full = envelope.materialize_entries(profile["events"])
+        if sorted(map(_canonical, full)) != sorted(map(_canonical, profile["entries"])):
+            raise TranslateError("profile entries are not the materialized view of its events")
+    return envelope.materialize_entries(profile["events"], as_of)
 
 
 def _stubs_for(profile: dict, key: str) -> list:
@@ -230,11 +262,19 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
         if outcome["status"] == "resolved" and spec is None:
             no_wrapper_field.append(dict(profile_key=key, entry_ids=ids))
             continue
+        would_create = []
         if outcome["status"] == "resolved":
             value, via, detail = _convert(spec, outcome["entry"]["value"])
+            would_create = _missing_parents(base_wrapper, path)
             if via is None:
                 outcome = dict(status="not_expressible", reasons=["no_wrapper_representation"],
                                entries=outcome["entries"], detail=detail)
+            elif would_create:
+                # Ruling R27: a profile entry may fill a field of an existing object, never create
+                # one (an `invariants.*` object switches on a production check).
+                reason = "would_create_invariant" if path[0] == "invariants" else "would_create_object"
+                outcome = dict(status="not_expressible", reasons=[reason], entries=outcome["entries"],
+                               detail="base wrapper lacks " + ", ".join(would_create))
         if outcome["status"] == "not_expressible":
             present, base_value = _get(base_wrapper, path) if path else (False, None)
             not_expressible.append(dict(
@@ -242,7 +282,7 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
                 wrapper_pointer=pointer(path) if path else None,
                 partitions=[e["applies_to"] for e in outcome["entries"]],
                 form_types=sorted({e["form_type"] for e in outcome["entries"] if e["form_type"] is not None}),
-                values=[e["value"] for e in outcome["entries"]],
+                values=[e["value"] for e in outcome["entries"]], would_create=would_create,
                 base_retained=(dict(pointer=pointer(path), present=present,
                                     sha256=value_sha256(base_value) if present else None) if path else None)))
             continue
@@ -270,6 +310,8 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
     equal = [p for p, v in generated.items() if p in base_fields and value_sha256(base_fields[p]) == value_sha256(v)]
     union = set(generated) | set(base_fields)
     total = len(generated)
+    fields_added = sorted(set(generated) - set(base_fields))
+    created = sorted(set(objects(wrapper)) - set(objects(base_wrapper)))
     sidecar = dict(
         schema=SIDECAR_SCHEMA, translate_version=TRANSLATE_VERSION, cik=profile.get("cik"), era=profile.get("era"),
         report_date=report_date, form_type=form_type, as_of=as_of,
@@ -285,8 +327,9 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
         coverage=dict(fields_total=total, profile_driven=len(driven),
                       profile_driven_via_inherited=sum(1 for v in driven.values() if v != "direct"),
                       inherited=len(overlay), ratio=round(len(driven) / total, 6) if total else 0.0),
+        fields_added=fields_added, created_objects=created,
         parity=dict(fields_total=len(union), fields_equal_to_base=len(equal),
-                    fields_added=len(set(generated) - set(base_fields)),
+                    fields_added=len(fields_added),
                     profile_driven_total=len(translated),
                     profile_driven_equal_to_base=sum(1 for t in translated if t["equal_to_base"])),
         schema_validation=validation, disclaimer=DISCLAIMER)
@@ -321,16 +364,30 @@ def sidecar_relative(cik: str, era: str) -> str:
     return "translate/" + cik + "/" + era + ".sidecar.json"
 
 
+def write_wrapper(paths: PilotPaths, cik: str, era: str, wrapper: dict) -> dict:
+    """The generated wrapper, write-once, key order preserved."""
+    relative = wrapper_relative(cik, era)
+    target = _write_once_ordered(paths, relative, wrapper)
+    return dict(path=str(target), relative=relative, sha256=hashlib.sha256(target.read_bytes()).hexdigest())
+
+
+def write_sidecar(paths: PilotPaths, cik: str, era: str, sidecar: dict, wrapper_record: dict,
+                  *, extra: dict | None = None) -> dict:
+    """The sidecar (pilot metadata), write-once, pointing at the generated wrapper's sha256."""
+    relative = sidecar_relative(cik, era)
+    body = dict(sidecar, generated_wrapper=dict(relative=wrapper_record["relative"],
+                                                sha256=wrapper_record["sha256"]), **(extra or {}))
+    target = write_once_json(paths, relative, body)
+    return dict(path=str(target), relative=relative, sha256=hashlib.sha256(target.read_bytes()).hexdigest(),
+                body=body)
+
+
 def write_overlay(paths: PilotPaths, cik: str, era: str, result: dict, *, extra: dict | None = None) -> dict:
     """Write the generated wrapper (order preserved) and its sidecar, both write-once under the run root."""
-    wrapper_rel, sidecar_rel = wrapper_relative(cik, era), sidecar_relative(cik, era)
-    target = _write_once_ordered(paths, wrapper_rel, result["wrapper"])
-    digest = hashlib.sha256(target.read_bytes()).hexdigest()
-    sidecar = dict(result["sidecar"], generated_wrapper=dict(relative=wrapper_rel, sha256=digest), **(extra or {}))
-    side = write_once_json(paths, sidecar_rel, sidecar)
-    return dict(wrapper=dict(path=str(target), relative=wrapper_rel, sha256=digest),
-                sidecar=dict(path=str(side), relative=sidecar_rel,
-                             sha256=hashlib.sha256(side.read_bytes()).hexdigest()), sidecar_body=sidecar)
+    wrapper = write_wrapper(paths, cik, era, result["wrapper"])
+    side = write_sidecar(paths, cik, era, result["sidecar"], wrapper, extra=extra)
+    body = side.pop("body")
+    return dict(wrapper=wrapper, sidecar=side, sidecar_body=body)
 
 
 # ---------------------------------------------------------------- production loader admission
