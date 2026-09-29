@@ -94,10 +94,20 @@ SEMANTIC_CONSTANTS = dict(
          "text_match_tolerance_pct percentage points (the owner-session census tolerance)")
 # The v3 bands. IN-SAMPLE: chosen after the Stage B Q2 censuses, the seeded drift of B2-1 and the
 # recorded history of B2-2b were read; see CALIBRATION.
-SEMANTIC_BANDS = {"standard": dict(share_pp=15, fixed_share_pp=10, text_share_pp=5, min_rows=10,
+SEMANTIC_BANDS = {"standard": dict(share_pp=5, fixed_share_pp=5, text_share_pp=5, min_rows=10,
                                    min_parse_share=0.5),
-                  "low_history": dict(share_pp=15, fixed_share_pp=10, text_share_pp=5, min_rows=10,
+                  "low_history": dict(share_pp=5, fixed_share_pp=5, text_share_pp=5, min_rows=10,
                                       min_parse_share=0.5)}
+
+
+def _joint(rows) -> list:
+    return [dict(value="s%s_f%s" % (s, f), share_pp=s, fixed_share_pp=f, seeded_detection_fraction=d,
+                 negatives_breach_rate=r, negatives_n=94, negatives_breach_rate_per_criterion=dict(share=sh, fixed=fx))
+            for s, f, d, r, sh, fx in rows]
+
+
+def _curve(rows, n) -> list:
+    return [dict(value=v, seeded_detection_fraction=d, negatives_breach_rate=r, negatives_n=n) for v, d, r in rows]
 
 
 _CAL_OK = "smallest candidate meeting both criteria"
@@ -109,7 +119,44 @@ IQR_RECORD = dict(
     curve=[dict(value=1.5, negatives_breach_rate=0.1354), dict(value=2.0, negatives_breach_rate=0.1146),
            dict(value=3.0, negatives_breach_rate=0.0833)])
 CALIBRATION = dict(
-    label="in-sample (bands chosen after Q2 and the history were read)", status="pending",
+    label="in-sample (bands chosen after Q2 and the history were read)", status="calibrated",
+    seed_run_id="stageb2-seed-v3-20260929t144753z", backtest_run_id="stageb2-backtest-v3-20260929t145004z",
+    code_head="94d5c9f",
+    bands={
+        "rate_composition": dict(
+            target="spread_for_coupon", status="calibrated", chosen=dict(share_pp=5, fixed_share_pp=5), reason=_CAL_OK,
+            positives=dict(units=2, detected=2, note="the two adjudicated BCRED fixed-coupon pairs (R39a)"),
+            curve=_joint((
+        (5, 5, 0.05, 0.0213, 0.0213, 0.0),
+        (5, 10, 0.1, 0.0213, 0.0213, 0.0),
+        (5, 15, 0.1, 0.0213, 0.0213, 0.0),
+        (5, 20, 0.1, 0.0213, 0.0213, 0.0),
+        (5, 25, 0.1, 0.0213, 0.0213, 0.0),
+        (10, 5, 0.1, 0.0213, 0.0213, 0.0),
+        (10, 10, 0.1, 0.0213, 0.0213, 0.0),
+        (10, 15, 0.2, 0.0213, 0.0213, 0.0),
+        (10, 20, 0.2, 0.0213, 0.0213, 0.0),
+        (10, 25, 0.2, 0.0213, 0.0213, 0.0),
+        (15, 5, 0.2, 0.0213, 0.0213, 0.0),
+        (15, 10, 0.2, 0.0213, 0.0213, 0.0),
+        (15, 15, 0.2, 0.0213, 0.0213, 0.0),
+        (15, 20, 0.2, 0.0213, 0.0213, 0.0),
+        (15, 25, 0.2, 0.0213, 0.0213, 0.0),
+        (20, 5, 0.2, 0.0106, 0.0106, 0.0),
+        (20, 10, 0.2, 0.0106, 0.0106, 0.0),
+        (20, 15, 0.2, 0.0106, 0.0106, 0.0),
+        (20, 20, 0.2, 0.0106, 0.0106, 0.0),
+        (20, 25, 0.3, 0.0106, 0.0106, 0.0),
+        (25, 5, 0.3, 0.0106, 0.0106, 0.0),
+        (25, 10, 0.3, 0.0106, 0.0106, 0.0),
+        (25, 15, 0.3, 0.0106, 0.0106, 0.0),
+        (25, 20, 0.3, 0.0106, 0.0106, 0.0),
+        (25, 25, 0.3, 0.0106, 0.0106, 0.0),
+            ))),
+        "text_share_pp": dict(target="text_numeric_divergence", status="calibrated", chosen=5, reason=_CAL_OK,
+                              curve=_curve(((5, 0.05, 0.0753), (10, 0.1, 0.0645), (15, 0.2, 0.0645), (20, 0.2, 0.0538),
+                                            (25, 0.3, 0.043)), 93))},
+    fixed_not_swept=dict(min_rows=10, min_parse_share=0.5, note="floors, not calibrated"),
     rule=("per CONTRACT (review I1, ruling R39): rate_composition is chosen on the joint share_pp x fixed_share_pp "
           "grid as the smallest point (ordered by share_pp, then fixed_share_pp) whose COMPOSITION-CONTRACT breach "
           "rate on negatives (upper bound, rolling / as-evaluated; the two adjudicated BCRED fixed-coupon pairs are "
@@ -119,9 +166,14 @@ CALIBRATION = dict(
     tier_basis="pooled", iqr_widen=IQR_RECORD,
     median_shift_experiment=dict(adopted=False, note="calibration-only (addendum 3); curves in the back-test root"))
 
-SUPERSEDED_V3 = dict(run_id="stageb2-contracts-v3-20260929t124944z",
-                     content_sha256="9ebef3466953375884cbd3603d20fa6aeb1d6e106337e55ecc29314cf4a505e9",
-                     reason="calibration rule applied per contract; R38 fixed/floating split")
+SUPERSEDED_V3 = [
+    dict(run_id="stageb2-contracts-v3-20260929t124944z",
+         content_sha256="9ebef3466953375884cbd3603d20fa6aeb1d6e106337e55ecc29314cf4a505e9",
+         reason="calibration rule applied per contract; R38 fixed/floating split"),
+    dict(run_id="stageb2-contracts-v3-20260929t141812z",
+         content_sha256="a8ae34ce19427ea0cdfd5032ae2637947bd71b92a9f57afed70883f2d19b91d8",
+         reason=("ruling R39: fixed-coupon share on its own band (fixed_share_pp), IQR demoted to evidence, "
+                 "value-inferred cause renamed, BCRED fixed-coupon pairs adjudicated positives"))]
 
 V3_REASON = ("adds rate_composition and text_agreement (owner ask 2026-09-29, M2 assessment); bands calibrated "
              "in-sample on B2-1 seeds and B2-2b negatives")

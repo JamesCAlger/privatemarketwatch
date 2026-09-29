@@ -1255,9 +1255,12 @@ def test_v3_bands_are_the_per_contract_choices_on_one_pooled_basis_and_labelled_
 def test_v3_supersedes_the_first_v3_root_with_the_fix_round_reason():
     sup = contracts.tolerance_content()["supersedes"]
     assert sup["version"] == "contract-tolerances.v2" and sup["run_id"] == V2_RUN
-    assert sup["superseded_v3"]["run_id"] == "stageb2-contracts-v3-20260929t124944z"
-    assert sup["superseded_v3"]["reason"] == "calibration rule applied per contract; R38 fixed/floating split"
-    assert sup["superseded_v3"]["content_sha256"].startswith("9ebef346")
+    chain = sup["superseded_v3"]
+    assert [c["run_id"] for c in chain] == ["stageb2-contracts-v3-20260929t124944z",
+                                            "stageb2-contracts-v3-20260929t141812z"]
+    assert chain[0]["reason"] == "calibration rule applied per contract; R38 fixed/floating split"
+    assert chain[0]["content_sha256"].startswith("9ebef346") and chain[1]["content_sha256"].startswith("a8ae34ce")
+    assert "R39" in chain[1]["reason"]
 
 
 def test_v2_subset_check_reports_evidence_noise_apart_from_the_identity_verdict():
