@@ -90,10 +90,11 @@ SEMANTIC_VARIANTS = (("spread_for_coupon", "spread_for_coupon", None),
                      ("text_numeric_divergence", "text_numeric_divergence", None),
                      ("bps_spread_scale", "bps_spread_scale", None)) + tuple(
     ("range_shift_" + str(d), "range_shift", d) for d in RANGE_DELTAS)
-SEMANTIC_TARGETS = {"share_pp": "spread_for_coupon", "iqr_widen": "spread_for_coupon",
+SEMANTIC_TARGETS = {"share_pp": "spread_for_coupon", "fixed_share_pp": "spread_for_coupon",
                     "text_share_pp": "text_numeric_divergence"}
-CANDIDATES = dict(share_pp=(5, 10, 15, 20, 25), iqr_widen=(1.5, 2.0, 3.0), text_share_pp=(5, 10, 15, 20, 25))
-REFERENCE = dict(share_pp=10, iqr_widen=2.0, text_share_pp=10)
+# ruling R39: the fixed-coupon share has its own band; the IQR is evidence only (no candidate band)
+CANDIDATES = dict(share_pp=(5, 10, 15, 20, 25), fixed_share_pp=(5, 10, 15, 20, 25), text_share_pp=(5, 10, 15, 20, 25))
+REFERENCE = dict(share_pp=10, fixed_share_pp=10, text_share_pp=10)
 MEDIAN_SHIFT = dict(x=(0.10, 0.15, 0.25), y=(0.05, 0.10))
 IN_SAMPLE = "in-sample (bands chosen after Q2 and the history were read)"
 DIVERGENCE_PP = Decimal(1)
@@ -828,17 +829,18 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
 # ---------------------------------------------------------------- Task B2-3: candidate bands and experiments
 
 def semantic_grid(v2: dict) -> list:
-    """Every candidate band as a v3 tolerance over the (frozen) v2 content: 15 composition points
-    (share_pp x iqr_widen) and 5 text points; the other family's bands sit at REFERENCE."""
+    """Every candidate band as a v3 tolerance over the (frozen) v2 content: 25 composition points
+    (share_pp x fixed_share_pp, ruling R39) and 5 text points; the other family's bands sit at REFERENCE."""
     point = lambda **kw: contracts.semantic_tolerances(v2, calibration=dict(label=IN_SAMPLE, status="candidate grid "
                                                                            "point (calibration only)"), **kw)
-    grid = [dict(name="c:s%s_i%s" % (s, i), family="composition", share_pp=s, iqr_widen=i,
+    grid = [dict(name="c:s%s_f%s" % (s, f), family="composition", share_pp=s, fixed_share_pp=f,
                  text_share_pp=REFERENCE["text_share_pp"],
-                 tolerances=point(share_pp=s, iqr_widen=i, text_share_pp=REFERENCE["text_share_pp"]))
-            for s in CANDIDATES["share_pp"] for i in CANDIDATES["iqr_widen"]]
-    grid += [dict(name="t:%s" % t, family="text", share_pp=REFERENCE["share_pp"], iqr_widen=REFERENCE["iqr_widen"],
-                  text_share_pp=t, tolerances=point(share_pp=REFERENCE["share_pp"], iqr_widen=REFERENCE["iqr_widen"],
-                                                    text_share_pp=t))
+                 tolerances=point(share_pp=s, fixed_share_pp=f, text_share_pp=REFERENCE["text_share_pp"]))
+            for s in CANDIDATES["share_pp"] for f in CANDIDATES["fixed_share_pp"]]
+    grid += [dict(name="t:%s" % t, family="text", share_pp=REFERENCE["share_pp"],
+                  fixed_share_pp=REFERENCE["fixed_share_pp"], text_share_pp=t,
+                  tolerances=point(share_pp=REFERENCE["share_pp"], fixed_share_pp=REFERENCE["fixed_share_pp"],
+                                   text_share_pp=t))
              for t in CANDIDATES["text_share_pp"]]
     return grid
 
@@ -889,11 +891,10 @@ def _semantic_families(grid: list) -> list:
     out = []
     for g in grid:
         if g["family"] == "composition":
-            if g["iqr_widen"] == REFERENCE["iqr_widen"]:
+            if g["fixed_share_pp"] == REFERENCE["fixed_share_pp"]:
                 out.append(("share_pp", str(g["share_pp"]), g["name"], "rate_composition", "share"))
-                out.append(("fixed_share", str(g["share_pp"]), g["name"], "rate_composition", "fixed"))
             if g["share_pp"] == REFERENCE["share_pp"]:
-                out.append(("iqr_widen", str(g["iqr_widen"]), g["name"], "rate_composition", "iqr"))
+                out.append(("fixed_share_pp", str(g["fixed_share_pp"]), g["name"], "rate_composition", "fixed"))
             out.append(("composition_status", g["name"], g["name"], "rate_composition", None))
         else:
             out.append(("text_share_pp", str(g["text_share_pp"]), g["name"], "text_agreement", None))
@@ -1168,9 +1169,9 @@ def render_semantic_summary(*, run_id: str, curves: dict, ms_curves: dict, meta:
              "Label: " + IN_SAMPLE + ". Bands swept on the B2-1 seeds after the Stage B Q2 and the history were read.",
              "Cell = median over CIKs where the contract holds in the null control at that band of the smallest "
              "fraction at which >= 2 of 3 seeds detect (never = not at 1.0); (d/n) CIKs detecting / applicable; std/low "
-             "= tier medians. share_pp and iqr_widen cells count their own criterion; text_share_pp and the "
+             "= tier medians. share_pp and fixed_share_pp cells count their own criterion; text_share_pp and the "
              "composition grid count the contract status.", ""]
-    for family in ("share_pp", "fixed_share", "iqr_widen", "text_share_pp", "composition_status"):
+    for family in ("share_pp", "fixed_share_pp", "text_share_pp", "composition_status"):
         table = curves.get(family) or {}
         if not table:
             continue
@@ -1364,7 +1365,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
         config.update(semantic=True, label=IN_SAMPLE, candidates={k: list(v) for k, v in CANDIDATES.items()},
                       reference=REFERENCE, targets=SEMANTIC_TARGETS,
                       median_shift=dict(MEDIAN_SHIFT, note="calibration-only experiment (addendum 3); not in v3"),
-                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"], iqr_widen=g["iqr_widen"],
+                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"],
+                                 fixed_share_pp=g["fixed_share_pp"],
                                  text_share_pp=g["text_share_pp"], content_sha256=manifest.digest(g["tolerances"]))
                             for g in grid],
                       learning_reference=dict(content_sha256=manifest.digest(ref_tol),
@@ -1474,7 +1476,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                     contracts={c: info["semantic"]["contracts"] for c, info in per_cik.items()},
                     relearn_checks={c: info["relearn_check"] for c, info in per_cik.items()},
                     eligibility=sens.get("eligibility"),
-                    rule="detected at a band = >= 2 of 3 seeds breach (the named criterion for share_pp / iqr_widen, "
+                    rule="detected at a band = >= 2 of 3 seeds breach (the named criterion for share_pp / fixed_share_pp, "
                          "the contract status otherwise); applicable = the contract holds in the null control at that "
                          "band; median over applicable CIKs (median_high, never ranked above 1.0)")
         write_once_json(paths, "results/semantic_curves.json", body)

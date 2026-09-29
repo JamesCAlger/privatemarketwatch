@@ -435,15 +435,15 @@ def test_new_perturbations_are_seeded_copy_on_write_and_schema_clean(kind):
 def test_semantic_grid_covers_every_candidate_band_over_the_v2_content_verbatim():
     v2 = contracts.tolerance_content_v2()
     grid = m2_seed.semantic_grid(v2)
-    assert len(grid) == 15 + 5 and len({g["name"] for g in grid}) == 20
+    assert len(grid) == 25 + 5 and len({g["name"] for g in grid}) == 30
     comp = [g for g in grid if g["family"] == "composition"]
-    assert {(g["share_pp"], g["iqr_widen"]) for g in comp} == {(s, i) for s in (5, 10, 15, 20, 25)
-                                                              for i in (1.5, 2.0, 3.0)}
+    assert {(g["share_pp"], g["fixed_share_pp"]) for g in comp} == {(s, f) for s in (5, 10, 15, 20, 25)
+                                                                   for f in (5, 10, 15, 20, 25)}
     assert {g["text_share_pp"] for g in grid if g["family"] == "text"} == {5, 10, 15, 20, 25}
     for g in grid:
         for tier in ("standard", "low_history"):
             assert {k: g["tolerances"]["bands"][tier][k] for k in v2["bands"][tier]} == v2["bands"][tier]
-    assert m2_seed.CANDIDATES == dict(share_pp=(5, 10, 15, 20, 25), iqr_widen=(1.5, 2.0, 3.0),
+    assert m2_seed.CANDIDATES == dict(share_pp=(5, 10, 15, 20, 25), fixed_share_pp=(5, 10, 15, 20, 25),
                                       text_share_pp=(5, 10, 15, 20, 25))
 
 
@@ -471,8 +471,8 @@ def test_spread_for_coupon_is_seen_by_composition_and_text_and_the_null_control_
                 assert per[text_id][0] == "breach"
     part = [e for e in matrix["evaluations"] if e["fraction"] == 0.2]
     for e in part:                      # 12 of 60 rows swapped: share moves 20 points
-        assert e["semantic"]["c:s15_i2.0"][comp_id][2]["share"] == "breach"
-        assert e["semantic"]["c:s20_i2.0"][comp_id][2]["share"] == "holds"
+        assert e["semantic"]["c:s15_f10"][comp_id][2]["share"] == "breach"
+        assert e["semantic"]["c:s20_f10"][comp_id][2]["share"] == "holds"
 
 
 def test_semantic_curves_take_the_seed_majority_and_the_median_over_applicable_ciks():
@@ -481,14 +481,14 @@ def test_semantic_curves_take_the_seed_majority_and_the_median_over_applicable_c
         for seed, flag in zip((1, 2, 3), flags):
             status = "breach" if flag else "holds"
             out.append(dict(cik=cik, tier=tier, variant="spread_for_coupon", fraction=fraction, seed=seed, semantic={
-                "c:s10_i2.0": {"k": [status, None, dict(share=status, iqr="holds"), 0]}}))
+                "c:s10_f10": {"k": [status, None, dict(share=status, fixed="holds"), 0]}}))
         return out
     evaluations = (ev("a", 0.05, [0, 1, 1]) + ev("a", 0.2, [1, 1, 1]) + ev("b", 0.05, [0, 0, 0])
                    + ev("b", 0.2, [1, 1, 0]) + ev("c", 0.05, [0, 0, 0]) + ev("c", 0.2, [0, 0, 0]))
-    meta = {"a": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}}),
-            "b": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}}),
-            "c": dict(tier="low_history", contracts={"k": "rate_composition"}, null={"c:s10_i2.0": {"k": "holds"}})}
-    grid = [dict(name="c:s10_i2.0", family="composition", share_pp=10, iqr_widen=2.0, text_share_pp=10)]
+    meta = {"a": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_f10": {"k": "holds"}}),
+            "b": dict(tier="standard", contracts={"k": "rate_composition"}, null={"c:s10_f10": {"k": "holds"}}),
+            "c": dict(tier="low_history", contracts={"k": "rate_composition"}, null={"c:s10_f10": {"k": "holds"}})}
+    grid = [dict(name="c:s10_f10", family="composition", share_pp=10, fixed_share_pp=10, text_share_pp=10)]
     curves = m2_seed.semantic_curves(evaluations, grid=grid, meta=meta)
     cell = curves["share_pp"]["10"]["spread_for_coupon"]
     assert cell["per_cik"] == {"a": 0.05, "b": 0.2, "c": None}
@@ -570,7 +570,7 @@ def test_real_stellus_semantic_seed_through_the_cli(tmp_path, monkeypatch):
     assert body["label"] == m2_seed.IN_SAMPLE
     assert body["relearn_checks"]["0001901037"]["equal"] is True
     assert body["relearn_checks"]["0001901037"]["semantic_contracts"] == 2
-    assert set(body["curves"]) >= {"share_pp", "iqr_widen", "text_share_pp"}
+    assert set(body["curves"]) >= {"share_pp", "fixed_share_pp", "text_share_pp"}
     matrix = json.loads((root / "results" / "seed_matrix.json").read_text(encoding="ascii"))
     assert matrix["ciks"]["0001901037"]["null_control"]["breaches"] == []
     (root / "results" / "semantic_summary.md").read_text(encoding="ascii")
@@ -579,6 +579,7 @@ def test_real_stellus_semantic_seed_through_the_cli(tmp_path, monkeypatch):
 def test_semantic_families_record_the_fixed_coupon_criterion_per_share_band():
     grid = m2_seed.semantic_grid(contracts.tolerance_content_v2())
     families = m2_seed._semantic_families(grid)
-    fixed = [(key, point) for family, key, point, kind, criterion in families if family == "fixed_share"]
-    assert fixed == [(str(s), "c:s%s_i2.0" % s) for s in m2_seed.CANDIDATES["share_pp"]]
-    assert {criterion for family, _, _, _, criterion in families if family == "fixed_share"} == {"fixed"}
+    fixed = [(key, point) for family, key, point, kind, criterion in families if family == "fixed_share_pp"]
+    assert fixed == [(str(f), "c:s10_f%s" % f) for f in m2_seed.CANDIDATES["fixed_share_pp"]]
+    assert {criterion for family, _, _, _, criterion in families if family == "fixed_share_pp"} == {"fixed"}
+    assert not [f for f in families if f[0] in ("iqr_widen", "fixed_share")]

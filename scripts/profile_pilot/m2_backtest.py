@@ -203,6 +203,16 @@ TYPED_POSITIVES = [
                 contains="onex_explicit_investee_and_debt_type"),
            "identity format; position_identity is deferred (unchecked); 2023-03-31 failed validation",
            expect="not_covered")]
+R39_SOURCE = ("B2-3 review round 0: census verification, 151 current-period rows, two separate facts, 141 new "
+              "fixed-rate bonds (ruling R39a; .superpowers/sdd/2026-09-28-filer-profile-pilot/task-b2-3-review.md)")
+TYPED_POSITIVES += [
+    _typed("r39:0001803498:" + day, "0001803498", day, {"rate_composition": [contracts.COMPOSITION_FIELD]},
+           "fixed_coupon_in_spread", R39_SOURCE,
+           dict(type="doc_line", path=".superpowers/sdd/2026-09-28-filer-profile-pilot/task-b2-3-review.md", line=111,
+                contains="All 151 violating keys"),
+           "adjudicated positive for the fixed-coupon criterion (R39a): the fixed-bond sleeve added (2022-12-31) "
+           "and removed again (2023-03-31)")
+    for day in ("2022-12-31", "2023-03-31")]
 INCEPTION_ONLY = [dict(
     cik="0001588272", field="interest_rate", finding="interest_rate carries the spread for floating loans",
     source="<main>/" + SEMANTIC_CSV + " rows cik=0001588272 (text_vs_rate rate_equals_text_spread 13-14 per quarter)",
@@ -637,7 +647,7 @@ def _pos_cell() -> dict:
 def semantic_negatives(pairs: list, grid_results: dict, positives: list, *, grid: list, tiers: dict,
                        mode: str = "rolling") -> dict:
     """Per candidate band (m2_seed._semantic_families): negatives n / breach / abstain (the named
-    criterion for share_pp and iqr_widen, the status otherwise), split by the learning block's tier,
+    criterion for share_pp and fixed_share_pp, the status otherwise), split by the learning block's tier,
     the unadjudicated breaches with their keys, and the positive units the new kinds cover.
 
     grid_results: pair_id -> grid point name -> [[contract_id, kind, status, cause, criteria, keys]]."""
@@ -714,13 +724,14 @@ def median_shift_scores(pairs: list, ms: dict, positives: list, *, fields: dict,
 
 TIER_BASIS = "pooled"
 CALIBRATION_RULE = (
-    "per CONTRACT (fix round 1, review I1): rate_composition is chosen on the joint share_pp x iqr_widen grid as the "
-    "smallest point (ordered by share_pp, then iqr_widen) whose COMPOSITION-CONTRACT breach rate on negatives (upper "
+    "per CONTRACT (review I1, ruling R39): rate_composition is chosen on the joint share_pp x fixed_share_pp grid as "
+    "the smallest point (ordered by share_pp, then fixed_share_pp) whose COMPOSITION-CONTRACT breach rate on negatives (upper "
     "bound, rolling / as-evaluated) is <= 10% and whose seeded detection fraction for spread_for_coupon (median over "
     "applicable CIKs of the smallest fraction >= 2 of 3 seeds breach the contract) is <= 0.30; text_agreement is "
     "chosen on text_share_pp by the same rule (target text_numeric_divergence). One tier basis for every band: "
     "pooled (all CIKs and tiers; both tiers take the chosen value). None = uncalibrated (curve reported); no v2 band "
-    "is widened. Per-criterion rates (share, iqr, fixed) are recorded for the record, never used to choose")
+    "is widened. Per-criterion rates (share, fixed) are recorded for the record, never used to choose; the IQR is "
+    "evidence only (R39c); the two adjudicated BCRED fixed-coupon pairs are positives, not negatives (R39a)")
 
 
 def choose_band(curve: list, *, max_neg: float = 0.10, max_detection: float = 0.30, key=None) -> dict:
@@ -766,7 +777,7 @@ def newly_abstained_summary(pairs: list, results: dict, scoring: dict) -> dict:
 def _curve(seed_curves: dict, negatives: dict, family: str, variant: str, det_tier: str, neg_tier: str,
            others=()) -> dict:
     rows = []
-    for value in m2_seed.CANDIDATES["share_pp" if family == "fixed_share" else family]:
+    for value in m2_seed.CANDIDATES[family]:
         key = str(value)
         cell = seed_curves[family][key][variant]
         neg = negatives[family][key][neg_tier]
@@ -784,21 +795,20 @@ def _joint_curve(seed_curves: dict, negatives: dict, tier: str) -> dict:
     """rate_composition on the joint grid: the CONTRACT status decides; per-criterion rates recorded."""
     rows = []
     for s in m2_seed.CANDIDATES["share_pp"]:
-        for i in m2_seed.CANDIDATES["iqr_widen"]:
-            point = "c:s%s_i%s" % (s, i)
+        for f in m2_seed.CANDIDATES["fixed_share_pp"]:
+            point = "c:s%s_f%s" % (s, f)
             cell = seed_curves["composition_status"][point]["spread_for_coupon"]
             neg = negatives["composition_status"][point][tier]
             per = dict(share=negatives["share_pp"][str(s)][tier]["breach_rate_upper_bound"],
-                       iqr=negatives["iqr_widen"][str(i)][tier]["breach_rate_upper_bound"],
-                       fixed=negatives["fixed_share"][str(s)][tier]["breach_rate_upper_bound"])
-            rows.append(dict(value="s%s_i%s" % (s, i), share_pp=s, iqr_widen=i, detection=cell["median"][tier],
+                       fixed=negatives["fixed_share_pp"][str(f)][tier]["breach_rate_upper_bound"])
+            rows.append(dict(value="s%s_f%s" % (s, f), share_pp=s, fixed_share_pp=f, detection=cell["median"][tier],
                              detected=cell["detected"][tier], applicable=cell["applicable"][tier],
                              neg_rate=neg["breach_rate_upper_bound"], neg_n=neg["n"], neg_breach=neg["breach"],
                              per_criterion=per))
-    out = choose_band(rows, key=lambda r: (r["share_pp"], r["iqr_widen"]))
+    out = choose_band(rows, key=lambda r: (r["share_pp"], r["fixed_share_pp"]))
     if out["chosen"] is not None:
         row = next(r for r in rows if r["value"] == out["chosen"])
-        out["chosen"] = dict(share_pp=row["share_pp"], iqr_widen=row["iqr_widen"])
+        out["chosen"] = dict(share_pp=row["share_pp"], fixed_share_pp=row["fixed_share_pp"])
     out.update(family="composition_status", target="spread_for_coupon", detection_tier=tier, negatives_tier=tier)
     return out
 
@@ -813,9 +823,7 @@ def assemble_calibration(seed_body: dict, negatives: dict, median_shift: dict, s
                                      others=("bps_spread_scale", "spread_for_coupon"))}
     criteria = {"share_pp": _curve(curves, negatives, "share_pp", "spread_for_coupon", tier, tier,
                                    others=("bps_spread_scale", "text_numeric_divergence")),
-                "iqr_widen": _curve(curves, negatives, "iqr_widen", "spread_for_coupon", tier, tier,
-                                    others=("bps_spread_scale",)),
-                "fixed_share": _curve(curves, negatives, "fixed_share", "spread_for_coupon", tier, tier)}
+                "fixed_share_pp": _curve(curves, negatives, "fixed_share_pp", "spread_for_coupon", tier, tier)}
     for c in criteria.values():
         c.update(status="record_only", chosen=None, reason="per-criterion curve, recorded; the contract decides")
     v2_range = scoring["rolling"]["as_evaluated"]["all"]["by_kind"].get("value_range", {}).get("negatives", {})
@@ -830,7 +838,8 @@ def assemble_calibration(seed_body: dict, negatives: dict, median_shift: dict, s
 
     def slim(b):
         return [dict(value=r["value"], seeded_detection_fraction=r["detection"], negatives_breach_rate=r["neg_rate"],
-                     negatives_n=r["neg_n"], **({"negatives_breach_rate_per_criterion": r["per_criterion"]}
+                     negatives_n=r["neg_n"], **({"negatives_breach_rate_per_criterion": r["per_criterion"],
+                                                 "share_pp": r["share_pp"], "fixed_share_pp": r["fixed_share_pp"]}
                                                 if "per_criterion" in r else {}))
                 for r in b["curve"]]
     block = dict(label=m2_seed.IN_SAMPLE, rule=CALIBRATION_RULE, tier_basis=TIER_BASIS, seed_run_id=seed_run_id,
@@ -847,7 +856,7 @@ def render_semantic(sem: dict, calibration: dict | None) -> str:
     lines = ["# M2 back-test: semantic kinds, newly-abstained events and the median_shift experiment ("
              + sem["run_id"] + ")", "", "Label: " + m2_seed.IN_SAMPLE + ".", "", "Caveat: " + NEGATIVES_CAVEAT, ""]
     neg = sem["negatives"]["rolling"]
-    for family in ("share_pp", "fixed_share", "iqr_widen", "text_share_pp", "composition_status"):
+    for family in ("share_pp", "fixed_share_pp", "text_share_pp", "composition_status"):
         lines += ["## Negatives per candidate: " + family + " (rolling / as-evaluated)", "",
                   "| band | n | breach | abstain | breach rate UB | std n/breach | low n/breach | positives d/a/m |",
                   "|---|---|---|---|---|---|---|---|"]
@@ -1167,7 +1176,8 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
             label=m2_seed.IN_SAMPLE, status="learning reference only"))
         sem_arg = dict(grid=grid)
         config.update(semantic=True, label=m2_seed.IN_SAMPLE, learning_reference=manifest.digest(learn_tol),
-                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"], iqr_widen=g["iqr_widen"],
+                      grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"],
+                                 fixed_share_pp=g["fixed_share_pp"],
                                  text_share_pp=g["text_share_pp"], content_sha256=manifest.digest(g["tolerances"]))
                             for g in grid],
                       median_shift=dict(m2_seed.MEDIAN_SHIFT, note="calibration-only experiment; not in v3"),

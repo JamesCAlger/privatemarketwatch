@@ -973,7 +973,7 @@ def test_v3_tolerance_content_carries_v2_verbatim_and_the_new_bands():
     assert v3["v2_verbatim"] == v2 and v3["v2_content_sha256"] == V2_SHA
     for tier in ("standard", "low_history"):
         assert {k: v3["bands"][tier][k] for k in v2["bands"][tier]} == v2["bands"][tier]
-        assert set(v3["bands"][tier]) - set(v2["bands"][tier]) == {"share_pp", "iqr_widen", "text_share_pp",
+        assert set(v3["bands"][tier]) - set(v2["bands"][tier]) == {"share_pp", "fixed_share_pp", "text_share_pp",
                                                                    "min_rows", "min_parse_share"}
     assert v3["supersedes"]["version"] == "contract-tolerances.v2" and v3["supersedes"]["run_id"] == V2_RUN
     assert "adds rate_composition and text_agreement" in v3["supersedes"]["reason"]
@@ -1029,16 +1029,17 @@ def test_composition_pure_level_shift_with_unchanged_dispersion_holds():
     assert abs(res["observed"]["p50_shift"] - 1.0) < 1e-6        # evidence only, never a criterion
 
 
-def test_composition_dispersion_widening_breaches_on_the_iqr_criterion():
+def test_composition_dispersion_is_evidence_only_never_a_status_criterion():
     block = learn(mk_doc(floaters()))
     mixed = mk_doc([floater(i, rate="0.05" if i % 3 == 0 else None) for i in range(60)], date=Q2)
-    wide = contracts.semantic_tolerances(v2_tol(), share_pp=90, iqr_widen=2.0, text_share_pp=10)
+    wide = contracts.semantic_tolerances(v2_tol(), share_pp=90, fixed_share_pp=90, text_share_pp=10)
     res = pick(contracts.evaluate_contracts(contracts.rebanded_block(block, wide), wide, q2_doc=mixed,
                                             q2_listing=Q2_LISTING, grammar=None,
                                             yield_q2=dict(VOTE_CASH, report_date=Q2)),
                "rate_composition", contracts.COMPOSITION_FIELD)
-    assert res["observed"]["criteria"] == dict(share="holds", iqr="breach", fixed="holds") and res["status"] == "breach"
-    assert set(res["violating_keys"]) >= {"f0", "f3"}
+    assert res["observed"]["criteria"] == dict(share="holds", fixed="holds") and res["status"] == "holds"
+    assert res["observed"]["dispersion_evidence"]["iqr_ratio"] > 2 and res["violating_keys"] == []
+    assert "never a status criterion" in res["observed"]["dispersion_evidence"]["rule"]
 
 
 def test_composition_low_n_abstains_on_either_side():
@@ -1229,18 +1230,26 @@ def test_v2_subset_check_compares_v2_contracts_and_results_without_the_flag():
 def test_v3_bands_are_the_per_contract_choices_on_one_pooled_basis_and_labelled_in_sample():
     cal = contracts.CALIBRATION
     assert cal["label"] == "in-sample (bands chosen after Q2 and the history were read)"
-    assert cal["tier_basis"] == "pooled" and "per CONTRACT" in cal["rule"]
+    assert cal["tier_basis"] == "pooled" and "per CONTRACT" in cal["rule"] and "R39" in cal["rule"]
+    assert cal["iqr_widen"]["status"] == "record_only" and "R39" in cal["iqr_widen"]["reason"]
+    assert cal["median_shift_experiment"]["adopted"] is False
+    if cal["status"] == "pending":
+        return                                    # the in-sample runs have not been folded in yet
     comp, text = cal["bands"]["rate_composition"], cal["bands"]["text_share_pp"]
     for tier in ("standard", "low_history"):
-        assert contracts.SEMANTIC_BANDS[tier]["share_pp"] == comp["chosen"]["share_pp"]
-        assert contracts.SEMANTIC_BANDS[tier]["iqr_widen"] == comp["chosen"]["iqr_widen"]
         assert contracts.SEMANTIC_BANDS[tier]["text_share_pp"] == text["chosen"]
-    ok = [r for r in comp["curve"] if r["negatives_breach_rate"] <= 0.10 and r["seeded_detection_fraction"] <= 0.30]
-    first = min(ok, key=lambda r: (int(r["value"].split("_")[0][1:]), float(r["value"].split("_i")[1])))
-    assert comp["chosen"] == dict(share_pp=int(first["value"].split("_")[0][1:]),
-                                  iqr_widen=float(first["value"].split("_i")[1]))
-    assert all(set(r["negatives_breach_rate_per_criterion"]) == {"share", "iqr", "fixed"} for r in comp["curve"])
-    assert len(comp["curve"]) == 15 and cal["median_shift_experiment"]["adopted"] is False
+        if comp["status"] == "calibrated":
+            assert contracts.SEMANTIC_BANDS[tier]["share_pp"] == comp["chosen"]["share_pp"]
+            assert contracts.SEMANTIC_BANDS[tier]["fixed_share_pp"] == comp["chosen"]["fixed_share_pp"]
+    assert len(comp["curve"]) == 25
+    assert all(set(r["negatives_breach_rate_per_criterion"]) == {"share", "fixed"} for r in comp["curve"])
+    ok = [r for r in comp["curve"] if r["negatives_breach_rate"] is not None and r["negatives_breach_rate"] <= 0.10
+          and r["seeded_detection_fraction"] is not None and r["seeded_detection_fraction"] <= 0.30]
+    if comp["status"] == "calibrated":
+        first = min(ok, key=lambda r: (r["share_pp"], r["fixed_share_pp"]))
+        assert comp["chosen"] == dict(share_pp=first["share_pp"], fixed_share_pp=first["fixed_share_pp"])
+    else:
+        assert not ok and comp["chosen"] is None
 
 
 def test_v3_supersedes_the_first_v3_root_with_the_fix_round_reason():
@@ -1306,8 +1315,9 @@ def test_a_fixed_bond_sleeve_breaches_under_its_own_cause_not_as_a_meaning_chang
     assert exp["fixed_coupon_in_spread"] == round(2 / 52, 6)
     grown = mk_doc([plain(i) for i in range(50)] + [bond(i) for i in range(14)], date=Q2)
     res = pick(evaluate(block, grown), "rate_composition", contracts.COMPOSITION_FIELD)
-    assert res["status"] == "breach" and res["cause"] == "fixed_coupon_in_spread_share_changed"
-    assert res["observed"]["criteria"] == dict(share="holds", iqr="holds", fixed="breach")
+    assert res["status"] == "breach" and res["cause"] == "rate_equals_spread_share_changed"
+    assert res["observed"]["rate_type_basis"] == "value_inferred"
+    assert res["observed"]["criteria"] == dict(share="holds", fixed="breach")
     assert res["violating_keys"] == sorted("f%d" % (100 + i) for i in range(14))
     assert (res["observed"]["floating_n"], res["observed"]["fixed_n"], res["observed"]["unresolved_n"]) == (50, 14, 0)
 
@@ -1335,4 +1345,36 @@ def test_floating_share_is_not_assessed_below_the_row_floor_while_the_fixed_shar
     res = pick(evaluate(block, mk_doc([plain(i) for i in range(5)] + [bond(i) for i in range(20)], date=Q2)),
                "rate_composition", contracts.COMPOSITION_FIELD)
     assert res["status"] == "holds"
-    assert res["observed"]["criteria"] == dict(share="not_assessed", iqr="not_assessed", fixed="holds")
+    assert res["observed"]["criteria"] == dict(share="not_learned", fixed="holds")
+
+
+# ---------------------------------------------------------------- ruling R39
+
+def test_marker_based_fixed_rows_keep_the_fixed_coupon_cause():
+    fixed = lambda i: bond(i, ident="Bondco %d | 4.50%% Fixed | 1/1/2030" % i)
+    block = learn(mk_doc(floaters(50) + [fixed(i) for i in range(2)]))
+    res = pick(evaluate(block, mk_doc(floaters(50) + [fixed(i) for i in range(14)], date=Q2)), "rate_composition",
+               contracts.COMPOSITION_FIELD)
+    assert res["cause"] == "fixed_coupon_in_spread_share_changed" and res["observed"]["rate_type_basis"] == "marker"
+
+
+def test_learned_floating_criterion_missing_in_q2_is_insufficient_unless_the_fixed_criterion_breaches():
+    block = learn(mk_doc([plain(i) for i in range(40)] + [bond(i) for i in range(20)]))
+    few = mk_doc([plain(i) for i in range(5)] + [bond(i) for i in range(10)], date=Q2)
+    res = pick(evaluate(block, few), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["observed"]["criteria"]["share"] == "insufficient_evidence"
+    assert res["status"] == "breach"                              # fixed share 33% -> 67%: the breach stands
+    steady = mk_doc([plain(i) for i in range(6)] + [bond(i) for i in range(4)], date=Q2)
+    steady_block = learn(mk_doc([plain(i) for i in range(30)] + [bond(i) for i in range(20)]))
+    res = pick(evaluate(steady_block, steady), "rate_composition", contracts.COMPOSITION_FIELD)
+    assert res["observed"]["criteria"] == dict(share="insufficient_evidence", fixed="holds")
+    assert res["status"] == "insufficient_evidence" and res["cause"] == "floating_rows_below_min_rows_in_q2"
+
+
+def test_v3_composition_bands_are_share_and_fixed_share_and_iqr_left_the_status_bands():
+    v3 = contracts.tolerance_content()
+    assert contracts.KIND_BAND_KEYS["rate_composition"] == ("share_pp", "fixed_share_pp", "min_rows")
+    for tier in ("standard", "low_history"):
+        assert "iqr_widen" not in v3["bands"][tier]
+    assert "evidence" in v3["operationalisation"]["rate_composition"] and "R39" in v3["operationalisation"][
+        "rate_composition"]

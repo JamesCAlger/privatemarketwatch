@@ -440,16 +440,16 @@ def _grid_res(cid, kind, status, criteria=None, keys=()):
 
 
 def test_semantic_negatives_count_criterion_breaches_per_candidate_band_and_skip_targeted_results():
-    grid = [dict(name="c:s5_i2.0", family="composition", share_pp=5, iqr_widen=2.0, text_share_pp=10),
-            dict(name="c:s10_i2.0", family="composition", share_pp=10, iqr_widen=2.0, text_share_pp=10),
-            dict(name="t:10", family="text", share_pp=10, iqr_widen=2.0, text_share_pp=10)]
+    grid = [dict(name="c:s5_f10", family="composition", share_pp=5, fixed_share_pp=10, text_share_pp=10),
+            dict(name="c:s10_f10", family="composition", share_pp=10, fixed_share_pp=10, text_share_pp=10),
+            dict(name="t:10", family="text", share_pp=10, fixed_share_pp=10, text_share_pp=10)]
     pairs = [_pair("p", "2024-03-31", "2024-06-30"), _pair("q", "2024-06-30", "2024-09-30", cik="D")]
     grid_results = {
-        "p": {"c:s5_i2.0": [_grid_res("C:rc", "rate_composition", "breach", dict(share="breach", iqr="holds"), ["a"])],
-              "c:s10_i2.0": [_grid_res("C:rc", "rate_composition", "holds", dict(share="holds", iqr="holds"))],
+        "p": {"c:s5_f10": [_grid_res("C:rc", "rate_composition", "breach", dict(share="breach", fixed="holds"), ["a"])],
+              "c:s10_f10": [_grid_res("C:rc", "rate_composition", "holds", dict(share="holds", fixed="holds"))],
               "t:10": [_grid_res("C:ta", "text_agreement", "breach", None, ["b"])]},
-        "q": {"c:s5_i2.0": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
-              "c:s10_i2.0": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
+        "q": {"c:s5_f10": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
+              "c:s10_f10": [_grid_res("D:rc", "rate_composition", "insufficient_evidence")],
               "t:10": [_grid_res("D:ta", "text_agreement", "breach", None, ["z"])]}}
     tiers = {"p": "standard", "q": "low_history"}
     positives = [_pos("T", "2024-09-30", {"text_agreement": [TEXT]}, cik="D")]
@@ -493,12 +493,13 @@ def _seed_body(comp_det=lambda s, i: 0.1):
                                                                                              low_history=0))
     curves = {"share_pp": {str(v): {"spread_for_coupon": cell(v / 100.0), "bps_spread_scale": cell(None)}
                            for v in m2_seed.CANDIDATES["share_pp"]},
-              "fixed_share": {str(v): {"spread_for_coupon": cell(None)} for v in m2_seed.CANDIDATES["share_pp"]},
-              "iqr_widen": {str(v): {"spread_for_coupon": cell(0.3)} for v in m2_seed.CANDIDATES["iqr_widen"]},
+              "fixed_share_pp": {str(v): {"spread_for_coupon": cell(None)}
+                                 for v in m2_seed.CANDIDATES["fixed_share_pp"]},
               "text_share_pp": {str(v): {"text_numeric_divergence": cell(0.05)}
                                 for v in m2_seed.CANDIDATES["text_share_pp"]},
-              "composition_status": {"c:s%s_i%s" % (s, i): {"spread_for_coupon": cell(comp_det(s, i))}
-                                     for s in m2_seed.CANDIDATES["share_pp"] for i in m2_seed.CANDIDATES["iqr_widen"]}}
+              "composition_status": {"c:s%s_f%s" % (s, f): {"spread_for_coupon": cell(comp_det(s, f))}
+                                     for s in m2_seed.CANDIDATES["share_pp"]
+                                     for f in m2_seed.CANDIDATES["fixed_share_pp"]}}
     ms = {"range_shift_0.6": {name: dict(median=dict(all=0.1)) for name in ["v2_band"] + [
         m2_seed.ms_name(x, y) for x in m2_seed.MEDIAN_SHIFT["x"] for y in m2_seed.MEDIAN_SHIFT["y"]]}}
     return dict(label=m2_seed.IN_SAMPLE, curves=curves, median_shift=ms)
@@ -512,11 +513,10 @@ def _negatives(comp_rate, text_rate=lambda t: 0.2):
                     low_history=dict(n=20, breach=0, insufficient_evidence=0, breach_rate_upper_bound=0.0),
                     unadjudicated=[], positives=dict(units=0, detected=0, abstained=0, missed=0))
     out = {"share_pp": {str(v): cell(0.02) for v in m2_seed.CANDIDATES["share_pp"]},
-           "fixed_share": {str(v): cell(0.01) for v in m2_seed.CANDIDATES["share_pp"]},
-           "iqr_widen": {str(v): cell(0.03) for v in m2_seed.CANDIDATES["iqr_widen"]},
+           "fixed_share_pp": {str(v): cell(0.01) for v in m2_seed.CANDIDATES["fixed_share_pp"]},
            "text_share_pp": {str(v): cell(text_rate(v)) for v in m2_seed.CANDIDATES["text_share_pp"]}}
-    out["composition_status"] = {"c:s%s_i%s" % (s, i): cell(comp_rate(s, i), std=0.5)
-                                 for s in m2_seed.CANDIDATES["share_pp"] for i in m2_seed.CANDIDATES["iqr_widen"]}
+    out["composition_status"] = {"c:s%s_f%s" % (s, f): cell(comp_rate(s, f), std=0.5)
+                                 for s in m2_seed.CANDIDATES["share_pp"] for f in m2_seed.CANDIDATES["fixed_share_pp"]}
     return out
 
 
@@ -532,23 +532,24 @@ SCORING = {"rolling": {"as_evaluated": {"all": {"by_kind": {"value_range": {"neg
 
 
 def test_calibration_binds_to_the_contract_status_on_the_joint_grid_with_one_pooled_basis():
-    # criteria alone would pass at s5; the CONTRACT (either criterion) only passes from s15_i3.0 on
-    comp = lambda s, i: 0.05 if (s, i) in ((15, 3.0), (20, 2.0), (20, 3.0), (25, 3.0)) else 0.12
+    # criteria alone would pass at s5; the CONTRACT (either criterion) only passes from s15_f20 on
+    comp = lambda s, f: 0.05 if (s, f) in ((15, 20), (15, 25), (20, 10), (25, 5)) else 0.12
     cal = bt.assemble_calibration(_seed_body(), _negatives(comp, text_rate=lambda t: 0.08), _ms(), SCORING,
                                   seed_run_id="stageb2-seed-v3-x")
     assert cal["tier_basis"] == "pooled"
     joint = cal["bands"]["rate_composition"]
-    assert joint["status"] == "calibrated" and joint["chosen"] == dict(share_pp=15, iqr_widen=3.0)
-    assert [r["value"] for r in joint["curve"]][:4] == ["s5_i1.5", "s5_i2.0", "s5_i3.0", "s10_i1.5"]
-    row = next(r for r in joint["curve"] if r["value"] == "s15_i3.0")
-    assert row["neg_rate"] == 0.05 and row["per_criterion"] == dict(share=0.02, iqr=0.03, fixed=0.01)
+    assert joint["status"] == "calibrated" and joint["chosen"] == dict(share_pp=15, fixed_share_pp=20)
+    assert [r["value"] for r in joint["curve"]][:3] == ["s5_f5", "s5_f10", "s5_f15"] and len(joint["curve"]) == 25
+    row = next(r for r in joint["curve"] if r["value"] == "s15_f20")
+    assert row["neg_rate"] == 0.05 and row["per_criterion"] == dict(share=0.02, fixed=0.01)
     assert cal["bands"]["text_share_pp"]["chosen"] == 5 and cal["bands"]["text_share_pp"]["detection_tier"] == "all"
-    assert set(cal["criteria"]) == {"share_pp", "iqr_widen", "fixed_share"}
+    assert set(cal["criteria"]) == {"share_pp", "fixed_share_pp"}
     block = cal["tolerances_block"]
     assert block["tier_basis"] == "pooled" and block["bands"]["rate_composition"]["chosen"] == dict(
-        share_pp=15, iqr_widen=3.0)
+        share_pp=15, fixed_share_pp=20)
     assert block["bands"]["rate_composition"]["curve"][0]["negatives_breach_rate_per_criterion"] == dict(
-        share=0.02, iqr=0.03, fixed=0.01)
+        share=0.02, fixed=0.01)
+    assert block["bands"]["rate_composition"]["curve"][0]["share_pp"] == 5
     json.dumps(block).encode("ascii")
 
 
@@ -556,7 +557,7 @@ def test_calibration_marks_the_contract_uncalibrated_when_no_joint_point_meets_t
     cal = bt.assemble_calibration(_seed_body(comp_det=lambda s, i: 0.5), _negatives(lambda s, i: 0.05), _ms(), SCORING,
                                   seed_run_id="x")
     assert cal["bands"]["rate_composition"]["status"] == "uncalibrated"
-    assert cal["bands"]["rate_composition"]["chosen"] is None and len(cal["bands"]["rate_composition"]["curve"]) == 15
+    assert cal["bands"]["rate_composition"]["chosen"] is None and len(cal["bands"]["rate_composition"]["curve"]) == 25
     assert cal["bands"]["text_share_pp"]["status"] == "uncalibrated"             # every negatives rate 20%
     sem = dict(run_id="r", negatives=dict(rolling=_negatives(lambda s, i: 0.05)),
                newly_abstained=dict(totals=dict(newly=1, carried=2), recogniser_format_units=dict(newly=1, carried=0),
@@ -615,3 +616,18 @@ def test_real_nexpoint_semantic_backtest_through_the_cli(tmp_path, monkeypatch):
     results = json.loads((root / "results" / "backtest_results.json").read_text(encoding="ascii"))["results"]
     assert all(len(v) == 59 for v in results.values())
     (root / "results" / "backtest_semantic.md").read_text(encoding="ascii")
+
+
+def test_the_bcred_fixed_coupon_pairs_are_adjudicated_positives_with_their_source():
+    rows = [r for r in bt.TYPED_POSITIVES if r["category"] == "fixed_coupon_in_spread"]
+    assert sorted((r["cik"], r["date"]) for r in rows) == [("0001803498", "2022-12-31"), ("0001803498", "2023-03-31")]
+    for r in rows:
+        assert r["targets"] == {"rate_composition": [contracts.COMPOSITION_FIELD]} and r["expect"] == "covered"
+        assert "B2-3 review round 0: census verification, 151 current-period rows, two separate facts, 141 new " \
+               "fixed-rate bonds" in r["source"] and "R39" in r["source"]
+        assert r["check"]["type"] == "doc_line"
+    pairs = [_pair("b", "2022-09-30", "2022-12-31", cik="0001803498")]
+    results = {"b": [_res("rate_composition", contracts.COMPOSITION_FIELD, "breach", ["k"])]}
+    s = bt.score(pairs, results, rows, mode="rolling")
+    assert [u["outcome"] for u in s["positive_units"]] == ["detected"]
+    assert s["by_kind"]["rate_composition"]["negatives"]["n"] == 0

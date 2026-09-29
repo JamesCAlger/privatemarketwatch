@@ -79,14 +79,14 @@ SPEC_BANDS = {
 KIND_BAND_KEYS = {"source_concept_set": ("source_concept_set",), "fill_rate": ("fill_rate_pp",),
                   "scale": ("scale",), "value_range": ("value_range_widen", "value_range_quantiles"),
                   "format_grammar": ("format_grammar_min_parse_share",), "fund_income_yield": (),
-                  "rate_composition": ("share_pp", "iqr_widen", "min_rows"),
+                  "rate_composition": ("share_pp", "fixed_share_pp", "min_rows"),
                   "text_agreement": ("text_share_pp", "min_rows", "min_parse_share")}
 # ---- Task B2-3 (tolerances v3): two semantic kinds, learned per partition after the v2 suite.
 SEMANTIC_KINDS = ("rate_composition", "text_agreement")
 ALL_KINDS = KINDS + SEMANTIC_KINDS
 COMPOSITION_FIELD = "interest_rate-basis_spread"
 TEXT_FIELD = "investment_identifier-rate_text"
-SEMANTIC_BAND_KEYS = ("share_pp", "iqr_widen", "text_share_pp", "min_rows", "min_parse_share")
+SEMANTIC_BAND_KEYS = ("share_pp", "fixed_share_pp", "text_share_pp", "min_rows", "min_parse_share")
 SEMANTIC_CONSTANTS = dict(
     max_unresolved_pair_share=0.5, text_match_tolerance_pct=0.011,
     rule="fixed operational constants (not swept): a composition abstains when unresolved pair rows exceed "
@@ -94,50 +94,29 @@ SEMANTIC_CONSTANTS = dict(
          "text_match_tolerance_pct percentage points (the owner-session census tolerance)")
 # The v3 bands. IN-SAMPLE: chosen after the Stage B Q2 censuses, the seeded drift of B2-1 and the
 # recorded history of B2-2b were read; see CALIBRATION.
-SEMANTIC_BANDS = {"standard": dict(share_pp=15, iqr_widen=3.0, text_share_pp=5, min_rows=10, min_parse_share=0.5),
-                  "low_history": dict(share_pp=15, iqr_widen=3.0, text_share_pp=5, min_rows=10, min_parse_share=0.5)}
-
-
-def _joint(rows) -> list:
-    return [dict(value="s%s_i%s" % (s, i), seeded_detection_fraction=d, negatives_breach_rate=r, negatives_n=96,
-                 negatives_breach_rate_per_criterion=dict(share=sh, iqr=iq, fixed=fx))
-            for s, i, d, r, sh, iq, fx in rows]
-
-
-def _curve(rows, n) -> list:
-    return [dict(value=v, seeded_detection_fraction=d, negatives_breach_rate=r, negatives_n=n) for v, d, r in rows]
+SEMANTIC_BANDS = {"standard": dict(share_pp=15, fixed_share_pp=10, text_share_pp=5, min_rows=10,
+                                   min_parse_share=0.5),
+                  "low_history": dict(share_pp=15, fixed_share_pp=10, text_share_pp=5, min_rows=10,
+                                      min_parse_share=0.5)}
 
 
 _CAL_OK = "smallest candidate meeting both criteria"
+IQR_RECORD = dict(
+    status="record_only",
+    reason=("ruling R39(c): the IQR is evidence, never a status criterion, until one IQR breach is shown to be a "
+            "change of meaning; round-1 contract curve kept for the record (criterion-alone negatives rates)"),
+    round1_backtest_run_id="stageb2-backtest-v3-20260929t141328z",
+    curve=[dict(value=1.5, negatives_breach_rate=0.1354), dict(value=2.0, negatives_breach_rate=0.1146),
+           dict(value=3.0, negatives_breach_rate=0.0833)])
 CALIBRATION = dict(
-    label="in-sample (bands chosen after Q2 and the history were read)",
-    rule=("per CONTRACT (fix round 1, review I1): rate_composition is chosen on the joint share_pp x iqr_widen grid as "
-          "the smallest point (ordered by share_pp, then iqr_widen) whose COMPOSITION-CONTRACT breach rate on negatives "
-          "(upper bound, rolling / as-evaluated) is <= 10% and whose seeded detection fraction for spread_for_coupon is "
-          "<= 0.30; text_agreement on text_share_pp by the same rule (target text_numeric_divergence). One tier basis "
-          "for every band: pooled (all CIKs and tiers; both tiers take the chosen value). None = uncalibrated; no v2 "
-          "band is widened. Per-criterion rates (share, iqr, fixed) are recorded, never used to choose"),
-    tier_basis="pooled",
-    seed_run_id="stageb2-seed-v3-20260929t141107z", backtest_run_id="stageb2-backtest-v3-20260929t141328z",
-    code_head="6a2aeb5",
-    bands={
-        "rate_composition": dict(
-            target="spread_for_coupon", status="calibrated", chosen=dict(share_pp=15, iqr_widen=3.0), reason=_CAL_OK,
-            curve=_joint((
-                (5, 1.5, 0.05, 0.1667, 0.0208, 0.1354, 0.0208), (5, 2.0, 0.05, 0.1458, 0.0208, 0.1146, 0.0208),
-                (5, 3.0, 0.05, 0.1146, 0.0208, 0.0833, 0.0208), (10, 1.5, 0.1, 0.1667, 0.0208, 0.1354, 0.0208),
-                (10, 2.0, 0.1, 0.1458, 0.0208, 0.1146, 0.0208), (10, 3.0, 0.1, 0.1146, 0.0208, 0.0833, 0.0208),
-                (15, 1.5, 0.2, 0.1458, 0.0208, 0.1354, 0.0), (15, 2.0, 0.2, 0.125, 0.0208, 0.1146, 0.0),
-                (15, 3.0, 0.2, 0.0938, 0.0208, 0.0833, 0.0), (20, 1.5, 0.2, 0.1354, 0.0104, 0.1354, 0.0),
-                (20, 2.0, 0.2, 0.1146, 0.0104, 0.1146, 0.0), (20, 3.0, 0.2, 0.0833, 0.0104, 0.0833, 0.0),
-                (25, 1.5, 0.3, 0.1354, 0.0104, 0.1354, 0.0), (25, 2.0, 0.3, 0.1146, 0.0104, 0.1146, 0.0),
-                (25, 3.0, 0.3, 0.0833, 0.0104, 0.0833, 0.0)))),
-        "text_share_pp": dict(target="text_numeric_divergence", status="calibrated", chosen=5, reason=_CAL_OK,
-                              curve=_curve(((5, 0.05, 0.0753), (10, 0.1, 0.0645), (15, 0.2, 0.0645), (20, 0.2, 0.0538),
-                                            (25, 0.3, 0.043)), 93))},
-    fixed_not_swept=dict(min_rows=10, min_parse_share=0.5, note="floors, not calibrated"),
-    consequence=("at share_pp 15 the fixed_coupon_in_spread criterion does not fire on the BCRED 2022-09-30 -> "
-                 "2022-12-31 fixed-bond sleeve (a ~10 pp move); it fires at share_pp 5 and 10 only"),
+    label="in-sample (bands chosen after Q2 and the history were read)", status="pending",
+    rule=("per CONTRACT (review I1, ruling R39): rate_composition is chosen on the joint share_pp x fixed_share_pp "
+          "grid as the smallest point (ordered by share_pp, then fixed_share_pp) whose COMPOSITION-CONTRACT breach "
+          "rate on negatives (upper bound, rolling / as-evaluated; the two adjudicated BCRED fixed-coupon pairs are "
+          "positives, not negatives) is <= 10% and whose seeded detection fraction for spread_for_coupon is <= "
+          "0.30; text_agreement on text_share_pp by the same rule. One tier basis: pooled. None = uncalibrated; no "
+          "v2 band is widened. Per-criterion rates are recorded, never used to choose"),
+    tier_basis="pooled", iqr_widen=IQR_RECORD,
     median_shift_experiment=dict(adopted=False, note="calibration-only (addendum 3); curves in the back-test root"))
 
 SUPERSEDED_V3 = dict(run_id="stageb2-contracts-v3-20260929t124944z",
@@ -179,7 +158,7 @@ def tolerance_content() -> dict:
     return semantic_tolerances(tolerance_content_v2(), bands=SEMANTIC_BANDS, calibration=CALIBRATION)
 
 
-def semantic_tolerances(v2: dict, *, bands: dict | None = None, share_pp=None, iqr_widen=None, text_share_pp=None,
+def semantic_tolerances(v2: dict, *, bands: dict | None = None, share_pp=None, fixed_share_pp=None, text_share_pp=None,
                         min_rows=10, min_parse_share=0.5, calibration: dict | None = None) -> dict:
     """v3 content from a v2 content (the frozen file's, or tolerance_content_v2()): every v2 band and
     section verbatim, plus the semantic bands. Calibration passes one candidate per call (both tiers
@@ -189,7 +168,7 @@ def semantic_tolerances(v2: dict, *, bands: dict | None = None, share_pp=None, i
         raise ContractError("semantic tolerances extend only the v2 content, got " + repr(v2.get("version")))
     if bands is None:
         tier_value = lambda value, tier: value[tier] if isinstance(value, dict) else value
-        bands = {tier: dict(share_pp=tier_value(share_pp, tier), iqr_widen=tier_value(iqr_widen, tier),
+        bands = {tier: dict(share_pp=tier_value(share_pp, tier), fixed_share_pp=tier_value(fixed_share_pp, tier),
                             text_share_pp=tier_value(text_share_pp, tier), min_rows=min_rows,
                             min_parse_share=min_parse_share) for tier in ("standard", "low_history")}
     out = copy.deepcopy(v2)
@@ -204,11 +183,17 @@ def semantic_tolerances(v2: dict, *, bands: dict | None = None, share_pp=None, i
             "field pair interest_rate / basis_spread on rows carrying both (a 0 rate is an undrawn placeholder, "
             "counted apart); implied base = canonical(rate) - canonical(spread) in percent, magnitude resolved PER "
             "ROW (same magnitude class, or declared ratio units that differ, compute; otherwise unresolved_pair); "
-            "NOT gated on the scale contract. Learn share_rate_le_spread (implied base <= 0), p25/p50/p75, n. "
-            "Breach when |share - learned| * 100 > share_pp, or when the IQR exceeds learned IQR x iqr_widen. The "
-            "level of the implied base is never a criterion (p50_shift is evidence). Abstain when n < min_rows or "
-            "unresolved pair rows exceed max_unresolved_pair_share in either quarter. Violating keys: rows with "
-            "implied base <= 0 (share) and rows farther than iqr_widen x learned IQR from the Q2 median (dispersion)"),
+            "NOT gated on the scale contract. Rows split by rate type (R38, contracts_observe.RATE_TYPE_RULE). "
+            "Learn on FLOATING rows share_rate_le_spread (implied base <= 0), p25/p50/p75, n; and the "
+            "fixed_coupon_in_spread share. Status (R39) = floating-share criterion (|share - learned| * 100 > "
+            "share_pp) OR fixed-coupon criterion (|fixed share - learned| * 100 > fixed_share_pp). The IQR and the "
+            "p50 shift are EVIDENCE only (R39c), never a criterion. A learned floating criterion that cannot be "
+            "assessed in Q2 (floating rows < min_rows) makes the contract insufficient_evidence unless the fixed "
+            "criterion breaches. Fixed-criterion cause: rate_equals_spread_share_changed with rate_type_basis "
+            "value_inferred when neither quarter has a rate-type marker row, else fixed_coupon_in_spread_share_changed "
+            "(R39d). Abstain when classified rows < min_rows or unresolved pair rows exceed max_unresolved_pair_share "
+            "in either quarter. Violating keys: floating rows with implied base <= 0 (share) and Q2 fixed rows "
+            "(fixed)"),
         text_agreement=(
             "identifier text parsed with the filer's authored grammar (inherited, hash pinned) where one applies to "
             "the partition, else the generic patterns (contracts_observe RE_BASE_PLUS_PCT / RE_BASE_PLUS_BPS / "
@@ -919,6 +904,16 @@ def observe_semantic(c, q2_doc, members, grammars, facts_by_i, conventions, tole
                                  tol_pct=constants["text_match_tolerance_pct"]))
 
 
+def rate_type_basis(learned: dict, now: dict) -> str:
+    """R39(d): value_inferred when neither quarter has a rate-type marker row; marker when no row was
+    value-inferred; mixed otherwise (a marker-based filer keeps the fixed-coupon cause)."""
+    markers = int(learned.get("marker", 0)) + int(now.get("marker", 0))
+    values = int(learned.get("value", 0)) + int(now.get("value", 0))
+    if not markers:
+        return "value_inferred"
+    return "marker" if not values else "mixed"
+
+
 def semantic_verdict(c: dict, q2: dict, sem: dict, tolerances: dict) -> dict:
     exp, band = c["expectation"], c["band"]
     if not sem["members"]:
@@ -932,35 +927,40 @@ def semantic_verdict(c: dict, q2: dict, sem: dict, tolerances: dict) -> dict:
         if cause:
             return _result(c, "insufficient_evidence", q2, cause=cause, expected=exp,
                            observed=dict(brief, channel_gaps=sem["gaps"]), keys=obs["unobservable_keys"])
-        floating = exp["share_rate_le_spread"] is not None and brief["share_rate_le_spread"] is not None
+        learned_floating = exp["share_rate_le_spread"] is not None
+        now_floating = brief["share_rate_le_spread"] is not None
         criteria, observed, keys = {}, dict(brief), set()
-        if floating:
+        if learned_floating and now_floating:
             delta = (obs["share_rate_le_spread"] - exp["share_rate_le_spread"]) * 100
-            limit = exp["iqr"] * band["iqr_widen"]
-            criteria.update(share="breach" if abs(delta) > band["share_pp"] + 1e-9 else "holds",
-                            iqr="breach" if obs["iqr"] > limit + 1e-9 else "holds")
+            criteria["share"] = "breach" if abs(delta) > band["share_pp"] + 1e-9 else "holds"
             observed.update(share_delta_pp=round(delta, 6),
-                            iqr_ratio=round(obs["iqr"] / exp["iqr"], 6) if exp["iqr"] else None,
                             p50_shift=round(obs["p50"] - exp["p50"], 10),
-                            p50_rule="evidence only: the reference rate moves every quarter; the level is never a "
-                                     "criterion")
+                            dispersion_evidence=dict(
+                                iqr_learned=exp["iqr"], iqr_q2=obs["iqr"],
+                                iqr_ratio=round(obs["iqr"] / exp["iqr"], 6) if exp["iqr"] else None,
+                                rule="evidence only (ruling R39c): never a status criterion; the level (p50) is "
+                                     "evidence too"))
             if criteria["share"] == "breach":
                 keys |= {k for k, v in obs["floating"] if v <= 0}
-            if criteria["iqr"] == "breach":
-                keys |= {k for k, v in obs["floating"] if abs(v - obs["p50"]) > limit + 1e-9}
         else:
-            criteria.update(share="not_assessed", iqr="not_assessed")
+            criteria["share"] = "insufficient_evidence" if learned_floating else "not_learned"
         fixed_delta = (obs["fixed_coupon_in_spread"] - exp["fixed_coupon_in_spread"]) * 100
-        criteria["fixed"] = "breach" if abs(fixed_delta) > band["share_pp"] + 1e-9 else "holds"
-        observed.update(fixed_delta_pp=round(fixed_delta, 6), criteria=criteria)
+        criteria["fixed"] = "breach" if abs(fixed_delta) > band["fixed_share_pp"] + 1e-9 else "holds"
+        basis = rate_type_basis(exp.get("type_basis") or {}, obs["type_basis"])
+        observed.update(fixed_delta_pp=round(fixed_delta, 6), criteria=criteria, rate_type_basis=basis)
         if criteria["fixed"] == "breach":
             keys |= set(obs["fixed_keys"])
+        causes = {"share": "implied_base_share_moved",
+                  "fixed": ("rate_equals_spread_share_changed" if basis == "value_inferred"
+                            else "fixed_coupon_in_spread_share_changed")}
         failed = [name for name, verdict in criteria.items() if verdict == "breach"]
-        if not failed:
-            return _result(c, "holds", q2, expected=exp, observed=observed)
-        cause = "+".join({"share": "implied_base_share_moved", "iqr": "implied_base_dispersion_widened",
-                          "fixed": "fixed_coupon_in_spread_share_changed"}[f] for f in failed)
-        return _result(c, "breach", q2, cause=cause, expected=exp, observed=observed, keys=keys)
+        if failed:
+            return _result(c, "breach", q2, cause="+".join(causes[f] for f in failed), expected=exp,
+                           observed=observed, keys=keys)
+        if criteria["share"] == "insufficient_evidence":
+            return _result(c, "insufficient_evidence", q2, cause="floating_rows_below_min_rows_in_q2", expected=exp,
+                           observed=observed)
+        return _result(c, "holds", q2, expected=exp, observed=observed)
     brief = _text_brief(obs)
     cause = _text_gate(obs, sem["gaps"], band, "_in_q2")
     if cause:
