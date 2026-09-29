@@ -280,6 +280,27 @@ def test_removed_concept_breach_lists_the_q2_rows_no_longer_carrying_it():
     assert len(result["violating_keys"]) == 20
 
 
+def test_namespace_move_keys_only_rows_carrying_the_added_concept():
+    block = learn(mk_doc(book(pik="0.01")))
+    moved = [debt(i, extra=dict(pik_rate=val("0.01", concept="abc:Pik"))) for i in range(40)] + book()[40:]
+    result = pick(evaluate(block, mk_doc(moved, date=Q2)), "source_concept_set", "pik_rate")
+    assert result["observed"]["added"] == ["abc:Pik"]
+    assert result["observed"]["removed"] == ["us-gaap:InvestmentInterestRatePaidInKind"]
+    assert result["violating_keys"] == sorted("c%d" % i for i in range(40))
+    assert result["observed"]["rows_not_carrying_removed"] == 60
+
+
+def test_pure_removal_never_keys_rows_filled_under_a_still_expected_concept():
+    q1 = [debt(i, pik="0.01") for i in range(30)] + \
+         [debt(i, extra=dict(pik_rate=val("0.01", concept="abc:Pik"))) for i in range(30, 60)]
+    q2 = [debt(i, extra=dict(pik_rate=val("0.01", concept="abc:Pik"))) for i in range(30)] + \
+         [debt(i, extra=dict(pik_rate="NIL")) for i in range(30, 45)] + book()[45:]
+    result = pick(evaluate(learn(mk_doc(q1)), mk_doc(q2, date=Q2)), "source_concept_set", "pik_rate")
+    assert result["observed"]["removed"] == ["us-gaap:InvestmentInterestRatePaidInKind"]
+    assert result["observed"]["added"] == []
+    assert result["violating_keys"] == sorted("c%d" % i for i in range(30, 60))
+
+
 def test_mixed_magnitudes_and_text_rates_abstain_on_scale_and_range():
     nexpoint = book(30, rate="0.10") + [debt(100 + i, rate="3.75") for i in range(30)]
     block = learn(mk_doc(nexpoint))

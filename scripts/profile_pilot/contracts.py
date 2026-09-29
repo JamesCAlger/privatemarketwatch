@@ -495,10 +495,14 @@ def _evaluate_concepts(c, q2, obs) -> dict:
         return _result(c, "holds", q2, expected=expected, observed=dict(concepts=got))
     added = sorted(set(got) - set(expected))
     removed = sorted(set(expected) - set(got))
-    keys = {k for concept in added for k in obs["concept_keys"][concept]}
-    # A removed concept is carried by no Q2 row: every Q2 row of the partition is a row
-    # whose field is no longer carried by it.
-    keys |= set(obs["row_keys"]) if removed else set()
+    # Attribution without cross-quarter row identity: an addition (incl. a namespace move,
+    # added AND removed) names the rows carrying the added concept; a pure removal names the
+    # rows where the field is unfilled (absent, nil, conflict). Never rows still filled under
+    # an expected concept, never rows outside those sets.
+    if added:
+        keys = {k for concept in added for k in obs["concept_keys"][concept]}
+    else:
+        keys = set(obs["absent_keys"] + obs["nil_keys"] + [x["context_id"] for x in obs["conflicts"]])
     return _result(c, "breach", q2, expected=expected,
                    observed=dict(concepts=got, added=added, removed=removed,
                                  rows_not_carrying_removed=len(obs["row_keys"]) if removed else 0),
