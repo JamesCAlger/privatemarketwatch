@@ -17,6 +17,12 @@ from pipeline import config
 
 CORRECTIONS_FILE = config.DATA_DIR / "overrides" / "identifier_spread_corrections.json"
 
+# PARKED 2026-09-29: the 21 records were never adjudicated (changelog says parked pending
+# Agent B), and Agent B has since judged three of them wrong. Default off; opt in only
+# after adjudication.
+APPLY_IDENTIFIER_SPREAD_OVERRIDES = False
+OVERRIDE_SOURCE_LABEL = "identifier_text_override"
+
 
 def spread_changed_index(before: pd.Series, after: pd.Series) -> pd.Index:
     """Return the index positions where basis_spread changed, NaN-safe.
@@ -51,12 +57,24 @@ def load_corrections():
 
 
 def apply_spread_corrections(df, identifier_col="bdc_investment_identifier",
-                             corrections=None, log=print):
-    """Override basis_spread on matched rows. Returns (df, n_applied)."""
+                             corrections=None, log=print, enabled=None):
+    """Override basis_spread on matched rows. Returns (df, n_applied).
+
+    Gated: does nothing unless ``enabled`` (default: APPLY_IDENTIFIER_SPREAD_OVERRIDES,
+    which is False) is true. When applied, changed rows get basis_spread_source =
+    OVERRIDE_SOURCE_LABEL.
+    """
     import pandas as pd
 
+    if enabled is None:
+        enabled = APPLY_IDENTIFIER_SPREAD_OVERRIDES
     if corrections is None:
         corrections = load_corrections()
+    if not enabled:
+        if corrections:
+            log("  identifier spread overrides present but disabled "
+                "(parked pending adjudication)")
+        return df, 0
     if not corrections or df is None or len(df) == 0:
         return df, 0
     if "basis_spread" not in df.columns or identifier_col not in df.columns:
@@ -91,7 +109,11 @@ def apply_spread_corrections(df, identifier_col="bdc_investment_identifier",
     n = int(mask.sum())
     if n:
         df = df.copy()
+        before = df["basis_spread"].copy()
         df.loc[mask, "basis_spread"] = merged.loc[mask, "_new"].to_numpy()
+        if "basis_spread_source" in df.columns:
+            changed = spread_changed_index(before, df["basis_spread"])
+            df.loc[changed, "basis_spread_source"] = OVERRIDE_SOURCE_LABEL
     log(f"  Agent A basis_spread corrections applied: {n} rows "
         f"(of {len(corr_df)} corrections)")
     return df, n

@@ -12686,3 +12686,32 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - V13 source SEALED: `scratch/2026-09-16_refactor_continuation/v13-source-ready-v1.json` status PASS, review_sha256 d2ba16b8, 14 evidence entries, overlay of six manifest-tracked paths, `v12-acceptance-review-v1.json` authored as the machine-checkable prior-candidate review. An earlier overlay that wrongly listed four untracked test files and omitted two tracked ones was superseded before any build; both superseded artifacts are retained.
 - Recorded as open, not closed: tier B's own primary pass still excludes rows tier A claimed as an end, so the largest tier retains the directional defect (lost recall, not wrong pairs); the two joint-borrower gold disagreements; and the footprint gate's labelled-parent metric remains an issuer_name proxy for a member-basis rule, predicted zero for V13 by applying the repaired rule to the sealed V12 bundle and still to be re-checked on the real V13 bundle.
 - The V13 build, all downstream evaluations, the cold twin, the V13 public build and the recovery drill are NOT started. No production adoption, publication, baseline refresh or threshold change occurred.
+
+## 2026-09-29 -- Identifier-spread override disabled pending adjudication; scale fix
+
+- What changed: `pipeline/identifier_spread_corrections.py` gains
+  `APPLY_IDENTIFIER_SPREAD_OVERRIDES = False`; `apply_spread_corrections(..., enabled=None)`
+  now returns the frame unchanged unless opted in, logging one ASCII line
+  ("identifier spread overrides present but disabled (parked pending adjudication)") when
+  records exist. When enabled, rows whose value actually changes get
+  `basis_spread_source = identifier_text_override` (previously they kept `xbrl_field`).
+  Scale logic from a4c163c (writes `agentA_value_pct`, percentage points, matching the
+  staging `basis_spread` column at `staging_bdc.py` L2509-2513) is untouched.
+  `data/overrides/identifier_spread_corrections.json` (21 records, Crescent 0001633336 /
+  Antares 0001993402) and the staging call site are kept as-is.
+- Why: (1) the 2026-06-20 changelog entry (~L5630) says these 21 corrections were to be
+  PARKED pending Agent B adjudication, yet staging applied them unconditionally;
+  (2) Agent B judged three of them wrong: Great Lakes Dental and Ontario Systems 2026-03-31
+  (`data/output/review_queue/verdicts/RVQ_BLK_182258267a2c.json`, identifiers carry
+  comparative-period spreads) and Vantage Insurance 2025-12-31 (`RVQ_BLK_72007a195609.json`);
+  (3) overridden rows were labelled `xbrl_field`, hiding the override.
+- Scale note: the decimal-scaled Crescent spreads (e.g. 0.0425 beside 7.25 siblings,
+  labelled `xbrl_field`) in `data/output/private_markets_holdings.csv` come from the stale
+  2026-09-08 16:49 build, which predates a4c163c (2026-09-15, switched the written value
+  from `new_value_decimal` to `agentA_value_pct`). Current code does not write decimals.
+- Outputs: unchanged until the next rebuild; no rebuild or diff_outputs run. At the next
+  rebuild those rows revert to their XBRL spreads (percentage points), a semantic delta vs
+  baseline to expect.
+- Tests: tests/test_identifier_spread_corrections.py 11 -> 16 (default-off, enabled
+  labels + 4.25 pp, unchanged-value keeps label, missing declared value raises x2); existing
+  tests now pass `enabled=True`. 16 passed.
