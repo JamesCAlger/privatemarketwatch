@@ -863,7 +863,10 @@ def render_semantic(sem: dict, calibration: dict | None) -> str:
               "- by kind: " + json.dumps(newly["by_kind"], sort_keys=True), "",
               "## Inception blocks (first learned quarter per CIK; evidence, not a status)", ""]
     for cik, by_day in sorted(sem["inception"].items()):
-        day = sorted(by_day)[0]
+        days = [d for d in sorted(by_day) if any(i.get("inception") for i in by_day[d])]
+        if not days:
+            continue
+        day = days[0]
         for item in by_day[day]:
             inc = item.get("inception") or {}
             lines.append("- " + cik + " " + day + " " + item["kind"] + ": share_rate_le_spread "

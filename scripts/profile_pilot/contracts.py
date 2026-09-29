@@ -94,12 +94,42 @@ SEMANTIC_CONSTANTS = dict(
          "text_match_tolerance_pct percentage points (the owner-session census tolerance)")
 # The v3 bands. IN-SAMPLE: chosen after the Stage B Q2 censuses, the seeded drift of B2-1 and the
 # recorded history of B2-2b were read; see CALIBRATION.
-SEMANTIC_BANDS = {"standard": dict(share_pp=10, iqr_widen=2.0, text_share_pp=10, min_rows=10, min_parse_share=0.5),
-                  "low_history": dict(share_pp=25, iqr_widen=2.0, text_share_pp=10, min_rows=10, min_parse_share=0.5)}
+SEMANTIC_BANDS = {"standard": dict(share_pp=5, iqr_widen=3.0, text_share_pp=5, min_rows=10, min_parse_share=0.5),
+                  "low_history": dict(share_pp=5, iqr_widen=3.0, text_share_pp=5, min_rows=10, min_parse_share=0.5)}
+
+
+def _curve(rows) -> list:
+    return [dict(value=v, seeded_detection_fraction=d, negatives_breach_rate=r, negatives_n=n) for v, d, r, n in rows]
+
+
+_CAL_OK = "smallest candidate meeting both criteria"
 CALIBRATION = dict(
-    label="in-sample (bands chosen after Q2 and the history were read)", status="pending",
-    note="provisional values (share_pp mirrors the v2 fill-rate tiers); replaced by the in-sample calibration "
-         "before any v3 file is frozen")
+    label="in-sample (bands chosen after Q2 and the history were read)",
+    rule=("per band, the smallest candidate whose negatives breach rate (upper bound, pooled across CIKs, rolling / "
+          "as-evaluated) is <= 10% while the seeded detection fraction (median over applicable CIKs of the smallest "
+          "fraction >= 2 of 3 seeds detect) for the drift class it targets is <= 0.30; none = uncalibrated (curve "
+          "reported); no v2 band is widened"),
+    seed_run_id="stageb2-seed-v3-20260929t124021z", backtest_run_id="stageb2-backtest-v3-20260929t124241z",
+    code_head="5213b49",
+    bands={
+        "share_pp.standard": dict(target="spread_for_coupon", status="calibrated", chosen=5, reason=_CAL_OK, curve=_curve(
+            ((5, 0.05, 0.0488, 82), (10, 0.2, 0.0488, 82), (15, 0.2, 0.0244, 82), (20, 0.3, 0.0122, 82),
+             (25, 0.3, 0.0122, 82)))),
+        "share_pp.low_history": dict(
+            target="spread_for_coupon", status="calibrated", chosen=5, reason=_CAL_OK + "; thin evidence: 1 seeded "
+            "CIK (Fidelity) and 14 negatives", curve=_curve(
+                ((5, 0.05, 0.0, 14), (10, 0.1, 0.0, 14), (15, 0.2, 0.0, 14), (20, 0.2, 0.0, 14), (25, 0.3, 0.0, 14)))),
+        "iqr_widen": dict(target="spread_for_coupon", status="calibrated", chosen=3.0, reason=_CAL_OK, curve=_curve(
+            ((1.5, 0.2, 0.1354, 96), (2.0, 0.3, 0.1146, 96), (3.0, 0.3, 0.0833, 96)))),
+        "text_share_pp": dict(target="text_numeric_divergence", status="calibrated", chosen=5, reason=_CAL_OK,
+                              curve=_curve(((5, 0.05, 0.0753, 93), (10, 0.1, 0.0645, 93), (15, 0.2, 0.0645, 93),
+                                            (20, 0.2, 0.0538, 93), (25, 0.3, 0.043, 93))))},
+    fixed_not_swept=dict(min_rows=10, min_parse_share=0.5, note="floors, not calibrated"),
+    combined_composition=dict(point="share_pp 5 x iqr_widen 3.0", negatives_breach_rate=0.1146, negatives_n=96,
+                              seeded_detection_fraction=0.05,
+                              note="each criterion meets the rule alone; the contract status (either criterion) "
+                                   "exceeds 10% on the negatives: reported, not re-tuned"),
+    median_shift_experiment=dict(adopted=False, note="calibration-only (addendum 3); curves in the back-test root"))
 V3_REASON = ("adds rate_composition and text_agreement (owner ask 2026-09-29, M2 assessment); bands calibrated "
              "in-sample on B2-1 seeds and B2-2b negatives")
 NEWLY_ABSTAINED_RULE = (

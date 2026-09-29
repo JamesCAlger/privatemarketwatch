@@ -1223,3 +1223,20 @@ def test_v2_subset_check_compares_v2_contracts_and_results_without_the_flag():
     check = contracts_run.v2_subset_check({CIK: b3}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: bad})
     assert check["identical"] is False and check["by_cik"][CIK]["results"] is False
     assert check["differences"][CIK]
+
+
+def test_v3_bands_are_the_calibrated_choices_and_every_curve_is_labelled_in_sample():
+    cal = contracts.CALIBRATION
+    assert cal["label"] == "in-sample (bands chosen after Q2 and the history were read)"
+    bands = contracts.SEMANTIC_BANDS
+    for tier in ("standard", "low_history"):
+        assert bands[tier]["share_pp"] == cal["bands"]["share_pp." + tier]["chosen"]
+        assert bands[tier]["iqr_widen"] == cal["bands"]["iqr_widen"]["chosen"]
+        assert bands[tier]["text_share_pp"] == cal["bands"]["text_share_pp"]["chosen"]
+    for band in cal["bands"].values():
+        assert band["status"] in ("calibrated", "uncalibrated") and band["curve"]
+        if band["status"] == "calibrated":
+            ok = [r for r in band["curve"] if r["negatives_breach_rate"] <= 0.10
+                  and r["seeded_detection_fraction"] is not None and r["seeded_detection_fraction"] <= 0.30]
+            assert band["chosen"] == min(r["value"] for r in ok)
+    assert cal["median_shift_experiment"]["adopted"] is False
