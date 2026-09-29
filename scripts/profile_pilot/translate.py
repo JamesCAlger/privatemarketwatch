@@ -26,8 +26,15 @@ generated fields, reported beside parity with the base wrapper, so a mostly copi
 cannot look like a replacement. Pilot metadata lives only in the sidecar; unknown wrapper
 keys are refused (UnknownWrapperKeyError).
 
+Coverage is split (finding I5) into header (cik / entity_name, set directly), structural
+(any other wrapper field set directly from a profile entry) and via_inherited (set through
+an inherited table, e.g. the fv source_field equivalence); the overall profile-driven count
+is kept, but a header or via-inherited field never counts as structural.
+
 Loader admission runs the production `_load_specs_from_json(directory)` inside
-`restored_wrapper_context()`, which snapshots and restores the loader module's state.
+`restored_wrapper_context(directory)`, which redirects and restores the directory binding
+of all three wrapper consumers (loader, staging_bdc, wrapper_content_signatures) and the
+loader's spec map, and records which directory each consumer actually read.
 Field granularity: a field is a path to a non-object value (lists are atomic).
 """
 from __future__ import annotations
@@ -73,6 +80,16 @@ TRANSLATIONS = (
          profile_key="fund_level_concepts.investments_at_fair_value_concept", convert="concept_to_field"),
 )
 BY_PROFILE_KEY = {t["profile_key"]: t for t in TRANSLATIONS}
+# Wrapper header fields: identity, not behaviour. Never counted as structural coverage.
+HEADER_POINTERS = frozenset({"/cik", "/entity_name"})
+COVERAGE_CLASSES = ("header", "structural", "via_inherited")
+
+
+def coverage_class(pointer_text: str, via: str) -> str:
+    """via_inherited beats header beats structural: an inherited-table field is never structural."""
+    if via != "direct":
+        return "via_inherited"
+    return "header" if pointer_text in HEADER_POINTERS else "structural"
 VIEW_SECTIONS = ("presentation_views",)
 
 
@@ -242,6 +259,17 @@ def _entries(profile: dict, as_of) -> list:
     return envelope.materialize_entries(profile["events"], as_of)
 
 
+def _coverage(driven: dict, total: int, inherited: int) -> dict:
+    """Overall profile-driven count plus the disjoint header / structural / via_inherited split."""
+    split = {c: 0 for c in COVERAGE_CLASSES}
+    for pointer_text, via in driven.items():
+        split[coverage_class(pointer_text, via)] += 1
+    ratio = (lambda n: round(n / total, 6) if total else 0.0)
+    return dict(fields_total=total, profile_driven=len(driven), profile_driven_header=split["header"],
+                profile_driven_structural=split["structural"], profile_driven_via_inherited=split["via_inherited"],
+                inherited=inherited, ratio=ratio(len(driven)), structural_ratio=ratio(split["structural"]))
+
+
 def _stubs_for(profile: dict, key: str) -> list:
     return [s["stub_id"] for s in profile.get("packet_stubs") or [] if key in (s.get("bears_on") or [])]
 
@@ -295,6 +323,7 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
             profile_key=key, section=key.split(".", 1)[0], wrapper_pointer=pointer(path), entry_id=chosen["entry_id"],
             entry_provenance=chosen["provenance"], inherited_from=chosen["inherited_from"], via=via,
             equivalence_source=detail if via == "inherited_equivalence" else None,
+            coverage_class=coverage_class(pointer(path), via),
             value_sha256=value_sha256(value), base_present=present,
             base_value_sha256=value_sha256(base_value) if present else None,
             equal_to_base=present and value_sha256(base_value) == value_sha256(value)))
@@ -324,9 +353,7 @@ def to_wrapper_v3(profile: dict, base_wrapper: dict, report_date: str, form_type
         inherited_overlay=dict(field_count=len(overlay), fields=overlay,
                                rule="every generated field not set from a profile entry; sha256 of its "
                                     "order-preserving compact JSON"),
-        coverage=dict(fields_total=total, profile_driven=len(driven),
-                      profile_driven_via_inherited=sum(1 for v in driven.values() if v != "direct"),
-                      inherited=len(overlay), ratio=round(len(driven) / total, 6) if total else 0.0),
+        coverage=_coverage(driven, total, len(overlay)),
         fields_added=fields_added, created_objects=created,
         parity=dict(fields_total=len(union), fields_equal_to_base=len(equal),
                     fields_added=len(fields_added),
@@ -398,6 +425,8 @@ class LoaderContext:
     loader: object
     records: list = field(default_factory=list)
     mutations: list = field(default_factory=list)
+    consumers: dict = field(default_factory=dict)
+    redirected_to: str | None = None
 
 
 class _Capture(logging.Handler):
@@ -409,35 +438,104 @@ class _Capture(logging.Handler):
         self.sink.append(record.getMessage())
 
 
-STATE_ATTRS = ("WRAPPER_SPECS", "_WRAPPER_DEFINITIONS_DIR")
+# The three production modules that read wrapper JSON through their OWN directory binding
+# (finding I2). Each binding is redirected (when a directory is given) and restored; the
+# loader's spec map is state too. Consumer-parity SEMANTICS for staging/signatures are
+# Stage C Task 9: here they are only redirected, restored and reported as not invoked.
+WRAPPER_CONSUMERS = (
+    dict(name="loader", module="pipeline.bdc_xbrl_wrapper", dir_attr="_WRAPPER_DEFINITIONS_DIR",
+         state_attrs=("WRAPPER_SPECS",)),
+    dict(name="staging", module="pipeline.staging_bdc", dir_attr="_WRAPPER_DEFINITIONS_DIR", state_attrs=()),
+    dict(name="signatures", module="pipeline.wrapper_content_signatures", dir_attr="WRAPPER_DEFINITIONS_DIR",
+         state_attrs=()),
+)
+STATE_ATTRS = tuple(c["module"] + "." + a for c in WRAPPER_CONSUMERS for a in (c["dir_attr"],) + c["state_attrs"])
+NOT_INVOKED = "not invoked in Stage B (consumer-parity semantics are Stage C Task 9)"
+
+
+def _content_token(value):
+    """Identity plus shallow content, so an in-place change of a mutable binding is seen."""
+    if isinstance(value, dict):
+        return (id(value), tuple((k, id(v)) for k, v in value.items()))
+    if isinstance(value, (list, set)):
+        return (id(value), tuple(id(v) for v in value))
+    return (id(value), None)
 
 
 @contextmanager
-def restored_wrapper_context():
-    """Snapshot pipeline.bdc_xbrl_wrapper module state and its logger; restore in finally.
+def restored_wrapper_context(directory=None):
+    """Snapshot every wrapper-consumer binding and the loader logger; restore in finally.
 
-    Yields a LoaderContext with the production loader and the captured log messages.
-    `mutations` names the module attributes found changed at exit (then restored).
+    With `directory`, the three consumers' directory bindings point at it for the
+    duration. Yields a LoaderContext whose `loader` is the production
+    `_load_specs_from_json` wrapped to record the directory each call actually read.
+    At exit (even on failure) every binding is restored; `mutations` names each
+    "module.attr" found rebound away from what the context set, or changed in place.
+    `consumers` reports, per consumer, the original binding, the binding during the
+    context and the directories actually read.
     """
-    from pipeline import bdc_xbrl_wrapper as module
+    import importlib
+    modules = {c["module"]: importlib.import_module(c["module"]) for c in WRAPPER_CONSUMERS}
+    module = modules["pipeline.bdc_xbrl_wrapper"]
     logger = logging.getLogger(module.__name__)
-    saved = {name: getattr(module, name) for name in STATE_ATTRS}
+    saved, contents, expected = {}, {}, {}
+    for c in WRAPPER_CONSUMERS:
+        for attr in (c["dir_attr"],) + c["state_attrs"]:
+            value = getattr(modules[c["module"]], attr)
+            saved[(c["module"], attr)] = value
+            if isinstance(value, dict):  # restored in place too if mutated in place
+                contents[(c["module"], attr)] = (_content_token(value), dict(value))
     log_state = (logger.level, list(logger.handlers), logger.propagate, logger.disabled)
-    ctx = LoaderContext(module=module, loader=module._load_specs_from_json)
+    production = module._load_specs_from_json
+    ctx = LoaderContext(module=module, loader=None,
+                        redirected_to=None if directory is None else str(Path(directory)))
+    for c in WRAPPER_CONSUMERS:
+        ctx.consumers[c["name"]] = dict(module=c["module"], attr=c["dir_attr"],
+                                        original=str(saved[(c["module"], c["dir_attr"])]),
+                                        bound=None, reads=[], invoked=False,
+                                        note=None if c["name"] == "loader" else NOT_INVOKED)
+
+    def recording_loader(target=None):
+        read = Path(target) if target else getattr(module, "_WRAPPER_DEFINITIONS_DIR")
+        ctx.consumers["loader"]["reads"].append(str(read))
+        ctx.consumers["loader"]["invoked"] = True
+        return production(target)
+
+    ctx.loader = recording_loader
     handler = _Capture(ctx.records)
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
     try:
+        if directory is not None:
+            for c in WRAPPER_CONSUMERS:
+                setattr(modules[c["module"]], c["dir_attr"], Path(directory))
+        for (name, attr) in saved:
+            value = getattr(modules[name], attr)
+            expected[(name, attr)] = (value, _content_token(value))
+        for c in WRAPPER_CONSUMERS:
+            ctx.consumers[c["name"]]["bound"] = str(getattr(modules[c["module"]], c["dir_attr"]))
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
         yield ctx
     finally:
-        for name, value in saved.items():
-            if getattr(module, name) is not value:
-                ctx.mutations.append(name)
-                setattr(module, name, value)
+        for (name, attr), value in saved.items():
+            current = getattr(modules[name], attr)
+            if (name, attr) in expected:
+                want, token = expected[(name, attr)]
+                if current is not want or _content_token(current) != token:
+                    ctx.mutations.append(name + "." + attr)
+            setattr(modules[name], attr, value)
+            if (name, attr) in contents and _content_token(value) != contents[(name, attr)][0]:
+                value.clear()
+                value.update(contents[(name, attr)][1])
+                if name + "." + attr not in ctx.mutations:
+                    ctx.mutations.append(name + "." + attr)
         logger.removeHandler(handler)
         logger.setLevel(log_state[0])
         logger.propagate, logger.disabled = log_state[2], log_state[3]
         logger.handlers[:] = log_state[1]
+
+
+def consumer_report(ctx: LoaderContext) -> dict:
+    return dict(redirected_to=ctx.redirected_to, consumers={k: dict(v) for k, v in ctx.consumers.items()})
 
 
 def _spec_view(spec) -> dict:
@@ -473,7 +571,7 @@ def admit_directory(directory, ciks, *, base_dir=None) -> dict:
     directory = Path(directory)
     out = dict(directory=str(directory), base_dir=str(base_dir) if base_dir else None, directory_error=None,
                base_error=None, ciks={})
-    with restored_wrapper_context() as ctx:
+    with restored_wrapper_context(directory) as ctx:
         try:
             specs = ctx.loader(directory)
         except Exception as exc:  # the loader aborts the whole directory on one bad file
@@ -487,6 +585,7 @@ def admit_directory(directory, ciks, *, base_dir=None) -> dict:
         messages = list(ctx.records)
     out["log_messages"] = messages
     out["state_mutations"] = ctx.mutations
+    out["wrapper_consumers"] = consumer_report(ctx)
     for cik in ciks:
         path = directory / (cik + ".json")
         if specs is None:

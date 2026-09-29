@@ -256,6 +256,31 @@ def test_true_decimal_percent_and_bps_changes_within_one_namespace():
     assert same["status"] == "holds"
 
 
+def _drop_fact_indices(doc, field="interest_rate", ctxs=None):
+    for p in doc["positions"]:
+        if ctxs is None or p["context_id"] in ctxs:
+            p["fields"][field]["fact_indices"] = []
+    return doc
+
+
+def test_a_filled_field_without_a_fact_index_is_unobservable_scale_not_a_breach():
+    # Minor A: inability to observe the unit is insufficient_evidence with a named cause.
+    block = learn(mk_doc(book(rate="0.10")))
+    q2 = _drop_fact_indices(mk_doc(book(rate="0.10"), date=Q2))
+    scale = pick(evaluate(block, q2), "scale", "interest_rate")
+    assert (scale["status"], scale["cause"]) == ("insufficient_evidence", "unit_not_observable_no_fact_index")
+    assert scale["observed"]["classes"] == {"unit_not_observable": 60} and len(scale["violating_keys"]) == 60
+    # An observed unit change on other rows is still a breach, whatever the unobservable rows say.
+    mixed = mk_doc(book(30, rate="0.10") + [debt(i, rate="10.0", unit="pct") for i in range(30, 60)], date=Q2)
+    mixed = _drop_fact_indices(mixed, ctxs={"c%d" % i for i in range(10)})
+    scale = pick(evaluate(block, mixed), "scale", "interest_rate")
+    assert (scale["status"], scale["cause"]) == ("breach", "declared_unit_class_changed")
+    assert scale["violating_keys"] == sorted("c%d" % i for i in range(30, 60))
+    # Learning: a Q1 field without fact indices names the same cause (never "mixed" or "no ratio unit").
+    unlearned = learn(_drop_fact_indices(mk_doc(book(rate="0.10"))))
+    assert pick(unlearned["contracts"], "scale", "interest_rate")["learn_cause"] == "unit_not_observable_no_fact_index"
+
+
 def test_namespace_change_with_unchanged_scale_breaks_concept_not_scale():
     block = learn(mk_doc(book()))
     results = evaluate(block, mk_doc(book(concept="abc:CustomInterestRate"), date=Q2))
@@ -735,6 +760,68 @@ def test_runner_helpers_are_light_and_name_the_missing_q2():
     assert contracts_run.order_proof(clock, cached_q2_stamps=["T5", "T6"]) is True
     assert contracts_run.order_proof(dict(clock, first_q2_parse_utc="T3"), cached_q2_stamps=[]) is False
     assert contracts_run.order_proof(dict(clock, first_q2_parse_utc="T4"), cached_q2_stamps=[]) is True
+
+
+# ---------------------------------------------------------------- producer lineage (I1)
+
+def _profile_chain(tmp_path):
+    """A fake census root and a profile root derived from it (real Task 6 stage)."""
+    from scripts.profile_pilot import profile_run
+    from tests.test_profile_pilot_profile import CIK as PCIK, NOW as PNOW, build_census_root, sibling
+    census_paths = build_census_root(tmp_path)
+    prof_paths = sibling(census_paths, run_id="stageb-profile-test")
+    profile_run.run_stage(prof_paths, census_run_id=census_paths.run_id, ciks=[PCIK], recorded_at=PNOW)
+    return census_paths, prof_paths, PCIK
+
+
+def _copy_census_root(census_paths, run_id):
+    import shutil
+    shutil.copytree(census_paths.run_root, census_paths.run_root.parent / run_id)
+    return run_id
+
+
+def test_contracts_pins_a_profile_root_only_when_it_was_derived_from_the_pinned_census(tmp_path):
+    from scripts.profile_pilot import contracts_run
+    from scripts.profile_pilot.manifest import StageInvalidated
+    from tests.test_profile_pilot_profile import sibling
+    census_paths, prof_paths, cik = _profile_chain(tmp_path)
+    paths = sibling(census_paths, run_id="stageb-contracts-test")
+    census = contracts_run.pin_census(paths, census_paths.run_id, [cik])
+    pinned = contracts_run.pin_profiles(paths, prof_paths.run_id, [cik], census=census)
+    assert pinned["lineage"]["ok"] is True and pinned["lineage"]["census_run_id"] == census_paths.run_id
+    assert [c["profile"] for c in pinned["lineage"]["checked"]] == [cik + "/q1"]
+    assert pinned["census_sha256"][cik] == census["selected"][(cik, "q1")]["census_sha256"]
+    # Same bytes, other census root: the profile root names a different producer.
+    other = contracts_run.pin_census(paths, _copy_census_root(census_paths, "stageb-fake-census-copy"), [cik])
+    with pytest.raises(StageInvalidated, match="derived from census root"):
+        contracts_run.pin_profiles(paths, prof_paths.run_id, [cik], census=other)
+    # Same census root id, but its authoritative Q1 census is now different bytes.
+    target = census_paths.run_root / "census" / cik / "2023-03-31.json"
+    target.write_text(target.read_text(encoding="ascii") + " ", encoding="ascii")
+    listing = census_paths.run_root / "results" / "authoritative.json"
+    body = json.loads(listing.read_text(encoding="ascii"))
+    for row in body["fund_quarters"]:
+        if row["census_relative"] == "census/" + cik + "/2023-03-31.json":
+            row["census_sha256"] = manifest.sha256_file(target)
+    listing.write_text(json.dumps(body), encoding="ascii")
+    changed = contracts_run.pin_census(paths, census_paths.run_id, [cik])
+    with pytest.raises(StageInvalidated, match="was derived from census"):
+        contracts_run.pin_profiles(paths, prof_paths.run_id, [cik], census=changed)
+    code = contracts_run.main(["run", "--main-root", str(paths.main_repo_root), "--data-root", str(paths.data_root),
+                               "--run-id", "stageb-contracts-test2", "--census-run-id", census_paths.run_id,
+                               "--profile-run-id", prof_paths.run_id, "--cik", cik])
+    assert code == contracts_run.EXIT_INVALIDATED
+
+
+def test_profile_document_source_must_name_the_lineage_census(tmp_path):
+    from scripts.profile_pilot import contracts_run
+    from scripts.profile_pilot.manifest import StageInvalidated
+    census_paths, prof_paths, cik = _profile_chain(tmp_path)
+    record = manifest.file_record(prof_paths.run_root / "profiles" / cik / "q1.json", "p")
+    doc = contracts_run.load_profile(record)
+    assert contracts_run.load_profile(record, census_sha256=doc["source"]["census_sha256"]) == doc
+    with pytest.raises(StageInvalidated, match="profile document source"):
+        contracts_run.load_profile(record, census_sha256="0" * 64)
 
 
 # ---------------------------------------------------------------- real census pair (cache)

@@ -489,6 +489,35 @@ def test_partition_specific_entries_do_not_resolve_a_flat_wrapper_key(tmp_path):
     assert (record["class"], record["reason"]) == ("unresolved", "not_implemented")
 
 
+def _twin(entry_, **changes):
+    twin = copy.deepcopy(entry_)
+    twin.update(changes)
+    return twin
+
+
+def test_m1_resolves_through_the_envelope_and_equally_specific_entries_raise(tmp_path):
+    # Finding I3: two equally specific live entries for one flat key are an error (never entries[0]).
+    prof = synthetic_profile([("identifier_format.delimiter", " | ", "derived", None, None)])
+    [only] = prof["entries"]
+    prof["entries"].append(_twin(only, entry_id=only["entry_id"] + "-twin", value=";"))
+    with pytest.raises(envelope.AmbiguousResolutionError):
+        score(tmp_path, wrapper_doc(), prof)
+    # Precedence (exact form > all-form) comes from the envelope, whatever the entry order.
+    prof = synthetic_profile([("identifier_format.delimiter", ";", "derived", None, None)])
+    [all_form] = prof["entries"]
+    form_specific = _twin(all_form, entry_id=all_form["entry_id"] + "-10q", value=" | ", form_type="10-Q")
+    prof["entries"] = [all_form, form_specific]
+    record = cls(score(tmp_path, wrapper_doc(), prof), "identifier_format.delimiter")
+    assert (record["class"], record["entry_ids"]) == ("exact", [form_specific["entry_id"]])
+    # A form-specific entry for another form, or a retracted entry, never applies.
+    prof["entries"] = [all_form, _twin(form_specific, form_type="10-K")]
+    assert cls(score(tmp_path, wrapper_doc(), prof), "identifier_format.delimiter")["entry_ids"] == [
+        all_form["entry_id"]]
+    prof["entries"] = [_twin(all_form, recorded_until="2026-09-29T12:30:00Z"), form_specific]
+    assert cls(score(tmp_path, wrapper_doc(), prof), "identifier_format.delimiter")["entry_ids"] == [
+        form_specific["entry_id"]]
+
+
 def test_counts_use_the_fixed_denominator_and_partial_is_not_exact(tmp_path):
     wrapper = wrapper_doc()
     prof = synthetic_profile([("identifier_format.delimiter", "|", "derived", None, None)])
@@ -637,6 +666,43 @@ def test_a_changed_census_file_invalidates_the_stage(tmp_path):
     paths = sibling(census_paths)
     with pytest.raises(StageInvalidated):
         profile_run.run_stage(paths, census_run_id=CENSUS_ROOT_ID, ciks=[CIK], recorded_at=NOW)
+
+
+def _rewrite_listing(census_paths, change):
+    target = census_paths.run_root / "results" / "authoritative.json"
+    body = json.loads(target.read_text(encoding="ascii"))
+    for row in body["fund_quarters"]:
+        change(row)
+    target.write_text(json.dumps(body), encoding="ascii")
+
+
+@pytest.mark.parametrize("verdict", [None, "fail", "PASS"])
+def test_a_missing_or_non_pass_validation_verdict_is_refused(tmp_path, verdict):
+    # Finding I8: no fail-open default; a row without the field is refused like a failed one.
+    census_paths = build_census_root(tmp_path)
+
+    def change(row):
+        if row["role"] == "q1":
+            if verdict is None:
+                row.pop("validation_verdict")
+            else:
+                row["validation_verdict"] = verdict
+
+    _rewrite_listing(census_paths, change)
+    paths = sibling(census_paths)
+    with pytest.raises(StageInvalidated, match="validation_verdict|non-pass"):
+        profile_run.run_stage(paths, census_run_id=CENSUS_ROOT_ID, ciks=[CIK], recorded_at=NOW)
+    assert not (paths.run_root / "profiles").exists()
+
+
+def test_the_three_consumers_share_one_authoritative_census_reader():
+    from scripts.profile_pilot import contracts_run, lineage, translate_run
+    assert lineage.ERA_ROLES == profile.ERA_ROLES
+    for module in (profile_run, contracts_run, translate_run):
+        source = Path(module.__file__).read_text(encoding="ascii")
+        assert "lineage.load_authoritative_census(" in source, module.__name__
+        assert '.get("validation_verdict"' not in source, module.__name__
+        assert '["validation_verdict"]' not in source, module.__name__
 
 
 # ---------------------------------------------------------------- cached census (launcher only)

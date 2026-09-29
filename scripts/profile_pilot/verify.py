@@ -201,6 +201,7 @@ def cmd_test(args) -> int:
                 plugin_receipt=str(receipt), plugin_verdict=plugin and plugin.get("verdict"),
                 launcher_inventory=protection.summarize(before, after, comparison),
                 protected_roots=[str(r) for r in paths.protected_roots],
+                read_only_roots=[str(r) for r in paths.read_only_roots],
                 backstop_pre=pre, backstop_post=post, backstop_verdict=backstop,
                 preservation="PASS" if preservation_ok else "FAIL")
     target = write_json(paths, folder + "/receipt.json", body)

@@ -7,9 +7,12 @@ as `lease_refused`.
 Cache (ruling R15): the ONE cache is Task 1's `manifest.cache_identity` /
 `run_cached_stage`. The identity holds the source file record, every code file record
 plus their digest, the runtime library versions, the configuration dependencies (wrapper,
-grammar, bounds) and the collector version. Results are stored under the identity's
-fingerprint (`census/{cik}/{report_date}/{fingerprint16}.json`), so ANY dependency change
-is a cache miss that regenerates beside the preserved old result, never a silent reuse.
+grammar, bounds) and the collector version. Layout (ruling R23): the authoritative result
+is `census/{cik}/{report_date}.json`, write-once, exactly one census per fund-quarter per
+run root; the cache fingerprint is recorded INSIDE that JSON and in the run summary. A
+re-run inside the same run id whose identity differs (other bounds or dependencies) is
+refused (StageInvalidated: use a new run id), so regeneration is proven across run ids,
+never by a second result in one root and never by a silent reuse.
 Only complete, validated, within-limit results are cached. Incomplete collections, failed
 validations and limit breaches write a separate write-once receipt under census_failures/.
 

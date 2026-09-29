@@ -93,14 +93,23 @@ class RootSpec:
 
 
 def root_specs(paths=None, *, roots=None, main_repo_root=None) -> list[RootSpec]:
-    """Inventory boundary per protected root; main (and data-root) output is depth 1."""
+    """Inventory boundary per protected root; main (and data-root) output uses MAIN_OUTPUT_MODE.
+
+    With `paths`, the read-only roots (worktree data/overrides) are inventoried in full
+    beside the protected roots, so a change there fails preservation like any other."""
     if paths is not None:
-        roots = paths.protected_roots
+        roots = tuple(paths.protected_roots) + tuple(r for r in paths.read_only_roots
+                                                     if r not in paths.protected_roots)
         shallow = {(paths.main_repo_root / "data" / "output").resolve(strict=False),
                    paths.output_root.resolve(strict=False)}
     else:
         shallow = {(Path(main_repo_root) / "data" / "output").resolve(strict=False)} if main_repo_root else set()
     return [RootSpec(Path(r), MAIN_OUTPUT_MODE if Path(r) in shallow else "full") for r in roots]
+
+
+def guarded_roots(paths) -> tuple:
+    """Roots the Python-write guard blocks: protected roots plus read-only roots."""
+    return tuple(paths.protected_roots) + tuple(r for r in paths.read_only_roots if r not in paths.protected_roots)
 
 
 def inventory(specs) -> dict:
@@ -174,7 +183,7 @@ def protected_session(paths, *, receipt: str):
     from scripts.profile_pilot.paths import write_json
     specs = root_specs(paths)
     before = inventory(specs)
-    uninstall = install_open_guard(paths.protected_roots)
+    uninstall = install_open_guard(guarded_roots(paths))
     state: dict = {}
     body_error = None
     try:
@@ -188,6 +197,7 @@ def protected_session(paths, *, receipt: str):
         comparison = compare(before, after)
         state.update(summarize(before, after, comparison))
         state["protected_roots"] = [str(r) for r in paths.protected_roots]
+        state["read_only_roots"] = [str(r) for r in paths.read_only_roots]
         state["body_error"] = (None if body_error is None else
                                type(body_error).__name__ + ": " + str(body_error))
         write_json(paths, receipt, state)

@@ -30,7 +30,7 @@ from pathlib import Path
 import sys
 import time
 
-from scripts.profile_pilot import cohort, m1, manifest, profile, protection
+from scripts.profile_pilot import cohort, lineage, m1, manifest, profile, protection
 from scripts.profile_pilot.manifest import StageInvalidated
 from scripts.profile_pilot.paths import (PathError, PilotPaths, discover_main_root, resolve_paths,
                                          write_once_json)
@@ -71,31 +71,22 @@ def census_root(paths: PilotPaths, census_run_id: str) -> PilotPaths:
 
 
 def pin_census(census_paths: PilotPaths, ciks) -> dict:
-    """The authoritative listing and every census file this stage will read, re-hashed."""
-    root = census_paths.run_root
-    authoritative = manifest.file_record(root / "results" / "authoritative.json",
-                                         "census_root/results/authoritative.json")
-    excluded = manifest.file_record(root / "results" / "excluded.json", "census_root/results/excluded.json")
-    if authoritative["status"] != "present":
-        raise StageInvalidated("census root has no results/authoritative.json: " + str(root))
-    listing = json.loads(Path(authoritative["path"]).read_text(encoding="ascii"))
+    """The authoritative listing and every census file this stage will read, re-hashed.
+
+    Through the shared lineage reader: a row without `validation_verdict` or with any
+    verdict other than "pass" is refused (ruling I8; no fail-open default)."""
+    era_of = {role: era for era, role in profile.ERA_ROLES.items()}
+    census = lineage.load_authoritative_census(census_paths, census_paths.run_id, roles=tuple(era_of), ciks=ciks)
     selected, files = {}, []
-    for row in listing["fund_quarters"]:
-        era = next((e for e, role in profile.ERA_ROLES.items() if role == row["role"]), None)
-        if era is None or row["cik"] not in ciks:
-            continue
-        if row.get("validation_verdict", "pass") != "pass":
-            raise StageInvalidated("authoritative listing holds a non-pass census: " + row["census_relative"])
-        record = manifest.file_record(root / row["census_relative"], row["census_relative"])
-        if record["status"] != "present" or record["sha256"] != row["census_sha256"]:
-            raise StageInvalidated("census file differs from the authoritative listing: " + row["census_relative"])
-        record.update(cik=row["cik"], era=era, role=row["role"], report_date=row["report_date"],
+    for (cik, role), row in census["rows"].items():
+        record = row["record"]
+        record.update(cik=cik, era=era_of[role], role=role, report_date=row["report_date"],
                       fingerprint=row["fingerprint"])
-        selected[(row["cik"], era)] = dict(row, record=record)
+        selected[(cik, era_of[role])] = row
         files.append(record)
-    return dict(run_id=census_paths.run_id, run_root=str(root), authoritative=authoritative,
-                excluded=excluded, census_files=files, selected=selected,
-                authoritative_git_head=listing.get("git_head"))
+    return dict(run_id=census_paths.run_id, run_root=census["run_root"], authoritative=census["authoritative"],
+                excluded=census["excluded"], census_files=files, selected=selected,
+                authoritative_git_head=census["listing"].get("git_head"))
 
 
 def freeze_and_check_inventory(paths: PilotPaths, census_paths: PilotPaths) -> dict:

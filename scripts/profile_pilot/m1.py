@@ -32,6 +32,7 @@ import json
 from pathlib import Path
 import re
 
+from scripts.profile_pilot import envelope
 from scripts.profile_pilot.census_detect import DELIMITERS
 from scripts.profile_pilot.manifest import StageInvalidated, digest
 from scripts.profile_pilot.paths import PilotPaths, confined, write_once_json
@@ -372,18 +373,25 @@ def _compare(family: dict, derived, wrapper, key: str, semantics: dict) -> tuple
 # ---------------------------------------------------------------- profile projection
 
 def _live_entries(profile: dict, key: str) -> list:
+    """Entries of `key` applicable at the profile's report date and form in the current state.
+
+    Applicability (both clocks and form) is judged by the Task 2 resolver
+    (envelope.resolve_for_row) with the partition predicate neutralised, so the caller can
+    see partition-specific entries; nothing here re-implements valid/transaction time.
+    """
     date, form = profile["report_date"], profile.get("form_type")
-    out = []
-    for entry in profile["entries"]:
-        if entry["key"] != key or entry["recorded_until"] is not None:
-            continue
-        if not ((entry["valid_from"] is None or entry["valid_from"] <= date)
-                and (entry["valid_to"] is None or date < entry["valid_to"])):
-            continue
-        if entry["form_type"] is not None and entry["form_type"] != form:
-            continue
-        out.append(entry)
-    return out
+    return [e for e in profile["entries"] if e["key"] == key
+            and envelope.resolve_for_row([dict(e, applies_to=None)], {}, key, date, form, None).found]
+
+
+def _resolve_entry(profile: dict, key: str, live: list) -> dict:
+    """The ONE entry for a flat wrapper key, by envelope precedence (form > all-form).
+
+    Equally specific live entries raise envelope.AmbiguousResolutionError (never entries[0])."""
+    found = envelope.resolve_for_row(live, {}, key, profile["report_date"], profile.get("form_type"), None)
+    if not found.found:
+        raise SemanticsError("live entries of " + key + " did not resolve")
+    return found.entry
 
 
 def _profile_key(family: dict, key: str) -> str | None:
@@ -437,7 +445,7 @@ def _leaf(profile: dict, family: dict, key: str, values: dict, semantics: dict) 
             return dict(record, **{"class": klass}, reason=reason, stub_ids=stub_ids, wrapper=wrapper,
                         derived=None, note="no derived entry")
         return dict(record, **{"class": "exact"}, wrapper=None, derived=None, note="absent in both")
-    entry = entries[0]
+    entry = _resolve_entry(profile, profile_key, entries)
     klass, detail = _compare(family, entry["value"], wrapper, key, semantics)
     provenance, inherited_from = entry["provenance"], entry.get("inherited_from")
     via = detail.pop("inherited_via", None)

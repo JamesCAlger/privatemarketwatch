@@ -8,7 +8,9 @@ Order (spec 6.3 / s8; R18/R26 pattern), all in a NEW write-once run root:
   1. freeze inventories/contract_tolerances.json from the spec table (before anything is read);
   2. pin the census root (authoritative listing, excluded listing, every Q1/Q2 census file:
      bytes hashed and checked against the listing, not parsed), the profile root (summary,
-     manifest, every Q1 profile), the authored grammars and anchors, the code (incl.
+     manifest, every Q1 profile; refused unless profile_summary.census_run_id is this census
+     root and every Q1 profile's census_sha256 is the authoritative row's, via
+     lineage.check_profile_lineage), the authored grammars and anchors, the code (incl.
      pipeline/rate_convention.py and pipeline/identifier_rate.py), and materialise the
      pinned slices (bdc_holdings + private_markets_holdings via manifest.materialise_slices,
      bdc_fund_income here); write manifest.json;
@@ -30,7 +32,7 @@ from pathlib import Path
 import sys
 import time
 
-from scripts.profile_pilot import cohort, contracts, contracts_income, manifest, protection
+from scripts.profile_pilot import cohort, contracts, contracts_income, lineage, manifest, protection
 from scripts.profile_pilot.manifest import StageInvalidated
 from scripts.profile_pilot.paths import (PathError, PilotPaths, confined, discover_main_root, pilot_duckdb,
                                          resolve_paths, write_once_json)
@@ -41,7 +43,8 @@ RUN_PREFIX = "stageb-contracts-"
 ANCHOR_DIR = "data/overrides/identifier_anchors"
 CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_income.py",
               "scripts/profile_pilot/contracts_observe.py",
-              "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/envelope.py",
+              "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/lineage.py",
+              "scripts/profile_pilot/envelope.py",
               "scripts/profile_pilot/census.py", "scripts/profile_pilot/census_detect.py",
               "scripts/profile_pilot/manifest.py", "pipeline/rate_convention.py", "pipeline/identifier_rate.py",
               "pipeline/identifier_signature.py")
@@ -74,37 +77,32 @@ def _other_root(paths: PilotPaths, run_id: str) -> PilotPaths:
 # ---------------------------------------------------------------- pins (hash only; nothing parsed from Q2)
 
 def pin_census(paths: PilotPaths, census_run_id: str, ciks) -> dict:
-    other = _other_root(paths, census_run_id)
-    root = other.run_root
-    authoritative = _record(root / "results" / "authoritative.json", "census_root/results/authoritative.json")
-    excluded = _record(root / "results" / "excluded.json", "census_root/results/excluded.json")
-    listing = json.loads(Path(authoritative["path"]).read_text(encoding="ascii"))
-    missing = json.loads(Path(excluded["path"]).read_text(encoding="ascii"))
-    selected, files = {}, []
-    for row in listing["fund_quarters"]:
-        if row["cik"] not in ciks or row["role"] not in ("q1", "q2"):
-            continue
-        if row.get("validation_verdict") != "pass":
-            raise StageInvalidated("authoritative listing holds a non-pass census: " + row["census_relative"])
-        record = _record(root / row["census_relative"], "census_root/" + row["census_relative"])
-        if record["sha256"] != row["census_sha256"]:
-            raise StageInvalidated("census file differs from the authoritative listing: " + row["census_relative"])
-        selected[(row["cik"], row["role"])] = dict(row, record=record)
-        files.append(record)
+    census = lineage.load_authoritative_census(paths, census_run_id, roles=("q1", "q2"), ciks=ciks,
+                                               label_prefix="census_root/", require_excluded=True)
+    missing = json.loads(Path(census["excluded"]["path"]).read_text(encoding="ascii"))
+    selected = census["rows"]
     unavailable = {(r["cik"], r["role"]): r for r in missing["fund_quarters"] if r["cik"] in ciks}
     for cik in ciks:
         if (cik, "q1") not in selected:
             raise StageInvalidated("no authoritative Q1 census for " + cik)
-    return dict(run_id=census_run_id, run_root=str(root), authoritative=authoritative, excluded=excluded,
-                files=files, selected=selected, unavailable=unavailable, paths=other)
+    return dict(run_id=census_run_id, run_root=census["run_root"], authoritative=census["authoritative"],
+                excluded=census["excluded"], files=census["files"], selected=selected, unavailable=unavailable,
+                paths=census["paths"])
 
 
-def pin_profiles(paths: PilotPaths, profile_run_id: str, ciks) -> dict:
+def pin_profiles(paths: PilotPaths, profile_run_id: str, ciks, *, census: dict) -> dict:
+    """The Q1 profiles, refused unless the profile root was derived from the pinned census root.
+
+    Lineage (I1): profile_summary.census_run_id == the pinned census run id and every Q1
+    profile's census_sha256 / census_relative == the authoritative Q1 row (lineage module)."""
     root = _other_root(paths, profile_run_id).run_root
     summary = _record(root / "results" / "profile_summary.json", "profile_root/results/profile_summary.json")
     built = _record(root / "manifest.json", "profile_root/manifest.json")
-    listed = json.loads(Path(summary["path"]).read_text(encoding="ascii"))["profiles"]
-    profiles = {}
+    body = json.loads(Path(summary["path"]).read_text(encoding="ascii"))
+    checked = lineage.check_profile_lineage(body, census_run_id=census["run_id"], census_rows=census["selected"],
+                                            ciks=ciks, eras=("q1",))
+    listed = body["profiles"]
+    profiles, census_sha = {}, {}
     for cik in ciks:
         entry = listed.get(cik + "/q1") or {}
         if entry.get("status") != "derived":
@@ -113,7 +111,9 @@ def pin_profiles(paths: PilotPaths, profile_run_id: str, ciks) -> dict:
         if record["sha256"] != entry.get("sha256"):
             raise StageInvalidated("profile file differs from profile_summary: " + cik)
         profiles[cik] = record
-    return dict(run_id=profile_run_id, run_root=str(root), summary=summary, manifest=built, profiles=profiles)
+        census_sha[cik] = entry["census_sha256"]
+    return dict(run_id=profile_run_id, run_root=str(root), summary=summary, manifest=built, profiles=profiles,
+                census_sha256=census_sha, lineage=checked)
 
 
 def pin_grammar(paths: PilotPaths, cik: str) -> tuple[dict | None, list]:
@@ -171,13 +171,15 @@ def load_census(row: dict) -> dict:
     return outer["result"]
 
 
-def load_profile(record: dict) -> dict:
+def load_profile(record: dict, *, census_sha256: str | None = None) -> dict:
     path = Path(record["path"])
     if manifest.sha256_file(path) != record["sha256"]:
         raise StageInvalidated("profile file changed before use: " + str(path))
     outer = json.loads(path.read_text(encoding="ascii"))
     if outer.get("complete") is not True:
         raise StageInvalidated("profile result incomplete: " + str(path))
+    if census_sha256 is not None:
+        lineage.check_profile_document_source(outer["result"], census_sha256=census_sha256, label=str(path))
     return outer["result"]
 
 
@@ -233,7 +235,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     clock["tolerances_frozen_utc"] = _now()
 
     census = pin_census(paths, census_run_id, ciks)
-    profiles = pin_profiles(paths, profile_run_id, ciks)
+    profiles = pin_profiles(paths, profile_run_id, ciks, census=census)
     grammars, grammar_records = {}, []
     for cik in ciks:
         grammars[cik], records = pin_grammar(paths, cik)
@@ -253,7 +255,8 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     built["inputs"] += [{k: r[k] for k in KEEP if k in r} for r in pinned]
     built["inputs"] += [s["source"] for s in slices + [income_slice]]
     built.update(stage="contracts", census_source=dict(run_id=census_run_id, run_root=census["run_root"]),
-                 profile_source=dict(run_id=profile_run_id, run_root=profiles["run_root"]),
+                 profile_source=dict(run_id=profile_run_id, run_root=profiles["run_root"],
+                                     lineage=profiles["lineage"]),
                  grammars={c: (None if g is None else dict(path=g["path"], sha256=g["sha256"], dialect=g["dialect"],
                                                            signatures=g["signatures"],
                                                            anchors_source=g["anchors_source"], provenance="inherited"))
@@ -290,7 +293,8 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                 paths, cik=cik, report_date=row["report_date"], holdings_path=holdings_path,
                 income_path=income_slice["path"], census_doc=q1_doc,
                 min_quarters=contracts.frozen_min_quarters(tolerances))
-            return contracts.learn_contracts(cik=cik, q1_doc=q1_doc, q1_profile=load_profile(profile_record),
+            q1_profile = load_profile(profile_record, census_sha256=profiles["census_sha256"][cik])
+            return contracts.learn_contracts(cik=cik, q1_doc=q1_doc, q1_profile=q1_profile,
                                              grammar=grammars[cik], yield_q1=yield_q1, tolerances=tolerances,
                                              q2_listing=_q2_listing(census, cik), recorded_at=recorded_at)
 

@@ -24,6 +24,7 @@ FILLED = ("reported", "consistent_duplicate")
 UNOBSERVABLE = ("unobservable", "not_collected")
 IDENTIFIER_FIELD = "investment_identifier"
 RATIO_CLASSES = ("pure", "percent", "bps")
+UNIT_NOT_OBSERVABLE = "unit_not_observable"
 PERCENT_MEASURES = frozenset({"percent", "pct", "percentage"})
 BPS_MEASURES = frozenset({"bps", "bp", "basispoint", "basispoints"})
 NO_SIGNATURE_FINDINGS = ("too_few_identifiers",)
@@ -54,8 +55,13 @@ def _decimal(value):
 
 
 def scale_class(fact: dict | None, units: dict) -> str:
+    """Declared unit class of the fact behind a filled field.
+
+    A filled field with no fact index cannot show its unit: that is UNIT_NOT_OBSERVABLE
+    (inability to observe -> insufficient_evidence downstream), never `unresolved_unit`
+    (a unit that WAS observed but is not a recognised ratio/monetary/shares unit)."""
     if not fact:
-        return "unresolved_unit"
+        return UNIT_NOT_OBSERVABLE
     if fact.get("value_kind") != "numeric":
         return "text"
     if fact.get("unit_kind") in ("monetary", "shares"):

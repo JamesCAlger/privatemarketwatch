@@ -44,7 +44,7 @@ def _resolve():
 _PATHS, _PROBLEM = _resolve()
 _STATE: dict = dict(guard_installed_at_import=False, conftest_guard_extended=False)
 if _PATHS is not None:
-    protection.install_open_guard(_PATHS.protected_roots)
+    protection.install_open_guard(protection.guarded_roots(_PATHS))
     _STATE["guard_installed_at_import"] = True
 
 
@@ -99,6 +99,7 @@ def pytest_sessionfinish(session, exitstatus):
         comparison = protection.compare(before, after)
         body = protection.summarize(before, after, comparison)
     body.update(protected_roots=[str(r) for r in _PATHS.protected_roots],
+                read_only_roots=[str(r) for r in _PATHS.read_only_roots],
                 guard_installed_at_import=_STATE["guard_installed_at_import"],
                 conftest_guard_extended=_STATE["conftest_guard_extended"],
                 conftest_roots_unchanged=_STATE.get("conftest_roots_unchanged"),

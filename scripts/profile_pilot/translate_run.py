@@ -6,7 +6,9 @@
 Order, all in a NEW write-once run root (R18/R26 pattern):
   1. pin the profile root: manifest.json, results/profile_summary.json,
      inventories/m1_comparison_semantics.json and every profile file read (sha256 checked
-     against profile_summary);
+     against profile_summary); lineage (I1): the census root the profile root names must
+     list, per derived profile, the census sha256 that profile was derived from
+     (lineage.check_profile_lineage; its authoritative.json is pinned too);
   2. pin the base wrappers: HEAD (tracked file == `git show HEAD:` bytes, blob recorded) and
      the eed082b bytes the profile root re-materialised (sha from its manifest, blob and
      sha re-derived from git);
@@ -29,7 +31,7 @@ from pathlib import Path
 import sys
 import time
 
-from scripts.profile_pilot import cohort, m1, manifest, profile, protection, translate
+from scripts.profile_pilot import cohort, lineage, m1, manifest, profile, protection, translate
 from scripts.profile_pilot.manifest import StageInvalidated
 from scripts.profile_pilot.paths import (PathError, PilotPaths, discover_main_root, resolve_paths,
                                          write_once_json)
@@ -40,6 +42,8 @@ EXIT_REFUSED = 4
 RUN_PREFIX = "stageb-translate-"
 CODE_FILES = (translate.WRAPPER_SCHEMA_RELATIVE, translate.LOADER_RELATIVE,
               "scripts/profile_pilot/translate.py", "scripts/profile_pilot/translate_run.py",
+              "scripts/profile_pilot/lineage.py", "pipeline/staging_bdc.py",
+              "pipeline/wrapper_content_signatures.py",
               "scripts/profile_pilot/envelope.py", "scripts/profile_pilot/m1.py",
               "scripts/profile_pilot/profile.py", "pipeline/extract_companyfacts.py",
               "scripts/profile_pilot/schemas/filer_profile_v0.schema.json",
@@ -72,6 +76,16 @@ def pin_profile_root(paths: PilotPaths, profile_run_id: str, ciks) -> dict:
                    semantics=_record(root / m1.SEMANTICS_RELATIVE, "profile_root/" + m1.SEMANTICS_RELATIVE))
     summary = json.loads(Path(records["summary"]["path"]).read_text(encoding="ascii"))
     body = json.loads(Path(records["manifest"]["path"]).read_text(encoding="ascii"))
+    # Lineage (I1), transitively: the profile root names its census root; that root's
+    # authoritative listing must hold, per derived profile, the census bytes it was derived from.
+    census_run_id = summary.get("census_run_id")
+    if not census_run_id or (body.get("census_source") or {}).get("run_id") != census_run_id:
+        raise StageInvalidated("profile root summary and manifest disagree on the census root: "
+                               + repr(census_run_id) + " vs " + repr((body.get("census_source") or {}).get("run_id")))
+    census = lineage.load_authoritative_census(paths, census_run_id, roles=tuple(lineage.ERA_ROLES.values()),
+                                               ciks=ciks, label_prefix="census_root/", hash_files=False)
+    checked = lineage.check_profile_lineage(summary, census_run_id=census_run_id, census_rows=census["rows"],
+                                            ciks=ciks, eras=profile.ERAS)
     profiles = {}
     for cik in ciks:
         for era in profile.ERAS:
@@ -84,9 +98,12 @@ def pin_profile_root(paths: PilotPaths, profile_run_id: str, ciks) -> dict:
             record = _record(root / relative, "profile_root/" + relative)
             if record["sha256"] != listed.get("sha256"):
                 raise StageInvalidated("profile file differs from profile_summary: " + relative)
-            profiles[(cik, era)] = dict(status="present", relative=relative, record=record)
+            profiles[(cik, era)] = dict(status="present", relative=relative, record=record,
+                                        census_sha256=listed["census_sha256"])
     return dict(run_id=profile_run_id, run_root=str(root), git_head=summary.get("git_head"),
-                records=records, profiles=profiles, verified_era=body["verified_era"])
+                records=records, profiles=profiles, verified_era=body["verified_era"],
+                census_root=dict(run_id=census_run_id, run_root=census["run_root"],
+                                 authoritative=census["authoritative"], lineage=checked))
 
 
 def pin_base_wrappers(paths: PilotPaths, pins: dict, ciks) -> dict:
@@ -119,7 +136,8 @@ def build_manifest(paths: PilotPaths, pins: dict, bases: dict, *, ciks, as_of: s
     base_records = [r for b in bases.values() for r in (b["q1"], b["same_era"])]
     keep = ("label", "path", "status", "sha256", "bytes")
     inputs = ([{k: r[k] for k in keep} for r in list(pins["records"].values()) + profile_records + base_records]
-              + [{k: r[k] for k in keep} for r in code])
+              + [{k: r[k] for k in keep} for r in code]
+              + [{k: pins["census_root"]["authoritative"][k] for k in keep}])
     built = dict(manifest_version=manifest.MANIFEST_VERSION, stage="translate", run_id=paths.run_id,
                  roots=dict(main_repo_root=str(paths.main_repo_root), code_root=str(paths.code_root),
                             data_root=str(paths.data_root), run_root=str(paths.run_root)),
@@ -129,6 +147,7 @@ def build_manifest(paths: PilotPaths, pins: dict, bases: dict, *, ciks, as_of: s
                  profile_root=dict(run_id=pins["run_id"], run_root=pins["run_root"], git_head=pins["git_head"],
                                    files={k: v for k, v in pins["records"].items()},
                                    profiles={c + "/" + e: p for (c, e), p in pins["profiles"].items()}),
+                 census_root=pins["census_root"],
                  base_wrappers=bases, code=code, inputs=inputs,
                  stage_config=dict(ciks=list(ciks), eras=list(profile.ERAS), as_of=as_of,
                                    translate_version=translate.TRANSLATE_VERSION,
@@ -153,6 +172,7 @@ def translate_one(paths: PilotPaths, cik: str, era: str, pin: dict, base: dict, 
             raise StageInvalidated("profile result is incomplete: " + pin["relative"])
         prof = doc["result"]
         profile.validate_document(prof)
+        lineage.check_profile_document_source(prof, census_sha256=pin["census_sha256"], label=pin["relative"])
         base_wrapper = m1.load_wrapper(base["path"], expected_sha256=base["sha256"])
         result = translate.to_wrapper_v3(prof, base_wrapper, prof["report_date"], prof["form_type"], as_of=as_of)
         wrapper = translate.write_wrapper(paths, cik, era, result["wrapper"])
@@ -181,7 +201,8 @@ def _row(result: dict, admission: dict, sidecar: dict) -> dict:
                 consumer_parity=sidecar["consumer_parity"],
                 sections_translated=side["sections_translated"], entries_used=side["entries_used"],
                 translated=[dict(profile_key=t["profile_key"], wrapper_pointer=t["wrapper_pointer"], via=t["via"],
-                                 equal_to_base=t["equal_to_base"]) for t in side["translated"]],
+                                 coverage_class=t["coverage_class"], equal_to_base=t["equal_to_base"])
+                            for t in side["translated"]],
                 not_expressible=[dict(profile_key=n["profile_key"], reasons=n["reasons"], entry_ids=n["entry_ids"],
                                       wrapper_pointer=n["wrapper_pointer"], detail=n["detail"],
                                       would_create=n.get("would_create", []))
@@ -250,9 +271,15 @@ def run_stage(paths: PilotPaths, *, profile_run_id: str, ciks=None, as_of: str |
             entries_used=sum(r["entries_used"] for r in rows),
             mean_coverage=round(sum(r["coverage"]["ratio"] for r in rows) / len(rows), 6) if rows else None,
             profile_driven_fields=sum(r["coverage"]["profile_driven"] for r in rows),
+            profile_driven_header=sum(r["coverage"]["profile_driven_header"] for r in rows),
+            profile_driven_structural=sum(r["coverage"]["profile_driven_structural"] for r in rows),
+            profile_driven_via_inherited=sum(r["coverage"]["profile_driven_via_inherited"] for r in rows),
+            mean_structural_coverage=(round(sum(r["coverage"]["structural_ratio"] for r in rows) / len(rows), 6)
+                                      if rows else None),
             fields_total=sum(r["coverage"]["fields_total"] for r in rows),
             directory_error=admissions[era]["directory_error"], base_error=admissions[era]["base_error"],
-            loader_state_mutations=admissions[era]["state_mutations"])
+            loader_state_mutations=admissions[era]["state_mutations"],
+            wrapper_consumers=admissions[era]["wrapper_consumers"])
     summary = dict(run_id=paths.run_id, git_head=built["git"]["head"],
                    dirty_source_digest=built["git"]["dirty_source_digest"], profile_run_id=profile_run_id,
                    as_of=as_of, finished_utc=_now(), seconds=round(time.perf_counter() - started, 1),
@@ -294,7 +321,9 @@ def main(argv=None) -> int:
     for era, row in summary["totals"].items():
         print(era + ": " + json.dumps({k: row[k] for k in (
             "ciks", "admitted", "schema_pass", "not_expressible", "not_expressible_by_reason", "entries_used",
-            "mean_coverage", "fields_added", "created_objects", "consumer_parity_true", "spec_parity_true")},
+            "mean_coverage", "profile_driven_fields", "profile_driven_header", "profile_driven_structural",
+            "profile_driven_via_inherited", "fields_total", "fields_added", "created_objects",
+            "consumer_parity_true", "spec_parity_true", "loader_state_mutations")},
             sort_keys=True))
     return 0
 

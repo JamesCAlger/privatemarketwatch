@@ -39,7 +39,7 @@ import copy
 from scripts.profile_pilot import envelope
 from scripts.profile_pilot.census import POSITION_FIELDS, POSITION_RATE, field_channel
 from scripts.profile_pilot.contracts_observe import (  # noqa: F401  (current_positions, grammar_info re-exported)
-    IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, WHOLE_FILING, as_grammars, canonical, channel_gaps,
+    IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, UNIT_NOT_OBSERVABLE, WHOLE_FILING, as_grammars, canonical, channel_gaps,
     current_positions, grammar_for, grammar_info, grammar_observation, learn_partitions, observe_field, quantile,
     route, routing_rows, widened)
 
@@ -213,6 +213,8 @@ def _learn_scale(obs: dict, gaps: list, conventions: dict) -> tuple[dict | None,
     if any(c["reason"] == "unit_differs" for c in obs["conflicts"]):
         return None, "conflicting_units_on_one_field"
     classes = list(obs["classes"])
+    if UNIT_NOT_OBSERVABLE in classes:
+        return None, "unit_not_observable_no_fact_index"
     if len(classes) > 1:
         return None, "mixed_declared_units_unresolved"
     if classes[0] not in RATIO_CLASSES:
@@ -531,11 +533,18 @@ def _evaluate_scale(c, q2, obs) -> dict:
     if not obs["filled"]:
         return _result(c, "insufficient_evidence", q2, cause="no_q2_values_to_assess", expected=exp,
                        observed=observed)
-    other = {k: v for k, v in obs["class_keys"].items() if k != expected_class}
+    # A filled field with no fact index cannot show its unit: inability to observe is
+    # insufficient_evidence, never a declared-unit breach. A differing unit that WAS
+    # observed on other rows is still a breach.
+    other = {k: v for k, v in obs["class_keys"].items() if k not in (expected_class, UNIT_NOT_OBSERVABLE)}
+    unobservable = obs["class_keys"].get(UNIT_NOT_OBSERVABLE, [])
     unit_conflicts = [x["context_id"] for x in obs["conflicts"] if x["reason"] == "unit_differs"]
     if other:
         return _result(c, "breach", q2, cause="declared_unit_class_changed", expected=exp, observed=observed,
                        keys={k for v in other.values() for k in v})
+    if unobservable:
+        return _result(c, "insufficient_evidence", q2, cause="unit_not_observable_no_fact_index", expected=exp,
+                       observed=observed, keys=unobservable)
     if unit_conflicts:
         return _result(c, "insufficient_evidence", q2, cause="conflicting_units_on_one_field", expected=exp,
                        observed=observed, keys=unit_conflicts)

@@ -104,6 +104,13 @@ class PilotPaths:
                 unique.append(root)
         return tuple(unique)
 
+    @property
+    def read_only_roots(self) -> tuple[Path, ...]:
+        """Production inputs the pilot must never change: the code root's data/overrides
+        (wrappers, grammars, anchors, corrections). Inventoried before/after like the
+        protected roots; any change fails preservation."""
+        return (self.code_root.joinpath("data", "overrides").resolve(strict=False),)
+
 
 def resolve_paths(*, main_repo_root, data_root, code_root, run_id) -> PilotPaths:
     main = _explicit_dir(main_repo_root, "main_repo_root")

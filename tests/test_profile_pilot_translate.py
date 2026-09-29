@@ -278,6 +278,22 @@ def test_stale_entries_are_rejected_with_and_without_as_of():
         translate.to_wrapper_v3(edited, base_wrapper(), Q, "10-Q", as_of=LATER)
 
 
+def test_coverage_splits_header_structural_and_via_inherited():
+    # Finding I5: header (cik, entity_name) and via-inherited fields never count as structural.
+    out = translate.to_wrapper_v3(make_profile(BASIC + (FV_ENTRY,)), base_wrapper(), Q, "10-Q")
+    cov = out["sidecar"]["coverage"]
+    assert (cov["profile_driven"], cov["profile_driven_header"], cov["profile_driven_structural"],
+            cov["profile_driven_via_inherited"]) == (4, 2, 1, 1)
+    assert cov["structural_ratio"] == round(1 / cov["fields_total"], 6)
+    assert cov["ratio"] == round(4 / cov["fields_total"], 6)
+    classes = {t["wrapper_pointer"]: t["coverage_class"] for t in out["sidecar"]["translated"]}
+    assert classes == {"/cik": "header", "/entity_name": "header", "/identifier_format/delimiter": "structural",
+                       "/invariants/fv_reconciliation/source_field": "via_inherited"}
+    only_header = translate.to_wrapper_v3(make_profile(BASIC[:2]), base_wrapper(), Q, "10-Q")["sidecar"]["coverage"]
+    assert only_header["profile_driven"] == 2 and only_header["profile_driven_structural"] == 0
+    assert only_header["structural_ratio"] == 0.0
+
+
 def test_a_mostly_copied_wrapper_reports_low_coverage_beside_high_parity():
     out = translate.to_wrapper_v3(make_profile(BASIC[:1]), base_wrapper(), Q, "10-Q")
     cov, parity = out["sidecar"]["coverage"], out["sidecar"]["parity"]
@@ -370,32 +386,97 @@ def test_silent_loader_skip_is_a_rejection_with_a_reason(tmp_path):
     assert v["admitted"] is False and "dispatch" in v["error"]
 
 
-def test_restored_wrapper_context_restores_module_state_even_on_failure(tmp_path):
+def _consumer_bindings():
+    from pipeline import staging_bdc, wrapper_content_signatures
+    return dict(loader=(bdc_xbrl_wrapper, "_WRAPPER_DEFINITIONS_DIR"),
+                staging=(staging_bdc, "_WRAPPER_DEFINITIONS_DIR"),
+                signatures=(wrapper_content_signatures, "WRAPPER_DEFINITIONS_DIR"))
+
+
+def test_restored_wrapper_context_restores_all_three_consumers_even_on_failure(tmp_path):
+    # Finding I2: loader, staging_bdc and wrapper_content_signatures each bind their own directory.
     module = bdc_xbrl_wrapper
-    specs, directory = module.WRAPPER_SPECS, module._WRAPPER_DEFINITIONS_DIR
+    bindings = _consumer_bindings()
+    originals = {name: getattr(mod, attr) for name, (mod, attr) in bindings.items()}
+    specs, specs_items = module.WRAPPER_SPECS, dict(module.WRAPPER_SPECS)
     logger = logging.getLogger(module.__name__)
     level, handlers, propagate = logger.level, list(logger.handlers), logger.propagate
+    redirect = tmp_path / "generated"
     with pytest.raises(RuntimeError, match="boom"):
-        with translate.restored_wrapper_context() as ctx:
+        with translate.restored_wrapper_context(redirect) as ctx:
+            for name, (mod, attr) in bindings.items():
+                assert getattr(mod, attr) == redirect, name  # redirected for the duration
+                setattr(mod, attr, tmp_path / ("rebound_" + name))
             module.WRAPPER_SPECS = {}
-            module._WRAPPER_DEFINITIONS_DIR = tmp_path
             logger.setLevel(logging.CRITICAL)
             logger.propagate = False
-            assert ctx.loader is module._load_specs_from_json
             raise RuntimeError("boom")
-    assert module.WRAPPER_SPECS is specs and module._WRAPPER_DEFINITIONS_DIR == directory
+    for name, (mod, attr) in bindings.items():
+        assert getattr(mod, attr) is originals[name], name
+    assert module.WRAPPER_SPECS is specs
     assert (logger.level, logger.handlers, logger.propagate) == (level, handlers, propagate)
+    assert sorted(ctx.mutations) == sorted(["pipeline.bdc_xbrl_wrapper._WRAPPER_DEFINITIONS_DIR",
+                                            "pipeline.bdc_xbrl_wrapper.WRAPPER_SPECS",
+                                            "pipeline.staging_bdc._WRAPPER_DEFINITIONS_DIR",
+                                            "pipeline.wrapper_content_signatures.WRAPPER_DEFINITIONS_DIR"])
+    # In-place mutation of the loader's spec map is detected AND undone.
     with translate.restored_wrapper_context() as ctx:
-        module.WRAPPER_SPECS = {}
-    assert module.WRAPPER_SPECS is specs and ctx.mutations == ["WRAPPER_SPECS"]
+        module.WRAPPER_SPECS["0000000000"] = object()
+    assert module.WRAPPER_SPECS is specs and dict(module.WRAPPER_SPECS) == specs_items
+    assert ctx.mutations == ["pipeline.bdc_xbrl_wrapper.WRAPPER_SPECS"]
+    # A clean context reports no mutation and restores the redirect.
+    with translate.restored_wrapper_context(redirect) as ctx:
+        pass
+    assert ctx.mutations == []
+    assert all(getattr(mod, attr) is originals[name] for name, (mod, attr) in bindings.items())
 
 
-def test_nothing_is_written_under_data_overrides():
-    source = (CODE_ROOT / "scripts" / "profile_pilot" / "translate.py").read_text(encoding="ascii")
-    runner = (CODE_ROOT / "scripts" / "profile_pilot" / "translate_run.py").read_text(encoding="ascii")
-    for text in (source, runner):
-        assert "reload_wrapper_specs" not in text
-        assert "write_text" not in text
+def test_admission_records_the_directory_each_consumer_read(tmp_path):
+    paths = fake_paths(tmp_path, run_id="stageb-translate-test")
+    real = json.loads((CODE_ROOT / "data" / "overrides" / "bdc_xbrl_wrappers" / (CIK + ".json")).read_text("utf-8"))
+    translate.write_overlay(paths, CIK, "q1", translate.to_wrapper_v3(make_profile(BASIC[:2]), real, Q, "10-Q"))
+    base_dir = tmp_path / "base"
+    base_dir.mkdir()
+    (base_dir / (CIK + ".json")).write_text(json.dumps(real), encoding="utf-8")
+    generated = paths.run_root / "translate" / "wrappers_q1"
+    report = translate.admit_directory(generated, [CIK], base_dir=base_dir)["wrapper_consumers"]
+    consumers = report["consumers"]
+    assert report["redirected_to"] == str(generated)
+    assert consumers["loader"]["reads"] == [str(generated), str(base_dir)]
+    assert consumers["loader"]["invoked"] is True
+    for name in ("staging", "signatures"):
+        assert consumers[name]["bound"] == str(generated)
+        assert consumers[name]["reads"] == [] and consumers[name]["invoked"] is False
+        assert "Stage C" in consumers[name]["note"]
+    production = str(CODE_ROOT / "data" / "overrides" / "bdc_xbrl_wrappers")
+    assert {consumers[n]["original"] for n in consumers} == {production}
+    for name, (mod, attr) in _consumer_bindings().items():
+        assert str(getattr(mod, attr)) == production, name
+
+
+def test_nothing_is_written_under_data_overrides(tmp_path):
+    # Minor B: data/overrides is a read-only root of the preservation inventory; the translate
+    # stage (loader redirection included) runs inside it and the receipt must PASS.
+    from tests.test_profile_pilot_profile import NOW as PNOW, build_census_root, sibling
+    from scripts.profile_pilot import profile_run, protection
+    overrides = (CODE_ROOT / "data" / "overrides").resolve()
+    census_paths = build_census_root(tmp_path)
+    profile_run.run_stage(sibling(census_paths, run_id="stageb-profile-test"), census_run_id=census_paths.run_id,
+                          ciks=[CIK], recorded_at=PNOW)
+    paths = sibling(census_paths, run_id="stageb-translate-test")
+    assert overrides in paths.read_only_roots
+    assert str(overrides) in {str(s.path) for s in protection.root_specs(paths)}
+    before = protection.inventory(protection.root_specs(paths))
+    assert any(p.startswith(str(overrides)) for p in before["files"])
+    code = translate_run.main(["run", "--main-root", str(paths.main_repo_root), "--data-root", str(paths.data_root),
+                               "--run-id", paths.run_id, "--profile-run-id", "stageb-profile-test", "--cik", CIK])
+    assert code == 0
+    after = protection.inventory(protection.root_specs(paths))
+    assert protection.compare(before, after)["ok"]
+    [receipt] = (paths.run_root / "verification").glob("*_translate_preservation.json")
+    body = json.loads(receipt.read_text(encoding="ascii"))
+    assert body["verdict"] == "PASS" and str(overrides) in body["read_only_roots"]
+    assert str(overrides) in {s["path"] for s in body["before"]["specs"]}
 
 
 # ---------------------------------------------------------------- stage (fake roots)
@@ -425,8 +506,11 @@ def test_stage_writes_wrappers_sidecars_and_summary_under_the_run_root(tmp_path)
         assert row["not_expressible"] == [] and row["entries_used"] == 2
         assert row["schema_validation"] == dict(verdict="pass", errors=[])
         assert row["loader_admission"]["admitted"] is True and row["loader_admission"]["error"] is None
-        assert row["coverage"] == dict(fields_total=n, profile_driven=2, profile_driven_via_inherited=0,
-                                       inherited=n - 2, ratio=round(2 / n, 6))
+        assert row["coverage"] == dict(fields_total=n, profile_driven=2, profile_driven_header=1,
+                                       profile_driven_structural=1, profile_driven_via_inherited=0,
+                                       inherited=n - 2, ratio=round(2 / n, 6), structural_ratio=round(1 / n, 6))
+        assert [t["coverage_class"] for t in row["translated"]] == ["header", "structural"]
+        assert summary["admission"][era]["wrapper_consumers"]["consumers"]["staging"]["invoked"] is False
         assert row["inherited_overlay"]["field_count"] == n - 2
         assert row["fields_added"] == [] and row["created_objects"] == []
         assert row["consumer_parity"] == dict(verdict=True, spec_parity=True, created_objects=[])
@@ -436,6 +520,11 @@ def test_stage_writes_wrappers_sidecars_and_summary_under_the_run_root(tmp_path)
         assert (totals["admitted"], totals["schema_pass"], totals["not_expressible"]) == (1, 1, 0)
         assert totals["not_expressible_by_reason"] == {}
         assert (totals["fields_added"], totals["consumer_parity_true"]) == (0, 1)
+        assert (totals["profile_driven_fields"], totals["profile_driven_header"], totals["profile_driven_structural"],
+                totals["profile_driven_via_inherited"]) == (2, 1, 1, 0)
+        assert totals["loader_state_mutations"] == []
+        assert summary["admission"][era]["wrapper_consumers"]["consumers"]["loader"]["reads"][0].endswith(
+            "wrappers_" + era)
     manifest_body = json.loads((root / "manifest.json").read_text(encoding="ascii"))
     labels = {r["label"] for r in manifest_body["inputs"]}
     assert "code/schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json" in labels
@@ -443,8 +532,46 @@ def test_stage_writes_wrappers_sidecars_and_summary_under_the_run_root(tmp_path)
     assert "profile_root/profiles/" + CIK + "/q1.json" in labels
     assert "base_wrapper/q1/" + CIK in labels and "base_wrapper/same_era/" + CIK in labels
     assert (root / "results" / "translate_summary.json").is_file()
+    assert manifest_body["census_root"]["run_id"] == census_paths.run_id
+    assert manifest_body["census_root"]["lineage"]["ok"] is True
+    assert "census_root/results/authoritative.json" in labels
     with pytest.raises(translate.PathError):
         translate_run.run_stage(paths, profile_run_id="stageb-profile-test", ciks=[CIK], as_of=PNOW)
+
+
+def test_translate_refuses_a_profile_root_whose_census_lineage_does_not_hold(tmp_path):
+    # Finding I1, transitively: profile root -> the census root it names -> the census bytes listed there.
+    from tests.test_profile_pilot_profile import NOW as PNOW, build_census_root, sibling
+    from scripts.profile_pilot import profile_run
+    from scripts.profile_pilot.manifest import StageInvalidated
+    census_paths = build_census_root(tmp_path)
+    profile_run.run_stage(sibling(census_paths, run_id="stageb-profile-test"), census_run_id=census_paths.run_id,
+                          ciks=[CIK], recorded_at=PNOW)
+    listing = census_paths.run_root / "results" / "authoritative.json"
+    original = listing.read_text(encoding="ascii")
+    body = json.loads(original)
+    for row in body["fund_quarters"]:
+        if row["role"] == "verified_era":
+            row["census_sha256"] = "f" * 64
+    listing.write_text(json.dumps(body), encoding="ascii")
+    paths = sibling(census_paths, run_id="stageb-translate-test")
+    with pytest.raises(StageInvalidated, match="same_era was derived from census"):
+        translate_run.run_stage(paths, profile_run_id="stageb-profile-test", ciks=[CIK], as_of=PNOW)
+    assert not (paths.run_root / "translate").exists()
+    code = translate_run.main(["run", "--main-root", str(paths.main_repo_root), "--data-root", str(paths.data_root),
+                               "--run-id", "stageb-translate-test2", "--profile-run-id", "stageb-profile-test",
+                               "--cik", CIK])
+    assert code == translate_run.EXIT_INVALIDATED
+    # A non-pass verdict in the named census root is refused as well (one shared reader).
+    body = json.loads(original)
+    body["fund_quarters"][0].pop("validation_verdict")
+    listing.write_text(json.dumps(body), encoding="ascii")
+    with pytest.raises(StageInvalidated, match="validation_verdict"):
+        translate_run.run_stage(sibling(census_paths, run_id="stageb-translate-test3"),
+                                profile_run_id="stageb-profile-test", ciks=[CIK], as_of=PNOW)
+    listing.write_text(original, encoding="ascii")
+    translate_run.run_stage(sibling(census_paths, run_id="stageb-translate-test4"),
+                            profile_run_id="stageb-profile-test", ciks=[CIK], as_of=PNOW)
 
 
 # ---------------------------------------------------------------- cached profile (launcher only)

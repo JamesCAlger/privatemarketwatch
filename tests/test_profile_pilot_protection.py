@@ -98,6 +98,46 @@ def test_protected_session_passes_when_untouched(tmp_path):
     assert receipt["before"]["file_count"] >= 2
 
 
+def _fake_code_root(tmp_path):
+    code = tmp_path / "code"
+    (code / "pipeline").mkdir(parents=True)
+    (code / "scripts" / "profile_pilot").mkdir(parents=True)
+    (code / "scripts" / "profile_pilot" / "__init__.py").write_text("", encoding="ascii")
+    wrappers = code / "data" / "overrides" / "bdc_xbrl_wrappers"
+    wrappers.mkdir(parents=True)
+    (wrappers / "0000000001.json").write_text("{}", encoding="ascii")
+    return code
+
+
+@pytest.mark.parametrize("change", ["python", "native", "delete"])
+def test_a_change_under_data_overrides_fails_preservation(tmp_path, change):
+    # Minor B: the code root's data/overrides is a read-only root (inventoried before/after).
+    from scripts.profile_pilot.paths import resolve_paths
+    main = fake_paths(tmp_path).main_repo_root
+    paths = resolve_paths(main_repo_root=main, data_root=main / "data", code_root=_fake_code_root(tmp_path),
+                          run_id="stageb-test")
+    wrapper = paths.code_root / "data" / "overrides" / "bdc_xbrl_wrappers" / "0000000001.json"
+    assert paths.read_only_roots == ((paths.code_root / "data" / "overrides").resolve(),)
+    specs = {str(s.path): s.mode for s in protection.root_specs(paths)}
+    assert specs[str(paths.read_only_roots[0])] == "full"
+    with pytest.raises(PreservationError):
+        with protection.protected_session(paths, receipt="verification/overrides.json"):
+            if change == "python":
+                with pytest.raises(AssertionError, match="protected"):
+                    wrapper.write_text("{\"x\": 1}", encoding="ascii")
+                os.utime(wrapper, ns=(1, 1))  # a change the Python guard cannot see
+            elif change == "native":
+                con = duckdb.connect()
+                target = wrapper.parent / "native.json"
+                con.execute("COPY (SELECT 1 AS a) TO '" + target.as_posix() + "' (FORMAT csv)")
+                con.close()
+            else:
+                wrapper.unlink()
+    receipt = json.loads((paths.run_root / "verification" / "overrides.json").read_text())
+    assert receipt["verdict"] == "FAIL"
+    assert str(paths.read_only_roots[0]) in receipt["read_only_roots"]
+
+
 def test_inventory_inspection_failure_fails_preservation(tmp_path, monkeypatch):
     paths = fake_paths(tmp_path)
     specs = protection.root_specs(paths)
