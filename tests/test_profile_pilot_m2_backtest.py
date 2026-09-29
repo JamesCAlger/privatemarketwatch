@@ -118,9 +118,12 @@ def test_fingerprint_positives_are_computed_per_consecutive_selected_accession()
     selected = [("0001950803", "2024-09-30", "0001193125-24-258463"), ("0001950803", "2024-12-31", "0001193125-25-067163"),
                 ("0001950803", "2025-03-31", "0001193125-25-119892"), ("0001950803", "2025-12-31", "0001193125-26-128890")]
     out = bt.fingerprint_positives(rows, selected)
-    got = sorted((p["date"], tuple(p["targets"]["source_concept_set"])) for p in out["positives"])
-    assert got == sorted([("2024-12-31", ("interest_rate",)), ("2025-12-31", ("interest_rate",)),
-                          ("2025-12-31", tuple(sorted(POSITION_RATE)))])
+    scored = [p for p in out["positives"] if p["polarity"] == "positive"]
+    got = sorted((p["date"], tuple(p["targets"]["source_concept_set"])) for p in scored)
+    assert got == [("2024-12-31", ("interest_rate",)), ("2025-12-31", ("interest_rate",))]
+    # extension-namespace rate facts are not position concepts (review I2a): recorded, never scored
+    [ext] = [p for p in out["positives"] if p["polarity"] != "positive"]
+    assert ext["polarity"] == "not_a_position_event" and ext["date"] == "2025-12-31" and ext["reason"]
     assert all(p["category"] == "rate_tag_fingerprint" and "rate_tag_fingerprint_by_accession.csv" in p["source"]
                for p in out["positives"])
     assert out["unmapped_selected"] == []
@@ -142,6 +145,30 @@ def test_findings_ledger_rows_map_to_kinds_and_false_alarms_are_negative_evidenc
     assert by["ledger:R2"]["targets"] == {"format_grammar": ["investment_identifier"], "value_range": ["basis_spread"]}
     assert by["ledger:R3"]["targets"]["value_range"] == ["pik_rate"]
     assert all("findings_ledger_post.csv" in p["source"] for p in out)
+    # no v2 kind tests identifier text against the XBRL value (review I2b): not covered until B2-3
+    [agent] = bt.ledger_positives([dict(review_id="R4", state="real_error_unremediated", cik="0001860424",
+                                        rule_name="agentA_spread_vs_xbrl", report_date="2025-12-31")])
+    assert agent["polarity"] == "positive" and "text_agreement" in agent["not_covered_reason"]
+    assert by["ledger:R1"].get("not_covered_reason") is None
+
+
+def test_bcred_comparative_period_spread_row_is_a_coverage_gap_not_a_scale_positive():
+    [row] = [r for r in bt.TYPED_POSITIVES if r["positive_id"] == "semantic:0001803498:basis_spread_scale"]
+    assert row["category"] == "comparative_period_coverage_gap" and row["expect"] == "not_covered"
+    assert "comparative facts" in row["not_covered_reason"] and "current positions" in row["not_covered_reason"]
+
+
+def test_a_not_covered_row_scores_not_covered_and_leaves_its_results_as_negatives():
+    pairs = [_pair("p", "2025-09-30", "2025-12-31")]
+    results = {"p": [_res("format_grammar", "investment_identifier", "breach", ["k"]),
+                     _res("value_range", "basis_spread", "holds")]}
+    row = dict(_pos("G", "2025-12-31", {"format_grammar": ["investment_identifier"], "value_range": ["basis_spread"]}),
+               not_covered_reason="no v2 kind")
+    s = bt.score(pairs, results, [row], mode="rolling")
+    assert sorted((u["kind"], u["outcome"]) for u in s["positive_units"]) == [
+        ("format_grammar", "not_covered"), ("value_range", "not_covered")]
+    assert s["by_kind"]["format_grammar"]["negatives"]["breach"] == 1 and len(s["unadjudicated"]) == 1
+    assert s["by_kind"]["format_grammar"]["negatives"]["breach_rate_of_decided"] == 1.0
 
 
 def test_recogniser_format_quarters_become_positives_scored_in_both_directions():

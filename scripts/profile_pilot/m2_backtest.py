@@ -106,7 +106,14 @@ LEDGER_CSV = "output/quarter_pass/q1p3_20260831/findings_ledger_post.csv"
 SEMANTIC_CSV = "scratch/2026-09-29_filer_profile_example/semantic_census_by_fund_quarter.csv"
 FINGERPRINT_CLASSES = (("bare", "n_bare", ("interest_rate",)), ("cash", "n_cash", ("interest_rate",)),
                        ("pik", "n_pik", ("pik_rate",)), ("floor", "n_floor", ("interest_rate_floor",)),
-                       ("ext", "n_ext_rate_facts", tuple(sorted(POSITION_RATE))))
+                       ("ext", "n_ext_rate_facts", None))
+EXT_REASON = ("extension-namespace rate facts are not position concepts (review I2a: Stepstone's are SOFR benchmark "
+              "levels on VariableRateAxis contexts that never enter a position concept set): recorded, never scored")
+AGENTA_REASON = ("no v2 contract kind tests identifier text against the XBRL value (review I2b); B2-3 adds "
+                 "text_agreement")
+COMPARATIVE_REASON = ("owner-session semantic census counted comparative facts; M2 reads current positions by design "
+                      "(review I1: the 488 values >= 1 sit on the FY2022 10-K's 2021-12-31 comparative contexts; all "
+                      "current-period spreads are < 1 under pure)")
 LEDGER_STATES = ("real_error_unremediated", "remediated_promoted", "remediation_staged")
 LEDGER_NEGATIVE_STATE = "adjudicated_false_alarm"
 LEDGER_RULES = {
@@ -114,9 +121,9 @@ LEDGER_RULES = {
     "fmt_interest_rate": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["interest_rate"]},
     "fmt_pik_rate": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["pik_rate"]},
     "dl_rate_fill": {"fill_rate": ["interest_rate"]},
-    # not named by the brief: an identifier-text spread disagreeing with the XBRL spread is read
-    # as format grammar on the identifier + value range on basis_spread (implementer mapping).
+    # identifier-text spread vs XBRL spread: targets kept for the record, scored not_covered (AGENTA_REASON)
     "agentA_spread_vs_xbrl": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["basis_spread"]}}
+LEDGER_NOT_COVERED = {"agentA_spread_vs_xbrl": AGENTA_REASON}
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",
@@ -128,9 +135,12 @@ CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_
               "pipeline/rate_convention.py", "pipeline/identifier_rate.py", "pipeline/identifier_signature.py")
 
 
-def _typed(pid, cik, day, targets, category, source, check, note, expect="covered"):
-    return dict(positive_id=pid, cik=cik, date=day, targets=targets, category=category, polarity="positive",
-                attach="eval", source=source, check=check, note=note, expect=expect)
+def _typed(pid, cik, day, targets, category, source, check, note, expect="covered", not_covered_reason=None):
+    out = dict(positive_id=pid, cik=cik, date=day, targets=targets, category=category, polarity="positive",
+               attach="eval", source=source, check=check, note=note, expect=expect)
+    if not_covered_reason:
+        out["not_covered_reason"] = not_covered_reason
+    return out
 
 
 _D07 = (("0001588272", "2024-03-31", 325), ("0001588272", "2024-06-30", 1040), ("0001588272", "2024-09-30", 1040),
@@ -162,11 +172,12 @@ TYPED_POSITIVES = [
                 expect={"field": "fair_value", "factor": 0.001}),
            "two-row fair_value x0.001; no scale contract exists for fair_value", expect="not_covered"),
     _typed("semantic:0001803498:basis_spread_scale", "0001803498", "2022-12-31", {"scale": ["basis_spread"]},
-           "semantic_census", "<main>/" + SEMANTIC_CSV + " row cik=0001803498 report_date=2022-12-31 "
+           "comparative_period_coverage_gap", "<main>/" + SEMANTIC_CSV + " row cik=0001803498 report_date=2022-12-31 "
            "spread_repr=mixed(frac=1299,pct=488,big=0) (~27% percent-scaled basis_spread rows)",
            dict(type="csv_row", path=SEMANTIC_CSV, key={"cik": "0001803498", "report_date": "2022-12-31"},
                 expect={"spread_repr": "mixed(frac=1299,pct=488,big=0)"}),
-           "owner-session semantic census finding"),
+           "owner-session semantic census finding; the 488 percent-scaled values are 2021-12-31 comparatives",
+           expect="not_covered", not_covered_reason=COMPARATIVE_REASON),
     _typed("changelog:0001950803:monetary_1000x", "0001950803", "2025-12-31",
            {"scale": ["fair_value", "cost", "principal_amount"]}, "changelog",
            "docs/agent_changelog.md:3361 (2026-06-07 Stepstone 2025-12-31 1000x monetary understatement)",
@@ -254,7 +265,8 @@ def fingerprint_positives(rows, selected) -> dict:
 
     rows: fingerprint CSV rows (cik without padding, accession without dashes); selected: (cik10, quarter,
     accession) of every SELECTED fund-quarter of the census inventory. Class presence (count > 0) is compared;
-    bare/cash -> interest_rate, pik -> pik_rate, floor -> interest_rate_floor, ext -> any rate field."""
+    bare/cash -> interest_rate, pik -> pik_rate, floor -> interest_rate_floor; an ext change is recorded with
+    polarity not_a_position_event (EXT_REASON) and never scored."""
     by_acc = {(str(int(r["cik"])), str(r["accession"]).replace("-", "")): r for r in rows}
     positives, unmapped, seq = [], [], {}
     for cik, quarter, acc in sorted(selected):
@@ -270,11 +282,13 @@ def fingerprint_positives(rows, selected) -> dict:
             for name, _, fields in FINGERPRINT_CLASSES:
                 if name in changed:
                     groups.setdefault(fields, []).append(name)
-            for fields, names in sorted(groups.items()):
+            for fields, names in sorted(groups.items(), key=lambda kv: (kv[0] is None, kv[0] or ())):
+                ext = fields is None
                 positives.append(dict(
                     positive_id="fingerprint:" + cik + ":" + quarter + ":" + "+".join(names), cik=cik, date=quarter,
-                    targets={"source_concept_set": list(fields)}, category="rate_tag_fingerprint",
-                    polarity="positive", attach="eval",
+                    targets={} if ext else {"source_concept_set": list(fields)}, category="rate_tag_fingerprint",
+                    polarity="not_a_position_event" if ext else "positive", attach="eval",
+                    **({"reason": EXT_REASON} if ext else {}),
                     source="data/" + FINGERPRINT_CSV + " accessions " + pacc + " -> " + acc,
                     note="classes " + ",".join(sorted(before)) + " -> " + ",".join(sorted(after)) + " (changed: "
                          + ",".join(names) + ")", expect="covered"))
@@ -292,7 +306,10 @@ def ledger_positives(rows) -> list:
                         date=str(r["report_date"])[:10], targets={k: list(v) for k, v in targets.items()},
                         category="findings_ledger", polarity="recorded_negative" if negative else "positive",
                         attach="eval", source="data/" + LEDGER_CSV + " review_id=" + r["review_id"] + " state="
-                        + r["state"] + " rule=" + r["rule_name"], note=r["rule_name"], expect="covered"))
+                        + r["state"] + " rule=" + r["rule_name"], note=r["rule_name"],
+                        expect="not_covered" if r["rule_name"] in LEDGER_NOT_COVERED else "covered",
+                        **({"not_covered_reason": LEDGER_NOT_COVERED[r["rule_name"]]}
+                           if r["rule_name"] in LEDGER_NOT_COVERED else {})))
     return out
 
 
@@ -504,15 +521,16 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
         hits, carried = _attached(pair, pos_rows)
         negs, _ = _attached(pair, neg_rows)
         for p in hits:
-            others = _targets([q for q in hits if q is not p])
+            others = _targets([q for q in hits if q is not p and not q.get("not_covered_reason")])
             for kind, fields in sorted(p["targets"].items()):
-                covered = [f for f in fields if f in SUITE.get(kind, ())]
+                covered = [] if p.get("not_covered_reason") else [f for f in fields if f in SUITE.get(kind, ())]
                 unit = dict(positive_id=p["positive_id"], category=p["category"], pair_id=pair["pair_id"],
                             cik=pair["cik"], learn_date=pair["learn_date"], eval_date=pair["eval_date"],
                             gapped=pair["gapped"], kind=kind, fields=list(fields), field_mismatch=[])
                 matched = [r for r in res if r["kind"] == kind and r["field"] in covered]
                 if not covered:
                     unit["outcome"] = "not_covered"
+                    unit["not_covered_reason"] = p.get("not_covered_reason") or "no contract kind covers the field"
                 elif not matched:
                     unit["outcome"] = "no_contract"
                 elif any(r["status"] == "breach" for r in matched):
@@ -534,7 +552,10 @@ def score(pairs: list, results: dict, positives: list, *, mode: str, exclude_cat
                     b["units"] += 1
                     b[unit["outcome"]] += 1
                     b["field_mismatch"] += bool(unit["field_mismatch"])
-        targeted, carried_targets, neg_targets = _targets(hits), _targets(carried), {}
+        # a not_covered row claims no result: its target results stay negatives
+        targeted = _targets([p for p in hits if not p.get("not_covered_reason")])
+        carried_targets = _targets([p for p in carried if not p.get("not_covered_reason")])
+        neg_targets = {}
         for p in negs:
             for kind, fields in p["targets"].items():
                 for field in fields:
@@ -597,8 +618,8 @@ def _pct(v) -> str:
 
 def _kind_table(block: dict) -> list:
     lines = ["| kind | pos units | not covered | detected | abstained | missed | field mismatch | recall | "
-             "neg n | neg breach | neg abstain | breach rate (upper bound) | carried |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+             "neg n | neg breach | neg abstain | breach rate (upper bound) | breach rate of decided | carried |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for kind in KNOWN_KINDS:
         v = block["by_kind"].get(kind)
         if not v:
@@ -607,7 +628,7 @@ def _kind_table(block: dict) -> list:
         lines.append("| " + " | ".join(str(x) for x in (
             kind, p["units"], p["not_covered"] + p["no_contract"], p["detected"], p["abstained"], p["missed"],
             p["field_mismatch"], _pct(p["recall"]), n["n"], n["breach"], n["insufficient_evidence"],
-            _pct(n["breach_rate_upper_bound"]), v["carried"])) + " |")
+            _pct(n["breach_rate_upper_bound"]), _pct(n["breach_rate_of_decided"]), v["carried"])) + " |")
     return lines
 
 
@@ -667,11 +688,16 @@ def render_recall(*, run_id: str, scoring: dict, context: dict) -> str:
         lines += ["## Coverage gaps (positives no contract kind covers)", ""]
         gaps = sorted({(u["positive_id"], u["kind"]) for mode_block in scoring.values()
                        for u in mode_block["as_evaluated"]["all"]["positive_units"] if u["outcome"] == "not_covered"})
-        gaps_rows = [p for p in context.get("positives", []) if any(
-            k not in SUITE or not set(f) & set(SUITE[k]) for k, f in p["targets"].items())]
+        gaps_rows = [p for p in context.get("positives", []) if p.get("polarity") == "positive" and (
+            p.get("not_covered_reason") or any(k not in SUITE or not set(f) & set(SUITE[k])
+                                              for k, f in p["targets"].items()))]
         for p in gaps_rows:
-            lines.append("- " + p["positive_id"] + " (" + p["date"] + "): " + json.dumps(p["targets"], sort_keys=True)
-                         + " -- " + p["source"])
+            lines.append("- " + p["positive_id"] + " (" + p["date"] + ", " + p["category"] + "): "
+                         + json.dumps(p["targets"], sort_keys=True) + " -- " + p["source"]
+                         + (" -- " + p["not_covered_reason"] if p.get("not_covered_reason") else ""))
+        excluded_rows = [p for p in context.get("positives", []) if p.get("polarity") == "not_a_position_event"]
+        lines += ["", "Recorded but not scored (not a position event):"]
+        lines += ["- " + p["positive_id"] + ": " + p["reason"] for p in excluded_rows] or ["- none"]
         lines += ["- scored not_covered units: " + str(len(gaps)), "", "## Unscorable positives (rolling)", ""]
         for u in main["unscorable"]:
             lines.append("- " + u["positive_id"] + " " + u["date"] + ": " + u["reason"])
