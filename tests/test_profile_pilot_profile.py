@@ -319,9 +319,14 @@ def test_identical_prefix_sets_with_different_mappings_are_not_exact(tmp_path):
                                [["Debt Securities", "equity"], ["Equity Securities", "debt"]],
                                "derived", None, None)])
     result = score(tmp_path, wrapper, prof)
-    assert cls(result, "dispatch.prefix_rules")["class"] == "partial"
+    # overlapping prefixes with zero matching (prefix, family) pairs is a miss, not partial
+    assert cls(result, "dispatch.prefix_rules")["class"] == "miss"
     assert cls(result, "dispatch.prefix_rules.Debt Securities")["class"] == "miss"
     assert cls(result, "dispatch.prefix_rules.Equity Securities")["class"] == "miss"
+    one_right = synthetic_profile([("subtotals_and_headings.prefix_rules",
+                                    [["Debt Securities", "debt"], ["Equity Securities", "debt"]],
+                                    "derived", None, None)])
+    assert cls(score(tmp_path, wrapper, one_right), "dispatch.prefix_rules")["class"] == "partial"
 
 
 def test_prefix_presence_without_family_mapping_is_not_exact(tmp_path):
@@ -330,7 +335,7 @@ def test_prefix_presence_without_family_mapping_is_not_exact(tmp_path):
     prof = synthetic_profile([("subtotals_and_headings.prefix_rules", [["Debt Securities", None]],
                                "derived", None, None)])
     result = score(tmp_path, wrapper, prof)
-    assert cls(result, "dispatch.prefix_rules")["class"] == "partial"
+    assert cls(result, "dispatch.prefix_rules")["class"] == "miss"
     assert cls(result, "dispatch.prefix_rules.Debt Securities")["class"] == "miss"
     exact = [r["key"] for r in result["keys"] if r["class"] == "exact"]
     assert not [k for k in exact if k.startswith("dispatch.prefix_rules")]
@@ -353,12 +358,20 @@ def test_wrong_tolerance_with_the_right_anchor_field(tmp_path):
          "derived", None, None),
         ("fund_level_concepts.invariants.fv_reconciliation.tolerance_pct", 0.10, "derived", None, None)])
     result = score(tmp_path, wrapper_doc(), prof)
-    assert cls(result, "invariants.fv_reconciliation.source_field")["class"] == "exact"
+    source = cls(result, "invariants.fv_reconciliation.source_field")
+    # the concept -> field translation is the imported companyfacts table: inherited, never exact
+    assert source["class"] == "inherited" and source["provenance"] == "inherited"
+    assert source["inherited_from"].startswith("pipeline/extract_companyfacts.py@")
     assert cls(result, "invariants.fv_reconciliation.tolerance_pct")["class"] == "miss"
     tol_abs = cls(result, "invariants.fv_reconciliation.tolerance_abs")
     assert (tol_abs["class"], tol_abs["reason"]) == ("unresolved", "not_implemented")
-    assert cls(result, "invariants.fv_reconciliation")["class"] == "partial"
-    assert cls(result, "invariants")["class"] == "partial"
+    for key in ("invariants.fv_reconciliation", "invariants"):
+        record = cls(result, key)
+        assert (record["class"], record["reason"]) == ("unresolved", "not_implemented")
+    wrong = synthetic_profile([("fund_level_concepts.investments_at_fair_value_concept",
+                                "us-gaap:Assets", "derived", None, None)])
+    assert cls(score(tmp_path, wrapper_doc(), wrong),
+               "invariants.fv_reconciliation.source_field")["class"] == "miss"
 
 
 def test_a_visible_fund_total_does_not_reproduce_an_invariant(tmp_path):
@@ -370,13 +383,16 @@ def test_a_visible_fund_total_does_not_reproduce_an_invariant(tmp_path):
     for key in ("invariants.fv_reconciliation.tolerance_pct", "invariants.fv_reconciliation.tolerance_abs"):
         record = cls(result, key)
         assert (record["class"], record["reason"]) == ("unresolved", "not_implemented")
-    assert cls(result, "invariants.fv_reconciliation")["class"] == "partial"
+    assert cls(result, "invariants.fv_reconciliation.source_field")["class"] == "inherited"
+    assert cls(result, "invariants.fv_reconciliation")["class"] == "unresolved"
 
 
 def test_extra_aggregate_markers_are_partial_not_exact(tmp_path):
+    """Derived values are full observed labels; wrapper values are any() substring markers.
+    Observed labels cannot reproduce a marker set, so the best class is partial."""
     wrapper = wrapper_doc()
     extra = synthetic_profile([("subtotals_and_headings.aggregate_labels",
-                                ["total investments", "subtotal", "total cash"], "derived", None, None)])
+                                ["total investments (153.8%)", "subtotal", "total cash"], "derived", None, None)])
     record = cls(score(tmp_path, wrapper, extra), "dispatch.aggregate_markers")
     assert record["class"] == "partial" and record["extra"] == ["total cash"] and record["missing"] == []
     fewer = synthetic_profile([("subtotals_and_headings.aggregate_labels", ["Total  Investments"],
@@ -385,17 +401,19 @@ def test_extra_aggregate_markers_are_partial_not_exact(tmp_path):
     assert record["class"] == "partial" and record["missing"] == ["subtotal"]
     same = synthetic_profile([("subtotals_and_headings.aggregate_labels", ["Subtotal", "total investments"],
                                "derived", None, None)])
-    assert cls(score(tmp_path, wrapper, same), "dispatch.aggregate_markers")["class"] == "exact"
+    assert cls(score(tmp_path, wrapper, same), "dispatch.aggregate_markers")["class"] == "partial"
+    disjoint = synthetic_profile([("subtotals_and_headings.aggregate_labels", ["grand sum"],
+                                   "derived", None, None)])
+    assert cls(score(tmp_path, wrapper, disjoint), "dispatch.aggregate_markers")["class"] == "miss"
 
 
 def test_inherited_equality_is_inherited_never_exact(tmp_path):
     source = "data/overrides/bdc_xbrl_wrappers/0001901037.json (corroboration)"
-    prof = synthetic_profile([("subtotals_and_headings.aggregate_labels", ["total investments", "subtotal"],
-                               "inherited", source, None)])
+    prof = synthetic_profile([("identifier_format.delimiter", " | ", "inherited", source, None)])
     result = score(tmp_path, wrapper_doc(), prof)
-    assert cls(result, "dispatch.aggregate_markers")["class"] == "inherited"
+    assert cls(result, "identifier_format.delimiter")["class"] == "inherited"
     assert result["counts"]["exact"] == sum(r["class"] == "exact" for r in result["keys"])
-    assert "dispatch.aggregate_markers" not in [r["key"] for r in result["keys"] if r["class"] == "exact"]
+    assert "identifier_format.delimiter" not in [r["key"] for r in result["keys"] if r["class"] == "exact"]
 
 
 def test_subtotal_resting_on_wrapper_marker_yields_an_inherited_entry():
@@ -452,7 +470,14 @@ def test_unresolved_selectors_follow_the_detector_reason(tmp_path):
     record = cls(score(tmp_path, wrapper_doc(), insufficient), "identifier_format.delimiter")
     assert (record["class"], record["reason"]) == ("unresolved", "insufficient_evidence")
     nothing = synthetic_profile()
-    assert cls(score(tmp_path, wrapper_doc(), nothing), "identifier_format.delimiter")["class"] == "miss"
+    record = cls(score(tmp_path, wrapper_doc(), nothing), "identifier_format.delimiter")
+    assert (record["class"], record["reason"]) == ("unresolved", "no_observation")
+    record = cls(score(tmp_path, wrapper_doc(), nothing), "dispatch.aggregate_markers")
+    assert (record["class"], record["reason"]) == ("unresolved", "no_observation")
+    # resolved evidence that contradicts the wrapper (no dominant delimiter) is a miss
+    contradicts = synthetic_profile(stubs=[dict(stub_id="identifier_format:1", section="identifier_format",
+                                                cause="no_value", bears_on=["identifier_format.delimiter"])])
+    assert cls(score(tmp_path, wrapper_doc(), contradicts), "identifier_format.delimiter")["class"] == "miss"
 
 
 def test_partition_specific_entries_do_not_resolve_a_flat_wrapper_key(tmp_path):
@@ -487,13 +512,42 @@ def test_comparison_reads_the_frozen_semantics_file(tmp_path, monkeypatch):
     frozen = m1.load_semantics(paths)
     with pytest.raises(PathError):
         m1.freeze_semantics(paths, inventory)
-    monkeypatch.setattr(m1, "FAMILIES", [])
+    wrapper = json.loads((CODE_ROOT / "data" / "overrides" / "bdc_xbrl_wrappers" / (CIK + ".json"))
+                         .read_text(encoding="utf-8"))
+    wrapper["entity_name"] = "Stellus Private Credit BDC LLC"
+    prof = synthetic_profile(
+        [("fund_level_concepts.entity_registrant_name", "STELLUS PRIVATE CREDIT BDC", "derived", None, None),
+         ("fund_level_concepts.investments_at_fair_value_concept", "us-gaap:InvestmentOwnedAtFairValue",
+          "derived", None, None)],
+        stubs=[dict(stub_id="s:%d" % i, section="identifier_format", cause=c,
+                    bears_on=["identifier_format.delimiter"])
+               for i, c in enumerate(("insufficient_evidence", "candidate"))])
+    keys = inventory["ciks"][CIK]["keys"]
+    before = m1.compare_to_wrapper(prof, wrapper, cik=CIK, inventory_keys=keys, semantics=frozen)
+    assert cls(before, "entity_name")["class"] == "partial"
+    assert cls(before, "identifier_format.delimiter")["reason"] == "candidate"
+    assert cls(before, "invariants.fv_reconciliation.source_field")["class"] == "inherited"
+    for name, value in (("FAMILIES", []), ("LEGAL_FORM_TOKENS", ()), ("EQUIVALENCE", {}),
+                        ("REASONS", ("not_implemented", "insufficient_evidence", "candidate")),
+                        ("CLASSES", ("exact",)), ("ROLLUP", []), ("NO_ENTRY_RULE", [])):
+        monkeypatch.setattr(m1, name, value)
     assert m1.load_semantics(paths) == frozen
+    after = m1.compare_to_wrapper(prof, wrapper, cik=CIK, inventory_keys=keys, semantics=frozen)
+    assert after == before
+    for field in m1.REQUIRED_FIELDS:
+        partial = {k: v for k, v in frozen.items() if k != field}
+        with pytest.raises(m1.SemanticsError):
+            m1.compare_to_wrapper(prof, wrapper, cik=CIK, inventory_keys=keys, semantics=partial)
     target = Path(state["path"])
     body = json.loads(target.read_text(encoding="ascii"))
     body["content"]["families"][0]["derivation"] = "implemented"
     target.write_text(json.dumps(body), encoding="ascii")
     with pytest.raises(StageInvalidated):
+        m1.load_semantics(paths)
+    missing = {k: v for k, v in frozen.items() if k != "legal_form_tokens"}
+    target.write_text(json.dumps(dict(body, content=missing, content_sha256=manifest.digest(missing))),
+                      encoding="ascii")
+    with pytest.raises(m1.SemanticsError):
         m1.load_semantics(paths)
 
 

@@ -179,10 +179,10 @@ def _wrapper_pin(paths: PilotPaths, cik: str, era: str, inventory: dict, verifie
                 rule="wrapper bytes at sign-off commit, re-materialised in this run root")
 
 
-def _unavailable(keys, reason: str) -> dict:
+def _unavailable(keys, reason: str, semantics: dict) -> dict:
     records = [dict(key=k, section=m1.section_of(k), container=False, family=None, reason="insufficient_evidence",
                     note=reason, **{"class": "unresolved"}) for k in keys]
-    return dict(keys=records, **m1.summarise(records))
+    return dict(keys=records, **m1.summarise(records, semantics["classes"], semantics["reasons"]))
 
 
 def score_era(paths: PilotPaths, era: str, profiles: dict, inventory: dict, semantics: dict,
@@ -193,7 +193,8 @@ def score_era(paths: PilotPaths, era: str, profiles: dict, inventory: dict, sema
         pin = _wrapper_pin(paths, cik, era, inventory, verified)
         entry = profiles[(cik, era)]
         if entry["status"] != "derived":
-            result = _unavailable(keys, "census unavailable for this era: " + entry.get("reason", ""))
+            result = _unavailable(keys, "census unavailable for this era: " + entry.get("reason", ""),
+                                  semantics)
         else:
             wrapper = m1.load_wrapper(pin["path"], expected_sha256=pin["sha256"])
             result = m1.compare_to_wrapper(entry["document"], wrapper, cik=cik, inventory_keys=keys,
@@ -207,7 +208,7 @@ def score_era(paths: PilotPaths, era: str, profiles: dict, inventory: dict, sema
             groups.setdefault(GROUPS.get(label, label), []).append(cik)
         per_cik[cik] = body
         all_records += result["keys"]
-    totals = m1.summarise(all_records)
+    totals = m1.summarise(all_records, semantics["classes"], semantics["reasons"])
     out = dict(era=era, run_id=paths.run_id, semantics=sem_state,
                inventory=dict(content_sha256=manifest.digest(inventory)), ciks=per_cik,
                totals={k: totals[k] for k in ("denominator", "counts", "unresolved_by_reason", "by_section",
@@ -217,7 +218,7 @@ def score_era(paths: PilotPaths, era: str, profiles: dict, inventory: dict, sema
         out["groups"] = {}
         for name, members in groups.items():
             records = [r for c in members for r in per_cik[c]["keys"]]
-            summary = m1.summarise(records)
+            summary = m1.summarise(records, semantics["classes"], semantics["reasons"])
             out["groups"][name] = dict(ciks=members, denominator=summary["denominator"], counts=summary["counts"],
                                        unresolved_by_reason=summary["unresolved_by_reason"])
         out["group_rule"] = ("reporting split only: every CIK stays in the fixed denominator; label from the "

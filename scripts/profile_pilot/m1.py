@@ -11,7 +11,10 @@ per-CIK assignment of every wrapper key of the fixed denominator
 in-code declaration.
 
 Classes (exactly one per denominator key): exact, partial, inherited, unresolved
-(reason: candidate | insufficient_evidence | not_implemented), miss, not_derivable.
+(reason: candidate | insufficient_evidence | no_observation | not_implemented), miss
+(a contradictory census proposal only), not_derivable. The scorer reads classes, reasons,
+families, equivalence and legal-form tokens from the frozen file and fails closed if any is
+missing.
 `partial` is never added to `exact`. Scalars are exact or miss; `partial` is reserved
 for collections and near-equal strings (subset, overlap, same prefixes with different
 families, same delimiter token with different padding, same name up to case and legal
@@ -33,20 +36,26 @@ from scripts.profile_pilot.census_detect import DELIMITERS
 from scripts.profile_pilot.manifest import StageInvalidated, digest
 from scripts.profile_pilot.paths import PilotPaths, confined, write_once_json
 
-SEMANTICS_VERSION = "m1-semantics.v1"
+SEMANTICS_VERSION = "m1-semantics.v2"
 SEMANTICS_RELATIVE = "inventories/m1_comparison_semantics.json"
 CLASSES = ("exact", "partial", "inherited", "unresolved", "miss", "not_derivable")
-REASONS = ("candidate", "insufficient_evidence", "not_implemented")
+# Unresolved reasons in precedence order (first present wins, for stubs and rollups).
+REASONS = ("candidate", "insufficient_evidence", "no_observation", "not_implemented")
+# Every field the scorer reads from the frozen file; a missing one fails closed.
+REQUIRED_FIELDS = ("classes", "reasons", "families", "equivalence", "legal_form_tokens", "assignments")
 DISCLAIMER = ("M1 is a derivation-rate measurement against hand-authored wrappers. It is not "
               "evidence that the wrapper, the census or the profile is correct.")
 HEADER_KEYS = ("schema_version", "cik", "entity_name", "version", "source")
 LEGAL_FORM_TOKENS = ("inc", "incorporated", "corp", "corporation", "llc", "lp", "ltd", "limited", "co",
                      "company", "plc")
-# pipeline/extract_companyfacts.py: investments_at_fair_value exact + fallback concepts.
+# Imported concept -> field vocabulary (pipeline/extract_companyfacts.py, investments_at_fair_value
+# exact + fallback concepts). An equality reached only through this table rests on inherited code:
+# it is scored `inherited`, never `exact`; the file hash is frozen with the table.
 EQUIVALENCE = {"invariants.fv_reconciliation.source_field": {
-    "investments_at_fair_value": ["InvestmentOwnedAtFairValue", "InvestmentsAtFairValueAggregate",
-                                  "InvestmentsFairValueDisclosure"],
-    "source": "pipeline/extract_companyfacts.py investments_at_fair_value (exact + fallback)"}}
+    "mapping": {"investments_at_fair_value": ["InvestmentOwnedAtFairValue", "InvestmentsAtFairValueAggregate",
+                                              "InvestmentsFairValueDisclosure"]},
+    "source": "pipeline/extract_companyfacts.py"}}
+CODE_ROOT = Path(__file__).resolve().parents[2]
 
 # Ordered: the first family whose match specs accept a key owns it.
 FAMILIES = [
@@ -69,9 +78,15 @@ FAMILIES = [
     dict(id="identifier_field_order", match=[dict(exact=["identifier_format.field_order"])],
          comparison="ordered_list", derivation="not_implemented", profile_key="identifier_format.field_order",
          canonical="ordered list of field names"),
-    dict(id="aggregate_markers", match=[dict(exact=["dispatch.aggregate_markers"])], comparison="string_set",
-         casefold=True, derivation="implemented", profile_key="subtotals_and_headings.aggregate_labels",
-         canonical="set of lower-cased, whitespace-collapsed substrings (consumer uses any())"),
+    dict(id="aggregate_markers", match=[dict(exact=["dispatch.aggregate_markers"])],
+         comparison="substring_markers", derivation="implemented",
+         profile_key="subtotals_and_headings.aggregate_labels",
+         canonical="wrapper = lower-cased substring markers matched with any(); derived = full lower-cased "
+                   "labels of observed structural subtotals. Observed labels cannot reproduce a marker set, "
+                   "so exact is unreachable: every derived label covered by some marker (and at least one) -> "
+                   "partial; some labels uncovered -> partial if any is covered, else miss. `extra` = labels "
+                   "no marker covers (contradiction), `missing` = markers matching no observed label "
+                   "(unobserved, not contradiction)"),
     dict(id="non_private_markers", match=[dict(exact=["dispatch.non_private_markers"])], comparison="string_set",
          casefold=True, derivation="not_implemented", profile_key="subtotals_and_headings.non_private_markers",
          canonical="set of lower-cased substrings"),
@@ -100,8 +115,9 @@ FAMILIES = [
     dict(id="fv_source_field", match=[dict(exact=["invariants.fv_reconciliation.source_field"])],
          comparison="anchor_field", derivation="implemented",
          profile_key="fund_level_concepts.investments_at_fair_value_concept",
-         canonical="concept of the fund-level investments total mapped through `equivalence`; the field "
-                   "alone, never its basis or tolerance"),
+         canonical="concept of the fund-level investments total mapped through the imported `equivalence` "
+                   "table; equality through that table is inherited (never exact); the field alone, never "
+                   "its basis or tolerance"),
     dict(id="invariant_thresholds", match=[dict(exact=["invariants"]), dict(prefix=["invariants."])],
          comparison="decimal", derivation="not_implemented", profile_key_prefix="fund_level_concepts.",
          canonical="decimal equality; a visible fund total does not derive a tolerance or threshold"),
@@ -120,18 +136,21 @@ ROLLUP = [
     "container keys (keys with descendants in the CIK inventory, unless the family is whole_value) are "
     "classified from their descendant LEAF keys:",
     "1 all exact -> exact", "2 all exact or inherited, at least one inherited -> inherited",
-    "3 any exact, partial or inherited -> partial", "4 any unresolved -> unresolved (reason: candidate if any "
-    "leaf reason is candidate, else insufficient_evidence if any, else not_implemented)",
-    "5 any miss -> miss", "6 otherwise -> not_derivable",
+    "3 any exact or partial -> partial (an inherited leaf is not a derived subset)",
+    "4 any unresolved -> unresolved (reason: first of `reasons` present among the leaves)",
+    "5 any miss -> miss", "6 any inherited -> inherited", "7 otherwise -> not_derivable",
 ]
 NO_ENTRY_RULE = [
     "implemented derivation, no live entry for the profile key at the report date:",
-    "stub bearing on the key with cause candidate -> unresolved/candidate; else insufficient_evidence -> "
-    "unresolved/insufficient_evidence; else not_implemented -> unresolved/not_implemented; else "
-    "(no stub, or cause no_value) -> miss",
+    "stub bearing on the key: the first of `reasons` among the stub causes -> unresolved/<reason>; a "
+    "stub with cause no_value (resolved evidence that yields no value, contradicting the wrapper's "
+    "value) -> miss; no stub at all (nothing observed) -> unresolved/no_observation",
+    "miss is reserved for a contradictory census proposal (a different value, or resolved evidence of "
+    "no value)",
     "entries carrying a non-null applies_to cannot be compared with a flat wrapper key -> "
     "unresolved/not_implemented",
-    "an exact comparison on an entry with provenance inherited -> inherited",
+    "an exact comparison on an entry with provenance inherited, or reached through an inherited "
+    "equivalence table, -> inherited (inherited_from recorded on the key record)",
     "a denominator key absent from this wrapper version is compared as an absent value",
 ]
 
@@ -176,8 +195,12 @@ def build_semantics(inventory: dict) -> dict:
             else:
                 raise SemanticsError("wrapper key " + repr(key) + " of " + cik + " has no frozen comparison family")
         assignments[cik] = owned
+    equivalence = {}
+    for key, table in EQUIVALENCE.items():
+        source = CODE_ROOT / table["source"]
+        equivalence[key] = dict(table, sha256=hashlib.sha256(source.read_bytes()).hexdigest())
     return dict(version=SEMANTICS_VERSION, classes=list(CLASSES), reasons=list(REASONS), families=FAMILIES,
-                rollup=ROLLUP, no_entry_rule=NO_ENTRY_RULE, equivalence=EQUIVALENCE,
+                rollup=ROLLUP, no_entry_rule=NO_ENTRY_RULE, equivalence=equivalence,
                 legal_form_tokens=list(LEGAL_FORM_TOKENS), inventory_content_sha256=digest(inventory),
                 assignments=assignments, disclaimer=DISCLAIMER)
 
@@ -195,7 +218,14 @@ def load_semantics(paths: PilotPaths) -> dict:
     body = json.loads(confined(paths, SEMANTICS_RELATIVE).read_text(encoding="ascii"))
     if body.get("inventory") != "m1_comparison_semantics" or digest(body["content"]) != body.get("content_sha256"):
         raise StageInvalidated("frozen M1 comparison semantics do not match their digest")
+    _require(body["content"])
     return body["content"]
+
+
+def _require(semantics: dict) -> None:
+    missing = [f for f in REQUIRED_FIELDS if f not in semantics]
+    if missing:
+        raise SemanticsError("frozen M1 semantics lack required field(s): " + ", ".join(missing))
 
 
 # ---------------------------------------------------------------- wrapper access (this module only)
@@ -231,16 +261,16 @@ def _ws(text) -> str:
     return " ".join(str(text).split())
 
 
-def _loose_name(text) -> str:
+def _loose_name(text, legal_form_tokens) -> str:
     tokens = re.sub(r"[^a-z0-9 ]+", " ", str(text).casefold()).split()
-    return " ".join(t for t in tokens if t not in LEGAL_FORM_TOKENS)
+    return " ".join(t for t in tokens if t not in set(legal_form_tokens))
 
 
 def _local(qname) -> str:
     return str(qname).rsplit("}", 1)[-1].rsplit(":", 1)[-1]
 
 
-def canonical_value(family: dict, value, semantics: dict | None = None):
+def canonical_value(family: dict, value, semantics: dict):
     mode = family["comparison"]
     if value is None:
         return None
@@ -251,6 +281,9 @@ def canonical_value(family: dict, value, semantics: dict | None = None):
     if mode == "string_set":
         items = value if isinstance(value, list) else [value]
         return sorted({_ws(v).lower() if family.get("casefold") else str(v) for v in items})
+    if mode == "substring_markers":
+        items = value if isinstance(value, list) else [value]
+        return sorted({_ws(v).lower() for v in items})
     if mode == "ordered_list":
         return list(value) if isinstance(value, list) else [value]
     if mode in ("ordered_pairs", "prefix_family"):
@@ -263,9 +296,9 @@ def canonical_value(family: dict, value, semantics: dict | None = None):
         except InvalidOperation:
             return None
     if mode == "anchor_field":
-        table = ((semantics or {}).get("equivalence") or EQUIVALENCE).get(family["match"][0]["exact"][0], {})
-        for field, concepts in table.items():
-            if field != "source" and _local(value) in concepts:
+        table = semantics["equivalence"][family["match"][0]["exact"][0]]
+        for field, concepts in table["mapping"].items():
+            if _local(value) in concepts:
                 return field
         return str(value)
     return value
@@ -288,12 +321,20 @@ def _compare(family: dict, derived, wrapper, key: str, semantics: dict) -> tuple
         return "exact", dict(detail, note="absent in both")
     if d is None or w is None:
         return "miss", detail
-    if mode in ("exact_cik", "decimal", "anchor_field"):
+    if mode == "anchor_field":
+        table = semantics["equivalence"][family["match"][0]["exact"][0]]
+        if d == w:
+            detail.update(inherited_via=table["source"] + "@" + table["sha256"],
+                          note="equal only through the imported concept->field table")
+            return "exact", detail
+        return "miss", detail
+    if mode in ("exact_cik", "decimal"):
         return ("exact" if d == w else "miss"), detail
     if mode == "name":
         if d == w:
             return "exact", detail
-        return ("partial" if _loose_name(d) == _loose_name(w) else "miss"), detail
+        tokens = semantics["legal_form_tokens"]
+        return ("partial" if _loose_name(d, tokens) == _loose_name(w, tokens) else "miss"), detail
     if mode == "delimiter":
         if d == w:
             return "exact", detail
@@ -304,6 +345,14 @@ def _compare(family: dict, derived, wrapper, key: str, semantics: dict) -> tuple
         if not missing and not extra:
             return "exact", detail
         return ("partial" if set(d) & set(w) else "miss"), detail
+    if mode == "substring_markers":
+        extra = [label for label in d if not any(m in label for m in w)]
+        missing = [m for m in w if not any(m in label for label in d)]
+        detail.update(missing=missing, extra=extra,
+                      note="observed labels vs substring markers: exact is not reachable")
+        if not d:
+            return "miss", detail
+        return ("partial" if len(extra) < len(d) else "miss"), detail
     if mode == "ordered_list":
         detail.update(missing=[x for x in w if x not in d], extra=[x for x in d if x not in w])
         if d == w:
@@ -314,7 +363,9 @@ def _compare(family: dict, derived, wrapper, key: str, semantics: dict) -> tuple
         detail.update(missing=[p for p in wp if p not in dp], extra=[p for p in dp if p not in wp])
         if d == w:
             return "exact", detail
-        return ("partial" if set(wp) & set(dp) else "miss"), detail
+        pairs = {tuple(p) for p in d if p[1] is not None} & {tuple(p) for p in w}
+        detail["matching_pairs"] = sorted(list(p) for p in pairs)
+        return ("partial" if pairs else "miss"), detail
     raise SemanticsError("unknown comparison mode " + repr(mode))
 
 
@@ -343,14 +394,16 @@ def _profile_key(family: dict, key: str) -> str | None:
     return None
 
 
-def _no_entry(profile: dict, profile_key: str | None) -> tuple[str, str | None, list]:
+def _no_entry(profile: dict, profile_key: str | None, reasons) -> tuple[str, str | None, list]:
     stubs = [s for s in profile.get("packet_stubs") or [] if profile_key and profile_key in s.get("bears_on", [])]
     causes = {s["cause"] for s in stubs}
     ids = [s["stub_id"] for s in stubs]
-    for reason in REASONS:
+    for reason in reasons:
         if reason in causes:
             return "unresolved", reason, ids
-    return "miss", None, ids
+    if "no_value" in causes:
+        return "miss", None, ids  # resolved evidence of no value contradicts the wrapper's value
+    return "unresolved", "no_observation", ids
 
 
 def _leaf(profile: dict, family: dict, key: str, values: dict, semantics: dict) -> dict:
@@ -380,19 +433,24 @@ def _leaf(profile: dict, family: dict, key: str, values: dict, semantics: dict) 
             return dict(record, **{"class": "unresolved"}, reason="not_implemented", wrapper=wrapper,
                         note="derivation not implemented by this pilot")
         if present:
-            klass, reason, stub_ids = _no_entry(profile, profile_key)
+            klass, reason, stub_ids = _no_entry(profile, profile_key, semantics["reasons"])
             return dict(record, **{"class": klass}, reason=reason, stub_ids=stub_ids, wrapper=wrapper,
                         derived=None, note="no derived entry")
         return dict(record, **{"class": "exact"}, wrapper=None, derived=None, note="absent in both")
     entry = entries[0]
     klass, detail = _compare(family, entry["value"], wrapper, key, semantics)
-    if klass == "exact" and entry["provenance"] == "inherited":
+    provenance, inherited_from = entry["provenance"], entry.get("inherited_from")
+    via = detail.pop("inherited_via", None)
+    if via:
+        provenance = "inherited"
+        inherited_from = "; ".join(x for x in (via, inherited_from) if x)
+    if klass == "exact" and provenance == "inherited":
         klass = "inherited"
     return dict(record, **detail, **{"class": klass}, entry_ids=[entry["entry_id"]],
-                provenance=entry["provenance"], inherited_from=entry.get("inherited_from"))
+                provenance=provenance, inherited_from=inherited_from)
 
 
-def _rollup(leaves: list) -> tuple[str, str | None]:
+def _rollup(leaves: list, reasons) -> tuple[str, str | None]:
     classes = [r["class"] for r in leaves]
     if not classes:
         return "not_derivable", None
@@ -400,13 +458,15 @@ def _rollup(leaves: list) -> tuple[str, str | None]:
         return "exact", None
     if all(c in ("exact", "inherited") for c in classes):
         return "inherited", None
-    if any(c in ("exact", "partial", "inherited") for c in classes):
+    if any(c in ("exact", "partial") for c in classes):
         return "partial", None
     if "unresolved" in classes:
-        reasons = {r["reason"] for r in leaves if r["class"] == "unresolved"}
-        return "unresolved", next(r for r in REASONS if r in reasons)
+        present = {r["reason"] for r in leaves if r["class"] == "unresolved"}
+        return "unresolved", next(r for r in reasons if r in present)
     if "miss" in classes:
         return "miss", None
+    if "inherited" in classes:
+        return "inherited", None
     return "not_derivable", None
 
 
@@ -416,28 +476,29 @@ def section_of(key: str) -> str:
     return key.split(".", 1)[0].split("[", 1)[0]
 
 
-def summarise(records: list) -> dict:
+def summarise(records: list, classes=CLASSES, reasons=REASONS) -> dict:
     def counts(rows):
-        out = {c: 0 for c in CLASSES}
+        out = {c: 0 for c in classes}
         for r in rows:
             out[r["class"]] += 1
         return out
 
-    reasons = {r: 0 for r in REASONS}
+    by_reason = {r: 0 for r in reasons}
     for r in records:
         if r["class"] == "unresolved":
-            reasons[r["reason"]] += 1
+            by_reason[r["reason"]] += 1
     sections: dict = {}
     for r in records:
         sections.setdefault(r["section"], []).append(r)
     leaves = [r for r in records if not r["container"]]
-    return dict(denominator=len(records), counts=counts(records), unresolved_by_reason=reasons,
+    return dict(denominator=len(records), counts=counts(records), unresolved_by_reason=by_reason,
                 by_section={s: dict(denominator=len(rows), counts=counts(rows)) for s, rows in sorted(sections.items())},
                 leaf_only=dict(denominator=len(leaves), counts=counts(leaves)))
 
 
 def compare_to_wrapper(profile: dict, wrapper: dict, *, cik: str, inventory_keys, semantics: dict) -> dict:
     """Classify every denominator key of `cik` (the fixed inventory) against `wrapper`."""
+    _require(semantics)
     assignment = semantics["assignments"].get(cik)
     if assignment is None:
         raise SemanticsError("no frozen assignment for " + cik)
@@ -456,9 +517,9 @@ def compare_to_wrapper(profile: dict, wrapper: dict, *, cik: str, inventory_keys
         if assignment[key] == "container":
             leaves = [records[k] for k in keys if k in records and not records[k]["container"]
                       and (k.startswith(key + ".") or k.startswith(key + "[]"))]
-            klass, reason = _rollup(leaves)
+            klass, reason = _rollup(leaves, semantics["reasons"])
             records[key] = dict(key=key, section=section_of(key), container=True, family="container",
                                 reason=reason, wrapper_present=key in values, leaf_keys=len(leaves),
                                 **{"class": klass})
     ordered = [records[k] for k in keys]
-    return dict(cik=cik, keys=ordered, **summarise(ordered))
+    return dict(cik=cik, keys=ordered, **summarise(ordered, semantics["classes"], semantics["reasons"]))
