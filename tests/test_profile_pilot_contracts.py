@@ -1226,21 +1226,29 @@ def test_v2_subset_check_compares_v2_contracts_and_results_without_the_flag():
     assert check["differences"][CIK]
 
 
-def test_v3_bands_are_the_calibrated_choices_and_every_curve_is_labelled_in_sample():
+def test_v3_bands_are_the_per_contract_choices_on_one_pooled_basis_and_labelled_in_sample():
     cal = contracts.CALIBRATION
     assert cal["label"] == "in-sample (bands chosen after Q2 and the history were read)"
-    bands = contracts.SEMANTIC_BANDS
+    assert cal["tier_basis"] == "pooled" and "per CONTRACT" in cal["rule"]
+    comp, text = cal["bands"]["rate_composition"], cal["bands"]["text_share_pp"]
     for tier in ("standard", "low_history"):
-        assert bands[tier]["share_pp"] == cal["bands"]["share_pp." + tier]["chosen"]
-        assert bands[tier]["iqr_widen"] == cal["bands"]["iqr_widen"]["chosen"]
-        assert bands[tier]["text_share_pp"] == cal["bands"]["text_share_pp"]["chosen"]
-    for band in cal["bands"].values():
-        assert band["status"] in ("calibrated", "uncalibrated") and band["curve"]
-        if band["status"] == "calibrated":
-            ok = [r for r in band["curve"] if r["negatives_breach_rate"] <= 0.10
-                  and r["seeded_detection_fraction"] is not None and r["seeded_detection_fraction"] <= 0.30]
-            assert band["chosen"] == min(r["value"] for r in ok)
-    assert cal["median_shift_experiment"]["adopted"] is False
+        assert contracts.SEMANTIC_BANDS[tier]["share_pp"] == comp["chosen"]["share_pp"]
+        assert contracts.SEMANTIC_BANDS[tier]["iqr_widen"] == comp["chosen"]["iqr_widen"]
+        assert contracts.SEMANTIC_BANDS[tier]["text_share_pp"] == text["chosen"]
+    ok = [r for r in comp["curve"] if r["negatives_breach_rate"] <= 0.10 and r["seeded_detection_fraction"] <= 0.30]
+    first = min(ok, key=lambda r: (int(r["value"].split("_")[0][1:]), float(r["value"].split("_i")[1])))
+    assert comp["chosen"] == dict(share_pp=int(first["value"].split("_")[0][1:]),
+                                  iqr_widen=float(first["value"].split("_i")[1]))
+    assert all(set(r["negatives_breach_rate_per_criterion"]) == {"share", "iqr", "fixed"} for r in comp["curve"])
+    assert len(comp["curve"]) == 15 and cal["median_shift_experiment"]["adopted"] is False
+
+
+def test_v3_supersedes_the_first_v3_root_with_the_fix_round_reason():
+    sup = contracts.tolerance_content()["supersedes"]
+    assert sup["version"] == "contract-tolerances.v2" and sup["run_id"] == V2_RUN
+    assert sup["superseded_v3"]["run_id"] == "stageb2-contracts-v3-20260929t124944z"
+    assert sup["superseded_v3"]["reason"] == "calibration rule applied per contract; R38 fixed/floating split"
+    assert sup["superseded_v3"]["content_sha256"].startswith("9ebef346")
 
 
 def test_v2_subset_check_reports_evidence_noise_apart_from_the_identity_verdict():
