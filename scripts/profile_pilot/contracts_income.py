@@ -26,11 +26,14 @@ S2 result is interpreted, the inputs must prove, in order:
 
 `interest_rate` is passed to S2 unchanged (the stored leg) and `pik_rate` separately:
 S2 adds the PIK term itself, so the adapter never adds PIK a second time. S2 reports
-per-CIK aggregates only; holdings are restricted to ONE (cik, quarter), so its
-income_r_median is that quarter's r. Base/PIK sums are mirrored here ONLY to attribute
-a missing S2 result to a named cause and to report coverage; a tagged-quarter r that
-disagrees with the mirror is a defect and raises. Income rows are as-of the quarter
-(report_date <= quarter) so learning never sees a later quarter's income.
+per-CIK aggregates; holdings are restricted to the evidence WINDOW (default: the one
+quarter), every window quarter must pass every proof, and the vote follows S2's own
+evidence limit (pipeline.rate_convention.classify_cik): a side needs at least the FROZEN
+INCOME_MIN_QUARTERS per-quarter votes and 2x dominance, so a one-quarter window never
+votes (cause s2_evidence_limit_below_min_quarters). Base/PIK sums are mirrored ONLY to
+attribute a missing S2 result to a named cause and to report coverage; on a one-quarter
+tagged window an r that disagrees with the mirror is a defect and raises. Income rows are
+as-of the anchor quarter (report_date <= quarter): learning never sees a later quarter.
 """
 from __future__ import annotations
 
@@ -250,34 +253,66 @@ def _no_result_cause(mirror: dict, work: dict, constants: dict) -> tuple[str, fl
     return "s2_no_quarter_result_estimated_income", None
 
 
+def s2_vote(votes_all_in: int, votes_cash: int, min_quarters: int) -> str | None:
+    """S2's own evidence limit (pipeline.rate_convention.classify_cik): >= min_quarters votes
+    on one side and 2x dominance over the other."""
+    if votes_all_in >= min_quarters and votes_all_in >= 2 * votes_cash and votes_all_in > votes_cash:
+        return "all_in"
+    if votes_cash >= min_quarters and votes_cash >= 2 * votes_all_in and votes_cash > votes_all_in:
+        return "cash_leg"
+    return None
+
+
 def income_evidence(holdings, income, *, cik: str, report_date: str, census_doc: dict | None, aggregate=None,
-                    cwd=None) -> dict:
-    """Yield evidence for one (cik, quarter): preconditions, S2 output, vote or named cause."""
+                    cwd=None, window=None, window_docs: dict | None = None, min_quarters=None) -> dict:
+    """Yield evidence for (cik, anchor quarter) over an evidence window: proofs, S2 output, vote or cause.
+
+    `window` lists the report dates whose rows S2 sees (default: the anchor alone); the anchor
+    must be the last. Every window quarter must pass every proof. `min_quarters` is the FROZEN
+    INCOME_MIN_QUARTERS (default: the live constant, which evaluation cross-checks when frozen).
+    """
     from pipeline import rate_convention
     aggregate = aggregate or rate_convention._aggregate_signals
     cwd = cwd or nullcontext
     q = str(report_date)[:10]
+    window = sorted({str(d)[:10] for d in (window or [q])})
+    if window[-1] != q:
+        raise ValueError("the anchor quarter must be the last quarter of the evidence window")
+    docs = dict(window_docs or {})
+    docs.setdefault(q, census_doc)
     constants = s2_constants()
-    pre, cause, work = _preconditions(holdings, income, cik=cik, q=q, census_doc=census_doc)
+    min_quarters = int(constants["INCOME_MIN_QUARTERS"] if min_quarters is None else min_quarters)
+    per_pre, per_work, cause, cause_quarter = {}, {}, None, None
+    for wq in window:
+        per_pre[wq], cause_q, per_work[wq] = _preconditions(holdings, income, cik=cik, q=wq,
+                                                             census_doc=docs.get(wq))
+        if cause_q and cause is None:
+            cause, cause_quarter = cause_q, wq
+    work = per_work[q]
     out = dict(cik=str(cik).zfill(10), report_date=q, status="insufficient_evidence", vote=None, cause=cause,
-               preconditions=pre, interpreted=False,
+               cause_quarter=cause_quarter, window=window, preconditions=per_pre[q],
+               window_preconditions=per_pre, interpreted=False,
                inherited=dict(s2_function=S2_FUNCTION, method_version=constants["METHOD_VERSION"],
-                              holdings="private_markets_holdings pinned slice, source='bdc' rows for the quarter",
-                              income="bdc_fund_income pinned slice, rows with report_date <= quarter"),
+                              holdings="private_markets_holdings pinned slice, source='bdc' rows of the window",
+                              income="bdc_fund_income pinned slice, rows with report_date <= anchor quarter",
+                              vote_rule="classify_cik evidence limit: >= INCOME_MIN_QUARTERS votes, 2x dominance"),
                s2=None)
-    if "bdc" not in work:
+    frames = [per_work[wq]["bdc"][list(S2_COLUMNS)] for wq in window if "bdc" in per_work[wq]]
+    if not frames:
         return _json_safe(out)
-    frame = work["bdc"][list(S2_COLUMNS)].copy()
+    import pandas as pd
+    frame = pd.concat(frames, ignore_index=True)
     asof = income[income["report_date"].astype(str).str[:10] <= q].copy() if "report_date" in income.columns \
         else income.copy()
     with cwd():
         signals = aggregate(frame, asof)
     row = signals[signals["cik"].astype(str) == cik_s2(cik)]
-    mirror = _mirror(work)
+    mirror = _mirror(work) if "bdc" in work else None
     src = None if "tagged" not in work else ("tagged" if work["tagged"] else "est")
-    s2 = dict(function=S2_FUNCTION, constants=constants, mirror=mirror, src=src, interest_income=work.get("ii"),
-              total_investment_income=work.get("tii"), r=None, income_quarters=0, votes_all_in=0, votes_cash=0,
-              coverage_ratio=None, income_used=None)
+    s2 = dict(function=S2_FUNCTION, constants=constants, min_quarters=min_quarters, mirror=mirror, src=src,
+              window_mirrors={wq: _mirror(w) for wq, w in per_work.items() if "bdc" in w} if len(window) > 1
+              else None, interest_income=work.get("ii"), total_investment_income=work.get("tii"), r=None,
+              income_quarters=0, votes_all_in=0, votes_cash=0, coverage_ratio=None, income_used=None)
     if len(row):
         r0 = row.iloc[0]
         s2.update(income_quarters=int(_num(r0.get("income_quarters")) or 0),
@@ -286,24 +321,27 @@ def income_evidence(holdings, income, *, cik: str, report_date: str, census_doc:
                   r=_num(r0.get("income_r_median")))
     out["s2"] = s2
     if cause is not None:
-        s2["note"] = "S2 output recorded but NOT interpreted: precondition " + cause + " failed"
+        s2["note"] = ("S2 output recorded but NOT interpreted: precondition " + cause + " failed for "
+                      + str(cause_quarter))
         return _json_safe(out)
     out["interpreted"] = True
     if not s2["income_quarters"] or s2["r"] is None:
         out["cause"], s2["coverage_ratio"] = _no_result_cause(mirror, work, constants)
         return _json_safe(out)
     r = s2["r"]
-    s2["income_used"] = mirror["base"] + r * mirror["pik_add"]
-    s2["coverage_ratio"] = mirror["base"] / s2["income_used"] if s2["income_used"] else None
-    if work.get("tagged"):
-        mirrored = (work["ii"] - mirror["base"]) / mirror["pik_add"]
-        if abs(mirrored - r) > MIRROR_TOLERANCE * max(1.0, abs(r)):
-            raise IncomeEvidenceError("S2 r %.9f disagrees with the attribution mirror %.9f for %s %s"
-                                      % (r, mirrored, cik, q))
-    if s2["votes_cash"] and not s2["votes_all_in"]:
-        out.update(status="vote", vote="cash_leg", cause=None)
-    elif s2["votes_all_in"] and not s2["votes_cash"]:
-        out.update(status="vote", vote="all_in", cause=None)
+    if len(window) == 1:
+        s2["income_used"] = mirror["base"] + r * mirror["pik_add"]
+        s2["coverage_ratio"] = mirror["base"] / s2["income_used"] if s2["income_used"] else None
+        if work.get("tagged"):
+            mirrored = (work["ii"] - mirror["base"]) / mirror["pik_add"]
+            if abs(mirrored - r) > MIRROR_TOLERANCE * max(1.0, abs(r)):
+                raise IncomeEvidenceError("S2 r %.9f disagrees with the attribution mirror %.9f for %s %s"
+                                          % (r, mirrored, cik, q))
+    vote = s2_vote(s2["votes_all_in"], s2["votes_cash"], min_quarters)
+    if vote:
+        out.update(status="vote", vote=vote, cause=None)
+    elif s2["votes_all_in"] or s2["votes_cash"]:
+        out["cause"] = "s2_evidence_limit_below_min_quarters"
     elif r < constants["INCOME_R_FLOOR"]:
         out["cause"] = "r_below_floor_measurement_problem"
     else:
@@ -336,11 +374,13 @@ def read_quarter_frames(paths, *, holdings_path, income_path, cik: str, report_d
 
 
 def load_income_evidence(paths, *, cik: str, report_date: str, holdings_path, income_path,
-                         census_doc: dict | None) -> dict:
-    """The S2 adapter over the pinned slices; S2 runs with cwd = run root (its own DuckDB)."""
+                         census_doc: dict | None, min_quarters: int) -> dict:
+    """The S2 adapter over the pinned slices (one-quarter window: the census pairs give one
+    census per quarter); S2 runs with cwd = run root (its own DuckDB). `min_quarters` is the
+    frozen INCOME_MIN_QUARTERS."""
     from scripts.profile_pilot.paths import pilot_cwd
     h, inc = read_quarter_frames(paths, holdings_path=holdings_path, income_path=income_path, cik=cik,
                                  report_date=report_date)
     ev = income_evidence(h, inc, cik=cik, report_date=report_date, census_doc=census_doc,
-                         cwd=lambda: pilot_cwd(paths))
+                         cwd=lambda: pilot_cwd(paths), min_quarters=min_quarters)
     return _json_safe(ev)

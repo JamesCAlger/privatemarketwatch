@@ -91,8 +91,9 @@ def channel_gaps(doc: dict, channels) -> list:
 
 
 def observe_field(doc: dict, positions: list, field: str, facts_by_i: dict) -> dict:
-    obs = dict(rows=len(positions), filled_keys=[], absent_keys=[], nil_keys=[], unobservable_keys=[],
-               conflicts=[], concept_keys={}, class_keys={}, values=[], decimals={})
+    obs = dict(rows=len(positions), row_keys=[p["context_id"] for p in positions], filled_keys=[], absent_keys=[],
+               nil_keys=[], unobservable_keys=[], conflicts=[], concept_keys={}, class_keys={}, values=[],
+               decimals={})
     for p in positions:
         value = p["fields"].get(field) or {"status": "absent"}
         status, ctx = value.get("status"), p["context_id"]
@@ -124,8 +125,10 @@ def observe_field(doc: dict, positions: list, field: str, facts_by_i: dict) -> d
     return obs
 
 
-def canonical(values: list, cls: str) -> list:
-    factor = Decimal(SCALE_CONVENTIONS[cls]["factor"])
+def canonical(values: list, cls: str, conventions: dict) -> list:
+    """Canonical percent values under the given (FROZEN) conventions; SCALE_CONVENTIONS here only
+    seeds the tolerance file."""
+    factor = Decimal(str(conventions[cls]["factor"]))
     return [(ctx, float(v * factor)) for ctx, v, c in values if c == cls]
 
 
@@ -197,7 +200,26 @@ def _twins(position: dict) -> dict:
                 pik_rate=number("pik_rate"), maturity_date=maturity if isinstance(maturity, str) else None)
 
 
-def routing_rows(doc: dict, positions: list, grammar: dict | None) -> list:
+def as_grammars(grammar) -> list:
+    """None, one grammar_info, or a list of them (one per authored dialect)."""
+    if not grammar:
+        return []
+    return list(grammar) if isinstance(grammar, (list, tuple)) else [grammar]
+
+
+def grammar_for(applies_to: dict | None, grammars: list) -> tuple[dict | None, str | None]:
+    """The dialect grammar a partition's format contract uses, or the cause it has none."""
+    if not grammars:
+        return None, "no_authored_grammar"
+    if applies_to and applies_to.get("kind") == "grammar_dialect":
+        hits = [g for g in grammars if g["dialect"] == applies_to["dialect"]]
+        return (hits[0], None) if len(hits) == 1 else (None, "no_single_grammar_for_dialect")
+    if len(grammars) == 1:
+        return grammars[0], None
+    return None, "several_dialects_without_dialect_partition"
+
+
+def routing_rows(doc: dict, positions: list, grammar) -> list:
     fv_concepts: dict = {}
     for p in positions:
         concepts = (p["fields"].get("fair_value") or {}).get("concepts") or []
@@ -205,9 +227,25 @@ def routing_rows(doc: dict, positions: list, grammar: dict | None) -> list:
     rows = [dict(context_id=p["context_id"], investment_identifier=p["identity"].get("typed_identifier"),
                  dimensions=[list(d) for d in p["identity"].get("dimensions") or []],
                  fair_value_concept=fv_concepts[p["context_id"]], twins=_twins(p)) for p in positions]
-    if grammar:
-        labelled = [r for r in rows if r["investment_identifier"]]
-        _grammar_rows(labelled, dict(path=grammar["path"], sha256=grammar["sha256"], body=grammar["body"]))
+    grammars = as_grammars(grammar)
+    labelled = [r for r in rows if r["investment_identifier"]]
+    if len(grammars) == 1:
+        g = grammars[0]
+        _grammar_rows(labelled, dict(path=g["path"], sha256=g["sha256"], body=g["body"]))
+    elif grammars:
+        # One label per row: the unique authored dialect that parses it (census_detect rule per
+        # grammar); none -> "unparsed", several -> "ambiguous:" + names (matches no dialect).
+        parses: dict = {}
+        for g in grammars:
+            probe = [dict(investment_identifier=r["investment_identifier"]) for r in labelled]
+            _grammar_rows(probe, dict(path=g["path"], sha256=g["sha256"], body=g["body"]))
+            for r, p in zip(labelled, probe):
+                if p.get("grammar_dialect") == g["dialect"]:
+                    parses.setdefault(r["context_id"], []).append(g["dialect"])
+        for r in labelled:
+            names = sorted(parses.get(r["context_id"], []))
+            r["grammar_dialect"] = names[0] if len(names) == 1 else (
+                "ambiguous:" + "+".join(names) if names else "unparsed")
     return rows
 
 

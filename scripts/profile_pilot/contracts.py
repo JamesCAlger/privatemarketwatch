@@ -39,11 +39,21 @@ import copy
 from scripts.profile_pilot import envelope
 from scripts.profile_pilot.census import POSITION_FIELDS, POSITION_RATE, field_channel
 from scripts.profile_pilot.contracts_observe import (  # noqa: F401  (current_positions, grammar_info re-exported)
-    IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, WHOLE_FILING, canonical, channel_gaps, current_positions,
-    grammar_info, grammar_observation, learn_partitions, observe_field, quantile, route, routing_rows, widened)
+    IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, WHOLE_FILING, as_grammars, canonical, channel_gaps,
+    current_positions, grammar_for, grammar_info, grammar_observation, learn_partitions, observe_field, quantile,
+    route, routing_rows, widened)
 
-CONTRACTS_VERSION = "contracts.v0.1"
-TOLERANCES_VERSION = "contract-tolerances.v1"
+CONTRACTS_VERSION = "contracts.v0.2"
+TOLERANCES_VERSION = "contract-tolerances.v2"
+V1_RUN_ID = "stageb-contracts-20260929t032414z"
+IDENTIFIER_FORMAT_INTERPRETATION = (
+    "as-evaluated: an unresolved mixed identifier format in Q1 (partition candidate / insufficient_evidence "
+    "with a real signature) blocks only the identifier format contract; concept, fill, scale and range stay "
+    "whole-filing (controller-directed reading of spec 6.3). strict 6.3 ('apply those predicates to Q2 rows "
+    "before computing every expectation'; 'a mixed format without an evidenced discriminator is unresolved, "
+    "not a default whole-filing contract'): every row-level contract of such a CIK is insufficient_evidence/"
+    "identifier_format_unresolved; the fund-level yield contract is not row-partitioned and is unaffected. "
+    "M2 is published both ways; each result carries identifier_format_unresolved.")
 KINDS = ("source_concept_set", "fill_rate", "scale", "value_range", "format_grammar", "fund_income_yield")
 STATUSES = ("holds", "holds_with_form_type", "breach", "insufficient_evidence")
 CONCEPT_FIELDS = POSITION_FIELDS
@@ -114,9 +124,31 @@ def tolerance_content() -> dict:
         scale_conventions=copy.deepcopy(SCALE_CONVENTIONS),
         fund_income_yield=dict(s2_function=S2_FUNCTION, constants=s2_constants(),
                                expectation="the Q1 S2 vote (cash_leg or all_in) persists in Q2",
-                               vote_rule="S2's own per-quarter votes (tagged / estimated thresholds)"),
+                               vote_rule="S2 per-quarter votes (tagged / estimated thresholds) aggregated over the "
+                                         "evidence window; a side votes only with >= INCOME_MIN_QUARTERS votes and "
+                                         "2x dominance (classify_cik); a one-quarter window cannot vote"),
         form_type_qualifiers=dict(evidenced=[], rule=HOLDS_WITH_FORM_TYPE_REASON),
+        supersedes=dict(version="contract-tolerances.v1", run_id=V1_RUN_ID,
+                        reason="evidence-limit correction, not a relaxation: v1 let one quarter's S2 vote stand as "
+                               "a vote, bypassing S2's INCOME_MIN_QUARTERS limit; v2 applies the limit (frozen "
+                               "constant). v1 results stay untouched as the prior result."),
+        identifier_format_interpretation=IDENTIFIER_FORMAT_INTERPRETATION,
         reporting="reporting bands, not pass/fail bars; the pilot records")
+
+
+def frozen_scale_conventions(tolerances: dict) -> dict:
+    conventions = _req(tolerances, "scale_conventions", "tolerances")
+    for cls in RATIO_CLASSES:
+        entry = _req(conventions, cls, "tolerances.scale_conventions")
+        _req(entry, "factor", "tolerances.scale_conventions." + cls)
+        _req(entry, "canonical_unit", "tolerances.scale_conventions." + cls)
+    return conventions
+
+
+def frozen_min_quarters(tolerances: dict) -> int:
+    section = _req(tolerances, "fund_income_yield", "tolerances")
+    constants = _req(section, "constants", "tolerances.fund_income_yield")
+    return int(_req(constants, "INCOME_MIN_QUARTERS", "tolerances.fund_income_yield.constants"))
 
 
 def band_for(tolerances: dict, tier: str, kind: str) -> dict:
@@ -173,7 +205,7 @@ def _contract(cik, kind, field, partition, tier, band, *, expectation=None, caus
                 learn_cause=cause, expectation=expectation, evidence=evidence or {})
 
 
-def _learn_scale(obs: dict, gaps: list) -> tuple[dict | None, str | None]:
+def _learn_scale(obs: dict, gaps: list, conventions: dict) -> tuple[dict | None, str | None]:
     if gaps or obs["unobservable_keys"]:
         return None, "q1_channel_incomplete"
     if not obs["filled"]:
@@ -191,7 +223,7 @@ def _learn_scale(obs: dict, gaps: list) -> tuple[dict | None, str | None]:
         return None, "magnitude_mixed_under_one_declared_unit"
     if classes[0] == "pure" and obs["regime"] == "ge1":
         return None, "pure_values_inconsistent_with_decimal_convention"
-    return dict(scale_class=classes[0], conversion=SCALE_CONVENTIONS[classes[0]],
+    return dict(scale_class=classes[0], conversion=conventions[classes[0]],
                 magnitude_regime=obs["regime"]), None
 
 
@@ -206,11 +238,13 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
     """Every contract for one CIK from Q1 evidence only (no Q2 input exists in this signature)."""
     positions = current_positions(q1_doc)
     tier = tier_for(tolerances, len(positions))
+    conventions = frozen_scale_conventions(tolerances)
+    grammars = as_grammars(grammar)
     q1_date, q1_form = q1_doc["document"]["report_date"], q1_doc["document"].get("form_type")
     entries = list((q1_profile or {}).get("entries") or [])
     learned = learn_partitions(q1_doc, entries)
     partitions = learned["partitions"]
-    rows = routing_rows(q1_doc, positions, grammar)
+    rows = routing_rows(q1_doc, positions, grammars)
     routing = route(partitions, rows, q1_date, q1_form, recorded_at)
     by_ctx = {p["context_id"]: p for p in positions}
     rows_by_ctx = {r["context_id"]: r for r in rows}
@@ -250,7 +284,7 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
                                            nil=len(obs["nil_keys"]), conflicts=len(obs["conflicts"]),
                                            zero_values=obs["zero_values"], channel_gaps=gaps)))
             if field in SCALE_FIELDS:
-                expectation, scale_cause = _learn_scale(obs, gaps)
+                expectation, scale_cause = _learn_scale(obs, gaps, conventions)
                 scale_cause = block_cause or scale_cause
                 contracts.append(_contract(cik, "scale", field, partition, tier, band_for(tolerances, tier, "scale"),
                                            expectation=None if scale_cause else expectation, cause=scale_cause,
@@ -260,14 +294,15 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
                     range_exp, range_cause = None, block_cause or (
                         ("scale_not_established_in_q1" if scale_cause else None))
                     if not range_cause:
-                        values = sorted(v for _, v in canonical(obs["values"], expectation["scale_class"]))
+                        values = sorted(v for _, v in canonical(obs["values"], expectation["scale_class"],
+                                                                conventions))
                         range_exp = dict(canonical_unit="percent", scale_class=expectation["scale_class"],
                                          min=values[0], max=values[-1], n_values=len(values),
                                          widened=widened(values[0], values[-1], band["value_range_widen"]))
                     contracts.append(_contract(cik, "value_range", field, partition, tier, band,
                                                expectation=range_exp, cause=range_cause,
                                                evidence=dict(scale_learn_cause=scale_cause)))
-        contracts.append(_learn_format(cik, partition, tier, tolerances, q1_doc, member_rows, grammar,
+        contracts.append(_learn_format(cik, partition, tier, tolerances, q1_doc, member_rows, grammars,
                                        learned["identifier_format"], block_cause))
     whole = next(p for p in partitions if p["partition_id"] == WHOLE_FILING)
     vote_ok = yield_q1.get("status") == "vote" and yield_q1.get("vote") in ("cash_leg", "all_in")
@@ -284,8 +319,8 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
                 identifier_format=learned["identifier_format"],
                 routing=dict(ambiguous=routing["ambiguous"], unroutable=routing["unroutable"]),
                 partition_statement=partition_statement(learned["evidenced"]),
-                grammar=None if not grammar else dict(path=grammar["path"], sha256=grammar["sha256"],
-                                                      dialect=grammar["dialect"], signatures=grammar["signatures"]),
+                grammar=[dict(path=g["path"], sha256=g["sha256"], dialect=g["dialect"], signatures=g["signatures"])
+                         for g in grammars] or None,
                 contracts=contracts, recorded_at=recorded_at, stage_b_note=STAGE_B_NOTE)
 
 
@@ -296,14 +331,15 @@ def partition_statement(evidenced: bool) -> str:
             "identifier formats leave the format contract insufficient_evidence")
 
 
-def _learn_format(cik, partition, tier, tolerances, q1_doc, rows, grammar, identifier_format, block_cause) -> dict:
+def _learn_format(cik, partition, tier, tolerances, q1_doc, rows, grammars, identifier_format, block_cause) -> dict:
     band = band_for(tolerances, tier, "format_grammar")
     gaps = channel_gaps(q1_doc, ("contexts", "identifiers"))
+    grammar, missing = grammar_for(partition["applies_to"], grammars)
     obs = grammar_observation(rows, grammar) if grammar and not gaps else None
     if block_cause:
         cause = block_cause
     elif not grammar:
-        cause = "no_authored_grammar"
+        cause = missing
     elif gaps:
         cause = "q1_channel_incomplete"
     elif identifier_format["status"] == "unresolved_mixed":
@@ -368,12 +404,27 @@ def _check_s2_constants(tolerances: dict) -> None:
 
 
 def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2_listing: dict,
-                       grammar: dict | None, yield_q2: dict | None) -> list:
-    """Evaluate the frozen contracts of one CIK on Q2; every contract yields exactly one result."""
+                       grammar, yield_q2: dict | None) -> list:
+    """Evaluate the frozen contracts of one CIK on Q2; every contract yields exactly one result.
+
+    Each result carries `identifier_format_unresolved` (the frozen Q1 identifier-format status)
+    so M2 can be reported under both readings of spec 6.3 (see IDENTIFIER_FORMAT_INTERPRETATION).
+    """
+    results = _evaluate(block, tolerances, q2_doc=q2_doc, q2_listing=q2_listing, grammar=grammar,
+                        yield_q2=yield_q2)
+    status = _req(_req(block, "identifier_format", "inventory block"), "status", "inventory block.identifier_format")
+    for r in results:
+        r["identifier_format_unresolved"] = status == "unresolved_mixed"
+    return results
+
+
+def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yield_q2) -> list:
     contracts = _req(block, "contracts", "inventory block")
     for c in contracts:
         _check_frozen(c, tolerances)
     _check_s2_constants(tolerances)
+    conventions = frozen_scale_conventions(tolerances)
+    grammars = as_grammars(grammar)
     if q2_doc is None:
         q2 = dict(report_date=q2_listing.get("report_date"), form_type=None, status=q2_listing.get("status"),
                   detail=q2_listing.get("detail"))
@@ -384,7 +435,7 @@ def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2
     positions = current_positions(q2_doc)
     partitions = [dict(partition_id=p["partition_id"], applies_to=p["applies_to"])
                   for p in _req(block, "partitions", "inventory block")]
-    rows = routing_rows(q2_doc, positions, grammar)
+    rows = routing_rows(q2_doc, positions, grammars)
     routing = route(partitions, rows, q2["report_date"], q2["form_type"], _req(block, "recorded_at", "block"))
     by_ctx = {p["context_id"]: p for p in positions}
     rows_by_ctx = {r["context_id"]: r for r in rows}
@@ -411,7 +462,7 @@ def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2
         members = [by_ctx[k] for k in routing["routed"].get(pid, [])]
         if c["kind"] == "format_grammar":
             results.append(_evaluate_format(c, q2, q2_doc, [rows_by_ctx[k] for k in routing["routed"].get(pid, [])],
-                                            grammar))
+                                            grammars))
             continue
         gaps = channel_gaps(q2_doc, ("contexts", field_channel(c["field"])))
         if (pid, c["field"]) not in cache:
@@ -425,8 +476,11 @@ def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2
         if not obs["rows"]:
             results.append(_result(c, "insufficient_evidence", q2, cause="no_q2_positions_in_partition"))
             continue
-        verdict = {"source_concept_set": _evaluate_concepts, "fill_rate": _evaluate_fill, "scale": _evaluate_scale,
-                   "value_range": _evaluate_range}[c["kind"]](c, q2, obs, scale_status)
+        if c["kind"] == "value_range":
+            verdict = _evaluate_range(c, q2, obs, scale_status, conventions)
+        else:
+            verdict = {"source_concept_set": _evaluate_concepts, "fill_rate": _evaluate_fill,
+                       "scale": _evaluate_scale}[c["kind"]](c, q2, obs)
         if c["kind"] == "scale":
             scale_status[(pid, c["field"])] = verdict["status"]
         results.append(verdict)
@@ -434,7 +488,7 @@ def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2
     return sorted(results, key=lambda r: order[r["contract_id"]])
 
 
-def _evaluate_concepts(c, q2, obs, _scale) -> dict:
+def _evaluate_concepts(c, q2, obs) -> dict:
     expected = _req(c["expectation"], "concepts", c["contract_id"])
     got = obs["concepts"]
     if got == expected:
@@ -442,11 +496,16 @@ def _evaluate_concepts(c, q2, obs, _scale) -> dict:
     added = sorted(set(got) - set(expected))
     removed = sorted(set(expected) - set(got))
     keys = {k for concept in added for k in obs["concept_keys"][concept]}
-    return _result(c, "breach", q2, expected=expected, observed=dict(concepts=got, added=added, removed=removed),
+    # A removed concept is carried by no Q2 row: every Q2 row of the partition is a row
+    # whose field is no longer carried by it.
+    keys |= set(obs["row_keys"]) if removed else set()
+    return _result(c, "breach", q2, expected=expected,
+                   observed=dict(concepts=got, added=added, removed=removed,
+                                 rows_not_carrying_removed=len(obs["row_keys"]) if removed else 0),
                    keys=keys, cause="concept_set_changed")
 
 
-def _evaluate_fill(c, q2, obs, _scale) -> dict:
+def _evaluate_fill(c, q2, obs) -> dict:
     exp = _req(c["expectation"], "fill_share", c["contract_id"])
     pp = _req(c["band"], "fill_rate_pp", c["contract_id"])
     observed = dict(fill_share=obs["fill_share"], filled=obs["filled"], rows=obs["rows"],
@@ -460,7 +519,7 @@ def _evaluate_fill(c, q2, obs, _scale) -> dict:
                    cause="fill_rate_outside_band")
 
 
-def _evaluate_scale(c, q2, obs, _scale) -> dict:
+def _evaluate_scale(c, q2, obs) -> dict:
     exp = c["expectation"]
     expected_class = _req(exp, "scale_class", c["contract_id"])
     regime = _req(exp, "magnitude_regime", c["contract_id"])
@@ -485,7 +544,7 @@ def _evaluate_scale(c, q2, obs, _scale) -> dict:
     return _result(c, "holds", q2, expected=exp, observed=observed)
 
 
-def _evaluate_range(c, q2, obs, scale_status) -> dict:
+def _evaluate_range(c, q2, obs, scale_status, conventions) -> dict:
     exp = c["expectation"]
     lo, hi = _req(exp, "widened", c["contract_id"])
     q_lo, q_hi = _req(c["band"], "value_range_quantiles", c["contract_id"])
@@ -493,7 +552,7 @@ def _evaluate_range(c, q2, obs, scale_status) -> dict:
     if status != "holds":
         return _result(c, "insufficient_evidence", q2, cause="scale_contract_not_holds",
                        observed=dict(scale_status=status), expected=exp)
-    values = canonical(obs["values"], _req(exp, "scale_class", c["contract_id"]))
+    values = canonical(obs["values"], _req(exp, "scale_class", c["contract_id"]), conventions)
     if not values:
         return _result(c, "insufficient_evidence", q2, cause="no_q2_values_to_assess", expected=exp)
     ordered = sorted(v for _, v in values)
@@ -506,11 +565,14 @@ def _evaluate_range(c, q2, obs, scale_status) -> dict:
                    keys=outside)
 
 
-def _evaluate_format(c, q2, q2_doc, rows, grammar) -> dict:
+def _evaluate_format(c, q2, q2_doc, rows, grammars) -> dict:
     exp = c["expectation"]
     minimum = _req(c["band"], "format_grammar_min_parse_share", c["contract_id"])
-    if not grammar or grammar["sha256"] != _req(exp, "grammar_sha256", c["contract_id"]):
+    pinned = [g for g in grammars if g["sha256"] == _req(exp, "grammar_sha256", c["contract_id"])
+              and g["dialect"] == _req(exp, "dialect", c["contract_id"])]
+    if len(pinned) != 1:
         raise ContractError("format contract evaluated without its pinned grammar: " + c["contract_id"])
+    grammar = pinned[0]
     gaps = channel_gaps(q2_doc, ("contexts", "identifiers"))
     if gaps:
         return _result(c, "insufficient_evidence", q2, cause="q2_channel_incomplete", expected=exp,
@@ -547,25 +609,46 @@ def _counts(results) -> dict:
     return out
 
 
-def summarise_m2(results: list, *, denominator: int) -> dict:
-    if len(results) != denominator:
-        raise ContractError("M2 results (%d) differ from the frozen denominator (%d)" % (len(results), denominator))
+def _tables(results: list) -> dict:
     by = lambda key: {k: _counts([r for r in results if key(r) == k]) for k in sorted({key(r) for r in results})}
     causes: dict = {}
     for r in results:
         if r["status"] == "insufficient_evidence":
             causes[r["cause"]] = causes.get(r["cause"], 0) + 1
     counts = _counts(results)
-    return dict(denominator=denominator, counts=counts,
-                holds_share=round(counts["holds"] / denominator, 6) if denominator else None,
+    return dict(denominator=len(results), counts=counts,
+                holds_share=round(counts["holds"] / len(results), 6) if results else None,
                 by_cik=by(lambda r: r["cik"]), by_kind=by(lambda r: r["kind"]),
                 by_q2_form_type=by(lambda r: r["q2"]["form_type"] or "unavailable"),
                 by_cik_and_kind=by(lambda r: r["cik"] + ":" + r["kind"]),
                 by_q2_form_type_and_kind=by(lambda r: (r["q2"]["form_type"] or "unavailable") + ":" + r["kind"]),
-                insufficient_causes=dict(sorted(causes.items())),
+                insufficient_causes=dict(sorted(causes.items())))
+
+
+def strict_results(results: list) -> list:
+    """Strict spec 6.3 reading: every row-level contract of a CIK whose Q1 identifier format is an
+    unresolved mixture is insufficient_evidence/identifier_format_unresolved (yield is fund-level)."""
+    out = []
+    for r in results:
+        flagged = _req(r, "identifier_format_unresolved", "result " + str(r.get("contract_id")))
+        if flagged and r["kind"] != "fund_income_yield" and r["status"] != "insufficient_evidence":
+            r = dict(r, status="insufficient_evidence", cause="identifier_format_unresolved")
+        out.append(r)
+    return out
+
+
+def summarise_m2(results: list, *, denominator: int) -> dict:
+    if len(results) != denominator:
+        raise ContractError("M2 results (%d) differ from the frozen denominator (%d)" % (len(results), denominator))
+    strict = strict_results(results)
+    return dict(_tables(results), reading="as_evaluated",
                 breaches=[dict(contract_id=r["contract_id"], cause=r["cause"], expected=r["expected"],
                                observed=_brief(r["observed"]), violating_keys=r["violating_keys"],
-                               q2_form_type=r["q2"]["form_type"]) for r in results if r["status"] == "breach"],
+                               q2_form_type=r["q2"]["form_type"],
+                               identifier_format_unresolved=r["identifier_format_unresolved"])
+                          for r in results if r["status"] == "breach"],
+                identifier_format_unresolved_contracts=sum(r["identifier_format_unresolved"] for r in results),
+                strict_6_3=dict(_tables(strict), interpretation=IDENTIFIER_FORMAT_INTERPRETATION),
                 holds_with_form_type_reason=HOLDS_WITH_FORM_TYPE_REASON, deferred_unchecked=DEFERRED,
                 stage_b_note=STAGE_B_NOTE, claim=CLAIM)
 

@@ -40,6 +40,7 @@ EXIT_INVALIDATED, EXIT_CONTRACT, EXIT_REFUSED = 2, 3, 4
 RUN_PREFIX = "stageb-contracts-"
 ANCHOR_DIR = "data/overrides/identifier_anchors"
 CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_income.py",
+              "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/envelope.py",
               "scripts/profile_pilot/census.py", "scripts/profile_pilot/census_detect.py",
               "scripts/profile_pilot/manifest.py", "pipeline/rate_convention.py", "pipeline/identifier_rate.py",
@@ -195,6 +196,17 @@ def _q2_listing(census: dict, cik: str) -> dict:
                 detail=gone.get("detail") or "no authoritative Q2 census")
 
 
+def order_proof(clock: dict, *, cached_q2_stamps: list):
+    """True/False from the wall clock; "unknown" (never True) when no Q2 parse time is known.
+
+    On cache hits the parse time is the cached record's own evaluated_utc (earliest)."""
+    first = clock.get("first_q2_parse_utc") or (min(cached_q2_stamps) if cached_q2_stamps else None)
+    if first is None:
+        return "unknown"
+    return (clock["tolerances_frozen_utc"] <= clock["manifest_written_utc"] <= clock["learning_done_utc"]
+            <= clock["inventory_frozen_utc"] <= first)
+
+
 def _yield_brief(ev: dict | None) -> dict | None:
     if not ev:
         return None
@@ -276,7 +288,8 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
             q1_doc = load_census(row)
             yield_q1 = contracts_income.load_income_evidence(
                 paths, cik=cik, report_date=row["report_date"], holdings_path=holdings_path,
-                income_path=income_slice["path"], census_doc=q1_doc)
+                income_path=income_slice["path"], census_doc=q1_doc,
+                min_quarters=contracts.frozen_min_quarters(tolerances))
             return contracts.learn_contracts(cik=cik, q1_doc=q1_doc, q1_profile=load_profile(profile_record),
                                              grammar=grammars[cik], yield_q1=yield_q1, tolerances=tolerances,
                                              q2_listing=_q2_listing(census, cik), recorded_at=recorded_at)
@@ -291,7 +304,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     tolerances = manifest.load_inventory(paths, "contract_tolerances")
     inventory = manifest.load_inventory(paths, "contract_inventory")
     inv_record = manifest.file_record(inventory_state["path"], "run/inventories/contract_inventory.json")
-    results, yields = [], {}
+    results, yields, cached_stamps = [], {}, []
     for cik in ciks:
         row = census["selected"].get((cik, "q2"))
         block = inventory["ciks"][cik]
@@ -302,18 +315,22 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
             collector_version=contracts.CONTRACTS_VERSION)
 
         def evaluate(cik=cik, row=row, block=block):
-            clock.setdefault("first_q2_parse_utc", _now())
+            stamp = _now()
+            clock.setdefault("first_q2_parse_utc", stamp)
             q2_doc = load_census(row) if row else None
             yield_q2 = None if row is None else contracts_income.load_income_evidence(
                 paths, cik=cik, report_date=row["report_date"], holdings_path=holdings_path,
-                income_path=income_slice["path"], census_doc=q2_doc)
+                income_path=income_slice["path"], census_doc=q2_doc,
+                min_quarters=contracts.frozen_min_quarters(tolerances))
             listing = block["q2_listing"]
-            return dict(yield_q2=yield_q2, results=contracts.evaluate_contracts(
+            return dict(evaluated_utc=stamp, yield_q2=yield_q2, results=contracts.evaluate_contracts(
                 block, tolerances, q2_doc=q2_doc, q2_listing=listing, grammar=grammars[cik], yield_q2=yield_q2))
 
         size = row["record"]["bytes"] if row else 0
         out = manifest.run_cached_stage(paths, "results/contracts/" + cik + ".json", identity, evaluate,
                                         workload=_workload(cik, size))
+        if out["cache"] == "hit" and out["result"].get("evaluated_utc"):
+            cached_stamps.append(out["result"]["evaluated_utc"])
         results += out["result"]["results"]
         q1_yield = next(c for c in block["contracts"] if c["kind"] == "fund_income_yield")["evidence"]["q1_yield"]
         verdict = next(r for r in out["result"]["results"] if r["kind"] == "fund_income_yield")
@@ -331,13 +348,17 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     after = manifest.verify_inputs(built)
     if not after["ok"]:
         raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
-    order_ok = (clock["tolerances_frozen_utc"] <= clock["manifest_written_utc"] <= clock["learning_done_utc"]
-                <= clock["inventory_frozen_utc"] <= clock.get("first_q2_parse_utc", "9"))
+    order_ok = order_proof(clock, cached_q2_stamps=cached_stamps)
+    strict = m2["strict_6_3"]
     summary = dict(run_id=paths.run_id, git_head=built["git"]["head"],
                    dirty_source_digest=built["git"]["dirty_source_digest"], census_run_id=census_run_id,
                    profile_run_id=profile_run_id, recorded_at=recorded_at, clock=clock, order_ok=order_ok,
+                   cached_q2_stamps=cached_stamps, tolerances_version=tolerances["version"],
                    seconds=round(time.perf_counter() - started, 1), counts=m2["counts"],
                    by_q2_form_type=m2["by_q2_form_type"], denominator=m2["denominator"],
+                   holds_share=m2["holds_share"],
+                   strict_6_3=dict(counts=strict["counts"], by_q2_form_type=strict["by_q2_form_type"],
+                                   holds_share=strict["holds_share"], interpretation=strict["interpretation"]),
                    input_verification_after=after, results="results/m2.json", claim=contracts.CLAIM,
                    stage_b_note=contracts.STAGE_B_NOTE)
     write_once_json(paths, "results/contracts_summary.json", summary)
@@ -380,6 +401,10 @@ def main(argv=None) -> int:
           + " s | order_ok " + str(summary["order_ok"]))
     print("M2 (denominator " + str(summary["denominator"]) + "): " + json.dumps(summary["counts"], sort_keys=True))
     for form, counts in summary["by_q2_form_type"].items():
+        print("  Q2 " + form + ": " + json.dumps(counts, sort_keys=True))
+    strict = summary["strict_6_3"]
+    print("M2 strict 6.3: " + json.dumps(strict["counts"], sort_keys=True))
+    for form, counts in strict["by_q2_form_type"].items():
         print("  Q2 " + form + ": " + json.dumps(counts, sort_keys=True))
     return 0
 

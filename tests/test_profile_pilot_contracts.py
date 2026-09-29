@@ -190,8 +190,19 @@ def test_tolerance_file_carries_the_spec_table_verbatim_and_operational_bands():
     assert tol["low_history_below_positions"] == 50
     assert tol["form_type_qualifiers"]["evidenced"] == []
     assert set(tol["fund_income_yield"]["constants"]) >= {"INCOME_COVERAGE_BAND", "METHOD_VERSION",
-                                                          "INCOME_R_ALL_IN", "INCOME_R_CASH"}
+                                                          "INCOME_R_ALL_IN", "INCOME_R_CASH", "INCOME_MIN_QUARTERS"}
     json.dumps(tol).encode("ascii")
+
+
+def test_tolerance_version_2_records_the_evidence_limit_correction_and_interpretation():
+    tol = tolerances()
+    assert tol["version"] == "contract-tolerances.v2"
+    assert tol["supersedes"]["version"] == "contract-tolerances.v1"
+    assert tol["supersedes"]["run_id"] == "stageb-contracts-20260929t032414z"
+    assert "INCOME_MIN_QUARTERS" in tol["fund_income_yield"]["vote_rule"]
+    assert "not a relaxation" in tol["supersedes"]["reason"]
+    assert "strict" in tol["identifier_format_interpretation"]
+    assert set(tol["scale_conventions"]) == {"pure", "percent", "bps"}
 
 
 # ---------------------------------------------------------------- denominator and statuses
@@ -256,6 +267,19 @@ def test_namespace_change_with_unchanged_scale_breaks_concept_not_scale():
     assert len(concept["violating_keys"]) == 60
 
 
+def test_removed_concept_breach_lists_the_q2_rows_no_longer_carrying_it():
+    block = learn(mk_doc(book(pik="0.01")))
+    result = pick(evaluate(block, mk_doc(book(), date=Q2)), "source_concept_set", "pik_rate")
+    assert result["status"] == "breach" and result["observed"]["removed"] == ["us-gaap:InvestmentInterestRatePaidInKind"]
+    assert len(result["violating_keys"]) == 60
+    partial = book(pik="0.01")[:40] + book()[40:]
+    moved = [debt(i, pik="0.01") for i in range(40)] + \
+            [debt(i, extra=dict(pik_rate=val("0.01", concept="abc:Pik"))) for i in range(40, 60)]
+    result = pick(evaluate(learn(mk_doc(partial)), mk_doc(moved, date=Q2)), "source_concept_set", "pik_rate")
+    assert result["observed"]["added"] == ["abc:Pik"] and result["observed"]["removed"] == []
+    assert len(result["violating_keys"]) == 20
+
+
 def test_mixed_magnitudes_and_text_rates_abstain_on_scale_and_range():
     nexpoint = book(30, rate="0.10") + [debt(100 + i, rate="3.75") for i in range(30)]
     block = learn(mk_doc(nexpoint))
@@ -313,6 +337,70 @@ def test_unresolved_mixed_identifier_format_blocks_the_format_contract_only():
     assert fmt["learn_cause"] == "unresolved_mixed_identifier_format"
     assert pick(block["contracts"], "fill_rate", "interest_rate")["learn_status"] == "learned"
     assert "whole-filing" in block["partition_statement"]
+
+
+def test_m2_is_reported_as_evaluated_and_under_the_strict_6_3_reading():
+    mixed = learn(mk_doc(book(), partition=(MIXED,)))
+    clean = learn(mk_doc(book()))
+    results = evaluate(mixed, mk_doc(book(), date=Q2)) + evaluate(clean, mk_doc(book(), date=Q2))
+    flagged = [r for r in results if r["identifier_format_unresolved"]]
+    assert len(flagged) == len(mixed["contracts"])
+    assert not any(r["identifier_format_unresolved"] for r in results[len(mixed["contracts"]):])
+    m2 = contracts.summarise_m2(results, denominator=len(results))
+    strict = m2["strict_6_3"]
+    assert strict["denominator"] == m2["denominator"]
+    moved = sum(1 for r in flagged if r["kind"] != "fund_income_yield" and r["status"] != "insufficient_evidence")
+    assert strict["counts"]["insufficient_evidence"] == m2["counts"]["insufficient_evidence"] + moved
+    assert strict["insufficient_causes"]["identifier_format_unresolved"] == moved
+    assert strict["counts"]["holds"] < m2["counts"]["holds"]
+    assert set(strict["by_q2_form_type"]) == set(m2["by_q2_form_type"])
+    assert "strict" in strict["interpretation"]
+
+
+# ---------------------------------------------------------------- two dialect partitions (format)
+
+PIPE_BODY = dict(applies_to=dict(signature="PIPE"), required_fields=["interest_rate"],
+                 extractors=[dict(field="interest_rate", regex=r"\|\s*(\d+(?:\.\d+)?)%\s*\|", group=1, type="pct")])
+COMMA_BODY = dict(applies_to=dict(signature="COMMA"), required_fields=["interest_rate"],
+                  extractors=[dict(field="interest_rate", regex=r",\s*(\d+(?:\.\d+)?)%\s*,", group=1, type="pct")])
+
+
+def dialects():
+    return [contracts.grammar_info(PIPE_BODY, path="g/pipe.json", sha256="1" * 64,
+                                   anchors=[("PIPE", re.compile(r"\|\s*\d+(?:\.\d+)?%"))]),
+            contracts.grammar_info(COMMA_BODY, path="g/comma.json", sha256="2" * 64,
+                                   anchors=[("COMMA", re.compile(r",\s*\d+(?:\.\d+)?%"))])]
+
+
+def comma(i):
+    return debt(1000 + i, ident="Beta %d, First Lien, 10.00%%, 1/1/2029" % i)
+
+
+def test_two_dialect_partitions_hold_their_own_format_contracts_where_whole_filing_breaches():
+    pipe_pred = dict(kind="grammar_dialect", dialect="PIPE")
+    comma_pred = dict(kind="grammar_dialect", dialect="COMMA")
+    rows = book(30) + [comma(i) for i in range(30)]
+    routed = contracts.routing_rows(mk_doc(rows), contracts.current_positions(mk_doc(rows)), dialects())
+    assert envelope.predicate_matches(pipe_pred, routed[0]) and not envelope.predicate_matches(comma_pred, routed[0])
+    assert envelope.predicate_matches(comma_pred, routed[-1])
+    block = learn(mk_doc(rows, partition=(evidenced(pipe_pred, comma_pred),)), gram=dialects())
+    q2 = mk_doc(book(25) + [comma(i) for i in range(35)], date=Q2)
+    results = evaluate(block, q2, gram=dialects())
+    formats = [r for r in results if r["kind"] == "format_grammar"]
+    assert sorted(r["expected"]["dialect"] for r in formats) == ["COMMA", "PIPE"]
+    assert {r["status"] for r in formats} == {"holds"}
+    assert {tuple(sorted(r["applies_to"].items())) for r in formats} == {
+        tuple(sorted(pipe_pred.items())), tuple(sorted(comma_pred.items()))}
+    # Whole filing under one dialect: the same regular filing reads as a 50% grammar failure...
+    both = [contracts.grammar_info(PIPE_BODY, path="g/pipe.json", sha256="1" * 64,
+                                   anchors=[("PIPE", re.compile(r"\d+(?:\.\d+)?%"))])]
+    flat = learn(mk_doc(rows), gram=both)
+    fmt = pick(flat["contracts"], "format_grammar", "investment_identifier")
+    assert fmt["learn_cause"] == "grammar_does_not_hold_on_q1" and fmt["evidence"]["parse_share"] == 0.5
+    # ...and a whole-filing contract frozen on a one-dialect Q1 breaches on the two-dialect Q2.
+    single = learn(mk_doc(book(60)), gram=both)
+    breach = pick(evaluate(single, q2, gram=both), "format_grammar", "investment_identifier")
+    assert breach["status"] == "breach" and len(breach["violating_keys"]) == 35
 
 
 # ---------------------------------------------------------------- format grammar
@@ -432,6 +520,20 @@ def test_evaluation_reads_only_the_frozen_files_and_fails_closed(tmp_path, monke
     del broken["bands"]["standard"]["fill_rate_pp"]
     with pytest.raises(contracts.ContractError):
         evaluate(inventory["ciks"][CIK], q2, tol=broken)
+    # The conversion used for Q2 ranges is the frozen one, not the code's dict.
+    from scripts.profile_pilot import contracts_observe
+    ranged = evaluate(inventory["ciks"][CIK], q2, tol=frozen_tol)
+    assert pick(ranged, "value_range", "interest_rate")["status"] == "holds"
+    monkeypatch.setitem(contracts_observe.SCALE_CONVENTIONS, "pure", dict(canonical_unit="percent", factor="1"))
+    assert evaluate(inventory["ciks"][CIK], q2, tol=frozen_tol) == ranged
+    no_conventions = copy.deepcopy(frozen_tol)
+    del no_conventions["scale_conventions"]
+    with pytest.raises(contracts.ContractError):
+        evaluate(inventory["ciks"][CIK], q2, tol=no_conventions)
+    no_factor = copy.deepcopy(frozen_tol)
+    del no_factor["scale_conventions"]["pure"]["factor"]
+    with pytest.raises(contracts.ContractError):
+        evaluate(inventory["ciks"][CIK], q2, tol=no_factor)
     no_expectation = copy.deepcopy(inventory["ciks"][CIK])
     del no_expectation["contracts"][0]["expectation"]
     with pytest.raises(contracts.ContractError):
@@ -491,16 +593,43 @@ def yield_evidence(h, inc, doc, tmp_path, **kw):
                                                 cwd=lambda: chdir(tmp_path), **kw)
 
 
-def test_cash_leg_and_all_in_double_pik_controls(tmp_path):
-    cash = holdings([("10.0", "2.0", "1000000")] * 5 + [("10.0", "", "1000000")] * 5)
+Q0 = "2023-03-31"
+
+
+def two_quarters(rows, ii, *, concept="us-gaap:InvestmentInterestRatePaidInCash"):
+    h = pd.concat([holdings(rows, q=Q0, acc="A0"), holdings(rows, q=Q1, acc="A1")], ignore_index=True)
+    inc = pd.concat([income(ii, q=Q0, acc="A0"), income(ii, q=Q1, acc="A1")], ignore_index=True)
+    docs = {Q0: census_for(len(rows), q=Q0, concept=concept), Q1: census_for(len(rows), q=Q1, concept=concept)}
+    return h, inc, docs
+
+
+def test_one_quarter_cannot_vote_two_can_and_pik_is_never_added_twice(tmp_path):
+    cash_rows = [("10.0", "2.0", "1000000")] * 5 + [("10.0", "", "1000000")] * 5
+    cash = holdings(cash_rows)
     ev = yield_evidence(cash, income("275000.0"), census_for(10), tmp_path)
-    assert ev["status"] == "vote" and ev["vote"] == "cash_leg"
-    assert ev["s2"]["src"] == "tagged" and abs(ev["s2"]["r"] - 1.0) < 1e-9
+    assert ev["status"] == "insufficient_evidence" and ev["vote"] is None
+    assert ev["cause"] == "s2_evidence_limit_below_min_quarters"
+    assert ev["s2"]["src"] == "tagged" and abs(ev["s2"]["r"] - 1.0) < 1e-9 and ev["s2"]["votes_cash"] == 1
+    assert ev["s2"]["min_quarters"] == 2
     assert ev["preconditions"]["rate_units"]["ok"] and ev["preconditions"]["duration"]["ok"]
-    allin = holdings([("12.0", "2.0", "1000000")] * 5 + [("10.0", "", "1000000")] * 5)
-    ev = yield_evidence(allin, income("275000.0"), census_for(10, concept="us-gaap:InvestmentInterestRate"),
-                        tmp_path)
+    h, inc, docs = two_quarters(cash_rows, "275000.0")
+    with chdir(tmp_path):
+        ev = contracts_income.income_evidence(h, inc, cik=CIK, report_date=Q1, census_doc=docs[Q1],
+                                              window=[Q0, Q1], window_docs=docs, cwd=lambda: chdir(tmp_path))
+    assert ev["status"] == "vote" and ev["vote"] == "cash_leg" and ev["s2"]["votes_cash"] == 2
+    assert sorted(ev["window_preconditions"]) == [Q0, Q1]
+    allin_rows = [("12.0", "2.0", "1000000")] * 5 + [("10.0", "", "1000000")] * 5
+    h, inc, docs = two_quarters(allin_rows, "275000.0", concept="us-gaap:InvestmentInterestRate")
+    with chdir(tmp_path):
+        ev = contracts_income.income_evidence(h, inc, cik=CIK, report_date=Q1, census_doc=docs[Q1],
+                                              window=[Q0, Q1], window_docs=docs, cwd=lambda: chdir(tmp_path))
     assert ev["status"] == "vote" and ev["vote"] == "all_in" and abs(ev["s2"]["r"]) < 1e-9
+    # The frozen minimum governs: a frozen value of 3 blocks the two-quarter vote.
+    with chdir(tmp_path):
+        ev = contracts_income.income_evidence(h, inc, cik=CIK, report_date=Q1, census_doc=docs[Q1],
+                                              window=[Q0, Q1], window_docs=docs, min_quarters=3,
+                                              cwd=lambda: chdir(tmp_path))
+    assert ev["cause"] == "s2_evidence_limit_below_min_quarters"
     seen = []
     from pipeline.rate_convention import _aggregate_signals
 
@@ -578,6 +707,13 @@ def test_runner_helpers_are_light_and_name_the_missing_q2():
     brief = contracts_run._yield_brief(dict(report_date=Q1, status="insufficient_evidence", vote=None,
                                             cause="no_fund_income_row", preconditions=dict(rows=dict(ok=True))))
     assert brief["preconditions"] == {"rows": True} and brief["r"] is None
+    assert "scripts/profile_pilot/contracts_observe.py" in contracts_run.CODE_FILES
+    clock = dict(tolerances_frozen_utc="T1", manifest_written_utc="T2", learning_done_utc="T3",
+                 inventory_frozen_utc="T4")
+    assert contracts_run.order_proof(clock, cached_q2_stamps=[]) == "unknown"
+    assert contracts_run.order_proof(clock, cached_q2_stamps=["T5", "T6"]) is True
+    assert contracts_run.order_proof(dict(clock, first_q2_parse_utc="T3"), cached_q2_stamps=[]) is False
+    assert contracts_run.order_proof(dict(clock, first_q2_parse_utc="T4"), cached_q2_stamps=[]) is True
 
 
 # ---------------------------------------------------------------- real census pair (cache)
