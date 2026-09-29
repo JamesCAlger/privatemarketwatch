@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "filer_profile_document_v0.schema.json",
+  "title": "Filer profile v0 document layout (filer-profile pilot, spec 6.2 section table)",
+  "description": "Layered over filer_profile_v0.schema.json, which stays the entry-envelope contract (Task 2) and is not modified: every item of `entries` must validate against its $defs/entry. `events` is the append-only assertion/retraction log; `entries` is its materialized view. Sections follow spec 6.2: nine derived sections, accounting_scope and lifecycle stubs, anchors copied from data/overrides/agent_anchor when a file exists for the report date, else a stub. Candidate and insufficient_evidence detector outcomes are packet stubs, never entries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "profile_version", "cik", "era", "report_date", "form_type", "recorded_at", "source",
+               "channel_states", "sections", "events", "entries", "packet_stubs", "anchors", "validation",
+               "counts", "claims"],
+  "properties": {
+    "schema": {"const": "filer_profile_document_v0"},
+    "profile_version": {"type": "string", "minLength": 1},
+    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
+    "era": {"enum": ["q1", "same_era"]},
+    "report_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "form_type": {"type": ["string", "null"]},
+    "recorded_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "source": {
+      "type": "object",
+      "required": ["cik", "report_date", "census_relative", "census_sha256", "fingerprint"],
+      "properties": {
+        "census_relative": {"type": "string", "minLength": 1},
+        "census_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "fingerprint": {"type": "string", "minLength": 1}
+      }
+    },
+    "channel_states": {"type": "object", "additionalProperties": {"type": ["string", "null"]}},
+    "sections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identifier_format", "subtotals_and_headings", "presentation_views", "comparative_periods",
+                   "column_contract", "footnote_conventions", "position_identity", "non_disclosure",
+                   "fund_level_concepts", "accounting_scope", "lifecycle", "anchors"],
+      "patternProperties": {"^[a-z_]+$": {"$ref": "#/$defs/section"}}
+    },
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+    "entries": {"type": "array", "items": {"$ref": "filer_profile_v0.schema.json#/$defs/entry"}},
+    "packet_stubs": {"type": "array", "items": {"$ref": "#/$defs/packet_stub"}},
+    "anchors": {
+      "oneOf": [
+        {"type": "object", "required": ["status", "provenance", "inherited_from", "files"],
+         "properties": {"status": {"const": "copied"}, "provenance": {"const": "inherited"},
+                        "inherited_from": {"type": "string", "minLength": 1},
+                        "files": {"type": "array", "minItems": 1, "items": {
+                          "type": "object", "required": ["path", "sha256", "report_date", "content"],
+                          "properties": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}}},
+        {"type": "object", "required": ["status", "reason"],
+         "properties": {"status": {"const": "stub"}, "reason": {"type": "string"}}}
+      ]
+    },
+    "validation": {"type": "object", "required": ["events", "entries", "slices"]},
+    "counts": {"type": "object", "required": ["entries", "packet_stubs", "stubs_by_cause"]},
+    "claims": {"type": "string"}
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "entry_ids", "stub_ids", "depends_on_channels", "notes"],
+      "properties": {
+        "status": {"enum": ["derived", "unresolved", "insufficient_evidence", "no_observations", "stub", "copied"]},
+        "entry_ids": {"type": "array", "items": {"type": "string"}},
+        "stub_ids": {"type": "array", "items": {"type": "string"}},
+        "depends_on_channels": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": ["event", "event_id", "entry_id", "recorded_at"],
+      "properties": {"event": {"enum": ["assert", "retract"]}}
+    },
+    "packet_stub": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stub_id", "section", "cause", "bears_on", "detector", "finding", "subject", "question",
+                   "evidence"],
+      "properties": {
+        "stub_id": {"type": "string", "minLength": 1},
+        "section": {"type": "string"},
+        "cause": {"enum": ["candidate", "insufficient_evidence", "not_implemented", "no_value"],
+                  "description": "candidate / insufficient_evidence: the detector outcome or blocked channel; not_implemented: outside this pilot; no_value: resolved evidence that yields no value (e.g. no dominant delimiter)."},
+        "bears_on": {"type": "array", "items": {"type": "string"}},
+        "detector": {"type": ["string", "null"]},
+        "finding": {"type": ["string", "null"]},
+        "subject": {"type": "object"},
+        "question": {"type": ["string", "null"]},
+        "evidence": {"type": "object"}
+      }
+    }
+  }
+}
