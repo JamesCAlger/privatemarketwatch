@@ -229,26 +229,49 @@ def v2_subset_check(blocks: dict, results: dict, *, v2_blocks: dict, v2_results:
     """v2 contract ids, expectations and results must be byte-for-byte the v2 run's under v3: the v3
     block's v2 contracts equal the v2 inventory's, and the v3 results of those contracts (without the
     newly_abstained flag, which v2 results do not carry) equal the v2 results after a JSON round trip."""
-    by_cik, diffs = {}, {}
+    by_cik, diffs, ev_diffs = {}, {}, {}
+    rt = lambda x: json.loads(json.dumps(x))
     for cik in sorted(blocks):
-        v2c = [c for c in blocks[cik]["contracts"] if c["kind"] in contracts.KINDS]
-        mine = json.loads(json.dumps([{k: v for k, v in r.items() if k != "newly_abstained"}
-                                      for r in results[cik] if r["kind"] in contracts.KINDS]))
-        theirs = json.loads(json.dumps([{k: v for k, v in r.items() if k != "newly_abstained"}
-                                        for r in v2_results[cik]]))
-        same_c = json.loads(json.dumps(v2c)) == json.loads(json.dumps(v2_blocks[cik]["contracts"]))
+        v2c = rt([c for c in blocks[cik]["contracts"] if c["kind"] in contracts.KINDS])
+        old = rt(v2_blocks[cik]["contracts"])
+        mine = rt([{k: v for k, v in r.items() if k != "newly_abstained"}
+                   for r in results[cik] if r["kind"] in contracts.KINDS])
+        theirs = rt([{k: v for k, v in r.items() if k != "newly_abstained"} for r in v2_results[cik]])
+        strip = lambda cs: [{k: v for k, v in c.items() if k != "evidence"} for c in cs]
+        same_c = strip(v2c) == strip(old)
         same_r = mine == theirs
-        by_cik[cik] = dict(contracts=same_c, results=same_r, v2_contracts=len(v2c),
-                           semantic_contracts=len(blocks[cik]["contracts"]) - len(v2c))
+        noise = []
+        for a, b in zip(v2c, old):
+            _paths(a.get("evidence"), b.get("evidence"), a["contract_id"] + ".evidence", noise)
+        by_cik[cik] = dict(contracts=same_c, results=same_r, evidence_identical=not noise and len(v2c) == len(old),
+                           v2_contracts=len(v2c), semantic_contracts=len(blocks[cik]["contracts"]) - len(v2c))
         bad = [a.get("contract_id") for a, b in zip(mine, theirs) if a != b]
         if len(mine) != len(theirs):
             bad.append("result count %d != %d" % (len(mine), len(theirs)))
-        if not same_c:
-            bad.append("v2 contracts differ from the v2 inventory")
+        if len(v2c) != len(old):
+            bad.append("v2 contract count %d != %d" % (len(v2c), len(old)))
+        bad += [a["contract_id"] + " (contract)" for a, b in zip(strip(v2c), strip(old)) if a != b]
         if bad:
             diffs[cik] = bad[:20]
-    return dict(identical=not diffs, by_cik=by_cik, differences=diffs,
-                rule="v2 subset = contracts of the v2 kinds; results compared without newly_abstained")
+        if noise:
+            ev_diffs[cik] = noise[:20]
+    return dict(identical=not diffs, by_cik=by_cik, differences=diffs, evidence_differences=ev_diffs,
+                rule="identity verdict = v2 contract ids, bands, learn status/cause and expectations, and the v2 "
+                     "results (without newly_abstained), byte-for-byte after a JSON round trip; learning EVIDENCE "
+                     "differences are reported apart (evidence_differences) and do not decide the verdict: the "
+                     "pinned parquet slices are written by an unordered parallel DuckDB COPY, so S2 float sums in "
+                     "the yield evidence can differ in the last ulp between runs")
+
+
+def _paths(a, b, path: str, out: list) -> None:
+    if isinstance(a, dict) and isinstance(b, dict):
+        for k in sorted(set(a) | set(b)):
+            _paths(a.get(k), b.get(k), path + "." + str(k), out)
+    elif isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
+        for i, (x, y) in enumerate(zip(a, b)):
+            _paths(x, y, path + "[" + str(i) + "]", out)
+    elif a != b:
+        out.append(path)
 
 
 def load_v2_run(paths: PilotPaths, run_id: str, ciks) -> dict:

@@ -1217,6 +1217,7 @@ def test_v2_subset_check_compares_v2_contracts_and_results_without_the_flag():
     r3 = evaluate(b3, q2)
     check = contracts_run.v2_subset_check({CIK: b3}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: r2})
     assert check["identical"] is True and check["by_cik"][CIK] == dict(contracts=True, results=True, v2_contracts=57,
+                                                                       evidence_identical=True,
                                                                        semantic_contracts=2)
     bad = copy.deepcopy(r2)
     bad[0]["status"] = "breach"
@@ -1240,3 +1241,23 @@ def test_v3_bands_are_the_calibrated_choices_and_every_curve_is_labelled_in_samp
                   and r["seeded_detection_fraction"] is not None and r["seeded_detection_fraction"] <= 0.30]
             assert band["chosen"] == min(r["value"] for r in ok)
     assert cal["median_shift_experiment"]["adopted"] is False
+
+
+def test_v2_subset_check_reports_evidence_noise_apart_from_the_identity_verdict():
+    from scripts.profile_pilot import contracts_run
+    q1, q2 = mk_doc(book() + floaters()), mk_doc(book() + floaters(), date=Q2)
+    b2, b3 = learn(q1, tol=v2_tol()), learn(q1)
+    r2 = json.loads(json.dumps(strip_flag(evaluate(b2, q2, tol=v2_tol()))))
+    r3 = evaluate(b3, q2)
+    noisy = copy.deepcopy(b2)
+    noisy["contracts"][-1]["evidence"]["q1_yield"]["s2"] = dict(mirror=dict(base=269234.878125))
+    b3n = copy.deepcopy(b3)
+    b3n["contracts"][len(b2["contracts"]) - 1]["evidence"]["q1_yield"]["s2"] = dict(mirror=dict(base=269234.87812500005))
+    check = contracts_run.v2_subset_check({CIK: b3n}, {CIK: r3}, v2_blocks={CIK: noisy}, v2_results={CIK: r2})
+    assert check["identical"] is True and check["by_cik"][CIK]["evidence_identical"] is False
+    assert check["evidence_differences"][CIK] == [
+        CIK + ":fund_income_yield:interest_rate:whole_filing.evidence.q1_yield.s2.mirror.base"]
+    wrong = copy.deepcopy(b3)
+    wrong["contracts"][0]["expectation"] = dict(concepts=["x:y"])
+    check = contracts_run.v2_subset_check({CIK: wrong}, {CIK: r3}, v2_blocks={CIK: b2}, v2_results={CIK: r2})
+    assert check["identical"] is False and check["by_cik"][CIK]["contracts"] is False
