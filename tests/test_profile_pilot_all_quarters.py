@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -362,3 +363,19 @@ def test_scan_flag_with_cohort_quarters_is_refused(tmp_path):
     from scripts.profile_pilot import verify as verify_mod
     with pytest.raises(ValueError, match="scan-amendments"):
         verify_mod.freeze_inventory_content(_paths(tmp_path), "cohort", scan_amendments=True)
+
+
+def test_cmd_freeze_refuses_cohort_plus_scan_before_taking_the_lease(monkeypatch):
+    # Fix round 1 (review finding): cmd_freeze must validate --quarters/--scan-amendments
+    # BEFORE protection.shared_heavy_lease is ever entered, so a bad combination never
+    # acquires the real shared lease or leaves a stray pseudo-candidate under the main
+    # checkout. Fail the test if the lease factory is reached at all.
+    from scripts.profile_pilot import protection, verify as verify_mod
+
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("shared_heavy_lease must not be entered when validation fails")
+
+    monkeypatch.setattr(protection, "shared_heavy_lease", fail_if_called)
+    args = SimpleNamespace(quarters="cohort", scan_amendments=True)
+    with pytest.raises(ValueError, match="scan-amendments"):
+        verify_mod.cmd_freeze(args)

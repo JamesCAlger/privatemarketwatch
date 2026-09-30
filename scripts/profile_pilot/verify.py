@@ -220,6 +220,17 @@ def cmd_test(args) -> int:
 QUARTERS_MODES = ("cohort", "all")
 
 
+def validate_freeze_args(quarters: str, scan_amendments: bool) -> None:
+    """Refuse an invalid --quarters/--scan-amendments combination before any lease is taken.
+
+    Called from cmd_freeze BEFORE shared_heavy_lease is entered (not just inside
+    freeze_inventory_content, which a caller could reach after already holding the lease):
+    a bad combination must never acquire the real shared lease or create its pseudo-candidate.
+    """
+    if scan_amendments and quarters != "all":
+        raise ValueError("--scan-amendments applies only to --quarters all")
+
+
 def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = False, lease=None) -> dict:
     """primary_quarter_inventory content: the Stage B cohort (default) or every cached quarter.
 
@@ -228,8 +239,7 @@ def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = Fa
     the caller must hold the shared heavy lease (cohort asserts it).
     """
     from scripts.profile_pilot import cohort
-    if scan_amendments and quarters != "all":
-        raise ValueError("--scan-amendments applies only to --quarters all")
+    validate_freeze_args(quarters, scan_amendments)
     if quarters == "cohort":
         return cohort.primary_quarter_inventory(paths)
     if quarters == "all":
@@ -242,9 +252,11 @@ def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = Fa
 
 def cmd_freeze(args) -> int:
     from scripts.profile_pilot import manifest
+    quarters = getattr(args, "quarters", "cohort")
+    scan = getattr(args, "scan_amendments", False)
+    validate_freeze_args(quarters, scan)  # before _paths/protected_session/the lease
     paths = _paths(args)
     stamp = _stamp()
-    scan = getattr(args, "scan_amendments", False)
     with protection.protected_session(paths, receipt="verification/" + stamp + "_freeze_preservation.json"):
         t0 = time.perf_counter()
         freeze_receipt = dict(scan_amendments=scan, lease_acquired_utc=None, lease_released_utc=None)
@@ -252,11 +264,10 @@ def cmd_freeze(args) -> int:
             head = manifest.git_head(paths.code_root)
             with protection.shared_heavy_lease(paths, head=head) as lease:
                 freeze_receipt["lease_acquired_utc"] = lease.acquired_utc
-                primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"),
-                                                   scan_amendments=scan, lease=lease)
+                primary = freeze_inventory_content(paths, quarters, scan_amendments=scan, lease=lease)
             freeze_receipt["lease_released_utc"] = datetime.now(timezone.utc).isoformat()
         else:
-            primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"))
+            primary = freeze_inventory_content(paths, quarters)
         manifest.freeze_inventory(paths, "primary_quarter_inventory", primary)
         manifest.freeze_inventory(paths, "wrapper_key_inventory",
                                   manifest.wrapper_key_inventory(paths.code_root))
