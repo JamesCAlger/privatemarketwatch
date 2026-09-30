@@ -315,3 +315,22 @@ fund across two keys and hides it from the conservation join).
 4. Re-running `apply_promoted_rules` on Q1 marks the TCW VII dedup rule `scope_carryover` with 27 rows.
 5. No anchor leaf without `basis` influences any gate.
 6. Zero rows in unified holdings with a non-10-digit `cik`.
+
+## Amendment 2026-09-30: underlying-schedule rows leave the published basis (owner ruling)
+
+Ruled by the owner on 2026-09-30 after the sub-project 0b base build. The V13 scope-recognition
+repair retains a BDC's joint-venture underlying schedules as rows with
+`accounting_record_class = 'underlying_schedule'` (BCRED: Emerald JV LP and Verdelite JV LP,
+722 rows / $7.7B in Q1-2026). Under section 1 as written ("no category, dimension, or
+subsidiary filter") those rows entered both the headline and the gate numerator, so BCRED
+overshot its filed total by 10.1% and contributed $8.17B of an $11.9B over-inclusion, and the
+published number double counted the JV interest already carried on the parent schedule.
+
+Ruling: `published_fv(cik, quarter)` = SUM(fair_value) over all unified rows with that cik and
+report_date EXCEPT rows whose `accounting_record_class` is exactly `underlying_schedule`.
+The exclusion applies identically to the public headline, the public partitions, every
+per-fund public export, and every FV gate, through the single definition in
+`pipeline/published_basis.py`. No other filter is added; `is_subsidiary` is not the key
+(it is derived from the same scope). `unresolved_underlying_schedule` rows, when they exist,
+stay in the basis until ruled on. Section 1's rationale stands: whatever the headline shows,
+the gate must see, and the exclusion is applied to both.
