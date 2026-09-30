@@ -220,13 +220,23 @@ def cmd_test(args) -> int:
 QUARTERS_MODES = ("cohort", "all")
 
 
-def freeze_inventory_content(paths, quarters: str) -> dict:
-    """primary_quarter_inventory content: the Stage B cohort (default) or every cached quarter."""
+def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = False, lease=None) -> dict:
+    """primary_quarter_inventory content: the Stage B cohort (default) or every cached quarter.
+
+    scan_amendments=True (all mode only) passes run_context_census.scan_instance so that
+    fund-quarters whose selection needs an amendment scan are settled instead of excluded;
+    the caller must hold the shared heavy lease (cohort asserts it).
+    """
     from scripts.profile_pilot import cohort
+    if scan_amendments and quarters != "all":
+        raise ValueError("--scan-amendments applies only to --quarters all")
     if quarters == "cohort":
         return cohort.primary_quarter_inventory(paths)
     if quarters == "all":
-        return cohort.all_quarter_inventory(paths)
+        if not scan_amendments:
+            return cohort.all_quarter_inventory(paths)
+        from scripts import run_context_census
+        return cohort.all_quarter_inventory(paths, scanner=run_context_census.scan_instance, lease=lease)
     raise ValueError("quarters must be one of " + repr(QUARTERS_MODES) + ", got " + repr(quarters))
 
 
@@ -234,9 +244,19 @@ def cmd_freeze(args) -> int:
     from scripts.profile_pilot import manifest
     paths = _paths(args)
     stamp = _stamp()
+    scan = getattr(args, "scan_amendments", False)
     with protection.protected_session(paths, receipt="verification/" + stamp + "_freeze_preservation.json"):
         t0 = time.perf_counter()
-        primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"))
+        freeze_receipt = dict(scan_amendments=scan, lease_acquired_utc=None, lease_released_utc=None)
+        if scan:
+            head = manifest.git_head(paths.code_root)
+            with protection.shared_heavy_lease(paths, head=head) as lease:
+                freeze_receipt["lease_acquired_utc"] = lease.acquired_utc
+                primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"),
+                                                   scan_amendments=scan, lease=lease)
+            freeze_receipt["lease_released_utc"] = datetime.now(timezone.utc).isoformat()
+        else:
+            primary = freeze_inventory_content(paths, getattr(args, "quarters", "cohort"))
         manifest.freeze_inventory(paths, "primary_quarter_inventory", primary)
         manifest.freeze_inventory(paths, "wrapper_key_inventory",
                                   manifest.wrapper_key_inventory(paths.code_root))
@@ -247,6 +267,7 @@ def cmd_freeze(args) -> int:
         built["input_verification"] = manifest.verify_inputs(built)
         built["frozen_utc"] = datetime.now(timezone.utc).isoformat()
         built["seconds"] = round(time.perf_counter() - t0, 1)
+        built["freeze_receipt"] = freeze_receipt
         target = write_once_json(paths, "manifest.json", built)
     print("manifest: " + str(target))
     print("primary quarters: " + json.dumps(primary["counts"], sort_keys=True))
@@ -342,6 +363,9 @@ def main(argv=None) -> int:
         if name == "freeze":
             cmd.add_argument("--quarters", choices=QUARTERS_MODES, default="cohort",
                              help="cohort = the Stage B fund-quarters (default); all = every cached quarter")
+            cmd.add_argument("--scan-amendments", action="store_true",
+                             help="all mode only: settle amendment-only fund-quarters via a "
+                                  "leased run_context_census.scan_instance instead of excluding them")
         if name == "test":
             cmd.add_argument("--no-pre-backstop", action="store_true")
             cmd.add_argument("targets", nargs="*")

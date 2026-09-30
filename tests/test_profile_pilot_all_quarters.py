@@ -8,7 +8,19 @@ import pytest
 
 from scripts.profile_pilot import census_run, census_validate, cohort, lineage, manifest, verify
 from scripts.profile_pilot.manifest import StageInvalidated
+from tests.test_profile_pilot_m2_seed import TmpRunPaths
 from tests.test_profile_pilot_paths import fake_paths, index_row, put_instance
+
+
+def _paths(tmp_path, run_id="sp1-freeze-test"):
+    # test_profile_pilot_all_quarters.py has no `_paths` helper of its own; this reuses the
+    # TmpRunPaths fixture test_profile_pilot_m2_seed.py exports. PilotPaths construction does
+    # not validate its fields (only resolve_paths does), so a bare tmp_path stands in for every
+    # root -- fine here since freeze_inventory_content's callers under test monkeypatch
+    # cohort.all_quarter_inventory and never touch the filesystem through `paths`.
+    return TmpRunPaths(main_repo_root=tmp_path, code_root=tmp_path, data_root=tmp_path,
+                       run_id=run_id, tmp_run_root=tmp_path / "run")
+
 
 STELLUS, ARES, NEXPOINT = "0001901037", "0001287750", "0001588272"
 
@@ -312,3 +324,41 @@ def test_crosscheck_run_compares_every_reference_row_and_pins_the_cohort_invento
     assert body["cohort_exclusions"]["equal"] is True
     regression = body["cohort_inventory_regression"]
     assert regression["identical"] is True and regression["new_root_cohort_rows_equal_reference"] is True
+
+
+# ---------------------------------------------------------------- amendment-scan wiring (SP1 Task 1)
+
+def test_freeze_all_with_scan_passes_the_default_scanner_under_a_held_lease(tmp_path, monkeypatch):
+    from scripts.profile_pilot import verify as verify_mod, cohort as cohort_mod
+    seen = {}
+
+    def fake_inventory(paths, *, scanner=None, lease=None):
+        seen["scanner"] = scanner
+        seen["lease"] = lease
+        return dict(fund_quarters=[])
+
+    class Lease:
+        held = True
+        lock_path = tmp_path / "heavy.lock"
+
+    monkeypatch.setattr(cohort_mod, "all_quarter_inventory", fake_inventory)
+    paths = _paths(tmp_path)
+    verify_mod.freeze_inventory_content(paths, "all", scan_amendments=True, lease=Lease())
+    from scripts import run_context_census
+    assert seen["scanner"] is run_context_census.scan_instance
+    assert seen["lease"].held is True
+
+
+def test_freeze_all_without_scan_keeps_scanner_none(tmp_path, monkeypatch):
+    from scripts.profile_pilot import verify as verify_mod, cohort as cohort_mod
+    seen = {}
+    monkeypatch.setattr(cohort_mod, "all_quarter_inventory",
+                        lambda paths, *, scanner=None, lease=None: seen.update(scanner=scanner) or dict(fund_quarters=[]))
+    verify_mod.freeze_inventory_content(_paths(tmp_path), "all")
+    assert seen["scanner"] is None
+
+
+def test_scan_flag_with_cohort_quarters_is_refused(tmp_path):
+    from scripts.profile_pilot import verify as verify_mod
+    with pytest.raises(ValueError, match="scan-amendments"):
+        verify_mod.freeze_inventory_content(_paths(tmp_path), "cohort", scan_amendments=True)
