@@ -723,10 +723,15 @@ def freeze_contracts(paths, blocks: dict, *, tolerances_state: dict) -> dict:
 # ---------------------------------------------------------------- evaluation (frozen inputs only)
 
 def _result(c: dict, status: str, q2: dict, *, cause=None, expected=None, observed=None, keys=()) -> dict:
-    return dict(contract_id=c["contract_id"], cik=c["cik"], kind=c["kind"], field=c["field"],
-                partition_id=c["partition_id"], applies_to=c["applies_to"], tier=c["tier"], status=status,
-                cause=cause, expected=expected, observed=observed, violating_keys=sorted(keys), q2=q2,
-                band=c["band"])
+    result = dict(contract_id=c["contract_id"], cik=c["cik"], kind=c["kind"], field=c["field"],
+                  partition_id=c["partition_id"], applies_to=c["applies_to"], tier=c["tier"], status=status,
+                  cause=cause, expected=expected, observed=observed, violating_keys=sorted(keys), q2=q2,
+                  band=c["band"])
+    if c["kind"] == TOTALS_KIND:
+        # sp1 Task 6a: the shared fallback path (not_learned_in_q1 / q2_census_unavailable) bypasses
+        # contracts_totals.evaluate_totals, which is the only other place status_basis is set.
+        result["status_basis"] = "provisional"
+    return result
 
 
 def _check_frozen(c: dict, tolerances: dict) -> None:

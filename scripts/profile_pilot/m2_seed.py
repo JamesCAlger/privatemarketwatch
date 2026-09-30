@@ -1325,6 +1325,8 @@ def pin_tolerances(tol_path: Path) -> tuple[dict, dict]:
             raise StageInvalidated("v4 tolerances do not carry the frozen v2 verbatim")
         if manifest.digest(body["content"]["v3_verbatim"]) != body["content"].get("v3_content_sha256"):
             raise StageInvalidated("v4 tolerances v3_verbatim does not match its v3_content_sha256")
+        if body["content"] != contracts.tolerance_content_v4(body["content"]["v3_verbatim"]):
+            raise StageInvalidated("v4 tolerances content does not match tolerance_content_v4(v3_verbatim)")
     elif body["content_sha256"] != TOLERANCES_V2_SHA256:
         raise StageInvalidated("tolerances file is not the frozen v2 (content_sha256 " + str(body.get("content_sha256"))
                                + ")")

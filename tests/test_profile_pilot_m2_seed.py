@@ -667,3 +667,16 @@ def test_pin_tolerances_accepts_v4_over_the_frozen_v2_and_refuses_a_tampered_v2(
     (tmp_path / "b").mkdir()
     with pytest.raises(m2_seed.StageInvalidated):
         m2_seed.pin_tolerances(_tol_file(tmp_path / "b", bad))
+
+
+def test_pin_tolerances_refuses_a_v4_file_whose_totals_band_was_tampered(tmp_path):
+    # the v2/v3_content_sha256 checks above do not see a change confined to the v4-only bands
+    # (independent_totals is added on top of v3_verbatim, not inside it); recomputing
+    # tolerance_content_v4(v3_verbatim) and comparing closes that gap.
+    good = _v4()
+    m2_seed.pin_tolerances(_tol_file(tmp_path, good))
+    tampered = _v4()
+    tampered["bands"]["standard"]["independent_totals"]["fv_residual_pct"] = 6.0
+    (tmp_path / "c").mkdir()
+    with pytest.raises(m2_seed.StageInvalidated):
+        m2_seed.pin_tolerances(_tol_file(tmp_path / "c", tampered))

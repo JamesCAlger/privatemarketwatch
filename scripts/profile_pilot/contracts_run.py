@@ -233,6 +233,22 @@ def _workload(cik: str, size: int) -> dict:
                 est_seconds=round(3 + size / 5e6, 1), est_bytes=int(350e6 + 20 * size))
 
 
+def _tolerances_for_version(tolerances_version: int) -> dict:
+    """The frozen tolerance content for a --tolerances-version CLI choice (3 default, 4 opt-in).
+
+    v3 is today's freeze (contracts.tolerance_content()); v4 extends that same v3 content with
+    the pre-registered independent_totals bands (contracts.tolerance_content_v4)."""
+    content = contracts.tolerance_content()
+    return content if tolerances_version == 3 else contracts.tolerance_content_v4(content)
+
+
+def _kinds_for_version(tolerances_version: int) -> list:
+    """The kinds that can be learned under the frozen tolerances: v3 has no independent_totals band."""
+    if tolerances_version == 4:
+        return list(contracts.ALL_KINDS)
+    return [k for k in contracts.ALL_KINDS if k != contracts.TOTALS_KIND]
+
+
 def _q2_listing(census: dict, cik: str) -> dict:
     row = census["selected"].get((cik, "q2"))
     if row:
@@ -340,12 +356,13 @@ def load_v2_run(paths: PilotPaths, run_id: str, ciks) -> dict:
 # ---------------------------------------------------------------- the stage
 
 def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, ciks=None, v2_run_id: str | None = None,
-              recorded_at: str | None = None) -> dict:
+              recorded_at: str | None = None, tolerances_version: int = 3) -> dict:
     ciks = list(ciks or cohort.PILOT_CIKS)
     recorded_at = recorded_at or _now()
     started = time.perf_counter()
     clock = dict(started_utc=_now())
-    tolerances_state = contracts.freeze_tolerances(paths)
+    tolerances_content = _tolerances_for_version(tolerances_version)
+    tolerances_state = manifest.freeze_inventory(paths, "contract_tolerances", tolerances_content)
     clock["tolerances_frozen_utc"] = _now()
 
     census = pin_census(paths, census_run_id, ciks)
@@ -379,7 +396,8 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                            for c, g in grammars.items()},
                  slices=slices + [income_slice, financials_slice], code=code, s2_constants=contracts_income.s2_constants(),
                  stage_config=dict(ciks=ciks, recorded_at=recorded_at, contracts_version=contracts.CONTRACTS_VERSION,
-                                   tolerances_version=contracts.TOLERANCES_VERSION, kinds=list(contracts.ALL_KINDS),
+                                   tolerances_version=tolerances_content["version"],
+                                   kinds=_kinds_for_version(tolerances_version),
                                    yield_holdings="private_markets_holdings slice (S2's production input); "
                                                   "bdc_holdings is pinned but is not S2-shaped"))
     built["inventories"] = manifest.inventory_states(paths)
@@ -516,6 +534,8 @@ def main(argv=None) -> int:
     cmd.add_argument("--profile-run-id", required=True)
     cmd.add_argument("--cik", action="append", default=None)
     cmd.add_argument("--v2-run-id", default=None, help="Task B2-3: assert the v2 subset equals this v2 run")
+    cmd.add_argument("--tolerances-version", type=int, choices=[3, 4], default=3,
+                     help="sp1 Task 6a: 3 (default, today's frozen content) or 4 (adds the independent_totals bands)")
     args = parser.parse_args(argv)
     try:
         main_root = args.main_root or discover_main_root(CODE_ROOT)
@@ -525,7 +545,7 @@ def main(argv=None) -> int:
                    + "_contracts_preservation.json")
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, profile_run_id=args.profile_run_id,
-                                ciks=args.cik, v2_run_id=args.v2_run_id)
+                                ciks=args.cik, v2_run_id=args.v2_run_id, tolerances_version=args.tolerances_version)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
         return EXIT_INVALIDATED

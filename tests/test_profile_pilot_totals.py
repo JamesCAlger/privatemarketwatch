@@ -234,3 +234,59 @@ def test_strict_reading_exempts_totals_like_the_yield_when_the_identifier_format
                for r in totals)
     fill = pick(res, "fill_rate", "interest_rate")
     assert fill["status"] == "holds" and strict[fill["contract_id"]]["cause"] == "identifier_format_unresolved"
+
+
+# ---------------------------------------------------------------- sp1 Task 6a: --tolerances-version wiring
+
+def test_tolerances_for_version_three_is_the_v3_content_untouched():
+    from scripts.profile_pilot import contracts, contracts_run
+    content = contracts_run._tolerances_for_version(3)
+    assert content == contracts.tolerance_content()
+    assert "independent_totals" not in content["bands"]["standard"]
+
+
+def test_tolerances_for_version_four_carries_the_pre_registered_totals_bands():
+    from scripts.profile_pilot import contracts, contracts_run
+    content = contracts_run._tolerances_for_version(4)
+    assert content == contracts.tolerance_content_v4(contracts.tolerance_content())
+    standard = content["bands"]["standard"]["independent_totals"]
+    low = content["bands"]["low_history"]["independent_totals"]
+    assert standard["fv_residual_pct"] == 5.0 and standard["pct_sum_shift_pp"] == 15
+    assert low["fv_residual_pct"] == 10.0 and low["pct_sum_shift_pp"] == 25
+
+
+def test_kinds_for_version_excludes_independent_totals_under_three_only():
+    from scripts.profile_pilot import contracts, contracts_run
+    assert contracts_run._kinds_for_version(3) == [k for k in contracts.ALL_KINDS if k != contracts.TOTALS_KIND]
+    assert contracts.TOTALS_KIND not in contracts_run._kinds_for_version(3)
+    assert contracts_run._kinds_for_version(4) == list(contracts.ALL_KINDS)
+    assert contracts.TOTALS_KIND in contracts_run._kinds_for_version(4)
+
+
+# ---------------------------------------------------------------- sp1 Task 6a: status_basis on the shared _result path
+
+def test_not_learned_totals_results_carry_provisional_status_basis_but_fill_rate_does_not():
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(n=3), tol=v4, financials_q1=None)
+    totals_contracts = [c for c in block["contracts"] if c["kind"] == "independent_totals"]
+    assert len(totals_contracts) == 2 and all(c["learn_status"] != "learned" for c in totals_contracts)
+    res = evaluate(block, book(n=3), tol=v4, financials_q2=FIN)
+    totals = [r for r in res if r["kind"] == "independent_totals"]
+    assert len(totals) == 2
+    assert all(r["cause"].startswith("not_learned_in_q1") for r in totals)
+    assert all(r.get("status_basis") == "provisional" for r in totals)
+    fill = pick(res, "fill_rate", "interest_rate")
+    assert "status_basis" not in fill
+
+
+def test_q2_unavailable_totals_results_carry_provisional_status_basis_but_fill_rate_does_not():
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    res = evaluate(block, None, tol=v4, financials_q2=FIN)
+    assert res and all(r["cause"] == "q2_census_unavailable" for r in res)
+    totals = [r for r in res if r["kind"] == "independent_totals"]
+    assert len(totals) == 2 and all(r.get("status_basis") == "provisional" for r in totals)
+    fill = pick(res, "fill_rate", "interest_rate")
+    assert "status_basis" not in fill
