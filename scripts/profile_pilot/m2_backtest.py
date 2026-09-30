@@ -164,6 +164,8 @@ def ledger_exclusions(rows, *, ciks, dates) -> list:
         out.append(dict(review_id=r["review_id"], cik=cik, date=date, rule_name=r["rule_name"], state=r["state"],
                         verdict_status=r.get("verdict_status"), reason=reason))
     return sorted(out, key=lambda o: (o["cik"], o["date"], o["review_id"]))
+
+
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",
