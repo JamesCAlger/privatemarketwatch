@@ -12854,3 +12854,29 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   change here.
 - NOT done: frontend export (waits for phase 2 so it runs once), baseline refresh, threshold change.
   Phase 2 (fund-level reconciliations and PIK summaries on the same predicate) is in progress.
+
+## 2026-09-30 -- Published basis phase 2: fund-level reconciliations and PIK summaries exclude underlying-schedule rows; schema change
+
+- Commit 872880b (reviewed, approved). Same predicate, same helpers (`published_fv_mask`,
+  `PUBLISHED_ROWS_WHERE_SQL`, `published_rows_csv_sql`), applied to: oracle fund-level checks A04,
+  A07, E01, E02 (holdings frame only; fund_financials untouched); `validate_holdings.
+  check_pct_of_net_assets_sum`; `check_gav_reconciliation` (the ex-underlying sum now feeds
+  `gav_ratio`, `gav_ratio_adjusted`, `flag`, `residual_*`; `gav_rule_id` unchanged; previously
+  both ratios used the all-rows sum and the ex-sub sum was informational); `rate_convention`
+  S2 income reconciliation input; `bdc_sector_reconciliation` holdings sum (filing-side sector
+  table untouched); `validate_fund_financials.validate_cross_level` (F20-F27); PIK fund-level
+  builders `build_pik_schedule_proxy_summary`, `build_pik_schedule_proxy_transitions`,
+  `build_pik_transitions` (position status keeps all rows). 427 tests passed across 8 files.
+- SCHEMA CHANGE: `position_pik_status.csv` and its Parquet companion gain a trailing
+  `accounting_record_class` column (`pipeline/output_schemas.py`); every reader selects by name.
+- Deliberate non-masks: E07 (position count vs filing leaf count; both sides include JV leaves,
+  masking one side would invent a gap); rate-convention S1/S4/S5 (per-row rate-printing evidence,
+  JV rows are legitimate witnesses). OWNER SIGN-OFF REQUESTED on the S1/S4/S5 call.
+- FOLLOW-UP (Important, not fixed here): the raw-source side of GAV
+  (`bdc_source_reconciliation_fv`, from bdc_holdings.csv) has no record class and stays
+  unmasked, so for a JV fund the source/comparison ratio can leave the [0.3, 1.2] band and
+  flip `gav_evidence_scope` from `source_fv_present_not_indexable` to `indexable_fv_reconciled`,
+  hiding an under-extraction. Fix needs a scope column on the raw source artifact.
+- Outputs move on the next rebuild for JV-holding BDCs (GAV, oracle A04/E01/A07/E02, F20-F27,
+  sector reconciliation, PIK artifacts). Oracle + queue + acceptance re-run started 21:35;
+  PIK rebuild and frontend export follow.
