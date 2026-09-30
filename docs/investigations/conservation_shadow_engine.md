@@ -452,3 +452,22 @@ Decisions:
 - KEEP `fv_conservation_fail` surfaced (FP rate 0-4.5%, bar 50%).
 - Do NOT re-point the ex-cash overrides at plus_cash in this pass; that is owner decision 4
   (basis precedence / averaging across bases) and belongs with the anchor lane, not here.
+
+## 2026-10-01 - Census-side published basis: a 7-rule predicate reconciles all 8 pilot filers within 0.5%
+
+Question: the SP1 drift replay found census fair-value sums 14% to 375% above filed totals (the
+independent_totals kind unmeasurable on 7 of 8 filers). Which census features identify the rows
+production publishes?
+
+Result: joining census current-instant positions to production rows on context id and deriving an
+ordered predicate (keep own-period instant; drop unreported-FV rows, label/subtotal rows, generic
+cash buckets, issuer rollups whose FV equals their children's sum; mark reporting-entity look-through
+rows as underlying by typed-identifier suffix, since no LegalEntityAxis member exists in the census;
+include cash-equivalent-axis FV facts) reconciles all 8 filers to production within 0.5% (Ares -0.08%,
+BCRED +0.26%, six at 0). Three production defects surfaced: BCRED drops 11 real positions ($212.5M,
+wrapper fallback misreads them as rollups); Ares double-counts the "Shoes For Crews" rollup ($24.4M)
+with its four children; Stepstone publishes 30 real duplicate rows with no context id. Open: named
+money-market funds (BCRED's balance sheet excludes its $653.7M, Fidelity's includes $196.4M);
+provisional ruling: the gate targets production's published basis, MMFs stay. Artifacts and scripts:
+`scratch/2026-10-01_census_published_basis/` (findings.md, s21_predicate_v2.py,
+residuals_after_predicate_v2.csv). Feeds sub-project 3 (partition-structure entries).

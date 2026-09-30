@@ -94,6 +94,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-06-16 - Strong-anchor blind-spot profile: broad, skews pre-XBRL/N-PORT; published cohort 25.7%
 - 2026-06-16 - BDC cross-target anchor coverage: CUSIP zero, N-PORT issuer coupled to paused entity resolution
 - 2026-09-08 - fv_conservation false-positive re-measure on the published basis (Plan 2 rollout)
+- 2026-10-01 - Census-side published basis: a 7-rule predicate reconciles all 8 pilot filers within 0.5%
 
 ## Identifier & rate semantics (Agent A) ([identifier_rate_semantics.md](identifier_rate_semantics.md))
 - 2026-06-19 - Structured-XBRL-twin coverage for freeform investment_identifier (Agent A anchor budget)
