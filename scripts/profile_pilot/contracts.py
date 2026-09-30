@@ -1,6 +1,6 @@
 """Task 8: partitioned contracts learned from Q1, frozen, then evaluated on Q2 (spec 6.3, 9: M2).
 
-Order (spec 6.3 / s8): (1) the tolerance table is frozen (`freeze_tolerances`, write-once,
+Order (spec 6.3 / s8): (1) the tolerance table is frozen (`_tolerances_for_version` in contracts_run, write-once,
 Task 1 mechanism) before anything is learned; (2) `learn_contracts` reads ONLY the Q1
 census, the Q1 profile, the authored grammar and the Q1 yield evidence, and learns every
 contract inside the partitions evidenced in Q1; (3) `freeze_contracts` writes the full

@@ -1,7 +1,7 @@
 """Independent-totals contract kind (spec 2026-09-29 section 5, D-floor).
 
-Two whole-filing criteria that cannot abstain on a pure scale flip: the census's
-published-basis fair-value sum against the fund's filed investments_at_fair_value,
+Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
+FV sum (NOT on the published basis; SP1 finding 2026-10-01) against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
 (detection_not_claimed); the criterion is deferred to sub-project 2.
 Pure functions: no I/O, no tolerances access beyond the band dict passed in.

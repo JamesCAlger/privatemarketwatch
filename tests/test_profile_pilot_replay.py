@@ -30,10 +30,11 @@ def test_structural_floor_passes_at_recall_90_and_fp_2_and_fails_below():
 
 
 def test_totals_floor_uses_the_seed_sensitivity():
-    ok = dict(median_smallest_detected=0.05, detected_ciks=5, applicable_ciks=5)
+    ok = _seeded({c: _frow() for c in "ABCDE"})[rr.TOTALS_KIND]
     assert rr.totals_verdict(ok) == "PASS"
-    assert rr.totals_verdict(dict(ok, detected_ciks=4)) == "FAIL"
-    assert rr.totals_verdict(dict(ok, median_smallest_detected=0.3)) == "FAIL"
+    four = _seeded(dict({c: _frow() for c in "ABCD"}, E=_frow(smallest=None, reason="not_detected_at_1.0")))
+    assert rr.totals_verdict(four[rr.TOTALS_KIND]) == "FAIL"
+    assert rr.totals_verdict(_seeded({c: _frow(smallest=0.3) for c in "ABCDE"})[rr.TOTALS_KIND]) == "FAIL"
 
 
 def test_drift_queue_has_the_ledger_header_and_ranks_by_fv_at_risk():
@@ -83,3 +84,115 @@ def test_totals_fv_at_risk_is_zero_when_an_input_is_missing():
     assert rr.fv_at_risk(dict(base, field="fair_value", observed=dict(fv_sum=1.0, fv_anchor=None)), keys=[], fv=fv) == 0.0
     assert rr.fv_at_risk(dict(base, field="pct_of_net_assets", observed=dict(pct_sum=120.0), expected=None),
                          keys=[], fv=fv) == 0.0
+
+
+# ---------------------------------------------------------------- totals floor (controller ruling 2026-10-01)
+
+def _seeded(per_cik_fv: dict, per_cik_pct: dict | None = None) -> dict:
+    def variant(field, per):
+        return dict(field=field, median_smallest_detected=None, detected_ciks=0, applicable_ciks=0, per_cik=per)
+    return {rr.TOTALS_KIND: dict(floor_variant=rr.TOTALS_VARIANT, note=rr.TOTALS_SEED_NOTE, variants={
+        rr.TOTALS_VARIANT: variant("fair_value", per_cik_fv),
+        "pct_scale_flip": variant("pct_of_net_assets", per_cik_pct or {})})}
+
+
+def _frow(anchored=True, applicable=True, smallest=0.05, reason="measured"):
+    return dict(anchored=anchored, applicable=applicable, smallest_detected=smallest, reason=reason)
+
+
+def test_totals_floor_denominator_is_every_anchored_filer():
+    one_of_two = _seeded({"A": _frow(), "B": _frow(applicable=False, smallest=None,
+                                                   reason="baseline_out_of_band:fv_residual_outside_band")})
+    assert rr.totals_verdict(one_of_two[rr.TOTALS_KIND]) == "FAIL"
+    m = rr.totals_measured(one_of_two[rr.TOTALS_KIND])
+    assert m["detected_over_anchored"] == "1/2" and m["not_detected"] == {
+        "B": "baseline_out_of_band:fv_residual_outside_band"}
+    # an unanchored filer is outside the denominator
+    ok = _seeded({"A": _frow(), "C": _frow(anchored=False, applicable=False, smallest=None, reason="no_anchor")})
+    assert rr.totals_verdict(ok[rr.TOTALS_KIND]) == "PASS"
+    # detected, but only above the 0.20 floor
+    late = _seeded({"A": _frow(smallest=0.3)})
+    assert rr.totals_verdict(late[rr.TOTALS_KIND]) == "FAIL"
+
+
+def test_totals_floor_with_no_anchored_filer_is_no_anchors_not_pass():
+    none = _seeded({"A": _frow(anchored=False, applicable=False, smallest=None, reason="no_anchor")})
+    assert rr.totals_verdict(none[rr.TOTALS_KIND]) == "NO_ANCHORS"
+    per_kind = {rr.TOTALS_KIND: dict(recall=None, false_alarm_rate=None, pos_units=0, neg_n=0)}
+    assert rr.floors(per_kind, none)[rr.TOTALS_KIND]["verdict"] == "NO_ANCHORS"
+    assert rr.floors(per_kind, {})[rr.TOTALS_KIND]["verdict"] == "FAIL"
+
+
+def test_seeded_cells_carry_per_filer_reasons_for_both_variants():
+    def cik_cell(applicable, smallest, reason=None):
+        return dict(applicable=applicable, smallest_detected=smallest, reason=reason)
+    held_not = "contract does not hold in the null control"
+    sens = dict(cells={
+        rr.TOTALS_VARIANT: {rr.TOTALS_KIND: dict(median_smallest_detected=0.05, detected_ciks=1, applicable_ciks=1,
+                                                 per_cik={"A": cik_cell(True, 0.05),
+                                                          "B": cik_cell(False, None, held_not)})},
+        "pct_scale_flip": {rr.TOTALS_KIND: dict(median_smallest_detected=None, detected_ciks=0, applicable_ciks=0,
+                                                per_cik={"A": cik_cell(False, None, "0 eligible rows (of 0 filled): "
+                                                                                    "nothing was perturbed"),
+                                                         "B": cik_cell(False, None, held_not)})}},
+        null_control={"B": [dict(cause="fv_residual_outside_band",
+                                 contract_id="B:independent_totals:fair_value:whole_filing"),
+                            dict(cause="pct_sum_outside_band",
+                                 contract_id="B:independent_totals:pct_of_net_assets:whole_filing")]})
+    seeded = rr.seeded_cells(sens, financials_loaded={"A": True, "B": True, "C": False})
+    fv = seeded[rr.TOTALS_KIND]["variants"][rr.TOTALS_VARIANT]["per_cik"]
+    pct = seeded[rr.TOTALS_KIND]["variants"]["pct_scale_flip"]["per_cik"]
+    assert fv["A"] == dict(anchored=True, applicable=True, smallest_detected=0.05, reason="measured")
+    assert fv["B"]["reason"] == "baseline_out_of_band:fv_residual_outside_band"
+    assert fv["C"]["reason"] == "no_anchor"
+    assert pct["A"]["reason"].startswith("not_applicable:0 eligible rows")
+    assert pct["B"]["reason"] == "baseline_out_of_band:pct_sum_outside_band"
+    assert rr.totals_verdict(seeded[rr.TOTALS_KIND]) == "FAIL"
+    body = dict(run_id="sp1-replay-test", sample_label=rr.SAMPLE_LABEL, pair_rule=rr.PAIR_RULE,
+                negatives_caveat="caveat", ciks={}, per_kind={}, floors={}, seeded=seeded, exclusions=[],
+                exclusion_buckets={"excluded_state:open": 2})
+    text = rr.render_md(body, [])
+    assert "detected 1/2 anchored filers" in text and "x0.01 is not seeded" in text
+    assert "| B | fair_value_scale_flip | True | False | - | baseline_out_of_band:fv_residual_outside_band |" in text
+    assert "| B | pct_scale_flip | True | False | - | baseline_out_of_band:pct_sum_outside_band |" in text
+    assert "| C | fair_value_scale_flip | False | False | - | no_anchor |" in text
+    assert "| excluded_state:open | 2 |" in text
+    text.encode("ascii")
+
+
+def test_exclusion_buckets_use_the_backtest_excluded_states():
+    rows = [dict(state="open", reason="state_not_adjudicated:open"),
+            dict(state="brand_new", reason="state_not_adjudicated:brand_new"),
+            dict(state="adjudicated_confirmed", reason="rule_not_mapped:X99")]
+    assert rr.exclusion_buckets(rows) == {"excluded_state:open": 1, "rule_not_mapped": 1,
+                                          "unexpected_state:brand_new": 1}
+
+
+def test_run_refuses_a_seed_whose_lineage_differs_from_the_backtest(tmp_path):
+    import json
+    import pytest
+    from scripts.profile_pilot import lineage, m2_backtest
+    from scripts.profile_pilot.manifest import StageInvalidated
+    from tests.test_profile_pilot_paths import fake_paths
+    paths = fake_paths(tmp_path, run_id="sp1-replay-test")
+    broot = lineage.sibling_root(paths, "stageb2-backtest-test").run_root
+    sroot = lineage.sibling_root(paths, "stageb2-seed-test").run_root
+    for root, rels in ((broot, ("results/pairs.json", "results/backtest_results.json", "results/positives.json",
+                                "results/scoring.json")),
+                       (sroot, ("results/sensitivity.json", "results/run_summary.json"))):
+        for rel in rels:
+            (root / rel).parent.mkdir(parents=True, exist_ok=True)
+            (root / rel).write_text("{}", encoding="ascii")
+
+    def lineage_of(contracts, census):
+        return json.dumps(dict(contracts_source=dict(run_id=contracts), census_source=dict(run_id=census)))
+    (broot / "manifest.json").write_text(lineage_of("stageb-contracts-a", "stageb2-census-a"), encoding="ascii")
+    (sroot / "manifest.json").write_text(lineage_of("stageb-contracts-b", "stageb2-census-a"), encoding="ascii")
+    ledger = paths.data_root / m2_backtest.LEDGER_CSV
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    ledger.write_text("review_id\n", encoding="ascii")
+    with pytest.raises(StageInvalidated, match="contracts_source.run_id"):
+        rr.run(paths, backtest_run_id="stageb2-backtest-test", seed_run_id="stageb2-seed-test")
+    (sroot / "manifest.json").write_text(lineage_of("stageb-contracts-a", "stageb2-census-b"), encoding="ascii")
+    with pytest.raises(StageInvalidated, match="census_source.run_id"):
+        rr.run(paths, backtest_run_id="stageb2-backtest-test", seed_run_id="stageb2-seed-test")

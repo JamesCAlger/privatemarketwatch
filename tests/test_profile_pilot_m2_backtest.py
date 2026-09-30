@@ -338,8 +338,9 @@ def test_recall_md_carries_the_negatives_caveat_and_is_ascii():
     scoring = bt.score_all(pairs, dict(as_evaluated=results, strict=results), [], modes=("rolling",))
     text = bt.render_recall(run_id="stageb2-backtest-test", scoring=scoring, context=dict(
         profile_mode="derived_in_memory", pairs=pairs, yields={}, timing={}, positives=[], inception_only=[],
-        unscorable={}, reproduction={}, classes={}))
+        unscorable={}, reproduction={}, classes={}), tolerances=dict(version=4, content_sha256="61eb05e63012" + "0" * 52))
     assert bt.NEGATIVES_CAVEAT in text
+    assert "Frozen tolerances v4 (content_sha256 61eb05e63012..." in text
     assert "without recogniser_format" in text
     text.encode("ascii")
 

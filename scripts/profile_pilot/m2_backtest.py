@@ -1025,9 +1025,11 @@ def _kind_table(block: dict) -> list:
     return lines
 
 
-def render_recall(*, run_id: str, scoring: dict, context: dict) -> str:
+def render_recall(*, run_id: str, scoring: dict, context: dict, tolerances: dict) -> str:
+    """tolerances = the pinned record (m2_seed.pin_tolerances): its version and content_sha256 are printed."""
     lines = ["# M2 back-test against recorded history (" + run_id + ")", "",
-             "Frozen tolerances v2 (content_sha256 " + TOLERANCES_V2_SHA256[:12] + "...). Learning profile: "
+             "Frozen tolerances " + m2_seed.tolerances_label(tolerances["version"]) + " (content_sha256 "
+             + str(tolerances["content_sha256"])[:12] + "...). Learning profile: "
              + str(context.get("profile_mode")) + ". " + PROFILE_NOTE + ".", "",
              "Caveat: " + NEGATIVES_CAVEAT, "",
              "Yield: " + YIELD_WINDOW_NOTE + ".", "",
@@ -1274,6 +1276,14 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
     if contracts.has_totals_bands(learn_tol):
         # the independent_totals anchor: pinned into THIS run root (the frozen contracts roots predate it)
         financials_rec = contracts_run.materialise_financials_slice(paths)
+        frozen = croot / contracts_run.FINANCIALS_SLICE
+        if frozen.is_file():
+            # the contracts root learned with its own pinned slice: the one materialised here must be identical
+            frozen_sha = manifest.file_record(frozen, "contracts_root/" + contracts_run.FINANCIALS_SLICE)["sha256"]
+            if frozen_sha != financials_rec["sha256"]:
+                raise StageInvalidated("financials slice differs from the contracts root's "
+                                       + contracts_run.FINANCIALS_SLICE + " (" + frozen_sha[:12] + " vs "
+                                       + financials_rec["sha256"][:12] + ")")
     inputs = ([census["authoritative"], census["excluded"]] + census["files"] + [cman_rec, tol_rec, inv_rec]
               + list(slices.values()) + ([financials_rec, financials_rec["source"]] if financials_rec else [])
               + [r for recs in grammar_recs.values() for r in recs] + sources["records"] + code
@@ -1404,7 +1414,7 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                         max_peak_bytes=max(p["timing"]["peak_bytes"] for p in evaluated))
     context = dict(profile_mode=PROFILE_MODE, pairs=all_pairs, yields=yield_summary, timing=extremes,
                    positives=positives, inception_only=INCEPTION_ONLY, reproduction=repro, classes=classes)
-    recall = render_recall(run_id=paths.run_id, scoring=scoring, context=context)
+    recall = render_recall(run_id=paths.run_id, scoring=scoring, context=context, tolerances=tol_rec)
     write_once_json(paths, "results/positives.json", dict(rows=positives, typed_checks=checks,
                                                           inception_only=INCEPTION_ONLY))
     write_once_json(paths, "results/pairs.json", dict(pairs=all_pairs, quarter_classes=classes,

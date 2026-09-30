@@ -1134,13 +1134,21 @@ def blind_spots(evaluations: list, sens: dict) -> list:
 
 # ---------------------------------------------------------------- rendering
 
+def tolerances_label(version) -> str:
+    """The pinned tolerances version as printed: an int version (v4) -> "v4"; a string one verbatim
+    ("contract-tolerances.v2"). The int-vs-string field itself is a v5 item."""
+    return "v" + str(version) if isinstance(version, int) else str(version)
+
+
 def _cell(value, n, d) -> str:
     return ("never" if value is None else ("%g" % value)) + " (" + str(d) + "/" + str(n) + ")" if n else "n/a"
 
 
-def render_summary(*, run_id: str, sens: dict, spots: list, per_cik: dict, timing: dict) -> str:
+def render_summary(*, run_id: str, sens: dict, spots: list, per_cik: dict, timing: dict, tolerances: dict) -> str:
+    """tolerances = the pinned record (pin_tolerances): its version and content_sha256 are printed."""
     lines = ["# M2 seeded-drift sensitivity (" + run_id + ")", "",
-             "Frozen contracts v2 (tolerances content_sha256 " + TOLERANCES_V2_SHA256[:12] + "...), learned from the "
+             "Frozen contracts " + tolerances_label(tolerances["version"]) + " (tolerances content_sha256 "
+             + str(tolerances["content_sha256"])[:12] + "...), learned from the "
              "unperturbed Q1; " + SYNTHETIC_Q2_NOTE + ".",
              "Cell = median over applicable CIKs of the smallest fraction at which >= 2 of 3 seeds BREACH "
              "(never = not detected even at 1.0); (d/n) = CIKs detecting / CIKs where the contract holds in the "
@@ -1613,7 +1621,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                     for k, n in sorted(collateral.items())],
         null_control={c: info["null_control"]["breaches"] for c, info in per_cik.items()},
         realism_errors=realism, original_unchanged={c: info["original_unchanged"] for c, info in per_cik.items()}))
-    summary_md = render_summary(run_id=paths.run_id, sens=sens, spots=spots, per_cik=per_cik, timing=timing)
+    summary_md = render_summary(run_id=paths.run_id, sens=sens, spots=spots, per_cik=per_cik, timing=timing,
+                                tolerances=tol_rec)
     matrix_csv = render_csv(per_cik)
     _write_text_once(confined(paths, "results/summary.md"), summary_md)
     _write_text_once(confined(paths, "results/seed_matrix.csv"), matrix_csv)

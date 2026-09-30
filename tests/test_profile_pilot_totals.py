@@ -1,13 +1,14 @@
 """Task 3: independent_totals contract kind as pure functions.
 
-Two whole-filing criteria that cannot abstain on a pure scale flip: the census's
-published-basis fair-value sum against the fund's filed investments_at_fair_value,
+Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
+FV sum (NOT on the published basis; SP1 finding 2026-10-01) against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. See scripts/profile_pilot/contracts_totals.py.
 """
 import pytest
 
 from tests.test_profile_pilot_contracts import mk_doc, debt, val
 from scripts.profile_pilot import contracts_totals as ct
+from scripts.profile_pilot.paths import PathError
 
 BAND = dict(fv_residual_pct=5.0, pct_sum_min=50, pct_sum_max=250, pct_sum_shift_pp=15, min_positions=5)
 FIN = dict(cik="0000000001", report_date="2026-03-31", investments_at_fair_value=80_000_000.0,
@@ -208,7 +209,7 @@ def test_financials_slice_keeps_the_eight_ciks_padded_and_load_returns_one_row(t
                        total_assets=90.0)
     assert contracts_run.load_financials(paths, pilot, "2024-03-31") is None
     assert contracts_run.load_financials(paths, "0000000009", "2026-03-31") is None
-    with pytest.raises(Exception):
+    with pytest.raises(PathError):
         contracts_run.materialise_financials_slice(paths)                 # write-once
 
 

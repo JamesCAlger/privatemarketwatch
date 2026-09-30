@@ -323,7 +323,9 @@ def test_real_stellus_seed_matrix_through_the_cli(tmp_path, monkeypatch):
     built = json.loads((root / "manifest.json").read_text(encoding="ascii"))
     assert built["tolerances"]["content_sha256"] == m2_seed.TOLERANCES_V2_SHA256
     assert list((tmp_path / "scratch").glob("seed_*.md")) and list((tmp_path / "scratch").glob("seed_*.csv"))
-    (root / "results" / "summary.md").read_text(encoding="ascii")
+    summary_text = (root / "results" / "summary.md").read_text(encoding="ascii")
+    assert ("Frozen contracts " + m2_seed.tolerances_label(built["tolerances"]["version"]) + " (tolerances content_sha256 "
+            + built["tolerances"]["content_sha256"][:12] + "...)") in summary_text
 
 
 def test_realism_self_check_runs_on_seed_one_only_and_is_timed_apart_from_the_measured_work():

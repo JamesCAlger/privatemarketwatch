@@ -6,7 +6,8 @@ criterion 3 floors, and write the shadow drift queue in findings-ledger shape.
 
 Inputs (read only, each pinned with its sha256 in this run's manifest): the back-test run root
 (results/pairs.json, results/backtest_results.json, results/positives.json, results/scoring.json,
-manifest.json), the seed run root (results/sensitivity.json), the census run root the back-test
+manifest.json), the seed run root (results/sensitivity.json, results/run_summary.json, manifest.json:
+its contracts_source/census_source run ids must equal the back-test's), the census run root the back-test
 read (the eval-quarter census documents only) and the q1p3 findings ledger.
 
 Scoring is m2_backtest.score over ONLY the selected pairs (mode rolling, reading as_evaluated,
@@ -36,11 +37,15 @@ EXIT_INVALIDATED, EXIT_REFUSED = 2, 4
 
 STRUCTURAL = ("source_concept_set", "fill_rate", "format_grammar", "scale")
 NOT_CLAIMED = ("value_range", "rate_composition", "text_agreement", "fund_income_yield")
-TOTALS_KIND = "independent_totals"
+TOTALS_KIND = contracts_totals.KIND
 STRUCTURAL_RECALL_FLOOR = 0.90
 STRUCTURAL_FP_CEILING = 0.02
 TOTALS_FRACTION_FLOOR = 0.20
 TOTALS_VARIANT = "fair_value_scale_flip"
+# Both totals seed variants are reported per filer; only TOTALS_VARIANT carries the floor.
+TOTALS_VARIANT_FIELDS = {TOTALS_VARIANT: contracts_totals.TOTALS_FIELD, "pct_scale_flip": contracts_totals.PCT_FIELD}
+TOTALS_SEED_NOTE = ("x0.01 is not seeded: the seed harness has only the x100 flip (fair_value_scale_flip, "
+                    "pct_scale_flip)")
 EVAL_DATE = "2026-03-31"
 MODE, READING, POSITIVE_SET = "rolling", "as_evaluated", "all"
 # The Interfaces block's wording (task-5 brief); step 3 carried a paraphrase (resolution in the task-5 report).
@@ -56,8 +61,9 @@ FLOOR_TEXT = {
     "structural": "recall >= %.2f AND false_alarm_rate <= %.2f (false_alarm_rate = (adjudicated_false_alarm_breaches "
                   "+ unadjudicated_breaches) / neg_n, the upper bound); pos_units == 0 -> NO_POSITIVES"
                   % (STRUCTURAL_RECALL_FLOOR, STRUCTURAL_FP_CEILING),
-    "totals": "seed " + TOTALS_VARIANT + ": median_smallest_detected <= %.2f AND detected_ciks == applicable_ciks"
-              % TOTALS_FRACTION_FLOOR,
+    "totals": "seed " + TOTALS_VARIANT + ": every ANCHORED CIK (seed run_summary financials_loaded) detected at "
+              "fraction <= %.2f; denominator = anchored CIKs, not the seed's applicable set (controller ruling "
+              "2026-10-01); 0 anchored -> NO_ANCHORS" % TOTALS_FRACTION_FLOOR,
     "not_claimed": "detection_not_claimed (spec criterion 3): measured numbers reported, no floor"}
 
 
@@ -100,12 +106,27 @@ def floor_verdict(kind: str, m: dict) -> str:
     return "PASS" if ok else "FAIL"
 
 
-def totals_verdict(cell: dict) -> str:
-    """independent_totals floor from the seed run's fair_value_scale_flip sensitivity cell."""
-    med = cell.get("median_smallest_detected")
-    ok = (med is not None and med <= TOTALS_FRACTION_FLOOR and cell["applicable_ciks"] > 0
-          and cell["detected_ciks"] == cell["applicable_ciks"])
-    return "PASS" if ok else "FAIL"
+def totals_measured(seeded: dict) -> dict:
+    """detected / anchored for TOTALS_VARIANT: a CIK counts as detected only when its seed smallest_detected
+    fraction is <= TOTALS_FRACTION_FLOOR. The denominator is every anchored CIK (financials loaded in the
+    seed run), so a CIK whose contract never held at baseline counts against the floor."""
+    per_cik = seeded["variants"][TOTALS_VARIANT]["per_cik"]
+    anchored = sorted(c for c, r in per_cik.items() if r["anchored"])
+    detected = sorted(c for c in anchored if per_cik[c]["smallest_detected"] is not None
+                      and per_cik[c]["smallest_detected"] <= TOTALS_FRACTION_FLOOR)
+    return dict(detected=len(detected), anchored=len(anchored), detected_over_anchored=
+                str(len(detected)) + "/" + str(len(anchored)), detected_ciks=detected,
+                not_detected={c: per_cik[c]["reason"] for c in anchored if c not in detected})
+
+
+def totals_verdict(seeded: dict) -> str:
+    """independent_totals floor (controller ruling 2026-10-01): PASS only when EVERY anchored CIK is detected
+    at fraction <= TOTALS_FRACTION_FLOOR under TOTALS_VARIANT; 0 anchored CIKs -> NO_ANCHORS (not measurable,
+    never a PASS); otherwise FAIL."""
+    m = totals_measured(seeded)
+    if not m["anchored"]:
+        return "NO_ANCHORS"
+    return "PASS" if m["detected"] == m["anchored"] else "FAIL"
 
 
 def _fmt_m(value: float) -> str:
@@ -228,20 +249,88 @@ def floors(per_kind: dict, seeded: dict) -> dict:
             out[kind] = dict(floor=FLOOR_TEXT["not_claimed"], measured=measured, verdict="NOT_CLAIMED",
                              basis="spec criterion 3 detection_not_claimed; " + SAMPLE_LABEL)
         elif kind == TOTALS_KIND:
-            cell = seeded.get(TOTALS_KIND)
-            out[kind] = dict(floor=FLOOR_TEXT["totals"], measured=dict(seed=cell, replay=measured),
-                             verdict=totals_verdict(cell) if cell else "FAIL",
+            entry = seeded.get(TOTALS_KIND)
+            seed = totals_measured(entry) if entry else None
+            out[kind] = dict(floor=FLOOR_TEXT["totals"], measured=dict(seed=seed, replay=measured),
+                             verdict=totals_verdict(entry) if entry else "FAIL",
                              basis="seed run sensitivity (" + TOTALS_VARIANT + ")"
-                                   + ("" if cell else ": cell missing") + "; " + SAMPLE_LABEL)
+                                   + ("" if entry else ": cell missing") + "; " + TOTALS_SEED_NOTE + "; "
+                                   + SAMPLE_LABEL)
     return out
 
 
-def seeded_cells(sens: dict) -> dict:
-    cell = ((sens.get("cells") or {}).get(TOTALS_VARIANT) or {}).get(TOTALS_KIND)
-    if cell is None:
+def _baseline_cause(null_control: list, field: str):
+    """The seed null control's breach cause for this CIK's independent_totals contract on `field`, or None."""
+    for b in null_control or []:
+        parts = str(b.get("contract_id", "")).split(":")
+        if len(parts) >= 3 and parts[1] == TOTALS_KIND and parts[2] == field:
+            return b.get("cause") or "unknown"
+    return None
+
+
+def totals_row(cell_cik: dict | None, *, anchored: bool, null_control: list, field: str) -> dict:
+    """One filer's totals seed outcome: anchored (financials loaded), applicable (the contract held in the null
+    control), smallest_detected, and why it was not measured/detected."""
+    c = cell_cik or {}
+    applicable, smallest = bool(c.get("applicable")), c.get("smallest_detected")
+    if not anchored:
+        reason = "no_anchor"
+    elif applicable:
+        reason = "measured" if smallest is not None else "not_detected_at_1.0"
+    else:
+        cause = _baseline_cause(null_control, field)
+        reason = ("baseline_out_of_band:" + cause if cause
+                  else "not_applicable:" + str(c.get("reason") or "absent from the seed cell"))
+    return dict(anchored=anchored, applicable=applicable, smallest_detected=smallest, reason=reason)
+
+
+def seeded_cells(sens: dict, *, financials_loaded: dict) -> dict:
+    """Both totals seed variants, per filer. `financials_loaded` = the seed run_summary's cik -> bool."""
+    cells = sens.get("cells") or {}
+    if (cells.get(TOTALS_VARIANT) or {}).get(TOTALS_KIND) is None:
         return {}
-    return {TOTALS_KIND: dict(variant=TOTALS_VARIANT, median_smallest_detected=cell["median_smallest_detected"],
-                              detected_ciks=cell["detected_ciks"], applicable_ciks=cell["applicable_ciks"])}
+    null_control = sens.get("null_control") or {}
+    variants = {}
+    for variant, field in TOTALS_VARIANT_FIELDS.items():
+        cell = (cells.get(variant) or {}).get(TOTALS_KIND) or {}
+        per = cell.get("per_cik") or {}
+        ciks = sorted(set(per) | set(financials_loaded))
+        variants[variant] = dict(field=field, median_smallest_detected=cell.get("median_smallest_detected"),
+                                 detected_ciks=cell.get("detected_ciks"), applicable_ciks=cell.get("applicable_ciks"),
+                                 per_cik={c: totals_row(per.get(c), anchored=financials_loaded.get(c) is True,
+                                                        null_control=null_control.get(c), field=field)
+                                          for c in ciks})
+    return {TOTALS_KIND: dict(floor_variant=TOTALS_VARIANT, note=TOTALS_SEED_NOTE, variants=variants)}
+
+
+def exclusion_buckets(exclusions: list) -> dict:
+    """Count the unscored ledger rows by bucket. A state the back-test knowingly excludes
+    (m2_backtest.LEDGER_EXCLUDED_STATES) buckets as excluded_state:<state>; an unscored state NOT in that
+    list buckets as unexpected_state:<state> so a new ledger state is visible; unmapped rules as
+    rule_not_mapped."""
+    out = {}
+    for e in exclusions:
+        if e["reason"].startswith("rule_not_mapped:"):
+            bucket = "rule_not_mapped"
+        elif e["state"] in m2_backtest.LEDGER_EXCLUDED_STATES:
+            bucket = "excluded_state:" + str(e["state"])
+        else:
+            bucket = "unexpected_state:" + str(e["state"])
+        out[bucket] = out.get(bucket, 0) + 1
+    return dict(sorted(out.items()))
+
+
+LINEAGE_KEYS = ("contracts_source", "census_source")
+
+
+def check_seed_lineage(seed_manifest: dict, backtest_manifest: dict) -> None:
+    """The seed and the back-test must read the same contracts root and the same census root."""
+    for key in LINEAGE_KEYS:
+        seed_id = (seed_manifest.get(key) or {}).get("run_id")
+        back_id = (backtest_manifest.get(key) or {}).get("run_id")
+        if seed_id is None or seed_id != back_id:
+            raise StageInvalidated("seed and back-test lineage differ on " + key + ".run_id: seed " + repr(seed_id)
+                                   + " vs back-test " + repr(back_id))
 
 
 def check_units(units: list, recorded: list, pair_ids: set) -> None:
@@ -283,9 +372,21 @@ def render_md(body: dict, queue: list) -> str:
                     [(k, f["verdict"], json.dumps(f["measured"], sort_keys=True), f["floor"])
                      for k, f in body["floors"].items()])
     lines += ["", "## Seeded (independent_totals)", ""]
-    lines += _table(("kind", "variant", "median smallest detected", "detected ciks", "applicable ciks"),
-                    [(k, s["variant"], s["median_smallest_detected"], s["detected_ciks"], s["applicable_ciks"])
-                     for k, s in body["seeded"].items()])
+    for kind, s in body["seeded"].items():
+        m = totals_measured(s)
+        lines += ["Floor variant " + s["floor_variant"] + ": detected " + m["detected_over_anchored"]
+                  + " anchored filers at fraction <= " + str(TOTALS_FRACTION_FLOOR) + " (denominator = anchored "
+                  "filers). Note: " + s["note"] + ".", ""]
+        lines += _table(("kind", "variant", "median smallest detected (seed applicable set)", "detected ciks",
+                         "applicable ciks"),
+                        [(kind, v, c["median_smallest_detected"], c["detected_ciks"], c["applicable_ciks"])
+                         for v, c in s["variants"].items()])
+        lines += ["", "Per filer:", ""]
+        lines += _table(("cik", "variant", "anchored", "applicable", "smallest detected", "reason"),
+                        [(cik, v, r["anchored"], r["applicable"], r["smallest_detected"], r["reason"])
+                         for v, c in s["variants"].items() for cik, r in c["per_cik"].items()])
+    lines += ["", "## Ledger rows not scored (by bucket)", ""]
+    lines += _table(("bucket", "rows"), sorted(body.get("exclusion_buckets", {}).items()))
     lines += ["", "## Abstentions", ""]
     lines += _table(("kind", "cik", "field", "cause"),
                     [(k, a[0], a[1], a[2]) for k, m in body["per_kind"].items() for a in m["abstentions"]])
@@ -325,8 +426,12 @@ def run(paths, *, backtest_run_id: str, seed_run_id: str) -> dict:
         ("manifest", "manifest.json"), ("pairs", "results/pairs.json"), ("results", "results/backtest_results.json"),
         ("positives", "results/positives.json"), ("scoring", "results/scoring.json"))}
     recs["sensitivity"] = m2_seed._record(sroot / "results" / "sensitivity.json", "seed_root/results/sensitivity.json")
+    recs["seed_manifest"] = m2_seed._record(sroot / "manifest.json", "seed_root/manifest.json")
+    recs["seed_run_summary"] = m2_seed._record(sroot / "results" / "run_summary.json",
+                                               "seed_root/results/run_summary.json")
     recs["ledger"] = m2_seed._record(paths.data_root / m2_backtest.LEDGER_CSV, "data/" + m2_backtest.LEDGER_CSV)
     bman = _load(recs["manifest"])
+    check_seed_lineage(_load(recs["seed_manifest"]), bman)
     results = _load(recs["results"])["results"]
     positives = _load(recs["positives"])["rows"]
     scoring = _load(recs["scoring"])
@@ -338,7 +443,10 @@ def run(paths, *, backtest_run_id: str, seed_run_id: str) -> dict:
         raise StageInvalidated("selected pairs have no back-test results: " + ", ".join(missing))
     scored = per_kind_scores(chosen, results, positives)
     check_units(scored["units"], scoring["positive_units"][MODE][READING], {p["pair_id"] for p in chosen.values()})
-    seeded = seeded_cells(_load(recs["sensitivity"]))
+    loaded = _load(recs["seed_run_summary"]).get("financials_loaded")
+    if not isinstance(loaded, dict):
+        raise StageInvalidated("seed run_summary.json carries no financials_loaded map")
+    seeded = seeded_cells(_load(recs["sensitivity"]), financials_loaded=loaded)
 
     # census FV of the eval quarter: exactly the files the back-test pinned
     census_run_id = bman["census_source"]["run_id"]
@@ -370,7 +478,8 @@ def run(paths, *, backtest_run_id: str, seed_run_id: str) -> dict:
     body = dict(run_id=paths.run_id, sample_label=SAMPLE_LABEL, pair_rule=PAIR_RULE,
                 ciks={c: dict(pair_id=p["pair_id"], learn_date=p["learn_date"], eval_date=p["eval_date"],
                               gapped=p["gapped"]) for c, p in chosen.items()},
-                per_kind=per_kind, floors=floors(per_kind, seeded), exclusions=exclusions, seeded=seeded,
+                per_kind=per_kind, floors=floors(per_kind, seeded), exclusions=exclusions,
+                exclusion_buckets=exclusion_buckets(exclusions), seeded=seeded,
                 unadjudicated=scored["unadjudicated"], unscorable=scored["unscorable"],
                 negatives_caveat=m2_backtest.NEGATIVES_CAVEAT,
                 source=dict(backtest_run_id=backtest_run_id, seed_run_id=seed_run_id, census_run_id=census_run_id,
