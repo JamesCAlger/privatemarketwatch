@@ -680,3 +680,70 @@ def test_pin_tolerances_refuses_a_v4_file_whose_totals_band_was_tampered(tmp_pat
     (tmp_path / "c").mkdir()
     with pytest.raises(m2_seed.StageInvalidated):
         m2_seed.pin_tolerances(_tol_file(tmp_path / "c", tampered))
+
+
+# ---------------------------------------------------------------- Task 6b (sp1): contracts roots frozen under v4
+
+def contracts_root(tmp_path, content, inventory_tol_sha=None):
+    """A fixture contracts root: inventories/contract_tolerances.json holding `content` and a
+    contract_inventory whose tolerances block records `inventory_tol_sha` (default: the file's digest)."""
+    from scripts.profile_pilot import manifest
+    root = tmp_path / "contracts"
+    inv_dir = root / "inventories"
+    inv_dir.mkdir(parents=True)
+    _tol_file(inv_dir, content)
+    inv = dict(tolerances=dict(content_sha256=inventory_tol_sha or manifest.digest(content)), ciks={})
+    (inv_dir / "contract_inventory.json").write_text(json.dumps(dict(
+        inventory="contract_inventory", content_sha256=manifest.digest(inv), content=inv, run_id="r")),
+        encoding="ascii")
+    return TmpRunPaths(main_repo_root=tmp_path, code_root=tmp_path, data_root=tmp_path, run_id="contracts",
+                       tmp_run_root=root)
+
+
+def test_frozen_tolerances_accept_a_v4_root_whose_inventory_records_the_v4_digest(tmp_path):
+    tol, tol_rec, inv_rec, inventory = m2_seed.pin_frozen_tolerances(contracts_root(tmp_path, _v4()))
+    assert tol == _v4() and tol_rec["version"] == 4
+    assert inventory["tolerances"]["content_sha256"] == tol_rec["content_sha256"]
+    assert inv_rec["label"] == "contracts_root/inventories/contract_inventory.json"
+
+
+def test_frozen_tolerances_keep_the_v2_path_and_refuse_a_v2_v4_mismatch(tmp_path):
+    from scripts.profile_pilot import contracts, manifest
+    v2 = contracts.tolerance_content_v2()
+    tol, tol_rec, _, _ = m2_seed.pin_frozen_tolerances(contracts_root(tmp_path / "a", v2))
+    assert tol_rec["content_sha256"] == m2_seed.TOLERANCES_V2_SHA256
+    with pytest.raises(m2_seed.StageInvalidated, match="frozen against other tolerances"):
+        m2_seed.pin_frozen_tolerances(contracts_root(tmp_path / "b", _v4(),
+                                                     inventory_tol_sha=m2_seed.TOLERANCES_V2_SHA256))
+    with pytest.raises(m2_seed.StageInvalidated, match="frozen against other tolerances"):
+        m2_seed.pin_frozen_tolerances(contracts_root(tmp_path / "c", v2, inventory_tol_sha=manifest.digest(_v4())))
+
+
+def test_semantic_v2_basis_is_the_embedded_v2_for_v3_and_v4_and_the_file_for_v2():
+    from scripts.profile_pilot import contracts
+    v2 = contracts.tolerance_content_v2()
+    assert m2_seed.semantic_v2_basis(v2) is v2
+    v3 = contracts.tolerance_content()
+    assert m2_seed.semantic_v2_basis(v3) == v2 and m2_seed.semantic_v2_basis(v3) is v3["v2_verbatim"]
+    v4 = _v4()
+    assert m2_seed.semantic_v2_basis(v4) is v4["v3_verbatim"]["v2_verbatim"]
+    assert [g["tolerances"] for g in m2_seed.semantic_grid(m2_seed.semantic_v2_basis(v4))] == [
+        g["tolerances"] for g in m2_seed.semantic_grid(v2)]
+    with pytest.raises(m2_seed.StageInvalidated):
+        m2_seed.semantic_v2_basis(dict(version="contract-tolerances.v9"))
+
+
+def test_relearned_v3_block_equals_a_v4_frozen_block_on_the_v2_subset():
+    # a v4 contracts root's frozen block also carries semantic + independent_totals contracts; the
+    # --semantic re-learn (v3 learning reference from the embedded v2) must still compare on the v2 subset
+    from scripts.profile_pilot import contracts
+    v4 = _v4()
+    frozen = learn(totals_book(), tol=v4, financials_q1=FIN)
+    ref = contracts.semantic_tolerances(m2_seed.semantic_v2_basis(v4), bands=contracts.SEMANTIC_BANDS,
+                                        calibration=dict(label=m2_seed.IN_SAMPLE, status="learning reference only"))
+    relearned = learn(totals_book(), tol=ref)
+    assert any(c["kind"] == "independent_totals" for c in frozen["contracts"])
+    assert m2_seed.compare_relearned(frozen, relearned)["equal"] is True
+    tampered = copy.deepcopy(relearned)
+    tampered["contracts"][0]["expectation"] = dict(concepts=["x:y"])
+    assert m2_seed.compare_relearned(frozen, tampered)["equal"] is False

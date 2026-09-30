@@ -706,3 +706,27 @@ def test_trim_keeps_status_basis_only_where_the_result_carries_it():
                 q2=dict(form_type="10-Q"))
     assert "status_basis" not in bt._trim(base)
     assert bt._trim(dict(base, kind="independent_totals", status_basis="provisional"))["status_basis"] == "provisional"
+
+
+# ---------------------------------------------------------------- Task 6b (sp1): contracts roots frozen under v4
+
+def test_backtest_pins_a_v4_root_and_refuses_a_mismatched_inventory(tmp_path):
+    from tests.test_profile_pilot_m2_seed import _v4, contracts_root
+    tol, tol_rec, _, _ = m2_seed.pin_frozen_tolerances(contracts_root(tmp_path / "a", _v4()))
+    assert tol_rec["version"] == 4
+    with pytest.raises(bt.StageInvalidated, match="frozen against other tolerances"):
+        m2_seed.pin_frozen_tolerances(contracts_root(tmp_path / "b", _v4(),
+                                                     inventory_tol_sha=bt.TOLERANCES_V2_SHA256))
+
+
+def test_learning_tolerances_under_a_v4_root_equal_the_pinned_v4():
+    from tests.test_profile_pilot_m2_seed import _v4
+    pinned = _v4()
+    assert bt.learning_tolerances(pinned, 4) == pinned
+    v2 = pinned["v3_verbatim"]["v2_verbatim"]
+    assert bt.learning_tolerances(pinned, 2) is v2
+    assert bt.learning_tolerances(pinned, 3)["v2_verbatim"] == v2
+    drifted = _v4()
+    drifted["bands"]["standard"]["independent_totals"]["fv_residual_pct"] = 6.0
+    with pytest.raises(bt.StageInvalidated, match="in-memory v4"):
+        bt.learning_tolerances(drifted, 4)

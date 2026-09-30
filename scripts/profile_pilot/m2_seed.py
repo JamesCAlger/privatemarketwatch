@@ -1027,13 +1027,15 @@ def median_shift_curves(evaluations: list, *, meta: dict) -> dict:
 
 def compare_relearned(frozen: dict, relearned: dict) -> dict:
     """The block re-learned with the current code must equal the frozen block on every v2 contract and
-    every block field except the version (a v3 block adds only the semantic contracts)."""
+    every block field except the version (a v3 block adds only the semantic contracts). A frozen v4
+    block (v4 contracts root) also carries semantic/totals contracts: only its v2 subset is compared."""
     diffs = ["block." + k for k in sorted(set(frozen) | set(relearned))
              if k not in ("version", "contracts") and frozen.get(k) != relearned.get(k)]
     v2 = [c for c in relearned["contracts"] if c["kind"] in contracts.KINDS]
-    if len(v2) != len(frozen["contracts"]):
-        diffs.append("v2 contract count %d != %d" % (len(v2), len(frozen["contracts"])))
-    diffs += [a["contract_id"] for a, b in zip(frozen["contracts"], v2) if a != b]
+    frozen_v2 = [c for c in frozen["contracts"] if c["kind"] in contracts.KINDS]
+    if len(v2) != len(frozen_v2):
+        diffs.append("v2 contract count %d != %d" % (len(v2), len(frozen_v2)))
+    diffs += [a["contract_id"] for a, b in zip(frozen_v2, v2) if a != b]
     return dict(equal=not diffs, differences=diffs[:40], v2_contracts=len(v2),
                 semantic_contracts=len(relearned["contracts"]) - len(v2))
 
@@ -1336,6 +1338,32 @@ def pin_tolerances(tol_path: Path) -> tuple[dict, dict]:
                                  version=body["content"]["version"])
 
 
+def pin_frozen_tolerances(cpaths) -> tuple[dict, dict, dict, dict]:
+    """The contracts root's frozen tolerances (pin_tolerances: v2, or v4 over the frozen v2) and its
+    contract_inventory, which must have been frozen against exactly that tolerances file."""
+    croot = cpaths.run_root
+    tolerances, tol_rec = pin_tolerances(croot / "inventories" / "contract_tolerances.json")
+    inv_rec = _record(croot / "inventories" / "contract_inventory.json",
+                      "contracts_root/inventories/contract_inventory.json")
+    inventory = manifest.load_inventory(cpaths, "contract_inventory")
+    if inventory["tolerances"]["content_sha256"] != tol_rec["content_sha256"]:
+        raise StageInvalidated("contract_inventory was frozen against other tolerances")
+    return tolerances, tol_rec, inv_rec, inventory
+
+
+def semantic_v2_basis(tolerances: dict) -> dict:
+    """The v2 content the semantic (v3) grid is derived from: the file itself for v2, the embedded
+    v2_verbatim for v3, v3_verbatim.v2_verbatim for v4."""
+    version = (tolerances or {}).get("version")
+    if version == contracts.TOLERANCES_VERSION_V2:
+        return tolerances
+    if version == contracts.TOLERANCES_VERSION:
+        return tolerances["v2_verbatim"]
+    if version == contracts.TOLERANCES_VERSION_V4:
+        return tolerances["v3_verbatim"]["v2_verbatim"]
+    raise StageInvalidated("no v2 basis for tolerances version " + repr(version))
+
+
 def pin_block(paths, croot: Path, cik: str, row: dict, inventory: dict) -> tuple[dict, dict]:
     """The frozen learned block, reused as is (self-contained); fails closed on any drift."""
     record = _record(croot / "learning" / (cik + ".json"), "contracts_root/learning/" + cik + ".json")
@@ -1397,11 +1425,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
     cman = json.loads(Path(cman_rec["path"]).read_text(encoding="ascii"))
     if cman["census_source"]["run_id"] != census_run_id or cman["profile_source"]["run_id"] != profile_run_id:
         raise StageInvalidated("contracts root was not built from the pinned census/profile roots")
-    tolerances, tol_rec = pin_tolerances(croot / "inventories" / "contract_tolerances.json")
-    inv_rec = _record(croot / "inventories" / "contract_inventory.json", "contracts_root/inventories/contract_inventory.json")
-    inventory = manifest.load_inventory(cpaths, "contract_inventory")
-    if inventory["tolerances"]["content_sha256"] != TOLERANCES_V2_SHA256:
-        raise StageInvalidated("contract_inventory was frozen against other tolerances")
+    tolerances, tol_rec, inv_rec, inventory = pin_frozen_tolerances(cpaths)
     blocks, block_recs, grammars, grammar_recs = {}, {}, {}, {}
     for cik in ciks:
         blocks[cik], block_recs[cik] = pin_block(paths, croot, cik, census["rows"][(cik, "q1")], inventory)
@@ -1417,10 +1441,15 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                                                                                    bytes=LIMIT_BYTES))
     grid = ref_tol = None
     if semantic:
-        grid = semantic_grid(tolerances)
-        ref_tol = contracts.semantic_tolerances(tolerances, bands=contracts.SEMANTIC_BANDS,
+        v2_basis = semantic_v2_basis(tolerances)
+        grid = semantic_grid(v2_basis)
+        ref_tol = contracts.semantic_tolerances(v2_basis, bands=contracts.SEMANTIC_BANDS,
                                                 calibration=dict(label=IN_SAMPLE, status="learning reference only"))
         config.update(semantic=True, label=IN_SAMPLE, candidates={k: list(v) for k, v in CANDIDATES.items()},
+                      semantic_basis=dict(pinned_version=tol_rec["version"], v2_content_sha256=manifest.digest(v2_basis),
+                                          rule="the v3 semantic grid and learning reference derive from the frozen v2 "
+                                               "(embedded verbatim in a v3/v4 file); the frozen block is evaluated "
+                                               "under the pinned tolerances as they are"),
                       reference=REFERENCE, targets=SEMANTIC_TARGETS,
                       median_shift=dict(MEDIAN_SHIFT, note="calibration-only experiment (addendum 3); not in v3"),
                       grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"],

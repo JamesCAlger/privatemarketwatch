@@ -438,14 +438,27 @@ def resolve_tolerances_version(version, *, semantic: bool) -> int:
     return version
 
 
-def learning_tolerances(v2: dict, version: int, *, calibration: dict | None = None) -> dict:
+def learning_tolerances(pinned: dict, version: int, *, calibration: dict | None = None) -> dict:
     """The learning tolerances, derived IN MEMORY from the frozen v2 (never rebuilt from code constants):
-    2 = the frozen v2 itself; 3 = v2 + the semantic bands; 4 = that v3 + the independent_totals bands."""
+    2 = the frozen v2 itself; 3 = v2 + the semantic bands; 4 = that v3 + the independent_totals bands.
+    `pinned` is the contracts root's tolerances (v2, or v4 embedding the frozen v2). Under a v4 root,
+    version 4 is derived with the pinned v3 calibration and must equal the pinned content."""
+    v2 = m2_seed.semantic_v2_basis(pinned)
     if version == 2:
         return v2
+    pinned_v4 = pinned.get("version") == contracts.TOLERANCES_VERSION_V4 and version == 4
+    if pinned_v4 and calibration is None:
+        calibration = pinned["v3_verbatim"]["calibration"]
     v3 = contracts.semantic_tolerances(v2, bands=contracts.SEMANTIC_BANDS, calibration=calibration or dict(
         label=m2_seed.IN_SAMPLE, status="learning reference only"))
-    return v3 if version == 3 else contracts.tolerance_content_v4(v3)
+    if version == 3:
+        return v3
+    v4 = contracts.tolerance_content_v4(v3)
+    if pinned_v4 and v4 != pinned:
+        raise StageInvalidated("in-memory v4 derived from the frozen v2 differs from the pinned v4 tolerances "
+                               "(content_sha256 " + manifest.digest(v4)[:12] + " != " + manifest.digest(pinned)[:12]
+                               + ")")
+    return v4
 
 
 def learn_block(cik: str, doc: dict, *, tolerances: dict, grammar, yield_ev: dict, recorded_at: str, derive,
@@ -1199,12 +1212,7 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
     croot = cpaths.run_root
     cman_rec = m2_seed._record(croot / "manifest.json", "contracts_root/manifest.json")
     cman = json.loads(Path(cman_rec["path"]).read_text(encoding="ascii"))
-    tolerances, tol_rec = m2_seed.pin_tolerances(croot / "inventories" / "contract_tolerances.json")
-    inv_rec = m2_seed._record(croot / "inventories" / "contract_inventory.json",
-                              "contracts_root/inventories/contract_inventory.json")
-    inventory = manifest.load_inventory(cpaths, "contract_inventory")
-    if inventory["tolerances"]["content_sha256"] != TOLERANCES_V2_SHA256:
-        raise StageInvalidated("contract_inventory was frozen against other tolerances")
+    tolerances, tol_rec, inv_rec, inventory = m2_seed.pin_frozen_tolerances(cpaths)
     slices = {}
     for name in ("private_markets_holdings_pilot8.parquet", "bdc_fund_income_pilot8.parquet"):
         rec = m2_seed._record(croot / "inputs" / name, "contracts_root/inputs/" + name)
@@ -1242,7 +1250,7 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
         config.update(tolerances_version=tolerances_version, learning_tolerances_sha256=manifest.digest(learn_tol),
                       provisional_kinds=list(learn_tol.get("provisional_kinds") or []))
     if semantic:
-        grid = m2_seed.semantic_grid(tolerances)
+        grid = m2_seed.semantic_grid(m2_seed.semantic_v2_basis(tolerances))
         sem_arg = dict(grid=grid)
         config.update(semantic=True, label=m2_seed.IN_SAMPLE, learning_reference=manifest.digest(learn_tol),
                       grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"],
