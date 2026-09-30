@@ -12789,3 +12789,28 @@ Deferred minors are listed per task in the ledger (loader duplication with contr
   sub-project 3 now depends on 2 for any kind it freezes as non-provisional.
 - Five new risk rows in section 10. Verification: ASCII check on the file (0 non-ASCII lines);
   no tests apply to a docs change.
+
+## 2026-09-30 -- Task 3: independent_totals contract kind (pure functions)
+
+- What changed: new `scripts/profile_pilot/contracts_totals.py` (observe_totals,
+  learn_totals, evaluate_totals; pure, no I/O) and `tests/test_profile_pilot_totals.py`
+  (8 tests, all passing). No other module touched; Task 4 wires this kind into
+  `contracts.py`, tolerances v4, the seed harness and the back-test.
+- Two whole-filing criteria that cannot abstain on a pure scale flip: published-basis
+  fair-value sum of current-period census positions vs the fund's filed
+  `investments_at_fair_value` (fixed `fv_residual_pct` band), and the
+  `pct_of_net_assets` sum vs an absolute band and vs the learned Q1 sum
+  (`pct_sum_shift_pp`). Breaches confirmed on an x100 flip at 100% and at 20% of
+  rows in tests; abstains only on `no_anchor` (no financials or null
+  `investments_at_fair_value`) or `too_few_positions` / `pct_not_filled`.
+- Deviation from spec section 5 (D-floor): income reconciliation is recorded as
+  EVIDENCE ONLY in this sub-project (`INCOME_LABEL = "detection_not_claimed"`), not
+  as a status criterion -- the pilot found the yield contract not learnable with
+  one-quarter windows and the spec forbids a home-made ratio. The criterion is
+  deferred to sub-project 2.
+- Verification: `python -m scripts.profile_pilot.verify test --no-pre-backstop
+  tests/test_profile_pilot_totals.py` -- RED (run sp1-verify-t3a) `ImportError:
+  cannot import name 'contracts_totals'`; GREEN (run sp1-verify-t3b) `pytest: exit 3
+  | 8 passed in 13.89s` (launcher exit 3 is the preservation/backstop receipt
+  reacting to a concurrent quarter-pass job writing under data/output at the time;
+  pytest's own exit line is the evidence for this task).
