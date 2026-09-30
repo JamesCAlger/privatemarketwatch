@@ -116,6 +116,29 @@ def review_id(contract_id: str, eval_date: str) -> str:
     return "DRIFT_" + hashlib.sha1((contract_id + eval_date).encode("ascii")).hexdigest()[:12]
 
 
+def _num_or_none(value):
+    return None if value is None else float(value)
+
+
+def fv_at_risk(result: dict, *, keys: list, fv: dict) -> float:
+    """Fair value at risk of one queued result (controller ruling, Task 5 fix round 1).
+
+    independent_totals carries no violating keys, so its at-risk figure comes from the observed totals:
+    fair_value -> |fv_sum - fv_anchor|; pct_of_net_assets -> fund FV x |pct_sum - pct_sum_q1| / 100;
+    0 when an input is missing. Every other kind: the FV sum of the violating rows."""
+    if result["kind"] == TOTALS_KIND:
+        observed = result.get("observed") if isinstance(result.get("observed"), dict) else {}
+        expected = result.get("expected") if isinstance(result.get("expected"), dict) else {}
+        if result["field"] == contracts_totals.TOTALS_FIELD:
+            fv_sum, anchor = _num_or_none(observed.get("fv_sum")), _num_or_none(observed.get("fv_anchor"))
+            return abs(fv_sum - anchor) if fv_sum is not None and anchor is not None else 0.0
+        if result["field"] == contracts_totals.PCT_FIELD:
+            pct, pct_q1 = _num_or_none(observed.get("pct_sum")), _num_or_none(expected.get("pct_sum_q1"))
+            return float(fv["total"]) * abs(pct - pct_q1) / 100 if pct is not None and pct_q1 is not None else 0.0
+        return 0.0
+    return sum(float(fv["by_key"].get(k) or 0.0) for k in keys)
+
+
 def queue_rows(results: dict, *, pairs: dict, fv_by_quarter: dict) -> list:
     """One ledger-shaped row per breach or newly-abstained result on the selected pairs, ranked by FV at risk."""
     out = []
@@ -125,7 +148,7 @@ def queue_rows(results: dict, *, pairs: dict, fv_by_quarter: dict) -> list:
             if r["status"] != "breach" and not r.get("newly_abstained"):
                 continue
             keys = list(r.get("violating_keys") or [])
-            at_risk = sum(float(fv["by_key"].get(k) or 0.0) for k in keys)
+            at_risk = fv_at_risk(r, keys=keys, fv=fv)
             out.append(dict(review_id=review_id(r["contract_id"], pair["eval_date"]), state="open", in_queue="shadow",
                             population_origin="live", verdict_status="MISSING", verdict_detail="",
                             has_fix_route="False", cik=cik, rule_name="drift:" + r["kind"],
@@ -152,8 +175,8 @@ def fv_of_doc(doc: dict) -> dict:
     violating_keys (contracts_observe row_keys / absent_keys / conflicts are p["context_id"])."""
     total = contracts_totals.observe_totals(doc, financials=None)["fv_sum"]
     by_key = {}
-    for p in contracts_totals._current(doc):
-        value = contracts_totals._num((p["fields"].get(FV_FIELD) or {}).get("value"))
+    for p in contracts_totals.current_positions(doc):
+        value = contracts_totals.numeric_value((p["fields"].get(FV_FIELD) or {}).get("value"))
         if value is not None:
             by_key[p["context_id"]] = float(value)
     return dict(total=float(total), by_key=by_key)

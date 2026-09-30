@@ -53,3 +53,33 @@ def test_drift_queue_has_the_ledger_header_and_ranks_by_fv_at_risk():
     assert rows[0]["fv_at_risk_m"] == "6.0" and rows[0]["fund_quarter_fv_m"] == "80.0"
     assert rows[0]["state"] == "open" and rows[0]["lane"] == "drift" and rows[0]["engine"] == "profile_contracts"
     assert rows[1]["cause"] == "unresolved_unit"
+
+
+def test_totals_rows_carry_a_real_fv_at_risk_and_rank_by_it():
+    pid = "rolling:A:2025-12-31:2026-03-31"
+    results = {pid: [
+        dict(contract_id="A:fill_rate:interest_rate:whole_filing", kind="fill_rate", field="interest_rate",
+             partition_id="whole_filing", status="breach", cause="fill_dropped", n_violating=2,
+             violating_keys=["c1", "c2"], newly_abstained=False),
+        dict(contract_id="A:independent_totals:fair_value:whole_filing", kind="independent_totals",
+             field="fair_value", partition_id="whole_filing", status="breach", cause="fv_residual_outside_band",
+             n_violating=0, violating_keys=[], newly_abstained=False,
+             observed=dict(fv_sum=88_600_000_000.0, fv_anchor=80_900_000_000.0), expected=dict()),
+        dict(contract_id="A:independent_totals:pct_of_net_assets:whole_filing", kind="independent_totals",
+             field="pct_of_net_assets", partition_id="whole_filing", status="breach", cause="pct_sum_shifted",
+             n_violating=0, violating_keys=[], newly_abstained=False,
+             observed=dict(pct_sum=120.0), expected=dict(pct_sum_q1=100.0))]}
+    fv = {("A", "2026-03-31"): dict(total=80_000_000.0, by_key={"c1": 5_000_000.0, "c2": 1_000_000.0})}
+    text = rr.drift_queue_csv(results, pairs={"A": _pair("A", "2025-12-31", "2026-03-31")}, fv_by_quarter=fv)
+    rows = list(csv.DictReader(io.StringIO(text)))
+    assert text.splitlines()[0].startswith(LEDGER_HEADER)
+    assert [(r["field"], r["fv_at_risk_m"]) for r in rows] == [
+        ("fair_value", "7700.0"), ("pct_of_net_assets", "16.0"), ("interest_rate", "6.0")]
+
+
+def test_totals_fv_at_risk_is_zero_when_an_input_is_missing():
+    fv = dict(total=80_000_000.0, by_key={})
+    base = dict(kind="independent_totals", status="breach")
+    assert rr.fv_at_risk(dict(base, field="fair_value", observed=dict(fv_sum=1.0, fv_anchor=None)), keys=[], fv=fv) == 0.0
+    assert rr.fv_at_risk(dict(base, field="pct_of_net_assets", observed=dict(pct_sum=120.0), expected=None),
+                         keys=[], fv=fv) == 0.0

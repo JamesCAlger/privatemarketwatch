@@ -33,6 +33,16 @@ def _current(doc):
     return [p for p in doc["positions"] if p["period"].get("instant") in ends]
 
 
+def current_positions(doc: dict) -> list:
+    """Public accessor: the current-period positions (instant in document_period_end_dates)."""
+    return _current(doc)
+
+
+def numeric_value(value):
+    """Public accessor: Decimal of a census field value, None when blank or unparsable."""
+    return _num(value)
+
+
 def _sum(positions, field):
     values = [_num((p["fields"].get(field) or {}).get("value")) for p in positions]
     filled = [v for v in values if v is not None]
