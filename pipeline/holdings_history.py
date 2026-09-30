@@ -6,6 +6,7 @@ from pathlib import Path
 from pipeline.output_schemas import OUTPUT_SCHEMAS
 from pipeline.programme.artifacts import literal,typed_query
 from pipeline.programme.core import sha
+from pipeline.published_basis import PUBLISHED_ROWS_WHERE_SQL
 
 
 def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end="2026-03-31",release_id=None,source_cache=None,
@@ -27,7 +28,8 @@ def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end=
     release=release_id or "holdings-"+source_hash
     schema=OUTPUT_SCHEMAS["private_markets_holdings.csv"]
     con.execute("""CREATE OR REPLACE TEMP TABLE history AS SELECT * FROM ("""+
-        typed_query(holdings_file,schema)+") WHERE cik IN (SELECT unnest(?)) AND report_date BETWEEN ?::DATE AND ?::DATE",
+        typed_query(holdings_file,schema)+") WHERE cik IN (SELECT unnest(?)) AND report_date BETWEEN ?::DATE AND ?::DATE"
+        " AND "+PUBLISHED_ROWS_WHERE_SQL,
         [sorted(cohort),start,end])
     invalid=con.execute("""SELECT count(*) FROM history WHERE coalesce(row_id,'')='' OR coalesce(position_id,'')=''""").fetchone()[0]
     if invalid: raise ValueError("Accessible history requires final observation and position identity")

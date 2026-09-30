@@ -66,3 +66,18 @@ def test_history_readback_still_rejects_a_changed_written_value(tmp_path,monkeyp
         export_history(con,hp,tmp_path/"history",cohort={"0000000123"},release_id="R")
     assert hp.read_bytes()==before
     assert not (tmp_path/"history/manifest.json").exists()
+
+
+def test_history_excludes_underlying_schedule_rows(tmp_path):
+    # Owner ruling 2026-09-30: the published basis excludes JV look-through rows, so the
+    # public per-fund history must agree with the headline and partitions.
+    hp=tmp_path/"private_markets_holdings.csv"
+    frame=holdings([dict(row_id="R1",position_id="P1",fair_value="100",accounting_record_class="parent_schedule"),
+        dict(row_id="R2",position_id="P2",fair_value="7",accounting_record_class=""),
+        dict(row_id="JV",position_id="P3",fair_value="5000",accounting_record_class="underlying_schedule")])
+    project_artifact(frame,"private_markets_holdings.csv").to_csv(hp,index=False)
+    with duckdb.connect() as con:
+        manifest=export_history(con,hp,tmp_path/"history",cohort={"0000000123"},release_id="R")
+    assert manifest["accessible_holdings_difference"]==0 and manifest["rows"]==2
+    current=json.loads((tmp_path/"history/0000000123/2026-03-31.json").read_text())
+    assert [r["row_id"] for r in current["rows"]]==["R1","R2"]

@@ -103,3 +103,27 @@ def test_exporters_share_one_snapshot_without_replacing_unknowns(tmp_path,monkey
     for rows in (portfolio["instrumentBreakdown"],sectors):
         assert sum(Decimal(row["fairValueExact"]) for row in rows) == Decimal(portfolio["fairValueExact"])
     assert next(row for row in sectors if row["sector"] == "Unknown")["totalFv"] == -15.125
+
+
+def test_underlying_schedule_rows_are_excluded_from_headline_and_partitions(tmp_path):
+    # Owner ruling 2026-09-30: JV look-through rows are not the BDC's own exposure.
+    path = tmp_path / "private_markets_holdings.csv"
+    holdings([
+        {"row_id":"parent","fair_value":"100","accounting_record_class":"parent_schedule",
+         "lien_position":"First Lien","gics_sub_industry":"Software"},
+        {"row_id":"blank","fair_value":"10","accounting_record_class":""},
+        {"row_id":"unresolved","fair_value":"1",
+         "accounting_record_class":"unresolved_underlying_schedule"},
+        {"row_id":"jv","fair_value":"5000","accounting_record_class":"underlying_schedule",
+         "lien_position":"First Lien","gics_sub_industry":"Software"},
+    ]).to_csv(path, index=False)
+    with duckdb.connect() as con:
+        result = snapshot(con, path)
+        kept = {r[0] for r in con.execute("SELECT row_id FROM public_holdings").fetchall()}
+    assert kept == {"parent","blank","unresolved"}
+    assert result["portfolioFv"] == 111
+    assert result["positionCount"] == 3
+    assert result["basis"] == "cohort_holdings_signed_fair_value_ex_underlying_schedule"
+    for rows in result["partitions"].values():
+        assert sum(Decimal(r["fairValueExact"]) for r in rows) == Decimal(result["fairValueExact"])
+        assert sum(r["positionCount"] for r in rows) == 3

@@ -3,6 +3,7 @@
 import math
 
 from pipeline.export.helpers import *
+from pipeline.published_basis import published_rows_csv_sql
 from pipeline.config import BDC_LIEN_BREAKDOWN_FILE, BDC_DERIVATIVES_FILE
 
 
@@ -631,9 +632,7 @@ def _export_metadata(
     if snapshot is None and latest_quarter is None and UNIFIED_HOLDINGS_CSV.exists():
         cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         result = con.execute(f"""
-            SELECT MAX(report_date) FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            SELECT MAX(report_date) FROM {published_rows_csv_sql(UNIFIED_HOLDINGS_CSV)}
             WHERE report_date <= '{cutoff_date}'
               {_unlisted_bdc_filter_sql('cik')}
         """).fetchone()
@@ -675,9 +674,7 @@ def _export_metadata(
         cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         aum_row = con.execute(f"""
             WITH raw AS (
-                SELECT * FROM read_csv_auto(
-                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-                )
+                SELECT * FROM {published_rows_csv_sql(UNIFIED_HOLDINGS_CSV)}
                 WHERE 1=1
                   {_unlisted_bdc_filter_sql('cik')}
             ),
@@ -722,9 +719,7 @@ def _export_metadata(
     if UNIFIED_HOLDINGS_CSV.exists():
         vintage_row = con.execute(f"""
             SELECT MAX(filing_date)
-            FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            FROM {published_rows_csv_sql(UNIFIED_HOLDINGS_CSV)}
             WHERE filing_date IS NOT NULL AND TRIM(filing_date) != ''
               {_unlisted_bdc_filter_sql('cik')}
         """).fetchone()

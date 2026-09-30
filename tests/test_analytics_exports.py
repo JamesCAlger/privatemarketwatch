@@ -35,7 +35,8 @@ def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 def _write_rows(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.name == "private_markets_holdings.csv":
-        rows = [{"lien_position": "", "fair_value_currency": "USD", **row} for row in rows]
+        rows = [{"lien_position": "", "fair_value_currency": "USD",
+                 "accounting_record_class": "parent_schedule", **row} for row in rows]
     columns = list(rows[0].keys())
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -361,7 +362,7 @@ def test_gics_sector_export_ignores_even_accepted_fund_overlay(monkeypatch, tmp_
     assert by_sector["Energy"]["totalFv"] == 100
     assert by_sector["Health Care"]["totalFv"] == 200
     assert by_sector["Financials"]["totalFv"] == 300
-    assert all(row["basis"] == "cohort_holdings_signed_fair_value" for row in exported)
+    assert all(row["basis"] == "cohort_holdings_signed_fair_value_ex_underlying_schedule" for row in exported)
     assert sum(row["totalFv"] for row in exported) == 600
     assert sum(row["pctOfTotal"] for row in exported) == 1.0
 
@@ -433,7 +434,7 @@ def test_gics_sector_export_falls_back_when_bdc_reconciliation_fails(monkeypatch
     assert exported[0]["totalFv"] == 100.0
     assert exported[0]["pctOfTotal"] == 1.0
     assert exported[0]["fundCount"] == 1
-    assert exported[0]["basis"] == "cohort_holdings_signed_fair_value"
+    assert exported[0]["basis"] == "cohort_holdings_signed_fair_value_ex_underlying_schedule"
 
 
 def test_gics_sector_export_labels_unknown_and_uses_total_denominator(monkeypatch, tmp_path):
@@ -497,3 +498,35 @@ def test_gics_sector_export_labels_unknown_and_uses_total_denominator(monkeypatc
     assert by_sector["Health Care"]["pctOfTotal"] == 0.3
     assert by_sector["Unknown"]["pctOfTotal"] == 0.6
     assert sum(row["totalFv"] for row in exported) == 1000
+
+
+def test_unified_holdings_readers_go_through_published_rows_helper():
+    # Owner ruling 2026-09-30: every holdings read in the export modules must apply the
+    # published basis (ex underlying_schedule), so no direct read_csv_auto of
+    # UNIFIED_HOLDINGS_CSV in analytics, fund or index exports.
+    from pipeline.export import fund_exports, index_exports
+    offenders = []
+    for module in (analytics_exports, fund_exports, index_exports):
+        lines = Path(module.__file__).read_text(encoding="utf-8").splitlines()
+        offenders += [
+            (module.__name__, i + 1) for i, line in enumerate(lines)
+            if "read_csv_auto(" in line
+            and ("UNIFIED_HOLDINGS_CSV" in line
+                 or (i + 1 < len(lines) and "UNIFIED_HOLDINGS_CSV" in lines[i + 1]))
+        ]
+    assert offenders == []
+
+
+def test_credit_risk_style_reader_excludes_underlying_schedule(monkeypatch, tmp_path):
+    holdings = tmp_path / "private_markets_holdings.csv"
+    _write_rows(holdings, [
+        {"cik": "0000000001", "report_date": "2025-03-31", "fair_value": "100"},
+        {"cik": "0000000001", "report_date": "2025-03-31", "fair_value": "900",
+         "accounting_record_class": "underlying_schedule"},
+    ])
+    monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
+    con = duckdb.connect(":memory:")
+    total = con.execute(
+        f"SELECT sum(TRY_CAST(fair_value AS DOUBLE)) FROM {analytics_exports._published_holdings()}"
+    ).fetchone()[0]
+    assert total == 100

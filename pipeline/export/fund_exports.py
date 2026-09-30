@@ -3,6 +3,7 @@
 import re
 
 from pipeline.export.helpers import *
+from pipeline.published_basis import published_rows_csv_sql
 
 # EFTS-sourced universe names carry a "(CIK 0001234567)" suffix; never
 # let it reach the public UI.
@@ -761,9 +762,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 nonaccrual_footnote,
                 nonaccrual_dimension,
                 TRY_CAST(principal_amount_usd AS DOUBLE) AS principal_amount_usd
-            FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            FROM {published_rows_csv_sql(UNIFIED_HOLDINGS_CSV)}
             WHERE 1=1
               {_unlisted_bdc_filter_sql('cik')}
         """)

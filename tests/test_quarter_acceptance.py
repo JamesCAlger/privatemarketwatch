@@ -63,13 +63,23 @@ def _thresholds(path: Path, *, min_anchored: float = 50.0, checks: list | None =
     return path
 
 
-def _holdings(path: Path, rows: list[tuple[str, str, float]]) -> Path:
+def _holdings(path: Path, rows: list[tuple]) -> Path:
+    # rows: (cik, report_date, fair_value[, accounting_record_class]); default parent_schedule.
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["cik", "report_date", "fair_value"])
-        for cik, d, fv in rows:
-            w.writerow([cik, d, fv])
+        w.writerow(["cik", "report_date", "fair_value", "accounting_record_class"])
+        for row in rows:
+            cik, d, fv = row[:3]
+            w.writerow([cik, d, fv, row[3] if len(row) > 3 else "parent_schedule"])
     return path
+
+
+def test_fund_fv_excludes_underlying_schedule_rows(tmp_path):
+    # Owner ruling 2026-09-30: JV look-through rows are outside the published basis.
+    path = _holdings(tmp_path / "h.csv", [("0000000001", Q, 100_000_000.0),
+                                          ("0000000001", Q, 7_000_000_000.0, "underlying_schedule"),
+                                          ("0000000001", Q, 5_000_000.0, "")])
+    assert qa._fund_fv_by_quarter(path, {"0000000001"}) == {("0000000001", Q): 105.0}
 
 
 def _cons_row(cik: str, status: str, metric: str = "0.1") -> dict:

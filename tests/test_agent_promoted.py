@@ -385,9 +385,9 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
     # unified holdings stand-in: sums match the override for A, the schedule for B
     con.execute("""
         CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
-            ('0001715933', '2025-06-30', 1000.0, 'x=y', 'LOAN'),
-            ('0000000456', '2025-06-30', 500.0,  'x=y', 'LOAN')
-        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)
+            ('0001715933', '2025-06-30', 1000.0, 'x=y', 'LOAN', 'parent_schedule'),
+            ('0000000456', '2025-06-30', 500.0,  'x=y', 'LOAN', 'parent_schedule')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, accounting_record_class)
     """)
     # raw bdc stand-in with printed schedule totals (the LOWER-priority anchor)
     con.execute("""
@@ -418,6 +418,7 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
 def test_engine_conservation_sum_is_published_basis(monkeypatch):
     """Spec 2026-09-07 s.1: the engine sums every row (CASH, is_subsidiary=1, NULL dims).
     Parent 600+400, subsidiary layer 400, cash 20 -> 1420 vs a 1000 schedule total = overshoot.
+    The 5000 underlying_schedule (JV look-through) row is excluded (owner ruling 2026-09-30).
     That overshoot is the gate DOING ITS JOB (Bain Q1-26); Bain Q4-25 reconciles the same way."""
     import scripts.shadow_conservation_engine as sce
 
@@ -426,11 +427,12 @@ def test_engine_conservation_sum_is_published_basis(monkeypatch):
     con.execute("INSERT INTO wrapped VALUES ('0001899017')")
     con.execute("""
         CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
-            ('0001899017', '2026-03-31', 600.0, 'x=y', 'LOAN', 0),
-            ('0001899017', '2026-03-31', 400.0, 'x=y', 'LOAN', 0),
-            ('0001899017', '2026-03-31', 400.0, 'nonconsolidatedsubsidiaryaxis=SLP', 'LOAN', 1),
-            ('0001899017', '2026-03-31', 20.0, NULL, 'CASH', NULL)
-        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, is_subsidiary)
+            ('0001899017', '2026-03-31', 600.0, 'x=y', 'LOAN', 0, 'parent_schedule'),
+            ('0001899017', '2026-03-31', 400.0, 'x=y', 'LOAN', 0, 'parent_schedule'),
+            ('0001899017', '2026-03-31', 400.0, 'nonconsolidatedsubsidiaryaxis=SLP', 'LOAN', 1, 'parent_schedule'),
+            ('0001899017', '2026-03-31', 20.0, NULL, 'CASH', NULL, 'parent_schedule'),
+            ('0001899017', '2026-03-31', 5000.0, 'x=y', 'LOAN', 1, 'underlying_schedule')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, is_subsidiary, accounting_record_class)
     """)
     con.execute("""
         CREATE TABLE bdc_tbl AS SELECT * FROM (VALUES
@@ -464,10 +466,10 @@ def test_engine_companyfacts_plus_cash_only_where_cash_rows_exist(monkeypatch, t
     con.executemany("INSERT INTO wrapped VALUES (?)", [("0000000001",), ("0000000002",)])
     con.execute("""
         CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
-            ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN'),
-            ('0000000001', '2026-03-31', 20.0, 'cashandcashequivalentsaxis=MMF', 'CASH'),
-            ('0000000002', '2026-03-31', 500.0, 'x=y', 'LOAN')
-        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)
+            ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN', 'parent_schedule'),
+            ('0000000001', '2026-03-31', 20.0, 'cashandcashequivalentsaxis=MMF', 'CASH', 'parent_schedule'),
+            ('0000000002', '2026-03-31', 500.0, 'x=y', 'LOAN', 'parent_schedule')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, accounting_record_class)
     """)
     monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
     rule = sce.ConservationRule(
@@ -493,9 +495,9 @@ def test_engine_companyfacts_plus_cash_skipped_when_column_absent(monkeypatch, t
     con.execute("CREATE TABLE wrapped(cik VARCHAR)")
     con.execute("INSERT INTO wrapped VALUES ('0000000001')")
     con.execute("""CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
-        ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN'),
-        ('0000000001', '2026-03-31', 20.0, 'c=MMF', 'CASH')
-        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)""")
+        ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN', 'parent_schedule'),
+        ('0000000001', '2026-03-31', 20.0, 'c=MMF', 'CASH', 'parent_schedule')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, accounting_record_class)""")
     monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
     rule = sce.ConservationRule(
         name="fv_nocol", value_column="fair_value",

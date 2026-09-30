@@ -7,6 +7,7 @@ from pathlib import Path
 
 from pipeline import config
 from pipeline.cohort_guard import load_cohort_ciks
+from pipeline.published_basis import PUBLISHED_ROWS_WHERE_SQL
 
 
 def write_public_contributors(con,path,as_of):
@@ -34,11 +35,12 @@ def public_snapshot(con, holdings_file: Path, *, cutoff="9999-12-31", cohort=Non
     mapping = sorted((name, item["sector"]) for name, item in hierarchy.items())
     if mapping:
         con.executemany("INSERT INTO public_sector_map VALUES (?,?)", mapping)
-    con.execute("""CREATE OR REPLACE TEMP TABLE public_holdings AS
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE public_holdings AS
       WITH scoped AS (
         SELECT *, TRY_CAST(substr(report_date,1,10) AS DATE) AS public_date
         FROM read_csv(?,all_varchar=true)
         WHERE lpad(cik,10,'0') IN (SELECT unnest(?))
+          AND {PUBLISHED_ROWS_WHERE_SQL}
       ), current_rows AS (
         SELECT * FROM scoped WHERE public_date <= CAST(? AS DATE)
         QUALIFY public_date = max(public_date) OVER ()
@@ -88,4 +90,4 @@ def public_snapshot(con, holdings_file: Path, *, cutoff="9999-12-31", cohort=Non
             raise ValueError("Public partition lost or repeated contributors: " + dimension)
     return dict(asOf=str(as_of) if as_of else None, portfolioFv=float(total),
         fairValueExact=str(total), positionCount=count, missingFairValueCount=missing,
-        partitions=partitions, publicPartitionDelta="0", basis="cohort_holdings_signed_fair_value")
+        partitions=partitions, publicPartitionDelta="0", basis="cohort_holdings_signed_fair_value_ex_underlying_schedule")

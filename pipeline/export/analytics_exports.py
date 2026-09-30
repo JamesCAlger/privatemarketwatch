@@ -1,6 +1,16 @@
 """Frontend export helpers split from pipeline.export_frontend."""
 
 from pipeline.export.helpers import *
+from pipeline.published_basis import published_rows_csv_sql
+
+
+def _published_holdings() -> str:
+    """The unified holdings CSV restricted to the published basis (ex underlying_schedule,
+    owner ruling 2026-09-30). Every holdings reader in this module goes through here so
+    per-fund, time-series, credit-risk, PIK and spread exports agree with the headline.
+    Resolved at call time so tests can monkeypatch UNIFIED_HOLDINGS_CSV."""
+    return published_rows_csv_sql(UNIFIED_HOLDINGS_CSV)
+
 
 def _top_n_with_other(
     rows: list[dict],
@@ -599,9 +609,7 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
     if UNIFIED_HOLDINGS_CSV.exists():
         fill = con.execute(f"""
             WITH raw AS (
-                SELECT * FROM read_csv_auto(
-                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-                )
+                SELECT * FROM {_published_holdings()}
             )
             SELECT
                 COUNT(*) AS total,
@@ -672,9 +680,7 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
                         || 'q'
                         || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR)
                     AS quarter
-                FROM read_csv_auto(
-                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-                )
+                FROM {_published_holdings()}
             )
             SELECT quarter,
                 SUM(CASE WHEN source = 'bdc' THEN 1 ELSE 0 END) AS bdc,
@@ -700,9 +706,7 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
         # Classification breakdown (latest quarter-end date)
         cls_breakdown = con.execute(f"""
             WITH raw AS (
-                SELECT * FROM read_csv_auto(
-                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-                )
+                SELECT * FROM {_published_holdings()}
             ),
             latest AS (
                 SELECT MAX(report_date) AS d FROM raw
@@ -910,8 +914,7 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
         try:
             con.execute(
                 "CREATE OR REPLACE TEMP TABLE _uh AS SELECT * FROM "
-                f"read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', "
-                "all_varchar=true)"
+                f"{_published_holdings()}"
             )
             uh_ok = True
         except Exception as exc:
@@ -1232,7 +1235,7 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                 || 'q'
                 || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value
-            FROM read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true)
+            FROM {_published_holdings()}
             WHERE TRY_CAST(fair_value AS DOUBLE) > 0
               AND report_date >= '2022-10-01'
               {_exclude_consumer_lending_sql('cik')}
@@ -1256,9 +1259,7 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
 
     rows = con.execute(f"""
         WITH raw AS (
-            SELECT * FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            SELECT * FROM {_published_holdings()}
             WHERE 1=1
               {_unlisted_bdc_filter_sql('cik')}
         ),
@@ -1398,7 +1399,7 @@ def _export_pik_eligibility(con: duckdb.DuckDBPyConnection) -> None:
                 || 'q'
                 || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value
-            FROM read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true)
+            FROM {_published_holdings()}
             WHERE TRY_CAST(fair_value AS DOUBLE) > 0
               AND report_date >= '2022-10-01'
               {_exclude_consumer_lending_sql('cik')}
@@ -1422,9 +1423,7 @@ def _export_pik_eligibility(con: duckdb.DuckDBPyConnection) -> None:
 
     rows = con.execute(f"""
         WITH raw AS (
-            SELECT * FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            SELECT * FROM {_published_holdings()}
             WHERE 1=1
               {_unlisted_bdc_filter_sql('cik')}
         ),
@@ -1673,9 +1672,7 @@ def _export_spread_time_series(con: duckdb.DuckDBPyConnection) -> None:
                 report_date,
                 TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value
-            FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            FROM {_published_holdings()}
             WHERE index_classification = 'DIRECT_LENDING'
               AND TRY_CAST(basis_spread AS DOUBLE) > 0
               AND TRY_CAST(basis_spread AS DOUBLE) <= 15
@@ -1735,9 +1732,7 @@ def _export_spread_by_fund_size(con: duckdb.DuckDBPyConnection) -> None:
                 report_date,
                 TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value
-            FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            FROM {_published_holdings()}
             WHERE index_classification = 'DIRECT_LENDING'
               AND TRY_CAST(basis_spread AS DOUBLE) > 0
               AND TRY_CAST(basis_spread AS DOUBLE) <= 15
@@ -1835,9 +1830,7 @@ def _export_spread_by_lien(con: duckdb.DuckDBPyConnection) -> None:
                 TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value,
                 report_date
-            FROM read_csv_auto(
-                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-            )
+            FROM {_published_holdings()}
             WHERE index_classification = 'DIRECT_LENDING'
               AND TRY_CAST(basis_spread AS DOUBLE) > 0
               AND TRY_CAST(basis_spread AS DOUBLE) <= 15
