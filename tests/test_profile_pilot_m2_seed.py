@@ -583,3 +583,87 @@ def test_semantic_families_record_the_fixed_coupon_criterion_per_share_band():
     assert fixed == [(str(f), "c:s10_f%s" % f) for f in m2_seed.CANDIDATES["fixed_share_pp"]]
     assert {criterion for family, _, _, _, criterion in families if family == "fixed_share_pp"} == {"fixed"}
     assert not [f for f in families if f[0] in ("iqr_widen", "fixed_share")]
+
+
+# ================================================================ Task 4 (sp1): independent_totals seed wiring
+
+from tests.test_profile_pilot_totals import FIN, book as totals_book  # noqa: E402
+
+
+@pytest.mark.parametrize("kind,field", (("fair_value_scale_flip", "fair_value"), ("pct_scale_flip", "pct_of_net_assets")))
+def test_totals_scale_flips_multiply_the_field_by_100_on_the_seeded_fraction(kind, field):
+    doc = totals_book()
+    before = copy.deepcopy(doc)
+    out, receipt = run(doc, kind, 0.2, seed=3)
+    assert receipt["field"] == field and receipt["eligible"] == 80 and receipt["touched"] == 16
+    touched = {r["context_id"] for r in receipt["rows"]}
+    for p in out["positions"]:
+        want = before["positions"][[q["context_id"] for q in before["positions"]].index(p["context_id"])]
+        ratio = float(p["fields"][field]["value"]) / float(want["fields"][field]["value"])
+        assert ratio == (100.0 if p["context_id"] in touched else 1.0)
+    assert doc == before and m2_seed.realism_errors(doc, out, receipt) == []
+    again, r2 = run(doc, kind, 0.2, seed=3, deep=False)
+    assert again == out and r2 == receipt
+    zero, rz = run(doc, kind, 0.0)
+    assert zero == doc and rz["touched"] == 0
+
+
+def test_totals_variants_are_registered_with_the_totals_detector():
+    for name in ("fair_value_scale_flip", "pct_scale_flip"):
+        assert name in m2_seed.PERTURB_KINDS and name in m2_seed.VARIANT_NAMES
+        assert m2_seed.EXPECTED_DETECTOR[name] == "independent_totals"
+    assert "independent_totals" in m2_seed.CONTRACT_KINDS
+
+
+def _v4():
+    from scripts.profile_pilot import contracts
+    return contracts.tolerance_content_v4(contracts.tolerance_content())
+
+
+def test_target_ids_name_the_totals_contract_of_the_flipped_field():
+    tol = _v4()
+    block = learn(totals_book(), tol=tol, financials_q1=FIN)
+    results = evaluate(block, totals_book(), tol=tol, financials_q2=FIN)
+    fv = m2_seed._target_ids(results, variant="fair_value_scale_flip")
+    pct = m2_seed._target_ids(results, variant="pct_scale_flip")
+    assert fv["independent_totals"] == CIK + ":independent_totals:fair_value:whole_filing"
+    assert pct["independent_totals"] == CIK + ":independent_totals:pct_of_net_assets:whole_filing"
+    assert "independent_totals" not in m2_seed._target_ids(results)
+    assert {k: v for k, v in fv.items() if k != "independent_totals"} == m2_seed._target_ids(results)
+
+
+def test_seed_matrix_detects_the_totals_flips_under_v4():
+    tol = _v4()
+    doc = totals_book()
+    block = learn(doc, tol=tol, financials_q1=FIN)
+    variants = [v for v in m2_seed.VARIANTS if v[0] in ("fair_value_scale_flip", "pct_scale_flip")]
+    matrix = m2_seed.evaluate_matrix(cik=CIK, block=block, tolerances=tol, q1_doc=doc, grammar=None,
+                                     yield_q2=dict(status="vote", vote="cash_leg", cause=None,
+                                                   report_date=doc["document"]["report_date"]),
+                                     variants=variants, fractions=(0.0, 1.0), seeds=(1, 2, 3), financials=FIN)
+    full = [e for e in matrix["evaluations"] if e["fraction"] == 1.0]
+    assert full and all(e["targets"]["independent_totals"]["outcome"] == "detected" for e in full)
+    zero = [e for e in matrix["evaluations"] if e["fraction"] == 0.0]
+    assert all(e["targets"]["independent_totals"]["outcome"] == "null_control" for e in zero)
+    sens = m2_seed.sensitivity(matrix["evaluations"], variants=[v[0] for v in variants])
+    assert sens["cells"]["fair_value_scale_flip"]["independent_totals"]["detected_ciks"] == 1
+    csv_text = m2_seed.render_csv({CIK: matrix})
+    assert "independent_totals:fair_value:whole_filing" in csv_text
+
+
+def _tol_file(tmp_path, content):
+    from scripts.profile_pilot import manifest
+    path = tmp_path / "contract_tolerances.json"
+    path.write_text(json.dumps(dict(inventory="contract_tolerances", content_sha256=manifest.digest(content),
+                                    content=content, run_id="r")), encoding="ascii")
+    return path
+
+
+def test_pin_tolerances_accepts_v4_over_the_frozen_v2_and_refuses_a_tampered_v2(tmp_path):
+    content, rec = m2_seed.pin_tolerances(_tol_file(tmp_path, _v4()))
+    assert content["version"] == 4 and rec["version"] == 4
+    bad = _v4()
+    bad["v3_verbatim"]["v2_verbatim"]["bands"]["standard"]["fill_rate_pp"] = 11
+    (tmp_path / "b").mkdir()
+    with pytest.raises(m2_seed.StageInvalidated):
+        m2_seed.pin_tolerances(_tol_file(tmp_path / "b", bad))

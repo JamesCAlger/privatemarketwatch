@@ -151,15 +151,16 @@ def tolerances():
     return contracts.tolerance_content()
 
 
-def learn(q1_doc, *, profile=None, gram=None, yield_q1=VOTE_CASH, tol=None):
+def learn(q1_doc, *, profile=None, gram=None, yield_q1=VOTE_CASH, tol=None, financials_q1=None):
     return contracts.learn_contracts(cik=CIK, q1_doc=q1_doc, q1_profile=profile or mk_profile(q1_doc),
                                      grammar=gram, yield_q1=yield_q1, tolerances=tol or tolerances(),
-                                     q2_listing=Q2_LISTING, recorded_at=RECORDED)
+                                     q2_listing=Q2_LISTING, recorded_at=RECORDED, financials_q1=financials_q1)
 
 
-def evaluate(block, q2_doc, *, gram=None, yield_q2=None, tol=None, listing=Q2_LISTING):
+def evaluate(block, q2_doc, *, gram=None, yield_q2=None, tol=None, listing=Q2_LISTING, financials_q2=None):
     return contracts.evaluate_contracts(block, tol or tolerances(), q2_doc=q2_doc, q2_listing=listing,
-                                        grammar=gram, yield_q2=yield_q2 or dict(VOTE_CASH, report_date=Q2))
+                                        grammar=gram, yield_q2=yield_q2 or dict(VOTE_CASH, report_date=Q2),
+                                        financials_q2=financials_q2)
 
 
 def pick(results, kind, field, partition="whole_filing"):
@@ -1381,3 +1382,18 @@ def test_v3_composition_bands_are_share_and_fixed_share_and_iqr_left_the_status_
         assert "iqr_widen" not in v3["bands"][tier]
     assert "evidence" in v3["operationalisation"]["rate_composition"] and "R39" in v3["operationalisation"][
         "rate_composition"]
+
+
+def test_v4_denominator_is_the_v3_denominator_plus_two_totals_contracts_and_v3_is_unchanged():
+    v3 = contracts.tolerance_content()
+    v4 = contracts.tolerance_content_v4(v3)
+    q1 = mk_doc(book())
+    b3, b4 = learn(q1, gram=grammar(), tol=v3), learn(q1, gram=grammar(), tol=v4)
+    assert len(b4["contracts"]) == len(b3["contracts"]) + 2
+    assert [c for c in b4["contracts"] if c["kind"] != "independent_totals"] == b3["contracts"]
+    r3 = evaluate(b3, mk_doc(book(), date=Q2), gram=grammar(), tol=v3)
+    r4 = evaluate(b4, mk_doc(book(), date=Q2), gram=grammar(), tol=v4)
+    assert [r for r in r4 if r["kind"] != "independent_totals"] == r3
+    totals = [r for r in r4 if r["kind"] == "independent_totals"]
+    assert [(r["status"], r["cause"]) for r in totals] == [("insufficient_evidence", "not_learned_in_q1: no_anchor"),
+                                                          ("insufficient_evidence", "not_learned_in_q1: pct_not_filled")]

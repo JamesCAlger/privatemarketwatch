@@ -70,20 +70,24 @@ SEEDS = (1, 2, 3)
 RANGE_DELTAS = (0.15, 0.3, 0.6)
 PERTURB_KINDS = ("scale_flip", "scale_flip_declared", "concept_move_namespace", "concept_move_local",
                  "spread_for_coupon", "fill_drop", "range_shift", "identifier_format", "text_numeric_divergence",
-                 "bps_spread_scale")
+                 "bps_spread_scale", "fair_value_scale_flip", "pct_scale_flip")
+# sp1 Task 4: the independent_totals drift classes and the field each one flips (x100 regardless of unit)
+TOTALS_VARIANT_FIELD = {"fair_value_scale_flip": "fair_value", "pct_scale_flip": "pct_of_net_assets"}
 VARIANTS = (("scale_flip", "scale_flip", None), ("scale_flip_declared", "scale_flip_declared", None),
             ("concept_move_namespace", "concept_move_namespace", None),
             ("concept_move_local", "concept_move_local", None), ("spread_for_coupon", "spread_for_coupon", None),
             ("fill_drop", "fill_drop", None)) + tuple(
     ("range_shift_" + str(d), "range_shift", d) for d in RANGE_DELTAS) + (
-    ("identifier_format", "identifier_format", None),)
+    ("identifier_format", "identifier_format", None),
+    ("fair_value_scale_flip", "fair_value_scale_flip", None), ("pct_scale_flip", "pct_scale_flip", None))
 VARIANT_NAMES = tuple(v[0] for v in VARIANTS)
-CONTRACT_KINDS = ("source_concept_set", "fill_rate", "scale", "value_range", "format_grammar")
+CONTRACT_KINDS = ("source_concept_set", "fill_rate", "scale", "value_range", "format_grammar", "independent_totals")
 EXPECTED_DETECTOR = {"scale_flip": "scale", "scale_flip_declared": "scale",
                      "concept_move_namespace": "source_concept_set", "concept_move_local": "source_concept_set",
                      "spread_for_coupon": "value_range", "fill_drop": "fill_rate",
                      "range_shift_0.15": "value_range", "range_shift_0.3": "value_range",
-                     "range_shift_0.6": "value_range", "identifier_format": "format_grammar"}
+                     "range_shift_0.6": "value_range", "identifier_format": "format_grammar",
+                     "fair_value_scale_flip": "independent_totals", "pct_scale_flip": "independent_totals"}
 # ---- Task B2-3 (semantic mode): the drift classes the two new kinds target, plus the range shifts
 # for the median_shift calibration-only experiment (addendum 3; never adopted into v3).
 SEMANTIC_VARIANTS = (("spread_for_coupon", "spread_for_coupon", None),
@@ -116,6 +120,7 @@ LIMIT_RULE = ("ruling R35: the 60 s / 2 GiB bound applies to the measured work (
               "evaluation, timed per step and per CIK); the realism self-check runs on seed 1 only per class x "
               "fraction and is timed separately (validate_seconds)")
 CODE_FILES = ("scripts/profile_pilot/m2_seed.py", "scripts/profile_pilot/contracts.py",
+              "scripts/profile_pilot/contracts_totals.py",
               "scripts/profile_pilot/contracts_observe.py", "scripts/profile_pilot/contracts_run.py",
               "scripts/profile_pilot/envelope.py", "scripts/profile_pilot/census.py",
               "scripts/profile_pilot/census_detect.py", "scripts/profile_pilot/lineage.py",
@@ -368,6 +373,7 @@ def perturb(doc: dict, kind: str, fraction: float, *, seed: int, field: str = FI
     """A copy of the census result `doc` with one drift class on a seeded subset + its receipt."""
     _check_args(kind, fraction, delta)
     ed = _Editor(copy.deepcopy(doc) if deep else doc)
+    field = TOTALS_VARIANT_FIELD.get(kind, field)
     receipt = dict(kind=kind, field=IDENTIFIER_FIELD if kind == "identifier_format" else field,
                    fraction=fraction, seed=seed, delta=delta, rule=None, eligible=0, touched=0, rows=[],
                    removed_fact_indices=[], added_units=[], added_concepts=[], removed_concepts=[])
@@ -375,7 +381,8 @@ def perturb(doc: dict, kind: str, fraction: float, *, seed: int, field: str = FI
                "concept_move_namespace": _concept_move, "concept_move_local": _concept_move,
                "spread_for_coupon": _spread_for_coupon, "fill_drop": _fill_drop, "range_shift": _range_shift,
                "identifier_format": _identifier_format, "text_numeric_divergence": _text_numeric_divergence,
-               "bps_spread_scale": _bps_spread_scale}[kind]
+               "bps_spread_scale": _bps_spread_scale, "fair_value_scale_flip": _field_scale_flip,
+               "pct_scale_flip": _field_scale_flip}[kind]
     handler(ed, receipt, field, fraction, seed, delta)
     receipt["touched"] = len(receipt["rows"])
     receipt["filled"] = _filled_rows(ed.src, receipt["field"])
@@ -392,6 +399,28 @@ def _scale_flip(ed, receipt, field, fraction, seed, _delta):
         facts = _set_value(ed, n, field, new)
         receipt["rows"].append(dict(context_id=ctx, before=ed.src["positions"][n]["fields"][field]["value"],
                                     after=new, declared_class=cls, fact_indices=facts))
+
+
+def _field_scale_flip(ed, receipt, field, fraction, seed, _delta):
+    """x100 on a seeded fraction of current-period rows carrying the field (deterministic per seed).
+
+    Mirrors _scale_flip with the field bound by perturb (TOTALS_VARIANT_FIELD); unlike _scale_flip it
+    does not require a ratio unit (fair_value is monetary), so every parseable filled value is eligible."""
+    rows = {}
+    for n in _current_indices(ed.src):
+        p = ed.src["positions"][n]
+        value = _filled(p, field)
+        number = _decimal(value.get("value")) if value else None
+        if number is not None:
+            rows[p["context_id"]] = (n, number)
+    receipt.update(eligible=len(rows), rule="raw value x100 whatever the declared unit; unit_ref, unit_kind and "
+                                         "decimals unchanged (independent_totals drift class)")
+    for ctx in _select(rows, fraction, seed):
+        n, number = rows[ctx]
+        new = _fmt(number * Decimal(100))
+        facts = _set_value(ed, n, field, new)
+        receipt["rows"].append(dict(context_id=ctx, before=ed.src["positions"][n]["fields"][field]["value"],
+                                    after=new, fact_indices=facts))
 
 
 def _scale_flip_declared(ed, receipt, field, fraction, seed, _delta):
@@ -694,10 +723,17 @@ def outcome(baseline: str, status: str, *, fraction: float | None = None) -> str
     return {"breach": "detected", "insufficient_evidence": "abstained"}.get(status, "missed")
 
 
-def _target_ids(results: list) -> dict:
+def _target_ids(results: list, variant: str | None = None) -> dict:
+    """Target contract per kind. independent_totals is targeted only by its own drift classes, and then
+    the contract of the flipped field (fair_value or pct_of_net_assets; whole filing)."""
     targets = {}
     for kind in CONTRACT_KINDS:
-        field = IDENTIFIER_FIELD if kind == "format_grammar" else FIELD
+        if kind == contracts.TOTALS_KIND:
+            field = TOTALS_VARIANT_FIELD.get(variant)
+            if field is None:
+                continue
+        else:
+            field = IDENTIFIER_FIELD if kind == "format_grammar" else FIELD
         hits = [r for r in results if r["kind"] == kind and r["field"] == field]
         for r in hits:
             key = kind if len(hits) == 1 else kind + ":" + r["partition_id"]
@@ -707,7 +743,7 @@ def _target_ids(results: list) -> dict:
 
 def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, grammar, yield_q2,
                     variants=VARIANTS, fractions=FRACTIONS, seeds=SEEDS, full_validation: bool = False,
-                    semantic: dict | None = None) -> dict:
+                    semantic: dict | None = None, financials: dict | None = None) -> dict:
     """Null control + every variant x fraction x seed, evaluated against the frozen block.
 
     semantic (Task B2-3): dict(block=<v3 block learned from the unperturbed Q1>, grid=semantic_grid(...),
@@ -720,7 +756,7 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
 
     def ev(doc):
         return contracts.evaluate_contracts(block, tolerances, q2_doc=doc, q2_listing=listing, grammar=grammar,
-                                            yield_q2=yield_q2)
+                                            yield_q2=yield_q2, financials_q2=financials)
 
     sem_eval = ms_eval = None
     learn_stats = {}
@@ -757,7 +793,8 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
     ids = [r["contract_id"] for r in null]
     base = {r["contract_id"]: r for r in null}
     targets = _target_ids(null)
-    target_set = set(targets.values())
+    by_variant = {name: _target_ids(null, variant=name) for name, _, _ in variants}
+    target_set = set(targets.values()).union(*(set(t.values()) for t in by_variant.values()))
     evaluations, receipts = [], []
     for name, kind, delta in variants:
         for fraction in fractions:
@@ -779,7 +816,7 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
                     raise contracts.ContractError("contract order/denominator changed under perturbation: " + cik)
                 changed = [r for r in results if r["status"] != base[r["contract_id"]]["status"]]
                 tgt = {}
-                for key, cid in targets.items():
+                for key, cid in by_variant[name].items():
                     r = next(x for x in results if x["contract_id"] == cid)
                     tgt[key] = dict(contract_id=cid, status=r["status"], cause=r["cause"],
                                     baseline_status=base[cid]["status"], baseline_cause=base[cid]["cause"],
@@ -818,6 +855,8 @@ def evaluate_matrix(*, cik: str, block: dict, tolerances: dict, q1_doc: dict, gr
         contract_meta=[dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"],
                             partition_id=r["partition_id"]) for r in null],
         targets=targets, synthetic_q2=SYNTHETIC_Q2_NOTE,
+        **({"variant_targets": {n: t for n, t in by_variant.items() if t != targets}}
+           if any(t != targets for t in by_variant.values()) else {}),
         null_control=dict(counts=dict(sorted(counts.items())),
                           breaches=[dict(contract_id=r["contract_id"], cause=r["cause"]) for r in null
                                     if r["status"] == "breach"],
@@ -1013,9 +1052,15 @@ def _median_fraction(values: list):
     return None if med == math.inf else med
 
 
-def sensitivity(evaluations: list, *, variants=VARIANT_NAMES, kinds=CONTRACT_KINDS) -> dict:
+def sensitivity(evaluations: list, *, variants=VARIANT_NAMES, kinds=None) -> dict:
     """Per variant x kind: per CIK the smallest fraction the seed majority detects (and abstains on);
-    median over applicable CIKs with 'never' ranked above every fraction (median_high)."""
+    median over applicable CIKs with 'never' ranked above every fraction (median_high).
+
+    Default kinds: CONTRACT_KINDS, with independent_totals only when some evaluation targets it (a v2/v3
+    block has no totals contract, so a v2/v3 seed run keeps its pre-v4 table)."""
+    if kinds is None:
+        kinds = tuple(k for k in CONTRACT_KINDS
+                      if k != contracts.TOTALS_KIND or any(k in e["targets"] for e in evaluations))
     grouped: dict = {}
     eligibility: dict = {}
     for e in evaluations:
@@ -1214,8 +1259,9 @@ def render_csv(per_cik: dict) -> str:
     for cik, info in per_cik.items():
         meta = info["contract_meta"]
         null = info["null_control"]["statuses"]
-        by_target = {cid: key for key, cid in info["targets"].items()}
+        variant_targets = info.get("variant_targets") or {}
         for e in info["evaluations"]:
+            by_target = {cid: key for key, cid in variant_targets.get(e["variant"], info["targets"]).items()}
             for m, (st, cause), (nst, _) in zip(meta, e["statuses"], null):
                 key = by_target.get(m["contract_id"])
                 role = "target" if key else ("collateral" if m["contract_id"] in e["changed"] else "other")
@@ -1267,12 +1313,22 @@ def pin_tolerances(tol_path: Path) -> tuple[dict, dict]:
     if record["status"] != "present":
         raise StageInvalidated("frozen tolerances missing: " + str(tol_path))
     body = json.loads(Path(tol_path).read_text(encoding="ascii"))
-    if body.get("inventory") != "contract_tolerances" or body.get("content_sha256") != TOLERANCES_V2_SHA256:
+    if body.get("inventory") != "contract_tolerances":
+        raise StageInvalidated("not a contract_tolerances inventory: " + str(tol_path))
+    if manifest.digest(body.get("content")) != body.get("content_sha256"):
+        raise StageInvalidated("tolerances content does not match its content_sha256")
+    version = body["content"].get("version")
+    if version == contracts.TOLERANCES_VERSION_V4:
+        # v4 carries v3 verbatim, which carries the frozen v2 verbatim: the v2 digest must still be the frozen one
+        v2 = (body["content"].get("v3_verbatim") or {}).get("v2_verbatim")
+        if v2 is None or manifest.digest(v2) != TOLERANCES_V2_SHA256:
+            raise StageInvalidated("v4 tolerances do not carry the frozen v2 verbatim")
+        if manifest.digest(body["content"]["v3_verbatim"]) != body["content"].get("v3_content_sha256"):
+            raise StageInvalidated("v4 tolerances v3_verbatim does not match its v3_content_sha256")
+    elif body["content_sha256"] != TOLERANCES_V2_SHA256:
         raise StageInvalidated("tolerances file is not the frozen v2 (content_sha256 " + str(body.get("content_sha256"))
                                + ")")
-    if manifest.digest(body["content"]) != body["content_sha256"]:
-        raise StageInvalidated("tolerances content does not match its content_sha256")
-    if body["content"].get("version") != contracts.TOLERANCES_VERSION_V2:
+    elif version != contracts.TOLERANCES_VERSION_V2:
         raise StageInvalidated("tolerances version is not " + contracts.TOLERANCES_VERSION_V2)
     return body["content"], dict(record, content_sha256=body["content_sha256"], run_id=body.get("run_id"),
                                  version=body["content"]["version"])

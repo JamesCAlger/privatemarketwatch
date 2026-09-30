@@ -42,6 +42,7 @@ EXIT_INVALIDATED, EXIT_CONTRACT, EXIT_REFUSED = 2, 3, 4
 RUN_PREFIX = "stageb-contracts-"
 ANCHOR_DIR = "data/overrides/identifier_anchors"
 CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_income.py",
+              "scripts/profile_pilot/contracts_totals.py",
               "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/lineage.py",
               "scripts/profile_pilot/envelope.py",
@@ -49,6 +50,8 @@ CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contr
               "scripts/profile_pilot/manifest.py", "pipeline/rate_convention.py", "pipeline/identifier_rate.py",
               "pipeline/identifier_signature.py")
 INCOME_SLICE = "inputs/bdc_fund_income_pilot8.parquet"
+FINANCIALS_SLICE = "inputs/fund_financials_pilot8.parquet"
+FINANCIALS_COLUMNS = ("cik", "report_date", "investments_at_fair_value", "net_assets", "total_assets")
 KEEP = ("label", "path", "status", "sha256", "bytes")
 
 
@@ -157,6 +160,48 @@ def materialise_income_slice(paths: PilotPaths) -> dict:
     record = manifest.file_record(target, "run/" + INCOME_SLICE)
     record.update(source=before, rows_by_cik={c: n for c, n in rows})
     return record
+
+
+def materialise_financials_slice(paths: PilotPaths) -> dict:
+    """Pin the 8 CIKs' fund_financials rows (the independent_totals anchor), write-once, like the income slice."""
+    source = paths.output_root / "fund_financials.csv"
+    before = manifest.file_record(source, "output/fund_financials.csv")
+    target = confined(paths, FINANCIALS_SLICE)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        raise PathError("refusing to overwrite frozen slice: " + str(target))
+    con = pilot_duckdb(paths)
+    try:
+        con.execute("COPY (SELECT lpad(cik, 10, '0') AS cik, substr(report_date, 1, 10) AS report_date, "
+                    "TRY_CAST(investments_at_fair_value AS DOUBLE) AS investments_at_fair_value, "
+                    "TRY_CAST(net_assets AS DOUBLE) AS net_assets, TRY_CAST(total_assets AS DOUBLE) AS total_assets "
+                    "FROM read_csv(?, all_varchar=true, header=true) "
+                    "WHERE lpad(cik, 10, '0') IN (SELECT unnest(?)) ORDER BY 1, 2) TO '"
+                    + target.as_posix().replace("'", "''") + "' (FORMAT parquet)",
+                    [str(source), list(cohort.PILOT_CIKS)])
+        rows = con.execute("SELECT cik, count(*) FROM read_parquet(?) GROUP BY 1 ORDER BY 1",
+                           [str(target)]).fetchall()
+    finally:
+        con.close()
+    manifest.assert_inputs_unchanged([before], "while slicing fund_financials")
+    record = manifest.file_record(target, "run/" + FINANCIALS_SLICE)
+    record.update(source=before, rows_by_cik={c: n for c, n in rows})
+    return record
+
+
+def load_financials(paths: PilotPaths, cik: str, report_date: str) -> dict | None:
+    """The pinned fund_financials row of one (cik, quarter), or None; two rows are a ContractError."""
+    con = pilot_duckdb(paths)
+    try:
+        rows = con.execute("SELECT " + ", ".join(FINANCIALS_COLUMNS) + " FROM read_parquet(?) "
+                           "WHERE cik = ? AND report_date = ?",
+                           [str(confined(paths, FINANCIALS_SLICE)), str(cik).zfill(10), str(report_date)[:10]]
+                           ).fetchall()
+    finally:
+        con.close()
+    if len(rows) > 1:
+        raise contracts.ContractError("fund_financials has %d rows for %s %s" % (len(rows), cik, report_date))
+    return dict(zip(FINANCIALS_COLUMNS, rows[0])) if rows else None
 
 
 # ---------------------------------------------------------------- loading pinned JSON
@@ -314,6 +359,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
             for rel in CODE_FILES]
     slices = manifest.materialise_slices(paths)
     income_slice = materialise_income_slice(paths)
+    financials_slice = materialise_financials_slice(paths)
     holdings_path = next(s["path"] for s in slices if s["label"].endswith("private_markets_holdings_pilot8.parquet"))
 
     primary = manifest.load_inventory(census["paths"], "primary_quarter_inventory")
@@ -321,9 +367,9 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
     tol_record = manifest.file_record(tolerances_state["path"], "run/inventories/contract_tolerances.json")
     pinned = ([census["authoritative"], census["excluded"], profiles["summary"], profiles["manifest"], tol_record]
               + census["files"] + list(profiles["profiles"].values()) + grammar_records + code + slices
-              + [income_slice] + (v2["records"] if v2 else []))
+              + [income_slice, financials_slice] + (v2["records"] if v2 else []))
     built["inputs"] += [{k: r[k] for k in KEEP if k in r} for r in pinned]
-    built["inputs"] += [s["source"] for s in slices + [income_slice]]
+    built["inputs"] += [s["source"] for s in slices + [income_slice, financials_slice]]
     built.update(stage="contracts", census_source=dict(run_id=census_run_id, run_root=census["run_root"]),
                  profile_source=dict(run_id=profile_run_id, run_root=profiles["run_root"],
                                      lineage=profiles["lineage"]),
@@ -331,7 +377,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                                                            signatures=g["signatures"],
                                                            anchors_source=g["anchors_source"], provenance="inherited"))
                            for c, g in grammars.items()},
-                 slices=slices + [income_slice], code=code, s2_constants=contracts_income.s2_constants(),
+                 slices=slices + [income_slice, financials_slice], code=code, s2_constants=contracts_income.s2_constants(),
                  stage_config=dict(ciks=ciks, recorded_at=recorded_at, contracts_version=contracts.CONTRACTS_VERSION,
                                    tolerances_version=contracts.TOLERANCES_VERSION, kinds=list(contracts.ALL_KINDS),
                                    yield_holdings="private_markets_holdings slice (S2's production input); "
@@ -346,7 +392,7 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
 
     # The parquet slices are what the stages read; their CSV sources are pinned in the manifest
     # (re-hashing 1.3 GB of CSV around every cached stage would add nothing).
-    slice_deps = [{k: s[k] for k in KEEP} for s in slices + [income_slice]]
+    slice_deps = [{k: s[k] for k in KEEP} for s in slices + [income_slice, financials_slice]]
     blocks, deps_common = {}, dict(tolerances=tol_record, code=code, slices=slice_deps)
     for cik in ciks:
         row = census["selected"][(cik, "q1")]
@@ -366,7 +412,8 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
             q1_profile = load_profile(profile_record, census_sha256=profiles["census_sha256"][cik])
             return contracts.learn_contracts(cik=cik, q1_doc=q1_doc, q1_profile=q1_profile,
                                              grammar=grammars[cik], yield_q1=yield_q1, tolerances=tolerances,
-                                             q2_listing=_q2_listing(census, cik), recorded_at=recorded_at)
+                                             q2_listing=_q2_listing(census, cik), recorded_at=recorded_at,
+                                             financials_q1=load_financials(paths, cik, row["report_date"]))
 
         out = manifest.run_cached_stage(paths, "learning/" + cik + ".json", identity, learn,
                                         workload=_workload(cik, row["record"]["bytes"]))
@@ -397,8 +444,10 @@ def run_stage(paths: PilotPaths, *, census_run_id: str, profile_run_id: str, cik
                 income_path=income_slice["path"], census_doc=q2_doc,
                 min_quarters=contracts.frozen_min_quarters(tolerances))
             listing = block["q2_listing"]
+            financials_q2 = None if row is None else load_financials(paths, cik, row["report_date"])
             return dict(evaluated_utc=stamp, yield_q2=yield_q2, results=contracts.evaluate_contracts(
-                block, tolerances, q2_doc=q2_doc, q2_listing=listing, grammar=grammars[cik], yield_q2=yield_q2))
+                block, tolerances, q2_doc=q2_doc, q2_listing=listing, grammar=grammars[cik], yield_q2=yield_q2,
+                financials_q2=financials_q2))
 
         size = row["record"]["bytes"] if row else 0
         out = manifest.run_cached_stage(paths, "results/contracts/" + cik + ".json", identity, evaluate,

@@ -4,6 +4,8 @@ Two whole-filing criteria that cannot abstain on a pure scale flip: the census's
 published-basis fair-value sum against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. See scripts/profile_pilot/contracts_totals.py.
 """
+import pytest
+
 from tests.test_profile_pilot_contracts import mk_doc, debt, val
 from scripts.profile_pilot import contracts_totals as ct
 
@@ -13,11 +15,10 @@ FIN = dict(cik="0000000001", report_date="2026-03-31", investments_at_fair_value
 
 
 def book(n=80, fv="1000000", pct="1.25"):
-    doc = mk_doc([debt(i) for i in range(n)])
-    for p in doc["positions"]:
-        p["fields"]["fair_value"] = val(fv, unit="USD")
-        p["fields"]["pct_of_net_assets"] = val(pct)
-    return doc
+    # census-shaped fields (status, fact_indices, facts) so the book also runs through learn_contracts,
+    # the derived profile and the seed perturbations (Task 4), not only the pure totals functions
+    return mk_doc([debt(i, extra=dict(fair_value=val(fv, "usd", decimals="0"), pct_of_net_assets=val(pct)))
+                   for i in range(n)])
 
 
 def test_observe_sums_current_period_positions_and_computes_residual():
@@ -102,3 +103,134 @@ def test_large_book_with_unfilled_pct_abstains_pct_not_filled():
     assert r_fv["status"] == "holds"
     r_pct = ct.evaluate_totals(contracts[1], q2, doc, financials_q2=FIN, band=BAND)
     assert r_pct["status"] == "insufficient_evidence" and r_pct["cause"] == "pct_not_filled"
+
+
+# ---------------------------------------------------------------- Task 4: wiring (tolerances v4, contracts, seed)
+
+# Brief-vs-code: the brief builds v3 as semantic_tolerances(tolerances()), but tolerances() already IS the
+# frozen v3 content (tolerance_content()), semantic_tolerances() accepts only v2, and without bands= it yields
+# None candidate bands (calibration mode). The frozen v3 is used directly.
+from tests.test_profile_pilot_contracts import learn, evaluate, pick, tolerances as tol_v3  # noqa: E402
+
+
+def test_v4_tolerances_carry_v3_verbatim_and_the_totals_bands():
+    from scripts.profile_pilot import contracts
+    v3 = tol_v3()
+    v4 = contracts.tolerance_content_v4(v3)
+    assert v4["version"] == 4 and v4["v3_verbatim"] == v3
+    assert v4["bands"]["standard"]["independent_totals"] == dict(fv_residual_pct=5.0, pct_sum_min=50, pct_sum_max=250,
+                                                               pct_sum_shift_pp=15, min_positions=5)
+    assert v4["bands"]["low_history"]["independent_totals"]["fv_residual_pct"] == 10.0
+    assert v4["provisional_kinds"] == ["independent_totals"]
+    assert contracts.band_for(v4, "standard", "independent_totals") == v4["bands"]["standard"]["independent_totals"]
+
+
+def test_learn_and_evaluate_route_the_totals_kind_whole_filing():
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    q1 = book()
+    block = learn(q1, tol=v4, financials_q1=FIN)
+    ids = {c["contract_id"] for c in block["contracts"] if c["kind"] == "independent_totals"}
+    assert len(ids) == 2
+    res = evaluate(block, book(fv="100000000"), tol=v4, financials_q2=FIN)
+    assert pick(res, "independent_totals", "fair_value")["status"] == "breach"
+    assert pick(res, "independent_totals", "pct_of_net_assets")["status"] == "holds"
+    assert all(r.get("status_basis") == "provisional" for r in res if r["kind"] == "independent_totals")
+
+
+def test_m2_denominator_counts_two_totals_contracts_per_cik():
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    assert sum(1 for c in block["contracts"] if c["kind"] == "independent_totals") == 2
+
+
+def test_v4_digests_and_supersedes_record_v3_and_v2_stays_verbatim():
+    from scripts.profile_pilot import contracts, manifest, m2_seed
+    v3 = tol_v3()
+    v4 = contracts.tolerance_content_v4(v3)
+    assert v4["v3_content_sha256"] == manifest.digest(v3) == v4["supersedes"]["superseded_v4"]
+    assert manifest.digest(v4["v3_verbatim"]["v2_verbatim"]) == m2_seed.TOLERANCES_V2_SHA256
+    assert v4["calibration"]["v4_quarters_seen"] == []
+    assert v3 == tol_v3()          # the v3 input is not mutated
+
+
+def test_v2_and_v3_tolerances_learn_no_totals_contracts():
+    from scripts.profile_pilot import contracts
+    v3 = tol_v3()
+    for tol in (contracts.tolerance_content_v2(), v3):
+        block = learn(book(), tol=tol, financials_q1=FIN)
+        assert not any(c["kind"] == "independent_totals" for c in block["contracts"])
+
+
+def test_totals_contracts_do_not_abstain_on_an_ambiguous_partition_overlap(monkeypatch):
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    frame = contracts._q2_frame
+    monkeypatch.setattr(contracts, "_q2_frame",
+                        lambda *a, **k: dict(frame(*a, **k), ambiguous={"whole_filing": ["c0"]}))
+    res = evaluate(block, book(), tol=v4, financials_q2=FIN)
+    assert pick(res, "fill_rate", "interest_rate")["cause"] == "ambiguous_partition_overlap"
+    assert [pick(res, "independent_totals", f)["status"] for f in ct.FIELDS] == ["holds", "holds"]
+
+
+def test_totals_field_constants_agree_with_the_backtest():
+    from scripts.profile_pilot import m2_backtest as bt
+    assert bt.TOTALS_FIELD == ct.TOTALS_FIELD and bt.PCT_FIELD == ct.PCT_FIELD
+    assert bt.SUITE["independent_totals"] == (ct.TOTALS_FIELD, ct.PCT_FIELD)
+    assert "independent_totals" in bt.KNOWN_KINDS
+
+
+# ---------------------------------------------------------------- Task 4: pinned fund_financials slice
+
+def _fake_financials(tmp_path, rows):
+    from tests.test_profile_pilot_paths import fake_paths
+    paths = fake_paths(tmp_path, run_id="stageb-contracts-t4")
+    header = "cik,entity_name,report_date,total_assets,net_assets,investments_at_fair_value,investments_at_cost\n"
+    body = "".join(",".join(str(v) for v in r) + "\n" for r in rows)
+    (paths.output_root / "fund_financials.csv").write_text(header + body, encoding="ascii")
+    return paths
+
+
+def test_financials_slice_keeps_the_eight_ciks_padded_and_load_returns_one_row(tmp_path):
+    from scripts.profile_pilot import cohort, contracts_run
+    pilot = cohort.PILOT_CIKS[0]
+    paths = _fake_financials(tmp_path, [
+        (str(int(pilot)), "Pilot", "2026-03-31", 90, 60, 80, 79),
+        (pilot, "Pilot", "2025-12-31", 91, 61, 81, 80),
+        ("0000000009", "Other", "2026-03-31", 1, 1, 1, 1)])
+    record = contracts_run.materialise_financials_slice(paths)
+    assert record["label"] == "run/" + contracts_run.FINANCIALS_SLICE and record["rows_by_cik"] == {pilot: 2}
+    assert record["source"]["label"] == "output/fund_financials.csv"
+    row = contracts_run.load_financials(paths, pilot, "2026-03-31")
+    assert row == dict(cik=pilot, report_date="2026-03-31", investments_at_fair_value=80.0, net_assets=60.0,
+                       total_assets=90.0)
+    assert contracts_run.load_financials(paths, pilot, "2024-03-31") is None
+    assert contracts_run.load_financials(paths, "0000000009", "2026-03-31") is None
+    with pytest.raises(Exception):
+        contracts_run.materialise_financials_slice(paths)                 # write-once
+
+
+def test_load_financials_refuses_two_rows_for_one_quarter(tmp_path):
+    from scripts.profile_pilot import cohort, contracts, contracts_run
+    pilot = cohort.PILOT_CIKS[0]
+    paths = _fake_financials(tmp_path, [(pilot, "A", "2026-03-31", 1, 1, 1, 1), (pilot, "B", "2026-03-31", 2, 2, 2, 2)])
+    contracts_run.materialise_financials_slice(paths)
+    with pytest.raises(contracts.ContractError):
+        contracts_run.load_financials(paths, pilot, "2026-03-31")
+
+
+def test_strict_reading_exempts_totals_like_the_yield_when_the_identifier_format_is_unresolved():
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    res = [dict(r, identifier_format_unresolved=True)
+           for r in evaluate(block, book(fv="100000000"), tol=v4, financials_q2=FIN)]
+    strict = {r["contract_id"]: r for r in contracts.strict_results(res)}
+    totals = [r for r in res if r["kind"] == "independent_totals"]
+    assert [r["status"] for r in totals] == ["breach", "holds"]
+    assert all(strict[r["contract_id"]]["status"] == r["status"] and strict[r["contract_id"]]["cause"] == r["cause"]
+               for r in totals)
+    fill = pick(res, "fill_rate", "interest_rate")
+    assert fill["status"] == "holds" and strict[fill["contract_id"]]["cause"] == "identifier_format_unresolved"

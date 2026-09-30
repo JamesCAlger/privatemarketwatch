@@ -605,6 +605,7 @@ def test_real_nexpoint_semantic_backtest_through_the_cli(tmp_path, monkeypatch):
                     "--census-run-id", "stageb2-census-20260929t094408z",
                     "--contracts-run-id", "stageb-contracts-20260929t053506z",
                     "--cik", "0001588272", "--run-id", "stageb2-backtest-v3-test", "--semantic",
+                    "--tolerances-version", "3",
                     "--scratch-dir", str(tmp_path / "scratch")])
     assert code == 0
     root = tmp_path / "run"
@@ -662,3 +663,46 @@ def test_ledger_exclusions_list_every_unscored_row_with_a_reason():
     assert by_id == {"r1": "state_not_adjudicated:open", "r2": "state_not_adjudicated:needs_human",
                      "r4": "rule_not_mapped:nonaccrual_x"}
     # r3 is scored (not excluded); r5 is outside the cohort and not listed
+
+
+# ---------------------------------------------------------------- Task 4 (sp1): independent_totals wiring
+
+def test_tolerances_version_defaults_to_4_under_semantic_and_2_otherwise():
+    assert bt.resolve_tolerances_version(None, semantic=True) == 4
+    assert bt.resolve_tolerances_version(None, semantic=False) == 2
+    assert bt.resolve_tolerances_version(3, semantic=True) == 3
+    with pytest.raises(bt.StageInvalidated):
+        bt.resolve_tolerances_version(2, semantic=True)
+    with pytest.raises(bt.StageInvalidated):
+        bt.resolve_tolerances_version(5, semantic=False)
+
+
+def test_learning_tolerances_derive_v3_and_v4_in_memory_from_the_frozen_v2():
+    v2 = contracts.tolerance_content_v2()
+    assert bt.learning_tolerances(v2, 2) is v2
+    v3 = bt.learning_tolerances(v2, 3)
+    v4 = bt.learning_tolerances(v2, 4)
+    assert v3["version"] == contracts.TOLERANCES_VERSION and v3["v2_verbatim"] == v2
+    assert v4 == contracts.tolerance_content_v4(v3)
+
+
+def test_zero_position_learning_quarter_under_v4_adds_the_two_totals_contracts():
+    empty = mk_doc([], date="2023-03-31")
+    v4 = bt.learning_tolerances(contracts.tolerance_content_v2(), 4)
+    block = bt.learn_block(CIK, empty, tolerances=v4, grammar=None, yield_ev=NO_VOTE,
+                           recorded_at="2026-09-29T00:00:00Z", derive=mk_profile, financials=None)
+    assert len(block["contracts"]) == 61
+    assert [(c["kind"], c["field"]) for c in block["contracts"][-2:]] == [
+        ("independent_totals", bt.TOTALS_FIELD), ("independent_totals", bt.PCT_FIELD)]
+    assert all(c["learn_status"] == "insufficient_evidence" for c in block["contracts"])
+    v3 = bt.learn_block(CIK, empty, tolerances=bt.learning_tolerances(contracts.tolerance_content_v2(), 3),
+                        grammar=None, yield_ev=NO_VOTE, recorded_at="2026-09-29T00:00:00Z", derive=mk_profile)
+    assert len(v3["contracts"]) == 59
+
+
+def test_trim_keeps_status_basis_only_where_the_result_carries_it():
+    base = dict(contract_id="x", kind="scale", field="interest_rate", partition_id="whole_filing", status="holds",
+                cause=None, violating_keys=[], expected=None, observed=None, identifier_format_unresolved=False,
+                q2=dict(form_type="10-Q"))
+    assert "status_basis" not in bt._trim(base)
+    assert bt._trim(dict(base, kind="independent_totals", status_basis="provisional"))["status_basis"] == "provisional"

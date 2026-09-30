@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import copy
 
-from scripts.profile_pilot import envelope
+from scripts.profile_pilot import contracts_totals, envelope
 from scripts.profile_pilot.census import POSITION_FIELDS, POSITION_RATE, field_channel
 from scripts.profile_pilot.contracts_observe import (  # noqa: F401  (current_positions, grammar_info re-exported)
     IDENTIFIER_FIELD, RATIO_CLASSES, SCALE_CONVENTIONS, UNIT_NOT_OBSERVABLE, WHOLE_FILING, as_grammars, canonical, channel_gaps,
@@ -83,7 +83,13 @@ KIND_BAND_KEYS = {"source_concept_set": ("source_concept_set",), "fill_rate": ("
                   "text_agreement": ("text_share_pp", "min_rows", "min_parse_share")}
 # ---- Task B2-3 (tolerances v3): two semantic kinds, learned per partition after the v2 suite.
 SEMANTIC_KINDS = ("rate_composition", "text_agreement")
-ALL_KINDS = KINDS + SEMANTIC_KINDS
+# ---- sp1 Task 4 (tolerances v4): the independent_totals kind, learned whole-filing after the semantic kinds.
+TOTALS_KIND = contracts_totals.KIND
+ALL_KINDS = KINDS + SEMANTIC_KINDS + (TOTALS_KIND,)
+KIND_BAND_KEYS[TOTALS_KIND] = (TOTALS_KIND,)
+TOLERANCES_VERSION_V4 = 4
+# strict 6.3 reading: kinds not keyed on identifiers keep their status when the identifier format is unresolved
+STRICT_EXEMPT_KINDS = ("fund_income_yield", TOTALS_KIND)
 COMPOSITION_FIELD = "interest_rate-basis_spread"
 TEXT_FIELD = "investment_identifier-rate_text"
 SEMANTIC_BAND_KEYS = ("share_pp", "fixed_share_pp", "text_share_pp", "min_rows", "min_parse_share")
@@ -273,6 +279,32 @@ def has_semantic_bands(tolerances: dict) -> bool:
     return "share_pp" in (((tolerances or {}).get("bands") or {}).get("standard") or {})
 
 
+def has_totals_bands(tolerances: dict) -> bool:
+    """v4 and later: the independent_totals band is present (v2/v3 versions are strings, v4 is the int 4)."""
+    return TOTALS_KIND in (((tolerances or {}).get("bands") or {}).get("standard") or {})
+
+
+def tolerance_content_v4(v3: dict) -> dict:
+    """v4 = v3 verbatim + the independent_totals bands (spec 2026-09-29 s5, D-floor). IN-SAMPLE until Q2-2026."""
+    from scripts.profile_pilot import manifest
+    if v3.get("version") != TOLERANCES_VERSION:
+        raise ContractError("tolerances v4 extends only the v3 content, got " + repr(v3.get("version")))
+    v3_sha = manifest.digest(v3)
+    out = copy.deepcopy(v3)
+    out["bands"]["standard"][TOTALS_KIND] = dict(fv_residual_pct=5.0, pct_sum_min=50, pct_sum_max=250,
+                                                 pct_sum_shift_pp=15, min_positions=5)
+    out["bands"]["low_history"][TOTALS_KIND] = dict(fv_residual_pct=10.0, pct_sum_min=50, pct_sum_max=250,
+                                                    pct_sum_shift_pp=25, min_positions=5)
+    out.update(version=TOLERANCES_VERSION_V4, v3_verbatim=copy.deepcopy(v3), v3_content_sha256=v3_sha,
+               provisional_kinds=[TOTALS_KIND],
+               supersedes=dict(copy.deepcopy(v3.get("supersedes", {})), superseded_v4=v3_sha),
+               calibration=dict(copy.deepcopy(v3.get("calibration", {})), v4_quarters_seen=[], v4_basis=
+                                "pre-registered 2026-09-30 from oracle A04 bdc_tolerance and A07 defaults; "
+                                "not tuned to any replay result"),
+               totals_income="evidence only, detection_not_claimed (criterion deferred to sub-project 2)")
+    return out
+
+
 def semantic_constants(tolerances: dict) -> dict:
     section = _req(tolerances, "semantic_constants", "tolerances")
     return {k: _req(section, k, "tolerances.semantic_constants") for k in
@@ -344,6 +376,8 @@ def band_for(tolerances: dict, tier: str, kind: str) -> dict:
         section = _req(tolerances, "fund_income_yield", "tolerances")
         return dict(s2_constants=_req(section, "constants", "tolerances.fund_income_yield"))
     bands = _req(_req(tolerances, "bands", "tolerances"), tier, "tolerances.bands")
+    if kind == TOTALS_KIND:
+        return dict(_req(bands, TOTALS_KIND, "tolerances.bands." + tier))
     return {key: _req(bands, key, "tolerances.bands." + tier) for key in KIND_BAND_KEYS[kind]}
 
 
@@ -424,8 +458,11 @@ def _scale_evidence(obs: dict) -> dict:
 
 
 def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar: dict | None, yield_q1: dict,
-                    tolerances: dict, q2_listing: dict, recorded_at: str) -> dict:
-    """Every contract for one CIK from Q1 evidence only (no Q2 input exists in this signature)."""
+                    tolerances: dict, q2_listing: dict, recorded_at: str, financials_q1: dict | None = None) -> dict:
+    """Every contract for one CIK from Q1 evidence only (no Q2 input exists in this signature).
+
+    financials_q1 (v4): the pinned fund_financials row of the learning quarter (or None), used only
+    by the independent_totals kind, which is learned only when the tolerances carry its band."""
     positions = current_positions(q1_doc)
     tier = tier_for(tolerances, len(positions))
     conventions = frozen_scale_conventions(tolerances)
@@ -507,6 +544,9 @@ def learn_contracts(*, cik: str, q1_doc: dict, q1_profile: dict | None, grammar:
         cause=None if vote_ok else str(yield_q1.get("cause") or "q1_yield_without_vote"),
         evidence=dict(q1_yield=yield_q1)))
     contracts += semantic
+    if has_totals_bands(tolerances):
+        contracts += contracts_totals.learn_totals(cik, tier, band_for(tolerances, tier, TOTALS_KIND), q1_doc,
+                                                   financials_q1=financials_q1)
     return dict(cik=cik, version=CONTRACTS_VERSION_V3 if semantic_on else CONTRACTS_VERSION, tier=tier,
                 q1=dict(report_date=q1_date, form_type=q1_form, positions=len(positions),
                         accession_number=q1_doc["document"].get("accession_number")),
@@ -707,14 +747,14 @@ def _check_s2_constants(tolerances: dict) -> None:
 
 
 def evaluate_contracts(block: dict, tolerances: dict, *, q2_doc: dict | None, q2_listing: dict,
-                       grammar, yield_q2: dict | None) -> list:
+                       grammar, yield_q2: dict | None, financials_q2: dict | None = None) -> list:
     """Evaluate the frozen contracts of one CIK on Q2; every contract yields exactly one result.
 
     Each result carries `identifier_format_unresolved` (the frozen Q1 identifier-format status)
     so M2 can be reported under both readings of spec 6.3 (see IDENTIFIER_FORMAT_INTERPRETATION).
     """
     results = _evaluate(block, tolerances, q2_doc=q2_doc, q2_listing=q2_listing, grammar=grammar,
-                        yield_q2=yield_q2)
+                        yield_q2=yield_q2, financials_q2=financials_q2)
     status = _req(_req(block, "identifier_format", "inventory block"), "status", "inventory block.identifier_format")
     learned = {c["contract_id"] for c in block["contracts"] if c["learn_status"] == "learned"}
     for r in results:
@@ -748,7 +788,7 @@ def _q2_frame(block: dict, q2_doc: dict, q2_listing: dict, grammars: list) -> di
                 ambiguous=ambiguous, unroutable=[u["context_id"] for u in routing["unroutable"]])
 
 
-def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yield_q2) -> list:
+def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yield_q2, financials_q2=None) -> list:
     contracts = _req(block, "contracts", "inventory block")
     for c in contracts:
         _check_frozen(c, tolerances)
@@ -769,6 +809,11 @@ def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yie
         pid = c["partition_id"]
         if c["learn_status"] != "learned":
             results.append(_result(c, "insufficient_evidence", q2, cause="not_learned_in_q1: " + str(c["learn_cause"])))
+            continue
+        if c["kind"] == TOTALS_KIND:
+            # whole-filing by construction: never routed, so never abstains on a partition overlap
+            results.append(contracts_totals.evaluate_totals(c, q2, q2_doc, financials_q2=financials_q2,
+                                                            band=c["band"]))
             continue
         if c["kind"] == "fund_income_yield":
             results.append(_evaluate_yield(c, q2, yield_q2))
@@ -1119,11 +1164,12 @@ def _tables(results: list) -> dict:
 
 def strict_results(results: list) -> list:
     """Strict spec 6.3 reading: every row-level contract of a CIK whose Q1 identifier format is an
-    unresolved mixture is insufficient_evidence/identifier_format_unresolved (yield is fund-level)."""
+    unresolved mixture is insufficient_evidence/identifier_format_unresolved. Exempt: fund_income_yield
+    (fund-level) and independent_totals (whole-filing sums, independent of identifiers; controller ruling)."""
     out = []
     for r in results:
         flagged = _req(r, "identifier_format_unresolved", "result " + str(r.get("contract_id")))
-        if flagged and r["kind"] != "fund_income_yield" and r["status"] != "insufficient_evidence":
+        if flagged and r["kind"] not in STRICT_EXEMPT_KINDS and r["status"] != "insufficient_evidence":
             r = dict(r, status="insufficient_evidence", cause="identifier_format_unresolved")
         out.append(r)
     return out

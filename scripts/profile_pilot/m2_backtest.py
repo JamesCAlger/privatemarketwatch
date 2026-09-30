@@ -98,7 +98,8 @@ SUITE = {"source_concept_set": tuple(contracts.CONCEPT_FIELDS), "fill_rate": tup
          "scale": tuple(contracts.SCALE_FIELDS), "value_range": tuple(contracts.RANGE_FIELDS),
          "format_grammar": (IDENTIFIER_FIELD,), "fund_income_yield": (contracts.YIELD_FIELD,),
          "rate_composition": (contracts.COMPOSITION_FIELD,), "text_agreement": (contracts.TEXT_FIELD,)}
-KNOWN_KINDS = tuple(SUITE) + ("position_identity",)
+KNOWN_KINDS = tuple(SUITE) + ("position_identity",)   # extended with independent_totals below (sp1 Task 4)
+TOLERANCES_VERSIONS = (2, 3, 4)
 FIELD_GROUPS = (tuple(POSITION_RATE) + ("pct_of_net_assets",), tuple(POSITION_VALUE), (IDENTIFIER_FIELD,))
 CHECK_TYPES = ("d07", "json_scope", "csv_row", "doc_line")
 FINGERPRINT_CSV = "output/linkbase_analysis/rate_tag_fingerprint_by_accession.csv"
@@ -130,6 +131,8 @@ LEDGER_NOT_COVERED_KINDS = {"agentA_spread_vs_xbrl": {"format_grammar": AGENTA_R
 TOTALS_FIELD = "fair_value"
 PCT_FIELD = "pct_of_net_assets"
 LEDGER_MAP_VERSION = "sp1-2026-09-30"
+SUITE[contracts.TOTALS_KIND] = (TOTALS_FIELD, PCT_FIELD)
+KNOWN_KINDS = tuple(SUITE) + ("position_identity",)
 LEDGER_RULES.update({
     # independent totals (spec 2026-09-29 section 5, D-floor): pre-registered before the kind existed
     "fv_conservation": {"independent_totals": [TOTALS_FIELD]},
@@ -168,6 +171,7 @@ def ledger_exclusions(rows, *, ciks, dates) -> list:
 
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
+              "scripts/profile_pilot/contracts_totals.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",
               "scripts/profile_pilot/profile.py", "scripts/profile_pilot/envelope.py",
               "scripts/profile_pilot/census.py", "scripts/profile_pilot/census_detect.py",
@@ -424,21 +428,44 @@ def verify_typed(paths, rows, *, d07_computed: set) -> list:
 
 # ---------------------------------------------------------------- learning (in memory)
 
-def learn_block(cik: str, doc: dict, *, tolerances: dict, grammar, yield_ev: dict, recorded_at: str, derive) -> dict:
+def resolve_tolerances_version(version, *, semantic: bool) -> int:
+    """--tolerances-version: default 4 under --semantic, else 2; the semantic grid needs v3 or later."""
+    version = (4 if semantic else 2) if version is None else int(version)
+    if version not in TOLERANCES_VERSIONS:
+        raise StageInvalidated("unknown tolerances version " + repr(version))
+    if semantic and version < 3:
+        raise StageInvalidated("--semantic needs tolerances version 3 or 4 (the semantic bands)")
+    return version
+
+
+def learning_tolerances(v2: dict, version: int, *, calibration: dict | None = None) -> dict:
+    """The learning tolerances, derived IN MEMORY from the frozen v2 (never rebuilt from code constants):
+    2 = the frozen v2 itself; 3 = v2 + the semantic bands; 4 = that v3 + the independent_totals bands."""
+    if version == 2:
+        return v2
+    v3 = contracts.semantic_tolerances(v2, bands=contracts.SEMANTIC_BANDS, calibration=calibration or dict(
+        label=m2_seed.IN_SAMPLE, status="learning reference only"))
+    return v3 if version == 3 else contracts.tolerance_content_v4(v3)
+
+
+def learn_block(cik: str, doc: dict, *, tolerances: dict, grammar, yield_ev: dict, recorded_at: str, derive,
+                financials: dict | None = None) -> dict:
     """contracts.learn_contracts on one quarter; a zero-position quarter keeps the full denominator
     (every (kind, field) of the suite, whole filing) as insufficient_evidence."""
     positions = current_positions(doc)
     profile = derive(doc) if positions else None
     block = contracts.learn_contracts(cik=cik, q1_doc=doc, q1_profile=profile, grammar=grammar, yield_q1=yield_ev,
                                       tolerances=tolerances, recorded_at=recorded_at,
-                                      q2_listing=dict(status="backtest", note="evaluation quarter set per pair"))
+                                      q2_listing=dict(status="backtest", note="evaluation quarter set per pair"),
+                                      financials_q1=financials)
     if positions:
         return block
     whole = dict(partition_id=WHOLE_FILING, applies_to=None)
     have = {(c["kind"], c["field"], c["partition_id"]) for c in block["contracts"]}
     tier = block["tier"]
     added = []
-    kinds = contracts.ALL_KINDS if contracts.has_semantic_bands(tolerances) else contracts.KINDS
+    kinds = contracts.KINDS + (contracts.SEMANTIC_KINDS if contracts.has_semantic_bands(tolerances) else ()) + (
+        (contracts.TOTALS_KIND,) if contracts.has_totals_bands(tolerances) else ())
     for kind in kinds:
         for field in SUITE[kind]:
             if (kind, field, WHOLE_FILING) in have:
@@ -507,7 +534,8 @@ def _trim(r: dict) -> dict:
                 violating_keys=keys if r["status"] == "breach" else [],
                 expected=contracts._brief(r["expected"]), observed=contracts._brief(r["observed"]),
                 identifier_format_unresolved=r["identifier_format_unresolved"], q2_form_type=r["q2"].get("form_type"),
-                newly_abstained=bool(r.get("newly_abstained")))
+                newly_abstained=bool(r.get("newly_abstained")),
+                **({"status_basis": r["status_basis"]} if "status_basis" in r else {}))
 
 
 def strict(results: list) -> list:
@@ -1143,8 +1171,9 @@ def _stage_timing(timing: dict) -> dict:
 
 
 def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, scratch_dir: Path | None = None,
-              semantic: bool = False, seed_run_id: str | None = None) -> dict:
+              semantic: bool = False, seed_run_id: str | None = None, tolerances_version: int | None = None) -> dict:
     ciks = list(ciks or cohort.PILOT_CIKS)
+    tolerances_version = resolve_tolerances_version(tolerances_version, semantic=semantic)
     started = time.perf_counter()
     clock = dict(started_utc=_now())
     recorded_at = clock["started_utc"]
@@ -1207,12 +1236,13 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                   position_like_min=POSITION_LIKE_MIN, cover_only_max_facts=COVER_ONLY_MAX_FACTS,
                   limits=dict(seconds=LIMIT_SECONDS, bytes=LIMIT_BYTES), negatives_caveat=NEGATIVES_CAVEAT,
                   suite={k: list(v) for k, v in SUITE.items()}, ledger_rules=LEDGER_RULES)
-    grid = learn_tol = sem_arg = None
-    learn_tol = tolerances
+    grid = sem_arg = None
+    learn_tol = learning_tolerances(tolerances, tolerances_version)
+    if tolerances_version != 2:
+        config.update(tolerances_version=tolerances_version, learning_tolerances_sha256=manifest.digest(learn_tol),
+                      provisional_kinds=list(learn_tol.get("provisional_kinds") or []))
     if semantic:
         grid = m2_seed.semantic_grid(tolerances)
-        learn_tol = contracts.semantic_tolerances(tolerances, bands=contracts.SEMANTIC_BANDS, calibration=dict(
-            label=m2_seed.IN_SAMPLE, status="learning reference only"))
         sem_arg = dict(grid=grid)
         config.update(semantic=True, label=m2_seed.IN_SAMPLE, learning_reference=manifest.digest(learn_tol),
                       grid=[dict(name=g["name"], family=g["family"], share_pp=g["share_pp"],
@@ -1232,8 +1262,13 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
                 k: list(v) for k, v in m2_seed.CANDIDATES.items()}:
             raise StageInvalidated("seed root semantic curves were not swept over the same candidates")
     keep = ("label", "path", "status", "sha256", "bytes")
+    financials_rec = None
+    if contracts.has_totals_bands(learn_tol):
+        # the independent_totals anchor: pinned into THIS run root (the frozen contracts roots predate it)
+        financials_rec = contracts_run.materialise_financials_slice(paths)
     inputs = ([census["authoritative"], census["excluded"]] + census["files"] + [cman_rec, tol_rec, inv_rec]
-              + list(slices.values()) + [r for recs in grammar_recs.values() for r in recs] + sources["records"] + code
+              + list(slices.values()) + ([financials_rec, financials_rec["source"]] if financials_rec else [])
+              + [r for recs in grammar_recs.values() for r in recs] + sources["records"] + code
               + ([seed_rec] if seed_rec else []))
     built = dict(
         run_id=paths.run_id, stage="m2_backtest", version=BACKTEST_VERSION, created_utc=_now(),
@@ -1262,6 +1297,8 @@ def run_stage(paths, *, census_run_id: str, contracts_run_id: str, ciks=None, sc
     clock["manifest_written_utc"] = _now()
 
     slice_deps = {k: dict(label=v["label"], sha256=v["sha256"], bytes=v["bytes"]) for k, v in slices.items()}
+    if financials_rec:
+        slice_deps["fund_financials_pilot8.parquet"] = {k: financials_rec[k] for k in ("label", "sha256", "bytes")}
     holdings_path = slices["private_markets_holdings_pilot8.parquet"]["path"]
     income_path = slices["bdc_fund_income_pilot8.parquet"]["path"]
     all_pairs, results_json, classes, yields_by, repro, timing_rows = [], {}, {}, {}, {}, []
@@ -1488,6 +1525,9 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
     t = time.perf_counter()
     doc = contracts_run.load_census(row)
     timing["load_seconds"] = time.perf_counter() - t
+    # independent_totals (v4): the pinned fund_financials row of THIS quarter; it is the learning quarter's
+    # anchor for blocks learned here and the evaluation quarter's anchor for the pairs evaluated here
+    financials = contracts_run.load_financials(paths, cik, day) if contracts.has_totals_bands(tolerances) else None
     qclass = classify_quarter(doc)
     slim = slim_view(doc)
     window = income_window(day, prev=prev, gapped=gapped, min_quarters=min_quarters)
@@ -1519,7 +1559,7 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
     if qclass["class"] != "pre_tagging":
         t = time.perf_counter()
         block = learn_block(cik, doc, tolerances=tolerances, grammar=grammar, yield_ev=ev_yield,
-                            recorded_at=recorded_at, derive=derive)
+                            recorded_at=recorded_at, derive=derive, financials=financials)
         timing["learn_contracts_seconds"] = time.perf_counter() - t - timing.get("profile_seconds", 0.0)
     listing = dict(status="available", report_date=day, census_relative=row["census_relative"])
     evaluations = {}
@@ -1530,7 +1570,7 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
             continue
         t = time.perf_counter()
         res = contracts.evaluate_contracts(learn_out["block"], tolerances, q2_doc=doc, q2_listing=listing,
-                                           grammar=grammar, yield_q2=ev_yield)
+                                           grammar=grammar, yield_q2=ev_yield, financials_q2=financials)
         extra = {}
         if mode == "rolling":
             prior = ((prev_out.get("evaluations") or {}).get("rolling") or {}).get("results")
@@ -1549,7 +1589,7 @@ def _quarter(paths, *, cik, row, day, prev, gapped, prev_out, q1_out, q1_date, t
         saved = dict(timing)
         again = learn_block(cik, doc, tolerances=tolerances, grammar=grammar, yield_ev=single,
                             recorded_at=frozen_block["recorded_at"],
-                            derive=lambda d: derive(d, at=frozen_block["recorded_at"]))
+                            derive=lambda d: derive(d, at=frozen_block["recorded_at"]), financials=financials)
         timing.clear()
         timing.update(saved)
         key = lambda c: (c["contract_id"], c["learn_status"], c["learn_cause"], c["expectation"])
@@ -1593,6 +1633,9 @@ def main(argv=None) -> int:
     cmd.add_argument("--scratch-dir", type=Path, default=None)
     cmd.add_argument("--semantic", action="store_true", help="Task B2-3: v3 semantic kinds at every candidate band")
     cmd.add_argument("--seed-run-id", default=None, help="Task B2-3: seed root whose semantic curves calibrate")
+    cmd.add_argument("--tolerances-version", type=int, choices=TOLERANCES_VERSIONS, default=None,
+                     help="learning tolerances derived in memory from the frozen v2 (default 4 with --semantic, "
+                          "else 2); 4 adds the provisional independent_totals kind")
     args = parser.parse_args(argv)
     try:
         main_root = args.main_root or discover_main_root(CODE_ROOT)
@@ -1603,7 +1646,7 @@ def main(argv=None) -> int:
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, contracts_run_id=args.contracts_run_id,
                                 ciks=args.cik, scratch_dir=args.scratch_dir, semantic=args.semantic,
-                                seed_run_id=args.seed_run_id)
+                                seed_run_id=args.seed_run_id, tolerances_version=args.tolerances_version)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + str(exc).encode("ascii", "backslashreplace").decode("ascii"))
         return EXIT_INVALIDATED
