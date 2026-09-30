@@ -127,6 +127,43 @@ LEDGER_RULES = {
     "agentA_spread_vs_xbrl": {"format_grammar": [IDENTIFIER_FIELD], "value_range": ["basis_spread"],
                               "text_agreement": [contracts.TEXT_FIELD]}}
 LEDGER_NOT_COVERED_KINDS = {"agentA_spread_vs_xbrl": {"format_grammar": AGENTA_REASON, "value_range": AGENTA_REASON}}
+TOTALS_FIELD = "fair_value"
+PCT_FIELD = "pct_of_net_assets"
+LEDGER_MAP_VERSION = "sp1-2026-09-30"
+LEDGER_RULES.update({
+    # independent totals (spec 2026-09-29 section 5, D-floor): pre-registered before the kind existed
+    "fv_conservation": {"independent_totals": [TOTALS_FIELD]},
+    "cost_conservation": {"independent_totals": [TOTALS_FIELD]},
+    "A04": {"independent_totals": [TOTALS_FIELD]},
+    "E01": {"independent_totals": [TOTALS_FIELD]},
+    "A07": {"independent_totals": [PCT_FIELD]},
+    "pct_of_net_assets_identity": {"independent_totals": [PCT_FIELD]},
+})
+LEDGER_EXCLUDED_STATES = ("open", "needs_human", "evidence_backlog", "remediation_pulled", "gone_unadjudicated",
+                          "resolved_upstream")
+
+
+def ledger_exclusions(rows, *, ciks, dates) -> list:
+    """Every ledger row for the replay cohort and dates that is NOT scored, with the reason.
+
+    A row is scored only when its state is in LEDGER_STATES or LEDGER_NEGATIVE_STATE and its
+    rule_name is in LEDGER_RULES. Everything else is reported so the recall denominator is honest.
+    """
+    out = []
+    for r in rows:
+        cik, date = str(r["cik"]).zfill(10), str(r["report_date"])[:10]
+        if cik not in ciks or date not in dates:
+            continue
+        scored_state = r["state"] in LEDGER_STATES + (LEDGER_NEGATIVE_STATE,)
+        if not scored_state:
+            reason = "state_not_adjudicated:" + str(r["state"])
+        elif r["rule_name"] not in LEDGER_RULES:
+            reason = "rule_not_mapped:" + str(r["rule_name"])
+        else:
+            continue
+        out.append(dict(review_id=r["review_id"], cik=cik, date=date, rule_name=r["rule_name"], state=r["state"],
+                        verdict_status=r.get("verdict_status"), reason=reason))
+    return sorted(out, key=lambda o: (o["cik"], o["date"], o["review_id"]))
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",

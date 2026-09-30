@@ -631,3 +631,34 @@ def test_the_bcred_fixed_coupon_pairs_are_adjudicated_positives_with_their_sourc
     s = bt.score(pairs, results, rows, mode="rolling")
     assert [u["outcome"] for u in s["positive_units"]] == ["detected"]
     assert s["by_kind"]["rate_composition"]["negatives"]["n"] == 0
+
+
+# ---------------------------------------------------------------- pre-registered independent_totals ledger map
+
+def test_totals_and_identity_rules_map_to_independent_totals_fields():
+    from scripts.profile_pilot import m2_backtest as bt
+    assert bt.LEDGER_RULES["fv_conservation"] == {"independent_totals": ["fair_value"]}
+    assert bt.LEDGER_RULES["cost_conservation"] == {"independent_totals": ["fair_value"]}
+    assert bt.LEDGER_RULES["A04"] == {"independent_totals": ["fair_value"]}
+    assert bt.LEDGER_RULES["E01"] == {"independent_totals": ["fair_value"]}
+    assert bt.LEDGER_RULES["A07"] == {"independent_totals": ["pct_of_net_assets"]}
+    assert bt.LEDGER_RULES["pct_of_net_assets_identity"] == {"independent_totals": ["pct_of_net_assets"]}
+    assert bt.LEDGER_MAP_VERSION == "sp1-2026-09-30"
+    # the five v2/v3 rules are untouched
+    assert bt.LEDGER_RULES["dl_rate_fill"] == {"fill_rate": ["interest_rate"]}
+
+
+def test_ledger_exclusions_list_every_unscored_row_with_a_reason():
+    from scripts.profile_pilot import m2_backtest as bt
+    rows = [
+        dict(review_id="r1", state="open", verdict_status="MISSING", cik="0001287750", rule_name="A07", report_date="2026-03-31"),
+        dict(review_id="r2", state="needs_human", verdict_status="verdict_ESCALATE", cik="0001287750", rule_name="fv_conservation", report_date="2025-12-31"),
+        dict(review_id="r3", state="real_error_unremediated", verdict_status="verdict_real_error", cik="0001287750", rule_name="A07", report_date="2026-03-31"),
+        dict(review_id="r4", state="real_error_unremediated", verdict_status="verdict_real_error", cik="0001287750", rule_name="nonaccrual_x", report_date="2026-03-31"),
+        dict(review_id="r5", state="real_error_unremediated", verdict_status="verdict_real_error", cik="0009999999", rule_name="A07", report_date="2026-03-31"),
+    ]
+    out = bt.ledger_exclusions(rows, ciks={"0001287750"}, dates={"2025-12-31", "2026-03-31"})
+    by_id = {o["review_id"]: o["reason"] for o in out}
+    assert by_id == {"r1": "state_not_adjudicated:open", "r2": "state_not_adjudicated:needs_human",
+                     "r4": "rule_not_mapped:nonaccrual_x"}
+    # r3 is scored (not excluded); r5 is outside the cohort and not listed
