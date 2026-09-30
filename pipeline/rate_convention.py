@@ -61,6 +61,7 @@ from pipeline.config import (
     RATE_CONVENTION_OVERRIDES_DIR,
     S0_CONVENTION_SIGNAL_FILE,
 )
+from pipeline.published_basis import published_fv_mask
 
 logger = logging.getLogger(__name__)
 
@@ -365,6 +366,10 @@ def _aggregate_signals(
     con = duckdb.connect()
     con.register("h", holdings)
     con.register("inc", income)
+    # S2 compares holdings to the BDC's OWN income: published basis only (owner ruling
+    # 2026-09-30, no underlying_schedule JV look-through rows). S1/S4/S5 are row-level
+    # evidence of how the filer prints rates and keep every row.
+    con.register("h_pub", holdings[published_fv_mask(holdings)])
 
     base = con.execute("""
         WITH bdc AS (
@@ -407,7 +412,7 @@ def _aggregate_signals(
                    TRY_CAST(interest_rate AS DOUBLE) AS ir,
                    TRY_CAST(pik_rate AS DOUBLE) AS pik,
                    TRY_CAST(principal_amount AS DOUBLE) AS prin
-            FROM h WHERE lower(COALESCE(source, '')) = 'bdc'
+            FROM h_pub WHERE lower(COALESCE(source, '')) = 'bdc'
         ),
         pred AS (
             SELECT cik, q,
@@ -567,7 +572,8 @@ def build_rate_convention(
         holdings = pd.read_csv(UNIFIED_HOLDINGS_FILE, low_memory=False,
                                usecols=["source", "cik", "report_date", "interest_rate",
                                         "pik_rate", "principal_amount", "basis_spread",
-                                        "bdc_investment_identifier"])
+                                        "bdc_investment_identifier",
+                                        "accounting_record_class"])
     if income is None:
         income = pd.read_csv(BDC_FUND_INCOME_FILE, low_memory=False)
 

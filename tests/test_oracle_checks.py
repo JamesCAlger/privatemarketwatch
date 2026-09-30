@@ -1682,3 +1682,76 @@ class TestJ08SuspectedRefinancing:
         assert len(results) == 1
         # With only 1 match that is a refi, rate=100% > 0% threshold -> warn
         assert results[0].status == "warn"
+
+
+# ===================================================================
+# Published basis (owner ruling 2026-09-30): fund-level checks exclude
+# accounting_record_class == 'underlying_schedule' rows.
+# ===================================================================
+
+class TestPublishedBasisFundLevelChecks:
+    def _two_rows(self, parent_fv="95000000", jv_fv="95000000", **extra):
+        return _holdings([
+            {"fair_value": parent_fv, "accounting_record_class": "parent_schedule", **extra},
+            {"fair_value": jv_fv, "accounting_record_class": "underlying_schedule", **extra},
+        ])
+
+    def test_A04_excludes_underlying_schedule(self):
+        ff = _fund_financials([{"investments_at_fair_value": "100000000"}])
+        results = check_A04_gav_reconciliation(self._two_rows(), ff)
+        assert [r.status for r in results] == ["pass"]
+        assert "holdings_fv=95,000,000" in results[0].message
+
+    def test_A04_frame_without_column_keeps_all_rows(self):
+        holdings = _holdings([{"fair_value": "95000000"}, {"fair_value": "95000000"}])
+        ff = _fund_financials([{"investments_at_fair_value": "100000000"}])
+        results = check_A04_gav_reconciliation(holdings, ff)
+        assert [r.status for r in results] == ["fail"]
+
+    def test_E01_excludes_underlying_schedule(self):
+        from pipeline.oracle_checks import check_E01_holdings_fv_vs_investments
+        ff = _fund_financials([{"investments_at_fair_value": "100000000"}])
+        results = check_E01_holdings_fv_vs_investments(self._two_rows(), ff)
+        assert [(r.check_id, r.status) for r in results] == [("E01", "pass")]
+
+    @staticmethod
+    def _pct_rows():
+        # 5 parent rows at 20% (100%) + 10 JV rows at 20% (200%): 300% unmasked.
+        return _holdings(
+            [{"pct_of_net_assets": "20", "accounting_record_class": "parent_schedule"}] * 5
+            + [{"pct_of_net_assets": "20", "accounting_record_class": "underlying_schedule"}] * 10
+        )
+
+    def test_A07_excludes_underlying_schedule(self):
+        results = check_A07_pct_of_net_assets_sum(self._pct_rows())
+        assert [r.status for r in results] == ["pass"]
+        assert "pct_sum=100.0%" in results[0].message
+
+    def test_A07_frame_without_column_keeps_all_rows(self):
+        holdings = self._pct_rows().drop(columns=["accounting_record_class"])
+        results = check_A07_pct_of_net_assets_sum(holdings)
+        assert [r.status for r in results] == ["fail"]
+        assert "pct_sum=300.0%" in results[0].message
+
+    def test_E02_excludes_underlying_schedule(self):
+        ff = _fund_financials([{"total_assets": "120000000"}])
+        results = check_E02_holdings_fv_vs_total_assets(
+            self._two_rows(parent_fv="100000000", jv_fv="100000000"), ff)
+        assert [r.status for r in results] == ["pass"]
+
+    def test_E02_frame_without_column_keeps_all_rows(self):
+        holdings = _holdings([{"fair_value": "100000000"}, {"fair_value": "100000000"}])
+        ff = _fund_financials([{"total_assets": "120000000"}])
+        results = check_E02_holdings_fv_vs_total_assets(holdings, ff)
+        assert [r.status for r in results] == ["fail"]
+
+    def test_E07_still_counts_underlying_rows(self):
+        """E07 compares source leaf counts (which include JV-schedule leaves) to output
+        row counts; it is a completeness check, not a fund-level FV total, so it keeps
+        every row."""
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf", "source_row_id": str(i)}
+            for i in range(2)
+        ])
+        results = check_E07_position_count_vs_filing(detail, self._two_rows())
+        assert [r.status for r in results] == ["pass"]

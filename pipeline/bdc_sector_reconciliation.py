@@ -20,6 +20,7 @@ from pipeline.config import (
     BDC_SECTOR_RECONCILIATION_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
+from pipeline.published_basis import published_fv_mask, published_rows_csv_sql
 
 logger = logging.getLogger(__name__)
 
@@ -59,17 +60,24 @@ def _register_source(
     df: Optional[pd.DataFrame],
     path: Path,
     columns: list[str],
+    published_only: bool = False,
 ) -> bool:
+    """published_only: keep only published-basis rows (owner ruling 2026-09-30:
+    no underlying_schedule JV look-through rows). Used for the holdings source."""
     if df is not None:
+        if published_only:
+            df = df[published_fv_mask(df)]
         if df.empty:
             con.register(name, pd.DataFrame(columns=columns))
         else:
             con.register(name, df)
         return True
     if path.exists():
+        table = (published_rows_csv_sql(path) if published_only else
+                 f"read_csv_auto('{path.as_posix()}', all_varchar=true)")
         con.execute(f"""
             CREATE TEMP VIEW {name} AS
-            SELECT * FROM read_csv_auto('{path.as_posix()}', all_varchar=true)
+            SELECT * FROM {table}
         """)
         return True
     con.register(name, pd.DataFrame(columns=columns))
@@ -114,6 +122,7 @@ def reconcile_bdc_sector_breakdown(
             [
                 "source", "cik", "report_date", "issuer_name", "fair_value",
             ],
+            published_only=True,
         )
 
         reconciliation = con.execute(f"""

@@ -329,3 +329,77 @@ def test_schedule_proxy_outputs_write_files(tmp_path):
     assert len(transitions) == 1
     assert (tmp_path / "summary.csv").exists()
     assert (tmp_path / "transitions.csv").exists()
+
+
+# Owner ruling 2026-09-30: position status keeps every row; fund-level PIK products
+# (summary, transitions, schedule-proxy transitions) use the published basis.
+
+def _status_pair(cls_prior: str, cls_current: str, **cols) -> pd.DataFrame:
+    base = {"source": "bdc", "cik": "1", "entity_name": "BDC", "issuer_name": "Acme",
+            "index_classification": "DIRECT_LENDING", **cols}
+    return pd.DataFrame([
+        {**base, "position_id": "P1", "report_date": "2024-03-31", "report_quarter": "2024q1",
+         "pik_current_status": "not_paying", "pik_current_evidence": "zero",
+         "pik_terms_flag": "False", "pik_terms_rate": "", "fair_value": "10",
+         "accounting_record_class": cls_prior},
+        {**base, "position_id": "P1", "report_date": "2024-06-30", "report_quarter": "2024q2",
+         "pik_current_status": "paying", "pik_current_evidence": "positive",
+         "pik_terms_flag": "True", "pik_terms_rate": "3.0", "fair_value": "11",
+         "accounting_record_class": cls_current},
+    ])
+
+
+def test_position_status_keeps_underlying_rows_and_carries_record_class(tmp_path):
+    unified = _unified([
+        {"source": "bdc", "cik": "100", "report_date": "2024-03-31",
+         "issuer_name": "Parent Co", "pik_rate": "2.5"},
+        {"source": "bdc", "cik": "100", "report_date": "2024-03-31",
+         "issuer_name": "JV Co", "pik_rate": "2.5"},
+    ])
+    unified["accounting_record_class"] = ["parent_schedule", "underlying_schedule"]
+    status, _ = build_position_pik_status(
+        unified_df=unified, bdc_evidence_df=pd.DataFrame(),
+        output_path=tmp_path / "status.csv", transitions_path=tmp_path / "transitions.csv",
+    )
+    assert len(status) == 2
+    assert sorted(status["accounting_record_class"]) == ["parent_schedule", "underlying_schedule"]
+    assert set(status["pik_terms_flag"]) == {"True"}
+
+
+def test_pik_transitions_exclude_underlying_schedule():
+    assert build_pik_transitions(
+        _status_pair("underlying_schedule", "underlying_schedule")).empty
+    assert len(build_pik_transitions(_status_pair("parent_schedule", "parent_schedule"))) == 1
+
+
+def test_pik_transitions_frame_without_class_column_keeps_all_rows():
+    status = _status_pair("x", "x").drop(columns=["accounting_record_class"])
+    assert len(build_pik_transitions(status)) == 1
+
+
+def test_schedule_proxy_transitions_exclude_underlying_schedule():
+    assert build_pik_schedule_proxy_transitions(
+        _status_pair("underlying_schedule", "underlying_schedule")).empty
+    status = _status_pair("x", "x").drop(columns=["accounting_record_class"])
+    assert len(build_pik_schedule_proxy_transitions(status)) == 1
+
+
+def test_schedule_proxy_summary_excludes_underlying_schedule():
+    status = pd.DataFrame([
+        {"source": "bdc", "cik": "1", "report_date": "2024-03-31", "position_id": "P1",
+         "fair_value": "100", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "True", "pik_terms_rate": "2.5",
+         "accounting_record_class": "parent_schedule"},
+        {"source": "bdc", "cik": "1", "report_date": "2024-03-31", "position_id": "P2",
+         "fair_value": "300", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "False", "pik_terms_rate": "",
+         "accounting_record_class": "underlying_schedule"},
+    ])
+    summary = build_pik_schedule_proxy_summary(status)
+    row = summary[summary["scope"] == "all"].iloc[0]
+    assert row["total_rows"] == 1
+    assert row["total_fair_value"] == 100
+    assert row["pik_terms_fair_value_pct"] == 1.0
+
+    full = build_pik_schedule_proxy_summary(status.drop(columns=["accounting_record_class"]))
+    assert full[full["scope"] == "all"].iloc[0]["total_rows"] == 2

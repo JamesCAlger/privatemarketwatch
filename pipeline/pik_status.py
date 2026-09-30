@@ -1,4 +1,11 @@
-"""Build position-level current PIK status and transition CSVs."""
+"""Build position-level current PIK status and transition CSVs.
+
+Published basis (owner ruling 2026-09-30): position status covers ALL unified rows,
+including underlying_schedule (JV look-through) rows, and carries
+accounting_record_class. The fund-level products -- build_pik_transitions,
+build_pik_schedule_proxy_summary and build_pik_schedule_proxy_transitions --
+use the published basis (pipeline.published_basis.published_fv_mask).
+"""
 
 from __future__ import annotations
 
@@ -16,6 +23,7 @@ from pipeline.config import (
     POSITION_PIK_STATUS_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
+from pipeline.published_basis import published_fv_mask
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +33,7 @@ STATUS_COLUMNS = [
     "position_id", "fair_value", "index_classification",
     "pik_current_status", "pik_current_flag", "pik_current_evidence",
     "pik_current_amount", "pik_terms_flag", "pik_terms_rate",
+    "accounting_record_class",
 ]
 
 TRANSITION_COLUMNS = [
@@ -305,6 +314,7 @@ def build_position_pik_status(
 
 def build_pik_transitions(status_df: pd.DataFrame) -> pd.DataFrame:
     """Build observable ``not_paying -> paying`` and unknown evidence transitions."""
+    status_df = status_df[published_fv_mask(status_df)]  # published basis (2026-09-30)
     if status_df.empty:
         return pd.DataFrame(columns=TRANSITION_COLUMNS)
 
@@ -456,6 +466,7 @@ def build_pik_schedule_proxy_summary(status_df: pd.DataFrame) -> pd.DataFrame:
     This is a schedule-rate proxy: ``pik_terms_rate > 0`` indicates disclosed
     PIK terms, not independently verified current PIK income/accrual.
     """
+    status_df = status_df[published_fv_mask(status_df)]  # published basis (2026-09-30)
     if status_df.empty:
         return pd.DataFrame(columns=SCHEDULE_PROXY_SUMMARY_COLUMNS)
     df = _prepare_schedule_proxy_status(status_df)
@@ -512,6 +523,7 @@ def build_pik_schedule_proxy_summary(status_df: pd.DataFrame) -> pd.DataFrame:
 
 def build_pik_schedule_proxy_transitions(status_df: pd.DataFrame) -> pd.DataFrame:
     """Build same-position no-PIK-terms to PIK-terms transition proxy."""
+    status_df = status_df[published_fv_mask(status_df)]  # published basis (2026-09-30)
     if status_df.empty:
         return pd.DataFrame(columns=SCHEDULE_PROXY_TRANSITION_COLUMNS)
     df = _prepare_schedule_proxy_status(status_df)

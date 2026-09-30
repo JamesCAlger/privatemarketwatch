@@ -4277,9 +4277,9 @@ class TestCheckGavReconciliation:
         assert result.iloc[0]["gav_rule_id"] == "GAV_NPORT01"
 
     def test_adjusted_ratio_is_published_basis(self):
-        """Spec 2026-09-07 s.1: GAV sums every row, subsidiary rows included. The ex_sub
-        column stays informational. 8M vs 5M anchor -> 1.6 on BOTH ratios -> FAIL on a
-        STRONG anchor."""
+        """Spec 2026-09-07 s.1: GAV sums every published row; is_subsidiary is NOT the key.
+        No accounting_record_class column -> every row is published. 8M vs 5M anchor ->
+        1.6 on BOTH ratios -> FAIL on a STRONG anchor."""
         holdings = _make_unified_df([
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
@@ -4291,9 +4291,33 @@ class TestCheckGavReconciliation:
         result = check_gav_reconciliation(holdings, fund_financials_df=ff)
         assert abs(float(result.iloc[0]["gav_ratio"]) - 1.6) < 0.01
         assert abs(float(result.iloc[0]["gav_ratio_adjusted"]) - 1.6) < 0.01
-        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 5000000.0
+        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 8000000.0
         assert int(result.iloc[0]["has_subsidiary_positions"]) == 1
         assert result.iloc[0]["reconciliation_status"] == "FAIL"
+
+    def test_gate_ratio_excludes_underlying_schedule(self):
+        """Owner ruling 2026-09-30: underlying_schedule (JV look-through) rows leave the
+        gate numerator. 5M parent + 3M underlying vs 5M anchor -> ratio 1.0 -> PASS;
+        sum_holdings_fv still reports all 8M."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc",
+             "accounting_record_class": "parent_schedule"},
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "3000000", "source": "bdc",
+             "accounting_record_class": "underlying_schedule"},
+        ])
+        ff = pd.DataFrame([{"cik": "100", "report_date": "2024-03-31",
+                            "investments_at_fair_value": "5000000", "total_assets": "6000000"}])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        row = result.iloc[0]
+        assert float(row["sum_holdings_fv"]) == 8000000.0
+        assert float(row["sum_holdings_fv_ex_sub"]) == 5000000.0
+        assert abs(float(row["gav_ratio"]) - 1.0) < 0.001
+        assert abs(float(row["gav_ratio_adjusted"]) - 1.0) < 0.001
+        assert float(row["residual_fv"]) == 0.0
+        assert row["flag"] == "ok"
+        assert row["reconciliation_status"] == "PASS"
 
     def test_strong_anchor_bands_warn_2pct_fail_5pct(self):
         def _run(fv, ifv=None, ta="10000000"):
@@ -4419,8 +4443,9 @@ class TestCheckGavReconciliation:
         assert result.iloc[0]["flag"] == "over_coverage"
         adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
         assert abs(adj_ratio - 2.364) < 0.01
-        # ex-sub numerator survives as an informational column
-        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 5000000.0
+        # ex-sub column is keyed on accounting_record_class, not is_subsidiary:
+        # no record class on these rows -> every row is published
+        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 13000000.0
         assert result.iloc[0]["reconciliation_status"] == "FAIL"
 
     def test_no_subsidiary_passthrough(self):
@@ -4525,6 +4550,27 @@ class TestCheckPctOfNetAssetsSum:
         assert len(result) == 1
         assert float(result.iloc[0]["pct_sum"]) < 50
         assert result.iloc[0]["flag"] == "low_pct_sum"
+
+    def test_underlying_schedule_rows_excluded(self):
+        """Owner ruling 2026-09-30: JV look-through rows are not the BDC's own book.
+        10 parent rows at 12% + 10 underlying rows at 12% -> 120%, ok (not 240%)."""
+        rows = []
+        for cls in ("parent_schedule", "underlying_schedule"):
+            for i in range(10):
+                rows.append({
+                    "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                    "issuer_name": f"Company {cls} {i}",
+                    "fair_value": "1000000",
+                    "pct_of_net_assets": "12.0",
+                    "report_date": "2024-03-31",
+                    "accounting_record_class": cls,
+                })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 1
+        assert abs(float(result.iloc[0]["pct_sum"]) - 120.0) < 0.1
+        assert int(result.iloc[0]["position_count"]) == 10
+        assert result.iloc[0]["flag"] == "ok"
 
     def test_nport_excluded(self):
         """N-PORT positions are ignored (no pct_of_net_assets typically)."""

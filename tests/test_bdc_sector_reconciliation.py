@@ -98,3 +98,46 @@ def test_scaling_preserves_per_cik_holdings_fair_value():
     )
 
     assert abs(reconciled["reconciled_fair_value"].sum() - 100_000_000) < 1e-6
+
+
+def test_underlying_schedule_holdings_excluded_from_denominator():
+    """Owner ruling 2026-09-30: JV look-through rows are not the BDC's own book."""
+    rows = _holdings("0001", "2025-03-31", [100_000_000, 100_000_000])
+    rows[0]["accounting_record_class"] = "parent_schedule"
+    rows[1]["accounting_record_class"] = "underlying_schedule"
+    reconciliation, _ = _run(_sector("0001", "2025-03-31", [100_000_000]), rows)
+
+    assert reconciliation.loc[0, "holdings_fair_value"] == 100_000_000
+    assert reconciliation.loc[0, "holdings_row_count"] == 1
+    assert reconciliation.loc[0, "reconciliation_status"] == "PASS"
+
+
+def test_holdings_frame_without_class_column_keeps_all_rows():
+    reconciliation, _ = _run(
+        _sector("0001", "2025-03-31", [100_000_000]),
+        _holdings("0001", "2025-03-31", [100_000_000, 100_000_000]),
+    )
+
+    assert reconciliation.loc[0, "holdings_fair_value"] == 200_000_000
+
+
+def test_holdings_csv_path_uses_published_rows(tmp_path):
+    import duckdb
+
+    from pipeline.bdc_sector_reconciliation import _register_source
+
+    rows = _holdings("0001", "2025-03-31", [100_000_000, 100_000_000, 5])
+    rows[0]["accounting_record_class"] = "parent_schedule"
+    rows[1]["accounting_record_class"] = "underlying_schedule"
+    rows[2]["accounting_record_class"] = ""
+    path = tmp_path / "holdings.csv"
+    pd.DataFrame(rows).to_csv(path, index=False)
+
+    con = duckdb.connect()
+    try:
+        assert _register_source(con, "holdings_raw", None, path, [], published_only=True)
+        n, fv = con.execute(
+            "SELECT count(*), sum(CAST(fair_value AS DOUBLE)) FROM holdings_raw").fetchone()
+    finally:
+        con.close()
+    assert (n, fv) == (2, 100_000_005)

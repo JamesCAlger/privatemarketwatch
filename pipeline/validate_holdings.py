@@ -56,6 +56,7 @@ from pipeline.config import (
     UNIFIED_HOLDINGS_FILE,
     VALIDATE_ALL_RESIDUAL_SUMMARY_FILE,
 )
+from pipeline.published_basis import PUBLISHED_ROWS_WHERE_SQL, published_fv_mask
 
 logger = logging.getLogger(__name__)
 
@@ -1041,6 +1042,9 @@ def check_gav_reconciliation(
         except Exception:
             bdc_source_df = None
 
+    if "accounting_record_class" not in unified_df.columns:
+        # No record class -> every row is published (published_fv_mask semantics).
+        unified_df = unified_df.assign(accounting_record_class="")
     con = duckdb.connect()
     con.register("holdings", unified_df)
     nport_non_indexable_ciks = {str(c).zfill(10) for c in NPORT_EXCLUDE_CIKS}
@@ -1189,7 +1193,9 @@ def check_gav_reconciliation(
             FIRST(entity_name) AS entity_name,
             CAST(report_date AS VARCHAR) AS report_date,
             SUM(TRY_CAST(fair_value AS DOUBLE)) AS sum_holdings_fv,
-            SUM(CASE WHEN COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 0
+            -- Published basis (owner ruling 2026-09-30): ex underlying_schedule rows.
+            -- Column name kept for downstream readers; the key is NOT is_subsidiary.
+            SUM(CASE WHEN {PUBLISHED_ROWS_WHERE_SQL}
                      THEN TRY_CAST(fair_value AS DOUBLE) ELSE 0 END)
                 AS sum_holdings_fv_ex_sub,
             MAX(CASE WHEN COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 1
@@ -1320,16 +1326,16 @@ def check_gav_reconciliation(
             WHEN has_nport_positions = 1 AND has_bdc_positions = 0 THEN 'GAV_NPORT01'
             ELSE 'GAV_SCOPE01'
         END AS gav_rule_id,
+        -- Gate numerator = published basis (owner ruling 2026-09-30): every row
+        -- except underlying_schedule (JV look-through), i.e. sum_holdings_fv_ex_sub.
         CASE WHEN comparison_value > 0
-             THEN ROUND(sum_holdings_fv / comparison_value, 4)
+             THEN ROUND(sum_holdings_fv_ex_sub / comparison_value, 4)
         END AS gav_ratio,
         CASE WHEN comparison_value > 0 AND bdc_source_reconciliation_fv IS NOT NULL
              THEN ROUND(bdc_source_reconciliation_fv / comparison_value, 4)
         END AS bdc_source_reconciliation_ratio,
-        -- Published basis (spec 2026-09-07 s.1): every row counts, subsidiary
-        -- positions included.  sum_holdings_fv_ex_sub stays informational.
         CASE WHEN comparison_value > 0
-             THEN ROUND(sum_holdings_fv / comparison_value, 4)
+             THEN ROUND(sum_holdings_fv_ex_sub / comparison_value, 4)
         END AS gav_ratio_adjusted,
         CASE
             WHEN comparison_value IS NULL THEN 'no_comparison'
@@ -1338,10 +1344,10 @@ def check_gav_reconciliation(
                  AND cik IN ({nport_non_indexable_sql})
                 THEN 'non_indexable_denominator'
             WHEN comparison_value > 0
-                 AND sum_holdings_fv / comparison_value > 1.2
+                 AND sum_holdings_fv_ex_sub / comparison_value > 1.2
                 THEN 'over_coverage'
             WHEN comparison_value > 0
-                 AND sum_holdings_fv / comparison_value < 0.3
+                 AND sum_holdings_fv_ex_sub / comparison_value < 0.3
                 THEN 'under_coverage'
             ELSE 'ok'
         END AS flag,
@@ -1362,7 +1368,7 @@ def check_gav_reconciliation(
                  AND comparison_value > 0
                  AND bdc_source_reconciliation_fv IS NOT NULL
                  AND bdc_source_reconciliation_fv / comparison_value BETWEEN 0.3 AND 1.2
-                 AND sum_holdings_fv / comparison_value < 0.3
+                 AND sum_holdings_fv_ex_sub / comparison_value < 0.3
                 THEN 'source_fv_present_not_indexable'
             WHEN has_bdc_positions = 1
                  AND comparison_value > 0
@@ -1388,8 +1394,8 @@ def check_gav_reconciliation(
         raw_ratio = pd.to_numeric(result.get("gav_ratio"), errors="coerce")
         ratio = ratio.fillna(raw_ratio)
         comparison = pd.to_numeric(result.get("comparison_value"), errors="coerce")
-        # Published basis (spec 2026-09-07 s.1): every row counts; ex_sub is informational only.
-        numerator = pd.to_numeric(result.get("sum_holdings_fv"), errors="coerce")
+        # Published basis (owner ruling 2026-09-30): ex underlying_schedule rows.
+        numerator = pd.to_numeric(result.get("sum_holdings_fv_ex_sub"), errors="coerce")
         result["residual_fv"] = (numerator - comparison).round(4)
         result["residual_pct"] = ((numerator - comparison) / comparison).round(6)
 
@@ -1513,6 +1519,9 @@ def check_pct_of_net_assets_sum(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty or "source" not in df.columns:
         return empty
 
+    # Published basis (owner ruling 2026-09-30): JV look-through rows are not the
+    # BDC's own book, so they do not count toward its % of net assets.
+    df = df[published_fv_mask(df)]
     if not (df["source"] == "bdc").any():
         return empty
 

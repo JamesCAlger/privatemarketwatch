@@ -375,6 +375,7 @@ OUTPUT_SCHEMAS: dict[str, dict[str, str]] = {
         "pik_current_amount": "DOUBLE",
         "pik_terms_flag": "BOOLEAN",
         "pik_terms_rate": "DOUBLE",
+        "accounting_record_class": "VARCHAR",
     },
     "position_matches.csv": {
         "cik": "VARCHAR",

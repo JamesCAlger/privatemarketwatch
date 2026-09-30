@@ -26,6 +26,8 @@ from typing import Any
 
 import pandas as pd
 
+from pipeline.published_basis import published_fv_mask
+
 logger = logging.getLogger(__name__)
 
 
@@ -240,6 +242,8 @@ def check_A04_gav_reconciliation(
     nport_tolerance: float = 0.10,
 ) -> list[CheckResult]:
     """A04: GAV reconciliation -- sum(leaf_fv) vs investments_at_fair_value."""
+    # Published basis (owner ruling 2026-09-30): the BDC's own book, no JV look-through rows.
+    holdings_df = holdings_df[published_fv_mask(holdings_df)]
     results = []
     if holdings_df.empty:
         return [_make_result("A04", "global", "skip", 0, bdc_tolerance,
@@ -299,6 +303,7 @@ def check_A07_pct_of_net_assets_sum(
     outlier_threshold: float = 25,
 ) -> list[CheckResult]:
     """A07: sum(pct_of_net_assets) should be between 50% and 250% for BDC."""
+    holdings_df = holdings_df[published_fv_mask(holdings_df)]  # published basis (2026-09-30)
     results = []
     if holdings_df.empty or "pct_of_net_assets" not in holdings_df.columns:
         return [_make_result("A07", "global", "skip", 0, max_sum,
@@ -844,7 +849,9 @@ def check_E01_holdings_fv_vs_investments(
     *,
     tolerance: float = 0.05,
 ) -> list[CheckResult]:
-    """E01: Primary GAV recon -- holdings FV vs investments_at_fair_value within 5%."""
+    """E01: Primary GAV recon -- holdings FV vs investments_at_fair_value within 5%.
+
+    Published basis is applied inside A04 (one mask, not two)."""
     a04_results = check_A04_gav_reconciliation(
         holdings_df, fund_financials_df,
         bdc_tolerance=tolerance, nport_tolerance=tolerance * 2,
@@ -860,6 +867,7 @@ def check_E02_holdings_fv_vs_total_assets(
     fund_financials_df: pd.DataFrame | None = None,
 ) -> list[CheckResult]:
     """E02: BDC fallback -- holdings FV should be < total_assets."""
+    holdings_df = holdings_df[published_fv_mask(holdings_df)]  # published basis (2026-09-30)
     results = []
     if holdings_df.empty:
         return [_make_result("E02", "global", "skip", 0, 0, "No holdings data")]
@@ -942,7 +950,10 @@ def check_E07_position_count_vs_filing(
     *,
     tolerance: float = 0.10,
 ) -> list[CheckResult]:
-    """E07: Source leaf count vs output leaf count discrepancy < 10%."""
+    """E07: Source leaf count vs output leaf count discrepancy < 10%.
+
+    Keeps underlying_schedule rows: the source leaf count includes JV-schedule
+    leaves, so this completeness check must compare like with like."""
     results = []
     if source_detail_df.empty or holdings_df.empty:
         return [_make_result("E07", "global", "skip", 0, tolerance, "Missing data")]

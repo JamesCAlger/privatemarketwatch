@@ -282,3 +282,32 @@ def test_validate_fund_financials_orchestrator_without_holdings_marks_cross_skip
     assert "fund_quality" in reports
     assert reports["fund_quality"].iloc[0]["validation_tier"] == "VERIFIED"
     assert reports["fund_cross_level"].empty
+
+
+def _jv_holdings():
+    return _holdings_df([
+        {"accounting_record_class": "parent_schedule"},
+        {"accounting_record_class": "parent_schedule"},
+        {"accounting_record_class": "underlying_schedule",
+         "fair_value": "900000", "pct_of_net_assets": "150"},
+    ])
+
+
+def test_validate_cross_level_excludes_underlying_schedule_rows():
+    """Owner ruling 2026-09-30: fund-vs-holdings comparisons use the published basis."""
+    result = validate_cross_level(_fund_df([{}]), _jv_holdings())
+
+    f21 = result[result["check_code"] == "F21"].iloc[0]
+    assert float(f21["value"]) == 1.5
+    assert _status(result, "F20") == STATUS_PASS
+    assert _status(result, "F21") == STATUS_PASS
+    assert _status(result, "F23") == STATUS_PASS
+
+
+def test_validate_cross_level_without_class_column_keeps_all_rows():
+    holdings = _jv_holdings().drop(columns=["accounting_record_class"])
+    result = validate_cross_level(_fund_df([{}]), holdings)
+
+    f21 = result[result["check_code"] == "F21"].iloc[0]
+    assert float(f21["value"]) == 3.0
+    assert _status(result, "F21") == STATUS_FAIL

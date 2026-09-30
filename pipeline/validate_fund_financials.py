@@ -32,6 +32,7 @@ from pipeline.column_validation import (
     SEVERITY_INFO,
     SEVERITY_WARN,
 )
+from pipeline.published_basis import published_fv_mask
 
 logger = logging.getLogger(__name__)
 
@@ -378,13 +379,18 @@ def validate_cross_level(
     fund_df: pd.DataFrame,
     holdings_df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
-    """Validate fund-level values against unified holdings aggregates."""
+    """Validate fund-level values against unified holdings aggregates.
+
+    Holdings are on the published basis (owner ruling 2026-09-30): JV look-through
+    (underlying_schedule) rows are not the fund's own book, so they are excluded
+    from every F20-F28 comparison, including the canonical GAV row (F20)."""
     if fund_df.empty:
         return _empty_results()
     if holdings_df is None:
         if not UNIFIED_HOLDINGS_FILE.exists():
             return _empty_results()
         holdings_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+    holdings_df = holdings_df[published_fv_mask(holdings_df)]
     if holdings_df.empty:
         return _empty_results()
 

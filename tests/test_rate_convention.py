@@ -525,3 +525,43 @@ def test_classify_s0_cash_leg_survives_incl_phrasing():
     r = classify_cik(_stats(n_incl_phrase=5, s0_vote="cash_leg",
                             s0_confidence="high", s0_reason="concept dominance"))
     assert (r["convention"], r["basis"]) == ("cash_leg", "tag_fingerprint")
+
+
+def _jv_income_case(with_class: bool):
+    # 12 parent rows + 12 JV look-through rows, 10% all-in incl 4% PIK, 3 quarters.
+    # BDC income covers only its own book: base(parent) = 300k -> income 300k.
+    qs = ("2024-12-31", "2025-03-31", "2025-06-30")
+    rows, classes = [], []
+    for q in qs:
+        for cls in ("parent_schedule", "underlying_schedule"):
+            rows += [("bdc", "0001000009", q, 10.0, 4.0, 1_000_000.0,
+                      f"Borrower {cls} {i}") for i in range(12)]
+            classes += [cls] * 12
+    h = _holdings(rows)
+    if with_class:
+        h["accounting_record_class"] = classes
+    inc = _income([("0001000009", q, 3, 300_000.0) for q in qs])
+    return build_rate_convention(h, inc)
+
+
+def test_s2_income_excludes_underlying_schedule_rows():
+    """Owner ruling 2026-09-30: fund income vs holdings (S2) is a fund-level
+    comparison; JV look-through rows are not in the BDC's interest income."""
+    out = _jv_income_case(with_class=True)
+    assert out["income_r_median"].iloc[0] == pytest.approx(0.0, abs=1e-9)
+    assert list(out["convention"]) == ["all_in"]
+    assert list(out["basis"]) == ["income_reconciliation"]
+
+
+def test_s2_income_frame_without_class_column_keeps_all_rows():
+    out = _jv_income_case(with_class=False)
+    # base 600k, pik_add 240k, income 300k -> r = -1.25 (below floor, no vote)
+    assert out["income_r_median"].iloc[0] == pytest.approx(-1.25)
+    assert list(out["convention"]) != ["all_in"] or list(out["basis"]) != ["income_reconciliation"]
+
+
+def test_s1_pik_row_counts_keep_underlying_schedule_rows():
+    """S1 is row-level convention evidence (how the filer prints rates), not a
+    fund-level total: JV rows still count."""
+    out = _jv_income_case(with_class=True)
+    assert int(out["n_pik_rows"].iloc[0]) == 72
