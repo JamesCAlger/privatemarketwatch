@@ -12771,3 +12771,47 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   baseline refresh. Follow-up defects: the double identity finalization in `rebuild_outputs.py`
   (redundant ~15 min per full run; harmless now that matching is deterministic); rubric P7
   ("identical IDs across two cold builds") was never executed before today.
+
+## 2026-09-30 -- 0b measurement pass: the base build raises published-basis over-inclusion from $3.4B to $11.9B (retained JV rows); owner decision required
+
+- Ran quarter pass `base0b_20260930` (oracle -> acceptance, no rebuild) on the base-build
+  outputs so the gate reads inputs computed on today's holdings: validate 5,963 s (cold
+  reconciliation cache), provenance, shadow (ledger written 18:41), queue, ledger, acceptance.
+  Then evaluated both quarters under v3 and under the v2 thresholds from the sign-off commit
+  (`scratch/2026-09-30_base_build/thresholds_v2_d18560d.json`). Diagnostics in
+  `scratch/2026-09-30_base_build/diag_*.py`.
+- Correction to the earlier 2026-09-30 entry: the "identical to 09-08" reading was an artifact
+  of the stale shadow ledger. With the ledger regenerated, both quarters FAIL under v2 AND v3:
+  Q1-2026 reconcile 75.4 (attested 94.1; 09-08 v3 80.9), flagged_fv 48.7 (9.9; 25.7),
+  verified_fv 35.4 (73.1; 60.3), over_inclusion 3.04% = $11.9B (09-08: 0.88% = $3.37B),
+  drift 18. Q4-2025 reconcile 83.8 (95.5), flagged 33.8 (4.8), verified 45.1 (80.5),
+  over_inclusion 2.05%, unfinished_investigations 6.
+- Mechanism (evidence: `diag_new_fails.py`, pre_0b snapshot vs today, Q1-2026): BCRED
+  0001803498 went from 1,277 rows / $80.26B to 2,002 rows / $88.64B; the +722 rows / $7.7B are
+  `accounting_record_class=underlying_schedule` rows of Emerald JV LP (417 rows, $7.1B) and
+  Verdelite JV LP (305 rows, $0.6B), flagged `is_subsidiary=1`. They are retained by the V13
+  scope-recognition repair (e1185af/439007f: "908 rows move from parent to underlying scope")
+  under the 2026-08-29 retain-and-flag policy. The v3 published basis (`pipeline/published_basis.py`,
+  by design "no category, dimension, or subsidiary filter", so the gate matches the headline)
+  sums them, so BCRED overshoots its anchor by 10.1% and contributes $8.17B of the $11.9B
+  over-inclusion; a failing fund counts its whole FV toward flagged share, so BCRED alone adds
+  22.6 points (25.7 -> 48.7). Same pattern: 0002011498 +89 subsidiary rows / $232M (18.5%
+  overshoot), 0002008748 37 rows / $310M (17.3%). Other large overshoots (1930679 21%, 1899017
+  22%, 1715933 54%, 1603480 129%, 1988280 29%) existed on 09-08 and are unchanged.
+- No `Total...` subtotal rows leaked for the newly failing funds (checked). The frontend JSON
+  exported by the build (92 tracked files modified) is NOT committed; the public site is
+  unchanged.
+- Three decisions are in tension and only the owner can resolve them: (1) 2026-08-29
+  retain-and-flag ("the FV-conservation gate excludes subsidiary rows"); (2) 2026-09-07 v3
+  published basis (gate numerator = headline = all rows, no subsidiary filter); (3) V13 scope
+  recognition retaining BCRED's JV underlying schedules. Under (2)+(3), every retained
+  underlying-schedule row is over-inclusion in the PUBLIC number (the BDC's exposure is its JV
+  interest line on the parent schedule; the underlying positions double count it). Options:
+  (a) exclude `accounting_record_class='underlying_schedule'` from the published basis for BOTH
+  headline and gate (consistent, preserves v3's rationale); (b) keep the headline as all rows and
+  accept the over-inclusion; (c) revert the JV retention for BCRED. Not decided here.
+- Consequences for the programme: sub-project 0b's exit test (both quarters re-attest) is not
+  met and cannot be met by any build until the decision above and the paused v3 rollout are
+  settled. Twin builds can still compare against this base (it is deterministic). Sub-project 1
+  work (drift replay) is unaffected and continues on the pilot branch.
+- NOT done: no threshold change, no baseline refresh, no revert, no frontend commit.
