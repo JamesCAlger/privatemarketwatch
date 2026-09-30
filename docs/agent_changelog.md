@@ -12837,3 +12837,54 @@ Deferred minors are listed per task in the ledger (loader duplication with contr
   TCW 12, Onex 12, Stepstone 12), excluded 4.
 - Consequence for the replay: the Q4-2025 -> Q1-2026 pair is ungapped for 6 of 8 filers; TCW and
   NexPoint replay from 2025-09-30 and are reported gapped.
+
+## 2026-10-01 -- SP1 Task 6: drift replay Q4-2025 -> Q1-2026 (shadow): results and floors
+
+- Run ids: census `stageb2-sp1census-20260930t2235z` (110 authoritative fund-quarters), profile
+  `stageb-profile-sp1-20260930t225432z`, contracts `stageb-contracts-sp1-20260930t225432z`
+  (tolerances v4, M2 denominator 488 = 472 + 16, fund_financials slice pinned), seed
+  `stageb2-seed-sp1-full2-20261001t0100z` (full variants, pinned financials loaded for 8/8;
+  the earlier `--semantic` seed `stageb2-seed-sp1-20260930t235307z` feeds the back-test's
+  calibration curves), back-test `stageb2-backtest-sp1-20260930t235307z` (v4, all 110
+  quarters), replay `sp1-replay-full2-20261001t0100z` (artifacts copied to
+  `scratch/2026-09-30_sp1_replay/`). Every number below is IN-SAMPLE (q1p3 adjudicated
+  2026-08/09; first out-of-sample quarter 2026-06-30).
+- Pairs: the 2025-12-31 -> 2026-03-31 rolling pair is ungapped for Ares, BCRED, Onex, Stellus,
+  Fidelity, Stepstone; TCW and NexPoint replay from 2025-09-30 (gapped; their Q4-2025 remains
+  `ambiguous_same_quarter_candidates`).
+- Per kind (pos units / detected / abstained / missed / recall; negatives n / breach / FA upper):
+  fill_rate 0 positives, negatives 184 / 4 -> FA upper 0.0217; source_concept_set 0 positives,
+  184 / 1 -> 0.0054; scale 0 positives, 40 / 0; format_grammar 3 / 0 / 3 / 0 recall 0.0 (all
+  three positives abstain: no authored grammar or unresolved mixed identifier format);
+  independent_totals 9 / 6 / 3 / 0 recall 0.667, negatives 10 / 8 (1 adjudicated FA, 7
+  unadjudicated) -> FA upper 0.80; value_range 2 / 0 / 1 / 1; text_agreement 1 / 0 / 0 / 1;
+  rate_composition and fund_income_yield 0 positives.
+- Floors (criterion 3): fill_rate, scale, source_concept_set NO_POSITIVES (the q1p3 ledger
+  holds no adjudicated structural positives for the 8 filers on this pair; only FA upper bounds
+  are measured, and fill_rate's 0.0217 sits above the 0.02 ceiling); format_grammar FAIL;
+  independent_totals seed verdict PASS BUT ON n = 1: financials loaded for all 8, yet only
+  Stellus reconciles at baseline (its x100 flip is caught at 5% of rows); the other 7 breach
+  `fv_residual_outside_band` on the unperturbed book (census FV exceeds the filed total by 14%
+  to 375%: BCRED 2026-03-31 census 2,016 current positions / $91.2B vs published $80.9B; Ares
+  $34.4B vs $29.5B; Stepstone $5.4B vs $3.3B), so seeded detection is unmeasurable there and
+  the replay FA upper of 0.80 is the honest reading. value_range, rate_composition,
+  text_agreement, fund_income_yield NOT_CLAIMED.
+- Root cause for the totals kind: census positions are not on the published basis. They keep
+  JV-scope rows, subtotal candidates (BCRED: 34 resolved subtotal outcomes) and dimension
+  views that production removes, and the pre-registered pct band [50, 250] assumes percent
+  units while census pct sums run 1.7 to 7.1. A census-side published-basis partition (current
+  instant, no aggregate rows, parent scope only) is a prerequisite and belongs to sub-project 3's
+  partition-structure entries; the bands are NOT tuned here.
+- Exclusions (the honest denominator): 116 ledger rows for the 8 filers on the two dates are not
+  scored: 82 `rule_not_mapped` (E07 9, FX01 9, PP03 6, nonaccrual_flag 6, B01 4, ...) and 34
+  `state_not_adjudicated`.
+- Shadow drift queue: 18 rows in findings-ledger shape, ranked by FV at risk (top: BCRED totals
+  fair_value $10,757.6M at risk of $91,227M; Ares $4,892.5M; Stepstone $2,073.6M). Nothing
+  downstream reads it.
+- Harness fixes made during the runs (all reviewed): contracts_run `--tolerances-version 4`
+  (aa525ed); seed/back-test accept v4-frozen roots (b1b54a7); seed loads the pinned financials
+  (bd7cb0b); replay ranks totals rows by residual (cb28aea). Run-id prefix rule R18 and the
+  Stage B same-census parity check (`--v2-run-id`) were the two refusals met and worked around
+  (recorded in the ledger).
+- NOT done: no threshold change, no baseline refresh, no production change from this
+  sub-project; the full pytest suite was not run (launcher-scoped files only).
