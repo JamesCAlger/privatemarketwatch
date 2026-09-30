@@ -12814,3 +12814,26 @@ Deferred minors are listed per task in the ledger (loader duplication with contr
   | 8 passed in 13.89s` (launcher exit 3 is the preservation/backstop receipt
   reacting to a concurrent quarter-pass job writing under data/output at the time;
   pytest's own exit line is the evidence for this task).
+
+## 2026-09-30 -- SP1 Task 1: amendment scan settles Q4-2025 for Ares; TCW and NexPoint stay unavailable
+
+- Code (commit 15882fe, reviewed): `scripts/profile_pilot/verify.py freeze --quarters all
+  --scan-amendments` takes the shared heavy lease and passes `run_context_census.scan_instance`
+  to `cohort.all_quarter_inventory`; refused for `--quarters cohort`; the freeze receipt records
+  the scan flag and lease timestamps. Tests +3 in `tests/test_profile_pilot_all_quarters.py`
+  (20 passed through the launcher). A fix round (validate the flag combination before taking
+  the lease) follows.
+- Real runs (run id `stageb2-sp1census-20260930t2235z`; a first attempt under `sp1-census-...`
+  was refused by the R18 run-id prefix rule after its freeze, and is not reused): scanned
+  freeze selected 111 / unavailable 3 fund-quarters (Stage B2: 106 / 8). Settled by the scan:
+  Ares 0001287750 2025-12-31 (10-K 0001287750-26-000006, one cover-only amendment skipped as
+  `amendment_without_target_instant`) and Ares 2022-12-31 (the sub-project 0 item). Residual
+  unavailable, all `ambiguous_same_quarter_candidates` (a populated or incomplete amendment
+  competes, which the policy leaves unavailable): TCW 0001715933 2025-12-31 and 2023-12-31,
+  NexPoint 0001588272 2025-12-31. `census_run --scope all` collected 111 (Ares 2025-12-31
+  16.5 s; BCRED 2026-03-31 24.8 s; performance and target pass). `census_validate --scope all`:
+  110 pass, 1 fail (Onex 0001860424 2023-03-31, the pre-existing Stage B2 failure), exit 1;
+  authoritative 110 fund-quarters (Ares 15, BCRED 16, Stellus 16, Fidelity 14, NexPoint 13,
+  TCW 12, Onex 12, Stepstone 12), excluded 4.
+- Consequence for the replay: the Q4-2025 -> Q1-2026 pair is ungapped for 6 of 8 filers; TCW and
+  NexPoint replay from 2025-09-30 and are reported gapped.
