@@ -3149,3 +3149,32 @@ class TestDirectionalSlots:
         assert ("2025-06-30", "2025-09-30") in spans
         later = result[(result["begin_report_date"].astype(str) == "2025-06-30")]
         assert later["match_method"].iloc[0] in ("C_normalized_name", "D_fuzzy")
+
+
+# ---------------------------------------------------------------------------
+# Determinism of the supplementary edge order (2026-09-30 base build failure)
+# ---------------------------------------------------------------------------
+
+class TestSupplementaryEdgeOrder:
+    """The union loop that consumes supplementary pairs is order-dependent by
+    construction: ``_guarded_union`` skips an edge whenever an earlier edge has
+    already placed a same-report-date row in the component.  DuckDB returns a
+    query without a terminal ORDER BY in a parallel, run-varying order, so two
+    runs on identical input produced partitions that differed in two components
+    (7,953 vs 7,954 skipped edges) and the durable-identity gate raised
+    "Unreviewed identity merge" on the second finalization of one rebuild.
+    """
+
+    def test_supplementary_pair_select_carries_a_terminal_order_by(self):
+        import inspect
+        from pipeline import position_matching as pm
+        assert pm.SUPP_PAIR_ORDER == "ORDER BY uid_a, uid_b"
+        source = inspect.getsource(pm.assign_position_ids)
+        assert "SELECT uid_a, uid_b FROM rn_b WHERE rn2 = 1 {SUPP_PAIR_ORDER}" in source
+
+    def test_bipartite_candidate_fetch_is_fully_ordered(self):
+        import inspect
+        from pipeline import position_matching as pm
+        assert pm.BIPARTITE_CAND_ORDER == "ORDER BY ALL"
+        source = inspect.getsource(pm._bipartite_dedup)
+        assert 'f"SELECT * FROM {cand_table} {BIPARTITE_CAND_ORDER}"' in source

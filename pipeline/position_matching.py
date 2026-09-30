@@ -365,6 +365,15 @@ CONTESTED_MAX_ROUNDS = 1 + CONTESTED_LEFTOVER_ROUNDS
 # tier_random precision 0.960 excluding leftover tiers vs 0.919 production.
 # See docs/investigations/agent_campaigns.md ("Match-gold batch mg4_contested").
 CONTESTED_ASSIGNMENT_DEFAULT = True
+# The supplementary-pair select feeds an order-dependent union loop (the
+# duplicate-report-date guard skips an edge based on what earlier edges did).
+# Without a terminal ORDER BY, DuckDB's parallel result order varies run to
+# run and two identical-input runs disagreed in two components (2026-09-30
+# base build: 7,953 vs 7,954 skipped edges, "Unreviewed identity merge").
+SUPP_PAIR_ORDER = "ORDER BY uid_a, uid_b"
+# Same reason for the Hungarian dedup's candidate fetch: ORDER BY ALL pins the
+# arrival order that its tie-breaks depend on.
+BIPARTITE_CAND_ORDER = "ORDER BY ALL"
 # Maturity veto with amendment escape (experiment E5,
 # docs/investigations/position_matching.md).  On the mg3 gold set a strict
 # maturity veto loses 2.6% of confirmed edges to extensions / amendments in
@@ -2058,14 +2067,20 @@ def _bipartite_dedup(
     t0 = time.time()
     cand_table = f"{tier_name}_candidates"
 
-    # Fetch candidates
-    cand_df = con.execute(f"SELECT * FROM {cand_table}").fetchdf()
+    # Fetch candidates in a fully determined order: the trivial-component
+    # branch and the per-cell "keep the lowest cost" rule below both resolve
+    # equal-cost ties by arrival order, and an unordered DuckDB fetch arrives
+    # in a run-varying parallel order (2026-09-30: two identical-input runs
+    # produced 599,523 vs 599,522 pairs).
+    cand_df = con.execute(f"SELECT * FROM {cand_table} {BIPARTITE_CAND_ORDER}").fetchdf()
     if cand_df.empty:
         return 0
 
     # Fetch greedy result for comparison
     greedy_pairs = set()
-    greedy_df = con.execute(f"SELECT _begin_row_id, _end_row_id FROM {tier_name}").fetchdf()
+    greedy_df = con.execute(
+        f"SELECT _begin_row_id, _end_row_id FROM {tier_name} ORDER BY _begin_row_id, _end_row_id"
+    ).fetchdf()
     for _, r in greedy_df.iterrows():
         greedy_pairs.add((int(r["_begin_row_id"]), int(r["_end_row_id"])))
 
@@ -3051,7 +3066,7 @@ def assign_position_ids(
             ) AS rn2
         FROM rn_a WHERE rn1 = 1
     )
-    SELECT uid_a, uid_b FROM rn_b WHERE rn2 = 1
+    SELECT uid_a, uid_b FROM rn_b WHERE rn2 = 1 {SUPP_PAIR_ORDER}
     """
     if not contested_assignment:
         supp_pairs = con2.execute(
