@@ -1,6 +1,8 @@
 # Filer-profile programme: design
 
 Date: 2026-09-29. Status: approved in session by the owner (sections 1-6), pending written review.
+Amended 2026-09-30 after written review: five gaps resolved as decisions D-families through
+D-floor plus three smaller rulings (section 2.1); sections 3, 4, 5, 7, 8 and 10 carry the changes.
 Branch: `filer-profile-pilot` (worktree). Supersedes the pilot's Stage C and D as planned in
 `docs/superpowers/plans/2026-09-28-filer-profile-pilot.md`; the pilot spec v4.2 remains the
 authority for the census, envelope and contract mechanics it defines.
@@ -44,20 +46,45 @@ identifier text is the wrong side in 30 of 32 adjudicated spread packets and 453
 deterministic reconciliation, so text is a weak witness (ledger ruling R40); no deterministic
 instrument-type signal exists on BCRED's bond contexts (ruling R41).
 
+### 2.1 Decisions from the written review (2026-09-30)
+
+| # | Gap found | Decision |
+|---|---|---|
+| D-families | Section 7's inventory counts CIK-keyed override files and grammars as per-filer knowledge, but section 4 gave the document slots only for the wrapper and B2 corrections. The 8 filers touch 6 to 12 override files each across nine families | Every override family gets a disposition class (section 7.1): knowledge families are the SOURCE of inception entries on their axis and are deleted per filer once the family's consumer switch lands; executable families go into the wrapper section as versioned blocks; process artifacts are excluded from the inventory by rule with the reason recorded |
+| D-precedence | The wrapper stays executable and an entry can describe the same field (e.g. a rescale factor vs a scale entry); nothing said which wins | Entries are authoritative on MEANING, the wrapper only on PROCEDURE. A consistency contract (section 4.1) requires every wrapper key with a semantic counterpart to have an accepted entry that agrees with it; disagreement blocks the filer's build |
+| D-corrections | Criterion 5 said corrections are "re-evaluated each quarter", but a B2 correction is keyed by `row_id` = hash(accession, context), which cannot exist in the next quarter's filing; `position_id` renumbers per rebuild | Corrections split into ONE-OFF (valid for one report date; re-evaluation = pre-image check on any rebuild of that quarter) and RECURRING (same mechanism, same filer, 2+ quarters; promoted to a partition-predicate entry with its own contract). Cross-quarter position continuity is used only by the row-continuity detector, via the registry natural key, opt-in (section 4.2) |
+| D-base-build | D-seq rides twelve V13 matching repairs into the first profile-era build; criterion 2 requires the twin build to be identical except for accepted entries, and re-attestation would see matching and profile deltas together | A MATCHING-ONLY BASE BUILD lands first (sub-project 0b): cached rebuild with the repairs and no profile, semantic diff, re-attestation of Q4-2025 and Q1-2026, matching delta recorded on its own. Every profile twin build compares against that base |
+| D-floor | Criterion 3 required reporting recall per kind with no minimum; measured value-range recall is 0 of 8, fill-rate 1 of 4, and a pure x100 scale flip abstains on every filer | Criterion 3 is split by kind with floors (section 3); independent totals is promoted from an experiment to a REQUIRED contract kind (section 5); sub-project 3 freezes only kinds that have reported, others are provisional |
+| D-convention | The rate family switch touches all-in vs spread meaning while AGENTS.md requires the storage convention and income formula to flip atomically | The switch changes WHERE the convention is read from, not what production stores. Cash-leg storage stays until the atomic migration decided 2026-07-12 (section 7) |
+| D-q2-order | The paused published-basis gate (v3) also names Q2-2026 as its calibration quarter | Order fixed: v4 gate calibration on Q2 actuals first; the drift stage runs in shadow beside it; no profile-driven value change enters the Q2 pass until sub-project 8 (section 8) |
+| D-winner | Sub-project 2 had no rule for a "winner" and sub-project 3 did not depend on it | Pre-registered adoption rule (section 5.1); sub-project 3 depends on 2 for the kinds it freezes |
+
 ## 3. Exit criteria (all required)
 
 1. **Coverage.** Every field of every one of the 8 filers has a dated, evidenced entry or an
    explicit insufficient-evidence stub; stubs are listed with the evidence that would close them.
 2. **Production reads the profile.** A twin build of the Q1-2026 filings for the 8 filers is
-   identical to the wrapper build except for rows touched by accepted entries that were meant to
-   change them, each listed with its evidence.
-3. **Drift runs in the quarter pass.** The Q4-to-Q1 replay reports recall and false-alarm rate
-   per contract kind against the q1p3 adjudicated findings; Q2-2026 runs live and produces the
-   adjudication queue the fleet works.
+   identical to the MATCHING-ONLY BASE BUILD (D-base-build) except for rows touched by accepted
+   entries that were meant to change them, each listed with its evidence.
+3. **Drift runs in the quarter pass**, with floors per kind (D-floor):
+   - Structural kinds (source concept set, fill rate, format grammar, zero-position rule):
+     recall >= 90% on the q1p3 adjudicated set at a false-alarm rate <= the band version's
+     stated rate (currently ~2%).
+   - Independent totals (section 5): detects a seeded pure scale flip (x100, x0.01) on every
+     filer with a reconciling total; abstains only where no total exists, and each abstention is
+     listed.
+   - Semantic kinds (value range, scale via declared unit, composition, income yield): each
+     either meets a floor won under the section 5.1 adoption rule or carries the label
+     `detection_not_claimed` in the profile, meaning the kind is caught only by its witness at
+     admission. The label is public in the validation artifacts.
+   - The Q4-to-Q1 replay reports recall and false-alarm rate per kind against the q1p3
+     findings; Q2-2026 runs in shadow and produces the adjudication queue the fleet works.
 4. **No per-filer knowledge in code** for the 8 filers: the code-path inventory (section 7)
-   has no open rows.
-5. **Corrections persist.** Every existing B2 correction for the 8 is an entry, re-evaluated
-   each quarter, with failures listed.
+   has no open rows, and every override family has a disposition (section 7.1).
+5. **Corrections persist** (D-corrections). Every existing B2 correction for the 8 is either a
+   one-off entry whose pre-image check passes on the rebuilt quarter, or a recurring entry with
+   a partition predicate and a contract that held on the latest quarter; failures and
+   retractions listed with reason.
 
 ## 4. The profile document
 
@@ -77,8 +104,8 @@ the 8 filers. Four parts:
 - **Wrapper section.** The filer's wrapper content in its executable shape, one versioned
   block with validity dates, hash and evidence (the sign-off it was attested under).
   Production's wrapper loader reads it from here for the 8 filers. Edits are supersessions.
-- **Corrections section.** Every B2 correction for the filer as an entry with mechanism, keyed
-  rows, evidence and dates, re-evaluated each quarter by the contracts.
+- **Corrections section.** Every B2 correction for the filer as an entry of one of the two
+  kinds in section 4.2, with mechanism, evidence and dates.
 
 Each document carries a version, a schema version and an event log. Readers call
 `profile.resolve(cik, field, report_date, row)` and receive exactly one accepted entry or an
@@ -90,13 +117,62 @@ old `valid_from`), retract (failed confirmation or contradicted witness), end (`
 Nothing is physically deleted. Global rules in pipeline code stay outside the document with
 their existing lifecycle; the inventory (section 7) is the only link.
 
+Inception entries are not written from scratch. For each knowledge family in section 7.1 the
+existing override file for the filer is the input: its value becomes the entry value, its
+citations become the evidence references, its date becomes `valid_from`, and the file's content
+hash is recorded as the entry's pre-image. A filer with no file on an axis gets a census-derived
+entry or an insufficient-evidence stub.
+
+### 4.1 Precedence between entries and the wrapper section (D-precedence)
+
+Entries are authoritative on meaning. The wrapper section is authoritative only on procedure
+(how staging executes). A wrapper key that has a semantic counterpart (rescale factors and
+declared units, delimiter and prefix rules, aggregate markers, source fields, rate convention)
+MUST have an accepted entry on that axis, and a **consistency contract** asserts that the
+wrapper key's value and the entry's value agree at every report date the wrapper block is valid
+for. The Task 7 translate adapter is the comparator. A breach blocks the filer's build; it is
+resolved by superseding whichever side is wrong, with evidence, never by editing the other to
+match. For the five key families the census already derives (cik, entity_name, delimiter,
+aggregate_markers, fair-value source_field), the wrapper key is generated from the entry at
+load time once the family's consumer switch lands, so those keys stop existing as independent
+data. No other wrapper key is derived.
+
+### 4.2 Two kinds of correction (D-corrections)
+
+- **One-off correction.** Keyed by `row_id` (hash of accession and context). `valid_from` equals
+  `valid_to` equals the report date. It records the pre-image (the extracted value before the
+  correction, and the row's source fact hash). Re-evaluation runs on any rebuild of that quarter
+  and means: the `row_id` still exists and the pre-image still matches. If the row is gone or the
+  pre-image changed (the extraction was fixed upstream), the entry is retracted with that reason
+  and the retraction is a ledger event. A one-off correction is never carried to another quarter.
+- **Recurring correction.** The same mechanism on the same filer in two or more quarters (e.g.
+  `all_pik_normalization` where a PIK fact is present and the cash rate is null). It is promoted
+  to a partition-predicate entry: `applies_to` is the structural predicate that selected those
+  rows, the value is the rule, and its contract tests the predicate's population each quarter
+  (fill and concept-set on the partition). Promotion is a column-meaning admission (owner
+  sign-off) because it changes rows the original review never saw.
+- **Position continuity.** Cross-quarter identity of a position is needed only by the
+  row-continuity detector (section 5.1). It reads the registry natural key
+  (`cik | source | rawid | principal | shares`, report date removed) as an opt-in input. The
+  registry stays off the production path; no correction is keyed on `position_id`.
+
 ## 5. Contracts and the drift stage
 
 A contract is a testable expectation attached to an accepted entry. Kinds: source concept set,
 fill rate, scale, format grammar, value range, rate composition (floating-share and
 fixed-coupon-share criteria; dispersion recorded as evidence only, ruling R39), text agreement
 (evidence only, R40), income yield (redesigned: each proof step is its own entry and contract;
-reconciliation runs only where the proofs hold).
+reconciliation runs only where the proofs hold), and **independent totals** (D-floor): per
+filer and report date, fair-value conservation against the filed total, pct-of-net-assets sum,
+and income reconciliation, each as a monetary-scale contract. Independent totals is a required
+kind, not an experiment, because it is the only kind that cannot abstain on a pure scale flip:
+a x100 change in a rate or amount column moves the total by two orders of magnitude whatever
+the per-row band says. The reconciliation code already exists in the shadow engines; the
+contract wraps it. It abstains only where the filing carries no reconciling total, and every
+abstention is listed against criterion 3.
+
+Contracts frozen into inception entries before sub-project 2 reports on their kind carry
+`status_basis = provisional` and are re-versioned, not edited, when the experiment lands.
 
 Statuses: holds, breach, insufficient_evidence, holds_with_form_type. Two rules added from the
 Stage B2 measurements: `newly_abstained` is reported as an event whenever a contract that held
@@ -128,6 +204,16 @@ diff between filings; presentation-header change in the inline XBRL; distributio
 KS) replacing the min-max value-range band; change-point detection over the filer's series.
 Winners are versioned into the tolerances file as contract kinds. Event triggers (amendments,
 auditor changes, namespace bumps) are excluded from this programme.
+
+**Adoption rule (D-winner), pre-registered before any experiment runs.** A candidate detector
+is adopted as a contract kind when, on the three yardsticks, it (a) reaches recall on the
+Q4-to-Q1 replay at least equal to the existing kind for the same drift class, or >= 50% where no
+kind exists; (b) stays within the current band version's stated false-alarm rate on the
+all-quarter quiet pairs; and (c) detects its own seeded perturbation at a fraction <= 0.20 of
+rows on at least 6 of 8 filers. A candidate that fails (c) but passes (a) and (b) is recorded
+as evidence-only. Winners land as a NEW tolerances version with the three measurements; the
+current version is never edited. Losers are recorded with their numbers so the experiment is
+not re-run.
 
 ## 6. The fleet and admission loop
 
@@ -172,9 +258,48 @@ or per-CIK branch and DELETES it. Each switch is gated by a twin build of the Q1
 identical except for rows touched by accepted entries meant to change them. The rebuild runs
 from cached inputs and the acceptance gate re-attests Q4-2025 and Q1-2026.
 
+**Base build (D-base-build).** Before any twin build, sub-project 0b lands the matching-only
+base: a cached rebuild with the twelve V13 matching repairs and no profile consumer, followed by
+`scripts/diff_outputs.py --semantic` and `scripts/reattest_quarters.py check` for Q4-2025 and
+Q1-2026. The matching delta is recorded in the changelog on its own. If re-attestation regresses
+from the repairs alone, that is a stop-and-report event found in isolation, before any profile
+delta exists. Every twin build in sub-projects 4 and 6 compares against this base, never against
+the pre-V13 wrapper build.
+
+**Rate convention storage (D-convention).** The rate family switch changes where the filer's
+stated convention (cash leg vs all-in) is read from: the `rate_convention` entry replaces the
+`data/overrides/rate_convention/` file for that filer. It does NOT change what production
+stores: `interest_rate` remains the cash leg and `pik_rate` separate until the storage
+convention and the `index_returns` income formula migrate atomically, per the 2026-07-12
+decision. That migration is outside this programme and is listed as an inventory exception.
+
 Two production defects resolve here, not by code: the identifier-spread override (21 text
 spreads; gated off 2026-09-29 in commit e379e8a) is retired in favour of accepted entries or
 nothing; BCRED's coupon type comes from its fixed-rate entry, not from spread presence.
+
+### 7.1 Override family disposition (D-families)
+
+Measured 2026-09-30 on the 8 pilot filers (`grep -rl <cik> data/overrides`):
+
+| Family | Pilot filers | Class | Disposition |
+|---|---|---|---|
+| `rate_convention/` | 2 | knowledge | Source of the rate-meaning inception entry (convention, column semantics, citations); file deleted per filer after the rate family switch |
+| `identifier_rate_grammars/` | 5 | knowledge | Source of the identifier format and dialect entry; deleted after the format family switch |
+| `identifier_anchors/` | 5 | knowledge | Source of the anchor-dialect entry (same axis); deleted with the grammars |
+| `bdc_aggregate_row_overrides.json` | 2 | knowledge | Source of partition-structure entries (subtotal exclusions as `applies_to` predicates); the filer's records deleted after the identity family switch |
+| `bdc_xbrl_oracle_exceptions.json` | 1 | knowledge | Source of a reconciliation-scope entry with the exception's evidence; the filer's record deleted after the identity family switch |
+| `identifier_spread_corrections.json` | 0 of 8 (Crescent, Antares) | knowledge | Already gated off; retired per section 7 when those filers enter the cohort |
+| `agent_b2_corrections/` | 3 | knowledge | Section 4.2 entries; directory entries for the filer deleted once criterion 5 holds |
+| `bdc_xbrl_wrappers/` | 8 | executable | Wrapper section (D-consolidate); file deleted per filer at consolidation, loader redirected |
+| `agent_investigate_rules/` | 6 | executable | Promoted per-CIK rules become a second versioned block in the wrapper section, same lifecycle; rules that are expressible as entries are converted and the block entry retired |
+| `agent_anchor/` | 8 | process artifact | Excluded from the inventory: fleet output, regenerated per pass, not knowledge |
+| `wrapper_cohorts/` | 8 | process artifact | Excluded: cohort membership manifest, not per-filer semantics |
+| `position_id_registry/` | 1 | process artifact | Excluded: opt-in matching state, read only by the row-continuity detector |
+| `enforcement_registry/`, `bdc_xbrl_html_section_bridges/`, `fund_highlights_wrappers/`, `row_corrections.csv`, `entity_overrides.json` | 0 of 8 | n/a | No pilot filer present; classified when a filer that uses them enters the cohort |
+
+The inventory script (below) reads this table: a knowledge-family file for a migrated filer
+that still exists is an open row; a process-artifact family never produces a row. A family
+added later without a class here fails the CI check.
 
 The frontend does not change; profile coverage and drift status appear in the validation
 artifacts the site already reads once the loop is live.
@@ -190,17 +315,24 @@ a migrated filer without an exception record. The programme is not done while an
 | # | Sub-project | Depends on | Exit test |
 |---|---|---|---|
 | 0 | Frame: retire V13 in the closeout rubric and memory; Ares 2022-12-31 amendment scan under the lease; re-cut Stage C/D of the pilot plan to this design | none | rubric ruling written; every cohort filer has an evaluation quarter |
-| 1 | Drift replay Q4-to-Q1 against q1p3 findings, shadow | pilot as built | recall and false-alarm rate per kind against the adjudicated set |
-| 2 | Detector experiments (5.1) | 1 | each candidate measured on the three yardsticks; winners versioned |
-| 3 | Profile document: schema, wrapper consolidation, inception entries for the 8 on Q4-2025 | 1 | criterion 1; resolver answers every field |
-| 4 | Rate family live: consumers switched, twin build, defects retired | 3 | twin build clean vs signed-off Q1-2026; re-attestation passes |
+| 0b | Matching-only base build (D-base-build): cached rebuild with the V13 repairs, semantic diff, re-attestation of Q4-2025 and Q1-2026 | 0 | both quarters re-attest; matching delta recorded alone in the changelog |
+| 1 | Drift replay Q4-to-Q1 against q1p3 findings, shadow; independent-totals kind added (section 5) | pilot as built | recall and false-alarm rate per kind against the adjudicated set; scale-flip detection listed per filer |
+| 2 | Detector experiments (5.1) under the pre-registered adoption rule | 1 | each candidate measured on the three yardsticks; winners and losers versioned with their numbers |
+| 3 | Profile document: schema, family disposition applied (7.1), wrapper consolidation, consistency contract (4.1), inception entries for the 8 on Q4-2025 from the existing override files | 1; 2 for any kind it freezes as non-provisional | criterion 1; resolver answers every field; consistency contract holds on all 8 |
+| 4 | Rate family live: consumers switched, twin build vs base, defects retired, `rate_convention` files deleted for the 8 | 0b, 3 | twin build clean vs base build on signed-off Q1-2026; re-attestation passes |
 | 5 | Fleet loop: B1, B2, two-tier admission, calibration | 1, 3 | one full loop on the Q4-to-Q1 queue with entries admitted and one retracted |
-| 6 | Remaining families: format, monetary scale, identity; corrections migrated | 4, 5 | twin build per family; criterion 5 |
-| 7 | Inventory and CI check | 6 | criterion 4 |
-| 8 | Q2-2026 live | 4-7, filings fetched (owner go) | first out-of-sample quarter through the full loop |
+| 6 | Remaining families: format, monetary scale, identity; corrections migrated as section 4.2 kinds; knowledge files deleted per family | 4, 5 | twin build per family vs base; criterion 5 |
+| 7 | Inventory and CI check, reading the 7.1 table | 6 | criterion 4 |
+| 8 | Q2-2026 live, after the v4 gate calibration on Q2 actuals (D-q2-order) | 4-7, filings fetched (owner go), gate v4 recorded | first out-of-sample quarter through the full loop |
 
-Sub-projects 1 and 2 can start now. Each gets its own spec and plan (brainstorming,
-writing-plans, subagent-driven development with Opus 5.5 subagents, reviewer per task, ledger).
+Sub-projects 0b, 1 and 2 can start now; 0b takes the lease and runs alone (R36). Each
+sub-project gets its own spec and plan (brainstorming, writing-plans, subagent-driven
+development with Opus 5.5 subagents, reviewer per task, ledger).
+
+Q2-2026 ordering (D-q2-order): the published-basis gate's v4 calibration on Q2 actuals runs in
+the normal quarter pass first; the drift stage runs in shadow beside it in the same pass; no
+profile-driven value change enters production for Q2 until sub-project 8 opens. The two
+programmes share the quarter but not the numbers.
 
 ## 9. Constraints carried forward
 
@@ -221,5 +353,20 @@ tests. New for the programme: production code changes go through twin builds and
   Mitigation: witness = schedule text; sign-off tier.
 - **Fleet capacity**: two sandbox accounts, MaxParallel 2. Mitigation: ring-then-wave
   pipelining; queue ranked by fair value.
-- **V13 retirement** leaves the twelve matching repairs unpublished until the first
-  profile-era build. Accepted by the owner (D-seq).
+- **V13 retirement** leaves the twelve matching repairs unpublished until the base build
+  (sub-project 0b). Accepted by the owner (D-seq); attribution risk removed by D-base-build.
+- **Inception from existing override files** (D-families) inherits any error those files carry.
+  Mitigation: each inherited entry records the file's content hash as its pre-image and gets its
+  contract evaluated on Q4-2025 before acceptance; an entry whose contract breaches at inception
+  is admitted as candidate only.
+- **Consistency contract false positives** (D-precedence): a wrapper key and an entry can differ
+  legitimately in representation (substring markers vs observed labels, per the frozen M1
+  semantics). Mitigation: the comparator uses the Task 7 translate semantics, and a representation
+  mismatch is `insufficient_evidence`, not breach, until the key family is derivable.
+- **Recurring-correction promotion widens scope** (D-corrections): a predicate can select rows
+  the original review never saw. Mitigation: promotion is owner sign-off tier and the twin build
+  lists every newly touched row.
+- **Floors are set before the detectors exist** (D-floor). The 90% structural floor and the
+  6-of-8 seeded rule are chosen from Stage B2 measurements, not validated out of sample.
+  Mitigation: floors live in the tolerances file, versioned like bands; Q2-2026 is the first
+  out-of-sample check of the floors themselves.

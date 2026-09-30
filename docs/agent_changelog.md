@@ -12750,3 +12750,42 @@ Results (all reviewed by a second agent from the run roots):
 - Open owner decisions recorded in the ledger: a level check for text mismatches; whether dispersion (IQR) should return as a criterion once one IQR breach is shown to be a change of meaning; the value-inferred rate type on filers without markers; the median-shift value_range band (measured, not adopted: 3.2-7.3% breach rate, 1 of 4 positives); out-of-sample validation of every v3 band on Q2-2026 when it arrives.
 
 Deferred minors are listed per task in the ledger (loader duplication with contracts_run, whole-document realism validation above 5 MB, per-CIK rather than per-step bound checks, unbounded evidence-noise carve-out in the v2-subset check, DuckDB parallel COPY nondeterminism in the pinned slices, lease taken per heavy instance rather than per scan).
+
+## 2026-09-30 -- Filer-profile programme design amended after written review (eight decisions)
+
+- What changed: `docs/superpowers/specs/2026-09-29-filer-profile-programme-design.md` (docs only,
+  no code, tests or data). New section 2.1 records eight review decisions; sections 3, 4, 5, 7,
+  8 and 10 carry them. Status line now reads "amended 2026-09-30 after written review".
+- D-families: every `data/overrides/` family gets a disposition class (new section 7.1 table,
+  measured on the 8 pilot filers): knowledge families (rate_convention, identifier grammars and
+  anchors, aggregate row overrides, oracle exceptions, B2 corrections) are the SOURCE of
+  inception entries and are deleted per filer after the family's consumer switch; executable
+  families (wrappers, investigate rules) go into the wrapper section as versioned blocks;
+  process artifacts (agent_anchor, wrapper_cohorts, position_id_registry) are excluded from
+  the inventory by rule. Inception entries inherit value, citations, date and a content-hash
+  pre-image from the existing file.
+- D-precedence (new 4.1): entries authoritative on meaning, wrapper on procedure; a consistency
+  contract (Task 7 translate adapter as comparator) blocks a filer's build when a wrapper key
+  and its semantic entry disagree; the five census-derivable key families become generated from
+  the entry after their switch.
+- D-corrections (new 4.2): B2 corrections split into ONE-OFF (row_id-keyed, single report
+  date, pre-image check on rebuild, never carried forward) and RECURRING (same mechanism 2+
+  quarters, promoted to a partition-predicate entry with its own contract, owner sign-off).
+  Position continuity only via the registry natural key, opt-in, detector-only.
+- D-base-build: new sub-project 0b lands a matching-only base build (V13 repairs, no profile)
+  with semantic diff and re-attestation of Q4-2025 and Q1-2026 BEFORE any twin build; criterion
+  2 and all twin builds now compare against that base.
+- D-floor: criterion 3 split by kind with floors (structural recall >= 90% at the band's stated
+  FP rate; independent totals must catch a seeded x100 flip wherever a reconciling total
+  exists; semantic kinds either win a floor under the adoption rule or carry a public
+  `detection_not_claimed` label). Independent totals promoted from experiment to REQUIRED
+  contract kind. Contracts frozen before sub-project 2 reports are `status_basis = provisional`.
+- D-convention: rate family switch changes where the convention is READ, not what production
+  stores; cash-leg storage stays until the atomic 2026-07-12 migration (inventory exception).
+- D-q2-order: v4 gate calibration on Q2 actuals first, drift stage in shadow beside it, no
+  profile-driven value change for Q2 until sub-project 8.
+- D-winner (5.1): pre-registered adoption rule (replay recall >= existing kind or >= 50%;
+  within band FP rate on quiet pairs; seeded detection at <= 0.20 of rows on >= 6 of 8 filers);
+  sub-project 3 now depends on 2 for any kind it freezes as non-provisional.
+- Five new risk rows in section 10. Verification: ASCII check on the file (0 non-ASCII lines);
+  no tests apply to a docs change.
