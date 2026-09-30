@@ -12880,3 +12880,18 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Outputs move on the next rebuild for JV-holding BDCs (GAV, oracle A04/E01/A07/E02, F20-F27,
   sector reconciliation, PIK artifacts). Oracle + queue + acceptance re-run started 21:35;
   PIK rebuild and frontend export follow.
+
+## 2026-09-30 -- Production chain on the published-basis code: oracle, queue, acceptance, PIK rebuild, frontend export
+
+- Ran on ensemble-fp-experiment at 872880b: `pipeline.oracle_runner`, `pipeline.review_queue
+  --emit-bdc-worklist`, acceptance for both quarters (unchanged: Q1 reconcile 78.3 / flagged 46.7
+  / verified 36.5 / over_inclusion 0.864; Q4 85.3 / 10.65 / 67.9 / 0.114; blockers Q1 25 items
+  across 20 funds, $2.48B), `rebuild_outputs.py --pik-status --pik-proxy` (670 s; PIK status
+  783,894 rows; schedule proxy 2,099 summary rows, transitions 5,583 -> 5,492 as JV rows leave the
+  fund-level products), `rebuild_outputs.py --frontend` (1,625 s, 26 JSON files; public headline
+  2026-03-31 = $383.04B on basis `cohort_holdings_signed_fair_value_ex_underlying_schedule`, vs
+  $382.15B in the pre-build snapshot and $391.7B on the all-rows basis), `reattest_quarters.py
+  check` (both quarters still REGRESSED, same flips), `diff_outputs.py --semantic` (identical to
+  the base-build report: holdings +3,439 rows vs the 2026-09-05 baseline, 671 divergent
+  artifacts). Logs: `scratch/2026-09-30_base_build/*_p2.log`.
+- Frontend JSON under frontend/public/data is modified and NOT committed. No baseline refresh.
