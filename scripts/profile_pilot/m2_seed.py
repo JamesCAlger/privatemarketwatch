@@ -1393,6 +1393,18 @@ def pin_block(paths, croot: Path, cik: str, row: dict, inventory: dict) -> tuple
                                   "block (v2 subset for a v3 re-learn) before evaluating; mismatch invalidates")
 
 
+def pin_financials(cpaths, tolerances: dict, cik: str, report_date: str) -> dict | None:
+    """The pinned CONTRACTS root's fund_financials row at `report_date` for `cik`: the independent_totals
+    anchor the contracts root learned with, loaded once per CIK and reused by every evaluation in that
+    CIK's matrix (null control and every perturbation) so the totals contracts see the same anchor. v2/v3
+    tolerances carry no independent_totals band, so financials stays None there even though the contracts
+    root always materialises the slice (contracts_run.build materialises it unconditionally)."""
+    if not contracts.has_totals_bands(tolerances):
+        return None
+    from scripts.profile_pilot import contracts_run
+    return contracts_run.load_financials(cpaths, cik, report_date)
+
+
 def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_id: str, ciks=None,
               scratch_dir: Path | None = None, fractions=FRACTIONS, seeds=SEEDS, semantic: bool = False) -> dict:
     """semantic=True (Task B2-3): the semantic drift classes + range shifts, the v3 semantic contracts at
@@ -1426,6 +1438,10 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
     if cman["census_source"]["run_id"] != census_run_id or cman["profile_source"]["run_id"] != profile_run_id:
         raise StageInvalidated("contracts root was not built from the pinned census/profile roots")
     tolerances, tol_rec, inv_rec, inventory = pin_frozen_tolerances(cpaths)
+    # independent_totals (v4, Task 6c): the CONTRACTS root's pinned fund_financials slice is an input the
+    # results now depend on; v2/v3 roots have no totals bands so financials_rec stays None (unchanged).
+    financials_rec = _record(croot / contracts_run.FINANCIALS_SLICE, "contracts_root/" + contracts_run.FINANCIALS_SLICE) \
+        if contracts.has_totals_bands(tolerances) else None
     blocks, block_recs, grammars, grammar_recs = {}, {}, {}, {}
     for cik in ciks:
         blocks[cik], block_recs[cik] = pin_block(paths, croot, cik, census["rows"][(cik, "q1")], inventory)
@@ -1463,7 +1479,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                                      "(compare_relearned); a mismatch invalidates the stage")
     inputs = ([census["authoritative"]] + census["files"] + [summary_rec] + list(profile_recs.values())
               + [cman_rec, tol_rec, inv_rec] + list(block_recs.values())
-              + [r for recs in grammar_recs.values() for r in recs] + code)
+              + [r for recs in grammar_recs.values() for r in recs] + code
+              + ([financials_rec] if financials_rec else []))
     keep = ("label", "path", "status", "sha256", "bytes")
     built = dict(
         run_id=paths.run_id, stage="m2_seed", version=SEED_VERSION, created_utc=_now(),
@@ -1488,6 +1505,11 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
         grammars={c: (None if g is None else dict(path=g["path"], sha256=g["sha256"], dialect=g["dialect"],
                                                   anchors_source=g.get("anchors_source"), provenance="inherited"))
                   for c, g in grammars.items()},
+        financials=dict(loaded=financials_rec is not None,
+                        sha256=(financials_rec["sha256"] if financials_rec else None),
+                        rule="the pinned contracts root's fund_financials slice (contracts_run.FINANCIALS_SLICE); "
+                             "loaded once per CIK at the Q1 learning date (pin_financials) and reused for every "
+                             "evaluation in that CIK's matrix; None under v2/v3 tolerances (no totals bands)"),
         code=code, config=config, synthetic_q2=SYNTHETIC_Q2_NOTE,
         inputs=[{k: r[k] for k in keep if k in r} for r in inputs])
     write_once_json(paths, "manifest.json", built)
@@ -1499,12 +1521,16 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
         block = blocks[cik]
         identity = manifest.cache_identity("m2_seed", dict(
             cik=cik, census=row["record"], census_fingerprint=row["fingerprint"], learning=block_recs[cik],
-            tolerances=tol_rec, grammar=grammar_recs[cik], code=code, config=config), collector_version=SEED_VERSION)
+            tolerances=tol_rec, grammar=grammar_recs[cik], financials=financials_rec, code=code, config=config),
+            collector_version=SEED_VERSION)
 
         def compute(cik=cik, row=row, block=block):
             t0 = time.perf_counter()
             q1_doc = contracts_run.load_census(row)
             yield_q1 = next(c for c in block["contracts"] if c["kind"] == "fund_income_yield")["evidence"]["q1_yield"]
+            # independent_totals (v4, Task 6c): the pinned CONTRACTS root's financials row at this CIK's Q1
+            # learning date, reused by every evaluation of this CIK's matrix (null control + perturbations).
+            financials = pin_financials(cpaths, tolerances, cik, row["report_date"])
             check, relearned, learn_seconds = None, None, 0.0
             if semantic or block_recs[cik]["code_drift"]:
                 t = time.perf_counter()
@@ -1523,7 +1549,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                                      grammar=grammars[cik], yield_q2=yield_q1, fractions=fractions, seeds=seeds,
                                      full_validation=row["record"]["bytes"] <= FULL_VALIDATION_MAX_BYTES,
                                      variants=run_variants,
-                                     semantic=dict(block=relearned, grid=grid, range_stats=True) if semantic else None)
+                                     semantic=dict(block=relearned, grid=grid, range_stats=True) if semantic else None,
+                                     financials=financials)
             matrix["timing"].update(wall_seconds=round(time.perf_counter() - t0, 2), peak_wset_bytes=_peak_bytes(),
                                     census_bytes=row["record"]["bytes"], q1_positions=block["q1"]["positions"],
                                     learn_seconds=round(learn_seconds, 3))
@@ -1532,6 +1559,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
             matrix["relearn_check"] = check
             matrix["block_source"] = block_recs[cik]["block_source"]
             matrix["yield_q2"] = "the frozen Q1 yield evidence (the yield contract is not perturbed)"
+            matrix["financials_loaded"] = financials is not None
             return matrix
 
         out = manifest.run_cached_stage(paths, "results/cik/" + cik + ".json", identity, compute,
@@ -1601,7 +1629,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                        seconds=round(time.perf_counter() - started, 1), evaluations=len(evaluations),
                        null_breaches=sum(len(i["null_control"]["breaches"]) for i in per_cik.values()),
                        realism_errors=realism, blind_spots_expected=sum(s["expected_detector"] for s in spots),
-                       timing=timing, scratch_copies=copies, input_verification_after=after)
+                       timing=timing, scratch_copies=copies, input_verification_after=after,
+                       financials_loaded={c: info.get("financials_loaded") for c, info in per_cik.items()})
     write_once_json(paths, "results/run_summary.json", run_summary)
     return run_summary
 

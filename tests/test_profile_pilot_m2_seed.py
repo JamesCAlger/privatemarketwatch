@@ -747,3 +747,66 @@ def test_relearned_v3_block_equals_a_v4_frozen_block_on_the_v2_subset():
     tampered = copy.deepcopy(relearned)
     tampered["contracts"][0]["expectation"] = dict(concepts=["x:y"])
     assert m2_seed.compare_relearned(frozen, tampered)["equal"] is False
+
+
+# ---------------------------------------------------------------- Task 6c (sp1): seed loads the pinned financials
+
+FIN_DATE = "2024-03-31"
+
+
+def write_financials_slice(cpaths, row: dict) -> None:
+    """Write one fund_financials row under cpaths.run_root, matching contracts_run.FINANCIALS_COLUMNS,
+    for contracts_run.load_financials to find: the seed's pinned CONTRACTS root holds this slice (Task 6c)."""
+    import duckdb
+    from scripts.profile_pilot import contracts_run
+    target = cpaths.run_root / contracts_run.FINANCIALS_SLICE
+    target.parent.mkdir(parents=True, exist_ok=True)
+    con = duckdb.connect()
+    try:
+        con.execute(
+            "COPY (SELECT ? AS cik, ? AS report_date, ? AS investments_at_fair_value, "
+            "? AS net_assets, ? AS total_assets) TO '" + str(target).replace("'", "''") + "' (FORMAT parquet)",
+            [row[c] for c in contracts_run.FINANCIALS_COLUMNS])
+    finally:
+        con.close()
+
+
+def test_pin_financials_loads_the_pinned_row_for_the_ciks_q1_date(tmp_path):
+    tol = _v4()
+    cpaths = contracts_root(tmp_path, tol)
+    write_financials_slice(cpaths, dict(FIN, cik=CIK, report_date=FIN_DATE))
+    financials = m2_seed.pin_financials(cpaths, tol, CIK, FIN_DATE)
+    assert financials == dict(FIN, cik=CIK, report_date=FIN_DATE)
+
+
+def test_pin_financials_feeds_a_holding_null_control_and_a_detected_scale_flip(tmp_path):
+    # Before Task 6c, the seed's run loop never loaded financials, so every evaluation of the totals
+    # contracts abstained (insufficient_evidence: no_anchor) even in the null control. Loading the pinned
+    # row through the same path the seed now uses (pin_financials -> contracts_run.load_financials on the
+    # pinned CONTRACTS root) must make the null control hold and a full scale flip detected.
+    tol = _v4()
+    cpaths = contracts_root(tmp_path, tol)
+    write_financials_slice(cpaths, dict(FIN, cik=CIK, report_date=FIN_DATE))
+    financials = m2_seed.pin_financials(cpaths, tol, CIK, FIN_DATE)
+    doc = totals_book()
+    block = learn(doc, tol=tol, financials_q1=financials)
+    variants = [v for v in m2_seed.VARIANTS if v[0] == "fair_value_scale_flip"]
+    matrix = m2_seed.evaluate_matrix(cik=CIK, block=block, tolerances=tol, q1_doc=doc, grammar=None,
+                                     yield_q2=dict(status="vote", vote="cash_leg", cause=None,
+                                                   report_date=doc["document"]["report_date"]),
+                                     variants=variants, fractions=(0.0, 1.0), seeds=(1, 2, 3),
+                                     financials=financials)
+    idx = next(i for i, m in enumerate(matrix["contract_meta"])
+               if m["kind"] == "independent_totals" and m["field"] == "fair_value")
+    assert matrix["null_control"]["statuses"][idx] == ["holds", None]
+    full = [e for e in matrix["evaluations"] if e["fraction"] == 1.0]
+    assert full and all(e["targets"]["independent_totals"]["outcome"] == "detected" for e in full)
+
+
+def test_pin_financials_stays_none_under_a_v2_root_without_touching_any_file(tmp_path):
+    from scripts.profile_pilot import contracts
+    v2 = contracts.tolerance_content_v2()
+    cpaths = contracts_root(tmp_path, v2)
+    # no financials slice is written here: a v2/v3 root predates it, and pin_financials must not try to
+    # read one (the gate is checked before contracts_run.load_financials is ever called).
+    assert m2_seed.pin_financials(cpaths, v2, CIK, FIN_DATE) is None
