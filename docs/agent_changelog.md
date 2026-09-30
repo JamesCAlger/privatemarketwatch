@@ -12815,3 +12815,42 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   settled. Twin builds can still compare against this base (it is deterministic). Sub-project 1
   work (drift replay) is unaffected and continues on the pilot branch.
 - NOT done: no threshold change, no baseline refresh, no revert, no frontend commit.
+
+## 2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling): implementation and measurement
+
+- Ruling recorded in the v3 gate spec (commit 249bef8, "Amendment 2026-09-30"). Implementation e16491e
+  (reviewed, approved): one predicate `PUBLISHED_ROWS_WHERE_SQL` in `pipeline/published_basis.py`
+  (`coalesce(accounting_record_class,'') <> 'underlying_schedule'`), applied by `published_fv_sum_sql`
+  (AND-ed with the caller's where; the shadow engine's fair-value AND cost rules inherit it),
+  `published_fv_mask`, `published_fv_by_quarter`, and a new `published_rows_csv_sql(path)` used by
+  `public_snapshot` (basis string now `cohort_holdings_signed_fair_value_ex_underlying_schedule`),
+  all 11 holdings readers in `pipeline/export/analytics_exports.py`, `fund_exports.py` (fund_details),
+  three dead-path sites in `index_exports.py`, and `holdings_history.export_history`. A table without
+  the column now errors by design (every writer of private_markets_holdings.csv passes through
+  `accounting_scope.annotate` and the schema projection, so no live path lacks it). 24 test fixtures
+  gained the column; 583 tests passed across 19 files. `is_subsidiary` is not the key;
+  `unresolved_underlying_schedule` (absent today) stays in the basis. Product consequence flagged
+  by both implementer and reviewer: JV underlying positions no longer appear anywhere on the
+  public site, not even the per-fund history (about 16.7K rows); a look-through view would be a
+  separate feature.
+- Measurement (shadow runner re-run 19:46, acceptance under v3 and the d18560d v2 thresholds,
+  re-attestation; artifacts `scratch/2026-09-30_base_build/acc_*_exub.json`, `reattest_exub.log`):
+  Q1-2026 cohort FV 391,711 -> 383,038 M (the JV rows), over_inclusion 3.04% / $11.9B -> 0.864% /
+  $3.31B (09-08 was $3.37B: the build's JV effect is neutralised), reconcile 75.4 -> 78.3, flagged
+  48.7 -> 46.7, verified 35.4 -> 36.5. Q4-2025: over_inclusion 2.05% -> 0.114% / $0.43B, flagged
+  33.8 -> 10.65, reconcile 83.8 -> 85.3, verified 45.1 -> 67.9. Both quarters still FAIL under v2
+  and v3; re-attestation still REGRESSED.
+- Why Q1 flagged share stays high: BCRED's parent schedule alone is $80.91B against a companyfacts
+  anchor with residual +0.548%, just over the 0.5% band (pre-build parent was $80.26B and
+  reconciled; +3 rows / +$0.65B on the parent side); a failing fund contributes its whole FV, so
+  BCRED alone is 21 points. 2008748 now undershoots -4.6% and 1954360 -0.83% (new fails); Bain
+  Capital Private Credit 1899017 CLEARED (its 66 subsidiary-axis rows were the over-inclusion).
+  The remaining Q1 fails (1838126 +6.3%, 1930679 +21%, 1899017-class large overshoots 1715933
+  +54%, 1603480 +129%, 1988280 +29%) all pre-date the build.
+- Second mechanism behind verified_fv 73 -> 36: the verified tier fell from 46 funds (09-08) to
+  40; 29 funds are under_review, and 17 of them PASS conservation but carry 1-2 source-
+  reconciliation blockers (e.g. 1812554 $35.5B, one blocker $528M). The blockers come from the
+  validate stage on the rebuilt holdings and need B2 adjudication (fleet, owner-run); no code
+  change here.
+- NOT done: frontend export (waits for phase 2 so it runs once), baseline refresh, threshold change.
+  Phase 2 (fund-level reconciliations and PIK summaries on the same predicate) is in progress.
