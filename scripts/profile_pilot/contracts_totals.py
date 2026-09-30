@@ -10,6 +10,8 @@ from __future__ import annotations
 from decimal import Decimal, InvalidOperation
 
 KIND = "independent_totals"
+# TOTALS_FIELD/PCT_FIELD intentionally duplicate m2_backtest.TOTALS_FIELD/PCT_FIELD
+# (not imported, to avoid a circular import); Task 4 adds an equality test.
 TOTALS_FIELD = "fair_value"
 PCT_FIELD = "pct_of_net_assets"
 FIELDS = (TOTALS_FIELD, PCT_FIELD)
@@ -56,7 +58,7 @@ def _contract(cik, field, tier, band, learn_status, learn_cause, expectation, ev
                 evidence=evidence, status_basis="provisional")
 
 
-def learn_totals(cik: str, tier: str, band: dict, q1_doc: dict, *, financials_q1: dict | None) -> list:
+def learn_totals(cik: str, tier: str, band: dict, q1_doc: dict, *, financials_q1: dict | None) -> list[dict]:
     obs = observe_totals(q1_doc, financials=financials_q1)
     few = obs["n_positions"] < band["min_positions"]
     out = []
@@ -86,6 +88,10 @@ def _result(c, status, q2, *, cause=None, expected=None, observed=None):
 def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: dict | None, band: dict) -> dict:
     obs = observe_totals(q2_doc, financials=financials_q2)
     exp = contract["expectation"]
+    # Whole-book gate, shared by both fields: when the book itself is smaller than
+    # min_positions, "too_few_positions" is the true cause for BOTH fields. A field
+    # that is merely sparsely filled within an adequately sized book is a different
+    # cause (pct_not_filled below) and is checked only after this gate passes.
     if obs["n_positions"] < band["min_positions"]:
         return _result(contract, "insufficient_evidence", q2, cause="too_few_positions", expected=exp, observed=obs)
     if contract["field"] == TOTALS_FIELD:

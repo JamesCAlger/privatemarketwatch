@@ -4,8 +4,6 @@ Two whole-filing criteria that cannot abstain on a pure scale flip: the census's
 published-basis fair-value sum against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. See scripts/profile_pilot/contracts_totals.py.
 """
-import copy
-import pytest
 from tests.test_profile_pilot_contracts import mk_doc, debt, val
 from scripts.profile_pilot import contracts_totals as ct
 
@@ -84,3 +82,23 @@ def test_too_few_positions_never_learns():
     contracts = ct.learn_totals("0000000001", "standard", BAND, book(n=3), financials_q1=FIN)
     assert all(c["learn_status"] == "insufficient_evidence" for c in contracts)
     assert contracts[0]["learn_cause"] == "too_few_positions"
+
+
+def test_shrunken_q2_book_abstains_both_fields_with_too_few_positions():
+    contracts = ct.learn_totals("0000000001", "standard", BAND, book(), financials_q1=FIN)
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    res = [ct.evaluate_totals(c, q2, book(n=3), financials_q2=FIN, band=BAND) for c in contracts]
+    assert [r["status"] for r in res] == ["insufficient_evidence", "insufficient_evidence"]
+    assert [r["cause"] for r in res] == ["too_few_positions", "too_few_positions"]
+
+
+def test_large_book_with_unfilled_pct_abstains_pct_not_filled():
+    contracts = ct.learn_totals("0000000001", "standard", BAND, book(), financials_q1=FIN)
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    doc = book()
+    for p in doc["positions"][3:]:
+        p["fields"]["pct_of_net_assets"] = val(None)
+    r_fv = ct.evaluate_totals(contracts[0], q2, doc, financials_q2=FIN, band=BAND)
+    assert r_fv["status"] == "holds"
+    r_pct = ct.evaluate_totals(contracts[1], q2, doc, financials_q2=FIN, band=BAND)
+    assert r_pct["status"] == "insufficient_evidence" and r_pct["cause"] == "pct_not_filled"
