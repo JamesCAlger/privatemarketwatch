@@ -12974,3 +12974,30 @@ Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
   real duplicate rows without context ids. Owner item: named money-market funds (BCRED's balance sheet
   excludes $653.7M; production and the predicate keep them).
 - NOT done: full pytest suite; predicate v2; any production change.
+
+## 2026-10-01 -- SP3 Task 0 correction after the whole-branch review
+
+- "Anchored" in the SP3 Task 0 entry means the fund_financials slice row LOADED for the filer (seed
+  run_summary `financials_loaded`), so the 8 anchored filers include TCW (0001715933) although its anchor
+  value is absent on the seed's learn quarter: TCW's totals contract was never learned in the seed
+  (`not_learned_in_q1: no_anchor`, stageb2-seed-sp3-full-20261001t024208z/results/cik/0001715933.json).
+- TCW's Q1-2026 fair_value queue row (DRIFT_6823745f0c4b, $355.9M at risk of $1,013.2M): the back-test
+  pair the replay pinned (rolling 2025-09-30 -> 2026-03-31, gapped) HAS an anchor. Observed: census
+  published sum $1,013,243,399 vs anchor $657,323,982 (+54.1%; the learn quarter was already +61.9%, so
+  this is a standing gap, not drift). The excess equals, to the dollar, the FV of the 2 rows R3 removed
+  ($355,919,417; stageb2-backtest-sp3-20261001t024208z/results/backtest_results.json). Most likely the
+  anchor covers only part of the book (one category) while the census sums every category, and the R3
+  rows are that category's total. NOT verified against the filing: treat as a hypothesis.
+- The other 5 totals queue rows are pct_of_net_assets `pct_sum_outside_band` breaches (BCRED, 0001901037,
+  0001950803, 0001860424, TCW), attributable to the band's percent-units assumption ([50, 250]).
+- Plan vs result: the plan expected 8/8 null-control holds; the 2026-03-31 calibration did not carry to
+  the 2022-2023 inception quarters the seed learns on (explained in the preceding entry).
+- The totals kind now uses ONE period end (census_published.period_end: DEI DocumentPeriodEndDate, else
+  max of document_period_end_dates); the other kinds still treat any metadata date as current.
+- Fixes (a52eeb5): `contracts._check_frozen` refuses a totals contract whose `applies_to` differs from
+  `contracts_totals.APPLIES_TO` (a v1-learned contract can no longer evaluate silently on another
+  partition version); `classify` gains `near_misses` (FV-only prefix parents that FAIL the R5 sum
+  equality), `r7_conflicts` (R7 now needs agreeing facts) and `no_period_end` (totals abstain with cause
+  `no_period_end` instead of breaching at -100%); memo stores (doc, part); replay totals DRIFT ids hash
+  `census-published.v1` (ids minted before this change differ); column "removed by rule (seed learn
+  quarter)"; fixture test pins the single c-929 deviation and the source CSV sha256 (1318d968...).
