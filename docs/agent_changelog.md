@@ -12888,3 +12888,51 @@ Deferred minors are listed per task in the ledger (loader duplication with contr
   (recorded in the ledger).
 - NOT done: no threshold change, no baseline refresh, no production change from this
   sub-project; the full pytest suite was not run (launcher-scoped files only).
+
+## 2026-10-01 -- SP1 correction after the whole-branch review
+
+Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
+
+- independent_totals floor: NOT MET. Controller ruling: the floor's denominator is every filer
+  with a pinned financials anchor (seed run_summary `financials_loaded`: 8 of 8), not the
+  seed's null-control-holding set. Measurable on 1 of 8 anchored filers (Stellus 0001901037,
+  x100 flip caught at fraction 0.05); 7 are out of band at baseline: 6 breach
+  `fv_residual_outside_band` in the null control (Ares, NexPoint, BCRED, Onex, Fidelity,
+  Stepstone) and TCW 0001715933 never learns the fair_value contract in Q1
+  (`not_learned_in_q1: no_anchor`, insufficient_evidence at baseline) although the run loaded
+  its financials. The recorded "seed verdict PASS on n = 1" is withdrawn. Bands and floors
+  unchanged. Re-run: `sp1-replay-final-20261001t1230z` (same back-test and seed roots, code
+  d7ff581): independent_totals FAIL, seed measured 1/8; other floors unchanged.
+- The replay recall of 0.667 for independent_totals coincides with standing baseline breaches
+  (the census is not on the published basis) and is NOT drift evidence.
+- pct_scale_flip is applicable on 0 of 8 filers (2 have no filled pct rows to perturb; 6 breach
+  `pct_sum_outside_band` at baseline).
+- x0.01 was never seeded: the seed harness has only the x100 flip.
+- The seed (`stageb2-seed-sp1-full2-20261001t0100z/results/summary.md`) and back-test
+  (`stageb2-backtest-sp1-20260930t235307z/results/recall.md`) artifacts for the
+  recorded runs say "v2" and print the v2 digest although the pinned tolerances are v4
+  (content_sha256 61eb05e63012...). The roots are write-once: noted here, not rewritten. The
+  renderers now print the pinned record's version and digest.
+- The six-file launcher suite with the backstop was NOT run for the recorded result. Run now:
+  `sp1-verify-full-20261001t1200z`, 303 passed; backstop 671 divergent artifacts (45,993
+  checked, 18,548 skipped), verdict unchanged; preservation PASS. The 161 -> 671 rise is the
+  2026-09-30 production base build under data/output (controller's explanation), not this
+  branch.
+- Retraction: the 2026-09-30 Task 3 entry's "published-basis fair-value sum" wording is wrong.
+  The totals kind sums census current-period FV, which is NOT on the published basis (SP1
+  finding 2026-10-01).
+- Code (d7ff581): replay_report totals floor over anchored filers with a per-filer table and
+  reasons for both totals variants (0 anchored -> NO_ANCHORS); seed/back-test lineage check
+  (contracts_source.run_id and census_source.run_id must match, else StageInvalidated);
+  exclusions bucketed by m2_backtest.LEDGER_EXCLUDED_STATES; m2_backtest refuses a financials
+  slice that differs from the contracts root's copy; docstring fixes; replay tests 4 -> 11.
+- Spec section 8 row 1 updated: "totals NOT MET (1/8 measurable)".
+
+### v5 items for sub-projects 2/3
+
+- Learn-quarter gate for totals: a totals contract that does not hold on its learn quarter
+  should be recorded as `does_not_hold_on_q1`, not carried into evaluation.
+- Reclassify `scale` as a semantic kind in the replay floors (value semantics, not structure).
+- Review the `cost_conservation -> fair_value` ledger mapping (cost is not FV).
+- Tolerance version field is int (4) vs string ("contract-tolerances.v2"/".v3"): unify.
+- The default `contracts_run` v3 root is not accepted by `m2_seed.pin_tolerances` (v2 or v4 only).
