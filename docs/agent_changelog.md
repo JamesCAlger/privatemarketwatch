@@ -13001,3 +13001,38 @@ Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
   `no_period_end` instead of breaching at -100%); memo stores (doc, part); replay totals DRIFT ids hash
   `census-published.v1` (ids minted before this change differ); column "removed by rule (seed learn
   quarter)"; fixture test pins the single c-929 deviation and the source CSV sha256 (1318d968...).
+
+## 2026-10-01 -- SP3 Task 0b: census published-basis predicate v2 (hierarchical rollups) adopted
+
+- `scripts/profile_pilot/census_published.py` (2132a31, 8418644, b2454c9, c7a627f; all reviewed): new rule
+  R5b after R5: a kept row is a rollup when its identifier is a strict prefix of >= 1 kept row (whole `|`
+  segments when the parent carries a `|`, else whole words), its fair value equals the direct children's
+  sum within reported decimals AND its cost equals the children's cost sum (fv-only fallback when the
+  parent reports neither cost nor pct, which must also match principal when the parent reports it);
+  applied bottom-up; abstains when the parent reports a rate, spread, floor, PIK rate or maturity; zero-FV
+  parents are never rollups (R5 and R5b, v2 only). Diagnostics: `near_misses_r5b` (with reasons),
+  `r5b_single_child`, `r5b_passes`. `CENSUS_PUBLISHED_VERSION = census-published.v2`; v1 stays reachable
+  via `classify(..., version=)` with its behaviour frozen; the contracts path refuses frozen v1 roots by
+  exact `applies_to` match, so a NEW contracts run is required before any re-measure.
+  `contracts_totals.evaluate_totals` PCT branch gains a None-guard (`not_learned_in_q1`).
+- Adoption rule (controller Rulings 3-4, binding for every predicate version): over all census documents
+  of the 8 pilot filers vs production's published total (`accounting_record_class <> 'underlying_schedule'`),
+  the reference is production where it reconciles to `fund_financials.investments_at_fair_value` within
+  0.5%, else the anchor, else unmeasurable; no fund-quarter may fall below -0.5% where v1 was >= -0.5%,
+  and none may worsen by more than 1 point. Result vs current production (after main 5b85cc4):
+  111 docs, 3 skipped (no production rows, no anchor), 101 measured (76 vs production, 25 vs anchor),
+  7 unmeasurable (0001715933), 31 improved, 0 worsened, 0 violations
+  (`scratch/2026-09-30_base_build/diag_predicate_v2_table.csv` + `.meta.json`, main checkout).
+  Fidelity 2023-03-31 and NexPoint 2023-09-30 inception now reconcile; Ares's v1 double count of the
+  'Lightbeam Bidco' issuer subtotal is removed in 6 quarters.
+- Known breaches the totals contracts will still raise (17): Onex 2023-06-30..2025-03-31 (corrupted
+  identifiers), Fidelity 2024-06-30..2025-03-31 vs anchor, TCW 2025-03-31, BCRED +10-13%, 13 fund-quarters
+  already below -0.5% under v1 (NexPoint 2025-06/09 about -59%, TCW 2025-09-30 -43%, TCW 2025-12-31 -10%,
+  Fidelity 2025-06..12 -5.6..-7.8%, Ares 2022-24 about -0.8%), and four anchor-only quarters where the
+  census sums to zero (NexPoint 2022-12-31 / 2023-06-30, 0001715933 2022-12-31, TCW 2023-06-30). These
+  are production under-publication or anchor questions, not predicate items.
+- Rejected on the way: accepting the negated children's cost sum (Onex unfunded revolvers) -- widened a
+  value identity and bought nothing. Tests: six pilot files, 340 passed at c7a627f (launcher run
+  `sp3-verify-t0b-fix3-a`, receipt present; post-backstop 680 divergent, unattributed, consistent with the
+  Fidelity wrapper change in production). Full suite not run. Re-measure chain on v2 launched after this
+  entry (`stageb-contracts-sp3v2-*` and following).
