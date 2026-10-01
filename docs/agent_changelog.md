@@ -13036,3 +13036,20 @@ Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
   `sp3-verify-t0b-fix3-a`, receipt present; post-backstop 680 divergent, unattributed, consistent with the
   Fidelity wrapper change in production). Full suite not run. Re-measure chain on v2 launched after this
   entry (`stageb-contracts-sp3v2-*` and following).
+
+## 2026-10-01 -- SP3 Task 0b re-measure on census-published.v2 (stamp 20261001t093945z)
+
+- Chain (alone under the lease): contracts `stageb-contracts-sp3v2-20261001t093945z` (v4 tolerances, new roots
+  because v1 roots are refused), seeds `stageb2-seed-sp3v2-full-...` / `-sem-...`, back-test
+  `stageb2-backtest-sp3v2-...`, replay `sp1-replay-sp3v2-20261001t093945z` (copied to
+  `scratch/2026-10-01_sp3_replay/*_v2.*`). IN-SAMPLE.
+- Inception totals contracts under v2: fair_value in band for Ares (-0.48%), NexPoint, Stepstone, Stellus
+  and Fidelity (0.0%); BCRED +10.5% (anchor defect), Onex +183.6% (corrupted identifiers), TCW no anchor.
+  Seed `fair_value_scale_flip`: applicable 5 of 8 anchored, all detected at 0.05 (v1 predicate: 3 of 8; raw
+  census: 1 of 8). `pct_scale_flip` 0 of 8: learned pct sums are 1.66-5.05, so the [50, 250] percent band
+  is the wrong unit for these filers (open item). Totals floor verdict stays FAIL under criterion 3.
+- Replay Q4-2025 -> Q1-2026: identical to the v1-predicate run (totals negatives 4 of 10 breach, FA upper
+  0.40, recall 0.556, queue 13 rows; other kinds unchanged). Expected: R5b fires on inception-era
+  hierarchical headings, which the sign-off pair does not carry; the pair's remaining totals breaches are
+  the pct-unit issue and TCW's Q1 fair_value row.
+- NOT done: full suite; pct-unit band; production fixes beyond Fidelity wrapper v2 (main 5b85cc4).
