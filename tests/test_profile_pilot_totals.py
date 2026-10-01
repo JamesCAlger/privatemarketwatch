@@ -384,7 +384,7 @@ def test_one_evaluate_call_classifies_the_q2_doc_once_and_the_cache_changes_noth
 @pytest.mark.parametrize("applies_to", [
     {"whole_filing": True},
     {"whole_filing": True, "census_published": "census-published.v0"},
-    {"whole_filing": True, "census_published": "census-published.v1"}])
+    {"whole_filing": True, "census_published": "census-published.v2"}])
 def test_frozen_totals_contract_with_another_partition_version_is_refused(applies_to):
     from scripts.profile_pilot import contracts
     v4 = contracts.tolerance_content_v4(tol_v3())

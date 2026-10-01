@@ -30,12 +30,13 @@ def fv_only(ctx, ident, fv, decimals="0"):
     return dict(ctx=ctx, ident=ident, fields=dict(fair_value=val(fv, "usd", decimals=decimals)))
 
 
-def rules(doc, cik=OTHER):
-    return {c: r["rule"] for c, r in cp.classify(doc, cik=cik)["rows"].items()}
+def rules(doc, cik=OTHER, version=cp.CENSUS_PUBLISHED_VERSION):
+    return {c: r["rule"] for c, r in cp.classify(doc, cik=cik, version=version)["rows"].items()}
 
 
 def test_constants():
-    assert cp.CENSUS_PUBLISHED_VERSION == V2
+    # fix round 1 (adoption rule, ruling 3): v2 failed the all-quarter adoption check, so v1 stays current
+    assert cp.CENSUS_PUBLISHED_VERSION == V1
     assert cp.VERSIONS == (V1, V2)
     assert cp.REPORTING_ENTITIES == {BCRED: ("Emerald JV LP", "Verdelite JV LP")}
     assert cp.RULES_V1 == ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading",
@@ -43,12 +44,12 @@ def test_constants():
     assert cp.RULES == ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading",
                         "R4_generic_cash_bucket", "R5_issuer_rollup_fv_only", "R5b_hierarchical_rollup",
                         "R6_reporting_entity_lookthrough")
-    out = cp.classify(mk_doc([debt(1)]), cik=OTHER)
+    out = cp.classify(mk_doc([debt(1)]), cik=OTHER, version=V2)
     assert out["version"] == V2
     assert set(out) >= {"version", "period_end", "rows", "extra_fv_facts", "removed_by_rule",
                         "near_misses_r5b", "r5b_passes"}
     assert set(out["removed_by_rule"]) == set(cp.RULES)
-    v1 = cp.classify(mk_doc([debt(1)]), cik=OTHER, version=V1)
+    v1 = cp.classify(mk_doc([debt(1)]), cik=OTHER)
     assert v1["version"] == V1 and set(v1["removed_by_rule"]) == set(cp.RULES_V1)
     assert "near_misses_r5b" not in v1 and "r5b_passes" not in v1
 
@@ -374,7 +375,7 @@ ISSUERS = ["i1", "i2", "i3", "i4", "i5"]
 
 
 def test_r5b_removes_industry_then_category_rollups_bottom_up():
-    out = cp.classify(onex_doc(), cik=OTHER)
+    out = cp.classify(onex_doc(), cik=OTHER, version=V2)
     got = {c: r["rule"] for c, r in out["rows"].items()}
     assert {c for c, r in got.items() if r is None} == set(ISSUERS)
     assert all(got[c] == "R5b_hierarchical_rollup" for c in ("cat_debt", "cat_eq", "ind_hc", "ind_sw", "ind_ch"))
@@ -382,9 +383,9 @@ def test_r5b_removes_industry_then_category_rollups_bottom_up():
     # pass 1; the debt category only in pass 2, once its industry children are gone
     assert out["r5b_passes"] == [["cat_eq", "ind_hc", "ind_sw", "ind_ch"], ["cat_debt"]]
     assert out["removed_by_rule"]["R5b_hierarchical_rollup"] == {"n": 5, "fv": 1200.0}
-    assert out["near_misses_r5b"] == {"n": 0, "fv": 0.0}
-    assert cp.published_fv_sum(onex_doc(), cik=OTHER) == Decimal(700)
-    assert [p["context_id"] for p in cp.published_positions(onex_doc(), cik=OTHER)] == ISSUERS
+    assert nm(out) == (0, 0.0, 0, 0)
+    assert cp.published_fv_sum(onex_doc(), cik=OTHER, version=V2) == Decimal(700)
+    assert [p["context_id"] for p in cp.published_positions(onex_doc(), cik=OTHER, version=V2)] == ISSUERS
 
 
 def test_same_onex_doc_under_v1_keeps_everything():
@@ -401,48 +402,48 @@ def apex_doc(parent_fv, parent_cost, *, pct="0.0100", principal=None):
 
 
 def test_r5b_fv_match_cost_mismatch_is_kept_and_counted_as_near_miss():
-    out = cp.classify(apex_doc("200", "150"), cik=OTHER)
+    out = cp.classify(apex_doc("200", "150"), cik=OTHER, version=V2)
     assert out["rows"]["p"]["rule"] is None and out["rows"]["p"]["published"] is True
-    assert out["near_misses_r5b"] == {"n": 1, "fv": 200.0}
-    out = cp.classify(apex_doc("260", "190"), cik=OTHER)          # cost matches, FV does not
-    assert out["rows"]["p"]["rule"] is None and out["near_misses_r5b"] == {"n": 1, "fv": 260.0}
+    assert nm(out) == (1, 200.0, 1, 0)
+    out = cp.classify(apex_doc("260", "190"), cik=OTHER, version=V2)          # cost matches, FV does not
+    assert out["rows"]["p"]["rule"] is None and nm(out) == (1, 260.0, 1, 0)
 
 
 def test_r5b_real_position_prefixing_two_tranches_with_other_fv_is_kept():
     doc = mk_doc([full_row("p", "Zeta Holdings Term Loan", "300", "300"),
                   full_row("k1", "Zeta Holdings Term Loan Delayed Draw Tranche A", "100", "100"),
                   full_row("k2", "Zeta Holdings Term Loan Delayed Draw Tranche B", "150", "150")])
-    out = cp.classify(doc, cik=OTHER)
+    out = cp.classify(doc, cik=OTHER, version=V2)
     assert {c: r["rule"] for c, r in out["rows"].items()} == {"p": None, "k1": None, "k2": None}
-    assert out["near_misses_r5b"] == {"n": 0, "fv": 0.0}
+    assert nm(out) == (0, 0.0, 0, 0)
     assert out["r5b_passes"] == []
 
 
 def test_r5b_parent_without_cost_needs_no_pct_for_the_fv_only_fallback():
     # no cost, pct reported: kept even though FV equals the children's sum
-    assert cp.classify(apex_doc("200", None), cik=OTHER)["rows"]["p"]["rule"] is None
+    assert cp.classify(apex_doc("200", None), cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
     # no cost, no pct (principal only, so not an R5 FV-only row): the FV test alone decides
-    out = cp.classify(apex_doc("200", None, pct=None, principal="200"), cik=OTHER)
+    out = cp.classify(apex_doc("200", None, pct=None, principal="200"), cik=OTHER, version=V2)
     assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
-    assert cp.classify(apex_doc("250", None, pct=None, principal="200"), cik=OTHER)["rows"]["p"]["rule"] is None
+    assert cp.classify(apex_doc("250", None, pct=None, principal="200"), cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
 
 
 def test_r5b_whole_word_prefix_only():
     doc = mk_doc([full_row("p", "Apex Corp", "200", "190"),
                   full_row("k1", "Apex Corporation First Lien", "100", "100"),
                   full_row("k2", "Apex Corporation Second Lien", "100", "90")])
-    assert cp.classify(doc, cik=OTHER)["rows"]["p"]["rule"] is None
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
 
 
 def test_r5b_tolerance_follows_reported_decimals():
     doc = mk_doc([full_row("p", "Apex Corp", "200000", "190000", decimals="-3"),
                   full_row("k1", "Apex Corp First Lien Term Loan", "100400", "100400", decimals="-3"),
                   full_row("k2", "Apex Corp Second Lien Term Loan", "100400", "90400", decimals="-3")])
-    assert cp.classify(doc, cik=OTHER)["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
     doc = mk_doc([full_row("p", "Apex Corp", "200", "190"),
                   full_row("k1", "Apex Corp First Lien Term Loan", "100", "100"),
                   full_row("k2", "Apex Corp Second Lien Term Loan", "102", "90")])
-    assert cp.classify(doc, cik=OTHER)["rows"]["p"]["rule"] is None
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
 
 
 def test_r5b_ignores_rows_removed_by_earlier_rules():
@@ -451,7 +452,7 @@ def test_r5b_ignores_rows_removed_by_earlier_rules():
     doc["positions"].append(copy.deepcopy(doc["positions"][1]))
     doc["positions"][-1]["context_id"] = "old"
     doc["positions"][-1]["period"]["instant"] = "2023-03-31"
-    out = cp.classify(doc, cik=OTHER)
+    out = cp.classify(doc, cik=OTHER, version=V2)
     assert out["rows"]["old"]["rule"] == "R1_own_period_instant"
     assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
 
@@ -461,29 +462,40 @@ def test_r5b_piped_parent_must_end_on_a_segment_boundary():
     # identical FV and cost, production publishes both -> not a rollup
     base = "Debt | First Lien | Rep Tec Holdings Term Loan | SOFR + 4.75% | 5/30/2031"
     doc = mk_doc([full_row("p", base, "8610000", "8624000"), full_row("k", base + " One", "8610000", "8624000")])
-    assert rules(doc) == {"p": None, "k": None}
+    assert rules(doc, version=V2) == {"p": None, "k": None}
     # NexPoint 2023-09-30 shape: 'Common Stocks | Real Estate' is not a parent of the REIT segment
     doc = mk_doc([full_row("re", "Common Stocks | Real Estate", "300", None, pct=None),
                   full_row("a", "Common Stocks | Real Estate | Alpha REF Inc.", "100", "90", pct=None),
                   full_row("b", "Common Stocks | Real Estate | IQHQ Inc.", "200", "150", pct=None),
                   full_row("r", "Common Stocks | Real Estate Investment Trust (REIT) | Beta Trust", "50", "40", pct=None)])
-    assert rules(doc) == {"re": "R5b_hierarchical_rollup", "a": None, "b": None, "r": None}
+    assert rules(doc, version=V2) == {"re": "R5b_hierarchical_rollup", "a": None, "b": None, "r": None}
     # a piped parent whose children add whole segments is still a rollup
     doc = mk_doc([full_row("p", "Debt | Software", "250", "235"),
                   full_row("k1", "Debt | Software | Acme LLC | First Lien", "100", "95"),
                   full_row("k2", "Debt | Software | Beta Inc | First Lien", "150", "140")])
-    assert rules(doc) == {"p": "R5b_hierarchical_rollup", "k1": None, "k2": None}
+    assert rules(doc, version=V2) == {"p": "R5b_hierarchical_rollup", "k1": None, "k2": None}
 
 
-def test_r5b_cost_of_an_unfunded_negative_fv_child_may_count_negative():
-    # Onex 2023-06-30 shape: the subtotal's cost carries the unfunded revolver's cost negative, the tagged fact
-    # is positive; the FV sum matches either way
-    doc = mk_doc([full_row("p", "Debt Investments Wholesale", "16017998", "17022370"),
-                  full_row("k1", "Debt Investments Wholesale IMB Midco LLC Initial Term Loan", "16077525", "17034042"),
-                  full_row("k2", "Debt Investments Wholesale IMB Midco LLC Revolving Loan", "-59527", "11672")])
-    out = cp.classify(doc, cik=OTHER)
-    assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup" and out["near_misses_r5b"]["n"] == 0
-    # the sign flip applies only to a negative-FV child: a positive-FV child's cost is never negated
-    doc["positions"][2]["fields"]["fair_value"]["value"] = "59527"
-    doc["positions"][0]["fields"]["fair_value"]["value"] = "16137052"
-    assert cp.classify(doc, cik=OTHER)["rows"]["p"]["rule"] is None
+def nm(out):
+    """(n, fv, n fv_cost_mismatch, n non_additive_terms) of a v2 classification's near_misses_r5b."""
+    m = out["near_misses_r5b"]
+    return (m["n"], m["fv"], m["by_reason"]["fv_cost_mismatch"]["n"], m["by_reason"]["non_additive_terms"]["n"])
+
+
+def test_r5b_parent_with_a_non_additive_term_is_kept_and_counted():
+    # TCW 2025-06-30 shape: a duplicate tag '... | 11/19/2031 | One' whose parent carries rate/maturity/floor;
+    # FV and cost equal its only child's, but a subtotal cannot carry a rate or a maturity -> kept
+    base = "Debt | First Lien | Kite Midco II LTD Term Loan B1 | 3M SOFR + 5.00% | 9.27% | 11/19/2031 |"
+    parent = full_row("p", base, "5203660", "5215733", principal="5290056")
+    parent["fields"].update(interest_rate=val("0.0927"), maturity_date=val("2031-11-19", None, kind="text"))
+    doc = mk_doc([parent, full_row("k", base + " One", "5203660", "5215733", principal="5290056")])
+    out = cp.classify(doc, cik=OTHER, version=V2)
+    assert out["rows"]["p"]["rule"] is None and out["rows"]["k"]["rule"] is None
+    assert nm(out) == (1, 5203660.0, 0, 1)
+    # the removed-rollup case: the same shape without the non-additive terms (a subtotal carrying only the
+    # additive fair value, cost, principal and pct) is still a rollup
+    doc = mk_doc([full_row("p", "Debt Securities Consumer Services", "38291396", "38000944", principal="38291396"),
+                  full_row("k", "Debt Securities Consumer Services Grand Circle Corp Term Loan", "38291396",
+                           "38000944", principal="38291396")])
+    out = cp.classify(doc, cik=OTHER, version=V2)
+    assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup" and nm(out) == (0, 0.0, 0, 0)

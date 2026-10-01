@@ -1,7 +1,7 @@
 """Independent-totals contract kind (spec 2026-09-29 section 5, D-floor).
 
 Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
-FV sum ON the census published basis (census_published, CENSUS_PUBLISHED_VERSION, now v2; SP3 Task 0, after the SP1
+FV sum ON the census published basis (census_published.CENSUS_PUBLISHED_VERSION; SP3 Task 0, after the SP1
 finding 2026-10-01 that the raw census sum over-counts) against the fund's filed
 investments_at_fair_value, and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
 (detection_not_claimed); the criterion is deferred to sub-project 2.
@@ -11,7 +11,7 @@ The totals kind uses the census published basis's SINGLE period end (census_publ
 there is none the observation carries no_period_end=True and fv_residual_pct=None, and both totals
 contracts abstain (learn and evaluate) with cause no_period_end instead of breaching at -100%.
 contracts._check_frozen refuses a totals contract whose applies_to differs from APPLIES_TO (exact match: a
-root learned under census-published.v1 is refused by v2 code and needs a new contracts run). The PCT branch
+root learned under another census published version is refused and needs a new contracts run). The PCT branch
 of evaluate_totals abstains with cause not_learned_in_q1 when the contract carries no expectation.
 """
 from __future__ import annotations

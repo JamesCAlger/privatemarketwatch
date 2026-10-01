@@ -1,5 +1,5 @@
-"""Census-side published-basis partition predicate (census-published.v2; v1 still reachable). Pure functions,
-no I/O.
+"""Census-side published-basis partition predicate. Current version census-published.v1; census-published.v2
+(R5b) is reachable via classify(..., version="census-published.v2") but is NOT current. Pure functions, no I/O.
 
 Ordered rules from the 2026-10-01 investigation (scratch/2026-10-01_census_published_basis,
 reference implementation s21_predicate_v2.py) that reconcile the eight pilot filers' census positions
@@ -17,18 +17,29 @@ listed in `r7_conflicts` instead of taking the first fact in document order.
 
 census-published.v2 (SP3 Task 0b): R5b_hierarchical_rollup, after R5 and before R6, catches subtotal rows
 that also report cost/pct (the 2023 inception schedules of Onex, Fidelity and NexPoint: single-segment
-identifiers, category -> industry -> issuer). A row still kept after R1-R5 is a rollup when its normalised
-identifier is a prefix of >= 1 other kept rows (its children) -- on a word boundary when the parent has no
-'|' segments, on a SEGMENT boundary when it has (so '... | 5/30/2031' is not the parent of a duplicate tag
-'... | 5/30/2031 One', measured on 0001950803 2026-03-31) -- its fair value equals the sum of its DIRECT
-children (kept rows whose longest kept prefix is this row) within the R5 reported-decimals tolerance, and its
-cost equals their cost sum the same way, the plain sum or the sum with a negative-FV (unfunded) child's
-positive cost counted negative (Onex 2023 subtotals); a parent without cost is judged on FV alone only when it
-also reports no pct (else kept). Passes repeat to a fixed point, each removing only the rollups with no
-rollup below them (deepest first; `r5b_passes` lists the context ids per pass).
-`near_misses_r5b` counts the prefix parents kept at the fixed point whose FV matched but cost did not, or
-vice versa. classify(..., version="census-published.v1") runs the rules without R5b and returns the v1
-output shape (no R5b keys), so frozen v1 artefacts can be re-evaluated on their own basis.
+identifiers, category -> industry -> issuer). The pool is the rows still kept after R1-R5. A pool row is a
+rollup when
+(a) its normalised identifier is a prefix of >= 1 other pool rows (its children): on a word boundary when the
+    parent has no '|' segments, on a SEGMENT boundary when it has (ruling 1: '... | 5/30/2031' is not the
+    parent of a duplicate tag '... | 5/30/2031 One', measured on 0001950803 2026-03-31);
+(b) its fair value equals the sum of its DIRECT children (pool rows whose longest valid prefix is this row)
+    within the R5 reported-decimals tolerance;
+(c) its cost equals the children's cost sum the same way (a parent without cost is judged on FV alone only
+    when it also reports no pct, else kept); and
+(d) it reports none of NON_ADDITIVE_FIELDS (rate, spread, floor, PIK rate, maturity): a subtotal cannot carry
+    them, so such a row is a position (fix round 1: TCW duplicate tags, Ares/BCRED single-child pairs).
+Passes repeat to a fixed point, each removing only the rollups with no rollup below them (deepest first;
+`r5b_passes` lists the context ids per pass). `near_misses_r5b` = {n, fv, by_reason} over the prefix parents
+kept at the fixed point: fv_cost_mismatch (FV matched and cost did not, or the reverse) and
+non_additive_terms (both matched, (d) abstained). The negated-cost alternative tried in 2132a31 was reverted
+(ruling 2).
+
+Adoption (ruling 3, 2026-10-01): v2 was measured over all 104 authoritative fund-quarters of the 8 pilot
+filers against production's published total and FAILS rule (a) on 0001920453 2023-12-31 and 2024-03-31
+(-40.5%, -40.2%). There production itself is +104.8% / +131.4% above the fund's filed
+investments_at_fair_value (it publishes the subtotal rows R5b removes) while v2 is +21.8% / +38.3%; the
+reference, not R5b, is the defect, but the rule binds, so CENSUS_PUBLISHED_VERSION stays v1. The v1 output
+shape has no R5b keys; frozen v1 artefacts evaluate unchanged.
 """
 from __future__ import annotations
 
@@ -38,7 +49,8 @@ import re
 CENSUS_PUBLISHED_V1 = "census-published.v1"
 CENSUS_PUBLISHED_V2 = "census-published.v2"
 VERSIONS = (CENSUS_PUBLISHED_V1, CENSUS_PUBLISHED_V2)
-CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V2
+# v2 failed the all-quarter adoption rule (fix round 1, 2026-10-01): v1 stays current; v2 via version=
+CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V1
 REPORTING_ENTITIES = {"0001803498": ("Emerald JV LP", "Verdelite JV LP")}   # R6 list per filer (v1 data)
 RULES_V1 = ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading", "R4_generic_cash_bucket",
             "R5_issuer_rollup_fv_only", "R6_reporting_entity_lookthrough")
@@ -49,6 +61,9 @@ LABEL_SEGMENT = re.compile(r"^(sub-?\s*)?total\b|^net assets$")
 CATEGORY_HEADING = re.compile(r"^(non-?)?controlled[\s,/-]*(non-?)?affiliated investments$")
 CASH_BUCKET = re.compile(r"^(other )?cash and cash equivalents\b")
 REPORTED = ("reported", "consistent_duplicate")
+# R5b: terms a subtotal row never carries (not additive across positions); a parent reporting one is kept
+NON_ADDITIVE_FIELDS = ("interest_rate", "basis_spread", "interest_rate_floor", "pik_rate", "maturity_date")
+R5B_NEAR_MISS_REASONS = ("fv_cost_mismatch", "non_additive_terms")
 
 
 def _segments(ident):
@@ -152,28 +167,14 @@ def _tol(pos, field, n_kids):
     return max(Decimal("0.5") * Decimal(10) ** (-d) * (n_kids + 1), Decimal(1))
 
 
-def _sum_matches(parent, kids, field, values=None):
+def _sum_matches(parent, kids, field):
     """True/False: parent's field equals the kids' sum within the reported-decimals tolerance (an unparsable or
-    missing kid value counts 0; `values` overrides the per-kid values); None when the parent's own value is
-    unparsable."""
+    missing kid value counts 0); None when the parent's own value is unparsable."""
     own = _num_field(parent, field)
     if own is None:
         return None
-    vals = values if values is not None else [_num_field(k, field) or Decimal(0) for k in kids]
+    vals = [_num_field(k, field) or Decimal(0) for k in kids]
     return abs(own - sum(vals, Decimal(0))) <= _tol(parent, field, len(kids))
-
-
-def _cost_matches(parent, kids):
-    """Cost equality against the kids' cost sum, plain or with the cost of a negative-FV kid (an unfunded
-    commitment) counted negative: the 2023 Onex subtotals carry those costs negative while the tagged facts
-    are positive (measured on 0001860424 2023-06-30, 7 of 8 industry rows)."""
-    if _sum_matches(parent, kids, "cost"):
-        return True
-    signed = []
-    for k in kids:
-        c, fv = _num_field(k, "cost") or Decimal(0), _fv(k) or Decimal(0)
-        signed.append(-c if fv < 0 < c else c)
-    return bool(_sum_matches(parent, kids, "cost", signed))
 
 
 def _key(pos):
@@ -217,16 +218,25 @@ def _direct_children(kept):
 
 
 def _r5b_test(parent, kids):
-    """(rollup, near_miss) for one prefix parent and its direct children."""
+    """(rollup, near_miss_reason) for one prefix parent and its direct children. near_miss_reason is
+    'fv_cost_mismatch' (FV matched and cost did not, or the reverse), 'non_additive_terms' (FV and cost both
+    matched but the parent reports a non-additive term a subtotal cannot carry: the row is a position, e.g. a
+    duplicate tag of its only child), or None."""
     fv_ok = _sum_matches(parent, kids, "fair_value")
     if fv_ok is None:
-        return False, False
+        return False, None
     if _reports(parent, "cost"):
-        cost_ok = _cost_matches(parent, kids)
-        return fv_ok and cost_ok, fv_ok != cost_ok
-    if _reports(parent, "pct_of_net_assets"):
-        return False, False
-    return fv_ok, False
+        cost_ok = bool(_sum_matches(parent, kids, "cost"))
+        if fv_ok != cost_ok:
+            return False, "fv_cost_mismatch"
+        ok = fv_ok and cost_ok
+    elif _reports(parent, "pct_of_net_assets"):
+        return False, None
+    else:
+        ok = fv_ok
+    if ok and any(_reports(parent, f) for f in NON_ADDITIVE_FIELDS):
+        return False, "non_additive_terms"
+    return ok, None
 
 
 def _r5b_scan(kept):
@@ -249,7 +259,7 @@ def _r5b_scan(kept):
         gone = {id(p) for p in deepest}
         kept = [p for p in kept if id(p) not in gone]
     kids, _ = _direct_children(kept)
-    near = [p for p in kept if id(p) in kids and _r5b_test(p, kids[id(p)])[1]]
+    near = [(p, r) for p in kept if id(p) in kids for r in [_r5b_test(p, kids[id(p)])[1]] if r]
     return passes, near
 
 
@@ -313,7 +323,8 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
         rows[cid] = "R5_issuer_rollup_fv_only"
     passes, near_b = [], []
     if v2:
-        passes, near_b = _r5b_scan([p for p in live if rows[p["context_id"]] is None])
+        pool = [p for p in live if rows[p["context_id"]] is None]
+        passes, near_b = _r5b_scan(pool)
         for batch in passes:
             for pos in batch:
                 rows[pos["context_id"]] = "R5b_hierarchical_rollup"
@@ -336,7 +347,9 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
            "near_misses": {"n": len(near), "fv": _fv_total(near)},
            "removed_by_rule": {r: {"n": v["n"], "fv": float(v["fv"])} for r, v in removed.items()}}
     if v2:
-        out["near_misses_r5b"] = {"n": len(near_b), "fv": _fv_total(near_b)}
+        out["near_misses_r5b"] = dict(n=len(near_b), fv=_fv_total([p for p, _ in near_b]), by_reason={
+            r: {"n": sum(1 for _, x in near_b if x == r), "fv": _fv_total([p for p, x in near_b if x == r])}
+            for r in R5B_NEAR_MISS_REASONS})
         out["r5b_passes"] = [[p["context_id"] for p in batch] for batch in passes]
     return out
 
