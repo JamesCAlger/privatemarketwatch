@@ -2,13 +2,17 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001920453",
   "entity_name": "Fidelity Private Credit Fund",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "FIDELITY_PRIVATE_CREDIT",
     "prefix_rules": {
       "Investments -- non-controlled/ non-affiliate Equity": "equity",
       "Investments -- non-controlled/ non-affiliated Equity": "equity",
+      "Investments Investments - non-controlled / non-affiliate": "debt",
+      "Investments Investments - non-controlled /non-affiliate": "debt",
+      "Investments Investments - non-controlled non-affiliate": "debt",
+      "Investments Investments -- non-controlled / non-affiliate": "debt",
       "Investments Investments": "debt"
     },
     "aggregate_markers": [
@@ -19,7 +23,7 @@
       "total investment portfolio",
       "non-controlled / non-affiliate first lien debt"
     ],
-    "category_marker_re": "(?i)^\\s*(?:(?:First|Second)\\s+Lien\\s+)?(?:Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)(?:\\s+[A-Z][A-Za-z,&:]+(?:\\s+[&A-Z]?[A-Za-z,&]+)*)?\\s*$",
+    "category_marker_re": "(?i)^(?!.*\\b(?:term\\s+loan|delayed\\s+draw|revolv\\w*|unitranche|warrants?|units?|stock|shares|notes?|bonds?)\\b)\\s*(?:(?:First|Second)\\s+Lien\\s+)?(?:Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)(?:\\s+[A-Z][A-Za-z,&:]+(?:\\s+[&A-Z]?[A-Za-z,&]+)*)?\\s*$",
     "non_private_markers": [
       "cash",
       "money market",
@@ -120,6 +124,15 @@
       }
     }
   },
+  "known_edge_cases": [
+    {
+      "id": "affiliation_phrase_heading_leak",
+      "description": "2023-12-31..2025-03-31 identifiers carry an affiliation phrase after 'Investments Investments' ('- non-controlled / non-affiliate', with spacing/dash variants). v1 stripped only 'Investments Investments', so category_marker_re (start-anchored) missed the 'First Lien Debt <Industry>' heading rows and the leaf marker 'first lien' published them as positions (fund total about 2x fund_financials). v2 strips the affiliation phrase as part of the prefix. The negative lookahead in category_marker_re keeps instrument-bearing all-alphabetic leaves (e.g. 'Conair Holdings LLC Delayed Draw Term Loan', 2024-06-30) from being demoted.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^Investments Investments -{1,2} non-controlled ?/? ?non-affiliate (First|Second) Lien Debt",
+      "disposition": "expected"
+    }
+  ],
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.10

@@ -1389,7 +1389,58 @@ def test_fidelity_wrapper_classifies_hierarchical_debt_leaf():
 
     assert row["wrapper_family"] == "debt"
     assert row["wrapper_disposition"] == "debt_position_leaf"
-    assert row["wrapper_rule_id"] == "FIDELITY_PRIVATE_CREDIT_DEBT_LEAF_V1"
+    assert row["wrapper_rule_id"] == "FIDELITY_PRIVATE_CREDIT_DEBT_LEAF_V2"
+
+
+@pytest.mark.parametrize(
+    "identifier",
+    [
+        # 2024-06-30 category heading (877.2M, sum of the first-lien leaves below it)
+        "Investments Investments - non-controlled / non-affiliate First Lien Debt",
+        # 2024-06-30 industry heading (73.3M)
+        "Investments Investments - non-controlled / non-affiliate First Lien Debt "
+        "Specialized Consumer Services",
+        "Investments Investments - non-controlled / non-affiliate Second Lien Debt "
+        "Property & Casualty Insurance",
+        # spacing / dash variants seen 2024-03-31..2025-03-31
+        "Investments Investments -- non-controlled / non-affiliate First Lien Debt Health Care Services",
+        "Investments Investments - non-controlled non-affiliate First Lien Debt Application Software",
+        "Investments Investments - non-controlled /non-affiliate First Lien Debt Food Retail",
+    ],
+)
+def test_fidelity_wrapper_affiliation_phrase_headings_are_aggregate(identifier):
+    # v1 stripped only "Investments Investments"; the start-anchored category_marker_re
+    # missed these headings and the "first lien" leaf marker published them as positions.
+    row = classify_identifier("0001920453", identifier)
+
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "aggregate"
+
+
+def test_fidelity_wrapper_alphabetic_instrument_leaf_survives_heading_fix():
+    # Real 2024-06-30 unfunded delayed-draw position (FV -0.3M, maturity 2029-11-02) whose
+    # text after the industry is purely alphabetic; the category_marker_re instrument-word
+    # lookahead must keep it a leaf.
+    row = classify_identifier(
+        "0001920453",
+        "Investments Investments - non-controlled / non-affiliate First Lien Debt "
+        "Personal Care Products Conair Holdings LLC Delayed Draw Term Loan",
+    )
+
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+    assert row["wrapper_rule_id"] == "FIDELITY_PRIVATE_CREDIT_DEBT_LEAF_V2"
+
+
+def test_fidelity_wrapper_affiliation_prefix_keeps_rate_bearing_leaf():
+    row = classify_identifier(
+        "0001920453",
+        "Investments Investments - non-controlled / non-affiliate First Lien Debt "
+        "Building Products Oscar AcquisitionCo, LLC Term Loan SOFR+4.25% Interest Rate 9.58% "
+        "Maturity Date 4/29/2029",
+    )
+
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+    assert row["wrapper_maturity_date_key"]
 
 
 def test_fidelity_wrapper_classifies_current_equity_leaf():
