@@ -75,6 +75,9 @@ _KEY_RE = re.compile(r"[a-z][a-z0-9_]*(\.[a-z0-9_]+)*")
 _FORM_RE = re.compile(r"[A-Za-z0-9-]+")
 _QNAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_.-]*:[A-Za-z_][A-Za-z0-9_.-]*")
 _FIELD_RE = re.compile(r"[a-z][a-z0-9_]*")
+_SHA_RE = re.compile(r"[0-9a-f]{64}")
+
+SUPPORT_KINDS = ("prevalence", "context_count", "inherited_file")
 
 
 class EnvelopeError(ValueError):
@@ -289,10 +292,14 @@ def _check_support(support: Any) -> None:
          and _int(support["numerator"], 0) and _int(support["denominator"], 1)
          and support["numerator"] <= support["denominator"])
         or (support.get("kind") == "context_count" and set(support) == {"kind", "count"}
-            and _int(support["count"], 0)))
+            and _int(support["count"], 0))
+        or (support.get("kind") == "inherited_file" and set(support) == {"kind", "path", "sha256"}
+            and isinstance(support["path"], str) and bool(support["path"])
+            and isinstance(support["sha256"], str) and bool(_SHA_RE.fullmatch(support["sha256"]))))
     if not ok:
-        raise EnvelopeError("support must be {kind: prevalence, numerator, denominator} or "
-                            "{kind: context_count, count}; got " + repr(support))
+        raise EnvelopeError("support must be {kind: prevalence, numerator, denominator}, "
+                            "{kind: context_count, count} or {kind: inherited_file, path, sha256}; got "
+                            + repr(support))
 
 
 def _check_evidence(evidence: Any) -> None:
@@ -511,8 +518,13 @@ def _append(events: list, new_events: list) -> list:
 def make_assertion(events: list, *, cik: str, key: str, value: Any, valid_from: str | None,
                    recorded_at: str, support: dict, evidence: list, valid_to: str | None = None,
                    form_type: str | None = None, applies_to: dict | None = None,
-                   provenance: str = "derived", inherited_from: str | None = None) -> list:
-    """Return a new log with one census/derived assertion appended."""
+                   provenance: str = "derived", inherited_from: str | None = None,
+                   author: str = "census", status: str = "derived") -> list:
+    """Return a new log with one assertion appended.
+
+    ``author``/``status`` default to the original census/derived vocabulary; SP3
+    inherited entries pass ``author="agent"`` and a later-stage ``status``.
+    """
     log = _replay(events)
     if not isinstance(cik, str) or not _CIK_RE.fullmatch(cik):
         raise EnvelopeError("cik must be a 10-digit string: " + repr(cik))
@@ -524,8 +536,8 @@ def make_assertion(events: list, *, cik: str, key: str, value: Any, valid_from: 
     body = {"entry_id": _next_id(log, _tags(cik, key, applies_to, form_type), set()),
             "key": key, "value": value, "form_type": form_type, "applies_to": applies_to,
             "valid_from": valid_from, "valid_to": valid_to, "recorded_at": recorded_at,
-            "supersedes": None, "supersession_kind": None, "author": "census",
-            "status": "derived", "provenance": provenance, "inherited_from": inherited_from,
+            "supersedes": None, "supersession_kind": None, "author": author,
+            "status": status, "provenance": provenance, "inherited_from": inherited_from,
             "support": support, "evidence": evidence, "regression_pin": None}
     body = copy.deepcopy(body)
     _check_body(body)

@@ -36,7 +36,7 @@
       ]
     },
     "support": {
-      "description": "A measured quantity with a named estimator. No free-floating confidence or score.",
+      "description": "A measured quantity with a named estimator. No free-floating confidence or score. inherited_file (SP3 proper): the entry's value is copied from a pinned file; the measured quantity is the file identity.",
       "oneOf": [
         {"type": "object", "additionalProperties": false,
          "required": ["kind", "numerator", "denominator"],
@@ -45,7 +45,11 @@
                         "denominator": {"type": "integer", "minimum": 1}}},
         {"type": "object", "additionalProperties": false, "required": ["kind", "count"],
          "properties": {"kind": {"const": "context_count"},
-                        "count": {"type": "integer", "minimum": 0}}}
+                        "count": {"type": "integer", "minimum": 0}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "path", "sha256"],
+         "properties": {"kind": {"const": "inherited_file"},
+                        "path": {"type": "string", "minLength": 1},
+                        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}
       ]
     },
     "evidence_item": {

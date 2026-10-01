@@ -636,6 +636,40 @@ def test_overlap_validation_scopes_rows_to_the_key_under_check():
         ev.validate_profile(both, sample_rows={KEY: [dict(ROW_LIEN, grammar_dialect="pipe3")]})
 
 
+INHERITED = {"kind": "inherited_file", "path": "data/overrides/rate_convention/0001860424.json", "sha256": "a" * 64}
+EVID_FILE = [{"kind": "override_file", "path": "data/overrides/rate_convention/0001860424.json", "sha256": "a" * 64}]
+
+
+def test_inherited_file_support_with_author_and_status():
+    events = ev.make_assertion([], cik=CIK, key="meaning.interest_rate", value={"convention": "all_in"},
+                               valid_from=None, recorded_at=T0, support=INHERITED, evidence=EVID_FILE,
+                               provenance="inherited",
+                               inherited_from="data/overrides/rate_convention/0001860424.json@aaaaaaaaaaaa",
+                               author="agent", status="promoted")
+    [entry] = ev.materialize_entries(events)
+    assert (entry["author"], entry["status"], entry["support"]) == ("agent", "promoted", INHERITED)
+    assert _entry_validator().is_valid(entry)
+    ev.validate_profile(events, sample_rows={})
+
+
+@pytest.mark.parametrize("bad", [dict(INHERITED, path=""), dict(INHERITED, sha256="A" * 64),
+                                 {"kind": "inherited_file", "path": "x"}, dict(INHERITED, extra=1)])
+def test_inherited_file_support_rejects_malformed(bad):
+    with pytest.raises(EnvelopeError, match="support must be"):
+        _assert([], support=bad)
+    [entry] = ev.materialize_entries(_assert([]))
+    assert not _entry_validator().is_valid(dict(entry, support=bad))
+
+
+def test_make_assertion_defaults_and_vocabulary_are_unchanged():
+    [entry] = ev.materialize_entries(_assert([]))
+    assert (entry["author"], entry["status"]) == ("census", "derived")
+    with pytest.raises(EnvelopeError, match="author"):
+        _assert([], author="robot")
+    with pytest.raises(EnvelopeError, match="status"):
+        _assert([], status="accepted")
+
+
 def test_resolve_filters_both_clocks_and_rejects_mixed_clock_arguments():
     events = _assert([], valid_to="2024-03-31")
     entries = ev.materialize_entries(events)
