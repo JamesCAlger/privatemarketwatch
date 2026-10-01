@@ -40,6 +40,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-13 - Financial conventions expose an unsupported remap and unit-reference errors
 - 2026-09-13: Current staged evidence behind legacy rule admission
 - 2026-09-13: Retention decision D08 versus legacy exclusions and duplicate removal
+- 2026-10-01 -- GICS sector labels depend on rebuild order (found during the Fidelity wrapper v2 export)
 
 ## Source reconciliation & blocker chains ([source_reconciliation.md](source_reconciliation.md))
 - BDC source reconciliation blockers - 2026-05-19

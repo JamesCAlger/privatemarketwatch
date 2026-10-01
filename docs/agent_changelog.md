@@ -12941,3 +12941,8 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   rate-bearing leaf survives; rule-id expectation V1 -> V2). Wrapper/oracle/trial/matching 790
   passed; oracle_checks J01/J03/J04/DiagnoseFuzzy 20 passed; unified_holdings not-slow 545 passed.
   Full suite not run. No baseline refresh. Evidence: `scratch/2026-10-01_fidelity_wrapper/`.
+
+## 2026-10-01 -- Production defect: GICS sector labels depend on rebuild order
+
+- Found by the frontend export after the Fidelity wrapper v2 fix: about 490 rows across about 25 unrelated funds changed sector label in both directions. Reported mechanism: the unified build reads company names from the previous run's entity file before the GICS cache is applied (`pipeline/unified_holdings.py` `_apply_gics_cache`), so sector output depends on the prior build. Not yet independently verified; recorded in `docs/investigations/data_quality_audits.md` (2026-10-01).
+- Regenerated frontend JSON left uncommitted. Fix direction: input-derived entity identity for GICS application plus a twin-build determinism test on the sector columns.
