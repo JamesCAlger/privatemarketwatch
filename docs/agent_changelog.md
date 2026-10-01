@@ -12936,3 +12936,41 @@ Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
 - Review the `cost_conservation -> fair_value` ledger mapping (cost is not FV).
 - Tolerance version field is int (4) vs string ("contract-tolerances.v2"/".v3"): unify.
 - The default `contracts_run` v3 root is not accepted by `m2_seed.pin_tolerances` (v2 or v4 only).
+
+## 2026-10-01 -- SP3 Task 0: census published-basis partition (census-published.v1) and the re-measured totals floor
+
+- Code (all reviewed): `scripts/profile_pilot/census_published.py` (f425328, 4ed82a9): the seven ordered
+  rules validated on 2026-10-01 (own-period instant; drop unreported FV; drop whole-segment label/subtotal
+  headings; drop generic cash buckets, named money-market funds stay; drop issuer rollups whose FV equals
+  their children's sum; mark reporting-entity look-through rows (BCRED: Emerald JV LP, Verdelite JV LP) by
+  typed-identifier suffix, since no LegalEntityAxis exists in the census; include sole-dimension cash-
+  equivalent-axis FV facts), versioned `census-published.v1`, pure functions, 17 tests incl. a 187-row
+  recorded fixture. `contracts_totals.observe_totals` now sums the published partition and records
+  `removed_by_rule`; totals contracts carry `applies_to.census_published = census-published.v1`
+  (38e3754, 079e5e0 memoises the classification per evaluation call; classify on BCRED's 4,032-row
+  document takes 0.07 s). Bands, floors and the anchor are unchanged.
+- Re-measure (stamp 20261001t024208z; census stageb2-sp1census-20260930t2235z, profile
+  stageb-profile-sp1-20260930t225432z): contracts `stageb-contracts-sp3-...` (v4), seeds
+  `stageb2-seed-sp3-full-...` / `-sem-...`, back-test `stageb2-backtest-sp3-...`, replay
+  `sp1-replay-sp3-20261001t024208z` (copied to `scratch/2026-10-01_sp3_replay/`). IN-SAMPLE.
+- Totals floor: seed `fair_value_scale_flip` applicable 3 of 8 anchored filers (Ares, Stellus, Stepstone;
+  all detected at 0.05) vs 1 of 8 before the predicate; verdict FAIL under criterion 3 (every anchored
+  filer). Replay pair Q4-2025 -> Q1-2026: totals negatives breach 4 of 10 (was 8), FA upper 0.40 (was
+  0.80), recall 0.556 (5 / 9; 1 missed, 3 abstain); drift queue 13 rows (was 18); BCRED's $10.8B
+  standing breach is gone (its census now reconciles on the pair). Other kinds unchanged
+  (structural NO_POSITIVES, format_grammar FAIL, value_range / composition / text / yield NOT_CLAIMED).
+- Why 5 filers still fail at their INCEPTION quarter (2022-2023, the seed's learning doc): BCRED
+  2022-09-30 census and production agree within 0.15% but the fund_financials anchor is 10% below
+  both (anchor defect); Onex 2023-06-30 census = 3x production and Fidelity 2023-03-31 = 4x because
+  category/industry subtotal rows (identifiers with no `|` separators, e.g. "Non-controlled/Non-
+  affiliated investments Debt Investments Healthcare & Pharmaceuticals") are strict prefixes of their
+  children with FV equal to the children's sum, but also report cost and pct, so R5's fv-only guard
+  keeps them; NexPoint 2.1x likewise; TCW has no anchor. Predicate v2 item (new version per spec
+  section 5): R5b hierarchical rollup = whole-word prefix of kept rows AND FV equals children's sum AND
+  cost equals children's cost sum, applied bottom-up. The pct band [50, 250] still assumes percent units
+  (pct_scale_flip applicable 0 of 8).
+- Production defects carried from the investigation (open, production branch): BCRED drops 11 real
+  positions ($212.5M); Ares double-counts the "Shoes For Crews" rollup ($24.4M); Stepstone publishes 30
+  real duplicate rows without context ids. Owner item: named money-market funds (BCRED's balance sheet
+  excludes $653.7M; production and the predicate keep them).
+- NOT done: full pytest suite; predicate v2; any production change.
