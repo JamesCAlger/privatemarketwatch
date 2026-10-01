@@ -810,6 +810,7 @@ def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yie
                                                                        "facts_by_i"))
     ambiguous, unroutable = frame["ambiguous"], frame["unroutable"]
     cache, scale_status, results = {}, {}, []
+    totals_cache = {}   # census_published.classify of q2_doc, shared by the two totals contracts of this call
     for c in sorted(contracts, key=lambda c: ALL_KINDS.index(c["kind"])):
         pid = c["partition_id"]
         if c["learn_status"] != "learned":
@@ -818,7 +819,7 @@ def _evaluate(block: dict, tolerances: dict, *, q2_doc, q2_listing, grammar, yie
         if c["kind"] == TOTALS_KIND:
             # whole-filing by construction: never routed, so never abstains on a partition overlap
             results.append(contracts_totals.evaluate_totals(c, q2, q2_doc, financials_q2=financials_q2,
-                                                            band=c["band"]))
+                                                            band=c["band"], cache=totals_cache))
             continue
         if c["kind"] == "fund_income_yield":
             results.append(_evaluate_yield(c, q2, yield_q2))

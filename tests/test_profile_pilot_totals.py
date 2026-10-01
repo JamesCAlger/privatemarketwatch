@@ -352,3 +352,27 @@ def test_other_filer_keeps_the_emerald_rows_published():
 def test_book_rows_remove_nothing():
     obs = ct.observe_totals(book(), financials=FIN, cik="0000000001")
     assert obs["n_positions"] == 80 and all(v["n"] == 0 for v in obs["removed_by_rule"].values())
+
+
+def test_one_evaluate_call_classifies_the_q2_doc_once_and_the_cache_changes_nothing(monkeypatch):
+    from scripts.profile_pilot import contracts, census_published as cp
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    q2_doc = book(fv="100000000")
+    plain = evaluate(block, q2_doc, tol=v4, financials_q2=FIN)
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    totals = [c for c in block["contracts"] if c["kind"] == "independent_totals"]
+    uncached = [ct.evaluate_totals(c, q2, q2_doc, financials_q2=FIN, band=c["band"]) for c in totals]
+    real, calls = cp.classify, []
+
+    def counting(doc, *, cik):
+        calls.append(cik)
+        return real(doc, cik=cik)
+    monkeypatch.setattr(cp, "classify", counting)
+    cached = evaluate(block, q2_doc, tol=v4, financials_q2=FIN)
+    assert len(calls) == 1
+    assert cached == plain
+    shared = {}
+    calls.clear()
+    with_cache = [ct.evaluate_totals(c, q2, q2_doc, financials_q2=FIN, band=c["band"], cache=shared) for c in totals]
+    assert len(calls) == 1 and with_cache == uncached

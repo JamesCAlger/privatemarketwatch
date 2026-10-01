@@ -54,11 +54,18 @@ def _sum(positions, field):
     return sum(filled, Decimal(0)), len(filled)
 
 
-def observe_totals(doc: dict, *, financials: dict | None, cik: str) -> dict:
+def observe_totals(doc: dict, *, financials: dict | None, cik: str, cache: dict | None = None) -> dict:
     """Totals on the census published basis (census_published, census-published.v1): the FV sum equals
     census_published.published_fv_sum (published positions plus R7 cash-equivalent-axis facts); counts and the
-    pct sum run over the published positions. classify runs ONCE here (R5 is quadratic in the live rows)."""
-    part = census_published.classify(doc, cik=cik)
+    pct sum run over the published positions. classify runs ONCE here (R5 is quadratic in the live rows);
+    `cache` (a dict scoped to ONE contracts._evaluate call) memoises it per (id(doc), cik) across the two
+    totals contracts of that call. cache=None is the pure path."""
+    key = (id(doc), cik)
+    part = cache.get(key) if cache is not None else None
+    if part is None:
+        part = census_published.classify(doc, cik=cik)
+        if cache is not None:
+            cache[key] = part
     positions = [p for p in doc["positions"] if part["rows"][p["context_id"]]["published"]]
     fv_sum, fv_filled = _sum(positions, TOTALS_FIELD)
     fv_sum += sum((f["fair_value"] for f in census_published.r7_cash_axis_facts(doc, part["period_end"])),
@@ -108,8 +115,9 @@ def _result(c, status, q2, *, cause=None, expected=None, observed=None):
                 status_basis="provisional")
 
 
-def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: dict | None, band: dict) -> dict:
-    obs = observe_totals(q2_doc, financials=financials_q2, cik=contract["cik"])
+def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: dict | None, band: dict,
+                    cache: dict | None = None) -> dict:
+    obs = observe_totals(q2_doc, financials=financials_q2, cik=contract["cik"], cache=cache)
     exp = contract["expectation"]
     # Whole-book gate, shared by both fields: when the book itself is smaller than
     # min_positions, "too_few_positions" is the true cause for BOTH fields. A field
