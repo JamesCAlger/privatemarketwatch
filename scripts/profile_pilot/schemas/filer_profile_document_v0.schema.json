@@ -12,7 +12,7 @@
     "schema": {"const": "filer_profile_document_v0"},
     "profile_version": {"type": "string", "minLength": 1},
     "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
-    "era": {"enum": ["q1", "same_era"]},
+    "era": {"enum": ["q1", "same_era", "inception"]},
     "report_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
     "form_type": {"type": ["string", "null"]},
     "recorded_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},

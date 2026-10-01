@@ -18,9 +18,10 @@ from __future__ import annotations
 import copy
 import re
 
+from scripts.profile_pilot import envelope, profile
 from scripts.profile_pilot import profile_document as pd
 from scripts.profile_pilot.profile_families import REPO_PREFIX, cik10
-from scripts.profile_pilot.translate import value_sha256
+from scripts.profile_pilot.translate import _get, pointer, value_sha256
 
 SIGNOFF_TAGS = ("signoff-2025-12-31", "signoff-2026-03-31")
 PRE_IMAGE_REASON = ("criterion 5 pre-image check (row_id present, pre-image unchanged) runs on the rebuilt quarter "
@@ -146,6 +147,258 @@ def _signature(c: dict) -> str:
     if c["family"] == "bdc_xbrl_oracle_exceptions.json":
         return str(c["target"].get("oracle_reason"))
     return str(c["fix_class"])
+
+
+INHERITED_FAMILIES = {"rate_convention": ("meaning.interest_rate", "agent"),
+                      "identifier_rate_grammars": ("identifier_format.dialect", "agent"),
+                      "identifier_anchors": ("identifier_format.anchors", "agent")}
+PREDICATE_CODE_PATH = "scripts/profile_pilot/census_published.py"
+REPORTING_ENTITY_POINTER = ("source_encodings", "reporting_entity_suffixes")
+NO_CONTRACT = "none_available: no contract kind for this axis has reported (sub-project 2)"
+ADOPTION_EVIDENCE = (
+    dict(kind="adoption_record", changelog="docs/agent_changelog.md",
+         heading="2026-10-01 -- SP3 Task 0b: census published-basis predicate v2 (hierarchical rollups) adopted",
+         commits=["2132a31", "8418644", "b2454c9", "c7a627f"],
+         rule="anchor-aware adoption rule (controller rulings 3-4): 101 measured fund-quarters, 0 violations, "
+              "0 worsenings (IN-SAMPLE)",
+         table="scratch/2026-09-30_base_build/diag_predicate_v2_table.csv"),
+    dict(kind="owner_ruling", changelog="docs/agent_changelog.md",
+         heading="2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling)"))
+# A10 (pre-flight ruling): the Stage B census cannot derive non_private_markers or prefix_rules (no detector
+# produces them), so they are excluded even though their section (subtotals_and_headings) is otherwise
+# census-derivable. Leaving them in would make an unavailable census wrongly "blamed" for their absence
+# (grid_stubs would stub them census_unavailable instead of no_source).
+CENSUS_KEYS = frozenset(k for k in pd.GRID_KEYS
+                        if k.split(".", 1)[0] in ("column_contract", "subtotals_and_headings", "fund_level_concepts")
+                        and k not in ("subtotals_and_headings.non_private_markers",
+                                      "subtotals_and_headings.prefix_rules")
+                        ) | {"identifier_format.delimiter"}
+CLOSING_EVIDENCE = {
+    "column_contract": "a complete-collection census of this report date deriving the field's carrying concepts",
+    "scale_unit": "the declared unit on the census unit channel, or a reconciling independent total "
+                  "(spec 6 scale witness)",
+    "meaning": "an adjudicated rate-convention verdict with an income-reconciliation witness (spec 6; D-convention)",
+    "identifier_format": "a resolved partition-detector outcome on the census, or an Agent A grammar/anchor file",
+    "subtotals_and_headings": "a resolved subtotal-detector outcome on the census",
+    "fund_level_concepts": "single DEI or fund-total facts at the document period end in the census",
+    "partition_structure": "a wrapper source_encodings list or a LegalEntityAxis observation naming the filer's "
+                           "reporting entities",
+    "income_proofs": "the income-proof step entries of the redesigned income-yield kind (spec 5), each with its "
+                     "contract",
+}
+
+
+def file_evidence(rel, sha, content, *, value_is_file=True, pointer=None) -> list:
+    item = dict(kind="override_file", path=REPO_PREFIX + rel, sha256=sha, ordered_sha256=value_sha256(content),
+                value_is_file=value_is_file)
+    if pointer is not None:
+        item["pointer"] = pointer
+    out = [item]
+    if isinstance(content, dict):
+        for k in ("citations", "evidence_citations", "evidence"):
+            v = content.get(k)
+            if isinstance(v, list) and v:
+                out.append(dict(kind="source_citations", field=k, items=copy.deepcopy(v)))
+        for k in ("target_quarter", "first_seen_quarter", "updated_at"):
+            if content.get(k):
+                out.append(dict(kind="source_date", field=k, value=content[k]))
+    return out
+
+
+def _assert_inherited(events, cik, key, value, *, support_path, sha, evidence, author, recorded_at):
+    before = {e["entry_id"] for e in envelope.materialize_entries(events)}
+    events = envelope.make_assertion(
+        events, cik=cik, key=key, value=copy.deepcopy(value), valid_from=None, recorded_at=recorded_at,
+        support=dict(kind="inherited_file", path=support_path, sha256=sha), evidence=evidence,
+        provenance="inherited", inherited_from=support_path + "@" + sha[:12], author=author, status="promoted")
+    new = [e["entry_id"] for e in envelope.materialize_entries(events) if e["entry_id"] not in before]
+    if len(new) != 1:
+        raise InceptionError("expected one new entry for " + key + ", got " + repr(new))
+    return events, new[0]
+
+
+def census_entries(census, *, recorded_at):
+    if census is None:
+        return [], []
+    derived = profile.derive_profile(census["doc"], source=census["source"], era=profile.INCEPTION_ERA,
+                                     recorded_at=recorded_at, anchors=None)
+    return list(derived["events"]), list(derived["packet_stubs"])
+
+
+def confirmations(q4_entries, q1_census, *, recorded_at) -> dict:
+    if q1_census is None:
+        return {e["entry_id"]: (False, "q1_census_unavailable") for e in q4_entries}
+    q1 = profile.derive_profile(q1_census["doc"], source=q1_census["source"], era=profile.INCEPTION_ERA,
+                                recorded_at=recorded_at, anchors=None)
+    by_key: dict = {}
+    for e in q1["entries"]:
+        by_key.setdefault(e["key"], []).append(e)
+    out = {}
+    for e in q4_entries:
+        others = by_key.get(e["key"], [])
+        if len(others) != 1:
+            out[e["entry_id"]] = (False, "q1_no_entry" if not others else "q1_ambiguous")
+        elif (value_sha256(others[0]["value"]) == value_sha256(e["value"])
+              and others[0]["applies_to"] == e["applies_to"]):
+            out[e["entry_id"]] = (True, "q1_value_equal")
+        else:
+            out[e["entry_id"]] = (False, "q1_value_differs")
+    return out
+
+
+def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_unavailable) -> list:
+    live = [e for e in entries if e["recorded_until"] is None and pd.valid_at(e, report_date)]
+    stubs = []
+    for key in pd.GRID_KEYS:
+        mine = [e for e in live if e["key"] == key]
+        if any(admissions[e["entry_id"]]["state"] == "accepted" for e in mine):
+            continue
+        section = key.split(".", 1)[0]
+        if mine:
+            first = mine[0]
+            reason = admissions[first["entry_id"]]["witness"].get("next_quarter", "not confirmed")
+            stubs.append(pd.stub(cik, key, "candidate_pending_confirmation",
+                                 "next-quarter confirmation of " + first["entry_id"] + " (inception: " + reason
+                                 + "); admission loop, sub-project 5", entry_id=first["entry_id"],
+                                 detail=dict(next_quarter=reason)))
+            continue
+        bearing = [s for s in census_stubs if key in (s.get("bears_on") or [])]
+        if bearing:
+            first = bearing[0]
+            question = first.get("question") or ("census detector " + str(first.get("detector")) + " outcome "
+                                                 + str(first.get("cause")))
+            stubs.append(pd.stub(cik, key, "census_stub", question,
+                                 detail=dict(census_stub_ids=[s["stub_id"] for s in bearing],
+                                             cause=first.get("cause"), finding=first.get("finding"))))
+            continue
+        if census_unavailable and key in CENSUS_KEYS:
+            stubs.append(pd.stub(cik, key, "census_unavailable",
+                                 "an authoritative " + report_date + " census for " + cik + " ("
+                                 + census_unavailable["census_run_id"] + " excluded it: "
+                                 + str(census_unavailable.get("detail") or census_unavailable.get("reason")) + ")",
+                                 detail=dict(census_unavailable)))
+            continue
+        stubs.append(pd.stub(cik, key, "no_source", CLOSING_EVIDENCE[section]))
+    return stubs
+
+
+def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git_head: str) -> dict:
+    cik = cik10(cik)
+    files = inputs["files"]
+    events, census_stubs = census_entries(inputs.get("census_q4"), recorded_at=recorded_at)
+    admissions, targets = {}, {}
+    q4_entries = envelope.materialize_entries(events)
+    confirmed = confirmations(q4_entries, inputs.get("census_q1"), recorded_at=recorded_at)
+    for e in q4_entries:
+        ok, reason = confirmed[e["entry_id"]]
+        admissions[e["entry_id"]] = pd.admission(
+            "accepted" if ok else "candidate", "census_confirmed_next_quarter" if ok else "census_unconfirmed",
+            source_kind="census", mechanism="census-derived (" + profile.PROFILE_VERSION + ")", confidence=None,
+            source_author="census", recorded_at=recorded_at, run_id=run_id,
+            source=inputs["census_q4"]["source"]["census_relative"], witness={"next_quarter": reason},
+            inception_evaluation="next_quarter_census_equality")
+    for family in sorted(INHERITED_FAMILIES):
+        found = files.get(family) or []
+        if not found:
+            continue
+        if len(found) != 1:
+            raise InceptionError("more than one " + family + " file for " + cik + ": "
+                                 + repr([x["path"] for x in found]))
+        key, author = INHERITED_FAMILIES[family]
+        item, content = found[0], found[0]["content"]
+        meta = content if isinstance(content, dict) else {}
+        events, eid = _assert_inherited(events, cik, key, content, support_path=REPO_PREFIX + item["path"],
+                                        sha=item["sha256"], evidence=file_evidence(item["path"], item["sha256"], content),
+                                        author=author, recorded_at=recorded_at)
+        admissions[eid] = pd.admission("accepted", "inherited_production", source_kind="override_file",
+                                       mechanism=family + " override file", confidence=_number(meta.get("confidence")),
+                                       source_author=str(meta.get("created_by") or author), recorded_at=recorded_at,
+                                       run_id=run_id, source=REPO_PREFIX + item["path"], witness={},
+                                       inception_evaluation=NO_CONTRACT)
+        targets.setdefault(item["path"], []).append(eid)
+    pred = inputs["predicate"]
+    events, basis_id = _assert_inherited(
+        events, cik, "partition_structure.published_basis", {"predicate": pred["version"]},
+        support_path=PREDICATE_CODE_PATH, sha=pred["code_sha256"],
+        evidence=[dict(kind="code_file", path=PREDICATE_CODE_PATH, sha256=pred["code_sha256"])]
+        + [dict(e) for e in ADOPTION_EVIDENCE], author="human", recorded_at=recorded_at)
+    admissions[basis_id] = pd.admission(
+        "accepted", "adopted_predicate", source_kind="predicate_code",
+        mechanism="census published-basis predicate " + pred["version"], confidence=None, source_author="human",
+        recorded_at=recorded_at, run_id=run_id, source=PREDICATE_CODE_PATH,
+        witness={"adoption": "anchor-aware adoption rule, controller rulings 3-4"},
+        inception_evaluation="adoption rule over 101 fund-quarters of the 8 filers (IN-SAMPLE)")
+    entities_id = None
+    wrappers = files.get("bdc_xbrl_wrappers") or []
+    if wrappers:
+        w = wrappers[0]
+        present, suffixes = _get(w["content"], REPORTING_ENTITY_POINTER)
+        if present:
+            evidence = file_evidence(w["path"], w["sha256"], w["content"], value_is_file=False,
+                                     pointer=pointer(REPORTING_ENTITY_POINTER))
+            evidence.append(dict(kind="investigation", path="docs/investigations/conservation_shadow_engine.md",
+                                 heading="2026-10-01", note="R6 look-through rows by typed-identifier suffix"))
+            events, entities_id = _assert_inherited(events, cik, "partition_structure.reporting_entities",
+                                                    list(suffixes), support_path=REPO_PREFIX + w["path"],
+                                                    sha=w["sha256"], evidence=evidence, author="human",
+                                                    recorded_at=recorded_at)
+            admissions[entities_id] = pd.admission(
+                "accepted", "inherited_production", source_kind="override_file",
+                mechanism="wrapper source_encodings.reporting_entity_suffixes", confidence=None, source_author="human",
+                recorded_at=recorded_at, run_id=run_id, source=REPO_PREFIX + w["path"], witness={},
+                inception_evaluation="consistency contract vs wrapper and the census_published code mirror")
+            targets.setdefault(w["path"], []).append(entities_id)
+    entries = envelope.materialize_entries(events)
+    live_keys = [e["key"] for e in entries if e["recorded_until"] is None]
+    dup = sorted({k for k in live_keys if live_keys.count(k) > 1})
+    if dup:
+        raise InceptionError("two inception entries for one key: " + repr(dup))
+    blocks = []
+    for family, block_family in (("bdc_xbrl_wrappers", "bdc_xbrl_wrapper"),
+                                 ("agent_investigate_rules", "agent_investigate_rules")):
+        found = files.get(family) or []
+        if not found:
+            continue
+        tags = sorted({t for x in found for t in (inputs.get("attested_under") or {}).get(x["path"], [])})
+        block = wrapper_block(cik, family=block_family, files=found, recorded_at=recorded_at, attested_under=tags)
+        blocks.append(block)
+        for x in found:
+            targets.setdefault(x["path"], []).append(block["block_id"])
+    corrections = correction_records(cik, b2_files=files.get("agent_b2_corrections") or [],
+                                     shared=inputs.get("shared") or {}, recorded_at=recorded_at, run_id=run_id)
+    for c in corrections:
+        targets.setdefault(c["source"]["path"], []).append(c["correction_id"])
+    disposition = []
+    for d in inputs["disposition"]:
+        d = dict(d, targets=list(targets.get(d["path"], [])))
+        if d["action"] in ("entry", "wrapper_block", "correction") and not d["targets"]:
+            raise InceptionError("converted file produced nothing: " + d["path"])
+        disposition.append(d)
+    stubs = grid_stubs(cik, entries, admissions, census_stubs, report_date=pd.INCEPTION_REPORT_DATE,
+                       census_unavailable=inputs.get("census_q4_unavailable"))
+    detection = {k: dict(claim="claimed" if v["verdict"] == "PASS" else "detection_not_claimed",
+                         verdict=v["verdict"], replay_run_id=v["replay_run_id"])
+                 for k, v in sorted((inputs.get("detection") or {}).items())}
+    q4, q1 = inputs.get("census_q4"), inputs.get("census_q1")
+    doc = dict(
+        schema=pd.SCHEMA_NAME, schema_version=1, document_version=1, cik=cik,
+        inception_report_date=pd.INCEPTION_REPORT_DATE, recorded_at=recorded_at, run_id=run_id,
+        code=dict(git_head=git_head, converter_version=pd.CONVERTER_VERSION),
+        events=events, entries=entries, admissions=admissions, stubs=stubs,
+        wrapper_section=dict(blocks=blocks), corrections=corrections,
+        partition_predicate=dict(census_published_version=pred["version"], published_basis_entry_id=basis_id,
+                                 reporting_entities_entry_id=entities_id,
+                                 code_mirror=dict(path=PREDICATE_CODE_PATH, constant="REPORTING_ENTITIES",
+                                                  value=list(inputs.get("code_mirror") or []))),
+        detection_claims=detection, disposition=disposition,
+        ledger=[dict(event="document_created", at=recorded_at, run_id=run_id, detail=dict(
+            converter_version=pd.CONVERTER_VERSION,
+            census_q4=q4["source"]["census_relative"] if q4 else None,
+            census_q1=q1["source"]["census_relative"] if q1 else None,
+            census_q4_unavailable=inputs.get("census_q4_unavailable"),
+            overrides_root=inputs.get("overrides_root"), replay_run_id=inputs.get("replay_run_id")))])
+    pd.validate_document(doc)
+    return doc
 
 
 def mark_recurrence(corrections: list[dict]) -> list[dict]:

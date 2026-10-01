@@ -37,6 +37,8 @@ SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
 DOCUMENT_SCHEMA = "filer_profile_document_v0.schema.json"
 ENVELOPE_SCHEMA = "filer_profile_v0.schema.json"
 ERAS = ("q1", "same_era")
+INCEPTION_ERA = "inception"           # SP3 proper: the Q4-2025 inception derivation; not a Stage B era
+DERIVE_ERAS = ERAS + (INCEPTION_ERA,)
 ERA_ROLES = {"q1": "q1", "same_era": "verified_era"}
 DERIVED_SECTIONS = ("identifier_format", "subtotals_and_headings", "presentation_views",
                     "comparative_periods", "column_contract", "footnote_conventions",
@@ -525,7 +527,7 @@ def _stub_sections(b: _Builder, anchors: dict | None) -> dict:
 
 def derive_profile(doc: dict, *, source: dict, era: str, recorded_at: str, anchors: dict | None = None) -> dict:
     """Profile v0 for one census document. Pure: no file access, no wrapper."""
-    if era not in ERAS:
+    if era not in DERIVE_ERAS:
         raise ProfileError("unknown era " + repr(era))
     if str(doc["document"]["cik"]).zfill(10) != str(source["cik"]).zfill(10) \
             or doc["document"]["report_date"] != source["report_date"]:

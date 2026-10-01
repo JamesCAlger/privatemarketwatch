@@ -5,7 +5,10 @@ import copy
 
 import pytest
 
+from scripts.profile_pilot import profile
+from scripts.profile_pilot import profile_document as pd
 from scripts.profile_pilot import profile_inception as pi
+from tests.test_profile_pilot_profile import mini_doc, single_dialect
 from tests.test_profile_pilot_profile_families import ARES, STELLUS, wrapper_v3
 
 NOW = "2026-10-01T12:00:00Z"
@@ -139,3 +142,144 @@ def test_unrelated_b2_one_offs_sharing_a_fix_class_are_grouped_known_limitation(
     assert out[0]["recurrence_group"] == out[1]["recurrence_group"]
     assert out[0]["recurrence_group"] is not None
     assert all(c["promotion"] == "proposed_recurring_owner_tier" for c in out)
+
+
+# ---------------------------------------------------------------- Task 6: census entries, admissions, stubs, build_document
+
+Q4, Q1 = "2025-12-31", "2026-03-31"
+
+
+def census(date, identifiers=None, delim="|"):
+    doc = mini_doc(partition=[single_dialect(delim)], report_date=date, identifiers=identifiers)
+    source = dict(cik=STELLUS, report_date=date, role="all:" + date,
+                  census_relative="census/" + STELLUS + "/" + date + ".json", census_sha256="0" * 64,
+                  fingerprint="f" * 64, accession_number="0000000000-23-000001", form_type="10-Q")
+    return dict(doc=doc, source=source)
+
+
+def inception_inputs(*, q4=True, q1=True, wrapper=None, extra_files=None, shared=None):
+    w = wrapper or wrapper_v3(STELLUS, source_encodings={"reporting_entity_suffixes": ["Emerald JV LP"]})
+    files = {"bdc_xbrl_wrappers": [f("bdc_xbrl_wrappers/" + STELLUS + ".json", w)],
+             "rate_convention": [f("rate_convention/" + STELLUS + ".json",
+                                   {"cik": STELLUS, "convention": "all_in", "target_quarter": Q1, "confidence": 0.8,
+                                    "citations": [{"kind": "header", "quote": "Interest Rate (2)"}]})]}
+    files.update(extra_files or {})
+    action = {"bdc_xbrl_wrappers": "wrapper_block", "agent_investigate_rules": "wrapper_block",
+              "agent_b2_corrections": "correction"}
+    disposition = [dict(path=x["path"], family=fam,
+                        cls="executable" if action.get(fam) == "wrapper_block" else "knowledge",
+                        action=action.get(fam, "entry"), sha256=x["sha256"], ordered_sha256=None, targets=[],
+                        reason=None, record_indexes=None)
+                   for fam, items in files.items() for x in items]
+    for name, s in (shared or {}).items():
+        disposition.append(dict(path=name, family=name, cls="knowledge", action="correction", sha256=s["sha256"],
+                                ordered_sha256=None, targets=[], reason=None,
+                                record_indexes=[i for i, _ in s["records"]]))
+    return dict(files=files, shared=shared or {}, disposition=disposition,
+                attested_under={"bdc_xbrl_wrappers/" + STELLUS + ".json": ["signoff-2026-03-31"]},
+                census_q4=census(Q4) if q4 else None,
+                census_q4_unavailable=None if q4 else dict(census_run_id="stageb2-sp1census-20260930t2235z",
+                                                           reason="unavailable",
+                                                           detail="ambiguous_same_quarter_candidates"),
+                census_q1=census(Q1) if q1 else None,
+                detection={"fill_rate": dict(verdict="NO_POSITIVES", replay_run_id="sp1-replay-x"),
+                           "source_concept_set": dict(verdict="PASS", replay_run_id="sp1-replay-x")},
+                predicate=dict(version="census-published.v2", code_sha256="e" * 64),
+                code_mirror=["Emerald JV LP"], overrides_root="tmp", replay_run_id="sp1-replay-x")
+
+
+def build(**kw):
+    return pi.build_document(STELLUS, inputs=inception_inputs(**kw), recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+
+
+def test_derive_profile_accepts_the_inception_era_without_changing_eras():
+    assert profile.ERAS == ("q1", "same_era") and profile.INCEPTION_ERA == "inception"
+    c = census(Q4)
+    out = profile.derive_profile(c["doc"], source=c["source"], era=profile.INCEPTION_ERA, recorded_at=NOW, anchors=None)
+    profile.validate_document(out)
+    assert out["era"] == "inception"
+
+
+def test_build_document_full():
+    doc = build()
+    pd.validate_document(doc)
+    by_key = {e["key"]: e for e in doc["entries"]}
+    delim = by_key["identifier_format.delimiter"]
+    assert delim["value"] == " | "
+    assert doc["admissions"][delim["entry_id"]]["state"] == "accepted"
+    assert doc["admissions"][delim["entry_id"]]["basis"] == "census_confirmed_next_quarter"
+    conv = by_key["meaning.interest_rate"]
+    assert conv["valid_from"] is None and conv["provenance"] == "inherited" and conv["author"] == "agent"
+    assert conv["support"]["kind"] == "inherited_file" and conv["value"]["convention"] == "all_in"
+    assert doc["admissions"][conv["entry_id"]]["confidence"] == 0.8
+    assert {"kind": "source_date", "field": "target_quarter", "value": Q1} in conv["evidence"]
+    assert by_key["partition_structure.published_basis"]["value"] == {"predicate": "census-published.v2"}
+    ents = by_key["partition_structure.reporting_entities"]
+    assert ents["value"] == ["Emerald JV LP"]
+    assert doc["partition_predicate"]["reporting_entities_entry_id"] == ents["entry_id"]
+    assert doc["partition_predicate"]["code_mirror"]["value"] == ["Emerald JV LP"]
+    [block] = doc["wrapper_section"]["blocks"]
+    assert block["attested_under"] == ["signoff-2026-03-31"]
+    assert doc["detection_claims"]["fill_rate"]["claim"] == "detection_not_claimed"
+    assert doc["detection_claims"]["source_concept_set"]["claim"] == "claimed"
+    targets = {d["path"]: d["targets"] for d in doc["disposition"]}
+    assert targets["bdc_xbrl_wrappers/" + STELLUS + ".json"] == [ents["entry_id"], block["block_id"]]
+    assert targets["rate_convention/" + STELLUS + ".json"] == [conv["entry_id"]]
+    for key, cell in pd.coverage(doc, Q4).items():
+        assert cell["accepted_entry_ids"] or cell["stub"], key
+    assert pd.resolve(doc, "scale_unit.fair_value", Q4)["stub"]["cause"] == "no_source"
+    assert all(e["evidence"] for e in doc["entries"])
+
+
+def test_unconfirmed_census_entry_is_a_candidate_with_a_stub():
+    inputs = inception_inputs()
+    inputs["census_q1"] = census(Q1, identifiers=["Borrower %d LLC ; Term Loan" % i for i in range(12)], delim=";")
+    doc = pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+    delim = next(e for e in doc["entries"] if e["key"] == "identifier_format.delimiter")
+    assert doc["admissions"][delim["entry_id"]]["state"] == "candidate"
+    # pd.admission() treats any non-numeric confidence (including the census path's confidence=None)
+    # as "not a measured quantity" and records it in witness.confidence_raw (Task 3 behavior, approved;
+    # not special-cased for None), so it appears alongside the next_quarter witness key.
+    assert doc["admissions"][delim["entry_id"]]["witness"] == {"next_quarter": "q1_value_differs",
+                                                               "confidence_raw": None}
+    out = pd.resolve(doc, "identifier_format.delimiter", Q4)
+    assert out["status"] == "stub" and out["stub"]["cause"] == "candidate_pending_confirmation"
+    assert out["stub"]["entry_id"] == delim["entry_id"]
+
+
+def test_census_unavailable_gives_census_unavailable_stubs():
+    doc = build(q4=False, q1=False)
+    assert not any(e["key"].startswith("column_contract.") for e in doc["entries"])
+    stub = pd.resolve(doc, "column_contract.fair_value", Q4)["stub"]
+    assert stub["cause"] == "census_unavailable" and "ambiguous_same_quarter_candidates" in stub["closing_evidence"]
+    assert pd.resolve(doc, "income_proofs.duration", Q4)["stub"]["cause"] == "no_source"
+    assert doc["ledger"][0]["detail"]["census_q4"] is None
+    # A10: CENSUS_KEYS excludes these two (the census cannot derive them), so an unavailable
+    # census must not be blamed for their absence -- they are no_source, like income_proofs.
+    assert pd.resolve(doc, "subtotals_and_headings.non_private_markers", Q4)["stub"]["cause"] == "no_source"
+    assert pd.resolve(doc, "subtotals_and_headings.prefix_rules", Q4)["stub"]["cause"] == "no_source"
+
+
+def test_two_files_in_one_knowledge_family_are_refused():
+    inputs = inception_inputs()
+    inputs["files"]["rate_convention"].append(f("rate_convention/other.json", {"cik": STELLUS, "convention": "cash"}))
+    with pytest.raises(pi.InceptionError):
+        pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+
+
+def test_a_converted_file_that_produces_nothing_is_refused():
+    inputs = inception_inputs()
+    inputs["disposition"].append(dict(path="identifier_anchors/" + STELLUS + ".json", family="identifier_anchors",
+                                      cls="knowledge", action="entry", sha256=SHA, ordered_sha256=None, targets=[],
+                                      reason=None, record_indexes=None))
+    with pytest.raises(pi.InceptionError, match="produced nothing"):
+        pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+
+
+def test_shared_records_land_as_recurring_one_offs():
+    rows = [[0, {"cik": STELLUS, "report_date": "2025-09-30", "oracle_reason": "rate_outliers_detected", "confidence": 0.9}],
+            [1, {"cik": STELLUS, "report_date": "2025-12-31", "oracle_reason": "rate_outliers_detected", "confidence": 0.9}]]
+    doc = build(shared={"bdc_xbrl_oracle_exceptions.json": {"sha256": SHA, "records": rows}})
+    assert [c["kind"] for c in doc["corrections"]] == ["one_off", "one_off"]
+    assert doc["corrections"][0]["recurrence_group"] == doc["corrections"][1]["recurrence_group"]
+    assert doc["corrections"][0]["recurrence_group"] is not None
