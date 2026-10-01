@@ -104,3 +104,38 @@ def test_shared_records_become_one_offs_with_recurrence():
     assert out[3]["recurrence_group"] is None and out[3]["promotion"] is None
     assert out[0]["source"] == {"path": "bdc_aggregate_row_overrides.json", "sha256": SHA, "record_index": 1}
     assert out[0]["mechanism"] == "aggregate_row_exclusion" and out[0]["target"]["match_text"] == "Ivy Hill"
+
+
+# ---------------------------------------------------------------- hardening carried from the Task 5 review
+
+def test_wrapper_block_agent_investigate_rules_checks_cik_like_every_other_path():
+    foreign = {"cik": STELLUS, "rule_id": "x", "rule_type": "row_exclusion", "scope": {"quarters": ["2025-09-30"]},
+               "predicate_sql": "row_id IN ('ROW-1')"}
+    with pytest.raises(pi.InceptionError):
+        pi.wrapper_block(ARES, family="agent_investigate_rules",
+                         files=[f("agent_investigate_rules/" + STELLUS + "/x.json", foreign)],
+                         recorded_at=NOW, attested_under=[])
+
+
+def test_b2_list_shaped_row_selector_is_refused_not_an_attributeerror():
+    leaf = b2("list_selector", template={"row_selector": ["ROW-1", "ROW-2"]})
+    with pytest.raises(pi.InceptionError, match="list_selector"):
+        pi.correction_records(ARES, b2_files=[leaf], shared={}, recorded_at=NOW, run_id=RUN)
+
+
+def test_unrelated_b2_one_offs_sharing_a_fix_class_are_grouped_known_limitation():
+    # Known limitation (pinned, not fixed here): the B2 recurrence signature is fix_class alone
+    # (plus family and mechanism). Two genuinely unrelated one-off fixes on different rows and
+    # quarters still land in one recurrence_group and get flagged proposed_recurring_owner_tier.
+    leaf_a = {"cik": ARES, "mechanism": "extraction_gap", "fix_class": "zero_fill",
+             "scope": {"quarters": ["2025-09-30"]}, "template": {"row_selector": {"row_id": "ROW-A"}}}
+    leaf_b = {"cik": ARES, "mechanism": "extraction_gap", "fix_class": "zero_fill",
+             "scope": {"quarters": ["2025-12-31"]}, "template": {"row_selector": {"row_id": "ROW-B"}}}
+    files = [f("agent_b2_corrections/" + ARES + "/zero_fill_a.json", leaf_a),
+             f("agent_b2_corrections/" + ARES + "/zero_fill_b.json", leaf_b)]
+    out = pi.correction_records(ARES, b2_files=files, shared={}, recorded_at=NOW, run_id=RUN)
+    assert out[0]["kind"] == out[1]["kind"] == "one_off"
+    assert out[0]["target"] != out[1]["target"]
+    assert out[0]["recurrence_group"] == out[1]["recurrence_group"]
+    assert out[0]["recurrence_group"] is not None
+    assert all(c["promotion"] == "proposed_recurring_owner_tier" for c in out)

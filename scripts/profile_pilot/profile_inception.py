@@ -58,6 +58,10 @@ def wrapper_block(cik, *, family, files, recorded_at, attested_under) -> dict:
             raise InceptionError("wrapper cik " + repr(content.get("cik")) + " is not " + cik)
         expressibility = None
     elif family == "agent_investigate_rules":
+        for x in files:
+            if cik10(x["content"].get("cik")) != cik:
+                raise InceptionError("rule cik " + repr(x["content"].get("cik")) + " is not " + cik + ": "
+                                     + x["path"])
         content = {"files": {x["path"]: copy.deepcopy(x["content"]) for x in files}}
         expressibility = {x["path"]: rule_expressibility(x["content"]) for x in files}
     else:
@@ -107,6 +111,9 @@ def correction_records(cik, *, b2_files, shared, recorded_at, run_id) -> list[di
         if cik10(leaf.get("cik")) != cik:
             raise InceptionError("B2 leaf cik differs from its filer: " + item["path"])
         selector = (leaf.get("template") or {}).get("row_selector")
+        if selector is not None and not isinstance(selector, dict):
+            raise InceptionError("row_selector must be an object, not " + type(selector).__name__ + ": "
+                                 + item["path"])
         dates = _b2_dates(leaf)
         out.append(_correction(cik, n, "b2", family="agent_b2_corrections", mechanism=leaf.get("mechanism"),
                                fix_class=leaf.get("fix_class"), dates=dates,
@@ -142,6 +149,13 @@ def _signature(c: dict) -> str:
 
 
 def mark_recurrence(corrections: list[dict]) -> list[dict]:
+    """Group one-off corrections by (family, mechanism, signature); flag groups spanning >= 2 report dates.
+
+    Known limitation: for B2 corrections the signature is `fix_class` alone. Two genuinely unrelated
+    one-off fixes that happen to share a fix_class (on different rows, different quarters) are grouped
+    into one recurrence_group and flagged proposed_recurring_owner_tier. Nothing here promotes them;
+    owner sign-off (SP6) must check target/row overlap before treating the group as a real recurrence.
+    """
     groups: dict = {}
     for c in corrections:
         if c["kind"] == "one_off":
