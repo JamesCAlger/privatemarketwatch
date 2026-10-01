@@ -740,6 +740,9 @@ def _check_frozen(c: dict, tolerances: dict) -> None:
         _req(c, key, "contract " + str(c.get("contract_id")))
     if c["band"] != band_for(tolerances, c["tier"], c["kind"]):
         raise ContractError("frozen contract band disagrees with the frozen tolerance file: " + c["contract_id"])
+    if c["kind"] == TOTALS_KIND and c["applies_to"] != contracts_totals.APPLIES_TO:
+        raise ContractError("frozen totals contract applies_to disagrees with the census published partition "
+                            "version " + repr(contracts_totals.APPLIES_TO) + ": " + c["contract_id"])
     if c["learn_status"] == "learned" and c["expectation"] is None:
         raise ContractError("learned contract without an expectation: " + c["contract_id"])
 

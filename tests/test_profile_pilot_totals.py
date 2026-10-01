@@ -376,3 +376,62 @@ def test_one_evaluate_call_classifies_the_q2_doc_once_and_the_cache_changes_noth
     calls.clear()
     with_cache = [ct.evaluate_totals(c, q2, q2_doc, financials_q2=FIN, band=c["band"], cache=shared) for c in totals]
     assert len(calls) == 1 and with_cache == uncached
+
+
+# ---------------------------------------------------------------- SP3 Task 0 final-review fixes
+
+
+@pytest.mark.parametrize("applies_to", [
+    {"whole_filing": True},
+    {"whole_filing": True, "census_published": "census-published.v0"},
+    {"whole_filing": True, "census_published": "census-published.v2"}])
+def test_frozen_totals_contract_with_another_partition_version_is_refused(applies_to):
+    from scripts.profile_pilot import contracts
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    for c in block["contracts"]:
+        if c["kind"] == "independent_totals":
+            c["applies_to"] = dict(applies_to)
+    with pytest.raises(contracts.ContractError, match="partition version"):
+        evaluate(block, book(), tol=v4, financials_q2=FIN)
+
+
+def test_frozen_totals_contract_with_the_current_partition_version_passes():
+    from scripts.profile_pilot import contracts, census_published as cp
+    assert ct.APPLIES_TO == {"whole_filing": True, "census_published": cp.CENSUS_PUBLISHED_VERSION}
+    v4 = contracts.tolerance_content_v4(tol_v3())
+    block = learn(book(), tol=v4, financials_q1=FIN)
+    totals = [c for c in block["contracts"] if c["kind"] == "independent_totals"]
+    assert totals and all(c["applies_to"] == ct.APPLIES_TO for c in totals)
+    res = evaluate(block, book(), tol=v4, financials_q2=FIN)
+    assert pick(res, "independent_totals", "fair_value")["status"] == "holds"
+
+
+def _no_period_end(doc):
+    doc["document_metadata"]["document_period_end_dates"] = []
+    return doc
+
+
+def test_observe_without_a_period_end_has_no_residual():
+    obs = ct.observe_totals(_no_period_end(book()), financials=FIN, cik="0000000001")
+    assert obs["no_period_end"] is True and obs["fv_residual_pct"] is None
+    assert ct.observe_totals(book(), financials=FIN, cik="0000000001")["no_period_end"] is False
+
+
+def test_missing_period_end_abstains_with_cause_no_period_end_not_a_breach():
+    contracts = ct.learn_totals("0000000001", "standard", BAND, book(), financials_q1=FIN)
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    res = [ct.evaluate_totals(c, q2, _no_period_end(book()), financials_q2=FIN, band=BAND) for c in contracts]
+    assert [(r["status"], r["cause"]) for r in res] == [("insufficient_evidence", "no_period_end")] * 2
+    learned = ct.learn_totals("0000000001", "standard", BAND, _no_period_end(book()), financials_q1=FIN)
+    assert [(c["learn_status"], c["learn_cause"]) for c in learned] == [("insufficient_evidence", "no_period_end")] * 2
+
+
+def test_cache_entry_for_a_different_doc_with_the_same_id_is_not_reused():
+    from scripts.profile_pilot import census_published as cp
+    doc, other = book(), bcred_doc()
+    stale = cp.classify(other, cik="0000000001")
+    cache = {(id(doc), "0000000001"): (other, stale)}
+    obs = ct.observe_totals(doc, financials=FIN, cik="0000000001", cache=cache)
+    assert obs["n_positions"] == 80 and obs["fv_sum"] == 80_000_000
+    assert cache[(id(doc), "0000000001")][0] is doc

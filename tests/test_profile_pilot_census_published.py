@@ -18,6 +18,7 @@ from tests.test_profile_pilot_contracts import Q1, debt, mk_doc, val
 BCRED = "0001803498"
 OTHER = "0001860424"
 FIXTURE = Path(__file__).parent / "fixtures" / "census_published_v2_rows.csv"
+REFERENCE_NAMES = {"R1_not_current_instant": "R1_own_period_instant"}   # rename only, same rule
 EXTRA_FIELDS = ("cost", "principal_amount", "interest_rate", "pct_of_net_assets", "basis_spread",
                 "interest_rate_floor", "pik_rate")
 
@@ -217,12 +218,22 @@ def recorded_docs():
 
 
 def test_recorded_v2_rows_get_the_same_rule():
+    """Fixture rows come from scratch/2026-10-01_census_published_basis/census_rule_assignments_v2.csv
+    (sha256 1318d9684f3b854393685c589c6368428749ddc5ffe15a0b28d4dab0fd384f06, read-only source). The
+    implementation differs from the investigation's reference rule on exactly one row: c-929 (Belfor, a
+    reported FV of 0 that the reference rule removed by R2; the implementation keeps value 0, deliberate).
+    The reference names R1 R1_not_current_instant; REFERENCE_NAMES maps it to the implementation's name."""
     seen = defaultdict(int)
+    differs = set()
     for cik, doc, rows in recorded_docs():
         got = cp.classify(doc, cik=cik)["rows"]
         for r in rows:
             assert got[r["context_id"]]["rule"] == (r["rule"] or None), (cik, r["context_id"], r["typed_identifier"])
+            ref = REFERENCE_NAMES.get(r["reference_rule"], r["reference_rule"]) or None
+            if got[r["context_id"]]["rule"] != ref:
+                differs.add(r["context_id"])
             seen[r["rule"]] += 1
+    assert differs == {"c-929"}
     assert seen["R2_fv_not_reported"] == 48 and seen["R3_label_or_heading"] == 7
     assert seen["R4_generic_cash_bucket"] == 3 and seen["R5_issuer_rollup_fv_only"] == 33
     assert seen["R6_reporting_entity_lookthrough"] == 5 and seen["R1_own_period_instant"] == 2
@@ -245,3 +256,59 @@ def test_r7_cash_axis_with_other_axis_or_typed_dimension_emits_nothing():
 def test_r5_unparsable_parent_fair_value_does_not_raise():
     kid = debt(1, ident="Apex Corp, First lien")
     assert rules(mk_doc([fv_only("p", "Apex Corp", "n/a"), kid]))["p"] is None
+
+
+def test_r1_two_distinct_dei_period_end_dates_choose_the_max_and_record_the_source():
+    doc = mk_doc([debt(1), debt(2)])
+    doc["positions"][1]["period"]["instant"] = "2023-03-31"
+    n = len(doc["facts"])
+    doc["facts"] += [dict(i=n, qname="dei:DocumentPeriodEndDate", value="2023-03-31", context_id="d1"),
+                     dict(i=n + 1, qname="dei:DocumentPeriodEndDate", value=Q1, context_id="d2")]
+    out = cp.classify(doc, cik=OTHER)
+    assert out["period_end"] == Q1 and out["period_end_source"] == "dei:DocumentPeriodEndDate"
+    assert out["no_period_end"] is False
+    assert out["rows"]["c1"]["rule"] is None and out["rows"]["c2"]["rule"] == "R1_own_period_instant"
+
+
+def test_r5_near_miss_parent_is_counted_but_kept():
+    kids = [debt(1, ident="Apex Corp, First lien"), debt(2, ident="Apex Corp, Second lien")]
+    for k in kids:
+        k["fields"]["fair_value"] = val("100", "usd", decimals="0")
+    out = cp.classify(mk_doc([fv_only("p", "Apex Corp", "250")] + kids), cik=OTHER)
+    assert out["rows"]["p"]["rule"] is None
+    assert out["near_misses"] == {"n": 1, "fv": 250.0}
+    rollup = cp.classify(mk_doc([fv_only("p", "Apex Corp", "200")] + copy.deepcopy(kids)), cik=OTHER)
+    assert rollup["rows"]["p"]["rule"] == "R5_issuer_rollup_fv_only"
+    assert rollup["near_misses"] == {"n": 0, "fv": 0.0}
+
+
+def test_r7_agreeing_duplicate_facts_emit_once():
+    doc = fidelity_doc()
+    doc["facts"].append(dict(i=len(doc["facts"]), qname="us-gaap:InvestmentOwnedAtFairValue", value="179450525.0",
+                             context_id="cash1"))
+    out = cp.classify(doc, cik="0001920453")
+    assert out["extra_fv_facts"] == [dict(context_id="cash1", fair_value=179450525.0, source="R7_cash_equivalent_axis")]
+    assert out["r7_conflicts"] == []
+
+
+def test_r7_disagreeing_facts_skip_the_context_and_record_a_conflict():
+    doc = fidelity_doc()
+    doc["facts"].append(dict(i=len(doc["facts"]), qname="us-gaap:InvestmentOwnedAtFairValue", value="1",
+                             context_id="cash1"))
+    out = cp.classify(doc, cik="0001920453")
+    assert out["extra_fv_facts"] == []
+    assert out["r7_conflicts"] == [dict(context_id="cash1", values=["179450525", "1"])]
+    assert cp.published_fv_sum(doc, cik="0001920453") == Decimal("1000000")
+
+
+def test_no_period_end_is_reported_and_fails_closed():
+    doc = fidelity_doc()
+    doc["document_metadata"]["document_period_end_dates"] = []
+    doc["contexts"].append(dict(id="dur", period=dict(kind="duration", start="2026-01-01", end=Q1),
+                                typed_dimensions=[], dimensions=[["us-gaap:CashAndCashEquivalentsAxis", "abc:M"]]))
+    doc["facts"].append(dict(i=len(doc["facts"]), qname="us-gaap:InvestmentOwnedAtFairValue", value="3",
+                             context_id="dur"))
+    out = cp.classify(doc, cik="0001920453")
+    assert out["period_end"] is None and out["no_period_end"] is True and out["period_end_source"] == "none"
+    assert out["extra_fv_facts"] == [] and out["r7_conflicts"] == []
+    assert all(not r["published"] for r in out["rows"].values())

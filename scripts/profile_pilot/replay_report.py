@@ -15,6 +15,11 @@ positive set all); the selected pairs' positive units are cross-checked against 
 own scoring.json. Floors are pre-registered constants below and are never tuned. Every number
 is IN-SAMPLE (SAMPLE_LABEL). Negatives are 'nothing recorded', not 'verified unchanged': the
 false-alarm rate is an UPPER bound (unadjudicated breaches count against the kind).
+Drift review ids (2026-10-01 final review): DRIFT_ + sha1(contract_id + eval_date)[:12]; for
+independent_totals rows the hash input also appends census_published.CENSUS_PUBLISHED_VERSION, so totals
+ids minted before this change (no version in the input) differ from ids minted after it. The per-filer
+seeded column is "removed by rule (seed learn quarter)": the census-published removals of the seed's
+learn-quarter document, not of the eval quarter.
 Exit codes: 0 ok, 2 stage invalidated, 4 refused.
 """
 from __future__ import annotations
@@ -26,7 +31,7 @@ import json
 from pathlib import Path
 import sys
 
-from scripts.profile_pilot import contracts_run, contracts_totals, lineage, m2_backtest, m2_seed, manifest, protection
+from scripts.profile_pilot import census_published, contracts_run, contracts_totals, lineage, m2_backtest, m2_seed, manifest, protection
 from scripts.profile_pilot.manifest import StageInvalidated
 from scripts.profile_pilot.paths import PathError, confined, discover_main_root, resolve_paths, write_once_json
 
@@ -133,8 +138,11 @@ def _fmt_m(value: float) -> str:
     return format(value / 1e6, ".1f")
 
 
-def review_id(contract_id: str, eval_date: str) -> str:
-    return "DRIFT_" + hashlib.sha1((contract_id + eval_date).encode("ascii")).hexdigest()[:12]
+def review_id(contract_id: str, eval_date: str, *, kind: str | None = None) -> str:
+    """DRIFT id. Totals rows (kind independent_totals) also hash the census published partition version, so
+    a partition change mints new ids instead of silently reusing a review of a different basis."""
+    tail = census_published.CENSUS_PUBLISHED_VERSION if kind == TOTALS_KIND else ""
+    return "DRIFT_" + hashlib.sha1((contract_id + eval_date + tail).encode("ascii")).hexdigest()[:12]
 
 
 def _num_or_none(value):
@@ -170,7 +178,7 @@ def queue_rows(results: dict, *, pairs: dict, fv_by_quarter: dict) -> list:
                 continue
             keys = list(r.get("violating_keys") or [])
             at_risk = fv_at_risk(r, keys=keys, fv=fv)
-            out.append(dict(review_id=review_id(r["contract_id"], pair["eval_date"]), state="open", in_queue="shadow",
+            out.append(dict(review_id=review_id(r["contract_id"], pair["eval_date"], kind=r["kind"]), state="open", in_queue="shadow",
                             population_origin="live", verdict_status="MISSING", verdict_detail="",
                             has_fix_route="False", cik=cik, rule_name="drift:" + r["kind"],
                             report_date=pair["eval_date"], lane="drift", engine="profile_contracts",
@@ -398,7 +406,7 @@ def render_md(body: dict, queue: list) -> str:
         per_rows = [(cik, v, r) for v, c in s["variants"].items() for cik, r in c["per_cik"].items()]
         removed_col = any("removed_by_rule" in r for _, _, r in per_rows)
         lines += _table(("cik", "variant", "anchored", "applicable", "smallest detected", "reason")
-                        + (("removed by rule",) if removed_col else ()),
+                        + (("removed by rule (seed learn quarter)",) if removed_col else ()),
                         [(cik, v, r["anchored"], r["applicable"], r["smallest_detected"], r["reason"])
                          + ((r.get("removed_by_rule", "-"),) if removed_col else ()) for cik, v, r in per_rows])
     lines += ["", "## Ledger rows not scored (by bucket)", ""]

@@ -5,6 +5,14 @@ reference implementation s21_predicate_v2.py) that reconcile the eight pilot fil
 to production's published basis within 0.5%. R1-R5 remove a position; R6 marks it underlying (not
 published); R7 adds cash-equivalent-axis fair-value facts the census does not treat as positions.
 The first rule that fires wins.
+
+Final-review hardening (2026-10-01): with no period end (neither the DEI fact nor
+document_period_end_dates) classify reports period_end=None and no_period_end=True, R1 fails closed
+(every row is removed) and R7 emits nothing, so consumers must abstain (contracts_totals does, with cause
+no_period_end). `near_misses` counts the FV-only parents that are a token prefix of >= 1 kept rows but fail
+the R5 children-sum equality (rollups that would slip back into the sum stay visible). R7 needs every
+InvestmentOwnedAtFairValue fact of a qualifying context to agree; a disagreeing context is skipped and
+listed in `r7_conflicts` instead of taking the first fact in document order.
 """
 from __future__ import annotations
 
@@ -79,11 +87,12 @@ def _fv_only(pos):
             and sum(1 for v in f.values() if v.get("status") == "reported") == 1)
 
 
-def r5_issuer_rollups(live):
-    """Context ids of FV-only rows whose normalised identifier is a token prefix of >=1 other live rows
-    and whose FV equals their FV sum within half a unit of the reported decimals per summand (min 1)."""
+def _r5_scan(live):
+    """(rollups, near_misses): context ids of FV-only rows whose normalised identifier is a token prefix of
+    >=1 other live rows and whose FV equals their FV sum within half a unit of the reported decimals per
+    summand (min 1); near_misses are the same prefix parents that FAIL that equality."""
     keys = [(_norm(p["identity"].get("typed_identifier")), p) for p in live]
-    out = set()
+    out, near = set(), []
     for key, parent in keys:
         if not key or not _fv_only(parent):
             continue
@@ -97,7 +106,14 @@ def r5_issuer_rollups(live):
         tol = max(Decimal("0.5") * Decimal(10) ** (-d) * (len(kids) + 1), Decimal(1))
         if abs((_fv(parent) or Decimal(0)) - sum((_fv(k) or Decimal(0) for k in kids), Decimal(0))) <= tol:
             out.add(parent["context_id"])
-    return out
+        else:
+            near.append(parent)
+    return out, near
+
+
+def r5_issuer_rollups(live):
+    """Context ids of the R5 rollups (see _r5_scan)."""
+    return _r5_scan(live)[0]
 
 
 def r6_reporting_entity(pos, cik):
@@ -105,21 +121,34 @@ def r6_reporting_entity(pos, cik):
     return bool(names) and any(_norm(s) in names for s in _segments(pos["identity"].get("typed_identifier"))[1:])
 
 
-def r7_cash_axis_facts(doc, pe):
+def _r7_scan(doc, pe):
+    """(facts, conflicts): one fact per qualifying context whose InvestmentOwnedAtFairValue facts all agree;
+    contexts whose facts disagree are skipped and returned as conflicts. No period end -> nothing."""
+    if pe is None:
+        return [], []
     held = {p["context_id"] for p in doc.get("positions", ())}
     ctxs = {c["id"]: c for c in doc.get("contexts", ())
             if (c.get("period") or {}).get("instant") == pe and c["id"] not in held
             and not c.get("typed_dimensions") and len(c.get("dimensions") or ()) == 1
             and str(c["dimensions"][0][0]).endswith("CashAndCashEquivalentsAxis")}
-    out, seen = [], set()
+    values = {}
     for f in doc.get("facts", ()):
         cid = f.get("context_id")
-        if cid in ctxs and cid not in seen and f.get("qname") == "us-gaap:InvestmentOwnedAtFairValue":
+        if cid in ctxs and f.get("qname") == "us-gaap:InvestmentOwnedAtFairValue":
             v = _dec(f.get("value"))
             if v is not None:
-                seen.add(cid)
-                out.append(dict(context_id=cid, fair_value=v, source=R7_SOURCE))
-    return out
+                values.setdefault(cid, []).append(v)
+    out, conflicts = [], []
+    for cid, vs in values.items():
+        if len(set(vs)) == 1:
+            out.append(dict(context_id=cid, fair_value=vs[0], source=R7_SOURCE))
+        else:
+            conflicts.append(dict(context_id=cid, values=[str(v) for v in vs]))
+    return out, conflicts
+
+
+def r7_cash_axis_facts(doc, pe):
+    return _r7_scan(doc, pe)[0]
 
 
 def classify(doc, *, cik):
@@ -133,7 +162,8 @@ def classify(doc, *, cik):
         rows[pos["context_id"]] = rule
         if rule is None:
             live.append(pos)
-    for cid in r5_issuer_rollups(live):
+    rollups, near = _r5_scan(live)
+    for cid in rollups:
         rows[cid] = "R5_issuer_rollup_fv_only"
     for pos in live:
         if rows[pos["context_id"]] is None and r6_reporting_entity(pos, cik):
@@ -144,10 +174,14 @@ def classify(doc, *, cik):
         if rule:
             removed[rule]["n"] += 1
             removed[rule]["fv"] += _fv(pos) or Decimal(0)
+    r7, r7_conflicts = _r7_scan(doc, pe)
     return {"version": CENSUS_PUBLISHED_VERSION, "period_end": pe, "period_end_source": pe_source,
+            "no_period_end": pe is None,
             "rows": {c: {"published": r is None, "underlying": r == "R6_reporting_entity_lookthrough", "rule": r}
                      for c, r in rows.items()},
-            "extra_fv_facts": [dict(f, fair_value=float(f["fair_value"])) for f in r7_cash_axis_facts(doc, pe)],
+            "extra_fv_facts": [dict(f, fair_value=float(f["fair_value"])) for f in r7],
+            "r7_conflicts": r7_conflicts,
+            "near_misses": {"n": len(near), "fv": float(sum((_fv(p) or Decimal(0) for p in near), Decimal(0)))},
             "removed_by_rule": {r: {"n": v["n"], "fv": float(v["fv"])} for r, v in removed.items()}}
 
 

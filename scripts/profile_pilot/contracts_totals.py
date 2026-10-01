@@ -6,6 +6,11 @@ finding 2026-10-01 that the raw census sum over-counts) against the fund's filed
 investments_at_fair_value, and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
 (detection_not_claimed); the criterion is deferred to sub-project 2.
 Pure functions: no I/O, no tolerances access beyond the band dict passed in.
+
+The totals kind uses the census published basis's SINGLE period end (census_published.period_end); when
+there is none the observation carries no_period_end=True and fv_residual_pct=None, and both totals
+contracts abstain (learn and evaluate) with cause no_period_end instead of breaching at -100%.
+contracts._check_frozen refuses a totals contract whose applies_to differs from APPLIES_TO.
 """
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
@@ -59,26 +64,32 @@ def observe_totals(doc: dict, *, financials: dict | None, cik: str, cache: dict 
     census_published.published_fv_sum (published positions plus R7 cash-equivalent-axis facts); counts and the
     pct sum run over the published positions. classify runs ONCE here (R5 is quadratic in the live rows);
     `cache` (a dict scoped to ONE contracts._evaluate call) memoises it per (id(doc), cik) across the two
-    totals contracts of that call. cache=None is the pure path."""
+    totals contracts of that call; the entry stores (doc, part) and is reused only when it holds the SAME
+    doc object (an id() reused after garbage collection never returns a stale partition). cache=None is the
+    pure path."""
     key = (id(doc), cik)
-    part = cache.get(key) if cache is not None else None
-    if part is None:
+    cached = cache.get(key) if cache is not None else None
+    if cached is not None and cached[0] is doc:
+        part = cached[1]
+    else:
         part = census_published.classify(doc, cik=cik)
         if cache is not None:
-            cache[key] = part
+            cache[key] = (doc, part)
     positions = [p for p in doc["positions"] if part["rows"][p["context_id"]]["published"]]
     fv_sum, fv_filled = _sum(positions, TOTALS_FIELD)
     fv_sum += sum((f["fair_value"] for f in census_published.r7_cash_axis_facts(doc, part["period_end"])),
                   Decimal(0))
     pct_sum, pct_filled = _sum(positions, PCT_FIELD)
     anchor = _num((financials or {}).get("investments_at_fair_value"))
-    residual = None if anchor in (None, Decimal(0)) else float(100 * (fv_sum - anchor) / anchor)
+    no_pe = bool(part.get("no_period_end"))
+    residual = None if no_pe or anchor in (None, Decimal(0)) else float(100 * (fv_sum - anchor) / anchor)
     return dict(n_positions=len(positions), fv_sum=float(fv_sum), fv_filled=fv_filled,
                 fv_anchor=None if anchor is None else float(anchor), fv_residual_pct=residual,
                 pct_sum=float(pct_sum), pct_filled=pct_filled,
                 anchor_source=ANCHOR_SOURCE if anchor is not None else None,
                 published_version=part["version"], removed_by_rule=part["removed_by_rule"],
-                extra_fv_facts=len(part["extra_fv_facts"]))
+                extra_fv_facts=len(part["extra_fv_facts"]), no_period_end=no_pe,
+                near_misses=part["near_misses"], r7_conflicts=len(part["r7_conflicts"]))
 
 
 def _contract(cik, field, tier, band, learn_status, learn_cause, expectation, evidence):
@@ -92,6 +103,8 @@ def learn_totals(cik: str, tier: str, band: dict, q1_doc: dict, *, financials_q1
     obs = observe_totals(q1_doc, financials=financials_q1, cik=cik)
     few = obs["n_positions"] < band["min_positions"]
     out = []
+    if obs["no_period_end"]:
+        return [_contract(cik, f, tier, band, "insufficient_evidence", "no_period_end", None, obs) for f in FIELDS]
     if few:
         out.append(_contract(cik, TOTALS_FIELD, tier, band, "insufficient_evidence", "too_few_positions", None, obs))
     elif obs["fv_anchor"] is None:
@@ -119,6 +132,8 @@ def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: di
                     cache: dict | None = None) -> dict:
     obs = observe_totals(q2_doc, financials=financials_q2, cik=contract["cik"], cache=cache)
     exp = contract["expectation"]
+    if obs["no_period_end"]:
+        return _result(contract, "insufficient_evidence", q2, cause="no_period_end", expected=exp, observed=obs)
     # Whole-book gate, shared by both fields: when the book itself is smaller than
     # min_positions, "too_few_positions" is the true cause for BOTH fields. A field
     # that is merely sparsely filled within an adequately sized book is a different

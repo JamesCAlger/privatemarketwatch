@@ -212,7 +212,8 @@ def test_per_filer_totals_table_shows_removed_by_rule_when_the_seed_summary_carr
                 negatives_caveat="caveat", ciks={}, per_kind={}, floors={}, seeded=seeded, exclusions=[],
                 exclusion_buckets={})
     text = rr.render_md(body, [])
-    assert "| cik | variant | anchored | applicable | smallest detected | reason | removed by rule |" in text
+    assert ("| cik | variant | anchored | applicable | smallest detected | reason | "
+            "removed by rule (seed learn quarter) |") in text
     assert "| A | fair_value_scale_flip | True | True | 0.05 | measured | R3_label_or_heading:1/600;" in text
     text.encode("ascii")
     plain = rr.render_md(dict(body, seeded=rr.seeded_cells(sens, financials_loaded={"A": True})), [])
@@ -223,3 +224,21 @@ def test_fv_of_doc_totals_on_the_published_basis():
     from tests.test_profile_pilot_totals import bcred_doc, BCRED
     fv = rr.fv_of_doc(bcred_doc(), cik=BCRED)
     assert fv["total"] == 600.0 and fv["by_key"]["e1"] == 50.0
+
+
+def test_totals_review_ids_hash_the_census_published_version_and_other_kinds_do_not():
+    import hashlib
+    from scripts.profile_pilot import census_published as cp
+    cid, date = "A:independent_totals:fair_value:whole_filing", "2026-03-31"
+    want = "DRIFT_" + hashlib.sha1((cid + date + cp.CENSUS_PUBLISHED_VERSION).encode("ascii")).hexdigest()[:12]
+    assert rr.review_id(cid, date, kind=rr.TOTALS_KIND) == want
+    assert rr.review_id(cid, date) != want
+    other = "A:fill_rate:interest_rate:whole_filing"
+    assert rr.review_id(other, date, kind="fill_rate") ==         "DRIFT_" + hashlib.sha1((other + date).encode("ascii")).hexdigest()[:12]
+    results = {"rolling:A:2025-12-31:2026-03-31": [
+        dict(contract_id=cid, kind="independent_totals", field="fair_value", partition_id="whole_filing",
+             status="breach", cause="fv_residual_outside_band", n_violating=0, violating_keys=[],
+             newly_abstained=False, observed=dict(fv_sum=2.0, fv_anchor=1.0), expected=dict())]}
+    rows = rr.queue_rows(results, pairs={"A": _pair("A", "2025-12-31", date)},
+                         fv_by_quarter={("A", date): dict(total=1.0, by_key={})})
+    assert [r["review_id"] for r in rows] == [want]
