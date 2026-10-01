@@ -12901,3 +12901,43 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Found by the census published-basis predicate v2 (filer-profile pilot, Task 0b): production's published total is 2.05x-2.31x the fund's own `investments_at_fair_value` for six quarters; the excess ($0.6B-$2.2B per quarter) is rows with no instrument type named 'Debt', 'Debt <industry>' (category and industry subtotals). Details in `docs/investigations/conservation_shadow_engine.md` (2026-10-01 entry).
 - The shadow `fv_conservation` tight-tier check records `overshoot` for all six quarters at advisory enforcement; the quarter gate judges only the sign-off quarter (which reconciles). Historical cohort fund-detail pages therefore show roughly double the true portfolio for those quarters.
 - Fix not made here (recorded as the fourth production defect of the investigation; mechanism to be chosen: per-CIK correction or global hierarchical-subtotal rule). No production data changed.
+
+## 2026-10-01 -- Fidelity (0001920453) wrapper v2: category-subtotal leakage fixed in production
+
+- `data/overrides/bdc_xbrl_wrappers/0001920453.json` version 1 -> 2 (schema v3). Prefix rules add
+  `Investments Investments - non-controlled / non-affiliate` plus the variants `/non-affiliate`,
+  `non-controlled non-affiliate` and `-- non-controlled / non-affiliate` (ordered before the bare
+  `Investments Investments`), so the start-anchored `category_marker_re` now sees
+  `First Lien Debt <Industry>` and demotes the heading rows to `aggregate`. `category_marker_re`
+  gains a negative lookahead for instrument words (term loan, delayed draw, revolv*, unitranche,
+  warrant, unit, stock, shares, note, bond): without it the fix demoted one real position
+  (Conair Holdings LLC Delayed Draw Term Loan, 2024-06-30, FV -0.3M, maturity 2029-11-02).
+  `known_edge_cases` documents the mechanism. Pipeline code unchanged (Layer 2 only).
+- Disposition diff over all 4,997 raw rows: 388 `debt_position_leaf` + 76 `debt_category_rollup`
+  -> `aggregate`, all 2023-12-31..2025-03-31, none containing a digit, dot or percent; no other
+  disposition changes. Production: -131 published rows (all no-instrument-type heading rows named
+  'Debt' / 'Debt <industry>'), no row gained, no surviving row changed FV/type/maturity/spread.
+- Published total vs `fund_financials.investments_at_fair_value`: 2023-12-31 +104.8% -> -7.6%,
+  2024-03-31 +131.4% -> -4.6%, 2024-06-30 +127.5% -> -2.8%, 2024-09-30 +116.8% -> -3.8%,
+  2024-12-31 +118.8% -> -2.0%, 2025-03-31 +119.9% -> +0.8%. 2023-03-31..2023-09-30 and
+  2025-06-30..2026-03-31 identical to the dollar (residual undershoots of 5.7/13.7/10.3% remain).
+- Oracle (staging + trial): v1 raw fail on unclassified_rate/fv_rate in the six quarters; v2 clears
+  those but raises `exclusion_risk_detected` (non-waiveable) in the same six quarters because the
+  check's evidence tokens include "first lien"/"second lien", which are the heading names; all
+  flagged rows (24-94 per quarter) are the demoted headings with no rate/maturity/digit text.
+  Promotion gate: `review_required`, blocking rows -13, blocking FV -$488.9M. J01 54.1% -> 53.6%
+  (pre-existing fail), J03 8.9% -> 9.1% (pass).
+- Rebuilt: `rebuild_outputs.py --unified` (783,894 -> 783,763 rows), `--returns` (required by the
+  RI07 export guard), `pipeline.main --export-frontend`. `diff_outputs.py --semantic`: holdings
+  +3,308 rows vs the 2026-09-05 baseline (was +3,439; -131 = this fix), 680 divergent artifacts
+  (was 671). `reattest_quarters.py check`: both quarters REGRESSED with the same flips as every run
+  since 2026-09-30 18:47 (pre-existing; Fidelity's 2025-12-31 and 2026-03-31 rows unchanged).
+- Side finding (NOT fixed): the unified build joins `canonical_name` from the existing
+  `entity_lookup.csv` before applying the GICS cache (canonical fallback), so GICS is
+  path-dependent on the previous run. This export moves gics_sector on ~490 holdings_history rows
+  across ~25 other cohort funds in both directions (e.g. Ares Consilio row loses Industrials with
+  identical issuer and canonical name). Frontend JSON left uncommitted for owner review.
+- Tests: `tests/test_bdc_xbrl_wrapper.py` +8 (6 heading parametrizations, Conair leaf survives,
+  rate-bearing leaf survives; rule-id expectation V1 -> V2). Wrapper/oracle/trial/matching 790
+  passed; oracle_checks J01/J03/J04/DiagnoseFuzzy 20 passed; unified_holdings not-slow 545 passed.
+  Full suite not run. No baseline refresh. Evidence: `scratch/2026-10-01_fidelity_wrapper/`.
