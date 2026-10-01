@@ -1,6 +1,7 @@
 """Census-side published-basis partition predicate. Current version census-published.v2 (adopted in Task 0b
-fix round 2); census-published.v1 stays reachable via classify(..., version="census-published.v1"). Pure
-functions, no I/O.
+fix round 2). census-published.v1 is reachable ONLY through a direct classify(..., version="census-published.v1")
+call: the contracts path (contracts._check_frozen, exact match on applies_to) REFUSES frozen v1 roots, so a new
+contracts run is needed for them. Pure functions, no I/O.
 
 Ordered rules from the 2026-10-01 investigation (scratch/2026-10-01_census_published_basis,
 reference implementation s21_predicate_v2.py) that reconcile the eight pilot filers' census positions
@@ -21,30 +22,44 @@ that also report cost/pct (the 2023 inception schedules of Onex, Fidelity and Ne
 identifiers, category -> industry -> issuer). The pool is the rows still kept after R1-R5. A pool row is a
 rollup when
 (a) its normalised identifier is a prefix of >= 1 other pool rows (its children): on a word boundary when the
-    parent has no '|' segments, on a SEGMENT boundary when it has (ruling 1: '... | 5/30/2031' is not the
-    parent of a duplicate tag '... | 5/30/2031 One', measured on 0001950803 2026-03-31);
+    parent is not segmented, on a SEGMENT boundary when it is -- its raw identifier contains '|' anywhere,
+    even trailing (ruling 1 + review item 8: '... | 5/30/2031' is not the parent of a duplicate tag
+    '... | 5/30/2031 One', measured on 0001950803 2026-03-31; 'Debt Securities |' is not the parent of
+    'Debt Securities Consumer Services ...');
 (b) its fair value equals the sum of its DIRECT children (pool rows whose longest valid prefix is this row)
     within the R5 reported-decimals tolerance;
-(c) its cost equals the children's cost sum the same way (a parent without cost is judged on FV alone only
-    when it also reports no pct, else kept); and
+(c) its cost equals the children's cost sum the same way; a parent without cost and with pct is kept; a
+    parent without cost and pct is judged on FV alone, plus the principal sum when it reports principal
+    (review item 6);
 (d) it reports none of NON_ADDITIVE_FIELDS (rate, spread, floor, PIK rate, maturity): a subtotal cannot carry
-    them, so such a row is a position (fix round 1: TCW duplicate tags, Ares/BCRED single-child pairs).
+    them, so such a row is a position (fix round 1: TCW duplicate tags, Ares/BCRED single-child pairs);
 (e) its fair value is non-zero (ruling 5, fix round 2): a zero-FV parent carries no sum evidence and stays
     published (BCRED WHCG / Pigments, Ares Eagle warrant). In v2 the same guard applies to R5; v1 R5 is
     frozen and unchanged.
 Passes repeat to a fixed point, each removing only the rollups with no rollup below them (deepest first;
 `r5b_passes` lists the context ids per pass). `near_misses_r5b` = {n, fv, by_reason} over the prefix parents
-kept at the fixed point: fv_cost_mismatch (FV matched and cost did not, or the reverse) and
-non_additive_terms (both matched, (d) abstained). The negated-cost alternative tried in 2132a31 was reverted
-(ruling 2).
+kept at the fixed point: fv_cost_mismatch, fv_principal_mismatch (one additive sum matched, the other did
+not) and non_additive_terms ((d) abstained). `r5b_single_child` = {n, fv} counts removed rollups that had
+exactly one direct child: they are ambiguous with duplicate tags. Measured (fix round 3,
+scratch/2026-09-30_base_build/diag_r5b_single_child.py): 241 such removals over all quarters, 236 with a
+child carrying position fields and 5 with an identical-FV/cost child without position fields, all Fidelity
+industry/category headings over one holding; FV is conserved either way (the child stays), so no abstention.
+The negated-cost alternative tried in 2132a31 was reverted (ruling 2).
+Known limits (review item 7): hierarchy blocking -- a kept prefix row that is NOT a rollup (e.g. a near
+miss) still absorbs its descendants as direct children, so its ancestors are summed at the wrong level and
+are kept too (conservative: under-removal, never over-removal); R6 look-through rows are in the R5b child
+pool (a JV row whose identifier extends a fund position's) -- no effect today, because v1's R6 splits on '|'
+and BCRED's JV rows use a ', Emerald JV LP' suffix it does not mark, and (d)/(e) keep those pairs.
 
-Adoption (rulings 3-6, 2026-10-01): measured over all 104 fund-quarters of the 8 pilot filers that have a
-production counterpart. The reference for a fund-quarter is production's published total where production
-reconciles to fund_financials.investments_at_fair_value within 0.5%, else that anchor (ruling 4: production
-publishes Fidelity's subtotal rows, +105% to +131% over the anchor); 7 fund-quarters with no anchor and
-production out of band are unmeasurable. Of the 97 measured: 0 violations of rule (a) (v2 below -0.5% where
-v1 was not), 0 worsenings by > 1 pp (rule b), 31 improvements by > 1 pp -> v2 is current. The v1 output shape
-has no R5b keys; frozen v1 artefacts evaluate unchanged via version=.
+Adoption (rulings 3-6; re-measured in fix round 3 against CURRENT production after the Fidelity wrapper v2
+fix, scratch/2026-09-30_base_build/diag_predicate_v2.py + .meta.json): 111 census documents of the 8 pilot
+filers; 3 have neither production rows nor a fund_financials anchor and are skipped; 108 rows. The reference
+for a fund-quarter is production's published total where production reconciles to
+fund_financials.investments_at_fair_value within 0.5%, else that anchor (also when production has no rows);
+7 fund-quarters (all 0001715933) have production rows but NO anchor at all and production cannot be checked,
+so they are unmeasurable. Of the 101 measured: 0 violations of rule (a) (v2 below -0.5% where v1 was not),
+0 worsenings by > 1 pp (rule b), 31 improvements by > 1 pp -> v2 is current. The v1 output shape has no R5b
+keys.
 """
 from __future__ import annotations
 
@@ -68,7 +83,7 @@ CASH_BUCKET = re.compile(r"^(other )?cash and cash equivalents\b")
 REPORTED = ("reported", "consistent_duplicate")
 # R5b: terms a subtotal row never carries (not additive across positions); a parent reporting one is kept
 NON_ADDITIVE_FIELDS = ("interest_rate", "basis_spread", "interest_rate_floor", "pik_rate", "maturity_date")
-R5B_NEAR_MISS_REASONS = ("fv_cost_mismatch", "non_additive_terms")
+R5B_NEAR_MISS_REASONS = ("fv_cost_mismatch", "fv_principal_mismatch", "non_additive_terms")
 
 
 def _segments(ident):
@@ -189,86 +204,102 @@ def _key(pos):
     return " | ".join(s for s in (_norm(seg) for seg in ident.split("|")) if s)
 
 
-def _ancestor_keys(key, by_key):
-    """Proper prefixes of `key` that are some kept row's key, longest first. A parent key without '|' may end
-    on any word boundary of the child; a parent key with '|' must end on a segment boundary (whole segments),
-    so 'Common Stocks | Real Estate' is not a parent of 'Common Stocks | Real Estate Investment Trust ...' and
-    '... | 5/30/2031' is not a parent of '... | 5/30/2031 One'."""
+def _segmented(pos):
+    """True when the raw identifier contains '|' anywhere (a trailing or empty segment still counts)."""
+    return "|" in (pos["identity"].get("typed_identifier") or "")
+
+
+def _ancestor_keys(key, by_key, segmented):
+    """Proper prefixes of `key` that are some kept row's key, longest first. A parent key whose rows are not
+    segmented may end on any word boundary of the child; a segmented parent key (its key contains '|', or any
+    row carrying it has a raw '|', see `segmented`) must end on a segment boundary (whole segments), so
+    'Common Stocks | Real Estate' is not a parent of 'Common Stocks | Real Estate Investment Trust ...',
+    '... | 5/30/2031' is not a parent of '... | 5/30/2031 One', and 'Debt Securities |' is not a parent of
+    'Debt Securities Consumer Services ...'."""
     toks = key.split(" ")
     out = []
     for n in range(len(toks) - 1, 0, -1):
         cand = " ".join(toks[:n])
         if toks[n - 1] == "|" or cand not in by_key:
             continue
-        if "|" in toks[:n] and toks[n] != "|":
+        if ("|" in toks[:n] or cand in segmented) and toks[n] != "|":
             continue
         out.append(cand)
     return out
 
 
 def _direct_children(kept):
-    """({id(parent): [direct children]}, by_key) over the kept rows: a row's parent key is its longest valid
-    ancestor key (see _ancestor_keys); every kept row carrying that key is a parent."""
+    """({id(parent): [direct children]}, by_key, segmented) over the kept rows: a row's parent key is its
+    longest valid ancestor key (see _ancestor_keys); every kept row carrying that key is a parent."""
     keyed = [(_key(p), p) for p in kept]
-    by_key = {}
+    by_key, segmented = {}, set()
     for key, p in keyed:
         if key:
             by_key.setdefault(key, []).append(p)
+            if _segmented(p):
+                segmented.add(key)
     kids = {}
     for key, p in keyed:
-        anc = _ancestor_keys(key, by_key) if key else []
+        anc = _ancestor_keys(key, by_key, segmented) if key else []
         if anc:
             for parent in by_key[anc[0]]:
                 kids.setdefault(id(parent), []).append(p)
-    return kids, by_key
+    return kids, by_key, segmented
+
+
+def _paired(parent, kids, field, reason):
+    """(ok, near_miss_reason) for FV plus one more additive field that must match too."""
+    fv_ok = bool(_sum_matches(parent, kids, "fair_value"))
+    other_ok = bool(_sum_matches(parent, kids, field))
+    return (fv_ok and other_ok), (reason if fv_ok != other_ok else None)
 
 
 def _r5b_test(parent, kids):
     """(rollup, near_miss_reason) for one prefix parent and its direct children. near_miss_reason is
-    'fv_cost_mismatch' (FV matched and cost did not, or the reverse), 'non_additive_terms' (FV and cost both
-    matched but the parent reports a non-additive term a subtotal cannot carry: the row is a position, e.g. a
-    duplicate tag of its only child), or None."""
+    'fv_cost_mismatch' (FV matched and cost did not, or the reverse), 'fv_principal_mismatch' (same for the
+    principal of a parent without cost and pct), 'non_additive_terms' (the sums matched but the parent reports
+    a non-additive term a subtotal cannot carry: the row is a position, e.g. a duplicate tag of its only
+    child), or None."""
     if not _fv(parent):
         return False, None                              # ruling 5: a zero-FV parent carries no sum evidence
-    fv_ok = _sum_matches(parent, kids, "fair_value")
-    if fv_ok is None:
-        return False, None
     if _reports(parent, "cost"):
-        cost_ok = bool(_sum_matches(parent, kids, "cost"))
-        if fv_ok != cost_ok:
-            return False, "fv_cost_mismatch"
-        ok = fv_ok and cost_ok
+        ok, reason = _paired(parent, kids, "cost", "fv_cost_mismatch")
     elif _reports(parent, "pct_of_net_assets"):
         return False, None
+    elif _reports(parent, "principal_amount"):
+        ok, reason = _paired(parent, kids, "principal_amount", "fv_principal_mismatch")
     else:
-        ok = fv_ok
+        ok, reason = bool(_sum_matches(parent, kids, "fair_value")), None
+    if reason:
+        return False, reason
     if ok and any(_reports(parent, f) for f in NON_ADDITIVE_FIELDS):
         return False, "non_additive_terms"
     return ok, None
 
 
 def _r5b_scan(kept):
-    """(passes, near_misses) over the rows R1-R5 kept: each pass removes the R5b rollups that have no R5b
-    rollup among their descendants (deepest first) and re-derives the direct children from what is left;
-    near_misses are the prefix parents still kept at the fixed point whose FV matched but cost did not, or
-    vice versa."""
-    kept, passes = list(kept), []
+    """(passes, near_misses, single_child) over the rows R1-R5 kept: each pass removes the R5b rollups that have
+    no R5b rollup among their descendants (deepest first) and re-derives the direct children from what is
+    left; near_misses are (row, reason) for the prefix parents still kept at the fixed point that _r5b_test
+    labels; single_child are the removed rollups that had exactly one direct child when removed."""
+    kept, passes, single = list(kept), [], []
     while True:
-        kids, by_key = _direct_children(kept)
+        kids, by_key, segmented = _direct_children(kept)
         found = [p for p in kept if id(p) in kids and _r5b_test(p, kids[id(p)])[0]]
         if not found:
             break
         above = set()
         for p in found:
-            for a in _ancestor_keys(_key(p), by_key):
+            for a in _ancestor_keys(_key(p), by_key, segmented):
                 above.update(id(q) for q in by_key[a])
         deepest = [p for p in found if id(p) not in above]
         passes.append(deepest)
+        single += [p for p in deepest if len(kids[id(p)]) == 1]
         gone = {id(p) for p in deepest}
         kept = [p for p in kept if id(p) not in gone]
-    kids, _ = _direct_children(kept)
+    kids, _, _ = _direct_children(kept)
     near = [(p, r) for p in kept if id(p) in kids for r in [_r5b_test(p, kids[id(p)])[1]] if r]
-    return passes, near
+    return passes, near, single
 
 
 def r6_reporting_entity(pos, cik):
@@ -329,10 +360,10 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
     rollups, near = _r5_scan(live, nonzero_parent=v2)
     for cid in rollups:
         rows[cid] = "R5_issuer_rollup_fv_only"
-    passes, near_b = [], []
+    passes, near_b, single_b = [], [], []
     if v2:
         pool = [p for p in live if rows[p["context_id"]] is None]
-        passes, near_b = _r5b_scan(pool)
+        passes, near_b, single_b = _r5b_scan(pool)
         for batch in passes:
             for pos in batch:
                 rows[pos["context_id"]] = "R5b_hierarchical_rollup"
@@ -359,6 +390,7 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
             r: {"n": sum(1 for _, x in near_b if x == r), "fv": _fv_total([p for p, x in near_b if x == r])}
             for r in R5B_NEAR_MISS_REASONS})
         out["r5b_passes"] = [[p["context_id"] for p in batch] for batch in passes]
+        out["r5b_single_child"] = {"n": len(single_b), "fv": _fv_total(single_b)}
     return out
 
 

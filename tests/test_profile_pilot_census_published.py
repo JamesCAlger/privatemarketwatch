@@ -428,10 +428,14 @@ def test_r5b_real_position_prefixing_two_tranches_with_other_fv_is_kept():
 def test_r5b_parent_without_cost_needs_no_pct_for_the_fv_only_fallback():
     # no cost, pct reported: kept even though FV equals the children's sum
     assert cp.classify(apex_doc("200", None), cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
-    # no cost, no pct (principal only, so not an R5 FV-only row): the FV test alone decides
-    out = cp.classify(apex_doc("200", None, pct=None, principal="200"), cik=OTHER, version=V2)
+    # no cost, no pct, no principal (shares only, so not an R5 FV-only row): the FV test alone decides
+    def shares_parent(fv):
+        doc = apex_doc(fv, None, pct=None)
+        doc["positions"][0]["fields"]["shares_held"] = dict(doc["positions"][0]["fields"]["fair_value"], value="10")
+        return doc
+    out = cp.classify(shares_parent("200"), cik=OTHER, version=V2)
     assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
-    assert cp.classify(apex_doc("250", None, pct=None, principal="200"), cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
+    assert cp.classify(shares_parent("250"), cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
 
 
 def test_r5b_whole_word_prefix_only():
@@ -536,3 +540,47 @@ def test_v2_zero_fv_kept_set_is_exactly_the_fixture_r5_rows_with_fv_zero():
         zero = {r["context_id"] for r in csv.DictReader(fh)
                 if r["rule"] == "R5_issuer_rollup_fv_only" and Decimal(r["fv_value"]) == 0}
     assert zero == V2_ZERO_FV_KEPT
+
+
+# ---------------------------------------------------------------- fix round 3 (review items 1, 6, 8)
+
+def test_r5b_counts_single_child_rollups():
+    # item 1: a single-child 'rollup' is ambiguous with a duplicate tag, so the count is reported
+    doc = mk_doc([full_row("one", "Debt Securities Consumer Services", "38291396", "38000944"),
+                  full_row("k1", "Debt Securities Consumer Services Grand Circle Corp Term Loan", "38291396",
+                           "38000944"),
+                  full_row("two", "Lightbeam Bidco, Inc.", "4600000", "4700000", pct=None),
+                  full_row("k2", "Lightbeam Bidco, Inc., First lien senior secured revolving loan", "100000",
+                           "100000", pct=None, principal="100000"),
+                  full_row("k3", "Lightbeam Bidco, Inc., First lien senior secured loan", "4500000", "4600000",
+                           pct=None, principal="4600000")])
+    out = cp.classify(doc, cik=OTHER, version=V2)
+    assert out["rows"]["one"]["rule"] == out["rows"]["two"]["rule"] == "R5b_hierarchical_rollup"
+    assert out["r5b_single_child"] == {"n": 1, "fv": 38291396.0}
+
+
+def test_r5b_fv_only_fallback_also_requires_the_principal_sum_when_the_parent_reports_principal():
+    # item 6: no cost, no pct, principal reported -> FV and principal must both match
+    out = cp.classify(apex_doc("200", None, pct=None, principal="150"), cik=OTHER, version=V2)
+    assert out["rows"]["p"]["rule"] is None
+    assert out["near_misses_r5b"]["by_reason"]["fv_principal_mismatch"] == {"n": 1, "fv": 200.0}
+    # removed-rollup case: principal matches the children's sum (no principal on the kids -> 0, so parent 0
+    # would be unparsable-free; give the kids principal)
+    doc = apex_doc("200", None, pct=None, principal="200")
+    for k in doc["positions"][1:]:
+        k["fields"]["principal_amount"] = dict(doc["positions"][0]["fields"]["principal_amount"], value="100")
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
+
+
+def test_r5b_trailing_pipe_parent_is_segmented():
+    # item 8: a raw '|' anywhere in the parent identifier makes it segmented, even when the segment after the
+    # pipe is empty: 'Debt Securities |' does not word-match 'Debt Securities Consumer Services ...'
+    doc = mk_doc([full_row("p", "Debt Securities |", "300", "290"),
+                  full_row("k1", "Debt Securities Consumer Services Acme LLC Term Loan", "100", "90"),
+                  full_row("k2", "Debt Securities Consumer Services Beta Inc Term Loan", "200", "200")])
+    assert rules(doc, version=V2)["p"] is None
+    # but it still segment-matches children that continue after the pipe
+    doc = mk_doc([full_row("p", "Debt Securities |", "300", "290"),
+                  full_row("k1", "Debt Securities | Consumer Services | Acme LLC Term Loan", "100", "90"),
+                  full_row("k2", "Debt Securities | Consumer Services | Beta Inc Term Loan", "200", "200")])
+    assert rules(doc, version=V2)["p"] == "R5b_hierarchical_rollup"
