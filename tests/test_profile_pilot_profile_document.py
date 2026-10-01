@@ -75,6 +75,88 @@ def minimal_document(*, state="accepted", stub_all=True):
                 ledger=[dict(event="document_created", at=NOW, run_id=RUN, detail={})])
 
 
+def bounded_events(valid_from="2025-12-31", valid_to="2026-03-31", key="scale_unit.fair_value", value=None):
+    return envelope.make_assertion(list(), cik=CIK, key=key, value=value or {"unit": "USD"}, valid_from=valid_from,
+                                   valid_to=valid_to, recorded_at=NOW,
+                                   support={"kind": "context_count", "count": 1},
+                                   evidence=[{"kind": "owner_ruling", "ref": "R1"}])
+
+
+def _bounded_doc(valid_from, valid_to, key="scale_unit.fair_value"):
+    events = bounded_events(valid_from, valid_to, key)
+    entries = envelope.materialize_entries(events)
+    eid = entries[0]["entry_id"]
+    return dict(minimal_document(stub_all=False), events=events, entries=entries, admissions={eid: adm()},
+                stubs=[])
+
+
+def block(block_id, *, supersedes=None):
+    return dict(block_id=block_id, family="bdc_xbrl_wrapper", version=1, content={}, content_sha256="d" * 64,
+                source_files=[dict(path="x.json", sha256="e" * 64, ordered_sha256="e" * 64)],
+                valid_from=None, valid_to=None, recorded_at=NOW, recorded_until=None, supersedes=supersedes,
+                supersession_kind=("correction" if supersedes else None),
+                attested_under=[], evidence=[{"kind": "override_file"}], expressibility=None)
+
+
+def _with_extra_admission(d):
+    d["admissions"] = dict(d["admissions"], **{"9999999999:bogus:key:all:allforms:v1": adm()})
+
+
+def _with_foreign_entry(d):
+    events = envelope.make_assertion(d["events"], cik="0000000002", key="meaning.pik_rate",
+                                     value={"convention": "cash"}, valid_from=None, recorded_at=NOW,
+                                     support={"kind": "context_count", "count": 1},
+                                     evidence=[{"kind": "owner_ruling", "ref": "R1"}])
+    entries = envelope.materialize_entries(events)
+    new_eid = next(e["entry_id"] for e in entries if e["entry_id"] not in d["admissions"])
+    d.update(events=events, entries=entries, admissions=dict(d["admissions"], **{new_eid: adm()}))
+
+
+def _with_overlapping_entry(d):
+    events = inherited_events(d["events"], value={"convention": "cash"})
+    entries = envelope.materialize_entries(events)
+    new_eid = next(e["entry_id"] for e in entries if e["entry_id"] not in d["admissions"])
+    d.update(events=events, entries=entries, admissions=dict(d["admissions"], **{new_eid: adm()}))
+
+
+def _with_stub_key_outside_grid(d):
+    d["stubs"].append(dict(stub_id=CIK + ":stub:not_a_grid.key", key="not_a_grid.key", cause="no_source",
+                           closing_evidence="x", entry_id=None, detail={}))
+
+
+def _with_stub_naming_unknown_entry(d):
+    d["stubs"].append(pd.stub(CIK, "meaning.interest_rate", "no_source", "x", entry_id="bogus:entry:id"))
+
+
+def _with_stub_wrong_key(d):
+    eid = d["entries"][0]["entry_id"]
+    d["stubs"] = [s for s in d["stubs"] if s["key"] != "scale_unit.fair_value"]
+    d["stubs"].append(pd.stub(CIK, "scale_unit.fair_value", "no_source", "x", entry_id=eid))
+
+
+def _with_stub_naming_accepted_entry(d):
+    eid = d["entries"][0]["entry_id"]
+    d["stubs"].append(pd.stub(CIK, "meaning.interest_rate", "no_source", "x", entry_id=eid))
+
+
+def _with_stub_wrong_cik(d):
+    d["stubs"] = [s for s in d["stubs"] if s["key"] != "scale_unit.cost"]
+    d["stubs"].append(dict(stub_id="0000000000:stub:scale_unit.cost", key="scale_unit.cost", cause="no_source",
+                           closing_evidence="x", entry_id=None, detail={}))
+
+
+def _with_duplicate_block_ids(d):
+    d["wrapper_section"]["blocks"] = [block("blk:1"), block("blk:1")]
+
+
+def _with_block_superseding_unknown_block(d):
+    d["wrapper_section"]["blocks"] = [block("blk:2", supersedes="blk:missing")]
+
+
+def _with_correction_superseding_unknown_correction(d):
+    d.update(corrections=[one_off(supersedes="corr:missing")])
+
+
 def test_grid_shape():
     assert len(pd.FIELD_KEYS) == 39 and len(pd.FILER_KEYS) == 17 and len(pd.GRID_KEYS) == 56
     assert len(set(pd.GRID_KEYS)) == 56
@@ -88,6 +170,7 @@ def test_schema_enums_match_the_module_constants():
     assert tuple(d["admission"]["properties"]["basis"]["enum"]) == pd.ADMISSION_BASES
     assert tuple(d["admission"]["properties"]["source_kind"]["enum"]) == pd.SOURCE_KINDS
     assert tuple(d["stub"]["properties"]["cause"]["enum"]) == pd.STUB_CAUSES
+    assert tuple(d["correction"]["properties"]["state"]["enum"]) == pd.LIFECYCLE_STATES
 
 
 def test_minimal_document_validates_and_resolves():
@@ -139,6 +222,26 @@ def test_entry_state_superseded_and_retracted():
     (lambda d: d.update(corrections=[one_off(valid_to="2026-03-31")]), "one_off"),
     (lambda d: d.update(corrections=[one_off(), one_off()]), "correction ids"),
     (lambda d: d.update(schema="filer_profile_document_v0"), "schema"),
+    (_with_extra_admission, "admissions"),
+    (_with_foreign_entry, "another filer"),
+    (_with_stub_key_outside_grid, "outside the grid"),
+    (_with_stub_naming_unknown_entry, "unknown entry"),
+    (_with_stub_wrong_key, "different key"),
+    (_with_stub_naming_accepted_entry, "accepted entry"),
+    (_with_stub_wrong_cik, "stub_id must carry"),
+    (_with_duplicate_block_ids, "block ids"),
+    (_with_block_superseding_unknown_block, "unknown block"),
+    (_with_overlapping_entry, "overlap"),
+    (lambda d: d.update(corrections=[one_off(report_date=None, kind="multi_quarter", valid_from=None,
+                                             valid_to=None, report_dates=[Q4])]), "multi_quarter"),
+    (lambda d: d.update(corrections=[one_off(report_date=None, kind="undated", valid_from=None, valid_to=None,
+                                             report_dates=[Q4])]), "undated"),
+    (lambda d: d.update(corrections=[one_off(target={})]), "row_id"),
+    (_with_correction_superseding_unknown_correction, "unknown correction"),
+    (lambda d: d.update(partition_predicate=dict(d["partition_predicate"], published_basis_entry_id="bogus:id")),
+     "published_basis_entry_id"),
+    (lambda d: d.update(partition_predicate=dict(d["partition_predicate"], reporting_entities_entry_id="bogus:id")),
+     "reporting_entities_entry_id"),
 ])
 def test_validate_rejects(mutate, message):
     doc = copy.deepcopy(minimal_document())
@@ -166,3 +269,130 @@ def test_load_document_round_trips(tmp_path):
     path = tmp_path / "doc.json"
     path.write_text(json.dumps(doc, indent=2, ensure_ascii=True) + "\n", encoding="ascii")
     assert pd.load_document(path) == doc
+
+
+# ---- Fix round 1 ----
+
+def test_valid_at_boundaries():
+    bounded = dict(valid_from="2025-12-31", valid_to="2026-03-31")
+    assert pd.valid_at(bounded, "2025-12-31") is True
+    assert pd.valid_at(bounded, "2026-03-31") is False
+    assert pd.valid_at(bounded, "2025-12-30") is False
+    unbounded = dict(valid_from=None, valid_to=None)
+    assert pd.valid_at(unbounded, "1900-01-01") is True
+    assert pd.valid_at(unbounded, "2999-01-01") is True
+
+
+def test_coverage_and_resolve_respect_the_half_open_valid_interval():
+    doc = _bounded_doc("2025-12-31", "2026-03-31")
+    eid = doc["entries"][0]["entry_id"]
+    assert pd.resolve(doc, "scale_unit.fair_value", "2025-12-31")["status"] == "resolved"
+    assert pd.resolve(doc, "scale_unit.fair_value", "2026-03-31") == {"status": "no_entry"}
+    assert pd.resolve(doc, "scale_unit.fair_value", "2025-12-30") == {"status": "no_entry"}
+    cov_in = pd.coverage(doc, "2025-12-31")["scale_unit.fair_value"]
+    assert cov_in["entry_ids"] == [eid] and cov_in["accepted_entry_ids"] == [eid]
+    cov_out_hi = pd.coverage(doc, "2026-03-31")["scale_unit.fair_value"]
+    assert cov_out_hi["entry_ids"] == [] and cov_out_hi["accepted_entry_ids"] == []
+    cov_out_lo = pd.coverage(doc, "2025-12-30")["scale_unit.fair_value"]
+    assert cov_out_lo["entry_ids"] == [] and cov_out_lo["accepted_entry_ids"] == []
+
+
+def test_valid_at_null_bounds_are_unbounded_in_resolve():
+    doc = minimal_document()
+    assert pd.resolve(doc, "meaning.interest_rate", "1900-01-01")["status"] == "resolved"
+    assert pd.resolve(doc, "meaning.interest_rate", "2999-01-01")["status"] == "resolved"
+
+
+def test_resolve_as_of_before_and_after_a_retraction():
+    doc = minimal_document()
+    eid = doc["entries"][0]["entry_id"]
+    events = doc["events"] + [{"event": "retract", "event_id": "retract:" + eid, "entry_id": eid,
+                               "recorded_at": LATER}]
+    doc = dict(doc, events=events)
+    assert pd.resolve(doc, "meaning.interest_rate", Q4, as_of=NOW)["status"] == "resolved"
+    assert pd.resolve(doc, "meaning.interest_rate", Q4, as_of=LATER) == {"status": "no_entry"}
+
+
+def test_resolve_rejects_predicate_evaluation_error_as_profile_document_error():
+    events = envelope.make_assertion(list(), cik=CIK, key="meaning.pik_rate", value={"convention": "cash"},
+                                     valid_from=None, recorded_at=NOW,
+                                     support={"kind": "context_count", "count": 1},
+                                     evidence=[{"kind": "owner_ruling", "ref": "R1"}],
+                                     applies_to={"kind": "grammar_dialect", "dialect": "x"})
+    entries = envelope.materialize_entries(events)
+    eid = entries[0]["entry_id"]
+    doc = dict(minimal_document(stub_all=False), events=events, entries=entries, admissions={eid: adm()}, stubs=[])
+    with pytest.raises(pd.ProfileDocumentError, match="grammar_dialect"):
+        pd.resolve(doc, "meaning.pik_rate", Q4)
+
+
+def test_resolve_rejects_bad_report_date():
+    doc = minimal_document()
+    with pytest.raises(pd.ProfileDocumentError, match="report_date"):
+        pd.resolve(doc, "meaning.interest_rate", "not-a-date")
+
+
+def test_resolve_rejects_unknown_off_grid_key():
+    doc = minimal_document()
+    with pytest.raises(pd.ProfileDocumentError, match="not on the grid"):
+        pd.resolve(doc, "not_a_grid.key", Q4)
+
+
+def test_resolve_allows_off_grid_key_carried_by_an_entry():
+    events = envelope.make_assertion(list(), cik=CIK, key="wrapper_only.custom_axis", value={"x": 1},
+                                     valid_from=None, recorded_at=NOW,
+                                     support={"kind": "context_count", "count": 1},
+                                     evidence=[{"kind": "owner_ruling", "ref": "R1"}])
+    entries = envelope.materialize_entries(events)
+    eid = entries[0]["entry_id"]
+    doc = dict(minimal_document(stub_all=False), events=events, entries=entries, admissions={eid: adm()}, stubs=[])
+    out = pd.resolve(doc, "wrapper_only.custom_axis", Q4)
+    assert out["status"] == "resolved"
+
+
+def test_admission_stores_non_numeric_confidence_in_witness_raw():
+    a = pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",
+                     confidence="high", source_author="agent", recorded_at=NOW, run_id=RUN, source="s",
+                     inception_evaluation="none_available")
+    assert a["confidence"] is None and a["witness"]["confidence_raw"] == "high"
+
+
+def test_admission_stores_prose_confidence_in_witness_raw():
+    prose = "fairly confident given the override file's internal consistency"
+    a = pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",
+                     confidence=prose, source_author="agent", recorded_at=NOW, run_id=RUN, source="s",
+                     inception_evaluation="none_available")
+    assert a["confidence"] is None and a["witness"]["confidence_raw"] == prose
+
+
+def test_admission_numeric_confidence_is_unaffected():
+    a = adm()
+    assert a["confidence"] == 0.9 and "confidence_raw" not in a["witness"]
+
+
+def test_admission_rejects_out_of_range_confidence():
+    with pytest.raises(pd.ProfileDocumentError, match="range"):
+        pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",
+                     confidence=1.5, source_author="agent", recorded_at=NOW, run_id=RUN, source="s",
+                     inception_evaluation="none_available")
+
+
+def test_admission_rejects_nan_confidence():
+    with pytest.raises(pd.ProfileDocumentError, match="NaN"):
+        pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",
+                     confidence=float("nan"), source_author="agent", recorded_at=NOW, run_id=RUN, source="s",
+                     inception_evaluation="none_available")
+
+
+def test_load_document_rejects_bad_json(tmp_path):
+    path = tmp_path / "bad.json"
+    path.write_text("{not json", encoding="ascii")
+    with pytest.raises(pd.ProfileDocumentError, match="JSON"):
+        pd.load_document(path)
+
+
+def test_load_document_rejects_non_ascii_bytes(tmp_path):
+    path = tmp_path / "bad.json"
+    path.write_bytes(b'{"x": "\xc3\xa9"}')
+    with pytest.raises(pd.ProfileDocumentError, match="ASCII"):
+        pd.load_document(path)
