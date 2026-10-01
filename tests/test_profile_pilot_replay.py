@@ -196,3 +196,30 @@ def test_run_refuses_a_seed_whose_lineage_differs_from_the_backtest(tmp_path):
     (sroot / "manifest.json").write_text(lineage_of("stageb-contracts-a", "stageb2-census-b"), encoding="ascii")
     with pytest.raises(StageInvalidated, match="census_source.run_id"):
         rr.run(paths, backtest_run_id="stageb2-backtest-test", seed_run_id="stageb2-seed-test")
+
+
+def test_per_filer_totals_table_shows_removed_by_rule_when_the_seed_summary_carries_it():
+    sens = dict(cells={rr.TOTALS_VARIANT: {rr.TOTALS_KIND: dict(
+        median_smallest_detected=0.05, detected_ciks=1, applicable_ciks=1,
+        per_cik={"A": dict(applicable=True, smallest_detected=0.05, reason=None)})}}, null_control={})
+    removed = {"A": {"R3_label_or_heading": dict(n=1, fv=600.0), "R4_generic_cash_bucket": dict(n=1, fv=10.0),
+                     "R6_reporting_entity_lookthrough": dict(n=2, fv=110.0), "R1_own_period_instant": dict(n=0, fv=0.0)}}
+    seeded = rr.seeded_cells(sens, financials_loaded={"A": True}, removed_by_rule=removed)
+    row = seeded[rr.TOTALS_KIND]["variants"][rr.TOTALS_VARIANT]["per_cik"]["A"]
+    assert row["removed_by_rule"] == "R3_label_or_heading:1/600; R4_generic_cash_bucket:1/10; " \
+                                     "R6_reporting_entity_lookthrough:2/110"
+    body = dict(run_id="sp3-replay-test", sample_label=rr.SAMPLE_LABEL, pair_rule=rr.PAIR_RULE,
+                negatives_caveat="caveat", ciks={}, per_kind={}, floors={}, seeded=seeded, exclusions=[],
+                exclusion_buckets={})
+    text = rr.render_md(body, [])
+    assert "| cik | variant | anchored | applicable | smallest detected | reason | removed by rule |" in text
+    assert "| A | fair_value_scale_flip | True | True | 0.05 | measured | R3_label_or_heading:1/600;" in text
+    text.encode("ascii")
+    plain = rr.render_md(dict(body, seeded=rr.seeded_cells(sens, financials_loaded={"A": True})), [])
+    assert "removed by rule" not in plain
+
+
+def test_fv_of_doc_totals_on_the_published_basis():
+    from tests.test_profile_pilot_totals import bcred_doc, BCRED
+    fv = rr.fv_of_doc(bcred_doc(), cik=BCRED)
+    assert fv["total"] == 600.0 and fv["by_key"]["e1"] == 50.0

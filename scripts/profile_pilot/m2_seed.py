@@ -54,7 +54,7 @@ import statistics
 import sys
 import time
 
-from scripts.profile_pilot import cohort, contracts, lineage, manifest, protection
+from scripts.profile_pilot import census_published, cohort, contracts, lineage, manifest, protection
 from scripts.profile_pilot.contracts_observe import FILLED, IDENTIFIER_FIELD, RATIO_CLASSES, scale_class
 from scripts.profile_pilot.manifest import StageInvalidated
 from scripts.profile_pilot.paths import PathError, confined, discover_main_root, resolve_paths, write_once_json
@@ -120,7 +120,7 @@ LIMIT_RULE = ("ruling R35: the 60 s / 2 GiB bound applies to the measured work (
               "evaluation, timed per step and per CIK); the realism self-check runs on seed 1 only per class x "
               "fraction and is timed separately (validate_seconds)")
 CODE_FILES = ("scripts/profile_pilot/m2_seed.py", "scripts/profile_pilot/contracts.py",
-              "scripts/profile_pilot/contracts_totals.py",
+              "scripts/profile_pilot/contracts_totals.py", "scripts/profile_pilot/census_published.py",
               "scripts/profile_pilot/contracts_observe.py", "scripts/profile_pilot/contracts_run.py",
               "scripts/profile_pilot/envelope.py", "scripts/profile_pilot/census.py",
               "scripts/profile_pilot/census_detect.py", "scripts/profile_pilot/lineage.py",
@@ -1413,6 +1413,15 @@ def pin_financials(cpaths, tolerances: dict, cik: str, report_date: str) -> dict
     return contracts_run.load_financials(cpaths, cik, report_date)
 
 
+def totals_removed_by_rule(tolerances: dict, q1_doc: dict, cik: str) -> dict | None:
+    """The census published-basis partition's removed_by_rule on the learning quarter (census_published.classify),
+    recorded per CIK beside financials_loaded for the replay's per-filer totals table. None under v2/v3
+    tolerances (no independent_totals band, so the partition is not used)."""
+    if not contracts.has_totals_bands(tolerances):
+        return None
+    return census_published.classify(q1_doc, cik=cik)["removed_by_rule"]
+
+
 def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_id: str, ciks=None,
               scratch_dir: Path | None = None, fractions=FRACTIONS, seeds=SEEDS, semantic: bool = False) -> dict:
     """semantic=True (Task B2-3): the semantic drift classes + range shifts, the v3 semantic contracts at
@@ -1568,6 +1577,7 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
             matrix["block_source"] = block_recs[cik]["block_source"]
             matrix["yield_q2"] = "the frozen Q1 yield evidence (the yield contract is not perturbed)"
             matrix["financials_loaded"] = financials is not None
+            matrix["removed_by_rule"] = totals_removed_by_rule(tolerances, q1_doc, cik)
             return matrix
 
         out = manifest.run_cached_stage(paths, "results/cik/" + cik + ".json", identity, compute,
@@ -1639,7 +1649,8 @@ def run_stage(paths, *, census_run_id: str, profile_run_id: str, contracts_run_i
                        null_breaches=sum(len(i["null_control"]["breaches"]) for i in per_cik.values()),
                        realism_errors=realism, blind_spots_expected=sum(s["expected_detector"] for s in spots),
                        timing=timing, scratch_copies=copies, input_verification_after=after,
-                       financials_loaded={c: info.get("financials_loaded") for c, info in per_cik.items()})
+                       financials_loaded={c: info.get("financials_loaded") for c, info in per_cik.items()},
+                       removed_by_rule={c: info.get("removed_by_rule") for c, info in per_cik.items()})
     write_once_json(paths, "results/run_summary.json", run_summary)
     return run_summary
 

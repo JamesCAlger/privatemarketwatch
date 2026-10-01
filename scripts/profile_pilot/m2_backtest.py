@@ -171,7 +171,7 @@ def ledger_exclusions(rows, *, ciks, dates) -> list:
 
 CODE_FILES = ("scripts/profile_pilot/m2_backtest.py", "scripts/profile_pilot/m2_seed.py",
               "scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_observe.py",
-              "scripts/profile_pilot/contracts_totals.py",
+              "scripts/profile_pilot/contracts_totals.py", "scripts/profile_pilot/census_published.py",
               "scripts/profile_pilot/contracts_income.py", "scripts/profile_pilot/contracts_run.py",
               "scripts/profile_pilot/profile.py", "scripts/profile_pilot/envelope.py",
               "scripts/profile_pilot/census.py", "scripts/profile_pilot/census_detect.py",
@@ -543,7 +543,7 @@ def pair_timing(learn_timing: dict, eval_timing: dict, *, peak: int) -> dict:
 def _trim(r: dict) -> dict:
     keys = list(r["violating_keys"])
     return dict(contract_id=r["contract_id"], kind=r["kind"], field=r["field"], partition_id=r["partition_id"],
-                status=r["status"], cause=r["cause"], n_violating=len(keys),
+                applies_to=r.get("applies_to"), status=r["status"], cause=r["cause"], n_violating=len(keys),
                 violating_keys=keys if r["status"] == "breach" else [],
                 expected=contracts._brief(r["expected"]), observed=contracts._brief(r["observed"]),
                 identifier_format_unresolved=r["identifier_format_unresolved"], q2_form_type=r["q2"].get("form_type"),

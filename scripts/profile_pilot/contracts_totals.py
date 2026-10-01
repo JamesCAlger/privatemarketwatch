@@ -1,13 +1,16 @@
 """Independent-totals contract kind (spec 2026-09-29 section 5, D-floor).
 
 Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
-FV sum (NOT on the published basis; SP1 finding 2026-10-01) against the fund's filed investments_at_fair_value,
-and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
+FV sum ON the census published basis (census_published, census-published.v1; SP3 Task 0, after the SP1
+finding 2026-10-01 that the raw census sum over-counts) against the fund's filed
+investments_at_fair_value, and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
 (detection_not_claimed); the criterion is deferred to sub-project 2.
 Pure functions: no I/O, no tolerances access beyond the band dict passed in.
 """
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
+
+from scripts.profile_pilot import census_published
 
 KIND = "independent_totals"
 # TOTALS_FIELD/PCT_FIELD intentionally duplicate m2_backtest.TOTALS_FIELD/PCT_FIELD
@@ -19,6 +22,8 @@ BAND_KEYS = ("fv_residual_pct", "pct_sum_min", "pct_sum_max", "pct_sum_shift_pp"
 ANCHOR_SOURCE = "fund_financials.investments_at_fair_value"
 PARTITION = "whole_filing"
 INCOME_LABEL = "detection_not_claimed"
+# partition_id stays whole_filing (contract ids unchanged); applies_to names the census partition version
+APPLIES_TO = {PARTITION: True, "census_published": census_published.CENSUS_PUBLISHED_VERSION}
 
 
 def _num(value):
@@ -49,27 +54,35 @@ def _sum(positions, field):
     return sum(filled, Decimal(0)), len(filled)
 
 
-def observe_totals(doc: dict, *, financials: dict | None) -> dict:
-    positions = _current(doc)
+def observe_totals(doc: dict, *, financials: dict | None, cik: str) -> dict:
+    """Totals on the census published basis (census_published, census-published.v1): the FV sum equals
+    census_published.published_fv_sum (published positions plus R7 cash-equivalent-axis facts); counts and the
+    pct sum run over the published positions. classify runs ONCE here (R5 is quadratic in the live rows)."""
+    part = census_published.classify(doc, cik=cik)
+    positions = [p for p in doc["positions"] if part["rows"][p["context_id"]]["published"]]
     fv_sum, fv_filled = _sum(positions, TOTALS_FIELD)
+    fv_sum += sum((f["fair_value"] for f in census_published.r7_cash_axis_facts(doc, part["period_end"])),
+                  Decimal(0))
     pct_sum, pct_filled = _sum(positions, PCT_FIELD)
     anchor = _num((financials or {}).get("investments_at_fair_value"))
     residual = None if anchor in (None, Decimal(0)) else float(100 * (fv_sum - anchor) / anchor)
     return dict(n_positions=len(positions), fv_sum=float(fv_sum), fv_filled=fv_filled,
                 fv_anchor=None if anchor is None else float(anchor), fv_residual_pct=residual,
                 pct_sum=float(pct_sum), pct_filled=pct_filled,
-                anchor_source=ANCHOR_SOURCE if anchor is not None else None)
+                anchor_source=ANCHOR_SOURCE if anchor is not None else None,
+                published_version=part["version"], removed_by_rule=part["removed_by_rule"],
+                extra_fv_facts=len(part["extra_fv_facts"]))
 
 
 def _contract(cik, field, tier, band, learn_status, learn_cause, expectation, evidence):
     return dict(contract_id=cik + ":" + KIND + ":" + field + ":" + PARTITION, cik=cik, kind=KIND, field=field,
-                partition_id=PARTITION, applies_to={PARTITION: True}, tier=tier, band=dict(band),
+                partition_id=PARTITION, applies_to=dict(APPLIES_TO), tier=tier, band=dict(band),
                 learn_status=learn_status, learn_cause=learn_cause, expectation=expectation,
                 evidence=evidence, status_basis="provisional")
 
 
 def learn_totals(cik: str, tier: str, band: dict, q1_doc: dict, *, financials_q1: dict | None) -> list[dict]:
-    obs = observe_totals(q1_doc, financials=financials_q1)
+    obs = observe_totals(q1_doc, financials=financials_q1, cik=cik)
     few = obs["n_positions"] < band["min_positions"]
     out = []
     if few:
@@ -96,7 +109,7 @@ def _result(c, status, q2, *, cause=None, expected=None, observed=None):
 
 
 def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: dict | None, band: dict) -> dict:
-    obs = observe_totals(q2_doc, financials=financials_q2)
+    obs = observe_totals(q2_doc, financials=financials_q2, cik=contract["cik"])
     exp = contract["expectation"]
     # Whole-book gate, shared by both fields: when the book itself is smaller than
     # min_positions, "too_few_positions" is the true cause for BOTH fields. A field

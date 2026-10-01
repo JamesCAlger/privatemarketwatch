@@ -1,7 +1,7 @@
 """Task 3: independent_totals contract kind as pure functions.
 
 Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
-FV sum (NOT on the published basis; SP1 finding 2026-10-01) against the fund's filed investments_at_fair_value,
+FV sum on the census published basis (census-published.v1, SP3 Task 0) against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. See scripts/profile_pilot/contracts_totals.py.
 """
 import pytest
@@ -23,14 +23,14 @@ def book(n=80, fv="1000000", pct="1.25"):
 
 
 def test_observe_sums_current_period_positions_and_computes_residual():
-    obs = ct.observe_totals(book(), financials=FIN)
+    obs = ct.observe_totals(book(), financials=FIN, cik="0000000001")
     assert obs["n_positions"] == 80 and obs["fv_filled"] == 80
     assert obs["fv_sum"] == 80_000_000 and obs["fv_residual_pct"] == 0
     assert obs["pct_sum"] == 100 and obs["anchor_source"] == "fund_financials.investments_at_fair_value"
 
 
 def test_observe_without_financials_has_no_anchor():
-    obs = ct.observe_totals(book(), financials=None)
+    obs = ct.observe_totals(book(), financials=None, cik="0000000001")
     assert obs["fv_anchor"] is None and obs["fv_residual_pct"] is None
 
 
@@ -291,3 +291,64 @@ def test_q2_unavailable_totals_results_carry_provisional_status_basis_but_fill_r
     assert len(totals) == 2 and all(r.get("status_basis") == "provisional" for r in totals)
     fill = pick(res, "fill_rate", "interest_rate")
     assert "status_basis" not in fill
+
+
+# ---------------------------------------------------------------- SP3 Task 0 / Task 2: census published basis
+
+BCRED = "0001803498"
+FIN600 = dict(FIN, investments_at_fair_value=600.0)
+
+
+def bcred_doc():
+    def fv_row(ctx, ident, fv):
+        return dict(ctx=ctx, ident=ident, fields=dict(fair_value=val(fv, "usd", decimals="0"),
+                                                      pct_of_net_assets=val("1.0")))
+    return mk_doc([fv_row("p1", "Alpha Co | First Lien Term Loan", "100"),
+                   fv_row("p2", "Beta Co | Second Lien Term Loan", "200"),
+                   fv_row("p3", "Gamma Co | Common Equity", "300"),
+                   fv_row("e1", "Delta Co Senior Loan | Emerald JV LP", "50"),
+                   fv_row("e2", "Epsilon Co Term Loan | Emerald JV LP", "60"),
+                   fv_row("t1", "Total Investments", "600"),
+                   fv_row("k1", "Cash and cash equivalents", "10")])
+
+
+def test_observe_sums_the_census_published_basis_and_reports_removed_by_rule():
+    from scripts.profile_pilot import census_published as cp
+    doc = bcred_doc()
+    obs = ct.observe_totals(doc, financials=FIN600, cik=BCRED)
+    assert obs["fv_sum"] == 600 and obs["n_positions"] == 3 and obs["fv_filled"] == 3
+    assert obs["fv_sum"] == float(cp.published_fv_sum(doc, cik=BCRED))
+    assert obs["pct_sum"] == 3.0 and obs["pct_filled"] == 3 and obs["fv_residual_pct"] == 0
+    assert obs["published_version"] == cp.CENSUS_PUBLISHED_VERSION
+    removed = obs["removed_by_rule"]
+    assert removed["R3_label_or_heading"] == dict(n=1, fv=600.0)
+    assert removed["R4_generic_cash_bucket"] == dict(n=1, fv=10.0)
+    assert removed["R6_reporting_entity_lookthrough"] == dict(n=2, fv=110.0)
+    assert all(removed[r] == dict(n=0, fv=0.0) for r in ("R1_own_period_instant", "R2_fv_not_reported",
+                                                          "R5_issuer_rollup_fv_only"))
+
+
+def test_published_basis_fair_value_contract_holds_at_anchor_600_and_carries_the_partition_version():
+    from scripts.profile_pilot import census_published as cp
+    band = dict(BAND, min_positions=3)
+    contracts = ct.learn_totals(BCRED, "standard", band, bcred_doc(), financials_q1=FIN600)
+    assert contracts[0]["learn_status"] == "learned"
+    assert all(c["applies_to"] == {"whole_filing": True, "census_published": cp.CENSUS_PUBLISHED_VERSION}
+               and c["partition_id"] == "whole_filing" for c in contracts)
+    assert contracts[0]["contract_id"] == BCRED + ":independent_totals:fair_value:whole_filing"
+    assert contracts[0]["evidence"]["removed_by_rule"]["R6_reporting_entity_lookthrough"]["n"] == 2
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    r = ct.evaluate_totals(contracts[0], q2, bcred_doc(), financials_q2=FIN600, band=band)
+    assert r["status"] == "holds" and r["observed"]["fv_sum"] == 600
+    assert r["applies_to"]["census_published"] == cp.CENSUS_PUBLISHED_VERSION
+
+
+def test_other_filer_keeps_the_emerald_rows_published():
+    obs = ct.observe_totals(bcred_doc(), financials=FIN600, cik="0000000001")
+    assert obs["n_positions"] == 5 and obs["fv_sum"] == 710
+    assert obs["removed_by_rule"]["R6_reporting_entity_lookthrough"]["n"] == 0
+
+
+def test_book_rows_remove_nothing():
+    obs = ct.observe_totals(book(), financials=FIN, cik="0000000001")
+    assert obs["n_positions"] == 80 and all(v["n"] == 0 for v in obs["removed_by_rule"].values())

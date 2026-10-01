@@ -42,7 +42,7 @@ EXIT_INVALIDATED, EXIT_CONTRACT, EXIT_REFUSED = 2, 3, 4
 RUN_PREFIX = "stageb-contracts-"
 ANCHOR_DIR = "data/overrides/identifier_anchors"
 CODE_FILES = ("scripts/profile_pilot/contracts.py", "scripts/profile_pilot/contracts_income.py",
-              "scripts/profile_pilot/contracts_totals.py",
+              "scripts/profile_pilot/contracts_totals.py", "scripts/profile_pilot/census_published.py",
               "scripts/profile_pilot/contracts_observe.py",
               "scripts/profile_pilot/contracts_run.py", "scripts/profile_pilot/lineage.py",
               "scripts/profile_pilot/envelope.py",

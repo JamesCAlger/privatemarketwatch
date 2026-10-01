@@ -731,3 +731,11 @@ def test_learning_tolerances_under_a_v4_root_equal_the_pinned_v4():
     drifted["bands"]["standard"]["independent_totals"]["fv_residual_pct"] = 6.0
     with pytest.raises(bt.StageInvalidated, match="in-memory v4"):
         bt.learning_tolerances(drifted, 4)
+
+
+def test_trim_keeps_applies_to_so_the_replay_can_show_the_partition_version():
+    base = dict(contract_id="x", kind="independent_totals", field="fair_value", partition_id="whole_filing",
+                applies_to={"whole_filing": True, "census_published": "census-published.v1"}, status="holds",
+                cause=None, violating_keys=[], expected=None, observed=None, identifier_format_unresolved=False,
+                q2=dict(form_type="10-Q"))
+    assert bt._trim(base)["applies_to"] == {"whole_filing": True, "census_published": "census-published.v1"}

@@ -188,13 +188,15 @@ def drift_queue_csv(results: dict, *, pairs: dict, fv_by_quarter: dict) -> str:
                                            for row in queue_rows(results, pairs=pairs, fv_by_quarter=fv_by_quarter)])
 
 
-def fv_of_doc(doc: dict) -> dict:
-    """Census FV total (contracts_totals.observe_totals) and per-position FV keyed by the position's context_id.
+def fv_of_doc(doc: dict, *, cik: str) -> dict:
+    """Census FV total (contracts_totals.observe_totals, i.e. the census published basis) and per-position FV
+    keyed by the position's context_id. by_key stays over ALL current-period positions: violating keys of the
+    other kinds may name rows the published basis removes, and their FV at risk is still real.
 
     The key is the census position's TOP-LEVEL `context_id` (census.py builds positions with
     context_id=context["id"]; `identity` carries no context id): the id contracts.py puts in
     violating_keys (contracts_observe row_keys / absent_keys / conflicts are p["context_id"])."""
-    total = contracts_totals.observe_totals(doc, financials=None)["fv_sum"]
+    total = contracts_totals.observe_totals(doc, financials=None, cik=cik)["fv_sum"]
     by_key = {}
     for p in contracts_totals.current_positions(doc):
         value = contracts_totals.numeric_value((p["fields"].get(FV_FIELD) or {}).get("value"))
@@ -284,22 +286,33 @@ def totals_row(cell_cik: dict | None, *, anchored: bool, null_control: list, fie
     return dict(anchored=anchored, applicable=applicable, smallest_detected=smallest, reason=reason)
 
 
-def seeded_cells(sens: dict, *, financials_loaded: dict) -> dict:
-    """Both totals seed variants, per filer. `financials_loaded` = the seed run_summary's cik -> bool."""
+def removed_text(removed: dict | None) -> str:
+    """'rule:n/fv; ...' over the rules that removed at least one row ('-' when none did)."""
+    parts = [r + ":" + str(v["n"]) + "/" + format(v["fv"], ".0f") for r, v in sorted((removed or {}).items())
+             if v and v.get("n")]
+    return "; ".join(parts) or "-"
+
+
+def seeded_cells(sens: dict, *, financials_loaded: dict, removed_by_rule: dict | None = None) -> dict:
+    """Both totals seed variants, per filer. `financials_loaded` = the seed run_summary's cik -> bool;
+    `removed_by_rule` = the seed run_summary's cik -> census published-basis removals (SP3), when present."""
     cells = sens.get("cells") or {}
     if (cells.get(TOTALS_VARIANT) or {}).get(TOTALS_KIND) is None:
         return {}
     null_control = sens.get("null_control") or {}
+    removed = {c: v for c, v in (removed_by_rule or {}).items() if v is not None}
     variants = {}
     for variant, field in TOTALS_VARIANT_FIELDS.items():
         cell = (cells.get(variant) or {}).get(TOTALS_KIND) or {}
         per = cell.get("per_cik") or {}
         ciks = sorted(set(per) | set(financials_loaded))
+        rows = {c: totals_row(per.get(c), anchored=financials_loaded.get(c) is True,
+                              null_control=null_control.get(c), field=field) for c in ciks}
+        if removed:
+            rows = {c: dict(r, removed_by_rule=removed_text(removed.get(c))) for c, r in rows.items()}
         variants[variant] = dict(field=field, median_smallest_detected=cell.get("median_smallest_detected"),
                                  detected_ciks=cell.get("detected_ciks"), applicable_ciks=cell.get("applicable_ciks"),
-                                 per_cik={c: totals_row(per.get(c), anchored=financials_loaded.get(c) is True,
-                                                        null_control=null_control.get(c), field=field)
-                                          for c in ciks})
+                                 per_cik=rows)
     return {TOTALS_KIND: dict(floor_variant=TOTALS_VARIANT, note=TOTALS_SEED_NOTE, variants=variants)}
 
 
@@ -382,9 +395,12 @@ def render_md(body: dict, queue: list) -> str:
                         [(kind, v, c["median_smallest_detected"], c["detected_ciks"], c["applicable_ciks"])
                          for v, c in s["variants"].items()])
         lines += ["", "Per filer:", ""]
-        lines += _table(("cik", "variant", "anchored", "applicable", "smallest detected", "reason"),
+        per_rows = [(cik, v, r) for v, c in s["variants"].items() for cik, r in c["per_cik"].items()]
+        removed_col = any("removed_by_rule" in r for _, _, r in per_rows)
+        lines += _table(("cik", "variant", "anchored", "applicable", "smallest detected", "reason")
+                        + (("removed by rule",) if removed_col else ()),
                         [(cik, v, r["anchored"], r["applicable"], r["smallest_detected"], r["reason"])
-                         for v, c in s["variants"].items() for cik, r in c["per_cik"].items()])
+                         + ((r.get("removed_by_rule", "-"),) if removed_col else ()) for cik, v, r in per_rows])
     lines += ["", "## Ledger rows not scored (by bucket)", ""]
     lines += _table(("bucket", "rows"), sorted(body.get("exclusion_buckets", {}).items()))
     lines += ["", "## Abstentions", ""]
@@ -443,10 +459,12 @@ def run(paths, *, backtest_run_id: str, seed_run_id: str) -> dict:
         raise StageInvalidated("selected pairs have no back-test results: " + ", ".join(missing))
     scored = per_kind_scores(chosen, results, positives)
     check_units(scored["units"], scoring["positive_units"][MODE][READING], {p["pair_id"] for p in chosen.values()})
-    loaded = _load(recs["seed_run_summary"]).get("financials_loaded")
+    seed_summary = _load(recs["seed_run_summary"])
+    loaded = seed_summary.get("financials_loaded")
     if not isinstance(loaded, dict):
         raise StageInvalidated("seed run_summary.json carries no financials_loaded map")
-    seeded = seeded_cells(_load(recs["sensitivity"]), financials_loaded=loaded)
+    seeded = seeded_cells(_load(recs["sensitivity"]), financials_loaded=loaded,
+                          removed_by_rule=seed_summary.get("removed_by_rule"))
 
     # census FV of the eval quarter: exactly the files the back-test pinned
     census_run_id = bman["census_source"]["run_id"]
@@ -465,7 +483,7 @@ def run(paths, *, backtest_run_id: str, seed_run_id: str) -> dict:
             raise StageInvalidated("eval census differs from the one the back-test pinned: " + row["census_relative"])
         if (cik, EVAL_DATE) in fv_by_quarter:
             raise StageInvalidated("two authoritative censuses for " + cik + " " + EVAL_DATE)
-        fv_by_quarter[(cik, EVAL_DATE)] = fv_of_doc(contracts_run.load_census(row))
+        fv_by_quarter[(cik, EVAL_DATE)] = fv_of_doc(contracts_run.load_census(row), cik=cik)
 
     ledger = _ledger_rows(paths, ciks)
     exclusions = []

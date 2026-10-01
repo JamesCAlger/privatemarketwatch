@@ -812,3 +812,12 @@ def test_pin_financials_stays_none_under_a_v2_root_without_touching_any_file(tmp
     # no financials slice is written here: a v2/v3 root predates it, and pin_financials must not try to
     # read one (the gate is checked before contracts_run.load_financials is ever called).
     assert m2_seed.pin_financials(cpaths, v2, CIK, FIN_DATE) is None
+
+
+def test_totals_removed_by_rule_is_the_q1_partition_count_under_v4_and_none_under_v2():
+    from scripts.profile_pilot import contracts
+    from tests.test_profile_pilot_totals import bcred_doc, BCRED
+    removed = m2_seed.totals_removed_by_rule(_v4(), bcred_doc(), BCRED)
+    assert removed["R6_reporting_entity_lookthrough"] == dict(n=2, fv=110.0)
+    assert removed["R3_label_or_heading"] == dict(n=1, fv=600.0)
+    assert m2_seed.totals_removed_by_rule(contracts.tolerance_content_v2(), bcred_doc(), BCRED) is None
