@@ -165,3 +165,15 @@ def test_oversize_non_process_artifact_family_raises(tmp_path, monkeypatch):
             {"cik": ARES, "convention": "all_in", "pad": "x" * 64})})
     with pytest.raises(pf.FamilyError, match="MAX_SCAN_BYTES"):
         pf.scan_overrides(root, PILOT)
+
+
+# --- Task 4 review carry-over (completed in Task 5): an oversize file in an UNCLASSIFIED family raises
+# unconditionally, even when it mentions no pilot CIK at all (neither in its path nor in its content) --
+# the oversize check runs before content is read, so absence of a mention cannot be the reason it is
+# let through (module docstring amendment, same commit).
+def test_oversize_unclassified_family_with_no_mention_raises(tmp_path, monkeypatch):
+    monkeypatch.setattr(pf, "MAX_SCAN_BYTES", 32)
+    root = write_tree(tmp_path / "overrides", {
+        "brand_new_family/no_mentions.json": json.dumps({"note": "nothing pilot-related here", "pad": "x" * 64})})
+    with pytest.raises(pf.FamilyError, match="MAX_SCAN_BYTES"):
+        pf.scan_overrides(root, PILOT)

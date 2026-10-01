@@ -5,10 +5,13 @@ content: JSON strings and "cik" values, never other JSON numbers; non-JSON text 
 table. It FAILS CLOSED: a mentioning file in a family without a class, or in a family that must not mention a pilot
 filer, raises FamilyError (7.1: "a family added later without a class fails"). Process-artifact files above
 MAX_SCAN_BYTES are never content-scanned (position_id_registry/registry.csv is ~112 MB); any other family above the
-cap raises. Because an oversize file's absence of a mention cannot be proven, it is conservatively recorded as
-mentioning every filer the scan was asked about, with its own disposition row of `not_loaded` and its size noted in
-`reason`, instead of the family's normal action (pre-flight ruling A13). Paths with an underscore-prefixed segment
-after the family, or a `.proposed.` file name, are
+cap raises. An oversize file in any family that is not a process artifact -- including an unclassified family --
+raises unconditionally, whether or not it mentions a pilot CIK: the oversize check runs before content is read, so
+absence of a mention can never be the reason it is let through. Because an oversize process-artifact file's absence
+of a mention cannot be proven either, it is conservatively recorded as mentioning every filer the scan was asked
+about, with its own disposition row of `not_loaded` and its size noted in `reason`, instead of the family's normal
+action (pre-flight ruling A13). Paths with an underscore-prefixed segment after the family, or a `.proposed.` file
+name, are
 `not_loaded` (production skips them: pipeline/rule_admission.admitted, agent_promoted.load_promoted_rules).
 Read-only; files are read as production reads them (utf-8-sig).
 """
