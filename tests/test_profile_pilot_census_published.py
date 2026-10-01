@@ -170,6 +170,24 @@ def test_r6_filer_without_list_marks_nothing():
     assert all(r["published"] and not r["underlying"] for r in out.values())
 
 
+def test_r6_list_from_the_profile_replaces_the_code_mirror():
+    doc = bcred_doc()
+    mirror = cp.classify(doc, cik=BCRED)["rows"]
+    given = cp.classify(doc, cik=BCRED, reporting_entities=("Emerald JV LP", "Verdelite JV LP"))["rows"]
+    assert given == mirror
+    empty = cp.classify(doc, cik=BCRED, reporting_entities=())["rows"]
+    assert not any(r["underlying"] for r in empty.values())
+    other = cp.classify(doc, cik=OTHER, reporting_entities=("Emerald JV LP",))["rows"]
+    assert other["c1"]["underlying"] is True and other["c2"]["underlying"] is False
+
+
+def test_published_fv_sum_threads_the_reporting_entities():
+    doc = bcred_doc()
+    assert cp.published_fv_sum(doc, cik=BCRED) == Decimal("2000000")
+    assert cp.published_fv_sum(doc, cik=BCRED, reporting_entities=()) == Decimal("4000000")
+    assert len(cp.published_positions(doc, cik=BCRED, reporting_entities=())) == 4
+
+
 def fidelity_doc():
     doc = mk_doc([debt(1)])
     cash = ["us-gaap:CashAndCashEquivalentsAxis", "abc:FidelityFloatingRateCentralFundMember"]

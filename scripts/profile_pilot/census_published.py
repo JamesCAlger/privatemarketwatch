@@ -71,7 +71,10 @@ CENSUS_PUBLISHED_V2 = "census-published.v2"
 VERSIONS = (CENSUS_PUBLISHED_V1, CENSUS_PUBLISHED_V2)
 # v2 passed the all-quarter adoption rule under ruling 4 (fix round 2, 2026-10-01); v1 via version=
 CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V2
-REPORTING_ENTITIES = {"0001803498": ("Emerald JV LP", "Verdelite JV LP")}   # R6 list per filer (v1 data)
+# Code MIRROR of the profile entry partition_structure.reporting_entities (SP3 proper). The profile entry is
+# authoritative; profile_consistency asserts entry == wrapper source_encodings == this constant. Removal is a
+# consumer switch (sub-project 6/7), not done here.
+REPORTING_ENTITIES = {"0001803498": ("Emerald JV LP", "Verdelite JV LP")}
 RULES_V1 = ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading", "R4_generic_cash_bucket",
             "R5_issuer_rollup_fv_only", "R6_reporting_entity_lookthrough")
 RULES = RULES_V1[:5] + ("R5b_hierarchical_rollup",) + RULES_V1[5:]
@@ -302,8 +305,9 @@ def _r5b_scan(kept):
     return passes, near, single
 
 
-def r6_reporting_entity(pos, cik):
-    names = {_norm(n) for n in REPORTING_ENTITIES.get(cik, ())}
+def r6_reporting_entity(pos, cik, reporting_entities=None):
+    source = REPORTING_ENTITIES.get(cik, ()) if reporting_entities is None else tuple(reporting_entities)
+    names = {_norm(n) for n in source}
     return bool(names) and any(_norm(s) in names for s in _segments(pos["identity"].get("typed_identifier"))[1:])
 
 
@@ -341,9 +345,10 @@ def _fv_total(positions):
     return float(sum((_fv(p) or Decimal(0) for p in positions), Decimal(0)))
 
 
-def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
+def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION, reporting_entities=None):
     """Partition the positions on the census published basis of `version` (v1 = R1-R7 without R5b; v2 adds
-    R5b). An unknown version raises ValueError."""
+    R5b). An unknown version raises ValueError. `reporting_entities=None` reads the REPORTING_ENTITIES code
+    mirror for `cik` (every existing caller); a tuple (possibly empty) replaces it for R6."""
     if version not in VERSIONS:
         raise ValueError("unknown census published version " + repr(version) + "; known " + repr(VERSIONS))
     v2 = version == CENSUS_PUBLISHED_V2
@@ -368,7 +373,7 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
             for pos in batch:
                 rows[pos["context_id"]] = "R5b_hierarchical_rollup"
     for pos in live:
-        if rows[pos["context_id"]] is None and r6_reporting_entity(pos, cik):
+        if rows[pos["context_id"]] is None and r6_reporting_entity(pos, cik, reporting_entities):
             rows[pos["context_id"]] = "R6_reporting_entity_lookthrough"
     removed = {r: {"n": 0, "fv": Decimal(0)} for r in (RULES if v2 else RULES_V1)}
     for pos in doc.get("positions", ()):
@@ -394,13 +399,13 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
     return out
 
 
-def published_positions(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
-    rows = classify(doc, cik=cik, version=version)["rows"]
+def published_positions(doc, *, cik, version=CENSUS_PUBLISHED_VERSION, reporting_entities=None):
+    rows = classify(doc, cik=cik, version=version, reporting_entities=reporting_entities)["rows"]
     return [p for p in doc.get("positions", ()) if rows[p["context_id"]]["published"]]
 
 
-def published_fv_sum(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
-    out = classify(doc, cik=cik, version=version)
+def published_fv_sum(doc, *, cik, version=CENSUS_PUBLISHED_VERSION, reporting_entities=None):
+    out = classify(doc, cik=cik, version=version, reporting_entities=reporting_entities)
     total = sum((_fv(p) or Decimal(0) for p in doc.get("positions", ()) if out["rows"][p["context_id"]]["published"]),
                 Decimal(0))
     return total + sum((f["fair_value"] for f in r7_cash_axis_facts(doc, out["period_end"])), Decimal(0))
