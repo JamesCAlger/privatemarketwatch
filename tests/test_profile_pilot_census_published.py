@@ -22,6 +22,7 @@ OTHER = "0001860424"
 V1, V2 = "census-published.v1", "census-published.v2"
 FIXTURE = Path(__file__).parent / "fixtures" / "census_published_v2_rows.csv"
 REFERENCE_NAMES = {"R1_not_current_instant": "R1_own_period_instant"}   # rename only, same rule
+V2_ZERO_FV_KEPT = {"c-1929", "c-1931", "c-1939", "c-1949", "c-1953"}   # ruling 5: zero-FV R5 parents kept by v2
 EXTRA_FIELDS = ("cost", "principal_amount", "interest_rate", "pct_of_net_assets", "basis_spread",
                 "interest_rate_floor", "pik_rate")
 
@@ -35,8 +36,9 @@ def rules(doc, cik=OTHER, version=cp.CENSUS_PUBLISHED_VERSION):
 
 
 def test_constants():
-    # fix round 1 (adoption rule, ruling 3): v2 failed the all-quarter adoption check, so v1 stays current
-    assert cp.CENSUS_PUBLISHED_VERSION == V1
+    # fix round 2 (rulings 4-6): v2 passes the all-quarter adoption check (0 violations, 0 worsenings), so v2 is
+    # current; v1 stays reachable via version=
+    assert cp.CENSUS_PUBLISHED_VERSION == V2
     assert cp.VERSIONS == (V1, V2)
     assert cp.REPORTING_ENTITIES == {BCRED: ("Emerald JV LP", "Verdelite JV LP")}
     assert cp.RULES_V1 == ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading",
@@ -49,7 +51,7 @@ def test_constants():
     assert set(out) >= {"version", "period_end", "rows", "extra_fv_facts", "removed_by_rule",
                         "near_misses_r5b", "r5b_passes"}
     assert set(out["removed_by_rule"]) == set(cp.RULES)
-    v1 = cp.classify(mk_doc([debt(1)]), cik=OTHER)
+    v1 = cp.classify(mk_doc([debt(1)]), cik=OTHER, version=V1)
     assert v1["version"] == V1 and set(v1["removed_by_rule"]) == set(cp.RULES_V1)
     assert "near_misses_r5b" not in v1 and "r5b_passes" not in v1
 
@@ -242,7 +244,9 @@ def test_recorded_v2_rows_get_the_same_rule(version):
     implementation differs from the investigation's reference rule on exactly one row: c-929 (Belfor, a
     reported FV of 0 that the reference rule removed by R2; the implementation keeps value 0, deliberate).
     The reference names R1 R1_not_current_instant; REFERENCE_NAMES maps it to the implementation's name.
-    Under v2 the expectations are identical (asserted by the v2 parametrisation, not argued): the fixture
+    Under v2 the expectations are identical (asserted by the v2 parametrisation, not argued) except the five
+    Ares FV-only R5 parents with reported FV 0 (V2_ZERO_FV_KEPT): ruling 5 keeps a zero-FV parent, so v2 leaves
+    them published (FV effect 0) and they join the rows that differ from the reference. Otherwise the fixture
     rebuilds extra fields with the synthetic value 1, and the FV-only parents are already taken by R5.
     R5b fires on no fixture row."""
     seen = defaultdict(int)
@@ -250,14 +254,16 @@ def test_recorded_v2_rows_get_the_same_rule(version):
     for cik, doc, rows in recorded_docs():
         got = cp.classify(doc, cik=cik, version=version)["rows"]
         for r in rows:
-            assert got[r["context_id"]]["rule"] == (r["rule"] or None), (cik, r["context_id"], r["typed_identifier"])
+            want = None if (version == V2 and r["context_id"] in V2_ZERO_FV_KEPT) else (r["rule"] or None)
+            assert got[r["context_id"]]["rule"] == want, (cik, r["context_id"], r["typed_identifier"])
             ref = REFERENCE_NAMES.get(r["reference_rule"], r["reference_rule"]) or None
             if got[r["context_id"]]["rule"] != ref:
                 differs.add(r["context_id"])
-            seen[r["rule"]] += 1
-    assert differs == {"c-929"}
+            seen[want or ""] += 1
+    assert differs == ({"c-929"} | (V2_ZERO_FV_KEPT if version == V2 else set()))
     assert seen["R2_fv_not_reported"] == 48 and seen["R3_label_or_heading"] == 7
-    assert seen["R4_generic_cash_bucket"] == 3 and seen["R5_issuer_rollup_fv_only"] == 33
+    assert seen["R4_generic_cash_bucket"] == 3
+    assert seen["R5_issuer_rollup_fv_only"] == (28 if version == V2 else 33)
     assert seen["R6_reporting_entity_lookthrough"] == 5 and seen["R1_own_period_instant"] == 2
 
 
@@ -499,3 +505,34 @@ def test_r5b_parent_with_a_non_additive_term_is_kept_and_counted():
                            "38000944", principal="38291396")])
     out = cp.classify(doc, cik=OTHER, version=V2)
     assert out["rows"]["p"]["rule"] == "R5b_hierarchical_rollup" and nm(out) == (0, 0.0, 0, 0)
+
+
+def test_zero_fv_parent_is_never_a_rollup_under_v2():
+    # ruling 5: a zero-FV parent carries no sum evidence (BCRED WHCG / Pigments, Ares Eagle warrant) -> kept
+    zero = mk_doc([full_row("p", "WHCG Purchaser, Inc. - Class A Common Units", "0", "0"),
+                   full_row("k", "WHCG Purchaser, Inc. - Class A Common Units 1", "0", "0")])
+    out = cp.classify(zero, cik=OTHER, version=V2)
+    assert out["rows"]["p"]["rule"] is None and out["rows"]["k"]["rule"] is None
+    # the same shape with FV 100 = 100 (and cost) is still an R5b rollup
+    hundred = mk_doc([full_row("p", "WHCG Purchaser, Inc. - Class A Common Units", "100", "100"),
+                      full_row("k", "WHCG Purchaser, Inc. - Class A Common Units 1", "100", "100")])
+    assert cp.classify(hundred, cik=OTHER, version=V2)["rows"]["p"]["rule"] == "R5b_hierarchical_rollup"
+
+
+def test_zero_fv_fv_only_parent_is_kept_by_r5_under_v2_and_v1_is_unchanged():
+    # R5 (FV-only parent) gets the same guard in v2; v1 is a frozen version and keeps its R5 behaviour
+    doc = mk_doc([fv_only("p", "Eagle Football Holdings BidCo Limited, Warrant", "0"),
+                  full_row("k", "Eagle Football Holdings BidCo Limited, Warrant 1", "0", "0")])
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] is None
+    assert cp.classify(doc, cik=OTHER, version=V1)["rows"]["p"]["rule"] == "R5_issuer_rollup_fv_only"
+    doc = mk_doc([fv_only("p", "Eagle Football Holdings BidCo Limited, Warrant", "100"),
+                  full_row("k", "Eagle Football Holdings BidCo Limited, Warrant 1", "100", "100")])
+    assert cp.classify(doc, cik=OTHER, version=V2)["rows"]["p"]["rule"] == "R5_issuer_rollup_fv_only"
+
+
+def test_v2_zero_fv_kept_set_is_exactly_the_fixture_r5_rows_with_fv_zero():
+    # derived from the fixture, not hand-picked: every recorded R5 row whose reported FV parses to 0
+    with open(FIXTURE, encoding="utf-8", newline="") as fh:
+        zero = {r["context_id"] for r in csv.DictReader(fh)
+                if r["rule"] == "R5_issuer_rollup_fv_only" and Decimal(r["fv_value"]) == 0}
+    assert zero == V2_ZERO_FV_KEPT

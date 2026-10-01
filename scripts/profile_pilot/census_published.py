@@ -1,5 +1,6 @@
-"""Census-side published-basis partition predicate. Current version census-published.v1; census-published.v2
-(R5b) is reachable via classify(..., version="census-published.v2") but is NOT current. Pure functions, no I/O.
+"""Census-side published-basis partition predicate. Current version census-published.v2 (adopted in Task 0b
+fix round 2); census-published.v1 stays reachable via classify(..., version="census-published.v1"). Pure
+functions, no I/O.
 
 Ordered rules from the 2026-10-01 investigation (scratch/2026-10-01_census_published_basis,
 reference implementation s21_predicate_v2.py) that reconcile the eight pilot filers' census positions
@@ -28,18 +29,22 @@ rollup when
     when it also reports no pct, else kept); and
 (d) it reports none of NON_ADDITIVE_FIELDS (rate, spread, floor, PIK rate, maturity): a subtotal cannot carry
     them, so such a row is a position (fix round 1: TCW duplicate tags, Ares/BCRED single-child pairs).
+(e) its fair value is non-zero (ruling 5, fix round 2): a zero-FV parent carries no sum evidence and stays
+    published (BCRED WHCG / Pigments, Ares Eagle warrant). In v2 the same guard applies to R5; v1 R5 is
+    frozen and unchanged.
 Passes repeat to a fixed point, each removing only the rollups with no rollup below them (deepest first;
 `r5b_passes` lists the context ids per pass). `near_misses_r5b` = {n, fv, by_reason} over the prefix parents
 kept at the fixed point: fv_cost_mismatch (FV matched and cost did not, or the reverse) and
 non_additive_terms (both matched, (d) abstained). The negated-cost alternative tried in 2132a31 was reverted
 (ruling 2).
 
-Adoption (ruling 3, 2026-10-01): v2 was measured over all 104 authoritative fund-quarters of the 8 pilot
-filers against production's published total and FAILS rule (a) on 0001920453 2023-12-31 and 2024-03-31
-(-40.5%, -40.2%). There production itself is +104.8% / +131.4% above the fund's filed
-investments_at_fair_value (it publishes the subtotal rows R5b removes) while v2 is +21.8% / +38.3%; the
-reference, not R5b, is the defect, but the rule binds, so CENSUS_PUBLISHED_VERSION stays v1. The v1 output
-shape has no R5b keys; frozen v1 artefacts evaluate unchanged.
+Adoption (rulings 3-6, 2026-10-01): measured over all 104 fund-quarters of the 8 pilot filers that have a
+production counterpart. The reference for a fund-quarter is production's published total where production
+reconciles to fund_financials.investments_at_fair_value within 0.5%, else that anchor (ruling 4: production
+publishes Fidelity's subtotal rows, +105% to +131% over the anchor); 7 fund-quarters with no anchor and
+production out of band are unmeasurable. Of the 97 measured: 0 violations of rule (a) (v2 below -0.5% where
+v1 was not), 0 worsenings by > 1 pp (rule b), 31 improvements by > 1 pp -> v2 is current. The v1 output shape
+has no R5b keys; frozen v1 artefacts evaluate unchanged via version=.
 """
 from __future__ import annotations
 
@@ -49,8 +54,8 @@ import re
 CENSUS_PUBLISHED_V1 = "census-published.v1"
 CENSUS_PUBLISHED_V2 = "census-published.v2"
 VERSIONS = (CENSUS_PUBLISHED_V1, CENSUS_PUBLISHED_V2)
-# v2 failed the all-quarter adoption rule (fix round 1, 2026-10-01): v1 stays current; v2 via version=
-CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V1
+# v2 passed the all-quarter adoption rule under ruling 4 (fix round 2, 2026-10-01); v1 via version=
+CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V2
 REPORTING_ENTITIES = {"0001803498": ("Emerald JV LP", "Verdelite JV LP")}   # R6 list per filer (v1 data)
 RULES_V1 = ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading", "R4_generic_cash_bucket",
             "R5_issuer_rollup_fv_only", "R6_reporting_entity_lookthrough")
@@ -122,14 +127,15 @@ def _fv_only(pos):
             and sum(1 for v in f.values() if v.get("status") == "reported") == 1)
 
 
-def _r5_scan(live):
+def _r5_scan(live, nonzero_parent=False):
     """(rollups, near_misses): context ids of FV-only rows whose normalised identifier is a token prefix of
     >=1 other live rows and whose FV equals their FV sum within half a unit of the reported decimals per
-    summand (min 1); near_misses are the same prefix parents that FAIL that equality."""
+    summand (min 1); near_misses are the same prefix parents that FAIL that equality. nonzero_parent (v2,
+    ruling 5) skips parents whose FV is zero or unparsable: they carry no sum evidence and stay published."""
     keys = [(_norm(p["identity"].get("typed_identifier")), p) for p in live]
     out, near = set(), []
     for key, parent in keys:
-        if not key or not _fv_only(parent):
+        if not key or not _fv_only(parent) or (nonzero_parent and not _fv(parent)):
             continue
         kids = [p for k, p in keys if p is not parent and k.startswith(key + " ")]
         if not kids:
@@ -222,6 +228,8 @@ def _r5b_test(parent, kids):
     'fv_cost_mismatch' (FV matched and cost did not, or the reverse), 'non_additive_terms' (FV and cost both
     matched but the parent reports a non-additive term a subtotal cannot carry: the row is a position, e.g. a
     duplicate tag of its only child), or None."""
+    if not _fv(parent):
+        return False, None                              # ruling 5: a zero-FV parent carries no sum evidence
     fv_ok = _sum_matches(parent, kids, "fair_value")
     if fv_ok is None:
         return False, None
@@ -318,7 +326,7 @@ def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
         rows[pos["context_id"]] = rule
         if rule is None:
             live.append(pos)
-    rollups, near = _r5_scan(live)
+    rollups, near = _r5_scan(live, nonzero_parent=v2)
     for cid in rollups:
         rows[cid] = "R5_issuer_rollup_fv_only"
     passes, near_b = [], []
