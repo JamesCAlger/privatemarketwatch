@@ -226,3 +226,22 @@ def test_recorded_v2_rows_get_the_same_rule():
     assert seen["R2_fv_not_reported"] == 48 and seen["R3_label_or_heading"] == 7
     assert seen["R4_generic_cash_bucket"] == 3 and seen["R5_issuer_rollup_fv_only"] == 33
     assert seen["R6_reporting_entity_lookthrough"] == 5 and seen["R1_own_period_instant"] == 2
+
+
+def test_r7_cash_axis_with_other_axis_or_typed_dimension_emits_nothing():
+    doc = fidelity_doc()
+    for c in doc["contexts"]:
+        if c["id"] == "cash1":
+            c["dimensions"] = c["dimensions"] + [["abc:SomeAxis", "abc:YMember"]]
+    doc["contexts"].append(dict(id="cash_typed", period=dict(kind="instant", instant=Q1),
+                                typed_dimensions=[dict(axis="us-gaap:InvestmentIdentifierAxis", value="X")],
+                                dimensions=[["us-gaap:CashAndCashEquivalentsAxis", "abc:ZMember"]]))
+    doc["facts"].append(dict(i=len(doc["facts"]), qname="us-gaap:InvestmentOwnedAtFairValue", value="11",
+                             context_id="cash_typed"))
+    assert cp.classify(doc, cik="0001920453")["extra_fv_facts"] == []
+    assert cp.published_fv_sum(doc, cik="0001920453") == Decimal("1000000")
+
+
+def test_r5_unparsable_parent_fair_value_does_not_raise():
+    kid = debt(1, ident="Apex Corp, First lien")
+    assert rules(mk_doc([fv_only("p", "Apex Corp", "n/a"), kid]))["p"] is None

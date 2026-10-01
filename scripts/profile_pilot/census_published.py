@@ -95,7 +95,7 @@ def r5_issuer_rollups(live):
         except (TypeError, ValueError):
             d = 0
         tol = max(Decimal("0.5") * Decimal(10) ** (-d) * (len(kids) + 1), Decimal(1))
-        if abs(_fv(parent) - sum((_fv(k) or Decimal(0) for k in kids), Decimal(0))) <= tol:
+        if abs((_fv(parent) or Decimal(0)) - sum((_fv(k) or Decimal(0) for k in kids), Decimal(0))) <= tol:
             out.add(parent["context_id"])
     return out
 
@@ -109,7 +109,8 @@ def r7_cash_axis_facts(doc, pe):
     held = {p["context_id"] for p in doc.get("positions", ())}
     ctxs = {c["id"]: c for c in doc.get("contexts", ())
             if (c.get("period") or {}).get("instant") == pe and c["id"] not in held
-            and any(str(d[0]).endswith("CashAndCashEquivalentsAxis") for d in c.get("dimensions") or ())}
+            and not c.get("typed_dimensions") and len(c.get("dimensions") or ()) == 1
+            and str(c["dimensions"][0][0]).endswith("CashAndCashEquivalentsAxis")}
     out, seen = [], set()
     for f in doc.get("facts", ()):
         cid = f.get("context_id")
