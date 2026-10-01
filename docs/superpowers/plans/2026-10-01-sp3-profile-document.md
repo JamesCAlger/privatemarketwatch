@@ -2869,3 +2869,19 @@ Gaps knowingly left to later sub-projects (stated, not silent): criterion 5 pre-
 **2. Placeholder scan.** No TBD/TODO/"similar to". Every code step has code; every test step has test code; the only free values are run-id stamps and the replay id chosen by an explicit rule in Task 10 Step 1.
 
 **3. Type consistency.** `admission(...)` / `stub(...)` shapes (Task 3) match the schema `$defs` and are the only constructors used in Tasks 6-8. `collect_override_inputs` output keys (`files`, `shared`, `disposition`) are the `inputs` keys `build_document` reads (Task 6) and the CLI fills (Task 9). Disposition records carry `cls`/`action`/`targets`/`record_indexes` in Task 4, Task 6 and the schema. Corrections carry `source.record_index` (Task 5), read by `materialise_overrides` (Task 7). Evidence `override_file.value_is_file` is written in Task 6 (`file_evidence`) and read in Task 7 (`_per_filer_files`). `valid_at` (Task 3) is used by Task 6 `grid_stubs`. `consistency_contract(..., code_mirror=)` and `exit_test(..., expected_ciks=)` signatures match their callers in Task 9 and the tests in Task 8. `RUN_PREFIX = "sp3p-profile-"` is enforced in `run_stage` and `main` and matches the Global Constraints.
+
+## Amendments from the pre-flight scan (2026-10-01, controller rulings; binding for every task)
+
+- A1 (X13, blocking): the Q1-2026 census role is `verified_era`, not `all:2026-03-31`. Task 9 looks census entries up under `verified_era`; Task 9 test data uses that role; Task 10 expectations include the count of accepted census entries.
+- A2 (X14/F4): the ledger already exists; Task 1 appends, never creates.
+- A3 (S1): a filer's consistency verdict is `holds` only when every counterpart wrapper key has an accepted entry; when there are zero breaches but some keys lack evidence the verdict is `no_breach`, and the insufficient-evidence key count is published beside it (ruling P4).
+- A4 (S2): BCRED's `reporting_entity_identifier_suffixes` (read by production) joins the checked keys; `cash_identifiers` and `rate_sanity` are reported as `unevaluated` keys, never silently omitted.
+- A5 (S3): in this sub-project "consolidation" means the wrapper content is in the document and reproduces the file exactly (Task 7); deleting the file and redirecting the loader is sub-project 4.
+- A6 (S4): one-off corrections are reported in two groups, row-keyed (`row_id`) and non-row-keyed (shared-file records, some B2 corrections); both are kept.
+- A7 (D1/F5): Task 9 guards the MAIN checkout's `data/overrides` (and `data/output`, `frontend/public/data`) read-only for the run, not only the worktree copy.
+- A8 (D2): the Task 9 CLI declares a workload (census documents are 35-55 MB).
+- A9 (D3): an empty delimiter after whitespace stripping is `insufficient_evidence`, not a breach.
+- A10 (Task 6/F3): `CENSUS_KEYS` excludes `non_private_markers` and `prefix_rules` (the census cannot derive them).
+- A11 (Task 9): `InceptionError`, `RoundTripError`, `ProfileDocumentError` map to exit code 2 with a one-line message.
+- A12 (F2): `read_json` reads plain utf-8 exactly as `pipeline/bdc_xbrl_wrapper.py` does; the docstring says so.
+- A13 (minor): Task 3's Interfaces block is read together with the schema constants its tests use; the oversize position-registry file gets a disposition row (`not_loaded`, size); near-duplicated helper blocks are shared via one helper where the implementer finds them.
