@@ -1,10 +1,11 @@
-"""Census-side published-basis partition predicate (census-published.v1). Pure functions, no I/O.
+"""Census-side published-basis partition predicate (census-published.v2; v1 still reachable). Pure functions,
+no I/O.
 
-Seven ordered rules from the 2026-10-01 investigation (scratch/2026-10-01_census_published_basis,
+Ordered rules from the 2026-10-01 investigation (scratch/2026-10-01_census_published_basis,
 reference implementation s21_predicate_v2.py) that reconcile the eight pilot filers' census positions
-to production's published basis within 0.5%. R1-R5 remove a position; R6 marks it underlying (not
-published); R7 adds cash-equivalent-axis fair-value facts the census does not treat as positions.
-The first rule that fires wins.
+to production's published basis within 0.5%. R1-R5 (and R5b in v2) remove a position; R6 marks it
+underlying (not published); R7 adds cash-equivalent-axis fair-value facts the census does not treat as
+positions. The first rule that fires wins.
 
 Final-review hardening (2026-10-01): with no period end (neither the DEI fact nor
 document_period_end_dates) classify reports period_end=None and no_period_end=True, R1 fails closed
@@ -13,16 +14,35 @@ no_period_end). `near_misses` counts the FV-only parents that are a token prefix
 the R5 children-sum equality (rollups that would slip back into the sum stay visible). R7 needs every
 InvestmentOwnedAtFairValue fact of a qualifying context to agree; a disagreeing context is skipped and
 listed in `r7_conflicts` instead of taking the first fact in document order.
+
+census-published.v2 (SP3 Task 0b): R5b_hierarchical_rollup, after R5 and before R6, catches subtotal rows
+that also report cost/pct (the 2023 inception schedules of Onex, Fidelity and NexPoint: single-segment
+identifiers, category -> industry -> issuer). A row still kept after R1-R5 is a rollup when its normalised
+identifier is a prefix of >= 1 other kept rows (its children) -- on a word boundary when the parent has no
+'|' segments, on a SEGMENT boundary when it has (so '... | 5/30/2031' is not the parent of a duplicate tag
+'... | 5/30/2031 One', measured on 0001950803 2026-03-31) -- its fair value equals the sum of its DIRECT
+children (kept rows whose longest kept prefix is this row) within the R5 reported-decimals tolerance, and its
+cost equals their cost sum the same way, the plain sum or the sum with a negative-FV (unfunded) child's
+positive cost counted negative (Onex 2023 subtotals); a parent without cost is judged on FV alone only when it
+also reports no pct (else kept). Passes repeat to a fixed point, each removing only the rollups with no
+rollup below them (deepest first; `r5b_passes` lists the context ids per pass).
+`near_misses_r5b` counts the prefix parents kept at the fixed point whose FV matched but cost did not, or
+vice versa. classify(..., version="census-published.v1") runs the rules without R5b and returns the v1
+output shape (no R5b keys), so frozen v1 artefacts can be re-evaluated on their own basis.
 """
 from __future__ import annotations
 
 from decimal import Decimal, InvalidOperation
 import re
 
-CENSUS_PUBLISHED_VERSION = "census-published.v1"
+CENSUS_PUBLISHED_V1 = "census-published.v1"
+CENSUS_PUBLISHED_V2 = "census-published.v2"
+VERSIONS = (CENSUS_PUBLISHED_V1, CENSUS_PUBLISHED_V2)
+CENSUS_PUBLISHED_VERSION = CENSUS_PUBLISHED_V2
 REPORTING_ENTITIES = {"0001803498": ("Emerald JV LP", "Verdelite JV LP")}   # R6 list per filer (v1 data)
-RULES = ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading", "R4_generic_cash_bucket",
-         "R5_issuer_rollup_fv_only", "R6_reporting_entity_lookthrough")
+RULES_V1 = ("R1_own_period_instant", "R2_fv_not_reported", "R3_label_or_heading", "R4_generic_cash_bucket",
+            "R5_issuer_rollup_fv_only", "R6_reporting_entity_lookthrough")
+RULES = RULES_V1[:5] + ("R5b_hierarchical_rollup",) + RULES_V1[5:]
 R7_SOURCE = "R7_cash_equivalent_axis"
 
 LABEL_SEGMENT = re.compile(r"^(sub-?\s*)?total\b|^net assets$")
@@ -116,6 +136,123 @@ def r5_issuer_rollups(live):
     return _r5_scan(live)[0]
 
 
+def _reports(pos, field):
+    return pos["fields"].get(field, {}).get("status") in REPORTED
+
+
+def _num_field(pos, field):
+    return _dec(pos["fields"].get(field, {}).get("value"))
+
+
+def _tol(pos, field, n_kids):
+    try:
+        d = int(pos["fields"][field].get("decimals"))
+    except (KeyError, TypeError, ValueError):
+        d = 0
+    return max(Decimal("0.5") * Decimal(10) ** (-d) * (n_kids + 1), Decimal(1))
+
+
+def _sum_matches(parent, kids, field, values=None):
+    """True/False: parent's field equals the kids' sum within the reported-decimals tolerance (an unparsable or
+    missing kid value counts 0; `values` overrides the per-kid values); None when the parent's own value is
+    unparsable."""
+    own = _num_field(parent, field)
+    if own is None:
+        return None
+    vals = values if values is not None else [_num_field(k, field) or Decimal(0) for k in kids]
+    return abs(own - sum(vals, Decimal(0))) <= _tol(parent, field, len(kids))
+
+
+def _cost_matches(parent, kids):
+    """Cost equality against the kids' cost sum, plain or with the cost of a negative-FV kid (an unfunded
+    commitment) counted negative: the 2023 Onex subtotals carry those costs negative while the tagged facts
+    are positive (measured on 0001860424 2023-06-30, 7 of 8 industry rows)."""
+    if _sum_matches(parent, kids, "cost"):
+        return True
+    signed = []
+    for k in kids:
+        c, fv = _num_field(k, "cost") or Decimal(0), _fv(k) or Decimal(0)
+        signed.append(-c if fv < 0 < c else c)
+    return bool(_sum_matches(parent, kids, "cost", signed))
+
+
+def _key(pos):
+    """Normalised identifier with ' | ' kept between non-empty segments (tokens; '|' is its own token)."""
+    ident = pos["identity"].get("typed_identifier") or ""
+    return " | ".join(s for s in (_norm(seg) for seg in ident.split("|")) if s)
+
+
+def _ancestor_keys(key, by_key):
+    """Proper prefixes of `key` that are some kept row's key, longest first. A parent key without '|' may end
+    on any word boundary of the child; a parent key with '|' must end on a segment boundary (whole segments),
+    so 'Common Stocks | Real Estate' is not a parent of 'Common Stocks | Real Estate Investment Trust ...' and
+    '... | 5/30/2031' is not a parent of '... | 5/30/2031 One'."""
+    toks = key.split(" ")
+    out = []
+    for n in range(len(toks) - 1, 0, -1):
+        cand = " ".join(toks[:n])
+        if toks[n - 1] == "|" or cand not in by_key:
+            continue
+        if "|" in toks[:n] and toks[n] != "|":
+            continue
+        out.append(cand)
+    return out
+
+
+def _direct_children(kept):
+    """({id(parent): [direct children]}, by_key) over the kept rows: a row's parent key is its longest valid
+    ancestor key (see _ancestor_keys); every kept row carrying that key is a parent."""
+    keyed = [(_key(p), p) for p in kept]
+    by_key = {}
+    for key, p in keyed:
+        if key:
+            by_key.setdefault(key, []).append(p)
+    kids = {}
+    for key, p in keyed:
+        anc = _ancestor_keys(key, by_key) if key else []
+        if anc:
+            for parent in by_key[anc[0]]:
+                kids.setdefault(id(parent), []).append(p)
+    return kids, by_key
+
+
+def _r5b_test(parent, kids):
+    """(rollup, near_miss) for one prefix parent and its direct children."""
+    fv_ok = _sum_matches(parent, kids, "fair_value")
+    if fv_ok is None:
+        return False, False
+    if _reports(parent, "cost"):
+        cost_ok = _cost_matches(parent, kids)
+        return fv_ok and cost_ok, fv_ok != cost_ok
+    if _reports(parent, "pct_of_net_assets"):
+        return False, False
+    return fv_ok, False
+
+
+def _r5b_scan(kept):
+    """(passes, near_misses) over the rows R1-R5 kept: each pass removes the R5b rollups that have no R5b
+    rollup among their descendants (deepest first) and re-derives the direct children from what is left;
+    near_misses are the prefix parents still kept at the fixed point whose FV matched but cost did not, or
+    vice versa."""
+    kept, passes = list(kept), []
+    while True:
+        kids, by_key = _direct_children(kept)
+        found = [p for p in kept if id(p) in kids and _r5b_test(p, kids[id(p)])[0]]
+        if not found:
+            break
+        above = set()
+        for p in found:
+            for a in _ancestor_keys(_key(p), by_key):
+                above.update(id(q) for q in by_key[a])
+        deepest = [p for p in found if id(p) not in above]
+        passes.append(deepest)
+        gone = {id(p) for p in deepest}
+        kept = [p for p in kept if id(p) not in gone]
+    kids, _ = _direct_children(kept)
+    near = [p for p in kept if id(p) in kids and _r5b_test(p, kids[id(p)])[1]]
+    return passes, near
+
+
 def r6_reporting_entity(pos, cik):
     names = {_norm(n) for n in REPORTING_ENTITIES.get(cik, ())}
     return bool(names) and any(_norm(s) in names for s in _segments(pos["identity"].get("typed_identifier"))[1:])
@@ -151,7 +288,16 @@ def r7_cash_axis_facts(doc, pe):
     return _r7_scan(doc, pe)[0]
 
 
-def classify(doc, *, cik):
+def _fv_total(positions):
+    return float(sum((_fv(p) or Decimal(0) for p in positions), Decimal(0)))
+
+
+def classify(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
+    """Partition the positions on the census published basis of `version` (v1 = R1-R7 without R5b; v2 adds
+    R5b). An unknown version raises ValueError."""
+    if version not in VERSIONS:
+        raise ValueError("unknown census published version " + repr(version) + "; known " + repr(VERSIONS))
+    v2 = version == CENSUS_PUBLISHED_V2
     pe, pe_source = period_end(doc)
     rows, live = {}, []
     for pos in doc.get("positions", ()):
@@ -165,33 +311,43 @@ def classify(doc, *, cik):
     rollups, near = _r5_scan(live)
     for cid in rollups:
         rows[cid] = "R5_issuer_rollup_fv_only"
+    passes, near_b = [], []
+    if v2:
+        passes, near_b = _r5b_scan([p for p in live if rows[p["context_id"]] is None])
+        for batch in passes:
+            for pos in batch:
+                rows[pos["context_id"]] = "R5b_hierarchical_rollup"
     for pos in live:
         if rows[pos["context_id"]] is None and r6_reporting_entity(pos, cik):
             rows[pos["context_id"]] = "R6_reporting_entity_lookthrough"
-    removed = {r: {"n": 0, "fv": Decimal(0)} for r in RULES}
+    removed = {r: {"n": 0, "fv": Decimal(0)} for r in (RULES if v2 else RULES_V1)}
     for pos in doc.get("positions", ()):
         rule = rows[pos["context_id"]]
         if rule:
             removed[rule]["n"] += 1
             removed[rule]["fv"] += _fv(pos) or Decimal(0)
     r7, r7_conflicts = _r7_scan(doc, pe)
-    return {"version": CENSUS_PUBLISHED_VERSION, "period_end": pe, "period_end_source": pe_source,
-            "no_period_end": pe is None,
-            "rows": {c: {"published": r is None, "underlying": r == "R6_reporting_entity_lookthrough", "rule": r}
-                     for c, r in rows.items()},
-            "extra_fv_facts": [dict(f, fair_value=float(f["fair_value"])) for f in r7],
-            "r7_conflicts": r7_conflicts,
-            "near_misses": {"n": len(near), "fv": float(sum((_fv(p) or Decimal(0) for p in near), Decimal(0)))},
-            "removed_by_rule": {r: {"n": v["n"], "fv": float(v["fv"])} for r, v in removed.items()}}
+    out = {"version": version, "period_end": pe, "period_end_source": pe_source,
+           "no_period_end": pe is None,
+           "rows": {c: {"published": r is None, "underlying": r == "R6_reporting_entity_lookthrough", "rule": r}
+                    for c, r in rows.items()},
+           "extra_fv_facts": [dict(f, fair_value=float(f["fair_value"])) for f in r7],
+           "r7_conflicts": r7_conflicts,
+           "near_misses": {"n": len(near), "fv": _fv_total(near)},
+           "removed_by_rule": {r: {"n": v["n"], "fv": float(v["fv"])} for r, v in removed.items()}}
+    if v2:
+        out["near_misses_r5b"] = {"n": len(near_b), "fv": _fv_total(near_b)}
+        out["r5b_passes"] = [[p["context_id"] for p in batch] for batch in passes]
+    return out
 
 
-def published_positions(doc, *, cik):
-    rows = classify(doc, cik=cik)["rows"]
+def published_positions(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
+    rows = classify(doc, cik=cik, version=version)["rows"]
     return [p for p in doc.get("positions", ()) if rows[p["context_id"]]["published"]]
 
 
-def published_fv_sum(doc, *, cik):
-    out = classify(doc, cik=cik)
+def published_fv_sum(doc, *, cik, version=CENSUS_PUBLISHED_VERSION):
+    out = classify(doc, cik=cik, version=version)
     total = sum((_fv(p) or Decimal(0) for p in doc.get("positions", ()) if out["rows"][p["context_id"]]["published"]),
                 Decimal(0))
     return total + sum((f["fair_value"] for f in r7_cash_axis_facts(doc, out["period_end"])), Decimal(0))

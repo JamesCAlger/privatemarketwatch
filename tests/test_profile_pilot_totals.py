@@ -1,7 +1,7 @@
 """Task 3: independent_totals contract kind as pure functions.
 
 Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
-FV sum on the census published basis (census-published.v1, SP3 Task 0) against the fund's filed investments_at_fair_value,
+FV sum on the census published basis (census_published.CENSUS_PUBLISHED_VERSION, SP3 Task 0) against the fund's filed investments_at_fair_value,
 and the pct-of-net-assets sum. See scripts/profile_pilot/contracts_totals.py.
 """
 import pytest
@@ -384,7 +384,7 @@ def test_one_evaluate_call_classifies_the_q2_doc_once_and_the_cache_changes_noth
 @pytest.mark.parametrize("applies_to", [
     {"whole_filing": True},
     {"whole_filing": True, "census_published": "census-published.v0"},
-    {"whole_filing": True, "census_published": "census-published.v2"}])
+    {"whole_filing": True, "census_published": "census-published.v1"}])
 def test_frozen_totals_contract_with_another_partition_version_is_refused(applies_to):
     from scripts.profile_pilot import contracts
     v4 = contracts.tolerance_content_v4(tol_v3())
@@ -435,3 +435,14 @@ def test_cache_entry_for_a_different_doc_with_the_same_id_is_not_reused():
     obs = ct.observe_totals(doc, financials=FIN, cik="0000000001", cache=cache)
     assert obs["n_positions"] == 80 and obs["fv_sum"] == 80_000_000
     assert cache[(id(doc), "0000000001")][0] is doc
+
+
+# ---------------------------------------------------------------- SP3 Task 0b: PCT expectation None-guard
+
+def test_pct_contract_without_a_learned_expectation_abstains_instead_of_raising():
+    contracts = ct.learn_totals("0000000001", "standard", BAND, book(), financials_q1=FIN)
+    q2 = dict(report_date="2026-03-31", form_type="10-Q", status="selected", detail=None)
+    pct = dict(contracts[1], expectation=None, learn_status="insufficient_evidence", learn_cause="no_period_end")
+    r = ct.evaluate_totals(pct, q2, book(), financials_q2=FIN, band=BAND)
+    assert (r["status"], r["cause"]) == ("insufficient_evidence", "not_learned_in_q1")
+    assert r["expected"] is None and r["status_basis"] == "provisional"

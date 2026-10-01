@@ -1,7 +1,7 @@
 """Independent-totals contract kind (spec 2026-09-29 section 5, D-floor).
 
 Two whole-filing criteria that cannot abstain on a pure scale flip: the census current-period
-FV sum ON the census published basis (census_published, census-published.v1; SP3 Task 0, after the SP1
+FV sum ON the census published basis (census_published, CENSUS_PUBLISHED_VERSION, now v2; SP3 Task 0, after the SP1
 finding 2026-10-01 that the raw census sum over-counts) against the fund's filed
 investments_at_fair_value, and the pct-of-net-assets sum. Income reconciliation is EVIDENCE ONLY here
 (detection_not_claimed); the criterion is deferred to sub-project 2.
@@ -10,7 +10,9 @@ Pure functions: no I/O, no tolerances access beyond the band dict passed in.
 The totals kind uses the census published basis's SINGLE period end (census_published.period_end); when
 there is none the observation carries no_period_end=True and fv_residual_pct=None, and both totals
 contracts abstain (learn and evaluate) with cause no_period_end instead of breaching at -100%.
-contracts._check_frozen refuses a totals contract whose applies_to differs from APPLIES_TO.
+contracts._check_frozen refuses a totals contract whose applies_to differs from APPLIES_TO (exact match: a
+root learned under census-published.v1 is refused by v2 code and needs a new contracts run). The PCT branch
+of evaluate_totals abstains with cause not_learned_in_q1 when the contract carries no expectation.
 """
 from __future__ import annotations
 from decimal import Decimal, InvalidOperation
@@ -60,7 +62,7 @@ def _sum(positions, field):
 
 
 def observe_totals(doc: dict, *, financials: dict | None, cik: str, cache: dict | None = None) -> dict:
-    """Totals on the census published basis (census_published, census-published.v1): the FV sum equals
+    """Totals on the census published basis (census_published.CENSUS_PUBLISHED_VERSION): the FV sum equals
     census_published.published_fv_sum (published positions plus R7 cash-equivalent-axis facts); counts and the
     pct sum run over the published positions. classify runs ONCE here (R5 is quadratic in the live rows);
     `cache` (a dict scoped to ONE contracts._evaluate call) memoises it per (id(doc), cik) across the two
@@ -146,6 +148,10 @@ def evaluate_totals(contract: dict, q2: dict, q2_doc: dict, *, financials_q2: di
         if abs(obs["fv_residual_pct"]) > band["fv_residual_pct"]:
             return _result(contract, "breach", q2, cause="fv_residual_outside_band", expected=exp, observed=obs)
         return _result(contract, "holds", q2, expected=exp, observed=obs)
+    if exp is None:
+        # a contract that never learned (e.g. learn cause no_period_end) has no pct_sum_q1 to shift from;
+        # contracts._evaluate skips such contracts, a direct caller gets an abstention instead of a TypeError
+        return _result(contract, "insufficient_evidence", q2, cause="not_learned_in_q1", expected=exp, observed=obs)
     if obs["pct_filled"] < band["min_positions"]:
         return _result(contract, "insufficient_evidence", q2, cause="pct_not_filled", expected=exp, observed=obs)
     if obs["pct_sum"] < band["pct_sum_min"] or obs["pct_sum"] > band["pct_sum_max"]:
