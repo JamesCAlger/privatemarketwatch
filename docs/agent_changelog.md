@@ -12895,3 +12895,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   the base-build report: holdings +3,439 rows vs the 2026-09-05 baseline, 671 divergent
   artifacts). Logs: `scratch/2026-09-30_base_build/*_p2.log`.
 - Frontend JSON under frontend/public/data is modified and NOT committed. No baseline refresh.
+
+## 2026-10-01 -- Production defect: Fidelity (0001920453) publishes category subtotal rows, 2023-12-31..2025-03-31
+
+- Found by the census published-basis predicate v2 (filer-profile pilot, Task 0b): production's published total is 2.05x-2.31x the fund's own `investments_at_fair_value` for six quarters; the excess ($0.6B-$2.2B per quarter) is rows with no instrument type named 'Debt', 'Debt <industry>' (category and industry subtotals). Details in `docs/investigations/conservation_shadow_engine.md` (2026-10-01 entry).
+- The shadow `fv_conservation` tight-tier check records `overshoot` for all six quarters at advisory enforcement; the quarter gate judges only the sign-off quarter (which reconciles). Historical cohort fund-detail pages therefore show roughly double the true portfolio for those quarters.
+- Fix not made here (recorded as the fourth production defect of the investigation; mechanism to be chosen: per-CIK correction or global hierarchical-subtotal rule). No production data changed.

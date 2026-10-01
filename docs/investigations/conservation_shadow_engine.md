@@ -471,3 +471,15 @@ money-market funds (BCRED's balance sheet excludes its $653.7M, Fidelity's inclu
 provisional ruling: the gate targets production's published basis, MMFs stay. Artifacts and scripts:
 `scratch/2026-10-01_census_published_basis/` (findings.md, s21_predicate_v2.py,
 residuals_after_predicate_v2.csv). Feeds sub-project 3 (partition-structure entries).
+
+## 2026-10-01 -- Fidelity Private Credit Fund (0001920453): production publishes category subtotal rows for six quarters
+
+**Question.** The census published-basis predicate v2 (hierarchical rollup rule) moved Fidelity's 2023-12-31 and 2024-03-31 residuals vs production from +95%/+73% to -40%. Is the predicate over-removing, or is production over-including?
+
+**Method.** `scratch/2026-09-30_base_build/diag_fidelity_anchor.py` and `diag_fidelity_subtotals.py` (DuckDB over `private_markets_holdings.csv` ex `underlying_schedule`, `fund_financials.csv`); `data/output/shadow/conservation_gate_results.csv`.
+
+**Result.** Production over-includes. Production's published total is 2.05x to 2.31x the fund's own `investments_at_fair_value` for 2023-12-31, 2024-03-31, 2024-06-30, 2024-09-30, 2024-12-31 and 2025-03-31 (+104.8, +131.4, +127.5, +116.8, +118.8, +119.9 percent). The excess is carried by rows with no instrument type whose issuer is a category heading: 'Debt' (489.1M at 2023-12-31; 877.2M at 2024-06-30), 'Debt Health Care Services', 'Debt Specialized Consumer Services', and so on. Rows with no instrument type sum to 599.5M, 1,038.7M, 1,200.0M, 1,347.4M, 1,693.4M and 2,156.6M in those quarters, versus 0 to 36.5M in every other quarter. Quarters 2023-03-31 and 2025-09-30 onward reconcile at 0.0%; 2023-06-30, 2023-09-30 and 2025-06-30 undershoot by 5.7, 13.7 and 10.3 percent (a separate, smaller question).
+
+**What the gates saw.** The shadow engine's `fv_conservation` (tight tier) records `overshoot` for all six quarters with the right residuals, at `enforcement=advisory`; `cost_conservation` likewise. The quarter-acceptance gate evaluates only the quarter under sign-off (2025-12-31 and 2026-03-31 reconcile), so the leakage in the published history is seen and unblocked. Fidelity is in the public cohort (`frontend/public/data/fund_details/0001920453.json`), so the fund-detail history shows roughly double the true portfolio for those six quarters.
+
+**Mechanism (not yet chosen).** The identifiers carry the hierarchy (category -> industry -> issuer as whole-word prefixes, no `|` separators) and the subtotal rows' fair value and cost equal their children's sums exactly; the census-side rule R5b detects them. The production fix belongs in Layer 2 (per-CIK correction with evidence) or in the global subtotal rule if the same shape recurs (Onex 0001860424 and NexPoint 0001588272 carry the same shape at their 2023 inception quarters). Fourth production defect of the published-basis investigation (after BCRED's 11 dropped positions, Ares's rollup double count, Stepstone's missing context ids), and by far the largest: about $0.6B to $2.2B per quarter.
