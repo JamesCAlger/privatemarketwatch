@@ -370,6 +370,15 @@ def test_admission_numeric_confidence_is_unaffected():
     assert a["confidence"] == 0.9 and "confidence_raw" not in a["witness"]
 
 
+def test_admission_none_confidence_is_absent_from_witness():
+    # None means the source had no confidence at all, unlike a non-numeric value ("high", prose) that
+    # was actually present: confidence_raw must not appear for the None case (Task 7 carry-over fix).
+    a = pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",
+                     confidence=None, source_author="agent", recorded_at=NOW, run_id=RUN, source="s",
+                     inception_evaluation="none_available")
+    assert a["confidence"] is None and "confidence_raw" not in a["witness"]
+
+
 def test_admission_rejects_out_of_range_confidence():
     with pytest.raises(pd.ProfileDocumentError, match="range"):
         pd.admission("accepted", "inherited_production", source_kind="override_file", mechanism="m",

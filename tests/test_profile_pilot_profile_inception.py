@@ -237,11 +237,9 @@ def test_unconfirmed_census_entry_is_a_candidate_with_a_stub():
     doc = pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
     delim = next(e for e in doc["entries"] if e["key"] == "identifier_format.delimiter")
     assert doc["admissions"][delim["entry_id"]]["state"] == "candidate"
-    # pd.admission() treats any non-numeric confidence (including the census path's confidence=None)
-    # as "not a measured quantity" and records it in witness.confidence_raw (Task 3 behavior, approved;
-    # not special-cased for None), so it appears alongside the next_quarter witness key.
-    assert doc["admissions"][delim["entry_id"]]["witness"] == {"next_quarter": "q1_value_differs",
-                                                               "confidence_raw": None}
+    # pd.admission() special-cases confidence=None (the census path never has a confidence) so no
+    # confidence_raw key is added; only alongside the next_quarter witness key (Task 7 carry-over fix).
+    assert doc["admissions"][delim["entry_id"]]["witness"] == {"next_quarter": "q1_value_differs"}
     out = pd.resolve(doc, "identifier_format.delimiter", Q4)
     assert out["status"] == "stub" and out["stub"]["cause"] == "candidate_pending_confirmation"
     assert out["stub"]["entry_id"] == delim["entry_id"]

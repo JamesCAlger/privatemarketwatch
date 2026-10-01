@@ -80,7 +80,11 @@ def admission(state, basis, *, source_kind, mechanism, confidence, source_author
     if state not in ADMISSION_STATES or basis not in ADMISSION_BASES or source_kind not in SOURCE_KINDS:
         raise ProfileDocumentError("bad admission " + repr((state, basis, source_kind)))
     witness = dict(witness or {})
-    if isinstance(confidence, bool) or not isinstance(confidence, (int, float)):
+    if confidence is None:
+        # No confidence at all (e.g. the census path): distinct from a non-numeric value that was
+        # actually present ("high", prose), which is kept visible in witness.confidence_raw below.
+        pass
+    elif isinstance(confidence, bool) or not isinstance(confidence, (int, float)):
         # Not a measured quantity: keep it visible (criterion-5-adjacent audit trail) without pretending it is a
         # number the gate can compare.
         witness["confidence_raw"] = confidence
