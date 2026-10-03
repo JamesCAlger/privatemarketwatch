@@ -81,7 +81,9 @@ has a generic AssertionError/OSError clause at all:
       the same ruling-A7 read-only-root concern the inventory-based PreservationError already reports under);
       anything else is re-raised untouched;
   (b) a pinned input disappearing or becoming unreadable "when it is read or re-verified" is caught as
-      OSError at the specific read/re-verify sites (collect_override_inputs and the census reads inside the
+      OSError at the specific read/re-verify sites (fix round 4: the first reads of the inputs that become
+      pinned -- override scan, census listings/excluded content, replay record + content, predicate code
+      record; then collect_override_inputs and the census reads inside the
       per-filer loop; the shared/originals/loader_parity reads after it; manifest.verify_inputs's own
       re-check call) via the `_reading_pinned_inputs` context manager, and converted to StageInvalidated
       there -- NOT around the two write statements inside that same stretch of code (profiles/<cik>.json,
@@ -369,18 +371,23 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         started = time.perf_counter()
         ciks = sorted(pf.cik10(c) for c in (ciks or cohort.PILOT_CIKS))
         recorded_at = recorded_at or _now()
-        hits = pf.scan_overrides(root, ciks)
-        census = lineage.load_authoritative_census(paths, census_run_id, roles=CENSUS_ROLES, ciks=ciks,
-                                                    require_excluded=True)
-        excluded = json.loads(Path(census["excluded"]["path"]).read_text(encoding="ascii"))
         replay_path = paths.data_root / "pilot" / "filer_profile" / replay_run_id / "results" / "replay_q4_q1.json"
-        replay_record = manifest.file_record(replay_path, "replay/" + replay_run_id + "/results/replay_q4_q1.json")
-        if replay_record["status"] != "present":
-            raise StageInvalidated("replay result missing: " + str(replay_path))
-        floors = json.loads(replay_path.read_text(encoding="ascii"))["floors"]
+        # Fix round 4: every read of an input that BECOMES pinned below (the override scan, the census
+        # listings and files hashed by load_authoritative_census, the excluded listing's content, the
+        # replay record and content, the predicate code record) is a pinned-input read like the ones
+        # further down -- an OSError here is exit 2, not 3. No write happens inside this block.
+        with _reading_pinned_inputs("while first reading the inputs to pin"):
+            hits = pf.scan_overrides(root, ciks)
+            census = lineage.load_authoritative_census(paths, census_run_id, roles=CENSUS_ROLES, ciks=ciks,
+                                                        require_excluded=True)
+            excluded = json.loads(Path(census["excluded"]["path"]).read_text(encoding="ascii"))
+            replay_record = manifest.file_record(replay_path, "replay/" + replay_run_id + "/results/replay_q4_q1.json")
+            if replay_record["status"] != "present":
+                raise StageInvalidated("replay result missing: " + str(replay_path))
+            floors = json.loads(replay_path.read_text(encoding="ascii"))["floors"]
+            predicate_record = manifest.file_record(paths.code_root / pi.PREDICATE_CODE_PATH,
+                                                     "code/" + pi.PREDICATE_CODE_PATH)
         detection = {k: dict(verdict=v["verdict"], replay_run_id=replay_run_id) for k, v in floors.items()}
-        predicate_record = manifest.file_record(paths.code_root / pi.PREDICATE_CODE_PATH,
-                                                 "code/" + pi.PREDICATE_CODE_PATH)
         predicate = dict(version=census_published.CENSUS_PUBLISHED_VERSION, code_sha256=predicate_record["sha256"])
         shared_names = [n for n in pf.SHARED_FILES if (root / n).is_file()]
         hit_paths = {h["path"] for h in hits}

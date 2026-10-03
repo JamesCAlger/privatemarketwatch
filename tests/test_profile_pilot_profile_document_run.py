@@ -817,3 +817,74 @@ def test_vanishing_pinned_input_still_exits_2_under_the_narrowed_mapping(staged,
     monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
     with pytest.raises(run.StageInvalidated, match="vanished or became unreadable"):
         build(staged)
+
+
+# ---------------------------------------------------------------- Fix round 4 (re-review of 928998a)
+# The reads of inputs that BECOME pinned (override scan, census listings, the census excluded content,
+# the replay record + content, the predicate code record) sat outside _reading_pinned_inputs, so an
+# OSError there exited 3. They are reads of pinned inputs like any other: exit 2.
+
+
+def _main_exit(staged, run_id):
+    return run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--cik", STELLUS])
+
+
+def _file_record_failing_for(monkeypatch, label_prefix, *, unlink_after=False):
+    original = run.manifest.file_record
+
+    def patched(path, label):
+        if not label.startswith(label_prefix):
+            return original(path, label)
+        if unlink_after:
+            record = original(path, label)
+            Path(path).unlink()
+            return record
+        raise PermissionError(13, "synthetic: access denied", str(path))
+
+    monkeypatch.setattr(run.manifest, "file_record", patched)
+
+
+def test_replay_file_vanishing_between_record_and_read_exits_2(staged, monkeypatch):
+    _file_record_failing_for(monkeypatch, "replay/", unlink_after=True)
+    with pytest.raises(run.StageInvalidated, match="vanished or became unreadable"):
+        build(staged)
+
+
+def test_replay_file_vanishing_exits_2_through_main(staged, monkeypatch):
+    _file_record_failing_for(monkeypatch, "replay/", unlink_after=True)
+    assert _main_exit(staged, "sp3p-profile-fix4-replay-vanish") == run.EXIT_INVALIDATED
+
+
+def test_replay_file_unreadable_when_hashed_exits_2(staged, monkeypatch):
+    _file_record_failing_for(monkeypatch, "replay/")
+    assert _main_exit(staged, "sp3p-profile-fix4-replay-unreadable") == run.EXIT_INVALIDATED
+
+
+def test_predicate_file_read_failing_exits_2(staged, monkeypatch):
+    _file_record_failing_for(monkeypatch, "code/")
+    assert _main_exit(staged, "sp3p-profile-fix4-predicate") == run.EXIT_INVALIDATED
+
+
+def test_census_excluded_file_read_failing_exits_2(staged, monkeypatch):
+    """The excluded listing is hashed inside load_authoritative_census and its CONTENT is read by
+    run_stage afterwards; it vanishing in between is a pinned input vanishing."""
+    original = run.lineage.load_authoritative_census
+
+    def vanishing(*args, **kwargs):
+        out = original(*args, **kwargs)
+        Path(out["excluded"]["path"]).unlink()
+        return out
+
+    monkeypatch.setattr(run.lineage, "load_authoritative_census", vanishing)
+    assert _main_exit(staged, "sp3p-profile-fix4-excluded") == run.EXIT_INVALIDATED
+
+
+def test_override_scan_read_failing_exits_2(staged, monkeypatch):
+    """scan_overrides reads every override file's content before any of them is pinned."""
+    def failing(root, ciks):
+        raise PermissionError(13, "synthetic: access denied", str(root))
+
+    monkeypatch.setattr(run.pf, "scan_overrides", failing)
+    assert _main_exit(staged, "sp3p-profile-fix4-scan") == run.EXIT_INVALIDATED
