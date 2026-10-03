@@ -13258,3 +13258,13 @@ these documents; nothing pushed.
 - Open: the owner decision on the spec criterion above; BCRED's accepted published_basis rests on a
   +0.51% residual inside the contract's band (the adoption rule used 0.5%); Onex and Stellus entity-name
   items from the earlier entry are unchanged.
+
+## 2026-10-04 -- SP3 proper: residuals after the fix-wave re-review (owner items, no code change)
+
+- Re-review of the final fix wave (168123f..f63b479): all seven findings addressed, run of record `sp3p-profile-20261003t231621z` (exit 1) verified against its pinned totals file for all 8 filers. No further fix wave was run; the items below are open.
+- `partition_structure.published_basis` accept tolerance is an OWNER RULING, not settled: "holds" in the pinned back-test means the fair-value residual is inside the totals contract band (5.0% standard tier, 10.0% low-history tier), not inside the 0.5% used when the predicate was adopted. The band and tier are not recorded in the witness. The earlier line calling a hold "a reconciliation" overstates it: read it as "inside the contract band". BCRED is accepted at +0.51% (about $419M) only because of the 5% band; under 0.5% the accepted count is 3 of 8, not 4.
+- The inception gate's consistency leg is thin: Ares, Onex, Stellus and StepStone pass on ONE compared row, and that row is `fund_level_concepts.entity_cik` (CIK equals CIK). "At least one compared row" is close to vacuous; whether that suffices for the gate is an owner decision.
+- `spec_exit` is unreachable on any real filer as built: two wrapper keys (`source_encodings.cash_identifiers`, `invariants.rate_sanity`) have no semantic counterpart and are always insufficient_evidence. This is stated here and in the test docstring but not in `exit_test.json` or the spec note. Either the keys get counterparts or the owner amends the spec 4.1 / row 3 criterion.
+- Minor, open: the accepted `published_basis` entry pairs today's `census_published.py` hash with an outcome computed at an older code head (diff read: behaviour-preserving for default callers, no automated check); `exit_test` trusts the verdict word without a vocabulary check; the 2026-10-03 PASS entries above are superseded on the verdict by the later entry (append-only, no inline marker).
+- Spec amendment needed (owner): inherited entries carry `valid_from = null` (matches how production applies the files) while spec section 4 says the file date becomes `valid_from`.
+- Tests: none run for this entry (docs only). Full repo suite not run in this sub-project; pilot regression `sp3p-verify-final-regression2` 942 passed / 2 skipped at 6e43669.
