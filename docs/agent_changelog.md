@@ -13165,3 +13165,4 @@ Every number below is IN-SAMPLE (the 8 pilot filers, one report date, 2025-12-31
   PowerShell `ConvertFrom-Json` and any case-insensitive JSON reader refuse those two files.
 - NOT run: the full repo suite; a pilot-suite regression at 928998a by this task (the last one by this
   task was `sp3p-verify-t10a` at dd176ff, 906 passed / 2 skipped). IN-SAMPLE.
+- Open item (SP3 proper, both runs): the Stellus 0001901037 registrant-name difference between the Q4-2025 and Q1-2026 censuses is UNRESOLVED. The `fund_level_concepts.entity_registrant_name` entry is a candidate (witness `q1_value_differs`); nothing has adjudicated which name is right.
