@@ -40,6 +40,11 @@ def _number(value):
 
 
 def rule_expressibility(rule: dict) -> dict:
+    """Fix round 1, item 15 (deferred, out of scope for this round): a list-shaped rule `content` or
+    `template` (as opposed to the B2 list-shaped `row_selector` hardened in the prior round) still
+    raises AttributeError here (e.g. `.get("quarters")` on a list) rather than InceptionError. No
+    pilot filer's `agent_investigate_rules` file has that shape today.
+    """
     quarters = (rule.get("scope") or {}).get("quarters") or []
     if (rule.get("rule_type") == "row_exclusion" and _ROW_ID_SQL.search(rule.get("predicate_sql") or "")
             and len(quarters) == 1):
@@ -155,15 +160,20 @@ INHERITED_FAMILIES = {"rate_convention": ("meaning.interest_rate", "agent"),
 PREDICATE_CODE_PATH = "scripts/profile_pilot/census_published.py"
 REPORTING_ENTITY_POINTER = ("source_encodings", "reporting_entity_suffixes")
 NO_CONTRACT = "none_available: no contract kind for this axis has reported (sub-project 2)"
+# Fix round 1 (Task 6 review item 7): headings are quoted exactly as they appear in the named checkout's
+# file (verified by hand against that file, not re-checked at runtime) and the checkout is named so a
+# later reader can tell a worktree-only entry (not yet in main) from one already in main. The scratch
+# table path is dropped (scratch is disposable); the worktree changelog entry is the durable citation.
+PREDICATE_VERSION_DESCRIBED = "census-published.v2"
 ADOPTION_EVIDENCE = (
-    dict(kind="adoption_record", changelog="docs/agent_changelog.md",
+    dict(kind="adoption_record", changelog="docs/agent_changelog.md", checkout="worktree",
          heading="2026-10-01 -- SP3 Task 0b: census published-basis predicate v2 (hierarchical rollups) adopted",
          commits=["2132a31", "8418644", "b2454c9", "c7a627f"],
-         rule="anchor-aware adoption rule (controller rulings 3-4): 101 measured fund-quarters, 0 violations, "
-              "0 worsenings (IN-SAMPLE)",
-         table="scratch/2026-09-30_base_build/diag_predicate_v2_table.csv"),
-    dict(kind="owner_ruling", changelog="docs/agent_changelog.md",
-         heading="2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling)"))
+         rule="anchor-aware adoption rule (controller rulings 3-4): 111 docs, 101 measured fund-quarters, "
+              "31 improved, 0 worsened, 0 violations (IN-SAMPLE)"),
+    dict(kind="owner_ruling", changelog="docs/agent_changelog.md", checkout="main",
+         heading="2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling): "
+                 "implementation and measurement"))
 # A10 (pre-flight ruling): the Stage B census cannot derive non_private_markers or prefix_rules (no detector
 # produces them), so they are excluded even though their section (subtotals_and_headings) is otherwise
 # census-derivable. Leaving them in would make an unavailable census wrongly "blamed" for their absence
@@ -199,7 +209,7 @@ def file_evidence(rel, sha, content, *, value_is_file=True, pointer=None) -> lis
             v = content.get(k)
             if isinstance(v, list) and v:
                 out.append(dict(kind="source_citations", field=k, items=copy.deepcopy(v)))
-        for k in ("target_quarter", "first_seen_quarter", "updated_at"):
+        for k in ("target_quarter", "first_seen_quarter", "updated_at", "report_date"):
             if content.get(k):
                 out.append(dict(kind="source_date", field=k, value=content[k]))
     return out
@@ -225,28 +235,76 @@ def census_entries(census, *, recorded_at):
     return list(derived["events"]), list(derived["packet_stubs"])
 
 
-def confirmations(q4_entries, q1_census, *, recorded_at) -> dict:
-    if q1_census is None:
-        return {e["entry_id"]: (False, "q1_census_unavailable") for e in q4_entries}
-    q1 = profile.derive_profile(q1_census["doc"], source=q1_census["source"], era=profile.INCEPTION_ERA,
-                                recorded_at=recorded_at, anchors=None)
-    by_key: dict = {}
-    for e in q1["entries"]:
-        by_key.setdefault(e["key"], []).append(e)
-    out = {}
-    for e in q4_entries:
-        others = by_key.get(e["key"], [])
-        if len(others) != 1:
-            out[e["entry_id"]] = (False, "q1_no_entry" if not others else "q1_ambiguous")
-        elif (value_sha256(others[0]["value"]) == value_sha256(e["value"])
-              and others[0]["applies_to"] == e["applies_to"]):
-            out[e["entry_id"]] = (True, "q1_value_equal")
-        else:
-            out[e["entry_id"]] = (False, "q1_value_differs")
+def _bearing_map(stubs) -> dict:
+    out: dict = {}
+    for s in stubs or []:
+        for k in (s.get("bears_on") or []):
+            out.setdefault(k, []).append({"stub_id": s["stub_id"], "cause": s["cause"]})
     return out
 
 
-def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_unavailable) -> list:
+def confirmations(q4_entries, q1_census, *, census_stubs, recorded_at) -> dict:
+    """entry_id -> dict(ok, reason, open).
+
+    `open` is None unless unresolved census outcomes (packet stubs) bear on the key in Q4 or Q1
+    (fix round 1, item 4, controller ruling): in that case the entry is forced to a candidate with
+    reason "open_census_outcomes" regardless of what the Q1 value comparison would otherwise say,
+    and `open` carries {"q4": [...], "q1": [...]}, each a list of {"stub_id", "cause"} for the
+    bearing stubs of that quarter.
+    """
+    q4_bearing = _bearing_map(census_stubs)
+    q1_entries_by_key: dict = {}
+    q1_bearing: dict = {}
+    if q1_census is not None:
+        q1 = profile.derive_profile(q1_census["doc"], source=q1_census["source"], era=profile.INCEPTION_ERA,
+                                    recorded_at=recorded_at, anchors=None)
+        for e in q1["entries"]:
+            q1_entries_by_key.setdefault(e["key"], []).append(e)
+        q1_bearing = _bearing_map(q1["packet_stubs"])
+    out = {}
+    for e in q4_entries:
+        open_q4, open_q1 = q4_bearing.get(e["key"]) or [], q1_bearing.get(e["key"]) or []
+        if open_q4 or open_q1:
+            out[e["entry_id"]] = dict(ok=False, reason="open_census_outcomes", open={"q4": open_q4, "q1": open_q1})
+            continue
+        if q1_census is None:
+            out[e["entry_id"]] = dict(ok=False, reason="q1_census_unavailable", open=None)
+            continue
+        others = q1_entries_by_key.get(e["key"], [])
+        if len(others) != 1:
+            out[e["entry_id"]] = dict(ok=False, reason="q1_no_entry" if not others else "q1_ambiguous", open=None)
+        elif (value_sha256(others[0]["value"]) == value_sha256(e["value"])
+              and others[0]["applies_to"] == e["applies_to"]):
+            out[e["entry_id"]] = dict(ok=True, reason="q1_value_equal", open=None)
+        else:
+            out[e["entry_id"]] = dict(ok=False, reason="q1_value_differs", open=None)
+    return out
+
+
+def _check_census_inputs(cik, census_q4, census_q1):
+    """Fix round 1, item 2: census inputs are never checked against the filer or each other."""
+    if census_q4 is not None:
+        src = census_q4["source"]
+        if cik10(src.get("cik")) != cik or src.get("report_date") != pd.INCEPTION_REPORT_DATE:
+            raise InceptionError("census_q4 does not match filer " + cik + " at " + pd.INCEPTION_REPORT_DATE
+                                 + ": " + repr((src.get("cik"), src.get("report_date"))))
+    if census_q1 is not None:
+        src = census_q1["source"]
+        if cik10(src.get("cik")) != cik:
+            raise InceptionError("census_q1 belongs to another filer: " + repr(src.get("cik")))
+        # Compared with the inception date itself (census_q4, when present, is already pinned to it above),
+        # so a Q1 census is date-checked even for a filer with no Q4 census. ISO dates order as strings.
+        day = src.get("report_date")
+        if not isinstance(day, str) or not day > pd.INCEPTION_REPORT_DATE:
+            raise InceptionError("census_q1 report_date " + repr(day) + " is not later than the inception "
+                                 "report date " + pd.INCEPTION_REPORT_DATE)
+
+
+def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_ran, census_unavailable) -> list:
+    # Fix round 1, item 10: this duplicates profile_document._live's filter (recorded_until is None and
+    # valid_at(report_date)) rather than importing it. _live is underscore-private to that module and
+    # this review round is scoped to profile_inception.py only, so the duplication is left as-is and
+    # flagged here rather than importing a private name across the module boundary.
     live = [e for e in entries if e["recorded_until"] is None and pd.valid_at(e, report_date)]
     stubs = []
     for key in pd.GRID_KEYS:
@@ -267,6 +325,11 @@ def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_un
             first = bearing[0]
             question = first.get("question") or ("census detector " + str(first.get("detector")) + " outcome "
                                                  + str(first.get("cause")))
+            # Fix round 1, item 12 (deferred): census_stub_ids names Stage B packet-stub ids from THIS
+            # build's derive_profile() call. Those stubs are never persisted anywhere in the document
+            # (only their ids and cause/finding are copied here), so once this build's in-memory
+            # census_stubs list is gone the ids are not a durable cross-reference -- re-running the
+            # census derivation is the only way to look one back up.
             stubs.append(pd.stub(cik, key, "census_stub", question,
                                  detail=dict(census_stub_ids=[s["stub_id"] for s in bearing],
                                              cause=first.get("cause"), finding=first.get("finding"))))
@@ -278,24 +341,48 @@ def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_un
                                  + str(census_unavailable.get("detail") or census_unavailable.get("reason")) + ")",
                                  detail=dict(census_unavailable)))
             continue
+        if census_ran and key in CENSUS_KEYS:
+            # Fix round 1, item 5: a complete Q4 census ran and derived no observation (no entry, no
+            # bearing packet stub) for this key -- there is no missing census to blame, so say so
+            # instead of reusing the generic "a complete-collection census ... would close it" prose.
+            stubs.append(pd.stub(cik, key, "no_source",
+                                 "the " + report_date + " census ran to completion and collected no "
+                                 "observation for this key (nothing in the current census to attribute; "
+                                 "not a missing-census question)", detail={"census": "collected_no_observation"}))
+            continue
         stubs.append(pd.stub(cik, key, "no_source", CLOSING_EVIDENCE[section]))
     return stubs
 
 
 def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git_head: str) -> dict:
     cik = cik10(cik)
+    census_q4, census_q4_unavailable = inputs.get("census_q4"), inputs.get("census_q4_unavailable")
+    census_q1 = inputs.get("census_q1")
+    # Fix round 1, item 5: census_q4 and census_q4_unavailable describe the SAME fact (whether Stage B
+    # produced an authoritative Q4 census for this filer) from two sides; exactly one must be set.
+    if (census_q4 is None) == (census_q4_unavailable is None):
+        raise InceptionError("exactly one of census_q4 and census_q4_unavailable must be set")
+    _check_census_inputs(cik, census_q4, census_q1)
+    pred = inputs["predicate"]
+    if pred["version"] != PREDICATE_VERSION_DESCRIBED:
+        raise InceptionError("predicate version " + repr(pred["version"]) + " does not match the adoption "
+                             "evidence, which describes " + PREDICATE_VERSION_DESCRIBED)
     files = inputs["files"]
-    events, census_stubs = census_entries(inputs.get("census_q4"), recorded_at=recorded_at)
+    events, census_stubs = census_entries(census_q4, recorded_at=recorded_at)
     admissions, targets = {}, {}
     q4_entries = envelope.materialize_entries(events)
-    confirmed = confirmations(q4_entries, inputs.get("census_q1"), recorded_at=recorded_at)
+    confirmed = confirmations(q4_entries, census_q1, census_stubs=census_stubs, recorded_at=recorded_at)
     for e in q4_entries:
-        ok, reason = confirmed[e["entry_id"]]
+        c = confirmed[e["entry_id"]]
+        witness = {"next_quarter": c["reason"]}
+        if c["open"] is not None:
+            witness["open_census_outcomes"] = c["open"]
         admissions[e["entry_id"]] = pd.admission(
-            "accepted" if ok else "candidate", "census_confirmed_next_quarter" if ok else "census_unconfirmed",
+            "accepted" if c["ok"] else "candidate",
+            "census_confirmed_next_quarter" if c["ok"] else "census_unconfirmed",
             source_kind="census", mechanism="census-derived (" + profile.PROFILE_VERSION + ")", confidence=None,
             source_author="census", recorded_at=recorded_at, run_id=run_id,
-            source=inputs["census_q4"]["source"]["census_relative"], witness={"next_quarter": reason},
+            source=census_q4["source"]["census_relative"], witness=witness,
             inception_evaluation="next_quarter_census_equality")
     for family in sorted(INHERITED_FAMILIES):
         found = files.get(family) or []
@@ -307,16 +394,28 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
         key, author = INHERITED_FAMILIES[family]
         item, content = found[0], found[0]["content"]
         meta = content if isinstance(content, dict) else {}
+        # Fix round 1, item 8: a knowledge file's own cik, when it carries one, must match the filer.
+        if meta.get("cik") is not None and cik10(meta.get("cik")) != cik:
+            raise InceptionError(family + " file cik " + repr(meta.get("cik")) + " is not " + cik + ": "
+                                 + item["path"])
         events, eid = _assert_inherited(events, cik, key, content, support_path=REPO_PREFIX + item["path"],
                                         sha=item["sha256"], evidence=file_evidence(item["path"], item["sha256"], content),
                                         author=author, recorded_at=recorded_at)
-        admissions[eid] = pd.admission("accepted", "inherited_production", source_kind="override_file",
-                                       mechanism=family + " override file", confidence=_number(meta.get("confidence")),
-                                       source_author=str(meta.get("created_by") or author), recorded_at=recorded_at,
-                                       run_id=run_id, source=REPO_PREFIX + item["path"], witness={},
-                                       inception_evaluation=NO_CONTRACT)
+        witness = {}
+        if family == "rate_convention":
+            # Fix round 1, item 13: carry the adjudicated reconciliation witness through, when present.
+            for wk in ("verify_tier", "verify_n_reconciled"):
+                if wk in meta:
+                    witness[wk] = meta[wk]
+        admissions[eid] = pd.admission(
+            "accepted", "inherited_production", source_kind="override_file", mechanism=family + " override file",
+            # Fix round 1, item 1: pass the raw confidence through -- a qualitative value ("high")
+            # must reach pd.admission() unfiltered so it lands in witness.confidence_raw, not be
+            # silently turned into None by _number() before admission() ever sees it.
+            confidence=meta.get("confidence"), source_author=str(meta.get("created_by") or author),
+            recorded_at=recorded_at, run_id=run_id, source=REPO_PREFIX + item["path"], witness=witness,
+            inception_evaluation=NO_CONTRACT)
         targets.setdefault(item["path"], []).append(eid)
-    pred = inputs["predicate"]
     events, basis_id = _assert_inherited(
         events, cik, "partition_structure.published_basis", {"predicate": pred["version"]},
         support_path=PREDICATE_CODE_PATH, sha=pred["code_sha256"],
@@ -334,10 +433,19 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
         w = wrappers[0]
         present, suffixes = _get(w["content"], REPORTING_ENTITY_POINTER)
         if present:
+            # Fix round 1, item 11: the wrapper's own schema does not constrain this field's shape.
+            if not (isinstance(suffixes, list) and all(isinstance(s, str) for s in suffixes)):
+                raise InceptionError("source_encodings.reporting_entity_suffixes must be a list of strings: "
+                                     + repr(suffixes))
             evidence = file_evidence(w["path"], w["sha256"], w["content"], value_is_file=False,
                                      pointer=pointer(REPORTING_ENTITY_POINTER))
             evidence.append(dict(kind="investigation", path="docs/investigations/conservation_shadow_engine.md",
-                                 heading="2026-10-01", note="R6 look-through rows by typed-identifier suffix"))
+                                 checkout="main",
+                                 heading="2026-10-01 - Census-side published basis: a 7-rule predicate "
+                                         "reconciles all 8 pilot filers within 0.5%",
+                                 note="R6: mark reporting-entity look-through rows as underlying by "
+                                      "typed-identifier suffix, since no LegalEntityAxis member exists in "
+                                      "the census"))
             events, entities_id = _assert_inherited(events, cik, "partition_structure.reporting_entities",
                                                     list(suffixes), support_path=REPO_PREFIX + w["path"],
                                                     sha=w["sha256"], evidence=evidence, author="human",
@@ -375,11 +483,10 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
             raise InceptionError("converted file produced nothing: " + d["path"])
         disposition.append(d)
     stubs = grid_stubs(cik, entries, admissions, census_stubs, report_date=pd.INCEPTION_REPORT_DATE,
-                       census_unavailable=inputs.get("census_q4_unavailable"))
+                       census_ran=census_q4 is not None, census_unavailable=census_q4_unavailable)
     detection = {k: dict(claim="claimed" if v["verdict"] == "PASS" else "detection_not_claimed",
                          verdict=v["verdict"], replay_run_id=v["replay_run_id"])
                  for k, v in sorted((inputs.get("detection") or {}).items())}
-    q4, q1 = inputs.get("census_q4"), inputs.get("census_q1")
     doc = dict(
         schema=pd.SCHEMA_NAME, schema_version=1, document_version=1, cik=cik,
         inception_report_date=pd.INCEPTION_REPORT_DATE, recorded_at=recorded_at, run_id=run_id,
@@ -393,10 +500,13 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
         detection_claims=detection, disposition=disposition,
         ledger=[dict(event="document_created", at=recorded_at, run_id=run_id, detail=dict(
             converter_version=pd.CONVERTER_VERSION,
-            census_q4=q4["source"]["census_relative"] if q4 else None,
-            census_q1=q1["source"]["census_relative"] if q1 else None,
-            census_q4_unavailable=inputs.get("census_q4_unavailable"),
-            overrides_root=inputs.get("overrides_root"), replay_run_id=inputs.get("replay_run_id")))])
+            census_q4=census_q4["source"]["census_relative"] if census_q4 else None,
+            census_q1=census_q1["source"]["census_relative"] if census_q1 else None,
+            census_q4_unavailable=census_q4_unavailable,
+            overrides_root=inputs.get("overrides_root"), replay_run_id=inputs.get("replay_run_id"),
+            # Fix round 1, item 9 (ruling P5): the MAIN checkout head inception actually read, distinct
+            # from `code.git_head` (this worktree's HEAD, the converter code version).
+            overrides_git_head=inputs.get("overrides_git_head")))])
     pd.validate_document(doc)
     return doc
 
