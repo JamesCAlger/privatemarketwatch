@@ -1,0 +1,2238 @@
+{
+  "schema": "filer_profile_document_v1",
+  "schema_version": 1,
+  "document_version": 1,
+  "cik": "0001715933",
+  "inception_report_date": "2025-12-31",
+  "recorded_at": "2026-10-03T21:28:55Z",
+  "run_id": "sp3p-profile-20261003t212843z",
+  "code": {
+    "git_head": "928998a6ab4ffcd2234c975a1838a4a27ab31f63",
+    "converter_version": "profile-document.v1"
+  },
+  "events": [
+    {
+      "event": "assert",
+      "event_id": "assert:0001715933:identifier_format.anchors:all:allforms:v1",
+      "entry_id": "0001715933:identifier_format.anchors:all:allforms:v1",
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "entry": {
+        "entry_id": "0001715933:identifier_format.anchors:all:allforms:v1",
+        "key": "identifier_format.anchors",
+        "value": {
+          "schema_version": "agentA-anchor-vocabulary.v1",
+          "cik": "0001715933",
+          "entity_name": "TCW Direct Lending VII LLC",
+          "report_date": "2026-03-31",
+          "status": "PROPOSED",
+          "anchors": [
+            {
+              "label": "DEBT",
+              "regex": "^Debt Securities\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 4,
+                  "observation": "Debt position identifiers begin with Debt Securities."
+                }
+              ]
+            },
+            {
+              "label": "MAT",
+              "regex": "Maturity Date",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 4,
+                  "observation": "Dominant debt identifiers contain the literal Maturity Date marker."
+                }
+              ]
+            },
+            {
+              "label": "RATE",
+              "regex": "-\\s*\\d+(?:\\.\\d+)?\\s*%",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 4,
+                  "observation": "Debt identifiers embed the headline interest rate after the instrument descriptor."
+                }
+              ]
+            },
+            {
+              "label": "REFRATE",
+              "regex": "\\b(?:SOFR|PRIME)\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 4,
+                  "observation": "Floating debt identifiers name SOFR or Prime."
+                }
+              ]
+            },
+            {
+              "label": "EQUITY",
+              "regex": "^Equity Securities\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 27,
+                  "row_index": 1,
+                  "observation": "Equity position identifiers begin with Equity Securities."
+                }
+              ]
+            },
+            {
+              "label": "EQUITY_INVESTMENTS",
+              "regex": "^Equity Investments\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 27,
+                  "row_index": 1,
+                  "observation": "Equity Investments is a section marker in identifier text."
+                }
+              ]
+            },
+            {
+              "label": "CASH_EQUIV",
+              "regex": "^Cash Equivalents\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 1,
+                  "observation": "Cash Equivalents is a section marker in identifier text."
+                }
+              ]
+            },
+            {
+              "label": "SHORT_TERM",
+              "regex": "^Short-term Investments\\b",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-25-276898",
+                  "table_index": 24,
+                  "row_index": 1,
+                  "observation": "Short-term Investments is a section marker in identifier text."
+                }
+              ]
+            },
+            {
+              "label": "TOTAL_INVESTMENTS",
+              "regex": "^Total Investments(?:\\s*\\(|\\b)",
+              "evidence": [
+                {
+                  "accession_number": "0001193125-26-221880",
+                  "table_index": 24,
+                  "row_index": 1,
+                  "observation": "Bundle none_examples repeatedly contain the aggregate marker Total Investments followed by a parenthesized net-assets percentage."
+                }
+              ]
+            },
+            {
+              "label": "DEBT_EQUITY",
+              "regex": "^Debt \\& Equity Securities$",
+              "evidence": [
+                {
+                  "accession_number": "0000950170-23-020312",
+                  "table_index": 24,
+                  "row_index": 1,
+                  "observation": "Bundle none_examples contain the standalone combined-section marker Debt & Equity Securities."
+                }
+              ]
+            }
+          ],
+          "notes": "Adds narrow anchors for both marker forms represented in none_examples; Total Investments is an aggregate marker, not a position grammar input."
+        },
+        "form_type": null,
+        "applies_to": null,
+        "valid_from": null,
+        "valid_to": null,
+        "recorded_at": "2026-10-03T21:28:55Z",
+        "supersedes": null,
+        "supersession_kind": null,
+        "author": "agent",
+        "status": "promoted",
+        "provenance": "inherited",
+        "inherited_from": "data/overrides/identifier_anchors/0001715933.json@618ce8e3bd95",
+        "support": {
+          "kind": "inherited_file",
+          "path": "data/overrides/identifier_anchors/0001715933.json",
+          "sha256": "618ce8e3bd95c9bf74d70f11054ec7a8d13dc728a553f351e1ba69f569b5dd86"
+        },
+        "evidence": [
+          {
+            "kind": "override_file",
+            "path": "data/overrides/identifier_anchors/0001715933.json",
+            "sha256": "618ce8e3bd95c9bf74d70f11054ec7a8d13dc728a553f351e1ba69f569b5dd86",
+            "ordered_sha256": "8add90c8e9c20e3e11a02f2131db46dac97d956978b8621148d313461fc97249",
+            "value_is_file": true
+          },
+          {
+            "kind": "source_date",
+            "field": "report_date",
+            "value": "2026-03-31"
+          }
+        ],
+        "regression_pin": null
+      }
+    },
+    {
+      "event": "assert",
+      "event_id": "assert:0001715933:identifier_format.dialect:all:allforms:v1",
+      "entry_id": "0001715933:identifier_format.dialect:all:allforms:v1",
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "entry": {
+        "entry_id": "0001715933:identifier_format.dialect:all:allforms:v1",
+        "key": "identifier_format.dialect",
+        "value": {
+          "schema_version": "agentA-rate-grammar.v1",
+          "cik": "0001715933",
+          "entity_name": "TCW Direct Lending VII LLC",
+          "report_date": "2026-03-31",
+          "status": "PROPOSED",
+          "applies_to": {
+            "regime": "flattened",
+            "signature": "DEBT RATE REFRATE MAT"
+          },
+          "available_identifier_datapoints": [
+            "section_or_asset_class",
+            "industry_or_category",
+            "issuer",
+            "acquisition_date",
+            "instrument_type",
+            "tranche_or_position_descriptor",
+            "interest_rate",
+            "reference_rate_type",
+            "basis_spread",
+            "interest_rate_floor",
+            "pik_terms_text",
+            "pik_rate",
+            "pct_of_net_assets",
+            "maturity_date"
+          ],
+          "unsupported_identifier_datapoints": [
+            "principal_or_par_amount",
+            "amortized_cost",
+            "fair_value",
+            "share_or_unit_count",
+            "affiliated_investment_basis_spread",
+            "affiliated_investment_maturity_date"
+          ],
+          "pik_convention": "inclusive",
+          "extractors": [
+            {
+              "field": "interest_rate",
+              "regex": "-\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*(?:inc\\s+PIK)?",
+              "group": 1,
+              "type": "pct"
+            },
+            {
+              "field": "reference_rate_type",
+              "regex": "\\((SOFR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%",
+              "group": 1,
+              "type": "ref_code",
+              "map": {
+                "SOFR": "SOFR",
+                "PRIME": "PRIME"
+              }
+            },
+            {
+              "field": "basis_spread",
+              "regex": "\\((?:SOFR|PRIME)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+              "group": 1,
+              "type": "pct"
+            },
+            {
+              "field": "interest_rate_floor",
+              "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*Floor",
+              "group": 1,
+              "type": "pct"
+            },
+            {
+              "field": "pik_rate",
+              "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*PIK\\)",
+              "group": 1,
+              "type": "pct"
+            },
+            {
+              "field": "maturity_date",
+              "regex": "Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{2})",
+              "group": 1,
+              "type": "date_mdy"
+            }
+          ],
+          "required_fields": [
+            "interest_rate",
+            "reference_rate_type",
+            "basis_spread",
+            "maturity_date"
+          ],
+          "invariants": [
+            {
+              "name": "interest_rate_identifier_matches_twin",
+              "kind": "pct_agree",
+              "parsed": "interest_rate",
+              "twin": "interest_rate"
+            },
+            {
+              "name": "basis_spread_identifier_matches_twin",
+              "kind": "pct_agree",
+              "parsed": "basis_spread",
+              "twin": "basis_spread"
+            },
+            {
+              "name": "maturity_date_identifier_matches_twin",
+              "kind": "date_agree",
+              "parsed": "maturity_date",
+              "twin": "maturity_date"
+            },
+            {
+              "name": "reference_rate_implies_spread",
+              "kind": "implication",
+              "if_present": "reference_rate_type",
+              "then_present": "basis_spread"
+            }
+          ],
+          "evidence": [
+            {
+              "accession_number": "0001193125-26-221880",
+              "table_index": 24,
+              "row_index": 4,
+              "observation": "Recent dominant debt identifiers embed headline rate, reference rate, spread, floor or PIK terms, and maturity date."
+            },
+            {
+              "accession_number": "0000950170-23-020312",
+              "table_index": 24,
+              "row_index": 4,
+              "observation": "Oldest sampled era uses the same headline-rate, reference-plus-spread, and maturity markers."
+            }
+          ],
+          "notes": "Scoped only to the dominant signature containing embedded rate and maturity datapoints. RATE-only affiliated identifiers support headline interest_rate but not spread or maturity and are excluded from this grammar."
+        },
+        "form_type": null,
+        "applies_to": null,
+        "valid_from": null,
+        "valid_to": null,
+        "recorded_at": "2026-10-03T21:28:55Z",
+        "supersedes": null,
+        "supersession_kind": null,
+        "author": "agent",
+        "status": "promoted",
+        "provenance": "inherited",
+        "inherited_from": "data/overrides/identifier_rate_grammars/0001715933.json@a6cf26630350",
+        "support": {
+          "kind": "inherited_file",
+          "path": "data/overrides/identifier_rate_grammars/0001715933.json",
+          "sha256": "a6cf2663035072de0aaf689ea93db0e3dd63b1c29eb96b2ef3f4ae7d509665e1"
+        },
+        "evidence": [
+          {
+            "kind": "override_file",
+            "path": "data/overrides/identifier_rate_grammars/0001715933.json",
+            "sha256": "a6cf2663035072de0aaf689ea93db0e3dd63b1c29eb96b2ef3f4ae7d509665e1",
+            "ordered_sha256": "53bc3b8d41851b56a2d9b9776c6678d42a513d84ef4ee46c79d8b6372d815c5b",
+            "value_is_file": true
+          },
+          {
+            "kind": "source_citations",
+            "field": "evidence",
+            "items": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Recent dominant debt identifiers embed headline rate, reference rate, spread, floor or PIK terms, and maturity date."
+              },
+              {
+                "accession_number": "0000950170-23-020312",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Oldest sampled era uses the same headline-rate, reference-plus-spread, and maturity markers."
+              }
+            ]
+          },
+          {
+            "kind": "source_date",
+            "field": "report_date",
+            "value": "2026-03-31"
+          }
+        ],
+        "regression_pin": null
+      }
+    },
+    {
+      "event": "assert",
+      "event_id": "assert:0001715933:partition_structure.published_basis:all:allforms:v1",
+      "entry_id": "0001715933:partition_structure.published_basis:all:allforms:v1",
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "entry": {
+        "entry_id": "0001715933:partition_structure.published_basis:all:allforms:v1",
+        "key": "partition_structure.published_basis",
+        "value": {
+          "predicate": "census-published.v2"
+        },
+        "form_type": null,
+        "applies_to": null,
+        "valid_from": null,
+        "valid_to": null,
+        "recorded_at": "2026-10-03T21:28:55Z",
+        "supersedes": null,
+        "supersession_kind": null,
+        "author": "human",
+        "status": "promoted",
+        "provenance": "inherited",
+        "inherited_from": "scripts/profile_pilot/census_published.py@744f329d3b90",
+        "support": {
+          "kind": "inherited_file",
+          "path": "scripts/profile_pilot/census_published.py",
+          "sha256": "744f329d3b90b2128bed901e596cf57599b867748a7e538a44d37b15cc6c24b1"
+        },
+        "evidence": [
+          {
+            "kind": "code_file",
+            "path": "scripts/profile_pilot/census_published.py",
+            "sha256": "744f329d3b90b2128bed901e596cf57599b867748a7e538a44d37b15cc6c24b1"
+          },
+          {
+            "kind": "adoption_record",
+            "changelog": "docs/agent_changelog.md",
+            "checkout": "worktree",
+            "heading": "2026-10-01 -- SP3 Task 0b: census published-basis predicate v2 (hierarchical rollups) adopted",
+            "commits": [
+              "2132a31",
+              "8418644",
+              "b2454c9",
+              "c7a627f"
+            ],
+            "rule": "anchor-aware adoption rule (controller rulings 3-4): 111 docs, 101 measured fund-quarters, 31 improved, 0 worsened, 0 violations (IN-SAMPLE)"
+          },
+          {
+            "kind": "owner_ruling",
+            "changelog": "docs/agent_changelog.md",
+            "checkout": "main",
+            "heading": "2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling): implementation and measurement"
+          }
+        ],
+        "regression_pin": null
+      }
+    }
+  ],
+  "entries": [
+    {
+      "entry_id": "0001715933:identifier_format.anchors:all:allforms:v1",
+      "key": "identifier_format.anchors",
+      "value": {
+        "schema_version": "agentA-anchor-vocabulary.v1",
+        "cik": "0001715933",
+        "entity_name": "TCW Direct Lending VII LLC",
+        "report_date": "2026-03-31",
+        "status": "PROPOSED",
+        "anchors": [
+          {
+            "label": "DEBT",
+            "regex": "^Debt Securities\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Debt position identifiers begin with Debt Securities."
+              }
+            ]
+          },
+          {
+            "label": "MAT",
+            "regex": "Maturity Date",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Dominant debt identifiers contain the literal Maturity Date marker."
+              }
+            ]
+          },
+          {
+            "label": "RATE",
+            "regex": "-\\s*\\d+(?:\\.\\d+)?\\s*%",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Debt identifiers embed the headline interest rate after the instrument descriptor."
+              }
+            ]
+          },
+          {
+            "label": "REFRATE",
+            "regex": "\\b(?:SOFR|PRIME)\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 4,
+                "observation": "Floating debt identifiers name SOFR or Prime."
+              }
+            ]
+          },
+          {
+            "label": "EQUITY",
+            "regex": "^Equity Securities\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 27,
+                "row_index": 1,
+                "observation": "Equity position identifiers begin with Equity Securities."
+              }
+            ]
+          },
+          {
+            "label": "EQUITY_INVESTMENTS",
+            "regex": "^Equity Investments\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 27,
+                "row_index": 1,
+                "observation": "Equity Investments is a section marker in identifier text."
+              }
+            ]
+          },
+          {
+            "label": "CASH_EQUIV",
+            "regex": "^Cash Equivalents\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 1,
+                "observation": "Cash Equivalents is a section marker in identifier text."
+              }
+            ]
+          },
+          {
+            "label": "SHORT_TERM",
+            "regex": "^Short-term Investments\\b",
+            "evidence": [
+              {
+                "accession_number": "0001193125-25-276898",
+                "table_index": 24,
+                "row_index": 1,
+                "observation": "Short-term Investments is a section marker in identifier text."
+              }
+            ]
+          },
+          {
+            "label": "TOTAL_INVESTMENTS",
+            "regex": "^Total Investments(?:\\s*\\(|\\b)",
+            "evidence": [
+              {
+                "accession_number": "0001193125-26-221880",
+                "table_index": 24,
+                "row_index": 1,
+                "observation": "Bundle none_examples repeatedly contain the aggregate marker Total Investments followed by a parenthesized net-assets percentage."
+              }
+            ]
+          },
+          {
+            "label": "DEBT_EQUITY",
+            "regex": "^Debt \\& Equity Securities$",
+            "evidence": [
+              {
+                "accession_number": "0000950170-23-020312",
+                "table_index": 24,
+                "row_index": 1,
+                "observation": "Bundle none_examples contain the standalone combined-section marker Debt & Equity Securities."
+              }
+            ]
+          }
+        ],
+        "notes": "Adds narrow anchors for both marker forms represented in none_examples; Total Investments is an aggregate marker, not a position grammar input."
+      },
+      "form_type": null,
+      "applies_to": null,
+      "valid_from": null,
+      "valid_to": null,
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "recorded_until": null,
+      "supersedes": null,
+      "supersession_kind": null,
+      "author": "agent",
+      "status": "promoted",
+      "provenance": "inherited",
+      "inherited_from": "data/overrides/identifier_anchors/0001715933.json@618ce8e3bd95",
+      "support": {
+        "kind": "inherited_file",
+        "path": "data/overrides/identifier_anchors/0001715933.json",
+        "sha256": "618ce8e3bd95c9bf74d70f11054ec7a8d13dc728a553f351e1ba69f569b5dd86"
+      },
+      "evidence": [
+        {
+          "kind": "override_file",
+          "path": "data/overrides/identifier_anchors/0001715933.json",
+          "sha256": "618ce8e3bd95c9bf74d70f11054ec7a8d13dc728a553f351e1ba69f569b5dd86",
+          "ordered_sha256": "8add90c8e9c20e3e11a02f2131db46dac97d956978b8621148d313461fc97249",
+          "value_is_file": true
+        },
+        {
+          "kind": "source_date",
+          "field": "report_date",
+          "value": "2026-03-31"
+        }
+      ],
+      "regression_pin": null
+    },
+    {
+      "entry_id": "0001715933:identifier_format.dialect:all:allforms:v1",
+      "key": "identifier_format.dialect",
+      "value": {
+        "schema_version": "agentA-rate-grammar.v1",
+        "cik": "0001715933",
+        "entity_name": "TCW Direct Lending VII LLC",
+        "report_date": "2026-03-31",
+        "status": "PROPOSED",
+        "applies_to": {
+          "regime": "flattened",
+          "signature": "DEBT RATE REFRATE MAT"
+        },
+        "available_identifier_datapoints": [
+          "section_or_asset_class",
+          "industry_or_category",
+          "issuer",
+          "acquisition_date",
+          "instrument_type",
+          "tranche_or_position_descriptor",
+          "interest_rate",
+          "reference_rate_type",
+          "basis_spread",
+          "interest_rate_floor",
+          "pik_terms_text",
+          "pik_rate",
+          "pct_of_net_assets",
+          "maturity_date"
+        ],
+        "unsupported_identifier_datapoints": [
+          "principal_or_par_amount",
+          "amortized_cost",
+          "fair_value",
+          "share_or_unit_count",
+          "affiliated_investment_basis_spread",
+          "affiliated_investment_maturity_date"
+        ],
+        "pik_convention": "inclusive",
+        "extractors": [
+          {
+            "field": "interest_rate",
+            "regex": "-\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*(?:inc\\s+PIK)?",
+            "group": 1,
+            "type": "pct"
+          },
+          {
+            "field": "reference_rate_type",
+            "regex": "\\((SOFR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%",
+            "group": 1,
+            "type": "ref_code",
+            "map": {
+              "SOFR": "SOFR",
+              "PRIME": "PRIME"
+            }
+          },
+          {
+            "field": "basis_spread",
+            "regex": "\\((?:SOFR|PRIME)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+            "group": 1,
+            "type": "pct"
+          },
+          {
+            "field": "interest_rate_floor",
+            "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*Floor",
+            "group": 1,
+            "type": "pct"
+          },
+          {
+            "field": "pik_rate",
+            "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*PIK\\)",
+            "group": 1,
+            "type": "pct"
+          },
+          {
+            "field": "maturity_date",
+            "regex": "Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{2})",
+            "group": 1,
+            "type": "date_mdy"
+          }
+        ],
+        "required_fields": [
+          "interest_rate",
+          "reference_rate_type",
+          "basis_spread",
+          "maturity_date"
+        ],
+        "invariants": [
+          {
+            "name": "interest_rate_identifier_matches_twin",
+            "kind": "pct_agree",
+            "parsed": "interest_rate",
+            "twin": "interest_rate"
+          },
+          {
+            "name": "basis_spread_identifier_matches_twin",
+            "kind": "pct_agree",
+            "parsed": "basis_spread",
+            "twin": "basis_spread"
+          },
+          {
+            "name": "maturity_date_identifier_matches_twin",
+            "kind": "date_agree",
+            "parsed": "maturity_date",
+            "twin": "maturity_date"
+          },
+          {
+            "name": "reference_rate_implies_spread",
+            "kind": "implication",
+            "if_present": "reference_rate_type",
+            "then_present": "basis_spread"
+          }
+        ],
+        "evidence": [
+          {
+            "accession_number": "0001193125-26-221880",
+            "table_index": 24,
+            "row_index": 4,
+            "observation": "Recent dominant debt identifiers embed headline rate, reference rate, spread, floor or PIK terms, and maturity date."
+          },
+          {
+            "accession_number": "0000950170-23-020312",
+            "table_index": 24,
+            "row_index": 4,
+            "observation": "Oldest sampled era uses the same headline-rate, reference-plus-spread, and maturity markers."
+          }
+        ],
+        "notes": "Scoped only to the dominant signature containing embedded rate and maturity datapoints. RATE-only affiliated identifiers support headline interest_rate but not spread or maturity and are excluded from this grammar."
+      },
+      "form_type": null,
+      "applies_to": null,
+      "valid_from": null,
+      "valid_to": null,
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "recorded_until": null,
+      "supersedes": null,
+      "supersession_kind": null,
+      "author": "agent",
+      "status": "promoted",
+      "provenance": "inherited",
+      "inherited_from": "data/overrides/identifier_rate_grammars/0001715933.json@a6cf26630350",
+      "support": {
+        "kind": "inherited_file",
+        "path": "data/overrides/identifier_rate_grammars/0001715933.json",
+        "sha256": "a6cf2663035072de0aaf689ea93db0e3dd63b1c29eb96b2ef3f4ae7d509665e1"
+      },
+      "evidence": [
+        {
+          "kind": "override_file",
+          "path": "data/overrides/identifier_rate_grammars/0001715933.json",
+          "sha256": "a6cf2663035072de0aaf689ea93db0e3dd63b1c29eb96b2ef3f4ae7d509665e1",
+          "ordered_sha256": "53bc3b8d41851b56a2d9b9776c6678d42a513d84ef4ee46c79d8b6372d815c5b",
+          "value_is_file": true
+        },
+        {
+          "kind": "source_citations",
+          "field": "evidence",
+          "items": [
+            {
+              "accession_number": "0001193125-26-221880",
+              "table_index": 24,
+              "row_index": 4,
+              "observation": "Recent dominant debt identifiers embed headline rate, reference rate, spread, floor or PIK terms, and maturity date."
+            },
+            {
+              "accession_number": "0000950170-23-020312",
+              "table_index": 24,
+              "row_index": 4,
+              "observation": "Oldest sampled era uses the same headline-rate, reference-plus-spread, and maturity markers."
+            }
+          ]
+        },
+        {
+          "kind": "source_date",
+          "field": "report_date",
+          "value": "2026-03-31"
+        }
+      ],
+      "regression_pin": null
+    },
+    {
+      "entry_id": "0001715933:partition_structure.published_basis:all:allforms:v1",
+      "key": "partition_structure.published_basis",
+      "value": {
+        "predicate": "census-published.v2"
+      },
+      "form_type": null,
+      "applies_to": null,
+      "valid_from": null,
+      "valid_to": null,
+      "recorded_at": "2026-10-03T21:28:55Z",
+      "recorded_until": null,
+      "supersedes": null,
+      "supersession_kind": null,
+      "author": "human",
+      "status": "promoted",
+      "provenance": "inherited",
+      "inherited_from": "scripts/profile_pilot/census_published.py@744f329d3b90",
+      "support": {
+        "kind": "inherited_file",
+        "path": "scripts/profile_pilot/census_published.py",
+        "sha256": "744f329d3b90b2128bed901e596cf57599b867748a7e538a44d37b15cc6c24b1"
+      },
+      "evidence": [
+        {
+          "kind": "code_file",
+          "path": "scripts/profile_pilot/census_published.py",
+          "sha256": "744f329d3b90b2128bed901e596cf57599b867748a7e538a44d37b15cc6c24b1"
+        },
+        {
+          "kind": "adoption_record",
+          "changelog": "docs/agent_changelog.md",
+          "checkout": "worktree",
+          "heading": "2026-10-01 -- SP3 Task 0b: census published-basis predicate v2 (hierarchical rollups) adopted",
+          "commits": [
+            "2132a31",
+            "8418644",
+            "b2454c9",
+            "c7a627f"
+          ],
+          "rule": "anchor-aware adoption rule (controller rulings 3-4): 111 docs, 101 measured fund-quarters, 31 improved, 0 worsened, 0 violations (IN-SAMPLE)"
+        },
+        {
+          "kind": "owner_ruling",
+          "changelog": "docs/agent_changelog.md",
+          "checkout": "main",
+          "heading": "2026-09-30 -- Published basis excludes underlying-schedule rows (owner ruling): implementation and measurement"
+        }
+      ],
+      "regression_pin": null
+    }
+  ],
+  "admissions": {
+    "0001715933:identifier_format.anchors:all:allforms:v1": {
+      "state": "accepted",
+      "basis": "inherited_production",
+      "source_kind": "override_file",
+      "mechanism": "identifier_anchors override file",
+      "confidence": null,
+      "provenance": {
+        "who": "profile-document.v1",
+        "source_author": "agent",
+        "when": "2026-10-03T21:28:55Z",
+        "run_id": "sp3p-profile-20261003t212843z",
+        "source": "data/overrides/identifier_anchors/0001715933.json"
+      },
+      "witness": {},
+      "contract": {
+        "status_basis": "provisional",
+        "inception_evaluation": "none_available: no contract kind for this axis has reported (sub-project 2)"
+      }
+    },
+    "0001715933:identifier_format.dialect:all:allforms:v1": {
+      "state": "accepted",
+      "basis": "inherited_production",
+      "source_kind": "override_file",
+      "mechanism": "identifier_rate_grammars override file",
+      "confidence": null,
+      "provenance": {
+        "who": "profile-document.v1",
+        "source_author": "agent",
+        "when": "2026-10-03T21:28:55Z",
+        "run_id": "sp3p-profile-20261003t212843z",
+        "source": "data/overrides/identifier_rate_grammars/0001715933.json"
+      },
+      "witness": {},
+      "contract": {
+        "status_basis": "provisional",
+        "inception_evaluation": "none_available: no contract kind for this axis has reported (sub-project 2)"
+      }
+    },
+    "0001715933:partition_structure.published_basis:all:allforms:v1": {
+      "state": "accepted",
+      "basis": "adopted_predicate",
+      "source_kind": "predicate_code",
+      "mechanism": "census published-basis predicate census-published.v2",
+      "confidence": null,
+      "provenance": {
+        "who": "profile-document.v1",
+        "source_author": "human",
+        "when": "2026-10-03T21:28:55Z",
+        "run_id": "sp3p-profile-20261003t212843z",
+        "source": "scripts/profile_pilot/census_published.py"
+      },
+      "witness": {
+        "adoption": "anchor-aware adoption rule, controller rulings 3-4"
+      },
+      "contract": {
+        "status_basis": "provisional",
+        "inception_evaluation": "adoption rule over 101 fund-quarters of the 8 filers (IN-SAMPLE)"
+      }
+    }
+  },
+  "stubs": [
+    {
+      "stub_id": "0001715933:stub:column_contract.fair_value",
+      "key": "column_contract.fair_value",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.cost",
+      "key": "column_contract.cost",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.principal_amount",
+      "key": "column_contract.principal_amount",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.face_amount",
+      "key": "column_contract.face_amount",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.shares_held",
+      "key": "column_contract.shares_held",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.pct_of_net_assets",
+      "key": "column_contract.pct_of_net_assets",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.unrealized_gain_loss",
+      "key": "column_contract.unrealized_gain_loss",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.realized_gain_loss",
+      "key": "column_contract.realized_gain_loss",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.interest_rate",
+      "key": "column_contract.interest_rate",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.pik_rate",
+      "key": "column_contract.pik_rate",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.interest_rate_floor",
+      "key": "column_contract.interest_rate_floor",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.basis_spread",
+      "key": "column_contract.basis_spread",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.maturity_date",
+      "key": "column_contract.maturity_date",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.acquisition_date",
+      "key": "column_contract.acquisition_date",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.reference_rate_type",
+      "key": "column_contract.reference_rate_type",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.variable_rate_type",
+      "key": "column_contract.variable_rate_type",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.industry",
+      "key": "column_contract.industry",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.affiliation",
+      "key": "column_contract.affiliation",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.issuer_name",
+      "key": "column_contract.issuer_name",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.investment_type",
+      "key": "column_contract.investment_type",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.non_income_producing",
+      "key": "column_contract.non_income_producing",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.restricted",
+      "key": "column_contract.restricted",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:column_contract.non_accrual",
+      "key": "column_contract.non_accrual",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.fair_value",
+      "key": "scale_unit.fair_value",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.cost",
+      "key": "scale_unit.cost",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.principal_amount",
+      "key": "scale_unit.principal_amount",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.face_amount",
+      "key": "scale_unit.face_amount",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.shares_held",
+      "key": "scale_unit.shares_held",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.pct_of_net_assets",
+      "key": "scale_unit.pct_of_net_assets",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.unrealized_gain_loss",
+      "key": "scale_unit.unrealized_gain_loss",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.realized_gain_loss",
+      "key": "scale_unit.realized_gain_loss",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.interest_rate",
+      "key": "scale_unit.interest_rate",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.pik_rate",
+      "key": "scale_unit.pik_rate",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.interest_rate_floor",
+      "key": "scale_unit.interest_rate_floor",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:scale_unit.basis_spread",
+      "key": "scale_unit.basis_spread",
+      "cause": "no_source",
+      "closing_evidence": "the declared unit on the census unit channel, or a reconciling independent total (spec 6 scale witness)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:meaning.interest_rate",
+      "key": "meaning.interest_rate",
+      "cause": "no_source",
+      "closing_evidence": "an adjudicated rate-convention verdict with an income-reconciliation witness (spec 6; D-convention)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:meaning.pik_rate",
+      "key": "meaning.pik_rate",
+      "cause": "no_source",
+      "closing_evidence": "an adjudicated rate-convention verdict with an income-reconciliation witness (spec 6; D-convention)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:meaning.interest_rate_floor",
+      "key": "meaning.interest_rate_floor",
+      "cause": "no_source",
+      "closing_evidence": "an adjudicated rate-convention verdict with an income-reconciliation witness (spec 6; D-convention)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:meaning.basis_spread",
+      "key": "meaning.basis_spread",
+      "cause": "no_source",
+      "closing_evidence": "an adjudicated rate-convention verdict with an income-reconciliation witness (spec 6; D-convention)",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:identifier_format.delimiter",
+      "key": "identifier_format.delimiter",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:identifier_format.alternate_delimiters",
+      "key": "identifier_format.alternate_delimiters",
+      "cause": "no_source",
+      "closing_evidence": "a resolved partition-detector outcome on the census, or an Agent A grammar/anchor file",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:identifier_format.field_order",
+      "key": "identifier_format.field_order",
+      "cause": "no_source",
+      "closing_evidence": "a resolved partition-detector outcome on the census, or an Agent A grammar/anchor file",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:subtotals_and_headings.aggregate_labels",
+      "key": "subtotals_and_headings.aggregate_labels",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:subtotals_and_headings.non_private_markers",
+      "key": "subtotals_and_headings.non_private_markers",
+      "cause": "no_source",
+      "closing_evidence": "a resolved subtotal-detector outcome on the census",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:subtotals_and_headings.prefix_rules",
+      "key": "subtotals_and_headings.prefix_rules",
+      "cause": "no_source",
+      "closing_evidence": "a resolved subtotal-detector outcome on the census",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:fund_level_concepts.entity_cik",
+      "key": "fund_level_concepts.entity_cik",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:fund_level_concepts.entity_registrant_name",
+      "key": "fund_level_concepts.entity_registrant_name",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:fund_level_concepts.investments_at_fair_value_concept",
+      "key": "fund_level_concepts.investments_at_fair_value_concept",
+      "cause": "census_unavailable",
+      "closing_evidence": "an authoritative 2025-12-31 census for 0001715933 (stageb2-sp1census-20260930t2235z excluded it: ambiguous_same_quarter_candidates)",
+      "entry_id": null,
+      "detail": {
+        "census_run_id": "stageb2-sp1census-20260930t2235z",
+        "reason": "unavailable",
+        "detail": "ambiguous_same_quarter_candidates"
+      }
+    },
+    {
+      "stub_id": "0001715933:stub:partition_structure.reporting_entities",
+      "key": "partition_structure.reporting_entities",
+      "cause": "no_source",
+      "closing_evidence": "a wrapper source_encodings list or a LegalEntityAxis observation naming the filer's reporting entities",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:income_proofs.principal_currency",
+      "key": "income_proofs.principal_currency",
+      "cause": "no_source",
+      "closing_evidence": "the income-proof step entries of the redesigned income-yield kind (spec 5), each with its contract",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:income_proofs.rate_units",
+      "key": "income_proofs.rate_units",
+      "cause": "no_source",
+      "closing_evidence": "the income-proof step entries of the redesigned income-yield kind (spec 5), each with its contract",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:income_proofs.duration",
+      "key": "income_proofs.duration",
+      "cause": "no_source",
+      "closing_evidence": "the income-proof step entries of the redesigned income-yield kind (spec 5), each with its contract",
+      "entry_id": null,
+      "detail": {}
+    },
+    {
+      "stub_id": "0001715933:stub:income_proofs.estimated_income_calibration",
+      "key": "income_proofs.estimated_income_calibration",
+      "cause": "no_source",
+      "closing_evidence": "the income-proof step entries of the redesigned income-yield kind (spec 5), each with its contract",
+      "entry_id": null,
+      "detail": {}
+    }
+  ],
+  "wrapper_section": {
+    "blocks": [
+      {
+        "block_id": "0001715933:wrapper:bdc_xbrl_wrapper:v1",
+        "family": "bdc_xbrl_wrapper",
+        "version": 1,
+        "content": {
+          "schema_version": "bdc-xbrl-wrapper.v3",
+          "cik": "0001715933",
+          "entity_name": "TCW Direct Lending VII LLC",
+          "version": 1,
+          "source": "bdc_xbrl",
+          "dispatch": {
+            "rule_prefix": "TCW_DIRECT_LENDING_VII",
+            "prefix_rules": {
+              "Debt Securities": "debt",
+              "Equity Securities": "equity",
+              "Controlled Affiliated Investments": "mixed",
+              "Controlled Affiliated Investment": "mixed",
+              "Controlled Affiliated investments": "mixed",
+              "Non-Controlled Affiliated Investments": "mixed",
+              "Non-Controlled Affiliated Investment": "mixed",
+              "Debt & Equity Securities": "mixed",
+              "Cash Equivalents": "cash",
+              "Short-term Investments": "cash",
+              "Cash": "cash",
+              "Total Investments": "mixed",
+              "Net Assets": "mixed",
+              "Liabilities in Excess of Other Assets": "mixed",
+              "Net unrealized depreciation on unfunded commitments": "mixed"
+            },
+            "leaf_markers_by_family": {
+              "debt": [
+                "acquisition date",
+                "term loan",
+                "delayed draw",
+                "incremental term loan",
+                "protective advance",
+                "revolver",
+                "last out",
+                "super senior",
+                "sofr",
+                "libor",
+                "prime",
+                "maturity",
+                "maturity date",
+                "fixed coupon",
+                "pik"
+              ],
+              "equity": [
+                "acquisition date",
+                "common stock",
+                "common units",
+                "preferred stock",
+                "preferred units",
+                "class a units",
+                "class b common units",
+                "class c common units",
+                "class a lp interests",
+                "membership interests",
+                "warrant",
+                "warrants",
+                "expires"
+              ],
+              "cash": [],
+              "mixed": [
+                "term loan",
+                "delayed draw",
+                "incremental term loan",
+                "protective advance",
+                "revolver",
+                "last out",
+                "super senior",
+                "common stock",
+                "common units",
+                "preferred stock",
+                "preferred units",
+                "class a units",
+                "class b common units",
+                "class c common units",
+                "class a lp interests",
+                "membership interests",
+                "warrant",
+                "warrants",
+                "pik"
+              ]
+            },
+            "aggregate_markers": [
+              "total investments",
+              "debt & equity securities",
+              "net assets",
+              "liabilities in excess of other assets",
+              "net unrealized depreciation on unfunded commitments",
+              "total debt securities",
+              "total equity securities",
+              "debt securities",
+              "equity securities",
+              "controlled affiliated investments",
+              "non-controlled affiliated investments",
+              "subtotal",
+              "sub-total"
+            ],
+            "non_private_markers": [
+              "cash equivalents",
+              "first american government obligation fund",
+              "short-term investments",
+              "u.s. treasury",
+              "us treasury",
+              "treasury bill",
+              "money market"
+            ],
+            "fallback_family_patterns": [
+              {
+                "regex": "(?i)^\\s*(?:Cash\\s+Equivalents|Short-term\\s+Investments)\\b",
+                "family": "cash"
+              },
+              {
+                "regex": "(?i)^\\s*(?:Total\\s+Investments|Debt\\s*&\\s*Equity\\s+Securities|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other\\s+Assets|Net\\s+unrealized\\s+depreciation\\s+on\\s+unfunded\\s+commitments)\\b",
+                "family": "mixed"
+              }
+            ],
+            "category_marker_re": "(?i)^(?!.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Incremental\\s+Term\\s+Loan|Protective\\s+Advance|Revolver|Last\\s+Out|Super\\s+Senior|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%|\\s*)$",
+            "category_marker_before_total": true,
+            "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%"
+          },
+          "identifier_format": {
+            "delimiter": " ",
+            "field_order": [
+              "asset_class",
+              "industry",
+              "issuer_name",
+              "acquisition_date",
+              "instrument_description",
+              "rate",
+              "net_assets",
+              "maturity"
+            ],
+            "alternate_delimiters": [
+              ", ",
+              " - "
+            ]
+          },
+          "staging": {
+            "strategy": "hierarchy_extract",
+            "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+)(.+?)\\s+(?:Acquisition\\s+Date\\s+|(?:Last\\s+Out\\s+|Delayed\\s+Draw\\s+|Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b",
+            "hierarchy_instrument_re": "(?i)(?:\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+.+?\\s+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.+?\\s+)((?:Last\\s+Out\\s+)?(?:Delayed\\s+Draw\\s+)?(?:Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?Units|Class\\s+[A-Z]\\s+LP\\s+Interests|Membership\\s+Interests|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Warrants?)(?:.*?))\\s*(?:[-,]?\\s*\\d|\\s+%\\s+of\\s+Net\\s+Assets|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
+            "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)')",
+            "extra_industry_labels": [
+              "Aerospace & Defense",
+              "Auto Components",
+              "Automobile Components",
+              "Building Products",
+              "Capital Goods",
+              "Commercial & Professional Services",
+              "Commercial & Professional Service",
+              "Commercial Services & Supplies",
+              "Construction & Engineering",
+              "Construction Materials",
+              "Consumer Durables & Apparel",
+              "Consumer Discretionary",
+              "Consumer Services",
+              "Containers & Packaging",
+              "Electrical Equipment",
+              "Energy Equipment & Services",
+              "Food Products",
+              "Ground Transportation",
+              "Health Care Equipment & Supplies",
+              "Health Care Technology",
+              "Hotels, Restaurants & Leisure",
+              "Household Durables",
+              "Household Products",
+              "Industrial Machinery",
+              "Information Technology Services",
+              "Internet & Direct Marketing Retail",
+              "Leisure Products",
+              "Machinery",
+              "Materials",
+              "Media",
+              "Oil & Gas Equipment & Services",
+              "Oil & Gas & Consumable Fuels",
+              "Oil, Gas & Consumable Fuels",
+              "Pharmaceuticals",
+              "Professional Services",
+              "Publishing",
+              "Software",
+              "Specialty Retail",
+              "Technology Hardware, Storage and Peripherals",
+              "Textiles, Apparel & Luxury Goods",
+              "Trading Companies & Distributors",
+              "Transportation Infrastructure"
+            ]
+          },
+          "archetypes": {
+            "debt": {
+              "description": "TCW VII debt positions including term loans, delayed draw term loans, revolvers, last-out loans, super-senior revolvers, and protective advances.",
+              "detection_rules": {
+                "keywords": [
+                  "Term Loan",
+                  "Delayed Draw",
+                  "Revolver",
+                  "Last Out",
+                  "Super Senior",
+                  "Protective Advance",
+                  "SOFR",
+                  "LIBOR",
+                  "Maturity"
+                ],
+                "keyword_mode": "any"
+              },
+              "field_signatures": {
+                "fair_value": {
+                  "type": "numeric_range",
+                  "constraint": "required",
+                  "min": -1000000000,
+                  "max": 1000000000000
+                },
+                "interest_rate": {
+                  "type": "numeric_range",
+                  "constraint": "optional",
+                  "min": 0.0,
+                  "max": 1.0
+                }
+              }
+            },
+            "equity": {
+              "description": "TCW VII common stock, common units, preferred units, membership interests, LP interests, and equity-linked warrant positions.",
+              "detection_rules": {
+                "keywords": [
+                  "Common Stock",
+                  "Common Units",
+                  "Preferred Stock",
+                  "Preferred Units",
+                  "Class A Units",
+                  "Class B Common Units",
+                  "Class C Common Units",
+                  "Class A LP Interests",
+                  "Membership Interests",
+                  "Warrant",
+                  "Warrants"
+                ],
+                "keyword_mode": "any"
+              },
+              "field_signatures": {
+                "fair_value": {
+                  "type": "numeric_range",
+                  "constraint": "required",
+                  "min": -1000000000,
+                  "max": 1000000000000
+                }
+              }
+            }
+          },
+          "known_edge_cases": [
+            {
+              "id": "TCW_VII_COMPARATIVE_PERIOD_ROWS",
+              "description": "Several filings include prior-period rows for the same accession; the wrapper classifies identifiers while the staging pre-filter remains responsible for excluding comparative periods.",
+              "first_seen_quarter": "2023-09-30",
+              "detection_pattern": "same accession with prior report_date",
+              "disposition": "expected"
+            },
+            {
+              "id": "TCW_VII_INDUSTRY_SUBTOTALS",
+              "description": "Rows such as Debt Securities Food Products and Debt Securities Chemicals are industry or issuer subtotal candidates unless they contain acquisition-date or instrument evidence.",
+              "first_seen_quarter": "2023-03-31",
+              "detection_pattern": "Debt Securities <industry> without acquisition date or instrument terms",
+              "disposition": "expected"
+            }
+          ],
+          "invariants": {
+            "unclassified_rate": {
+              "max_pct": 0.1
+            }
+          }
+        },
+        "content_sha256": "647bddf9d245a962d0c00dd07fa18879c2d78a10a9db859016f6a7655f3fca8b",
+        "source_files": [
+          {
+            "path": "bdc_xbrl_wrappers/0001715933.json",
+            "sha256": "8194319cfcd9e70899cdfb13097e86993309cc1d9a7c5cb2d6350d3548c2cde5",
+            "ordered_sha256": "647bddf9d245a962d0c00dd07fa18879c2d78a10a9db859016f6a7655f3fca8b"
+          }
+        ],
+        "valid_from": null,
+        "valid_to": null,
+        "recorded_at": "2026-10-03T21:28:55Z",
+        "recorded_until": null,
+        "supersedes": null,
+        "supersession_kind": null,
+        "attested_under": [
+          "signoff-2025-12-31",
+          "signoff-2026-03-31"
+        ],
+        "evidence": [
+          {
+            "kind": "override_file",
+            "path": "data/overrides/bdc_xbrl_wrappers/0001715933.json",
+            "sha256": "8194319cfcd9e70899cdfb13097e86993309cc1d9a7c5cb2d6350d3548c2cde5",
+            "ordered_sha256": "647bddf9d245a962d0c00dd07fa18879c2d78a10a9db859016f6a7655f3fca8b"
+          },
+          {
+            "kind": "attestation",
+            "tags": [
+              "signoff-2025-12-31",
+              "signoff-2026-03-31"
+            ],
+            "rule": "tag lists the sign-off tags whose blob parses order-identical to the file read"
+          }
+        ],
+        "expressibility": null
+      },
+      {
+        "block_id": "0001715933:wrapper:agent_investigate_rules:v1",
+        "family": "agent_investigate_rules",
+        "version": 1,
+        "content": {
+          "files": {
+            "agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json": {
+              "cik": "1715933",
+              "rule_id": "1715933_2025q2_add_cash_short_term_investments",
+              "rule_type": "row_add",
+              "action": "add",
+              "scope": {
+                "quarters": [
+                  "2025-06-30"
+                ]
+              },
+              "positions": [
+                {
+                  "report_date": "2025-06-30",
+                  "issuer_name": "First American Government Obligation Fund, Yield 4.26%, Class X (FGXXX)",
+                  "bdc_investment_identifier": "First American Government Obligation Fund, Yield 4.26%, Class X (FGXXX)",
+                  "bdc_dimensions_raw": "investmentidentifieraxis=First American Government Obligation Fund, Yield 4.26%, Class X (FGXXX)",
+                  "source_row_id": "filing accession 0000950170-25-107431 table 7 row 28",
+                  "fair_value": 7095586.0,
+                  "cost": 7095586.0,
+                  "asset_category": "CASH",
+                  "index_classification": "CASH",
+                  "asset_class": "CASH",
+                  "exposure_type": "LIQUID",
+                  "issuer_category": "FUND",
+                  "accession_number": "0000950170-25-107431",
+                  "fair_value_currency": "USD",
+                  "cost_currency": "USD"
+                },
+                {
+                  "report_date": "2025-06-30",
+                  "issuer_name": "U.S. Treasury Bill, Yield 4.30%, Maturity Date 10/28/25",
+                  "bdc_investment_identifier": "U.S. Treasury Bill, Yield 4.30%, Maturity Date 10/28/25",
+                  "bdc_dimensions_raw": "investmentidentifieraxis=U.S. Treasury Bill, Yield 4.30%, Maturity Date 10/28/25",
+                  "source_row_id": "filing accession 0000950170-25-107431 table 7 row 31",
+                  "fair_value": 394466500.0,
+                  "cost": 394466500.0,
+                  "asset_category": "CASH",
+                  "index_classification": "CASH",
+                  "asset_class": "CASH",
+                  "exposure_type": "LIQUID",
+                  "issuer_category": "GOVERNMENT",
+                  "accession_number": "0000950170-25-107431",
+                  "fair_value_currency": "USD",
+                  "cost_currency": "USD"
+                }
+              ],
+              "evidence": [
+                {
+                  "source": "filing",
+                  "quote": "Table 7 rows 26, 29, 32 show Total Debt & Equity Investments fair value 691,956,192; Total Cash Equivalents fair value 7,095,586; Total Short-term Investments fair value 394,466,500."
+                },
+                {
+                  "source": "query",
+                  "quote": "Staging/holdings searches for Cash, Treasury, Short-term, and First American returned no 2025-06-30 cash or short-term investment rows, while the anchor override identifies them as printed components of Total Investments."
+                },
+                {
+                  "source": "data\\raw\\filings\\bdc_html\\1715933\\000095017025107431.html",
+                  "sha256": "d7ce471e0a1e327a45173ad8eb19d934a1863685dadccc5ce5124694808c26c8",
+                  "quote": "Rows 28 and 31 identify the individual fund position and Treasury bill. Rows 29 and 32 are totals with equal values, not additional positions."
+                }
+              ],
+              "rationale": "The extractor dropped the printed cash-equivalent and short-term investment components that are part of the filer's Total Investments anchor. Adding those two source-backed filing rows restores the omitted investment components after duplicate affiliated-axis rows are excluded. Reviewed 2026-09-13: replace each aggregate identity with its sole printed position from rows 28 and 31; preserve the two values and count. Printed yields are not treated as loan coupons. Confidence in this identity repair is high; direct inline fact anchoring remains unavailable.",
+              "confidence": 0.9,
+              "measured_impact": {
+                "2025-06-30": {
+                  "rows": 2,
+                  "fv": 401562086.0,
+                  "residual_before": -401562086.0,
+                  "residual_after": 0.0
+                }
+              }
+            },
+            "agent_investigate_rules/1715933/1715933_2025q2_affiliated_duplicate_rows.json": {
+              "cik": "1715933",
+              "rule_id": "1715933_2025q2_affiliated_duplicate_rows",
+              "rule_type": "row_exclusion",
+              "action": "exclude",
+              "scope": {
+                "quarters": [
+                  "2025-06-30"
+                ]
+              },
+              "predicate_sql": "report_date = '2025-06-30' AND (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Controlled Affiliated Investments%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Non-Controlled Affiliated Investments%')",
+              "evidence": [
+                {
+                  "source": "query",
+                  "quote": "For 2025-06-30, holdings split into schedule_detail rows=60 fv=1726029084.0 and affiliation_axis rows=28 fv=402132074.0. The affiliation-axis rows duplicate investments already present in the debt/equity detail schedule, e.g. Live Comfortably Borrower LLC Term Loan appears once as Debt Securities fair_value 54080611.0 and once as Controlled Affiliated Investments fair_value 54080611.0."
+                },
+                {
+                  "source": "filing",
+                  "quote": "Anchor override rationale: The schedule presents a final Total Investments row after Total Debt & Equity Investments, Total Cash Equivalents, and Total Short-term Investments. Its fair value is 1,093,518,278, which equals 691,956,192 + 7,095,586 + 394,466,500."
+                }
+              ],
+              "rationale": "The controlled and non-controlled affiliated rows are alternate-axis presentations of underlying debt/equity positions already counted in the detailed schedule. They must be excluded as duplicates; the missing cash-equivalent and short-term investment components are handled by a separate row_add rule rather than by retaining duplicate private-position rows.",
+              "confidence": 0.94,
+              "measured_impact": {
+                "2025-06-30": {
+                  "rows": 28,
+                  "fv": -402132074.0,
+                  "residual_before": 569988.0,
+                  "residual_after": -401562086.0
+                }
+              }
+            },
+            "agent_investigate_rules/1715933/1715933_twin_star_2025q2_fv_scale.json": {
+              "cik": "1715933",
+              "rule_id": "1715933_twin_star_2025q2_fv_scale",
+              "rule_type": "value_rescale",
+              "action": "rescale",
+              "scope": {
+                "quarters": [
+                  "2025-06-30"
+                ]
+              },
+              "predicate_sql": "report_date = '2025-06-30' AND bdc_investment_identifier IN ('Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date - 03/31/2025, 15th Amendment Delayed Draw Term Loan - 25.00% inc PIK (25.00%, Fixed Coupon, all PIK), % of Net Assets 0.1%, Maturity Date 06/18/26', 'Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date - 06/11/2025, 16th Amendment Delayed Draw Term Loan - 25.00% inc PIK (25.00%, Fixed Coupon, all PIK), % of Net Assets 0.1%, Maturity Date 06/18/26')",
+              "field": "fair_value",
+              "factor": 0.001,
+              "evidence": [
+                {
+                  "source": "query",
+                  "quote": "For 2025-06-30, the Twin Star 15th Amendment Delayed Draw Term Loan has fair_value 598100000.0 while cost and principal_amount are both 598100.0; the 16th Amendment Delayed Draw Term Loan has fair_value 437008000.0 while cost and principal_amount are both 437008.0."
+                },
+                {
+                  "source": "filing",
+                  "quote": "Anchor override evidence: Table 7 row 33: Total Investments (226.1%) | $ | 1,246,113,181 | $ | 1,093,518,278."
+                }
+              ],
+              "rationale": "Two Twin Star fair values were extracted 1000x too large while their cost and principal columns are in dollar units. Rescaling only those two fair_value cells corrects the unit defect without deleting real positions.",
+              "confidence": 0.98,
+              "measured_impact": {
+                "2025-06-30": {
+                  "rows": 2,
+                  "fv": -1034072892.0,
+                  "residual_before": 1034642880.0,
+                  "residual_after": 569988.0
+                }
+              }
+            },
+            "agent_investigate_rules/1715933/exclude_affiliated_rollforward_duplicate_rows_2025h2.json": {
+              "cik": "1715933",
+              "rule_id": "exclude_affiliated_rollforward_duplicate_rows_2025h2",
+              "rule_type": "row_exclusion",
+              "action": "exclude",
+              "scope": {
+                "quarters": [
+                  "2025-09-30",
+                  "2025-12-31"
+                ]
+              },
+              "predicate_sql": "bdc_dimensions_raw ILIKE '%Affiliated Investment%'",
+              "evidence": [
+                {
+                  "source": "query",
+                  "quote": "For 2025-12-31, holdings fair_value sum is 1,061,901,106; rows with bdc_dimensions_raw ILIKE '%Affiliated Investment%' are 29 rows totaling 416,707,992. Excluding them leaves 645,193,114, equal to the fv_conservation anchor."
+                },
+                {
+                  "source": "query",
+                  "quote": "For 2025-09-30, holdings fair_value sum is 1,084,215,154; rows with bdc_dimensions_raw ILIKE '%Affiliated Investment%' are 28 rows totaling 414,622,307. Excluding them leaves 669,592,847, equal to the fv_conservation anchor."
+                },
+                {
+                  "source": "filing",
+                  "quote": "Main schedule total: Total Debt & Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114."
+                },
+                {
+                  "source": "filing",
+                  "quote": "Affiliate roll-forward totals: Total Controlled Affiliated investments | ... | Fair Value at December 31, 2025 | 308,845,992; Total Non-Controlled Affiliated Investments | ... | Fair Value at December 31, 2025 | 107,862,000."
+                },
+                {
+                  "source": "filing",
+                  "quote": "Example duplicate position: Tabhi Purchaser, LLC appears in the main schedule as Term Loan B fair value 56,634,539 and again in the controlled-affiliate roll-forward as Tabhi Purchaser, LLC (Mondee) Term Loan B fair value 56,634,539."
+                }
+              ],
+              "rationale": "The extracted data includes affiliate roll-forward disclosure rows as if they were additional holdings. These rows present beginning fair value, additions, reductions, realized/unrealized changes, and ending fair value for controlled and non-controlled affiliated investments; they duplicate positions already counted in the main schedule of investments. For the affected 2025-09-30 and 2025-12-31 quarters, the affiliated-roll-forward ending fair values exactly equal the conservation overshoot, so excluding those leaked disclosure rows reconciles fair value to the validated anchor without deleting real main-schedule positions.",
+              "confidence": 0.98,
+              "measured_impact": {
+                "2025-09-30": {
+                  "rows": 28,
+                  "fv": 414622307.0,
+                  "residual_before": 414622307.0,
+                  "residual_after": 0.0
+                },
+                "2025-12-31": {
+                  "rows": 29,
+                  "fv": 416707992.0,
+                  "residual_before": 416707992.0,
+                  "residual_after": 0.0
+                }
+              }
+            }
+          }
+        },
+        "content_sha256": "3d3448b4aa35846257f1170620cedade0610bca59a2169c89d2e7248e0ee407f",
+        "source_files": [
+          {
+            "path": "agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json",
+            "sha256": "8014a7af9fc05df307481070d41184ce3fa243058cbca6c72d0d2fc8b664c3ac",
+            "ordered_sha256": "f1160ab07ebefb4bc58fad1f7b2ddd61c47edf190ec486cd8c79902c7e38c762"
+          },
+          {
+            "path": "agent_investigate_rules/1715933/1715933_2025q2_affiliated_duplicate_rows.json",
+            "sha256": "3b4f6c75944714fc43d11287ec799f23b9615f5ee8485237dfcdaa09a81af257",
+            "ordered_sha256": "84a75e9b036d89e49d47270b58fdd59bf13ad95d13c5e4bd6cd39f8f29621f4a"
+          },
+          {
+            "path": "agent_investigate_rules/1715933/1715933_twin_star_2025q2_fv_scale.json",
+            "sha256": "1142f30ee6a36cf101fb8ac56d34cccd3e9ef39db3e97ceeff9d1f5e713775dc",
+            "ordered_sha256": "6ef8f2d335041fe3a3b5ed43b25d3f223164b85d064ef815192c136dca32cefa"
+          },
+          {
+            "path": "agent_investigate_rules/1715933/exclude_affiliated_rollforward_duplicate_rows_2025h2.json",
+            "sha256": "9ec4b667e57b56fc79ccf7cc3210f72a454ca508f235cfce48ed4b533f29b6b8",
+            "ordered_sha256": "ee6e2a06fd4f51cca81ff3b11fa63f73b65b6625e12bd1d2acf608ea58ef0091"
+          }
+        ],
+        "valid_from": null,
+        "valid_to": null,
+        "recorded_at": "2026-10-03T21:28:55Z",
+        "recorded_until": null,
+        "supersedes": null,
+        "supersession_kind": null,
+        "attested_under": [],
+        "evidence": [
+          {
+            "kind": "override_file",
+            "path": "data/overrides/agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json",
+            "sha256": "8014a7af9fc05df307481070d41184ce3fa243058cbca6c72d0d2fc8b664c3ac",
+            "ordered_sha256": "f1160ab07ebefb4bc58fad1f7b2ddd61c47edf190ec486cd8c79902c7e38c762"
+          },
+          {
+            "kind": "override_file",
+            "path": "data/overrides/agent_investigate_rules/1715933/1715933_2025q2_affiliated_duplicate_rows.json",
+            "sha256": "3b4f6c75944714fc43d11287ec799f23b9615f5ee8485237dfcdaa09a81af257",
+            "ordered_sha256": "84a75e9b036d89e49d47270b58fdd59bf13ad95d13c5e4bd6cd39f8f29621f4a"
+          },
+          {
+            "kind": "override_file",
+            "path": "data/overrides/agent_investigate_rules/1715933/1715933_twin_star_2025q2_fv_scale.json",
+            "sha256": "1142f30ee6a36cf101fb8ac56d34cccd3e9ef39db3e97ceeff9d1f5e713775dc",
+            "ordered_sha256": "6ef8f2d335041fe3a3b5ed43b25d3f223164b85d064ef815192c136dca32cefa"
+          },
+          {
+            "kind": "override_file",
+            "path": "data/overrides/agent_investigate_rules/1715933/exclude_affiliated_rollforward_duplicate_rows_2025h2.json",
+            "sha256": "9ec4b667e57b56fc79ccf7cc3210f72a454ca508f235cfce48ed4b533f29b6b8",
+            "ordered_sha256": "ee6e2a06fd4f51cca81ff3b11fa63f73b65b6625e12bd1d2acf608ea58ef0091"
+          },
+          {
+            "kind": "attestation",
+            "tags": [],
+            "rule": "tag lists the sign-off tags whose blob parses order-identical to the file read"
+          }
+        ],
+        "expressibility": {
+          "agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json": {
+            "expressible_as": null,
+            "reason": "executable rule_type 'row_add' stays in the wrapper section (spec 7.1)"
+          },
+          "agent_investigate_rules/1715933/1715933_2025q2_affiliated_duplicate_rows.json": {
+            "expressible_as": null,
+            "reason": "executable rule_type 'row_exclusion' stays in the wrapper section (spec 7.1)"
+          },
+          "agent_investigate_rules/1715933/1715933_twin_star_2025q2_fv_scale.json": {
+            "expressible_as": null,
+            "reason": "executable rule_type 'value_rescale' stays in the wrapper section (spec 7.1)"
+          },
+          "agent_investigate_rules/1715933/exclude_affiliated_rollforward_duplicate_rows_2025h2.json": {
+            "expressible_as": null,
+            "reason": "executable rule_type 'row_exclusion' stays in the wrapper section (spec 7.1)"
+          }
+        }
+      }
+    ]
+  },
+  "corrections": [],
+  "partition_predicate": {
+    "census_published_version": "census-published.v2",
+    "published_basis_entry_id": "0001715933:partition_structure.published_basis:all:allforms:v1",
+    "reporting_entities_entry_id": null,
+    "code_mirror": {
+      "path": "scripts/profile_pilot/census_published.py",
+      "constant": "REPORTING_ENTITIES",
+      "value": []
+    }
+  },
+  "detection_claims": {
+    "fill_rate": {
+      "claim": "detection_not_claimed",
+      "verdict": "NO_POSITIVES",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "format_grammar": {
+      "claim": "detection_not_claimed",
+      "verdict": "FAIL",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "fund_income_yield": {
+      "claim": "detection_not_claimed",
+      "verdict": "NOT_CLAIMED",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "independent_totals": {
+      "claim": "detection_not_claimed",
+      "verdict": "FAIL",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "rate_composition": {
+      "claim": "detection_not_claimed",
+      "verdict": "NOT_CLAIMED",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "scale": {
+      "claim": "detection_not_claimed",
+      "verdict": "NO_POSITIVES",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "source_concept_set": {
+      "claim": "detection_not_claimed",
+      "verdict": "NO_POSITIVES",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "text_agreement": {
+      "claim": "detection_not_claimed",
+      "verdict": "NOT_CLAIMED",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    },
+    "value_range": {
+      "claim": "detection_not_claimed",
+      "verdict": "NOT_CLAIMED",
+      "replay_run_id": "sp1-replay-sp3v2-20261001t093945z"
+    }
+  },
+  "disposition": [
+    {
+      "path": "agent_anchor/1715933/2025-06-30.json",
+      "family": "agent_anchor",
+      "cls": "process_artifact",
+      "action": "excluded",
+      "sha256": "d278193f96e00ebf207d92bba867713237c236f72f471587aff1892eca4d0489",
+      "ordered_sha256": null,
+      "targets": [],
+      "reason": "fleet output, regenerated per pass, not knowledge (spec 7.1)",
+      "record_indexes": null
+    },
+    {
+      "path": "agent_anchor/1715933/2026-03-31.json",
+      "family": "agent_anchor",
+      "cls": "process_artifact",
+      "action": "excluded",
+      "sha256": "25081b09b83495d9ac7345f17612dd4342f2907a0da7b8cf743bd8266807ffa9",
+      "ordered_sha256": null,
+      "targets": [],
+      "reason": "fleet output, regenerated per pass, not knowledge (spec 7.1)",
+      "record_indexes": null
+    },
+    {
+      "path": "agent_investigate_rules/1715933/1715933_2025q2_add_cash_short_term_investments.json",
+      "family": "agent_investigate_rules",
+      "cls": "executable",
+      "action": "wrapper_block",
+      "sha256": "8014a7af9fc05df307481070d41184ce3fa243058cbca6c72d0d2fc8b664c3ac",
+      "ordered_sha256": "f1160ab07ebefb4bc58fad1f7b2ddd61c47edf190ec486cd8c79902c7e38c762",
+      "targets": [
+        "0001715933:wrapper:agent_investigate_rules:v1"
+      ],
+      "reason": "second wrapper block (spec 7.1; P6)",
+      "record_indexes": null
+    },
+    {
+      "path": "agent_investigate_rules/1715933/1715933_2025q2_affiliated_duplicate_rows.json",
+      "family": "agent_investigate_rules",
+      "cls": "executable",
+      "action": "wrapper_block",
+      "sha256": "3b4f6c75944714fc43d11287ec799f23b9615f5ee8485237dfcdaa09a81af257",
+      "ordered_sha256": "84a75e9b036d89e49d47270b58fdd59bf13ad95d13c5e4bd6cd39f8f29621f4a",
+      "targets": [
+        "0001715933:wrapper:agent_investigate_rules:v1"
+      ],
+      "reason": "second wrapper block (spec 7.1; P6)",
+      "record_indexes": null
+    },
+    {
+      "path": "agent_investigate_rules/1715933/1715933_twin_star_2025q2_fv_scale.json",
+      "family": "agent_investigate_rules",
+      "cls": "executable",
+      "action": "wrapper_block",
+      "sha256": "1142f30ee6a36cf101fb8ac56d34cccd3e9ef39db3e97ceeff9d1f5e713775dc",
+      "ordered_sha256": "6ef8f2d335041fe3a3b5ed43b25d3f223164b85d064ef815192c136dca32cefa",
+      "targets": [
+        "0001715933:wrapper:agent_investigate_rules:v1"
+      ],
+      "reason": "second wrapper block (spec 7.1; P6)",
+      "record_indexes": null
+    },
+    {
+      "path": "agent_investigate_rules/1715933/exclude_affiliated_rollforward_duplicate_rows_2025h2.json",
+      "family": "agent_investigate_rules",
+      "cls": "executable",
+      "action": "wrapper_block",
+      "sha256": "9ec4b667e57b56fc79ccf7cc3210f72a454ca508f235cfce48ed4b533f29b6b8",
+      "ordered_sha256": "ee6e2a06fd4f51cca81ff3b11fa63f73b65b6625e12bd1d2acf608ea58ef0091",
+      "targets": [
+        "0001715933:wrapper:agent_investigate_rules:v1"
+      ],
+      "reason": "second wrapper block (spec 7.1; P6)",
+      "record_indexes": null
+    },
+    {
+      "path": "bdc_xbrl_wrappers/0001715933.json",
+      "family": "bdc_xbrl_wrappers",
+      "cls": "executable",
+      "action": "wrapper_block",
+      "sha256": "8194319cfcd9e70899cdfb13097e86993309cc1d9a7c5cb2d6350d3548c2cde5",
+      "ordered_sha256": "647bddf9d245a962d0c00dd07fa18879c2d78a10a9db859016f6a7655f3fca8b",
+      "targets": [
+        "0001715933:wrapper:bdc_xbrl_wrapper:v1"
+      ],
+      "reason": "wrapper section block (D-consolidate)",
+      "record_indexes": null
+    },
+    {
+      "path": "bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json",
+      "family": "bdc_xbrl_wrappers",
+      "cls": "process_artifact",
+      "action": "excluded",
+      "sha256": "34783057ceda62fb56ea4eb8dd25782c8c5b0e6ebd2b08bfd5bb1bbc64f08371",
+      "ordered_sha256": null,
+      "targets": [],
+      "reason": "SP3 classification (not in spec 7.1): unlisted-BDC reference listing for frontend filtering (config.UNLISTED_BDC_REFERENCE_FILE), not per-filer semantics; owner to confirm",
+      "record_indexes": null
+    },
+    {
+      "path": "identifier_anchors/0001715933.json",
+      "family": "identifier_anchors",
+      "cls": "knowledge",
+      "action": "entry",
+      "sha256": "618ce8e3bd95c9bf74d70f11054ec7a8d13dc728a553f351e1ba69f569b5dd86",
+      "ordered_sha256": "8add90c8e9c20e3e11a02f2131db46dac97d956978b8621148d313461fc97249",
+      "targets": [
+        "0001715933:identifier_format.anchors:all:allforms:v1"
+      ],
+      "reason": "source of the identifier_format.anchors entry (same axis as grammars)",
+      "record_indexes": null
+    },
+    {
+      "path": "identifier_rate_grammars/0001715933.json",
+      "family": "identifier_rate_grammars",
+      "cls": "knowledge",
+      "action": "entry",
+      "sha256": "a6cf2663035072de0aaf689ea93db0e3dd63b1c29eb96b2ef3f4ae7d509665e1",
+      "ordered_sha256": "53bc3b8d41851b56a2d9b9776c6678d42a513d84ef4ee46c79d8b6372d815c5b",
+      "targets": [
+        "0001715933:identifier_format.dialect:all:allforms:v1"
+      ],
+      "reason": "source of the identifier_format.dialect entry",
+      "record_indexes": null
+    },
+    {
+      "path": "position_id_registry/registry.csv",
+      "family": "position_id_registry",
+      "cls": "process_artifact",
+      "action": "not_loaded",
+      "sha256": "5e825a34e83d7fc122236fc32008d4c2d6245e2dd142617117c8c318da5139e9",
+      "ordered_sha256": null,
+      "targets": [],
+      "reason": "file above MAX_SCAN_BYTES (112520089 bytes); content never read, recorded conservatively for every filer this scan was asked about: opt-in matching state, read only by the row-continuity detector (spec 7.1)",
+      "record_indexes": null
+    },
+    {
+      "path": "wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json",
+      "family": "wrapper_cohorts",
+      "cls": "process_artifact",
+      "action": "excluded",
+      "sha256": "d79af461b67851aab238597d9eb37a8e1259bb0475375f6af3cd52ab5f251cce",
+      "ordered_sha256": null,
+      "targets": [],
+      "reason": "cohort membership manifest, not per-filer semantics (spec 7.1)",
+      "record_indexes": null
+    }
+  ],
+  "ledger": [
+    {
+      "event": "document_created",
+      "at": "2026-10-03T21:28:55Z",
+      "run_id": "sp3p-profile-20261003t212843z",
+      "detail": {
+        "converter_version": "profile-document.v1",
+        "census_q4": null,
+        "census_q1": "census/0001715933/2026-03-31.json",
+        "census_q4_unavailable": {
+          "census_run_id": "stageb2-sp1census-20260930t2235z",
+          "reason": "unavailable",
+          "detail": "ambiguous_same_quarter_candidates"
+        },
+        "overrides_root": "main checkout data/overrides",
+        "replay_run_id": "sp1-replay-sp3v2-20261001t093945z",
+        "overrides_git_head": "a72709c5214564532500c339474a1c06bbd772df"
+      }
+    }
+  ]
+}

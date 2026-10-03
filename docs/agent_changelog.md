@@ -13145,3 +13145,23 @@ Every number below is IN-SAMPLE (the 8 pilot filers, one report date, 2025-12-31
   2 skipped, plugin PASS, preservation PASS, backstop 680 divergent before and after (verdict
   unchanged, pre-existing). NOT run: the full repo suite; `diff_outputs.py --semantic` outside the
   launcher backstop.
+
+### Addendum 2026-10-03 -- SP3 proper re-run at the shipping code (928998a)
+
+- The entry above describes run `sp3p-profile-20261003t202605z`, made at dd176ff. The CLI changed
+  afterwards (928998a, exit-code mapping only), so the run was repeated: `sp3p-profile-20261003t212843z`
+  at 928998a, same census and replay ids, MAIN overrides at a72709c (`overrides_dirty = false`), exit
+  code 0, verdict PASS, light workload, stage 22.6 s. This run is the record.
+- Comparison with the first run: `results/roundtrip.json`, `consistency.json` and `exit_test.json` have
+  0 differences; the 40 regenerated override files are byte-identical; the manifest differs only in
+  `git.head`, `recorded_at`, `run_id`. The 8 profile documents differ only in fields that carry the run
+  id (`run_id`, ledger and provenance `run_id`), a timestamp (`recorded_at` on the document, entries,
+  events, corrections and wrapper blocks; ledger `at`; provenance `when`) or the code head
+  (`code.git_head`). No other difference. Every count in the entry above stands. One repeat only.
+- `data/profiles/<cik>.json` x8 are byte copies of the second run's documents (SHA256 8/8 equal).
+  No production module reads them.
+- Tooling note: two documents (TCW 0001715933, Onex 0001860424) contain JSON object keys that differ
+  only by case, copied faithfully from the production wrappers' `prefix_rules`. Python reads them;
+  PowerShell `ConvertFrom-Json` and any case-insensitive JSON reader refuse those two files.
+- NOT run: the full repo suite; a pilot-suite regression at 928998a by this task (the last one by this
+  task was `sp3p-verify-t10a` at dd176ff, 906 passed / 2 skipped). IN-SAMPLE.
