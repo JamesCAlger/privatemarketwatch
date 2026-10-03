@@ -13053,3 +13053,95 @@ Corrects the 2026-10-01 SP1 Task 6 entry above (that entry is not edited).
   hierarchical headings, which the sign-off pair does not carry; the pair's remaining totals breaches are
   the pct-unit issue and TCW's Q1 fair_value row.
 - NOT done: full suite; pct-unit band; production fixes beyond Fidelity wrapper v2 (main 5b85cc4).
+
+## 2026-10-03 -- SP3 proper: filer profile documents v1 at inception (Q4-2025)
+
+Every number below is IN-SAMPLE (the 8 pilot filers, one report date, 2025-12-31). Branch
+`filer-profile-pilot`, code dd176ff. Nothing in production reads these documents.
+
+- Built (Tasks 1-9, all under `scripts/profile_pilot/`, tests `tests/test_profile_pilot_profile_*.py`):
+  `profile_document.py` (document schema v1 `filer_profile_document_v1`: entries on the Stage A envelope,
+  per-entry `admissions` {candidate, accepted}, stubs, wrapper section, corrections, event log, ledger;
+  `resolve`, `coverage`, `validate_document`, 56-key grid), `profile_families.py` (spec 7.1 family
+  disposition, fail-closed scan of `data/overrides`), `profile_inception.py` (inherited entries from
+  override files, census entries with next-quarter confirmation, grid stubs, wrapper blocks, one-off
+  corrections with recurrence groups, detection claims), `profile_roundtrip.py` (regenerate the override
+  files from the written document, order-preserving comparison, loader parity through the production
+  loaders), `profile_consistency.py` (entry-vs-wrapper consistency contract, exit test),
+  `profile_document_run.py` (CLI; exit 0 PASS, 1 FAIL, 2 invalidated, 3 unexpected, 4 refused).
+  Additive envelope change: support kind `inherited_file` and `author=` / `status=` kwargs on
+  `make_assertion`; v0 `era` enum gains `inception`. `census_published.classify` gains a
+  `reporting_entities=` argument (the module constant stays as a code mirror).
+  `protection.HEAVY_ESTIMATE_BYTES` 2 GiB -> 4 GiB (owner ruling 2026-10-03).
+- Real run: `sp3p-profile-20261003t202605z` (census `stageb2-sp1census-20260930t2235z`, replay
+  `sp1-replay-sp3v2-20261001t093945z`, the v2-predicate replay, used instead of the plan-time
+  `sp1-replay-final-20261001t1230z`). Read MAIN `data/overrides` at a72709c, `overrides_dirty = false`,
+  guard receipt PASS (544 files unchanged). Exit code 0, verdict PASS. Workload classified light
+  (est_bytes 2.41e9, est_seconds 11.0), no lease; measured stage 25.2 s, process wall 50.7 s, peak
+  working set 0.51 GB.
+- Round trip: 40/40 files identical (wrappers 8, investigate rules 14, B2 leaves 4, rate_convention 2,
+  grammars 5, anchors 5, shared files 2); comparison is order-preserving parsed JSON, not raw bytes.
+  Loader parity as compared counts: wrappers 8/8, B2 4/4, investigate rules 6/6 filers, rate_convention
+  2/2, anchors 5/5, grammars 5/5, oracle exceptions 1/1; `bdc_aggregate_row_overrides.json` has no
+  loader and is covered by the file round trip only. Parity imports the WORKTREE copy of `pipeline/`.
+- What the PASS does and does not show. The exit test counts a stub as an answer. Of 448 grid cells
+  (8 x 56) 98 are accepted entries (21.9%), 1 is a candidate, 350 are stubs (no_source 286,
+  census_unavailable 56, census_stub 7, candidate_pending_confirmation 1). The 98 accepted: 77
+  census-derived and confirmed by the Q1-2026 census, 13 inherited from override files, 8 the adopted
+  partition predicate. PASS means the documents are well-formed, every cell has an entry or a stub with
+  closing evidence, and the override files are reproduced exactly. It does NOT mean the profile knows
+  78% of the grid.
+- Per filer (accepted grid / candidate grid / stubs; corrections; consistency holds / insufficient /
+  not_applicable, breach 0 everywhere, verdict `no_breach` for all 8, `holds` for none):
+  Ares 0001287750 10/0/46, 9 corr, 1/10/3. NexPoint 0001588272 3/0/53, 0 corr, 0/9/5.
+  TCW 0001715933 3/0/53, 0 corr, 0/10/4. BCRED 0001803498 14/0/42, 0 corr, 5/5/4.
+  Onex 0001860424 18/0/38, 2 corr, 1/8/5. Stellus 0001901037 17/1/38 (+1 stub on the candidate key),
+  8 corr, 1/10/3. Fidelity 0001920453 16/0/40, 1 corr, 2/5/7. StepStone 0001950803 17/0/39, 1 corr,
+  1/9/4. NexPoint and TCW have no authoritative Q4-2025 census (ambiguous same-quarter candidates), so
+  their census fields are stubs; Q1 census present for all 8.
+- Consistency is a weak check at inception and `no_breach` is not agreement. 112 key rows: 11 holds,
+  0 breach, 66 insufficient_evidence, 35 not_applicable. The 11 holds are `/cik` for 6 filers, entity
+  name for 2 (BCRED, Fidelity) and BCRED's reporting-entity list (2 wrapper pointers + the code mirror).
+  The other two breach-capable keys were never compared for any filer: where the wrapper carries
+  `identifier_format.delimiter` or `fv_reconciliation.source_field` the entry is a stub, and where the
+  entry is accepted the wrapper lacks the key. Entity name differs for Ares and StepStone (case only)
+  and for Onex (wrapper "Onex Falcon Direct Lending BDC Fund", census "Onex Direct Lending BDC Fund");
+  these are reported as representation mismatches, not breaches.
+- Entries off the grid: 82 accepted, 11 candidates. `structural_subtotals` accepted for 1 filer (Onex),
+  demoted to candidate with cause `open_census_outcomes` for 4 (BCRED, Stellus, Fidelity, StepStone),
+  absent for Ares. Other candidates: Q1 value differs (including Stellus
+  `fund_level_concepts.entity_registrant_name`, the one grid candidate).
+- Corrections: 21 one-off records (Ares 9, Onex 2, Stellus 8, Fidelity 1, StepStone 1); 1 row-keyed, 20
+  not row-keyed; 3 recurrence groups covering 17 records flagged `proposed_recurring_owner_tier` (Ares
+  aggregate-row exclusion x7, Onex x2, Stellus reconciliation-scope exception x8). Nothing is promoted.
+  Wrapper section: 8 wrapper blocks + 6 investigate-rule blocks. Wrapper blocks for BCRED and Fidelity
+  are attested under NO sign-off tag (both changed after `signoff-2026-03-31`); the other 6 match both.
+- Detection claims: 72/72 `detection_not_claimed` (replay floors: format_grammar and independent_totals
+  FAIL, 3 NO_POSITIVES, 4 NOT_CLAIMED). All contracts stay provisional.
+- Caveats on accepted entries: `partition_structure.published_basis` is accepted for all 8 on the basis
+  "predicate version adopted", including filers whose totals still breach under it (Onex, BCRED) or have
+  no anchor (TCW); `meaning.interest_rate` is accepted by inheritance for Onex and Fidelity and still
+  needs owner sign-off (spec section 6).
+- Plan decisions: P1 admission state lives in an `admissions` record beside the envelope; P2 inherited
+  support kind, file confidence copied to the admission; P3 inherited entries get `valid_from = null`
+  with the file date as evidence; P4 one-off corrections sit outside the envelope with
+  valid_from == valid_to; P5 the two shared files become point-dated one-offs with recurrence groups;
+  P6 investigate rules carried whole as a second wrapper block, not converted; P7 unlisted files
+  classified (reference file = process artifact, owner to confirm), unknown families fail the scan;
+  P8 wrapper-counterpart axes come from the census, accepted only on Q1 confirmation, never from the
+  wrapper; P9 reporting entities inherited from the BCRED wrapper with the code constant as a mirror;
+  P10 documents written to the run root and copied to `data/profiles/` on PASS only; P11 consistency is
+  per key holds / breach / insufficient_evidence / not_applicable, verdict `no_breach` when keys lack
+  evidence.
+- Production side observation (not a pilot item): the production B2 loader rejected 8 promoted
+  `classification_fix.json` files of non-pilot CIKs for invalid enum values (0001702510, 0001784700,
+  0001841514, 0001849894, 0001901612, 0001920145, 0002011498, 0002031750). Those corrections are not
+  applied in production today.
+- NOT done: reader flip (no production module reads the documents); deletion of any override file;
+  pre-image check (criterion 5, SP6); recurring-correction promotion (SP6, owner); fleet loop;
+  conversion of expressible investigate rules; consistency evaluation at any date other than 2025-12-31;
+  a Q4-2025 census for NexPoint and TCW; profile counterparts for `cash_identifiers` and `rate_sanity`.
+- Tests: pilot suite through the launcher at dd176ff, run `sp3p-verify-t10a`, 23 files, 906 passed /
+  2 skipped, plugin PASS, preservation PASS, backstop 680 divergent before and after (verdict
+  unchanged, pre-existing). NOT run: the full repo suite; `diff_outputs.py --semantic` outside the
+  launcher backstop.
