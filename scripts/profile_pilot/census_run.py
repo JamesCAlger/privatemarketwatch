@@ -1,6 +1,6 @@
 """Census stage runner (Tasks 4-5): census each frozen fund-quarter through manifest.run_cached_stage.
 
-Heavy work (Ares/BCRED instances, estimates above 60 s / 2 GiB) runs only inside
+Heavy work (Ares/BCRED instances, estimates above 60 s / 4 GiB) runs only inside
 protection.shared_heavy_lease; a refused lease stops the heavy work and is reported
 as `lease_refused`.
 

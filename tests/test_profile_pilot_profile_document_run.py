@@ -236,13 +236,18 @@ def test_no_production_module_reads_profile_documents():
 
 
 def test_workload_record_uses_the_real_classifier_and_is_light_for_the_small_fixture(staged):
-    """Not stubbed: the real manifest.classify_workload runs over the fixture's real (small) file sizes."""
+    """Not stubbed: the real manifest.classify_workload runs over the fixture's real (small) file sizes.
+    Fix round 2 (R4): pin the EXACT expected est_bytes from the fixture's own Q4+Q1 census file sizes
+    (the formula under test), not a floor that would pass even if the per-filer sum were wrong."""
+    census_dir = staged.data_root / "pilot" / "filer_profile" / CENSUS_RUN / "census" / STELLUS
+    census_bytes = (census_dir / (Q4 + ".json")).stat().st_size + (census_dir / (Q1 + ".json")).stat().st_size
+    expected_est_bytes = int(300e6 + 20 * census_bytes)
     build(staged)
     body = json.loads((staged.run_root / "manifest.json").read_text(encoding="ascii"))
     workload = body["workload"]
     assert set(workload) == set(run.manifest.WORKLOAD_FIELDS)
     assert workload["ciks"] == [STELLUS] and workload["instance_count"] == 0 and workload["pipeline_cik_count"] == 0
-    assert workload["est_bytes"] >= 300_000_000   # the 300e6 base alone, from write_profile's own formula
+    assert workload["est_bytes"] == expected_est_bytes
     assert body["heavy"] is False
 
 
@@ -293,6 +298,11 @@ def test_heavy_workload_with_a_lease_factory_runs_under_the_real_lease(staged, m
     assert summary["verdict"] == "FAIL"   # one filer of 8 -- same business outcome as the light path
     body = json.loads((staged.run_root / "manifest.json").read_text(encoding="ascii"))
     assert body["heavy"] is True
+    # R4 (fix round 2): prove the lease was actually RELEASED, not just that the build completed --
+    # a second, independent acquisition succeeding proves the module-level _PROCESS_LEASE lock and the
+    # pseudo-candidate were both cleaned up by the first `with lease_factory() as lease: ...` block.
+    with protection.shared_heavy_lease(staged, head="test-again") as lease2:
+        protection.assert_lease_held(lease2)
 
 
 # ---------------------------------------------------------------- F2: validate before any verdict file
@@ -365,12 +375,28 @@ def test_loader_parity_tally_includes_the_pooled_b2_compared_count():
     assert not problems
 
 
+def test_loader_parity_tally_flags_a_shortfall_in_the_pooled_b2_compared_count():
+    """R4 (fix round 2): a FAILING pooled agent_b2_corrections case, companion to the passing one above."""
+    parity = dict(agent_b2_corrections=dict(status="mismatch", compared=1))
+    expected = ["agent_b2_corrections/0001901037/a.json", "agent_b2_corrections/0001901037/b.json"]
+    tally, problems = run._loader_parity_tally(parity, expected)
+    assert tally["agent_b2_corrections"] == dict(expected=2, compared=1)
+    assert problems and "agent_b2_corrections" in problems[0]
+
+
+EXPECTED_LOADER_PARITY_FAMILIES = {"bdc_xbrl_wrappers", "agent_investigate_rules", "rate_convention",
+                                   "identifier_anchors", "identifier_rate_grammars", "agent_b2_corrections",
+                                   "bdc_xbrl_oracle_exceptions"}
+
+
 def test_real_build_loader_parity_tally_matches_the_filesystem(staged):
     """Integration companion: the real build's own tally (now including B2/rules/anchors/grammars from
-    the F11-extended fixture) finds no shortfall."""
+    the F11-extended fixture) covers all seven tallied families (fix round 2, R4) and finds no shortfall
+    in any of them."""
     build(staged)
     roundtrip = json.loads((staged.run_root / "results" / "roundtrip.json").read_text(encoding="ascii"))
     tally = roundtrip["loader_parity_tally"]
+    assert set(tally) == EXPECTED_LOADER_PARITY_FAMILIES
     for key, counts in tally.items():
         assert counts["compared"] == counts["expected"], (key, counts)
 
@@ -597,6 +623,99 @@ def test_subset_run_shared_mention_without_an_owned_record_is_not_a_false_missin
     roundtrip = json.loads((staged.run_root / "results" / "roundtrip.json").read_text(encoding="ascii"))
     assert "bdc_aggregate_row_overrides.json" not in roundtrip["files"]
     assert roundtrip["ok"] is True
+
+
+# ---------------------------------------------------------------- Fix round 2 (re-review of 8919347)
+
+# ---------------------------------------------------------------- R1: no PASS verdict on disk after exit 2
+
+
+def test_create_bypassing_open_mid_run_leaves_no_verdict_file_and_exits_2(staged, monkeypatch):
+    """R1: Path.touch() uses os.open, not io.open/builtins.open, so it bypasses the open-guard entirely
+    (F8's companion test, test_main_overrides_open_guard_blocks_a_write_immediately, only proves an
+    open()-based write is blocked). The pre-write guard comparison (not the one in `finally`, which runs
+    after results/exit_test.json would already exist) is what must catch this."""
+    original = run.pf.collect_override_inputs
+
+    def spy(root, cik, hits):
+        if cik == STELLUS:
+            (Path(root) / "sp3p_t9fix2_bypassed_create.json").touch()
+        return original(root, cik, hits)
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    run_id = "sp3p-profile-fix2-r1-create"
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--cik", STELLUS])
+    assert code == run.EXIT_INVALIDATED
+    run_root = staged.data_root / "pilot" / "filer_profile" / run_id
+    assert not (run_root / "results" / "exit_test.json").is_file()
+    assert not (run_root / "results" / "roundtrip.json").is_file()
+    assert not (run_root / "results" / "consistency.json").is_file()
+    # manifest.json is an input ledger, not a verdict file, and is written before the per-cik loop runs
+    assert (run_root / "manifest.json").is_file()
+
+
+def test_pre_write_guard_check_fires_even_when_pins_still_verify_ok(staged, monkeypatch):
+    """Isolates R1's new pre-write guard comparison from F2's pin re-verify (manifest.verify_inputs only
+    tracks files that were already PINNED; a brand-new file is invisible to it). Stubs verify_inputs to
+    always report ok=True, so if the pre-write guard comparison did not exist, the run would proceed to
+    write verdict files; it must not."""
+    monkeypatch.setattr(run.manifest, "verify_inputs",
+                        lambda manifest: dict(ok=True, changed=[], missing=[], appeared=[], checked=0))
+    original = run.pf.collect_override_inputs
+
+    def spy(root, cik, hits):
+        if cik == STELLUS:
+            (Path(root) / "sp3p_t9fix2_unpinned_new_file.json").touch()
+        return original(root, cik, hits)
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    with pytest.raises(run.PreservationError):
+        build(staged)
+    rr = staged.run_root
+    assert not (rr / "results" / "exit_test.json").is_file()
+    assert not (rr / "results" / "roundtrip.json").is_file()
+    assert not (rr / "results" / "consistency.json").is_file()
+
+
+# ---------------------------------------------------------------- R2: guard-block / vanished-pin -> exit 2
+
+
+def test_main_overrides_open_guard_block_exits_2_not_3(staged, monkeypatch):
+    original = run.pf.collect_override_inputs
+
+    def spy(root, cik, hits):
+        if cik == STELLUS:
+            (Path(root) / "sp3p_t9fix2_blocked_write.json").write_text("{}", encoding="ascii")
+        return original(root, cik, hits)
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", "sp3p-profile-fix2-r2-guard", "--census-run-id", CENSUS_RUN,
+                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert code == run.EXIT_INVALIDATED
+
+
+def test_vanishing_pinned_census_file_mid_build_exits_2_not_3(staged, monkeypatch):
+    """A pinned input OUTSIDE the MAIN-overrides guard (the census file, under data/pilot/filer_profile/,
+    not data/overrides/) vanishing mid-build raises a raw FileNotFoundError that nothing else catches --
+    before this fix it fell through to the generic `except Exception` (exit 3)."""
+    original = run.pf.collect_override_inputs
+    census_path = (staged.data_root / "pilot" / "filer_profile" / CENSUS_RUN / "census" / STELLUS
+                  / (Q4 + ".json"))
+
+    def spy(root, cik, hits):
+        out = original(root, cik, hits)
+        if cik == STELLUS:
+            census_path.unlink()
+        return out
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", "sp3p-profile-fix2-r2-pin", "--census-run-id", CENSUS_RUN,
+                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert code == run.EXIT_INVALIDATED
 
 
 # ---------------------------------------------------------------- M1 (companion kept as a real assertion above)

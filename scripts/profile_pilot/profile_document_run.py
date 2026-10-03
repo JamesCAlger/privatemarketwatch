@@ -28,11 +28,18 @@ frontend/public/data via PilotPaths.protected_roots, and the WORKTREE's data/ove
 fixed property other pilot stages rely on staying unchanged, tests/test_profile_pilot_protection.py:120): this
 module additionally (a) installs its own open-guard over the MAIN checkout's data/overrides via
 protection.install_open_guard's explicit roots list (no change to protection.py needed), blocking any write-mode
-`open()`/`io.open()` to it for the whole stage body, and (b) inventories that same root before and after the body,
-writing the comparison to verification/main_overrides_guard.json and raising protection.PreservationError on any
-create/change/delete that the open-guard did not itself block (e.g. a deletion via os.unlink, which does not go
-through open()). Fix round 1 (F8): protection.py's own protected_session receipt is NOT parameterised for extra
-roots, so this guard's receipt is a separate file, not folded into that one.
+`open()`/`io.open()` to it for the whole stage body -- a create that bypasses open() entirely (e.g. Path.touch(),
+which uses os.open, or os.unlink for a delete) is not blocked by this guard and is caught only by (b); and (b)
+inventories that same root, comparing it TWICE: once right before any verdict file is written (fix round 2, R1),
+raising protection.PreservationError there and writing NOTHING under results/ if it already differs, and once more
+in `finally` (the comparison this module's own receipt, verification/main_overrides_guard.json, records) for
+whatever changed after that point. Because every verdict file is write-once, a change that lands strictly between
+the pre-write comparison and process exit cannot be prevented after the fact -- that residual window is real and is
+not claimed to be closed; what fix round 2 guarantees is that the result of the PRE-WRITE comparison, not the final
+one, decides whether results/{roundtrip,consistency,exit_test}.json get written at all, so a run that fails the
+pre-write check never has a PASS-or-any-other-verdict file on disk. Fix round 1 (F8): protection.py's own
+protected_session receipt is NOT parameterised for extra roots, so this guard's receipt is a separate file, not
+folded into that one.
 
 Workload (ruling A8, honesty fix round 1 F1): declared once for the whole build. Q4 and Q1 censuses are BOTH loaded
 together for a given filer (not one at a time), so est_bytes uses the LARGEST per-filer Q4+Q1 byte sum across the
@@ -48,7 +55,9 @@ refused (LeaseRefused, exit 4) -- that refuse-if-heavy-without-a-lease path is k
 threshold sits.
 
 Exit codes: 0 exit test PASS, 1 FAIL (documents still written), 2 stage invalidated / document-contract violation /
-preservation failure, 3 any other unexpected exception, 4 refused.
+preservation failure / a blocked write to the MAIN overrides open-guard (AssertionError) / a pinned input vanishing
+or becoming unreadable mid-stage (OSError, e.g. FileNotFoundError -- fix round 2, R2: these are stage-invalidating
+conditions, not generic unexpected errors), 3 any other unexpected exception, 4 refused.
 """
 from __future__ import annotations
 
@@ -147,6 +156,18 @@ def _main_overrides_dirty(main_root: Path) -> bool:
         raise StageInvalidated("could not check the MAIN checkout's data/overrides for uncommitted changes: "
                                + done.stderr.decode("ascii", "backslashreplace").strip())
     return bool(done.stdout.strip())
+
+
+def _raise_if_guard_changed(before: dict, after: dict, *, when: str) -> None:
+    """R1: a single comparison, callable at more than one checkpoint. Raising PreservationError here
+    outranks (and chains onto) whatever is already propagating, matching protection.protected_session's
+    own documented convention."""
+    comparison = protection.compare(before, after)
+    if not comparison["ok"]:
+        raise PreservationError(
+            "MAIN checkout data/overrides changed " + when + " (read-only root for this CLI, ruling A7): "
+            "created=" + str(len(comparison["created"])) + " changed=" + str(len(comparison["changed"]))
+            + " deleted=" + str(len(comparison["deleted"])))
 
 
 def _census(row) -> dict | None:
@@ -412,6 +433,13 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         if not after["ok"]:
             raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
 
+        # R1 (fix round 2): the MAIN-overrides guard comparison that decides whether a verdict file gets
+        # written is THIS one, run BEFORE any of the three writes -- not the one in `finally`, which can
+        # only detect a change after the fact (write-once means a file already on disk cannot be
+        # un-written). See the module docstring for the residual window this does not claim to close.
+        mid_guard = protection.inventory(guard_specs)
+        _raise_if_guard_changed(before_guard, mid_guard, when="before verdict files were written")
+
         write_once_json(paths, "results/roundtrip.json", roundtrip)
         write_once_json(paths, "results/consistency.json", consistency)
         write_once_json(paths, "results/exit_test.json", exit_file_body)
@@ -425,19 +453,17 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
     finally:
         # F8: a preservation failure outranks (and chains onto, via Python's implicit exception context)
         # the body's own exception, matching protection.protected_session's own documented convention.
+        # R1: this is the SECOND (final) comparison; the first already ran above, before any verdict
+        # file was written, and is what actually keeps a verdict off disk under an exit-2 run. This one
+        # can only report-after-the-fact on the residual window between that check and here.
         uninstall_open_guard()
         after_guard = protection.inventory(guard_specs)
-        comparison = protection.compare(before_guard, after_guard)
-        receipt_body = protection.summarize(before_guard, after_guard, comparison)
+        receipt_body = protection.summarize(before_guard, after_guard, protection.compare(before_guard, after_guard))
         try:
             write_once_json(paths, GUARD_RECEIPT_RELATIVE, receipt_body)
         except PathError:
             pass   # already written by an earlier attempt in this run root
-        if not comparison["ok"]:
-            raise PreservationError(
-                "MAIN checkout data/overrides changed during the run (read-only root for this CLI, "
-                "ruling A7): created=" + str(len(comparison["created"])) + " changed="
-                + str(len(comparison["changed"])) + " deleted=" + str(len(comparison["deleted"])))
+        _raise_if_guard_changed(before_guard, after_guard, when="during the run")
 
 
 def main(argv=None) -> int:
@@ -482,6 +508,14 @@ def main(argv=None) -> int:
     except (PathError, pf.FamilyError, LeaseRefused) as exc:
         print("REFUSED: " + _ascii(str(exc)))
         return EXIT_REFUSED
+    except (AssertionError, OSError) as exc:
+        # R2 (fix round 2): a blocked write to the MAIN overrides open-guard (bare AssertionError, the
+        # only source of one in this call graph) and a pinned input vanishing or becoming unreadable
+        # mid-stage (OSError, e.g. FileNotFoundError, raised directly by a read that outran
+        # manifest.verify_inputs's own after-the-fact check) are stage-invalidating conditions, not
+        # generic unexpected errors -- kept distinct from the final `except Exception` below.
+        print("STAGE INVALIDATED: " + _ascii(type(exc).__name__ + ": " + str(exc)))
+        return EXIT_INVALIDATED
     except Exception as exc:
         print("UNEXPECTED ERROR: " + _ascii(type(exc).__name__ + ": " + str(exc)))
         return EXIT_UNEXPECTED
