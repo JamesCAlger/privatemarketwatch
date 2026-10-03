@@ -554,6 +554,10 @@ def test_overrides_git_head_failure_is_a_refusal(staged, monkeypatch):
 
 
 def test_main_overrides_open_guard_blocks_a_write_immediately(staged, monkeypatch):
+    """Fix round 3 (R2): run_stage itself now converts the open-guard's bare AssertionError to
+    PreservationError (matching its exact message prefix) before it ever leaves run_stage -- this test
+    originally (fix round 1, F8) asserted the raw AssertionError; updated to match the new, narrower
+    conversion. The guard still blocks the write itself (the write never completes either way)."""
     original = run.pf.collect_override_inputs
 
     def spy(root, cik, hits):
@@ -562,7 +566,7 @@ def test_main_overrides_open_guard_blocks_a_write_immediately(staged, monkeypatc
         return original(root, cik, hits)
 
     monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
-    with pytest.raises(AssertionError, match="profile pilot blocked a write"):
+    with pytest.raises(run.PreservationError, match="profile pilot blocked a write"):
         build(staged)
 
 
@@ -719,3 +723,97 @@ def test_vanishing_pinned_census_file_mid_build_exits_2_not_3(staged, monkeypatc
 
 
 # ---------------------------------------------------------------- M1 (companion kept as a real assertion above)
+
+
+# ---------------------------------------------------------------- Fix round 3 (re-review of dd176ff)
+# Narrows fix round 2's R2 (a blanket `except (AssertionError, OSError)` in main()) to convert only the
+# two intended mechanisms, AT THEIR OWN SITE inside run_stage, into PreservationError/StageInvalidated.
+# main() no longer has any AssertionError/OSError clause at all.
+
+
+def test_oserror_on_a_verdict_write_exits_3_not_2(staged, monkeypatch):
+    """A disk-full/permission OSError on one of the three FINAL results/*.json writes is a genuinely
+    unexpected failure, not a pinned-input or guard-blocked-write condition -- it must exit 3."""
+    original = run.write_once_json
+
+    def failing(paths_, relative, value):
+        if relative == "results/roundtrip.json":
+            raise OSError("synthetic: disk full")
+        return original(paths_, relative, value)
+
+    monkeypatch.setattr(run, "write_once_json", failing)
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", "sp3p-profile-fix3-verdict-write", "--census-run-id", CENSUS_RUN,
+                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert code == run.EXIT_UNEXPECTED == 3
+
+
+def test_missing_git_executable_resolving_overrides_head_stays_exit_2(staged, monkeypatch):
+    """A missing git EXECUTABLE raises OSError (FileNotFoundError) from subprocess.run itself, before
+    any CompletedProcess exists for the existing `done.returncode != 0` check to see -- distinct from
+    test_overrides_git_head_failure_is_a_refusal (fix round 1), which simulates git running and failing.
+    F7's original intent (a git failure resolving the MAIN checkout's overrides state is a refusal) must
+    hold for this case too."""
+    original = run.manifest.git
+
+    def missing_git(code_root, *args, **kwargs):
+        if tuple(args[:2]) == ("rev-parse", "HEAD") and Path(code_root) == staged.main_repo_root:
+            raise FileNotFoundError(2, "No such file or directory: 'git'")
+        return original(code_root, *args, **kwargs)
+
+    monkeypatch.setattr(run.manifest, "git", missing_git)
+    with pytest.raises(run.StageInvalidated):
+        build(staged)
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", "sp3p-profile-fix3-missing-git", "--census-run-id", CENSUS_RUN,
+                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert code == run.EXIT_INVALIDATED
+
+
+def test_bare_assertionerror_from_elsewhere_exits_3_not_2(staged, monkeypatch):
+    """A bare AssertionError that does NOT match the open-guard's own message is unrelated and must not
+    be swept into exit 2 -- it is exactly the kind of future/unrelated `assert` the narrowing guards
+    against."""
+    def boom(*a, **k):
+        raise AssertionError("unrelated assertion, nothing to do with the overrides guard")
+
+    monkeypatch.setattr(run.profile_consistency, "exit_test", boom)
+    code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                     "--run-id", "sp3p-profile-fix3-bare-assert", "--census-run-id", CENSUS_RUN,
+                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert code == run.EXIT_UNEXPECTED == 3
+
+
+def test_guard_blocked_write_still_exits_2_under_the_narrowed_mapping(staged, monkeypatch):
+    """One of the two intended cases, re-asserted under the new narrower mechanism (conversion inside
+    run_stage, not a blanket clause in main()) -- companion to test_main_overrides_open_guard_block_exits_2_not_3
+    (fix round 2), which already covers this through main(); this one asserts the PreservationError
+    conversion directly against run_stage."""
+    original = run.pf.collect_override_inputs
+
+    def spy(root, cik, hits):
+        if cik == STELLUS:
+            (Path(root) / "sp3p_t9fix3_blocked_write.json").write_text("{}", encoding="ascii")
+        return original(root, cik, hits)
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    with pytest.raises(run.PreservationError):
+        build(staged)
+
+
+def test_vanishing_pinned_input_still_exits_2_under_the_narrowed_mapping(staged, monkeypatch):
+    """The other intended case, re-asserted directly against run_stage: a pinned census file vanishing
+    mid-build raises StageInvalidated (via _reading_pinned_inputs), not a raw FileNotFoundError."""
+    original = run.pf.collect_override_inputs
+    census_path = (staged.data_root / "pilot" / "filer_profile" / CENSUS_RUN / "census" / STELLUS
+                  / (Q4 + ".json"))
+
+    def spy(root, cik, hits):
+        out = original(root, cik, hits)
+        if cik == STELLUS:
+            census_path.unlink()
+        return out
+
+    monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
+    with pytest.raises(run.StageInvalidated, match="vanished or became unreadable"):
+        build(staged)

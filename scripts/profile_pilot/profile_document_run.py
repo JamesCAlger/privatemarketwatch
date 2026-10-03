@@ -54,14 +54,47 @@ lease_factory pattern) rather than refusing outright; with no lease_factory supp
 refused (LeaseRefused, exit 4) -- that refuse-if-heavy-without-a-lease path is kept regardless of where the
 threshold sits.
 
-Exit codes: 0 exit test PASS, 1 FAIL (documents still written), 2 stage invalidated / document-contract violation /
-preservation failure / a blocked write to the MAIN overrides open-guard (AssertionError) / a pinned input vanishing
-or becoming unreadable mid-stage (OSError, e.g. FileNotFoundError -- fix round 2, R2: these are stage-invalidating
-conditions, not generic unexpected errors), 3 any other unexpected exception, 4 refused.
+Exit codes (fix round 3, R2/the docstring ask: every code listed explicitly, not just described in prose):
+  0  exit test PASS.
+  1  exit test FAIL (documents and round-trip/consistency results are still written).
+  2  stage invalidated: StageInvalidated (pins changed, census/role ambiguity, a git command this module
+     runs failing -- including the git EXECUTABLE itself being missing, fix round 3's own fix, same
+     exit code F7 already used for a git command that ran and failed), a document-contract violation
+     (InceptionError / RoundTripError / ProfileDocumentError), a preservation failure (PreservationError
+     -- the MAIN overrides guard's before/after inventory differing, OR, as of fix round 3, a write that
+     guard physically BLOCKED: see the next paragraph), or a pinned input that disappeared or became
+     unreadable strictly between being pinned and being read/re-verified (also converted to
+     StageInvalidated at the read site, fix round 3's R2 narrowing -- see below).
+  3  any other unexpected exception, including an OSError on a VERDICT write (disk full, permission) and
+     a bare AssertionError from anywhere OTHER than the open-guard's own blocked-write check.
+  4  refused (PathError / profile_families.FamilyError / LeaseRefused).
+
+Fix round 3 narrowed what used to be a blanket `except (AssertionError, OSError)` in main() (fix round 2's
+R2) mapping EVERY AssertionError and EVERY OSError to exit 2 -- that wrongly swept in a disk-full/permission
+OSError on a verdict write and any unrelated future bare `assert`. The two mechanisms that must stay exit 2
+are now converted to a typed/matched exception AT THEIR OWN SITE, inside this module, and main() no longer
+has a generic AssertionError/OSError clause at all:
+  (a) the open-guard's blocked write raises a bare AssertionError (protection.py offers no typed error for
+      it, and is not modified here); run_stage catches AssertionError around its whole guarded body, checks
+      the message against the exact prefix protection.install_open_guard's check() always uses, and
+      converts a match to PreservationError (reusing that type rather than adding a new one, since this is
+      the same ruling-A7 read-only-root concern the inventory-based PreservationError already reports under);
+      anything else is re-raised untouched;
+  (b) a pinned input disappearing or becoming unreadable "when it is read or re-verified" is caught as
+      OSError at the specific read/re-verify sites (collect_override_inputs and the census reads inside the
+      per-filer loop; the shared/originals/loader_parity reads after it; manifest.verify_inputs's own
+      re-check call) via the `_reading_pinned_inputs` context manager, and converted to StageInvalidated
+      there -- NOT around the two write statements inside that same stretch of code (profiles/<cik>.json,
+      roundtrip/overrides/<path>) or the three final results/*.json writes, which stay unwrapped so a write
+      failure is exit 3. `_main_overrides_git_head`/`_main_overrides_dirty` similarly catch OSError around
+      their own `manifest.git(...)` call (a missing git executable raises FileNotFoundError before any
+      CompletedProcess exists, so the existing `done.returncode != 0` check never saw it) and raise
+      StageInvalidated, matching F7's original intent that a git failure here is a refusal.
 """
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -88,6 +121,11 @@ Q4, Q1 = pd.INCEPTION_REPORT_DATE, "2026-03-31"
 # verified-era quarter; Q4 is selected by report date, in practice always the generic "all:2025-12-31" role.
 CENSUS_ROLES = ("verified_era", "all:" + Q4)
 GUARD_RECEIPT_RELATIVE = "verification/main_overrides_guard.json"
+# Fix round 3 (R2): protection.install_open_guard's check() always raises a bare AssertionError with this
+# EXACT prefix (protection.py is not modified; matching the message at this module's own catch site is the
+# documented fallback when protection.py offers no typed error for a condition). Keep this string in sync
+# with scripts/profile_pilot/protection.py's install_open_guard if that message ever changes.
+GUARD_BLOCKED_WRITE_PREFIX = "profile pilot blocked a write to a protected path:"
 
 # loader_parity family -> (per_cik | pooled) mapping used by _loader_parity_tally (F4): per-family compared
 # vs filesystem-expected counts, not just loader_parity["ok"] (true on all-absent).
@@ -137,12 +175,24 @@ def attested_under(main_root: Path, rel: str, content) -> list:
     return tags
 
 
+def _run_git(main_root: Path, *args: str, purpose: str):
+    """Fix round 3: a missing git executable raises OSError (FileNotFoundError) from subprocess.run
+    itself, before manifest.git's own `check=False` tolerance ever sees a returncode -- the
+    `done.returncode != 0` checks below never fired for it. Converted here to StageInvalidated, matching
+    F7's original intent that a git failure resolving the MAIN checkout's overrides state is a refusal."""
+    try:
+        return manifest.git(Path(main_root), *args, check=False)
+    except OSError as exc:
+        raise StageInvalidated("could not run git to " + purpose + " (ruling A7's read-only root): "
+                               + type(exc).__name__ + ": " + str(exc)) from exc
+
+
 def _main_overrides_git_head(main_root: Path) -> str:
     """The MAIN checkout's HEAD, for inputs["overrides_git_head"] (the checkout whose data/overrides was
     read, distinct from code.git_head which is the WORKTREE's own converter-code HEAD). Fix round 1 (F7):
     a git failure here is a refusal (StageInvalidated, exit 2), not a silently recorded None -- the MAIN
     checkout is expected to be a real git repository for every real run."""
-    done = manifest.git(Path(main_root), "rev-parse", "HEAD", check=False)
+    done = _run_git(main_root, "rev-parse", "HEAD", purpose="determine the MAIN checkout's git HEAD for data/overrides")
     if done.returncode != 0:
         raise StageInvalidated("could not determine the MAIN checkout's git HEAD for data/overrides (ruling "
                                "A7's read-only root): " + done.stderr.decode("ascii", "backslashreplace").strip())
@@ -151,11 +201,26 @@ def _main_overrides_git_head(main_root: Path) -> str:
 
 def _main_overrides_dirty(main_root: Path) -> bool:
     """F7: whether the MAIN checkout's data/overrides has uncommitted changes relative to its HEAD."""
-    done = manifest.git(Path(main_root), "status", "--porcelain", "--", "data/overrides", check=False)
+    done = _run_git(main_root, "status", "--porcelain", "--", "data/overrides",
+                    purpose="check the MAIN checkout's data/overrides for uncommitted changes")
     if done.returncode != 0:
         raise StageInvalidated("could not check the MAIN checkout's data/overrides for uncommitted changes: "
                                + done.stderr.decode("ascii", "backslashreplace").strip())
     return bool(done.stdout.strip())
+
+
+@contextmanager
+def _reading_pinned_inputs(when: str):
+    """Fix round 3 (R2): converts an OSError raised while reading or re-verifying a PINNED input (e.g.
+    FileNotFoundError on a census/override file deleted mid-stage) to StageInvalidated, at the read site.
+    Deliberately scoped to reads only -- callers must keep writes (profiles/<cik>.json,
+    roundtrip/overrides/<path>, the three results/*.json files) OUTSIDE this context manager, so a
+    disk-full/permission OSError on a WRITE stays an ordinary unexpected exception (exit 3), not this."""
+    try:
+        yield
+    except OSError as exc:
+        raise StageInvalidated("a pinned input could not be read " + when + " (vanished or became "
+                               "unreadable mid-stage): " + type(exc).__name__ + ": " + str(exc)) from exc
 
 
 def _raise_if_guard_changed(before: dict, after: dict, *, when: str) -> None:
@@ -331,9 +396,10 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
                                        + repr(q1_row["report_date"]))
             rows_by_cik[cik] = (q4_row, q1_row)
 
-        pins = ([manifest.file_record(root / h["path"], "overrides/" + h["path"]) for h in hits]
-                + [manifest.file_record(root / n, "overrides/" + n) for n in shared_names if n not in hit_paths]
-                + [census["authoritative"], census["excluded"]] + census["files"] + [replay_record, predicate_record])
+        with _reading_pinned_inputs("while hashing the override files to pin them"):
+            pins = ([manifest.file_record(root / h["path"], "overrides/" + h["path"]) for h in hits]
+                    + [manifest.file_record(root / n, "overrides/" + n) for n in shared_names if n not in hit_paths]
+                    + [census["authoritative"], census["excluded"]] + census["files"] + [replay_record, predicate_record])
 
         max_cik_census_bytes = max((_row_bytes(q4) + _row_bytes(q1) for q4, q1 in rows_by_cik.values()), default=0)
         workload = _workload(pins, max_cik_census_bytes, ciks)
@@ -357,12 +423,17 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
 
         def _build_documents() -> None:
             for cik in ciks:
-                inputs = pf.collect_override_inputs(root, cik, hits)
-                inputs["attested_under"] = {x["path"]: attested_under(paths.main_repo_root, x["path"], x["content"])
-                                            for x in inputs["files"].get("bdc_xbrl_wrappers", [])}
+                # Fix round 3 (R2): the reads only -- collect_override_inputs (override files) and
+                # _census (census files) -- not the write just below, which must stay unwrapped.
+                with _reading_pinned_inputs("for " + cik + "'s override files"):
+                    inputs = pf.collect_override_inputs(root, cik, hits)
+                    inputs["attested_under"] = {x["path"]: attested_under(paths.main_repo_root, x["path"], x["content"])
+                                                for x in inputs["files"].get("bdc_xbrl_wrappers", [])}
                 q4_row, q1_row = rows_by_cik[cik]
-                q4 = _census(q4_row)
-                inputs.update(census_q4=q4, census_q1=_census(q1_row),
+                with _reading_pinned_inputs("for " + cik + "'s census files"):
+                    q4 = _census(q4_row)
+                    q1 = _census(q1_row)
+                inputs.update(census_q4=q4, census_q1=q1,
                               census_q4_unavailable=None if q4 else _unavailable(excluded, cik, census_run_id),
                               detection=detection, predicate=predicate,
                               code_mirror=list(census_published.REPORTING_ENTITIES.get(cik, ())),
@@ -388,21 +459,25 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         else:
             _build_documents()
 
-        owned_shared = _owned_shared_files(root, shared_names, ciks)
-        shared = {n: pf.read_json(root / n) for n in shared_names}
-        # I3/M2: filesystem-derived, never document-derived, and narrowed to shared files this cik set
-        # actually OWNS a record in -- a shared file a filer merely mentions inside another record's text
-        # is not expected to round-trip for it (materialise_overrides's own "owned" condition).
-        expected = [rel for rel in rt.filesystem_expected_paths(root, ciks)
-                   if rel not in pf.SHARED_FILES or rel in owned_shared]
-        doc_paths = [paths.run_root / "profiles" / (cik + ".json") for cik in ciks]
-        materialised = rt.load_and_materialise(doc_paths, shared_originals=shared)
-        originals = {rel: pf.read_json(root / rel) for rel in expected if rel not in pf.SHARED_FILES}
-        originals.update({name: value for name, value in shared.items() if name in expected})
+        # Fix round 3 (R2): reads only, through the loader_parity call -- the write statement right after
+        # (roundtrip/overrides/<path>) stays unwrapped, same reasoning as _build_documents above.
+        with _reading_pinned_inputs("while building the round trip"):
+            owned_shared = _owned_shared_files(root, shared_names, ciks)
+            shared = {n: pf.read_json(root / n) for n in shared_names}
+            # I3/M2: filesystem-derived, never document-derived, and narrowed to shared files this cik set
+            # actually OWNS a record in -- a shared file a filer merely mentions inside another record's
+            # text is not expected to round-trip for it (materialise_overrides's own "owned" condition).
+            expected = [rel for rel in rt.filesystem_expected_paths(root, ciks)
+                       if rel not in pf.SHARED_FILES or rel in owned_shared]
+            doc_paths = [paths.run_root / "profiles" / (cik + ".json") for cik in ciks]
+            materialised = rt.load_and_materialise(doc_paths, shared_originals=shared)
+            originals = {rel: pf.read_json(root / rel) for rel in expected if rel not in pf.SHARED_FILES}
+            originals.update({name: value for name, value in shared.items() if name in expected})
         for rel, value in materialised.items():
             translate._write_once_ordered(paths, "roundtrip/overrides/" + rel, value)
         roundtrip = rt.roundtrip_check(materialised, originals)
-        roundtrip["loader_parity"] = rt.loader_parity(root, paths.run_root / "roundtrip" / "overrides", ciks)
+        with _reading_pinned_inputs("during loader parity"):
+            roundtrip["loader_parity"] = rt.loader_parity(root, paths.run_root / "roundtrip" / "overrides", ciks)
         parity_tally, parity_problems = _loader_parity_tally(roundtrip["loader_parity"], expected)
         roundtrip["loader_parity_tally"] = parity_tally
         if parity_problems:
@@ -428,8 +503,11 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
 
         # F2: verify the pins before any verdict file is written, so a mid-stage change invalidates the
         # stage with NO results written, rather than leaving a (possibly PASS) exit_test.json on disk
-        # under an exit-2 run.
-        after = manifest.verify_inputs(dict(inputs=pins))
+        # under an exit-2 run. Fix round 3 (R2): "or re-verified" -- verify_inputs itself re-hashes every
+        # pinned file and can raise OSError (e.g. PermissionError) on one that still exists but is no
+        # longer readable; wrapped the same way as the reads above.
+        with _reading_pinned_inputs("while re-verifying the pinned inputs"):
+            after = manifest.verify_inputs(dict(inputs=pins))
         if not after["ok"]:
             raise StageInvalidated("pinned inputs changed during the stage: " + json.dumps(after)[:400])
 
@@ -450,6 +528,18 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
                                                consistency=p["consistency"], resolved=p["resolved"],
                                                stubs=p["stubs"], counts=p["consistency_counts"]))
                            for c, p in exit_body["per_cik"].items()})
+    except AssertionError as exc:
+        # Fix round 3 (R2): the ONLY place a bare AssertionError is converted. A message matching the
+        # open-guard's own exact prefix (protection.install_open_guard's check(), not modified here) is
+        # the write it blocked; convert it to PreservationError so main() maps it through that EXISTING,
+        # typed clause -- reusing the type rather than adding a new one, since this is the same ruling-A7
+        # read-only-root concern the inventory-based PreservationError already reports under. Anything
+        # else is a genuinely unexpected assertion and must reach main()'s generic exception handler
+        # (exit 3) unconverted.
+        if str(exc).startswith(GUARD_BLOCKED_WRITE_PREFIX):
+            raise PreservationError("MAIN checkout data/overrides write blocked mid-stage (read-only root "
+                                    "for this CLI, ruling A7): " + str(exc)) from exc
+        raise
     finally:
         # F8: a preservation failure outranks (and chains onto, via Python's implicit exception context)
         # the body's own exception, matching protection.protected_session's own documented convention.
@@ -508,15 +598,13 @@ def main(argv=None) -> int:
     except (PathError, pf.FamilyError, LeaseRefused) as exc:
         print("REFUSED: " + _ascii(str(exc)))
         return EXIT_REFUSED
-    except (AssertionError, OSError) as exc:
-        # R2 (fix round 2): a blocked write to the MAIN overrides open-guard (bare AssertionError, the
-        # only source of one in this call graph) and a pinned input vanishing or becoming unreadable
-        # mid-stage (OSError, e.g. FileNotFoundError, raised directly by a read that outran
-        # manifest.verify_inputs's own after-the-fact check) are stage-invalidating conditions, not
-        # generic unexpected errors -- kept distinct from the final `except Exception` below.
-        print("STAGE INVALIDATED: " + _ascii(type(exc).__name__ + ": " + str(exc)))
-        return EXIT_INVALIDATED
     except Exception as exc:
+        # Fix round 3 (R2): no generic AssertionError/OSError clause here any more -- run_stage itself
+        # now converts its two intended mechanisms (the open-guard's blocked write; a pinned input
+        # vanishing/unreadable when read or re-verified) to PreservationError/StageInvalidated AT THEIR
+        # OWN SITE, so those are already handled by the clauses above. Anything reaching this one,
+        # including any other bare AssertionError or an OSError on a verdict write, is genuinely
+        # unexpected.
         print("UNEXPECTED ERROR: " + _ascii(type(exc).__name__ + ": " + str(exc)))
         return EXIT_UNEXPECTED
     print(json.dumps(summary, indent=2, sort_keys=True, ensure_ascii=True))
