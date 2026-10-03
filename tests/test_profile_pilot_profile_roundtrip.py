@@ -23,7 +23,7 @@ from scripts.profile_pilot import profile_roundtrip as rt
 from scripts.profile_pilot.translate import value_sha256
 from tests.test_profile_pilot_paths import CODE_ROOT
 from tests.test_profile_pilot_profile_families import STELLUS, wrapper_v3
-from tests.test_profile_pilot_profile_inception import NOW, RUN, SHA, inception_inputs
+from tests.test_profile_pilot_profile_inception import NOW, RUN, SHA, inception_inputs, totals_input
 
 REAL = CODE_ROOT / "data" / "overrides"
 ORACLE = "bdc_xbrl_oracle_exceptions.json"
@@ -444,7 +444,10 @@ def real_documents():
                       census_q4_unavailable=dict(census_run_id="none", reason="unavailable",
                                                  detail="no census supplied to the round-trip test"),
                       census_q1=None, detection={},
-                      predicate=dict(version="census-published.v2", code_sha256="0" * 64), code_mirror=[],
+                      predicate=dict(version="census-published.v2", code_sha256="0" * 64),
+                      # No totals result is supplied either (final review I3): published_basis is then a
+                      # candidate with a stub, which is the honest shape for a document built without one.
+                      totals=totals_input(None, cik=cik), code_mirror=[],
                       overrides_root="worktree data/overrides", replay_run_id="none")
         docs.append(pi.build_document(cik, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9"))
     return docs
