@@ -1,0 +1,2 @@
+# Profile documents are byte copies of write-once run outputs: no line-ending conversion, ever.
+data/profiles/*.json -text
