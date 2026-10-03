@@ -28,7 +28,7 @@ WRITE_MODE_CHARS = frozenset("wax+")
 # tree outgrows the budget; the Python-write guard covers every depth either way.
 MAIN_OUTPUT_MODE = "full"
 HEAVY_ESTIMATE_SECONDS = 60
-HEAVY_ESTIMATE_BYTES = 2 * 2 ** 30
+HEAVY_ESTIMATE_BYTES = 4 * 2 ** 30  # owner ruling 2026-10-03: raised from 2 GiB
 PIPELINE_CIK_LIMIT = 8
 
 
@@ -239,7 +239,7 @@ def requires_lease(*, ciks=(), instance_count=0, full_cache_scan=False, pipeline
 
     Heavy: parsing any Ares/BCRED instance, parsing more than one instance per call,
     a full raw-cache scan, a staging/unified run over more than the eight pilot CIKs,
-    or a parse/staging/census operation estimated above 60 s or 2 GiB.
+    or a parse/staging/census operation estimated above 60 s or 4 GiB.
     Light by enumeration (the estimate does NOT apply): DuckDB reads of pinned
     holdings/index slices for the eight CIKs and file hashing, including the
     freeze command (measured 62.5 s).

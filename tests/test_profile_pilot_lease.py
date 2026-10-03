@@ -186,7 +186,8 @@ def test_heavy_classification_follows_ruling_r3():
     assert protection.requires_lease(full_cache_scan=True)
     assert protection.requires_lease(pipeline_cik_count=9)
     assert protection.requires_lease(est_seconds=61)
-    assert protection.requires_lease(est_bytes=3 * 2 ** 30)
+    assert protection.requires_lease(est_bytes=5 * 2 ** 30)
+    assert not protection.requires_lease(est_bytes=3 * 2 ** 30)
     assert not protection.requires_lease(ciks=[], instance_count=0)
 
 
