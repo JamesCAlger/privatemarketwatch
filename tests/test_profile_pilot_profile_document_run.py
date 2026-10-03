@@ -20,9 +20,10 @@ from scripts.profile_pilot.paths import PathError
 from tests.test_profile_pilot_paths import CODE_ROOT, fake_paths
 from tests.test_profile_pilot_profile import detector, outcome, single_dialect
 from tests.test_profile_pilot_profile_families import ARES, STELLUS, write_tree, wrapper_v3
-from tests.test_profile_pilot_profile_inception import Q1, Q4, census
+from tests.test_profile_pilot_profile_inception import Q1, Q4, census, totals_results
 
 CENSUS_RUN, REPLAY_RUN, AT = "stageb2-fakecensus", "sp1-replay-fake", "2026-10-01T12:00:00Z"
+TOTALS_RUN = "stageb2-backtest-fake"
 IDENT = "us-gaap:InvestmentIdentifierAxis"
 
 
@@ -120,6 +121,23 @@ def _write_replay(paths):
     (replay / "replay_q4_q1.json").write_text(json.dumps(dict(floors=floors)), encoding="ascii")
 
 
+def _totals_path(paths):
+    return paths.data_root / "pilot" / "filer_profile" / TOTALS_RUN / "results" / "backtest_results.json"
+
+
+def _write_totals(paths, outcomes):
+    """Final review I3: the pinned independent-totals results (m2_backtest's backtest_results.json shape).
+    `outcomes` maps cik -> a fair_value status, a {mode: status} dict, or None for 'no pair evaluated at the
+    inception date' (the NexPoint / TCW shape)."""
+    results = {}
+    for cik, fair_value in outcomes.items():
+        if fair_value is not None:
+            results.update(totals_results(cik, fair_value))
+    path = _totals_path(paths)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(dict(note="test fixture", results=results, yields={})), encoding="ascii")
+
+
 def seed(paths):
     """The single-filer (STELLUS) fixture used by most tests. F11: extended beyond wrapper + rate_convention
     + the shared oracle-exceptions file to also carry a B2 correction, an investigate-rules directory
@@ -146,18 +164,28 @@ def seed(paths):
     (root / "results" / "authoritative.json").write_text(json.dumps(dict(fund_quarters=rows)), encoding="ascii")
     (root / "results" / "excluded.json").write_text(json.dumps(dict(fund_quarters=[])), encoding="ascii")
     _write_replay(paths)
+    _write_totals(paths, {STELLUS: "holds"})
     _git_init_and_commit(paths.main_repo_root)
 
 
-def seed_cohort(paths):
+NO_Q4_CENSUS = "0001588272"   # NexPoint: no authoritative Q4-2025 census in the run of record
+
+
+def seed_cohort(paths, *, no_q4_census=(), totals=None):
     """F6: a full 8-filer fixture that reaches exit-test PASS -- every pilot CIK gets a matching wrapper,
     rate_convention and Q4/Q1 census (no breach-prone extras; F11's richer STELLUS-only fixture is not
-    reused here to keep this fixture's correctness easy to reason about)."""
+    reused here to keep this fixture's correctness easy to reason about).
+
+    Final review I4: that all-compared shape never occurs in the real data. `no_q4_census` names filers in
+    the REAL shape (NexPoint / TCW): no authoritative Q4 census, listed as excluded, so no census-derived
+    entry exists and nothing in their wrapper can be compared. `totals` overrides the per-filer pinned
+    independent-totals outcome (default: holds where a Q4 census exists, no pair at all where it does not)."""
     from scripts.profile_pilot import census_published, cohort
     data = paths.data_root
     files = {}
     root = data / "pilot" / "filer_profile" / CENSUS_RUN
     rows = []
+    excluded = []
     for cik in cohort.PILOT_CIKS:
         extra = {}
         if cik in census_published.REPORTING_ENTITIES:
@@ -168,12 +196,20 @@ def seed_cohort(paths):
                 reporting_entity_suffixes=list(census_published.REPORTING_ENTITIES[cik])))
         files["bdc_xbrl_wrappers/" + cik + ".json"] = wrapper_v3(cik, **extra)
         files["rate_convention/" + cik + ".json"] = {"cik": cik, "convention": "all_in", "target_quarter": Q1}
-        rows += _authoritative_rows(cik, root)
+        mine = _authoritative_rows(cik, root)
+        if cik in no_q4_census:
+            mine = [r for r in mine if r["report_date"] != Q4]
+            excluded.append(dict(cik=cik, report_date=Q4, reason="ambiguous_same_quarter_candidates",
+                                 detail="two original filings"))
+        rows += mine
     write_tree(data / "overrides", files)
     (root / "results").mkdir(parents=True)
     (root / "results" / "authoritative.json").write_text(json.dumps(dict(fund_quarters=rows)), encoding="ascii")
-    (root / "results" / "excluded.json").write_text(json.dumps(dict(fund_quarters=[])), encoding="ascii")
+    (root / "results" / "excluded.json").write_text(json.dumps(dict(fund_quarters=excluded)), encoding="ascii")
     _write_replay(paths)
+    outcomes = {cik: (None if cik in no_q4_census else "holds") for cik in cohort.PILOT_CIKS}
+    outcomes.update(totals or {})
+    _write_totals(paths, outcomes)
     _git_init_and_commit(paths.main_repo_root)
 
 
@@ -186,7 +222,8 @@ def staged(tmp_path, monkeypatch):
 
 
 def build(paths, *, ciks=(STELLUS,)):
-    return run.run_stage(paths, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN, ciks=list(ciks), recorded_at=AT)
+    return run.run_stage(paths, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN,
+                         totals_run_id=TOTALS_RUN, ciks=list(ciks), recorded_at=AT)
 
 
 # ---------------------------------------------------------------- brief's original tests (carried forward)
@@ -219,10 +256,10 @@ def test_rerun_on_the_same_run_id_is_refused(staged):
 def test_run_id_prefix_is_enforced(tmp_path):
     paths = fake_paths(tmp_path, run_id="stageb-profile-x")
     with pytest.raises(PathError, match="sp3p-profile-"):
-        run.run_stage(paths, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN)
+        run.run_stage(paths, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN, totals_run_id=TOTALS_RUN)
     assert run.main(["build", "--data-root", str(paths.data_root), "--main-root", str(paths.main_repo_root),
                      "--run-id", "stageb-profile-x", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN]) == run.EXIT_REFUSED
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN]) == run.EXIT_REFUSED
 
 
 def test_no_production_module_reads_profile_documents():
@@ -272,6 +309,7 @@ def test_main_reports_refused_exit_code_when_the_lease_itself_refuses(staged, mo
     monkeypatch.setattr(run.protection, "shared_heavy_lease", refusing)
     assert run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", staged.run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN,
                      "--cik", STELLUS]) == run.EXIT_REFUSED
 
 
@@ -293,7 +331,8 @@ def test_heavy_workload_with_a_lease_factory_runs_under_the_real_lease(staged, m
     def lease_factory():
         return protection.shared_heavy_lease(staged, head="test")
 
-    summary = run.run_stage(staged, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN, ciks=[STELLUS],
+    summary = run.run_stage(staged, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN,
+                            totals_run_id=TOTALS_RUN, ciks=[STELLUS],
                             recorded_at=AT, lease_factory=lease_factory)
     assert summary["verdict"] == "FAIL"   # one filer of 8 -- same business outcome as the light path
     body = json.loads((staged.run_root / "manifest.json").read_text(encoding="ascii"))
@@ -335,7 +374,7 @@ def test_main_reports_exit_2_for_a_preservation_failure(staged, monkeypatch, cap
     monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix1-preservation", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
     out = capsys.readouterr().out
     assert "PRESERVATION FAILED" in out and "Traceback" not in out
@@ -349,6 +388,7 @@ def test_main_reports_exit_3_for_an_unexpected_exception(staged, monkeypatch, ca
     monkeypatch.setattr(run.profile_consistency, "exit_test", boom)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", staged.run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN,
                      "--cik", STELLUS])
     assert code == run.EXIT_UNEXPECTED == 3
     out = capsys.readouterr().out
@@ -449,7 +489,7 @@ def test_converted_disposition_without_a_hash_exits_2_via_inceptionerror(staged,
         build(staged)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix1-inception", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -466,7 +506,7 @@ def test_roundtriperror_from_loader_parity_tally_exits_2(staged, monkeypatch):
         build(staged)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix1-roundtrip", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -484,7 +524,7 @@ def test_profiledocumenterror_on_reload_exits_2(staged, monkeypatch):
         build(staged)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix1-proddoc", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -493,7 +533,8 @@ def test_census_q4_unavailable_branch_is_exercised_through_the_cli(staged):
     excluded_path.write_text(json.dumps(dict(fund_quarters=[
         dict(cik=ARES, report_date=Q4, reason="ambiguous_same_quarter_candidates",
             detail="two original filings")])), encoding="ascii")
-    summary = run.run_stage(staged, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN, ciks=[ARES],
+    summary = run.run_stage(staged, census_run_id=CENSUS_RUN, replay_run_id=REPLAY_RUN,
+                            totals_run_id=TOTALS_RUN, ciks=[ARES],
                             recorded_at=AT)
     doc = pd.load_document(staged.run_root / "profiles" / (ARES + ".json"))
     assert doc["ledger"][0]["detail"]["census_q4_unavailable"]["reason"] == "ambiguous_same_quarter_candidates"
@@ -504,7 +545,7 @@ def test_census_q4_unavailable_branch_is_exercised_through_the_cli(staged):
 def test_main_runs_to_completion_on_a_fail_fixture(staged):
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix1-fail", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_FAIL
 
 
@@ -513,7 +554,8 @@ def test_main_runs_to_completion_on_a_pass_fixture(tmp_path, monkeypatch):
     seed_cohort(paths)
     monkeypatch.setattr(run, "attested_under", lambda main_root, rel, content: [])
     code = run.main(["build", "--data-root", str(paths.data_root), "--main-root", str(paths.main_repo_root),
-                     "--run-id", paths.run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN])
+                     "--run-id", paths.run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN])
     exit_body = json.loads((paths.run_root / "results" / "exit_test.json").read_text(encoding="ascii"))
     assert exit_body["verdict"] == "PASS", exit_body
     assert code == 0
@@ -650,6 +692,7 @@ def test_create_bypassing_open_mid_run_leaves_no_verdict_file_and_exits_2(staged
     run_id = "sp3p-profile-fix2-r1-create"
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN,
                      "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
     run_root = staged.data_root / "pilot" / "filer_profile" / run_id
@@ -697,7 +740,7 @@ def test_main_overrides_open_guard_block_exits_2_not_3(staged, monkeypatch):
     monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix2-r2-guard", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -718,7 +761,7 @@ def test_vanishing_pinned_census_file_mid_build_exits_2_not_3(staged, monkeypatc
     monkeypatch.setattr(run.pf, "collect_override_inputs", spy)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix2-r2-pin", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -744,7 +787,7 @@ def test_oserror_on_a_verdict_write_exits_3_not_2(staged, monkeypatch):
     monkeypatch.setattr(run, "write_once_json", failing)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix3-verdict-write", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_UNEXPECTED == 3
 
 
@@ -766,7 +809,7 @@ def test_missing_git_executable_resolving_overrides_head_stays_exit_2(staged, mo
         build(staged)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix3-missing-git", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_INVALIDATED
 
 
@@ -780,7 +823,7 @@ def test_bare_assertionerror_from_elsewhere_exits_3_not_2(staged, monkeypatch):
     monkeypatch.setattr(run.profile_consistency, "exit_test", boom)
     code = run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", "sp3p-profile-fix3-bare-assert", "--census-run-id", CENSUS_RUN,
-                     "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+                     "--replay-run-id", REPLAY_RUN, "--totals-run-id", TOTALS_RUN, "--cik", STELLUS])
     assert code == run.EXIT_UNEXPECTED == 3
 
 
@@ -828,6 +871,7 @@ def test_vanishing_pinned_input_still_exits_2_under_the_narrowed_mapping(staged,
 def _main_exit(staged, run_id):
     return run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
                      "--run-id", run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN,
                      "--cik", STELLUS])
 
 
@@ -888,3 +932,135 @@ def test_override_scan_read_failing_exits_2(staged, monkeypatch):
 
     monkeypatch.setattr(run.pf, "scan_overrides", failing)
     assert _main_exit(staged, "sp3p-profile-fix4-scan") == run.EXIT_INVALIDATED
+
+
+# ---------------------------------------------------------------- final whole-branch review: C1, C2, I3, I4
+
+
+def _cohort_main(tmp_path, monkeypatch, run_id, **seed_kw):
+    paths = fake_paths(tmp_path, run_id=run_id)
+    seed_cohort(paths, **seed_kw)
+    monkeypatch.setattr(run, "attested_under", lambda main_root, rel, content: [])
+    code = run.main(["build", "--data-root", str(paths.data_root), "--main-root", str(paths.main_repo_root),
+                     "--run-id", paths.run_id, "--census-run-id", CENSUS_RUN, "--replay-run-id", REPLAY_RUN,
+                     "--totals-run-id", TOTALS_RUN])
+    body = json.loads((paths.run_root / "results" / "exit_test.json").read_text(encoding="ascii"))
+    return paths, code, body
+
+
+def test_all_compared_cohort_passes_the_inception_gate_but_not_the_spec_exit(tmp_path, monkeypatch, capsys):
+    """The genuine all-filers-compared fixture: PASS is still reachable. It is the GATE that passes; the
+    spec's criterion (every filer 'holds') is published separately and is false, with its reason."""
+    paths, code, body = _cohort_main(tmp_path, monkeypatch, "sp3p-profile-final-pass")
+    assert code == 0 and body["verdict"] == "PASS"
+    assert body["inception_gate"] is True and body["inception_gate_reasons"] == []
+    assert body["spec_exit"] is False
+    assert [r["code"] for r in body["spec_exit_reasons"]] == ["consistency_not_holds"]
+    assert body["consistency_verdict_counts"] == {"holds": 0, "no_breach": 8, "breach": 0,
+                                                  "insufficient_evidence": 0}
+    assert "holds on all" not in json.dumps(body)
+    for cik, row in body["per_cik"].items():
+        counts = row["consistency_rows"]
+        assert counts["compared"] >= 1 and counts["breach"] == 0, cik
+        assert counts["total"] == counts["compared"] + counts["insufficient_evidence"] + counts["not_applicable"]
+        assert row["consistency_verdict"] == "no_breach" and row["published_basis"] == "accepted"
+    printed = capsys.readouterr().out
+    assert "holds on all" not in printed
+    summary = json.loads(printed)
+    assert summary["inception_gate"] is True and summary["spec_exit"] is False
+    assert summary["spec_exit_reasons"] == body["spec_exit_reasons"]
+    assert summary["per_cik"][STELLUS]["consistency_rows"] == body["per_cik"][STELLUS]["consistency_rows"]
+
+
+def test_cohort_with_a_real_shape_filer_fails_the_inception_gate(tmp_path, monkeypatch, capsys):
+    """I4: one filer in the real-data shape (no Q4 census: nothing in its wrapper can be compared, and no
+    totals pair evaluates at the inception date). It is insufficient_evidence, the gate FAILS, exit 1."""
+    paths, code, body = _cohort_main(tmp_path, monkeypatch, "sp3p-profile-final-realshape",
+                                     no_q4_census=(NO_Q4_CENSUS,))
+    assert code == run.EXIT_FAIL and body["verdict"] == "FAIL"
+    assert body["inception_gate"] is False and body["spec_exit"] is False
+    assert [(r["code"], r["ciks"]) for r in body["inception_gate_reasons"]] == [
+        ("consistency_insufficient_evidence", [NO_Q4_CENSUS])]
+    row = body["per_cik"][NO_Q4_CENSUS]
+    assert row["consistency_verdict"] == "insufficient_evidence" and row["consistency"] is False
+    assert row["consistency_rows"]["compared"] == 0 and row["consistency_rows"]["insufficient_evidence"] >= 3
+    assert row["criterion_1"] is True and row["resolver"] is True   # stubs still answer every key
+    assert row["published_basis"] == "candidate"
+    assert body["consistency_verdict_counts"] == {"holds": 0, "no_breach": 7, "breach": 0,
+                                                  "insufficient_evidence": 1}
+    # the documents and the round trip are still written, and still clean
+    roundtrip = json.loads((paths.run_root / "results" / "roundtrip.json").read_text(encoding="ascii"))
+    assert roundtrip["ok"] is True
+    doc = pd.load_document(paths.run_root / "profiles" / (NO_Q4_CENSUS + ".json"))
+    basis = doc["admissions"][doc["partition_predicate"]["published_basis_entry_id"]]
+    assert basis["state"] == "candidate"
+    assert basis["witness"]["candidate_cause"] == "no_totals_outcome_at_inception"
+    assert basis["witness"]["independent_totals"]["source"]["run_id"] == TOTALS_RUN
+    assert "holds on all" not in capsys.readouterr().out
+
+
+def test_published_basis_follows_the_pinned_totals_outcome_per_filer(tmp_path, monkeypatch):
+    """I3 through the CLI: accepted where fair_value holds in every mode, candidate on a breach in any mode
+    or an abstention. None of it touches the gate (a candidate still has its stub)."""
+    breach, mixed, abstains = "0001950803", "0001920453", "0001715933"
+    paths, code, body = _cohort_main(
+        tmp_path, monkeypatch, "sp3p-profile-final-totals",
+        totals={breach: "breach", mixed: {"rolling": "breach", "anchored": "holds"},
+                abstains: "insufficient_evidence"})
+    assert code == 0 and body["inception_gate"] is True
+    states = {cik: row["published_basis"] for cik, row in body["per_cik"].items()}
+    assert {c for c, s in states.items() if s == "candidate"} == {breach, mixed, abstains}
+    assert sum(s == "accepted" for s in states.values()) == 5
+    causes = {}
+    for cik in (breach, mixed, abstains):
+        doc = pd.load_document(paths.run_root / "profiles" / (cik + ".json"))
+        causes[cik] = doc["admissions"][doc["partition_predicate"]["published_basis_entry_id"]]["witness"][
+            "candidate_cause"]
+    assert causes == {breach: "totals_breach_at_inception", mixed: "totals_breach_at_inception",
+                      abstains: "totals_insufficient_evidence_at_inception"}
+    pinned = json.loads((paths.run_root / "manifest.json").read_text(encoding="ascii"))
+    assert pinned["totals_run_id"] == TOTALS_RUN
+    assert any(i["label"] == "totals/" + TOTALS_RUN + "/results/backtest_results.json" for i in pinned["inputs"])
+
+
+def test_missing_totals_results_are_refused_before_any_write(staged):
+    _totals_path(staged).unlink()
+    with pytest.raises(run.StageInvalidated, match="totals contract results missing"):
+        build(staged)
+    assert not (staged.run_root / "manifest.json").is_file()
+    assert not (staged.run_root / "profiles").exists()
+
+
+def test_missing_totals_results_exit_2_through_main(staged):
+    _totals_path(staged).unlink()
+    assert _main_exit(staged, "sp3p-profile-final-nototals") == run.EXIT_INVALIDATED
+
+
+def test_totals_run_id_is_a_required_cli_argument(staged):
+    with pytest.raises(SystemExit) as exc:
+        run.main(["build", "--data-root", str(staged.data_root), "--main-root", str(staged.main_repo_root),
+                  "--run-id", "sp3p-profile-final-noarg", "--census-run-id", CENSUS_RUN,
+                  "--replay-run-id", REPLAY_RUN, "--cik", STELLUS])
+    assert exc.value.code == 2
+
+
+def test_totals_results_under_another_predicate_version_exit_2(staged):
+    path = _totals_path(staged)
+    results = totals_results(STELLUS, "holds", version="census-published.v1")
+    path.write_text(json.dumps(dict(results=results)), encoding="ascii")
+    assert _main_exit(staged, "sp3p-profile-final-v1totals") == run.EXIT_INVALIDATED
+
+
+def test_totals_file_read_failing_exits_2(staged, monkeypatch):
+    _file_record_failing_for(monkeypatch, "totals/", unlink_after=True)
+    assert _main_exit(staged, "sp3p-profile-final-totals-vanish") == run.EXIT_INVALIDATED
+
+
+def test_single_filer_summary_publishes_both_fields_and_row_counts(staged):
+    summary = build(staged)
+    assert summary["verdict"] == "FAIL" and summary["inception_gate"] is False and summary["spec_exit"] is False
+    assert "missing_filers" in [r["code"] for r in summary["inception_gate_reasons"]]
+    row = summary["per_cik"][STELLUS]
+    assert set(row["consistency_rows"]) == {"total", "compared", "holds", "breach", "insufficient_evidence",
+                                            "not_applicable"}
+    assert set(row["grid"]) == {"accepted", "candidate", "stubs"} and row["published_basis"] == "accepted"

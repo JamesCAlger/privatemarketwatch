@@ -3,12 +3,15 @@ check consistency and write the sub-project 3 exit test.
 
     python -m scripts.profile_pilot.profile_document_run build --data-root D --run-id sp3p-profile-<stamp>
         --census-run-id stageb2-sp1census-20260930t2235z --replay-run-id <sp1 replay run id>
-        [--main-root M] [--cik C ...]
+        --totals-run-id <back-test run id of the same predicate version> [--main-root M] [--cik C ...]
 
 Reads, pinned by sha256 and re-verified at the end (a change invalidates the stage, exit 2): every file of
 <main>/data/overrides that mentions a pilot filer (the MAIN checkout's production overrides, not the worktree copy)
 plus the shared override files, the census root's authoritative/excluded listings and the Q4-2025 / Q1-2026 census
-files it names for each filer, <data_root>/pilot/filer_profile/<replay>/results/replay_q4_q1.json and
+files it names for each filer, <data_root>/pilot/filer_profile/<replay>/results/replay_q4_q1.json,
+<data_root>/pilot/filer_profile/<totals>/results/backtest_results.json (final review I3: the pinned
+independent-totals contract results that decide, per filer, whether partition_structure.published_basis is
+admitted accepted or candidate; missing -> StageInvalidated, exit 2, before any write) and
 scripts/profile_pilot/census_published.py. Sign-off attestation is a read-only `git show <tag>:<path>` in the main
 checkout. Writes ONLY under <data_root>/pilot/filer_profile/<run_id>/ (write-once): manifest.json,
 profiles/<cik>.json and roundtrip/overrides/<path> (order-preserving), results/{roundtrip,consistency,exit_test}.json,
@@ -55,8 +58,10 @@ refused (LeaseRefused, exit 4) -- that refuse-if-heavy-without-a-lease path is k
 threshold sits.
 
 Exit codes (fix round 3, R2/the docstring ask: every code listed explicitly, not just described in prose):
-  0  exit test PASS.
-  1  exit test FAIL (documents and round-trip/consistency results are still written).
+  0  inception_gate PASS (final review C2: the exit code follows exit_test.json's `inception_gate`, NOT the
+     spec's exit criterion, which is published beside it as `spec_exit` with its reasons; a 0 here does not
+     say the spec criterion is met).
+  1  inception_gate FAIL (documents and round-trip/consistency results are still written).
   2  stage invalidated: StageInvalidated (pins changed, census/role ambiguity, a git command this module
      runs failing -- including the git EXECUTABLE itself being missing, fix round 3's own fix, same
      exit code F7 already used for a git command that ran and failed), a document-contract violation
@@ -123,6 +128,7 @@ Q4, Q1 = pd.INCEPTION_REPORT_DATE, "2026-03-31"
 # verified-era quarter; Q4 is selected by report date, in practice always the generic "all:2025-12-31" role.
 CENSUS_ROLES = ("verified_era", "all:" + Q4)
 GUARD_RECEIPT_RELATIVE = "verification/main_overrides_guard.json"
+TOTALS_RELATIVE = "results/backtest_results.json"
 # Fix round 3 (R2): protection.install_open_guard's check() always raises a bare AssertionError with this
 # EXACT prefix (protection.py is not modified; matching the message at this module's own catch site is the
 # documented fallback when protection.py offers no typed error for a condition). Keep this string in sync
@@ -357,7 +363,7 @@ def _workload(pins: list, max_cik_census_bytes: int, ciks) -> dict:
                est_seconds=round(2.0 + total_bytes / 50e6, 1), est_bytes=int(300e6 + 20 * max_cik_census_bytes))
 
 
-def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recorded_at=None,
+def run_stage(paths, *, census_run_id: str, replay_run_id: str, totals_run_id: str, ciks=None, recorded_at=None,
              lease_factory=None) -> dict:
     _check_prefix(paths.run_id)
     root = paths.main_repo_root / "data" / "overrides"
@@ -372,6 +378,7 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         ciks = sorted(pf.cik10(c) for c in (ciks or cohort.PILOT_CIKS))
         recorded_at = recorded_at or _now()
         replay_path = paths.data_root / "pilot" / "filer_profile" / replay_run_id / "results" / "replay_q4_q1.json"
+        totals_path = paths.data_root / "pilot" / "filer_profile" / totals_run_id / TOTALS_RELATIVE
         # Fix round 4: every read of an input that BECOMES pinned below (the override scan, the census
         # listings and files hashed by load_authoritative_census, the excluded listing's content, the
         # replay record and content, the predicate code record) is a pinned-input read like the ones
@@ -385,10 +392,25 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
             if replay_record["status"] != "present":
                 raise StageInvalidated("replay result missing: " + str(replay_path))
             floors = json.loads(replay_path.read_text(encoding="ascii"))["floors"]
+            # Final review I3: the pinned per-filer independent-totals outcomes. Read once, reduced to the
+            # small per-filer outcomes below, and dropped (the real file is about 20 MB; none of it is kept).
+            totals_record = manifest.file_record(totals_path, "totals/" + totals_run_id + "/" + TOTALS_RELATIVE)
+            if totals_record["status"] != "present":
+                raise StageInvalidated("totals contract results missing: " + str(totals_path))
+            totals_body = json.loads(totals_path.read_text(encoding="utf-8"))
+            totals_results = totals_body.get("results") if isinstance(totals_body, dict) else None
+            del totals_body
             predicate_record = manifest.file_record(paths.code_root / pi.PREDICATE_CODE_PATH,
                                                      "code/" + pi.PREDICATE_CODE_PATH)
         detection = {k: dict(verdict=v["verdict"], replay_run_id=replay_run_id) for k, v in floors.items()}
         predicate = dict(version=census_published.CENSUS_PUBLISHED_VERSION, code_sha256=predicate_record["sha256"])
+        if not isinstance(totals_results, dict):
+            raise StageInvalidated("totals contract results carry no `results` object: " + str(totals_path))
+        totals_source = dict(run_id=totals_run_id, relative=TOTALS_RELATIVE, sha256=totals_record["sha256"])
+        totals_by_cik = {cik: dict(pi.totals_outcome(totals_results, cik, report_date=Q4,
+                                                     predicate_version=predicate["version"]),
+                                   source=dict(totals_source)) for cik in ciks}
+        del totals_results
         shared_names = [n for n in pf.SHARED_FILES if (root / n).is_file()]
         hit_paths = {h["path"] for h in hits}
 
@@ -406,7 +428,8 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         with _reading_pinned_inputs("while hashing the override files to pin them"):
             pins = ([manifest.file_record(root / h["path"], "overrides/" + h["path"]) for h in hits]
                     + [manifest.file_record(root / n, "overrides/" + n) for n in shared_names if n not in hit_paths]
-                    + [census["authoritative"], census["excluded"]] + census["files"] + [replay_record, predicate_record])
+                    + [census["authoritative"], census["excluded"]] + census["files"]
+                    + [replay_record, totals_record, predicate_record])
 
         max_cik_census_bytes = max((_row_bytes(q4) + _row_bytes(q1) for q4, q1 in rows_by_cik.values()), default=0)
         workload = _workload(pins, max_cik_census_bytes, ciks)
@@ -422,7 +445,9 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         overrides_dirty = _main_overrides_dirty(paths.main_repo_root)
         write_once_json(paths, "manifest.json", dict(
             stage="sp3_profile_document", run_id=paths.run_id, git=git, inputs=pins, census_run_id=census_run_id,
-            replay_run_id=replay_run_id, overrides_root=str(root), overrides_git_head=overrides_git_head,
+            replay_run_id=replay_run_id, totals_run_id=totals_run_id,
+            totals_outcomes={c: t["outcome"] for c, t in totals_by_cik.items()},
+            overrides_root=str(root), overrides_git_head=overrides_git_head,
             overrides_dirty=overrides_dirty, recorded_at=recorded_at, converter_version=pd.CONVERTER_VERSION,
             ciks=ciks, hits=hits, workload=workload, heavy=heavy))
 
@@ -442,7 +467,7 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
                     q1 = _census(q1_row)
                 inputs.update(census_q4=q4, census_q1=q1,
                               census_q4_unavailable=None if q4 else _unavailable(excluded, cik, census_run_id),
-                              detection=detection, predicate=predicate,
+                              detection=detection, predicate=predicate, totals=totals_by_cik[cik],
                               code_mirror=list(census_published.REPORTING_ENTITIES.get(cik, ())),
                               overrides_root="main checkout data/overrides", overrides_git_head=overrides_git_head,
                               replay_run_id=replay_run_id)
@@ -498,13 +523,16 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         exit_body = profile_consistency.exit_test(documents, consistency, roundtrip, report_date=Q4,
                                                    expected_ciks=cohort.PILOT_CIKS)
 
-        # F5/F9: the verdict word, insufficient_evidence count and q1_census presence published on a
-        # WRITTEN COPY -- profile_consistency.exit_test's own return value is left exactly as that module
-        # defines it; this module adds fields derivable from data it already has.
+        # F5/F9: the insufficient_evidence count, q1_census presence and (final review I3) the pinned totals
+        # outcome published on a WRITTEN COPY -- profile_consistency.exit_test's own return value is left
+        # exactly as that module defines it (it already carries consistency_verdict, consistency_rows, grid
+        # and published_basis per filer); this module adds fields derivable from data it already has.
         def _enrich(c: str, row: dict) -> dict:
             return dict(row, consistency_verdict=consistency[c]["verdict"],
                        insufficient_evidence=consistency[c]["counts"]["insufficient_evidence"],
-                       q1_census="present" if rows_by_cik[c][1] is not None else "absent")
+                       q1_census="present" if rows_by_cik[c][1] is not None else "absent",
+                       q4_census="present" if rows_by_cik[c][0] is not None else "absent",
+                       totals_outcome=totals_by_cik[c]["outcome"])
 
         exit_file_body = dict(exit_body, per_cik={c: _enrich(c, row) for c, row in exit_body["per_cik"].items()})
 
@@ -528,12 +556,23 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, ciks=None, recor
         write_once_json(paths, "results/roundtrip.json", roundtrip)
         write_once_json(paths, "results/consistency.json", consistency)
         write_once_json(paths, "results/exit_test.json", exit_file_body)
+        # Final review C2: the summary carries BOTH fields under their own names; `verdict` (and so the
+        # exit code) is the inception gate, never the spec criterion.
         return dict(run_id=paths.run_id, git_head=git["head"], verdict=exit_body["verdict"],
+                   inception_gate=exit_body["inception_gate"],
+                   inception_gate_reasons=exit_body["inception_gate_reasons"],
+                   spec_exit=exit_body["spec_exit"], spec_exit_reasons=exit_body["spec_exit_reasons"],
+                   spec_exit_statement=exit_body["spec_exit_statement"],
+                   consistency_verdict_counts=exit_body["consistency_verdict_counts"],
+                   consistency_rows=exit_body["consistency_rows"], totals_run_id=totals_run_id,
                    seconds=round(time.perf_counter() - started, 1), roundtrip_counts=roundtrip["counts"],
                    loader_parity_ok=roundtrip["loader_parity"]["ok"], missing_filers=exit_body["missing_filers"],
                    per_cik={c: _enrich(c, dict(criterion_1=p["criterion_1"], resolver=p["resolver"],
                                                consistency=p["consistency"], resolved=p["resolved"],
-                                               stubs=p["stubs"], counts=p["consistency_counts"]))
+                                               stubs=p["stubs"], grid=p["grid"],
+                                               published_basis=p["published_basis"],
+                                               consistency_rows=p["consistency_rows"],
+                                               counts=p["consistency_counts"]))
                            for c, p in exit_body["per_cik"].items()})
     except AssertionError as exc:
         # Fix round 3 (R2): the ONLY place a bare AssertionError is converted. A message matching the
@@ -575,6 +614,9 @@ def main(argv=None) -> int:
     cmd.add_argument("--run-id", default=None)
     cmd.add_argument("--census-run-id", required=True)
     cmd.add_argument("--replay-run-id", required=True)
+    cmd.add_argument("--totals-run-id", required=True,
+                     help="back-test run whose results/backtest_results.json holds the independent-totals "
+                          "contract results at the inception date, under the current predicate version")
     cmd.add_argument("--cik", action="append", default=None)
     args = parser.parse_args(argv)
     try:
@@ -592,7 +634,7 @@ def main(argv=None) -> int:
 
         with protection.protected_session(paths, receipt=receipt):
             summary = run_stage(paths, census_run_id=args.census_run_id, replay_run_id=args.replay_run_id,
-                                ciks=args.cik, lease_factory=lease_factory)
+                                totals_run_id=args.totals_run_id, ciks=args.cik, lease_factory=lease_factory)
     except StageInvalidated as exc:
         print("STAGE INVALIDATED: " + _ascii(str(exc)))
         return EXIT_INVALIDATED

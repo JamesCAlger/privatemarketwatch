@@ -198,6 +198,114 @@ CLOSING_EVIDENCE = {
 }
 
 
+# Final whole-branch review I3: partition_structure.published_basis is `accepted` only where the filer's
+# independent-totals contract (fair_value: census published-basis FV sum vs the filed
+# investments_at_fair_value anchor) holds at the inception report date under the SAME predicate version.
+# "The predicate was adopted" says which version is in force; it does not say this filer reconciles on it.
+# The outcome is READ from a pinned artifact (the back-test of the v2 re-measure chain, which evaluates the
+# totals contracts at every census quarter including 2025-12-31), never recomputed here.
+TOTALS_KIND, TOTALS_GATE_FIELD = "independent_totals", "fair_value"
+TOTALS_OUTCOMES = ("holds", "breach", "insufficient_evidence", "none")
+NO_TOTALS_OUTCOME = "no_totals_outcome_at_inception"
+TOTALS_CANDIDATE_CAUSE = {"breach": "totals_breach_at_inception",
+                          "insufficient_evidence": "totals_insufficient_evidence_at_inception",
+                          "none": NO_TOTALS_OUTCOME}
+TOTALS_RULE = ("holds only if at least one independent_totals fair_value result is evaluated at the report date "
+               "and EVERY such result (all learn modes) is holds; any breach is breach; otherwise "
+               "insufficient_evidence; no result at the date is none. The pct_of_net_assets contract is recorded "
+               "in other_fields and does not gate (its [50, 250] band assumes percent units; open item).")
+
+
+def totals_outcome(results: dict, cik: str, *, report_date: str, predicate_version: str) -> dict:
+    """The filer's independent-totals outcome at `report_date`, read from pinned back-test results.
+
+    `results` is the `results` object of m2_backtest's results/backtest_results.json: pair id
+    "<mode>:<cik>:<learn_date>:<eval_date>" -> list of contract results. Pure; no file access. A totals
+    result evaluated under another census published version is refused, not skipped."""
+    cik = cik10(cik)
+    rows, other = [], []
+    for pair_id in sorted(results):
+        parts = str(pair_id).split(":")
+        if len(parts) != 4:
+            raise InceptionError("totals results: unrecognised pair id " + repr(pair_id))
+        mode, pair_cik, learn_date, eval_date = parts
+        if cik10(pair_cik) != cik or eval_date != report_date:
+            continue
+        for r in results[pair_id]:
+            if r.get("kind") != TOTALS_KIND:
+                continue
+            version = (r.get("applies_to") or {}).get("census_published")
+            if version != predicate_version:
+                raise InceptionError("totals result " + pair_id + " was evaluated under " + repr(version)
+                                     + ", not " + predicate_version)
+            observed = r.get("observed") or {}
+            item = dict(pair_id=pair_id, mode=mode, learn_date=learn_date, field=r.get("field"),
+                        status=r.get("status"), cause=r.get("cause"),
+                        fv_residual_pct=observed.get("fv_residual_pct"), fv_anchor=observed.get("fv_anchor"),
+                        fv_sum=observed.get("fv_sum"), pct_sum=observed.get("pct_sum"))
+            (rows if r.get("field") == TOTALS_GATE_FIELD else other).append(item)
+    statuses = [r["status"] for r in rows]
+    if not rows:
+        outcome = "none"
+    elif "breach" in statuses:
+        outcome = "breach"
+    elif all(s == "holds" for s in statuses):
+        outcome = "holds"
+    else:
+        outcome = "insufficient_evidence"
+    return dict(outcome=outcome, cause=TOTALS_CANDIDATE_CAUSE.get(outcome), kind=TOTALS_KIND,
+                field=TOTALS_GATE_FIELD, report_date=report_date, predicate_version=predicate_version,
+                rule=TOTALS_RULE, rows=rows, other_fields=other)
+
+
+def _checked_totals(cik, totals, pred) -> dict:
+    if not isinstance(totals, dict) or totals.get("outcome") not in TOTALS_OUTCOMES:
+        raise InceptionError("no pinned independent-totals outcome for " + cik + " (inputs['totals']): "
+                             "published_basis cannot be admitted without one")
+    source = totals.get("source")
+    if not (isinstance(source, dict) and source.get("run_id") and source.get("sha256")):
+        raise InceptionError("the totals outcome for " + cik + " names no pinned source (run_id, sha256)")
+    if totals.get("predicate_version") != pred["version"] or totals.get("report_date") != pd.INCEPTION_REPORT_DATE:
+        raise InceptionError("the totals outcome for " + cik + " is for "
+                             + repr((totals.get("predicate_version"), totals.get("report_date"))) + ", not "
+                             + repr((pred["version"], pd.INCEPTION_REPORT_DATE)))
+    return totals
+
+
+def _candidate_closing(entry: dict, admission: dict) -> tuple:
+    """(closing evidence, stub detail) for a grid key whose only live entry is a candidate. F6 (final review):
+    name what would actually close THIS candidate; "next-quarter confirmation" was printed for every cause,
+    including ones a next-quarter census cannot close (it had already confirmed the value)."""
+    eid, witness = entry["entry_id"], admission["witness"]
+    tail = "; admission loop, sub-project 5"
+    totals = witness.get("independent_totals")
+    if totals is not None:
+        cause = witness.get("candidate_cause")
+        seen = "; ".join("%s %s%s" % (r["mode"], r["status"],
+                                      "" if r["fv_residual_pct"] is None else " (%+.2f%%)" % r["fv_residual_pct"])
+                         for r in totals["rows"]) or "no result evaluated at this date"
+        return ("an independent-totals " + totals["field"] + " contract outcome of holds for this filer at "
+                + totals["report_date"] + " under " + totals["predicate_version"] + " (inception: " + str(cause)
+                + "; pinned run " + totals["source"]["run_id"] + ": " + seen + "), then admission of " + eid + tail,
+                dict(independent_totals=cause))
+    reason = witness.get("next_quarter", "not confirmed")
+    detail = dict(next_quarter=reason)
+    if reason == "open_census_outcomes":
+        opened = witness.get("open_census_outcomes") or {}
+        ids = ["%s %s (%s)" % (q, s["stub_id"], s["cause"]) for q in ("q4", "q1") for s in opened.get(q) or []]
+        return ("resolution of the open census outcome(s) bearing on this key: " + ", ".join(ids) + "; "
+                + eid + " stays a candidate until they are resolved, whatever the next quarter's value" + tail,
+                detail)
+    if reason == "q1_census_unavailable":
+        return ("an authoritative next-quarter census for this filer whose value for this key equals " + eid
+                + " (inception: " + reason + ")" + tail, detail)
+    if reason in ("q1_value_differs", "q1_no_entry", "q1_ambiguous"):
+        return ("adjudication of " + eid + " against the next-quarter census, which did not confirm it "
+                "(inception: " + reason + "): which quarter's value is right, or whether the value changed"
+                + tail, detail)
+    return ("next-quarter confirmation of " + eid + " (inception: " + reason + ")" + tail, detail)
+
+
 def file_evidence(rel, sha, content, *, value_is_file=True, pointer=None) -> list:
     item = dict(kind="override_file", path=REPO_PREFIX + rel, sha256=sha, ordered_sha256=value_sha256(content),
                 value_is_file=value_is_file)
@@ -314,11 +422,9 @@ def grid_stubs(cik, entries, admissions, census_stubs, *, report_date, census_ra
         section = key.split(".", 1)[0]
         if mine:
             first = mine[0]
-            reason = admissions[first["entry_id"]]["witness"].get("next_quarter", "not confirmed")
-            stubs.append(pd.stub(cik, key, "candidate_pending_confirmation",
-                                 "next-quarter confirmation of " + first["entry_id"] + " (inception: " + reason
-                                 + "); admission loop, sub-project 5", entry_id=first["entry_id"],
-                                 detail=dict(next_quarter=reason)))
+            closing, detail = _candidate_closing(first, admissions[first["entry_id"]])
+            stubs.append(pd.stub(cik, key, "candidate_pending_confirmation", closing, entry_id=first["entry_id"],
+                                 detail=detail))
             continue
         bearing = [s for s in census_stubs if key in (s.get("bears_on") or [])]
         if bearing:
@@ -416,17 +522,29 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
             recorded_at=recorded_at, run_id=run_id, source=REPO_PREFIX + item["path"], witness=witness,
             inception_evaluation=NO_CONTRACT)
         targets.setdefault(item["path"], []).append(eid)
+    # Final review I3: accepted only where this filer's pinned independent-totals outcome holds at the
+    # inception date; otherwise a candidate carrying the outcome (or its absence) in the witness.
+    totals = _checked_totals(cik, inputs.get("totals"), pred)
+    totals_holds = totals["outcome"] == "holds"
     events, basis_id = _assert_inherited(
         events, cik, "partition_structure.published_basis", {"predicate": pred["version"]},
         support_path=PREDICATE_CODE_PATH, sha=pred["code_sha256"],
         evidence=[dict(kind="code_file", path=PREDICATE_CODE_PATH, sha256=pred["code_sha256"])]
-        + [dict(e) for e in ADOPTION_EVIDENCE], author="human", recorded_at=recorded_at)
+        + [dict(e) for e in ADOPTION_EVIDENCE]
+        + [dict(kind="contract_results", contract_kind=TOTALS_KIND, field=TOTALS_GATE_FIELD,
+                report_date=totals["report_date"], outcome=totals["outcome"], **totals["source"])],
+        author="human", recorded_at=recorded_at)
+    basis_witness = {"adoption": "anchor-aware adoption rule, controller rulings 3-4",
+                     "independent_totals": copy.deepcopy(totals)}
+    if not totals_holds:
+        basis_witness["candidate_cause"] = TOTALS_CANDIDATE_CAUSE[totals["outcome"]]
     admissions[basis_id] = pd.admission(
-        "accepted", "adopted_predicate", source_kind="predicate_code",
+        "accepted" if totals_holds else "candidate", "adopted_predicate", source_kind="predicate_code",
         mechanism="census published-basis predicate " + pred["version"], confidence=None, source_author="human",
-        recorded_at=recorded_at, run_id=run_id, source=PREDICATE_CODE_PATH,
-        witness={"adoption": "anchor-aware adoption rule, controller rulings 3-4"},
-        inception_evaluation="adoption rule over 101 fund-quarters of the 8 filers (IN-SAMPLE)")
+        recorded_at=recorded_at, run_id=run_id, source=PREDICATE_CODE_PATH, witness=basis_witness,
+        inception_evaluation="adoption rule over 101 fund-quarters of the 8 filers (IN-SAMPLE); this filer's "
+                             "independent_totals " + TOTALS_GATE_FIELD + " outcome at " + totals["report_date"]
+                             + " (pinned run " + totals["source"]["run_id"] + "): " + totals["outcome"])
     entities_id = None
     wrappers = files.get("bdc_xbrl_wrappers") or []
     if wrappers:

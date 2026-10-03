@@ -32,11 +32,26 @@ cross-reference to the brief's literal code):
     anti-sycophancy requirement: a missing check is not evidence of agreement.
   - Verdict naming: because the two unpaired keys above guarantee insufficient_evidence >= 2 on every real
     contract, a filer verdict of "holds" would never be reachable for ANY of the 8 pilot filers even on a
-    perfectly agreeing wrapper. A filer with zero breaches but one or more insufficient_evidence keys instead
-    reports "no_breach", not "holds"; both counts are always published in counts. The underlying PASS
-    criterion is unchanged (zero breaches, except that no live wrapper block is still insufficient_evidence,
-    which is not a pass) -- exit_test's per-filer consistency check now accepts verdict in
-    ("holds", "no_breach") rather than comparing to the single literal string "holds".
+    perfectly agreeing wrapper. A filer with zero breaches, AT LEAST ONE COMPARED ROW and one or more
+    insufficient_evidence keys instead reports "no_breach", not "holds"; the counts are always published.
+
+Final whole-branch review (2026-10-03), findings C1 and C2 -- the verdict vocabulary and the two exit fields:
+
+  - Filer verdict, four words. "breach": any row breaches. "insufficient_evidence": the contract COMPARED NO
+    ROW at all (no holds row and no breach row; also the no-live-wrapper-block case). A check does not pass
+    when no comparison happened: NexPoint 0001588272 and TCW 0001715933 have no Q4-2025 census, so even /cik
+    has no accepted entry to compare, and "zero breaches" there is "zero comparisons". "no_breach": at least
+    one compared row, zero breaches, some insufficient rows. "holds": at least one compared row, zero
+    breaches, zero insufficient rows.
+  - exit_test publishes TWO separately named fields; they are different claims and must not be merged.
+      inception_gate  what the CLI's exit code is gated on: every grid key answered by an entry or a stub
+                      (criterion 1), resolver clean, round trip and loader parity ok, zero breaches, no filer
+                      with verdict insufficient_evidence, no missing filer. A stub counts as an answer here.
+      spec_exit       the spec's exit test (section 8 row 3; section 4.1: a counterpart wrapper key MUST have
+                      an accepted entry): the above AND every filer's verdict is "holds". False with a
+                      machine-readable reason (spec_exit_reasons) whenever any filer is not "holds".
+    The spec's own wording (EXIT_TEST_TEXT) is published as spec_exit_statement ONLY when spec_exit is true;
+    otherwise the statement says NOT MET with the counts. `verdict` (PASS/FAIL) follows inception_gate only.
 """
 from __future__ import annotations
 
@@ -78,12 +93,31 @@ def _compare(mode: str, wrapper_value, converted) -> str:
     return "holds" if value_sha256(wrapper_value) == value_sha256(converted) else "insufficient_evidence"
 
 
+VERDICTS = ("holds", "no_breach", "breach", "insufficient_evidence")
+SPEC_EXIT_REFERENCE = "spec 2026-09-29 filer-profile programme design, section 8 row 3 (and section 4.1)"
+INCEPTION_GATE_DEFINITION = ("every grid key answered by an entry or a stub; resolver clean; round trip and loader "
+                             "parity ok; zero breaches; no filer with verdict insufficient_evidence; no missing "
+                             "filer. The CLI exit code follows this field. A stub counts as an answer: this is "
+                             "not the spec exit test.")
+
+
 def _verdict(counts: dict) -> str:
     if counts["breach"]:
         return "breach"
+    if not counts["holds"]:
+        # C1: nothing was compared (no holds row, no breach row). Not a zero-breach outcome: no outcome.
+        return "insufficient_evidence"
     if counts["insufficient_evidence"]:
         return "no_breach"
     return "holds"
+
+
+def row_counts(contract: dict) -> dict:
+    """Per-filer key-row counts; `compared` = rows where a comparison actually happened (holds + breach)."""
+    c = contract["counts"]
+    return dict(total=sum(c[s] for s in STATUSES), compared=c["holds"] + c["breach"], holds=c["holds"],
+                breach=c["breach"], insufficient_evidence=c["insufficient_evidence"],
+                not_applicable=c["not_applicable"])
 
 
 def consistency_contract(document: dict, *, report_date: str, code_mirror=()) -> dict:
@@ -171,23 +205,80 @@ def resolver_report(document: dict, report_date: str) -> dict:
     return dict(ok=not no_entry and not ambiguous, counts=counts, no_entry=no_entry, ambiguous=ambiguous)
 
 
+def _grid_counts(cov: dict) -> dict:
+    cells = list(cov["cells"].values())
+    return dict(accepted=sum(1 for c in cells if c["accepted_entry_ids"]),
+                candidate=sum(1 for c in cells if c["entry_ids"] and not c["accepted_entry_ids"]),
+                stubs=sum(1 for c in cells if c["stub"]))
+
+
+def _published_basis_state(doc: dict):
+    ref = doc["partition_predicate"]["published_basis_entry_id"]
+    return None if ref is None else doc["admissions"][ref]["state"]
+
+
 def exit_test(documents: dict, consistency: dict, roundtrip: dict, *, report_date: str, expected_ciks) -> dict:
     per = {}
     for cik in sorted(documents):
         doc = documents[cik]
         cov, res, con = coverage_report(doc, report_date), resolver_report(doc, report_date), consistency[cik]
-        # "holds" and "no_breach" are both zero-breach outcomes; a no-live-block document still reports the
-        # literal "insufficient_evidence" verdict, which correctly fails this criterion.
+        # `consistency` is the per-filer GATE criterion: a zero-breach outcome with at least one compared
+        # row. "insufficient_evidence" (zero rows compared, or no live wrapper block) fails it (C1).
         per[cik] = dict(criterion_1=cov["ok"], resolver=res["ok"],
                         consistency=con["verdict"] in ("holds", "no_breach"),
+                        consistency_verdict=con["verdict"], consistency_rows=row_counts(con),
                         coverage_missing=cov["missing"], resolver_no_entry=res["no_entry"],
                         resolver_ambiguous=res["ambiguous"], resolved=res["counts"]["resolved"],
-                        stubs=res["counts"]["stub"], consistency_counts=con["counts"],
+                        stubs=res["counts"]["stub"], grid=_grid_counts(cov),
+                        published_basis=_published_basis_state(doc), consistency_counts=con["counts"],
                         breaches=[r for r in con["keys"] if r["status"] == "breach"])
     missing = sorted(set(expected_ciks) - set(documents))
-    spec_ok = (not missing and bool(per)
-               and all(p["criterion_1"] and p["resolver"] and p["consistency"] for p in per.values()))
-    return dict(report_date=report_date, spec_exit_test=EXIT_TEST_TEXT, spec_exit=spec_ok,
-                precondition_roundtrip=bool(roundtrip.get("ok")), missing_filers=missing,
-                verdict="PASS" if spec_ok and roundtrip.get("ok") else "FAIL", n_filers=len(per), per_cik=per,
+    roundtrip_ok = bool(roundtrip.get("ok"))
+    verdicts = {cik: p["consistency_verdict"] for cik, p in per.items()}
+    verdict_counts = {v: sum(1 for x in verdicts.values() if x == v) for v in VERDICTS}
+
+    def where(test) -> list:
+        return [cik for cik, p in per.items() if test(p)]
+
+    # Reasons shared by both fields (structure), then the consistency reason each field adds on its own.
+    structural = []
+    if not per:
+        structural.append(dict(code="no_filers", ciks=[]))
+    if missing:
+        structural.append(dict(code="missing_filers", ciks=missing))
+    for code, hit in (("criterion_1_uncovered_keys", where(lambda p: not p["criterion_1"])),
+                      ("resolver_not_clean", where(lambda p: not p["resolver"]))):
+        if hit:
+            structural.append(dict(code=code, ciks=hit))
+    if not roundtrip_ok:
+        structural.append(dict(code="roundtrip_or_loader_parity", ciks=[]))
+    gate_reasons = list(structural)
+    for code, word in (("consistency_breach", "breach"),
+                       ("consistency_insufficient_evidence", "insufficient_evidence")):
+        hit = where(lambda p, word=word: p["consistency_verdict"] == word)
+        if hit:
+            gate_reasons.append(dict(code=code, ciks=hit))
+    not_holds = {cik: v for cik, v in verdicts.items() if v != "holds"}
+    spec_reasons = list(structural)
+    if not_holds:
+        spec_reasons.append(dict(code="consistency_not_holds", ciks=sorted(not_holds), verdicts=not_holds,
+                                 verdict_counts=verdict_counts))
+    inception_gate, spec_ok = not gate_reasons, not spec_reasons
+    compared = sum(p["consistency_rows"]["compared"] for p in per.values())
+    total = sum(p["consistency_rows"]["total"] for p in per.values())
+    if spec_ok:
+        statement = EXIT_TEST_TEXT
+    else:
+        statement = ("NOT MET: consistency verdict is holds for %d of %d filers (no_breach %d, breach %d, "
+                     "insufficient_evidence %d; %d of %d key rows compared); reasons: %s"
+                     % (verdict_counts["holds"], len(per), verdict_counts["no_breach"], verdict_counts["breach"],
+                        verdict_counts["insufficient_evidence"], compared, total,
+                        ", ".join(r["code"] for r in spec_reasons)))
+    return dict(report_date=report_date, verdict="PASS" if inception_gate else "FAIL",
+                inception_gate=inception_gate, inception_gate_reasons=gate_reasons,
+                inception_gate_definition=INCEPTION_GATE_DEFINITION,
+                spec_exit=spec_ok, spec_exit_reasons=spec_reasons, spec_exit_reference=SPEC_EXIT_REFERENCE,
+                spec_exit_statement=statement, consistency_verdict_counts=verdict_counts,
+                consistency_rows=dict(compared=compared, total=total),
+                precondition_roundtrip=roundtrip_ok, missing_filers=missing, n_filers=len(per), per_cik=per,
                 sample_label="IN-SAMPLE")

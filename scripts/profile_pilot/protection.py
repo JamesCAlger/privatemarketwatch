@@ -28,6 +28,11 @@ WRITE_MODE_CHARS = frozenset("wax+")
 # tree outgrows the budget; the Python-write guard covers every depth either way.
 MAIN_OUTPUT_MODE = "full"
 HEAVY_ESTIMATE_SECONDS = 60
+# HEAVY_ESTIMATE_BYTES is the lease ESTIMATE threshold: a declared (pre-run) workload estimate above it
+# classifies the job heavy, so it must run under the shared lease. 4 GiB by owner ruling 2026-10-03 (was
+# 2 GiB). It is NOT the measured performance limit: the 2 GiB bounds in census_run (max_peak_bytes),
+# m2_seed (LIMIT_BYTES) and m2_backtest are limits on MEASURED peak memory of the work itself and were not
+# changed by that ruling. Do not unify the two numbers.
 HEAVY_ESTIMATE_BYTES = 4 * 2 ** 30  # owner ruling 2026-10-03: raised from 2 GiB
 PIPELINE_CIK_LIMIT = 8
 

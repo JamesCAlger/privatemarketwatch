@@ -157,7 +157,47 @@ def census(date, identifiers=None, delim="|"):
     return dict(doc=doc, source=source)
 
 
-def inception_inputs(*, q4=True, q1=True, wrapper=None, extra_files=None, shared=None):
+TOTALS_RUN = "stageb2-backtest-fake"
+V2 = "census-published.v2"
+
+
+def totals_row(field, status, *, cause=None, residual=0.0, version=V2):
+    """One result row in the shape m2_backtest writes to results/backtest_results.json."""
+    observed = None if status == "insufficient_evidence" else dict(
+        fv_residual_pct=residual, fv_anchor=100.0, fv_sum=100.0 + residual, pct_sum=2.0, published_version=version)
+    return dict(kind="independent_totals", field=field, status=status, cause=cause, observed=observed,
+                applies_to={"whole_filing": True, "census_published": version}, partition_id="whole_filing")
+
+
+def totals_results(cik, fair_value, *, date=Q4, pct="breach", version=V2, modes=("rolling", "anchored")):
+    """pair_id -> result rows. `fair_value` is one status for every mode, or a {mode: status} dict; a status
+    of None leaves that mode's pair out. Each pair also carries an unrelated kind and the pct contract."""
+    out = {}
+    for mode in modes:
+        status = fair_value[mode] if isinstance(fair_value, dict) else fair_value
+        if status is None:
+            continue
+        learn = "2025-09-30" if mode == "rolling" else "2022-09-30"
+        cause = {"breach": "fv_residual_outside_band",
+                 "insufficient_evidence": "not_learned_in_q1: no_anchor"}.get(status)
+        out[":".join((mode, cik, learn, date))] = [
+            dict(kind="fill_rate", field="fair_value", status="breach", cause=None, observed=None,
+                 applies_to={"whole_filing": True}),
+            totals_row("fair_value", status, cause=cause, residual=-7.5 if status == "breach" else 0.25,
+                       version=version),
+            totals_row("pct_of_net_assets", pct, cause="pct_sum_outside_band" if pct == "breach" else None,
+                       version=version)]
+    return out
+
+
+def totals_input(fair_value="holds", *, cik=STELLUS, **kw):
+    """inputs["totals"] as profile_document_run builds it: the pure outcome plus the pinned source."""
+    results = {} if fair_value is None else totals_results(cik, fair_value, **kw)
+    return dict(pi.totals_outcome(results, cik, report_date=Q4, predicate_version=V2),
+                source=dict(run_id=TOTALS_RUN, relative="results/backtest_results.json", sha256="a" * 64))
+
+
+def inception_inputs(*, q4=True, q1=True, wrapper=None, extra_files=None, shared=None, totals="holds"):
     w = wrapper or wrapper_v3(STELLUS, source_encodings={"reporting_entity_suffixes": ["Emerald JV LP"]})
     files = {"bdc_xbrl_wrappers": [f("bdc_xbrl_wrappers/" + STELLUS + ".json", w)],
              "rate_convention": [f("rate_convention/" + STELLUS + ".json",
@@ -185,6 +225,7 @@ def inception_inputs(*, q4=True, q1=True, wrapper=None, extra_files=None, shared
                 detection={"fill_rate": dict(verdict="NO_POSITIVES", replay_run_id="sp1-replay-x"),
                            "source_concept_set": dict(verdict="PASS", replay_run_id="sp1-replay-x")},
                 predicate=dict(version="census-published.v2", code_sha256="e" * 64),
+                totals=totals_input(totals),
                 code_mirror=["Emerald JV LP"], overrides_root="tmp", replay_run_id="sp1-replay-x")
 
 
@@ -388,6 +429,11 @@ def test_open_census_outcome_demotes_the_entry_in_the_built_document():
     assert out["status"] == "stub" and out["stub"]["cause"] == "candidate_pending_confirmation"
     assert out["stub"]["entry_id"] == entry["entry_id"]
     assert out["stub"]["detail"] == {"next_quarter": "open_census_outcomes"}
+    # F6 (final review): the closing evidence names what would actually close it -- the open census
+    # outcomes -- not a generic "next-quarter confirmation" the Q1 census had in fact already given.
+    closing = out["stub"]["closing_evidence"]
+    assert "next-quarter confirmation" not in closing
+    assert "open census outcome" in closing and opened["q4"][0]["stub_id"] in closing
     # false-positive guard: a key no open outcome bears on is still confirmed by Q1.
     delim = next(e for e in doc["entries"] if e["key"] == "identifier_format.delimiter")
     assert doc["admissions"][delim["entry_id"]]["state"] == "accepted"
@@ -580,10 +626,128 @@ def test_wrapper_only_filer_validates_with_only_stubs_and_the_wrapper_block():
         attested_under={}, census_q4=None,
         census_q4_unavailable=dict(census_run_id="x", reason="unavailable", detail="no_census"), census_q1=None,
         detection={}, predicate=dict(version="census-published.v2", code_sha256="e" * 64),
-        code_mirror=[], overrides_root="tmp", replay_run_id="r")
+        totals=totals_input("holds"), code_mirror=[], overrides_root="tmp", replay_run_id="r")
     doc = pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
     pd.validate_document(doc)
     assert [b["family"] for b in doc["wrapper_section"]["blocks"]] == ["bdc_xbrl_wrapper"]
     assert doc["corrections"] == []
     assert {e["key"] for e in doc["entries"]} == {"partition_structure.published_basis"}
     assert len(doc["stubs"]) == len(pd.GRID_KEYS) - 1
+
+
+# ---------------------------------------------------------------- final review I3: published_basis admission
+
+
+def test_totals_outcome_holds_only_when_every_fair_value_row_at_the_date_holds():
+    out = pi.totals_outcome(totals_results(STELLUS, "holds"), STELLUS, report_date=Q4, predicate_version=V2)
+    assert out["outcome"] == "holds" and out["cause"] is None
+    assert out["field"] == "fair_value" and out["report_date"] == Q4 and out["predicate_version"] == V2
+    assert [r["mode"] for r in out["rows"]] == ["anchored", "rolling"]
+    assert all(r["status"] == "holds" and r["fv_residual_pct"] == 0.25 for r in out["rows"])
+    # the pct-of-net-assets contract is recorded beside it and does NOT gate (wrong-unit band, open item)
+    assert [r["status"] for r in out["other_fields"]] == ["breach", "breach"]
+    assert all(r["field"] == "pct_of_net_assets" for r in out["other_fields"])
+
+
+def test_totals_outcome_is_a_breach_when_any_mode_breaches():
+    """Fidelity 0001920453 at 2025-12-31: rolling breaches at -7.77%, anchored holds on a wider band."""
+    results = totals_results(STELLUS, {"rolling": "breach", "anchored": "holds"})
+    out = pi.totals_outcome(results, STELLUS, report_date=Q4, predicate_version=V2)
+    assert out["outcome"] == "breach" and out["cause"] == "totals_breach_at_inception"
+    assert {r["mode"]: r["status"] for r in out["rows"]} == {"rolling": "breach", "anchored": "holds"}
+
+
+def test_totals_outcome_without_an_anchor_is_insufficient_evidence():
+    results = totals_results(STELLUS, {"rolling": "insufficient_evidence", "anchored": "holds"})
+    out = pi.totals_outcome(results, STELLUS, report_date=Q4, predicate_version=V2)
+    assert out["outcome"] == "insufficient_evidence"
+    assert out["cause"] == "totals_insufficient_evidence_at_inception"
+    assert "not_learned_in_q1: no_anchor" in [r["cause"] for r in out["rows"]]
+
+
+def test_totals_outcome_is_none_when_nothing_was_evaluated_at_the_date():
+    """NexPoint / TCW shape: no Q4-2025 census, so no pair evaluates at the inception date."""
+    other_date = totals_results(STELLUS, "holds", date="2025-09-30")
+    other_filer = totals_results(ARES, "holds")
+    for results in ({}, other_date, other_filer):
+        out = pi.totals_outcome(results, STELLUS, report_date=Q4, predicate_version=V2)
+        assert out["outcome"] == "none" and out["cause"] == pi.NO_TOTALS_OUTCOME and out["rows"] == []
+    assert pi.NO_TOTALS_OUTCOME == "no_totals_outcome_at_inception"
+
+
+def test_totals_outcome_under_another_predicate_version_is_refused():
+    results = totals_results(STELLUS, "holds", version="census-published.v1")
+    with pytest.raises(pi.InceptionError, match="census-published.v1"):
+        pi.totals_outcome(results, STELLUS, report_date=Q4, predicate_version=V2)
+    with pytest.raises(pi.InceptionError, match="pair id"):
+        pi.totals_outcome({"not-a-pair-id": []}, STELLUS, report_date=Q4, predicate_version=V2)
+
+
+def _basis(doc):
+    entry = next(e for e in doc["entries"] if e["key"] == "partition_structure.published_basis")
+    return entry, doc["admissions"][entry["entry_id"]]
+
+
+def test_published_basis_is_accepted_where_the_totals_outcome_holds():
+    doc = build(totals="holds")
+    entry, admission = _basis(doc)
+    assert admission["state"] == "accepted" and admission["basis"] == "adopted_predicate"
+    assert admission["witness"]["independent_totals"]["outcome"] == "holds"
+    assert admission["witness"]["independent_totals"]["source"]["run_id"] == TOTALS_RUN
+    assert "candidate_cause" not in admission["witness"]
+    assert pd.resolve(doc, "partition_structure.published_basis", Q4)["status"] == "resolved"
+    assert any(e["kind"] == "contract_results" and e["run_id"] == TOTALS_RUN and e["sha256"] == "a" * 64
+               for e in entry["evidence"])
+
+
+@pytest.mark.parametrize("fair_value, cause", [
+    ("breach", "totals_breach_at_inception"),
+    ({"rolling": "breach", "anchored": "holds"}, "totals_breach_at_inception"),
+    ("insufficient_evidence", "totals_insufficient_evidence_at_inception"),
+    (None, "no_totals_outcome_at_inception")])
+def test_published_basis_is_a_candidate_where_the_totals_outcome_does_not_hold(fair_value, cause):
+    doc = build(totals=fair_value)
+    pd.validate_document(doc)
+    entry, admission = _basis(doc)
+    assert admission["state"] == "candidate" and admission["basis"] == "adopted_predicate"
+    assert admission["witness"]["candidate_cause"] == cause
+    assert admission["witness"]["independent_totals"]["outcome"] != "holds"
+    assert doc["partition_predicate"]["published_basis_entry_id"] == entry["entry_id"]
+    out = pd.resolve(doc, "partition_structure.published_basis", Q4)
+    assert out["status"] == "stub" and out["stub"]["cause"] == "candidate_pending_confirmation"
+    assert out["stub"]["entry_id"] == entry["entry_id"]
+    assert out["stub"]["detail"] == {"independent_totals": cause}
+    closing = out["stub"]["closing_evidence"]
+    assert "independent-totals" in closing and "holds" in closing and cause in closing
+    assert "next-quarter confirmation" not in closing
+    # every grid key is still answered by an entry or a stub
+    for key, cell in pd.coverage(doc, Q4).items():
+        assert cell["accepted_entry_ids"] or cell["stub"], key
+
+
+def test_build_document_refuses_a_missing_or_mismatched_totals_input():
+    def attempt(change):
+        inputs = inception_inputs()
+        change(inputs)
+        with pytest.raises(pi.InceptionError, match="totals"):
+            pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+
+    attempt(lambda i: i.pop("totals"))
+    attempt(lambda i: i.update(totals=dict(i["totals"], predicate_version="census-published.v1")))
+    attempt(lambda i: i.update(totals=dict(i["totals"], report_date="2025-09-30")))
+    attempt(lambda i: i.update(totals=dict(i["totals"], outcome="fine")))
+    attempt(lambda i: i.update(totals={k: v for k, v in i["totals"].items() if k != "source"}))
+
+
+def test_candidate_stub_closing_evidence_names_the_real_cause():
+    """F6: 'next-quarter confirmation' only where a next-quarter census is what is actually missing."""
+    doc = build(q1=False)
+    delim = next(e for e in doc["entries"] if e["key"] == "identifier_format.delimiter")
+    stub = pd.resolve(doc, "identifier_format.delimiter", Q4)["stub"]
+    assert stub["entry_id"] == delim["entry_id"] and stub["detail"] == {"next_quarter": "q1_census_unavailable"}
+    assert "next-quarter census" in stub["closing_evidence"]
+    inputs = inception_inputs()
+    inputs["census_q1"] = census(Q1, identifiers=["Borrower %d LLC ; Term Loan" % i for i in range(12)], delim=";")
+    differs = pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+    closing = pd.resolve(differs, "identifier_format.delimiter", Q4)["stub"]["closing_evidence"]
+    assert "q1_value_differs" in closing and "adjudication" in closing
