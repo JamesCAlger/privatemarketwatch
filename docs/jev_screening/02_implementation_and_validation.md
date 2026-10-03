@@ -1,6 +1,8 @@
 # Implementation, experiments and rollout
 
-Status: planned, not started by this documentation change. Success means more
+Status: execution active in an isolated worktree; see the [run log](05_run_log.md).
+The stages below remain the acceptance plan, not a claim they all passed.
+Success means more
 confirmed data defects found at a fixed investigation budget, with controlled
 incorrect clearances and an evidence trail. Model agreement alone is insufficient.
 

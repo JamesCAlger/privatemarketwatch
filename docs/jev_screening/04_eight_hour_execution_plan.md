@@ -1,6 +1,9 @@
 # Eight-hour build and test plan
 
-Date: 2026-10-03. Status: planned; this document does not start execution.
+Date: 2026-10-03. Status: execution active in an isolated worktree. The owner
+subsequently instructed continuous work until stopped in this chat, without
+touching production. The schedule below sets priorities, not an automatic stop.
+See the [run log](05_run_log.md) for outcomes and deviations.
 
 ## Objective and end state
 
@@ -65,10 +68,13 @@ share classes and current/comparative schedules. Exercise later-period or altere
 layout fixtures without claiming synthetic fixtures establish real-filer coverage.
 
 Run targeted `tests/test_jev_bundles.py` tests, then that file. Routing tests follow
-the implementation in the next block. Record exact commands and results. Apply
-the repository's post-test semantic-diff requirement; report existing differences
-separately from this work. If scope or runtime prevents a required check, record
-it as incomplete, never as passing. Check for existing long jobs before starting
+the implementation in the next block. Record exact commands and results. The
+owner's later no-production instruction overrides running the standard semantic
+diff here: that command writes a production report. Keep that check explicitly
+not run, and use the isolated write guard and bounded read-only production
+metadata comparison instead; these do not establish full semantic parity.
+If scope or runtime prevents a required check, record it as incomplete, never as
+passing. Check for existing long jobs before starting
 one. No full-suite run is scheduled for this narrow experimental change; a later
 merge or broader shared-contract change requires the repository's wider checks.
 

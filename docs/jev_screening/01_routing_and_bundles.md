@@ -1,9 +1,10 @@
 # Routing and evidence contract
 
-Status: proposed. The only current implementation is the experimental C107/X08
-[bundle module](../../pipeline/jev_bundles.py),
-[CLI](../../scripts/build_jev_bundles.py) and
-[focused tests](../../tests/test_jev_bundles.py). Routing below is not implemented.
+Status: target contract with an isolated shadow implementation in
+`.claude/worktrees/jev-screening-pilot`. Production routing is not implemented.
+The pilot covers C107/X08 and an opt-in C104 probe; see the [run log](05_run_log.md)
+for current gaps, frozen results and tests. Independent source-audit requirements
+are deliberately not satisfied by builder readiness or model confidence alone.
 
 ## Routing precedence
 

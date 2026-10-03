@@ -22,7 +22,7 @@ def schedule(rows, *, date="June 30, 2025", units="in thousands", notes="", head
 
 
 def parsed(body):
-    return jb.parse_source(('<html><body><xbrli:unit id="usd"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+    return jb.parse_source(('<html xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"><body><xbrli:unit id="usd"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
                             '<xbrli:unit id="cad"><xbrli:measure>iso4217:CAD</xbrli:measure></xbrli:unit>'
                             + body + '</body></html>').encode())
 
@@ -57,6 +57,137 @@ def test_full_position_and_both_values_replace_unrelated_sample():
     assert candidate["comparisons"]["fair_value"]["agrees_at_display_precision"] is True
     assert candidate["header_rows"][0]["cells"][1]["text"] == "Investment"
     assert jb.make_request(packet)["questions"]["source_match"]["criteria"]["t0r1"]
+
+
+def section_schedule(name='Acme Test LLC', heading='Equity Securities (14)', **kwargs):
+    body = schedule([(name, 'Preferred units', fact('2,000'), fact('1'), '')], **kwargs)
+    return body.replace(f'<tr><td>{name}', f'<tr><td colspan="9">{heading}</td></tr><tr><td>{name}')
+
+
+def test_instrument_section_notes_are_required_and_retained():
+    body = section_schedule()
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
+    packet = bundle(source=parsed(body + '<p>(14) Equity investments are non-income producing.</p>'))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    candidate = packet['source_candidates'][0]
+    assert candidate['section_context'][0]['text'] == 'Equity Securities (14)'
+    assert [n['marker'] for n in candidate['notes']] == ['14']
+    assert jb.model_state(packet)['source_candidates'][0]['section_context'] == candidate['section_context']
+
+
+def test_section_notes_follow_adjacent_same_period_continuation():
+    first = section_schedule(name='Other Borrower')
+    second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    second = second.replace('Schedule of Investments', 'Schedule of Investments (continued)')
+    packet = bundle(source=parsed(first + second + '<p>(14) Equity investments are non-income producing.</p>'))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert packet['source_candidates'][0]['section_context'][0]['table_index'] == 0
+    assert [n['marker'] for n in packet['source_candidates'][0]['notes']] == ['14']
+
+
+@pytest.mark.parametrize('boundary', ['new_period', 'new_instrument', 'total'])
+def test_section_annotations_do_not_cross_schedule_or_instrument_boundaries(boundary):
+    first = section_schedule(name='Other Borrower', date='December 31, 2024' if boundary == 'new_period' else 'June 30, 2025')
+    second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    if boundary != 'not_continued':
+        second = second.replace('Schedule of Investments', 'Schedule of Investments (continued)')
+    if boundary in {'new_instrument', 'total'}:
+        heading = 'Preferred Stocks' if boundary == 'new_instrument' else 'Total Equity Securities'
+        second = second.replace('<tr><td>Acme', f'<tr><td colspan="9">{heading}</td></tr><tr><td>Acme')
+    packet = bundle(source=parsed(first + second))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert not packet['source_candidates'][0]['notes']
+
+
+def test_repeated_schedule_title_without_continuation_does_not_drop_annotations():
+    first = section_schedule(name='Other Borrower', heading='Investments (14)')
+    second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    packet = bundle(source=parsed(first + second + '<p>(14) Portfolio scope annotation.</p>'))
+    candidate = packet['source_candidates'][0]
+    assert 'annotated_section_scope_unresolved' in candidate['blocking_reasons']
+    assert candidate['section_context'][0]['scope_reason'] == 'unconfirmed_schedule_continuation'
+    assert [n['marker'] for n in candidate['notes']] == ['14']
+
+
+def test_repeated_schedule_without_prior_annotations_has_no_invented_scope_error():
+    first = section_schedule(name='Other Borrower', heading='Equity Securities')
+    second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    assert bundle(source=parsed(first + second))['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_unknown_annotated_section_is_explicitly_unresolved():
+    body = section_schedule(heading='Special ownership pool (14)')
+    packet = bundle(source=parsed(body + '<p>(14) Investments belong to a different ownership pool.</p>'))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert 'annotated_section_scope_unresolved' in packet['source_candidates'][0]['blocking_reasons']
+
+
+@pytest.mark.parametrize('later_heading', ['Healthcare', 'Equity Securities', 'Total Debt Investments'])
+def test_unknown_owner_scope_cannot_be_reset_by_guessed_hierarchy(later_heading):
+    body = section_schedule(heading='Special ownership pool (14)')
+    body = body.replace('<tr><td>Acme', f'<tr><td colspan="9">{later_heading}</td></tr><tr><td>Acme')
+    packet = bundle(source=parsed(body + '<p>(14) Investments belong to a different ownership pool.</p>'))
+    assert 'annotated_section_scope_unresolved' in packet['source_candidates'][0]['blocking_reasons']
+
+
+def test_portfolio_wide_investments_notes_survive_instrument_subheading():
+    body = section_schedule(heading='Investments (1)(2)')
+    body = body.replace('<tr><td>Acme', '<tr><td colspan="9">Debt Investments</td></tr><tr><td>Acme')
+    body += '<p>(1) Portfolio-wide investment disclosure applies.</p><p>(2) Restricted investment disclosure applies.</p>'
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert {n['marker'] for n in packet['source_candidates'][0]['notes']} == {'1', '2'}
+
+
+@pytest.mark.parametrize('ending', ['The acquisition dates are as follows:', 'The investment is non-income producing.'])
+def test_note_introducing_missing_table_cannot_count_as_complete(ending):
+    packet = bundle(source=parsed(section_schedule() + f'<p>(14) {ending}</p>'))
+    assert (packet['evidence_status']['status'] == 'blocked') is ending.endswith(':')
+    if ending.endswith(':'):
+        assert 'referenced_note_continuation_unresolved' in packet['source_candidates'][0]['blocking_reasons']
+
+
+@pytest.mark.parametrize('wrapper', [False, True])
+def test_complete_adjacent_note_table_is_retained(wrapper):
+    table = '<table><tr><td>Issuer</td><td>Acquisition date</td></tr><tr><td>Acme Test LLC</td><td>1/1/2024</td></tr></table>'
+    if wrapper:
+        table = '<div>' + table + '</div>'
+    source = parsed(section_schedule() + '<p>(14) Acquisition dates are as follows:</p>' + table)
+    packet = bundle(source=source)
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    note = packet['source_candidates'][0]['notes'][0]
+    assert len(note['continuation_table']['rows']) == 2
+    assert note['continuation_table']['table_index'] == 1
+    assert jb.model_state(packet)['source_notes'][0]['continuation_table'] == note['continuation_table']
+
+
+@pytest.mark.parametrize('text', ['Rates are represented in the below table. Certain loans have a floor.',
+                                'See the following table for reference rates.',
+                                'The table below lists the reference rates.'])
+def test_table_reference_mid_paragraph_requires_continuation(text):
+    body = section_schedule() + '<p>(14)' + text + '</p>'
+    missing = bundle(source=parsed(body))
+    assert 'referenced_note_continuation_unresolved' in missing['source_candidates'][0]['blocking_reasons']
+    table = '<table><tr><td>SOFR</td><td>4.1%</td></tr></table>'
+    present = bundle(source=parsed(body + table))
+    assert present['evidence_status']['status'] == 'ready_for_model'
+    assert present['source_candidates'][0]['notes'][0]['continuation_table']['rows']
+
+
+@pytest.mark.parametrize('interruption', ['<p>(15) A different note starts here.</p>',
+                                        '<p>Schedule of Investments December 31, 2024</p>',
+                                        'Non-whitespace intervening text'])
+def test_note_table_cannot_be_borrowed_across_interruption(interruption):
+    table = '<table><tr><td>Acme Test LLC</td><td>1/1/2024</td></tr></table>'
+    packet = bundle(source=parsed(section_schedule() + '<p>(14) Dates are as follows:</p>' + interruption + table))
+    assert packet['evidence_status']['status'] == 'blocked'
+
+
+def test_oversized_note_table_blocks_instead_of_truncating():
+    table = '<table>' + '<tr><td>Acme Test LLC</td><td>1/1/2024</td></tr>' * 41 + '</table>'
+    packet = bundle(source=parsed(section_schedule() + '<p>(14) Dates are as follows:</p>' + table))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert 'continuation_table' not in packet['source_candidates'][0]['notes'][0]
 
 
 def test_sibling_tranches_kept_and_value_matching_does_not_choose_source():
@@ -136,6 +267,60 @@ def test_missing_comparison_or_invalid_predicate_blocks(change, reason):
     assert reason in packet["evidence_status"]["blocking_reasons"]
     with pytest.raises(ValueError, match="Blocked"):
         jb.make_request(packet)
+
+
+@pytest.mark.parametrize('source', ['nport', 'html', None])
+def test_unvalidated_source_types_cannot_use_bdc_bundle_contract(source):
+    packet = bundle(row=output(source=source), source=basic_source())
+    assert 'unsupported_source' in packet['evidence_status']['blocking_reasons']
+
+
+@pytest.mark.parametrize('fmt', ['ixt:num-comma-decimal', 'ixt:numcommadecimal', 'ixt:unknown'])
+def test_unsupported_declared_numeric_format_is_not_guessed(fmt):
+    packet = bundle(source=basic_source(fmt=fmt))
+    assert 'unsupported_inline_transform' in packet['source_candidates'][0]['source_values']['cost']['blocking_reasons']
+    assert packet['evidence_status']['status'] == 'blocked'
+
+
+@pytest.mark.parametrize('namespace', ['', 'https://example.invalid/custom-transform'])
+def test_transform_local_name_without_supported_namespace_cannot_clear(namespace):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000', fmt='ixt:num-dot-decimal'), fact('1'), '')])
+    body = '<div xmlns:ixt="' + namespace + '">' + body + '</div>'
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
+
+
+@pytest.mark.parametrize('date,fmt', [('2020-02-12', 'ixt:num-dot-decimal'),
+                                      ('2022-02-16', 'ixt:num-dot-decimal'),
+                                      ('2011-07-31', 'ixt:numdotdecimal'),
+                                      ('2015-02-26', 'ixt:numdotdecimal')])
+def test_supported_dot_decimal_formats_preserve_amounts(date, fmt):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000', fmt=fmt), fact('1'), '')])
+    body = f'<div xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/{date}">{body}</div>'
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert packet['source_candidates'][0]['source_values']['cost']['amount'] == '2000000'
+
+
+@pytest.mark.parametrize('date,fmt', [('2020-02-12', 'ixt:numdotdecimal'),
+                                      ('2015-02-26', 'ixt:num-dot-decimal')])
+def test_transform_name_must_belong_to_its_declared_registry(date, fmt):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000', fmt=fmt), fact('1'), '')])
+    body = f'<div xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/{date}">{body}</div>'
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
+
+
+def test_fixed_zero_cannot_accept_a_contradictory_printed_amount():
+    packet = bundle(source=basic_source(fmt='ixt:fixed-zero'))
+    values = packet['source_candidates'][0]['source_values']['cost']
+    assert 'printed_inline_sign_conflict' in values['blocking_reasons']
+    assert values['amount'] is None
+
+
+def test_legacy_zero_dash_does_not_accept_numeric_payload():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000', fmt='ixt:zerodash'), fact('1'), '')])
+    body = '<div xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2015-02-26">' + body + '</div>'
+    packet = bundle(source=parsed(body))
+    assert 'unsupported_inline_transform_payload' in packet['source_candidates'][0]['source_values']['cost']['blocking_reasons']
 
 
 def test_duplicate_join_and_stale_flag_do_not_fall_back_to_row_ordinal():
@@ -446,6 +631,43 @@ def test_interest_formula_plus_is_not_a_source_note():
     assert jb._note_markers('SOFR + 5.00 %') == set()
     assert jb._note_markers('S + 500 , 75 Floor') == set()
     assert jb._note_markers('Issuer annotation ^#') == {'^', '#'}
+
+
+def test_rate_code_resolves_only_from_an_explicit_same_block_definition():
+    body = schedule([('Acme Test LLC', 'Term Loan (Q)', fact('2,000'), fact('1'), '')])
+    missing = bundle(source=parsed(body))
+    assert missing['source_candidates'][0]['missing_note_markers'] == ['q']
+    body += '<p>* Rates reset semi-annually (S), quarterly (Q), or monthly (M).</p>'
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    note = packet['source_candidates'][0]['notes'][0]
+    assert note['marker'] == '*'
+    assert note['embedded_definitions'] == {'q': ['quarterly']}
+
+
+def test_rate_definition_is_not_borrowed_from_a_later_note_block():
+    first = schedule([('Acme Test LLC', 'Term Loan (Q)', fact('2,000'), fact('1'), '')],
+                     notes='<p>(1) The initial note block lacks a definition.</p>')
+    second = schedule([('Other Borrower', 'Term Loan', fact('2,000'), fact('1'), '')],
+                      notes='<p>* Rates reset quarterly (Q), or monthly (M).</p>')
+    assert bundle(source=parsed(first + second))['evidence_status']['status'] == 'blocked'
+
+
+@pytest.mark.parametrize('definitions', [
+    '<p>* Rates reset quarterly (Q), or monthly (Q).</p>',
+    '<p>* Rates reset quarterly (Q), or monthly (M).</p><p>(Q) Investment belongs to another ownership pool.</p>',
+])
+def test_conflicting_embedded_or_standalone_rate_definitions_block(definitions):
+    body = schedule([('Acme Test LLC', 'Term Loan (Q)', fact('2,000'), fact('1'), '')])
+    assert bundle(source=parsed(body + definitions))['evidence_status']['status'] == 'blocked'
+
+
+def test_all_preserved_header_cells_contribute_required_notes():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    body = body.replace('<td>Notes</td>', '<td>Rate legend *</td>')
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
+    packet = bundle(source=parsed(body + '<p>* Rates reset quarterly (Q), or monthly (M).</p>'))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
 
 
 def test_repeated_symbol_note_is_distinct_and_header_notes_are_retained():

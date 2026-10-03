@@ -1,7 +1,7 @@
 # Jev screening with B1 investigation
 
-Date: 2026-10-03. Status: proposed implementation plan; experimental bundles exist,
-but production screening and automatic clearance are not enabled.
+Date: 2026-10-03. Status: isolated implementation and development evaluation active;
+production screening and automatic clearance are not enabled.
 
 Execution is active in the isolated `.claude/worktrees/jev-screening-pilot`
 worktree. See the [run log](05_run_log.md) for checkpoints and scope accounting.
@@ -59,5 +59,10 @@ fund or quarter as audited.
 - Preserve existing source reconciliation, quarter gates and remediation checks.
   Jev has no authority to edit holdings, approve fixes or refresh the baseline.
 
-The next work is bundle correctness and a routing simulation, followed by a blind
-test on untouched filers. The current results do not justify production clearance.
+The isolated pilot now includes bundle construction, shadow routing, deterministic
+comparators and frozen Jev observations. The two-fund blind holdout failed bundle
+readiness (0/20) and was consumed for repairs; later results are development data.
+Current work addresses source-context completeness and error controls. The
+results do not justify production clearance. The owner has instructed execution
+to continue until stopped in this chat; eight hours is a planning window, not an
+automatic stop condition.

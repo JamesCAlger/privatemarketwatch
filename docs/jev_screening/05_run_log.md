@@ -177,3 +177,121 @@ remain development evidence, not untouched human gold.
   the updated router/runner subset passes 71 tests. Fourth bounded production
   metadata check reports zero monitored changes. No production integration,
   rebuild, export, full suite, baseline refresh or production semantic diff.
+
+## Checkpoint: X08 scale controls and inherited section notes
+
+- Local checkpoint commit a8c9a3e on jev-screening-pilot-20261003 preserves the
+  isolated implementation and 164 passing focused tests. No merge or push.
+- Eight X08 controls (four unchanged, four FV divided by 1,000) produce 8/8 label
+  and source agreement. Jev identifies all four synthetic errors; decision
+  confidences are 0.10, 0.53, 0.53 and 0.59. All errors route to B1 regardless of
+  confidence. Two unchanged controls pass both cutoffs. Cost: 140,557 input tokens.
+  The deterministic context-anchor comparator also resolves all eight correctly.
+- Cumulative: 60/100 calls, 826,503 provider input tokens. These controls add no
+  natural flags or funds; the natural denominator remains 65 flags / 36 calls.
+- Source audit found omitted inherited section notes in three Monroe X08 bundles.
+  Equity Securities / Equity Investments headings reference notes 14-16: minority
+  ownership, holding-company/partnership ownership, and non-income-producing
+  treatment. Individual-row and column-header markers do not cover these notes.
+- A bounded section-context prototype retains explicit instrument headings across
+  adjacent, explicitly continued tables of the same period. Source table/row
+  coordinates are preserved; new period, non-continuation, total and new
+  instrument headings reset inheritance. Unknown annotated headings remain
+  unresolved. Four-position replay recovered all three Monroe note sets, with
+  four bundles still model-ready before the following additional guard.
+- BioXcel's note 14 ends by introducing a restricted-security acquisition-date
+  table. The paragraph alone does not include that table. Added an explicit
+  referenced_note_continuation_unresolved blocker for such trailing-colon notes.
+  This is a remaining evidence gap, not a model failure or an audited clearance.
+- Nine section/continuation tests were added after the 164-test checkpoint; the
+  bundle file now passes 87 tests. Full real-case replay is in progress. Historical
+  model results remain attached to their original, incomplete bundle versions.
+
+## Checkpoint: note tables, legends and additional source review
+
+- Extended note evidence with complete immediately adjacent tables (or wrappers
+  containing only that table), capped at 40 rows / 20,000 text characters.
+  Interrupted, oversized and unsupported continuations remain blocked; no rows
+  are silently truncated. BioXcel's full 19-row acquisition-date table is retained.
+- Original 41-case replay with section/table support produced 17 ready / 24
+  blocked. Two previously ready cases still have unresolved note continuations.
+  Consumed-holdout replay produced 14 ready / 6 blocked, with one additional
+  portfolio-wide Investments (1)(2)(3) heading classified as unknown. Added a
+  general portfolio-heading contract and regression; broader replay pending.
+- Reviewed the five previously unreviewed X08 cases against cached source rows.
+  All five disclosed cost/FV pairs match output. Supplemental references preserve
+  source coordinates/hashes and limitations; prior frozen references are intact.
+- Three Onex flags have complete reviewed target rows but are rejected because
+  alternative siblings contain untagged zero dashes. Counterfactual analysis
+  records this opportunity; strict whole-bundle fallback remains unchanged.
+- Two Varagon flags lacked a standalone Q footnote: the source explicitly defines
+  quarterly (Q) inside the same-block rate legend. Added explicit embedded rate
+  definitions and all preserved header-cell annotations. Missing, contradictory
+  or later-block definitions still block. Both repaired flags became ready.
+- Jev matched both newly submitted Varagon labels and sources; neither passed
+  both 0.75 cutoffs. These are two existing flags, not additional natural cases.
+  Session total: 62/100 calls and 854,979 provider input tokens. Natural totals:
+  65 unique flags, 38 calls, 38/38 label agreement, 37/38 source agreement, 14
+  historical confidence-only candidates, zero independently audited clearances.
+- Verification: 188 combined tests passed, followed by one temporal-freeze test
+  (29 runner tests pass). Fifth bounded production metadata check: zero changes.
+- Next frozen check: at most four September 2025 flags, one C107/X08 stratum per
+  Goldman/Crescent fund. Both funds are already consumed; selected accessions must
+  be absent from the existing pilot corpus. No replacement of missing strata or
+  source-driven repair before scoring. This is within-filer temporal validation,
+  not an untouched-filer accuracy estimate; cumulative funds stay at 16.
+
+## 2026-10-04 checkpoint: temporal check and numeric formats
+
+- Frozen within-filer temporal check selected two September 2025 C107 flags:
+  Goldman PDDS (cost -201,000) and Crescent CMG revolver (cost -7,000).
+  Both built without repairs and matched independently source-reviewed labels
+  and source rows. One passed both confidence cutoffs. The two X08 strata were
+  empty and were not replaced. This tests new accessions of consumed funds,
+  not unseen-filer accuracy; the builder is now unfrozen for development again.
+- Cumulative: 64/100 successful calls, 886,816 provider input tokens, 16 funds.
+  Natural totals: 67 flags / 40 calls, 40/40 label agreement, 39/40 source
+  agreement, 15 historical confidence-only candidates. All called natural cases
+  have false-alarm references; the four natural errors remain blocked. No
+  independently certified clearances, calibrated error rate or B1 time savings.
+- Numeric formats now require a supported registry namespace and its correct
+  transform name. Unsupported comma-decimal/custom formats stay unresolved.
+  fixed-zero is interpreted as zero, with contradictory visible numbers blocked;
+  legacy zerodash does not accept numeric payloads. This is deliberately limited
+  support, not a complete XBRL transformation engine. Specification basis:
+  https://www.xbrl.org/Specification/inlineXBRL-transformationRegistry/REC-2022-02-16/inlineXBRL-transformationRegistry-REC-2022-02-16.html
+- Latest format replays: four X08 bundles ready; C104 remains two ready / two
+  blocked; two consumed temporal cases remain ready. No additional Jev calls.
+  weak_numeric_format_12 is an incomplete diagnostic caused by selecting the old
+  five-case manifest against a four-case packet directory. It has no summary and
+  must not be scored. Corrected complete replay is weak_numeric_format_13.
+  Replay preflight now rejects missing prior packets and duplicate selected flags.
+- Verification: 205 focused tests passed across bundle/router/runner/compaction/
+  anchor files. All 64 saved responses pass the confidence/response contract.
+  Sixth bounded production metadata audit reports zero monitored changes.
+  No production rebuild/export, full suite, semantic diff, merge or push.
+
+## 2026-10-04 checkpoint: readiness is not evidence certification
+
+- Complete same-builder replay (full_contract_13, holdout_full_contract_13,
+  weak_numeric_format_13, temporal_numeric_format_12): 67 flags, 38 ready and
+  29 blocked. Of 15 historical confidence-only candidates, 13 remain ready and
+  two now block on missing note continuations. No old request exactly matches
+  the rebuilt version; confidence is not transferred. Version comparison is
+  preserved in bundle_version_comparison_*.json; zero API calls for this check.
+- Further inspection of Crescent CMG's temporal packet found additional omitted
+  evidence despite correct numeric classification. Adjacent same-period schedule
+  pages repeat their title without saying continued, so inherited Investments
+  notes were dropped. A rate note refers to a below table mid-paragraph, which the
+  prior trailing-colon continuation detector did not recognize.
+- Added explicit unresolved scope for annotated adjacent same-period schedules
+  without confirmed continuation. This retains the potentially applicable notes
+  rather than guessing that their scope ends. New period remains a hard boundary.
+  Expanded explicit table-reference detection beyond trailing colons, retaining
+  only bounded immediately adjacent note tables; missing tables still block.
+- 122 bundle tests pass (including valid unannotated schedules and complete table
+  counterexamples). Current readiness must be remeasured after these new guards;
+  the preceding 38/67 figure describes the frozen contract_13 builder only.
+- This source review invalidates any interpretation of the 2/2 temporal result as
+  complete bundle validation. It remains 2/2 label/source agreement on the older
+  frozen inputs; neither temporal case was certified or cleared.

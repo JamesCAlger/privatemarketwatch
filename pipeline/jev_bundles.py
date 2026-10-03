@@ -90,6 +90,14 @@ def _explicit_note_markers(text: str) -> tuple[set[str], bool]:
     return markers, bool(re.sub(r'[\s,;/]', '', remaining))
 
 
+def _rate_marker_definitions(text: str) -> dict[str, list[str]]:
+    meanings = {}
+    for meaning, marker in re.findall(
+            r'\b(semi[- ]annually|quarterly|monthly|annually)\s*\(([a-z])\)', text, re.I):
+        meanings.setdefault(marker.lower(), set()).add(meaning.lower())
+    return {marker: sorted(values) for marker, values in meanings.items()}
+
+
 def digest_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -197,6 +205,63 @@ def _row_text(row: list) -> str:
     return " | ".join(c["text"] for c in row if c["text"])
 
 
+def _section_contexts(tables: list) -> dict:
+    """Preserve explicit instrument-section annotations across adjacent pages.
+
+    This is bounded retrieval, not a claim that every possible filer hierarchy
+    is understood. Unclassified annotated headings remain explicit blockers.
+    """
+    result, active, previous = {}, {}, None
+    instruments = re.compile(r'\b(?:equity securities|equity investments|debt investments|'
+                             r'(?:secured|unsecured|lien|subordinated|unitranche) loans|'
+                             r'common stocks?|preferred stocks?|warrants|derivatives|'
+                             r'short.term investments|money market funds)\b', re.I)
+    for table in tables:
+        title = table.get('title_context', '')
+        titles = list(re.finditer(r'schedule\s+of\s+investments', title, re.I))
+        last_title = title[titles[-1].start():] if titles else ''
+        continuation = bool(re.search(r'\bcontinued\b', last_title[:150], re.I))
+        adjacent_same_period = bool(previous and table.get('report_date') and
+                previous.get('report_date') == table['report_date'] and
+                table['table_index'] == previous['table_index'] + 1 and
+                previous.get('headers', {}).get('issuer') and table.get('headers', {}).get('issuer'))
+        if adjacent_same_period and not continuation:
+            # A repeated title without "continued" may start a new schedule or
+            # merely a new page. Do not silently drop annotations or assert scope.
+            active = {k: {**v, 'scope_unresolved': True,
+                           'scope_reason': 'unconfirmed_schedule_continuation'}
+                      for k, v in active.items() if _note_markers(v['text']) or v.get('scope_unresolved')}
+        elif not (adjacent_same_period and continuation):
+            active = {}
+        header_end = max((h['row'] for h in table['headers'].values()), default=-1)
+        for ri, row in enumerate(table['rows']):
+            nonempty = [c for c in row if c['text']]
+            section = (ri > header_end and 0 < len(nonempty) <= 2
+                       and not any(c.get('inline_facts') or number(c['text']) is not None for c in row))
+            if section:
+                value = _row_text(row)
+                persistent = {k: v for k, v in active.items()
+                              if v.get('scope_unresolved') or k == 'portfolio'}
+                if re.match(r'^total\b', value, re.I):
+                    active = persistent
+                elif re.fullmatch(r'Investments\s*(?:\(\d+\)\s*)+', value, re.I):
+                    active['portfolio'] = {'table_index': table['table_index'], 'row_index': ri,
+                                           'text': value, 'cells': row}
+                elif instruments.search(value):
+                    active = {**persistent,
+                              'instrument': {'table_index': table['table_index'], 'row_index': ri,
+                                             'text': value, 'cells': row}}
+                elif _note_markers(value):
+                    active[f'unknown_{table["table_index"]}_{ri}'] = {
+                        'table_index': table['table_index'], 'row_index': ri,
+                        'text': value, 'cells': row, 'scope_unresolved': True}
+                # Unknown hierarchy cannot be reset by guessing that a later
+                # industry or instrument heading ends an ownership annotation.
+            result[(table['table_index'], ri)] = list(active.values())
+        previous = table
+    return result
+
+
 def _source_contexts(soup) -> dict:
     contexts = {}
     for context in soup.find_all(re.compile(r"(?:^|:)context$")):
@@ -219,11 +284,54 @@ def _source_contexts(soup) -> dict:
     return contexts
 
 
+def _requires_note_continuation(text: str) -> bool:
+    return text.rstrip().endswith(':') or bool(re.search(
+        r'\b(?:below|following)\s+table\b|\btable\s+(?:below|that follows)\b', text, re.I))
+
+
+def _immediate_note_table(element, table_ids: dict, tables: list) -> dict | None:
+    """Accept only an adjacent table or a wrapper containing that table alone."""
+    for sibling in element.next_siblings:
+        if isinstance(sibling, NavigableString):
+            if sibling.strip():
+                return None
+            continue
+        value = clean(sibling.get_text(' ', strip=True))
+        if not value:
+            continue
+        if sibling.name == 'table':
+            target = sibling
+        else:
+            nested = sibling.find_all('table')
+            if len(nested) != 1 or clean(nested[0].get_text(' ', strip=True)) != value:
+                return None
+            target = nested[0]
+        ti = table_ids.get(id(target))
+        if ti is None:
+            return None
+        table = tables[ti]
+        if table['unsupported_layout'] or len(table['rows']) > 40 or len(value) > 20000:
+            return None
+        return {'table_index': ti, 'association': 'immediately_following_note',
+                'rows': [{'row_index': ri, 'cells': row} for ri, row in enumerate(table['rows'])]}
+    return None
+
+
 def _classes(text: str) -> list[str]:
     # Retain only explicit class labels; an issuer match is not tranche proof.
     spaced = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
     spaced = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', spaced)
     return sorted(set(re.findall(r'\bclass\s+([a-z0-9]+(?:-[a-z0-9]+)?)\b', spaced.lower())))
+
+
+def _qname_namespace(element, qname: str | None) -> str | None:
+    if not qname or ':' not in qname:
+        return None
+    attribute = 'xmlns:' + qname.split(':', 1)[0].lower()
+    for parent in [element, *element.parents]:
+        if attribute in parent.attrs:
+            return parent.attrs[attribute]
+    return None
 
 
 def _identity_evidence(row, headers, contexts, output) -> dict:
@@ -291,7 +399,9 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
                 for tag in td.find_all("ix:nonfraction"):
                     facts.append({"name": tag.get("name"), "context_id": tag.get("contextref"),
                                   "currency": units.get(tag.get("unitref")), "scale": tag.get("scale", "0"),
-                                  "sign": tag.get("sign"), "format": tag.get("format"), "text": clean(tag.text)})
+                                  "sign": tag.get("sign"), "format": tag.get("format"),
+                                  'format_namespace': _qname_namespace(tag, tag.get('format')),
+                                  "text": clean(tag.text)})
                 cell = {"column": col, "span": span, "text": clean(td.get_text(" ", strip=True))}
                 if facts:
                     cell["inline_facts"] = facts
@@ -349,6 +459,10 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
             if match[1] and re.fullmatch(r'[+^#*]+', marker):
                 marker = '(' + marker + ')'
             record = {"marker": marker, "report_date": active_period, "anchor_table_index": active_table, "text": text}
+            if _requires_note_continuation(text):
+                continuation = _immediate_note_table(element, table_ids, tables)
+                if continuation:
+                    record['continuation_table'] = continuation
             if record not in notes:
                 notes.append(record)
     return {"parser_version": PARSER_VERSION, "tables": tables, "notes": notes, 'contexts': contexts}
@@ -414,6 +528,20 @@ def _money(row: list, header: dict | None, title_scale: int | None, *, expected_
     currency, scale = None, title_scale
     if len(facts) == 1:
         fact = facts[0]
+        format_name = (fact.get('format') or '').split(':')[-1].lower()
+        if format_name:
+            # Supported display parsing is deliberately narrower than the full
+            # XBRL registry; comma-decimal/custom transforms require another path.
+            formats = {
+                '2011-07-31': {'numdotdecimal', 'zerodash'},
+                '2015-02-26': {'numdotdecimal', 'zerodash'},
+                '2020-02-12': {'num-dot-decimal', 'fixed-zero'},
+                '2022-02-16': {'num-dot-decimal', 'fixed-zero'},
+            }
+            supported = {'http://www.xbrl.org/inlineXBRL/transformation/' + date: names
+                         for date, names in formats.items()}
+            if format_name not in supported.get(fact.get('format_namespace'), set()):
+                reasons.append('unsupported_inline_transform')
         known_concepts = {'us-gaap:InvestmentOwnedAtCost': 'cost',
                           'us-gaap:InvestmentOwnedAtFairValue': 'fair_value'}
         tagged_field = known_concepts.get(fact.get('name'))
@@ -431,11 +559,17 @@ def _money(row: list, header: dict | None, title_scale: int | None, *, expected_
             reasons.append("title_inline_scale_conflict")
         elif scale is None:
             scale = ix_scale
-        zero_format = (fact.get('format') or '').split(':')[-1].lower() in {'zerodash', 'zero-dash', 'fixed-zero'}
+        zero_format = format_name in {'zerodash', 'fixed-zero'}
         if value is None and clean(text.replace("$", "")) in {"-", "\u2014", "\u2013"} and zero_format:
             value = Decimal(0)
         # Printed signs must agree with the tagged fact; do not silently repair.
         fact_value = number(fact["text"])
+        if format_name == 'fixed-zero':
+            fact_value = Decimal(0)
+        elif format_name == 'zerodash':
+            if clean(fact['text']) not in {'-', '\u2014', '\u2013'}:
+                reasons.append('unsupported_inline_transform_payload')
+            fact_value = Decimal(0)
         if fact_value is not None:
             if fact.get("sign") == "-":
                 fact_value = -abs(fact_value)
@@ -457,6 +591,7 @@ def _money(row: list, header: dict | None, title_scale: int | None, *, expected_
 
 
 def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates: int = 24) -> tuple[list, dict]:
+    section_contexts = _section_contexts(parsed['tables'])
     terms = identity_terms(output)
     found, rejected, hit_count = [], [], 0
     if not terms:
@@ -519,13 +654,19 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
             if not issuer_header:
                 reasons.append("unresolved_identity_column")
             refs = set()
+            sections = section_contexts.get((table['table_index'], ri), [])
+            for section in sections:
+                refs.update(_note_markers(section['text']))
+                if section.get('scope_unresolved'):
+                    reasons.append('annotated_section_scope_unresolved')
             for cell in raw_row:
                 # Exclude monetary cells to avoid interpreting negative amounts as notes.
                 if any(cell in _field_cells(raw_row, headers.get(f)) for f in ("cost", "fair_value")):
                     continue
                 refs.update(_note_markers(cell['text']))
-            for header in headers.values():
-                refs.update(_note_markers(header['text']))
+            for header_row in {h['row'] for h in headers.values()}:
+                for cell in rows[header_row]:
+                    refs.update(_note_markers(cell['text']))
             for cell in _field_cells(raw_row, headers.get('notes')):
                 column_refs, unresolved = _explicit_note_markers(cell['text'])
                 refs.update(column_refs)
@@ -537,10 +678,29 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
             following_notes = [n for n in parsed['notes'] if n['report_date'] == output['report_date']
                                and n['anchor_table_index'] >= table['table_index']]
             note_anchor = min((n['anchor_table_index'] for n in following_notes), default=None)
-            notes = [n for n in following_notes if n['anchor_table_index'] == note_anchor and n['marker'] in refs]
-            missing_notes = sorted(refs - {n["marker"] for n in notes})
+            note_block = [n for n in following_notes if n['anchor_table_index'] == note_anchor]
+            selected_notes, covered = {}, set()
+            for ref in sorted(refs):
+                matches = [(index, n) for index, n in enumerate(note_block)
+                           if n['marker'] == ref or ref in _rate_marker_definitions(n['text'])]
+                if len({(n['marker'], n['text']) for _, n in matches}) > 1:
+                    reasons.append('ambiguous_note_reference:' + ref)
+                for index, note in matches:
+                    selected = selected_notes.setdefault(index, dict(note))
+                    if note['marker'] != ref:
+                        definitions = _rate_marker_definitions(note['text'])[ref]
+                        selected.setdefault('embedded_definitions', {})[ref] = definitions
+                        if len(definitions) != 1:
+                            reasons.append('conflicting_embedded_definition:' + ref)
+                    covered.add(ref)
+            notes = list(selected_notes.values())
+            missing_notes = sorted(refs - covered)
             if missing_notes:
                 reasons.append("missing_referenced_notes")
+            if any(_requires_note_continuation(n['text']) and not n.get('continuation_table') for n in notes):
+                # A paragraph introducing a following table/list is not the
+                # complete note. Retain B1 until that continuation is bundled.
+                reasons.append('referenced_note_continuation_unresolved')
             if any(len({n["text"] for n in notes if n["marker"] == marker}) > 1 for marker in refs):
                 reasons.append("conflicting_referenced_notes")
             comparisons = {}
@@ -563,6 +723,7 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
                               for idx in sorted({h["row"] for h in headers.values()})], "raw_cells": raw_row,
                           "context_rows": [{"row_index": idx, "cells": rows[idx]} for idx in sorted(context_indices)],
                           "source_values": values, "comparisons": comparisons, "notes": notes,
+                          'section_context': sections,
                           'identity_evidence': identity, 'period_evidence': table.get('period_evidence', {}),
                           "missing_note_markers": missing_notes, "blocking_reasons": reasons})
     complete = len(found) <= max_candidates
@@ -652,6 +813,7 @@ def model_state(bundle: dict) -> dict:
                            "note_ids": note_ids, "comparisons": candidate["comparisons"],
                            'identity_evidence': candidate.get('identity_evidence', {}),
                            'period_evidence': candidate.get('period_evidence', {}),
+                           'section_context': candidate.get('section_context', []),
                            "source_values": {field: {k: v for k, v in value.items() if k != "cells"}
                                              for field, value in candidate["source_values"].items()}})
     for table in tables.values():

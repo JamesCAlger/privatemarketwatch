@@ -29,6 +29,14 @@ def validate_arm(arm, bundle_directory, run_root):
             raise ValueError('Holdout was consumed; use consumed_holdout development arm')
     if arm == 'consumed_holdout' and not (run_root / 'holdout_development_02').exists():
         raise ValueError('Consumed holdout development evidence is missing')
+    if arm == 'temporal_holdout':
+        if bundle_directory.resolve() != (run_root / 'temporal_frozen_01').resolve():
+            raise ValueError('Temporal holdout requires the original frozen packets')
+        frozen = read(bundle_directory / 'frozen_builder.json')
+        if frozen.get('arm') != 'within_filer_unseen_accession':
+            raise ValueError('Temporal holdout identity is missing')
+        if sha(ROOT / 'pipeline/jev_bundles.py') != frozen['builder_sha256']:
+            raise ValueError('Builder changed after temporal freeze; evidence is development now')
 
 
 def validate_response(body, request):
@@ -103,6 +111,8 @@ def prepare(args):
         allowed |= set(reservation['all_previously_exercised_ciks'])
     if args.arm == 'weak_probe' and (len(packets) > 6 or any(p['rule']['id'] != 'C104' for _, p in packets)):
         raise ValueError('Weak probe is limited to six C104 development flags')
+    if args.arm == 'temporal_holdout' and len(packets) > 4:
+        raise ValueError('Temporal holdout is limited to four flags')
     if args.arm == 'controlled':
         if any(not p.get('provenance', {}).get('controlled_mutation') for _, p in packets):
             raise ValueError('Controlled arm requires explicit mutation provenance')
@@ -146,6 +156,7 @@ def prepare(args):
                 'records': records, 'policy': asdict(policy), 'references_sha256': sha(run / 'references.json'),
                 'runner_sha256': sha(Path(__file__)), 'routing_sha256': sha(ROOT / 'pipeline/jev_screening.py'),
                 'untouched_holdout': args.arm == 'holdout',
+                'within_filer_temporal_holdout': args.arm == 'temporal_holdout',
                 'production_clearance_enabled': False}
     write(run / 'manifest.json', manifest)
     print(json.dumps({'packets': len(records), 'requests': sum(bool(r['request_id']) for r in records)}), flush=True)
@@ -248,7 +259,7 @@ def main():
     parser.add_argument('--label', required=True)
     parser.add_argument('--bundles', type=Path)
     parser.add_argument('--references', type=Path)
-    parser.add_argument('--arm', choices=['development', 'holdout', 'consumed_holdout', 'controlled', 'weak_probe'], default='development')
+    parser.add_argument('--arm', choices=['development', 'holdout', 'consumed_holdout', 'controlled', 'weak_probe', 'temporal_holdout'], default='development')
     parser.add_argument('--limit', type=int, default=10)
     args = parser.parse_args()
     args.repo, args.run_root = args.repo.resolve(), args.run_root.resolve()

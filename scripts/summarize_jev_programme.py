@@ -21,7 +21,8 @@ def main():
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, run)
-    runs = ['development_model_01', 'consumed_holdout_model_01', 'weak_probe_model_01', 'newly_ready_model_01']
+    runs = ['development_model_01', 'consumed_holdout_model_01', 'weak_probe_model_01',
+            'newly_ready_model_01', 'legend_model_01', 'temporal_model_01']
     flags, versions = {}, defaultdict(list)
     for label in runs:
         report = summarize(run / label, run / 'api_attempts')

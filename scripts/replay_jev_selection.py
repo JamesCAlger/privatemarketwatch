@@ -35,6 +35,12 @@ def main():
     allowed = set(reservation['all_previously_exercised_ciks']) | {r['cik'] for r in reservation['holdout_funds']}
     if not {r['cik'] for r in selection['flags']} <= allowed:
         raise ValueError('New fund outside session cap')
+    filenames = [flag['rule_id'] + '_' + flag['row_id'] + '.json' for flag in selection['flags']]
+    if len(set(filenames)) != len(filenames):
+        raise ValueError('Duplicate selected flag')
+    missing = [name for name in filenames if not (args.prior_bundles / name).is_file()]
+    if missing:
+        raise ValueError('Selection has no prior packet: ' + ', '.join(missing))
     target = run / args.label
     target.mkdir()
     builder_hash = sha(ROOT / 'pipeline/jev_bundles.py')

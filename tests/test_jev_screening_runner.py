@@ -26,6 +26,22 @@ def test_holdout_requires_original_packets(tmp_path):
         validate_arm('holdout', tmp_path / 'repaired', tmp_path)
 
 
+def test_temporal_holdout_cannot_use_repaired_builder_or_another_folder(tmp_path):
+    folder = tmp_path / 'temporal_frozen_01'
+    folder.mkdir()
+    frozen = {'arm': 'within_filer_unseen_accession',
+              'builder_sha256': runner.sha(runner.ROOT / 'pipeline/jev_bundles.py')}
+    path = folder / 'frozen_builder.json'
+    path.write_text(json.dumps(frozen))
+    validate_arm('temporal_holdout', folder, tmp_path)
+    with pytest.raises(ValueError, match='original frozen'):
+        validate_arm('temporal_holdout', tmp_path / 'repaired', tmp_path)
+    frozen['builder_sha256'] = 'changed'
+    path.write_text(json.dumps(frozen))
+    with pytest.raises(ValueError, match='development now'):
+        validate_arm('temporal_holdout', folder, tmp_path)
+
+
 @pytest.fixture
 def pair():
     request = {'model': 'jev-1.13.0', 'questions': {
