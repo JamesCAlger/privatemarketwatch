@@ -13166,3 +13166,95 @@ Every number below is IN-SAMPLE (the 8 pilot filers, one report date, 2025-12-31
 - NOT run: the full repo suite; a pilot-suite regression at 928998a by this task (the last one by this
   task was `sp3p-verify-t10a` at dd176ff, 906 passed / 2 skipped). IN-SAMPLE.
 - Open item (SP3 proper, both runs): the Stellus 0001901037 registrant-name difference between the Q4-2025 and Q1-2026 censuses is UNRESOLVED. The `fund_level_concepts.entity_registrant_name` entry is a candidate (witness `q1_value_differs`); nothing has adjudicated which name is right.
+
+## 2026-10-03 -- SP3 proper final review: the exit test is NOT MET (run of record FAIL)
+
+The earlier 2026-10-03 entry "SP3 proper: filer profile documents v1 at inception (Q4-2025)" and its
+follow-up lines are SUPERSEDED ON THE VERDICT: they report exit 0 / PASS. Their counts stand (documents,
+round trip 40/40, loader parity, consistency key rows 11 holds / 0 breach / 66 insufficient / 35
+not_applicable), except accepted grid cells, which fall from 98 to 94 (below). Everything is IN-SAMPLE
+(8 pilot filers, one report date, 2025-12-31). Branch `filer-profile-pilot`; nothing in production reads
+these documents; nothing pushed.
+
+- What the whole-branch review found. (C1) A filer whose consistency contract compared ZERO rows was
+  given verdict `no_breach` and passed: NexPoint 0001588272 and TCW 0001715933 have no authoritative
+  Q4-2025 census, so not even `/cik` has an accepted entry to compare. "0 breaches" there was "0
+  comparisons". (C2) `exit_test.json` published `spec_exit: true` beside the text "consistency contract
+  holds on all 8" while holds was 0 of 8. (I3) `partition_structure.published_basis` was admitted
+  `accepted` for all 8 on "the predicate was adopted", including filers whose totals do not reconcile on
+  it. (I4) The tests pinned the weak behaviour; the 8-filer PASS fixture had a shape the real data never has.
+- What changed (code 7418134, test-only follow-up 6e43669).
+  `scripts/profile_pilot/profile_consistency.py`: filer verdict vocabulary is now four words --
+  `breach`; `insufficient_evidence` (no row compared at all, or no live wrapper block; FAILS);
+  `no_breach` (at least one compared row, zero breaches, some insufficient rows); `holds` (compared rows,
+  zero breaches, zero insufficient rows). `exit_test` publishes two separately named fields:
+  `inception_gate` (what the CLI exit code follows: every grid key answered by an entry or a stub,
+  resolver clean, round trip and loader parity ok, zero breaches, no filer `insufficient_evidence`, no
+  missing filer) with `inception_gate_reasons`, and `spec_exit` (the spec section 8 row 3 / 4.1
+  criterion: the above AND every filer `holds`) with machine-readable `spec_exit_reasons` and a
+  `spec_exit_statement` that carries the spec's wording only when it is true. Per filer it now publishes
+  `consistency_verdict`, `consistency_rows` {total, compared, holds, breach, insufficient_evidence,
+  not_applicable}, `grid` {accepted, candidate, stubs} and `published_basis`. `spec_exit_test` (the old
+  text field) is gone. `verdict` PASS/FAIL = `inception_gate`.
+  `scripts/profile_pilot/profile_inception.py`: `totals_outcome()` reads a filer's independent-totals
+  fair_value results at the inception date from pinned back-test results; published_basis is `accepted`
+  only if at least one such result exists and every one (all learn modes) holds under the same predicate
+  version, else `candidate` (basis still `adopted_predicate`) with the outcome and
+  `candidate_cause` in {totals_breach_at_inception, totals_insufficient_evidence_at_inception,
+  no_totals_outcome_at_inception} in the witness, a `contract_results` evidence item, and a
+  `candidate_pending_confirmation` stub naming the closing evidence. The pct_of_net_assets totals contract
+  is recorded in the witness and does NOT gate (its [50, 250] band assumes percent units; open item).
+  `build_document` refuses inputs without a pinned totals outcome. Candidate stubs now name their real
+  closing evidence per cause (open census outcomes, missing next-quarter census, Q1 not confirming)
+  instead of "next-quarter confirmation" for all. No schema file changed.
+  `scripts/profile_pilot/profile_document_run.py`: new REQUIRED `--totals-run-id` (pins
+  `<run>/results/backtest_results.json`; missing -> exit 2 before any write); manifest gains
+  `totals_run_id` and `totals_outcomes`; the stdout summary carries both gate fields and the per-filer
+  counts. `scripts/profile_pilot/protection.py`: comment only (4 GiB is the lease ESTIMATE threshold; the
+  2 GiB bounds in census_run / m2_seed / m2_backtest are MEASURED limits and are unchanged).
+  `.gitattributes` (new): `data/profiles/*.json -text`. `data/profiles/<cik>.json` x8 REMOVED from the
+  branch (plan rule: copy on PASS only; the run roots keep the documents).
+- Totals source, a deviation from the brief. The brief named the contracts run of the v2 re-measure chain
+  (`stageb-contracts-sp3v2-20261001t093945z`); that run evaluates each filer only at its own primary
+  quarter (2022-12-31 .. 2023-12-31) and has no result at 2025-12-31. The back-test of the SAME chain,
+  `stageb2-backtest-sp3v2-20261001t093945z`, evaluates the same contracts at every census quarter and is
+  what is pinned (sha256 in the run manifest). The fair_value check is an absolute band on the residual
+  against the filed `investments_at_fair_value`, so `holds` is a reconciliation, not agreement with a
+  learned value; the band differs by learn mode, hence the all-modes rule.
+- Run of record: `sp3p-profile-20261003t231621z`, code 6e43669, MAIN overrides at a72709c (clean), exit
+  code 1, `inception_gate` false (reason `consistency_insufficient_evidence`: 0001588272, 0001715933),
+  `spec_exit` false (reason `consistency_not_holds`, all 8; verdicts holds 0, no_breach 6,
+  insufficient_evidence 2, breach 0). It supersedes `sp3p-profile-20261003t212843z` (928998a, PASS) and
+  `sp3p-profile-20261003t224403z` (7418134, FAIL; identical to the run of record apart from run id,
+  timestamps and code head). Round trip 40/40 identical and loader parity ok, `results/roundtrip.json`
+  0 differences and `roundtrip/overrides/` 40/40 byte-identical to the superseded PASS run; 80 pinned
+  inputs (79 + the totals file); light workload, no lease; main overrides guard PASS.
+
+  | Filer | grid accepted / candidate / stubs | key rows compared (holds / breach / insufficient / n.a.) | verdict | published_basis (fair_value residual at 2025-12-31) |
+  |---|---|---|---|---|
+  | Ares 0001287750 | 10 / 0 / 46 | 1 (1 / 0 / 10 / 3) | no_breach | accepted (holds, +0.30%) |
+  | NexPoint 0001588272 | 2 / 1 / 54 | 0 (0 / 0 / 9 / 5) | insufficient_evidence | candidate (no totals outcome) |
+  | TCW 0001715933 | 2 / 1 / 54 | 0 (0 / 0 / 10 / 4) | insufficient_evidence | candidate (no totals outcome) |
+  | BCRED 0001803498 | 14 / 0 / 42 | 5 (5 / 0 / 5 / 4) | no_breach | accepted (holds, +0.51%) |
+  | Onex 0001860424 | 18 / 0 / 38 | 1 (1 / 0 / 8 / 5) | no_breach | accepted (holds, 0.00%) |
+  | Stellus 0001901037 | 17 / 1 / 39 | 1 (1 / 0 / 10 / 3) | no_breach | accepted (holds, 0.00%) |
+  | Fidelity 0001920453 | 15 / 1 / 41 | 2 (2 / 0 / 5 / 7) | no_breach | candidate (rolling breach, -7.77%; anchored holds) |
+  | StepStone 0001950803 | 16 / 1 / 40 | 1 (1 / 0 / 9 / 4) | no_breach | candidate (breach, -10.20%) |
+  | Total | 94 / 5 / 354 of 448 | 11 of 112 (11 / 0 / 66 / 35) | holds 0 of 8 | accepted 4, candidate 4 |
+
+  Stub causes: no_source 286, census_unavailable 56, census_stub 7, candidate_pending_confirmation 5.
+- What would move it. NexPoint and TCW need an authoritative Q4-2025 census (the census run excluded
+  both) before anything of theirs can be compared. `spec_exit` cannot be true for ANY filer as built: two
+  wrapper keys (`source_encodings.cash_identifiers`, `invariants.rate_sanity`) have no profile-side
+  counterpart and are always insufficient_evidence, and most counterpart keys have a stub, not an
+  accepted entry. That is a design gap for the owner, not a threshold to relax.
+- Tests (pilot launcher only, never bare pytest): red `sp3p-verify-final-red` 99 failed / 23 passed (new
+  and re-pointed tests against the old code); green `sp3p-verify-final-green` 122 passed; full pilot
+  regression `sp3p-verify-final-regression` at 7418134: 1 failed, 941 passed, 2 skipped (a hand-built
+  input in `tests/test_profile_pilot_profile_roundtrip.py` lacked the new totals input; fixed in 6e43669);
+  `sp3p-verify-final-regression2` at 6e43669: 942 passed, 2 skipped, plugin PASS, preservation PASS,
+  backstop 680 divergent / 45993 checked, verdict unchanged (pre-existing, same before and after).
+  NOT run: the full repo suite; `diff_outputs.py --semantic` outside the launcher's own backstop.
+- Open: the owner decision on the spec criterion above; BCRED's accepted published_basis rests on a
+  +0.51% residual inside the contract's band (the adoption rule used 0.5%); Onex and Stellus entity-name
+  items from the earlier entry are unchanged.
