@@ -3,7 +3,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import pytest
 
-from scripts.review_jev_sources import exact_context_facts, review_source_path
+from scripts.review_jev_sources import exact_context_facts, issuer_search_terms, review_source_path
 
 
 def test_blocked_packet_can_locate_exact_cached_accession(tmp_path):
@@ -34,3 +34,12 @@ def test_context_search_is_exact():
     context, facts = exact_context_facts(soup, 'ctx')
     assert context.text == 'Selected'
     assert [f.text for f in facts] == ['1']
+
+
+@pytest.mark.parametrize('value', [None, '', '   ', float('nan')])
+def test_missing_issuer_has_no_wildcard_or_literal_none_search(value):
+    assert issuer_search_terms(value) == ('', [])
+
+
+def test_visible_issuer_search_still_normalizes_real_names():
+    assert issuer_search_terms(' LTC   Ally Inc. ') == ('ltc ally inc.', ['ltc', 'ally'])

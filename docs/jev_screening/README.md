@@ -37,6 +37,7 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Rule workload](13_rule_workload.md) | Wider coverage, review overlap and limits on potential savings |
 | [Confidence sensitivity](14_confidence_sensitivity.md) | Separate experiment arms and why the cutoff remains uncalibrated |
 | [Zero-value controls](15_zero_value_controls.md) | Final paired C104 test and complete 100-call accounting |
+| [Missing issuer mechanism](16_missing_issuer_mechanism.md) | Three source-backed examples of upstream identity extraction failure and separate unresolved flags |
 
 ## Proposed operating model
 

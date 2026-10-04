@@ -46,6 +46,13 @@ def exact_context_facts(soup, context_id):
     return soup.find(id=context_id), soup.find_all('ix:nonfraction', attrs={'contextref': context_id})
 
 
+def issuer_search_terms(value):
+    if not isinstance(value, str):
+        return '', []
+    issuer = ' '.join(value.casefold().split())
+    return issuer, list(dict.fromkeys(re.findall(r'[a-z]{3,}', issuer)))[:2]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', type=Path, required=True)
@@ -126,9 +133,8 @@ def main():
                      'cell_html': str(f.find_parent(['td', 'th']))[:1800]}
                     for f in row.find_all('ix:nonfraction', attrs={'contextref': context_id})
                     if (f.get('name') or '').split(':')[-1].lower() in {'investmentownedatcost', 'investmentownedatfairvalue'}]
-            issuer = ' '.join(packet['output_position'].get('issuer_name', '').casefold().split())
+            issuer, tokens = issuer_search_terms(packet['output_position'].get('issuer_name'))
             issuer_rows, token_rows = [], []
-            tokens = list(dict.fromkeys(re.findall(r'[a-z]{3,}', issuer)))[:2]
             if issuer:
                 for ti, table in enumerate(tables):
                     for ri, row in enumerate(r for r in table.find_all('tr') if r.find(['td', 'th'])):

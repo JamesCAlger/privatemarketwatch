@@ -1,0 +1,87 @@
+# Missing issuer: upstream extraction, not a Jev bundle repair
+
+Date: 2026-10-04. Read-only investigation of three existing blocked C107 flags.
+No production code, wrappers, holdings or issue dispositions changed.
+
+## Source evidence
+
+All three are Crescent Private Credit Income Corp., CIK 1954360. Published issuer
+names are null, but cached source rows and their exact inline contexts name the
+positions explicitly:
+
+| Frozen row | Period | Source position | Source coordinates | Published / source cost |
+|---|---|---|---|---:|
+| ROW-22507c1f1f37f884 | 2026-03-31 | LTC Ally Inc, first-lien revolver, 04/2031 | table 15 row 32 | -$1,000 / -$1,000 |
+| ROW-abe6a29b7b31623f | 2026-03-31 | Angels of Care, first-lien revolver, 02/2030 | table 14 row 27 | -$3,000 / -$3,000 |
+| ROW-e53e1f373c7311c4 | 2025-12-31 | Numera, unitranche first-lien delayed-draw loan, 08/2032 | table 40 row 9 | -$1,000 / -$1,000 |
+
+Source amounts use inline USD facts, scale 3 and negative signs, consistent with
+the printed parentheses. Each exact context locates one cost row. Nearby rows
+include distinct term loans or revolvers, so borrower-level aggregation would be
+wrong. This investigation is not a completed independent notes/scope/recall audit.
+
+## Reproduced mechanism
+
+The active wrapper uses a hierarchy issuer regex expanded with
+`_CRESCENT_HIERARCHY_INDUSTRIES` from `pipeline/bdc_identifier.py`.
+`pipeline/staging_bdc.py` chooses that CIK-specific extraction branch when its
+condition matches, and extracts the issuer after a recognised industry label.
+
+| Observed identifier label | Configured label |
+|---|---|
+| Health Care Equipment and Services | Health Care Equipment & Services |
+| Financial Service | Financial Services |
+
+A bounded DuckDB reproduction of the active wrapper branch confirms its condition
+is true and issuer extraction returns an empty string for all three identifiers.
+Changing only the industry label to the configured spelling extracts LTC Ally
+Inc, Angels of Care and Numera, respectively; each matches the visible row prefix.
+The active production files were read and hashed, not imported for execution or
+modified. This reproduces the specific extraction branch, not the full historical
+pipeline build; downstream provenance still needs checking before any correction.
+
+## Implication for the hybrid workflow
+
+Each of these exact row IDs has three existing issues in the canonical validation
+artifact: C107 negative cost (REVIEW), C201 missing issuer (BLOCK_VERIFIED), and
+X02 missing credit rate/spread (REVIEW). The source-supported negative costs do
+not resolve the identity failure or the separate rate question.
+
+Do not fill an issuer only inside a Jev packet to make it ready. That would hide
+the fact that the published position is missing identity. Retain B1 routing and
+repair the upstream mechanism through the normal independently validated process.
+The reusable source locator can still help B1 find evidence from the exact context
+when visible-name search is unavailable.
+
+A later correction should validate a CIK-scoped industry-label vocabulary across
+quarters and instrument types, including real companies whose names resemble
+industry labels. It must preserve separate revolver/term-loan/DDTL positions and
+show before/after source reconciliation. Do not add a global free-text name
+extraction rule or treat three matching counterfactuals as rollout validation.
+
+This is an example of the required drift test: an industry-label spelling change
+can break identity extraction even when the schedule remains visually familiar.
+It is not evidence that Jev needs a bespoke whole-filer bundle builder.
+
+## Pilot tooling and artifacts
+
+The existing source-review helper initially crashed on null issuer names. The
+isolated fix skips name search for absent/non-string values while retaining exact
+context lookup. Five new checks cover null/blank/non-string names and a valid
+name; all 14 source-review tests pass. Builder readiness remains 37/67.
+
+Under `data/pilot/jev_screening/20261003_shadow/`:
+
+- `missing_identity_source_review_45.json`: three raw-source extracts from two
+  cached filings, without automatic truth labels or audit stamps.
+- `missing_issuer_mechanism_562617aca4f814f5.json`: active-code/config hashes,
+  branch reproduction, controlled label variants, source coordinates and existing
+  C107/C201/X02 issues.
+
+Original filing hashes:
+
+- Q1 2026: `fcc112450873f19d032e6872db3e353049519881d4b4eed154d7b3121665c40f`.
+- Q4 2025: `e664da7f3ab77c13ade79bb999f287293c03a11684275206b37485654842d6d6`.
+
+No new funds, selected natural cases, API calls, published corrections or
+independent clearances were added. Existing frozen reference labels remain intact.
