@@ -145,3 +145,17 @@ Canonical input: `data/output/row_validation_issues.csv`, SHA-256
 `112e7b7004a16071479e86a1987e6d5711ee3de0a350d16940a8bc3c0f4e3d67`.
 The report also records the inspected rule code and script hashes. This was an
 offline aggregate, not a new builder evaluation, test-suite run or API call.
+
+## 2026-10-04: actual review-group membership and queue identity
+
+The 67 frozen flags belong to 33 fund/period/rule groups containing 1,063 current issue rows: C107 44 selected of 919 rows in 18 groups; X08 19 of 30 in 11 groups; C104 4 of 114 in four groups. Twelve groups are fully selected; nine are also entirely evidence-ready before size, policy, model or audit checks. These are population-coverage counts, not completed reviews.
+
+A native join to queue CIK/report_date finds none of the 33 groups. The ledger casts inferred timestamps to strings such as `2026-03-31 00:00:00`, while `pipeline/review_queue.py` localizes only exact YYYY-MM-DD strings. Existing affected queue rows have blank CIK/report_date. The review-ID input includes the blank localized date rather than raw period, producing repeated IDs across quarters.
+
+A diagnostic-only join using unit_label and normalized period locates all 18 C107 groups, with n_units matching all current issue counts. Six review IDs repeat across 16 of those 18 entries. X08/C104 have no matched queue entries in these sampled groups; their tracking-only statuses do not imply current B1 jobs. Date normalization here does not certify a parent link or repair existing IDs, bundles, verdicts or locks.
+
+Only three queued C107 groups are fully selected: the three Ares single-row groups. All three currently exceed the ordinary runner's size cap. Other queued groups retain unselected members. Optional compact encoding remains unvalidated with the model. Thus these data do not demonstrate a fully screened current B1 job, even before independent audit is required.
+
+Before any queue integration: normalize and validate the ledger's date contract, require unique review IDs across periods, account for every parent member, and assess migration of existing IDs/verdicts/locks. Do not silently relabel existing records or reuse a verdict through an ambiguous ID. Production changes remain prohibited in this session.
+
+Artifact: review_group_profile_cc98b0808f2e7934.json. Inputs are hashed; queue timestamp 2026-09-30 19:24:52 UTC, issues timestamp 2026-09-30 17:34:23 UTC. Read-only diagnostic on the same 11 funds, no new model calls. Earlier strict-join report review_group_profile_1af497f03efcc785.json is retained as the initial observation.
