@@ -79,6 +79,14 @@ A later bounded note-table association adds full reference-rate tables to seven 
 
 Separate existing review work from additional screening:
 
+A read-only population check within the 16 reserved funds also shows why flags
+cannot be equated with B1 jobs. Of 510 Q1-2026 C107 positions, 416 have another
+review/block issue. Of 466 C104/X08 positions, 216 already have review/block issues
+and 250 have only tracking flags. Clearing C107 can reduce a subtask without
+removing a whole investigation; screening tracking flags can add work. See the
+[workload and overlap analysis](13_rule_workload.md). These counts describe a
+larger artifact slice than the frozen 67-case builder experiment below.
+
 | Frozen flag action | Flags | Current ready / blocked | Interpretation |
 |---|---:|---:|---|
 | C107 REVIEW | 44 | 24 / 20 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |

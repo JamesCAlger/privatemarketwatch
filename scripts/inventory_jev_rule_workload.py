@@ -66,6 +66,23 @@ def main():
     missing_ids = records('SELECT dataset, source, rule_id, report_date, ' + counts
                          + " FROM selected WHERE row_id IS NULL OR row_id=''"
                          + ' GROUP BY ALL ORDER BY issue_rows DESC, dataset, source, rule_id, report_date')
+    overlaps = records('''WITH positions AS (
+        SELECT cik, report_date, row_id,
+            BOOL_OR(rule_id='C107') c107,
+            BOOL_OR(rule_id='C104') c104,
+            BOOL_OR(rule_id='X08') x08,
+            BOOL_OR(action='REVIEW') any_review,
+            BOOL_OR(action='BLOCK_VERIFIED') any_block,
+            BOOL_OR(action='REVIEW' AND rule_id<>'C107') review_other_than_c107,
+            BOOL_OR(evidence_strength='STRONG') any_strong
+        FROM selected
+        WHERE dataset='private_markets_holdings' AND source='bdc'
+            AND report_date='2026-03-31' AND row_id IS NOT NULL AND row_id<>''
+        GROUP BY cik, report_date, row_id)
+        SELECT c107, c104, x08, any_review, any_block, review_other_than_c107, any_strong,
+               COUNT(*) position_keys, COUNT(DISTINCT cik) funds
+        FROM positions WHERE c107 OR c104 OR x08 GROUP BY ALL
+        ORDER BY c107, c104, x08, any_review, any_block, review_other_than_c107, any_strong''')
     db.close()
     if sha(source) != source_hash:
         raise ValueError('Source changed during aggregate')
@@ -74,11 +91,13 @@ def main():
         'inspected_rule_code_sha256': sha(repo / 'pipeline/column_validation.py'),
         'reserved_ciks': list(CIKS), 'overall': overall, 'groups': groups,
         'missing_identity_groups': missing_ids,
+        'q1_2026_position_flag_overlap': overlaps,
         'quarters': quarters, 'latest_flagged_period_per_fund': latest,
         'production_clearance_enabled': False,
         'limitations': ['Issue rows are not unique investigations or measured B1 jobs.',
             'Historical periods repeat positions; position keys are snapshot-local.',
             'Latest means latest period with a recorded flag, not confirmed latest fund holdings.',
+            'Position overlaps use exact row IDs in this artifact; fund-wide or missing-ID issues cannot be allocated.',
             'Flags do not establish true-error prevalence, bundle readiness or Jev savings.',
             'No new flags selected for source investigation or model calls.']}
     destination = run / ('rule_workload_' + fingerprint(report)[:16] + '.json')

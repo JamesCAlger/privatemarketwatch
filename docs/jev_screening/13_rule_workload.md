@@ -65,13 +65,49 @@ is not a certified join to current holdings. It is not a cheap expansion target
 until snapshot lineage and the row mapping are established. Large historical
 flag volume can reflect artifact semantics rather than a large current queue.
 
+## Position overlap changes the workload interpretation
+
+An additional read-only join groups exact Q1-2026 row IDs within this artifact:
+
+| Position set | Positions | Other review/block issue already present | No other review/block issue |
+|---|---:|---:|---:|
+| C104 zero FV | 448 | 204 | 244 |
+| X08 low FV/cost | 18 | 12 | 6 |
+| C107 negative cost | 510 | 416 | 94 |
+
+For C104/X08, "other" means any recorded REVIEW or BLOCK_VERIFIED issue. For C107,
+it excludes C107 itself. C104 and X08 are mutually exclusive here. Their combined
+466 positions contain 216 already needing review and 250 with only tracking
+issues. Seventy-three positions have both C104 and C107. Of the 94 positions with
+no review/block issue other than C107, ten also have a C104 tracking flag.
+
+This limits what clearing one flag can save. Even clearing every C107 suspicion
+would leave another review/block issue on 416 positions. It might shorten their
+investigations, but cannot remove the entire position review. At most 94 positions
+in this artifact could lose their sole recorded review issue through C107 alone;
+that is an upper bound on positions, not measured avoided B1 jobs. Newly screening
+C104/X08 potentially introduces investigation work for 250 positions that have
+only tracking flags, plus additional questions on the 216 already reviewed.
+
+The practical next measurement is marginal review time per flag and grouped
+investigation, including whether one source lookup settles several issues. It
+is not enough to multiply model clearance counts by the cost of a whole B1 job.
+The shadow router's complete-member requirement remains necessary: a cleared
+weak flag cannot erase another unresolved member.
+
+These overlaps omit issues without row IDs and fund-wide findings that cannot
+be allocated to a position. They do not reproduce the production queue/grouping
+logic, establish materiality or prove that every REVIEW action becomes a B1 job.
+No issue disposition was changed.
+
 ## Reproduction
 
 Isolated script: `scripts/inventory_jev_rule_workload.py`. It uses DuckDB with
 1 GB memory, two threads, a 120-second timeout and bounded aggregate output;
 checks the input hash before/after; and writes only to the pilot directory.
 
-Artifact: `data/pilot/jev_screening/20261003_shadow/rule_workload_92daab94bfc185cf.json`.
+Original inventory: `data/pilot/jev_screening/20261003_shadow/rule_workload_92daab94bfc185cf.json`.
+Updated inventory with overlap counts: `rule_workload_07cfcaabee4d805b.json` in the same directory.
 Canonical input: `data/output/row_validation_issues.csv`, SHA-256
 `112e7b7004a16071479e86a1987e6d5711ee3de0a350d16940a8bc3c0f4e3d67`.
 The report also records the inspected rule code and script hashes. This was an
