@@ -70,3 +70,43 @@ Layout profiling now records whether section evidence is local or from another
 table, its unresolved-scope reason and the association used for note tables.
 This separates geometry drift from evidence-scope drift without certifying either.
 The conservative continuation rule has not been relaxed to recover more flags.
+
+## Reuse observed across filers
+
+The current builder has no CIK-specific readiness overrides or named-filer parsing
+branches. Its rules recognise evidence/layout patterns. That is an implementation
+property, not proof that every pattern generalises. A read-only profile of the
+same 67 packets gives the following observed feature coverage:
+
+| Feature present in a candidate | Distinct flags | Funds | Filings | Whole packets ready / blocked |
+|---|---:|---:|---:|---:|
+| Monetary header spans multiple columns | 51 | 10 | 22 | 33 / 18 |
+| Explicit inline negative sign | 36 | 8 | 17 | 25 / 11 |
+| Explicit zero transform | 8 | 4 | 7 | 7 / 1 |
+| Immediately following note table | 6 | 3 | 6 | 5 / 1 |
+| Later reference-rate table across bounded intervening notes | 7 | 1 | 3 | 3 / 4 |
+| Period obtained from inline instant contexts | 9 | 2 | 5 | 4 / 5 |
+| Section evidence from another table | 10 | 3 | 5 | 4 / 6 |
+
+Features overlap, and one packet may contain several candidate layouts. These
+counts must not be summed. Ready/blocked describes the entire packet; a blocker
+may be unrelated to the listed feature. All 55 packets with candidates contain
+referenced notes, across 11 funds and 23 filings; 12 packets have no candidates.
+Neither feature presence nor readiness establishes an independent evidence audit.
+
+The multi-column, sign, zero and adjacent-note mechanisms have observations in
+several filers. The newer reference-rate association has only Crescent evidence;
+hold out a different filer with that pattern before claiming transfer. The narrow
+raw-dimension prefix comparator is also an observed normalization mechanism, not
+proof that all identifier normalization is safe.
+
+This supports a common parser plus explicit evidence contracts, while retaining
+B1 for unsupported mechanisms. Measure maintenance by the new structural pattern
+and its regression cases, not simply by counting how many filers have ever needed
+attention. If each additional filer still requires bespoke extraction or manual
+scope reconstruction, automatic coverage can remain too expensive despite cheap
+Jev calls. No maintenance return has been established here.
+
+Artifact: `mechanism_profile_7378f0315211e1fa.json` in the pilot root, produced by
+the isolated `scripts/profile_jev_mechanisms.py`. This is a candidate-sample
+inventory, not a census of full filings, certified templates or future support.
