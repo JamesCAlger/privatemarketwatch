@@ -186,7 +186,10 @@ counterexample, exact identity conflicts, unit disagreements, changed periods,
 partial group coverage, stale cache reuse, threshold boundaries, malformed/API
 failures and replay/rollback. Tests must use fixtures or temporary directories.
 
-Follow repository test and artifact-protection rules, including the semantic-diff
-backstop after tests. If a proposed check exceeds the owner's bounded scope,
-record the limitation and do not claim it passed. A documentation-only change
-requires no pytest, rebuild, export or network calls.
+Follow repository test and artifact-protection rules. In this isolated session,
+the owner's no-production-write instruction prevents the standard semantic-diff
+command because it writes a production report. Use the runtime write guard and
+bounded read-only metadata comparison, and report that semantic parity was not
+tested. If a proposed check exceeds the owner's bounded scope, record the
+limitation and do not claim it passed. A documentation-only change requires no
+pytest, rebuild, export or network calls.

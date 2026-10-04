@@ -396,6 +396,19 @@ def _identity_evidence(row, headers, contexts, output) -> dict:
     output_traits = _instrument_traits(clean(output.get('instrument_description')))
     source_conflicts = _trait_conflicts(visible_traits, context_traits)
     reasons = []
+    monetary_facts = [fact for field in ('cost', 'fair_value')
+                      for cell in _field_cells(row, headers.get(field))
+                      for fact in cell.get('inline_facts', [])]
+    if any(not clean(fact.get('context_id')) for fact in monetary_facts):
+        reasons.append('missing_monetary_context_reference')
+    monetary_ids = {fact['context_id'] for fact in monetary_facts if clean(fact.get('context_id'))}
+    if monetary_ids - contexts.keys():
+        reasons.append('missing_monetary_context_definition')
+    monetary_contexts = [contexts[key] for key in monetary_ids if key in contexts]
+    if any(not clean(c.get('instant')) for c in monetary_contexts):
+        reasons.append('missing_monetary_context_instant')
+    if any(not clean(c.get('entity_identifier')) for c in monetary_contexts):
+        reasons.append('missing_monetary_context_entity')
     if any(c.get('conflicting_definitions') for c in selected.values()):
         reasons.append('conflicting_source_context_definition')
     if visible_classes and context_classes and set(visible_classes) != set(context_classes):

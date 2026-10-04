@@ -60,6 +60,31 @@ def test_valid_provider_schema(pair):
     validate_response(*pair)
 
 
+@pytest.mark.parametrize('estimated_tokens,submitted', [(21000, True), (23000, False)])
+def test_preparation_keeps_oversized_evidence_out_of_request_queue(tmp_path, monkeypatch, estimated_tokens, submitted):
+    import tiktoken
+    packets = tmp_path / 'input'
+    packets.mkdir()
+    (packets / 'packet.json').write_text(json.dumps({
+        'schema_version': 'jev-value-bundle.v4', 'flag': {'cik': '1', 'row_id': 'ROW-1'}, 'provenance': {}}))
+    (tmp_path / 'session.json').write_text(json.dumps({'limits': {'holdout_flags': 40}}))
+    (tmp_path / 'holdout_reservation_v2.json').write_text(json.dumps({
+        'all_previously_exercised_ciks': ['1'], 'holdout_funds': []}))
+    monkeypatch.setattr(runner, 'route_flag', lambda *a, **k: {'route': 'pending'})
+    monkeypatch.setattr(runner, 'make_request', lambda *a, **k: {'state': 'sized separately'})
+    monkeypatch.setattr(tiktoken, 'get_encoding', lambda *a: SimpleNamespace(encode=lambda *a, **k: range(estimated_tokens)))
+    args = SimpleNamespace(arm='development', bundles=packets, run_root=tmp_path, label='sized', references=None)
+    runner.prepare(args)
+    manifest = json.loads((tmp_path / 'sized/manifest.json').read_text())
+    record = manifest['records'][0]
+    assert bool(record['request_id']) is submitted
+    assert len(list((tmp_path / 'sized/requests').glob('*.json'))) == int(submitted)
+    assert manifest['token_budget']['provider_token_guarantee'] is False
+    if not submitted:
+        assert record['not_submitted_reason'] == 'request_proxy_token_limit'
+        assert len(list((tmp_path / 'sized/packets').glob('*.json'))) == 1
+
+
 @pytest.mark.parametrize('tamper', ['none', 'receipt', 'references'])
 def test_analysis_does_not_score_misbound_receipts_or_changed_references(tmp_path, pair, tamper):
     from scripts.analyze_jev_screening import summarize

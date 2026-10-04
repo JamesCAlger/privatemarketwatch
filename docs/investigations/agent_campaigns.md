@@ -1974,3 +1974,38 @@ published cost for C107/X08; C104 remains FV-only. Krayden's own context says Te
 Loan while its negative cost/FV tags are on a visible Revolver, so matching values
 cannot resolve identity. Supplemental raw evidence and references are preserved
 as additional_C107_*_01.json. No Jev calls were added for this review.
+
+## 2026-10-04 -- Jev pilot: context completeness, size and deterministic comparison
+
+Question: does broader source context improve the proposed cheap weak-rule
+screening workflow, and can changing filing structures make incomplete bundles
+appear ready?
+
+On 12 current-builder rechecks, Jev and a raw-preserving deterministic comparator
+both match all reviewed labels and source rows. All called references are false
+alarms. Four natural scale-error controls remain blocked before submission.
+This does not establish incremental model value or an error-detection rate.
+Eight exact-request repeats also show variable confidence, including one cutoff
+crossing without a request change. No score-based production clearances exist.
+
+Four existing filings were sized offline. Current states are 8.2-13.1k cl100k
+proxy tokens; broad visible tables plus selected published columns are
+24.8-183.7k. Complete SOI recall is not certified. Provider documentation states
+32k for state plus longest question, 64k total. Current provider usage is 30-36%
+above the runner's whole-JSON cl100k estimate, so a proxy below 32k does not
+establish fit. The 94 successful calls used 1,502,036 reported input tokens,
+approximately $0.0631 at the published $0.042/M rate; engineering and B1 costs
+remain unmeasured. Sources and full sizing are in docs/jev_screening/08_context_size_and_cost.md.
+
+Eighteen synthetic structure probes across three existing filings initially
+passed intended invariance/fallback checks. Deeper Fortress probes found missing
+monetary context definitions, instant dates or entities still appeared ready.
+Four failing focused tests reproduced this, and explicit context requirements
+now block those cases. A valid nonmonetary duration context remains allowed.
+The current 67-flag replay remains 34 ready / 33 blocked with unchanged candidate
+sets. This is a repaired synthetic failure mechanism, not another discovered
+production data error or proof of future-filer coverage.
+
+Source-first review inputs now cover all 67 existing flags, withholding model
+answers and builder outcomes; every review remains unfinished. Independent B1
+review and timing are still outstanding. Production remains untouched.

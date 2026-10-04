@@ -17,6 +17,9 @@ from pipeline.jev_screening import Policy, fingerprint, route_flag, valid_confid
 from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
 
 ENDPOINT = 'https://api.typesafe.ai/v1/systemone'
+# Current rechecks use 1.30-1.36 provider tokens per whole-JSON cl100k token.
+# This tighter heuristic leaves headroom; it is not a provider-token guarantee.
+MAX_PROXY_TOKENS = 22000
 
 
 def validate_arm(arm, bundle_directory, run_root):
@@ -141,7 +144,7 @@ def prepare(args):
             request = make_request(packet, model=policy.model)
             count = len(tokenizer.encode(json.dumps(request, ensure_ascii=True), disallowed_special=()))
             record['proxy_tokens'] = count
-            if count <= 26000:
+            if count <= MAX_PROXY_TOKENS:
                 request_id = fingerprint(request)
                 write(run / 'requests' / (request_id + '.json'), request)
                 record['request_id'] = request_id
@@ -157,6 +160,10 @@ def prepare(args):
                 'runner_sha256': sha(Path(__file__)), 'routing_sha256': sha(ROOT / 'pipeline/jev_screening.py'),
                 'untouched_holdout': args.arm == 'holdout',
                 'within_filer_temporal_holdout': args.arm == 'temporal_holdout',
+                'token_budget': {'whole_request_cl100k_limit': MAX_PROXY_TOKENS,
+                                 'provider_token_guarantee': False,
+                                 'provider_state_longest_question_limit': 32000,
+                                 'provider_total_limit': 64000},
                 'production_clearance_enabled': False}
     write(run / 'manifest.json', manifest)
     print(json.dumps({'packets': len(records), 'requests': sum(bool(r['request_id']) for r in records)}), flush=True)

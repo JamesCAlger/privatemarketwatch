@@ -124,6 +124,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-10-03 - Expanded Jev natural-case test across new filers and periods
 - 2026-10-03 - Isolated Jev hybrid screening build and bounded shadow evaluation
 - 2026-10-04 - Jev source completeness and presentation stability
+- 2026-10-04 -- Jev pilot: context completeness, size and deterministic comparison
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)

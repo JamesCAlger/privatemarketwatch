@@ -521,3 +521,41 @@ remain development evidence, not untouched human gold.
   new API calls or clearances. Four focused tests pass for leakage and binding.
 - Source-first findings must be frozen before evaluating builder candidate recall.
   See 09_independent_review_handoff.md. No measured B1 savings are claimed.
+
+## 2026-10-04 checkpoint: changing structures and token headroom
+
+- Eighteen synthetic probes of Fortress, Onex and Oaktree cached filings pass:
+  original and added-navigation-table variants retain candidate identity/values;
+  unsupported rowspans, unknown numeric transforms, missing currency declarations
+  and conflicting context dates block. No claim of observed future-layout recall.
+- On 12 current requests, provider input usage is 1.302-1.364 times the runner's
+  whole-JSON cl100k estimate. Tightened future request preparation from 26k to 22k
+  proxy tokens and recorded that it is not a provider-token guarantee. Frozen
+  historical requests and results remain unchanged. Maximum actual usage across
+  94 calls is 28,803 tokens. No additional API calls.
+- Runner tests: 31 pass, including oversized-evidence retention without submission.
+  Initial new-test fixture omitted provenance; corrected the fixture and reran.
+- Latest local checkpoint bf20a9b precedes these probes/token-cap changes; no merge
+  or push. Source-change artifacts source_changes_24_*.json, proxy comparison
+  token_proxy_comparison_25.json. Six API calls remain reserved.
+
+## 2026-10-04 checkpoint: monetary-context readiness repair
+
+- Deeper synthetic Fortress probes exposed three false-ready states: missing
+  referenced context, missing instant and missing entity. Four focused failures
+  also cover a missing contextRef attribute. Builder now blocks all four cases.
+- Corrected synthetic fixtures to declare their referenced monetary contexts,
+  including distinct prior/current contexts. A valid nonmonetary duration context
+  remains allowed. Combined targeted tests: 283 passed.
+- Post-fix source-context probes: 12/12 intended outcomes across Fortress, Onex
+  and Oaktree (three unchanged controls and nine damaged variants). The original
+  failing Fortress artifact is preserved separately; no API calls were made.
+- Full replay context_required_v4_27: 67 flags, 34 ready / 33 blocked; candidate
+  sets unchanged. Builder hash 435473f61511418bcafe0fd888cc26ee72477c50f8b971185f665626714bda8e.
+  Historical 17 confidence candidates: 13 currently ready, zero unchanged requests.
+- The 12 latest rechecks differ only in bundle ID after the rebuild. Diagnostic
+  equivalence excluding that ID is not exact request equality and does not
+  authorize score transfer. Earlier review forms also remain bound to their
+  original bundle versions and are still unfinished.
+- Thirteenth bounded production metadata audit: zero changed paths. No full
+  suite, production rebuild/export, semantic-diff write, new fund or new API call.

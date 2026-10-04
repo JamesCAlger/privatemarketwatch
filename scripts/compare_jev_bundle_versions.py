@@ -90,10 +90,42 @@ def main():
         'audited_clearances': 0, 'observations': rows,
         'limitation': 'Readiness is not audited completeness. Historical confidence is not transferred to changed requests. No API calls or production routing.',
     }
+    recheck_bindings = []
+    for label in ('current_development_model_01', 'current_consumed_model_01'):
+        manifest_path = run / label / 'manifest.json'
+        if not manifest_path.exists():
+            continue
+        records = read(manifest_path)['records']
+        if len(records) > 50:
+            raise ValueError('Unbounded recheck manifest')
+        for record in records:
+            if not record['request_id']:
+                continue
+            key = (record['flag']['rule_id'], record['flag']['row_id'])
+            packet, _ = current[key]
+            original = read(run / label / 'requests' / (record['request_id'] + '.json'))
+            if fingerprint(original) != record['request_id']:
+                raise ValueError('Recheck request changed')
+            ready = packet['evidence_status']['status'] == 'ready_for_model'
+            current_request = make_request(packet) if ready else None
+            exact = ready and fingerprint(current_request) == record['request_id']
+            # Diagnostic only: the model did see this ID, so never treat this
+            # comparison as permission to reuse a response for a changed request.
+            without_id = json.loads(json.dumps(current_request)) if ready else None
+            original_without_id = json.loads(json.dumps(original))
+            if without_id is not None:
+                without_id['state'].pop('bundle_id', None)
+            original_without_id['state'].pop('bundle_id', None)
+            recheck_bindings.append({'run': label, 'row_id': key[1], 'current_ready': ready,
+                                    'exact_request_unchanged': exact,
+                                    'only_bundle_id_changed': ready and not exact and fingerprint(without_id) == fingerprint(original_without_id)})
+    report['current_recheck_request_bindings'] = recheck_bindings
+    report['current_recheck_requests_unchanged'] = sum(r['exact_request_unchanged'] for r in recheck_bindings)
+    report['current_recheck_only_bundle_id_changed'] = sum(r['only_bundle_id_changed'] for r in recheck_bindings)
     destination = run / ('bundle_version_comparison_' + fingerprint(report)[:16] + '.json')
     if not destination.exists():
         write(destination, report)
-    print(json.dumps({k: v for k, v in report.items() if k != 'observations'}), flush=True)
+    print(json.dumps({k: v for k, v in report.items() if k not in {'observations', 'current_recheck_request_bindings'}}), flush=True)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,8 @@ API calls, funds or production changes.
 The pinned `jev-1.13.0` model costs $0.042 per million input tokens, with free
 output. Its limits are 64k tokens for the entire request and 32k for state plus
 the longest question. State is ingested once. These are provider limits, not
-the pilot's conservative 26k whole-request proxy ceiling.
+the pilot's 22k whole-request proxy ceiling (tightened from 26k after comparing
+estimates with observed usage). The proxy ceiling is not a context guarantee.
 Source: [TypeSafe models](https://docs.typesafe.ai/models), checked 2026-10-04.
 
 The session's 94 successful calls reported 1,502,036 input tokens. Applying that
@@ -21,6 +22,12 @@ demonstrated. At the same rate, 10k input tokens cost $0.00042; 30k cost $0.0012
 Numbers below are rounded thousands of `cl100k_base` tokens for state only.
 The provider uses its own tokenizer: these are sizing estimates, not confirmed
 acceptance or billing counts. Longest questions add approximately 0.13-0.16k.
+
+On the 12 current-builder API requests, actual input usage was 1.302-1.364 times
+the runner's whole-JSON cl100k count. This ratio is not directly transferable to
+the compact state-only counts below. In particular, the 24.8k Onex projection
+must not be interpreted as a confirmed fit inside Jev's 32k constraint. Exact
+provider tokenization or an actual bounded acceptance test would be required.
 
 | Fund / period / example | Current bundle | Broad visible tables and notes | Broad structured tables, notes and contexts | All published columns | Visible tables plus selected published columns |
 |---|---:|---:|---:|---:|---:|

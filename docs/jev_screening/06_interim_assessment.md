@@ -59,12 +59,34 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay sibling_recall_v4_18 has
+references are preserved separately. Latest full replay context_required_v4_27 has
 34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
 
+Synthetic changes to three real filings confirm some structural fallback
+behaviour, but deeper probes found that missing monetary context definitions,
+dates or entities were not blocking readiness. Explicit checks now reject those
+cases. The repaired replay changes neither the 34/33 readiness split nor candidate
+sets. This is a corrected synthetic failure mechanism, not an additional observed
+production error. The 12 most recent recheck payloads now differ only in bundle
+ID; even those are preserved as old-version observations, not newly scored calls.
+
 ## Implications for the proposed workflow
+
+Separate existing review work from additional screening:
+
+| Frozen flag action | Flags | Current ready / blocked | Interpretation |
+|---|---:|---:|---|
+| C107 REVIEW | 44 | 21 / 23 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |
+| X08 TRACK_ONLY | 19 | 11 / 8 | Added screening coverage, with B1 investigation capacity needed for escalations. |
+| C104 TRACK_ONLY | 4 | 2 / 2 | Exploratory extra coverage; no clearance eligibility promoted. |
+
+In the 12-call current-builder recheck, only two of seven C107 cases passed both
+confidence cutoffs. Four of five called X08 cases passed, while four additional
+known-error X08 controls were blocked before calling. None was independently
+cleared. Pooling all six confidence candidates as avoided B1 jobs would therefore
+overstate the benefit. The sampled cases cannot establish population workload.
 
 - Keep low-confidence, difficult-bundle, suspected-error and known-high-error
   cases with B1. Keep independently sampled review even for future clearances.

@@ -13304,3 +13304,23 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   are withheld by allowlist. Snapshot and source hashes retain traceability.
 - No independent reviews completed, B1 dispatch, API calls or production changes.
   Documented two-stage source findings then bundle comparison and timing limits.
+
+## 2026-10-04 -- Jev pilot: changed-source probes and token headroom
+
+- Eighteen bounded offline mutations of three existing real filings pass intended
+  invariance/fallback checks. Synthetic changes do not certify future layouts.
+- Provider usage exceeds cl100k whole-request proxy by 30-36% on 12 current calls.
+  Isolated runner now limits new requests to 22k proxy tokens (previously 26k),
+  explicitly heuristic; 31 runner tests pass. Historical artifacts unchanged.
+- No new API calls, source downloads or production changes.
+
+## 2026-10-04 -- Jev pilot: monetary context completeness
+
+- Synthetic real-source probes exposed ready bundles with missing monetary XBRL
+  context definitions, instants or entities. Added explicit blockers, including
+  missing contextRef; fixed fixture declarations and retained a valid-duration
+  counterexample. All changes remain in the isolated worktree.
+- 283 targeted tests pass. Twelve post-fix source probes pass across three filers.
+  Current 67-flag replay stays 34 ready / 33 blocked with unchanged candidates.
+- No new model calls or production changes. Thirteenth bounded metadata audit
+  reports zero changed paths. Historical scores/audit forms remain version-bound.

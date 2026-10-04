@@ -22,6 +22,10 @@ def schedule(rows, *, date="June 30, 2025", units="in thousands", notes="", head
 
 
 def parsed(body):
+    # Normal fixtures must include the context their monetary facts reference.
+    # Explicit malformed-context tests override this definition themselves.
+    if '<xbrli:context' not in body and 'Schedule of Investments June 30, 2025' in body:
+        body = context() + body
     return jb.parse_source(('<html xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"><body><xbrli:unit id="usd"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
                             '<xbrli:unit id="cad"><xbrli:measure>iso4217:CAD</xbrli:measure></xbrli:unit>'
                             + body + '</body></html>').encode())
@@ -109,13 +113,17 @@ def test_section_notes_follow_adjacent_same_period_continuation():
 @pytest.mark.parametrize('boundary', ['new_period', 'new_instrument', 'total'])
 def test_section_annotations_do_not_cross_schedule_or_instrument_boundaries(boundary):
     first = section_schedule(name='Other Borrower', date='December 31, 2024' if boundary == 'new_period' else 'June 30, 2025')
+    definitions = context()
+    if boundary == 'new_period':
+        first = first.replace('contextRef="c-1"', 'contextRef="c-prior"')
+        definitions += context(date='2024-12-31').replace('id="c-1"', 'id="c-prior"')
     second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
     if boundary != 'not_continued':
         second = second.replace('Schedule of Investments', 'Schedule of Investments (continued)')
     if boundary in {'new_instrument', 'total'}:
         heading = 'Preferred Stocks' if boundary == 'new_instrument' else 'Total Equity Securities'
         second = second.replace('<tr><td>Acme', f'<tr><td colspan="9">{heading}</td></tr><tr><td>Acme')
-    packet = bundle(source=parsed(first + second))
+    packet = bundle(source=parsed(definitions + first + second))
     assert packet['evidence_status']['status'] == 'ready_for_model'
     assert not packet['source_candidates'][0]['notes']
 
@@ -525,6 +533,41 @@ def context(identifier='Preferred units', date='2025-06-30'):
             f'<value>Acme Test LLC {identifier}</value></xbrldi:typedMember></xbrli:segment>'
             f'</xbrli:entity><xbrli:period><xbrli:instant>{date}</xbrli:instant>'
             '</xbrli:period></xbrli:context>')
+
+
+@pytest.mark.parametrize('missing,reason', [
+    ('definition', 'missing_monetary_context_definition'),
+    ('reference', 'missing_monetary_context_reference'),
+    ('instant', 'missing_monetary_context_instant'),
+    ('entity_identifier', 'missing_monetary_context_entity'),
+])
+def test_incomplete_monetary_context_cannot_be_replaced_by_visible_heading(missing, reason):
+    source = parsed(context() + schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')]))
+    if missing == 'definition':
+        source['contexts'] = {}
+    elif missing == 'reference':
+        for row in source['tables'][0]['rows']:
+            for cell in row:
+                for value in cell.get('inline_facts', []):
+                    value['context_id'] = None
+    else:
+        source['contexts']['c-1'][missing] = None
+    packet = bundle(source=source)
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert reason in packet['source_candidates'][0]['blocking_reasons']
+
+
+def test_nonmonetary_duration_context_does_not_invalidate_instant_amounts():
+    duration = context().replace('id="c-1"', 'id="rate-period"').replace(
+        '<xbrli:instant>2025-06-30</xbrli:instant>',
+        '<xbrli:startDate>2025-01-01</xbrli:startDate><xbrli:endDate>2025-06-30</xbrli:endDate>')
+    rate = fact('4.5').replace('contextRef="c-1"', 'contextRef="rate-period"').replace(
+        'us-gaap:InvestmentOwnedAtCost', 'custom:AverageCouponRate')
+    source = parsed(context() + duration + schedule([
+        ('Acme Test LLC', 'Preferred units ' + rate, fact('2,000'), fact('1'), '')]))
+    packet = bundle(source=source)
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert packet['source_candidates'][0]['identity_evidence']['contexts']['rate-period']['instant'] is None
 
 
 def test_conflicting_duplicate_context_id_blocks_instead_of_last_wins():

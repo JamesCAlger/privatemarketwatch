@@ -68,6 +68,12 @@ configuration, make it explicit, evidence-backed and regression tested.
 | Completeness | Required fields present, retrieval scope/limits, missing evidence and unresolved conflicts; distinguish completeness from correctness |
 | Status | Explicit eligibility result and reasons; never manufacture a normalised value to obtain readiness |
 
+Every tagged monetary fact must resolve to a declared context with a nonempty
+reporting instant and entity identifier. A visible schedule heading cannot replace
+missing tagged context. Conflicting definitions or disagreement with the filing's
+period/entity remain blocking. This readiness check does not certify that the
+context names the correct sibling position; independent identity review still applies.
+
 Resolve row IDs only in the snapshot where they were generated. Raw production
 position IDs are not stable across rebuilds. Cross-build reuse requires a fresh
 identity/provenance match and revalidation of the affected inputs.

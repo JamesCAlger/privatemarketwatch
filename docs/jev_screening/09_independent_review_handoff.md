@@ -56,3 +56,8 @@ Inputs: `data/pilot/jev_screening/20261003_shadow/blind_review_inputs_23/`.
 The manifest accounts for 44 C107, 19 X08 and four C104 flags. All 67 review forms
 are unfinished. Four tests check answer exclusion, unfinished status, version
 binding and preservation of original identity claims without mutating inputs.
+
+These inputs bind the `sibling_recall_v4_18` builder. Later context-completeness
+repairs produced `context_required_v4_27`; candidate sets and readiness did not
+change, but bundle fingerprints did. Regenerate review bindings before any audit
+of the newer builder. Do not relabel the prepared older forms as current audits.
