@@ -60,7 +60,7 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay currency_namespace_v4_37 has
+references are preserved separately. Latest full replay superscript_notes_v4_39 has
 34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
@@ -70,8 +70,7 @@ behaviour, but deeper probes found that missing monetary context definitions,
 dates or entities were not blocking readiness. Explicit checks now reject those
 cases. The repaired replay changes neither the 34/33 readiness split nor candidate
 sets. This is a corrected synthetic failure mechanism, not an additional observed
-production error. The 12 most recent recheck payloads now differ only in bundle
-ID; even those are preserved as old-version observations, not newly scored calls.
+production error. Later source-context retrieval diagnostics also change model-visible inputs. Historical rechecks remain old-version observations, not newly scored calls.
 
 ## Implications for the proposed workflow
 
@@ -120,5 +119,7 @@ overstate the benefit. The sampled cases cannot establish population workload.
 
 Production code, data, queues, gates and baselines remain unchanged. The isolated
 checkpoints are local only; no merge or push has been performed.
+
+
 
 

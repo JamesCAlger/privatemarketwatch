@@ -95,6 +95,15 @@ def _explicit_note_markers(text: str) -> tuple[set[str], bool]:
     return markers, bool(re.sub(r'[\s,;/]', '', remaining))
 
 
+def _cell_note_markers(cell: dict) -> set[str]:
+    return _note_markers(cell['text']) | set(cell.get('superscript_note_markers', []))
+
+
+def _section_note_markers(section: dict) -> set[str]:
+    return _note_markers(section['text']) | {marker for cell in section.get('cells', [])
+                                            for marker in _cell_note_markers(cell)}
+
+
 def _rate_marker_definitions(text: str) -> dict[str, list[str]]:
     meanings = {}
     for meaning, marker in re.findall(
@@ -249,7 +258,7 @@ def _section_contexts(tables: list) -> dict:
             # merely a new page. Do not silently drop annotations or assert scope.
             active = {k: {**v, 'scope_unresolved': True,
                            'scope_reason': 'unconfirmed_schedule_continuation'}
-                      for k, v in active.items() if _note_markers(v['text']) or v.get('scope_unresolved')}
+                      for k, v in active.items() if _section_note_markers(v) or v.get('scope_unresolved')}
         elif not (adjacent_same_period and continuation):
             active = {}
         header_end = max((h['row'] for h in table['headers'].values()), default=-1)
@@ -270,7 +279,7 @@ def _section_contexts(tables: list) -> dict:
                     active = {**persistent,
                               'instrument': {'table_index': table['table_index'], 'row_index': ri,
                                              'text': value, 'cells': row}}
-                elif _note_markers(value):
+                elif any(_cell_note_markers(c) or c.get('unparsed_superscript') for c in row):
                     active[f'unknown_{table["table_index"]}_{ri}'] = {
                         'table_index': table['table_index'], 'row_index': ri,
                         'text': value, 'cells': row, 'scope_unresolved': True}
@@ -490,6 +499,21 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
                     if unsupported_features:
                         facts[-1]['unsupported_features'] = unsupported_features
                 cell = {"column": col, "span": span, "text": clean(td.get_text(" ", strip=True))}
+                superscript_refs, unparsed_superscript = set(), False
+                for annotation in td.find_all(['sup', 'span']):
+                    if annotation.name != 'sup' and not re.search(r'vertical-align\s*:\s*super', annotation.get('style', ''), re.I):
+                        continue
+                    if annotation.find_parent('ix:nonfraction') or annotation.find('ix:nonfraction'):
+                        continue
+                    annotation_text = clean(annotation.get_text(' ', strip=True))
+                    if annotation_text:
+                        markers, unresolved = _explicit_note_markers(annotation_text)
+                        superscript_refs.update(markers)
+                        unparsed_superscript |= unresolved
+                if superscript_refs:
+                    cell['superscript_note_markers'] = sorted(superscript_refs)
+                if unparsed_superscript:
+                    cell['unparsed_superscript'] = True
                 if facts:
                     cell["inline_facts"] = facts
                 cells.append(cell)
@@ -766,17 +790,24 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
             refs = set()
             sections = section_contexts.get((table['table_index'], ri), [])
             for section in sections:
-                refs.update(_note_markers(section['text']))
+                refs.update(_section_note_markers(section))
+                if any(c.get('unparsed_superscript') for c in section.get('cells', [])):
+                    reasons.append('unparsed_superscript_reference')
                 if section.get('scope_unresolved'):
                     reasons.append('annotated_section_scope_unresolved')
             for cell in raw_row:
+                refs.update(cell.get('superscript_note_markers', []))
+                if cell.get('unparsed_superscript'):
+                    reasons.append('unparsed_superscript_reference')
                 # Exclude monetary cells to avoid interpreting negative amounts as notes.
                 if any(cell in _field_cells(raw_row, headers.get(f)) for f in ("cost", "fair_value")):
                     continue
                 refs.update(_note_markers(cell['text']))
             for header_row in {h['row'] for h in headers.values()}:
                 for cell in rows[header_row]:
-                    refs.update(_note_markers(cell['text']))
+                    refs.update(_cell_note_markers(cell))
+                    if cell.get('unparsed_superscript'):
+                        reasons.append('unparsed_superscript_reference')
             for cell in _field_cells(raw_row, headers.get('notes')):
                 column_refs, unresolved = _explicit_note_markers(cell['text'])
                 refs.update(column_refs)

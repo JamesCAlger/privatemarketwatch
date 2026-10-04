@@ -617,3 +617,22 @@ blocked, no candidate changes. Builder hash:
 e335e32d02d78ad8c0c75967f5585173acf3996b8c1b583b666ab78071c7a1df.
 Eight copied-source checks pass across Fortress and Onex, including valid prefix
 aliases. Sixteenth bounded production metadata audit: zero changed paths.
+
+## 2026-10-04 checkpoint: superscript notes and local build timing
+
+- Bare numeric superscript references were lost when HTML was flattened. Four
+  failing tests reproduced missing-note readiness and omitted supplied notes.
+  The builder now preserves explicit superscript references, including inherited
+  sections; unparsed annotations block. Plain identity digits and numeric-fact
+  typography have counterexamples. Combined targeted tests: 305 passed.
+- Candidate-row markup inventory: 167 unique rows in 23 source files, no superscript
+  markup detected. This excludes headers, section headings and unretrieved rows;
+  the repaired failure remains synthetic in this sample.
+- superscript_notes_v4_39: 67 flags, 34 ready / 33 blocked; unchanged candidate
+  sets. Builder c6e9e7e2ae6249b0d0fd63930de037199fd365bee866a368910e45fa2a0af89a.
+- bundle_build_timing_40: four existing cases, one empty/reused parser-cache pair
+  each. All eight builds exactly reproduce frozen packets. Empty-cache wall time
+  3.67-9.57s; reused-cache 0.039-0.114s. This is local component timing, excluding
+  CSV joins, provider calls, B1 review and maintenance. OS caches were not flushed;
+  a small read-only replay comparison overlapped the initial sample.
+- No new API calls, funds, independent audits or production modifications.

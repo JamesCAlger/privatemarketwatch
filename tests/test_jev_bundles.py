@@ -71,6 +71,50 @@ def test_explicit_non_nil_monetary_fact_remains_supported():
     assert packet['evidence_status']['status'] == 'ready_for_model'
 
 
+@pytest.mark.parametrize('markup', ['<sup>9</sup>', '<span style="vertical-align:super">9</span>'])
+def test_bare_superscript_reference_requires_its_note(markup):
+    body = schedule([('Acme Test LLC' + markup, 'Preferred units', fact('2,000'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert '9' in packet['source_candidates'][0]['missing_note_markers']
+
+
+@pytest.mark.parametrize('markup', ['<sup>9</sup>', '<span style="vertical-align:super">9</span>'])
+def test_bare_superscript_reference_retains_matching_note(markup):
+    body = schedule([('Acme Test LLC' + markup, 'Preferred units', fact('2,000'), fact('1'), '')],
+                    notes='<p>(9) Investment is held through a taxable subsidiary.</p>')
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert [n['marker'] for n in packet['source_candidates'][0]['notes']] == ['9']
+
+
+def test_plain_identity_digits_do_not_become_footnotes():
+    body = schedule([('Acme Test LLC 9', 'Preferred units', fact('2,000'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert not packet['source_candidates'][0]['notes']
+
+
+def test_superscript_inside_numeric_fact_is_not_a_note_reference():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,<sup>000</sup>'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert not packet['source_candidates'][0]['notes']
+
+
+def test_unparsed_superscript_reference_stays_blocked():
+    body = schedule([('Acme Test LLC<sup>1-3</sup>', 'Preferred units', fact('2,000'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert 'unparsed_superscript_reference' in packet['source_candidates'][0]['blocking_reasons']
+
+
+def test_superscript_section_note_is_not_lost():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    body = body.replace('<tr><td>Acme', '<tr><td colspan="9">Equity securities<sup>9</sup></td></tr><tr><td>Acme')
+    packet = bundle(source=parsed(body))
+    assert '9' in packet['source_candidates'][0]['missing_note_markers']
+
+
 def test_full_position_and_both_values_replace_unrelated_sample():
     packet = bundle(source=basic_source())
     assert packet["evidence_status"]["status"] == "ready_for_model"

@@ -89,3 +89,25 @@ The earlier `_21` artifact preserves the initial all-column comparison. Four
 fixed existing flags, cached sources capped at 40 MB, at most 5,000 published
 rows per fund-quarter, bounded DuckDB memory and a 180-second watchdog. Source
 and holdings hashes bind the measurement. No source downloads or model calls.
+
+## Local bundle construction timing
+
+A bounded measurement on four existing cases reproduced each frozen bundle with
+an empty parser cache and again with its parsed filing reused. These are component
+measurements on this machine, not service-level latency or a production benchmark.
+
+| Existing case | Empty parser cache | Reused parser cache |
+|---|---:|---:|
+| Fortress Exemplis | 4.50s | 0.052s |
+| Onex Montana | 4.19s | 0.039s |
+| Oaktree BioXcel | 3.67s | 0.045s |
+| Monroe Premier | 9.57s | 0.114s |
+
+Artifact: `bundle_build_timing_40.json`, replay `superscript_notes_v4_39`.
+All eight packets match their frozen fingerprints. Timing includes source
+read/hash, parsing and evidence retrieval; it excludes CSV selection/join,
+request preparation, model latency, B1 work and upkeep. OS file caches were not
+flushed; one pair per case and a small overlapping read-only comparison limit
+precision. Grouping flags by filing allows parser reuse, but maintenance and
+independent review costs remain unmeasured. Do not convert these timings into
+claimed B1 savings or extrapolate to the full cohort.
