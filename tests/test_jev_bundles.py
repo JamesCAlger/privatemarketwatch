@@ -570,6 +570,42 @@ def test_nonmonetary_duration_context_does_not_invalidate_instant_amounts():
     assert packet['source_candidates'][0]['identity_evidence']['contexts']['rate-period']['instant'] is None
 
 
+def test_name_retrieval_cannot_silently_omit_the_output_context_anchor():
+    other_fact = lambda value: fact(value).replace('contextRef="c-1"', 'contextRef="c-other"')
+    definitions = context() + context('Preferred units Maturity 2028').replace('id="c-1"', 'id="c-other"')
+    source = parsed(definitions + schedule([
+        ('Acme Test LLC', 'Preferred units', other_fact('2,000'), other_fact('1'), ''),
+        ('Alternate Legal Name LLC', 'Preferred units', fact('2,000'), fact('1'), '')]))
+    packet = bundle(row=output(src_context_id='c-1'), source=source)
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert 'source_context_anchor_not_retrieved' in packet['retrieval']['blocking_reasons']
+    assert packet['retrieval']['candidate_list_complete'] is False
+
+
+def test_output_context_anchor_in_retrieved_candidates_remains_ready():
+    packet = bundle(row=output(src_context_id='c-1'), source=basic_source())
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_context_anchor_in_unknown_header_table_is_not_silently_skipped():
+    other_fact = lambda value: fact(value).replace('contextRef="c-1"', 'contextRef="c-other"')
+    first = schedule([('Acme Test LLC', 'Preferred units', other_fact('2,000'), other_fact('1'), '')])
+    second = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')], header='Unfamiliar basis')
+    definitions = context() + context().replace('id="c-1"', 'id="c-other"')
+    packet = bundle(row=output(src_context_id='c-1'), source=parsed(definitions + first + second))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert packet['retrieval']['unretrieved_source_context_anchors'][0]['supported_headers'] is False
+
+
+def test_unrelated_nonmonetary_table_is_not_a_missing_position_anchor():
+    rate = fact('4.5').replace('us-gaap:InvestmentOwnedAtCost', 'custom:AverageCouponRate')
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    body += '<table><tr><td>Rate disclosure</td><td>' + rate + '</td></tr></table>'
+    packet = bundle(row=output(src_context_id='c-1'), source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert len(packet['retrieval']['source_context_anchor_rows']) == 1
+
+
 def test_conflicting_duplicate_context_id_blocks_instead_of_last_wins():
     body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
     first, second = context(), context(identifier='Common units')

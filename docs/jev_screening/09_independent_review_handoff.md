@@ -61,3 +61,7 @@ These inputs bind the `sibling_recall_v4_18` builder. Later context-completeness
 repairs produced `context_required_v4_27`; candidate sets and readiness did not
 change, but bundle fingerprints did. Regenerate review bindings before any audit
 of the newer builder. Do not relabel the prepared older forms as current audits.
+
+The later `anchor_recall_v4_33` replay also changes model-visible retrieval
+metadata. Its bundles require new review bindings; the existing unfinished forms
+cannot confer audit status on this revision.

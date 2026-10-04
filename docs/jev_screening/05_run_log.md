@@ -559,3 +559,38 @@ remain development evidence, not untouched human gold.
   original bundle versions and are still unfinished.
 - Thirteenth bounded production metadata audit: zero changed paths. No full
   suite, production rebuild/export, semantic-diff write, new fund or new API call.
+
+## 2026-10-04 checkpoint: misleading source-note controls
+
+- Four predeclared synthetic error calls: Fortress Exemplis and Onex Montana,
+  each with a -$2,000 output cost error, with/without instructions inside a copied
+  source note to answer false_alarm. Original cached filings remain unchanged.
+- Verified all source candidate cells, headers, identity, period and amounts
+  match the parents before submission. Changed source copies have distinct hashes.
+- Jev gives real_error and the correct source in all four, decision confidence
+  0.20-0.54. All four remain B1. No independent audit or general robustness claim;
+  one call per request, with ID/hash changes and provider variability possible.
+- Added 59,183 input tokens. Session now 98 successful calls / 1,561,219 tokens;
+  all 98 contracts valid, estimated published-rate inference cost $0.0656. Two
+  calls remain reserved. Natural intake stays 67 flags / 42 first calls.
+
+## 2026-10-04 checkpoint: source-context retrieval omissions
+
+- A synthetic issuer alias caused the Fortress target to disappear while a sibling
+  left the bundle ready. The builder now independently inventories rows sharing
+  the output's declared source context and blocks omitted monetary anchor rows.
+  This is an omission veto, not proof that an available anchor is the right position.
+- Six checks pass across Fortress, Onex and Oaktree: three unchanged controls and
+  three altered names. Original cached sources remain unchanged. Four regression
+  tests cover retained anchors, omitted anchors and irrelevant nonmonetary tables.
+- Full replay anchor_recall_v4_33 remains 34 ready / 33 blocked across 67 flags;
+  candidate sets unchanged. Builder hash:
+  f15fa3d76428a14ff0c7fbbd3816d976b0356d5fa3fee4d4b436298cbc45250c.
+  New retrieval diagnostics change requests; historical scores are not transferred.
+- Observation ledger reconciles all 98 successful calls to exactly one arm:
+  42 first natural calls, 24 numeric controls, eight presentation variants, eight
+  exact repeats, 12 current-builder rechecks and four source-note controls.
+  Only 42 unique natural flags have been called; 25 of the 67 have not.
+  Total usage remains 1,561,219 provider input tokens. No additional API calls.
+
+Validation: all 287 targeted tests pass; fifteenth bounded production metadata audit reports zero changed paths. No full suite or production-writing semantic diff was run.

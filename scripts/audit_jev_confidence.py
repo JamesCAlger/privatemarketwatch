@@ -25,7 +25,8 @@ def main():
                   'controlled_model_01', 'weak_probe_model_01', 'newly_ready_model_01',
                   'sibling_model_01', 'scale_model_01', 'legend_model_01', 'temporal_model_01',
                   'order_normal_model_01', 'order_reverse_model_01', 'grouped_header_model_01',
-                  'order_repeat_model_01', 'current_development_model_01', 'current_consumed_model_01']:
+                  'order_repeat_model_01', 'current_development_model_01', 'current_consumed_model_01',
+                  'note_stress_model_01']:
         manifest = read(run / label / 'manifest.json')
         if len(manifest['records']) > 50:
             raise ValueError('Bounded manifest required')

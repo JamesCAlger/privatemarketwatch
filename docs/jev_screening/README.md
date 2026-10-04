@@ -25,6 +25,7 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Proxy-cost evidence](07_proxy_cost_evidence.md) | Six real donor-lineage cases and why proxy costs need a separate B1 evidence contract |
 | [Context size and cost](08_context_size_and_cost.md) | Four real filing payload comparisons, provider limits and measured-token cost estimate |
 | [Independent review handoff](09_independent_review_handoff.md) | Source-first review inputs that withhold model answers and leave all audit checks unfinished |
+| [Source-note stress test](10_source_note_stress.md) | Four synthetic error controls, including misleading instructions inside copied filing notes |
 
 ## Proposed operating model
 

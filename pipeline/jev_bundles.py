@@ -664,10 +664,23 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
     section_contexts = _section_contexts(parsed['tables'])
     terms = identity_terms(output)
     found, rejected, hit_count = [], [], 0
+    output_context = clean(output.get('src_context_id'))
+    anchor_rows = []
     if not terms:
         return [], {"identity_terms": [], "blocking_reasons": ["missing_distinctive_issuer"]}
     for table in parsed["tables"]:
         rows, headers = table["rows"], table["headers"]
+        # Check the output's declared source context through a separate channel.
+        # A name search can otherwise omit the target yet retain another sibling.
+        # In unidentified tables, count only explicit monetary concepts to avoid
+        # mistaking an unrelated note/rate disclosure for a position row.
+        if output_context:
+            for ri, row in enumerate(rows):
+                if any(fact.get('context_id') == output_context and
+                       (headers or fact.get('name') in {'us-gaap:InvestmentOwnedAtCost', 'us-gaap:InvestmentOwnedAtFairValue'})
+                       for cell in row for fact in cell.get('inline_facts', [])):
+                    anchor_rows.append({'table_index': table['table_index'], 'row_index': ri,
+                                        'report_date': table['report_date'], 'supported_headers': bool(headers)})
         if not headers:
             continue
         issuer_header = headers.get("issuer")
@@ -806,12 +819,19 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
                           "missing_note_markers": missing_notes, "blocking_reasons": reasons})
     complete = len(found) <= max_candidates
     retrieval_reasons = [] if complete else ["candidate_limit"]
+    retained = {(c['table_index'], c['row_index']) for c in found[:max_candidates]}
+    missing_anchors = [a for a in anchor_rows if (a['table_index'], a['row_index']) not in retained]
+    if missing_anchors:
+        retrieval_reasons.append('source_context_anchor_not_retrieved')
     if any(r["report_date"] is None for r in rejected):
         retrieval_reasons.append("matching_table_period_unresolved")
     return found[:max_candidates], {"identity_terms": terms, "selection": "issuer_tokens_all_tranches_no_value_search",
                                    "search_scope": "Tables with explicit cost and fair-value headers; retrieval recall is not certified.",
                                    "matching_rows_before_period_filter": hit_count, "current_period_candidates": len(found),
-                                   "excluded_period_candidates": rejected, "candidate_list_complete": complete,
+                                   "excluded_period_candidates": rejected, "candidate_list_complete": complete and not missing_anchors,
+                                   "declared_output_context": output_context or None,
+                                   "source_context_anchor_rows": anchor_rows,
+                                   "unretrieved_source_context_anchors": missing_anchors,
                                    "blocking_reasons": retrieval_reasons}
 
 

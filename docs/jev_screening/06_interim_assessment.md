@@ -1,4 +1,4 @@
-# Interim assessment: useful screening requires validated evidence
+﻿# Interim assessment: useful screening requires validated evidence
 
 Updated 2026-10-04. Work continues in the isolated pilot; this is not a production
 approval or the final experiment report. Exact versions and limitations are in
@@ -37,7 +37,8 @@ this did not add another confirmed natural numeric-error mechanism.
 | Eight presentation calls on four revised X08 cases | Labels/sources remain correct, but three flags change confidence eligibility between orders; none passes both cutoffs in both orders. One call per order does not isolate provider variability. |
 | Eight exact-request repeats of that presentation experiment | All labels/sources remain correct. No complete answer distribution is identical; one unchanged request crosses the cutoff. Two between-presentation eligibility differences persist on repetition. This confirms some provider variability, without quantifying its population rate. |
 | 12 current-builder rechecks plus four blocked natural-error controls | Jev and the raw-preserving comparator both match all 12 called labels/sources. Six pass both confidence cutoffs; four eligibility results differ from older bundles. All 16 route to B1. This is development evidence, not a fresh holdout. |
-| 94 total calls, 1,502,036 provider input tokens | About $0.0631 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
+| Four source-note stress calls | Two synthetic cost errors, each with and without misleading instructions in a copied note: 4/4 correct source/error decisions, all B1. Not a general robustness result. |
+| 98 total calls, 1,561,219 provider input tokens | About $0.0656 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
 | Zero certified clearances; all B1 work retained | No production safety or savings claim |
 
 The deterministic exact-context comparator resolved 39/42 model-scored natural
@@ -59,7 +60,7 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay context_required_v4_27 has
+references are preserved separately. Latest full replay anchor_recall_v4_33 has
 34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
@@ -119,3 +120,4 @@ overstate the benefit. The sampled cases cannot establish population workload.
 
 Production code, data, queues, gates and baselines remain unchanged. The isolated
 checkpoints are local only; no merge or push has been performed.
+

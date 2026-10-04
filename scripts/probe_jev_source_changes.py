@@ -19,6 +19,8 @@ from scripts.review_jev_sources import review_source_path
 
 CASES = {'fortress': 'ROW-0a3fe5a6482a78b9', 'onex': 'ROW-1a734ef6a228d65a',
          'oaktree': 'ROW-1c2a72c58fbc2d87'}
+SOURCE_IDS = {'ROW-0a3fe5a6482a78b9': 't10r32', 'ROW-1a734ef6a228d65a': 't8r22',
+              'ROW-1c2a72c58fbc2d87': 't13r24'}
 
 
 def mutate(raw, packet, mode):
@@ -31,11 +33,25 @@ def mutate(raw, packet, mode):
         return str(soup).encode('utf-8')
     tables = [t for t in soup.find_all('table') if any(tr.find(['td', 'th']) for tr in t.find_all('tr'))]
     coordinates = {(c['table_index'], c['row_index']) for c in packet['source_candidates']}
+    target = next(c for c in packet['source_candidates'] if c['evidence_id'] == SOURCE_IDS[packet['flag']['row_id']])
+    if mode == 'target_issuer_alias':
+        coordinates = {(target['table_index'], target['row_index'])}
     modified = 0
     for ti, ri in sorted(coordinates):
         rows = [tr for tr in tables[ti].find_all('tr') if tr.find(['td', 'th'])]
         row = rows[ri]
-        if mode == 'unsupported_rowspan':
+        if mode == 'target_issuer_alias':
+            column = 0
+            for cell in row.find_all(['td', 'th']):
+                if column == target['headers']['issuer']['column']:
+                    if cell.find('ix:nonfraction'):
+                        raise ValueError('Issuer mutation would alter numeric evidence')
+                    cell.clear()
+                    cell.append('Alternate Legal Name LLC')
+                    modified += 1
+                    break
+                column += int(cell.get('colspan', 1))
+        elif mode == 'unsupported_rowspan':
             row.find(['td', 'th'])['rowspan'] = '2'
             modified += 1
         elif mode in {'unknown_numeric_transform', 'unresolved_currency'}:
@@ -79,14 +95,18 @@ def main():
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--case', choices=CASES, required=True)
     parser.add_argument('--context-probe', action='store_true')
+    parser.add_argument('--retrieval-probe', action='store_true')
     parser.add_argument('--label', default='24')
     args = parser.parse_args()
     repo, run = args.repo.resolve(), args.run_root.resolve()
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, run)
+    builder_hash = sha(ROOT / 'pipeline/jev_bundles.py')
     if not args.label.isdigit():
         raise ValueError('Numeric experiment label required')
+    if args.context_probe and args.retrieval_probe:
+        raise ValueError('Choose one probe family')
     paths = list((run / 'current_development_packets_20').glob('*_' + CASES[args.case] + '.json'))
     if len(paths) != 1:
         raise ValueError('Expected one frozen packet')
@@ -99,6 +119,8 @@ def main():
     modes = ('unchanged', 'missing_context_reference', 'missing_context_instant', 'missing_context_entity') if args.context_probe else (
         'unchanged', 'insert_navigation_table', 'unsupported_rowspan',
         'unknown_numeric_transform', 'unresolved_currency', 'conflicting_context_date')
+    if args.retrieval_probe:
+        modes = ('unchanged', 'target_issuer_alias')
     for mode in modes:
         print('Source-change probe:', args.case, mode, flush=True)
         altered = mutate(raw, packet, mode)
@@ -109,7 +131,11 @@ def main():
         ready = result['evidence_status']['status'] == 'ready_for_model'
         equivalent = candidate_content(result) == candidate_content(packet)
         passed = (ready and equivalent) if positive else not ready
-        records.append({'mutation': mode, 'expected': 'ready_equivalent' if positive else 'blocked',
+        expected = 'ready_equivalent' if positive else 'blocked'
+        if mode == 'target_issuer_alias':
+            expected = 'blocked_or_anchor_retained'
+            passed = not ready or SOURCE_IDS[CASES[args.case]] in {c['evidence_id'] for c in result['source_candidates']}
+        records.append({'mutation': mode, 'expected': expected,
                         'passed': passed, 'actual_status': result['evidence_status']['status'],
                         'candidate_content_unchanged': equivalent, 'candidates': len(result['source_candidates']),
                         'blocking_reasons': result['evidence_status']['blocking_reasons'],
@@ -118,10 +144,12 @@ def main():
         del parsed, altered, result
     report = {'case': args.case, 'row_id': CASES[args.case], 'records': records,
               'passed': sum(r['passed'] for r in records), 'probes': len(records),
-              'builder_sha256': sha(ROOT / 'pipeline/jev_bundles.py'), 'api_calls': 0,
+              'builder_sha256': builder_hash, 'api_calls': 0,
               'production_clearance_enabled': False,
               'limitation': 'Synthetic mutations of existing development filings, not observed future layouts or independent candidate-recall validation.'}
-    prefix = 'source_context_' if args.context_probe else 'source_changes_'
+    prefix = 'source_retrieval_' if args.retrieval_probe else ('source_context_' if args.context_probe else 'source_changes_')
+    if sha(ROOT / 'pipeline/jev_bundles.py') != builder_hash:
+        raise ValueError('Builder changed during probe')
     write(run / (prefix + args.label + '_' + args.case + '.json'), report)
     print(json.dumps(report), flush=True)
 

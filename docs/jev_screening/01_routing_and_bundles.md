@@ -165,3 +165,12 @@ Keep raw observations separate from final resolutions. Expired evidence reopens
 eligibility. A confirmed unsafe clearance disables the affected rule/layout mode
 and requeues affected clearances since the last valid checkpoint, without deleting
 history. Do not automatically refresh official baselines or alter gate thresholds.
+
+### Source-context omission veto
+
+Inventory monetary rows sharing the output's declared source context separately
+from issuer-name retrieval. If any such row is omitted, block the bundle with
+`source_context_anchor_not_retrieved`; do not silently choose a remaining sibling.
+In unsupported tables, only explicit known monetary concepts count as anchors.
+Absence of an anchor is not proof of complete recall. Independent candidate-recall
+review remains required, and pipeline context identifiers remain claims to verify.
