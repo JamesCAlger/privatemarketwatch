@@ -155,7 +155,10 @@ def asset_inventory(ap, bw, sb, bridge, correction_leaf, agent_rule):
         writes = template.get('field') or obj.get('field') or ''
         if family == 'agent_b2_corrections':
             role = 'B2 candidate mutation or wrapper/grammar proposal'
-            eligible = path.parent.parent == ROOT / 'data/overrides/agent_b2_corrections' and path.suffix == '.json' and isinstance(payload, dict)
+            # Same filter as the loader (pipeline/rule_admission.py): retired files are not eligible.
+            eligible = (path.parent.parent == ROOT / 'data/overrides/agent_b2_corrections' and path.suffix == '.json'
+                        and isinstance(payload, dict)
+                        and not path.name.startswith('_') and not path.parent.name.startswith('_'))
             eligibility = 'loader_eligible_unvalidated' if eligible else 'outside_loader_pattern'
             if obj.get('fix_class'):
                 errors = correction_leaf.validate_correction(obj).errors

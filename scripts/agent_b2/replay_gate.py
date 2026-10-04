@@ -41,8 +41,13 @@ DEFAULT_HOLDINGS = config.UNIFIED_HOLDINGS_PARQUET_FILE
 
 
 def load_leaves(corrections_dir: Path) -> list[tuple[Path, dict]]:
+    from pipeline.rule_admission import is_retired_path
+
     leaves = []
     for p in sorted(Path(corrections_dir).rglob("*.json")):
+        # Same filter as the loader: retired / pulled inputs are not replayed.
+        if is_retired_path(p, corrections_dir):
+            continue
         try:
             leaf = json.loads(p.read_text(encoding="utf-8-sig"))
         except (OSError, json.JSONDecodeError) as e:

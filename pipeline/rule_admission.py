@@ -64,11 +64,22 @@ def reject_contract(path, reason):
     reject_input(path, 'rejected_contract', reason)
 
 
+def is_retired_path(path,base):
+    """True when the file name or any directory below ``base`` starts with '_'.
+
+    The one definition of "retired / pulled" shared by the loader and by operator
+    scripts that walk an override store, so a retired file is never read, rewritten
+    or counted as a live correction.
+    """
+    path,base=Path(path),Path(base)
+    return path.name.startswith('_') or any(p.startswith('_') for p in path.relative_to(base).parts[:-1])
+
+
 def admitted(path,base,*,allow_legacy=True):
     path,base=Path(path),Path(base)
     from pipeline.rule_promotion import assert_ready
     assert_ready(base)
-    if '.proposed.' in path.name.lower() or path.name.startswith('_') or any(p.startswith('_') for p in path.relative_to(base).parts[:-1]):
+    if '.proposed.' in path.name.lower() or is_retired_path(path,base):
         record(path,'proposed_or_retired',False,'Proposal or retired input is not loadable')
         return False
     manifest=base/'admission_manifest.json'

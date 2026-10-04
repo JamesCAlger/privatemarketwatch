@@ -113,6 +113,40 @@ def test_restamp_skips_current_ids_and_pulled_dirs(tmp_path):
     assert changed == 0 and not unresolved
 
 
+def test_restamp_never_rewrites_or_reports_retired_files(tmp_path):
+    """A retired leaf (_-prefixed file name) keeps its original bytes, even with --apply."""
+    frame = _frame()
+    id_map, _ = build_id_map(frame)
+    legacy = next(iter(id_map))
+    live = _write_leaf(tmp_path, legacy)
+    retired = live.with_name("_retired_all_pik_normalization.json")
+    retired.write_bytes(live.read_bytes())
+    unknown = live.with_name("_retired_classification_fix.json")
+    unknown.write_text(json.dumps(
+        {"template": {"row_selector": {"row_id": "ROW-" + "f" * 16}}}), encoding="utf-8")
+    before = {p: p.read_bytes() for p in (retired, unknown)}
+    changed, unresolved = restamp_leaves(tmp_path, id_map,
+                                         current_ids=set(frame["row_id"]),
+                                         apply=True)
+    # Only the live leaf is restamped; the retired unknown id is not an error.
+    assert changed == 1 and not unresolved
+    assert {p: p.read_bytes() for p in before} == before
+    assert json.loads(live.read_text(encoding="utf-8"))[
+        "template"]["row_selector"]["row_id"] == id_map[legacy]
+
+
+def test_restamp_keeps_live_names_that_merely_contain_an_underscore(tmp_path):
+    """False-positive guard: only a LEADING underscore marks a retired path."""
+    frame = _frame()
+    id_map, _ = build_id_map(frame)
+    leaf_file = _write_leaf(tmp_path, next(iter(id_map)))  # all_pik_normalization.json
+    changed, unresolved = restamp_leaves(tmp_path, id_map,
+                                         current_ids=set(frame["row_id"]),
+                                         apply=True)
+    assert changed == 1 and not unresolved
+    assert "_" in leaf_file.name and not leaf_file.name.startswith("_")
+
+
 def test_restamp_reports_unknown_id(tmp_path):
     frame = _frame()
     id_map, _ = build_id_map(frame)

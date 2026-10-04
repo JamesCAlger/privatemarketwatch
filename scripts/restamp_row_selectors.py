@@ -69,8 +69,11 @@ def restamp_leaves(corrections_dir: Path, id_map: dict,
     """Rewrite legacy row_id selector values. Returns (n_changed, unresolved)."""
     changed = 0
     unresolved: list[tuple[str, str]] = []
+    from pipeline.rule_admission import is_retired_path
+
     for leaf_path in sorted(Path(corrections_dir).glob("*/*.json")):
-        if leaf_path.parent.name.startswith("_"):
+        # Same filter as the loader: a retired file keeps its original bytes.
+        if is_retired_path(leaf_path, corrections_dir):
             continue
         raw = leaf_path.read_bytes()
         had_bom = raw.startswith(_BOM)

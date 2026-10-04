@@ -56,8 +56,11 @@ for met in metrics:
             print(f"    {r['cik']} {r['report_date']}: {r[f'{met}_b']} -> {r[f'{met}_p']}")
         changed_cells |= set(m.loc[neq, "cik"].unique())
 
+# Same filter as the loader (pipeline/rule_admission.py): a CIK whose only files are
+# retired (_-prefixed name or directory) has no promoted correction.
 promoted = {p.parent.name for p in
-            (ROOT / "data" / "overrides" / "agent_b2_corrections").glob("*/*.json")}
+            (ROOT / "data" / "overrides" / "agent_b2_corrections").glob("*/*.json")
+            if not p.name.startswith("_") and not p.parent.name.startswith("_")}
 unexpected = changed_cells - promoted
 print(f"\nCIKs with ANY metric change: {len(changed_cells)}")
 print(f"CIKs with promoted corrections: {len(promoted)}")
