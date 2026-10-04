@@ -67,6 +67,14 @@ references are preserved separately. Latest full replay note_formula_v4_48 has
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
 
+The readiness funnel is narrower than the builder count: 67 selected flags,
+39 evidence-ready, 36 also within the ordinary runner's proxy cap, and 34 eligible
+under the default C107/X08 policy. The other two require the explicit C104
+development probe. No current model result or audit is supplied at the end of
+this funnel. Artifact `screening_funnel_e1de2d1edafbbe27.json` records all 67
+dispositions under both policies; it does not certify production rule eligibility
+or infer high true-error rates from this selected sample.
+
 Synthetic changes to three real filings confirm some structural fallback
 behaviour, but deeper probes found that missing monetary context definitions,
 dates or entities were not blocking readiness. Explicit checks now reject those
@@ -77,6 +85,15 @@ production error. Later source-context retrieval diagnostics also change model-v
 A later bounded note-table association adds full reference-rate tables to seven Crescent bundles across three filings. Three regain readiness; four remain blocked for other reasons. The source identities, amounts and candidate sets are unchanged. This is a development repair, with no inherited model score or independent audit.
 
 ## Implications for the proposed workflow
+
+An additional boundary is **row inclusion**. Four existing AB Centers rows pair
+main-SOI and supplemental-commitment disclosures. Each can match its own source
+while the economic overlap remains unresolved. Current source reconciliation
+does not settle that question. Cheap C107 clearance therefore must not close a
+separate source-role/position-inclusion investigation or certify the whole row.
+The [proxy-cost evidence](07_proxy_cost_evidence.md) records the four cases and a
+separate misleading reconciliation-reason mechanism. No duplication conclusion
+or production correction has been made.
 
 Separate existing review work from additional screening:
 

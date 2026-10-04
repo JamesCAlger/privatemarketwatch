@@ -717,3 +717,11 @@ Validation after the C104 pair and review-record work: 355 targeted Jev tests pa
 - Read cached source for the three omitted declared-context anchors: MES Q4-2025 t55r6, Krayden Q2-2023 t11r51, CMG Q4-2025 t36r7. All sit in headerless tables. No automatic header inheritance added.
 - Krayden retains its visible revolver versus term-loan-context contradiction; source cost uses a filer custom concept. The review helper now records all exact-context numeric facts with original markup/attributes/coordinates, without assigning concept equivalence or truth labels.
 - Eighteen source-review tests pass. No changed builder, readiness, frozen labels or API accounting. Independent reviews remain zero; source-first packet bindings for replay 48 were rechecked against all 26 original source hashes.
+
+## 2026-10-04 checkpoint: readiness funnel and row-inclusion boundary
+
+- Computed 67 dispositions: default C107/X08 has 34 awaiting current model/audit, three size fallbacks and 30 policy/evidence fallbacks. Explicit C104 probe adds two otherwise-supported cases. Current model/audit records were not supplied; no score transfer.
+- Investigated final two note-table gaps in one existing filing: note 9 crosses a page break to a 62-row commitment table. Both remain blocked for separate annotated scope; no limit widening.
+- Four existing AB Centers rows raise unresolved main-SOI/supplemental presentation overlap. Recorded exact source coordinates and descriptive FV sums; no duplicate finding, correction target or row deletion.
+- Existing source reconciliation matches main rows and gives supplemental rows nonblocking cost diagnostics. A separate SQL reason-branch precedence defect explains misleading equity/principal messages on those loan/cost cases. Production was read only.
+- Twenty-fifth bounded production metadata audit reports zero changed paths. API usage remains 100 calls and 1,580,960 provider input tokens. No new tests needed for these bounded diagnostics; no full suite/rebuild/export/semantic diff.

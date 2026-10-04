@@ -68,3 +68,76 @@ validation. Adding more raw current-table context does not solve it.
 Keep proxy costs outside the initial Jev reported-cost mode. Preserve this richer
 evidence for B1, measure its investigation benefit separately, and require a new
 label set and validation contract before proposing automated proxy adjudication.
+
+## Main-SOI versus supplemental presentation: unresolved overlap
+
+Four already-selected rows coexist in the frozen Q3-2024 output for CIK 1959568.
+All carry `parent_schedule` and the same parent accounting-scope ID, but their
+source contexts and field provenance differ:
+
+| Frozen row suffix | Source | Disclosed position | Published cost | Published FV |
+|---|---|---|---:|---:|
+| 54bec5b9be81ee4d | Main SOI t12r6 | AB Centers delayed-draw loan | -10,000 reported | -21,000 |
+| 96818d4e9b1777d0 | Main SOI t12r7 | AB Centers revolver | -2,000 reported | -2,000 |
+| 1e319095e85a0c34 | Commitments t15r2 | AB Centers delayed-draw loan | -22,000 FV proxy | -22,000 |
+| 24cf5e7b72e10c93 | Commitments t15r3 | AB Centers revolver | -2,000 FV proxy | -2,000 |
+
+Row identifiers above have the `ROW-` prefix and are valid only in the frozen
+holdings snapshot. Source file: `1959568/000095017024126452.html`, SHA-256
+`5fc8a8adf1d45724378996b3554af55de250ad17e84f3bc96088f932f552535f`.
+The primary rows have explicit instrument descriptions and 2031-07-02 maturity.
+The proxy rows retain instrument text inside the issuer/identifier but have null
+instrument-description and maturity fields. Their absence does not establish a
+different facility.
+
+This is **possible presentation overlap, not a proven duplicate finding**. Note 9
+says positions may be wholly or partly unfunded, with commitment expiration
+preceding loan maturity. The supplemental delayed-draw commitment expires in
+2026, while the main position matures in 2031; those dates therefore cannot alone
+prove that the facilities differ. Conversely, similar names and matching revolver
+FV do not prove equivalence. The delayed-draw FV differs between the two source
+presentations (-21,000 versus -22,000), requiring further reconciliation.
+
+The four published FVs sum to -47,000; the two main-SOI rows sum to -23,000 and the
+two supplemental rows to -24,000. These are descriptive sums, **not a correction
+proposal or an independently established target**. Do not deduplicate by issuer,
+value or maturity, and do not remove all supplemental/JV rows globally.
+
+B1 needs to establish the contractual position link, funded versus unfunded
+exposure treatment, the source schedule's totals, and why both observations enter
+the unified holdings. Then an independent position-level reconciliation can test
+any proposed extraction/correction mechanism. The frozen C107 reference labels
+are unchanged: source-value agreement on one row does not settle whether both
+rows belong in published holdings. This is a concrete limit on what cheap
+per-flag screening can certify.
+
+### Existing checks do not settle this overlap
+
+The frozen main rows each have C107 REVIEW. The supplemental proxy rows each
+have C107 and X02 REVIEW. Existing `source_reconciliation_detail.csv` matches
+all four by exact dimensions: the main rows are reconciled; supplemental rows
+have a nonblocking cost diagnostic because the source lacks cost and output uses
+an FV proxy. These records do not certify unique economic exposure across the
+two source presentations. The query rechecked their output cost/FV against the
+four frozen bundles and recorded hashes of both input artifacts.
+
+The two supplemental diagnostics also contain a misleading explanation:
+`principal_amount differs on equity position; tracked as diagnostic`. Their
+recorded category is LOAN, mismatched field is cost, and both principal amounts
+are absent. Read-only inspection of the current SQL builder shows an unparenthesized
+OR expression followed by equity/principal AND conditions. A bounded four-case
+SQL probe reproduces how a cost mismatch selects that explanation despite the
+failed equity/principal conditions. Parenthesizing the OR group selects the
+generic secondary-field explanation in that counterfactual.
+
+This identifies an explanation-branch mechanism, not a full historical rebuild
+or a demonstrated change to blocking status. Production code remains untouched.
+The reason text is carried into column-validation evidence and reconciliation
+summaries, so it should not be treated as source truth in a B1/Jev reference label.
+Any later fix needs a targeted regression covering loan cost-only, loan principal,
+equity principal and share-count mismatches, plus confirmation of unchanged
+status/amount outputs except intended explanatory text.
+
+Artifact: `overlap_routing_f9d3f6a9fd99796e.json`. The source-reconciliation input
+is the existing artifact dated 2026-09-30; its four amounts match the frozen pilot
+snapshot. No new flags, corrected amounts, promoted fixes or API calls resulted.

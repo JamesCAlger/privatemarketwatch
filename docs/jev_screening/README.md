@@ -7,6 +7,9 @@ Current checkpoint (2026-10-04): **39/67 bundles evidence-ready**, with 28 evide
 fallbacks. Three ready requests exceed the runner's token proxy cap, leaving
 **36/67 within both evidence and size requirements**. **100/100 API calls used**, 42 unique natural flags called, zero
 independently audited clearances and zero B1 suppression. Work continues offline.
+The default C107/X08 policy admits 34 of those 36; two C104 cases require the
+explicit development probe. These counts do not include a current model verdict
+or independent clearance.
 The inference estimate is about **$0.0664**; bundle maintenance and B1 review cost
 are not measured. See the [interim assessment](06_interim_assessment.md) first.
 

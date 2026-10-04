@@ -202,3 +202,26 @@ Artifacts: `header_gap_inspection_2a9e9202913a7d5a.json`,
 `unmatched_cost_sources_50.json`, `unmatched_zero_source_50.json` and
 `custom_context_source_51.json`. These are bounded source investigations on the
 same three frozen flags, not new natural cases or independent audit certificates.
+
+## The remaining note-table gap crosses a page boundary
+
+Both remaining missing continuations are AB Centers C107 flags for CIK 1959568,
+Q3-2024. Note 9 refers explicitly to the following unfunded-commitments table.
+Between that note and table 15 are note 10, the page footer, a repeated owner
+heading, an explicit continued schedule title, the same date/units, and a new
+unfunded-commitments introduction. Table 15 contains 62 rows and 4,471 text
+characters. The immediate-adjacency and 40-row limits both exclude it.
+
+This is different from the supported reference-rate-table association. A future
+commitment-table contract could use the repeated owner/date and explicit continued
+heading, but must retain intervening text, preserve all rows or demonstrate
+relevant-row recall, and stop before the subsequent comparative schedule. The
+current rate-specific exception and generic size limits were not broadened.
+Both flags also have unresolved annotated section scope, so table recovery alone
+would not make them evidence-ready.
+
+Artifact: `note_continuation_inspection_3f5a3d4abff61e39.json`. It contains bounded
+navigation excerpts, not a complete table bundle. The raw source is unchanged.
+The linked [proxy-cost investigation](07_proxy_cost_evidence.md) now also records
+possible main/supplemental row overlap, a separate question from whether each
+reported negative cost matches its source.
