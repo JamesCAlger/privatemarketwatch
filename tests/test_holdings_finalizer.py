@@ -94,6 +94,24 @@ def test_existing_holdings_complete_real_entity_and_position_writers(tmp_path):
             assert verify_pair(tmp_path / name, con)["typed_multiset_difference"] == 0
 
 
+def test_entity_rebuild_survives_holdings_with_no_resolvable_issuer(tmp_path):
+    """Opaque-id-only holdings: the resolver has no variant; entity columns stay blank."""
+    hp = tmp_path / "private_markets_holdings.csv"
+    frame = holdings([{"position_id": "", "issuer_name": "1824445.SQ.RVR", "fair_value": "100",
+                       "principal_amount": "100", "cost": "90",
+                       "entity_id": "ENT-00000009", "canonical_name": "Stale Name"}])
+    frame.to_csv(hp, index=False)
+    output, paired = finalizer.finalize_existing_holdings(
+        holdings_file=hp, rebuild_entities=True, bdc_raw_df=_make_bdc_raw([]))
+    assert len(output) == 1 and paired.empty
+    assert output.row_id.tolist() == ["ROW-1"]
+    published = pd.read_csv(hp, dtype=str, keep_default_na=False)
+    # The stale name is gone; nothing was invented in its place.
+    assert published.canonical_name.tolist() == [""]
+    lookup = pd.read_csv(tmp_path / "entity_lookup.csv")
+    assert lookup.empty and "issuer_name_variant" in lookup.columns
+
+
 def test_default_rebuild_uses_finalizer_before_replacing_holdings(tmp_path, monkeypatch):
     from pipeline import config, unified_holdings
     hp = tmp_path / "private_markets_holdings.csv"

@@ -134,9 +134,26 @@ def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool
             shutil.copy2(registry_target, registry_path)
         registry_outputs = [(registry_path, registry_target), (retirements_path, retirement_target)]
     if rebuild_entities:
-        entity_resolution.build_entity_lookup(
-            working, enrich=True, lookup_path=working.parent / "entity_lookup.csv",
-            stats_path=working.parent / "entity_resolution_stats.csv")
+        lookup_file = working.parent / "entity_lookup.csv"
+        # build_entity_lookup raises KeyError when no issuer name survives its
+        # variant filter (opaque ids / blanks only). Same guard as the in-build
+        # pass (unified_holdings._resolve_entities_in_build): ask the resolver's
+        # own filter, then publish an empty lookup and blank entity columns.
+        if entity_resolution._build_variant_table(working).empty:
+            import logging
+            logging.getLogger(__name__).info(
+                "Entity resolution (finalizer): no resolvable issuer names")
+            pd.DataFrame(columns=["entity_id", "canonical_name", "normalized_name",
+                "issuer_name_variant", "source", "occurrence_count", "cluster_method",
+                "cusip", "lei"]).to_csv(lookup_file, index=False)
+            blank = pd.read_csv(working, dtype=str)
+            blank["entity_id"] = ""
+            blank["canonical_name"] = ""
+            blank.to_csv(working, index=False)
+        else:
+            entity_resolution.build_entity_lookup(
+                working, enrich=True, lookup_path=lookup_file,
+                stats_path=working.parent / "entity_resolution_stats.csv")
     holdings = pd.read_csv(working, dtype=str)
     from pipeline import config
     if config.GICS_ENRICHMENT_DECISIONS_FILE.is_file():
