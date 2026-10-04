@@ -26,7 +26,7 @@ def parsed(body):
     # Explicit malformed-context tests override this definition themselves.
     if '<xbrli:context' not in body and 'Schedule of Investments June 30, 2025' in body:
         body = context() + body
-    return jb.parse_source(('<html xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"><body><xbrli:unit id="usd"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
+    return jb.parse_source(('<html xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"><body><xbrli:unit id="usd"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>'
                             '<xbrli:unit id="cad"><xbrli:measure>iso4217:CAD</xbrli:measure></xbrli:unit>'
                             + body + '</body></html>').encode())
 
@@ -50,6 +50,25 @@ def bundle(row=None, source=None, rule="X08", **kwargs):
 
 def basic_source(**changes):
     return parsed(schedule([("Acme Test LLC", "Preferred units", fact("2,000", **changes), fact("1"), "")]))
+
+
+@pytest.mark.parametrize('attribute,payload', [
+    ('xsi:nil="true"', '2,000'),
+    ('continuedAt="other-fragment"', '2,000'),
+    ('', '2,<ix:exclude>000</ix:exclude>'),
+    ('sign="+"', '2,000'),
+])
+def test_unsupported_monetary_fact_semantics_cannot_be_silently_ignored(attribute, payload):
+    cost = fact(payload).replace('sign=""', attribute)
+    packet = bundle(source=parsed(schedule([('Acme Test LLC', 'Preferred units', cost, fact('1'), '')])))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert packet['source_candidates'][0]['source_values']['cost']['amount'] is None
+
+
+def test_explicit_non_nil_monetary_fact_remains_supported():
+    cost = fact('2,000').replace('sign=""', 'xsi:nil="false"')
+    packet = bundle(source=parsed(schedule([('Acme Test LLC', 'Preferred units', cost, fact('1'), '')])))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
 
 
 def test_full_position_and_both_values_replace_unrelated_sample():
@@ -636,6 +655,26 @@ def test_later_unit_cannot_restore_an_ambiguous_currency_id():
     extra = ''.join(f'<xbrli:unit id="usd"><xbrli:measure>iso4217:{c}</xbrli:measure></xbrli:unit>'
                     for c in ['AUD', 'USD', 'USD'])
     assert bundle(source=parsed(extra + body))['evidence_status']['status'] == 'blocked'
+
+
+@pytest.mark.parametrize('definition', [
+    '<xbrli:measure xmlns:fake="urn:unrelated-unit">fake:USD</xbrli:measure>',
+    '<xbrli:measure>undeclared:USD</xbrli:measure>',
+    '<xbrli:measure>USD</xbrli:measure>',
+    '<xbrli:divide><xbrli:unitNumerator><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unitNumerator></xbrli:divide>',
+])
+def test_usd_suffix_alone_cannot_certify_currency(definition):
+    body = '<xbrli:unit id="suspect">' + definition + '</xbrli:unit>'
+    body += schedule([('Acme Test LLC', 'Preferred units', fact('2,000', currency='suspect'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert packet['source_candidates'][0]['source_values']['cost']['currency'] is None
+
+
+def test_currency_namespace_alias_is_supported():
+    body = '<xbrli:unit id="alias"><xbrli:measure xmlns:money="http://www.xbrl.org/2003/iso4217">money:USD</xbrli:measure></xbrli:unit>'
+    body += schedule([('Acme Test LLC', 'Preferred units', fact('2,000', currency='alias'), fact('1'), '')])
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'ready_for_model'
 
 
 def test_undisclosed_units_with_conflicting_column_scales_block_tcw_failure():

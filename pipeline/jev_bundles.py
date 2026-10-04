@@ -445,7 +445,13 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
     for unit in soup.find_all(re.compile(r"(?:^|:)unit$")):
         measures = unit.find_all(re.compile(r"(?:^|:)measure$"))
         unit_id = unit.get('id')
-        currency = clean(measures[0].text).split(':')[-1].upper() if len(measures) == 1 else None
+        currency = None
+        if len(measures) == 1 and measures[0].parent is unit:
+            measure = clean(measures[0].text)
+            if _qname_namespace(measures[0], measure) == 'http://www.xbrl.org/2003/iso4217':
+                code = measure.split(':')[-1]
+                if re.fullmatch(r'[A-Z]{3}', code):
+                    currency = code
         if unit_id not in units:
             units[unit_id] = currency
         elif units[unit_id] != currency:
@@ -472,6 +478,17 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
                                   "sign": tag.get("sign"), "format": tag.get("format"),
                                   'format_namespace': _qname_namespace(tag, tag.get('format')),
                                   "text": clean(tag.text)})
+                    unsupported_features = []
+                    if tag.get('xsi:nil') not in (None, 'false', '0'):
+                        unsupported_features.append('nil_or_invalid_nil')
+                    if tag.has_attr('continuedat'):
+                        unsupported_features.append('continued_fact')
+                    if tag.find('ix:exclude'):
+                        unsupported_features.append('excluded_fact_content')
+                    if tag.get('sign') not in (None, '', '-'):
+                        unsupported_features.append('invalid_sign')
+                    if unsupported_features:
+                        facts[-1]['unsupported_features'] = unsupported_features
                 cell = {"column": col, "span": span, "text": clean(td.get_text(" ", strip=True))}
                 if facts:
                     cell["inline_facts"] = facts
@@ -598,6 +615,8 @@ def _money(row: list, header: dict | None, title_scale: int | None, *, expected_
     currency, scale = None, title_scale
     if len(facts) == 1:
         fact = facts[0]
+        reasons.extend('unsupported_inline_feature:' + feature
+                       for feature in fact.get('unsupported_features', []))
         format_name = (fact.get('format') or '').split(':')[-1].lower()
         if format_name:
             # Supported display parsing is deliberately narrower than the full

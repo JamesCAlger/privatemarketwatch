@@ -60,7 +60,7 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay anchor_recall_v4_33 has
+references are preserved separately. Latest full replay currency_namespace_v4_37 has
 34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
@@ -120,4 +120,5 @@ overstate the benefit. The sampled cases cannot establish population workload.
 
 Production code, data, queues, gates and baselines remain unchanged. The isolated
 checkpoints are local only; no merge or push has been performed.
+
 

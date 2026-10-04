@@ -174,3 +174,13 @@ from issuer-name retrieval. If any such row is omitted, block the bundle with
 In unsupported tables, only explicit known monetary concepts count as anchors.
 Absence of an anchor is not proof of complete recall. Independent candidate-recall
 review remains required, and pipeline context identifiers remain claims to verify.
+
+### Supported inline monetary features
+
+Treat nil facts, continuation attributes, excluded fact content and invalid signs
+as unsupported evidence; do not silently flatten them into a monetary amount.
+A monetary currency unit must contain one direct measure whose QName resolves to
+`http://www.xbrl.org/2003/iso4217`. Accept alternate prefixes for that namespace;
+reject unrelated or unresolved namespaces and compound units. The `USD` suffix
+alone is insufficient. This is a narrow supported subset, not a full XBRL validator.
+The namespace requirement follows the [XBRL 2.1 specification](https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31%2Bcorrected-errata-2013-02-20.html).

@@ -594,3 +594,26 @@ remain development evidence, not untouched human gold.
   Total usage remains 1,561,219 provider input tokens. No additional API calls.
 
 Validation: all 287 targeted tests pass; fifteenth bounded production metadata audit reports zero changed paths. No full suite or production-writing semantic diff was run.
+
+## 2026-10-04 checkpoint: unsupported inline monetary semantics
+
+- Four new failing regressions showed nil markers, continuation attributes,
+  excluded numeric content and invalid signs being treated as ordinary facts.
+  The isolated parser now retains explicit unsupported-feature blockers instead
+  of returning usable amounts. Explicit false nil remains supported.
+- All five copied-source Fortress probes pass. They are synthetic malformed or
+  unsupported variants, not observed production errors or additional natural flags.
+- Replay inline_semantics_v4_35 stays 34 ready / 33 blocked, with no candidate
+  changes across 67 flags. Builder hash:
+  1d2438ab48ce107db7b8fd3e50446ebe5493fe914ec0cfc41705e12366ed7fd7.
+- Follow-up currency tests exposed acceptance of unrelated/undeclared USD QNames
+  and a nested divide unit. Added namespace and direct-measure requirements, with
+  a valid alternate-prefix counterexample. Combined targeted suite: 297 passed.
+  The full replay of this later currency revision is being recorded separately.
+- No new API calls, funds, source downloads, production writes or independent audits.
+
+Currency replay currency_namespace_v4_37 is complete: 67 flags, 34 ready / 33
+blocked, no candidate changes. Builder hash:
+e335e32d02d78ad8c0c75967f5585173acf3996b8c1b583b666ab78071c7a1df.
+Eight copied-source checks pass across Fortress and Onex, including valid prefix
+aliases. Sixteenth bounded production metadata audit: zero changed paths.

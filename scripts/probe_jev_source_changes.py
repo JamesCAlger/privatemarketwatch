@@ -31,6 +31,19 @@ def mutate(raw, packet, mode):
         navigation = BeautifulSoup('<table><tr><td>Navigation</td></tr></table>', 'lxml').table
         soup.body.insert(0, navigation)
         return str(soup).encode('utf-8')
+    if mode in {'currency_alias', 'currency_namespace_conflict', 'currency_namespace_missing'}:
+        modified = 0
+        for measure in soup.find_all(re.compile(r'(?:^|:)measure$')):
+            if measure.get_text(strip=True).split(':')[-1] != 'USD':
+                continue
+            measure.string = 'pilotcurrency:USD'
+            if mode != 'currency_namespace_missing':
+                measure['xmlns:pilotcurrency'] = ('http://www.xbrl.org/2003/iso4217'
+                    if mode == 'currency_alias' else 'urn:unrelated-unit')
+            modified += 1
+        if not modified:
+            raise ValueError('No currency measures changed')
+        return str(soup).encode('utf-8')
     tables = [t for t in soup.find_all('table') if any(tr.find(['td', 'th']) for tr in t.find_all('tr'))]
     coordinates = {(c['table_index'], c['row_index']) for c in packet['source_candidates']}
     target = next(c for c in packet['source_candidates'] if c['evidence_id'] == SOURCE_IDS[packet['flag']['row_id']])
@@ -65,6 +78,20 @@ def mutate(raw, packet, mode):
             for fact in row.find_all('ix:nonfraction'):
                 fact['contextref'] = 'missing-position-context'
                 modified += 1
+        elif mode in {'nil_monetary_fact', 'continued_monetary_fact', 'excluded_monetary_content', 'invalid_monetary_sign'}:
+            for fact in row.find_all('ix:nonfraction'):
+                if mode == 'nil_monetary_fact':
+                    fact['xsi:nil'] = 'true'
+                elif mode == 'continued_monetary_fact':
+                    fact['continuedat'] = 'unsupported-fragment'
+                elif mode == 'invalid_monetary_sign':
+                    fact['sign'] = '+'
+                else:
+                    excluded = soup.new_tag('ix:exclude')
+                    for child in list(fact.contents):
+                        excluded.append(child.extract())
+                    fact.append(excluded)
+                modified += 1
         elif mode in {'conflicting_context_date', 'missing_context_instant', 'missing_context_entity'}:
             for fact in row.find_all('ix:nonfraction'):
                 context = soup.find(id=fact.get('contextref'))
@@ -96,6 +123,8 @@ def main():
     parser.add_argument('--case', choices=CASES, required=True)
     parser.add_argument('--context-probe', action='store_true')
     parser.add_argument('--retrieval-probe', action='store_true')
+    parser.add_argument('--inline-probe', action='store_true')
+    parser.add_argument('--currency-probe', action='store_true')
     parser.add_argument('--label', default='24')
     args = parser.parse_args()
     repo, run = args.repo.resolve(), args.run_root.resolve()
@@ -105,7 +134,7 @@ def main():
     builder_hash = sha(ROOT / 'pipeline/jev_bundles.py')
     if not args.label.isdigit():
         raise ValueError('Numeric experiment label required')
-    if args.context_probe and args.retrieval_probe:
+    if sum((args.context_probe, args.retrieval_probe, args.inline_probe, args.currency_probe)) > 1:
         raise ValueError('Choose one probe family')
     paths = list((run / 'current_development_packets_20').glob('*_' + CASES[args.case] + '.json'))
     if len(paths) != 1:
@@ -121,13 +150,18 @@ def main():
         'unknown_numeric_transform', 'unresolved_currency', 'conflicting_context_date')
     if args.retrieval_probe:
         modes = ('unchanged', 'target_issuer_alias')
+    if args.inline_probe:
+        modes = ('unchanged', 'nil_monetary_fact', 'continued_monetary_fact',
+                 'excluded_monetary_content', 'invalid_monetary_sign')
+    if args.currency_probe:
+        modes = ('unchanged', 'currency_alias', 'currency_namespace_conflict', 'currency_namespace_missing')
     for mode in modes:
         print('Source-change probe:', args.case, mode, flush=True)
         altered = mutate(raw, packet, mode)
         parsed = parse_source(altered)
         result = build_bundle(packet['flag'], [deepcopy(packet['output_position'])], packet['provenance'],
                               parsed_source=parsed, source_metadata={'sha256': hashlib.sha256(altered).hexdigest()})
-        positive = mode in {'unchanged', 'insert_navigation_table'}
+        positive = mode in {'unchanged', 'insert_navigation_table', 'currency_alias'}
         ready = result['evidence_status']['status'] == 'ready_for_model'
         equivalent = candidate_content(result) == candidate_content(packet)
         passed = (ready and equivalent) if positive else not ready
@@ -148,6 +182,10 @@ def main():
               'production_clearance_enabled': False,
               'limitation': 'Synthetic mutations of existing development filings, not observed future layouts or independent candidate-recall validation.'}
     prefix = 'source_retrieval_' if args.retrieval_probe else ('source_context_' if args.context_probe else 'source_changes_')
+    if args.inline_probe:
+        prefix = 'source_inline_'
+    if args.currency_probe:
+        prefix = 'source_currency_'
     if sha(ROOT / 'pipeline/jev_bundles.py') != builder_hash:
         raise ValueError('Builder changed during probe')
     write(run / (prefix + args.label + '_' + args.case + '.json'), report)
