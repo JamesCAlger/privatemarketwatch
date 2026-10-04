@@ -100,6 +100,39 @@ be allocated to a position. They do not reproduce the production queue/grouping
 logic, establish materiality or prove that every REVIEW action becomes a B1 job.
 No issue disposition was changed.
 
+## Why X02 needs a separate evidence contract
+
+Three already-selected Crescent positions also carry X02. Their exact source
+contexts contain cost, FV and percentage-of-net-assets facts, but no principal
+or rate facts. The visible rows have a dash in the principal area. Their note 5
+says the position **or a portion** is an unfunded commitment and that no interest
+is earned on the unfunded portion. It also refers to the commitments note.
+
+Those observations do not establish that the entire position is unfunded or that
+the filing contains no applicable rate. A short excerpt with no rate tag cannot
+certify absence. The pilot assigns no X02 labels; the separate blocking identity
+issue also remains. See [the three-case investigation](16_missing_issuer_mechanism.md).
+
+A future X02 bundle would need:
+
+| Evidence | Required distinction | Trade-off |
+|---|---|---|
+| Published rate fields and provenance | Missing versus zero; rate, spread and cash/PIK terms as actually stored | More fields are needed, but changing rate conventions is outside screening |
+| Original rate/principal columns and inline facts | Blank, untagged dash, explicitly tagged zero and numeric value | Missing tags cannot become invented zeros |
+| Funding status and commitment notes | Entirely undrawn versus partly funded | An unfunded-portion note alone cannot waive a rate question |
+| Instrument identity and classification | Revolver, term loan, DDTL or misclassified equity | Same borrower does not mean the same instrument |
+| Applicable rate legends and targeted note references | Benchmark/spread terms versus current income/accrual status | More context may be necessary, but follow references needed for the question rather than every filing cross-reference |
+| Explicit evidence of disclosure coverage | Source omits a rate versus retrieval omitted the relevant disclosure | Hard absence questions require B1 when coverage is not established |
+
+This keeps C104 the better bounded next coverage family: it reuses a narrow FV
+comparison. X02 may eventually add more semantic value for Jev, but its higher
+flag count does not make its bundle simpler or its clearance safer.
+
+Raw inventory: `rate_context_inventory_0788a87fa395c099.json` in the pilot root,
+produced offline by `scripts/review_jev_rate_contexts.py`. It covers only the same
+three existing positions in two cached filings, with no new calls or natural
+case selection. It is not a full filing search or an independent absence audit.
+
 ## Reproduction
 
 Isolated script: `scripts/inventory_jev_rule_workload.py`. It uses DuckDB with
