@@ -33,6 +33,15 @@ def numeric_evidence_paths(candidate):
     return [unique[key] for key in sorted(unique)]
 
 
+def section_evidence(candidate):
+    return [{'table_index': section.get('table_index'), 'row_index': section.get('row_index'),
+             'text': section.get('text'), 'scope_unresolved': bool(section.get('scope_unresolved')),
+             'scope_reason': section.get('scope_reason'),
+             'location': ('unknown' if section.get('table_index') is None or candidate.get('table_index') is None
+                          else 'local' if section['table_index'] == candidate['table_index'] else 'other_table')}
+            for section in candidate.get('section_context', [])]
+
+
 def profile(packets):
     layouts, periods = {}, defaultdict(list)
     for packet in packets.values():
@@ -54,6 +63,9 @@ def profile(packets):
                 'period_basis': candidate.get('period_evidence', {}).get('basis'),
                 'note_markers': sorted(n['marker'] for n in candidate['notes']),
                 'note_table_count': sum(bool(n.get('continuation_table')) for n in candidate['notes']),
+                'note_table_associations': sorted({n['continuation_table']['association'] for n in candidate['notes']
+                                                  if n.get('continuation_table')}),
+                'section_evidence': section_evidence(candidate),
                 'missing_note_markers': candidate['missing_note_markers'],
                 'blocking_reasons': candidate['blocking_reasons'],
             })

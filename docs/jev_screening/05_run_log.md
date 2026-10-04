@@ -658,3 +658,10 @@ aliases. Sixteenth bounded production metadata audit: zero changed paths.
   42 unique natural flags called and 1,561,219 input tokens. No new API calls.
 - Intermediate rate_note_scope_v4_41 is retained as development evidence, not the
   accepted builder revision; it predates the two added association boundary vetoes.
+
+Section-scope follow-up: observed locally repeated annotated portfolio headings
+on sampled Q4-2025 Crescent pages versus inherited headings on later pages in
+Q3-2025/Q1-2026. No continuation policy relaxation. Layout profiler now preserves
+local/other-table section evidence, unresolved reasons and note-table association
+paths; six focused profiler tests pass (two new). This is descriptive evidence,
+not validation of all filing pages or a new human audit.

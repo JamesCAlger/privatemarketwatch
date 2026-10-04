@@ -55,3 +55,18 @@ This added tables to seven Crescent bundles across three filings. Three December
 Buyer. Four other bundles remain blocked for section scope. The overall split
 moved from 34/33 to 37/30 without changing source identities, amounts or candidate
 sets. No new model calls, independent certificates or B1 savings were recorded.
+
+## Observed section repetition across Crescent filings
+
+The sampled Q4-2025 pages for Accurate Finance Sub and CRS TH Holdings repeat the
+annotated `Investments (1)(2)(3)` heading locally. In sampled Q3-2025 and Q1-2026
+pages, later tables instead inherit that heading from the first table without an
+explicit continuation marker. The latter retain an unresolved-scope blocker.
+Both sets repeat the fund name and schedule title; that alone is not used to
+assert unchanged accounting scope. These are different sampled positions/pages,
+not a complete template census or a matched-position longitudinal test.
+
+Layout profiling now records whether section evidence is local or from another
+table, its unresolved-scope reason and the association used for note tables.
+This separates geometry drift from evidence-scope drift without certifying either.
+The conservative continuation rule has not been relaxed to recover more flags.
