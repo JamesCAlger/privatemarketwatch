@@ -24,7 +24,10 @@ from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_HOLDINGS_PARQUET_FILE,
     COMBINED_UNIVERSE_FILE,
-    ENTITY_LOOKUP_FILE,
+    # Not read by the build since 2026-10-04 (it is a previous run's output).
+    # Kept as a module attribute because tests and the programme-rules audit
+    # patch it; patching it must have no effect on the build.
+    ENTITY_LOOKUP_FILE,  # noqa: F401
     FUND_FINANCIALS_FILE,
     FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
     FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE,
@@ -412,6 +415,85 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
     """
     return df
 
+
+
+# ---------------------------------------------------------------------------
+# In-build entity resolution (input-determined entity_id / canonical_name)
+# ---------------------------------------------------------------------------
+
+# The only columns entity resolution reads from holdings.
+_ENTITY_INPUT_COLUMNS = [
+    "issuer_name", "source", "cusip", "lei", "bdc_investment_identifier",
+]
+
+
+def _resolve_entities_in_build(combined: pd.DataFrame) -> pd.DataFrame:
+    """Fill entity_id / canonical_name from a lookup built from THIS frame.
+
+    The lookup is a function of the frame's issuer names plus the entity
+    resolver's own reference inputs (identifier extraction cache, entity
+    overrides). Nothing is read from ENTITY_LOOKUP_FILE, which is an output of
+    the previous run: reading it back made the GICS canonical-name fallback,
+    and so the published sector mix, depend on rebuild order.
+
+    The final entity_lookup.csv is still written by the holdings finalizer
+    from the finished holdings. Both passes run the same resolver over the
+    same five columns, serialized the same way, so they agree.
+
+    Row order and row count are preserved (the caller has already sorted).
+    """
+    if combined.empty:
+        return combined
+
+    import tempfile
+
+    from pipeline import entity_resolution
+
+    with tempfile.TemporaryDirectory(prefix="unified-entities-") as directory:
+        staged = Path(directory) / "entity_inputs.csv"
+        # Same serializer as the final holdings CSV the finalizer resolves from.
+        combined[_ENTITY_INPUT_COLUMNS].to_csv(staged, index=False)
+        # build_entity_lookup cannot handle a frame with no resolvable issuer
+        # name (opaque ids, subtotal labels, blanks only). Ask the resolver's
+        # own variant filter rather than re-implementing it here.
+        if entity_resolution._build_variant_table(staged).empty:
+            logger.info("Entity enrichment (in-build): no resolvable issuer names")
+            result = combined.copy()
+            result["entity_id"] = ""
+            result["canonical_name"] = ""
+            return result
+        variants = entity_resolution.build_entity_lookup(
+            staged, enrich=False,
+            lookup_path=Path(directory) / "entity_lookup.csv",
+            stats_path=Path(directory) / "entity_resolution_stats.csv")
+
+    lookup = pd.DataFrame({
+        "_entity_issuer": variants["issuer_name"].astype(str),
+        "_entity_source": variants["source"].astype(str),
+        "entity_id": variants["entity_num"].map(entity_resolution._format_entity_id),
+        "canonical_name": variants["canonical_name"],
+    })
+
+    columns = list(combined.columns)
+    keyed = combined.drop(columns=["entity_id", "canonical_name"])
+    # String keys mirror the CAST(... AS VARCHAR) of the CSV the resolver read.
+    for key, column in (("_entity_issuer", "issuer_name"), ("_entity_source", "source")):
+        values = keyed[column].astype(object)
+        keyed[key] = values.where(values.isna(), values.astype(str))
+    # A duplicated (issuer, source) variant would multiply holdings rows; fail loudly.
+    merged = keyed.merge(lookup, how="left", on=["_entity_issuer", "_entity_source"],
+                         validate="many_to_one")
+    if len(merged) != len(combined):
+        raise ValueError("In-build entity enrichment changed the holdings row count")
+    merged.index = combined.index
+    for column in ("entity_id", "canonical_name"):
+        merged[column] = merged[column].astype(object).where(merged[column].notna(), "")
+    merged = merged[columns]
+
+    with_entity = int((merged["entity_id"] != "").sum())
+    logger.info("Entity enrichment (in-build): %d/%d rows (%.1f%%) with entity_id",
+                with_entity, len(merged), 100 * with_entity / len(merged))
+    return merged
 
 
 # ---------------------------------------------------------------------------
@@ -1159,28 +1241,11 @@ def build_unified_holdings(
         if sub_count > 0:
             logger.info("  Subsidiary positions: %d rows flagged (is_subsidiary=1)", sub_count)
 
-    # Entity enrichment: join against existing entity_lookup if available
-    if ENTITY_LOOKUP_FILE.exists() and not combined.empty:
-        con2 = duckdb.connect()
-        con2.register("holdings", combined)
-        lookup_str = str(ENTITY_LOOKUP_FILE).replace("\\", "/")
-        combined = con2.execute(f"""
-            SELECT h.* EXCLUDE (entity_id, canonical_name),
-                   COALESCE(e.entity_id, '') AS entity_id,
-                   COALESCE(e.canonical_name, '') AS canonical_name
-            FROM holdings h
-            LEFT JOIN read_csv_auto('{lookup_str}',
-                          header=true, all_varchar=true) e
-              ON CAST(h.issuer_name AS VARCHAR) = e.issuer_name_variant
-              AND CAST(h.source AS VARCHAR) = e.source
-        """).fetchdf()
-        con2.close()
-        # Re-apply column order (EXCLUDE moves columns to end)
-        combined = combined[UNIFIED_COLUMNS]
-        eid_count = (combined["entity_id"] != "").sum()
-        logger.info("Entity enrichment: %d/%d rows (%.1f%%) with entity_id",
-                     eid_count, len(combined),
-                     100 * eid_count / len(combined) if len(combined) else 0)
+    # Entity enrichment no longer happens here. This block used to LEFT JOIN
+    # data/output/entity_lookup.csv -- an OUTPUT of the previous run -- so the
+    # GICS canonical-name fallback made build N depend on build N-1
+    # (2026-10-01 defect). See _resolve_entities_in_build, called just before
+    # the GICS cache is applied.
 
     # Industry enrichment: join against identifier_extraction_lookup if available
     if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists() and not combined.empty:
@@ -1265,6 +1330,11 @@ def build_unified_holdings(
         kind="mergesort",
         na_position="last",
     ).reset_index(drop=True)
+
+    # Entity identity for THIS build, resolved from this frame's own issuer
+    # names (never from a previous run's entity_lookup.csv). Must precede the
+    # GICS cache, whose fallback keys on canonical_name.
+    combined = _resolve_entities_in_build(combined)
 
     # Apply cached GICS classifications (if cache exists on disk)
     combined = _apply_gics_cache(combined)

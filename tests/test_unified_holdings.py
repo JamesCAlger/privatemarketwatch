@@ -3623,23 +3623,34 @@ class TestBuildUnifiedHoldings:
 class TestEntityEnrichment:
     pytestmark = SLOW_INTEGRATION_MARKS
 
-    """Tests for entity_id population via entity_lookup join."""
+    """Entity columns and GICS come from the inputs of this build only.
 
-    def _make_bdc_df(self):
+    2026-10-04: the build used to LEFT JOIN data/output/entity_lookup.csv, an
+    OUTPUT of the previous run, and the GICS canonical-name fallback keyed on
+    it, so sector labels depended on rebuild order. The lookup is now resolved
+    in-build from the frame itself; a prior lookup on disk must be inert.
+    """
+
+    _LOOKUP_COLUMNS = [
+        "entity_id", "canonical_name", "normalized_name", "issuer_name_variant",
+        "source", "occurrence_count", "cluster_method", "cusip", "lei",
+    ]
+
+    def _make_bdc_df(self, identifiers=("Acme Corp - First Lien Term Loan",)):
         return pd.DataFrame([{
             "cik": "123", "entity_name": "Test BDC",
             "accession_number": "0001-23", "form_type": "10-K",
             "filing_date": "2023-06-01", "report_date": "2023-03-31",
-            "investment_identifier": "Acme Corp - First Lien Term Loan",
-            "fair_value": 1000000.0, "cost": 990000.0,
+            "investment_identifier": identifier,
+            "fair_value": 1000000.0 + 1000.0 * i, "cost": 990000.0,
             "principal_amount": 1000000.0, "interest_rate": 8.5,
             "basis_spread": 3.5, "reference_rate_type": "SOFR",
             "maturity_date": "2028-01-15", "pct_of_net_assets": 0.05,
             "pik_rate": None, "shares_held": None,
-            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "unrealized_gain_loss": 10000.0, "dimensions_raw": f"x=y{i}",
             "investment_type": "", "industry": "", "affiliation": "",
             "period": "2023-03-31",
-        }])
+        } for i, identifier in enumerate(identifiers)])
 
     def _make_nport_df(self):
         return pd.DataFrame(columns=[
@@ -3655,110 +3666,152 @@ class TestEntityEnrichment:
             "is_default", "other_identifier", "currency_code",
         ])
 
+    def _build(self, tmp_path, tag, identifiers, *, gics=None, prior_lookup=None):
+        """One hermetic build: every cache the entity/GICS path reads is a fixture."""
+        from pipeline.gics_classification import _normalize_company_name
+
+        work = tmp_path / tag
+        work.mkdir()
+        absent = work / "absent.csv"
+        cache_file = work / "company_gics_cache.csv"
+        if gics:
+            pd.DataFrame([{
+                "company_name_norm": _normalize_company_name(name),
+                "gics_sub_industry": value, "confidence": "high",
+                "source": "fixture", "timestamp": "2026-10-04T00:00:00",
+            } for name, value in gics.items()]).to_csv(cache_file, index=False)
+        lookup_path = absent
+        if prior_lookup is not None:
+            lookup_path = work / "entity_lookup.csv"
+            pd.DataFrame(prior_lookup, columns=self._LOOKUP_COLUMNS).to_csv(
+                lookup_path, index=False)
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   work / "output.csv"), \
+             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE", lookup_path), \
+             patch("pipeline.unified_holdings.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                   absent), \
+             patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                   absent), \
+             patch("pipeline.entity_resolution.ENTITY_OVERRIDES_FILE", absent), \
+             patch("pipeline.config.COMPANY_GICS_CACHE_FILE", cache_file), \
+             patch("pipeline.gics_classification.COMPANY_GICS_CACHE_FILE",
+                   cache_file):
+            result = build_unified_holdings(
+                bdc_df=self._make_bdc_df(identifiers), nport_df=self._make_nport_df())
+        return result.sort_values("bdc_investment_identifier").reset_index(drop=True)
+
+    _BOREALIS = (
+        "Borealis Analytics, Inc. - First Lien Term Loan",
+        "Borealis Analytics, Inc. - Revolver",
+        "The Borealis Analytics (Delaware) - Delayed Draw Term Loan",
+    )
+    _BOREALIS_GICS = {
+        "Borealis Analytics, Inc.": "Application Software",
+        "Zenith Widgets, Inc.": "Industrial Machinery & Supplies & Components",
+    }
+
     @pytest.mark.slow
     @pytest.mark.integration
-    def test_entity_id_populated_when_lookup_exists(self, tmp_path):
-        """When entity_lookup.csv exists, entity_id should be populated."""
-        bdc_df = self._make_bdc_df()
-        nport_df = self._make_nport_df()
-
-        # Create entity lookup with matching issuer_name variant
-        lookup_path = tmp_path / "entity_lookup.csv"
-        lookup_df = pd.DataFrame([{
-            "entity_id": "ENT-00000001",
-            "canonical_name": "Acme Corporation",
-            "normalized_name": "acme corp",
-            "issuer_name_variant": "Acme Corp",
-            "source": "bdc",
-            "occurrence_count": 10,
-            "cluster_method": "exact",
-            "cusip": "",
-            "lei": "",
-        }])
-        lookup_df.to_csv(lookup_path, index=False)
-
-        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
-                    tmp_path / "output.csv"), \
-             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
-                    lookup_path):
-            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+    def test_entity_columns_populated_without_prior_lookup(self, tmp_path):
+        """No entity_lookup.csv on disk: the build resolves entities itself."""
+        result = self._build(tmp_path, "a", ("Acme Corp - First Lien Term Loan",))
 
         acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
         assert acme["entity_id"] == "ENT-00000001"
-        assert acme["canonical_name"] == "Acme Corporation"
+        assert acme["canonical_name"] == "Acme Corp"
 
     @pytest.mark.slow
     @pytest.mark.integration
-    def test_entity_id_empty_when_no_lookup(self, tmp_path):
-        """When entity_lookup.csv does not exist, entity_id stays empty."""
-        bdc_df = self._make_bdc_df()
-        nport_df = self._make_nport_df()
+    def test_entity_and_sector_independent_of_prior_lookup(self, tmp_path):
+        """Absent, hostile and stale prior lookups all give the same answer."""
+        columns = ["bdc_investment_identifier", "issuer_name", "entity_id",
+                   "canonical_name", "gics_sub_industry"]
+        clean = self._build(tmp_path, "clean", self._BOREALIS, gics=self._BOREALIS_GICS)
+        assert len(clean) == 3
 
-        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
-                    tmp_path / "output.csv"), \
-             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
-                    tmp_path / "nonexistent_lookup.csv"):
-            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        # Hostile: every variant of this build mapped to a DIFFERENT company
+        # whose name is in the GICS cache under another sector.
+        hostile = [["ENT-00009999", "Zenith Widgets, Inc.", "zenith widgets", name,
+                    "bdc", 7, "exact", "", ""] for name in clean["issuer_name"].unique()]
+        # Stale: a lookup from a run that never saw these variants.
+        stale = [["ENT-00000042", "Other Corp", "other", "Other Corp",
+                  "bdc", 5, "exact", "", ""]]
+        for tag, lookup in (("hostile", hostile), ("stale", stale)):
+            other = self._build(tmp_path, tag, self._BOREALIS,
+                                gics=self._BOREALIS_GICS, prior_lookup=lookup)
+            pd.testing.assert_frame_equal(other[columns], clean[columns])
 
-        assert (result["entity_id"] == "").all()
-        assert (result["canonical_name"] == "").all()
+        assert (clean["entity_id"] != "").all()
+        assert not clean["canonical_name"].str.contains("Zenith").any()
+        assert not clean["gics_sub_industry"].str.contains("Industrial").any()
 
     @pytest.mark.slow
     @pytest.mark.integration
-    def test_unmatched_rows_get_empty_entity_id(self, tmp_path):
-        """Rows not in entity_lookup get empty entity_id (not NULL)."""
-        bdc_df = self._make_bdc_df()
-        nport_df = self._make_nport_df()
+    def test_canonical_name_fallback_still_classifies(self, tmp_path):
+        """A variant only reachable through its canonical name keeps its sector."""
+        from pipeline.gics_classification import _normalize_company_name
 
-        # Lookup has a different issuer name
-        lookup_path = tmp_path / "entity_lookup.csv"
-        lookup_df = pd.DataFrame([{
-            "entity_id": "ENT-00000099",
-            "canonical_name": "Other Corp",
-            "normalized_name": "other corp",
-            "issuer_name_variant": "Other Corp",
-            "source": "bdc",
-            "occurrence_count": 5,
-            "cluster_method": "exact",
-            "cusip": "",
-            "lei": "",
-        }])
-        lookup_df.to_csv(lookup_path, index=False)
+        result = self._build(tmp_path, "a", self._BOREALIS, gics=self._BOREALIS_GICS)
+        variant = result[result["bdc_investment_identifier"].str.contains("Delaware")].iloc[0]
 
-        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
-                    tmp_path / "output.csv"), \
-             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
-                    lookup_path):
-            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        # Precondition: the issuer name itself misses the cache, so only the
+        # in-build canonical name can supply the sector.
+        cached = {_normalize_company_name(name) for name in self._BOREALIS_GICS}
+        assert _normalize_company_name(variant["issuer_name"]) not in cached
+        assert variant["canonical_name"] == "Borealis Analytics, Inc."
+        assert variant["gics_sub_industry"] == "Application Software"
+        assert result["entity_id"].nunique() == 1
 
-        # No match -> empty string, not NaN
-        assert (result["entity_id"] == "").all()
+    @pytest.mark.slow
+    @pytest.mark.integration
+    def test_similar_names_do_not_share_a_sector(self, tmp_path):
+        """False-positive guard: a lookalike company is not merged or classified."""
+        result = self._build(
+            tmp_path, "a",
+            ("Summit Health Partners, LLC - First Lien Term Loan",
+             "Summit Hill Foods, Inc. - First Lien Term Loan"),
+            gics={"Summit Health Partners, LLC": "Health Care Services"})
+
+        health = result[result["issuer_name"].str.contains("Health")].iloc[0]
+        foods = result[result["issuer_name"].str.contains("Foods")].iloc[0]
+        assert health["gics_sub_industry"] == "Health Care Services"
+        assert foods["gics_sub_industry"] == ""
+        assert foods["entity_id"] != health["entity_id"]
+        assert foods["canonical_name"] != health["canonical_name"]
+
+    def test_helper_preserves_rows_and_leaves_unresolvable_names_blank(self, tmp_path):
+        """Row order/index survive; names the resolver rejects stay blank."""
+        from pipeline.unified_holdings import _resolve_entities_in_build
+
+        frame = pd.DataFrame({
+            "issuer_name": ["Zulu Corp", None, "Alpha, Inc.", "Zulu Corp", "ab"],
+            "source": ["bdc", "bdc", "nport", "nport", "bdc"],
+            "cusip": "", "lei": "", "bdc_investment_identifier": "",
+            "entity_id": "stale", "canonical_name": "stale",
+            "fair_value": [5.0, 4.0, 3.0, 2.0, 1.0],
+        }, index=[40, 30, 20, 10, 0])
+        absent = tmp_path / "absent.csv"
+        with patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                   absent), \
+             patch("pipeline.entity_resolution.ENTITY_OVERRIDES_FILE", absent):
+            result = _resolve_entities_in_build(frame)
+            unresolvable = _resolve_entities_in_build(frame.iloc[[1, 4]])
+
+        assert list(result.columns) == list(frame.columns)
+        assert list(result.index) == [40, 30, 20, 10, 0]
+        assert result["fair_value"].tolist() == [5.0, 4.0, 3.0, 2.0, 1.0]
+        assert result["canonical_name"].tolist() == [
+            "Zulu Corp", "", "Alpha, Inc.", "Zulu Corp", ""]
+        # Same company seen in both sources is one entity; stale values are gone.
+        assert result["entity_id"].iloc[0] == result["entity_id"].iloc[3] != ""
+        assert result["entity_id"].iloc[1] == result["entity_id"].iloc[4] == ""
+        assert (unresolvable[["entity_id", "canonical_name"]] == "").all().all()
 
     @pytest.mark.slow
     @pytest.mark.integration
     def test_column_order_preserved(self, tmp_path):
         """Entity enrichment should not change column order."""
-        bdc_df = self._make_bdc_df()
-        nport_df = self._make_nport_df()
-
-        lookup_path = tmp_path / "entity_lookup.csv"
-        pd.DataFrame([{
-            "entity_id": "ENT-00000001",
-            "canonical_name": "Acme Corporation",
-            "normalized_name": "acme corp",
-            "issuer_name_variant": "Acme Corp",
-            "source": "bdc",
-            "occurrence_count": 10,
-            "cluster_method": "exact",
-            "cusip": "",
-            "lei": "",
-        }]).to_csv(lookup_path, index=False)
-
-        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
-                    tmp_path / "output.csv"), \
-             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
-                    lookup_path):
-            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        result = self._build(tmp_path, "a", ("Acme Corp - First Lien Term Loan",))
 
         # Identity and accounting scope are finalized after enrichment.
         assert list(result.columns) == UNIFIED_COLUMNS + [
