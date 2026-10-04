@@ -134,3 +134,40 @@ Artifact: `request_size_profile_ab836bcd37fdc6f6.json`. Exact bundle/request has
 are recorded. A future size reduction must preserve geometry, required notes,
 sibling coverage and contradictions; increasing the cap or truncating evidence
 does not establish that a request is safe or fits the provider limit.
+
+## Optional lossless encoding experiment (not enabled)
+
+Component sizing shows source notes account for 15,953-17,352 proxy tokens in the
+three oversized requests. Their full continuation tables retain many blank cells.
+The earlier optional v1 encoding mainly addressed candidate contexts and cells
+with inline facts; it left three-field cells and note tables unchanged.
+
+The optional `lossless-grid.v2` experiment encodes ordinary cells as
+`[column, span, text]`, or `[column, span, text, inline_facts]` when that key exists.
+It also applies the encoding inside note continuation tables. Cells with additional
+annotations stay as dictionaries. Every blank cell, row, note, fact and candidate
+is retained; empty/missing/null fields stay distinct. The decoder reproduces the
+original request exactly for all 39 ready cases. No runner setting changed.
+
+| Representation | Total proxy tokens, 39 requests | Largest request | Above 22,000 cap |
+|---|---:|---:|---:|
+| Current runner | 467,757 | 25,355 | 3 |
+| Optional v1 | 455,888 | 24,950 | 3 |
+| Optional v2 | 420,709 | 20,236 | 0 |
+
+The three Ares requests would fall to 17,896, 19,528 and 20,236 proxy tokens.
+This is about a 10.1% aggregate proxy reduction, not measured provider savings.
+Reconstruction establishes information preservation, not equal model attention,
+confidence or accuracy. Earlier presentation sensitivity makes that distinction
+material. All three remain size fallbacks under the unchanged runner.
+
+Artifact: `replay_compaction_ff58d248ca734a0b.json`; component sizing:
+`request_size_profile_04c78bc1f4760705.json`. Eleven focused compaction tests pass,
+including malformed arrays, unknown encoding, additional cell annotations,
+empty/missing/null distinctions and unchanged v1 behavior. No API calls.
+
+Before enabling v2, freeze paired original/encoded requests and independently
+reviewed references, include real-error controls and note-sensitive decisions,
+and compare source choices, label errors, abstentions and routing disagreements.
+Do not reuse old scores or choose the representation with the more convenient
+confidence. Provider token fit also needs direct measurement under a new budget.

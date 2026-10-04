@@ -41,6 +41,7 @@ def main():
             'whole_request_proxy_tokens': count(request),
             'state_proxy_tokens': count(request['state']),
             'longest_question_proxy_tokens': max(count(q) for q in request['questions'].values()),
+            'state_sections_proxy_tokens': {name: count(value) for name, value in request['state'].items()},
             'source_candidates': len(packet['source_candidates']),
             'source_notes': len(request['state']['source_notes'])})
     counts = sorted(r['whole_request_proxy_tokens'] for r in rows)

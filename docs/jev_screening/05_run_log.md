@@ -704,3 +704,10 @@ Validation after the C104 pair and review-record work: 355 targeted Jev tests pa
 - Exact runner-proxy sizing finds three Ares requests above 22,000 tokens: 22,361 / 24,464 / 25,355. There are 36 requests within both evidence and size requirements. No evidence truncation or cap increase.
 - Refreshed unfinished source-first forms under blind_review_inputs_49. All 100 calls remain accounted for, 42 unique natural flags, 1,580,960 provider tokens. Zero new calls, independent certificates or B1 suppression; historical scores do not transfer.
 - 391 targeted Jev tests pass. Twenty-third bounded production metadata audit: zero changes. No full repository suite, production rebuild/export or production-writing semantic diff.
+
+## 2026-10-04 checkpoint: optional lossless note-table encoding
+
+- Component sizing traced 15,953-17,352 proxy tokens in oversized Ares requests to source notes, principally full continuation tables.
+- Added optional lossless-grid.v2 encoding for three/four-field cells in source and note tables, preserving all rows, blank cells, facts, annotations and missing/null distinctions. Existing v1 remains the default; the runner still uses ordinary requests.
+- All 39 ready requests reconstruct exactly. Aggregate proxy tokens: original 467,757; v1 455,888; v2 420,709. V2 maximum 20,236 and zero over the 22,000 proxy cap, versus three under current runner representation. This is offline format evidence, not model-equivalence or provider-fit validation.
+- Eleven focused compaction tests pass. No additional model calls, changed builder hash, promoted encoding, independent clearance or production edits.
