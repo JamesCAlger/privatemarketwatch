@@ -54,15 +54,22 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', required=True, type=Path)
     parser.add_argument('--run-root', required=True, type=Path)
+    parser.add_argument('--replay', required=True)
+    parser.add_argument('--label', required=True)
     args = parser.parse_args()
     repo, run = args.repo.resolve(), args.run_root.resolve()
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, run)
-    summary, packets = load_replay(run, 'sibling_recall_v4_18')
+    if not args.label.replace('_', '').isalnum():
+        raise ValueError('Invalid output label')
+    summary, packets = load_replay(run, args.replay)
     if len(packets) != 67 or len({p['output_position']['cik'] for p in packets.values()}) != 11:
         raise ValueError('Unexpected frozen scope')
-    target = run / 'blind_review_inputs_23'
+    holdings_hash = sha(repo / 'data/output/private_markets_holdings.csv')
+    if any(p['provenance']['holdings_sha256'] != holdings_hash for p in packets.values()):
+        raise ValueError('Holdings changed since replay')
+    target = run / args.label
     target.mkdir()
     hashes, inventory = {}, []
     for key, packet in sorted(packets.items()):
@@ -80,7 +87,9 @@ def main():
                           'sha256': sha(target / filename), 'rule': key[0]})
     report = {'packets': len(inventory), 'funds': 11, 'source_files': len(hashes),
               'rules': dict(Counter(i['rule'] for i in inventory)), 'inventory': inventory,
-              'builder_sha256': summary['builder_sha256'], 'reviews_completed': 0,
+              'builder_sha256': summary['builder_sha256'], 'replay': args.replay,
+              'preparation_script_sha256': sha(Path(__file__)),
+              'holdings_sha256': holdings_hash, 'reviews_completed': 0,
               'api_calls': 0, 'production_clearance_enabled': False,
               'limitation': 'Prepared inputs only; existing cases are development data. Independent reviewer identity and completed source review are still required.'}
     write(target / 'manifest.json', report)

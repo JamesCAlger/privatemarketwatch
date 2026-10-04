@@ -65,3 +65,9 @@ of the newer builder. Do not relabel the prepared older forms as current audits.
 The later `anchor_recall_v4_33` replay also changes model-visible retrieval
 metadata. Its bundles require new review bindings; the existing unfinished forms
 cannot confer audit status on this revision.
+
+## Refreshed handoff for the latest builder
+
+The new blind_review_inputs_43 directory binds rate_note_scope_v4_42 and builder SHA-256 6857318fdb820cc49c6f89cbf07e7dc03da90d51c6eeca599ffa77ee9c40326f. It contains the same 67 development flags, 11 funds and 26 cached filings. Holdings and cached source hashes were checked; all forms remain unfinished and no workers were dispatched.
+
+Preparation now requires explicit --replay and --label arguments and refuses an existing destination. Its manifest records the replay, preparation-script hash and holdings hash. Old forms remain preserved under blind_review_inputs_23; no review status was transferred.
