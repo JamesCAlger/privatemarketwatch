@@ -13596,3 +13596,8 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Added optional table navigation and source issuer-column seeds in the isolated worktree. On the same 67 flags, 23 have supported source seeds and 11 gain additional navigation coordinates; unknown/combined descriptions remain unsupported. Twenty-seven focused tests pass. No bundle/readiness or model changes.
 - Two-source probe recovers AB Centers commitment/main rows while keeping TCW's manual name recovery separate. Results and limitations recorded in docs/jev_screening/11_remaining_bundle_work.md and agent_campaigns investigation.
 - Read 40 existing historical B1 usage records across 13 reserved funds: 13,216,420 reported input tokens, 557 completed commands, 22 failures. No invoice, active-time or avoided-work claim; grouped historical work differs from current per-flag tests.
+
+## 2026-10-04 -- Jev pilot: supplementary context sizing
+
+- Measured hypothetical disclosure appendices on the same 39 ready requests: full records add 22.2% aggregate proxy tokens and one additional over-cap request; locator-only records add 8.9% but omit adjudication evidence.
+- BioXcel's 14 extra rows raise its request from 13,657 to 24,360 proxy tokens. This is payload sizing, not model-quality or billing evidence. No API calls, runtime integration or production changes.

@@ -925,3 +925,19 @@ There are 557 completed command events, 22 with nonzero/unsuccessful exit codes.
 This supplies a historical workload baseline, not a Jev/B1 cost ratio. B1 groups and current per-flag Jev requests differ in membership, snapshots and scope; no whole current B1 job has been independently cleared. Invoice cost, saved reviewer time, bundle-maintenance effort and fixed-budget incremental discovery remain unmeasured. Artifact: historical_usage_870d530513e1db9f.json. Offline read-only diagnostic; no worker dispatch, API calls or production changes.
 
 Protection audit 39 records zero changed production metadata paths after these diagnostics. No full suite or production rebuild was run for the optional, unintegrated helpers.
+
+## 2026-10-04: supplementary disclosure appendix sizing
+
+An offline sizing probe adds every additional row found by the optional published-name, exact-context and source issuer-column searches to the 39 currently ready requests. It preserves the existing candidates and excludes only already-present source coordinates. Thirty-one requests have additional rows. Other instruments, comparative periods and unknown table roles remain included; their relevance has not been independently audited.
+
+| Hypothetical encoding | Aggregate cl100k proxy tokens | Maximum | Above 22,000 runner cap |
+|---|---:|---:|---:|
+| Existing request | 467,724 | 25,352 | 3 |
+| Full navigation records | 571,389 | 26,157 | 4 |
+| Locator index only | 509,149 | 25,741 | 3 |
+
+Full records add 22.2% in aggregate; the locator index adds 8.9%. The index retains displayed cells, coordinates, role/period labels and context IDs but deliberately omits inline facts, unit/header evidence and context definitions. It is a navigation aid, not a substitute for full evidence. Neither option completes missing notes or proves identity/ownership.
+
+Oaktree BioXcel X08, ROW-1c2a72c58fbc2d87, is the newly oversized request: 14 additional source rows take it from 13,657 to 24,360 proxy tokens; the locator version is 17,369. The related material includes other instruments and comparative disclosures. A source inventory should therefore support targeted, auditable evidence assembly; appending all name matches is not a demonstrated improvement in classification.
+
+Artifact: disclosure_appendix_size_53f8f1a298625f47.json, produced by the isolated scripts/measure_jev_disclosure_appendix.py. No payload was submitted and the runner, bundle, readiness and routing contracts are unchanged. These are hypothetical serialized requests measured with cl100k, not Jev token counts, model outcomes or provider charges.
