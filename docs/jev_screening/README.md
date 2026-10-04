@@ -3,6 +3,9 @@
 Date: 2026-10-03. Status: isolated implementation and development evaluation active;
 production screening and automatic clearance are not enabled.
 
+Start with the [current implementation and evidence map](17_current_state.md)
+for the latest artifact versions and integration blockers.
+
 Current checkpoint (2026-10-04): **39/67 bundles evidence-ready**, with 28 evidence
 fallbacks. Three ready requests exceed the runner's token proxy cap, leaving
 **36/67 within both evidence and size requirements**. **100/100 API calls used**, 42 unique natural flags called, zero
@@ -47,6 +50,7 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Confidence sensitivity](14_confidence_sensitivity.md) | Separate experiment arms and why the cutoff remains uncalibrated |
 | [Zero-value controls](15_zero_value_controls.md) | Final paired C104 test and complete 100-call accounting |
 | [Missing issuer mechanism](16_missing_issuer_mechanism.md) | Three source-backed examples of upstream identity extraction failure and separate unresolved flags |
+| [Current state](17_current_state.md) | Current artifacts, reusable components, optional diagnostics and remaining integration evidence |
 
 ## Proposed operating model
 
