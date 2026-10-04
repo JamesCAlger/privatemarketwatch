@@ -101,3 +101,34 @@ def test_real_error_can_record_contradictory_source_amount():
     completed['review_form']['disposition'] = 'real_error'
     completed['review_form']['source_values']['cost']['amount'] = '-2000'
     assert freeze_findings(prepared, completed)['findings']['disposition'] == 'real_error'
+
+
+@pytest.mark.parametrize('treatment', ['selected', 'excluded', 'unresolved'])
+def test_duplicate_source_coordinate_cannot_have_two_inventory_entries(treatment):
+    prepared, completed = resolved()
+    completed['review_form']['candidate_inventory'].append(
+        {'coordinates': ' TABLE 1  ROW 2 ', 'treatment': treatment, 'reason': 'Conflicting duplicate'})
+    with pytest.raises(ValueError, match='Duplicate candidate coordinates'):
+        freeze_findings(prepared, completed)
+
+
+def test_false_alarm_source_coordinates_must_identify_selected_inventory_row():
+    prepared, completed = resolved()
+    completed['review_form']['source_coordinates'] = 'table 1 row 3'
+    with pytest.raises(ValueError, match='selected candidate'):
+        freeze_findings(prepared, completed)
+
+
+def test_false_alarm_needs_a_citation_at_selected_source_coordinates():
+    prepared, completed = resolved()
+    completed['review_form']['citations'][0]['coordinates'] = 'table 2 note 9'
+    with pytest.raises(ValueError, match='selected source coordinates'):
+        freeze_findings(prepared, completed)
+
+
+def test_coordinate_whitespace_case_and_additional_note_citation_are_valid():
+    prepared, completed = resolved()
+    completed['review_form']['source_coordinates'] = ' TABLE 1  ROW 2 '
+    completed['review_form']['citations'].append(
+        {'source_sha256': 'source-hash', 'coordinates': 'table 2 note 9', 'supports': 'Cost convention'})
+    assert freeze_findings(prepared, completed)['findings']['disposition'] == 'false_alarm'

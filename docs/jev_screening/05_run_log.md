@@ -774,3 +774,9 @@ The helper is not integrated into production or the current model router. Suppli
 - New builder SHA-256: 50a963afa56516ffc4c59606a27b292b861da55da6bb40cf95b432e9b243aeb1. Delta artifact: note_retrieval_delta_93f671ada0fa1fc5.json.
 - Current sizing artifact request_size_profile_4f68c257ba406ea4.json: 467,734 aggregate proxy tokens, max 25,355, three above cap. Optional v2 compaction reconstructs all 39 exactly at 420,686 proxy tokens, max 20,236; remains disabled/unscored. Tiny token differences versus replay 48 reflect changed version-bound identifiers, not evidence removal.
 - Refreshed unfinished blind_review_inputs_53 and verified all 67 packet bindings and 26 source hashes. API accounting unchanged: 100 calls, 1,580,960 provider input tokens. No independent clearance, B1 suppression or production edits.
+
+## Coordinate consistency in completed review records
+
+The findings validator now rejects duplicate candidate coordinates, including conflicting selected/excluded treatments of the same location. For a false-alarm finding, source_coordinates must match the selected inventory candidate, and at least one citation must name that location. Case and whitespace differences are normalized; distinct free-text coordinate schemes are not guessed equivalent. Additional note/scope citations remain allowed.
+
+Twenty-six findings tests plus five freeze-CLI integration tests pass (31 total). No real completed form has been submitted. This closes internal record contradictions; it does not verify coordinates against source bytes or establish independent source truth. Prepared forms 53 and the current builder are unchanged.

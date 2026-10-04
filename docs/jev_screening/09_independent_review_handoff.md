@@ -94,3 +94,9 @@ and clearance certificates remain zero. Older forms and integrity reports remain
 historical records and do not bind the changed requests.
 
 The offline verify_jev_review_bindings.py check matches all 67 current packet fingerprints to the current blind_review_inputs_53 bindings, verifies prepared-file hashes, checks the holdings snapshot, and rehashes all 26 original cached sources. All match. Prepared manifest SHA-256: 6d08af436a942eecab17d62e0f988810688fad1ade337728c89a5e1de438f578. Earlier integrity reports remain historical. This verifies content integrity against saved records, not independent evidence completeness; completed reviews remain zero.
+
+## Coordinate consistency in completed review records
+
+The findings validator now rejects duplicate candidate coordinates, including conflicting selected/excluded treatments of the same location. For a false-alarm finding, source_coordinates must match the selected inventory candidate, and at least one citation must name that location. Case and whitespace differences are normalized; distinct free-text coordinate schemes are not guessed equivalent. Additional note/scope citations remain allowed.
+
+Twenty-six findings tests plus five freeze-CLI integration tests pass (31 total). No real completed form has been submitted. This closes internal record contradictions; it does not verify coordinates against source bytes or establish independent source truth. Prepared forms 53 and the current builder are unchanged.

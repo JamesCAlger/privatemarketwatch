@@ -11,6 +11,12 @@ def _text(value):
     return isinstance(value, str) and bool(value.strip())
 
 
+def _coordinates(value):
+    # Normalize presentation only; do not guess that different free-text
+    # coordinate schemes refer to the same source location.
+    return ' '.join(value.casefold().split())
+
+
 def _timestamp(value):
     if not _text(value):
         raise ValueError('Review timestamps are required')
@@ -85,10 +91,20 @@ def freeze_findings(prepared, completed):
                 or candidate.get('treatment') not in {'selected', 'excluded', 'unresolved'}
                 or not _text(candidate.get('reason'))):
             raise ValueError('Each candidate requires coordinates, treatment and reason')
+    coordinates = [_coordinates(c['coordinates']) for c in inventory]
+    if len(set(coordinates)) != len(coordinates):
+        raise ValueError('Duplicate candidate coordinates require a single explicit treatment')
     if disposition == 'false_alarm' and sum(c['treatment'] == 'selected' for c in inventory) != 1:
         raise ValueError('False-alarm finding requires one selected source position')
     if disposition == 'false_alarm' and any(c['treatment'] == 'unresolved' for c in inventory):
         raise ValueError('Unresolved candidate prevents a false-alarm finding')
+    if disposition == 'false_alarm':
+        selected = next(c for c in inventory if c['treatment'] == 'selected')
+        coordinate = _coordinates(selected['coordinates'])
+        if _coordinates(form['source_coordinates']) != coordinate:
+            raise ValueError('Source coordinates differ from the selected candidate')
+        if not any(_coordinates(c['coordinates']) == coordinate for c in citations):
+            raise ValueError('A citation must identify the selected source coordinates')
     if disposition == 'false_alarm' and any(field not in values for field in prepared['rule']['fields']):
         raise ValueError('All disputed source amounts required')
     for field, value in values.items():
