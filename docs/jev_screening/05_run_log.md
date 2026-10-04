@@ -711,3 +711,9 @@ Validation after the C104 pair and review-record work: 355 targeted Jev tests pa
 - Added optional lossless-grid.v2 encoding for three/four-field cells in source and note tables, preserving all rows, blank cells, facts, annotations and missing/null distinctions. Existing v1 remains the default; the runner still uses ordinary requests.
 - All 39 ready requests reconstruct exactly. Aggregate proxy tokens: original 467,757; v1 455,888; v2 420,709. V2 maximum 20,236 and zero over the 22,000 proxy cap, versus three under current runner representation. This is offline format evidence, not model-equivalence or provider-fit validation.
 - Eleven focused compaction tests pass. No additional model calls, changed builder hash, promoted encoding, independent clearance or production edits.
+
+## 2026-10-04 checkpoint: headerless anchors and custom facts
+
+- Read cached source for the three omitted declared-context anchors: MES Q4-2025 t55r6, Krayden Q2-2023 t11r51, CMG Q4-2025 t36r7. All sit in headerless tables. No automatic header inheritance added.
+- Krayden retains its visible revolver versus term-loan-context contradiction; source cost uses a filer custom concept. The review helper now records all exact-context numeric facts with original markup/attributes/coordinates, without assigning concept equivalence or truth labels.
+- Eighteen source-review tests pass. No changed builder, readiness, frozen labels or API accounting. Independent reviews remain zero; source-first packet bindings for replay 48 were rechecked against all 26 original source hashes.

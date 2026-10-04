@@ -3,7 +3,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import pytest
 
-from scripts.review_jev_sources import exact_context_facts, issuer_search_terms, review_source_path
+from scripts.review_jev_sources import context_fact_inventory, exact_context_facts, issuer_search_terms, review_source_path
 
 
 def test_blocked_packet_can_locate_exact_cached_accession(tmp_path):
@@ -43,3 +43,39 @@ def test_missing_issuer_has_no_wildcard_or_literal_none_search(value):
 
 def test_visible_issuer_search_still_normalizes_real_names():
     assert issuer_search_terms(' LTC   Ally Inc. ') == ('ltc ally inc.', ['ltc', 'ally'])
+
+
+def test_custom_exact_context_facts_keep_original_semantics_and_coordinates():
+    soup = BeautifulSoup('<table><tr><td><ix:nonFraction name="filer:NetOfDiscount" contextRef="ctx" '
+        'scale="3" sign="-">11</ix:nonFraction></td></tr></table>'
+        '<ix:nonFraction name="us-gaap:InvestmentOwnedAtCost" contextRef="different">20</ix:nonFraction>', 'lxml')
+    _, facts = exact_context_facts(soup, 'ctx')
+    inventory = context_fact_inventory(facts, {id(soup.table): 4})
+    assert len(inventory) == 1
+    assert inventory[0]['concept'] == 'filer:NetOfDiscount'
+    assert inventory[0]['attributes']['sign'] == '-'
+    assert inventory[0]['table_index'] == 4
+    assert inventory[0]['row_index'] == 0
+    assert 'source_amount' not in inventory[0]
+
+
+def test_unlocated_fact_keeps_nil_and_excluded_markup_without_claiming_a_row():
+    soup = BeautifulSoup('<ix:nonFraction contextRef="ctx" xsi:nil="true">'
+                         '1<ix:exclude>000</ix:exclude></ix:nonFraction>', 'lxml')
+    _, facts = exact_context_facts(soup, 'ctx')
+    item = context_fact_inventory(facts, {})[0]
+    assert item['table_index'] is None and item['row_index'] is None
+    assert item['attributes']['xsi:nil'] == 'true'
+    assert '<ix:exclude>000</ix:exclude>' in item['html']
+
+
+def test_context_inventory_refuses_excess_instead_of_silent_truncation():
+    with pytest.raises(ValueError, match='inventory limit'):
+        context_fact_inventory([None] * 201, {})
+
+
+def test_context_inventory_refuses_oversized_markup():
+    soup = BeautifulSoup('<ix:nonFraction contextRef="ctx">' + '1' * 20001 + '</ix:nonFraction>', 'lxml')
+    _, facts = exact_context_facts(soup, 'ctx')
+    with pytest.raises(ValueError, match='markup limit'):
+        context_fact_inventory(facts, {})

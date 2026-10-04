@@ -46,6 +46,26 @@ def exact_context_facts(soup, context_id):
     return soup.find(id=context_id), soup.find_all('ix:nonfraction', attrs={'contextref': context_id})
 
 
+def context_fact_inventory(facts, table_ids):
+    """Retain custom concepts without interpreting them as cost or fair value."""
+    if len(facts) > 200:
+        raise ValueError('Context fact inventory limit exceeded')
+    result = []
+    for fact in facts:
+        markup = str(fact)
+        if len(markup) > 20000:
+            raise ValueError('Context fact markup limit exceeded')
+        table, row = fact.find_parent('table'), fact.find_parent('tr')
+        row_index = None
+        if table is not None and row is not None:
+            rows = [r for r in table.find_all('tr') if r.find(['td', 'th'])]
+            row_index = next((i for i, r in enumerate(rows) if r is row), None)
+        result.append({'concept': fact.get('name'), 'attributes': dict(fact.attrs),
+            'visible_text': text(fact), 'html': markup,
+            'table_index': table_ids.get(id(table)), 'row_index': row_index})
+    return result
+
+
 def issuer_search_terms(value):
     if not isinstance(value, str):
         return '', []
@@ -152,6 +172,8 @@ def main():
                             'source_hash_previously_frozen': bool(packet.get('filing', {}).get('sha256')),
                             'source_sha256': source_sha, 'output_position': packet['output_position'],
                             'context_text': text(context), 'context_xml': str(context) if context else None,
+                            'exact_context_fact_inventory': context_fact_inventory(facts, table_ids),
+                            'context_fact_inventory_limitation': 'All exact-context numeric facts, including custom concepts. No concept equivalence or source-value label is inferred.',
                             'unit_declarations': unit_declarations,
                             'negative_cost_notes': negative_cost_notes,
                             'source_positions': positions,

@@ -170,3 +170,35 @@ Do not truncate notes or drop sibling candidates merely to fit the cap.
 Validation: 391 targeted Jev tests pass; the 23rd bounded production metadata
 audit reports zero changed paths. No full suite, production rebuild/export or
 production-writing semantic diff was run. No new API calls.
+
+## Headerless declared-context anchors
+
+The three `no_current_period_candidates` cases are not simply failed issuer-name
+searches. The declared contexts locate source rows, but their HTML tables have
+no locally recognised header band:
+
+| Case | Source anchor | Finding | Remaining boundary |
+|---|---|---|---|
+| MES Intermediate, Varagon, Q4-2025, C104 | t55r6 | Revolver FV is explicitly tagged `fixed-zero`; source cost is -2,000 | Headerless table; the neighbouring inspected tables are also headerless. Whole-row scope, columns and sibling coverage are not certified by one zero fact. |
+| Krayden, Varagon, Q2-2023, C107 | t11r51 | Visible row is a revolver with 0% interest; its context describes a term loan at 11.34%. Cost uses `ck0001784700:InvestmentOwnedAtCostNetOfCapitalizedDiscount`, sign minus, scale 3 | Headerless table, unresolved table period and a substantive identity contradiction. Custom-concept interpretation must also be explicit. |
+| CMG Holdco, Crescent, Q4-2025, C107 | t36r7 | Visible delayed-draw position has source cost -20,000, FV -51,000, maturity 11/2030. The preceding table 35 has headers | Headerless continuation cannot inherit columns and ownership solely from adjacency or matching values. Comparative CMG rows are a different period and remain excluded. |
+
+No readiness or reference labels changed. Any future header-continuation support
+must retain the original header table/row coordinates, demonstrate unchanged
+geometry and owner/period scope, and stop at new headings or conflicting facts.
+It needs counterexamples for inserted columns, different accounting owners,
+comparative periods and custom-concept ambiguity. Finding the output's context
+is a retrieval aid, not proof that the context correctly identifies the position.
+
+The raw review helper previously listed only standard cost/FV concepts as
+`source_positions`, leaving Krayden's custom cost out of that view. It now also
+records **all exact-context numeric facts**, with original attributes, markup and
+coordinates, without assigning them a cost/FV meaning. This preserves custom
+concepts, nil/excluded content and unlocated facts for review. Eighteen focused
+source-review tests pass, including exact-context isolation and bounded refusal
+instead of silent truncation.
+
+Artifacts: `header_gap_inspection_2a9e9202913a7d5a.json`,
+`unmatched_cost_sources_50.json`, `unmatched_zero_source_50.json` and
+`custom_context_source_51.json`. These are bounded source investigations on the
+same three frozen flags, not new natural cases or independent audit certificates.
