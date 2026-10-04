@@ -1,4 +1,4 @@
-# Isolated Jev screening run
+﻿# Isolated Jev screening run
 
 Started 2026-10-03. Status: active, under the owner's instruction to continue until
 told to stop in this chat. The eight-hour schedule guides priorities; it is not an
@@ -737,7 +737,7 @@ Validation after the C104 pair and review-record work: 355 targeted Jev tests pa
 
 The offline role helper was applied to 51 distinct candidate tables from 23 cached filings, covering all 11 funds with retrieved candidates. It recognized 14 position-value tables across five funds and returned unknown for 37 tables across six funds. No table was classified as ambiguous or as unfunded commitments in this candidate-conditioned sample.
 
-Unknowns include combined issuer headings (Ares, Crescent), no explicit instrument column (Oaktree), symbolic note markers (Varagon), an Investment/Industry issuer convention (Goldman), and multi-marker numeric footnotes (Fortress). These are explicit limitations of the narrow helper, not proof that the underlying tables lack position data. No aliases or scope rules were widened to improve this count.
+Unknowns include combined issuer headings (Ares, Crescent), no explicit instrument column (Monroe, CIK 1742313), symbolic note markers (Varagon), an Investment/Industry issuer convention (Goldman), and multi-marker numeric footnotes (Fortress). These are explicit limitations of the narrow helper, not proof that the underlying tables lack position data. No aliases or scope rules were widened to improve this count.
 
 Crucially, the supplemental AB Centers commitment table is not in this candidate-table sample. It was identified by the separate four-row source investigation. Therefore these counts measure coverage conditional on existing retrieval, not schedule-role accuracy, full-filing recall or duplicate detection. A future role-aware bundle must inventory supplemental disclosures independently of the cost/FV candidate search before claiming relevant-schedule recall.
 
@@ -780,3 +780,16 @@ The helper is not integrated into production or the current model router. Suppli
 The findings validator now rejects duplicate candidate coordinates, including conflicting selected/excluded treatments of the same location. For a false-alarm finding, source_coordinates must match the selected inventory candidate, and at least one citation must name that location. Case and whitespace differences are normalized; distinct free-text coordinate schemes are not guessed equivalent. Additional note/scope citations remain allowed.
 
 Twenty-six findings tests plus five freeze-CLI integration tests pass (31 total). No real completed form has been submitted. This closes internal record contradictions; it does not verify coordinates against source bytes or establish independent source truth. Prepared forms 53 and the current builder are unchanged.
+
+## Current builder timing (replay 52)
+
+One empty/reused parser-cache pair per existing case reproduces each frozen packet exactly:
+
+| Existing filing case | Empty parser cache | Reused parser cache |
+|---|---:|---:|
+| Fortress | 5.156 s | 0.045 s |
+| Onex | 4.543 s | 0.038 s |
+| Oaktree | 4.387 s | 0.045 s |
+| Monroe | 11.701 s | 0.111 s |
+
+Artifact: bundle_build_timing_54.json. These are source read/hash/parse/retrieval timings on this machine, not cold operating-system-cache measurements or population latency. They exclude input selection, CSV joins, model calls, independent review and maintenance. The earlier replay-39 measurements are retained; different builder versions and single trials do not isolate the cost of the hidden-content check. Reusing an already parsed filing is materially cheaper in these four pairs, supporting source-grouped processing within the bounded cache.

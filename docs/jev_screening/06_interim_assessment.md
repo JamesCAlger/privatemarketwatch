@@ -17,11 +17,11 @@ A model can return the correct label while notes or scope are missing. This
 happened in source review of both development and temporal packets. High model
 confidence cannot compensate for that omission.
 
-Field provenance is another necessary boundary. Five of the remaining C107 cases
+Field provenance is another necessary boundary. Six frozen C107 flags
 use intentional first-observed-FV cost proxies, not current reported cost. A
 current-SOI comparison cannot adjudicate those proxies. Bundle v4 now preserves
-the pathway and retains these cases for donor-lineage review. The other remaining
-cases yielded four matching negative costs and one term-loan/revolver ambiguity;
+the pathway and retains these cases for donor-lineage review. An earlier five-case source investigation
+yielded four matching negative costs and one term-loan/revolver ambiguity;
 this did not add another confirmed natural numeric-error mechanism.
 
 ## Results and their limits

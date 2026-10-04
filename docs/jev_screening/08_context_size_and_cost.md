@@ -171,3 +171,16 @@ reviewed references, include real-error controls and note-sensitive decisions,
 and compare source choices, label errors, abstentions and routing disagreements.
 Do not reuse old scores or choose the representation with the more convenient
 confidence. Provider token fit also needs direct measurement under a new budget.
+
+## Current builder timing (replay 52)
+
+One empty/reused parser-cache pair per existing case reproduces each frozen packet exactly:
+
+| Existing filing case | Empty parser cache | Reused parser cache |
+|---|---:|---:|
+| Fortress | 5.156 s | 0.045 s |
+| Onex | 4.543 s | 0.038 s |
+| Oaktree | 4.387 s | 0.045 s |
+| Monroe | 11.701 s | 0.111 s |
+
+Artifact: bundle_build_timing_54.json. These are source read/hash/parse/retrieval timings on this machine, not cold operating-system-cache measurements or population latency. They exclude input selection, CSV joins, model calls, independent review and maintenance. The earlier replay-39 measurements are retained; different builder versions and single trials do not isolate the cost of the hidden-content check. Reusing an already parsed filing is materially cheaper in these four pairs, supporting source-grouped processing within the bounded cache.
