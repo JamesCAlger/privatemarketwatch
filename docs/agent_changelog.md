@@ -13268,3 +13268,82 @@ these documents; nothing pushed.
 - Minor, open: the accepted `published_basis` entry pairs today's `census_published.py` hash with an outcome computed at an older code head (diff read: behaviour-preserving for default callers, no automated check); `exit_test` trusts the verdict word without a vocabulary check; the 2026-10-03 PASS entries above are superseded on the verdict by the later entry (append-only, no inline marker).
 - Spec amendment needed (owner): inherited entries carry `valid_from = null` (matches how production applies the files) while spec section 4 says the file date becomes `valid_from`.
 - Tests: none run for this entry (docs only). Full repo suite not run in this sub-project; pilot regression `sp3p-verify-final-regression2` 942 passed / 2 skipped at 6e43669.
+
+## 2026-10-04 -- SP3 proper: owner rulings 1-3 applied (contract scope, 0.5% tolerance, substantive gate)
+
+Everything is IN-SAMPLE (8 pilot filers, one report date, 2025-12-31). Branch `filer-profile-pilot`, code
+05b4739; nothing in production reads these documents; nothing pushed. The exit test is still NOT MET.
+
+- Ruling 1 (contract scope): `source_encodings.cash_identifiers` and `invariants.rate_sanity` are PROCEDURE, outside the consistency contract; they leave the insufficient_evidence count and are published per filer in `procedure_keys_outside_contract` with a named guard.
+- Ruling 2 (tolerance): `partition_structure.published_basis` is accepted only where the fair-value totals residual at the inception date is within +/-0.5% in every learn mode, regardless of the contract's 5% / 10% band; otherwise candidate, routed to B1/B2 review.
+- Ruling 3 (gate): identity rows (`fund_level_concepts.entity_cik`, `.entity_registrant_name`) do not satisfy the inception gate; a filer needs at least one substantive compared row with zero breaches.
+- What changed. `scripts/profile_pilot/profile_consistency.py`: the two keys are no longer key rows
+  (`UNPAIRED_WRAPPER_KEYS` removed); `PROCEDURE_KEYS_OUTSIDE_CONTRACT` and `procedure_keys()` publish them
+  on every contract and in `exit_test.json` (top level and per filer). Guards: cash_identifiers ->
+  `independent_totals` (the published-basis fair-value check at the 0.5% band) with
+  `guard_status_at_report_date` read from the filer's own published_basis witness (within_tolerance /
+  outside_tolerance / no_residual / no_outcome), so a filer with no totals outcome shows a named guard that
+  did not run; rate_sanity -> `production_rate_rules` (owner correction of the same day; first reading was
+  `none_claimed`), listing `fmt_basis_spread`, `fmt_pik_rate`, `fmt_interest_rate`, `agentA_spread_vs_xbrl`
+  and oracle D07, with the note: the pilot value_range contract itself detected 0 of 8 known cases in the
+  back-test; D07 cannot distinguish a portfolio shift from a change of meaning; rate problems that no
+  production rule flags remain unguarded. Those rules are NAMED, not evaluated by this module
+  (`guard_evaluated_here: false`). `IDENTITY_PROFILE_KEYS`, `substantive()`, `meets_substantive_minimum()`:
+  each key row carries `identity`; per filer `compared_total`, `compared_substantive`,
+  `substantive_keys_compared`, `identity_keys_compared`, `substantive_comparison`; new gate reason
+  `consistency_no_substantive_comparison` (also a `spec_exit` reason, so spec_exit is never weaker than the
+  gate). `MIN_SUBSTANTIVE_COMPARED_SHARE = None` is the hook for the later minimum-share ruling; a non-None
+  value raises NotImplementedError rather than being ignored. The filer verdict words are unchanged;
+  `holds` is now reachable in principle (every counterpart key row holds).
+  `scripts/profile_pilot/profile_inception.py`: `PUBLISHED_BASIS_FV_TOLERANCE_PCT = 0.5` (the one place
+  the number lives), `published_basis_tolerance()`, `published_basis_candidate_cause()`. Accepted = totals
+  contract holds AND every row's absolute residual <= 0.5. Witness gains `owner_tolerance` {band_pct,
+  basis, outcome, residuals per mode with contract_status / contract_band / contract_tier, route}; the
+  pinned back-test rows carry neither band nor tier, so both read `not_recorded_in_pinned_file`. New
+  candidate causes `totals_outside_owner_tolerance_at_inception` and `totals_no_residual_at_inception`.
+  The candidate stub's closing evidence names the band and the route ("B1/B2 review item (fair-value
+  reconciliation flag)"). `scripts/profile_pilot/profile_document_run.py`: manifest gains
+  `published_basis_tolerance_pct` and `published_basis_tolerance_outcomes`; `exit_test.json` and stdout
+  carry `published_basis_tolerance` and the compared counts per filer. No schema file changed;
+  `CONVERTER_VERSION` unchanged (documents of the new rule are recognisable by `witness.owner_tolerance`).
+- Run of record: `sp3p-profile-20261004t101559z`, code 05b4739, MAIN overrides at a72709c (clean), same
+  command and inputs as `sp3p-profile-20261003t231621z` (which it supersedes), exit code 1.
+  `inception_gate` false, two reasons: `consistency_insufficient_evidence` (0001588272, 0001715933) and
+  `consistency_no_substantive_comparison` (0001287750, 0001860424, 0001901037, 0001920453, 0001950803).
+  `spec_exit` false (`consistency_no_substantive_comparison`, `consistency_not_holds` for all 8; verdicts
+  holds 0, no_breach 6, insufficient_evidence 2, breach 0). The gate now fails 7 of 8 (was 2 of 8): only
+  BCRED has a substantive comparison. Fidelity is a fifth identity-only filer (its two compared rows are
+  `/cik` and `/entity_name`), beside the four that pass on `/cik` alone. Round trip 40/40 identical and
+  loader parity ok; `results/roundtrip.json` 0 differences and `roundtrip/overrides/` 40/40 byte-identical
+  to the previous run of record; 80 pinned inputs, no sha changed; light workload; main overrides guard PASS.
+
+  | Filer | accepted / candidate / stubs | compared_total | compared_substantive | verdict | gate consistency leg | published_basis (fair_value residual) |
+  |---|---|---|---|---|---|---|
+  | Ares 0001287750 | 10 / 0 / 46 | 1 | 0 | no_breach | FAIL (identity only) | accepted (+0.30%) |
+  | NexPoint 0001588272 | 2 / 1 / 54 | 0 | 0 | insufficient_evidence | FAIL (nothing compared) | candidate (no totals outcome) |
+  | TCW 0001715933 | 2 / 1 / 54 | 0 | 0 | insufficient_evidence | FAIL (nothing compared) | candidate (no totals outcome) |
+  | BCRED 0001803498 | 13 / 1 / 43 | 5 | 3 | no_breach | pass | candidate (+0.51%, outside 0.5%; contract holds) |
+  | Onex 0001860424 | 18 / 0 / 38 | 1 | 0 | no_breach | FAIL (identity only) | accepted (0.00%) |
+  | Stellus 0001901037 | 17 / 1 / 39 | 1 | 0 | no_breach | FAIL (identity only) | accepted (0.00%) |
+  | Fidelity 0001920453 | 15 / 1 / 41 | 2 | 0 | no_breach | FAIL (identity only) | candidate (-7.77%; rolling breach, anchored holds) |
+  | StepStone 0001950803 | 16 / 1 / 40 | 1 | 0 | no_breach | FAIL (identity only) | candidate (-10.20%; breach) |
+  | Total | 93 / 6 / 355 of 448 | 11 of 96 key rows | 3 | holds 0 of 8 | 1 of 8 pass | accepted 3, candidate 5 |
+
+  Key rows 112 -> 96 (11 holds, 0 breach, 50 insufficient_evidence, 35 not_applicable). BCRED's three
+  substantive rows are all on `partition_structure.reporting_entities` (wrapper list, legacy wrapper list,
+  code mirror). Stub causes: no_source 286, census_unavailable 56, census_stub 7,
+  candidate_pending_confirmation 6. cash_identifiers guard status: within_tolerance for Ares, Onex,
+  Stellus; outside_tolerance for BCRED, Fidelity, StepStone; no_outcome for NexPoint, TCW.
+- Limits, stated plainly. The cash_identifiers guard catches a cash-row disagreement only insofar as it
+  moves the published-basis fair-value sum beyond 0.5% of the filed total, and for 5 of the 8 filers the
+  guard is currently outside tolerance or did not run. The rate_sanity guard is a list of production rule
+  names; nothing here checks that those rules ran or what they found for these filers. No filer is `holds`:
+  every filer still has counterpart keys answered by a stub.
+- Tests (pilot launcher only, never bare pytest): red `sp3p-verify-own1-red` 28 failed / 116 passed (new and
+  re-pointed tests against the old code; written before the rate_sanity guard correction); green
+  `sp3p-verify-own1-green` 144 passed; full pilot regression `sp3p-verify-own1-regression` at 05b4739 (all 23
+  `tests/test_profile_pilot_*.py`): 964 passed, 2 skipped, launcher exit 0. Plugin PASS and preservation
+  PASS on all three; backstop 680 divergent / 45993 checked on all three, verdict unchanged on the
+  regression (pre-existing, same as every earlier launcher run).
+  NOT run: the full repo suite; any frontend build; `diff_outputs.py --semantic` outside the launcher's own
+  backstop.

@@ -137,6 +137,21 @@ aggregate_markers, fair-value source_field), the wrapper key is generated from t
 load time once the family's consumer switch lands, so those keys stop existing as independent
 data. No other wrapper key is derived.
 
+Amendment (owner ruling 2026-10-04, rulings 1 and 3). (1) Two wrapper keys with no semantic
+counterpart, `source_encodings.cash_identifiers` and `invariants.rate_sanity`, are PROCEDURE and
+outside the consistency contract. They are published per filer in
+`procedure_keys_outside_contract` with a named guard: `independent_totals` (the published-basis
+fair-value check at the 0.5% band, section 6) for cash identifiers; `production_rate_rules`
+(`fmt_basis_spread`, `fmt_pik_rate`, `fmt_interest_rate`, `agentA_spread_vs_xbrl`, oracle D07) for
+rate sanity, with the note that the pilot value_range contract itself detected 0 of 8 known cases in
+the back-test, D07 cannot distinguish a portfolio shift from a change of meaning, and rate problems
+that no production rule flags remain unguarded. (3) The inception gate needs a SUBSTANTIVE
+comparison: identity rows (`fund_level_concepts.entity_cik`, `.entity_registrant_name`) do not
+satisfy it; a filer needs at least one substantive compared row with zero breaches; a breach on an
+identity row is still a breach. A minimum-share criterion is reserved for a later ruling (not
+implemented). `spec_exit` (every counterpart key of every filer holds) and `inception_gate` stay
+separate published fields.
+
 ### 4.2 Two kinds of correction (D-corrections)
 
 - **One-off correction.** Keyed by `row_id` (hash of accession and context). `valid_from` equals
@@ -241,6 +256,14 @@ rate meaning; declared unit or a reconciling total for scale; the filing's own s
 instrument type; the iXBRL presentation for format. A proposal with no witness never
 auto-accepts.
 
+Amendment (owner ruling 2026-10-04, ruling 2): admission tolerance for
+`partition_structure.published_basis`. It is `accepted` only where the filer's fair-value totals
+residual at the inception date is within +/-0.5% (absolute value, every learn mode that has a
+result), regardless of the totals contract's own 5% / 10% band. Outside 0.5%, or with no outcome,
+it is a `candidate` and the discrepancy is a B1/B2 review item (fair-value reconciliation flag).
+The witness records the residual per mode, the 0.5% band, and the contract band and tier where the
+pinned file carries them.
+
 Calibration: an adjudicated false alarm is recorded against the band that fired; the tolerances
 file re-versions only when a quarter's false alarms exceed the version's stated rate. A
 confirmed change re-learns the affected contracts from the admitted entry's `valid_from`.
@@ -318,7 +341,7 @@ a migrated filer without an exception record. The programme is not done while an
 | 0b | Matching-only base build (D-base-build): cached rebuild with the V13 repairs, semantic diff, re-attestation of Q4-2025 and Q1-2026 | 0 | both quarters re-attest; matching delta recorded alone in the changelog |
 | 1 | Drift replay Q4-to-Q1 against q1p3 findings, shadow; independent-totals kind added (section 5). DONE 2026-10-01: replay sp1-replay-full2-20261001t0100z; structural kinds NO_POSITIVES on the pair (FA upper fill 0.0217, concept 0.0054), format_grammar FAIL, totals NOT MET (1/8 measurable) (census not on the published basis for 7 filers), others NOT_CLAIMED; see changelog 2026-10-01 | pilot as built | recall and false-alarm rate per kind against the adjudicated set; scale-flip detection listed per filer |
 | 2 | Detector experiments (5.1) under the pre-registered adoption rule | 1 | each candidate measured on the three yardsticks; winners and losers versioned with their numbers |
-| 3 | Profile document: schema, family disposition applied (7.1), wrapper consolidation, consistency contract (4.1), inception entries for the 8 on Q4-2025 from the existing override files. Task 0 DONE 2026-10-01: census published-basis partition predicate in code (census_published.py; v1 then v2 with hierarchical rollups, adopted under the anchor-aware adoption rule, 0 violations over 101 fund-quarters), totals kind evaluates on it; the pct-unit band is the next item; see changelog 2026-10-01 (two entries). SP3 proper BUILT 2026-10-03, exit test NOT MET: run of record sp3p-profile-20261003t231621z (code 6e43669, exit 1; supersedes sp3p-profile-20261003t212843z at 928998a, whose PASS counted a filer with no comparison as passing); built: document schema v1, family disposition, wrapper blocks, one-off corrections, inception entries and stubs for the 8 at 2025-12-31, round trip 40/40 identical, loader parity ok, criterion 1 and resolver met with stubs (94 of 448 grid cells accepted, 5 candidate, 354 stubs); consistency criterion NOT MET: verdict holds 0/8, no_breach 6/8, insufficient_evidence 2/8, breach 0 (11 of 112 key rows compared, all hold; 66 insufficient_evidence, 35 not_applicable); NexPoint 0001588272 and TCW 0001715933 had NO row compared (no authoritative Q4-2025 census, so not even the CIK has an accepted entry to compare) and fail the inception gate; published_basis accepted for 4 of 8 (independent totals hold at 2025-12-31), candidate for Fidelity and StepStone (totals breach) and NexPoint and TCW (no totals outcome) (IN-SAMPLE); see changelog 2026-10-03 (final review entry) | 1; 2 for any kind it freezes as non-provisional | criterion 1; resolver answers every field; consistency contract holds on all 8 |
+| 3 | Profile document: schema, family disposition applied (7.1), wrapper consolidation, consistency contract (4.1), inception entries for the 8 on Q4-2025 from the existing override files. Task 0 DONE 2026-10-01: census published-basis partition predicate in code (census_published.py; v1 then v2 with hierarchical rollups, adopted under the anchor-aware adoption rule, 0 violations over 101 fund-quarters), totals kind evaluates on it; the pct-unit band is the next item; see changelog 2026-10-01 (two entries). SP3 proper BUILT 2026-10-03, exit test NOT MET: run of record sp3p-profile-20261003t231621z (code 6e43669, exit 1; supersedes sp3p-profile-20261003t212843z at 928998a, whose PASS counted a filer with no comparison as passing); built: document schema v1, family disposition, wrapper blocks, one-off corrections, inception entries and stubs for the 8 at 2025-12-31, round trip 40/40 identical, loader parity ok, criterion 1 and resolver met with stubs (94 of 448 grid cells accepted, 5 candidate, 354 stubs); consistency criterion NOT MET: verdict holds 0/8, no_breach 6/8, insufficient_evidence 2/8, breach 0 (11 of 112 key rows compared, all hold; 66 insufficient_evidence, 35 not_applicable); NexPoint 0001588272 and TCW 0001715933 had NO row compared (no authoritative Q4-2025 census, so not even the CIK has an accepted entry to compare) and fail the inception gate; published_basis accepted for 4 of 8 (independent totals hold at 2025-12-31), candidate for Fidelity and StepStone (totals breach) and NexPoint and TCW (no totals outcome) (IN-SAMPLE); see changelog 2026-10-03 (final review entry). RE-RUN 2026-10-04 under owner rulings 1-3 (procedure keys outside the contract; published_basis needs a residual within 0.5%; the gate needs a substantive comparison), exit test still NOT MET: run of record sp3p-profile-20261004t101559z (code 05b4739, exit 1) supersedes sp3p-profile-20261003t231621z; inception gate fails 7 of 8 (NexPoint and TCW: nothing compared; Ares, Onex, Stellus, Fidelity, StepStone: identity rows only), only BCRED 0001803498 has a substantive comparison (3 rows, all on reporting entities); verdict holds 0/8, no_breach 6/8, insufficient_evidence 2/8, breach 0 (11 of 96 key rows compared, 3 substantive; 50 insufficient_evidence, 35 not_applicable); 93 of 448 grid cells accepted, 6 candidate, 355 stubs; published_basis accepted for 3 of 8 (Ares +0.30%, Onex 0.00%, Stellus 0.00%), candidate for BCRED (+0.51%, outside 0.5%), Fidelity, StepStone, NexPoint, TCW (IN-SAMPLE); see changelog 2026-10-04 (owner rulings 1-3 entry) | 1; 2 for any kind it freezes as non-provisional | criterion 1; resolver answers every field; consistency contract holds on all 8 |
 | 4 | Rate family live: consumers switched, twin build vs base, defects retired, `rate_convention` files deleted for the 8 | 0b, 3 | twin build clean vs base build on signed-off Q1-2026; re-attestation passes |
 | 5 | Fleet loop: B1, B2, two-tier admission, calibration | 1, 3 | one full loop on the Q4-to-Q1 queue with entries admitted and one retracted |
 | 6 | Remaining families: format, monetary scale, identity; corrections migrated as section 4.2 kinds; knowledge files deleted per family | 4, 5 | twin build per family vs base; criterion 5 |
