@@ -193,3 +193,11 @@ bounded read-only metadata comparison, and report that semantic parity was not
 tested. If a proposed check exceeds the owner's bounded scope, record the
 limitation and do not claim it passed. A documentation-only change requires no
 pytest, rebuild, export or network calls.
+
+## Replay integrity implementation
+
+The isolated replay reader now checks exact declared flag membership, packet filenames, rule identity, builder/holdings versions, readiness/reasons and aggregate readiness counts. Newly written enriched replays include a full packet fingerprint in every summary entry; the reader validates it when declared. Rebuilds use the same checked parent loader.
+
+Historical summaries remain unchanged. Those without packet fingerprints receive identity/status/version checks but cannot establish full content immutability by themselves. Frozen model-request manifests and prepared review-input bindings provide separate content hashes; do not imply that adding a new hash retrospectively proves an older packet was unchanged.
+
+Seven negative fixtures failed before the repair; all nine focused replay tests now pass, including two compatible summary formats. The original/consumed holdout pair and current 100-call ledger still validate with unchanged counts. A targeted reader/consumer regression set passes 22 tests. No bundle-builder change, source reparse or model call was required.

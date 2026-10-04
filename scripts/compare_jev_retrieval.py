@@ -20,13 +20,44 @@ def load_replay(run, label):
     paths = list(directory.glob('*_ROW-*.json'))
     if not 1 <= len(paths) <= 100 or len(paths) != len(summary['cases']):
         raise ValueError('Incomplete or unbounded replay')
+    declared = {}
+    for case in summary['cases']:
+        if 'rule' in case and 'row_id' in case:
+            key = (case['rule'], case['row_id'])
+        elif isinstance(case.get('case_id'), str) and '_ROW-' in case['case_id']:
+            rule, row = case['case_id'].split('_ROW-', 1)
+            key = (rule, 'ROW-' + row)
+        else:
+            raise ValueError('Summary lacks flag identity')
+        if key in declared:
+            raise ValueError('Duplicate declared flag')
+        declared[key] = case
     packets = {}
     for path in paths:
         packet = read(path)
         key = (packet['rule']['id'], packet['flag']['row_id'])
         if key in packets or packet['provenance']['builder_sha256'] != summary['builder_sha256']:
             raise ValueError('Duplicate flag or mixed builder versions')
+        if (key not in declared or packet['flag'].get('rule_id') != key[0]
+                or path.stem != key[0] + '_' + key[1]):
+            raise ValueError('Packet flag differs from declared identity')
+        case = declared[key]
+        status = case.get('status', case.get('after'))
+        reasons = case.get('blocking_reasons', case.get('reasons'))
+        if (status != packet['evidence_status']['status']
+                or reasons != packet['evidence_status']['blocking_reasons']):
+            raise ValueError('Packet evidence status differs from summary')
+        if (summary.get('holdings_sha256')
+                and packet['provenance'].get('holdings_sha256') != summary['holdings_sha256']):
+            raise ValueError('Packet holdings snapshot differs from summary')
+        if 'packet_fingerprint' in case and fingerprint(packet) != case['packet_fingerprint']:
+            raise ValueError('Packet content fingerprint differs from summary')
         packets[key] = packet
+    if set(packets) != set(declared):
+        raise ValueError('Replay membership differs from summary')
+    actual_counts = dict(Counter(p['evidence_status']['status'] for p in packets.values()))
+    if 'status_counts' in summary and summary['status_counts'] != actual_counts:
+        raise ValueError('Replay status counts differ from summary')
     return summary, packets
 
 

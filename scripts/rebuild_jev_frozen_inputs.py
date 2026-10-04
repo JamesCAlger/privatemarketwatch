@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from pipeline.jev_bundles import SourceCache, build_bundle, clean
 from pipeline.jev_screening import fingerprint
+from scripts.compare_jev_retrieval import load_replay
 from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
 
 
@@ -31,14 +32,8 @@ def main():
     install_read_only_guard(repo, run)
     parents = {}
     for label in args.parents:
-        directory = run / label
-        summary = read(directory / 'summary.json')
-        paths = list(directory.glob('*_ROW-*.json'))
-        if len(paths) != len(summary['cases']):
-            raise ValueError('Incomplete parent replay')
-        for path in paths:
-            packet = read(path)
-            key = (packet['flag']['rule_id'], packet['flag']['row_id'])
+        _, packets = load_replay(run, label)
+        for key, packet in packets.items():
             if key in parents:
                 raise ValueError('Duplicate frozen flag')
             parents[key] = packet
@@ -82,7 +77,8 @@ def main():
                 and packet['filing']['sha256'] != parent['filing']['sha256']):
             raise ValueError('Source changed since parent')
         write(target / (rule + '_' + row_id + '.json'), packet)
-        cases.append({'rule': rule, 'row_id': row_id, **packet['evidence_status']})
+        cases.append({'rule': rule, 'row_id': row_id,
+                      'packet_fingerprint': fingerprint(packet), **packet['evidence_status']})
         print(f"Rebuild {index}/{len(ordered)}: {row_id} {packet['evidence_status']['status']}", flush=True)
     if sha(ROOT / 'pipeline/jev_bundles.py') != builder_hash or sha(holdings) != holdings_hash:
         raise ValueError('Inputs changed during rebuild; incomplete replay')
