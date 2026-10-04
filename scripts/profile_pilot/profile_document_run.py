@@ -11,7 +11,9 @@ plus the shared override files, the census root's authoritative/excluded listing
 files it names for each filer, <data_root>/pilot/filer_profile/<replay>/results/replay_q4_q1.json,
 <data_root>/pilot/filer_profile/<totals>/results/backtest_results.json (final review I3: the pinned
 independent-totals contract results that decide, per filer, whether partition_structure.published_basis is
-admitted accepted or candidate; missing -> StageInvalidated, exit 2, before any write) and
+admitted accepted or candidate -- since owner ruling 2 of 2026-10-04 accepted needs the fair-value residual
+within +/-0.5% in every learn mode, profile_inception.PUBLISHED_BASIS_FV_TOLERANCE_PCT; missing ->
+StageInvalidated, exit 2, before any write) and
 scripts/profile_pilot/census_published.py. Sign-off attestation is a read-only `git show <tag>:<path>` in the main
 checkout. Writes ONLY under <data_root>/pilot/filer_profile/<run_id>/ (write-once): manifest.json,
 profiles/<cik>.json and roundtrip/overrides/<path> (order-preserving), results/{roundtrip,consistency,exit_test}.json,
@@ -411,6 +413,9 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, totals_run_id: s
                                                      predicate_version=predicate["version"]),
                                    source=dict(totals_source)) for cik in ciks}
         del totals_results
+        # Owner ruling 2 (2026-10-04): the residual of each filer against the +/-0.5% band, computed by the
+        # same pure function build_document uses for the admission (published here, decided there).
+        tolerance_by_cik = {cik: pi.published_basis_tolerance(t) for cik, t in totals_by_cik.items()}
         shared_names = [n for n in pf.SHARED_FILES if (root / n).is_file()]
         hit_paths = {h["path"] for h in hits}
 
@@ -447,6 +452,8 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, totals_run_id: s
             stage="sp3_profile_document", run_id=paths.run_id, git=git, inputs=pins, census_run_id=census_run_id,
             replay_run_id=replay_run_id, totals_run_id=totals_run_id,
             totals_outcomes={c: t["outcome"] for c, t in totals_by_cik.items()},
+            published_basis_tolerance_pct=pi.PUBLISHED_BASIS_FV_TOLERANCE_PCT,
+            published_basis_tolerance_outcomes={c: t["outcome"] for c, t in tolerance_by_cik.items()},
             overrides_root=str(root), overrides_git_head=overrides_git_head,
             overrides_dirty=overrides_dirty, recorded_at=recorded_at, converter_version=pd.CONVERTER_VERSION,
             ciks=ciks, hits=hits, workload=workload, heavy=heavy))
@@ -532,7 +539,8 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, totals_run_id: s
                        insufficient_evidence=consistency[c]["counts"]["insufficient_evidence"],
                        q1_census="present" if rows_by_cik[c][1] is not None else "absent",
                        q4_census="present" if rows_by_cik[c][0] is not None else "absent",
-                       totals_outcome=totals_by_cik[c]["outcome"])
+                       totals_outcome=totals_by_cik[c]["outcome"],
+                       published_basis_tolerance=tolerance_by_cik[c])
 
         exit_file_body = dict(exit_body, per_cik={c: _enrich(c, row) for c, row in exit_body["per_cik"].items()})
 
@@ -572,6 +580,9 @@ def run_stage(paths, *, census_run_id: str, replay_run_id: str, totals_run_id: s
                                                stubs=p["stubs"], grid=p["grid"],
                                                published_basis=p["published_basis"],
                                                consistency_rows=p["consistency_rows"],
+                                               compared_total=p["compared_total"],
+                                               compared_substantive=p["compared_substantive"],
+                                               substantive_keys_compared=p["substantive_keys_compared"],
                                                counts=p["consistency_counts"]))
                            for c, p in exit_body["per_cik"].items()})
     except AssertionError as exc:

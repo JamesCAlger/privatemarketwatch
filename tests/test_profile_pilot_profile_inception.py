@@ -169,9 +169,12 @@ def totals_row(field, status, *, cause=None, residual=0.0, version=V2):
                 applies_to={"whole_filing": True, "census_published": version}, partition_id="whole_filing")
 
 
-def totals_results(cik, fair_value, *, date=Q4, pct="breach", version=V2, modes=("rolling", "anchored")):
+def totals_results(cik, fair_value, *, date=Q4, pct="breach", version=V2, modes=("rolling", "anchored"),
+                   residual=None):
     """pair_id -> result rows. `fair_value` is one status for every mode, or a {mode: status} dict; a status
-    of None leaves that mode's pair out. Each pair also carries an unrelated kind and the pct contract."""
+    of None leaves that mode's pair out. Each pair also carries an unrelated kind and the pct contract.
+    `residual` (owner ruling 2, 2026-10-04) is the fair-value residual in percent, one number for every mode or
+    a {mode: number} dict; default -7.5 on a breach, 0.25 otherwise."""
     out = {}
     for mode in modes:
         status = fair_value[mode] if isinstance(fair_value, dict) else fair_value
@@ -180,11 +183,13 @@ def totals_results(cik, fair_value, *, date=Q4, pct="breach", version=V2, modes=
         learn = "2025-09-30" if mode == "rolling" else "2022-09-30"
         cause = {"breach": "fv_residual_outside_band",
                  "insufficient_evidence": "not_learned_in_q1: no_anchor"}.get(status)
+        mine = residual[mode] if isinstance(residual, dict) else residual
+        if mine is None:
+            mine = -7.5 if status == "breach" else 0.25
         out[":".join((mode, cik, learn, date))] = [
             dict(kind="fill_rate", field="fair_value", status="breach", cause=None, observed=None,
                  applies_to={"whole_filing": True}),
-            totals_row("fair_value", status, cause=cause, residual=-7.5 if status == "breach" else 0.25,
-                       version=version),
+            totals_row("fair_value", status, cause=cause, residual=mine, version=version),
             totals_row("pct_of_net_assets", pct, cause="pct_sum_outside_band" if pct == "breach" else None,
                        version=version)]
     return out
@@ -720,6 +725,8 @@ def test_published_basis_is_a_candidate_where_the_totals_outcome_does_not_hold(f
     closing = out["stub"]["closing_evidence"]
     assert "independent-totals" in closing and "holds" in closing and cause in closing
     assert "next-quarter confirmation" not in closing
+    # owner ruling 2 (2026-10-04): the closing evidence names the route
+    assert "B1/B2 review item (fair-value reconciliation flag)" in closing
     # every grid key is still answered by an entry or a stub
     for key, cell in pd.coverage(doc, Q4).items():
         assert cell["accepted_entry_ids"] or cell["stub"], key
@@ -737,6 +744,97 @@ def test_build_document_refuses_a_missing_or_mismatched_totals_input():
     attempt(lambda i: i.update(totals=dict(i["totals"], report_date="2025-09-30")))
     attempt(lambda i: i.update(totals=dict(i["totals"], outcome="fine")))
     attempt(lambda i: i.update(totals={k: v for k, v in i["totals"].items() if k != "source"}))
+
+
+# ---------------------------------------------------------------- owner ruling 2 (2026-10-04): 0.5% tolerance
+
+
+def _build_with_residual(residual, fair_value="holds"):
+    inputs = inception_inputs()
+    inputs["totals"] = totals_input(fair_value, residual=residual)
+    return pi.build_document(STELLUS, inputs=inputs, recorded_at=NOW, run_id=RUN, git_head="2a218e9")
+
+
+def test_the_published_basis_tolerance_is_one_named_constant():
+    assert pi.PUBLISHED_BASIS_FV_TOLERANCE_PCT == 0.5
+
+
+@pytest.mark.parametrize("residual", [0.49, -0.49, 0.5, -0.5, 0.0, {"rolling": 0.49, "anchored": -0.3}])
+def test_published_basis_is_accepted_within_half_a_percent_in_every_mode(residual):
+    doc = _build_with_residual(residual)
+    entry, admission = _basis(doc)
+    assert admission["state"] == "accepted" and "candidate_cause" not in admission["witness"]
+    tol = admission["witness"]["owner_tolerance"]
+    assert tol["band_pct"] == 0.5 and tol["outcome"] == "within_tolerance"
+    assert "2026-10-04" in tol["basis"]
+    assert [r["mode"] for r in tol["residuals"]] == ["anchored", "rolling"]
+    assert all(r["within"] is True for r in tol["residuals"])
+    # the contract's own band and tier are not in the pinned file's rows: said so, not guessed
+    assert all(r["contract_band"] == "not_recorded_in_pinned_file" for r in tol["residuals"])
+    assert all(r["contract_tier"] == "not_recorded_in_pinned_file" for r in tol["residuals"])
+    assert pd.resolve(doc, "partition_structure.published_basis", Q4)["status"] == "resolved"
+
+
+@pytest.mark.parametrize("residual, outside_modes", [
+    (0.51, ["anchored", "rolling"]),                 # BCRED 0001803498 at 2025-12-31: +0.51%, contract holds
+    (-0.51, ["anchored", "rolling"]),                # the band is on the absolute value
+    ({"rolling": 0.49, "anchored": 0.51}, ["anchored"]),   # mixed modes: one inside is not enough
+    ({"rolling": -0.51, "anchored": 0.49}, ["rolling"]),
+    (4.9, ["anchored", "rolling"])])                 # inside the contract's own 5% band: still a candidate
+def test_published_basis_is_a_candidate_outside_half_a_percent_though_the_contract_holds(residual, outside_modes):
+    doc = _build_with_residual(residual)
+    pd.validate_document(doc)
+    entry, admission = _basis(doc)
+    witness = admission["witness"]
+    assert admission["state"] == "candidate" and admission["basis"] == "adopted_predicate"
+    assert witness["independent_totals"]["outcome"] == "holds"          # the contract band did not decide
+    assert witness["candidate_cause"] == "totals_outside_owner_tolerance_at_inception"
+    tol = witness["owner_tolerance"]
+    assert tol["band_pct"] == 0.5 and tol["outcome"] == "outside_tolerance"
+    assert [r["mode"] for r in tol["residuals"] if not r["within"]] == outside_modes
+    expected = residual if isinstance(residual, dict) else {"rolling": residual, "anchored": residual}
+    assert {r["mode"]: r["fv_residual_pct"] for r in tol["residuals"]} == expected
+    out = pd.resolve(doc, "partition_structure.published_basis", Q4)
+    assert out["status"] == "stub" and out["stub"]["cause"] == "candidate_pending_confirmation"
+    assert out["stub"]["detail"] == {"independent_totals": "totals_outside_owner_tolerance_at_inception"}
+    closing = out["stub"]["closing_evidence"]
+    assert "B1/B2 review item (fair-value reconciliation flag)" in closing and "0.5%" in closing
+    assert "totals_outside_owner_tolerance_at_inception" in closing
+
+
+def test_published_basis_with_no_totals_outcome_is_a_candidate_routed_to_review():
+    doc = build(totals=None)
+    entry, admission = _basis(doc)
+    tol = admission["witness"]["owner_tolerance"]
+    assert admission["state"] == "candidate" and tol["outcome"] == "no_outcome" and tol["residuals"] == []
+    assert admission["witness"]["candidate_cause"] == "no_totals_outcome_at_inception"
+    closing = pd.resolve(doc, "partition_structure.published_basis", Q4)["stub"]["closing_evidence"]
+    assert "B1/B2 review item (fair-value reconciliation flag)" in closing
+
+
+def test_published_basis_tolerance_needs_a_residual_and_a_holding_contract():
+    """A row with no residual (abstention) is never 'within'; a contract breach stays a candidate even if a
+    residual inside 0.5% were recorded beside it (the tolerance is an extra condition, not a replacement)."""
+    abstains = pi.published_basis_tolerance(pi.totals_outcome(
+        totals_results(STELLUS, {"rolling": "insufficient_evidence", "anchored": "holds"}), STELLUS,
+        report_date=Q4, predicate_version=V2))
+    assert abstains["outcome"] == "no_residual"
+    doc = _build_with_residual(0.1, fair_value="breach")
+    entry, admission = _basis(doc)
+    assert admission["state"] == "candidate"
+    assert admission["witness"]["candidate_cause"] == "totals_breach_at_inception"
+    assert admission["witness"]["owner_tolerance"]["outcome"] == "within_tolerance"
+
+
+def test_the_contract_band_and_tier_are_recorded_when_the_pinned_rows_carry_them():
+    results = totals_results(STELLUS, "holds", residual=0.3)
+    for pair in results.values():
+        for r in pair:
+            if r["kind"] == "independent_totals":
+                r["band"], r["tier"] = {"fv_residual_pct": 5.0}, "standard"
+    tol = pi.published_basis_tolerance(pi.totals_outcome(results, STELLUS, report_date=Q4, predicate_version=V2))
+    assert all(r["contract_band"] == {"fv_residual_pct": 5.0} and r["contract_tier"] == "standard"
+               for r in tol["residuals"])
 
 
 def test_candidate_stub_closing_evidence_names_the_real_cause():

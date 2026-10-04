@@ -3,15 +3,18 @@
 Three post-brief decisions are exercised here (see profile_consistency.py's module docstring and
 task-8-report.md for the full rationale): the legacy reporting_entity_identifier_suffixes counterpart (A4),
 a token comparison where either side strips to empty is insufficient_evidence (representation_mismatch,
-TCW/Onex-shaped), and the two unpaired semantic wrapper keys (source_encodings.cash_identifiers,
-invariants.rate_sanity) that always appear as insufficient_evidence rows. Because those two unpaired keys
-guarantee insufficient_evidence >= 2 on every contract built from a real wrapper_v3 fixture (none of which
-populate them), an agreeing wrapper's verdict is "no_breach", never "holds" -- that is the reason the
-no_breach/holds distinction exists at all.
+TCW/Onex-shaped), and the no_breach/holds distinction (zero breaches with some insufficient_evidence rows is
+"no_breach", never "holds").
 
 Final whole-branch review (C1, C2): a filer whose contract compared ZERO rows is "insufficient_evidence", which
 fails; the exit test publishes two separately named fields, inception_gate (the CLI's exit code) and spec_exit
 (the spec's criterion: every filer "holds").
+
+Owner rulings 2026-10-04. Ruling 1: source_encodings.cash_identifiers and invariants.rate_sanity are PROCEDURE,
+outside the contract -- not key rows, not counted as insufficient_evidence, published per filer in
+procedure_keys_outside_contract with a named guard (independent_totals / production_rate_rules). Ruling 3: identity rows
+(entity CIK, registrant name) do not satisfy the gate; a filer needs one SUBSTANTIVE compared row with zero
+breaches; an identity-row breach is still a breach.
 """
 from __future__ import annotations
 
@@ -37,21 +40,19 @@ def rows(result):
 def test_agreeing_wrapper_is_no_breach_not_holds():
     out = pc.consistency_contract(doc_with(), report_date=Q4, code_mirror=ENTS)
     r = rows(out)
-    # Zero breaches, but the two unpaired semantic keys (no profile_key counterpart at all) are always
-    # insufficient_evidence, so the filer verdict is "no_breach", not "holds". Both counts are published.
+    # Zero breaches, but some counterpart keys have no accepted entry (insufficient_evidence), so the filer
+    # verdict is "no_breach", not "holds". Both counts are published.
     assert out["counts"]["breach"] == 0
     assert out["verdict"] == "no_breach"
-    assert out["counts"]["insufficient_evidence"] >= 2
+    assert out["counts"]["insufficient_evidence"] >= 1
     assert r["/identifier_format/delimiter"]["status"] == "holds"
     assert r["/source_encodings/reporting_entity_suffixes"]["status"] == "holds"
     assert r[pc.CODE_MIRROR_POINTER]["status"] == "holds"
     assert r["/invariants/fv_reconciliation/source_field"]["status"] == "not_applicable"
     # The legacy pointer is absent from the default fixture's wrapper -> not_applicable, not insufficient.
     assert r["/source_encodings/reporting_entity_identifier_suffixes"]["status"] == "not_applicable"
-    # The two unpaired keys appear explicitly, as insufficient_evidence, not omitted.
-    assert r["/source_encodings/cash_identifiers"]["status"] == "insufficient_evidence"
-    assert r["/source_encodings/cash_identifiers"]["wrapper_present"] is False
-    assert r["/invariants/rate_sanity"]["status"] == "insufficient_evidence"
+    # Ruling 1: the two procedure keys are not key rows of the contract.
+    assert "/source_encodings/cash_identifiers" not in r and "/invariants/rate_sanity" not in r
     assert out["evaluated_dates"] == [Q4] and out["unevaluated"]["block_valid"] == [None, None]
 
 
@@ -69,7 +70,7 @@ def test_code_mirror_disagreement_or_orphan_is_a_breach():
     bare = doc_with(wrapper_v3(STELLUS))           # no source_encodings -> no reporting-entities entry
     out = pc.consistency_contract(bare, report_date=Q4, code_mirror=ENTS)
     assert rows(out)[pc.CODE_MIRROR_POINTER]["status"] == "breach"
-    # Zero breaches with an empty code mirror, but still no_breach (never holds): the two unpaired keys.
+    # Zero breaches with an empty code mirror, but still no_breach (not holds): counterpart keys with a stub.
     assert pc.consistency_contract(bare, report_date=Q4, code_mirror=())["verdict"] == "no_breach"
     assert pc.consistency_contract(bare, report_date=Q4, code_mirror=())["counts"]["breach"] == 0
 
@@ -209,8 +210,9 @@ def test_no_live_wrapper_block_is_insufficient_evidence_and_fails_the_exit_test(
 
 def test_spec_exit_is_true_only_when_every_filer_holds():
     """The spec criterion (4.1: a counterpart wrapper key MUST have an accepted entry) is verdict == holds for
-    every filer. A real contract cannot reach it today (the two unpaired wrapper keys are always
-    insufficient_evidence), so the all-holds case is built by hand to prove the field can be true."""
+    every filer. Since owner ruling 1 it is reachable in principle (the two procedure keys are outside the
+    contract); this fixture's wrapper still has counterpart keys with a stub, so the all-holds case is built
+    by hand to prove the field can be true."""
     doc = doc_with()
     real = pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS)
     keys = [r for r in real["keys"] if r["status"] in ("holds", "not_applicable")]
@@ -243,3 +245,176 @@ def test_exit_test_fails_when_a_filer_breaches():
     assert out["verdict"] == "FAIL" and out["spec_exit"] is False and out["inception_gate"] is False
     assert [r["code"] for r in out["inception_gate_reasons"]] == ["consistency_breach"]
     assert out["per_cik"][STELLUS]["consistency_rows"]["breach"] == 1
+
+
+# ---------------------------------------------------------------- owner rulings 2026-10-04: rulings 1 and 3
+
+
+def with_keys(contract, keys):
+    """A hand-built contract over a subset (or an edited copy) of a real contract's key rows."""
+    counts = {s: sum(r["status"] == s for r in keys) for s in pc.STATUSES}
+    return dict(contract, keys=keys, counts=counts, verdict=pc._verdict(counts))
+
+
+def compared(row):
+    return row["status"] in ("holds", "breach")
+
+
+def is_identity(row):
+    return row["profile_key"] in pc.IDENTITY_PROFILE_KEYS
+
+
+def gate(contract, doc):
+    return pc.exit_test({STELLUS: doc}, {STELLUS: contract}, {"ok": True}, report_date=Q4,
+                        expected_ciks=(STELLUS,))
+
+
+def test_procedure_keys_are_outside_the_contract_and_published_with_named_guards():
+    """Ruling 1, positive case: the two keys are not key rows, do not count as insufficient_evidence, and are
+    published with the stated guards -- whether or not the wrapper populates them."""
+    plain = pc.consistency_contract(doc_with(), report_date=Q4, code_mirror=ENTS)
+    w = wrapper_v3(STELLUS, source_encodings={"reporting_entity_suffixes": ENTS, "cash_identifiers": ["Cash"]})
+    w["invariants"] = {"rate_sanity": {"min_pct": 0.0, "max_pct": 30.0}}
+    populated = pc.consistency_contract(doc_with(w), report_date=Q4, code_mirror=ENTS)
+    for out in (plain, populated):
+        assert "/source_encodings/cash_identifiers" not in rows(out) and "/invariants/rate_sanity" not in rows(out)
+        assert not [r for r in out["keys"] if r["mode"] == "no_counterpart"]
+        assert sum(out["counts"].values()) == len(out["keys"])
+        listed = {r["pointer"]: r for r in out["procedure_keys_outside_contract"]}
+        assert sorted(listed) == ["/invariants/rate_sanity", "/source_encodings/cash_identifiers"]
+        assert all(r["classification"] == "procedure" for r in listed.values())
+        cash, rate = listed["/source_encodings/cash_identifiers"], listed["/invariants/rate_sanity"]
+        assert cash["guard"] == "independent_totals" and "0.5%" in cash["guard_note"]
+        assert "B1/B2" in cash["guard_note"]
+        # the guard's own state for this filer (fixture totals: holds at 0.25%)
+        assert cash["guard_status_at_report_date"] == "within_tolerance"
+        # owner correction (2026-10-04): the rate key's guard is the named production rate rules, with the
+        # owner's note on what they do not cover; they are named, not evaluated here, and no per-filer
+        # status is invented for them
+        assert rate["guard"] == "production_rate_rules"
+        assert rate["guard_rules"] == ["fmt_basis_spread", "fmt_pik_rate", "fmt_interest_rate",
+                                       "agentA_spread_vs_xbrl", "oracle_D07_median_rate_shift_gt_300bps"]
+        assert rate["guard_note"] == (
+            "the pilot value_range contract itself detected 0 of 8 known cases in the back-test; D07 cannot "
+            "distinguish a portfolio shift from a change of meaning; rate problems that no production rule "
+            "flags remain unguarded")
+        assert rate["guard_evaluated_here"] is False and "guard_status_at_report_date" not in rate
+        assert "guard_rules" not in cash
+    # populating the two keys changes nothing in the contract's counts or verdict
+    assert populated["counts"] == plain["counts"] and populated["verdict"] == plain["verdict"]
+    listed = {r["pointer"]: r for r in populated["procedure_keys_outside_contract"]}
+    assert listed["/source_encodings/cash_identifiers"]["wrapper_value"] == ["Cash"]
+    assert listed["/invariants/rate_sanity"]["wrapper_present"] is True
+    listed = {r["pointer"]: r for r in plain["procedure_keys_outside_contract"]}
+    assert listed["/source_encodings/cash_identifiers"]["wrapper_present"] is False
+
+
+def test_procedure_classification_does_not_swallow_counterpart_keys_or_claim_a_guard_that_did_not_run():
+    """Ruling 1, false-positive guard: a COUNTERPART key with no accepted entry is still insufficient_evidence
+    (only the two named keys left the contract), and a filer with no totals outcome has a named guard whose
+    status says it did not run."""
+    doc = zero_comparison_doc()
+    con = pc.consistency_contract(doc, report_date=Q4, code_mirror=())
+    assert rows(con)["/cik"]["status"] == "insufficient_evidence"
+    assert rows(con)["/identifier_format/delimiter"]["status"] == "insufficient_evidence"
+    assert con["counts"]["insufficient_evidence"] >= 3 and con["verdict"] == "insufficient_evidence"
+    no_totals = pi.build_document(STELLUS, inputs=inception_inputs(totals=None), recorded_at=NOW, run_id=RUN,
+                                  git_head="2a218e9")
+    out = pc.consistency_contract(no_totals, report_date=Q4, code_mirror=ENTS)
+    cash = {r["pointer"]: r for r in out["procedure_keys_outside_contract"]}["/source_encodings/cash_identifiers"]
+    assert cash["guard"] == "independent_totals" and cash["guard_status_at_report_date"] == "no_outcome"
+    # exit_test carries the per-filer list and the classification itself
+    body = gate(out, no_totals)
+    assert body["per_cik"][STELLUS]["procedure_keys_outside_contract"] == out["procedure_keys_outside_contract"]
+    assert [(r["pointer"], r["guard"]) for r in body["procedure_keys_outside_contract"]] == [
+        ("/source_encodings/cash_identifiers", "independent_totals"),
+        ("/invariants/rate_sanity", "production_rate_rules")]
+    assert "fmt_pik_rate" in body["procedure_keys_outside_contract"][1]["guard_rules"]
+    # no live wrapper block: still listed, presence unknown
+    doc = doc_with()
+    doc["wrapper_section"]["blocks"] = []
+    listed = pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS)["procedure_keys_outside_contract"]
+    assert [r["wrapper_present"] for r in listed] == [None, None]
+
+
+def test_a_filer_compared_only_on_identity_rows_fails_the_gate():
+    """Ruling 3: the real shape of Ares / Onex / Stellus / StepStone (only /cik compared) and Fidelity (/cik and
+    /entity_name): compared rows exist, zero breaches, nothing substantive. The gate fails."""
+    doc = doc_with()
+    real = pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS)
+    assert rows(real)["/cik"]["status"] == "holds" and rows(real)["/cik"]["identity"] is True
+    assert rows(real)["/identifier_format/delimiter"]["identity"] is False
+    thin = with_keys(real, [r for r in real["keys"] if is_identity(r) or not compared(r)])
+    assert thin["counts"]["holds"] >= 1 and thin["verdict"] == "no_breach"
+    out = gate(thin, doc)
+    row = out["per_cik"][STELLUS]
+    assert row["compared_total"] >= 1 and row["compared_substantive"] == 0
+    assert row["substantive_keys_compared"] == [] and "/cik" in row["identity_keys_compared"]
+    assert row["consistency"] is False and row["substantive_comparison"] is False
+    assert row["consistency_verdict"] == "no_breach"            # the verdict word is unchanged; the gate is not
+    assert out["inception_gate"] is False and out["verdict"] == "FAIL" and out["spec_exit"] is False
+    assert [(r["code"], r["ciks"]) for r in out["inception_gate_reasons"]] == [
+        ("consistency_no_substantive_comparison", [STELLUS])]
+    # an all-identity "holds" contract does not meet the gate or the spec exit either
+    only = with_keys(real, [r for r in real["keys"] if is_identity(r) and compared(r)])
+    assert only["verdict"] == "holds"
+    out = gate(only, doc)
+    assert out["inception_gate"] is False and out["spec_exit"] is False
+    assert "consistency_no_substantive_comparison" in [r["code"] for r in out["spec_exit_reasons"]]
+    assert out["spec_exit_statement"].startswith("NOT MET")
+
+
+def test_one_substantive_holds_row_passes_the_gate():
+    """Ruling 3, the other direction: one substantive compared row with zero breaches is enough (no minimum
+    share yet), with or without identity rows beside it."""
+    doc = doc_with()
+    real = pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS)
+    delimiter = rows(real)["/identifier_format/delimiter"]
+    assert delimiter["status"] == "holds"
+    rest = [r for r in real["keys"] if is_identity(r) or not compared(r)]
+    for keys in (rest + [delimiter], [r for r in rest if not compared(r)] + [delimiter]):
+        out = gate(with_keys(real, keys), doc)
+        row = out["per_cik"][STELLUS]
+        assert row["compared_substantive"] == 1
+        assert row["substantive_keys_compared"] == ["/identifier_format/delimiter"]
+        assert row["compared_total"] == 1 + len(row["identity_keys_compared"])
+        assert row["consistency"] is True and out["inception_gate"] is True and out["verdict"] == "PASS"
+        assert out["inception_gate_reasons"] == []
+    # the real contract publishes the same counts itself, and the totals
+    assert real["compared_total"] == real["counts"]["holds"] + real["counts"]["breach"]
+    assert real["compared_substantive"] == len(real["substantive_keys_compared"]) >= 1
+    out = gate(real, doc)
+    assert out["consistency_rows"]["compared_substantive"] == real["compared_substantive"]
+    assert out["identity_profile_keys"] == ["fund_level_concepts.entity_cik",
+                                           "fund_level_concepts.entity_registrant_name"]
+
+
+def test_an_identity_row_breach_is_still_a_breach():
+    """Ruling 3: identity rows are excluded from what SATISFIES the gate, never from what breaches it."""
+    doc = doc_with()
+    real = pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS)
+    keys = [dict(r, status="breach", reason="value_disagrees") if r["pointer"] == "/cik" else r
+            for r in real["keys"]]
+    bad = with_keys(real, keys)
+    assert bad["verdict"] == "breach"
+    out = gate(bad, doc)
+    row = out["per_cik"][STELLUS]
+    assert row["compared_substantive"] >= 1                     # substantive rows hold; it fails anyway
+    assert row["consistency"] is False and [b["pointer"] for b in row["breaches"]] == ["/cik"]
+    assert out["inception_gate"] is False
+    assert [r["code"] for r in out["inception_gate_reasons"]] == ["consistency_breach"]
+
+
+def test_the_minimum_share_hook_is_named_and_not_implemented(monkeypatch):
+    assert pc.MIN_SUBSTANTIVE_COMPARED_ROWS == 1 and pc.MIN_SUBSTANTIVE_COMPARED_SHARE is None
+    assert pc.meets_substantive_minimum(1) is True and pc.meets_substantive_minimum(0) is False
+    doc = doc_with()
+    out = gate(pc.consistency_contract(doc, report_date=Q4, code_mirror=ENTS), doc)
+    assert out["substantive_minimum"] == {"rows": 1, "share": None}
+    monkeypatch.setattr(pc, "MIN_SUBSTANTIVE_COMPARED_SHARE", 0.5)
+    try:
+        pc.meets_substantive_minimum(3)
+    except NotImplementedError:
+        pass
+    else:
+        raise AssertionError("a share threshold must not be silently ignored")

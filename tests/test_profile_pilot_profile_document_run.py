@@ -125,14 +125,15 @@ def _totals_path(paths):
     return paths.data_root / "pilot" / "filer_profile" / TOTALS_RUN / "results" / "backtest_results.json"
 
 
-def _write_totals(paths, outcomes):
+def _write_totals(paths, outcomes, residuals=None):
     """Final review I3: the pinned independent-totals results (m2_backtest's backtest_results.json shape).
     `outcomes` maps cik -> a fair_value status, a {mode: status} dict, or None for 'no pair evaluated at the
-    inception date' (the NexPoint / TCW shape)."""
+    inception date' (the NexPoint / TCW shape). `residuals` (owner ruling 2) maps cik -> fair-value residual
+    in percent (a number or a {mode: number} dict); default as in totals_results."""
     results = {}
     for cik, fair_value in outcomes.items():
         if fair_value is not None:
-            results.update(totals_results(cik, fair_value))
+            results.update(totals_results(cik, fair_value, residual=(residuals or {}).get(cik)))
     path = _totals_path(paths)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(dict(note="test fixture", results=results, yields={})), encoding="ascii")
@@ -171,7 +172,7 @@ def seed(paths):
 NO_Q4_CENSUS = "0001588272"   # NexPoint: no authoritative Q4-2025 census in the run of record
 
 
-def seed_cohort(paths, *, no_q4_census=(), totals=None):
+def seed_cohort(paths, *, no_q4_census=(), totals=None, totals_residuals=None):
     """F6: a full 8-filer fixture that reaches exit-test PASS -- every pilot CIK gets a matching wrapper,
     rate_convention and Q4/Q1 census (no breach-prone extras; F11's richer STELLUS-only fixture is not
     reused here to keep this fixture's correctness easy to reason about).
@@ -209,7 +210,7 @@ def seed_cohort(paths, *, no_q4_census=(), totals=None):
     _write_replay(paths)
     outcomes = {cik: (None if cik in no_q4_census else "holds") for cik in cohort.PILOT_CIKS}
     outcomes.update(totals or {})
-    _write_totals(paths, outcomes)
+    _write_totals(paths, outcomes, totals_residuals)
     _git_init_and_commit(paths.main_repo_root)
 
 
@@ -970,6 +971,53 @@ def test_all_compared_cohort_passes_the_inception_gate_but_not_the_spec_exit(tmp
     assert summary["inception_gate"] is True and summary["spec_exit"] is False
     assert summary["spec_exit_reasons"] == body["spec_exit_reasons"]
     assert summary["per_cik"][STELLUS]["consistency_rows"] == body["per_cik"][STELLUS]["consistency_rows"]
+    # Owner rulings 1 and 3 (2026-10-04), through the CLI: both counts and the substantive keys per filer,
+    # the procedure keys outside the contract with their guards, in exit_test.json and (counts) on stdout.
+    consistency = json.loads((paths.run_root / "results" / "consistency.json").read_text(encoding="ascii"))
+    for cik, row in body["per_cik"].items():
+        assert row["compared_total"] == row["consistency_rows"]["compared"]
+        assert 1 <= row["compared_substantive"] == len(row["substantive_keys_compared"]) < row["compared_total"]
+        assert "/cik" in row["identity_keys_compared"] and "/cik" not in row["substantive_keys_compared"]
+        assert [(r["pointer"], r["guard"]) for r in row["procedure_keys_outside_contract"]] == [
+            ("/source_encodings/cash_identifiers", "independent_totals"),
+            ("/invariants/rate_sanity", "production_rate_rules")]
+        assert row["procedure_keys_outside_contract"][0]["guard_status_at_report_date"] == "within_tolerance"
+        assert not [r for r in consistency[cik]["keys"] if r["pointer"] in (
+            "/source_encodings/cash_identifiers", "/invariants/rate_sanity")]
+        assert row["published_basis_tolerance"]["band_pct"] == 0.5
+        assert row["published_basis_tolerance"]["outcome"] == "within_tolerance"
+        for field in ("compared_total", "compared_substantive", "substantive_keys_compared",
+                      "published_basis_tolerance"):
+            assert summary["per_cik"][cik][field] == row[field]
+
+
+def test_published_basis_needs_a_residual_inside_half_a_percent_through_the_cli(tmp_path, monkeypatch):
+    """Owner ruling 2 (2026-10-04) through the CLI: the contract holds for every filer, but +0.51% (the real
+    BCRED shape), -0.51% and a mixed-mode filer are candidates; +0.49% is accepted. The gate is untouched."""
+    over, under, mixed, inside = "0001803498", "0001950803", "0001920453", "0001287750"
+    paths, code, body = _cohort_main(
+        tmp_path, monkeypatch, "sp3p-profile-own1-tolerance",
+        totals_residuals={over: 0.51, under: -0.51, mixed: {"rolling": 0.49, "anchored": 0.51}, inside: 0.49})
+    assert code == 0 and body["inception_gate"] is True
+    states = {cik: row["published_basis"] for cik, row in body["per_cik"].items()}
+    assert {c for c, s in states.items() if s == "candidate"} == {over, under, mixed}
+    assert states[inside] == "accepted"
+    for cik in (over, under, mixed):
+        row = body["per_cik"][cik]
+        assert row["totals_outcome"] == "holds"
+        assert row["published_basis_tolerance"]["outcome"] == "outside_tolerance"
+        assert row["grid"]["candidate"] >= 1
+        doc = pd.load_document(paths.run_root / "profiles" / (cik + ".json"))
+        basis = doc["admissions"][doc["partition_predicate"]["published_basis_entry_id"]]
+        assert basis["witness"]["candidate_cause"] == "totals_outside_owner_tolerance_at_inception"
+        stub = next(s for s in doc["stubs"] if s["key"] == "partition_structure.published_basis")
+        assert "B1/B2 review item (fair-value reconciliation flag)" in stub["closing_evidence"]
+        # the procedure key's guard reports its own state for this filer
+        assert row["procedure_keys_outside_contract"][0]["guard_status_at_report_date"] == "outside_tolerance"
+    assert body["per_cik"][inside]["published_basis_tolerance"]["outcome"] == "within_tolerance"
+    pinned = json.loads((paths.run_root / "manifest.json").read_text(encoding="ascii"))
+    assert pinned["published_basis_tolerance_pct"] == 0.5
+    assert pinned["published_basis_tolerance_outcomes"][over] == "outside_tolerance"
 
 
 def test_cohort_with_a_real_shape_filer_fails_the_inception_gate(tmp_path, monkeypatch, capsys):

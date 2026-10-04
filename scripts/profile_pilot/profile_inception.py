@@ -214,6 +214,20 @@ TOTALS_RULE = ("holds only if at least one independent_totals fair_value result 
                "and EVERY such result (all learn modes) is holds; any breach is breach; otherwise "
                "insufficient_evidence; no result at the date is none. The pct_of_net_assets contract is recorded "
                "in other_fields and does not gate (its [50, 250] band assumes percent units; open item).")
+# Owner ruling 2 of 2026-10-04: partition_structure.published_basis is ACCEPTED only where the filer's
+# fair-value totals residual at the inception date is within +/-0.5% (absolute value <= 0.5) in every learn
+# mode that has a result, regardless of the totals contract's own 5% / 10% band. Outside it, or with no
+# outcome, the entry is a candidate and the discrepancy is routed to B1/B2 review. This is the ONE place
+# the 0.5 lives; profile_consistency reads it for the cash_identifiers guard note.
+PUBLISHED_BASIS_FV_TOLERANCE_PCT = 0.5
+TOLERANCE_BASIS = ("owner ruling 2026-10-04 (ruling 2): accepted only where the absolute fair-value totals "
+                   "residual at the inception date is <= the band in every learn mode with a result, regardless "
+                   "of the totals contract's own band")
+TOLERANCE_OUTCOMES = ("within_tolerance", "outside_tolerance", "no_residual", "no_outcome")
+NOT_RECORDED = "not_recorded_in_pinned_file"
+OUTSIDE_TOLERANCE_CAUSE = "totals_outside_owner_tolerance_at_inception"
+NO_RESIDUAL_CAUSE = "totals_no_residual_at_inception"
+REVIEW_ROUTE = "B1/B2 review item (fair-value reconciliation flag)"
 
 
 def totals_outcome(results: dict, cik: str, *, report_date: str, predicate_version: str) -> dict:
@@ -242,7 +256,11 @@ def totals_outcome(results: dict, cik: str, *, report_date: str, predicate_versi
             item = dict(pair_id=pair_id, mode=mode, learn_date=learn_date, field=r.get("field"),
                         status=r.get("status"), cause=r.get("cause"),
                         fv_residual_pct=observed.get("fv_residual_pct"), fv_anchor=observed.get("fv_anchor"),
-                        fv_sum=observed.get("fv_sum"), pct_sum=observed.get("pct_sum"))
+                        fv_sum=observed.get("fv_sum"), pct_sum=observed.get("pct_sum"),
+                        # Ruling 2: the contract's own band / tier, if the pinned row carries them (the
+                        # back-test rows of record do not; that is recorded, not guessed).
+                        contract_band=r["band"] if r.get("band") is not None else NOT_RECORDED,
+                        contract_tier=r["tier"] if r.get("tier") is not None else NOT_RECORDED)
             (rows if r.get("field") == TOTALS_GATE_FIELD else other).append(item)
     statuses = [r["status"] for r in rows]
     if not rows:
@@ -256,6 +274,44 @@ def totals_outcome(results: dict, cik: str, *, report_date: str, predicate_versi
     return dict(outcome=outcome, cause=TOTALS_CANDIDATE_CAUSE.get(outcome), kind=TOTALS_KIND,
                 field=TOTALS_GATE_FIELD, report_date=report_date, predicate_version=predicate_version,
                 rule=TOTALS_RULE, rows=rows, other_fields=other)
+
+
+def published_basis_tolerance(totals: dict) -> dict:
+    """Owner ruling 2 (2026-10-04): the fair-value residual of every totals row at the inception date against
+    the +/-PUBLISHED_BASIS_FV_TOLERANCE_PCT band. Pure; reads only the rows totals_outcome() already kept.
+
+    outcome: no_outcome (no row at the date), no_residual (a row without a numeric residual, e.g. an
+    abstention), outside_tolerance (any row's absolute residual above the band), within_tolerance (every
+    row inside it)."""
+    band = PUBLISHED_BASIS_FV_TOLERANCE_PCT
+    residuals = []
+    for r in totals.get("rows") or []:
+        value = _number(r.get("fv_residual_pct"))
+        residuals.append(dict(mode=r.get("mode"), learn_date=r.get("learn_date"), fv_residual_pct=value,
+                              within=value is not None and abs(value) <= band,
+                              contract_status=r.get("status"),
+                              contract_band=r.get("contract_band", NOT_RECORDED),
+                              contract_tier=r.get("contract_tier", NOT_RECORDED)))
+    if not residuals:
+        outcome = "no_outcome"
+    elif any(r["fv_residual_pct"] is None for r in residuals):
+        outcome = "no_residual"
+    elif all(r["within"] for r in residuals):
+        outcome = "within_tolerance"
+    else:
+        outcome = "outside_tolerance"
+    return dict(band_pct=band, basis=TOLERANCE_BASIS, outcome=outcome, residuals=residuals, route=REVIEW_ROUTE)
+
+
+def published_basis_candidate_cause(totals: dict, tolerance: dict):
+    """None when published_basis is accepted: the totals contract holds AND the residual is inside the owner
+    tolerance in every mode. The contract outcome is kept as a condition (a breach or an abstention is never
+    accepted on a small residual alone); the tolerance is the additional, stricter one."""
+    if totals["outcome"] != "holds":
+        return TOTALS_CANDIDATE_CAUSE[totals["outcome"]]
+    if tolerance["outcome"] == "within_tolerance":
+        return None
+    return NO_RESIDUAL_CAUSE if tolerance["outcome"] == "no_residual" else OUTSIDE_TOLERANCE_CAUSE
 
 
 def _checked_totals(cik, totals, pred) -> dict:
@@ -284,9 +340,17 @@ def _candidate_closing(entry: dict, admission: dict) -> tuple:
         seen = "; ".join("%s %s%s" % (r["mode"], r["status"],
                                       "" if r["fv_residual_pct"] is None else " (%+.2f%%)" % r["fv_residual_pct"])
                          for r in totals["rows"]) or "no result evaluated at this date"
+        # Owner ruling 2 (2026-10-04): name the band and the route. With no residual at the date there is no
+        # measured discrepancy; the missing outcome is itself what goes to review.
+        measured = bool(totals["rows"])
+        route = ("route: the discrepancy is a " + REVIEW_ROUTE if measured else
+                 "route: no residual could be computed at this date; the missing totals outcome is a "
+                 + REVIEW_ROUTE)
         return ("an independent-totals " + totals["field"] + " contract outcome of holds for this filer at "
-                + totals["report_date"] + " under " + totals["predicate_version"] + " (inception: " + str(cause)
-                + "; pinned run " + totals["source"]["run_id"] + ": " + seen + "), then admission of " + eid + tail,
+                + totals["report_date"] + " under " + totals["predicate_version"] + " with the fair-value "
+                "residual within +/-" + str(PUBLISHED_BASIS_FV_TOLERANCE_PCT) + "% in every learn mode (owner "
+                "ruling 2026-10-04) (inception: " + str(cause) + "; pinned run " + totals["source"]["run_id"]
+                + ": " + seen + "); " + route + "; then admission of " + eid + tail,
                 dict(independent_totals=cause))
     reason = witness.get("next_quarter", "not confirmed")
     detail = dict(next_quarter=reason)
@@ -524,8 +588,11 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
         targets.setdefault(item["path"], []).append(eid)
     # Final review I3: accepted only where this filer's pinned independent-totals outcome holds at the
     # inception date; otherwise a candidate carrying the outcome (or its absence) in the witness.
+    # Owner ruling 2 (2026-10-04): and only where the residual is within +/-0.5% in every learn mode.
     totals = _checked_totals(cik, inputs.get("totals"), pred)
-    totals_holds = totals["outcome"] == "holds"
+    tolerance = published_basis_tolerance(totals)
+    basis_cause = published_basis_candidate_cause(totals, tolerance)
+    totals_holds = basis_cause is None
     events, basis_id = _assert_inherited(
         events, cik, "partition_structure.published_basis", {"predicate": pred["version"]},
         support_path=PREDICATE_CODE_PATH, sha=pred["code_sha256"],
@@ -535,16 +602,19 @@ def build_document(cik: str, *, inputs: dict, recorded_at: str, run_id: str, git
                 report_date=totals["report_date"], outcome=totals["outcome"], **totals["source"])],
         author="human", recorded_at=recorded_at)
     basis_witness = {"adoption": "anchor-aware adoption rule, controller rulings 3-4",
-                     "independent_totals": copy.deepcopy(totals)}
+                     "independent_totals": copy.deepcopy(totals),
+                     "owner_tolerance": tolerance}
     if not totals_holds:
-        basis_witness["candidate_cause"] = TOTALS_CANDIDATE_CAUSE[totals["outcome"]]
+        basis_witness["candidate_cause"] = basis_cause
     admissions[basis_id] = pd.admission(
         "accepted" if totals_holds else "candidate", "adopted_predicate", source_kind="predicate_code",
         mechanism="census published-basis predicate " + pred["version"], confidence=None, source_author="human",
         recorded_at=recorded_at, run_id=run_id, source=PREDICATE_CODE_PATH, witness=basis_witness,
         inception_evaluation="adoption rule over 101 fund-quarters of the 8 filers (IN-SAMPLE); this filer's "
                              "independent_totals " + TOTALS_GATE_FIELD + " outcome at " + totals["report_date"]
-                             + " (pinned run " + totals["source"]["run_id"] + "): " + totals["outcome"])
+                             + " (pinned run " + totals["source"]["run_id"] + "): " + totals["outcome"]
+                             + "; owner tolerance +/-" + str(PUBLISHED_BASIS_FV_TOLERANCE_PCT)
+                             + "% (ruling 2026-10-04): " + tolerance["outcome"])
     entities_id = None
     wrappers = files.get("bdc_xbrl_wrappers") or []
     if wrappers:

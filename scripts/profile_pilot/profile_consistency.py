@@ -24,16 +24,11 @@ cross-reference to the brief's literal code):
     delimiter is not an evaluable token; TCW (0001715933) and Onex (0001860424) wrappers carry exactly that
     shape in production. This narrows the general "exact/exact_set/token -> holds or breach" rule to a
     three-way outcome for token mode specifically.
-  - Unpaired semantic keys: source_encodings.cash_identifiers and invariants.rate_sanity are semantic wrapper
-    keys with NO profile_key counterpart anywhere in translate.TRANSLATIONS. They are reported as explicit
-    insufficient_evidence rows on every contract -- never omitted, never not_applicable, regardless of whether
-    the wrapper happens to populate them -- because there is no mechanism at all to check them profile-side.
-    That is a stronger, more honest statement than "nothing to check" (not_applicable), per the project's
-    anti-sycophancy requirement: a missing check is not evidence of agreement.
-  - Verdict naming: because the two unpaired keys above guarantee insufficient_evidence >= 2 on every real
-    contract, a filer verdict of "holds" would never be reachable for ANY of the 8 pilot filers even on a
-    perfectly agreeing wrapper. A filer with zero breaches, AT LEAST ONE COMPARED ROW and one or more
-    insufficient_evidence keys instead reports "no_breach", not "holds"; the counts are always published.
+  - Unpaired keys (SUPERSEDED by owner ruling 1 of 2026-10-04, below): source_encodings.cash_identifiers and
+    invariants.rate_sanity have NO profile_key counterpart anywhere in translate.TRANSLATIONS. Until the
+    ruling they were emitted as always-insufficient_evidence key rows, which made "holds" unreachable.
+  - Verdict naming: a filer with zero breaches, AT LEAST ONE COMPARED ROW and one or more
+    insufficient_evidence keys reports "no_breach", not "holds"; the counts are always published.
 
 Final whole-branch review (2026-10-03), findings C1 and C2 -- the verdict vocabulary and the two exit fields:
 
@@ -52,10 +47,33 @@ Final whole-branch review (2026-10-03), findings C1 and C2 -- the verdict vocabu
                       machine-readable reason (spec_exit_reasons) whenever any filer is not "holds".
     The spec's own wording (EXIT_TEST_TEXT) is published as spec_exit_statement ONLY when spec_exit is true;
     otherwise the statement says NOT MET with the counts. `verdict` (PASS/FAIL) follows inception_gate only.
+
+Owner rulings of 2026-10-04 (rulings 1 and 3; ruling 2 lives in profile_inception):
+
+  - Ruling 1, contract scope. cash_identifiers and rate_sanity are classified as PROCEDURE and are NOT key rows
+    of the contract (they no longer count as insufficient_evidence). They are not dropped silently: every
+    contract publishes them in `procedure_keys_outside_contract`, each with a NAMED guard.
+      cash_identifiers  guard `independent_totals`: a disagreement in which rows are cash moves the
+                        published-basis fair-value sum, which the totals check at the +/-0.5% band of ruling 2
+                        catches and routes to B1/B2 review. The guard's own state for THIS filer at the report
+                        date is published beside it (`guard_status_at_report_date`): a filer with no totals
+                        outcome has a named guard that did not run, and the row says so.
+      rate_sanity       guard `production_rate_rules` (owner correction of the same day; it replaced a first
+                        reading of `none_claimed`): the production rate detectors named in
+                        PRODUCTION_RATE_RULES. They are NAMED, not evaluated here -- this module does not read
+                        their output, and the note states what they do not cover.
+    "holds" is therefore reachable in principle: every counterpart key row of the filer holds.
+  - Ruling 3, the gate needs a substantive comparison. Identity rows (IDENTITY_PROFILE_KEYS: the entity CIK and
+    the registrant name; "CIK equals CIK") do not satisfy the gate. A filer passes the consistency leg only
+    with zero breaches and at least MIN_SUBSTANTIVE_COMPARED_ROWS compared rows that are not identity rows.
+    A breach on an identity row is still a breach. Both counts and the substantive keys are published per
+    filer. MIN_SUBSTANTIVE_COMPARED_SHARE is the hook for a later minimum-share ruling; it is None (no
+    threshold) and setting it without implementing the rule raises.
 """
 from __future__ import annotations
 
 from scripts.profile_pilot import profile_document as pd
+from scripts.profile_pilot import profile_inception as pi
 from scripts.profile_pilot.translate import TRANSLATIONS, _convert, _get, pointer, value_sha256
 
 COUNTERPARTS = tuple(dict(t) for t in TRANSLATIONS) + (
@@ -71,9 +89,35 @@ COMPARE_MODE = {"/cik": "exact", "/invariants/fv_reconciliation/source_field": "
                 "/source_encodings/reporting_entity_identifier_suffixes": "exact_set",
                 "/identifier_format/delimiter": "token"}
 CODE_MIRROR_POINTER = "code:scripts/profile_pilot/census_published.py:REPORTING_ENTITIES"
-# Semantic wrapper keys with no profile-side counterpart at all (see module docstring). Always reported,
-# never omitted, never not_applicable, regardless of wrapper presence.
-UNPAIRED_WRAPPER_KEYS = (("source_encodings", "cash_identifiers"), ("invariants", "rate_sanity"))
+# Owner ruling 1 (2026-10-04): wrapper keys with no profile-side counterpart are PROCEDURE, outside the
+# consistency contract. Published per filer in `procedure_keys_outside_contract`, each with a named guard.
+GUARD_TOTALS, GUARD_RATE_RULES = "independent_totals", "production_rate_rules"
+# The production rate detectors the owner named (correction to ruling 1, 2026-10-04). Each name was checked
+# to exist in the code at the time of writing: the findings-ledger format rules (fmt_<column>, generated in
+# scripts/shadow_weak_engine.py), scripts/shadow_agent_a_engine.py, pipeline/oracle_checks.py (check D07).
+PRODUCTION_RATE_RULES = ("fmt_basis_spread", "fmt_pik_rate", "fmt_interest_rate", "agentA_spread_vs_xbrl",
+                         "oracle_D07_median_rate_shift_gt_300bps")
+PROCEDURE_KEYS_OUTSIDE_CONTRACT = (
+    dict(wrapper_path=("source_encodings", "cash_identifiers"), guard=GUARD_TOTALS,
+         guard_note=("published-basis fair-value totals check at the +/-%s%% band (owner ruling 2, 2026-10-04): a "
+                     "disagreement in which rows are cash is caught downstream by the fair-value reconciliation "
+                     "and routed to the B1/B2 review agents. It is caught only insofar as it moves the "
+                     "published-basis fair-value sum outside that band."
+                     % pi.PUBLISHED_BASIS_FV_TOLERANCE_PCT)),
+    dict(wrapper_path=("invariants", "rate_sanity"), guard=GUARD_RATE_RULES,
+         guard_rules=list(PRODUCTION_RATE_RULES),
+         guard_note=("the pilot value_range contract itself detected 0 of 8 known cases in the back-test; D07 "
+                     "cannot distinguish a portfolio shift from a change of meaning; rate problems that no "
+                     "production rule flags remain unguarded")),
+)
+# Owner ruling 3 (2026-10-04): identity rows do not satisfy the inception gate ("CIK equals CIK" says nothing
+# about meaning). A breach on one is still a breach.
+IDENTITY_PROFILE_KEYS = frozenset({"fund_level_concepts.entity_cik", "fund_level_concepts.entity_registrant_name"})
+MIN_SUBSTANTIVE_COMPARED_ROWS = 1
+# Hook for a later owner ruling (a minimum share of a filer's counterpart keys that must be substantively
+# compared). NOT implemented: None means no share threshold. Do not set it without implementing the rule in
+# meets_substantive_minimum(), which refuses a non-None value rather than silently ignoring it.
+MIN_SUBSTANTIVE_COMPARED_SHARE = None
 STATUSES = ("holds", "breach", "insufficient_evidence", "not_applicable")
 EXIT_TEST_TEXT = "criterion 1; resolver answers every field; consistency contract holds on all 8"
 
@@ -96,9 +140,11 @@ def _compare(mode: str, wrapper_value, converted) -> str:
 VERDICTS = ("holds", "no_breach", "breach", "insufficient_evidence")
 SPEC_EXIT_REFERENCE = "spec 2026-09-29 filer-profile programme design, section 8 row 3 (and section 4.1)"
 INCEPTION_GATE_DEFINITION = ("every grid key answered by an entry or a stub; resolver clean; round trip and loader "
-                             "parity ok; zero breaches; no filer with verdict insufficient_evidence; no missing "
+                             "parity ok; zero breaches; no filer with verdict insufficient_evidence; every filer "
+                             "has at least %d SUBSTANTIVE compared row(s) (identity rows -- entity CIK, registrant "
+                             "name -- do not count; owner ruling 3, 2026-10-04; no minimum share yet); no missing "
                              "filer. The CLI exit code follows this field. A stub counts as an answer: this is "
-                             "not the spec exit test.")
+                             "not the spec exit test." % MIN_SUBSTANTIVE_COMPARED_ROWS)
 
 
 def _verdict(counts: dict) -> str:
@@ -120,13 +166,59 @@ def row_counts(contract: dict) -> dict:
                 not_applicable=c["not_applicable"])
 
 
+def substantive(contract: dict) -> dict:
+    """Ruling 3: compared rows (holds + breach) split into identity rows and substantive rows, from the key
+    rows themselves (so a hand-built contract is counted the same way as a real one)."""
+    compared = [r for r in contract["keys"] if r["status"] in ("holds", "breach")]
+    real = [r for r in compared if r.get("profile_key") not in IDENTITY_PROFILE_KEYS]
+    return dict(compared_total=len(compared), compared_substantive=len(real),
+                substantive_keys_compared=[r["pointer"] for r in real],
+                identity_keys_compared=[r["pointer"] for r in compared
+                                        if r.get("profile_key") in IDENTITY_PROFILE_KEYS])
+
+
+def meets_substantive_minimum(compared_substantive: int) -> bool:
+    if MIN_SUBSTANTIVE_COMPARED_SHARE is not None:
+        raise NotImplementedError("MIN_SUBSTANTIVE_COMPARED_SHARE is a hook for a later owner ruling; the "
+                                  "minimum-share rule is not implemented")
+    return compared_substantive >= MIN_SUBSTANTIVE_COMPARED_ROWS
+
+
+def _totals_guard_status(document: dict) -> str:
+    """The independent_totals guard's own state for this filer: the owner-tolerance outcome recorded in the
+    published_basis admission witness (within_tolerance | outside_tolerance | no_residual | no_outcome)."""
+    ref = (document.get("partition_predicate") or {}).get("published_basis_entry_id")
+    witness = ((document.get("admissions") or {}).get(ref) or {}).get("witness") or {}
+    return (witness.get("owner_tolerance") or {}).get("outcome") or "not_recorded"
+
+
+def procedure_keys(document: dict, content) -> list:
+    """Ruling 1: the wrapper keys classified as procedure, outside the contract, each with its named guard.
+    `content` is the live wrapper block's content, or None when there is no single live block."""
+    out = []
+    for spec in PROCEDURE_KEYS_OUTSIDE_CONTRACT:
+        present, wvalue = (None, None) if content is None else _get(content, spec["wrapper_path"])
+        row = dict(pointer=pointer(spec["wrapper_path"]), classification="procedure", guard=spec["guard"],
+                   guard_note=spec["guard_note"], wrapper_present=present,
+                   wrapper_value=wvalue if present else None)
+        if spec["guard"] == GUARD_TOTALS:
+            row["guard_status_at_report_date"] = _totals_guard_status(document)
+        else:
+            # Named, not evaluated: this module does not read the production rules' output for the filer.
+            row.update(guard_rules=list(spec["guard_rules"]), guard_evaluated_here=False)
+        out.append(row)
+    return out
+
+
 def consistency_contract(document: dict, *, report_date: str, code_mirror=()) -> dict:
     blocks = [b for b in document["wrapper_section"]["blocks"]
               if b["family"] == "bdc_xbrl_wrapper" and b["recorded_until"] is None]
     base = dict(cik=document["cik"], report_date=report_date, evaluated_dates=[report_date])
     if len(blocks) != 1:
-        return dict(base, block_id=None, unevaluated=None, keys=[], counts={s: 0 for s in STATUSES},
-                    verdict="insufficient_evidence")
+        empty = dict(base, block_id=None, unevaluated=None, keys=[], counts={s: 0 for s in STATUSES},
+                     verdict="insufficient_evidence",
+                     procedure_keys_outside_contract=procedure_keys(document, None))
+        return dict(empty, **substantive(empty))
     block = blocks[0]
     out_rows = []
     for spec in COUNTERPARTS:
@@ -134,7 +226,7 @@ def consistency_contract(document: dict, *, report_date: str, code_mirror=()) ->
         present, wvalue = _get(block["content"], spec["wrapper_path"])
         res = pd.resolve(document, spec["profile_key"], report_date)
         row = dict(pointer=ptr, profile_key=spec["profile_key"], mode=COMPARE_MODE.get(ptr, "representation"),
-                   resolution=res["status"], entry_id=(res.get("entry") or {}).get("entry_id"),
+                   identity=spec["profile_key"] in IDENTITY_PROFILE_KEYS, resolution=res["status"], entry_id=(res.get("entry") or {}).get("entry_id"),
                    stub_cause=(res.get("stub") or {}).get("cause"))
         if not present:
             row.update(status="not_applicable", reason="wrapper has no key")
@@ -152,14 +244,6 @@ def consistency_contract(document: dict, *, report_date: str, code_mirror=()) ->
                            reason=None if status == "holds" else
                            ("representation_mismatch" if status == "insufficient_evidence" else "value_disagrees"))
         out_rows.append(row)
-    for path in UNPAIRED_WRAPPER_KEYS:
-        ptr = pointer(path)
-        present, wvalue = _get(block["content"], path)
-        out_rows.append(dict(pointer=ptr, profile_key=None, mode="no_counterpart", resolution=None, entry_id=None,
-                             stub_cause=None, status="insufficient_evidence",
-                             reason="no profile_key counterpart exists for this wrapper key: there is no "
-                                    "mechanism to check it, not merely nothing to check",
-                             wrapper_present=present, wrapper_value=wvalue if present else None))
     mirror = sorted(str(v) for v in code_mirror)
     res = pd.resolve(document, "partition_structure.reporting_entities", report_date)
     if res["status"] == "resolved":
@@ -169,16 +253,18 @@ def consistency_contract(document: dict, *, report_date: str, code_mirror=()) ->
         status = "breach" if mirror else "not_applicable"
         reason = "code mirror carries per-filer knowledge with no accepted entry" if mirror else "no list anywhere"
     out_rows.append(dict(pointer=CODE_MIRROR_POINTER, profile_key="partition_structure.reporting_entities",
-                         mode="exact_set", resolution=res["status"],
+                         mode="exact_set", identity=False, resolution=res["status"],
                          entry_id=(res.get("entry") or {}).get("entry_id"),
                          stub_cause=(res.get("stub") or {}).get("cause"), status=status, reason=reason,
                          code_value=mirror))
     counts = {s: sum(r["status"] == s for r in out_rows) for s in STATUSES}
-    return dict(base, block_id=block["block_id"],
-                unevaluated=dict(block_valid=[block["valid_from"], block["valid_to"]],
-                                 reason="inception entries start at " + report_date
-                                        + "; other report dates of the block are not evaluated in sub-project 3"),
-                keys=out_rows, counts=counts, verdict=_verdict(counts))
+    out = dict(base, block_id=block["block_id"],
+               unevaluated=dict(block_valid=[block["valid_from"], block["valid_to"]],
+                                reason="inception entries start at " + report_date
+                                       + "; other report dates of the block are not evaluated in sub-project 3"),
+               keys=out_rows, counts=counts, verdict=_verdict(counts),
+               procedure_keys_outside_contract=procedure_keys(document, block["content"]))
+    return dict(out, **substantive(out))
 
 
 def coverage_report(document: dict, report_date: str) -> dict:
@@ -222,10 +308,18 @@ def exit_test(documents: dict, consistency: dict, roundtrip: dict, *, report_dat
     for cik in sorted(documents):
         doc = documents[cik]
         cov, res, con = coverage_report(doc, report_date), resolver_report(doc, report_date), consistency[cik]
-        # `consistency` is the per-filer GATE criterion: a zero-breach outcome with at least one compared
-        # row. "insufficient_evidence" (zero rows compared, or no live wrapper block) fails it (C1).
+        # `consistency` is the per-filer GATE criterion: a zero-breach outcome with at least one SUBSTANTIVE
+        # compared row (ruling 3). "insufficient_evidence" (zero rows compared, or no live wrapper block)
+        # fails it (C1); so does a filer whose only compared rows are identity rows.
+        sub = substantive(con)
+        sub_ok = meets_substantive_minimum(sub["compared_substantive"])
         per[cik] = dict(criterion_1=cov["ok"], resolver=res["ok"],
-                        consistency=con["verdict"] in ("holds", "no_breach"),
+                        consistency=con["verdict"] in ("holds", "no_breach") and sub_ok,
+                        substantive_comparison=sub_ok, compared_total=sub["compared_total"],
+                        compared_substantive=sub["compared_substantive"],
+                        substantive_keys_compared=sub["substantive_keys_compared"],
+                        identity_keys_compared=sub["identity_keys_compared"],
+                        procedure_keys_outside_contract=con.get("procedure_keys_outside_contract", []),
                         consistency_verdict=con["verdict"], consistency_rows=row_counts(con),
                         coverage_missing=cov["missing"], resolver_no_entry=res["no_entry"],
                         resolver_ambiguous=res["ambiguous"], resolved=res["counts"]["resolved"],
@@ -258,27 +352,40 @@ def exit_test(documents: dict, consistency: dict, roundtrip: dict, *, report_dat
         hit = where(lambda p, word=word: p["consistency_verdict"] == word)
         if hit:
             gate_reasons.append(dict(code=code, ciks=hit))
+    # Ruling 3: compared, zero breaches, but nothing substantive (identity rows only). A zero-comparison filer
+    # is already named by consistency_insufficient_evidence and a breaching one by consistency_breach.
+    thin = where(lambda p: p["consistency_verdict"] in ("holds", "no_breach") and not p["substantive_comparison"])
+    no_substantive = [dict(code="consistency_no_substantive_comparison", ciks=thin)] if thin else []
+    gate_reasons += no_substantive
     not_holds = {cik: v for cik, v in verdicts.items() if v != "holds"}
-    spec_reasons = list(structural)
+    # spec_exit is never weaker than the gate: an all-identity "holds" does not meet it either.
+    spec_reasons = list(structural) + no_substantive
     if not_holds:
         spec_reasons.append(dict(code="consistency_not_holds", ciks=sorted(not_holds), verdicts=not_holds,
                                  verdict_counts=verdict_counts))
     inception_gate, spec_ok = not gate_reasons, not spec_reasons
     compared = sum(p["consistency_rows"]["compared"] for p in per.values())
     total = sum(p["consistency_rows"]["total"] for p in per.values())
+    compared_substantive = sum(p["compared_substantive"] for p in per.values())
     if spec_ok:
         statement = EXIT_TEST_TEXT
     else:
         statement = ("NOT MET: consistency verdict is holds for %d of %d filers (no_breach %d, breach %d, "
-                     "insufficient_evidence %d; %d of %d key rows compared); reasons: %s"
+                     "insufficient_evidence %d; %d of %d key rows compared, %d of them substantive); reasons: %s"
                      % (verdict_counts["holds"], len(per), verdict_counts["no_breach"], verdict_counts["breach"],
-                        verdict_counts["insufficient_evidence"], compared, total,
+                        verdict_counts["insufficient_evidence"], compared, total, compared_substantive,
                         ", ".join(r["code"] for r in spec_reasons)))
     return dict(report_date=report_date, verdict="PASS" if inception_gate else "FAIL",
                 inception_gate=inception_gate, inception_gate_reasons=gate_reasons,
                 inception_gate_definition=INCEPTION_GATE_DEFINITION,
                 spec_exit=spec_ok, spec_exit_reasons=spec_reasons, spec_exit_reference=SPEC_EXIT_REFERENCE,
                 spec_exit_statement=statement, consistency_verdict_counts=verdict_counts,
-                consistency_rows=dict(compared=compared, total=total),
+                consistency_rows=dict(compared=compared, compared_substantive=compared_substantive, total=total),
+                identity_profile_keys=sorted(IDENTITY_PROFILE_KEYS),
+                substantive_minimum=dict(rows=MIN_SUBSTANTIVE_COMPARED_ROWS, share=MIN_SUBSTANTIVE_COMPARED_SHARE),
+                procedure_keys_outside_contract=[
+                    {k: v for k, v in dict(pointer=pointer(s["wrapper_path"]), guard=s["guard"],
+                                           guard_rules=s.get("guard_rules"), guard_note=s["guard_note"]).items()
+                     if v is not None} for s in PROCEDURE_KEYS_OUTSIDE_CONTRACT],
                 precondition_roundtrip=roundtrip_ok, missing_filers=missing, n_filers=len(per), per_cik=per,
                 sample_label="IN-SAMPLE")
