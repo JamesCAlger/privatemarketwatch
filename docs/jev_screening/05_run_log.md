@@ -454,3 +454,70 @@ remain development evidence, not untouched human gold.
   evidence paths and blockers available for future stratified validation.
 
 - Combined verification now passes 266 focused tests. Tenth bounded production metadata audit: zero changed paths. Full suite and production-writing semantic diff remain not run.
+
+## 2026-10-04 checkpoint: deterministic comparator explains remaining natural cases
+
+- Local checkpoint 1a68d8d preserves the preceding repeatability, lineage and
+  layout work; no merge/push. Investigated the three natural Jev successes for
+  which the exact-context baseline was unresolved: Onex VTC, Montana and IMB.
+- Their output identifiers omit a leading Non-controlled/Non-affiliated
+  investments prefix. The exact original dimension remains in bdc_dimensions_raw;
+  the production staging code explicitly performs affiliation-prefix stripping.
+- Added an opt-in comparator context-anchor-raw.v1. It requires equality of the
+  entire preserved raw dimension, the observed narrow prefix transformation,
+  unique source context, same entity/period and all existing source vetoes.
+  It does not strip arbitrary prefixes or accept extra axes/tranche changes.
+  Original context-anchor.v2 remains the default; six new regressions pass.
+- On the 42 model-called natural frozen inputs: exact comparator 39 resolved;
+  raw-preserving comparator 42 resolved with 42 label/source agreements; Jev 42
+  labels and 41 source agreements. All references are false alarms, and some
+  historical bundles later failed completeness guards. No audited clearance.
+- Result saved in anchor_variant_comparison_*.json. No API calls or production
+  changes. This is development evidence that the tested natural cases do not
+  yet demonstrate a model advantage over deterministic source matching.
+
+## 2026-10-04 checkpoint: one-builder recheck
+
+- Frozen 12 already called current-ready cases from sibling_recall_v4_18: eight
+  named development identity/note cases and four Goldman cases (two deterministic
+  row-ID selections per consumed quarter). Included all four known TCW natural
+  errors as blocked controls. This is purposive development, not a new holdout.
+- Both prepare runs use the same builder hash. Eight development and four
+  consumed-holdout requests succeed; TCW's four conflicts are not submitted.
+  Jev: 12/12 label and source agreement, six confidence-only candidates. The
+  raw-preserving anchor comparator also resolves all 12 with matching outcomes.
+- Four confidence eligibility results change from older bundles: Exemplis,
+  SouthernCarlson and SavATree no longer pass both cutoffs; VG Target now does.
+  Source/bundle changes and provider variability are confounded. No retry-to-pass
+  policy or threshold adjustment follows. Current Seres source selection agrees,
+  but decision/source confidence 0.74/0.39 still sends it to B1.
+- All 16 routing receipts retain B1; zero audited clearances. Recheck output is
+  current_recheck_*.json, selection current_recheck_manifest_20.json, with requests
+  under current_development_model_01 and current_consumed_model_01.
+- Recheck tokens 211,214. Session totals: 94 successful calls, 1,502,036 provider
+  input tokens, six calls reserved. All 94 response contracts validate. Historical
+  natural intake remains 67 unique flags / 42 first calls; the 12 rechecks are
+  not additional unique flags and do not overwrite prior observations.
+
+## 2026-10-04 checkpoint: context sizing and verification
+
+- Four existing cases sized offline. Current states 8.2-13.1k cl100k proxy tokens;
+  broader visible tables plus selected published columns 24.8-183.7k. Three of
+  four exceed the provider's 32k state-plus-longest-question limit on this proxy.
+  Full structured evidence is larger. No complete SOI recall claim is made.
+- Provider documentation confirms $0.042/M input tokens: the 94-call session's
+  1,502,036 reported tokens imply approximately $0.0631 inference cost, excluding
+  evidence engineering and B1 review. See 08_context_size_and_cost.md.
+- Combined targeted verification: 272 passed. Eleventh bounded production
+  metadata audit: zero changed paths. No full suite, rebuild, export or standard
+  semantic-diff command; the latter writes a production report.
+
+## 2026-10-04 checkpoint: source-first review handoff
+
+- Prepared 67 existing flags / 11 funds / 26 cached filings for independent B1
+  source review. Inputs withhold Jev answers, confidence, reference labels and
+  builder candidates/readiness. Pipeline identity remains a claim to verify.
+- All review fields remain unfinished. No review certificates, worker dispatch,
+  new API calls or clearances. Four focused tests pass for leakage and binding.
+- Source-first findings must be frozen before evaluating builder candidate recall.
+  See 09_independent_review_handoff.md. No measured B1 savings are claimed.

@@ -36,15 +36,25 @@ this did not add another confirmed natural numeric-error mechanism.
 | 17 historical confidence-only candidates | Not audited clearances. Later bundle versions invalidate reuse of old scores. Two newly called Fortress cases pass both trial cutoffs after grouped-header repair. |
 | Eight presentation calls on four revised X08 cases | Labels/sources remain correct, but three flags change confidence eligibility between orders; none passes both cutoffs in both orders. One call per order does not isolate provider variability. |
 | Eight exact-request repeats of that presentation experiment | All labels/sources remain correct. No complete answer distribution is identical; one unchanged request crosses the cutoff. Two between-presentation eligibility differences persist on repetition. This confirms some provider variability, without quantifying its population rate. |
-| 82 total calls, 1,290,822 provider input tokens | Includes natural, synthetic, presentation and exact-repeat calls. Dollars and B1 time savings have not been established by this experiment. |
+| 12 current-builder rechecks plus four blocked natural-error controls | Jev and the raw-preserving comparator both match all 12 called labels/sources. Six pass both confidence cutoffs; four eligibility results differ from older bundles. All 16 route to B1. This is development evidence, not a fresh holdout. |
+| 94 total calls, 1,502,036 provider input tokens | About $0.0631 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
 | Zero certified clearances; all B1 work retained | No production safety or savings claim |
 
 The deterministic exact-context comparator resolved 39/42 model-scored natural
-cases with reviewed-source agreement. Conditional on manually supplied correct
-source identity, arithmetic also explains the numeric classifications. These
-comparators share builder inputs: they are useful baselines, not independent
-certification. Jev's incremental contribution remains to be demonstrated on
-harder identity or interpretation cases.
+cases with reviewed-source agreement. The remaining three differ only by an
+affiliation prefix removed by the pipeline; the exact original dimension remains
+in `bdc_dimensions_raw`. A separate development comparator validates that raw
+dimension and the narrow prefix normalization, resolving all 42 with 42/42 label
+and source agreement. Its extra-axis, tranche and visible-identity vetoes remain.
+The original exact comparator and its results are preserved.
+
+This is a material limit on the case for Jev: its incremental contribution has
+not been demonstrated on the tested natural cases. These comparators share
+builder inputs and historical evidence omissions, so 42/42 is not independent
+certification or a production clearance claim. Harder identity/interpretation
+cases and an error-bearing holdout would be needed to establish model value.
+The common-builder recheck reproduces this finding on 12 current packets, so it
+is not solely an artefact of the older mixed-version comparison.
 
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
@@ -69,6 +79,9 @@ none has an unchanged current request, so old scores are not transferred.
   existing B1 job. That opportunity needs measured incremental error discovery.
 - Make the next decision by rule and supported layout, including builder and
   review effort. Overall label agreement alone is insufficient.
+- Keep a deterministic-first alternative in the shadow comparison. For supported
+  value checks, source matching plus arithmetic may cover the work without Jev;
+  it must meet the same independent evidence requirements before any clearance.
 
 ## Remaining experiments
 

@@ -23,6 +23,8 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Active run log](05_run_log.md) | Isolated implementation checkpoints, validation and remaining work |
 | [Interim assessment](06_interim_assessment.md) | What the current results support, what they do not, and remaining experiments |
 | [Proxy-cost evidence](07_proxy_cost_evidence.md) | Six real donor-lineage cases and why proxy costs need a separate B1 evidence contract |
+| [Context size and cost](08_context_size_and_cost.md) | Four real filing payload comparisons, provider limits and measured-token cost estimate |
+| [Independent review handoff](09_independent_review_handoff.md) | Source-first review inputs that withhold model answers and leave all audit checks unfinished |
 
 ## Proposed operating model
 

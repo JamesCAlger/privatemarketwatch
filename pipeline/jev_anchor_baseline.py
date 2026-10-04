@@ -8,8 +8,18 @@ candidate recall, owner scope or note completeness.
 from pipeline.jev_bundles import clean, number
 
 
-def compare_context_anchor(bundle):
-    result = {'method': 'context-anchor.v2', 'status': 'unresolved', 'source_id': None,
+def _raw_identifier_matches(output, dimension):
+    """Narrow observed affiliation-prefix normalization, retaining raw evidence."""
+    source = clean(dimension.get('text'))
+    raw = clean(output.get('bdc_dimensions_raw'))
+    prefix = 'Non-controlled/Non-affiliated investments '
+    return (raw == 'investmentidentifieraxis=' + source and source.startswith(prefix)
+            and source[len(prefix):] == clean(output.get('bdc_investment_identifier')))
+
+
+def compare_context_anchor(bundle, *, allow_raw_identifier=False):
+    result = {'method': 'context-anchor-raw.v1' if allow_raw_identifier else 'context-anchor.v2',
+              'status': 'unresolved', 'source_id': None,
               'reasons': [], 'production_clearance_allowed': False,
               'independent_identity_verified': False}
     output = bundle.get('output_position', {})
@@ -42,9 +52,14 @@ def compare_context_anchor(bundle):
         result['reasons'].append('entity_conflict')
     dimensions = context.get('dimensions', [])
     # No claim that context equality resolves additional owner/JV dimensions.
-    if (len(dimensions) != 1 or dimensions[0].get('axis', '').split(':')[-1] != 'InvestmentIdentifierAxis'
-            or clean(dimensions[0].get('text')) != identifier):
+    valid_scope = (len(dimensions) == 1 and
+                   dimensions[0].get('axis', '').split(':')[-1] == 'InvestmentIdentifierAxis')
+    exact_identifier = valid_scope and clean(dimensions[0].get('text')) == identifier
+    raw_identifier = valid_scope and allow_raw_identifier and _raw_identifier_matches(output, dimensions[0])
+    if not (exact_identifier or raw_identifier):
         result['reasons'].append('identifier_or_scope_not_exact')
+    elif allow_raw_identifier:
+        result['identifier_basis'] = 'published_identifier' if exact_identifier else 'raw_dimension_with_prefix_normalization'
     if result['reasons']:
         return result
     comparisons = {}

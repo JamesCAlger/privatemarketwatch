@@ -53,3 +53,38 @@ def test_value_change_cannot_select_a_different_candidate(packet):
     result = compare_context_anchor(packet)
     assert result['source_id'] == 't0r1'
     assert result['status'] == 'anchor_mismatch'
+
+
+def raw_packet(packet):
+    dimension = packet['source_candidates'][0]['identity_evidence']['contexts']['ctx']['dimensions'][0]
+    dimension['text'] = 'Non-controlled/Non-affiliated investments ' + dimension['text']
+    packet['output_position']['bdc_dimensions_raw'] = 'investmentidentifieraxis=' + dimension['text']
+    return packet
+
+
+def test_raw_dimension_is_an_explicit_separate_comparator(packet):
+    raw_packet(packet)
+    assert compare_context_anchor(packet)['status'] == 'unresolved'
+    result = compare_context_anchor(packet, allow_raw_identifier=True)
+    assert result['status'] == 'anchor_consistent'
+    assert result['identifier_basis'] == 'raw_dimension_with_prefix_normalization'
+    assert result['production_clearance_allowed'] is False
+
+
+@pytest.mark.parametrize('change', ['extra_axis', 'raw_scope', 'tranche', 'unrecognized_prefix', 'class'])
+def test_raw_dimension_does_not_excuse_other_identity_changes(packet, change):
+    raw_packet(packet)
+    context = packet['source_candidates'][0]['identity_evidence']['contexts']['ctx']
+    if change == 'extra_axis':
+        context['dimensions'].append({'axis': 'OwnerAxis', 'text': 'JV'})
+    elif change == 'raw_scope':
+        packet['output_position']['bdc_dimensions_raw'] += '|owneraxis=JV'
+    elif change == 'tranche':
+        packet['output_position']['bdc_investment_identifier'] = 'Acme Second Lien Term Loan'
+    elif change == 'class':
+        packet['source_candidates'][0]['identity_evidence']['output_class_compatible'] = False
+    else:
+        text = context['dimensions'][0]['text'].replace('Non-controlled/Non-affiliated', 'Controlled/Affiliated')
+        context['dimensions'][0]['text'] = text
+        packet['output_position']['bdc_dimensions_raw'] = 'investmentidentifieraxis=' + text
+    assert compare_context_anchor(packet, allow_raw_identifier=True)['status'] == 'unresolved'

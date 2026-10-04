@@ -13265,3 +13265,42 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   filer certifies source completeness. No source-type eligibility was expanded.
 
 - Combined pilot verification: 266 focused tests pass; tenth bounded production metadata audit reports zero changed paths. Full suite and production-writing semantic diff not run.
+
+## 2026-10-04 -- Jev pilot: raw-preserving deterministic comparator
+
+- Added isolated opt-in context-anchor-raw.v1 while preserving the original
+  comparator. Exact raw dimension plus a narrow observed affiliation-prefix
+  normalization explains the remaining Onex VTC/Montana/IMB exceptions.
+- Six new identity-veto tests pass. Historical natural inputs: 42/42 source and
+  label agreement for the raw comparator versus Jev 42 labels / 41 sources.
+  Shared evidence and all-false-alarm references prevent clearance/safety claims.
+- No API calls or production changes; checkpoint 1a68d8d remains local only.
+
+## 2026-10-04 -- Jev pilot: common-builder recheck
+
+- Rechecked 12 previously called natural cases on one current builder, plus four
+  pre-model TCW error controls. Jev and the raw-preserving deterministic baseline
+  both match all 12 called labels/sources; six pass both model cutoffs.
+- Four eligibility results differ from older bundles. All 16 cases remain B1,
+  with no clearance audits completed or production changes. This is consumed
+  development evidence, not a new holdout or confidence calibration.
+- 94 total successful calls / 1,502,036 input tokens; all response contracts valid.
+  Six calls remain reserved. Historical intake counts are not overwritten.
+
+## 2026-10-04 -- Jev pilot: context sizing and checkpoint verification
+
+- Added isolated bounded offline context sizing across four existing BDC cases.
+  Entire visible SOI selection plus selected published columns estimates
+  24.8-183.7k tokens; complete source recall is not certified. No API calls.
+- Documented verified provider context limits and published-rate inference cost
+  estimate ($0.0631 for 94 successful calls), excluding engineering/B1 costs.
+- 272 targeted tests pass; eleventh bounded production metadata audit reports
+  zero changed paths. No production writes, rebuilds, full suite or semantic diff.
+
+## 2026-10-04 -- Jev pilot: independent-review inputs
+
+- Added isolated source-first review preparation and four passing tests. Generated
+  67 unfinished inputs, 11 funds, 26 cached filings; answer/model/builder outcomes
+  are withheld by allowlist. Snapshot and source hashes retain traceability.
+- No independent reviews completed, B1 dispatch, API calls or production changes.
+  Documented two-stage source findings then bundle comparison and timing limits.
