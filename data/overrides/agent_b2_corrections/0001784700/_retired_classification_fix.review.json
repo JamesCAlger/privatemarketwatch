@@ -1,0 +1,33 @@
+{
+  "status": "retired",
+  "reviewed_date": "2026-10-04",
+  "original_file": "_retired_classification_fix.json",
+  "previous_file": "classification_fix.json",
+  "original_sha256": "af422c494f9bf05daa9d054f01c46d0c1884dda5ae82619ce0eeb708fa53e92d",
+  "mechanism": "The promoted template sets exposure_type to \"Senior Secured First Lien Loans\", which is outside the governed vocabulary for that column (pipeline.column_validation.ENUM_VALUES). The value is a filing heading or a look-through label, not an exposure type. The production loader has rejected this file on every build since commit a4c163c (pipeline.correction_leaf.classification_value_errors, called from pipeline.agent_promoted.load_promoted_corrections), so it has not been applied and no published row carries the value.",
+  "action": "Retire the whole leaf, preserving its original bytes. The invalid value is NOT mapped to a valid one and the vocabulary is NOT widened. No replacement correction is made here; any real classification defect behind the original review needs a new source-evidenced correction.",
+  "invalid_value": {
+    "field": "exposure_type",
+    "value": "Senior Secured First Lien Loans",
+    "allowed": [
+      "DIRECT",
+      "FUND",
+      "LIQUID"
+    ]
+  },
+  "loader_rejection": [
+    "classification_fix value 'Senior Secured First Lien Loans' is not valid for exposure_type; expected one of ['DIRECT', 'FUND', 'LIQUID']"
+  ],
+  "source_review_ids": [
+    "RVQ_REV_04fc65bef4c2"
+  ],
+  "sources": [
+    {
+      "path": "data/overrides/agent_b2_corrections/0001784700/_retired_classification_fix.json",
+      "sha256": "af422c494f9bf05daa9d054f01c46d0c1884dda5ae82619ce0eeb708fa53e92d",
+      "role": "the retired leaf itself; its template value is the evidence"
+    }
+  ],
+  "confidence": "High that the value is outside the column vocabulary (deterministic check). No judgement is made on the underlying review finding.",
+  "residual_risk": "The review finding that produced this leaf is unresolved; retiring the leaf removes a non-applying file, it does not fix the row(s)."
+}

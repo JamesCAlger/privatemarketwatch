@@ -1,0 +1,37 @@
+{
+  "status": "retired",
+  "reviewed_date": "2026-10-04",
+  "original_file": "_retired_classification_fix.json",
+  "previous_file": "classification_fix.json",
+  "original_sha256": "b236a8711354ee1c69d942058d9b6f4f444afe4b3a5dd9734bf000b1e38d6d05",
+  "mechanism": "The promoted template sets asset_class to \"Debt\", which is outside the governed vocabulary for that column (pipeline.column_validation.ENUM_VALUES). The value is a filing category word, not an asset class. The production loader has rejected this file on every build since commit a4c163c (pipeline.correction_leaf.classification_value_errors, called from pipeline.agent_promoted.load_promoted_corrections), so it has not been applied and no published row carries the value.",
+  "action": "Retire the whole leaf, preserving its original bytes. The invalid value is NOT mapped to a valid one and the vocabulary is NOT widened. No replacement correction is made here; any real classification defect behind the original review needs a new source-evidenced correction.",
+  "invalid_value": {
+    "field": "asset_class",
+    "value": "Debt",
+    "allowed": [
+      "CASH",
+      "HEDGE_FUND",
+      "OTHER",
+      "PRIVATE_CREDIT",
+      "PRIVATE_EQUITY",
+      "REAL_ESTATE",
+      "STRUCTURED_CREDIT"
+    ]
+  },
+  "loader_rejection": [
+    "classification_fix value 'Debt' is not valid for asset_class; expected one of ['CASH', 'HEDGE_FUND', 'OTHER', 'PRIVATE_CREDIT', 'PRIVATE_EQUITY', 'REAL_ESTATE', 'STRUCTURED_CREDIT']"
+  ],
+  "source_review_ids": [
+    "RVQ_REV_f49e7c48b6fa"
+  ],
+  "sources": [
+    {
+      "path": "data/overrides/agent_b2_corrections/0001901612/_retired_classification_fix.json",
+      "sha256": "b236a8711354ee1c69d942058d9b6f4f444afe4b3a5dd9734bf000b1e38d6d05",
+      "role": "the retired leaf itself; its template value is the evidence"
+    }
+  ],
+  "confidence": "High that the value is outside the column vocabulary (deterministic check). No judgement is made on the underlying review finding.",
+  "residual_risk": "The review finding that produced this leaf is unresolved; retiring the leaf removes a non-applying file, it does not fix the row(s)."
+}

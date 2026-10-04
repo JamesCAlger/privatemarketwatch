@@ -121,3 +121,58 @@ def test_added_position_with_supplied_cik_still_inherits_bdc_source(identity):
 def test_added_position_cannot_override_rule_scope(identity, error):
     with pytest.raises(ValueError, match=error):
         agent_promoted.apply_promoted_rules(source_frame(), {"0000000123": [add_rule(**identity)]})
+
+
+# Retired 2026-10-04: promoted classification leaves whose value is outside the column
+# vocabulary. The loader rejected them on every build; they are retired, not remapped.
+RETIRED_INVALID_CLASSIFICATIONS = {
+    "0001702510": ("index_classification", "SOFR"),
+    "0001784700": ("exposure_type", "Senior Secured First Lien Loans"),
+    "0001841514": ("exposure_type", "lookthrough"),
+    "0001849894": ("index_classification", "SOFR"),
+    "0001901612": ("asset_class", "Debt"),
+    "0001920145": ("index_classification", "Non-accrual"),
+    "0002011498": ("exposure_type", "INDIRECT"),
+    "0002031750": ("asset_class", "debt"),
+}
+
+
+def _real_b2_store():
+    from pathlib import Path
+    return Path(__file__).resolve().parents[1] / "data/overrides/agent_b2_corrections"
+
+
+@pytest.mark.parametrize("cik", sorted(RETIRED_INVALID_CLASSIFICATIONS))
+def test_invalid_promoted_classification_is_retired_with_original_bytes(cik):
+    from pipeline.programme.core import sha
+
+    folder = _real_b2_store() / cik
+    retired = folder / "_retired_classification_fix.json"
+    review = json.loads((folder / "_retired_classification_fix.review.json").read_text(encoding="utf-8"))
+    assert not (folder / "classification_fix.json").exists()
+    template = json.loads(retired.read_text(encoding="utf-8-sig"))["template"]
+    assert (template["field"], template["value"]) == RETIRED_INVALID_CLASSIFICATIONS[cik]
+    assert review["status"] == "retired" and review["mechanism"] and review["sources"]
+    assert review["previous_file"] == "classification_fix.json"
+    assert review["original_file"] == retired.name
+    assert review["original_sha256"] == sha(retired)
+
+
+def test_production_correction_store_has_no_load_failures(tmp_path):
+    """Every live promoted B2 file loads; a file that cannot load must be retired."""
+    base = _real_b2_store()
+    loaded = []
+
+    @rule_admission.capture_inputs(lambda: tmp_path / "audit")
+    def load():
+        loaded.extend(agent_promoted.load_promoted_corrections(base))
+        return pd.DataFrame()
+
+    load()
+    audit = pd.read_csv(tmp_path / "audit/input_admission_audit.csv")
+    failed = audit[audit.admission_status.isin(sorted(rule_admission.LOAD_FAILURE_STATUSES))]
+    assert failed.empty, failed[["path", "admission_status"]].to_dict("records")
+    assert len(loaded) == int(audit.loaded.sum()) > 0
+    retired = audit[audit.path.str.contains("_retired_classification_fix.json", regex=False)]
+    assert len(retired) == len(RETIRED_INVALID_CLASSIFICATIONS)
+    assert set(retired.admission_status) == {"proposed_or_retired"}

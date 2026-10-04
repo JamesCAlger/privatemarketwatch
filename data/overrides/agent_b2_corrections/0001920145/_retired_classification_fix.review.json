@@ -1,0 +1,41 @@
+{
+  "status": "retired",
+  "reviewed_date": "2026-10-04",
+  "original_file": "_retired_classification_fix.json",
+  "previous_file": "classification_fix.json",
+  "original_sha256": "74adb659b330d150a837b5d3b8361ee12166e685387843f6d5545017a92da33a",
+  "mechanism": "The promoted template sets index_classification to \"Non-accrual\", which is outside the governed vocabulary for that column (pipeline.column_validation.ENUM_VALUES). The value is a reference rate or accrual status taken from the filing, not an index classification. The production loader has rejected this file on every build since commit a4c163c (pipeline.correction_leaf.classification_value_errors, called from pipeline.agent_promoted.load_promoted_corrections), so it has not been applied and no published row carries the value.",
+  "action": "Retire the whole leaf, preserving its original bytes. The invalid value is NOT mapped to a valid one and the vocabulary is NOT widened. No replacement correction is made here; any real classification defect behind the original review needs a new source-evidenced correction.",
+  "invalid_value": {
+    "field": "index_classification",
+    "value": "Non-accrual",
+    "allowed": [
+      "CASH",
+      "COMMON_EQUITY",
+      "DIRECT_LENDING",
+      "DIRECT_REAL_ESTATE",
+      "HEDGE_FUND",
+      "PREFERRED_EQUITY",
+      "PRIVATE_CREDIT_FUND",
+      "PRIVATE_EQUITY_FUND",
+      "REAL_ESTATE_FUND",
+      "STRUCTURED_CREDIT",
+      "UNCLASSIFIED"
+    ]
+  },
+  "loader_rejection": [
+    "classification_fix value 'Non-accrual' is not valid for index_classification; expected one of ['CASH', 'COMMON_EQUITY', 'DIRECT_LENDING', 'DIRECT_REAL_ESTATE', 'HEDGE_FUND', 'PREFERRED_EQUITY', 'PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'REAL_ESTATE_FUND', 'STRUCTURED_CREDIT', 'UNCLASSIFIED']"
+  ],
+  "source_review_ids": [
+    "RVQ_REV_6f00b49abfec"
+  ],
+  "sources": [
+    {
+      "path": "data/overrides/agent_b2_corrections/0001920145/_retired_classification_fix.json",
+      "sha256": "74adb659b330d150a837b5d3b8361ee12166e685387843f6d5545017a92da33a",
+      "role": "the retired leaf itself; its template value is the evidence"
+    }
+  ],
+  "confidence": "High that the value is outside the column vocabulary (deterministic check). No judgement is made on the underlying review finding.",
+  "residual_risk": "The review finding that produced this leaf is unresolved; retiring the leaf removes a non-applying file, it does not fix the row(s)."
+}
