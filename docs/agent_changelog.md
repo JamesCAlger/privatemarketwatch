@@ -13347,3 +13347,74 @@ Everything is IN-SAMPLE (8 pilot filers, one report date, 2025-12-31). Branch `f
   regression (pre-existing, same as every earlier launcher run).
   NOT run: the full repo suite; any frontend build; `diff_outputs.py --semantic` outside the launcher's own
   backstop.
+
+## 2026-10-04 -- Amendment rule: one authoritative instance per fund-quarter (owner ruling); NexPoint and TCW Q4-2025 settled
+
+- Mechanism of the false ambiguity. `scripts/run_context_census.py scan_selected_source` skips an amendment
+  only when it has no instant context at the report date (`target_instant_contexts == 0`). The NexPoint
+  0001588272 and TCW 0001715933 10-K/As are cover pages (36 dei facts, zero non-dei numeric facts, 6-9 KB)
+  that tag `dei:EntityPublicFloat` on an instant context dated at the period end, so the count is 1, the
+  amendment was "selected", and `cohort.select_accession` refused the quarter as
+  `ambiguous_same_quarter_candidates` because the chosen instance was an amendment. Ares was settled only
+  because its public float is dated 2025-06-30.
+- The rule (owner ruling 2026-10-04: prioritise the amendment unless it only carries the amended
+  datapoints), in the pilot only: new `scripts/profile_pilot/instance_select.py` (`measure_instance`,
+  `decide`), called from `cohort.select_accession`; `verify freeze --scan-amendments` now passes
+  `instance_select.measure_instance`. `scripts/run_context_census.py` and `pipeline/` are unchanged (the
+  pilot could apply the rule from its own modules; the production-side script is still pinned and still
+  used for the single-candidate path). Per fund-quarter with several indexed candidates: (1) count each
+  candidate's target-quarter position facts (InvestmentOwnedAtFairValue on an instant context at the
+  report date carrying an investment-identifier axis); if no candidate has any, count target-quarter
+  non-dei numeric facts instead; (2) a candidate is FULL at >= 90% of the largest count
+  (`FULL_CANDIDATE_MIN_PCT`, integer comparison); (3) the latest-filed full candidate is selected, so a
+  full amendment beats the original; (4) an amendment with zero target-quarter non-dei numeric facts is
+  cover-only and skipped whatever its dei contexts; (5) refused with a specific reason:
+  `partial_amendment_needs_review` / `partial_original_needs_review` (strictly between 0% and 90%, or an
+  amendment with financial facts but no schedule), `two_originals_same_quarter`,
+  `no_candidate_with_position_facts`, `candidate_not_measurable` (uncached or unreadable),
+  `candidate_period_end_mismatch`, `mixed_form_family`. "Amendment" is the index form type;
+  `dei:AmendmentFlag` is recorded and never read (false on real Ares and TCW 10-K/As). File size and the
+  fund-level total are not used.
+- 90% is a PROXY in an empty gap, not a calibrated boundary: observed amendments carry 0% or >= 98% of
+  the original's facts, and no true partial amendment exists in the sample, so the threshold is untested
+  by real data.
+- Evidence base (from the read-only investigation that preceded this change; not re-derived here): 262
+  multi-instance fund-quarters in the filings index, 74 parsed (78 amendments: 44 with zero target-quarter
+  financial facts, 34 with >= 98% of the original's facts, nothing in between; one case, CIK 1571329
+  2022-12-31, where the amendment is the only schedule). 188 are UNVERIFIED because one candidate is not
+  cached. Within the pilot the rule met 7 multi-candidate fund-quarters, all 10-K plus one cover-only
+  10-K/A; the full-amendment, partial and amendment-only branches have run on synthetic instances only.
+- Recorded on every multi-candidate fund-quarter (`source_selection`, `selection_rule`): each candidate's
+  accession, form type, filing date, sha256, bytes, position and numeric counts, ratio, disposition; the
+  measure, the largest count, the decision and its reason. The inventory's `selection_policy` pins the
+  rule module's git blob, version and threshold.
+- Census root `stageb2-amendcensus-20261004t1307z` (code a4caae6; freeze under the shared lease, then
+  `census_run --scope all`, `census_validate --scope all`, run alone): freeze selected 114 / unavailable
+  0 (was 111 / 3); census collected 114, performance pass; validate 113 pass, 1 fail (Onex 0001860424
+  2023-03-31, pre-existing), exit 1; authoritative 113 (was 110), excluded 1. New: NexPoint 2025-12-31 ->
+  10-K 0001193125-26-134282 (27 position facts), TCW 2025-12-31 -> 10-K 0001193125-26-141887 (72), TCW
+  2023-12-31 -> 10-K 0000950170-24-039058 (95). No previously selected fund-quarter changed accession or
+  source sha (0 of 111). The 110 common census results are equal once run-root paths, timings and the
+  cache fingerprint are set aside (census_run.py and envelope.py changed since 2026-09-30, so every
+  fingerprint differs). `stageb2-sp1census-20260930t2235z` is untouched.
+- Profile run `sp3p-profile-20261004t132818z` (code a4caae6, new census root, same replay and totals
+  inputs as `sp3p-profile-20261004t101559z`): exit 1, FAIL, exit test still NOT MET. NexPoint 2/1/54 ->
+  11/1/45 and TCW 2/1/54 -> 16/1/40 (accepted / candidate / stubs); `census_unavailable` stubs 56 -> 0;
+  both now compare `/cik` only, verdict `no_breach`, and still fail the gate
+  (`consistency_no_substantive_comparison`, now 7 CIKs; `consistency_insufficient_evidence` gone); their
+  `published_basis` stays candidate with no totals outcome. Totals: 116 accepted, 6 candidate, 332 stubs of
+  448; 13 of 96 key rows compared, 3 substantive; verdicts no_breach 8. The six other filers are
+  identical after normalising run ids, timestamps and hashes. Round trip 40/40, 61 override pins
+  unchanged; MAIN at b665895 (overrides last changed at f11c9ba), overrides guard 552 files (was 544),
+  stderr empty (the 8 rejection lines for retired non-pilot files are gone).
+- Tests (pilot launcher only): red `sp3p-verify-amend-red` 27 failed / 52 passed; green
+  `sp3p-verify-amend-green3` 79 passed (`-green` had 1 failure, a digest pin over the changed policy text,
+  fixed in the test; `-green2` was refused, another session's pytest was running); regression
+  `sp3p-verify-amend-regression` at a4caae6, 24 files: 987 passed, 2 skipped, launcher exit 0.
+- NOT done: the totals / contract / back-test / replay chain was not re-run on the new census root, so
+  NexPoint and TCW have no totals outcome and the replay still treats them as gapped. Full repo suite not
+  run. Two latent hazards in PRODUCTION staging, zero occurrences found, recorded for the owner:
+  production has no fullness test when an amendment exists, and it ranks 10-K and 10-Q separately for one
+  report date. `census_crosscheck`'s whole-inventory `identical` flag against the Stage B reference will
+  now report `selection_policy` as differing (the policy text changed on purpose; row comparison is
+  unaffected).
