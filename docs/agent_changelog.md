@@ -12946,3 +12946,286 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 
 - Found by the frontend export after the Fidelity wrapper v2 fix: about 490 rows across about 25 unrelated funds changed sector label in both directions. Reported mechanism: the unified build reads company names from the previous run's entity file before the GICS cache is applied (`pipeline/unified_holdings.py` `_apply_gics_cache`), so sector output depends on the prior build. Not yet independently verified; recorded in `docs/investigations/data_quality_audits.md` (2026-10-01).
 - Regenerated frontend JSON left uncommitted. Fix direction: input-derived entity identity for GICS application plus a twin-build determinism test on the sector columns.
+
+## 2026-10-03 -- Retain the two newest programme candidates and document older builds
+
+- Owner requested removal of all older directories under `data/programme/candidates/`, replacing them with a history document. Retained `production-20260915-v11b` and `production-20260916-v12`; removed the other 18 candidates, including partial/cancelled snapshots. No automatic future retention policy was installed.
+- Added `docs/production_stack/candidate_history_2026-10-03.md` with per-version changes, failures, stage counts, remaining defects and the loss of direct replay of removed versions. Added `candidate_cleanup_2026-10-03.json` with snapshot/base fingerprints, manifest path deltas, result hashes, deletion receipts and retained-proof hashes. Linked the history from `03_pipeline_design.md`.
+- Storage: 20 -> 2 candidate directories, 165,708 -> 44,580 files, 995.524 -> 275.482 GiB logical size; removed 121,128 files / 773,138,203,652 bytes (720.041 GiB logical). Immediate observed C: free-space increase was 512.875 GiB; subsequent preservation check measured 529.688 GiB free (28.4% of 1,862.147 GiB). Logical size differs from allocated disk usage because some files are compressed.
+- Preservation PASS: all 44,580 retained file paths/sizes/mtime unchanged, all 86 selected manifest/stage/dependency SHA-256 hashes unchanged. Scanned 76 retained dependency records; no paths to removed candidates found. Resolved deletion targets and descendants checked for reparse points; no active data/archive worker or programme lock. Native .NET deletion in PowerShell completed V9/V10 after PowerShell access/path errors, without changing permissions.
+- Raw production cache, production outputs, frontend JSON, baseline and sibling programme archive/restore/tranche directories were outside deletion scope. No pipeline code or financial/data semantics changed. No pytest, semantic baseline diff, rebuild/export, re-attestation, download or baseline refresh run; verification was filesystem preservation and documentation checks. Session scripts/inventories: `scratch/2026-10-03_candidate_cleanup/`.
+
+## 2026-10-03 -- Jev source-reviewed value-check smoke test
+
+- Ran 18 curated cases across C107/C104/X08 twice with reversed decision options
+  (36 calls, jev-1.13.0). Six observed false alarms, six injected value defects,
+  six missing-source controls. All dispositions and source selections matched
+  expected outcomes; maximum paired confidence shift 0.34 despite stable labels.
+- 75,044 input tokens, estimated inference cost $0.00315; median call 0.749s.
+  Manual source mappings and computed differences make this a bundle-comprehension
+  smoke test, not representative B1-replacement accuracy or retrieval validation.
+- Results appended to docs/investigations/agent_campaigns.md; INDEX.md refreshed.
+  Requests, responses and bounded runner under scratch/2026-10-03_jev_pilot/.
+  Offline input/response checks passed. No production code/data changes, SEC calls,
+  pytest, rebuild, semantic diff or baseline refresh.
+
+
+## 2026-10-03 -- Jev comparison against frozen B1 reference decisions
+
+- Audited ens2_rest_r3: 629 of 631 runs have recoverable original bundles/source
+  payloads and verdicts confirmed by original final messages (252 real_error,
+  336 false_alarm, 41 ambiguous). These are Codex references, not audited truth.
+- Ran a frozen 13-case, six-rule development experiment comparing broad B1 source
+  evidence with focused cited context, twice with reversed options. 50 successful
+  responses; one broad request returned HTTP 400 twice, its reversal was skipped.
+  On 12 paired cases: agreement 6/12 broad, 5/12 focused; both clear one B1 real
+  error. Historical packets omit exact position joins and, for X08, the flagged
+  FV. No claim of production retrieval validation or replacement readiness.
+- Successful usage 711,562 input tokens, estimated $0.02989. Offline provenance,
+  blinding, pairing and response checks passed. Findings in agent_campaigns.md;
+  frozen inputs/results in scratch/2026-10-03_jev_b1_benchmark/. No production
+  changes, SEC calls, pytest, rebuild, semantic diff or baseline refresh.
+
+## 2026-10-03 -- Experimental Jev bundle builder for C107 and X08
+
+- Added `pipeline/jev_bundles.py`, `scripts/build_jev_bundles.py` and
+  `tests/test_jev_bundles.py`; added the explicit `tiktoken` dependency. Current
+  flags join exact holdings rows within hashed snapshots, with no historical
+  ordinal fallback. Cache-only source retrieval retains sibling positions,
+  headers, dates, owner context, units and notes; arithmetic is precomputed.
+- CLI emits audit packets and Jev requests only when required evidence is
+  complete. Unsupported layouts, incomplete joins/notes/units, unknown periods
+  and size limits remain unresolved. No review-ledger routing/promotion or API
+  calls are implemented. Current X08 positive-cost/positive-FV semantics retained.
+- Four previously inspected examples plus ten fresh flags: 14 packets, 10 ready
+  for model review, four incomplete (all CIK 0001860424). These are coverage
+  failures, not Jev decisions. Ready requests span 5,389-14,896 cl100k_base proxy
+  tokens; the provider tokenizer/context limit is not certified by this estimate.
+- Validation: 24 focused tests passed, including the production-write backstop;
+  offline packet/request/source hashes and four independently located source-row
+  checks passed. Frozen final build: `scratch/2026-10-03_jev_builder/final/`.
+- Recorded the owner's requirement to validate every builder against changing
+  filing structures over time and different filer/source types, with held-out
+  filers/periods and explicit unresolved outcomes. Hybrid direction and limits
+  documented in `docs/investigations/agent_campaigns.md`. No SEC/Jev calls,
+  holdings rebuild, frontend export, re-attestation or baseline refresh.
+
+- Owner scope follow-up: keep experiments below the size of the v1 fund set;
+  current scope is 14 flags across three funds, with explicit subset selection
+  for further work. Repository-wide `diff_outputs.py --semantic` was started and
+  stopped following this narrowed scope. No clean semantic-diff result claimed;
+  the 24-test production-write backstop and bounded artifact audit passed. Full
+  pytest suite not run.
+
+## 2026-10-03 -- Jev evaluation of automatic C107/X08 bundles
+
+- Ran 28 frozen Jev requests: ten complete observed bundles and four synthetic
+  value-error controls, each with reversed source/decision option order. Scope
+  remains 14 original flags across three BDCs; four incomplete packets were not
+  submitted. Four missing-field controls were rejected before API use.
+- Observed dispositions matched 20/20 agent-reviewed references, but source
+  selection abstained once while the decision still cleared the flag. Injected
+  errors were detected in 5/8 calls (3/4 normal, 2/4 reversed); all eight selected
+  the correct source. Three false clearances occurred despite explicit value
+  mismatches. No claim of independent human-gold or production accuracy.
+- Documented that clearance needs source identity/scope and deterministic value
+  agreement. An offline post-hoc veto would leave the four unsupported clearances
+  ambiguous; no production routing, model prompts or promotion rules changed.
+- 323,950 input tokens, estimated $0.0136059; all API calls succeeded. Frozen
+  request/response, pairing, mutation and arithmetic audits passed. Artifacts in
+  scratch/2026-10-03_jev_bundle_experiment/; findings in agent_campaigns.md and INDEX.
+- No production code/data writes, SEC downloads, pytest, full-suite run, semantic
+  diff, rebuild/export, re-attestation or baseline refresh in this experiment.
+
+## 2026-10-03 -- Expanded Jev natural-case and filing-structure evaluation
+
+- Froze 27 current C107/X08 flags across seven BDCs (eight targeted; one had no
+  current flags), spanning 2023-2026. Six filers were new to the prototype. No
+  synthetic output mutations or changes to builder code/eligibility rules.
+- Only 4/27 automatic packets marked ready; 23 blocked on headers/periods, currency,
+  notes or numeric geometry. All four ready TCW packets incorrectly scaled source
+  cost using conflicting inline tags; final model labels alone conceal this defect.
+- Ran 32 Jev calls: 12 separately source-reviewed natural cases in both option
+  orders, plus four unchanged automatic packets in both orders. Reviewed arm:
+  all four real FV scale errors and seven false alarms correct; one Ares Class A/C
+  identity conflict wrongly cleared twice (confidence 0.68/0.66). Numeric agreement
+  and exact source-context equality do not establish identity when visible class
+  and XBRL dimensions conflict. Automatic TCW arm labels 8/8 correct despite bad
+  source-cost normalization. Four natural errors share one filer/quarter/mechanism.
+- Verified an old Onex B1 source citation was for 2022-12-31, not the flagged
+  2023-09-30; current row is source-supported. Historical output FV was not preserved,
+  so old final-label correctness remains unknown. B1 references are not human gold.
+- 609,836 input tokens, estimated $0.025613112; all calls succeeded. Offline audits
+  passed: 32 request/response hashes/schema checks, 16 reversal pairs, original
+  output-field preservation, 27 packet hashes, 12 source hashes, 96 comparisons and
+  bounded source identity/period checks. Audit distinguishes arithmetic validity
+  from evidence quality. Artifacts: scratch/2026-10-03_jev_real_cases/.
+- Findings appended to agent_campaigns.md; INDEX refreshed. No production code/data
+  changes, SEC calls, pytest/full suite, semantic diff, rebuild/export, ledger
+  updates, re-attestation or baseline refresh. Manual preparation is not automatic
+  coverage; held-out structure/source-type validation remains required.
+- Holdout accounting: these seven tested filers/periods are now development evidence; Carlyle and Ares Strategic Income also appeared in the older B1 reserved filer split. Do not reuse them as an untouched holdout for subsequent builder fixes.
+
+## 2026-10-03 -- Jev screening and B1 investigation implementation plan
+
+- Added docs/jev_screening/ with an overview, routing/bundle contract, phased
+  implementation and validation plan, and a traceable experimental evidence record.
+- Proposed weak-rule screening with B1 for difficult bundles, suspected errors,
+  low confidence and known high-error rules; 0.75 remains a pilot cutoff.
+  Clearance requires independent evidence checks, sampled audits and versioned
+  receipts; grouped review items retain unresolved members. Nothing is enabled.
+- Planned filer/layout/period validation and comparisons against both the existing
+  B1 workflow and deterministic checks alone. Proposed cumulative cap: 16 BDCs;
+  next holdout: at most four new funds, 40 natural flags and 100 Jev calls.
+- Validation: four documents and 12 local links checked; historical experiment
+  counts cross-checked against investigations. Documentation only; no pytest,
+  pipeline/data changes, API calls, rebuild/export or semantic-diff run.
+
+## 2026-10-03 -- Eight-hour Jev build and test execution plan
+
+- Added docs/jev_screening/04_eight_hour_execution_plan.md and linked it from the
+  folder README. Allocates eight hours to bundle repairs, regression coverage,
+  shadow routing, blind evaluation, a conditional weak-rule probe and handoff.
+- Defines checkpoints and fallback priorities, preserves the sub-v1 fund cap,
+  limits the session to 100 total Jev calls, and keeps production clearance off.
+  Requires separate deterministic/B1/Jev comparisons and honest accounting for
+  incomplete blind reviews, manual bundles and estimated workload savings.
+- Validation: five plan documents and 15 local links passed link/whitespace
+  checks. Documentation only; execution has not started. No tests, API calls,
+  pipeline/data changes, rebuild or semantic-diff run.
+
+## 2026-10-03 -- Isolated Jev screening build: first checkpoint
+
+- Work is isolated in .claude/worktrees/jev-screening-pilot on branch
+  jev-screening-pilot-20261003; main-worktree production code/data are unchanged.
+  Added docs/jev_screening/05_run_log.md and an overview link.
+- Experimental repairs block contradictory TCW scales and Ares share classes,
+  recover continuation periods, and retain nested source notes. Two completed
+  41-flag replays yielded 10 and then 11 builder-ready packets; readiness is not
+  independently validated clearance. Added pure shadow routing and a bounded API
+  runner with separate evidence reviews, frozen inputs and no B1 suppression.
+- Validation: 78 focused tests passed in the isolated tree; bounded production
+  metadata comparison found zero changed paths. Source/packet hashes checked.
+  No new API calls at this checkpoint; no production semantic diff, full suite,
+  rebuild/export, corrections, queue writes or baseline refresh.
+- Scope audit includes older smoke/replay experiments: 14 consumed funds. Reserve
+  only Crescent (0001954360) and Goldman Sachs (0001920145) to retain a cumulative
+  16-fund cap below the 70-fund cohort. Artifacts: data/pilot/jev_screening/20261003_shadow/.
+
+## 2026-10-03 -- Isolated Jev pilot: holdout failure and controlled tests
+
+- Production remains untouched. Changes live in .claude/worktrees/jev-screening-pilot;
+  evidence lives in data/pilot/jev_screening/20261003_shadow.
+- Original development: 15/41 builder-ready. Untouched two-fund holdout: 0/20 ready.
+  Consuming it for general header/parenthesis repairs yields 15/20 development-ready;
+  these repaired cases must not be reported as untouched holdout performance.
+- Jev: 15/15 label agreement in each of two development runs; both confidence
+  cutoffs passed by 7 and 3 cases respectively. Full independent audit coverage
+  remains incomplete and all B1 work is retained. 30 calls used 363,444 input tokens.
+- Eight synthetic rounding controls: 7/8 label agreement. All four injected errors
+  avoided false-alarm classification (three errors, one ambiguous); none qualified
+  for clearance. These eight calls used 120,836 input tokens, separate from natural
+  cases. Session total: 38 of at most 100 attempts; cumulative fund cap remains 16.
+- Added C104 zero-FV experimental bundle support and fixed numeric-zero handling.
+  Default screening policy still excludes C104; a six-case weak-rule probe is
+  explicitly scoped to three already consumed funds. 98 focused tests passed.
+- No full suite, production semantic diff, rebuild/export, correction, queue write,
+  baseline change or production integration. See docs/jev_screening/05_run_log.md.
+
+## 2026-10-03 -- Jev pilot: source anchors and sibling-value controls
+
+- Isolated pilot only: added context-anchor baseline, Choice response-contract
+  validation and a selected-source numeric/currency veto in the shadow router.
+- Natural results: 65 unique flags, 36 Jev calls, 14 confidence-only candidates,
+  zero independently certified clearances. Context-anchor baseline resolves
+  33/36 natural cases with reviewed-source agreement; this shares builder inputs.
+- Eight paired sibling-cost controls: four synthetic errors yield one real_error,
+  two ambiguous and one false_alarm at 0.13 decision confidence. None passes both
+  0.75 cutoffs. This exposes a model decision failure beyond bundle construction.
+- Cumulative 52 calls / 685,946 input tokens within the 100-call, 16-fund pilot.
+  152 combined tests passed, then 71 router/runner tests passed after four added
+  veto regressions. Fourth bounded production metadata check: zero changes.
+- Main production code/data/queues/gates/baselines untouched. Full suite and
+  production semantic diff not run. Details: docs/jev_screening/05_run_log.md.
+
+## 2026-10-03 -- Jev pilot: inherited annotations and source review
+
+- Isolated builder now retains instrument/portfolio section annotations, adjacent
+  footnote tables and explicit same-block rate-code definitions. Unknown scope,
+  conflicting definitions and interrupted continuations remain blocked.
+- Five additional X08 source reviews found matching disclosed values. Three
+  remain blocked by incomplete alternatives; the policy was not relaxed. Two
+  repaired Varagon cases match Jev labels/sources but fail screening confidence.
+- Cumulative 62 calls / 854,979 input tokens; 65 natural flags / 38 natural calls.
+  14 historical confidence-only candidates, no audited clearances or B1 savings.
+- 188 combined tests passed; subsequent temporal-freeze test brings runner file
+  to 29 passing tests. Fifth bounded production metadata check: zero changes.
+- A maximum four-case within-filer temporal check is frozen next; no new funds,
+  production integration, data writes, full suite or production semantic diff.
+  See docs/jev_screening/05_run_log.md for evidence versions and limitations.
+
+## 2026-10-04 -- Jev pilot: temporal validation and numeric format guards
+
+- Isolated builder validates supported inline transform names against their
+  registry namespace and blocks visible/fixed-zero contradictions. Replays retain
+  four X08 ready cases, two C104 ready/two blocked, and both temporal cases ready.
+- Frozen new-accession check: two September 2025 C107 cases build without repair
+  and match Jev labels/sources; one passes both cutoffs. Missing X08 strata remain
+  empty. Same consumed funds; no claim of unseen-filer accuracy.
+- Totals: 64 calls / 886,816 input tokens; 67 natural flags / 40 natural calls;
+  15 historical confidence-only candidates, no audited clearances or B1 savings.
+- 205 focused tests pass; 64/64 saved response contracts valid. Sixth bounded
+  production metadata audit: zero monitored changes. Main production untouched;
+  full suite and production-writing semantic diff not run.
+- Replay preflight rejects missing prior packets/duplicates before writes. An
+  incomplete old-manifest diagnostic is explicitly excluded in the run log.
+
+## 2026-10-04 -- Jev pilot: prevent silent annotation loss across pages
+
+- Further raw-source review found Crescent repeated schedule titles without the
+  word continued and a note table referenced mid-paragraph. Isolated builder now
+  retains uncertain inherited annotations as explicit scope blockers and detects
+  below/following-table references, with bounded adjacent-table retrieval.
+- 122 bundle tests pass. Prior frozen readiness was 38/67, with 13/15 historical
+  confidence candidates still ready; that count predates these additional guards.
+  No audited clearances or additional API calls. Temporal 2/2 label agreement
+  must not be interpreted as complete evidence validation. Production untouched.
+
+## 2026-10-04 -- Jev pilot: tranche checks and confidence stability
+
+- Isolated bundle/router reject explicit instrument contradictions and selected
+  wrong tranches despite matching amounts. 177 targeted bundle/router tests pass.
+- Consumed 20-case replay is 9 ready / 11 blocked after note/scope guards; four
+  reviewed X08 packets remain ready. This is development, not blind validation.
+- Eight paired presentation calls preserve all labels and source selections but
+  change confidence-only eligibility for 3/4 flags. No flag passes both cutoffs
+  in both orders. Single calls do not separate order effects from provider noise.
+- Session totals: 72 calls / 1,073,704 input tokens; 67 natural flags / 40 natural
+  calls unchanged. All 72 response contracts valid; all B1 work retained.
+- Added docs/jev_screening/06_interim_assessment.md. Production untouched; local
+  checkpoint ff950eb was not merged or pushed. Full suite/semantic diff not run.
+
+## 2026-10-04 -- Jev pilot v4: preserve cost provenance
+
+- Isolated bundle v4/state v2 preserves cost_source and requires reported cost for
+  C107/X08. Intentional first-observed-FV proxies need donor-lineage review; their
+  mismatch with current SOI cost is not automatically an extraction error.
+- Ten remaining C107 references reviewed: four source-matching negative costs,
+  one Krayden term-loan/revolver identity ambiguity, five unscorable proxy-cost
+  cases. Added explicit Type of Investment grammar to identity checks.
+- 235 focused tests pass, including review-source path/context guards. Rebuilding
+  the same 67 flags with full cost provenance from the identical holdings hash.
+  Session API totals remain 72 calls / 1,073,704 tokens. Main production untouched.
+
+## 2026-10-04 -- Jev grouped-header retrieval and review accounting
+
+- Isolated grouped-note headers now preserve every comma-separated marker. Two
+  Fortress reported-cost cases become ready; Jev and deterministic baselines
+  match both source-reviewed outcomes. Neither is an audited clearance.
+- Same 67 natural flags: 42 natural calls, 42 label / 41 source agreements, all
+  called references false alarms. Supplemental review ledger: 49 false alarms,
+  four known errors, two ambiguous and 12 unscorable. These denominators differ
+  deliberately; historical frozen scoring labels are not overwritten.
+- 239 focused tests pass. 74 total API calls / 1,103,934 input tokens. Eighth
+  bounded production metadata audit: zero changed paths. Production unchanged;
+  no full suite, production semantic diff, merge or push.

@@ -12,7 +12,7 @@ def case():
     packet = {
         'rule': {'id': 'X08', **RULES['X08']},
         'flag': {'row_id': 'ROW-1', 'cik': '0000000001', 'report_date': '2025-06-30', 'rule_id': 'X08'},
-        'output_position': {'cost': '2000000', 'fair_value': '1000', 'report_date': '2025-06-30'},
+        'output_position': {'cost': '2000000', 'cost_reported': '2000000', 'fair_value': '1000', 'report_date': '2025-06-30'},
         'provenance': {'holdings_sha256': 'holdings', 'flags_sha256': 'flags', 'builder_sha256': 'builder'},
         'filing': {'sha256': 'source'},
         'evidence_status': {'status': 'ready_for_model', 'blocking_reasons': []},
@@ -71,6 +71,22 @@ def test_independent_audit_cannot_be_replaced_by_model_confidence(case):
     packet, result, _ = case
     receipt = route_flag(packet, result, None, expected_provenance=packet['provenance'])
     assert 'independent_review_missing' in receipt['reasons']
+
+
+def test_proxy_cost_cannot_bypass_builder_with_a_ready_marker(case):
+    case[0]['output_position']['cost_source'] = 'first_observed_fv_proxy'
+    refreeze(case)
+    receipt = route(case)
+    assert receipt['route'] == 'b1'
+    assert 'proxy_cost_requires_lineage' in receipt['reasons']
+
+
+def test_matching_amounts_and_high_confidence_cannot_clear_wrong_tranche(case):
+    case[0]['source_candidates'][0]['identity_evidence'] = {'output_instrument_compatible': False}
+    refreeze(case)
+    receipt = route(case)
+    assert receipt['route'] == 'b1'
+    assert 'candidate_identity_conflict' in receipt['reasons']
 
 
 def test_selected_row_mismatch_is_recorded_without_an_audit(case):

@@ -22,7 +22,7 @@ def test_selects_without_reference_or_model_and_never_certifies(packet):
     assert not observed['independent_identity_verified']
 
 
-@pytest.mark.parametrize('change', ['duplicate', 'identifier', 'period', 'scope', 'class', 'blocked'])
+@pytest.mark.parametrize('change', ['duplicate', 'identifier', 'period', 'scope', 'class', 'instrument', 'blocked'])
 def test_conflicts_or_ambiguous_anchor_remain_unresolved(packet, change):
     candidate = packet['source_candidates'][0]
     context = candidate['identity_evidence']['contexts']['ctx']
@@ -36,6 +36,8 @@ def test_conflicts_or_ambiguous_anchor_remain_unresolved(packet, change):
         context['dimensions'].append({'axis': 'OwnerAxis', 'text': 'JV'})
     elif change == 'class':
         candidate['identity_evidence']['output_class_compatible'] = False
+    elif change == 'instrument':
+        candidate['identity_evidence']['output_instrument_compatible'] = False
     else:
         packet['evidence_status']['status'] = 'blocked'
     assert compare_context_anchor(packet)['status'] == 'unresolved'

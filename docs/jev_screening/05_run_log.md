@@ -295,3 +295,92 @@ remain development evidence, not untouched human gold.
 - This source review invalidates any interpretation of the 2/2 temporal result as
   complete bundle validation. It remains 2/2 label/source agreement on the older
   frozen inputs; neither temporal case was certified or cleared.
+
+## 2026-10-04 checkpoint: tranche veto and presentation sensitivity
+
+- Local checkpoint ff950eb preserves the preceding layout/format work and 209
+  passing focused tests. No merge or push. Additional isolated edits follow.
+- Added explicit visible/context instrument contradictions for first/second lien,
+  revolver/term loan and common/preferred equity. Only explicit instrument text
+  is compared; issuer names and missing descriptions do not imply a conflict.
+  A selected sibling with an incompatible output instrument cannot be cleared
+  even when amounts and confidence agree. Sibling candidates are still retained.
+- Consumed 20-case holdout replay now has 9 ready / 11 blocked. Its six additional
+  fallbacks are note-table/scope gaps, not instrument conflicts. Four repaired
+  X08 source-review cases remain ready. Current temporal replay is 1 ready / 1
+  blocked; Crescent's rate table follows two other symbol notes and is not safely
+  associated by the adjacent-table retriever. No relaxation was applied.
+- Eight new controlled calls compare four revised X08 packets in original versus
+  reversed candidate order. Source data, output values, questions and opaque
+  bundle IDs are identical within each pair; only presentation ordering changes.
+  Both arms have 4/4 label and source agreement. Confidence-only eligibility
+  changes in three pairs; none passes both cutoffs in both presentations.
+- Normal/reversed decision and source confidence pairs:
+  Premier Roofing: (0.68, 0.87) / (0.81, 0.83).
+  BioXcel: (0.82, 0.82) / (0.83, 0.73).
+  Express Wash: (0.74, 0.92) / (0.86, 0.89).
+  Mooring: (0.68, 0.88) / (0.71, 0.79).
+  This is one call per presentation: order effects are not separated from provider
+  variability. Do not pick the higher-confidence presentation or tune cutoffs.
+- Presentation test input tokens: 186,888. Session totals: 72 successful calls,
+  1,073,704 provider input tokens, 28 calls remaining. Natural totals stay 67 flags
+  and 40 calls; 24 synthetic numeric controls and 8 presentation calls are separate.
+  All eight new routing receipts retain B1. No audited clearance or B1 savings.
+- All 72 saved response/confidence contracts validate. Bundle/router subset passes
+  177 tests; combined verification is running. See 06_interim_assessment.md for
+  the current decision implications, and order_comparison_*.json for paired data.
+
+## 2026-10-04 checkpoint: reported cost versus intentional proxy cost
+
+- Reviewed the ten remaining unlabelled C107 flags from six cached source files.
+  Four negative reported costs agree with source (Exemplis -195,000, Riser -11,000,
+  Milestone -842, Jackson Paper -16,223). Krayden is ambiguous: its context/output
+  say Term Loan, but the tagged -11,000 cost/-6,000 FV occur on a visible Revolver
+  row, while the funded term loan has positive values. Matching amounts cannot
+  resolve that contradiction. Added this observed grammar to identity regression.
+- Five apparent cost mismatches are explicitly first_observed_fv_proxy in the
+  current holdings snapshot, with cost_reported absent: GC Ferry, Accupac and
+  three AB Centers commitment observations. Do NOT label these as new extraction
+  errors based on current-SOI cost comparisons. They require donor-lineage and
+  policy review. AB Centers source rows are unfunded-commitment disclosures.
+- The old bundle omitted cost_source. v4 now preserves it and requires an explicit
+  reported-cost basis equal to published cost for C107/X08. Proxy/unknown pathways
+  stay with B1. C104 is FV-only and does not inherit that cost requirement. The
+  router repeats this veto even if a packet is marked ready. State schema is v2;
+  source-grid schema is v4. No production financial semantics were changed.
+- Supplemental references are frozen separately as additional_C107_references_01:
+  four false alarms, one identity ambiguity, five unscorable proxy-cost cases.
+  Raw facts and cost provenance are preserved beside them. Old frozen labels and
+  model denominators are not overwritten. No new natural error-rate claim.
+- A bounded same-snapshot rebuild validates every retained output field and the
+  full holdings hash before adding missing provenance fields. It is rebuilding
+  the existing 67 flags only, with no new funds or model calls.
+- 235 combined focused tests pass. The raw-review helper now supports exact cached
+  CIK/accession lookup for early-blocked packets, rejects paths outside the cache,
+  and never treats a missing context ID as a wildcard. Latest source/reference
+  additions do not certify complete bundle audits or enable clearance.
+
+## 2026-10-04 checkpoint: grouped header notes and complete review accounting
+
+- Full cost-provenance rebuild cost_basis_v4_16 completed: 31 ready / 36 blocked
+  across the same 67 flags. C107: 18/26; X08: 11/8; C104: 2/2. Six packets contain
+  proxy costs requiring lineage. This is builder readiness, not validated recall.
+- Latest supplemental source-review coverage is 49 false alarms, four known
+  errors, two identity ambiguities and 12 unscorable cases. No unreviewed flags
+  remain in that separate review ledger; frozen model references are unchanged.
+- Added comma-separated header markers such as Cost (3,5), retaining both notes.
+  Unsupported ranges or ambiguous marker syntax remain unsupported. Both Fortress
+  reported-cost cases become ready with their negative-cost explanation included.
+- Two newly called natural flags agree with reviewed labels and source rows:
+  Exemplis decision/source confidence 0.84/0.75; Riser 0.80/0.78. These add two
+  confidence-only candidates, not audited clearances. Both exact-context and
+  conditional arithmetic baselines also succeed on these cases.
+- Totals: 67 natural flags, 42 natural calls, 42 label / 41 source agreements;
+  all called natural references are false alarms. 17 historical confidence-only
+  candidates. Session: 74 successful calls, 1,103,934 provider input tokens,
+  26 calls remaining. All 74 response/confidence contracts validate.
+- 239 focused tests pass. Eighth bounded production metadata audit reports zero
+  changed paths. No full suite, production semantic diff, rebuild/export, merge
+  or push. A same-snapshot full replay of the grouped-header builder is running.
+
+- Completed grouped_headers_v4_17 replay: 34 ready / 33 blocked. Three Fortress C107 cases gain header support. Of 17 historical confidence candidates, 13 remain ready; none has an identical current request, so old confidence is not transferred. No clearance certificates.

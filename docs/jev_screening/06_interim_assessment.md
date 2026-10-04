@@ -1,0 +1,83 @@
+# Interim assessment: useful screening requires validated evidence
+
+Updated 2026-10-04. Work continues in the isolated pilot; this is not a production
+approval or the final experiment report. Exact versions and limitations are in
+the [run log](05_run_log.md).
+
+## What the evidence currently supports
+
+Improving bundle construction supports the proposed Jev/B1 workflow. The most
+useful improvements so far are reusable source checks: displayed versus tagged
+units, current versus comparative periods, share-class identity, inherited notes,
+note tables and explicit rate legends. They also improve evidence available to
+B1. None requires changing production holdings.
+
+The main unresolved cost is proving that a bundle contains the necessary evidence.
+A model can return the correct label while notes or scope are missing. This
+happened in source review of both development and temporal packets. High model
+confidence cannot compensate for that omission.
+
+Field provenance is another necessary boundary. Five of the remaining C107 cases
+use intentional first-observed-FV cost proxies, not current reported cost. A
+current-SOI comparison cannot adjudicate those proxies. Bundle v4 now preserves
+the pathway and retains these cases for donor-lineage review. The other remaining
+cases yielded four matching negative costs and one term-loan/revolver ambiguity;
+this did not add another confirmed natural numeric-error mechanism.
+
+## Results and their limits
+
+| Observation | What it means |
+|---|---|
+| 16 funds, 67 natural flags; 42 natural Jev calls | Below the 70-fund v1 cohort; not a representative population sample |
+| 42/42 natural label agreement; 41/42 source agreement | All called natural references are false alarms. Four reviewed natural errors were blocked before submission. This does not estimate missed-error risk. |
+| Original two-fund holdout: 0/20 bundles ready | Initial layout transfer failed. Repairs consumed this holdout; subsequent scores are development results. |
+| Two new-accession temporal cases: 2/2 label/source agreement | Within familiar filers, not unseen-filer validation. Later review found missing context in one packet, so this is not 2/2 complete-evidence validation. |
+| 24 separate synthetic controls | Include rounding, sibling-cost substitutions and FV scale errors. One substituted-cost error was called a false alarm at 0.13 decision confidence; it stayed with B1. |
+| 17 historical confidence-only candidates | Not audited clearances. Later bundle versions invalidate reuse of old scores. Two newly called Fortress cases pass both trial cutoffs after grouped-header repair. |
+| Eight presentation calls on four revised X08 cases | Labels/sources remain correct, but three flags change confidence eligibility between orders; none passes both cutoffs in both orders. One call per order does not isolate provider variability. |
+| 74 total calls, 1,103,934 provider input tokens | Includes natural, synthetic and presentation calls. Dollars and B1 time savings have not been established by this experiment. |
+| Zero certified clearances; all B1 work retained | No production safety or savings claim |
+
+The deterministic exact-context comparator resolved 39/42 model-scored natural
+cases with reviewed-source agreement. Conditional on manually supplied correct
+source identity, arithmetic also explains the numeric classifications. These
+comparators share builder inputs: they are useful baselines, not independent
+certification. Jev's incremental contribution remains to be demonstrated on
+harder identity or interpretation cases.
+
+Latest supplemental source review accounts for all 67 flags: 49 false alarms,
+four known errors, two identity ambiguities and 12 unscorable cases. These are
+review dispositions, not independently certified clearances. Frozen model-scoring
+references are preserved separately. The cost-provenance v4 rebuild was 31 ready
+and 36 blocked before the subsequent grouped-header repair.
+
+## Implications for the proposed workflow
+
+- Keep low-confidence, difficult-bundle, suspected-error and known-high-error
+  cases with B1. Keep independently sampled review even for future clearances.
+- Treat 0.75 as a trial cutoff on the provider's confidence scale. It is not a
+  calibrated probability of correctness or permission to waive evidence checks.
+  Freeze presentation order too; do not select whichever ordering produces the
+  higher confidence. Presentation stability is an additional validation need.
+- Improve reusable evidence mechanisms before adding filer-specific patches.
+  Explicit fallback is preferable when schedule scope cannot be established.
+- Distinguish wider weak-rule review from B1 cost reduction. X08/C104 are currently
+  track-only weak rules; screening them adds coverage rather than removing an
+  existing B1 job. That opportunity needs measured incremental error discovery.
+- Make the next decision by rule and supported layout, including builder and
+  review effort. Overall label agreement alone is insufficient.
+
+## Remaining experiments
+
+1. Measure the current builder's readiness and independently review its apparent
+   successes, including notes inherited across page boundaries.
+2. Compare deterministic checks and Jev on the same evidence. Do not count a
+   cheap arithmetic check as a uniquely model-enabled saving.
+3. Rescore only justified revised packets, preserving old observations and the
+   100-call session cap. Add no funds beyond the reserved 16.
+4. Preserve unresolved mechanisms as regression cases and B1 fallbacks. Fresh
+   independent B1 timing and a representative error-bearing holdout remain future
+   requirements; neither has been completed in this isolated session.
+
+Production code, data, queues, gates and baselines remain unchanged. The isolated
+checkpoints are local only; no merge or push has been performed.

@@ -12,7 +12,7 @@ import json
 import math
 from typing import Any
 
-from pipeline.jev_bundles import RULES, number, rule_fires
+from pipeline.jev_bundles import RULES, cost_basis_failures, number, rule_fires
 
 SCHEMA = 'jev-shadow-receipt.v1'
 REQUIRED_CHECKS = ('identity', 'period', 'scope', 'units', 'notes', 'candidate_recall')
@@ -65,7 +65,8 @@ def evidence_failures(bundle, source_id, audit):
     if candidate.get('blocking_reasons'):
         failures.append('candidate_evidence_blocked')
     identity = candidate.get('identity_evidence', {})
-    if identity.get('blocking_reasons') or identity.get('output_class_compatible') is False:
+    if (identity.get('blocking_reasons') or identity.get('output_class_compatible') is False
+            or identity.get('output_instrument_compatible') is False):
         failures.append('candidate_identity_conflict')
     if candidate.get('period_evidence', {}).get('conflict'):
         failures.append('candidate_period_conflict')
@@ -137,6 +138,8 @@ def route_flag(bundle: dict, result: dict | None, audit: dict | None, *,
     if rule_id in RULES:
         if bundle['rule'].get('fields') != RULES[rule_id]['fields'] or bundle['rule'].get('predicate') != RULES[rule_id]['predicate']:
             reasons.append('rule_contract_mismatch')
+        if 'cost' in RULES[rule_id]['fields']:
+            reasons.extend(cost_basis_failures(bundle.get('output_position', {})))
         if not rule_fires(rule_id, bundle.get('output_position', {})):
             reasons.append('flag_predicate_not_current')
     if not reasons:

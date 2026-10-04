@@ -8,6 +8,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.analyze_jev_screening import summarize
+from scripts.compare_jev_bundle_versions import NATURAL_RUNS
 from pipeline.jev_screening import fingerprint
 from scripts.jev_pilot_session import install_read_only_guard, read, write
 
@@ -21,8 +22,7 @@ def main():
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, run)
-    runs = ['development_model_01', 'consumed_holdout_model_01', 'weak_probe_model_01',
-            'newly_ready_model_01', 'legend_model_01', 'temporal_model_01']
+    runs = NATURAL_RUNS
     flags, versions = {}, defaultdict(list)
     for label in runs:
         report = summarize(run / label, run / 'api_attempts')

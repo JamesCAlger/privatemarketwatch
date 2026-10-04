@@ -21,6 +21,7 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Experimental evidence](03_experimental_evidence.md) | What the existing tests establish, limitations and regression cases |
 | [Eight-hour build and test plan](04_eight_hour_execution_plan.md) | Prioritised session schedule, deliverables, bounded evaluation and decision points |
 | [Active run log](05_run_log.md) | Isolated implementation checkpoints, validation and remaining work |
+| [Interim assessment](06_interim_assessment.md) | What the current results support, what they do not, and remaining experiments |
 
 ## Proposed operating model
 

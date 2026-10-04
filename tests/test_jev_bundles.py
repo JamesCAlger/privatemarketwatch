@@ -31,7 +31,8 @@ def output(**changes):
     return {"row_id": "ROW-1", "source": "bdc", "cik": "0000000001", "report_date": "2025-06-30",
             "accession_number": "0000000001-25-000001", "issuer_name": "Acme Test LLC",
             "bdc_investment_identifier": "Acme Test LLC Preferred units", "cost": "2000000", "fair_value": "1000",
-            "cost_currency": "USD", "fair_value_currency": "USD", **changes}
+            "cost_currency": "USD", "fair_value_currency": "USD",
+            "cost_reported": changes.get('cost', '2000000'), "cost_source": None, **changes}
 
 
 def bundle(row=None, source=None, rule="X08", **kwargs):
@@ -57,6 +58,26 @@ def test_full_position_and_both_values_replace_unrelated_sample():
     assert candidate["comparisons"]["fair_value"]["agrees_at_display_precision"] is True
     assert candidate["header_rows"][0]["cells"][1]["text"] == "Investment"
     assert jb.make_request(packet)["questions"]["source_match"]["criteria"]["t0r1"]
+
+
+@pytest.mark.parametrize('pathway', ['derived_proxy', 'first_observed_fv_proxy'])
+def test_proxy_cost_cannot_be_reviewed_as_current_reported_cost(pathway):
+    packet = bundle(row=output(cost_source=pathway), source=basic_source())
+    assert 'proxy_cost_requires_lineage' in packet['evidence_status']['blocking_reasons']
+    assert packet['output_position']['cost_source'] == pathway
+
+
+@pytest.mark.parametrize('reported,reason', [(None, 'unresolved_reported_cost_basis'),
+                                          ('1999999', 'output_cost_differs_from_reported_basis')])
+def test_cost_basis_must_be_explicit_and_match_published_value(reported, reason):
+    packet = bundle(row=output(cost_reported=reported), source=basic_source())
+    assert reason in packet['evidence_status']['blocking_reasons']
+
+
+def test_fair_value_only_rule_does_not_require_reported_cost():
+    packet = bundle(row=output(fair_value='0', cost_reported=None, cost_source='first_observed_fv_proxy'),
+                    source=basic_source(), rule='C104')
+    assert packet['evidence_status']['status'] == 'ready_for_model'
 
 
 def section_schedule(name='Acme Test LLC', heading='Equity Securities (14)', **kwargs):
@@ -538,6 +559,57 @@ def test_agreeing_share_class_is_not_blocked_as_a_conflict():
     assert packet['evidence_status']['status'] == 'ready_for_model'
 
 
+@pytest.mark.parametrize('visible,tagged,field', [
+    ('Second Lien Term Loan', 'First Lien Term Loan', 'lien'),
+    ('First Lien Revolver', 'First Lien Term Loan', 'facility'),
+    ('Common units', 'Preferred units', 'equity'),
+])
+def test_explicit_visible_instrument_conflict_with_own_context_blocks(visible, tagged, field):
+    source = parsed(context('Acme Test LLC Investment Type ' + tagged + ' Maturity 2030') + schedule([
+        ('Acme Test LLC', visible, fact('2,000'), fact('1'), '')]))
+    candidate = bundle(source=source)['source_candidates'][0]
+    assert 'visible_context_instrument_conflict:' + field in candidate['blocking_reasons']
+
+
+@pytest.mark.parametrize('visible,tagged', [('1st Lien Term Loan', 'First Lien Term Loan'),
+                                         ('Revolving Credit Facility', 'Revolver'),
+                                         ('Unitranche First Lien Loan', 'First Lien Loan')])
+def test_equivalent_instrument_wording_does_not_create_conflict(visible, tagged):
+    source = parsed(context('Acme Test LLC Investment Type ' + tagged) + schedule([
+        ('Acme Test LLC', visible, fact('2,000'), fact('1'), '')]))
+    assert bundle(source=source)['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_issuer_words_are_not_treated_as_instrument_traits():
+    source = parsed(context('First Lien Term Loan Holdings LLC') + schedule([
+        ('Acme Test LLC', 'Second Lien Revolver', fact('2,000'), fact('1'), '')]))
+    assert bundle(source=source)['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_krayden_style_context_cannot_relabel_a_visible_revolver_as_term_loan():
+    identifier = ('Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, '
+                  'Company Krayden Holdings, Inc., Industry Trading Companies & Distributors, '
+                  'Type of Investment Term Loan, Reference Rate and Spread SOFR+6.00%, Interest Rate 11.34%, Maturity 03/01/29')
+    source = parsed(context(identifier) + schedule([
+        ('Krayden Holdings, Inc.', 'Revolver', fact('(11)', sign='-'), fact('(6)', sign='-'), '')]))
+    packet = bundle(row=output(issuer_name='Krayden Holdings, Inc.', cost='-11000', fair_value='-6000',
+                               instrument_description='Term Loan', bdc_investment_identifier=identifier),
+                    source=source, rule='C107')
+    candidate = packet['source_candidates'][0]
+    assert candidate['comparisons']['cost']['agrees_at_display_precision']
+    assert 'visible_context_instrument_conflict:facility' in candidate['blocking_reasons']
+    assert candidate['identity_evidence']['output_instrument_compatible'] is False
+
+
+def test_other_tranche_is_retained_but_cannot_match_output_instrument():
+    source = parsed(schedule([
+        ('Acme Test LLC', 'First Lien Revolver', fact('2,000'), fact('1'), ''),
+        ('Acme Test LLC', 'First Lien Term Loan', fact('2,000'), fact('1'), '')]))
+    packet = bundle(row=output(instrument_description='First Lien Term Loan'), source=source)
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert [c['identity_evidence']['output_instrument_compatible'] for c in packet['source_candidates']] == [False, True]
+
+
 @pytest.mark.parametrize('source_class', ['ClassAUnitsMember', 'custom:ClassACommonUnitsMember', 'ClassAMember'])
 def test_camel_case_dimension_class_agrees_with_visible_class(source_class):
     source = parsed(context(source_class) + schedule([
@@ -668,6 +740,25 @@ def test_all_preserved_header_cells_contribute_required_notes():
     assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
     packet = bundle(source=parsed(body + '<p>* Rates reset quarterly (Q), or monthly (M).</p>'))
     assert packet['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_grouped_header_notes_are_resolved_without_losing_members():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')],
+                    header='Amortized Cost (3,5)').replace('>Fair Value<', '>Fair Value (4,5)<')
+    body += '<p>(3) Amortized cost includes applicable discounts.</p><p>(4) Fair values follow disclosed valuation policy.</p>'
+    missing = bundle(source=parsed(body))
+    assert missing['source_candidates'][0]['missing_note_markers'] == ['5']
+    body += '<p>(5) Unfunded loan fees can create negative balances.</p>'
+    complete = bundle(source=parsed(body))
+    assert complete['evidence_status']['status'] == 'ready_for_model'
+    assert {n['marker'] for n in complete['source_candidates'][0]['notes']} == {'3', '4', '5'}
+
+
+@pytest.mark.parametrize('suffix', ['(2025)', '(3-5)', '(3 and 5)'])
+def test_unsupported_header_parentheses_are_not_silently_discarded(suffix):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')],
+                    header='Amortized Cost ' + suffix)
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
 
 
 def test_repeated_symbol_note_is_distinct_and_header_notes_are_retained():

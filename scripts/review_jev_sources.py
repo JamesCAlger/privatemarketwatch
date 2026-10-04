@@ -24,6 +24,28 @@ def text(element):
     return ' '.join(element.get_text(' ', strip=True).split()) if element else ''
 
 
+def review_source_path(repo: Path, packet: dict) -> Path:
+    root = (repo / 'data/raw/filings/bdc_html').resolve()
+    declared = packet.get('filing', {}).get('path')
+    if declared:
+        path = Path(declared).resolve()
+    else:
+        output = packet['output_position']
+        cik, accession = str(output.get('cik', '')), str(output.get('accession_number', ''))
+        if not re.fullmatch(r'\d{1,10}', cik) or not re.fullmatch(r'\d{10}-\d{2}-\d{6}', accession):
+            raise ValueError('Missing or invalid cached source identity')
+        path = (root / str(int(cik)) / (accession.replace('-', '') + '.html')).resolve()
+    if not path.is_relative_to(root):
+        raise ValueError('Review source must remain in the cached BDC filings root')
+    return path
+
+
+def exact_context_facts(soup, context_id):
+    if not isinstance(context_id, str) or not context_id.strip():
+        return None, []
+    return soup.find(id=context_id), soup.find_all('ix:nonfraction', attrs={'contextref': context_id})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', type=Path, required=True)
@@ -40,13 +62,15 @@ def main():
     if not args.label.replace('_', '').isalnum():
         raise ValueError('Invalid label')
     install_read_only_guard(repo, out)
+    if not args.bundles.resolve().is_relative_to(out):
+        raise ValueError('Use frozen packets within the pilot run')
     groups = defaultdict(list)
     for path in sorted(args.bundles.glob(args.rule + '*.json')):
         packet = read(path)
         if args.row_id and packet['flag']['row_id'] not in args.row_id:
             continue
-        if packet.get('filing', {}).get('path') and (args.include_blocked or packet['evidence_status']['status'] == 'ready_for_model'):
-            groups[packet['filing']['path']].append(packet)
+        if args.include_blocked or packet['evidence_status']['status'] == 'ready_for_model':
+            groups[str(review_source_path(repo, packet))].append(packet)
     if sum(map(len, groups.values())) > 40:
         raise ValueError('Review limit exceeded')
     reports = []
@@ -55,7 +79,7 @@ def main():
         if source.stat().st_size > 40 * 1024 * 1024:
             raise ValueError('Source limit exceeded')
         source_sha = sha(source)
-        if any(p['filing']['sha256'] != source_sha for p in packets):
+        if any(p.get('filing', {}).get('sha256') and p['filing']['sha256'] != source_sha for p in packets):
             raise ValueError('Source changed')
         print('Review evidence:', packets[0]['flag']['cik'], packets[0]['flag']['report_date'], flush=True)
         soup = BeautifulSoup(source.read_bytes(), 'lxml')
@@ -67,9 +91,8 @@ def main():
         tables = [t for t in soup.find_all('table') if any(tr.find(['td', 'th']) for tr in t.find_all('tr'))]
         table_ids = {id(t): i for i, t in enumerate(tables)}
         for packet in packets:
-            context_id = packet['output_position']['src_context_id']
-            context = soup.find(id=context_id)
-            facts = soup.find_all('ix:nonfraction', attrs={'contextref': context_id})
+            context_id = packet['output_position'].get('src_context_id')
+            context, facts = exact_context_facts(soup, context_id)
             concept = 'investmentownedatfairvalue' if args.rule == 'C104' else 'investmentownedatcost'
             cost_facts = [f for f in facts if (f.get('name') or '').split(':')[-1].lower() == concept]
             positions = []
@@ -119,6 +142,8 @@ def main():
                     if len(issuer_rows) >= 80 or len(token_rows) >= 80:
                         break
             reports.append({'row_id': packet['flag']['row_id'], 'source_path': str(source),
+                            'source_path_basis': 'packet' if packet.get('filing', {}).get('path') else 'exact_cached_cik_accession',
+                            'source_hash_previously_frozen': bool(packet.get('filing', {}).get('sha256')),
                             'source_sha256': source_sha, 'output_position': packet['output_position'],
                             'context_text': text(context), 'context_xml': str(context) if context else None,
                             'unit_declarations': unit_declarations,

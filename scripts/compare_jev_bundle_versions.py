@@ -15,7 +15,8 @@ from scripts.analyze_jev_screening import summarize
 from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
 
 NATURAL_RUNS = ('development_model_01', 'consumed_holdout_model_01', 'weak_probe_model_01',
-                'newly_ready_model_01', 'legend_model_01', 'temporal_model_01')
+                'newly_ready_model_01', 'legend_model_01', 'temporal_model_01',
+                'grouped_header_model_01')
 
 
 def main():

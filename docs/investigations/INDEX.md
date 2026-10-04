@@ -114,6 +114,16 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-06 - mg3 assessment: where position-match errors come from and what to change
 - 2026-09-07 - Match-gold batch mg4_contested: promotion gate for the contested-assignment flag
 - 2026-09-07 - Match-gold batch mg5_recall: random interior-singleton stratum (recall)
+- 2026-10-03 - B1 source-investigation traces and a Jev-ready evidence bundle
+- 2026-10-03 - Jev value-check smoke test prepared with source-reviewed packets
+- 2026-10-03 - Jev value-check smoke test completed: 18/18 cases, confidence order sensitivity
+- 2026-10-03 - Whole-SOI Jev context cost and size estimates
+- 2026-10-03 - B1 reference corpus and first Jev source-context ablation
+- 2026-10-03 - Experimental C107/X08 bundle builder and hybrid boundary
+- 2026-10-03 - Jev experiment on automatically assembled C107/X08 bundles
+- 2026-10-03 - Expanded Jev natural-case test across new filers and periods
+- 2026-10-03 - Isolated Jev hybrid screening build and bounded shadow evaluation
+- 2026-10-04 - Jev source completeness and presentation stability
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)

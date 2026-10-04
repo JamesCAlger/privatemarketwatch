@@ -85,6 +85,15 @@ evidence contracts. C107/X08 support does not establish support for these famili
 Preserve separate loans, share classes and other positions; an issuer-level match
 cannot clear a position-level flag.
 
+Cost-dependent bundles must preserve `cost_source` and `cost_reported`. The
+published `cost` can be an intentional first-observed-FV proxy rather than a
+current filing's reported cost. The v4 pilot contract accepts reported cost only:
+its retained reported value must equal published cost, and the pathway must be
+known. `derived_proxy` and `first_observed_fv_proxy` require a different contract
+covering donor observation, donor source, period, position chain and the proxy
+policy. They stay with B1; a current-SOI mismatch does not establish proxy error.
+C104 depends on fair value alone and does not require a reported-cost basis.
+
 ## Independent checks before clearance
 
 1. Recheck the output join and current flag predicate against the frozen inputs.

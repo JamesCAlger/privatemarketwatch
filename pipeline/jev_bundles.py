@@ -18,8 +18,8 @@ from bs4 import BeautifulSoup, NavigableString
 
 from pipeline.html_soi_evidence import _html_path, parse_period_date
 
-SCHEMA = "jev-value-bundle.v3"
-PARSER_VERSION = "jev-source-grid.v3"
+SCHEMA = "jev-value-bundle.v4"
+PARSER_VERSION = "jev-source-grid.v4"
 RULES = {
     "C104": {
         "fields": ["fair_value"], "predicate": "fair_value = 0",
@@ -38,7 +38,7 @@ RULES = {
 POSITION_FIELDS = (
     "source", "cik", "report_date", "accession_number", "row_id", "row_id_basis",
     "issuer_name", "instrument_description", "bdc_investment_identifier",
-    "cost", "fair_value", "cost_currency", "fair_value_currency", "cost_reported",
+    "cost", "fair_value", "cost_currency", "fair_value_currency", "cost_reported", "cost_source",
     "principal_amount", "shares_held", "maturity_date", "instrument_type",
     "src_context_id", "bdc_dimensions_raw", "accounting_scope_id",
     "accounting_record_class", "is_subsidiary", "jv_subsidiary",
@@ -62,11 +62,16 @@ _HEADER_PATTERNS = {
     "notes": r"^(?:footnotes?|notes?)$",
 }
 _NOTE_DEFINITION = re.compile(r"^(?:\((\d{1,2}|[a-z]|[+^#*]{1,3})\)|([+^#*]{1,3}))\s*(.{20,})$", re.I)
+_NOTE_PAYLOAD = r'(?:\d{1,2}|[a-z])(?:\s*,\s*(?:\d{1,2}|[a-z]))*|[+^#*]{1,3}'
 
 
 def _note_markers(text: str) -> set[str]:
-    markers = {('(' + m + ')') if re.fullmatch(r'[+^#*]+', m) else m.lower()
-               for m in re.findall(r'\((\d{1,2}|[a-z]|[+^#*]{1,3})\)', text, re.I)}
+    markers = set()
+    for group in re.findall(r'\((' + _NOTE_PAYLOAD + r')\)', text, re.I):
+        if re.fullmatch(r'[+^#*]+', group):
+            markers.add('(' + group + ')')
+        else:
+            markers.update(marker.strip().lower() for marker in group.split(','))
     # Symbol-only cells or suffix annotations; do not treat an instrument's
     # embedded arithmetic '+' as a note reference.
     suffix = re.search(r'(?<!\w)((?:[+^#*]\s*)+)$', text)
@@ -125,6 +130,20 @@ def decimal_text(value: Decimal | None) -> str | None:
     return format(value, "f") if value is not None else None
 
 
+def cost_basis_failures(output: dict) -> list[str]:
+    pathway = clean(output.get('cost_source'))
+    if pathway in {'derived_proxy', 'first_observed_fv_proxy'}:
+        return ['proxy_cost_requires_lineage']
+    if pathway not in {'', 'reported'}:
+        return ['unsupported_cost_pathway']
+    reported, published = number(output.get('cost_reported')), number(output.get('cost'))
+    if reported is None:
+        return ['unresolved_reported_cost_basis']
+    if published != reported:
+        return ['output_cost_differs_from_reported_basis']
+    return []
+
+
 def rule_fires(rule: str, row: dict) -> bool:
     cost, fv = number(row.get("cost")), number(row.get("fair_value"))
     if rule == "C104":
@@ -176,7 +195,7 @@ def _headers(rows: list) -> dict:
     for ri, row in enumerate(rows[:8]):
         mapping = {}
         for cell in row:
-            label = re.sub(r"\((?:\d{1,2}|[a-z]|[+^#*]{1,3})\)", "", cell["text"], flags=re.I)
+            label = re.sub(r'\((?:' + _NOTE_PAYLOAD + r')\)', '', cell['text'], flags=re.I)
             label = re.sub(r'\s*[+^#*\s]+$', '', label).strip().lower()
             for field, pattern in _HEADER_PATTERNS.items():
                 if re.fullmatch(pattern, label):
@@ -334,6 +353,24 @@ def _qname_namespace(element, qname: str | None) -> str | None:
     return None
 
 
+def _instrument_traits(text: str) -> dict:
+    """Explicit instrument words only; absence is unknown, never a contradiction."""
+    text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text).lower()
+    patterns = {
+        'lien': {'first': r'\b(?:first|1st)[ -]+lien\b', 'second': r'\b(?:second|2nd)[ -]+lien\b'},
+        'facility': {'revolver': r'\brevolv(?:er|ing)\b', 'term_loan': r'\bterm[ -]+loan\b'},
+        'equity': {'preferred': r'\bpreferred\s+(?:shares?|stocks?|units?|equity)\b',
+                   'common': r'\bcommon\s+(?:shares?|stocks?|units?|equity)\b'},
+    }
+    return {field: sorted(name for name, pattern in terms.items() if re.search(pattern, text))
+            for field, terms in patterns.items()}
+
+
+def _trait_conflicts(left: dict, right: dict) -> list:
+    return [field for field in left if len(left[field]) == len(right.get(field, [])) == 1
+            and left[field] != right[field]]
+
+
 def _identity_evidence(row, headers, contexts, output) -> dict:
     visible = ' '.join(_row_text(_field_cells(row, headers.get(f))) for f in ('issuer', 'instrument'))
     context_ids = sorted({f['context_id'] for c in row for f in c.get('inline_facts', []) if f.get('context_id')})
@@ -342,17 +379,37 @@ def _identity_evidence(row, headers, contexts, output) -> dict:
     visible_classes, context_classes = _classes(visible), _classes(context_text)
     output_classes = _classes(' '.join(clean(output.get(f)) for f in
                                       ('issuer_name', 'instrument_description', 'bdc_investment_identifier')))
+    visible_instrument = _row_text(_field_cells(row, headers.get('instrument')))
+    # Full identifiers also contain issuer names. Parse only an explicit
+    # Investment Type segment, so issuer words cannot create tranche conflicts.
+    context_instruments = []
+    for context in selected.values():
+        for dimension in context['dimensions']:
+            spaced = re.sub(r'([a-z])([A-Z])', r'\1 \2', dimension['text'])
+            match = re.search(r'\b(?:Investment\s+Type|Type\s+of\s+Investment)\s+(.+?)'
+                              r'(?=,|\bMaturity\b|\bDissolution\b|\bReference\s+Rate\b|\bInterest\s+Rate\b|$)',
+                              spaced, re.I)
+            if match:
+                context_instruments.append(match[1])
+    visible_traits = _instrument_traits(visible_instrument)
+    context_traits = _instrument_traits(' '.join(context_instruments))
+    output_traits = _instrument_traits(clean(output.get('instrument_description')))
+    source_conflicts = _trait_conflicts(visible_traits, context_traits)
     reasons = []
     if any(c.get('conflicting_definitions') for c in selected.values()):
         reasons.append('conflicting_source_context_definition')
     if visible_classes and context_classes and set(visible_classes) != set(context_classes):
         reasons.append('visible_context_share_class_conflict')
+    reasons.extend('visible_context_instrument_conflict:' + field for field in source_conflicts)
     entities = {c['entity_identifier'].lstrip('0') for c in selected.values() if c['entity_identifier']}
     if entities and entities != {clean(output.get('cik')).lstrip('0')}:
         reasons.append('source_context_entity_conflict')
     return {'visible_text': visible, 'visible_classes': visible_classes,
             'context_classes': context_classes, 'output_classes': output_classes,
             'contexts': selected, 'context_ids': context_ids,
+            'visible_instrument_traits': visible_traits, 'context_instrument_traits': context_traits,
+            'output_instrument_traits': output_traits,
+            'output_instrument_compatible': not _trait_conflicts(visible_traits, output_traits),
             'output_class_compatible': not (visible_classes and output_classes and
                                            set(visible_classes) != set(output_classes)),
             'blocking_reasons': reasons}
@@ -755,6 +812,8 @@ def build_bundle(flag: dict, matched_rows: list[dict], provenance: dict, *, cach
             reasons.append("flag_output_mismatch:" + primary_field)
         if not rule_fires(rule, output):
             reasons.append("current_rule_predicate_not_satisfied")
+        if 'cost' in RULES[rule]['fields']:
+            reasons.extend(cost_basis_failures(output))
         for field in RULES[rule]["fields"]:
             if number(output.get(field)) is None:
                 reasons.append(f"missing_output:{field}")
@@ -818,7 +877,7 @@ def model_state(bundle: dict) -> dict:
                                              for field, value in candidate["source_values"].items()}})
     for table in tables.values():
         table["rows"] = [v for _, v in sorted(table["rows"].items())]
-    return {"schema_version": "jev-value-state.v1", "bundle_id": bundle["bundle_id"], "rule": bundle["rule"],
+    return {"schema_version": "jev-value-state.v2", "bundle_id": bundle["bundle_id"], "rule": bundle["rule"],
             "output_position": bundle["output_position"], "computed_output": bundle["computed_output"],
             "source_candidates": candidates, "source_tables": list(tables.values()), "source_notes": list(notes.values()),
             "evidence_status": bundle["evidence_status"], "retrieval": bundle["retrieval"],

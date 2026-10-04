@@ -9,7 +9,7 @@ from pipeline.jev_bundles import clean, number
 
 
 def compare_context_anchor(bundle):
-    result = {'method': 'context-anchor.v1', 'status': 'unresolved', 'source_id': None,
+    result = {'method': 'context-anchor.v2', 'status': 'unresolved', 'source_id': None,
               'reasons': [], 'production_clearance_allowed': False,
               'independent_identity_verified': False}
     output = bundle.get('output_position', {})
@@ -30,7 +30,9 @@ def compare_context_anchor(bundle):
     identity = candidate['identity_evidence']
     context = identity['contexts'][context_id]
     result['source_id'] = candidate['evidence_id']
-    if candidate.get('blocking_reasons') or identity.get('blocking_reasons') or identity.get('output_class_compatible') is False:
+    if (candidate.get('blocking_reasons') or identity.get('blocking_reasons')
+            or identity.get('output_class_compatible') is False
+            or identity.get('output_instrument_compatible') is False):
         result['reasons'].append('source_evidence_conflict')
     if (context.get('instant') != output.get('report_date')
             or candidate.get('report_date') != output.get('report_date')
