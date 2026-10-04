@@ -3,6 +3,12 @@
 Date: 2026-10-03. Status: isolated implementation and development evaluation active;
 production screening and automatic clearance are not enabled.
 
+Current checkpoint (2026-10-04): **37/67 bundles ready**, with 30 explicit B1
+fallbacks. **100/100 API calls used**, 42 unique natural flags called, zero
+independently audited clearances and zero B1 suppression. Work continues offline.
+The inference estimate is about **$0.0664**; bundle maintenance and B1 review cost
+are not measured. See the [interim assessment](06_interim_assessment.md) first.
+
 Execution is active in the isolated `.claude/worktrees/jev-screening-pilot`
 worktree. See the [run log](05_run_log.md) for checkpoints and scope accounting.
 Production code, data and queues remain outside this work.
@@ -26,6 +32,11 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Context size and cost](08_context_size_and_cost.md) | Four real filing payload comparisons, provider limits and measured-token cost estimate |
 | [Independent review handoff](09_independent_review_handoff.md) | Source-first review inputs that withhold model answers and leave all audit checks unfinished |
 | [Source-note stress test](10_source_note_stress.md) | Four synthetic error controls, including misleading instructions inside copied filing notes |
+| [Remaining bundle work](11_remaining_bundle_work.md) | Evidence gaps, recovered note tables and section-scope drift |
+| [Factual explanations](12_factual_explanations.md) | Source comparisons and routing reasons without invented model rationales |
+| [Rule workload](13_rule_workload.md) | Wider coverage, review overlap and limits on potential savings |
+| [Confidence sensitivity](14_confidence_sensitivity.md) | Separate experiment arms and why the cutoff remains uncalibrated |
+| [Zero-value controls](15_zero_value_controls.md) | Final paired C104 test and complete 100-call accounting |
 
 ## Proposed operating model
 
@@ -71,13 +82,3 @@ Current work addresses source-context completeness and error controls. The
 results do not justify production clearance. The owner has instructed execution
 to continue until stopped in this chat; eight hours is a planning window, not an
 automatic stop condition.
-
-The [remaining bundle work](11_remaining_bundle_work.md) separates reusable evidence gaps from cases requiring B1 investigation, with overlapping cause counts kept explicit.
-
-[Factual explanations](12_factual_explanations.md) show how recorded answers, source comparisons and routing reasons can replace some lost narrative without inventing a rationale.
-
-[Rule workload](13_rule_workload.md) distinguishes wider coverage from potential review savings within the reserved funds.
-
-[Confidence sensitivity](14_confidence_sensitivity.md) shows coverage changes across cutoffs without treating the development observations as safety calibration.
-
-[Zero-value controls](15_zero_value_controls.md) record the final paired test. The 100-call cap is exhausted; further work is offline. All routes still retain B1.

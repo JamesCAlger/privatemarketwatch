@@ -83,3 +83,5 @@ The bounded scripts/freeze_jev_review_findings.py checks the prepared manifest/i
 Twenty focused tests pass for the findings validator, including unresolved outcomes, source and envelope changes, timing, incomplete checks, invalid monetary values, unresolved siblings and contradictory amounts. The CLI help path was exercised. No completed real-case form was submitted or frozen; independent reviews remain zero.
 
 Five additional CLI integration tests pass using temporary synthetic fixtures: unresolved-record sealing, changed source, changed holdings, changed prepared input and overwrite refusal. They do not count as real completed reviews.
+
+The offline verify_jev_review_bindings.py check matches all 67 current packet fingerprints to the earlier blind_review_inputs_43 bindings, verifies prepared-file hashes, checks the holdings snapshot, and rehashes all 26 original cached sources. All match. Artifact: review_binding_check_02b194e6ef876029.json under the pilot root. This verifies content integrity against saved records, not independent evidence completeness; completed reviews remain zero.
