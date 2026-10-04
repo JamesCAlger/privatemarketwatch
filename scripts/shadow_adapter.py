@@ -54,6 +54,24 @@ def _in(ids: set[str]) -> str:
     return ", ".join(f"'{x}'" for x in sorted(ids))
 
 
+# A midnight time component on a date ('2026-03-31 00:00:00'). read_csv_auto infers
+# TIMESTAMP for a whole report_date column when ANY row carries one (the N-PORT rows
+# in holdings-derived artifacts do since the typed parquet companions, 2026-09-03),
+# and CAST(TIMESTAMP AS VARCHAR) then appends it to every row. review_queue only
+# localizes exact 'YYYY-MM-DD' periods, so the suffix blanked cik/report_date and
+# collided review_ids across quarters (found 2026-10-04).
+_MIDNIGHT_RE = r"^(\d{4}-\d{2}-\d{2})[ T]00:00:00(\.0+)?$"
+
+
+def _date_key(expr: str) -> str:
+    """SQL: `expr` as text with a midnight time component stripped.
+
+    Robust to the column being VARCHAR, DATE or TIMESTAMP. Anything that is not a
+    date-at-midnight (blank, '2025Q4', a real time of day) passes through unchanged.
+    """
+    return f"regexp_replace(CAST({expr} AS VARCHAR), '{_MIDNIGHT_RE}', '\\1')"
+
+
 def _oracle_select() -> str | None:
     f = ORACLE_CHECK_RESULTS_FILE
     if not f.exists():
@@ -65,7 +83,7 @@ def _oracle_select() -> str | None:
            'advisory' AS enforcement,
            COALESCE(CAST(cik AS VARCHAR), '(global)') AS cik,
            'report_date' AS period_kind,
-           COALESCE(CAST(report_date AS VARCHAR), '') AS period,
+           COALESCE({_date_key('report_date')}, '') AS period,
            lower(status) AS status,
            TRY_CAST(metric_value AS DOUBLE) AS metric, 'oracle_metric' AS metric_name,
            COALESCE(TRY_CAST(detail_rows AS BIGINT), TRY_CAST(residual_rows AS BIGINT), 0) AS n_units,
@@ -116,7 +134,7 @@ def _source_recon_select() -> str | None:
     parts: list[str] = []
     if res.exists():
         parts.append(f"""
-            SELECT 'rc' AS src, CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+            SELECT 'rc' AS src, CAST(cik AS VARCHAR) AS cik, {_date_key('report_date')} AS report_date,
                    CAST(mechanism AS VARCHAR) AS mechanism,
                    CAST(blocking_issue AS BOOLEAN) AS blocking,
                    CAST(confidence AS VARCHAR) AS confidence,
@@ -131,7 +149,7 @@ def _source_recon_select() -> str | None:
             FROM read_csv_auto('{res.as_posix()}', sample_size=-1)""")
     if so.exists():
         parts.append(f"""
-            SELECT 'so' AS src, CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+            SELECT 'so' AS src, CAST(cik AS VARCHAR) AS cik, {_date_key('report_date')} AS report_date,
                    CAST(mechanism AS VARCHAR) AS mechanism,
                    CAST(is_blocking AS BOOLEAN) AS blocking,
                    CAST(confidence AS VARCHAR) AS confidence,
@@ -185,7 +203,7 @@ def _row_issues_select() -> str | None:
                 ELSE 'advisory' END AS enforcement,
            COALESCE(CAST(cik AS VARCHAR), '(global)') AS cik,
            'report_date' AS period_kind,
-           COALESCE(CAST(report_date AS VARCHAR), '') AS period,
+           COALESCE({_date_key('report_date')}, '') AS period,
            CASE WHEN bool_or(upper(severity) = 'FAIL') THEN 'fail'
                 WHEN bool_or(upper(severity) = 'WARN') THEN 'warn'
                 ELSE 'skip' END AS status,
@@ -195,7 +213,7 @@ def _row_issues_select() -> str | None:
                 ELSE lower(any_value(action)) END AS mechanism,
            lower(any_value(evidence_strength)) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY rule_id, cik, report_date
+    GROUP BY rule_id, cik, {_date_key('report_date')}
     """
 
 
@@ -215,7 +233,7 @@ def _fund_financials_select() -> str | None:
     if not f.exists():
         logger.info("adapter: fund_financials_validation_current absent -- skip")
         return None
-    period = "COALESCE(CAST(report_date AS VARCHAR), CAST(report_quarter AS VARCHAR), '')"
+    period = f"COALESCE({_date_key('report_date')}, {_date_key('report_quarter')}, '')"
     return f"""
     SELECT 'fund_financials' AS engine, CAST(check_code AS VARCHAR) AS rule_name,
            CASE WHEN bool_or(upper(severity) = 'FAIL') THEN 'tight' ELSE 'weak' END AS tier,
@@ -252,7 +270,7 @@ def _html_template_select() -> str | None:
     return f"""
     SELECT 'html_extract' AS engine, 'html_agg' AS rule_name, 'tight' AS tier,
            'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
-           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           'report_date' AS period_kind, {_date_key('report_date')} AS period,
            CASE WHEN bool_or(upper(agg_status) = 'FAIL') THEN 'fail'
                 WHEN bool_or(upper(agg_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
            round(any_value(TRY_CAST(adj_ratio AS DOUBLE)), 3) AS metric, 'adj_ratio' AS metric_name,
@@ -260,15 +278,15 @@ def _html_template_select() -> str | None:
            CASE WHEN bool_or(CAST(drift_detected AS BOOLEAN)) THEN 'drift'
                 ELSE CAST(NULL AS VARCHAR) END AS mechanism,
            CAST(NULL AS VARCHAR) AS src_confidence
-    FROM {t} GROUP BY cik, report_date
+    FROM {t} GROUP BY cik, {_date_key('report_date')}
     UNION ALL
     SELECT 'html_extract', 'html_carry', 'weak', 'advisory', CAST(cik AS VARCHAR),
-           'report_date', CAST(report_date AS VARCHAR),
+           'report_date', {_date_key('report_date')},
            CASE WHEN bool_or(upper(carry_status) = 'FAIL') THEN 'warn'
                 WHEN bool_or(upper(carry_status) = 'PASS') THEN 'pass' ELSE 'skip' END,
            round(any_value(TRY_CAST(carry_rate AS DOUBLE)), 3), 'carry_rate', count(*),
            CAST(NULL AS VARCHAR), CAST(NULL AS VARCHAR)
-    FROM {t} GROUP BY cik, report_date
+    FROM {t} GROUP BY cik, {_date_key('report_date')}
     """
 
 
@@ -289,7 +307,7 @@ def _gav_recon_select() -> str | None:
            CASE WHEN bool_or(CAST(blocks_verified AS BOOLEAN)) THEN 'blocking_eligible'
                 ELSE 'advisory' END AS enforcement,
            CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
-           CAST(report_date AS VARCHAR) AS period,
+           {_date_key('report_date')} AS period,
            CASE WHEN bool_or(upper(reconciliation_status) = 'FAIL') THEN 'fail'
                 WHEN bool_or(upper(reconciliation_status) = 'WARN') THEN 'warn'
                 WHEN bool_or(upper(reconciliation_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
@@ -300,7 +318,7 @@ def _gav_recon_select() -> str | None:
                 ELSE lower(any_value(flag)) END AS mechanism,
            lower(any_value(comparison_confidence)) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY cik, report_date
+    GROUP BY cik, {_date_key('report_date')}
     """
 
 
@@ -317,7 +335,7 @@ def _fund_strategy_select() -> str | None:
     return f"""
     SELECT 'fund_strategy' AS engine, 'fund_strategy_validation' AS rule_name, 'weak' AS tier,
            'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
-           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           'report_date' AS period_kind, {_date_key('report_date')} AS period,
            CASE WHEN bool_or(upper(validation_status) = 'UNDER_REVIEW') THEN 'warn'
                 WHEN bool_or(upper(validation_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
            round(100.0 * sum(COALESCE(TRY_CAST(affected_fair_value AS DOUBLE), 0))
@@ -325,7 +343,7 @@ def _fund_strategy_select() -> str | None:
            'affected_pct' AS metric_name, count(*) AS n_units,
            lower(any_value(strategy_source)) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY cik, report_date
+    GROUP BY cik, {_date_key('report_date')}
     """
 
 
@@ -343,13 +361,13 @@ def _nonaccrual_select() -> str | None:
     return f"""
     SELECT 'nonaccrual' AS engine, 'nonaccrual_flag' AS rule_name, 'weak' AS tier,
            'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
-           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           'report_date' AS period_kind, {_date_key('report_date')} AS period,
            'warn' AS status,
            CAST(count(*) AS DOUBLE) AS metric, 'nonaccrual_positions' AS metric_name,
            count(*) AS n_units,
            lower(any_value(nonaccrual_source)) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY cik, report_date
+    GROUP BY cik, {_date_key('report_date')}
     """
 
 
@@ -420,14 +438,14 @@ def _derivative_role_select() -> str | None:
     SELECT 'derivative_role' AS engine, mechanism AS rule_name,
            'tight' AS tier, 'advisory' AS enforcement,
            CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
-           CAST(report_date AS VARCHAR) AS period,
+           {_date_key('report_date')} AS period,
            'fail' AS status,
            round(sum(TRY_CAST(net_fv AS DOUBLE)) / 1e6, 2) AS metric,
            'uncertain_deriv_fv_m' AS metric_name,
            count(*) AS n_units,
            mechanism AS mechanism, lower(any_value(role_confidence)) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY cik, report_date, mechanism
+    GROUP BY cik, {_date_key('report_date')}, mechanism
     """
 
 
@@ -442,7 +460,7 @@ def _agent_a_select() -> str | None:
     return f"""
     SELECT 'agentA' AS engine, rule_name, 'tight' AS tier, 'advisory' AS enforcement,
            CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
-           CAST(report_date AS VARCHAR) AS period,
+           {_date_key('report_date')} AS period,
            CASE WHEN bool_or(lower(status) = 'fail') THEN 'fail'
                 WHEN bool_or(lower(status) = 'warn') THEN 'warn' ELSE 'pass' END AS status,
            TRY_CAST(max(TRY_CAST(xbrl_residual AS DOUBLE)) AS DOUBLE) AS metric,
@@ -450,7 +468,7 @@ def _agent_a_select() -> str | None:
            CAST(count(*) AS BIGINT) AS n_units,
            mode(mechanism) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
-    GROUP BY cik, report_date, rule_name
+    GROUP BY cik, {_date_key('report_date')}, rule_name
     """
 
 
@@ -491,7 +509,7 @@ def _provenance_select() -> str | None:
     if det_exists:
         queued_cte = f"""
         queued AS (
-            SELECT DISTINCT cik, report_date, output_row_id AS qrow
+            SELECT DISTINCT cik, {_date_key('report_date')} AS report_date, output_row_id AS qrow
             FROM read_csv_auto('{det.as_posix()}', header=true, all_varchar=true)
             WHERE lower(COALESCE(blocking_issue, '')) IN ('true', '1')
         ),"""
@@ -510,7 +528,8 @@ def _provenance_select() -> str | None:
             SELECT p.*,
                    (q.qrow IS NOT NULL
                     AND p.reason_code IN ({tight})) AS already_queued
-            FROM read_csv_auto('{prov}', header=true, all_varchar=true) p
+            FROM (SELECT * REPLACE ({_date_key('report_date')} AS report_date)
+                  FROM read_csv_auto('{prov}', header=true, all_varchar=true)) p
             LEFT JOIN queued q
               ON q.cik = p.cik AND q.report_date = p.report_date
              AND q.qrow = p.row_id

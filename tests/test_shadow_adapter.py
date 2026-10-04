@@ -199,3 +199,92 @@ class TestSourceReconFeed:
             blocking_issue=False, affected_output_fair_value=1_000_000.0)])
         out = self._run(monkeypatch, tmp_path, res)
         assert out.empty
+
+
+class TestReportDateKey:
+    """Midnight-suffixed report dates must not reach the ledger (2026-10-04).
+
+    One timestamp-form row makes read_csv_auto infer TIMESTAMP for the whole
+    column; the old CAST then rendered every period as 'YYYY-MM-DD 00:00:00',
+    which review_queue cannot localize -- blank cik/report_date and review_ids
+    that collide across quarters.
+    """
+
+    def _issue(self, **kw):
+        base = {
+            "dataset": "private_markets_holdings", "source": "bdc",
+            "cik": "0001287750", "report_date": "2023-09-30", "rule_id": "C107",
+            "severity": "WARN", "evidence_strength": "WEAK", "status": "OPEN",
+            "action": "REVIEW",
+        }
+        return {**base, **kw}
+
+    def _run(self, monkeypatch, tmp_path, rows):
+        import scripts.shadow_adapter as adp
+        f = tmp_path / "row_validation_issues.csv"
+        pd.DataFrame(rows).to_csv(f, index=False)
+        monkeypatch.setattr(adp, "ROW_VALIDATION_ISSUES_FILE", f, raising=False)
+        frag = adp._row_issues_select()
+        assert frag is not None
+        return duckdb.connect().execute(frag).fetchdf()
+
+    def test_timestamp_row_does_not_reformat_other_periods(self, monkeypatch, tmp_path):
+        out = self._run(monkeypatch, tmp_path, [
+            self._issue(report_date="2023-09-30"),
+            self._issue(report_date="2023-12-31"),
+            self._issue(source="nport", cik="0001557265",
+                        report_date="2025-06-30 00:00:00", rule_id="C104"),
+        ])
+        assert sorted(out["period"]) == ["2023-09-30", "2023-12-31", "2025-06-30"]
+
+    def test_quarters_get_distinct_localized_review_ids(self, monkeypatch, tmp_path):
+        from pipeline import review_queue
+        out = self._run(monkeypatch, tmp_path, [
+            self._issue(report_date="2023-09-30"),
+            self._issue(report_date="2023-12-31"),
+            self._issue(source="nport", cik="0001557265",
+                        report_date="2025-06-30 00:00:00", rule_id="C104"),
+        ])
+        items = [review_queue._queue_item({k: str(v) for k, v in r.items()})
+                 for r in out[out["rule_name"] == "C107"].to_dict("records")]
+        assert all(i is not None for i in items)
+        assert {i["report_date"] for i in items} == {"2023-09-30", "2023-12-31"}
+        assert {i["cik"] for i in items} == {"0001287750"}
+        assert len({i["review_id"] for i in items}) == 2
+
+    def test_mixed_text_forms_of_one_date_group_together(self, monkeypatch, tmp_path):
+        # A non-date value keeps the column VARCHAR, so both spellings of the same
+        # date survive as text. They are one (cik, quarter, rule), not two.
+        out = self._run(monkeypatch, tmp_path, [
+            self._issue(report_date="2023-09-30"),
+            self._issue(report_date="2023-09-30 00:00:00"),
+            self._issue(report_date="unknown", rule_id="C202"),
+        ])
+        c107 = out[out["rule_name"] == "C107"]
+        assert len(c107) == 1
+        assert c107.iloc[0]["period"] == "2023-09-30"
+        assert c107.iloc[0]["n_units"] == 2
+
+    def test_non_midnight_values_pass_through_unchanged(self):
+        # False-positive guard: only a midnight time component is stripped.
+        import scripts.shadow_adapter as adp
+        cases = {
+            "2026-03-31": "2026-03-31",
+            "2026-03-31 00:00:00": "2026-03-31",
+            "2026-03-31T00:00:00": "2026-03-31",
+            "2026-03-31 00:00:00.000": "2026-03-31",
+            "2026-03-31 14:05:00": "2026-03-31 14:05:00",
+            "2025Q4": "2025Q4",
+            "": "",
+        }
+        con = duckdb.connect()
+        for raw, want in cases.items():
+            got = con.execute(f"SELECT {adp._date_key('?')}", [raw]).fetchone()[0]
+            assert got == want, raw
+
+    def test_typed_date_and_timestamp_columns(self):
+        import scripts.shadow_adapter as adp
+        con = duckdb.connect()
+        key = adp._date_key("d")
+        assert con.execute(f"SELECT {key} FROM (SELECT DATE '2026-03-31' AS d)").fetchone()[0] == "2026-03-31"
+        assert con.execute(f"SELECT {key} FROM (SELECT TIMESTAMP '2026-03-31 00:00:00' AS d)").fetchone()[0] == "2026-03-31"

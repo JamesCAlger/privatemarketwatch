@@ -210,6 +210,49 @@ def test_name_keyed_row_not_localized(tmp_path):
     assert items[0]["review_id"].startswith("RVQ_BLK_")
 
 
+def test_quarter_label_periods_get_distinct_review_ids(tmp_path):
+    # cross_source writes periods as quarter labels; report_date stays blank, so the
+    # id must fall back to the raw period or every quarter of a fund+rule collides.
+    rows = [
+        _row(engine="cross_source", rule_name="xs_nav_highlights_vs_companyfacts",
+             tier="tight", cik="0001633336", period_kind="report_quarter", period=p,
+             status="fail", metric="5.0", metric_name="pct_diff", n_units="1")
+        for p in ("2024q1", "2025q1", "2026q1")
+    ]
+    _, items = _build(tmp_path, rows)
+    assert all(i["report_date"] == "" for i in items)
+    assert len({i["review_id"] for i in items}) == 3
+
+
+def test_dated_review_id_unchanged_by_period_fallback(tmp_path):
+    # Rows with a real date keep the id they had before the fallback existed.
+    rows = [
+        _row(engine="row_validation", rule_name="C107", tier="weak", cik="0001287750",
+             period_kind="report_date", period="2026-03-31", status="warn",
+             metric="3.0", metric_name="issue_rows", n_units="3", mechanism="review"),
+    ]
+    _, items = _build(tmp_path, rows)
+    base = "|".join(["row_validation", "C107", "0001287750", "report_date",
+                     "2026-03-31", "review"])
+    assert items[0]["review_id"] == f"RVQ_REV_{review_queue.short_hash(base, 12)}"
+
+
+def test_global_run_timestamp_stays_out_of_review_id(tmp_path):
+    # False-positive guard: validation_rules rows carry a run timestamp as period.
+    # It must not enter the id, or the id would change on every run.
+    ids = []
+    for stamp in ("2026-08-12 09:32:27.273627+01", "2026-10-04 12:26:21.000000+01"):
+        d = tmp_path / stamp[:10]
+        d.mkdir()
+        _, items = _build(d, [
+            _row(engine="validation_rules", rule_name="PC02", tier="tight", cik="(global)",
+                 period_kind="global", period=stamp, status="fail", metric="0.2",
+                 metric_name="hit_rate", n_units="4"),
+        ])
+        ids.append(items[0]["review_id"])
+    assert ids[0] == ids[1]
+
+
 def test_anchor_classification(tmp_path):
     rows = [
         _row(engine="source_recon", rule_name="src", tier="tight", cik="0000000001",

@@ -182,12 +182,18 @@ def _review_id(
     mechanism: str,
     rule_name: str,
     period_kind: str,
+    period: str,
     unit_label: str,
 ) -> str:
     # source_recon ids must match the existing bdc_cik_review worklist/verdicts.
     if engine == "source_recon" and report_date:
         return make_review_id(cik, report_date, mechanism)
-    base = "|".join([engine, rule_name, unit_label, period_kind, report_date, mechanism])
+    # A period that is not 'YYYY-MM-DD' (quarter labels like '2024q1') leaves
+    # report_date blank; hashing the blank gave one id to every quarter of the same
+    # fund + rule. Fall back to the raw period. Global rows carry a run timestamp
+    # there, not an identity, so they stay out of the hash (ids stable across runs).
+    id_period = report_date or ("" if period_kind == "global" else period)
+    base = "|".join([engine, rule_name, unit_label, period_kind, id_period, mechanism])
     prefix = "BLK" if lane == "blocker" else "REV"
     return f"RVQ_{prefix}_{short_hash(base, 12)}"
 
@@ -227,6 +233,7 @@ def _queue_item(row: dict[str, str]) -> dict[str, Any] | None:
             mechanism=mechanism,
             rule_name=rule_name,
             period_kind=period_kind,
+            period=period,
             unit_label=unit_label,
         ),
         "lane": lane,
