@@ -73,3 +73,5 @@ to continue until stopped in this chat; eight hours is a planning window, not an
 automatic stop condition.
 
 The [remaining bundle work](11_remaining_bundle_work.md) separates reusable evidence gaps from cases requiring B1 investigation, with overlapping cause counts kept explicit.
+
+[Factual explanations](12_factual_explanations.md) show how recorded answers, source comparisons and routing reasons can replace some lost narrative without inventing a rationale.

@@ -665,3 +665,20 @@ Q3-2025/Q1-2026. No continuation policy relaxation. Layout profiler now preserve
 local/other-table section evidence, unresolved reasons and note-table association
 paths; six focused profiler tests pass (two new). This is descriptive evidence,
 not validation of all filing pages or a new human audit.
+
+## 2026-10-04 checkpoint: factual investigation explanations
+
+- Added an isolated pure explanation function and bounded offline CLI. Bundle and
+  receipt hashes are checked; source comparisons are recomputed instead of trusting
+  a stored agreement boolean. Missing/unbound source choices cannot invent values.
+- Generated 20 explanations from existing frozen records: 12 current-development
+  records (eight observations, four blocked) and eight synthetic scale controls.
+  Full routing receipts and provider/source/holdings hashes are retained. No calls.
+- Real examples distinguish low source confidence (Fortress Exemplis) from missing
+  independent review (Onex VTC). A synthetic FV-scale error illustrates numeric
+  mismatch reporting. These are facts and routes, not invented model rationales,
+  source-certification claims or explanations of the underlying extractor defect.
+- Eight focused explanation tests pass. Historical observations remain explicitly
+  separate from the latest builder/data version; B1 work is retained throughout.
+
+Combined validation after the explanation work: 326 targeted tests passed. Nineteenth bounded production metadata audit: zero changed paths. No full suite, production rebuild/export or production-writing semantic diff was run.
