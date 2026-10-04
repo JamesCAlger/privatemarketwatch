@@ -132,7 +132,7 @@ that identity is correct merely because amounts agree.
   comparisons. Do not search by the disputed amount to manufacture a match.
 - Keep original source snippets/coordinates and compact repeated headers/notes.
   Oversized evidence routes to B1; do not truncate required evidence to fit.
-- The existing 26,000 cl100k_base estimate is a proxy, not Jev's tokenizer or a
+- The current 22,000 cl100k_base request cap (reduced from 26,000) is a proxy, not Jev's tokenizer or a
   certified context-limit check. Validate limits for the pinned provider/model.
 - Pin the model, questions, rule contract and routing configuration per run.
   Record provider token usage, latency, cost basis and failed attempts.

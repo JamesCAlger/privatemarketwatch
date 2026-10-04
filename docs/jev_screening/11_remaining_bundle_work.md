@@ -225,3 +225,13 @@ navigation excerpts, not a complete table bundle. The raw source is unchanged.
 The linked [proxy-cost investigation](07_proxy_cost_evidence.md) now also records
 possible main/supplemental row overlap, a separate question from whether each
 reported negative cost matches its source.
+
+## 2026-10-04: role-helper coverage across existing filings
+
+The offline role helper was applied to 51 distinct candidate tables from 23 cached filings, covering all 11 funds with retrieved candidates. It recognized 14 position-value tables across five funds and returned unknown for 37 tables across six funds. No table was classified as ambiguous or as unfunded commitments in this candidate-conditioned sample.
+
+Unknowns include combined issuer headings (Ares, Crescent), no explicit instrument column (Oaktree), symbolic note markers (Varagon), an Investment/Industry issuer convention (Goldman), and multi-marker numeric footnotes (Fortress). These are explicit limitations of the narrow helper, not proof that the underlying tables lack position data. No aliases or scope rules were widened to improve this count.
+
+Crucially, the supplemental AB Centers commitment table is not in this candidate-table sample. It was identified by the separate four-row source investigation. Therefore these counts measure coverage conditional on existing retrieval, not schedule-role accuracy, full-filing recall or duplicate detection. A future role-aware bundle must inventory supplemental disclosures independently of the cost/FV candidate search before claiming relevant-schedule recall.
+
+Artifact: disclosure_role_profile_a042a86bbf1a9146.json. Original headers, source hashes and table coordinates are retained. Builder, readiness, model observations and routing remain unchanged. The helper remains optional and unintegrated.
