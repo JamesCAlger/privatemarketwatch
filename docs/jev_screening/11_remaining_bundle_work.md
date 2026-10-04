@@ -1,7 +1,7 @@
-﻿# Remaining bundle work
+# Remaining bundle work
 
-Basis: `explicit_visibility_v4_52`, 67 selected natural flags across 11 funds.
-Its structured evidence and blocker counts are unchanged from replay 48.
+Basis: `dependency_bound_v4_55`, 67 selected natural flags across 11 funds.
+Its structured evidence and blocker counts are unchanged from replays 48 and 52.
 There are 39 evidence-ready and 28 blocked bundles. Three ready bundles exceed
 the runner's size proxy cap. Readiness is not an independent audit.
 The blocker profile counts each flag once per cause; causes overlap and must not
@@ -286,3 +286,13 @@ A separate source-column method reads the issuer cell only where an exact-contex
 Concrete examples: AB Centers' source issuer column recovers the clean name from both polluted commitment-row labels, finding three main-schedule rows plus two commitment rows without Petvet. TCW's separate exploratory position remains unsupported by automatic source-column recovery because its rollforward header is Name of Investment and combines issuer/instrument/rate. A manually source-confirmed Superior Industries phrase finds nine mentions, including the primary schedule, comparative rows and other disclosures; that manual arm is not automatic coverage. For Oaktree BioXcel, broader navigation includes loans, common stock, warrants, acquisition-date tables and both current/comparative schedules, illustrating why a borrower match cannot select a position.
 
 Artifacts: disclosure_search_profile_da03743e49495fec.json (all 67) and disclosure_search_31d4e77534df5bba.json (two investigated sources). Earlier published-name-only profile ddb2f2b271e77fcf is retained. Twenty-seven focused search/seed tests pass. The helper remains unintegrated; replay dependency_bound_v4_55, 39/28 readiness, request payloads and 100-call accounting are unchanged. No independent audits or production changes.
+
+## 2026-10-04: header-continuation geometry probe
+
+Added an optional, non-mutating diagnostic for a headerless table between two tables with identical issuer/instrument/cost/FV header text and column spans. It requires agreeing table periods, checks every recognized monetary local-name fact against the proposed columns, and requires matching context period/entity. Hidden content, unsupported layout, shifted columns, missing fields and conflicting contexts remain unresolved. The result never applies inherited headers or certifies ownership, notes, taxonomy, units or position identity.
+
+On the three already investigated headerless cases, CMG Holdco's Crescent table 36 is geometrically consistent with tables 35 and 37: all 16 cost and 16 FV facts align with the proposed columns and expected period/entity. MES Intermediate's Varagon table 55 remains unresolved because adjacent header fields are missing; Krayden's table 11 remains unresolved because adjacent headers/period support are missing and custom cost concepts are outside this diagnostic's mapping. Krayden's independently observed visible/context instrument conflict remains unresolved too.
+
+This isolates a plausible reusable continuation mechanism in one consumed filing, not validated automatic support. Any implementation must retain the donor header's actual table/row coordinates separately from data-row boundaries in the receiving table, and independently establish schedule/ownership/notes continuity. Copying a header record into another table would misrepresent its provenance and can alter section-boundary handling. No such copy was applied.
+
+Artifact: header_continuation_probe_972590ca4ffead8e.json. Seventeen focused tests pass, including column changes, merged cells, changed periods/entities, hidden evidence, custom concepts and a contradiction on a non-target row. All three frozen bundles retain their blocked status; the overall 39/28 split and API accounting are unchanged. This is an isolated diagnostic with no production changes.

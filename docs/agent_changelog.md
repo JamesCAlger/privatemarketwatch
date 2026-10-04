@@ -13601,3 +13601,8 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 
 - Measured hypothetical disclosure appendices on the same 39 ready requests: full records add 22.2% aggregate proxy tokens and one additional over-cap request; locator-only records add 8.9% but omit adjudication evidence.
 - BioXcel's 14 extra rows raise its request from 13,657 to 24,360 proxy tokens. This is payload sizing, not model-quality or billing evidence. No API calls, runtime integration or production changes.
+
+## 2026-10-04 -- Jev pilot: bounded continuation geometry
+
+- Added an optional non-mutating header-continuation diagnostic and 17 passing focused tests. CMG's 16 cost/16 FV facts align between matching adjacent headers; both Varagon cases remain unresolved.
+- No header inheritance or readiness promotion. Ownership, notes, units and source identity remain separate checks; production and model accounting unchanged. Evidence in docs/jev_screening/11_remaining_bundle_work.md.
