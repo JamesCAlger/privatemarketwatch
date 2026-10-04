@@ -756,3 +756,11 @@ Only three queued C107 groups are fully selected: the three Ares single-row grou
 Before any queue integration: normalize and validate the ledger's date contract, require unique review IDs across periods, account for every parent member, and assess migration of existing IDs/verdicts/locks. Do not silently relabel existing records or reuse a verdict through an ambiguous ID. Production changes remain prohibited in this session.
 
 Artifact: review_group_profile_cc98b0808f2e7934.json. Inputs are hashed; queue timestamp 2026-09-30 19:24:52 UTC, issues timestamp 2026-09-30 17:34:23 UTC. Read-only diagnostic on the same 11 funds, no new model calls. Earlier strict-join report review_group_profile_1af497f03efcc785.json is retained as the initial observation.
+
+## 2026-10-04: isolated parent-inventory preflight
+
+Added `pipeline/jev_parent_inventory.py` in the pilot worktree only. It rejects missing/noncanonical dates, missing or contradictory CIKs, duplicate parent IDs, duplicate group identities, unidentified/duplicate members, foreign dataset members, and incomplete or excessive membership. It preserves exact issue/parent fingerprints and explicit snapshot hashes. It does not normalize or repair production queue IDs.
+
+Twenty-six focused tests pass. Applying it to the 18 unmodified queue rows found by diagnostic period matching rejects them with `Explicit numeric CIK required`. Artifact: review_group_profile_f9812fc4f1e9cffa.json. Previous membership totals are unchanged.
+
+The helper is not integrated into production or the current model router. Supplied hash strings and uniqueness within a selected slice are insufficient for global certification: its output explicitly leaves snapshot-hash verification, full-queue uniqueness, source truth and clearance false. A future file-backed caller must verify actual snapshots and the entire queue ID index before selecting parents. No B1 work is suppressed.

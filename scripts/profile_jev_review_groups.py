@@ -12,6 +12,7 @@ import duckdb
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from pipeline.jev_screening import fingerprint
+from pipeline.jev_parent_inventory import parent_inventory
 from scripts.compare_jev_retrieval import load_replay
 from scripts.jev_pilot_session import install_read_only_guard, sha, write
 
@@ -99,8 +100,15 @@ def main():
     review_ids = defaultdict(list)
     for r in diagnostic_queue:
         review_ids[r['review_id']].append({'unit_label': r['unit_label'], 'period': r['period'], 'rule': r['rule_name']})
+    try:
+        parent_inventory(diagnostic_queue, issues, queue_sha256=before['queue'], issues_sha256=before['issues'])
+        inventory_preflight = {'status': 'accepted'}
+    except ValueError as exc:
+        inventory_preflight = {'status': 'rejected', 'reason': str(exc)}
     report = {'replay': args.replay, 'input_sha256': before, 'counts': counts, 'groups': records,
         'diagnostic_repeated_review_ids': {k: v for k, v in review_ids.items() if len(v)>1},
+        'unmodified_queue_inventory_preflight': inventory_preflight,
+        'inventory_helper_sha256': sha(ROOT / 'pipeline/jev_parent_inventory.py'),
         'api_calls': 0, 'production_changes': 0,
         'limitation': 'Date normalization is diagnostic only, not a certified parent join. No model/audit certification, B1 job savings or queue filtering.'}
     destination = run / ('review_group_profile_' + fingerprint(report)[:16] + '.json')
