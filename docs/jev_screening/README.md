@@ -9,7 +9,7 @@ fallbacks. Three ready requests exceed the runner's token proxy cap, leaving
 independently audited clearances and zero B1 suppression. Work continues offline.
 The default C107/X08 policy admits 34 of those 36; two C104 cases require the
 explicit development probe. These counts do not include a current model verdict
-or independent clearance.
+or independent clearance. A separate queue date/ID defect also blocks safe parent linkage; see [group accounting](13_rule_workload.md).
 The inference estimate is about **$0.0664**; bundle maintenance and B1 review cost
 are not measured. See the [interim assessment](06_interim_assessment.md) first.
 

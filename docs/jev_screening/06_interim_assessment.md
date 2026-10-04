@@ -153,3 +153,7 @@ checkpoints are local only; no merge or push has been performed.
 
 
 
+
+Queue integration has an additional prerequisite: the current timestamp-form ledger periods lose CIK/date localization and collide across quarters in review IDs. In the pilot's 18 matched C107 queue entries, six IDs repeat across 16 entries. The isolated parent-inventory preflight rejects these rows; it does not repair them. No corresponding files were found for those six IDs in the shared review_bundles, shared verdicts or current lock directories. This limited existence check is not an audit of all historical batches and does not establish that no past collision occurred.
+
+The current driver and bundle code key bundle paths, verdicts and locks by review_id, making uniqueness a necessary integration contract. Source review confirmed the main and worktree review_queue/shadow_adapter modules have identical hashes. Details and snapshot-bound counts: [Rule workload](13_rule_workload.md).
