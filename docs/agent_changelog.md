@@ -13571,3 +13571,10 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Three bounded historical error groups no longer supply the same current flagged positions: TCW zero-FV groups changed membership; the Ares Strategic X08 group no longer fires. Named HydroSource/Alcresta current amounts match historical cited amounts, without a new source-truth claim.
 - Preserved trace/verdict/input hashes and avoided historical ordinal joins. No new experiment cases, model calls, funds or production changes.
 
+
+## 2026-10-04 -- Jev pilot: exploratory TCW dedup survivor defect
+
+- Separate one-position source investigation finds a sparse affiliate-rollforward survivor replacing a detailed Superior term-loan context in Q3-2025 TCW holdings. Main schedule/raw extraction cost is 20,376,019; published proxy cost is 12,115,467 (difference 8,260,552).
+- Six-row in-memory reproduction identifies deterministic context-anchor ordering in the existing dedup rule; current application audit matches expected three rows/FV and misses field retention loss. No production fix or full replay.
+- One exploratory case in an existing fund, separate from the frozen 67 cases; no new classifier calls. Full source and mechanism evidence in docs/jev_screening/07_proxy_cost_evidence.md.
+

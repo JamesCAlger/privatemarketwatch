@@ -73,6 +73,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-15 - E3-v2: certifying no-filing lifecycle exclusions from positive EDGAR evidence
 - 2026-09-16 - V11b source selection, cash retention and quarterly failure attribution
 - 2026-10-04 -- Jev pilot: possible primary/supplemental position overlap
+- 2026-10-04: exploratory TCW survivor defect outside the frozen experiment
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals
