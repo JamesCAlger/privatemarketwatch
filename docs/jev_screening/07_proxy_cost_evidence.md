@@ -141,3 +141,10 @@ status/amount outputs except intended explanatory text.
 Artifact: `overlap_routing_f9d3f6a9fd99796e.json`. The source-reconciliation input
 is the existing artifact dated 2026-09-30; its four amounts match the frozen pilot
 snapshot. No new flags, corrected amounts, promoted fixes or API calls resulted.
+
+## 2026-10-04 checkpoint: explicit disclosure roles
+
+- Added an optional offline header-role helper. It requires complete headers in one band, preserves original coordinates and abstains on conflicting/unsupported layouts. It does not infer economic identity, ownership or row inclusion.
+- Applied it to the four frozen AB Centers rows: t12r6/r7 identify position-value disclosures; t15r2/r3 identify unfunded-commitment disclosures. Exact output context IDs are present at all four source coordinates. Artifact: disclosure_roles_08568f715a21154d.json.
+- Thirteen focused role tests pass, including ambiguous headers, split bands and narrative unfunded references. This is one-filing validation, not evidence of transfer across filers.
+- Builder remains unchanged at 39 evidence-ready / 28 blocked. No API calls, independent clearance, production changes or deduplication decision.
