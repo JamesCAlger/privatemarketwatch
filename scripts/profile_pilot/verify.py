@@ -234,9 +234,10 @@ def validate_freeze_args(quarters: str, scan_amendments: bool) -> None:
 def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = False, lease=None) -> dict:
     """primary_quarter_inventory content: the Stage B cohort (default) or every cached quarter.
 
-    scan_amendments=True (all mode only) passes run_context_census.scan_instance so that
-    fund-quarters whose selection needs an amendment scan are settled instead of excluded;
-    the caller must hold the shared heavy lease (cohort asserts it).
+    scan_amendments=True (all mode only) passes instance_select.measure_instance so that
+    fund-quarters with several same-quarter candidates are settled by the amendment rule
+    (owner ruling 2026-10-04) instead of excluded; the caller must hold the shared heavy
+    lease (cohort asserts it).
     """
     from scripts.profile_pilot import cohort
     validate_freeze_args(quarters, scan_amendments)
@@ -245,8 +246,8 @@ def freeze_inventory_content(paths, quarters: str, *, scan_amendments: bool = Fa
     if quarters == "all":
         if not scan_amendments:
             return cohort.all_quarter_inventory(paths)
-        from scripts import run_context_census
-        return cohort.all_quarter_inventory(paths, scanner=run_context_census.scan_instance, lease=lease)
+        from scripts.profile_pilot import instance_select
+        return cohort.all_quarter_inventory(paths, scanner=instance_select.measure_instance, lease=lease)
     raise ValueError("quarters must be one of " + repr(QUARTERS_MODES) + ", got " + repr(quarters))
 
 
@@ -375,8 +376,8 @@ def main(argv=None) -> int:
             cmd.add_argument("--quarters", choices=QUARTERS_MODES, default="cohort",
                              help="cohort = the Stage B fund-quarters (default); all = every cached quarter")
             cmd.add_argument("--scan-amendments", action="store_true",
-                             help="all mode only: settle amendment-only fund-quarters via a "
-                                  "leased run_context_census.scan_instance instead of excluding them")
+                             help="all mode only: settle multi-candidate fund-quarters via the leased "
+                                  "amendment rule (instance_select) instead of excluding them")
         if name == "test":
             cmd.add_argument("--no-pre-backstop", action="store_true")
             cmd.add_argument("targets", nargs="*")

@@ -244,8 +244,10 @@ def test_populated_primary_plus_cover_only_amendment_selects_primary(tmp_path):
     def scanner(path, cik, quarter):
         scanned.append(Path(path).name)
         cover = Path(path) == amendment
+        # The cover page still has one dei instant context at the period end (public float).
         return dict(path=str(path), sha256=_sha(path), source_complete=True, errors=[],
-                    document_period_ends=[quarter], target_instant_contexts=0 if cover else 900)
+                    document_period_ends=[quarter], target_instant_contexts=1 if cover else 900,
+                    position_facts=0 if cover else 450, numeric_facts=0 if cover else 2000)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
     with held_lease(paths) as lease:
@@ -255,13 +257,14 @@ def test_populated_primary_plus_cover_only_amendment_selects_primary(tmp_path):
     assert result["accession_number"] == "0001287750-23-000010"
     assert result["form_type"] == "10-K"
     assert result["source_sha256"] == _sha(original)
-    assert result["selection"] == "same_quarter_source_after_cover_only_amendment"
+    assert result["selection"] == "original_after_cover_only_amendment"
     assert [t["disposition"] for t in result["source_selection"]] == [
-        "amendment_without_target_instant", "selected"]
-    assert scanned[0] == amendment.name
+        "cover_only_amendment", "selected"]
+    assert sorted(scanned) == sorted([amendment.name, original.name])
 
 
-def test_financially_populated_amendment_is_ambiguous_unavailable(tmp_path):
+def test_financially_populated_full_amendment_is_selected(tmp_path):
+    # Owner ruling 2026-10-04: a full amendment is prioritised over the original.
     rows = [index_row("1287750", "0001287750-23-000010", "10-K", "2023-02-07", "2022-12-31"),
             index_row("1287750", "0001628280-23-010219", "10-K/A", "2023-03-31", "2022-12-31")]
     paths = fake_paths(tmp_path, index_rows=rows)
@@ -270,16 +273,36 @@ def test_financially_populated_amendment_is_ambiguous_unavailable(tmp_path):
 
     def scanner(path, cik, quarter):
         return dict(path=str(path), sha256=_sha(path), source_complete=True, errors=[],
-                    document_period_ends=[quarter], target_instant_contexts=12)
+                    document_period_ends=[quarter], target_instant_contexts=12,
+                    position_facts=12, numeric_facts=40)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
     with held_lease(paths) as lease:
         result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner,
                                          lease=lease)
-    assert result["status"] == "unavailable"
-    assert result["reason"] == "ambiguous_same_quarter_candidates"
+    assert result["status"] == "selected"
+    assert result["accession_number"] == "0001628280-23-010219" and result["form_type"] == "10-K/A"
+    assert result["selection"] == "latest_full_amendment"
     assert {c["accession_number"] for c in result["candidates"]} == {
         "0001287750-23-000010", "0001628280-23-010219"}
+
+
+def test_measurement_of_other_bytes_than_the_pinned_candidate_is_refused(tmp_path):
+    rows = [index_row("1287750", "0001287750-23-000010", "10-K", "2023-02-07", "2022-12-31"),
+            index_row("1287750", "0001628280-23-010219", "10-K/A", "2023-03-31", "2022-12-31")]
+    paths = fake_paths(tmp_path, index_rows=rows)
+    put_instance(paths.main_repo_root, "1287750", "0001287750-23-000010")
+    put_instance(paths.main_repo_root, "1287750", "0001628280-23-010219")
+
+    def scanner(path, cik, quarter):
+        return dict(path=str(path), sha256="0" * 64, source_complete=True, errors=[],
+                    document_period_ends=[quarter], position_facts=12, numeric_facts=40)
+
+    candidates = cohort.load_index_candidates(paths, ciks=["0001287750"], quarters=["2022-12-31"])
+    with held_lease(paths) as lease:
+        result = cohort.select_accession(paths, "0001287750", "2022-12-31", candidates, scanner=scanner,
+                                         lease=lease)
+    assert result["status"] == "unavailable" and result["reason"] == "selection_scan_failed"
     assert "accession_number" not in result
 
 
@@ -292,13 +315,15 @@ def test_two_originals_are_not_resolved_by_picking_the_last(tmp_path):
 
     def scanner(path, cik, quarter):
         return dict(path=str(path), sha256=_sha(path), source_complete=True, errors=[],
-                    document_period_ends=[quarter], target_instant_contexts=5)
+                    document_period_ends=[quarter], target_instant_contexts=5,
+                    position_facts=5, numeric_facts=9)
 
     candidates = cohort.load_index_candidates(paths, ciks=["0001715933"], quarters=["2023-03-31"])
     with held_lease(paths) as lease:
         result = cohort.select_accession(paths, "0001715933", "2023-03-31", candidates, scanner=scanner,
                                          lease=lease)
     assert result["status"] == "unavailable"
+    assert result["reason"] == "two_originals_same_quarter"
     assert len(result["candidates"]) == 2
 
 

@@ -174,9 +174,27 @@ def _normalised(value, main: str):
 COHORT_MODE_PIN = "f17946a7994370f58c66d0b9fec8765251b1c3478d40a1caacfe2a02d8c75e21"
 
 
+# The selection policy text recorded before the amendment rule (owner ruling 2026-10-04).
+# The policy changed on purpose; substituting the old one proves nothing ELSE in the
+# cohort-mode inventory moved, so the pre-B2-2a pin still holds for every fund-quarter row.
+PRE_AMENDMENT_RULE_POLICY = dict(
+    reference="scripts/run_context_census.py",
+    functions=["select_source", "scan_selected_source"],
+    pilot_restrictions=[
+        "form_type is read from the filings index, never inferred from the month",
+        "two same-quarter original filings are ambiguous, never settled by filing date",
+        "an amendment is skipped only when the census scan proves it cover-only",
+        "a populated or incomplete amendment makes the quarter unavailable",
+        "multiple candidates without a scan are unavailable (scan may need the lease)",
+    ])
+
+
 def test_cohort_mode_output_is_pinned_to_the_pre_change_digest(tmp_path):
     paths = _fake(tmp_path)
     content = cohort.primary_quarter_inventory(paths)
+    policy = content["selection_policy"]
+    assert set(policy) == set(PRE_AMENDMENT_RULE_POLICY) | {"git_blob", "amendment_rule"}
+    content = dict(content, selection_policy=dict(PRE_AMENDMENT_RULE_POLICY, git_blob=policy["git_blob"]))
     got = manifest.digest(_normalised(content, str(paths.main_repo_root)))
     assert got == COHORT_MODE_PIN, got
     assert "quarters_mode" not in content and "window" not in content
@@ -345,8 +363,8 @@ def test_freeze_all_with_scan_passes_the_default_scanner_under_a_held_lease(tmp_
     monkeypatch.setattr(cohort_mod, "all_quarter_inventory", fake_inventory)
     paths = _paths(tmp_path)
     verify_mod.freeze_inventory_content(paths, "all", scan_amendments=True, lease=Lease())
-    from scripts import run_context_census
-    assert seen["scanner"] is run_context_census.scan_instance
+    from scripts.profile_pilot import instance_select
+    assert seen["scanner"] is instance_select.measure_instance
     assert seen["lease"].held is True
 
 

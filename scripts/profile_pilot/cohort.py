@@ -1,11 +1,16 @@
 """The eight pilot CIKs, their fund-quarters, and pinned primary accessions.
 
-Selection reuses the evidenced policy in scripts/run_context_census.py by reference
-(its git blob is pinned). The pilot is stricter than that script in two ways, both
-recorded in the inventory: it never settles a quarter by taking the latest of two
-original filings, and a financially populated or incomplete amendment is ambiguous
-evidence rather than a winner. Unsettled quarters are `unavailable` with every
-candidate listed.
+A single indexed candidate is pinned through scripts/run_context_census.py
+`select_source` by reference (its git blob is pinned). Several same-quarter candidates
+are settled by the pilot's own rule in scripts/profile_pilot/instance_select.py (owner
+ruling 2026-10-04: prioritise the amendment unless it only carries the amended
+datapoints), NOT by run_context_census.scan_selected_source: that function skips an
+amendment only when it has no instant context at the report date, and a cover-only
+10-K/A that dates dei:EntityPublicFloat at the period end has one, which left NexPoint
+and TCW falsely ambiguous. The production-side script is left unchanged. The pilot
+never settles a quarter by taking the latest of two original filings, and a partial
+amendment is refused rather than chosen or skipped. Unsettled quarters are
+`unavailable` with every candidate listed.
 """
 from __future__ import annotations
 
@@ -49,6 +54,7 @@ VERIFIED_PASS_ID = "q1p3_20260831"
 ATTESTATION = "data/reference/acceptance_attestations/2026-03-31.json"
 
 CENSUS_SCRIPT = "scripts/run_context_census.py"
+AMENDMENT_RULE_MODULE = "scripts/profile_pilot/instance_select.py"
 FORMS = ("10-K", "10-Q", "10-K/A", "10-Q/A")
 AMENDMENTS = frozenset({"10-K/A", "10-Q/A"})
 
@@ -134,10 +140,13 @@ def select_accession(paths: PilotPaths, cik: str, quarter: str, candidates: list
                      scanner=None, lease=None) -> dict:
     """Pin one primary accession for (cik, quarter) or return `unavailable` with evidence.
 
-    `scanner(path, cik, quarter)` is only needed when amendments compete. It parses
-    more than one instance (heavy under ruling R3), so passing a scanner requires a
-    HELD shared-lease handle (`lease`, from protection.shared_heavy_lease); without
-    one the call is refused before any work.
+    `scanner(path, cik, quarter)` is only needed when several candidates compete; it
+    returns the instance_select.measure_instance fields. It parses more than one
+    instance (heavy under ruling R3), so passing a scanner requires a HELD shared-lease
+    handle (`lease`, from protection.shared_heavy_lease); without one the call is
+    refused before any work. Every multi-candidate fund-quarter records each
+    candidate's accession, form type, filing date, counts and ratio in
+    `source_selection`, and the decision and its reason in `selection_rule`.
     """
     if scanner is not None:
         from scripts.profile_pilot.protection import assert_lease_held
@@ -164,26 +173,34 @@ def select_accession(paths: PilotPaths, cik: str, quarter: str, candidates: list
                     source_sha256=chosen["sha256"], source_bytes=chosen["bytes"])
     if scanner is None:
         return dict(base, status="unavailable", reason="selection_requires_amendment_scan")
+    from scripts.profile_pilot import instance_select
+    measured = []
     try:
-        result = census.scan_selected_source(obligation, exact, cache_root=paths.cache_root,
-                                             scanner=scanner)
+        for record in records:
+            if record["cached"]:
+                got = dict(scanner(Path(record["path"]), cik, quarter))
+                if got.get("source_complete") and got.get("sha256") != record["sha256"]:
+                    raise ValueError("measured bytes differ from the pinned candidate "
+                                     + record["accession_number"])
+            else:
+                got = dict(source_complete=False, errors=["candidate instance is not cached"])
+            measured.append(dict(got, accession_number=record["accession_number"],
+                                 form_type=record["form_type"], filing_date=record["filing_date"],
+                                 path=record["path"], sha256=record["sha256"], bytes=record["bytes"]))
+        decision = instance_select.decide(quarter, measured)
     except (ValueError, OSError) as exc:
         return dict(base, status="unavailable", reason="selection_scan_failed",
                     error=type(exc).__name__ + ": " + str(exc))
-    trace = result.get("source_selection", [])
-    originals = [r for r in exact if r["form_type"] not in AMENDMENTS]
-    chosen = next((r for r in records if r["accession_number"] == result["accession"]), None)
-    settled = (chosen is not None and chosen["form_type"] not in AMENDMENTS
-               and len(originals) == 1 and result.get("source_complete") is True
-               and all(t["disposition"] == "amendment_without_target_instant" for t in trace[:-1]))
-    if not settled:
-        return dict(base, status="unavailable", reason="ambiguous_same_quarter_candidates",
-                    source_selection=trace)
-    return dict(base, status="selected", selection=result["selection"],
+    trace = decision.pop("candidates")
+    if decision["status"] != "selected":
+        return dict(base, status="unavailable", reason=decision["reason"],
+                    source_selection=trace, selection_rule=decision)
+    chosen = next(r for r in records if r["accession_number"] == decision["accession_number"])
+    return dict(base, status="selected", selection=decision["reason"],
                 accession_number=chosen["accession_number"], form_type=chosen["form_type"],
                 filing_date=chosen["filing_date"], source_path=chosen["path"],
                 source_sha256=chosen["sha256"], source_bytes=chosen["bytes"],
-                source_selection=trace)
+                source_selection=trace, selection_rule=decision)
 
 
 def primary_quarter_inventory(paths: PilotPaths, *, scanner=None, lease=None) -> dict:
@@ -206,14 +223,25 @@ def primary_quarter_inventory(paths: PilotPaths, *, scanner=None, lease=None) ->
 
 
 def _selection_policy(paths: PilotPaths) -> dict:
+    from scripts.profile_pilot import instance_select
     return dict(
         reference=CENSUS_SCRIPT, git_blob=git_blob(paths.code_root, CENSUS_SCRIPT),
-        functions=["select_source", "scan_selected_source"],
+        functions=["select_source"],
+        amendment_rule=dict(
+            module=AMENDMENT_RULE_MODULE, git_blob=git_blob(paths.code_root, AMENDMENT_RULE_MODULE),
+            rule_version=instance_select.RULE_VERSION,
+            full_candidate_min_pct=instance_select.FULL_CANDIDATE_MIN_PCT,
+            threshold_basis="proxy in an empty gap: observed amendments carry 0% or >= 98% of the "
+                            "original's target-quarter position facts; no partial amendment in sample",
+            owner_ruling="2026-10-04: prioritise the amendment unless it only carries the amended "
+                         "datapoints"),
         pilot_restrictions=[
             "form_type is read from the filings index, never inferred from the month",
-            "two same-quarter original filings are ambiguous, never settled by filing date",
-            "an amendment is skipped only when the census scan proves it cover-only",
-            "a populated or incomplete amendment makes the quarter unavailable",
+            "amendment means the index form type; dei:AmendmentFlag is recorded, never read",
+            "two same-quarter original filings are refused, never settled by filing date",
+            "an amendment with zero target-quarter non-dei numeric facts is cover-only and skipped",
+            "the latest-filed full candidate is selected; a full amendment beats the original",
+            "a candidate strictly between 0% and the full threshold makes the quarter unavailable",
             "multiple candidates without a scan are unavailable (scan may need the lease)",
         ])
 
