@@ -378,3 +378,142 @@ def test_scope_carryover_counts_as_drift(tmp_path):
     res = qa.compute_acceptance(target_quarter=Q, **kw)
     assert res["metrics"]["promoted_rules"]["n_drift"] == 1
     assert res["checks"][2]["pass"] is False
+
+
+# --------------------------------------------------------------------------- promoted inputs that failed to load
+
+ADMISSION_HEADER = ["path", "admission_status", "loaded", "reason", "sha256"]
+HEALTH_CHECK = [{"id": "promoted_rule_health", "metric": "promoted_rules.n_not_ok",
+                 "op": "<=", "value": 0}]
+
+
+def _health_setup(tmp_path, admission_rows=None, audit_rows=None):
+    kw = _setup(tmp_path, ledger_rows=[_cons_row(c, "pass") for c in
+                                       ("0000000001", "0000000002", "0000000003")],
+                audit_rows=audit_rows if audit_rows is not None else [
+                    {"layer": "unified_b2_corrections", "cik": "0000000001",
+                     "rule_id": "column_remap", "status": "ok", "drift": ""}])
+    kw["thresholds_path"] = _thresholds(tmp_path / "thresholds.json", checks=HEALTH_CHECK)
+    if admission_rows is not None:
+        # The unified build writes both audits into the same directory.
+        _csv(tmp_path / "input_admission_audit.csv", ADMISSION_HEADER, admission_rows)
+    return kw
+
+
+def _admitted(path="b2/0000000001/column_remap.json"):
+    return {"path": path, "admission_status": "legacy_unverified", "loaded": "True",
+            "reason": "Original promotion manifest has not been migrated"}
+
+
+def test_rejected_promoted_input_fails_rule_health(tmp_path):
+    rejected = {"path": "b2/0000000002/classification_fix.json",
+                "admission_status": "rejected_contract", "loaded": "False",
+                "reason": "Input contract rejected (legacy_unverified): 'SOFR' is not valid"}
+    # The loader runs twice per build: one rejected FILE is one failure, not two.
+    kw = _health_setup(tmp_path, [_admitted(), rejected, _admitted(), rejected])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    promoted = res["metrics"]["promoted_rules"]
+    assert promoted["n_load_rejected"] == 1
+    assert promoted["n_apply_not_ok"] == 0
+    assert promoted["n_not_ok"] == 1
+    assert promoted["load_rejected_paths"] == ["b2/0000000002/classification_fix.json"]
+    assert promoted["admission_measured"] is True
+    assert res["checks"][0]["id"] == "promoted_rule_health"
+    assert res["checks"][0]["pass"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_each_load_failure_status_fails_rule_health(tmp_path):
+    from pipeline.rule_admission import LOAD_FAILURE_STATUSES
+
+    assert LOAD_FAILURE_STATUSES >= {"rejected_contract", "unreadable", "rejected_not_object",
+                                     "rejected_no_applier", "rejected_no_cik"}
+    for i, status in enumerate(sorted(LOAD_FAILURE_STATUSES)):
+        folder = tmp_path / str(i)
+        folder.mkdir()
+        kw = _health_setup(folder, [_admitted(), {
+            "path": "b2/0000000002/x.json", "admission_status": status, "loaded": "False"}])
+        res = qa.compute_acceptance(target_quarter=Q, **kw)
+        assert res["metrics"]["promoted_rules"]["n_load_rejected"] == 1, status
+        assert res["verdict"] == "FAIL", status
+
+
+def test_clean_admission_audit_keeps_rule_health_passing(tmp_path):
+    """False-positive guard: legacy, promoted, retired and proposal rows are not failures."""
+    kw = _health_setup(tmp_path, [
+        _admitted(),
+        {"path": "b2/0000000001/dedup.json", "admission_status": "promoted", "loaded": "True"},
+        {"path": "b2/0000000002/_retired_classification_fix.json",
+         "admission_status": "proposed_or_retired", "loaded": "False"},
+        {"path": "b2/0000000002/_retired_classification_fix.review.json",
+         "admission_status": "proposed_or_retired", "loaded": "False"},
+        {"path": "b2/0000000003/x.proposed.json",
+         "admission_status": "proposed_or_retired", "loaded": "False"},
+        {"path": "bridges/x.json", "admission_status": "invalid_schema", "loaded": "False"},
+    ])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    promoted = res["metrics"]["promoted_rules"]
+    assert promoted["n_load_rejected"] == 0 and promoted["n_not_ok"] == 0
+    assert promoted["admission_measured"] is True
+    assert res["checks"][0]["pass"] is True
+    assert res["verdict"] == "PASS"
+    assert res["inputs"]["admission"] == str(tmp_path / "input_admission_audit.csv")
+
+
+def test_rule_health_unchanged_for_application_audit_inputs(tmp_path):
+    """Existing behaviour: a not-ok applied rule still fails, with or without the admission audit."""
+    bad = [{"layer": "unified_agent_rules", "cik": "0000000001", "rule_id": "r1",
+            "status": "error", "drift": ""}]
+    without = tmp_path / "without"
+    without.mkdir()
+    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(without, audit_rows=bad))
+    promoted = res["metrics"]["promoted_rules"]
+    assert promoted["n_rules"] == 1 and promoted["n_not_ok"] == 1
+    assert promoted["n_load_rejected"] == 0 and promoted["admission_measured"] is False
+    assert res["verdict"] == "FAIL"
+    clean = tmp_path / "clean"
+    clean.mkdir()
+    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(clean))
+    assert res["metrics"]["promoted_rules"]["n_not_ok"] == 0
+    assert res["verdict"] == "PASS"
+
+
+def test_loader_audit_drives_rule_health_end_to_end(tmp_path):
+    """Real loader -> real admission audit -> gate: retired is ignored, live-invalid fails."""
+    import pandas as pd
+
+    from pipeline import agent_promoted, rule_admission
+
+    def leaf(value):
+        return {"cik": "1", "mechanism": "extraction_gap", "fix_class": "classification_fix",
+                "template": {"field": "index_classification", "value": value,
+                             "row_selector": {"issuer_name": "Loan"}},
+                "scope": {"quarters": [Q]}}
+
+    def verdict(folder, files):
+        store = folder / "store" / "0000000001"
+        store.mkdir(parents=True)
+        for name, payload in files.items():
+            (store / name).write_text(json.dumps(payload), encoding="utf-8")
+        kw = _health_setup(folder)
+
+        @rule_admission.capture_inputs(lambda: folder)
+        def build():
+            agent_promoted.load_promoted_corrections(folder / "store")
+            return pd.DataFrame()
+
+        build()
+        return qa.compute_acceptance(target_quarter=Q, **kw)
+
+    for name in ("retired", "live"):
+        (tmp_path / name).mkdir()
+    retired = verdict(tmp_path / "retired", {
+        "_retired_classification_fix.json": leaf("SOFR"),
+        "_retired_classification_fix.review.json": {"status": "retired"},
+        "column_remap.json": leaf("DIRECT_LENDING")})
+    assert retired["metrics"]["promoted_rules"]["admission_measured"] is True
+    assert retired["metrics"]["promoted_rules"]["n_load_rejected"] == 0
+    assert retired["verdict"] == "PASS"
+    live = verdict(tmp_path / "live", {"classification_fix.json": leaf("SOFR")})
+    assert live["metrics"]["promoted_rules"]["n_load_rejected"] == 1
+    assert live["verdict"] == "FAIL"

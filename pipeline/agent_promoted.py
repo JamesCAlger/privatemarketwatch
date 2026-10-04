@@ -230,22 +230,48 @@ def load_promoted_corrections(corrections_dir: Optional[Path] = None) -> list[di
         from pipeline.rule_admission import admitted
         if not admitted(p,base):
             continue
+        # Every drop below is recorded in the admission audit with a load-failure
+        # status (rule_admission.LOAD_FAILURE_STATUSES): a promoted file that does
+        # not load is a promoted fix that silently does not apply, and the
+        # acceptance gate (promoted_rule_health) fails on any such row.
+        from pipeline.rule_admission import reject_input
         try:
             leaf = json.loads(p.read_text(encoding="utf-8-sig"))
-        except (OSError, json.JSONDecodeError) as exc:
+        except (OSError, ValueError) as exc:
+            reject_input(p, "unreadable", type(exc).__name__)
             logger.warning("promoted correction unreadable, skipped: %s (%s)", p, exc)
             continue
-        if isinstance(leaf, dict):
-            if leaf.get("fix_class") == "classification_fix":
-                from pipeline.correction_leaf import classification_value_errors
-                errors = classification_value_errors(leaf.get("template"))
-                if errors:
-                    from pipeline.rule_admission import reject_contract
-                    reject_contract(p, "; ".join(errors))
-                    logger.warning("promoted classification correction rejected: %s (%s)",
-                                   p, "; ".join(errors))
-                    continue
-            out.append(leaf)
+        if not isinstance(leaf, dict):
+            reject_input(p, "rejected_not_object",
+                         "top-level JSON is " + type(leaf).__name__)
+            logger.warning("promoted correction is not a JSON object, skipped: %s (%s)",
+                           p, type(leaf).__name__)
+            continue
+        fix_class = str(leaf.get("fix_class") or "")
+        if fix_class == "classification_fix":
+            from pipeline.correction_leaf import classification_value_errors
+            errors = classification_value_errors(leaf.get("template"))
+            if errors:
+                from pipeline.rule_admission import reject_contract
+                reject_contract(p, "; ".join(errors))
+                logger.warning("promoted classification correction rejected: %s (%s)",
+                               p, "; ".join(errors))
+                continue
+        # The two filters below used to live only in the appliers
+        # (apply_promoted_stage2_corrections / raw_staging_exclusions), where the
+        # file path is unknown and the drop left no audit row.
+        from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+        if fix_class not in POST_STAGING_APPLIERS:
+            reject_input(p, "rejected_no_applier",
+                         "fix_class " + ascii(fix_class) + " has no production applier")
+            logger.warning("promoted correction has no production applier, skipped: "
+                           "%s (fix_class=%s)", p, ascii(fix_class))
+            continue
+        if not normalize_cik10(leaf.get("cik")):
+            reject_input(p, "rejected_no_cik", "leaf carries no usable cik")
+            logger.warning("promoted correction has no usable cik, skipped: %s", p)
+            continue
+        out.append(leaf)
     return out
 
 
@@ -455,12 +481,18 @@ def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict
             continue
         try:
             rule = json.loads(p.read_text(encoding="utf-8-sig"))
-        except (OSError, json.JSONDecodeError) as exc:
+        except (OSError, ValueError) as exc:
+            from pipeline.rule_admission import reject_input
+            reject_input(p, "unreadable", type(exc).__name__)
             logger.warning("promoted rule unreadable, skipped: %s (%s)", p, exc)
             continue
         cik = normalize_cik10(p.parent.name)
         if cik:
             out.setdefault(cik, []).append(rule)
+        else:
+            from pipeline.rule_admission import reject_input
+            reject_input(p, "rejected_no_cik", "rule directory name is not a CIK")
+            logger.warning("promoted rule directory is not a CIK, skipped: %s", p)
     return out
 
 

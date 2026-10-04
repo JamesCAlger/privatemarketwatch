@@ -967,3 +967,120 @@ def test_apply_promoted_rules_all_scope_and_row_add_exempt_from_carryover():
     del add["predicate_sql"]
     _, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [add]})
     assert audits[0]["drift"] == ""
+
+
+# --------------------------------------------------------------------------- loader drops are audited
+
+def _b2_leaf(**overrides):
+    leaf = {"cik": "123", "mechanism": "extraction_gap", "fix_class": "classification_fix",
+            "template": {"field": "index_classification", "value": "DIRECT_LENDING",
+                         "row_selector": {"issuer_name": "Loan"}},
+            "scope": {"quarters": ["2025-12-31"]}}
+    leaf.update(overrides)
+    return leaf
+
+
+def _load_b2_with_audit(tmp_path, base):
+    """Run the production B2 loader inside the build's admission-audit capture."""
+    from pipeline import rule_admission
+
+    loaded = []
+
+    @rule_admission.capture_inputs(lambda: tmp_path / "audit")
+    def run():
+        loaded.extend(ap.load_promoted_corrections(base))
+        return pd.DataFrame()
+
+    run()
+    audit = pd.read_csv(tmp_path / "audit" / "input_admission_audit.csv")
+    return loaded, audit.set_index("path")
+
+
+@pytest.mark.parametrize("name,text,status", [
+    ("not_object.json", json.dumps([_b2_leaf()]), "rejected_not_object"),
+    ("no_applier.json", json.dumps(_b2_leaf(fix_class="wrapper_patch")), "rejected_no_applier"),
+    ("no_fix_class.json", json.dumps(_b2_leaf(fix_class=None)), "rejected_no_applier"),
+    ("no_cik.json", json.dumps(_b2_leaf(cik="")), "rejected_no_cik"),
+    ("broken.json", "{oops", "unreadable"),
+])
+def test_silently_dropped_correction_is_audited_and_logged(tmp_path, caplog, name, text, status):
+    from pipeline.rule_admission import LOAD_FAILURE_STATUSES
+
+    base = tmp_path / "corrections"
+    dropped = base / "123" / name
+    dropped.parent.mkdir(parents=True)
+    dropped.write_text(text, encoding="utf-8")
+    _write_json(base / "123" / "valid.json", _b2_leaf())
+    with caplog.at_level("WARNING", logger="pipeline.agent_promoted"):
+        loaded, audit = _load_b2_with_audit(tmp_path, base)
+    assert [leaf["template"]["value"] for leaf in loaded] == ["DIRECT_LENDING"]
+    assert status in LOAD_FAILURE_STATUSES
+    assert audit.loc[str(dropped), "admission_status"] == status
+    assert not audit.loc[str(dropped), "loaded"]
+    assert "legacy_unverified" in audit.loc[str(dropped), "reason"]
+    assert audit.loc[str(base / "123" / "valid.json"), "loaded"]
+    messages = [r.getMessage() for r in caplog.records if name in r.getMessage()]
+    assert messages and all(m.isascii() for m in messages)
+
+
+def test_clean_correction_store_records_no_load_failure(tmp_path):
+    """False-positive guard: every production fix class with a CIK loads cleanly."""
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+    from pipeline.rule_admission import LOAD_FAILURE_STATUSES
+
+    base = tmp_path / "corrections"
+    for fix_class in sorted(POST_STAGING_APPLIERS):
+        template = (_b2_leaf()["template"] if fix_class == "classification_fix"
+                    else {"report_date": "2025-12-31"})
+        _write_json(base / "123" / (fix_class + ".json"),
+                    _b2_leaf(fix_class=fix_class, template=template))
+    loaded, audit = _load_b2_with_audit(tmp_path, base)
+    assert len(loaded) == len(POST_STAGING_APPLIERS)
+    assert not set(audit.admission_status) & LOAD_FAILURE_STATUSES
+    assert audit.loaded.all()
+
+
+def test_retired_invalid_correction_is_ignored_not_rejected(tmp_path):
+    """The `_retired_` prefix takes a file out of the loader before validation."""
+    from pipeline.rule_admission import LOAD_FAILURE_STATUSES
+
+    base = tmp_path / "corrections"
+    invalid = _b2_leaf(template={"field": "index_classification", "value": "SOFR"})
+    _write_json(base / "123" / "_retired_classification_fix.json", invalid)
+    _write_json(base / "123" / "_retired_classification_fix.review.json", {"status": "retired"})
+    loaded, audit = _load_b2_with_audit(tmp_path, base)
+    assert loaded == []
+    assert set(audit.admission_status) == {"proposed_or_retired"}
+    assert not set(audit.admission_status) & LOAD_FAILURE_STATUSES
+    # The same bytes under the live name ARE a load failure.
+    _write_json(base / "123" / "classification_fix.json", invalid)
+    loaded, audit = _load_b2_with_audit(tmp_path, base)
+    assert loaded == []
+    assert audit.loc[str(base / "123" / "classification_fix.json"),
+                     "admission_status"] == "rejected_contract"
+
+
+def test_unreadable_or_misplaced_promoted_rule_is_audited(tmp_path):
+    from pipeline import rule_admission
+
+    base = tmp_path / "rules"
+    _write_json(base / "1715933" / "live.json", _valid_rule(cik="1715933", rule_id="live"))
+    broken = base / "789" / "bad.json"
+    broken.parent.mkdir(parents=True)
+    broken.write_text("{oops", encoding="utf-8")
+    _write_json(base / "notes" / "stray.json", _valid_rule(cik="456", rule_id="stray"))
+    _write_json(base / "_pulled_frame_mismatch_20260722" / "p.json",
+                _valid_rule(cik="1965934", rule_id="pulled"))
+
+    @rule_admission.capture_inputs(lambda: tmp_path / "audit")
+    def run():
+        assert set(ap.load_promoted_rules(base)) == {"0001715933"}
+        return pd.DataFrame()
+
+    run()
+    audit = pd.read_csv(tmp_path / "audit" / "input_admission_audit.csv").set_index("path")
+    assert audit.loc[str(broken), "admission_status"] == "unreadable"
+    assert audit.loc[str(base / "notes" / "stray.json"), "admission_status"] == "rejected_no_cik"
+    assert audit.loc[str(base / "_pulled_frame_mismatch_20260722" / "p.json"),
+                     "admission_status"] == "proposed_or_retired"
+    assert audit.loc[str(base / "1715933" / "live.json"), "loaded"]

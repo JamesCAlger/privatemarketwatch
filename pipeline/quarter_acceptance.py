@@ -40,6 +40,10 @@ logger = logging.getLogger(__name__)
 LEDGER_FILE = config.OUTPUT_DIR / "shadow" / "validation_results_ledger.csv"
 QUEUE_FILE = config.OUTPUT_DIR / "review_queue" / "review_queue.csv"
 AUDIT_FILE = config.OUTPUT_DIR / "agent_fix_application_audit.csv"
+# Written by the unified build next to the application audit (rule_admission._write);
+# by default it is read from the SAME directory as ``audit_path`` so both audits
+# always describe one build.
+ADMISSION_AUDIT_NAME = "input_admission_audit.csv"
 INVESTIGATE_DIR = config.OUTPUT_DIR / "agent_investigate"
 
 FUNDS_COLUMNS = [
@@ -153,6 +157,7 @@ def compute_acceptance(
     ledger_path: Path = LEDGER_FILE,
     queue_path: Path = QUEUE_FILE,
     audit_path: Path = AUDIT_FILE,
+    admission_path: Path | None = None,
     holdings_path: Path | None = None,
     manifest_path: Path | None = None,
     thresholds_path: Path | None = None,
@@ -256,6 +261,28 @@ def compute_acceptance(
     else:
         logger.warning("promoted-rule audit missing, drift metrics empty: %s", audit_path)
 
+    # --- promoted inputs that failed to LOAD (admission audit of the same build) ---
+    # The application audit above only lists fixes that reached an applier. A promoted
+    # file the loader rejected, could not read, or dropped never appears there, so it
+    # would be silent. Any such file counts against promoted_rule_health (zero
+    # tolerance, same threshold): retire it or repair it. The loader runs more than once
+    # per build, so failures are counted per distinct file path, not per audit row.
+    from pipeline.rule_admission import LOAD_FAILURE_STATUSES
+    admission_path = admission_path or audit_path.parent / ADMISSION_AUDIT_NAME
+    admission_measured = admission_path.exists()
+    load_rejected: dict[str, str] = {}
+    if admission_measured:
+        for row in _read_rows(admission_path):
+            status = str(row.get("admission_status") or "").strip()
+            if status in LOAD_FAILURE_STATUSES:
+                load_rejected[str(row.get("path") or "")] = status
+        for path, status in sorted(load_rejected.items()):
+            logger.warning("promoted input failed to load (%s): %s", status, ascii(path))
+    else:
+        logger.warning("input admission audit missing, load-rejection metric empty: %s",
+                       admission_path)
+    n_load_rejected = len(load_rejected)
+
     # --- unfinished investigations (staged rules newer than their apply/gate) ---
     # A gate a rename can satisfy is not a gate (spec validation-layer principle): if the
     # investigation store is absent the metric is UNMEASURED (n_stale None), so the blocking
@@ -345,7 +372,13 @@ def compute_acceptance(
         },
         "promoted_rules": {
             "n_rules": n_rules,
-            "n_not_ok": n_noop,
+            # n_not_ok is what promoted_rule_health gates on: fixes that reached an
+            # applier and did not apply cleanly, PLUS promoted files that never loaded.
+            "n_not_ok": n_noop + n_load_rejected,
+            "n_apply_not_ok": n_noop,
+            "n_load_rejected": n_load_rejected,
+            "load_rejected_paths": sorted(load_rejected),
+            "admission_measured": admission_measured,
             "n_drift": n_drift,
         },
         "investigations": {
@@ -402,6 +435,7 @@ def compute_acceptance(
             "ledger": str(ledger_path),
             "queue": str(queue_path),
             "audit": str(audit_path),
+            "admission": str(admission_path),
             "holdings": str(holdings_path),
             "investigate": str(inv_dir),
         },
@@ -495,6 +529,8 @@ def cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--ledger", type=Path, default=LEDGER_FILE)
     parser.add_argument("--queue", type=Path, default=QUEUE_FILE)
     parser.add_argument("--audit", type=Path, default=AUDIT_FILE)
+    parser.add_argument("--admission", type=Path, default=None,
+                        help="Input admission audit; default = sibling of --audit.")
     parser.add_argument("--holdings", type=Path, default=None)
     parser.add_argument("--thresholds", type=Path, default=None)
     parser.add_argument("--investigate-dir", type=Path, default=None)
@@ -509,6 +545,7 @@ def cli(argv: list[str] | None = None) -> int:
         ledger_path=args.ledger,
         queue_path=args.queue,
         audit_path=args.audit,
+        admission_path=args.admission,
         holdings_path=args.holdings,
         thresholds_path=args.thresholds,
         investigate_dir=args.investigate_dir,

@@ -25,21 +25,43 @@ def record(path,status,loaded,reason):
             sha256=sha(path) if Path(path).is_file() else ''))
 
 
-def reject_contract(path, reason):
-    """Record that a discovered input failed validation before it was loaded.
+# A live (non-retired, non-proposal) promoted file that the loader admitted and
+# then could not use. Every one of these is a promoted fix that silently does
+# NOT apply, so the acceptance gate (quarter_acceptance, promoted_rule_health)
+# treats any of them as a failure. Retire the file (``_retired_`` prefix) or
+# repair it; do not add a status here to make a build pass.
+LOAD_FAILURE_LABELS = {
+    'rejected_contract': 'Input contract rejected',
+    'unreadable': 'Input unreadable',
+    'rejected_not_object': 'Input is not a JSON object',
+    'rejected_no_applier': 'Input has no production applier',
+    'rejected_no_cik': 'Input has no usable CIK',
+}
+LOAD_FAILURE_STATUSES = frozenset(LOAD_FAILURE_LABELS)
+
+
+def reject_input(path, status, reason):
+    """Record that a discovered input was dropped by the loader after admission.
 
     Admission is checked before parsing; replace that tentative audit event so
-    a rejected file is never falsely reported as an executed correction.
+    a dropped file is never falsely reported as an executed correction.
     """
+    if status not in LOAD_FAILURE_STATUSES:
+        raise ValueError('Unknown load-failure status: ' + str(status))
     audit = _audit.get()
     if audit is not None:
         for event in reversed(audit['inputs']):
             if event['path'] == str(path):
                 prior = event['admission_status']
-                event.update(admission_status='rejected_contract', loaded=False,
-                    reason=f'Input contract rejected ({prior}): {reason}')
+                event.update(admission_status=status, loaded=False,
+                    reason=f'{LOAD_FAILURE_LABELS[status]} ({prior}): {reason}')
                 return
-    record(path, 'rejected_contract', False, reason)
+    record(path, status, False, reason)
+
+
+def reject_contract(path, reason):
+    """Record that a discovered input failed validation before it was loaded."""
+    reject_input(path, 'rejected_contract', reason)
 
 
 def admitted(path,base,*,allow_legacy=True):
