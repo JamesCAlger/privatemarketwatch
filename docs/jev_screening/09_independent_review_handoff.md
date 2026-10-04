@@ -71,3 +71,15 @@ cannot confer audit status on this revision.
 The new blind_review_inputs_43 directory binds rate_note_scope_v4_42 and builder SHA-256 6857318fdb820cc49c6f89cbf07e7dc03da90d51c6eeca599ffa77ee9c40326f. It contains the same 67 development flags, 11 funds and 26 cached filings. Holdings and cached source hashes were checked; all forms remain unfinished and no workers were dispatched.
 
 Preparation now requires explicit --replay and --label arguments and refuses an existing destination. Its manifest records the replay, preparation-script hash and holdings hash. Old forms remain preserved under blind_review_inputs_23; no review status was transferred.
+
+## Validating a completed source-first form
+
+The isolated pipeline/jev_review_findings.py validates completed copies against their immutable prepared envelope. It accepts explicit unresolved outcomes without filling missing checks. A false-alarm record requires all six checks, one selected candidate with no unresolved siblings, source-bound citations, all disputed amounts, USD currency and arithmetic agreement at recorded display precision. Contradictory amounts can be recorded as a real-error finding.
+
+The reviewer adds source_first_attestation: true inside review_form, identifying their own declaration that source findings preceded exposure to builder/model results. This is an attestation, not mechanically verified independence. Citations are objects containing source_sha256, coordinates and supports. Candidate entries contain coordinates, treatment (selected/excluded/unresolved) and reason. Source values contain amount, display_unit and currency. All timestamps require timezones; active_seconds must be positive and no greater than elapsed review time.
+
+The bounded scripts/freeze_jev_review_findings.py checks the prepared manifest/input hashes, current holdings and original cached source before writing a new content-addressed source-first findings record. It refuses overwrites. The result explicitly marks independence_verified and bundle_audit_completed false, has no router audit method/evidence ID, and cannot itself act as a clearance certificate. A later separately validated bundle comparison remains necessary.
+
+Twenty focused tests pass for the findings validator, including unresolved outcomes, source and envelope changes, timing, incomplete checks, invalid monetary values, unresolved siblings and contradictory amounts. The CLI help path was exercised. No completed real-case form was submitted or frozen; independent reviews remain zero.
+
+Five additional CLI integration tests pass using temporary synthetic fixtures: unresolved-record sealing, changed source, changed holdings, changed prepared input and overwrite refusal. They do not count as real completed reviews.
