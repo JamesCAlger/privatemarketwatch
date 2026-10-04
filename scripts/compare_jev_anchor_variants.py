@@ -1,5 +1,6 @@
 """Compare exact and raw-preserving anchor baselines on frozen model inputs."""
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import sys
@@ -10,18 +11,47 @@ from pipeline.jev_anchor_baseline import compare_context_anchor
 from pipeline.jev_screening import fingerprint
 from scripts.analyze_jev_screening import summarize
 from scripts.compare_jev_bundle_versions import NATURAL_RUNS
-from scripts.jev_pilot_session import install_read_only_guard, read, write
+from scripts.compare_jev_retrieval import load_replay
+from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
+
+
+def current_replay(root, label):
+    summary, packets = load_replay(root, label)
+    if len(packets)>100 or summary['builder_sha256'] != sha(ROOT / 'pipeline/jev_bundles.py'):
+        raise ValueError('Bounded current replay required')
+    rows = []
+    for (rule, row_id), packet in sorted(packets.items()):
+        rows.append({'rule': rule, 'row_id': row_id, 'cik': packet['flag']['cik'],
+            'bundle_fingerprint': fingerprint(packet), 'evidence_status': packet['evidence_status']['status'],
+            'exact': compare_context_anchor(packet),
+            'raw': compare_context_anchor(packet, allow_raw_identifier=True)})
+    report = {'replay': label, 'builder_sha256': summary['builder_sha256'],
+        'selected_flags': len(rows), 'ready_flags': sum(r['evidence_status']=='ready_for_model' for r in rows),
+        'exact_statuses': dict(Counter(r['exact']['status'] for r in rows)),
+        'raw_statuses': dict(Counter(r['raw']['status'] for r in rows)),
+        'ready_raw_statuses': dict(Counter(r['raw']['status'] for r in rows if r['evidence_status']=='ready_for_model')),
+        'ready_unresolved': [r for r in rows if r['evidence_status']=='ready_for_model' and r['raw']['status']=='unresolved'],
+        'observations': rows, 'audited_clearances': 0, 'api_calls': 0, 'production_clearance_enabled': False,
+        'limitation': 'Current structured evidence only: no reference-label or model-score transfer, independent source certification or accuracy estimate.'}
+    destination = root / ('current_anchor_profile_' + fingerprint(report)[:16] + '.json')
+    if not destination.exists():
+        write(destination, report)
+    print(json.dumps({'artifact': destination.name, **{k: v for k, v in report.items() if k not in {'observations', 'ready_unresolved'}}}), flush=True)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--run-root', type=Path, required=True)
+    parser.add_argument('--replay', help='Profile a current replay without transferring historical labels')
     args = parser.parse_args()
     repo, root = args.repo.resolve(), args.run_root.resolve()
     if repo == ROOT or not root.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, root)
+    if args.replay:
+        current_replay(root, args.replay)
+        return
     rows, seen = [], set()
     for label in NATURAL_RUNS:
         run = root / label

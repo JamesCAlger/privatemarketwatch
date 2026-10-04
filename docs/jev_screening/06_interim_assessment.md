@@ -157,3 +157,11 @@ checkpoints are local only; no merge or push has been performed.
 Queue integration has an additional prerequisite: the current timestamp-form ledger periods lose CIK/date localization and collide across quarters in review IDs. In the pilot's 18 matched C107 queue entries, six IDs repeat across 16 entries. The isolated parent-inventory preflight rejects these rows; it does not repair them. No corresponding files were found for those six IDs in the shared review_bundles, shared verdicts or current lock directories. This limited existence check is not an audit of all historical batches and does not establish that no past collision occurred.
 
 The current driver and bundle code key bundle paths, verdicts and locks by review_id, making uniqueness a necessary integration contract. Source review confirmed the main and worktree review_queue/shadow_adapter modules have identical hashes. Details and snapshot-bound counts: [Rule workload](13_rule_workload.md).
+
+## Current deterministic comparison on replay 52
+
+The current 67-packet replay was profiled without transferring historical model scores or reference labels. The exact-context comparator finds 35 anchor-consistent cases. The opt-in raw-dimension comparator finds 39: all 39 evidence-ready bundles. Its four additional cases are Onex VTC, Montana Bidco, Jackson Paper and IMB, using the existing narrow affiliation-prefix normalization. All 28 evidence-blocked packets remain unresolved.
+
+Artifact: current_anchor_profile_517d2f61338d6e08.json. This reports agreement between current structured source evidence and output, not 39 independently audited correct clearances. Both comparators share the builder and pipeline provenance; they cannot certify candidate recall, note completeness, ownership or source truth. No model was called on the revised requests.
+
+This strengthens the deterministic-first alternative for C107/X08/C104. A classifier needs to demonstrate additional safe coverage or useful prioritization beyond these checks; agreement on already resolved arithmetic does not establish its contribution. Bundle correctness work remains useful to deterministic checks and B1 even if Jev is not eventually used for these rule families.

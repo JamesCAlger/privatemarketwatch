@@ -809,3 +809,11 @@ Re-read the three original trace bundles and final messages, verifying all trace
 This matters to the proposed hybrid: complete per-member accounting could improve coverage compared with representative B1 review, even before it saves time. That potential benefit is not yet a measured improvement in defect discovery. Each source-backed member needs a snapshot-specific reference; do not spread a group false_alarm label across uninspected rows or transfer it into current holdings. The historical Senior Credit group has 89 issues versus 88 in the current corresponding group, another reason to preserve snapshot identity.
 
 Artifact: historical_coverage_d8419f2cf0af2bf7.json. No new funds, current flags, classifier calls or production changes. The script reads only the three known partial traces after filtering the historical inventory to the reserved funds.
+
+## Current deterministic comparison on replay 52
+
+The current 67-packet replay was profiled without transferring historical model scores or reference labels. The exact-context comparator finds 35 anchor-consistent cases. The opt-in raw-dimension comparator finds 39: all 39 evidence-ready bundles. Its four additional cases are Onex VTC, Montana Bidco, Jackson Paper and IMB, using the existing narrow affiliation-prefix normalization. All 28 evidence-blocked packets remain unresolved.
+
+Artifact: current_anchor_profile_517d2f61338d6e08.json. This reports agreement between current structured source evidence and output, not 39 independently audited correct clearances. Both comparators share the builder and pipeline provenance; they cannot certify candidate recall, note completeness, ownership or source truth. No model was called on the revised requests.
+
+This strengthens the deterministic-first alternative for C107/X08/C104. A classifier needs to demonstrate additional safe coverage or useful prioritization beyond these checks; agreement on already resolved arithmetic does not establish its contribution. Bundle correctness work remains useful to deterministic checks and B1 even if Jev is not eventually used for these rule families.
