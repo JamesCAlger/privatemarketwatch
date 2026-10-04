@@ -153,8 +153,12 @@ def verify_investigations(manifest: Path, holdings: Path, cohort: set[str]) -> P
 def bound_legacy_inputs(evidence, holdings: Path, cohort: set[str], paths: dict) -> set[str]:
     """A bound receipt must identify the input actually used by the legacy gate."""
     bound = set()
-    for name in ("ledger", "queue", "audit", "investigate"):
-        recorded = evidence.path("legacy_" + name, candidate_bound=True)
+    for name in ("ledger", "queue", "audit", "admission", "investigate"):
+        # The admission audit is already recorded under its artifact name by
+        # run_production_acceptance; it is the sibling of the application audit.
+        recorded = evidence.path(
+            "input_admission_audit" if name == "admission" else "legacy_" + name,
+            candidate_bound=True)
         if recorded is None:
             continue
         actual = Path(paths[name]).resolve()

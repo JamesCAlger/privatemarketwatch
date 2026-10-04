@@ -279,9 +279,12 @@ def compute_acceptance(
         for path, status in sorted(load_rejected.items()):
             logger.warning("promoted input failed to load (%s): %s", status, ascii(path))
     else:
-        logger.warning("input admission audit missing, load-rejection metric empty: %s",
+        # Fail closed, like investigations.n_stale: with no admission audit the
+        # load-failure count is UNMEASURED (None), so promoted_rule_health cannot
+        # pass on a comfortable 0. Deleting or misplacing the audit is not a pass.
+        logger.warning("input admission audit missing, load-rejection metric unmeasured: %s",
                        admission_path)
-    n_load_rejected = len(load_rejected)
+    n_load_rejected = len(load_rejected) if admission_measured else None
 
     # --- unfinished investigations (staged rules newer than their apply/gate) ---
     # A gate a rename can satisfy is not a gate (spec validation-layer principle): if the
@@ -374,7 +377,8 @@ def compute_acceptance(
             "n_rules": n_rules,
             # n_not_ok is what promoted_rule_health gates on: fixes that reached an
             # applier and did not apply cleanly, PLUS promoted files that never loaded.
-            "n_not_ok": n_noop + n_load_rejected,
+            # None (unmeasured, check fails) when the admission audit is missing.
+            "n_not_ok": n_noop + n_load_rejected if admission_measured else None,
             "n_apply_not_ok": n_noop,
             "n_load_rejected": n_load_rejected,
             "load_rejected_paths": sorted(load_rejected),
@@ -471,7 +475,7 @@ def extend_acceptance(result, observations, *, thresholds_path=None,bound_legacy
             for row in result["checks"] if row["id"]!="fund_coverage"]
     dependencies={"reconcile_rate":{"ledger"},"flagged_fv_share":{"ledger"},
         "source_blocking_fv_share":{"queue"},"verified_fv_share":{"ledger","queue"},
-        "promoted_rule_drift":{"audit"},"promoted_rule_health":{"audit"},
+        "promoted_rule_drift":{"audit"},"promoted_rule_health":{"audit","admission"},
         "over_inclusion_fv_share":{"ledger"},"unfinished_investigations":{"investigate"}}
     if bound_legacy_inputs is not None:
         for check in checks:

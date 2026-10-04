@@ -461,21 +461,53 @@ def test_clean_admission_audit_keeps_rule_health_passing(tmp_path):
 
 
 def test_rule_health_unchanged_for_application_audit_inputs(tmp_path):
-    """Existing behaviour: a not-ok applied rule still fails, with or without the admission audit."""
+    """Existing behaviour: a not-ok applied rule still fails when the admission audit is clean."""
     bad = [{"layer": "unified_agent_rules", "cik": "0000000001", "rule_id": "r1",
             "status": "error", "drift": ""}]
-    without = tmp_path / "without"
-    without.mkdir()
-    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(without, audit_rows=bad))
+    failing = tmp_path / "failing"
+    failing.mkdir()
+    res = qa.compute_acceptance(target_quarter=Q,
+                                **_health_setup(failing, [_admitted()], audit_rows=bad))
     promoted = res["metrics"]["promoted_rules"]
     assert promoted["n_rules"] == 1 and promoted["n_not_ok"] == 1
-    assert promoted["n_load_rejected"] == 0 and promoted["admission_measured"] is False
+    assert promoted["n_apply_not_ok"] == 1 and promoted["n_load_rejected"] == 0
     assert res["verdict"] == "FAIL"
     clean = tmp_path / "clean"
     clean.mkdir()
-    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(clean))
+    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(clean, [_admitted()]))
     assert res["metrics"]["promoted_rules"]["n_not_ok"] == 0
     assert res["verdict"] == "PASS"
+
+
+def test_missing_admission_audit_fails_rule_health_closed(tmp_path):
+    """No admission audit = load failures UNMEASURED: the check must not read a comfortable 0."""
+    res = qa.compute_acceptance(target_quarter=Q, **_health_setup(tmp_path))
+    promoted = res["metrics"]["promoted_rules"]
+    assert promoted["admission_measured"] is False
+    assert promoted["n_load_rejected"] is None
+    assert promoted["n_not_ok"] is None
+    # The application-audit side is still reported so the panel stays readable.
+    assert promoted["n_rules"] == 1 and promoted["n_apply_not_ok"] == 0
+    check = res["checks"][0]
+    assert check["id"] == "promoted_rule_health"
+    assert check["pass"] is False and check["actual"] is None
+    assert res["verdict"] == "FAIL"
+
+
+def test_rule_health_declares_admission_audit_as_a_dependency():
+    """Under the extended gate the check is assessable only when BOTH audits are bound."""
+    def status(bound):
+        prior = dict(verdict="PASS", thresholds_version=3, calibration="provisional",
+                     checks=[{"id": "promoted_rule_health", "actual": 0, "pass": True},
+                             {"id": "promoted_rule_drift", "actual": 0, "pass": True}])
+        result = qa.extend_acceptance(prior, {}, bound_legacy_inputs=bound)
+        return {row["id"]: row["status"] for row in result["checks"]}
+
+    only_audit = status({"audit"})
+    assert only_audit["promoted_rule_health"] == "UNASSESSABLE"
+    assert only_audit["promoted_rule_drift"] == "PASS"  # drift reads the application audit only
+    assert status({"admission"})["promoted_rule_health"] == "UNASSESSABLE"
+    assert status({"audit", "admission"})["promoted_rule_health"] == "PASS"
 
 
 def test_loader_audit_drives_rule_health_end_to_end(tmp_path):

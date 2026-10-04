@@ -209,6 +209,21 @@ def test_investigation_receipt_binds_only_the_verified_store(tmp_path, holdings,
         inputs.bound_legacy_inputs(evidence, holdings, {CIK}, {"investigate": source})
 
 
+def test_admission_audit_binds_through_its_own_evidence_record(tmp_path, holdings):
+    from pipeline.quarter_evidence import Evidence
+    path = tmp_path / "input_admission_audit.csv"
+    path.write_text("path,admission_status,loaded,reason,sha256\n", encoding="utf-8")
+    manifest = tmp_path / "evidence.json"
+    atomic_json(manifest, dict(holdings_sha256=sha(holdings), files={
+        "input_admission_audit": dict(path=str(path.resolve()), sha256=sha(path),
+                                      holdings_sha256=sha(holdings))}))
+    evidence = Evidence(manifest, holdings)
+    assert inputs.bound_legacy_inputs(evidence, holdings, {CIK}, {"admission": path}) == {"admission"}
+    with pytest.raises(ContractError, match="differs from its evidence record"):
+        inputs.bound_legacy_inputs(evidence, holdings, {CIK},
+                                   {"admission": tmp_path / "other_build.csv"})
+
+
 def test_no_binding_is_not_claimed_as_measured(tmp_path, holdings):
     evidence = gate_evidence(tmp_path, holdings, {})
     assert inputs.bound_legacy_inputs(evidence, holdings, {CIK}, {}) == set()
