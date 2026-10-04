@@ -53,6 +53,13 @@ def main():
     main_context = 'C_f1dd68ce-9df4-4ad8-9279-784ba8aaf308'
     if published_context not in results[0]['surviving_contexts'] or main_context in results[0]['surviving_contexts']:
         raise ValueError('Observed survivor mechanism did not reproduce')
+    alternative, alternative_audit = _apply_dedup(pd.DataFrame(rows), {**rule, 'keep': 'last'})
+    alternative_rows = alternative.where(pd.notna(alternative), None).to_dict('records')
+    alternative_contexts = sorted(alternative['src_context_id'].tolist())
+    detailed_contexts = {r['src_context_id'] for r in rows
+                         if r['identifier'].startswith(('Debt Investments,', 'Equity Investments,'))}
+    if len(detailed_contexts) != 3:
+        raise ValueError('Expected three detailed-source candidates')
     main_row = next(r for r in rows if r['src_context_id'] == main_context)
     published_cost = float(parent['published_position']['cost'])
     audit_frame = pd.read_csv(repo / 'data/output/agent_fix_application_audit.csv', dtype=str)
@@ -65,6 +72,12 @@ def main():
               'worktree_module_sha256': {m: sha(ROOT / m) for m in modules},
               'module_text_equal_after_newline_normalization': True,
               'rule': rule, 'reconstructed_candidates': rows, 'results': results,
+              'keep_last_counterfactual': {'surviving_contexts': alternative_contexts,
+                  'audit': alternative_audit,
+                  'detailed_contexts_lost': sorted(detailed_contexts - set(alternative_contexts)),
+                  'source_costs_retained': {r['src_context_id']: (None if pd.isna(r['cost']) else r['cost'])
+                                           for r in alternative_rows}},
+              'keep_first_detailed_contexts_lost': sorted(detailed_contexts - set(results[0]['surviving_contexts'])),
               'current_application_audit': application,
               'main_schedule_cost': main_row['cost'], 'published_proxy_cost': published_cost,
               'cost_difference': main_row['cost'] - published_cost,

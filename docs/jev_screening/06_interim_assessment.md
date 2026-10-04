@@ -12,6 +12,12 @@ units, current versus comparative periods, share-class identity, inherited notes
 note tables and explicit rate legends. They also improve evidence available to
 B1. None requires changing production holdings.
 
+A separate exploratory TCW investigation found a wrong source representation
+surviving an existing dedup correction: FV totals stayed correct while detailed
+cost was lost and replaced by a proxy. This demonstrates value from source-role
+and field-retention investigation, not incremental value from Jev. It is outside
+the frozen 67-case experiment; see [the evidence](07_proxy_cost_evidence.md).
+
 The main unresolved cost is proving that a bundle contains the necessary evidence.
 A model can return the correct label while notes or scope are missing. This
 happened in source review of both development and temporal packets. High model
