@@ -100,3 +100,7 @@ The offline verify_jev_review_bindings.py check matches all 67 current packet fi
 The findings validator now rejects duplicate candidate coordinates, including conflicting selected/excluded treatments of the same location. For a false-alarm finding, source_coordinates must match the selected inventory candidate, and at least one citation must name that location. Case and whitespace differences are normalized; distinct free-text coordinate schemes are not guessed equivalent. Additional note/scope citations remain allowed.
 
 Twenty-six findings tests plus five freeze-CLI integration tests pass (31 total). No real completed form has been submitted. This closes internal record contradictions; it does not verify coordinates against source bytes or establish independent source truth. Prepared forms 53 and the current builder are unchanged.
+
+## 2026-10-04: dependency-bound replay refresh
+
+Current unfinished forms are blind_review_inputs_56, bound to dependency_bound_v4_55 and builder 1aa2a991b20957c2c7db4843be929c241230fa0f8f0041aae886a8a627b30570. The 67 forms cover the same 11 funds and 26 cached filings. Manifest SHA-256: 5db563b7b2d0e3d297aa486562ff91a6059712449ccf71a754d84ff5f2df505a. Review binding check 5e65701c442729f4 verifies packet/input/source hashes. All reviews remain unfinished; historical forms 53 are preserved and are not current certificates. Direct parser dependencies are now recorded; see the run log for the exact scope and limitations.

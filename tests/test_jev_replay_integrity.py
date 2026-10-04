@@ -65,3 +65,36 @@ def test_duplicate_summary_members_are_rejected(tmp_path):
     (directory / 'summary.json').write_text(json.dumps(summary), encoding='utf-8')
     with pytest.raises(ValueError):
         load_replay(tmp_path, 'replay')
+
+
+@pytest.mark.parametrize('mutation', [None, 'summary_hash', 'builder', 'packet_runtime', 'missing_runtime', 'early_block', 'invalid_accession', 'false_input_refusal'])
+def test_runtime_binding_is_checked_without_requiring_source_for_early_blocks(tmp_path, mutation):
+    directory, packet, summary = fixture(tmp_path)
+    runtime = {'schema_version': 'jev-parser-runtime.v1', 'builder_sha256': 'builder',
+               'date_helper_sha256': 'helper', 'beautifulsoup_version': 'version'}
+    summary.update(parser_runtime=deepcopy(runtime), parser_runtime_sha256=fingerprint(runtime))
+    packet['filing'] = {'status': 'cached_source_parsed', 'sha256': 'source',
+                        'parser_runtime': deepcopy(runtime), 'parser_runtime_sha256': fingerprint(runtime)}
+    if mutation == 'summary_hash':
+        summary['parser_runtime_sha256'] = 'changed'
+    elif mutation == 'builder':
+        summary['parser_runtime']['builder_sha256'] = 'other'
+        summary['parser_runtime_sha256'] = fingerprint(summary['parser_runtime'])
+    elif mutation == 'packet_runtime':
+        packet['filing']['parser_runtime']['date_helper_sha256'] = 'other'
+        packet['filing']['parser_runtime_sha256'] = fingerprint(packet['filing']['parser_runtime'])
+    elif mutation == 'missing_runtime':
+        del packet['filing']['parser_runtime']
+    elif mutation == 'early_block':
+        packet['filing'] = {}
+    elif mutation == 'invalid_accession':
+        packet['filing'] = {'status': 'missing_or_invalid_accession'}
+    elif mutation == 'false_input_refusal':
+        packet['filing'] = {'status': 'missing_or_invalid_accession', 'sha256': 'source'}
+    (directory / 'C107_ROW-A.json').write_text(json.dumps(packet), encoding='utf-8')
+    (directory / 'summary.json').write_text(json.dumps(summary), encoding='utf-8')
+    if mutation in {None, 'early_block', 'invalid_accession'}:
+        assert len(load_replay(tmp_path, 'replay')[1]) == 1
+    else:
+        with pytest.raises(ValueError, match='runtime'):
+            load_replay(tmp_path, 'replay')

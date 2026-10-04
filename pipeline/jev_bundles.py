@@ -10,12 +10,16 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import platform
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
 from bs4 import BeautifulSoup, NavigableString
+import bs4
+from lxml import etree
 
+from pipeline import html_soi_evidence
 from pipeline.html_soi_evidence import _html_path, parse_period_date
 
 SCHEMA = "jev-value-bundle.v4"
@@ -673,6 +677,25 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
     return {"parser_version": PARSER_VERSION, "tables": tables, "notes": notes, 'contexts': contexts}
 
 
+def parser_runtime() -> dict:
+    """Bind direct parsing dependencies; this is not a whole-environment lockfile."""
+    return {
+        'schema_version': 'jev-parser-runtime.v1',
+        'builder_sha256': digest_file(Path(__file__)),
+        'date_helper_sha256': digest_file(Path(html_soi_evidence.__file__)),
+        'python_implementation': platform.python_implementation(),
+        'python_version': platform.python_version(),
+        'beautifulsoup_version': bs4.__version__,
+        'lxml_version': list(etree.LXML_VERSION),
+        'libxml_runtime_version': list(etree.LIBXML_VERSION),
+        'libxml_compiled_version': list(etree.LIBXML_COMPILED_VERSION),
+    }
+
+
+def parser_runtime_fingerprint(runtime: dict) -> str:
+    return hashlib.sha256(json.dumps(runtime, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+
 class SourceCache:
     """Bounded in-memory parse cache keyed by accession, raw hash and parser hash."""
 
@@ -680,9 +703,14 @@ class SourceCache:
         self.max_entries = max_entries
         self.html_cache_dir = html_cache_dir
         self.entries: dict[tuple, dict] = {}
-        self.parser_hash = digest_file(Path(__file__))
+        self.runtime = parser_runtime()
+        self.parser_hash = self.runtime['builder_sha256']
+        self.runtime_hash = parser_runtime_fingerprint(self.runtime)
 
     def load(self, row: dict) -> tuple[dict | None, dict]:
+        if parser_runtime() != self.runtime:
+            self.entries.clear()
+            return None, {'status': 'parser_runtime_changed', 'parser_runtime_sha256': self.runtime_hash}
         acc = clean(row.get("accession_number"))
         if not re.fullmatch(r"\d{10}-\d{2}-\d{6}", acc):
             return None, {"status": "missing_or_invalid_accession"}
@@ -692,19 +720,23 @@ class SourceCache:
         path = (self.html_cache_dir / (cik.lstrip("0") or "0") / f"{acc.replace('-', '')}.html"
                 if self.html_cache_dir is not None else _html_path("bdc", cik, acc))
         metadata = {"path": str(path), "accession_number": acc, "parser_version": PARSER_VERSION,
-                    "parser_sha256": self.parser_hash}
+                    "parser_sha256": self.parser_hash, 'parser_runtime': json.loads(json.dumps(self.runtime)),
+                    'parser_runtime_sha256': self.runtime_hash}
         if not path.is_file():
             return None, {**metadata, "status": "missing_cached_source"}
         if path.stat().st_size > 40 * 1024 * 1024:
             return None, {**metadata, "status": "source_byte_limit"}
         raw = path.read_bytes()
         raw_hash = hashlib.sha256(raw).hexdigest()
-        key = (acc, raw_hash, self.parser_hash)
+        key = (acc, raw_hash, self.runtime_hash)
         if key not in self.entries:
             try:
                 parsed = parse_source(raw)
             except (ValueError, UnicodeDecodeError) as exc:
                 return None, {**metadata, "sha256": raw_hash, "status": str(exc)}
+            if parser_runtime() != self.runtime:
+                self.entries.clear()
+                return None, {**metadata, 'sha256': raw_hash, 'status': 'parser_runtime_changed'}
             if len(self.entries) >= self.max_entries:
                 self.entries.pop(next(iter(self.entries)))
             self.entries[key] = parsed

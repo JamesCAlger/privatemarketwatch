@@ -17,6 +17,12 @@ def load_replay(run, label):
         raise ValueError('Invalid replay label')
     directory = run / label
     summary = read(directory / 'summary.json')
+    runtime = summary.get('parser_runtime')
+    runtime_hash = summary.get('parser_runtime_sha256')
+    if runtime is not None or runtime_hash is not None:
+        if (not isinstance(runtime, dict) or fingerprint(runtime) != runtime_hash
+                or runtime.get('builder_sha256') != summary['builder_sha256']):
+            raise ValueError('Invalid replay parser runtime binding')
     paths = list(directory.glob('*_ROW-*.json'))
     if not 1 <= len(paths) <= 100 or len(paths) != len(summary['cases']):
         raise ValueError('Incomplete or unbounded replay')
@@ -35,6 +41,15 @@ def load_replay(run, label):
     packets = {}
     for path in paths:
         packet = read(path)
+        filing = packet.get('filing') or {}
+        # Input refusals may happen before a source path can be constructed.
+        input_refusal = (set(filing) == {'status'} and filing.get('status') in {
+            'missing_or_invalid_accession', 'missing_or_invalid_cik'})
+        source_attempted = bool(filing) and not input_refusal
+        if runtime is not None and source_attempted:
+            if (filing.get('parser_runtime') != runtime
+                    or filing.get('parser_runtime_sha256') != runtime_hash):
+                raise ValueError('Packet parser runtime differs from summary')
         key = (packet['rule']['id'], packet['flag']['row_id'])
         if key in packets or packet['provenance']['builder_sha256'] != summary['builder_sha256']:
             raise ValueError('Duplicate flag or mixed builder versions')

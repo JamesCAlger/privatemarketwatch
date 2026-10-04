@@ -13584,3 +13584,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Added a narrow header-role descriptor with dated FV/movement columns and conservative refusal. Twenty-three focused tests pass; the exploratory TCW primary/rollforward distinction reproduces.
 - Original 26-file inventory is unchanged (no new recognized rollforward tables). Helper remains unintegrated; builder, routing, model accounting and production unchanged.
 
+
+## 2026-10-04 -- Jev pilot: parser dependency provenance
+
+- Isolated cache/replay now binds the shared date helper and Python/HTML-parser versions, detects dependency changes, and rejects mixed replay metadata. No production code changes.
+- Same 67 cached cases retain 39 ready / 28 blocked; source evidence is unchanged. Prepared review inputs refreshed to version 56, all unfinished. API accounting remains 100 calls and zero independent clearances.
+- 484 targeted tests passed, then 17 replay-integrity tests after two added cases. Protection audit 37 reports no production metadata changes; no production rebuild or full suite.

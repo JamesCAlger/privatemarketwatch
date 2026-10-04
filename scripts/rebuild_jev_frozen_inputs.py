@@ -11,7 +11,7 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from pipeline.jev_bundles import SourceCache, build_bundle, clean
+from pipeline.jev_bundles import SourceCache, build_bundle, clean, parser_runtime
 from pipeline.jev_screening import fingerprint
 from scripts.compare_jev_retrieval import load_replay
 from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
@@ -80,9 +80,11 @@ def main():
         cases.append({'rule': rule, 'row_id': row_id,
                       'packet_fingerprint': fingerprint(packet), **packet['evidence_status']})
         print(f"Rebuild {index}/{len(ordered)}: {row_id} {packet['evidence_status']['status']}", flush=True)
-    if sha(ROOT / 'pipeline/jev_bundles.py') != builder_hash or sha(holdings) != holdings_hash:
+    if (sha(ROOT / 'pipeline/jev_bundles.py') != builder_hash or sha(holdings) != holdings_hash
+            or parser_runtime() != cache.runtime):
         raise ValueError('Inputs changed during rebuild; incomplete replay')
     summary = {'arm': 'development_snapshot_enrichment', 'builder_sha256': builder_hash,
+               'parser_runtime': cache.runtime, 'parser_runtime_sha256': cache.runtime_hash,
                'holdings_sha256': holdings_hash, 'cases': cases,
                'status_counts': dict(Counter(c['status'] for c in cases)), 'production_clearance_enabled': False}
     write(target / 'summary.json', summary)
