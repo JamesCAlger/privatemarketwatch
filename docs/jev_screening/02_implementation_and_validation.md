@@ -201,3 +201,21 @@ The isolated replay reader now checks exact declared flag membership, packet fil
 Historical summaries remain unchanged. Those without packet fingerprints receive identity/status/version checks but cannot establish full content immutability by themselves. Frozen model-request manifests and prepared review-input bindings provide separate content hashes; do not imply that adding a new hash retrospectively proves an older packet was unchanged.
 
 Seven negative fixtures failed before the repair; all nine focused replay tests now pass, including two compatible summary formats. The original/consumed holdout pair and current 100-call ledger still validate with unchanged counts. A targeted reader/consumer regression set passes 22 tests. No bundle-builder change, source reparse or model call was required.
+
+## Audit sample planning: illustrative bounds, not acceptance targets
+
+For independent, randomly sampled candidate clearances with zero unsafe outcomes, the exact one-sided 95% binomial upper bound is `1 - 0.05^(1/n)`. The corresponding zero-error sample sizes are:
+
+| Illustrative upper unsafe-clearance rate | Independent audited clearances needed |
+|---|---:|
+| 5% | 59 |
+| 2% | 149 |
+| 1% | 299 |
+| 0.5% | 598 |
+| 0.1% | 2,995 |
+
+Calculated as `ceil(log(0.05) / log(1 - target_rate))`. These numbers assume zero unsafe outcomes, independent observations and representative random sampling. Multiple rows sharing one filing/layout defect violate the independence assumption. A stratified or clustered design needs its own analysis; repeated requests, synthetic siblings and consumed development cases cannot inflate this denominator. No risk target is selected by this table.
+
+The current pilot has zero independently audited candidate clearances, so none of these bounds can be claimed from the 42 correct natural labels. Error-enriched controls instead test escalation mechanisms; they do not estimate traffic prevalence. A future experiment should preserve both a representative clearance audit sample and a separately reported natural-error challenge set, within the approved fund scope.
+
+Full B1 source review of every candidate is appropriate for calibration but cannot demonstrate the intended recurring workload saving. Any later sampled-audit operating mode also needs independently validated automatic evidence checks, supported-layout limits, drift detection and requeue capability. The current router requires per-packet independent review and does not implement such a production mode. Do not silently replace that requirement with a model confidence threshold or a reusable human checkmark.
