@@ -60,8 +60,8 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay superscript_notes_v4_39 has
-34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
+references are preserved separately. Latest full replay rate_note_scope_v4_42 has
+37 ready and 30 blocked: C107 24/20, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
 
@@ -72,13 +72,15 @@ cases. The repaired replay changes neither the 34/33 readiness split nor candida
 sets. This is a corrected synthetic failure mechanism, not an additional observed
 production error. Later source-context retrieval diagnostics also change model-visible inputs. Historical rechecks remain old-version observations, not newly scored calls.
 
+A later bounded note-table association adds full reference-rate tables to seven Crescent bundles across three filings. Three regain readiness; four remain blocked for other reasons. The source identities, amounts and candidate sets are unchanged. This is a development repair, with no inherited model score or independent audit.
+
 ## Implications for the proposed workflow
 
 Separate existing review work from additional screening:
 
 | Frozen flag action | Flags | Current ready / blocked | Interpretation |
 |---|---:|---:|---|
-| C107 REVIEW | 44 | 21 / 23 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |
+| C107 REVIEW | 44 | 24 / 20 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |
 | X08 TRACK_ONLY | 19 | 11 / 8 | Added screening coverage, with B1 investigation capacity needed for escalations. |
 | C104 TRACK_ONLY | 4 | 2 / 2 | Exploratory extra coverage; no clearance eligibility promoted. |
 
@@ -119,6 +121,7 @@ overstate the benefit. The sampled cases cannot establish population workload.
 
 Production code, data, queues, gates and baselines remain unchanged. The isolated
 checkpoints are local only; no merge or push has been performed.
+
 
 
 

@@ -345,6 +345,51 @@ def _immediate_note_table(element, table_ids: dict, tables: list) -> dict | None
     return None
 
 
+def _following_rate_note_table(element, table_ids: dict, tables: list, period: str) -> dict | None:
+    """Narrow fallback for an explicit rate table after noncompeting footnotes."""
+    text = clean(element.get_text(' ', strip=True))
+    rates = set(re.findall(r'\b(?:SOFR|Prime|EURIBOR|SONIA|BBSY|LIBOR)\b', text, re.I))
+    rates = {name.lower() for name in rates}
+    if not re.search(r'\breference rates?\b', text, re.I) or len(rates) < 2:
+        return None
+    skipped = []
+    for index, sibling in enumerate(element.next_siblings):
+        if index >= 20:
+            return None
+        if isinstance(sibling, NavigableString):
+            if sibling.strip():
+                return None
+            continue
+        value = clean(sibling.get_text(' ', strip=True))
+        if not value:
+            continue
+        if sibling.name == 'table':
+            ti = table_ids.get(id(sibling))
+            if ti is None or not skipped:
+                return None
+            table = tables[ti]
+            heading = ' '.join(_row_text(row) for row in table['rows'][:8])
+            table_rates = {name.lower() for name in re.findall(
+                r'\b(?:SOFR|Prime|EURIBOR|SONIA|BBSY|LIBOR)\b', value, re.I)}
+            if (table['unsupported_layout'] or len(table['rows']) > 40 or len(value) > 20000
+                    or table.get('report_date') not in (None, period)
+                    or parse_period_date(heading) not in (None, period)
+                    or not re.search(r'\breference rate\b', heading, re.I)
+                    or len(rates & table_rates) < 2):
+                return None
+            return {'table_index': ti, 'association': 'following_reference_rate_table',
+                    'intervening_notes': skipped,
+                    'rows': [{'row_index': ri, 'cells': row} for ri, row in enumerate(table['rows'])]}
+        marker = _NOTE_DEFINITION.match(value)
+        if (sibling.name not in {'p', 'div'} or sibling.find('table') or not marker
+                or _requires_note_continuation(value) or len(value) > 5000 or len(skipped) >= 4
+                or re.search(r'\btable\b|\breference rates?\b', value, re.I)
+                or re.search(r'schedule\s+of\s+investments|statements?\s+of', value, re.I)):
+            return None
+        skipped.append({'marker': (marker[1] or marker[2]).lower(), 'text': value})
+    return None
+
+
 def _classes(text: str) -> list[str]:
     # Retain only explicit class labels; an issuer match is not tranche proof.
     spaced = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
@@ -572,6 +617,8 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
             record = {"marker": marker, "report_date": active_period, "anchor_table_index": active_table, "text": text}
             if _requires_note_continuation(text):
                 continuation = _immediate_note_table(element, table_ids, tables)
+                if continuation is None:
+                    continuation = _following_rate_note_table(element, table_ids, tables, active_period)
                 if continuation:
                     record['continuation_table'] = continuation
             if record not in notes:

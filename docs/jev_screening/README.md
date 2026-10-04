@@ -71,3 +71,5 @@ Current work addresses source-context completeness and error controls. The
 results do not justify production clearance. The owner has instructed execution
 to continue until stopped in this chat; eight hours is a planning window, not an
 automatic stop condition.
+
+The [remaining bundle work](11_remaining_bundle_work.md) separates reusable evidence gaps from cases requiring B1 investigation, with overlapping cause counts kept explicit.

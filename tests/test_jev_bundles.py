@@ -275,6 +275,43 @@ def test_note_table_cannot_be_borrowed_across_interruption(interruption):
     assert packet['evidence_status']['status'] == 'blocked'
 
 
+def rate_note_body(interruption='<p>(15) Par values are reported in US dollars unless noted.</p>'):
+    table = '<table><tr><td>Reference Rate</td><td>Overnight</td></tr><tr><td>SOFR</td><td>4.1%</td></tr><tr><td>Prime</td><td>7.5%</td></tr></table>'
+    return (section_schedule() + '<p>(14) SOFR and Prime reference rates are represented in the below table.</p>'
+            + interruption + table)
+
+
+def test_explicit_reference_rate_table_can_follow_noncompeting_notes():
+    packet = bundle(source=parsed(rate_note_body()))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    note = packet['source_candidates'][0]['notes'][0]
+    assert note['continuation_table']['association'] == 'following_reference_rate_table'
+    assert note['continuation_table']['intervening_notes'][0]['marker'] == '15'
+
+
+@pytest.mark.parametrize('interruption', [
+    '<p>(15) Other rates appear in the following table.</p>',
+    '<p>(15) Other rates are disclosed in Table 1.</p>',
+    '<p>Consolidated Schedule of Investments December 31, 2024</p>',
+    '<p>This is an unclassified intervening paragraph.</p>',
+    '<p>(15) A different note applies to another holding.</p>' * 5,
+])
+def test_reference_rate_association_rejects_scope_or_competing_pointer(interruption):
+    packet = bundle(source=parsed(rate_note_body(interruption)))
+    assert packet['evidence_status']['status'] == 'blocked'
+
+
+def test_reference_rate_association_requires_header_and_named_rates():
+    for old, new in [('Reference Rate', 'Unrelated values'), ('Prime</td>', 'EURIBOR</td>')]:
+        packet = bundle(source=parsed(rate_note_body().replace(old, new)))
+        assert packet['evidence_status']['status'] == 'blocked'
+
+
+def test_reference_rate_association_rejects_explicit_other_date():
+    body = rate_note_body().replace('Reference Rate</td>', 'Reference Rate December 31, 2024</td>')
+    assert bundle(source=parsed(body))['evidence_status']['status'] == 'blocked'
+
+
 def test_oversized_note_table_blocks_instead_of_truncating():
     table = '<table>' + '<tr><td>Acme Test LLC</td><td>1/1/2024</td></tr>' * 41 + '</table>'
     packet = bundle(source=parsed(section_schedule() + '<p>(14) Dates are as follows:</p>' + table))

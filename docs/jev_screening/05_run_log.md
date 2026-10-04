@@ -636,3 +636,25 @@ aliases. Sixteenth bounded production metadata audit: zero changed paths.
   CSV joins, provider calls, B1 review and maintenance. OS caches were not flushed;
   a small read-only replay comparison overlapped the initial sample.
 - No new API calls, funds, independent audits or production modifications.
+
+## 2026-10-04 checkpoint: bounded reference-rate note association
+
+- Blocker profiling identified nine flags with missing note continuations. Three
+  Crescent Q4-2025 cases had this as their sole reported cause. Source inspection
+  showed the rate paragraph followed by two other footnotes and then table 52.
+- Added a narrow association for an explicit reference-rate table across at most
+  four noncompeting notes, preserving intervening text and requiring matching rate
+  names/header, bounded content and period consistency. General tables retain the
+  immediate-adjacency rule. Competing numbered references and other dates were
+  initially accepted in new counterexamples; both were repaired before this checkpoint.
+- Replay rate_note_scope_v4_42: 37 ready / 30 blocked (C107 24/20, X08 11/8,
+  C104 2/2). Builder 6857318fdb820cc49c6f89cbf07e7dc03da90d51c6eeca599ffa77ee9c40326f.
+  All 67 identities, source amounts and candidate inventories are unchanged.
+- Structured delta verification: seven flags gain note tables across three cached
+  filings of one fund. Accurate Finance Sub, CRS TH Holdings and CCI Buyer regain
+  readiness; four other bundles retain scope blockers. No audit/score transfer.
+- Combined targeted suite: 316 passed. Eighteenth bounded production metadata
+  audit: zero changed paths. Observation ledger still accounts for all 98 calls,
+  42 unique natural flags called and 1,561,219 input tokens. No new API calls.
+- Intermediate rate_note_scope_v4_41 is retained as development evidence, not the
+  accepted builder revision; it predates the two added association boundary vetoes.
