@@ -1,5 +1,6 @@
 """Describe explicit table headers; never decide economic identity or inclusion."""
 import re
+from datetime import datetime
 
 
 LABELS = {
@@ -12,10 +13,45 @@ LABELS = {
 }
 
 
+def _rollforward_band(row):
+    """Require two dated FV columns and both movement columns in one band."""
+    matches = {}
+    dated = []
+    for cell in row:
+        label = ' '.join(re.sub(r'\([a-z0-9]{1,2}\)', '', cell.get('text', ''), flags=re.I).split())
+        normalized = label.casefold()
+        field = ({'name of investment': 'issuer', 'gross addition': 'gross_addition',
+                  'gross additions': 'gross_addition', 'gross reduction': 'gross_reduction',
+                  'gross reductions': 'gross_reduction'}).get(normalized)
+        evidence = {k: cell[k] for k in ('column', 'span', 'text')}
+        if field:
+            matches.setdefault(field, []).append(evidence)
+        date_match = re.fullmatch(r'Fair Value at ([A-Za-z]+ \d{1,2}, \d{4})', label, re.I)
+        if date_match:
+            try:
+                date = datetime.strptime(date_match[1], '%B %d, %Y').date().isoformat()
+            except ValueError:
+                continue
+            dated.append((date, evidence))
+    if not {'issuer', 'gross_addition', 'gross_reduction'} <= matches.keys() or len(dated) != 2:
+        return None
+    # Preserve uncertain orientation instead of inferring beginning/end roles.
+    if dated[0][0] >= dated[1][0] or dated[0][1]['column'] >= dated[1][1]['column']:
+        return None
+    matches['beginning_fair_value'] = [{**dated[0][1], 'header_date': dated[0][0]}]
+    matches['ending_fair_value'] = [{**dated[1][1], 'header_date': dated[1][0]}]
+    return matches
+
+
 def table_disclosure_role(table):
     """A descriptive header finding, not proof of owner, scope or row validity."""
     evidence, roles = [], set()
     for row_index, row in enumerate(table.get('rows', [])[:8]):
+        rollforward = _rollforward_band(row)
+        if rollforward:
+            evidence.append({'table_index': table.get('table_index'), 'row_index': row_index,
+                             'matching_cells': rollforward, 'indicated_roles': ['investment_rollforward']})
+            roles.add('investment_rollforward')
         matches = {}
         for cell in row:
             label = re.sub(r'\(\d{1,2}\)', '', cell.get('text', ''))

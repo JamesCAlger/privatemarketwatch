@@ -12,7 +12,7 @@ from pipeline.jev_bundles import parse_source
 from pipeline.jev_disclosure_role import table_disclosure_role
 from pipeline.jev_screening import fingerprint
 from scripts.compare_jev_retrieval import load_replay
-from scripts.jev_pilot_session import install_read_only_guard, sha, write
+from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
 
 TARGETS = {
     'ROW-54bec5b9be81ee4d': (12, 6),
@@ -27,11 +27,38 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--replay', required=True)
+    parser.add_argument('--exploratory-tcw', action='store_true',
+                        help='Inspect the separately documented TCW primary and rollforward tables')
     args = parser.parse_args()
     repo, run = args.repo.resolve(), args.run_root.resolve()
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
         raise ValueError('Isolated pilot required')
     install_read_only_guard(repo, run)
+    if args.exploratory_tcw:
+        parent_path = run / 'exploratory_context_089f24a29d1a0ec6.json'
+        parent = read(parent_path)
+        source = (repo / parent['source_relative_path']).resolve()
+        if (parent['published_position']['row_id'] != 'ROW-ecc8c78a0d433f52' or
+                not source.is_relative_to(repo / 'data/raw/filings/bdc_html') or
+                source.stat().st_size > 40 * 1024 * 1024 or sha(source) != parent['source_sha256']):
+            raise ValueError('Unexpected exploratory source')
+        print('Inspecting primary and rollforward headers in the exploratory TCW source', flush=True)
+        parsed = parse_source(source.read_bytes())
+        records = [{'table_index': ti, 'finding': table_disclosure_role(parsed['tables'][ti]),
+                    'header_rows': parsed['tables'][ti]['rows'][:3]} for ti in (5, 10)]
+        if sha(source) != parent['source_sha256']:
+            raise ValueError('Exploratory source changed')
+        report = {'parent_sha256': sha(parent_path), 'source_sha256': parent['source_sha256'],
+                  'builder_sha256': sha(ROOT / 'pipeline/jev_bundles.py'),
+                  'role_helper_sha256': sha(ROOT / 'pipeline/jev_disclosure_role.py'),
+                  'tables': records, 'api_calls': 0, 'production_changes': 0,
+                  'limitation': 'Explicit header roles only; separate exploratory case, no automatic identity, ownership, row inclusion or correction.'}
+        destination = run / ('exploratory_table_roles_' + fingerprint(report)[:16] + '.json')
+        if not destination.exists():
+            write(destination, report)
+        print(json.dumps({'artifact': destination.name,
+                          'roles': {r['table_index']: r['finding']['role'] for r in records}}), flush=True)
+        return
     summary, packets = load_replay(run, args.replay)
     selected = {p['flag']['row_id']: p for p in packets.values() if p['flag']['row_id'] in TARGETS}
     if set(selected) != set(TARGETS):

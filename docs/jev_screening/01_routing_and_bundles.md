@@ -62,6 +62,7 @@ configuration, make it explicit, evidence-backed and regression tested.
 | Output position | Unique join within the frozen holdings snapshot; issuer, tranche/share class, dates, currency, values, dimensions, parent/JV/subsidiary scope |
 | Provenance | Flag/holdings hashes, filing accession and raw-source hash, builder/parser version, model/prompt/routing versions |
 | Source candidates | Relevant issuer and sibling positions, source coordinates, original cells, headers/spans, period, owner context and applicable notes |
+| Disclosure roles | Source-wide inventory of primary schedules and relevant supplemental/rollforward disclosures, including unresolved roles and period/owner links; not conditioned solely on successful candidate retrieval |
 | Identity evidence | Visible issuer/instrument/class/maturity/acquisition data, source dimensions/context and agreement/conflict checks |
 | Monetary evidence | Printed values and signs, displayed units, inline tags/units/scales and any disagreement between them |
 | Deterministic comparisons | Normalised values, differences and tolerance derived from display precision; original values retained |
@@ -73,6 +74,13 @@ reporting instant and entity identifier. A visible schedule heading cannot repla
 missing tagged context. Conflicting definitions or disagreement with the filing's
 period/entity remain blocking. This readiness check does not certify that the
 context names the correct sibling position; independent identity review still applies.
+
+Equal fair value across a main schedule and a rollforward does not make the rows
+interchangeable for cost, principal, rate or instrument evidence. Preserve their
+different purposes and conflicting terms. A source-role helper describes headers;
+it cannot certify economic identity, decide inclusion or select the surviving
+holding. The separate [TCW survivor investigation](07_proxy_cost_evidence.md)
+shows why count/FV reconciliation alone cannot validate retained fields.
 
 Resolve row IDs only in the snapshot where they were generated. Raw production
 position IDs are not stable across rebuilds. Cross-build reuse requires a fresh

@@ -13,6 +13,11 @@ or independent clearance. A separate queue date/ID defect also blocks safe paren
 The inference estimate is about **$0.0664**; bundle maintenance and B1 review cost
 are not measured. See the [interim assessment](06_interim_assessment.md) first.
 
+A separate exploratory TCW source investigation found an existing dedup rule
+retaining a sparse rollforward row and losing main-schedule cost detail, despite
+matching FV audit totals. This was not found by Jev and is outside the frozen
+67-case experiment. See [source-field retention](07_proxy_cost_evidence.md).
+
 Execution is active in the isolated `.claude/worktrees/jev-screening-pilot`
 worktree. See the [run log](05_run_log.md) for checkpoints and scope accounting.
 Production code, data and queues remain outside this work.

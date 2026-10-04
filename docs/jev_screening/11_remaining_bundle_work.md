@@ -1,6 +1,7 @@
 ﻿# Remaining bundle work
 
-Basis: `note_formula_v4_48`, 67 selected natural flags across 11 funds.
+Basis: `explicit_visibility_v4_52`, 67 selected natural flags across 11 funds.
+Its structured evidence and blocker counts are unchanged from replay 48.
 There are 39 evidence-ready and 28 blocked bundles. Three ready bundles exceed
 the runner's size proxy cap. Readiness is not an independent audit.
 The blocker profile counts each flag once per cause; causes overlap and must not
@@ -263,3 +264,13 @@ Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagn
 A bounded lexical scan of all 26 hash-bound cached filings found no embedded style blocks, stylesheet link tags or CSS imports. Consequently it found no stylesheet visibility declarations to investigate in this selected sample. Artifact: stylesheet_inventory_e2984c3f87a80287.json, generated offline by scripts/inventory_jev_stylesheets.py with all 67 prepared packet bindings checked.
 
 This does not certify rendered visibility: the scan is not a browser, does not resolve CSS syntax/cascade or scripts, and fetched no external resources. The builder's existing positive inline/HTML hidden-content refusal remains unchanged. Stylesheet-driven layouts remain an explicit future-layout limitation; this result provides no reason to add a CSS renderer to the current pilot. No new model calls, readiness changes or production edits.
+
+## 2026-10-04: optional explicit rollforward role
+
+Extended the isolated disclosure-role helper to recognize a same-band Name of Investment header, two valid chronologically ordered dated fair-value headers, and both Gross Addition and Gross Reduction columns. It preserves original header text/coordinates and dates. Missing movement fields, malformed/reversed/equal dates and unsupported geometry remain unknown; duplicate movement headers are ambiguous. No ownership, economic identity, inclusion or correction is inferred.
+
+Twenty-three focused helper tests pass, including ten new rollforward checks. In the separate exploratory TCW filing, the helper identifies table 5 as position_values and table 10 as investment_rollforward (exploratory_table_roles_4cf31ed60a1d39fe.json). This is one source example, not cross-filer rollforward validation.
+
+Reprofiling all 26 original frozen filings yields exactly the previous counts: 2,641 tables, 184 position_values, six unfunded_commitments, 2,451 unknown, no recognized investment_rollforward tables. Artifact: disclosure_role_profile_e683ca5c6be6746b.json. The additional rule therefore adds no demonstrated coverage within the frozen sample. Header conventions beyond this positive example remain unsupported; aliases were not widened to improve coverage.
+
+The helper is optional and unintegrated. Builder/request versions, 39/28 readiness, the frozen 67-case experiment, 100-call accounting and zero independent clearances are unchanged. The separate TCW exploration remains outside those denominators. No full suite, production rebuild/export or production-writing semantic diff was run.

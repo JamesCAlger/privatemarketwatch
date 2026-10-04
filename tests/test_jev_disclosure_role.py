@@ -65,3 +65,49 @@ def test_source_header_coordinates_and_note_reference_are_preserved():
     evidence = table_disclosure_role(source)['evidence'][0]
     assert evidence['row_index'] == 1
     assert evidence['matching_cells']['fair_value'] == [{'column': 3, 'span': 1, 'text': 'Fair Value (3)'}]
+
+
+ROLLFORWARD = ['Name of Investment', 'Fair Value at December 31, 2024',
+               'Gross Addition (a)', 'Gross Reduction (b)', 'Realized Gains (Losses)',
+               'Net Change in Unrealized Appreciation/ (Depreciation)',
+               'Fair Value at September 30, 2025', 'Interest/Dividend/ Other income']
+
+
+def test_explicit_rollforward_preserves_dates_without_assigning_owner():
+    source = table(ROLLFORWARD)
+    result = table_disclosure_role(source)
+    assert result['role'] == 'investment_rollforward'
+    assert result['ownership_scope_verified'] is False
+    assert result['economic_identity_verified'] is False
+    assert result['inclusion_decision'] is None
+    matches = result['evidence'][0]['matching_cells']
+    assert matches['beginning_fair_value'][0]['header_date'] == '2024-12-31'
+    assert matches['ending_fair_value'][0]['header_date'] == '2025-09-30'
+    assert matches['gross_addition'][0]['text'] == 'Gross Addition (a)'
+
+
+@pytest.mark.parametrize('index,replacement', [
+    (2, 'Principal Amount'), (3, 'Amortized Cost'),
+    (1, 'Fair Value at December 31, 2025'),
+    (1, 'Fair Value at September 30, 2025'),
+    (6, 'Fair Value at September 31, 2025'),
+    (0, 'Total Investments'),
+])
+def test_incomplete_or_conflicting_rollforward_headers_stay_unknown(index, replacement):
+    labels = list(ROLLFORWARD)
+    labels[index] = replacement
+    assert table_disclosure_role(table(labels))['role'] == 'unknown'
+
+
+def test_comparative_values_without_movements_are_not_a_rollforward():
+    assert table_disclosure_role(table([ROLLFORWARD[0], ROLLFORWARD[1], ROLLFORWARD[6]]))['role'] == 'unknown'
+
+
+def test_duplicate_rollforward_movement_header_is_ambiguous():
+    assert table_disclosure_role(table(ROLLFORWARD + ['Gross Addition']))['role'] == 'ambiguous'
+
+
+def test_unsupported_rollforward_layout_stays_unknown():
+    source = table(ROLLFORWARD)
+    source['unsupported_layout'] = True
+    assert table_disclosure_role(source)['role'] == 'unknown'

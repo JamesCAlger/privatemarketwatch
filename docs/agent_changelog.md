@@ -13578,3 +13578,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Six-row in-memory reproduction identifies deterministic context-anchor ordering in the existing dedup rule; current application audit matches expected three rows/FV and misses field retention loss. No production fix or full replay.
 - One exploratory case in an existing fund, separate from the frozen 67 cases; no new classifier calls. Full source and mechanism evidence in docs/jev_screening/07_proxy_cost_evidence.md.
 
+
+## 2026-10-04 -- Jev pilot: optional explicit rollforward role
+
+- Added a narrow header-role descriptor with dated FV/movement columns and conservative refusal. Twenty-three focused tests pass; the exploratory TCW primary/rollforward distinction reproduces.
+- Original 26-file inventory is unchanged (no new recognized rollforward tables). Helper remains unintegrated; builder, routing, model accounting and production unchanged.
+
