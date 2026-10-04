@@ -79,3 +79,5 @@ The [remaining bundle work](11_remaining_bundle_work.md) separates reusable evid
 [Rule workload](13_rule_workload.md) distinguishes wider coverage from potential review savings within the reserved funds.
 
 [Confidence sensitivity](14_confidence_sensitivity.md) shows coverage changes across cutoffs without treating the development observations as safety calibration.
+
+[Zero-value controls](15_zero_value_controls.md) record the final paired test. The 100-call cap is exhausted; further work is offline. All routes still retain B1.

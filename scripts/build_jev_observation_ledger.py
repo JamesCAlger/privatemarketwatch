@@ -22,7 +22,8 @@ RUNS = {**{label: 'natural_first_call' for label in NATURAL_RUNS},
         'order_repeat_model_01': 'exact_request_repeat',
         'current_development_model_01': 'current_builder_recheck',
         'current_consumed_model_01': 'current_builder_recheck',
-        'note_stress_model_01': 'synthetic_note_stress'}
+        'note_stress_model_01': 'synthetic_note_stress',
+        'zero_control_model_01': 'synthetic_zero_control'}
 
 
 def main():

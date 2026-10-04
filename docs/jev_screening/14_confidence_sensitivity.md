@@ -69,3 +69,7 @@ Choosing a production cutoff still requires an independent error-bearing sample,
 frozen presentation and builder, measured review costs, and a held-out evaluation.
 Confidence is the provider's score, not an established probability of correctness.
 No new API calls, natural cases or audited clearances were added.
+
+## 100-call accounting update
+
+The final two paired C104 controls are a seventh category, synthetic_zero_control, not added natural cases. Both labels/sources are correct and neither passes the joint 0.75 cutoff. The refreshed full report is threshold_sensitivity_9f9feef818294837.json, based on observation_ledger_926ba1f7437719b0.json. The historical six-group table above remains unchanged. No threshold was fitted or changed.

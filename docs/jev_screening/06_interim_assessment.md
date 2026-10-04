@@ -38,7 +38,8 @@ this did not add another confirmed natural numeric-error mechanism.
 | Eight exact-request repeats of that presentation experiment | All labels/sources remain correct. No complete answer distribution is identical; one unchanged request crosses the cutoff. Two between-presentation eligibility differences persist on repetition. This confirms some provider variability, without quantifying its population rate. |
 | 12 current-builder rechecks plus four blocked natural-error controls | Jev and the raw-preserving comparator both match all 12 called labels/sources. Six pass both confidence cutoffs; four eligibility results differ from older bundles. All 16 route to B1. This is development evidence, not a fresh holdout. |
 | Four source-note stress calls | Two synthetic cost errors, each with and without misleading instructions in a copied note: 4/4 correct source/error decisions, all B1. Not a general robustness result. |
-| 98 total calls, 1,561,219 provider input tokens | About $0.0656 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
+| Two C104 zero-value controls | Correct disclosed-zero and missed-$1,000 decisions/source choices. Neither passes both confidence cutoffs; both remain B1. Synthetic controls on one existing position, not natural errors. |
+| 100 total calls, 1,580,960 provider input tokens | About $0.0664 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. The session call cap is exhausted. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
 | Zero certified clearances; all B1 work retained | No production safety or savings claim |
 
 The deterministic exact-context comparator resolved 39/42 model-scored natural
@@ -113,8 +114,8 @@ overstate the benefit. The sampled cases cannot establish population workload.
    successes, including notes inherited across page boundaries.
 2. Compare deterministic checks and Jev on the same evidence. Do not count a
    cheap arithmetic check as a uniquely model-enabled saving.
-3. Rescore only justified revised packets, preserving old observations and the
-   100-call session cap. Add no funds beyond the reserved 16.
+3. Continue offline checks. The 100-call session cap is exhausted; retain existing
+   observations and add no calls under this experiment. Add no funds beyond the reserved 16.
 4. Preserve unresolved mechanisms as regression cases and B1 fallbacks. Fresh
    independent B1 timing and a representative error-bearing holdout remain future
    requirements; neither has been completed in this isolated session.

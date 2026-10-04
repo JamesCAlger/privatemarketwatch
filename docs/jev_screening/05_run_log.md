@@ -682,3 +682,15 @@ not validation of all filing pages or a new human audit.
   separate from the latest builder/data version; B1 work is retained throughout.
 
 Combined validation after the explanation work: 326 targeted tests passed. Nineteenth bounded production metadata audit: zero changed paths. No full suite, production rebuild/export or production-writing semantic diff was run.
+
+## 2026-10-04 checkpoint: workload, review records and final C104 controls
+
+- Read-only workload inventory within 16 reserved funds distinguishes 510 Q1-2026 C107 review issues from 448 C104 and 18 X08 track-only issues. Counts are not measured B1 jobs. Historical AGG01 entries lack row IDs and dates.
+- Offline threshold sensitivity preserves separate experiment arms and leaves 0.75 unchanged. Four focused tests pass; natural called references remain all false alarms.
+- Refreshed 67 unfinished source-first inputs against builder 42. Added findings validation plus freeze CLI: 20 validator and five CLI tests pass. No real completed review was submitted.
+- Used final two API calls on paired C104 controls for existing Specialized Dental position: disclosed zero versus copied-source FV 1,000 with output zero. Full candidate delta verification preserves unrelated evidence, including the duplicated target row in surrounding context.
+- Both answers and source selections are correct. False alarm confidence .72/.56; real error .77/.42; both B1. Deterministic context comparator also agrees on both.
+- Session total now 100 successful calls / 1,580,960 input tokens, approximately USD 0.0664 at published rate. All 100 response contracts validate. Seven categories; 42 unique natural flags called, 30 synthetic calls. Cap exhausted; work continues offline.
+- No new funds, original-source modifications, independent clearances or production changes.
+
+Validation after the C104 pair and review-record work: 355 targeted Jev tests passed; twenty-first bounded production metadata audit found zero changed paths. No full repository suite or production-writing semantic diff was run.

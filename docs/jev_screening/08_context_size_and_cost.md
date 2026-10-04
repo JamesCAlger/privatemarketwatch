@@ -12,8 +12,8 @@ the pilot's 22k whole-request proxy ceiling (tightened from 26k after comparing
 estimates with observed usage). The proxy ceiling is not a context guarantee.
 Source: [TypeSafe models](https://docs.typesafe.ai/models), checked 2026-10-04.
 
-The session's 98 successful calls reported 1,561,219 input tokens. Applying that
-published rate gives **$0.0656 estimated inference cost**. This is not an invoice
+The session's 100 successful calls reported 1,580,960 input tokens. Applying that
+published rate gives **$0.0664 estimated inference cost**. This is not an invoice
 and excludes engineering, evidence review and B1 time. No B1 savings have been
 demonstrated. At the same rate, 10k input tokens cost $0.00042; 30k cost $0.00126.
 
