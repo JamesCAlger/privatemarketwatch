@@ -379,6 +379,41 @@ def test_blank_name_continuation_retained():
     assert [c["row_index"] for c in bundle(source=source)["source_candidates"]] == [1, 2]
 
 
+@pytest.mark.parametrize('cost', ['-', fact('-', fmt='ixt:fixed-zero')])
+def test_blank_name_dash_cost_sibling_cannot_disappear(cost):
+    source = parsed(schedule([
+        ('Acme Test LLC', 'Term loan', fact('2,000'), fact('1,950'), ''),
+        ('', 'Preferred units', cost, fact('1'), ''),
+    ]))
+    packet = bundle(source=source)
+    assert [c['row_index'] for c in packet['source_candidates']] == [1, 2]
+    if cost == '-':
+        assert packet['evidence_status']['status'] == 'blocked'
+        assert 'cost:unresolved_numeric_cell' in packet['source_candidates'][1]['blocking_reasons']
+    else:
+        assert packet['source_candidates'][1]['source_values']['cost']['amount'] == '0'
+
+
+def test_fv_only_rule_retains_blank_name_zero_fv_with_missing_cost():
+    source = parsed(schedule([
+        ('Acme Test LLC', 'Term loan', fact('2,000'), fact('1,950'), ''),
+        ('', 'Preferred units', '-', fact('-', fmt='ixt:fixed-zero'), ''),
+    ]))
+    packet = bundle(row=output(fair_value='0'), source=source, rule='C104')
+    assert [c['row_index'] for c in packet['source_candidates']] == [1, 2]
+    assert packet['source_candidates'][1]['comparisons']['fair_value']['agrees_at_display_precision'] is True
+
+
+def test_blank_name_instrument_heading_without_amounts_is_not_candidate():
+    source = parsed(schedule([
+        ('Acme Test LLC', 'Term loan', fact('2,000'), fact('1,950'), ''),
+        ('', 'Preferred units', '', '', ''),
+        ('Other Borrower', 'Preferred units', fact('2,000'), fact('1'), ''),
+    ]))
+    packet = bundle(source=source)
+    assert [c['row_index'] for c in packet['source_candidates']] == [1]
+
+
 def test_unnamed_subtotal_is_context_not_a_position_candidate():
     source = parsed(schedule([
         ("Acme Test LLC", "Preferred units", fact("2,000"), fact("1"), ""),

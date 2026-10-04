@@ -51,7 +51,9 @@ def main():
                             'by_rule': dict(Counter(r['flag']['rule_id'] for r in accepted))})
     attempts = list((run / 'api_attempts').glob('*.started.json'))
     results = [read(p) for p in (run / 'api_attempts').glob('*.result.json')]
-    report = {'natural_unique_flags': len(flags), 'natural_successful_calls': sum(r['status'] == 'success' for r in flags.values()),
+    report = {'natural_unique_flags': len(flags),
+              'natural_distinct_funds': len({r['flag']['cik'] for r in flags.values()}),
+              'natural_successful_calls': sum(r['status'] == 'success' for r in flags.values()),
               'rule_summary': rule_summary, 'threshold_sensitivity': sensitivity,
               'all_session_attempts': len(attempts),
               'all_session_input_tokens': sum(r.get('response', {}).get('usage', {}).get('input_tokens', 0) for r in results),

@@ -94,6 +94,10 @@ covering donor observation, donor source, period, position chain and the proxy
 policy. They stay with B1; a current-SOI mismatch does not establish proxy error.
 C104 depends on fair value alone and does not require a reported-cost basis.
 
+The [proxy-cost investigation](07_proxy_cost_evidence.md) documents six real
+examples and a B1-only lineage packet. Internal donor-policy agreement does not
+certify source truth, position continuity or suitability of the proxy policy.
+
 ## Independent checks before clearance
 
 1. Recheck the output join and current flag predicate against the frozen inputs.

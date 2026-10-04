@@ -13229,3 +13229,39 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - 239 focused tests pass. 74 total API calls / 1,103,934 input tokens. Eighth
   bounded production metadata audit: zero changed paths. Production unchanged;
   no full suite, production semantic diff, merge or push.
+
+## 2026-10-04 -- Jev candidate recall and repeated confidence observations
+
+- Isolated retrieval now retains blank-name siblings with dash/missing cost;
+  three failing regressions reproduced the omission. Same 67-case real replay
+  changes no candidate sets: 34 ready / 33 blocked, with no audited clearances.
+- Exact repeats of eight presentation requests preserve all correct labels and
+  sources but show confidence variation; one identical request crosses 0.75.
+  Two presentation eligibility differences persist. No threshold tuning/retry
+  policy introduced. All B1 work retained.
+- 251 focused tests pass. 82 calls / 1,290,822 input tokens; all response contracts
+  valid. Natural sample: 67 flags from 11 funds, 42 calls. Sixteen refers to the
+  cumulative programme reservation, including prior research, not this sample.
+- Local checkpoint 105ee13 is unmerged/unpushed. Production remains untouched.
+
+## 2026-10-04 -- Jev pilot: B1-only proxy donor packets
+
+- Added isolated bounded lineage/source-review helpers for the six existing
+  proxy-cost flags. Frozen release and audit hashes verify; all six donor links
+  reproduce policy, and raw FV/date comparisons match their donor source rows.
+- Two donors are earlier-quarter observations; four are self-donors. This does
+  not verify position chains or proxy suitability, and adds no Jev eligibility.
+  All six remain B1 work. See docs/jev_screening/07_proxy_cost_evidence.md.
+- Eleven focused lineage tests pass. Ninth bounded production audit: zero
+  changed paths. API totals unchanged at 82 calls / 1,290,822 input tokens.
+
+## 2026-10-04 -- Jev pilot: observed layout coverage
+
+- Added isolated coverage profiler: 67 flags, 11 funds, 26 filing/period groups,
+  25 observed header/grid shapes and 12 flags without candidates. Four focused
+  tests separate value changes from geometry/transform changes.
+- Shape sets are diagnostic only. Cell merges and differing sampled instrument
+  tables explain some variation; neither shape equality nor a previously seen
+  filer certifies source completeness. No source-type eligibility was expanded.
+
+- Combined pilot verification: 266 focused tests pass; tenth bounded production metadata audit reports zero changed paths. Full suite and production-writing semantic diff not run.

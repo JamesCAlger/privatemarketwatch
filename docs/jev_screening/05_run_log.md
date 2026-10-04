@@ -384,3 +384,73 @@ remain development evidence, not untouched human gold.
   or push. A same-snapshot full replay of the grouped-header builder is running.
 
 - Completed grouped_headers_v4_17 replay: 34 ready / 33 blocked. Three Fortress C107 cases gain header support. Of 17 historical confidence candidates, 13 remain ready; none has an identical current request, so old confidence is not transferred. No clearance certificates.
+
+## 2026-10-04 checkpoint: candidate recall and exact-request variability
+
+- Local checkpoint 105ee13 preserves the preceding v4 work; no merge or push.
+- Code review found blank-name sibling retrieval depended on parsing a numeric
+  cost. Three failing regressions demonstrate that zero/missing-cost tranches
+  could disappear, including a zero-FV position for C104. Retrieval now retains
+  rows with instrument identity and monetary content before parsing values;
+  empty instrument headings and unnamed subtotals remain non-candidates.
+- Full same-input replay sibling_recall_v4_18 has 34 ready / 33 blocked. Compared
+  with grouped_headers_v4_17, no natural candidate lists or readiness change.
+  Thus this is a synthetic-regression fix, not measured additional natural recall.
+- Corrected denominator wording: 67 natural flags represent 11 distinct funds;
+  16 is the cumulative programme reservation including earlier research. The
+  programme summary now emits natural_distinct_funds explicitly.
+- Repeated all eight frozen presentation payloads exactly, using separate attempt
+  identities while retaining original request IDs, packets, evidence and answers.
+  Same 100-call cap, exclusive lock, bounded timeouts and no automatic retry for
+  unknown submissions. Eight transport tests verify these constraints.
+- All eight repeated labels and selected sources agree with their references.
+  No complete response distribution repeats exactly. BioXcel reversed source
+  confidence changes from 0.73 to 0.75, crossing the trial cutoff with identical
+  input. Other eligibility remains unchanged within each request. Premier Roofing
+  and Express Wash retain their normal/reversed eligibility differences.
+- This establishes some request-to-request confidence variability. With only two
+  calls per exact request, it does not isolate all ordering effects or calibrate
+  the threshold. Do not retry until a flag clears or choose a favourable ordering.
+- Session totals: 82 successful calls / 1,290,822 provider input tokens; 18 calls
+  remaining. Natural totals stay 67 flags / 42 calls. All 82 response contracts
+  validate; 251 combined focused tests pass. No audited clearances or B1 savings.
+- Seres source re-review confirms its current warrants row t20r18: 4,674 shares,
+  cost 293,000 and FV 7,000, versus comparative FV 40,000 in t34r20. The current
+  packet retains restricted-security note 14 and its 21-row continuation table.
+  Its older low-confidence source abstention remains a model observation, not a
+  new extraction error. No extra Seres call was made.
+
+## 2026-10-04 checkpoint: B1-only proxy-cost lineage
+
+- Built six bounded lineage records using existing holdings, cost_donor_audit,
+  financial_state_audit, identity_contract and holdings_release artifacts.
+  Input hashes match the frozen holdings and recorded release; an independent
+  query reproduces unique earliest eligible donors within that snapshot.
+- All six internal policy checks pass. GC Ferry uses 2025-09-30 FV -39,000;
+  Accupac uses 2023-03-31 FV -14,000. Three AB Centers observations and SI Swan
+  use their own first-observed FV. Raw donor source review finds the corresponding
+  negative USD FV facts and matching dates for all six.
+- This is not independent chain/policy certification. Three AB Centers donor
+  rows are explicitly unfunded-commitment disclosures. No output correction,
+  reported-cost label, new flag or Jev eligibility was inferred. All six stay B1.
+- Preserved proxy_lineage_19.json and proxy_donor_sources_19.json; documented the
+  distinct evidence contract in 07_proxy_cost_evidence.md. Eleven focused lineage
+  tests pass; ninth bounded production metadata audit reports zero changed paths.
+  API totals remain 82 calls / 1,290,822 tokens. No SEC downloads or production writes.
+
+## 2026-10-04 checkpoint: layout coverage inventory
+
+- Added an isolated layout profiler and four focused tests. The same 67 flags
+  cover 11 funds and 26 filing/period combinations, with 25 observed header/grid
+  shapes and 12 flags without candidates. Numeric transform/scale paths are
+  recorded separately from geometry and output values do not alter signatures.
+- Eight adjacent sampled period pairs have differing shape sets. Manual review
+  of Ares/Onex examples finds cell-merge variants and different sampled instrument
+  tables, so these must not be called eight confirmed filer-template changes.
+  Layout equality likewise cannot certify notes or accounting scope. The report
+  is a validation-coverage inventory, not a new admission gate or maintenance KPI.
+- Existing BDC inline-XBRL scope remains explicit. No interval/tender, N-PORT or
+  HTML-only support is inferred. Artifacts: layout_profile_*.json, with per-flag
+  evidence paths and blockers available for future stratified validation.
+
+- Combined verification now passes 266 focused tests. Tenth bounded production metadata audit: zero changed paths. Full suite and production-writing semantic diff remain not run.

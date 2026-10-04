@@ -28,14 +28,15 @@ this did not add another confirmed natural numeric-error mechanism.
 
 | Observation | What it means |
 |---|---|
-| 16 funds, 67 natural flags; 42 natural Jev calls | Below the 70-fund v1 cohort; not a representative population sample |
+| 11 funds represented by 67 natural flags; 42 natural Jev calls | Cumulative programme reservation is 16 funds, including prior research. Both are below the 70-fund v1 cohort; this is not a representative population sample. |
 | 42/42 natural label agreement; 41/42 source agreement | All called natural references are false alarms. Four reviewed natural errors were blocked before submission. This does not estimate missed-error risk. |
 | Original two-fund holdout: 0/20 bundles ready | Initial layout transfer failed. Repairs consumed this holdout; subsequent scores are development results. |
 | Two new-accession temporal cases: 2/2 label/source agreement | Within familiar filers, not unseen-filer validation. Later review found missing context in one packet, so this is not 2/2 complete-evidence validation. |
 | 24 separate synthetic controls | Include rounding, sibling-cost substitutions and FV scale errors. One substituted-cost error was called a false alarm at 0.13 decision confidence; it stayed with B1. |
 | 17 historical confidence-only candidates | Not audited clearances. Later bundle versions invalidate reuse of old scores. Two newly called Fortress cases pass both trial cutoffs after grouped-header repair. |
 | Eight presentation calls on four revised X08 cases | Labels/sources remain correct, but three flags change confidence eligibility between orders; none passes both cutoffs in both orders. One call per order does not isolate provider variability. |
-| 74 total calls, 1,103,934 provider input tokens | Includes natural, synthetic and presentation calls. Dollars and B1 time savings have not been established by this experiment. |
+| Eight exact-request repeats of that presentation experiment | All labels/sources remain correct. No complete answer distribution is identical; one unchanged request crosses the cutoff. Two between-presentation eligibility differences persist on repetition. This confirms some provider variability, without quantifying its population rate. |
+| 82 total calls, 1,290,822 provider input tokens | Includes natural, synthetic, presentation and exact-repeat calls. Dollars and B1 time savings have not been established by this experiment. |
 | Zero certified clearances; all B1 work retained | No production safety or savings claim |
 
 The deterministic exact-context comparator resolved 39/42 model-scored natural
@@ -48,8 +49,10 @@ harder identity or interpretation cases.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. The cost-provenance v4 rebuild was 31 ready
-and 36 blocked before the subsequent grouped-header repair.
+references are preserved separately. Latest full replay sibling_recall_v4_18 has
+34 ready and 33 blocked: C107 21/23, X08 11/8, C104 2/2. Readiness is not audited
+completeness. Thirteen of 17 historical confidence-only candidates remain ready;
+none has an unchanged current request, so old scores are not transferred.
 
 ## Implications for the proposed workflow
 

@@ -22,6 +22,14 @@ Current data, wrappers and source artifacts remain unchanged during the pilot.
 Other vehicle types, HTML-only and N-PORT support require separate validation
 before becoming eligible; they do not expand the BDC-only public product.
 
+The current layout inventory profiles 67 natural flags from 11 funds and 26
+filing/period combinations. It records 25 observed header/grid shapes, including
+within-table cell-merge variants; these are not 25 independently validated filer
+templates. Twelve flags have no retrieved candidates and remain explicitly
+uncovered. Sampled shape-set differences across periods are review triggers, not
+proof of template changes. Identical shapes do not certify unchanged note scope,
+units, ownership or candidate recall. Validate those evidence mechanisms too.
+
 ## Work packages and exit evidence
 
 | Stage | Work | Exit evidence |

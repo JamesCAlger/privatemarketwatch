@@ -680,7 +680,15 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
                         break
                     has_identity = any(clean(_row_text(_field_cells(rows[sibling], headers.get(field))))
                                        for field in ("instrument", "maturity", "acquisition_date"))
-                    if has_identity and any(number(c["text"]) is not None for c in _field_cells(rows[sibling], headers.get("cost"))):
+                    # Retrieval must not require a successfully parsed cost.
+                    # A sibling with a zero dash, missing cost or unfamiliar
+                    # amount still competes for identity; adjudication below
+                    # determines whether its required fields are usable.
+                    has_monetary_content = any(
+                        c.get('inline_facts') or clean(c['text']).strip('$ ()')
+                        for field in ('cost', 'fair_value')
+                        for c in _field_cells(rows[sibling], headers.get(field)))
+                    if has_identity and has_monetary_content:
                         selected.add(sibling)
         for ri in sorted(selected):
             if ri <= max((h["row"] for h in headers.values()), default=-1):

@@ -24,21 +24,25 @@ def main():
     for label in ['development_model_01', 'consumed_holdout_model_01',
                   'controlled_model_01', 'weak_probe_model_01', 'newly_ready_model_01',
                   'sibling_model_01', 'scale_model_01', 'legend_model_01', 'temporal_model_01',
-                  'order_normal_model_01', 'order_reverse_model_01', 'grouped_header_model_01']:
+                  'order_normal_model_01', 'order_reverse_model_01', 'grouped_header_model_01',
+                  'order_repeat_model_01']:
         manifest = read(run / label / 'manifest.json')
         if len(manifest['records']) > 50:
             raise ValueError('Bounded manifest required')
         for item in manifest['records']:
             request_id = item['request_id']
-            receipt_path = run / 'api_attempts' / (str(request_id) + '.result.json')
-            if not request_id or request_id in seen or not receipt_path.exists():
+            attempt_id = item.get('attempt_id', request_id)
+            receipt_path = run / 'api_attempts' / (str(attempt_id) + '.result.json')
+            if not request_id or attempt_id in seen or not receipt_path.exists():
                 continue
-            seen.add(request_id)
+            seen.add(attempt_id)
             request = read(run / label / 'requests' / (request_id + '.json'))
             if fingerprint(request) != request_id:
                 raise ValueError('Frozen request changed')
             receipt = read(receipt_path)
-            record = {'run': label, 'request_id': request_id, 'status': receipt['status']}
+            if receipt['request_id'] != request_id or receipt['bundle_fingerprint'] != item['packet_id']:
+                raise ValueError('Receipt identity differs from frozen record')
+            record = {'run': label, 'request_id': request_id, 'attempt_id': attempt_id, 'status': receipt['status']}
             if receipt['status'] == 'success':
                 try:
                     validate_response(receipt['response'], request)
