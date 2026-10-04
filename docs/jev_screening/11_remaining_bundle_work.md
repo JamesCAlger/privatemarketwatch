@@ -257,3 +257,9 @@ An initial pass using only declared builder paths covered 25 filings and found t
 Design implication: create a cached, source-wide disclosure inventory before selecting evidence for an individual rule. Preserve unknown roles and unresolved owner/period associations. Use the inventory to test whether relevant supplemental disclosures were considered, not to append every table or automatically certify recall. Current candidate packets and readiness remain unchanged; no source truth, duplicate exposure or inclusion correction is inferred.
 
 Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagnostic: disclosure_role_profile_dbb4aad701f83096.json. The final report binds the prepared review manifest, parser and role-helper hashes, verifies all 67 prepared packet bindings, and checks each source hash before/after parsing. Unknown-table counts are retained; their full cells are deliberately omitted from this diagnostic. No new funds, model calls or production changes.
+
+## 2026-10-04: stylesheet visibility scope check
+
+A bounded lexical scan of all 26 hash-bound cached filings found no embedded style blocks, stylesheet link tags or CSS imports. Consequently it found no stylesheet visibility declarations to investigate in this selected sample. Artifact: stylesheet_inventory_e2984c3f87a80287.json, generated offline by scripts/inventory_jev_stylesheets.py with all 67 prepared packet bindings checked.
+
+This does not certify rendered visibility: the scan is not a browser, does not resolve CSS syntax/cascade or scripts, and fetched no external resources. The builder's existing positive inline/HTML hidden-content refusal remains unchanged. Stylesheet-driven layouts remain an explicit future-layout limitation; this result provides no reason to add a CSS renderer to the current pilot. No new model calls, readiness changes or production edits.
