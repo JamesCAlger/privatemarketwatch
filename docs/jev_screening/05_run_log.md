@@ -764,3 +764,13 @@ Added `pipeline/jev_parent_inventory.py` in the pilot worktree only. It rejects 
 Twenty-six focused tests pass. Applying it to the 18 unmodified queue rows found by diagnostic period matching rejects them with `Explicit numeric CIK required`. Artifact: review_group_profile_f9812fc4f1e9cffa.json. Previous membership totals are unchanged.
 
 The helper is not integrated into production or the current model router. Supplied hash strings and uniqueness within a selected slice are insufficient for global certification: its output explicitly leaves snapshot-hash verification, full-queue uniqueness, source truth and clearance false. A future file-backed caller must verify actual snapshots and the entire queue ID index before selecting parents. No B1 work is suppressed.
+
+## 2026-10-04 checkpoint: explicit hidden-source content
+
+- Six new negative fixtures reproduced a gap: explicitly hidden tables/amounts were accepted as visible source evidence. Added conservative refusal for inline display:none, visibility:hidden/collapse, HTML hidden and ix:hidden, including ancestors, referenced notes and retained continuation cells. Text and coordinates are preserved; no hidden evidence is silently dropped.
+- Visible styling, empty hidden spacers and aria-hidden controls remain supported. This is not a CSS renderer: stylesheet/class visibility, overrides and other rendering semantics remain outside the check.
+- Final targeted Jev suite: 454 passed, 229 parser deprecation warnings. Bundle file alone: 214 passed. The initial continuation-cell schema mistake was caught and corrected before replay.
+- Replay explicit_visibility_v4_52: 39 ready / 28 blocked. Structured comparison with replay 48 finds zero changed source candidates, identities, amounts, notes or readiness decisions across all 67 flags. The builder hash and request bindings still change; no historical score transfer.
+- New builder SHA-256: 50a963afa56516ffc4c59606a27b292b861da55da6bb40cf95b432e9b243aeb1. Delta artifact: note_retrieval_delta_93f671ada0fa1fc5.json.
+- Current sizing artifact request_size_profile_4f68c257ba406ea4.json: 467,734 aggregate proxy tokens, max 25,355, three above cap. Optional v2 compaction reconstructs all 39 exactly at 420,686 proxy tokens, max 20,236; remains disabled/unscored. Tiny token differences versus replay 48 reflect changed version-bound identifiers, not evidence removal.
+- Refreshed unfinished blind_review_inputs_53 and verified all 67 packet bindings and 26 source hashes. API accounting unchanged: 100 calls, 1,580,960 provider input tokens. No independent clearance, B1 suppression or production edits.

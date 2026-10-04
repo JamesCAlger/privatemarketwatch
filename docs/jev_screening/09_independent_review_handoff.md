@@ -1,4 +1,4 @@
-# Independent source review handoff
+﻿# Independent source review handoff
 
 Prepared 2026-10-04. No B1 workers have been dispatched by this step.
 
@@ -86,11 +86,11 @@ Five additional CLI integration tests pass using temporary synthetic fixtures: u
 
 ## Current source-first handoff
 
-`blind_review_inputs_49` binds replay `note_formula_v4_48`, builder SHA-256
-`d2046340056cf4636765f7e7b525612d56bed6086584f4265a5bebc6e8002031`.
+`blind_review_inputs_53` binds replay `explicit_visibility_v4_52`, builder SHA-256
+`50a963afa56516ffc4c59606a27b292b861da55da6bb40cf95b432e9b243aeb1`.
 It contains the same 67 flags, 11 funds and 26 cached source files. Preparation
 rechecked source/holdings hashes. All forms are unfinished; independent reviews
 and clearance certificates remain zero. Older forms and integrity reports remain
 historical records and do not bind the changed requests.
 
-The offline verify_jev_review_bindings.py check matches all 67 current packet fingerprints to the earlier blind_review_inputs_43 bindings, verifies prepared-file hashes, checks the holdings snapshot, and rehashes all 26 original cached sources. All match. Artifact: review_binding_check_02b194e6ef876029.json under the pilot root. This verifies content integrity against saved records, not independent evidence completeness; completed reviews remain zero.
+The offline verify_jev_review_bindings.py check matches all 67 current packet fingerprints to the current blind_review_inputs_53 bindings, verifies prepared-file hashes, checks the holdings snapshot, and rehashes all 26 original cached sources. All match. Prepared manifest SHA-256: 6d08af436a942eecab17d62e0f988810688fad1ade337728c89a5e1de438f578. Earlier integrity reports remain historical. This verifies content integrity against saved records, not independent evidence completeness; completed reviews remain zero.

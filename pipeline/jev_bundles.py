@@ -508,6 +508,23 @@ def _identity_evidence(row, headers, contexts, output) -> dict:
             'blocking_reasons': reasons}
 
 
+def _hidden_markup(element) -> bool:
+    """Positive local hiding signals only; this is not a CSS rendering engine."""
+    return bool(element.name == 'ix:hidden' or element.has_attr('hidden') or
+                re.search(r'(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse))'
+                          r'\s*(?:!important\s*)?(?:;|$)', element.get('style', ''), re.I))
+
+
+def _hidden_cell_content(cell) -> bool:
+    # Preserve questionable text, rather than deleting it and making a different
+    # visible/tagged comparison pass. CSS overrides/classes need separate review.
+    if any(_hidden_markup(node) for node in [cell, *cell.parents]):
+        return bool(clean(cell.get_text(' ', strip=True)) or cell.find('ix:nonfraction'))
+    return any(_hidden_markup(node) and
+               (clean(node.get_text(' ', strip=True)) or node.name == 'ix:nonfraction' or node.find('ix:nonfraction'))
+               for node in cell.find_all(True))
+
+
 def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
     """Parse once per raw hash. Coordinate convention matches _extract_tables.
 
@@ -570,6 +587,8 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
                     if unsupported_features:
                         facts[-1]['unsupported_features'] = unsupported_features
                 cell = {"column": col, "span": span, "text": clean(td.get_text(" ", strip=True))}
+                if _hidden_cell_content(td):
+                    cell['hidden_source_content'] = True
                 superscript_refs, unparsed_superscript = set(), False
                 for annotation in td.find_all(['sup', 'span']):
                     if annotation.name != 'sup' and not re.search(r'vertical-align\s*:\s*super', annotation.get('style', ''), re.I):
@@ -641,6 +660,8 @@ def parse_source(raw: bytes, *, max_rows: int = 10000) -> dict:
             if match[1] and re.fullmatch(r'[+^#*]+', marker):
                 marker = '(' + marker + ')'
             record = {"marker": marker, "report_date": active_period, "anchor_table_index": active_table, "text": text}
+            if _hidden_cell_content(element):
+                record['hidden_source_content'] = True
             if _requires_note_continuation(text):
                 continuation = _immediate_note_table(element, table_ids, tables)
                 if continuation is None:
@@ -863,6 +884,10 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
             refs = set()
             note_header_rows = [rows[index] for index in sorted({h['row'] for h in headers.values()})]
             sections = section_contexts.get((table['table_index'], ri), [])
+            visibility_cells = [*raw_row, *(c for row in note_header_rows for c in row),
+                                *(c for section in sections for c in section.get('cells', []))]
+            if any(c.get('hidden_source_content') for c in visibility_cells):
+                reasons.append('hidden_source_content')
             for section in sections:
                 refs.update(_section_note_markers(section))
                 if any(c.get('unparsed_superscript') for c in section.get('cells', [])):
@@ -912,6 +937,10 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
                             reasons.append('conflicting_embedded_definition:' + ref)
                     covered.add(ref)
             notes = list(selected_notes.values())
+            if any(n.get('hidden_source_content') or
+                   any(c.get('hidden_source_content') for row in n.get('continuation_table', {}).get('rows', []) for c in row['cells'])
+                   for n in notes):
+                reasons.append('hidden_referenced_note_content')
             missing_notes = sorted(refs - covered)
             if missing_notes:
                 reasons.append("missing_referenced_notes")

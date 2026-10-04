@@ -52,6 +52,63 @@ def basic_source(**changes):
     return parsed(schedule([("Acme Test LLC", "Preferred units", fact("2,000", **changes), fact("1"), "")]))
 
 
+@pytest.mark.parametrize('hidden_style', ['display:none', 'visibility: hidden', 'visibility:collapse'])
+def test_explicit_hidden_table_is_retained_but_not_ready(hidden_style):
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')],
+                             layout=f'style="{hidden_style}"'))
+    packet = bundle(source=source)
+    assert packet['source_candidates']
+    assert 'hidden_source_content' in packet['source_candidates'][0]['blocking_reasons']
+    assert packet['evidence_status']['status'] != 'ready_for_model'
+
+
+@pytest.mark.parametrize('wrapper', ['<span hidden>{}</span>', '<ix:hidden>{}</ix:hidden>',
+                                    '<span style="display: none !important">{}</span>'])
+def test_hidden_amount_cannot_be_called_visible_source_evidence(wrapper):
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units', wrapper.format(fact('2,000')), fact('1'), '')]))
+    packet = bundle(source=source)
+    assert 'hidden_source_content' in packet['source_candidates'][0]['blocking_reasons']
+    assert packet['evidence_status']['status'] != 'ready_for_model'
+
+
+@pytest.mark.parametrize('style', ['display:table', 'visibility:visible', 'white-space:nowrap'])
+def test_visible_styling_remains_supported(style):
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')],
+                             layout=f'style="{style}"'))
+    assert bundle(source=source)['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_empty_hidden_spacer_does_not_block_real_visible_amount():
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units',
+                              '<span style="display:none"> </span>' + fact('2,000'), fact('1'), '')]))
+    assert bundle(source=source)['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_aria_hidden_is_not_a_visual_hiding_instruction():
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units',
+                              '<span aria-hidden="true">' + fact('2,000') + '</span>', fact('1'), '')]))
+    assert bundle(source=source)['evidence_status']['status'] == 'ready_for_model'
+
+
+def test_hidden_referenced_note_is_preserved_but_not_certified_visible():
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '(9)')],
+                             notes='<p hidden>(9) This holding has an unfunded commitment.</p>'))
+    packet = bundle(source=source)
+    candidate = packet['source_candidates'][0]
+    assert candidate['notes'][0]['hidden_source_content'] is True
+    assert 'hidden_referenced_note_content' in candidate['blocking_reasons']
+
+
+def test_hidden_note_continuation_table_remains_a_refusal():
+    source = parsed(schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '(9)')],
+        notes='<p>(9) Acquisition dates are as follows:</p>'
+              '<table hidden><tr><td>Issuer</td><td>Acquisition Date</td></tr>'
+              '<tr><td>Acme Test LLC</td><td>1/1/2024</td></tr></table>'))
+    candidate = bundle(source=source)['source_candidates'][0]
+    assert candidate['notes'][0]['continuation_table']
+    assert 'hidden_referenced_note_content' in candidate['blocking_reasons']
+
+
 @pytest.mark.parametrize('attribute,payload', [
     ('xsi:nil="true"', '2,000'),
     ('continuedAt="other-fragment"', '2,000'),
