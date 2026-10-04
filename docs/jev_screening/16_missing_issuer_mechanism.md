@@ -63,6 +63,35 @@ This is an example of the required drift test: an industry-label spelling change
 can break identity extraction even when the schedule remains visually familiar.
 It is not evidence that Jev needs a bespoke whole-filer bundle builder.
 
+## Aggregate period check
+
+A bounded read-only holdings query stays within this same reserved filer and
+does not select additional source-review cases:
+
+| Period | Published BDC positions | Missing issuer names | Missing names in health-care `and` variant | Missing names in singular financial-service variant |
+|---|---:|---:|---:|---:|
+| 2023-09-30 | 55 | 37 | 7 | 0 |
+| 2025-12-31 | 371 | 192 | 49 | 34 |
+| 2026-03-31 | 357 | 153 | 49 | 0 |
+
+The health-care variant appears from the earliest quarter in this current-snapshot
+projection, Q3 2023. The singular financial-service pattern is detected only in
+Q4 2025. This dates the observed identifier patterns, not a source-template change
+or the time when the pipeline first failed. The three-case mechanism must not be
+described as a newly introduced Q1-2026 defect.
+
+Q1 2026 contains 55 positions with the health-care variant: 49 lack names and six
+already have names. Other corrections, bridges or processing paths may explain
+the six; that provenance has not been established here. Another 104 missing names
+are outside the two narrowly matched label patterns. Do not claim a two-label fix
+would repair all 153 positions or overwrite existing valid identities.
+
+The direct data-quality priority is source-backed upstream identity remediation,
+with validation across periods and preserved correction precedence. Jev can help
+screen supported weak questions, but cannot make these published identities
+correct by clearing their negative-cost flags. No production remediation was
+performed under the owner's no-production instruction.
+
 ## Pilot tooling and artifacts
 
 The existing source-review helper initially crashed on null issuer names. The
@@ -77,6 +106,8 @@ Under `data/pilot/jev_screening/20261003_shadow/`:
 - `missing_issuer_mechanism_562617aca4f814f5.json`: active-code/config hashes,
   branch reproduction, controlled label variants, source coordinates and existing
   C107/C201/X02 issues.
+- `issuer_coverage_f1bab34c176c8ca7.json`: aggregate label and missing-name counts
+  across 11 periods from the same holdings snapshot; no new source-reviewed cases.
 
 Original filing hashes:
 
