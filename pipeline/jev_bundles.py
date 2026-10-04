@@ -61,7 +61,10 @@ _HEADER_PATTERNS = {
     "acquisition_date": r"^(?:initial )?acquisition date$",
     "notes": r"^(?:footnotes?|notes?)$",
 }
-_NOTE_DEFINITION = re.compile(r"^(?:\((\d{1,2}|[a-z]|[+^#*]{1,3})\)|([+^#*]{1,3}))\s*(.{20,})$", re.I)
+# A long list of references is not an explanatory note. In particular, a
+# reference-only div inside a holdings cell must not create a nearer note block
+# that masks the real definitions following the schedule.
+_NOTE_DEFINITION = re.compile(r"^(?:\((\d{1,2}|[a-z]|[+^#*]{1,3})\)|([+^#*]{1,3}))\s*((?=.*[a-z]{2}).{20,})$", re.I)
 _NOTE_PAYLOAD = r'(?:\d{1,2}|[a-z])(?:\s*,\s*(?:\d{1,2}|[a-z]))*|[+^#*]{1,3}'
 
 
@@ -74,7 +77,9 @@ def _note_markers(text: str) -> set[str]:
             markers.update(marker.strip().lower() for marker in group.split(','))
     # Symbol-only cells or suffix annotations; do not treat an instrument's
     # embedded arithmetic '+' as a note reference.
-    suffix = re.search(r'(?<!\w)((?:[+^#*]\s*)+)$', text)
+    # Markers may touch the preceding word. A word-boundary restriction here
+    # drops single symbols and silently turns an attached '**' into '*'.
+    suffix = re.search(r'((?:[+^#*]\s*)+)$', text)
     if suffix:
         markers.update(re.findall(r'\++|\^+|#+|\*+', suffix[1]))
     return markers
@@ -110,6 +115,27 @@ def _rate_marker_definitions(text: str) -> dict[str, list[str]]:
             r'\b(semi[- ]annually|quarterly|monthly|annually)\s*\(([a-z])\)', text, re.I):
         meanings.setdefault(marker.lower(), set()).add(meaning.lower())
     return {marker: sorted(values) for marker, values in meanings.items()}
+
+
+def _split_rate_formula(cell: dict, row: list, header_rows: list) -> bool:
+    """Recognise an operator only in an explicit Index + Spread column pair."""
+    if cell.get('superscript_note_markers') or cell.get('unparsed_superscript'):
+        return False
+    if not re.fullmatch(r'(?:SOFR|LIBOR|L|EURIBOR|E|SONIA|PRIME|BBSY|ESTR)\s*\+', cell['text'], re.I):
+        return False
+    boundary = cell['column'] + cell['span']
+    following = [c for c in row if c['column'] == boundary]
+    if len(following) != 1 or not re.fullmatch(r'\d+(?:\.\d+)?\s*%', following[0]['text']):
+        return False
+    spread = following[0]
+    for headers in header_rows:
+        index_headers = [h for h in headers if h['column'] == cell['column'] and h['span'] == cell['span']]
+        spread_headers = [h for h in headers if h['column'] == spread['column'] and h['span'] == spread['span']]
+        if (len(index_headers) == len(spread_headers) == 1
+                and index_headers[0]['text'].casefold() in {'index', 'reference rate', 'benchmark'}
+                and spread_headers[0]['text'].casefold() == 'spread'):
+            return True
+    return False
 
 
 def digest_file(path: Path) -> str:
@@ -835,6 +861,7 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
             if not issuer_header:
                 reasons.append("unresolved_identity_column")
             refs = set()
+            note_header_rows = [rows[index] for index in sorted({h['row'] for h in headers.values()})]
             sections = section_contexts.get((table['table_index'], ri), [])
             for section in sections:
                 refs.update(_section_note_markers(section))
@@ -849,7 +876,10 @@ def retrieve_candidates(parsed: dict, output: dict, rule: str, *, max_candidates
                 # Exclude monetary cells to avoid interpreting negative amounts as notes.
                 if any(cell in _field_cells(raw_row, headers.get(f)) for f in ("cost", "fair_value")):
                     continue
-                refs.update(_note_markers(cell['text']))
+                cell_refs = _note_markers(cell['text'])
+                if _split_rate_formula(cell, raw_row, note_header_rows):
+                    cell_refs.discard('+')
+                refs.update(cell_refs)
             for header_row in {h['row'] for h in headers.values()}:
                 for cell in rows[header_row]:
                     refs.update(_cell_note_markers(cell))

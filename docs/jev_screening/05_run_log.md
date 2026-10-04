@@ -694,3 +694,13 @@ Combined validation after the explanation work: 326 targeted tests passed. Ninet
 - No new funds, original-source modifications, independent clearances or production changes.
 
 Validation after the C104 pair and review-record work: 355 targeted Jev tests passed; twenty-first bounded production metadata audit found zero changed paths. No full repository suite or production-writing semantic diff was run.
+
+## 2026-10-04 checkpoint: note references and request sizing
+
+- Inspected the three remaining missing-note cases in cached source. Jackson Paper contained a reference-only cell misclassified as a note definition; Spotless's attached double-star header was parsed as single-star. Both are repaired by generic parsing rules in the isolated builder.
+- The symbol repair initially added false plus-note references for four Oaktree rate formulas. Explicit Index/Spread geometry with a recognized benchmark and percentage spread now distinguishes the operator; unknown/ambiguous layouts and superscript plus signs remain notes. Intermediate replays 46/47 preserve the observed failure.
+- Final replay note_formula_v4_48: 39 evidence-ready / 28 blocked, C107 26/18, X08 11/8, C104 2/2. Delta verification confirms only two flags change note evidence versus replay 42; source identities, amounts and candidate inventory remain unchanged across all 67.
+- Amerivet's note 12 remains beyond the bounded table gap; its independent share-class contradiction also remains. No arbitrary scope widening.
+- Exact runner-proxy sizing finds three Ares requests above 22,000 tokens: 22,361 / 24,464 / 25,355. There are 36 requests within both evidence and size requirements. No evidence truncation or cap increase.
+- Refreshed unfinished source-first forms under blind_review_inputs_49. All 100 calls remain accounted for, 42 unique natural flags, 1,580,960 provider tokens. Zero new calls, independent certificates or B1 suppression; historical scores do not transfer.
+- 391 targeted Jev tests pass. Twenty-third bounded production metadata audit: zero changes. No full repository suite, production rebuild/export or production-writing semantic diff.

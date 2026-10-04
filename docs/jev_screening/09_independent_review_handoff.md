@@ -66,7 +66,7 @@ The later `anchor_recall_v4_33` replay also changes model-visible retrieval
 metadata. Its bundles require new review bindings; the existing unfinished forms
 cannot confer audit status on this revision.
 
-## Refreshed handoff for the latest builder
+## Refreshed handoff for builder 42 (historical)
 
 The new blind_review_inputs_43 directory binds rate_note_scope_v4_42 and builder SHA-256 6857318fdb820cc49c6f89cbf07e7dc03da90d51c6eeca599ffa77ee9c40326f. It contains the same 67 development flags, 11 funds and 26 cached filings. Holdings and cached source hashes were checked; all forms remain unfinished and no workers were dispatched.
 
@@ -83,5 +83,14 @@ The bounded scripts/freeze_jev_review_findings.py checks the prepared manifest/i
 Twenty focused tests pass for the findings validator, including unresolved outcomes, source and envelope changes, timing, incomplete checks, invalid monetary values, unresolved siblings and contradictory amounts. The CLI help path was exercised. No completed real-case form was submitted or frozen; independent reviews remain zero.
 
 Five additional CLI integration tests pass using temporary synthetic fixtures: unresolved-record sealing, changed source, changed holdings, changed prepared input and overwrite refusal. They do not count as real completed reviews.
+
+## Current source-first handoff
+
+`blind_review_inputs_49` binds replay `note_formula_v4_48`, builder SHA-256
+`d2046340056cf4636765f7e7b525612d56bed6086584f4265a5bebc6e8002031`.
+It contains the same 67 flags, 11 funds and 26 cached source files. Preparation
+rechecked source/holdings hashes. All forms are unfinished; independent reviews
+and clearance certificates remain zero. Older forms and integrity reports remain
+historical records and do not bind the changed requests.
 
 The offline verify_jev_review_bindings.py check matches all 67 current packet fingerprints to the earlier blind_review_inputs_43 bindings, verifies prepared-file hashes, checks the holdings snapshot, and rehashes all 26 original cached sources. All match. Artifact: review_binding_check_02b194e6ef876029.json under the pilot root. This verifies content integrity against saved records, not independent evidence completeness; completed reviews remain zero.

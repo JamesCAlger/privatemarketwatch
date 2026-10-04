@@ -1,7 +1,8 @@
 ﻿# Remaining bundle work
 
-Basis: `rate_note_scope_v4_42`, 67 selected natural flags across 11 funds.
-There are 37 ready and 30 blocked bundles. Readiness is not an independent audit.
+Basis: `note_formula_v4_48`, 67 selected natural flags across 11 funds.
+There are 39 evidence-ready and 28 blocked bundles. Three ready bundles exceed
+the runner's size proxy cap. Readiness is not an independent audit.
 The blocker profile counts each flag once per cause; causes overlap and must not
 be summed into a distinct-flag total.
 
@@ -11,7 +12,7 @@ be summed into a distinct-flag total.
 | Referenced note table missing | 2 | 1 | Other unresolved causes also remain; a missing table cannot be waived. |
 | Proxy cost needs lineage | 6 | 4 | Requires a different evidence contract; a current reported-cost comparison cannot validate a derived value. |
 | Conflicting cost/FV scales | 4 | 1 | Known TCW mechanism; retain B1 investigation and independent normalization evidence. |
-| Missing referenced notes | 3 | 3 | Recover the correct filing note block; do not borrow a matching marker from another period. |
+| Missing referenced notes | 1 | 1 | Recover the correct filing note block; do not borrow a matching marker from another period. |
 | Missing output identity | 3 | 1 | Requires upstream identity investigation; amounts or row ordinals cannot establish the position. |
 | No current-period candidate | 3 | 2 | These also have an omitted declared-context anchor; fallback must preserve the uncertainty. |
 | Visible/context share-class conflict | 1 | 1 | Matching values cannot settle the identity contradiction. |
@@ -110,3 +111,62 @@ Jev calls. No maintenance return has been established here.
 Artifact: `mechanism_profile_7378f0315211e1fa.json` in the pilot root, produced by
 the isolated `scripts/profile_jev_mechanisms.py`. This is a candidate-sample
 inventory, not a census of full filings, certified templates or future support.
+
+## Missing-note investigation: distinguish definitions, references and operators
+
+Three existing flags exposed different mechanisms:
+
+- **Jackson Paper, Onex, Q4-2023:** a holdings cell containing only
+  `(5) (7) (8) 10) (11) (13)` was mistaken for a note definition. Its apparent
+  block at table 44 hid the real explanatory notes following table 45. Requiring
+  explanatory alphabetic text excludes numeric/alphabetic reference-only lists.
+  This recovers the source notes without borrowing across an actual earlier note
+  block. Notes 7/8 concern commitments; note 11 explains negative cost from
+  capitalized discount. The source cost at t44r5 remains -16,223.
+- **Spotless Brands, Ares, Q3-2023:** `Principal Amount**` was parsed as `*`.
+  A word-boundary restriction dropped the first attached symbol; it could also
+  miss an attached single symbol entirely. Preserving the full suffix retrieves
+  the actual double-star currency note. Single- and double-star definitions are
+  kept distinct.
+- **Amerivet, Ares Strategic Income Fund, Q4-2024:** note 12 is present after
+  table 90, beyond the bounded gap from the last investment table (82).
+  Intervening tables include derivatives, an affiliate schedule, five pages of
+  loan commitments and an equity-commitment table. The gap limit was not widened:
+  supporting this requires a scoped continuation contract, not a larger arbitrary
+  table allowance. The flag also retains a visible/context share-class conflict.
+
+The attached-symbol repair initially exposed four Oaktree false note references:
+`SOFR+` and `E+` in an **Index** column, immediately followed by a percentage in
+**Spread**. The final rule treats that explicit column pair as a formula. It
+requires matching header/data geometry, a recognized benchmark abbreviation and
+a percentage spread. Unknown codes, wrong headers, absent/untagged-number spreads
+and superscript plus signs retain the note requirement. A generic trailing plus
+is not globally ignored. Original headers, cells and rate legends remain in the
+bundle for review.
+
+These are reusable parsing mechanisms observed in particular development cases,
+not filer-specific eligibility overrides. Source amounts, candidate inventory and
+identity evidence are checked separately from changes to note retrieval. The
+same-period/nearest-real-note-block guard remains in place. No model observations
+are transferred to a revised request, and no independent audit is implied.
+
+The original inspection is preserved as
+`missing_note_inspection_0888fd84680be8dc.json`. Replays 46 and 47 retain the
+intermediate definition and symbol changes, including the four temporary formula
+false positives; they are not erased from the experiment history.
+
+Final replay `note_formula_v4_48` has 39 ready / 28 blocked, versus 37 / 30 before
+these repairs. `note_retrieval_delta_81bc15759cef6169.json` verifies that only the
+two recovered flags change note evidence relative to replay 42; source identity,
+amounts and candidate sets are unchanged across all 67. The four Oaktree cases
+return to their earlier evidence. Historical model scores do not transfer.
+
+Offline request sizing adds a separate operational limit: three Ares C107 packets
+use 22,361, 24,464 and 25,355 whole-request cl100k proxy tokens, above the runner's
+22,000 cap. Spotless is the first of these; Jackson uses 6,906. Thus 36/67 meet
+both evidence and size requirements, before confidence or independent review.
+Do not truncate notes or drop sibling candidates merely to fit the cap.
+
+Validation: 391 targeted Jev tests pass; the 23rd bounded production metadata
+audit reports zero changed paths. No full suite, production rebuild/export or
+production-writing semantic diff was run. No new API calls.

@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT))
 from pipeline.jev_bundles import make_request
 from pipeline.jev_screening import fingerprint
 from scripts.analyze_jev_screening import summarize
+from scripts.compare_jev_retrieval import load_replay
 from scripts.jev_pilot_session import install_read_only_guard, read, sha, write
 
 NATURAL_RUNS = ('development_model_01', 'consumed_holdout_model_01', 'weak_probe_model_01',
@@ -31,21 +32,11 @@ def main():
     install_read_only_guard(repo, run)
     current, hashes = {}, set()
     for label in args.replays:
-        if not label.replace('_', '').isalnum():
-            raise ValueError('Invalid replay label')
-        directory = run / label
-        summary = read(directory / 'summary.json')  # Incomplete replays cannot enter.
+        summary, packets = load_replay(run, label)
         hashes.add(summary['builder_sha256'])
-        paths = list(directory.glob('*_ROW-*.json'))
-        if len(paths) != len(summary['cases']):
-            raise ValueError('Replay packet accounting differs from summary')
-        for path in paths:
-            packet = read(path)
-            key = (packet['flag']['rule_id'], packet['flag']['row_id'])
+        for key, packet in packets.items():
             if key in current:
                 raise ValueError('Overlapping replay selections')
-            if packet['provenance']['builder_sha256'] != summary['builder_sha256']:
-                raise ValueError('Mixed builder versions')
             current[key] = (packet, label)
     if len(hashes) != 1 or next(iter(hashes)) != sha(ROOT / 'pipeline/jev_bundles.py'):
         raise ValueError('Replays must use one current frozen builder')

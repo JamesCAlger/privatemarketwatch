@@ -31,6 +31,7 @@ this did not add another confirmed natural numeric-error mechanism.
 | 11 funds represented by 67 natural flags; 42 natural Jev calls | Cumulative programme reservation is 16 funds, including prior research. Both are below the 70-fund v1 cohort; this is not a representative population sample. |
 | 42/42 natural label agreement; 41/42 source agreement | All called natural references are false alarms. Four reviewed natural errors were blocked before submission. This does not estimate missed-error risk. |
 | Original two-fund holdout: 0/20 bundles ready | Initial layout transfer failed. Repairs consumed this holdout; subsequent scores are development results. |
+| Current replay: 39/67 evidence-ready; 36/67 also fit the runner's proxy cap | Three ready Ares packets exceed 22,000 proxy tokens. Neither readiness nor size establishes independent correctness or safe clearance. |
 | Two new-accession temporal cases: 2/2 label/source agreement | Within familiar filers, not unseen-filer validation. Later review found missing context in one packet, so this is not 2/2 complete-evidence validation. |
 | 24 separate synthetic controls | Include rounding, sibling-cost substitutions and FV scale errors. One substituted-cost error was called a false alarm at 0.13 decision confidence; it stayed with B1. |
 | 17 historical confidence-only candidates | Not audited clearances. Later bundle versions invalidate reuse of old scores. Two newly called Fortress cases pass both trial cutoffs after grouped-header repair. |
@@ -61,8 +62,8 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay rate_note_scope_v4_42 has
-37 ready and 30 blocked: C107 24/20, X08 11/8, C104 2/2. Readiness is not audited
+references are preserved separately. Latest full replay note_formula_v4_48 has
+39 ready and 28 blocked: C107 26/18, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
 

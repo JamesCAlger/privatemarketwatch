@@ -3,8 +3,9 @@
 Date: 2026-10-03. Status: isolated implementation and development evaluation active;
 production screening and automatic clearance are not enabled.
 
-Current checkpoint (2026-10-04): **37/67 bundles ready**, with 30 explicit B1
-fallbacks. **100/100 API calls used**, 42 unique natural flags called, zero
+Current checkpoint (2026-10-04): **39/67 bundles evidence-ready**, with 28 evidence
+fallbacks. Three ready requests exceed the runner's token proxy cap, leaving
+**36/67 within both evidence and size requirements**. **100/100 API calls used**, 42 unique natural flags called, zero
 independently audited clearances and zero B1 suppression. Work continues offline.
 The inference estimate is about **$0.0664**; bundle maintenance and B1 review cost
 are not measured. See the [interim assessment](06_interim_assessment.md) first.

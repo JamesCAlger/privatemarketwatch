@@ -95,6 +95,57 @@ def test_plain_identity_digits_do_not_become_footnotes():
     assert not packet['source_candidates'][0]['notes']
 
 
+@pytest.mark.parametrize('text,markers', [
+    ('Principal Amount**', {'**'}),
+    ('Principal Amount***', {'***'}),
+    ('Acme Test LLC*', {'*'}),
+    ('Acme Test LLC^', {'^'}),
+    ('Acme Test LLC+#', {'+', '#'}),
+    ('Principal Amount **', {'**'}),
+    ('SOFR + 5.00%', set()),
+    ('A+B Company', set()),
+])
+def test_attached_symbol_references_preserve_the_complete_marker(text, markers):
+    assert jb._note_markers(text) == markers
+
+
+def test_attached_double_star_selects_its_own_note_not_single_star():
+    body = schedule([('Acme Test LLC**', 'Preferred units', fact('2,000'), fact('1'), '')],
+                    notes='<p>* This is a different single-star explanation.</p>'
+                          '<p>** This is the applicable double-star explanation.</p>')
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert [n['marker'] for n in packet['source_candidates'][0]['notes']] == ['**']
+
+
+def test_attached_single_star_without_definition_blocks():
+    body = schedule([('Acme Test LLC*', 'Preferred units', fact('2,000'), fact('1'), '')])
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'blocked'
+    assert packet['source_candidates'][0]['missing_note_markers'] == ['*']
+
+
+@pytest.mark.parametrize('index_header,spread_header,rate,spread,ready', [
+    ('Index', 'Spread', 'SOFR+', '5.75%', True),
+    ('Reference Rate', 'Spread', 'E+', '5.75 %', True),
+    ('Other', 'Spread', 'SOFR+', '5.75%', False),
+    ('Index', 'Other', 'SOFR+', '5.75%', False),
+    ('Index', 'Spread', 'SOFR+', '5.75', False),
+    ('Index', 'Spread', 'SOFR+', '-', False),
+    ('Index', 'Spread', 'Unknown+', '5.75%', False),
+    ('Index', 'Spread', 'SOFR<sup>+</sup>', '5.75%', False),
+])
+def test_split_rate_operator_requires_explicit_formula_geometry(index_header, spread_header, rate, spread, ready):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'), '')])
+    body = body.replace('<td colspan="3">Cost</td>',
+                        f'<td>{index_header}</td><td>{spread_header}</td><td colspan="3">Cost</td>')
+    body = body.replace('Preferred units</td>', f'Preferred units</td><td>{rate}</td><td>{spread}</td>')
+    packet = bundle(source=parsed(body))
+    assert (packet['evidence_status']['status'] == 'ready_for_model') == ready
+    if not ready:
+        assert '+' in packet['source_candidates'][0]['missing_note_markers']
+
+
 def test_superscript_inside_numeric_fact_is_not_a_note_reference():
     body = schedule([('Acme Test LLC', 'Preferred units', fact('2,<sup>000</sup>'), fact('1'), '')])
     packet = bundle(source=parsed(body))
@@ -551,6 +602,31 @@ def test_supplemental_table_does_not_disconnect_soi_notes():
     body += '<div>(9) This note follows a supplemental schedule.</div>'
     packet = bundle(source=parsed(body))
     assert packet["evidence_status"]["status"] == "ready_for_model"
+
+
+@pytest.mark.parametrize('references', [
+    '(5) (7) (8) 10) (11) (13)',
+    '(5) (7) (8) (10) (11) (13)',
+    '(a) (b) (c) (d) (e) (f) (g)',
+])
+def test_reference_only_cell_is_not_a_note_definition(references):
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'),
+                      '<div>' + references + '</div>')])
+    source = parsed(body)
+    assert source['notes'] == []
+    assert bundle(source=source)['evidence_status']['status'] == 'blocked'
+
+
+def test_reference_list_does_not_hide_following_explanatory_note_block():
+    body = schedule([('Acme Test LLC', 'Preferred units', fact('2,000'), fact('1'),
+                      '<div>(5) (7) (8) (10) (11) (13)</div>')])
+    body += schedule([('Other Issuer LLC', 'Preferred units', fact('2,000'), fact('1'), '')],
+                     notes=''.join(f'<p>({n}) This is the full explanatory source note for this schedule.</p>'
+                                   for n in (5, 7, 8, 10, 11, 13)))
+    packet = bundle(source=parsed(body))
+    assert packet['evidence_status']['status'] == 'ready_for_model'
+    assert len(packet['source_candidates'][0]['notes']) == 6
+    assert all(n['anchor_table_index'] == 1 for n in packet['source_candidates'][0]['notes'])
 
 
 def test_statement_heading_ends_soi_note_scope():

@@ -111,3 +111,26 @@ flushed; one pair per case and a small overlapping read-only comparison limit
 precision. Grouping flags by filing allows parser reuse, but maintenance and
 independent review costs remain unmeasured. Do not convert these timings into
 claimed B1 savings or extrapolate to the full cohort.
+
+## Current ready-request sizing
+
+Replay `note_formula_v4_48` has 39 evidence-ready requests. Using precisely the
+runner's whole-request `cl100k_base` serialization proxy, sizes range from 5,782
+to 25,355 tokens, median 11,060. Three exceed the 22,000 proxy cap:
+
+| C107 row | Fund | Whole request proxy tokens |
+|---|---|---:|
+| ROW-502ef9ff97600955 | Ares | 22,361 |
+| ROW-7f7d8d2bb7ebf851 | Ares | 24,464 |
+| ROW-96f4cdf3e1312b04 | Ares | 25,355 |
+
+Thus 36 of the 67 selected flags meet both current evidence and size requirements.
+The newly recovered Jackson Paper bundle uses 6,906 proxy tokens; newly recovered
+Spotless is the first oversized request above. The full 39-request proxy sum is
+467,757, but it is not a provider-token estimate or billable usage. No API calls
+were made. Provider acceptance is untested for these revised requests.
+
+Artifact: `request_size_profile_ab836bcd37fdc6f6.json`. Exact bundle/request hashes
+are recorded. A future size reduction must preserve geometry, required notes,
+sibling coverage and contradictions; increasing the cap or truncating evidence
+does not establish that a request is safe or fits the provider limit.
