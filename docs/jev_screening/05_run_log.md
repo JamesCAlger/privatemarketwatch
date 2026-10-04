@@ -817,3 +817,11 @@ The current 67-packet replay was profiled without transferring historical model 
 Artifact: current_anchor_profile_517d2f61338d6e08.json. This reports agreement between current structured source evidence and output, not 39 independently audited correct clearances. Both comparators share the builder and pipeline provenance; they cannot certify candidate recall, note completeness, ownership or source truth. No model was called on the revised requests.
 
 This strengthens the deterministic-first alternative for C107/X08/C104. A classifier needs to demonstrate additional safe coverage or useful prioritization beyond these checks; agreement on already resolved arithmetic does not establish its contribution. Bundle correctness work remains useful to deterministic checks and B1 even if Jev is not eventually used for these rule families.
+
+## 2026-10-04: date inference mechanism reproduced
+
+A bounded read-only probe reproduced the full date conversion for two existing Ares C107 flags. The raw issue CSV contains 2023-09-30 and 2023-12-31. Production-like DuckDB CSV inference identifies report_date as TIMESTAMP; casting it to VARCHAR produces the timestamp strings present in the ledger and queue. The unchanged queue constructor then leaves CIK/report_date blank and assigns both quarters RVQ_REV_459f93421b9d.
+
+In memory only, restoring each original date-only period makes the same constructor localize the CIK/date and produce two distinct IDs. These diagnostic IDs are not registered, migrated or authorized for dispatch. This confirms the conversion mechanism in two cases; it is not a full queue migration or a claim about historical verdict impact.
+
+Artifact: queue_date_probe_4e3529588849181b.json, produced by scripts/probe_jev_queue_dates.py in the isolated worktree. All three input hashes were checked before and after; main/worktree queue and adapter module hashes agree. No production changes or API calls.

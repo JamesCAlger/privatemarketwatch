@@ -13324,3 +13324,237 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
   Current 67-flag replay stays 34 ready / 33 blocked with unchanged candidates.
 - No new model calls or production changes. Thirteenth bounded metadata audit
   reports zero changed paths. Historical scores/audit forms remain version-bound.
+
+## 2026-10-04 -- Jev pilot: source-note stress controls
+
+- Built four synthetic cost-error controls on two existing filings; two include
+  misleading classification instructions in copied source notes. Pre-call
+  verification preserves original candidate identity and numeric evidence.
+- Four correct error/source decisions, confidence 0.20-0.54; all B1. No production
+  source changes, independent audits or new natural flags. Robustness not certified.
+- 98 successful calls / 1,561,219 input tokens; 98 valid response contracts. Two
+  calls remain within the existing 100-call cap. Details in docs/jev_screening/10_source_note_stress.md.
+
+## 2026-10-04 -- Jev pilot: source-context retrieval veto
+
+- Isolated builder now blocks monetary rows tied to the declared output context
+  when name-based retrieval omits them. This repairs a synthetic Fortress failure
+  without fuzzy alias expansion. Six source probes pass across three existing filers.
+- Replay anchor_recall_v4_33 remains 34 ready / 33 blocked, unchanged candidates.
+  Model-visible diagnostics change; historical scores remain version-bound.
+- Added an immutable observation ledger: all 98 calls accounted for, 42 unique
+  natural flags called among 67, no new funds or model calls. No production changes.
+
+## 2026-10-04 -- Jev pilot: inline semantics and currency evidence
+
+- Isolated parser blocks nil/continued/excluded-content monetary facts and invalid
+  signs; five Fortress mutation checks pass. The 67-flag replay stays 34/33 with
+  unchanged candidates. These are synthetic failure mechanisms, not new real errors.
+- Currency parsing now requires an ISO currency namespace and a direct measure,
+  retaining valid namespace aliases. Eight new negative tests failed before the
+  repairs; positive counterexamples remain supported. 297 targeted tests pass.
+- No API calls, new funds, production modifications or clearance activation.
+
+## 2026-10-04 -- Jev pilot: superscript notes and build timing
+
+- Isolated builder preserves bare superscript note references and blocks missing
+  or unparsed annotations. Eight focused regressions/counterexamples added;
+  combined targeted suite passes 305 tests. Full replay remains 34/33 across 67.
+- Bounded inventory finds no superscript markup on 167 candidate rows in 23 files;
+  this is a synthetic failure repair, not additional observed production errors.
+- Four local build timing pairs reproduce frozen packets exactly: empty parser
+  cache 3.67-9.57s, reused cache 0.039-0.114s. B1/maintenance costs not measured.
+- No model calls, production modifications, source downloads or clearance changes.
+
+## 2026-10-04 -- Jev pilot: recover bounded reference-rate note tables
+
+- Isolated builder associates explicit reference-rate tables across noncompeting
+  intervening notes, retaining their content and enforcing header/name/period and
+  size boundaries. Generic notes still require an adjacent table.
+- Seven Crescent bundles gain full tables across three filings; three regain
+  readiness. Current 67-flag replay is 37 ready / 30 blocked. Structured delta
+  verification confirms identical position identity, amounts and candidate sets.
+- 316 targeted tests pass; eighteenth bounded production metadata audit reports
+  zero changed paths. No new model calls, audits, production writes or B1 suppression.
+- Added blocker profile and documented remaining work in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: distinguish section evidence in drift profiles
+
+- Isolated layout profiler now records local versus other-table section evidence,
+  unresolved-scope reasons and note-table association paths. Six profiler tests
+  pass, including two new checks against conflating missing or inherited coordinates.
+- Source inspection documents repeated versus inherited portfolio annotations
+  across sampled Crescent quarters. Continuation policy remains conservative.
+- No builder changes, model calls, production writes or independent clearance.
+
+## 2026-10-04 -- Jev pilot: deterministic factual explanations
+
+- Added isolated pipeline/jev_explanation.py and bounded offline renderer. Summaries
+  bind to bundle/receipt hashes, retain source citations and recompute arithmetic;
+  they report recorded answers and routes without inventing model rationales.
+- Rendered 20 existing records: eight natural recheck observations, four blocked
+  records and eight synthetic controls. No new calls or independently audited cases.
+- 326 targeted tests pass. Nineteenth bounded production metadata audit reports
+  zero changed paths. No production integration, B1 suppression or baseline change.
+- Examples and limits are documented in docs/jev_screening/12_factual_explanations.md.
+
+## 2026-10-04 -- Jev pilot: bounded rule workload inventory
+
+- Read-only DuckDB inventory within the reserved 16 funds, with source and script hashes.
+- Q1-2026 recorded issues include C107 510 review, C104 448 track-only and X08 18 track-only; these are not measured B1 jobs or safe clearances.
+- AGG01 contributes 13,078 undated issues without row IDs, so its headline volume cannot establish a model-ready queue.
+- Added docs/jev_screening/13_rule_workload.md. No new model calls, intake cases or production changes; no tests required for this offline inventory.
+
+## 2026-10-04 -- Jev pilot: confidence sensitivity without calibration claims
+
+- Added isolated offline analysis of all 98 existing calls, separating natural, revised, repeated and synthetic observations.
+- First-natural confidence candidates fall from 23 at joint 0.70 to 17 at 0.75 and 7 at 0.80; the all-false-alarm natural references cannot estimate missed-error risk.
+- Four focused tests pass. No cutoff changes, new API calls, production writes or independently cleared flags.
+
+## 2026-10-04 -- Jev pilot: source-first findings validation
+
+- Refreshed 67 unfinished review inputs against the latest builder, preserving older inputs.
+- Added isolated pipeline/jev_review_findings.py and bounded freeze CLI. Enforces immutable evidence envelopes, source citations, explicit unresolved outcomes, valid timing and arithmetic consistency for false-alarm findings.
+- Twenty focused validator tests pass; CLI help checked. Findings explicitly remain pre-audit records and do not certify independence or grant clearance.
+- No real-case completed forms, new API calls, production integration or B1 suppression.
+
+## 2026-10-04 -- Jev pilot: paired C104 control and call-cap completion
+
+- Added two synthetic zero-FV controls on one existing Specialized Dental position; copied source FV changed from explicit zero to USD 1,000 while output stayed zero. Full candidate delta verification preserves all unrelated evidence and original cache.
+- Jev correctly labels/selects both; false alarm .72/.56 and real error .77/.42 confidence, both B1. Deterministic source comparator also resolves both.
+- 100 successful calls, 1,580,960 provider input tokens, about USD 0.0664 published-rate inference estimate. All 100 response contracts pass; 42 unique natural flags called, 30 synthetic calls, zero audited clearances.
+- 355 targeted Jev tests pass. Twenty-first bounded production metadata audit finds zero changed paths. No full suite, rebuild/export or production-writing semantic diff run.
+- Call cap exhausted; continuous work remains offline. Production unchanged.
+
+## 2026-10-04 -- Jev pilot: position-level flag overlap
+
+- Extended the isolated read-only workload inventory with exact snapshot-local row-ID overlaps for Q1-2026 within the reserved 16 funds.
+- C104/X08: 466 positions, 216 already have review/block issues and 250 only tracking issues. C107: 416 of 510 positions retain another review/block issue; only 94 have no other recorded review issue.
+- Counts are not actual B1 jobs and omit unallocatable fund-wide/missing-ID issues. Documents distinguish marginal flag work from whole-investigation savings.
+- No new API calls, natural-case selection, production changes or test-suite run for this aggregate-only change.
+
+## 2026-10-04 -- Jev pilot: reject inconsistent replay artifacts
+
+- Isolated replay reader validates exact membership, filenames, flag identity, status/reasons, snapshot/builder identity and readiness totals. New enriched replay summaries include full packet fingerprints; rebuild parent reads use the checked loader.
+- Seven previously accepted inconsistent-fixture cases now reject; nine focused replay tests and a 22-test reader/consumer set pass. Existing holdout and 100-call accounting artifacts retain their results.
+- Historical summaries are not rewritten; their lack of original content hashes remains an explicit limitation. No production writes, new calls or builder changes.
+
+## 2026-10-04 -- Jev pilot: verify earlier review bindings
+
+- Added bounded offline verification of replay packets against the previously frozen source-first handoff.
+- All 67 current packet fingerprints and 26 original source hashes match; holdings and prepared-input hashes also match. No completed reviews or clearance status inferred.
+- Refreshed the documentation index with current 100-call accounting. No new tests needed for the read-only verification script; no API calls or production writes.
+
+## 2026-10-04 -- Jev pilot: missing-issuer mechanism on three existing cases
+
+- Read-only Crescent source investigation locates LTC Ally, Angels of Care and Numera in original rows/contexts, with matching negative costs.
+- Active wrapper issuer regex returns empty on unrecognised industry-label variants; changing only the label in a bounded diagnostic recovers the visible names. This reproduces the branch, not a full pipeline replay.
+- All three already carry C201 BLOCK_VERIFIED and X02 REVIEW in addition to C107. No names filled inside bundles or production; existing references and readiness unchanged.
+- Fixed isolated source-review helper null-name crash. Five new checks; 14 source-review tests pass. No API calls or new natural cases.
+
+## 2026-10-04 -- Jev pilot: date the observed issuer-label gap
+
+- Read-only aggregate across 11 Crescent periods shows the health-care 'and' variant from Q3-2023 in the current snapshot; singular Financial Service appears in Q4-2025 only under this projection.
+- Q1-2026 has 357 positions and 153 missing issuer names: 49 of 55 health-care-variant positions lack names; 104 missing names lie outside the two probed variants. Six variant rows already have names, so correction precedence matters.
+- Counts do not establish the same mechanism for every row or date a source-template change. No added source-review cases, production remediation or API calls.
+
+## 2026-10-04 -- Jev pilot: bound the future missing-rate evidence contract
+
+- Exact-context raw fact inventory for the same three Crescent cases finds cost/FV/pct facts but no principal/rate facts. No new cases or X02 labels assigned.
+- Documented that an unfunded-portion note and displayed dash do not certify the whole position as undrawn or establish complete rate-disclosure absence.
+- Added future X02 evidence requirements to docs/jev_screening/13_rule_workload.md. No builder eligibility changes, API calls or production writes.
+
+## 2026-10-04 -- Jev pilot: measured mechanism reuse
+
+- Read-only candidate profile separates reusable patterns from single-filer evidence: monetary header spans in ten funds, negative signs in eight, zero transforms in four, adjacent note tables in three; the newer reference-rate association is observed only in Crescent.
+- Counts overlap and readiness is not independent validation. No CIK-specific builder readiness overrides were introduced; future transfer and maintenance cost remain unmeasured.
+- Added mechanism profile and documentation. No new tests required for aggregate-only work, API calls or production changes.
+
+## 2026-10-04 -- Jev pilot: note-definition and symbol retrieval repairs
+
+- Isolated builder rejects reference-only lists as note definitions, preserves attached symbol markers, and distinguishes split Index/Spread formulas using header geometry and percentage evidence. Added positive/negative regressions; 391 targeted Jev tests pass.
+- Frozen replay 48 recovers Jackson Paper and Spotless: 39/67 evidence-ready, 28 blocked; all source identities, values and candidate sets unchanged. Three ready packets exceed the runner proxy cap, so 36/67 meet evidence and size requirements. No score transfer or independent clearance claim.
+- Added bounded note diagnostics, delta verification and request-size profiling; hardened historical comparison to use the validated replay loader. Refreshed unfinished source-first inputs and documentation.
+- Zero new API calls; 100-call cap remains exhausted. Twenty-third bounded production metadata audit reports zero changes. No production edits, rebuild/export or semantic diff.
+
+## 2026-10-04 -- Jev pilot: optional lossless note-table encoding
+
+- Extended isolated optional compactor with explicit v2 cell arrays for source and note tables; preserved default v1 and ordinary runner requests. Eleven focused tests pass.
+- Exact reconstruction succeeds for all 39 ready frozen requests. V2 reduces aggregate proxy size from 467,757 to 420,709 and largest request from 25,355 to 20,236; all three current size fallbacks fit the proxy only under the unenabled format.
+- Documented that representation changes require fresh model/error-control and provider-token validation. No API calls, production changes or historical score transfer.
+
+## 2026-10-04 -- Jev pilot: headerless anchors and custom source concepts
+
+- Inspected the same three no-current-candidate flags. MES, Krayden and CMG have declared-context source anchors in headerless HTML tables, so absence from the candidate set is not a simple issuer search failure.
+- Krayden retains a visible revolver versus term-loan-context contradiction; its custom cost concept was omitted by the standard-cost-only review view. Added an all-exact-context fact inventory preserving custom attributes, markup and coordinates without inferring concept equivalence. Eighteen focused source-review tests pass.
+- Documented future header-continuation requirements and retained all three B1 fallbacks. No builder/readiness/label changes, API calls or production edits.
+
+## 2026-10-04 -- Jev pilot: readiness funnel and supplemental-row overlap
+
+- Computed all 67 frozen dispositions under default C107/X08 and explicit C104-probe policies: 39 evidence-ready, 36 also size-fit, 34 eligible under default policy. No current model/audit inputs or historical score transfer.
+- Inspected the final two note-table gaps: AB Centers note 9 crosses a page boundary to a 62-row commitment table; scope blockers remain. No retrieval-limit widening.
+- Recorded possible primary/supplemental presentation overlap for four existing AB Centers rows. Source-value agreement does not certify row inclusion; no duplicate conclusion, row deletion or frozen-label change. Reindexed source-reconciliation investigation.
+- Offline diagnostics only; no API calls or production edits. No tests needed for documentation/aggregate-only additions.
+
+## 2026-10-04 -- Jev pilot: source-reconciliation explanation precedence
+
+- Read-only query verifies all four AB Centers source/output amounts against frozen bundles. Main rows reconcile; supplemental proxy rows have nonblocking cost diagnostics. Neither proves economic uniqueness across schedules.
+- Observed incorrect equity/principal reason text on two LOAN/cost-only records. A bounded SQL probe reproduces the current unparenthesized OR/AND reason-branch mechanism; the parenthesized counterfactual produces the generic secondary-field reason. Documented follow-up regression requirements without editing production.
+- No new flags, truth-label changes, API calls or production writes. This is a scoped reason-code investigation, not a full historical reconciliation replay.
+
+## 2026-10-04 -- Jev pilot: explicit disclosure-role evidence
+
+- Isolated optional helper distinguishes position-value and unfunded-commitment header bands while preserving coordinates and abstaining on ambiguity. Applied to four frozen AB Centers source rows; exact source contexts verified.
+- Thirteen focused tests pass. One-filing evidence only; no builder integration, deduplication, API calls or production edits. Source agreement still does not prove unique economic exposure.
+
+
+## 2026-10-04 -- Jev pilot: disclosure-role coverage boundary
+
+- Profiled 51 candidate tables across 23 existing filings/11 funds: 14 recognized position-value tables across five funds, 37 unknown across six. Preserved header evidence and abstentions; no broadening to improve coverage.
+- Documented that supplemental AB Centers commitments are absent from the candidate-conditioned sample, so these counts cannot establish full-schedule recall. No builder, API, routing or production changes.
+
+
+## 2026-10-04 -- Jev pilot: grouped workload and queue identity risk
+
+- Read-only membership profile: 67 selected flags across 33 groups/1,063 issue rows. Twelve groups fully sampled, nine evidence-ready before other gates; no whole B1 job savings established.
+- Native queue joins fail because timestamp-form periods leave localized CIK/date blank. Diagnostic normalization locates 18 C107 groups with matching counts; six IDs repeat across 16 entries. No queue repair, verdict migration or production change performed.
+- Documented unique-ID/date/member-accounting prerequisites and kept all production suppression disabled. No API calls.
+
+
+## 2026-10-04 -- Jev pilot: parent-inventory refusal contract
+
+- Added isolated optional parent/member preflight with 26 focused passing tests. Canonical identity, unique IDs and exact complete membership are required; no implicit date or ID repair.
+- Existing affected queue rows are rejected for missing numeric CIK. Output does not claim global queue uniqueness, verified file hashes, source truth or production clearance. No production integration, model calls or bundle changes.
+
+
+## 2026-10-04 -- Jev pilot: explicit hidden-source evidence refusal
+
+- Isolated parser now preserves and blocks explicitly hidden candidate/header/section/note content instead of treating it as visible evidence. CSS rendering remains outside this narrow check.
+- 454 targeted Jev tests pass. Replay 52 remains 39 ready/28 blocked with zero structured evidence changes across 67 flags. New builder/request bindings and unfinished source-first forms 53 verified against all 26 cached source hashes.
+- No model calls, independent clearances, B1 suppression or production changes. Full suite/rebuild/export/production-writing semantic diff not run.
+
+
+## 2026-10-04 -- Jev pilot: review coordinate consistency
+
+- Isolated findings validator rejects duplicate candidate coordinates and false-alarm records whose selected row, source coordinates and citation disagree. Presentation-only whitespace/case normalization; no inferred source equivalence.
+- 31 targeted findings/CLI tests pass. No completed real reviews, builder changes or production edits. Thirtieth bounded metadata audit: zero changed paths.
+
+
+## 2026-10-04 -- Jev pilot: historical B1 partial-group references
+
+- Filtered the earlier inventory to 40 C107/C104/X08 review items within the existing fund reservation. Re-read three known partial C107 traces and verified their original trace/verdict hashes.
+- Groups of 89/42/40 issues had 25-row initial excerpts and explicit representative/sample caveats in final messages. These are not whole-group gold labels or additional current test flags.
+- Recorded snapshot and coverage limits; no new funds, classifier calls or production changes.
+
+
+## 2026-10-04 -- Jev pilot: current deterministic anchor coverage
+
+- Added current-replay profiling to the existing comparator diagnostic. On replay 52, exact anchors are consistent in 35 cases; raw-preserving anchors in all 39 ready cases, with four Onex prefix-normalization matches. All 28 blocked cases remain unresolved.
+- This is structured-evidence consistency, not independent correctness or safe clearance. No historical labels/scores transferred, model calls made or production routing changed.
+
+
+## 2026-10-04 -- Jev pilot: queue date conversion reproduction
+
+- Read-only two-case probe confirms date-only CSV values become timestamp strings through DuckDB inference, lose queue CIK/date localization, and collide across quarters.
+- In-memory date-only counterfactual produces distinct IDs; no production repair, migration or dispatch. Input hashes verified before/after. Details in docs/jev_screening/13_rule_workload.md.
+

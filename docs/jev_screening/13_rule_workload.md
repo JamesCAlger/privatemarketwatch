@@ -171,3 +171,11 @@ The helper is not integrated into production or the current model router. Suppli
 Queue integration has an additional prerequisite: the current timestamp-form ledger periods lose CIK/date localization and collide across quarters in review IDs. In the pilot's 18 matched C107 queue entries, six IDs repeat across 16 entries. The isolated parent-inventory preflight rejects these rows; it does not repair them. No corresponding files were found for those six IDs in the shared review_bundles, shared verdicts or current lock directories. This limited existence check is not an audit of all historical batches and does not establish that no past collision occurred.
 
 The current driver and bundle code key bundle paths, verdicts and locks by review_id, making uniqueness a necessary integration contract. Source review confirmed the main and worktree review_queue/shadow_adapter modules have identical hashes. Details and snapshot-bound counts: [Rule workload](13_rule_workload.md).
+
+## 2026-10-04: date inference mechanism reproduced
+
+A bounded read-only probe reproduced the full date conversion for two existing Ares C107 flags. The raw issue CSV contains 2023-09-30 and 2023-12-31. Production-like DuckDB CSV inference identifies report_date as TIMESTAMP; casting it to VARCHAR produces the timestamp strings present in the ledger and queue. The unchanged queue constructor then leaves CIK/report_date blank and assigns both quarters RVQ_REV_459f93421b9d.
+
+In memory only, restoring each original date-only period makes the same constructor localize the CIK/date and produce two distinct IDs. These diagnostic IDs are not registered, migrated or authorized for dispatch. This confirms the conversion mechanism in two cases; it is not a full queue migration or a claim about historical verdict impact.
+
+Artifact: queue_date_probe_4e3529588849181b.json, produced by scripts/probe_jev_queue_dates.py in the isolated worktree. All three input hashes were checked before and after; main/worktree queue and adapter module hashes agree. No production changes or API calls.
