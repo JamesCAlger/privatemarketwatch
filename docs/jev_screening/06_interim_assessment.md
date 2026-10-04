@@ -1,4 +1,4 @@
-﻿# Interim assessment: useful screening requires validated evidence
+# Interim assessment: useful screening requires validated evidence
 
 Updated 2026-10-04. Work continues in the isolated pilot; this is not a production
 approval or the final experiment report. Exact versions and limitations are in
@@ -68,7 +68,7 @@ is not solely an artefact of the older mixed-version comparison.
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
 four known errors, two identity ambiguities and 12 unscorable cases. These are
 review dispositions, not independently certified clearances. Frozen model-scoring
-references are preserved separately. Latest full replay explicit_visibility_v4_52 has
+references are preserved separately. Latest full replay dependency_bound_v4_55 has
 39 ready and 28 blocked: C107 26/18, X08 11/8, C104 2/2. Readiness is not audited
 completeness. Thirteen of 17 historical confidence-only candidates remain ready;
 none has an unchanged current request, so old scores are not transferred.
@@ -77,7 +77,7 @@ The readiness funnel is narrower than the builder count: 67 selected flags,
 39 evidence-ready, 36 also within the ordinary runner's proxy cap, and 34 eligible
 under the default C107/X08 policy. The other two require the explicit C104
 development probe. No current model result or audit is supplied at the end of
-this funnel. Artifact `screening_funnel_8a77eb3aaba94fb4.json` records all 67
+this funnel. Artifact `screening_funnel_aea23f322777be85.json` records all 67
 dispositions under both policies; it does not certify production rule eligibility
 or infer high true-error rates from this selected sample.
 

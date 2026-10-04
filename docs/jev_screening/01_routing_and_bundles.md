@@ -92,6 +92,7 @@ identity/provenance match and revalidation of the affected inputs.
 |---|---|---|
 | C107 | cost < 0 | Exact source position and cost column; sign, units, scope and applicable commitment/fee notes. A disclosed negative cost is not itself an error. |
 | X08 | cost > 0, FV > 0, FV/cost < 0.05 | Exact source position, both cost and FV, their independent units and applicable impairment/instrument context. Do not broaden the existing predicate to zero FV in this work. |
+| C104 (development probe only) | FV = 0 | Exact source position and FV; distinguish disclosed zero, explicitly tagged zero dash, missing value and failed extraction. The default routing policy still excludes C104. |
 | Future rule | Defined before implementation | Required fields, source relationships, permitted deterministic checks, ambiguity conditions, examples and independent tests |
 
 Rate, PIK, NAV-denominator, aggregate or cross-quarter rules need their own

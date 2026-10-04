@@ -13590,3 +13590,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Isolated cache/replay now binds the shared date helper and Python/HTML-parser versions, detects dependency changes, and rejects mixed replay metadata. No production code changes.
 - Same 67 cached cases retain 39 ready / 28 blocked; source evidence is unchanged. Prepared review inputs refreshed to version 56, all unfinished. API accounting remains 100 calls and zero independent clearances.
 - 484 targeted tests passed, then 17 replay-integrity tests after two added cases. Protection audit 37 reports no production metadata changes; no production rebuild or full suite.
+
+## 2026-10-04 -- Jev pilot: disclosure navigation and historical usage
+
+- Added optional table navigation and source issuer-column seeds in the isolated worktree. On the same 67 flags, 23 have supported source seeds and 11 gain additional navigation coordinates; unknown/combined descriptions remain unsupported. Twenty-seven focused tests pass. No bundle/readiness or model changes.
+- Two-source probe recovers AB Centers commitment/main rows while keeping TCW's manual name recovery separate. Results and limitations recorded in docs/jev_screening/11_remaining_bundle_work.md and agent_campaigns investigation.
+- Read 40 existing historical B1 usage records across 13 reserved funds: 13,216,420 reported input tokens, 557 completed commands, 22 failures. No invoice, active-time or avoided-work claim; grouped historical work differs from current per-flag tests.

@@ -897,3 +897,31 @@ Refreshed artifacts: unfinished blind_review_inputs_56; review_binding_check_5e6
 Request sizing is 467,724 aggregate cl100k proxy tokens, maximum 25,352, with the same three requests above 22,000. The default C107/X08 funnel has 34 pending model/audit, three size fallbacks and 30 evidence/policy fallbacks. All 39 ready cases remain consistent under the raw-preserving deterministic comparator; this is not independent correctness certification. API accounting remains 100 calls / 1,580,960 provider input tokens, zero independent clearances and zero B1 suppression.
 
 Validation: 484 targeted Jev tests passed together, followed by 17 passing replay-integrity tests after two additional refusal cases. Parser warnings are deprecations, not failures. Production metadata protection audit 37 records zero changes. No full suite, production rebuild/export, production-writing semantic diff or API calls were run.
+
+## 2026-10-04: supplementary disclosure navigation
+
+Added an optional table-search helper that retains exact-context anchors and contiguous issuer-phrase matches across all parsed table roles and periods. It preserves source cells, header evidence, context definitions and original coordinates, including unknown/hidden content. Search limits refuse incomplete results rather than silently truncating. This is navigation, not sibling identity, independent recall or a model-ready bundle; no existing candidates are replaced.
+
+Across the same 67 development flags and 26 source files, exact published-name search succeeds for 65 cases and refuses two one-word names. Forty-six have lexical matches; all 65 have an exact-context anchor. Fifty cases have navigation coordinates absent from their builder candidates, while 14 have builder coordinates missed by this search. These are complementary retrieval results, not 50 improved bundles. Exact-anchor fallback also preserves the two refused-name cases.
+
+A separate source-column method reads the issuer cell only where an exact-context row has explicit, separate issuer/instrument headers. It preserves the unmodified text and provenance; unknown/hidden headers, combined investment descriptions and unsupported names remain unresolved. It supplies queries for 23 flags across four funds and adds coordinates beyond published-name search for 11 flags across three funds. The additions include other instruments, comparative periods and tables with unknown roles. They require relevance review and do not certify complete evidence.
+
+Concrete examples: AB Centers' source issuer column recovers the clean name from both polluted commitment-row labels, finding three main-schedule rows plus two commitment rows without Petvet. TCW's separate exploratory position remains unsupported by automatic source-column recovery because its rollforward header is Name of Investment and combines issuer/instrument/rate. A manually source-confirmed Superior Industries phrase finds nine mentions, including the primary schedule, comparative rows and other disclosures; that manual arm is not automatic coverage. For Oaktree BioXcel, broader navigation includes loans, common stock, warrants, acquisition-date tables and both current/comparative schedules, illustrating why a borrower match cannot select a position.
+
+Artifacts: disclosure_search_profile_da03743e49495fec.json (all 67) and disclosure_search_31d4e77534df5bba.json (two investigated sources). Earlier published-name-only profile ddb2f2b271e77fcf is retained. Twenty-seven focused search/seed tests pass. The helper remains unintegrated; replay dependency_bound_v4_55, 39/28 readiness, request payloads and 100-call accounting are unchanged. No independent audits or production changes.
+
+## 2026-10-04: historical B1 usage, not measured savings
+
+Read the single completed-turn usage record from each of the 40 hash-verified historical C107/C104/X08 traces already inventoried within the 16-fund reservation. These groups represent 13 funds; they are not new current classifier cases. The traces report 13,216,420 input tokens, 9,978,368 cached-input tokens, 190,907 output tokens and 48,533 reasoning-output tokens. Fields are preserved separately: do not add overlapping categories or treat this as an invoice. Median reported input is 301,527.5 per historical group, range 126,056 to 640,895.
+
+| Historical rule | Groups | Reported input tokens | Completed commands | Failed commands |
+|---|---:|---:|---:|---:|
+| C104 | 14 | 4,714,587 | 207 | 8 |
+| C107 | 14 | 4,345,158 | 193 | 7 |
+| X08 | 12 | 4,156,675 | 157 | 7 |
+
+There are 557 completed command events, 22 with nonzero/unsuccessful exit codes. Commands include setup and verdict-writing work as well as investigation; their count is not a source-review completeness measure. Three C107 references already have explicit partial-coverage limitations. Completed turn status does not certify full group review, and no active-review duration is available in these records.
+
+This supplies a historical workload baseline, not a Jev/B1 cost ratio. B1 groups and current per-flag Jev requests differ in membership, snapshots and scope; no whole current B1 job has been independently cleared. Invoice cost, saved reviewer time, bundle-maintenance effort and fixed-budget incremental discovery remain unmeasured. Artifact: historical_usage_870d530513e1db9f.json. Offline read-only diagnostic; no worker dispatch, API calls or production changes.
+
+Protection audit 39 records zero changed production metadata paths after these diagnostics. No full suite or production rebuild was run for the optional, unintegrated helpers.

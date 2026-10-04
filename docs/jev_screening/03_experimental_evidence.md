@@ -112,3 +112,17 @@ A read-only recheck of three historical error groups within the existing fund re
 The original issue excerpts retain only row_key ordinals, not durable position identities. The diagnostic never joined those ordinals to current holdings; it separately located current flags and name-based candidate positions, preserving distinct instruments. It verified original trace/verdict hashes and current input hashes before/after. Neither historical group labels nor apparent amount corrections were promoted to gold.
 
 Artifact: historical_error_candidates_00ddb8e888a19fd3.json; initial flag-only report historical_error_candidates_bbe7200d66f9741a.json. No new builder cases, API calls, funds or production changes. The frozen experiment remains 67 cases with four reviewed natural numeric errors. A reusable error corpus needs the original full output row, original source bytes/context, rule semantics and a position-specific adjudication, rather than a historical queue verdict plus a current CSV.
+
+## 2026-10-04: historical B1 usage, not measured savings
+
+Read the single completed-turn usage record from each of the 40 hash-verified historical C107/C104/X08 traces already inventoried within the 16-fund reservation. These groups represent 13 funds; they are not new current classifier cases. The traces report 13,216,420 input tokens, 9,978,368 cached-input tokens, 190,907 output tokens and 48,533 reasoning-output tokens. Fields are preserved separately: do not add overlapping categories or treat this as an invoice. Median reported input is 301,527.5 per historical group, range 126,056 to 640,895.
+
+| Historical rule | Groups | Reported input tokens | Completed commands | Failed commands |
+|---|---:|---:|---:|---:|
+| C104 | 14 | 4,714,587 | 207 | 8 |
+| C107 | 14 | 4,345,158 | 193 | 7 |
+| X08 | 12 | 4,156,675 | 157 | 7 |
+
+There are 557 completed command events, 22 with nonzero/unsuccessful exit codes. Commands include setup and verdict-writing work as well as investigation; their count is not a source-review completeness measure. Three C107 references already have explicit partial-coverage limitations. Completed turn status does not certify full group review, and no active-review duration is available in these records.
+
+This supplies a historical workload baseline, not a Jev/B1 cost ratio. B1 groups and current per-flag Jev requests differ in membership, snapshots and scope; no whole current B1 job has been independently cleared. Invoice cost, saved reviewer time, bundle-maintenance effort and fixed-budget incremental discovery remain unmeasured. Artifact: historical_usage_870d530513e1db9f.json. Offline read-only diagnostic; no worker dispatch, API calls or production changes.

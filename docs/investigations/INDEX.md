@@ -133,6 +133,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-10-04 -- Jev pilot: note parsing, size limits and headerless anchors
 - 2026-10-04 -- Jev pilot: review-group membership and queue date identity
 - 2026-10-04: source-wide disclosure-role inventory
+- 2026-10-04: supplementary disclosure navigation
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)
