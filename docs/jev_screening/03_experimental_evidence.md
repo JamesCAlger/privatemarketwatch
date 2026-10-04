@@ -98,3 +98,17 @@ Re-read the three original trace bundles and final messages, verifying all trace
 This matters to the proposed hybrid: complete per-member accounting could improve coverage compared with representative B1 review, even before it saves time. That potential benefit is not yet a measured improvement in defect discovery. Each source-backed member needs a snapshot-specific reference; do not spread a group false_alarm label across uninspected rows or transfer it into current holdings. The historical Senior Credit group has 89 issues versus 88 in the current corresponding group, another reason to preserve snapshot identity.
 
 Artifact: historical_coverage_d8419f2cf0af2bf7.json. No new funds, current flags, classifier calls or production changes. The script reads only the three known partial traces after filtering the historical inventory to the reserved funds.
+
+## 2026-10-04: historical error candidates do not transfer to current flags
+
+A read-only recheck of three historical error groups within the existing fund reservation found no justified new current-error label:
+
+| Historical reference | Current snapshot observation | Consequence |
+|---|---|---|
+| TCW C104, Q3-2025, RVQ_REV_d01fc72414cb | Three old issues versus two current flags: HOP Energy Term Loan B and Superior common stock. The old verdict identified a third blank subtotal as the error and explicitly described the other two zeros as legitimate. | Do not spread the group error label across the two surviving named flags. Count reduction alone does not prove which remediation removed a row. |
+| TCW C104, Q3-2024, RVQ_REV_2b5ab0f83dc7 | Current HydroSource warrant FV is 210,328, matching the amount cited by historical B1; the sole current C104 flag is HOP Energy Term Loan B. | The old ordinal cannot identify today's flagged position. Current amount agreement with a historical citation is not a fresh source audit. |
+| Ares Strategic investigation reference RVQ_REV_cfa56935ad94 (X08, Q4-2025) | No current X08 flag in that fund/period. Alcresta's revolving-loan cost/FV are 73,700/73,500, matching the historical cited amounts. | This is not a present error-bearing classifier case. The data-change mechanism was not investigated. |
+
+The original issue excerpts retain only row_key ordinals, not durable position identities. The diagnostic never joined those ordinals to current holdings; it separately located current flags and name-based candidate positions, preserving distinct instruments. It verified original trace/verdict hashes and current input hashes before/after. Neither historical group labels nor apparent amount corrections were promoted to gold.
+
+Artifact: historical_error_candidates_00ddb8e888a19fd3.json; initial flag-only report historical_error_candidates_bbe7200d66f9741a.json. No new builder cases, API calls, funds or production changes. The frozen experiment remains 67 cases with four reviewed natural numeric errors. A reusable error corpus needs the original full output row, original source bytes/context, rule semantics and a position-specific adjudication, rather than a historical queue verdict plus a current CSV.

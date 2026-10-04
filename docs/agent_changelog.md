@@ -13565,3 +13565,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Early-refused packets omitted one complete filing from a builder-path-only inventory. Preserved period uncertainty and source hashes; no bundle/routing changes or model calls.
 - Corrected stale current-versus-historical counts in interim documentation. No production changes; diagnostic execution only, no new pytest run.
 
+
+## 2026-10-04 -- Jev pilot: historical error snapshot drift
+
+- Three bounded historical error groups no longer supply the same current flagged positions: TCW zero-FV groups changed membership; the Ares Strategic X08 group no longer fires. Named HydroSource/Alcresta current amounts match historical cited amounts, without a new source-truth claim.
+- Preserved trace/verdict/input hashes and avoided historical ordinal joins. No new experiment cases, model calls, funds or production changes.
+

@@ -843,3 +843,17 @@ Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagn
 A bounded lexical scan of all 26 hash-bound cached filings found no embedded style blocks, stylesheet link tags or CSS imports. Consequently it found no stylesheet visibility declarations to investigate in this selected sample. Artifact: stylesheet_inventory_e2984c3f87a80287.json, generated offline by scripts/inventory_jev_stylesheets.py with all 67 prepared packet bindings checked.
 
 This does not certify rendered visibility: the scan is not a browser, does not resolve CSS syntax/cascade or scripts, and fetched no external resources. The builder's existing positive inline/HTML hidden-content refusal remains unchanged. Stylesheet-driven layouts remain an explicit future-layout limitation; this result provides no reason to add a CSS renderer to the current pilot. No new model calls, readiness changes or production edits.
+
+## 2026-10-04: historical error candidates do not transfer to current flags
+
+A read-only recheck of three historical error groups within the existing fund reservation found no justified new current-error label:
+
+| Historical reference | Current snapshot observation | Consequence |
+|---|---|---|
+| TCW C104, Q3-2025, RVQ_REV_d01fc72414cb | Three old issues versus two current flags: HOP Energy Term Loan B and Superior common stock. The old verdict identified a third blank subtotal as the error and explicitly described the other two zeros as legitimate. | Do not spread the group error label across the two surviving named flags. Count reduction alone does not prove which remediation removed a row. |
+| TCW C104, Q3-2024, RVQ_REV_2b5ab0f83dc7 | Current HydroSource warrant FV is 210,328, matching the amount cited by historical B1; the sole current C104 flag is HOP Energy Term Loan B. | The old ordinal cannot identify today's flagged position. Current amount agreement with a historical citation is not a fresh source audit. |
+| Ares Strategic investigation reference RVQ_REV_cfa56935ad94 (X08, Q4-2025) | No current X08 flag in that fund/period. Alcresta's revolving-loan cost/FV are 73,700/73,500, matching the historical cited amounts. | This is not a present error-bearing classifier case. The data-change mechanism was not investigated. |
+
+The original issue excerpts retain only row_key ordinals, not durable position identities. The diagnostic never joined those ordinals to current holdings; it separately located current flags and name-based candidate positions, preserving distinct instruments. It verified original trace/verdict hashes and current input hashes before/after. Neither historical group labels nor apparent amount corrections were promoted to gold.
+
+Artifact: historical_error_candidates_00ddb8e888a19fd3.json; initial flag-only report historical_error_candidates_bbe7200d66f9741a.json. No new builder cases, API calls, funds or production changes. The frozen experiment remains 67 cases with four reviewed natural numeric errors. A reusable error corpus needs the original full output row, original source bytes/context, rule semantics and a position-specific adjudication, rather than a historical queue verdict plus a current CSV.
