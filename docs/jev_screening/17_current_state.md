@@ -1,6 +1,7 @@
 # Current implementation and evidence
 
-Updated 2026-10-04. Execution remains active until the owner stops it in chat.
+Updated 2026-10-04. Execution is paused at the owner's request after completing
+the footnote-link diagnostic. See the [handover](18_handover_2026-10-04.md).
 Production code, data, queues and gates are untouched. All new implementation is
 in `.claude/worktrees/jev-screening-pilot`; nothing below authorizes deployment.
 
@@ -35,6 +36,7 @@ estimate missed-error risk.
 | Deterministic comparator | Useful numeric baseline; source agreement does not certify identity, inclusion or complete recall. |
 | Disclosure-role/search helpers | Optional and unintegrated. Source issuer columns supply queries for 23 flags; 11 gain navigation rows. Other positions and periods remain distinct. |
 | Continuation-header diagnostic | One geometrically plausible CMG case; no inherited headers or readiness promotion. Scope and notes remain unresolved. |
+| Explicit footnote-link resolver | Optional, unintegrated, 31 focused tests. Resolves all selected fact links on 53 core flags; continued objects can span several numbered notes and require further handling. |
 | Proxy lineage, parent inventory, explanations, compaction | Separate bounded tools. They do not authorize proxy adjudication, production queue linkage or deployment. |
 
 ## Findings that matter before integration
@@ -70,6 +72,8 @@ All artifact names below are relative to
 | Header continuation | `header_continuation_probe_972590ca4ffead8e.json` |
 | Additional two-case period transfer | `later_period_c104_57/` |
 | Later-period missing-note diagnosis | `missing_note_inspection_3cdc76304ddd12df.json` |
+| Explicit-link coverage | `explicit_note_profile_9c1e421ec100ce3f.json` |
+| Linked continuation inspection | `linked_continuation_inspection_2c3416554001271f.json` |
 
 The next validation milestone is an independently reviewed, snapshot-bound
 comparison of deterministic checks alone against those checks plus Jev on the

@@ -1,7 +1,9 @@
 # Jev screening with B1 investigation
 
-Date: 2026-10-03. Status: isolated implementation and development evaluation active;
+Date: 2026-10-03. Status: paused by the owner on 2026-10-04 after the footnote-link check;
 production screening and automatic clearance are not enabled.
+
+Resume from the [agent handover](18_handover_2026-10-04.md), subject to the owner's next instructions.
 
 Start with the [current implementation and evidence map](17_current_state.md)
 for the latest artifact versions and integration blockers.
@@ -9,7 +11,7 @@ for the latest artifact versions and integration blockers.
 Current checkpoint (2026-10-04): **39/67 bundles evidence-ready**, with 28 evidence
 fallbacks. Three ready requests exceed the runner's token proxy cap, leaving
 **36/67 within both evidence and size requirements**. **100/100 API calls used**, 42 unique natural flags called, zero
-independently audited clearances and zero B1 suppression. Work continues offline.
+independently audited clearances and zero B1 suppression. Work is paused.
 The default C107/X08 policy admits 34 of those 36; two C104 cases require the
 explicit development probe. These counts do not include a current model verdict
 or independent clearance. A separate queue date/ID defect also blocks safe parent linkage; see [group accounting](13_rule_workload.md).
@@ -21,7 +23,7 @@ retaining a sparse rollforward row and losing main-schedule cost detail, despite
 matching FV audit totals. This was not found by Jev and is outside the frozen
 67-case experiment. See [source-field retention](07_proxy_cost_evidence.md).
 
-Execution is active in the isolated `.claude/worktrees/jev-screening-pilot`
+Implementation is saved in the isolated `.claude/worktrees/jev-screening-pilot`
 worktree. See the [run log](05_run_log.md) for checkpoints and scope accounting.
 Production code, data and queues remain outside this work.
 
@@ -56,6 +58,7 @@ low-confidence decisions and rules with a known high true-error rate.
 | [Zero-value controls](15_zero_value_controls.md) | Final paired C104 test and complete 100-call accounting |
 | [Missing issuer mechanism](16_missing_issuer_mechanism.md) | Three source-backed examples of upstream identity extraction failure and separate unresolved flags |
 | [Current state](17_current_state.md) | Current artifacts, reusable components, optional diagnostics and remaining integration evidence |
+| [Agent handover](18_handover_2026-10-04.md) | Owner pause, exact continuation point, remaining tasks and safety boundaries |
 
 ## Proposed operating model
 

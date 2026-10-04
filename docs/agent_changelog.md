@@ -13611,3 +13611,9 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 
 - Added an isolated deterministic two-case C104 probe in an existing fund's later filing. Both remain blocked by note 13 beyond the parser's bounded table association, although direct source tags encode zero FV.
 - Core 67-case results are unchanged; separate offline scope is two additional flags/one filing, same 11 funds. No new API calls, independent audits, production changes or clearance. Direct diagnostic execution only; details in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: explicit footnote links and owner pause
+
+- Added an optional isolated fact/footnote resolver, source probes and 31 passing focused tests. Full link resolution on 53/67 core flags is availability evidence only; five cases exceed the bounded relationship limit.
+- Two additional later-period cases have direct missing-note links. Continuation investigation shows that explicit objects can span multiple numbered notes/tables, so no automatic attachment or readiness promotion was applied.
+- Owner requested pause after this item. Handover records current artifacts, unresolved validation and production boundaries. Core 39/67 readiness, 100 API calls and zero independent clearances remain unchanged.

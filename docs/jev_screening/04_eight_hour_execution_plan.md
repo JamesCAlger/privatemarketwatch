@@ -1,6 +1,7 @@
 # Eight-hour build and test plan
 
-Date: 2026-10-03. Status: execution active in an isolated worktree. The owner
+Date: 2026-10-03. Status: paused by the owner on 2026-10-04; see the
+[handover](18_handover_2026-10-04.md). Implementation is in an isolated worktree. The owner
 subsequently instructed continuous work until stopped in this chat, without
 touching production. The schedule below sets priorities, not an automatic stop.
 See the [run log](05_run_log.md) for outcomes and deviations.
