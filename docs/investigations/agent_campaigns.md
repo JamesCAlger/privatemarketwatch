@@ -2009,3 +2009,86 @@ production data error or proof of future-filer coverage.
 Source-first review inputs now cover all 67 existing flags, withholding model
 answers and builder outcomes; every review remains unfinished. Independent B1
 review and timing are still outstanding. Production remains untouched.
+
+## 2026-10-04 -- Jev pilot: retrieval and source-feature stress checks
+
+Question: can apparently complete bundles silently omit source identity anchors,
+misread unsupported monetary facts or lose footnote references?
+
+A copied Fortress issuer-name mutation omitted the target while leaving a sibling
+ready. The builder now inventories declared-context monetary anchors separately
+and blocks known omissions. Six checks pass across three already sampled filers.
+Further fixtures exposed nil/continued/excluded-content facts, invalid signs and
+USD suffixes with unrelated or missing currency namespaces. Explicit blockers and
+valid counterexamples now pass; 13 copied-source inline/currency checks pass.
+The currency_namespace_v4_37 replay remains 34 ready / 33 blocked across 67 real
+flags, with unchanged candidate sets. These synthetic mechanisms do not count as
+new naturally occurring errors or establish future-filer recall.
+
+Four additional model controls tested synthetic cost errors with/without hostile
+instructions inside copied source notes. All four classified the error and source
+correctly and routed to B1. Session accounting is now 98 successful calls and
+1,561,219 provider input tokens across only 42 unique called natural flags; repeated,
+revised and synthetic calls remain separate. No independent clearances exist.
+The approximate published-rate inference cost is $0.0656; total operating cost and
+B1 savings remain unmeasured. See docs/jev_screening/10_source_note_stress.md.
+
+A markup inventory inspected 167 unique candidate rows across 23 source files and
+found no superscript markup on those rows. Synthetic bare superscript references
+nevertheless exposed a dropped-note failure. The isolated builder now retains
+those references and blocks missing or unparsed annotations; the targeted suite
+passes 305 tests. A fresh replay is recorded separately. This inventory excludes
+headers, section headings and unretrieved rows, so it is not full filing coverage.
+
+All implementation remains in the isolated worktree. Production metadata audits
+remain unchanged; no SEC downloads, production rebuilds, queue changes or merges.
+
+## 2026-10-04 -- Jev pilot: evidence recovery, explanations and workload
+
+Question: Can reusable evidence handling expand coverage while preserving source uncertainty and a reviewable handoff?
+
+A bounded reference-rate note association recovered three Crescent bundles without changing source identities, values or candidate sets. The latest replay is 37 ready / 30 blocked across the existing 67 flags. Section-scope ambiguity remains blocked. Deterministic explanations render recorded model answers, source comparisons and routing reasons; they do not invent causal diagnoses. See docs/jev_screening/11_remaining_bundle_work.md and 12_factual_explanations.md.
+
+Read-only counts within the reserved 16 funds show Q1-2026 C107 510 review issues, C104 448 track-only issues and X08 18 track-only issues. Flag counts are not B1 job counts or estimates of safe savings. AGG01 has 13,078 issues without row IDs or reporting dates, so its volume cannot establish a model-ready queue. See 13_rule_workload.md.
+
+Offline confidence sensitivity retains the six observation categories. First-natural candidates change from 23 at joint 0.70 to 17 at 0.75 and 7 at 0.80. All 42 natural references are false alarms, preventing missed-error calibration; cutoffs remain unchanged. Four focused tests pass. See 14_confidence_sensitivity.md.
+
+The refreshed source-first handoff binds the latest builder for all 67 development cases; zero completed independent reviews. Calls remain 98/100, with no new funds, production integration or B1 suppression. Twentieth bounded production metadata audit reports zero changed paths.
+
+## 2026-10-04 -- Jev pilot: note parsing, size limits and headerless anchors
+
+**Question:** Which remaining bundle gaps are recoverable parsing defects, and which require a different evidence contract?
+
+**Results:** Jackson Paper's reference-only cell was mistaken for a note definition; Spotless's attached double-star marker was shortened to a single star. Generic repairs recover both while retaining nearest-real-note-block scope. Explicit Index/Spread geometry prevents Oaktree rate operators from becoming false footnotes. Frozen replay note_formula_v4_48 has 39/67 evidence-ready bundles, 28 evidence fallbacks, with unchanged source identities, amounts and candidate sets. Three ready Ares packets exceed the current 22,000 whole-request token proxy cap, leaving 36 within both requirements.
+
+Optional v2 grid encoding preserves all rows/cells/notes and reconstructs all 39 requests exactly; proxy sum falls from 467,757 to 420,709 and maximum from 25,355 to 20,236. It remains disabled because encoding equivalence is not model equivalence or provider-fit validation. The 100-call cap is exhausted: 1,580,960 provider input tokens, approximately USD 0.0664 published-rate inference estimate, 42 unique natural flags called, no independent clearances or B1 savings established.
+
+Three remaining missing-candidate flags have exact-context anchors in headerless tables. Krayden also has a visible revolver versus term-loan context contradiction and a custom cost concept. The review helper now inventories all exact-context numeric facts without guessing their financial role. Header inheritance remains unsupported pending geometry, period, owner and concept validation.
+
+Validation: 391 targeted Jev tests passed after note repairs; later focused compaction tests 11/11 and source-review tests 18/18 passed. Twenty-four bounded production metadata audits found zero changes. No production rebuild/export or production-writing semantic diff. Detailed artifacts and limitations: docs/jev_screening/08_context_size_and_cost.md and 11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: review-group membership and queue date identity
+
+The 67 frozen flags belong to 33 fund/period/rule groups containing 1,063 current issue rows: C107 44 selected of 919 rows in 18 groups; X08 19 of 30 in 11 groups; C104 4 of 114 in four groups. Twelve groups are fully selected; nine are also entirely evidence-ready before size, policy, model or audit checks. These are population-coverage counts, not completed reviews.
+
+A native join to queue CIK/report_date finds none of the 33 groups. The ledger casts inferred timestamps to strings such as `2026-03-31 00:00:00`, while `pipeline/review_queue.py` localizes only exact YYYY-MM-DD strings. Existing affected queue rows have blank CIK/report_date. The review-ID input includes the blank localized date rather than raw period, producing repeated IDs across quarters.
+
+A diagnostic-only join using unit_label and normalized period locates all 18 C107 groups, with n_units matching all current issue counts. Six review IDs repeat across 16 of those 18 entries. X08/C104 have no matched queue entries in these sampled groups; their tracking-only statuses do not imply current B1 jobs. Date normalization here does not certify a parent link or repair existing IDs, bundles, verdicts or locks.
+
+Only three queued C107 groups are fully selected: the three Ares single-row groups. All three currently exceed the ordinary runner's size cap. Other queued groups retain unselected members. Optional compact encoding remains unvalidated with the model. Thus these data do not demonstrate a fully screened current B1 job, even before independent audit is required.
+
+Before any queue integration: normalize and validate the ledger's date contract, require unique review IDs across periods, account for every parent member, and assess migration of existing IDs/verdicts/locks. Do not silently relabel existing records or reuse a verdict through an ambiguous ID. Production changes remain prohibited in this session.
+
+Artifact: review_group_profile_cc98b0808f2e7934.json. Inputs are hashed; queue timestamp 2026-09-30 19:24:52 UTC, issues timestamp 2026-09-30 17:34:23 UTC. Read-only diagnostic on the same 11 funds, no new model calls. Earlier strict-join report review_group_profile_1af497f03efcc785.json is retained as the initial observation.
+
+## 2026-10-04: source-wide disclosure-role inventory
+
+The bounded inventory now scans every table in all 26 selected cached filings, using the frozen source-first review inputs to include filings absent from early-refused bundles. It inspects 2,641 tables: 184 have explicit position-value headers, six have explicit unfunded-commitment headers, and 2,451 are unknown to the deliberately narrow role helper. These counts include other periods, owners and irrelevant tables; they are not relevance or accuracy scores.
+
+Only 14 of the 190 recognized tables are in the existing candidate-table inventory. All six commitment tables are outside it, in two Senior Credit filings: Q3-2024 tables 15/18 and Q1-2026 tables 19/20/30/31. The parser associates Q3-2024 with table 15, leaves table 18's period unresolved, associates Q1-2026 with 19/20, and Q4-2025 with 30/31. These are retained parser findings, not independently certified scope.
+
+An initial pass using only declared builder paths covered 25 filings and found two commitment tables. The source-first bindings add the Senior Credit Q1-2026 filing represented by an early-blocked proxy-cost case: another 73 tables, including 16 position-value and four commitment tables. This demonstrates why a builder-conditioned inventory cannot establish coverage of all selected filings.
+
+Design implication: create a cached, source-wide disclosure inventory before selecting evidence for an individual rule. Preserve unknown roles and unresolved owner/period associations. Use the inventory to test whether relevant supplemental disclosures were considered, not to append every table or automatically certify recall. Current candidate packets and readiness remain unchanged; no source truth, duplicate exposure or inclusion correction is inferred.
+
+Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagnostic: disclosure_role_profile_dbb4aad701f83096.json. The final report binds the prepared review manifest, parser and role-helper hashes, verifies all 67 prepared packet bindings, and checks each source hash before/after parsing. Unknown-table counts are retained; their full cells are deliberately omitted from this diagnostic. No new funds, model calls or production changes.

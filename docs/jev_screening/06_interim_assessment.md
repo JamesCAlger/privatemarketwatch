@@ -37,7 +37,7 @@ this did not add another confirmed natural numeric-error mechanism.
 | 17 historical confidence-only candidates | Not audited clearances. Later bundle versions invalidate reuse of old scores. Two newly called Fortress cases pass both trial cutoffs after grouped-header repair. |
 | Eight presentation calls on four revised X08 cases | Labels/sources remain correct, but three flags change confidence eligibility between orders; none passes both cutoffs in both orders. One call per order does not isolate provider variability. |
 | Eight exact-request repeats of that presentation experiment | All labels/sources remain correct. No complete answer distribution is identical; one unchanged request crosses the cutoff. Two between-presentation eligibility differences persist on repetition. This confirms some provider variability, without quantifying its population rate. |
-| 12 current-builder rechecks plus four blocked natural-error controls | Jev and the raw-preserving comparator both match all 12 called labels/sources. Six pass both confidence cutoffs; four eligibility results differ from older bundles. All 16 route to B1. This is development evidence, not a fresh holdout. |
+| 12 builder-18 rechecks plus four blocked natural-error controls | Jev and the raw-preserving comparator both match all 12 called labels/sources. Six pass both confidence cutoffs; four eligibility results differ from older bundles. All 16 route to B1. This is historical development evidence, not the current replay or a fresh holdout. |
 | Four source-note stress calls | Two synthetic cost errors, each with and without misleading instructions in a copied note: 4/4 correct source/error decisions, all B1. Not a general robustness result. |
 | Two C104 zero-value controls | Correct disclosed-zero and missed-$1,000 decisions/source choices. Neither passes both confidence cutoffs; both remain B1. Synthetic controls on one existing position, not natural errors. |
 | 100 total calls, 1,580,960 provider input tokens | About $0.0664 inference cost at the verified published rate; not an invoice or end-to-end cost. Includes repeats and rechecks. The session call cap is exhausted. No B1 time savings established. See [sizing and cost](08_context_size_and_cost.md). |
@@ -56,7 +56,7 @@ not been demonstrated on the tested natural cases. These comparators share
 builder inputs and historical evidence omissions, so 42/42 is not independent
 certification or a production clearance claim. Harder identity/interpretation
 cases and an error-bearing holdout would be needed to establish model value.
-The common-builder recheck reproduces this finding on 12 current packets, so it
+The builder-18 recheck reproduced this finding on 12 packets at that checkpoint, so it
 is not solely an artefact of the older mixed-version comparison.
 
 Latest supplemental source review accounts for all 67 flags: 49 false alarms,
@@ -107,11 +107,11 @@ larger artifact slice than the frozen 67-case builder experiment below.
 
 | Frozen flag action | Flags | Current ready / blocked | Interpretation |
 |---|---:|---:|---|
-| C107 REVIEW | 44 | 24 / 20 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |
+| C107 REVIEW | 44 | 26 / 18 | Potential reduction of review-action flags, subject to audits; these are not 44 measured B1 jobs. |
 | X08 TRACK_ONLY | 19 | 11 / 8 | Added screening coverage, with B1 investigation capacity needed for escalations. |
 | C104 TRACK_ONLY | 4 | 2 / 2 | Exploratory extra coverage; no clearance eligibility promoted. |
 
-In the 12-call current-builder recheck, only two of seven C107 cases passed both
+In the historical 12-call builder-18 recheck, only two of seven C107 cases passed both
 confidence cutoffs. Four of five called X08 cases passed, while four additional
 known-error X08 controls were blocked before calling. None was independently
 cleared. Pooling all six confidence candidates as avoided B1 jobs would therefore

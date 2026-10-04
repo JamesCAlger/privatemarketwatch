@@ -245,3 +245,15 @@ Artifact: disclosure_role_profile_a042a86bbf1a9146.json. Original headers, sourc
 - New builder SHA-256: 50a963afa56516ffc4c59606a27b292b861da55da6bb40cf95b432e9b243aeb1. Delta artifact: note_retrieval_delta_93f671ada0fa1fc5.json.
 - Current sizing artifact request_size_profile_4f68c257ba406ea4.json: 467,734 aggregate proxy tokens, max 25,355, three above cap. Optional v2 compaction reconstructs all 39 exactly at 420,686 proxy tokens, max 20,236; remains disabled/unscored. Tiny token differences versus replay 48 reflect changed version-bound identifiers, not evidence removal.
 - Refreshed unfinished blind_review_inputs_53 and verified all 67 packet bindings and 26 source hashes. API accounting unchanged: 100 calls, 1,580,960 provider input tokens. No independent clearance, B1 suppression or production edits.
+
+## 2026-10-04: source-wide disclosure-role inventory
+
+The bounded inventory now scans every table in all 26 selected cached filings, using the frozen source-first review inputs to include filings absent from early-refused bundles. It inspects 2,641 tables: 184 have explicit position-value headers, six have explicit unfunded-commitment headers, and 2,451 are unknown to the deliberately narrow role helper. These counts include other periods, owners and irrelevant tables; they are not relevance or accuracy scores.
+
+Only 14 of the 190 recognized tables are in the existing candidate-table inventory. All six commitment tables are outside it, in two Senior Credit filings: Q3-2024 tables 15/18 and Q1-2026 tables 19/20/30/31. The parser associates Q3-2024 with table 15, leaves table 18's period unresolved, associates Q1-2026 with 19/20, and Q4-2025 with 30/31. These are retained parser findings, not independently certified scope.
+
+An initial pass using only declared builder paths covered 25 filings and found two commitment tables. The source-first bindings add the Senior Credit Q1-2026 filing represented by an early-blocked proxy-cost case: another 73 tables, including 16 position-value and four commitment tables. This demonstrates why a builder-conditioned inventory cannot establish coverage of all selected filings.
+
+Design implication: create a cached, source-wide disclosure inventory before selecting evidence for an individual rule. Preserve unknown roles and unresolved owner/period associations. Use the inventory to test whether relevant supplemental disclosures were considered, not to append every table or automatically certify recall. Current candidate packets and readiness remain unchanged; no source truth, duplicate exposure or inclusion correction is inferred.
+
+Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagnostic: disclosure_role_profile_dbb4aad701f83096.json. The final report binds the prepared review manifest, parser and role-helper hashes, verifies all 67 prepared packet bindings, and checks each source hash before/after parsing. Unknown-table counts are retained; their full cells are deliberately omitted from this diagnostic. No new funds, model calls or production changes.

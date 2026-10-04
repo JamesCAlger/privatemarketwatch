@@ -825,3 +825,15 @@ A bounded read-only probe reproduced the full date conversion for two existing A
 In memory only, restoring each original date-only period makes the same constructor localize the CIK/date and produce two distinct IDs. These diagnostic IDs are not registered, migrated or authorized for dispatch. This confirms the conversion mechanism in two cases; it is not a full queue migration or a claim about historical verdict impact.
 
 Artifact: queue_date_probe_4e3529588849181b.json, produced by scripts/probe_jev_queue_dates.py in the isolated worktree. All three input hashes were checked before and after; main/worktree queue and adapter module hashes agree. No production changes or API calls.
+
+## 2026-10-04: source-wide disclosure-role inventory
+
+The bounded inventory now scans every table in all 26 selected cached filings, using the frozen source-first review inputs to include filings absent from early-refused bundles. It inspects 2,641 tables: 184 have explicit position-value headers, six have explicit unfunded-commitment headers, and 2,451 are unknown to the deliberately narrow role helper. These counts include other periods, owners and irrelevant tables; they are not relevance or accuracy scores.
+
+Only 14 of the 190 recognized tables are in the existing candidate-table inventory. All six commitment tables are outside it, in two Senior Credit filings: Q3-2024 tables 15/18 and Q1-2026 tables 19/20/30/31. The parser associates Q3-2024 with table 15, leaves table 18's period unresolved, associates Q1-2026 with 19/20, and Q4-2025 with 30/31. These are retained parser findings, not independently certified scope.
+
+An initial pass using only declared builder paths covered 25 filings and found two commitment tables. The source-first bindings add the Senior Credit Q1-2026 filing represented by an early-blocked proxy-cost case: another 73 tables, including 16 position-value and four commitment tables. This demonstrates why a builder-conditioned inventory cannot establish coverage of all selected filings.
+
+Design implication: create a cached, source-wide disclosure inventory before selecting evidence for an individual rule. Preserve unknown roles and unresolved owner/period associations. Use the inventory to test whether relevant supplemental disclosures were considered, not to append every table or automatically certify recall. Current candidate packets and readiness remain unchanged; no source truth, duplicate exposure or inclusion correction is inferred.
+
+Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagnostic: disclosure_role_profile_dbb4aad701f83096.json. The final report binds the prepared review manifest, parser and role-helper hashes, verifies all 67 prepared packet bindings, and checks each source hash before/after parsing. Unknown-table counts are retained; their full cells are deliberately omitted from this diagnostic. No new funds, model calls or production changes.

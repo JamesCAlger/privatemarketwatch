@@ -72,6 +72,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-14 - Foreign FV reached USD sums after source-unit resolution
 - 2026-09-15 - E3-v2: certifying no-filing lifecycle exclusions from positive EDGAR evidence
 - 2026-09-16 - V11b source selection, cash retention and quarterly failure attribution
+- 2026-10-04 -- Jev pilot: possible primary/supplemental position overlap
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals
@@ -81,6 +82,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-06-05 - Ares Core Infrastructure cached HTML wrapper check
 - 2026-06-05 - Barings Private Credit wrapper residual closeout
 - 2026-06-05 - MidCap Financial wrapper residual closeout
+- 2026-10-04 -- Crescent null issuers encountered in Jev pilot
 
 ## Conservation / shadow-panel engine ([conservation_shadow_engine.md](conservation_shadow_engine.md))
 - 2026-06-15 - Top overshoot 0001851322 2025-12-31 = duplicate filing (10-K + 10-K/A)
@@ -125,6 +127,11 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-10-03 - Isolated Jev hybrid screening build and bounded shadow evaluation
 - 2026-10-04 - Jev source completeness and presentation stability
 - 2026-10-04 -- Jev pilot: context completeness, size and deterministic comparison
+- 2026-10-04 -- Jev pilot: retrieval and source-feature stress checks
+- 2026-10-04 -- Jev pilot: evidence recovery, explanations and workload
+- 2026-10-04 -- Jev pilot: note parsing, size limits and headerless anchors
+- 2026-10-04 -- Jev pilot: review-group membership and queue date identity
+- 2026-10-04: source-wide disclosure-role inventory
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)

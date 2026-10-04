@@ -13558,3 +13558,10 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Read-only two-case probe confirms date-only CSV values become timestamp strings through DuckDB inference, lose queue CIK/date localization, and collide across quarters.
 - In-memory date-only counterfactual produces distinct IDs; no production repair, migration or dispatch. Input hashes verified before/after. Details in docs/jev_screening/13_rule_workload.md.
 
+
+## 2026-10-04 -- Jev pilot: source-wide table roles
+
+- Expanded the isolated role diagnostic to all 26 selected cached filings, bound through source-first inputs: 2,641 tables, 184 position-value roles, six commitment roles, 2,451 unknown. All six commitment tables are outside candidate retrieval; no claim that all are relevant to a selected flag.
+- Early-refused packets omitted one complete filing from a builder-path-only inventory. Preserved period uncertainty and source hashes; no bundle/routing changes or model calls.
+- Corrected stale current-versus-historical counts in interim documentation. No production changes; diagnostic execution only, no new pytest run.
+

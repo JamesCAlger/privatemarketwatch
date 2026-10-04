@@ -97,7 +97,10 @@ performed under the owner's no-production instruction.
 The existing source-review helper initially crashed on null issuer names. The
 isolated fix skips name search for absent/non-string values while retaining exact
 context lookup. Five new checks cover null/blank/non-string names and a valid
-name; all 14 source-review tests pass. Builder readiness remains 37/67.
+name; all 14 source-review tests passed at that checkpoint, with readiness then
+37/67. Later unrelated note repairs brought the current replay to 39/67; these
+three missing-issuer cases remain blocked. The source-review helper now has 18
+passing focused tests, including later custom-context evidence preservation.
 
 Under `data/pilot/jev_screening/20261003_shadow/`:
 
