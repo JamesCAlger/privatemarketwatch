@@ -25,6 +25,11 @@ Execution is active in the isolated `.claude/worktrees/jev-screening-pilot`
 worktree. See the [run log](05_run_log.md) for checkpoints and scope accounting.
 Production code, data and queues remain outside this work.
 
+A separate offline period-transfer check adds two C104 cases in an existing
+fund's later filing. Both remain blocked by missing note associations. These
+are additional development cases, not additions to the 67-case model benchmark;
+no new model calls or independent audits were made.
+
 The objective is **audited, correct position-level data**. The main opportunity is
 to screen more weak-rule flags with the same B1 investigation budget. Jev handles
 supported cases cheaply; B1 investigates difficult evidence, suspected errors,

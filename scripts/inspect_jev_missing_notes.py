@@ -23,6 +23,7 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--run-root', type=Path, required=True)
     parser.add_argument('--replay', required=True)
+    parser.add_argument('--row-id', action='append', default=[], help='At most four explicit IDs from the supplied frozen replay')
     args = parser.parse_args()
     repo, run = args.repo.resolve(), args.run_root.resolve()
     if repo == ROOT or not run.is_relative_to(repo / 'data/pilot/jev_screening'):
@@ -31,9 +32,12 @@ def main():
     summary, packets = load_replay(run, args.replay)
     if sha(ROOT / 'pipeline/jev_bundles.py') != summary['builder_sha256']:
         raise ValueError('Diagnostic parser must match the selected replay builder')
+    targets = set(args.row_id) if args.row_id else TARGETS
+    if not 1 <= len(targets) <= 4 or not targets <= {p['flag']['row_id'] for p in packets.values()}:
+        raise ValueError('Expected bounded explicit flags from the supplied replay')
     reports = []
     for packet in packets.values():
-        if packet['flag']['row_id'] not in TARGETS:
+        if packet['flag']['row_id'] not in targets:
             continue
         source = Path(packet['filing']['path']).resolve()
         if not source.is_relative_to(repo / 'data/raw/filings/bdc_html') or source.stat().st_size > 40 * 1024 * 1024:
@@ -85,8 +89,10 @@ def main():
                 'last_rows': [' '.join(c['text'] for c in row)[:650] for row in t['rows'][-2:]]}
                 for t in parsed['tables']]})
         soup.decompose()
-    if len(reports) != 3:
-        raise ValueError('Expected exactly three existing flags')
+        if sha(source) != packet['filing']['sha256']:
+            raise ValueError('Source changed during note inspection')
+    if len(reports) != len(targets):
+        raise ValueError('Requested flag coverage incomplete')
     report = {'replay': args.replay, 'builder_sha256': summary['builder_sha256'],
         'records': reports, 'production_clearance_enabled': False, 'labels_assigned': False}
     path = run / ('missing_note_inspection_' + fingerprint(report)[:16] + '.json')

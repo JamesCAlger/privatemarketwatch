@@ -6,7 +6,10 @@ in `.claude/worktrees/jev-screening-pilot`; nothing below authorizes deployment.
 
 ## Measured position
 
-- **67 development flags, 11 funds, 26 filings.** The cumulative reservation is
+- **67 core development flags, 11 funds, 26 filings.** A separate later-period
+  offline arm adds two flags and one filing in an existing fund; both are blocked.
+  That makes 69 selected numeric cases, with the core denominator unchanged.
+  The cumulative reservation is
   16 BDCs, below v1. No untouched holdout remains.
 - **39 evidence-ready; 36 also fit the token proxy cap; 34 are eligible under the
   default C107/X08 policy.** These are prerequisites, not clearance counts.
@@ -65,6 +68,8 @@ All artifact names below are relative to
 | Supplementary navigation | `disclosure_search_profile_da03743e49495fec.json` |
 | Payload comparison | `disclosure_appendix_size_53f8f1a298625f47.json` |
 | Header continuation | `header_continuation_probe_972590ca4ffead8e.json` |
+| Additional two-case period transfer | `later_period_c104_57/` |
+| Later-period missing-note diagnosis | `missing_note_inspection_3cdc76304ddd12df.json` |
 
 The next validation milestone is an independently reviewed, snapshot-bound
 comparison of deterministic checks alone against those checks plus Jev on the

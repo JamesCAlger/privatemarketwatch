@@ -13606,3 +13606,8 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 
 - Added an optional non-mutating header-continuation diagnostic and 17 passing focused tests. CMG's 16 cost/16 FV facts align between matching adjacent headers; both Varagon cases remain unresolved.
 - No header inheritance or readiness promotion. Ownership, notes, units and source identity remain separate checks; production and model accounting unchanged. Evidence in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: later-period transfer without model calls
+
+- Added an isolated deterministic two-case C104 probe in an existing fund's later filing. Both remain blocked by note 13 beyond the parser's bounded table association, although direct source tags encode zero FV.
+- Core 67-case results are unchanged; separate offline scope is two additional flags/one filing, same 11 funds. No new API calls, independent audits, production changes or clearance. Direct diagnostic execution only; details in docs/jev_screening/11_remaining_bundle_work.md.
