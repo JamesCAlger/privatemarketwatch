@@ -82,3 +82,19 @@ an additional evaluated filer.
 
 All completed current-case tests concern BDCs. No result establishes support for
 other vehicle types or for a source format not actually exercised.
+
+## 2026-10-04: bounded recheck of historical B1 group coverage
+
+Within the existing 16-fund reservation, the earlier ens2_rest_r3 inventory contains 40 historical review items for these families: C107 14, C104 14, X08 12. These are grouped historical references, not 40 additional current natural flags. Three C107 items have known partial coverage and initial issue excerpts smaller than their groups:
+
+| Historical review ID | Fund / period | Group issues | Initial issue excerpt |
+|---|---|---:|---:|
+| RVQ_REV_ccd366f14e46 | Senior Credit, 2024-09-30 | 89 | 25 |
+| RVQ_REV_6d7c7704ecee | Oaktree, 2024-03-31 | 42 | 25 |
+| RVQ_REV_0a39a3b68c74 | Oaktree, 2023-12-31 | 40 | 25 |
+
+Re-read the three original trace bundles and final messages, verifying all trace/verdict hashes against the frozen inventory. Their finals explicitly describe representative or sampled source support. Initial excerpt size alone cannot measure all later investigation, but these stated caveats prevent treating the verdict as independently verified truth for every group member. The other 37 inventory entries have no detected partial-coverage marker; that is not proof of complete investigation.
+
+This matters to the proposed hybrid: complete per-member accounting could improve coverage compared with representative B1 review, even before it saves time. That potential benefit is not yet a measured improvement in defect discovery. Each source-backed member needs a snapshot-specific reference; do not spread a group false_alarm label across uninspected rows or transfer it into current holdings. The historical Senior Credit group has 89 issues versus 88 in the current corresponding group, another reason to preserve snapshot identity.
+
+Artifact: historical_coverage_d8419f2cf0af2bf7.json. No new funds, current flags, classifier calls or production changes. The script reads only the three known partial traces after filtering the historical inventory to the reserved funds.

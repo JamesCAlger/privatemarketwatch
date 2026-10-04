@@ -34,7 +34,7 @@ in the isolated worktree. The CLI reads frozen experiment records, makes no API
 calls and writes fingerprinted reports under the pilot run. Reports were generated
 for 12 current-development records (eight observations plus four blocked controls)
 and eight scale-control records. These are 20 explanations, not 20 new flags or
-model calls. Existing API accounting remains 98 calls / 42 unique natural flags.
+model calls. They were generated at 98 calls; the programme now has 100 calls / 42 unique natural flags, including the later zero-value controls.
 
 The explanation recovers *what was observed and why it was routed*. It does not
 replace B1's source investigation, causal diagnosis, repair proposal or independent
