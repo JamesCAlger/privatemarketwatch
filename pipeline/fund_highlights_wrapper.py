@@ -134,6 +134,22 @@ def load_highlights_wrapper(cik: Any) -> HighlightsWrapperSpec | None:
     return _WRAPPER_CACHE.get(_normalize_cik(cik))
 
 
+CLASS_NAV_PREFERENCE = "share_class_consensus"
+
+
+def class_nav_ciks() -> frozenset[str]:
+    """CIKs whose wrapper takes NAV per share from the per-class filing facts.
+
+    Opt-in: source_preferences.nav_per_share = "share_class_consensus". For these
+    funds the quarter-end per-class facts are kept in the highlights extract and,
+    when every class agrees, used in place of a missing or inconsistent
+    entity-level NAV per share.
+    """
+    _ensure_cache_loaded()
+    return frozenset(cik for cik, spec in _WRAPPER_CACHE.items()
+                     if spec.source_preferences.get("nav_per_share") == CLASS_NAV_PREFERENCE)
+
+
 def get_all_highlights_wrappers() -> dict[str, HighlightsWrapperSpec]:
     """Return the full wrapper cache: {cik_10digit: spec}."""
     _ensure_cache_loaded()

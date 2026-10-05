@@ -21,6 +21,7 @@ import pandas as pd
 
 from pipeline import extract_companyfacts, extract_ncen
 from pipeline.config import (
+    BDC_FUND_HIGHLIGHTS_FILE,
     BDC_FUND_INCOME_FILE,
     BDC_PREMIUM_DISCOUNT_FILE,
     BDC_XBRL_CACHE_DIR,
@@ -968,9 +969,43 @@ def _prepare_ncen(
 # C. BDC balance sheet + income join
 # ---------------------------------------------------------------------------
 
+# NAV/share identity tolerance: nav_per_share * shares_outstanding vs net_assets.
+_NAV_IDENTITY_TOL = 0.02
+
+
+def class_nav_consensus(highlights_df: Optional[pd.DataFrame], ciks=frozenset()) -> pd.DataFrame:
+    """Quarter-end NAV per share that every share class of a fund reports alike.
+
+    Only the funds in ciks (10-digit; those whose highlights wrapper opts in) are
+    considered. Input is the fund highlights extract. Only instant, per-class facts dated at a
+    calendar quarter end count. A fund-quarter appears only when all its classes
+    agree to the cent; classes that differ have no single per-share figure.
+    """
+    columns = ["cik", "report_quarter", "class_nav"]
+    needed = ["cik", "report_quarter", "period_end", "period_type", "share_class", "nav_per_share"]
+    if highlights_df is None or highlights_df.empty or not set(needed) <= set(highlights_df.columns):
+        return pd.DataFrame(columns=columns)
+    df = highlights_df[needed].copy()
+    df["nav_per_share"] = pd.to_numeric(df["nav_per_share"], errors="coerce")
+    end = pd.to_datetime(df["period_end"], errors="coerce")
+    df = df[(df["period_type"] == "instant") & df["share_class"].fillna("").astype(str).str.strip().ne("")
+            & end.dt.is_quarter_end.fillna(False) & (df["nav_per_share"] > 0)]
+    if df.empty:
+        return pd.DataFrame(columns=columns)
+    df["cik"] = df["cik"].astype(str).str.replace(r"[^0-9]", "", regex=True).str.zfill(10)
+    df = df[df["cik"].isin(ciks)]
+    if df.empty:
+        return pd.DataFrame(columns=columns)
+    grouped = df.groupby(["cik", "report_quarter"])["nav_per_share"].agg(["min", "max"]).reset_index()
+    grouped = grouped[(grouped["max"] - grouped["min"]) <= 0.005]
+    grouped["class_nav"] = grouped["max"]
+    return grouped[columns].reset_index(drop=True)
+
+
 def _prepare_bdc(
     cf_balance_df: pd.DataFrame,
     income_df: pd.DataFrame,
+    class_nav_df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """Join companyfacts balance sheet with bdc_fund_income."""
     if cf_balance_df.empty and (income_df is None or income_df.empty):
@@ -988,6 +1023,10 @@ def _prepare_bdc(
         cf_balance_df["investments_at_fair_value"] = None
 
     con.register("cf_balance", cf_balance_df)
+    if class_nav_df is None or class_nav_df.empty:
+        class_nav_df = pd.DataFrame({"cik": pd.Series(dtype=str), "report_quarter": pd.Series(dtype=str),
+                                     "class_nav": pd.Series(dtype=float)})
+    con.register("class_nav", class_nav_df)
 
     # Extended fields comma-separated for SQL SELECT
     _ext_select = ", ".join(_EXTENDED_FIELDS)
@@ -1245,6 +1284,24 @@ def _prepare_bdc(
         -- _is_seed flag not carried forward
         FROM no_seed
     ),
+    -- CTE 3b: Per-class NAV. When every share class reports the same quarter-end
+    -- NAV per share and that figure satisfies nav * shares = net assets, it replaces
+    -- an entity-level value that is missing or breaks the identity (a mis-tagged
+    -- fact, e.g. "per $1,000 of indebtedness" tagged as NAV per share).
+    class_checked AS (
+        SELECT c.* REPLACE (
+            CASE
+                WHEN k.class_nav IS NOT NULL
+                    AND c.net_assets > 0 AND c.shares_outstanding > 1000
+                    AND ABS(k.class_nav * c.shares_outstanding - c.net_assets) <= {_NAV_IDENTITY_TOL} * c.net_assets
+                    AND (c.nav_per_share IS NULL
+                         OR ABS(c.nav_per_share * c.shares_outstanding - c.net_assets) > {_NAV_IDENTITY_TOL} * c.net_assets)
+                THEN k.class_nav
+                ELSE c.nav_per_share
+            END AS nav_per_share)
+        FROM cleaned c LEFT JOIN class_nav k
+          ON k.cik = c.cik AND k.report_quarter = c.report_quarter
+    ),
     -- CTE 4: Derive NAV from net_assets/shares_outstanding where direct is NULL
     -- Guards: (a) CIK median derived/direct ratio must be 0.7-1.4x,
     -- (b) derived value within 2x of direct median, (c) range $2-$200 if no history
@@ -1266,7 +1323,7 @@ def _prepare_bdc(
                 THEN net_assets / shares_outstanding
                 ELSE NULL
             END) OVER (PARTITION BY cik) AS _median_derived_nav
-        FROM cleaned
+        FROM class_checked
     ),
     nav_filled AS (
         SELECT * EXCLUDE (_raw_derived_nav, _median_direct_nav, _direct_nav_count,
@@ -1715,7 +1772,13 @@ def build_fund_financials(
     logger.info("Companyfacts balance sheet: %d rows", len(cf_balance_df))
 
     # 4. Prepare BDC side
-    bdc_df = _prepare_bdc(cf_balance_df, income_df)
+    highlights_df = (pd.read_csv(BDC_FUND_HIGHLIGHTS_FILE, dtype=str)
+                     if BDC_FUND_HIGHLIGHTS_FILE.exists() else None)
+    from pipeline.fund_highlights_wrapper import class_nav_ciks
+    class_nav_df = class_nav_consensus(highlights_df, class_nav_ciks())
+    logger.info("Per-class NAV consensus: %d fund-quarters across %d funds",
+                len(class_nav_df), class_nav_df["cik"].nunique())
+    bdc_df = _prepare_bdc(cf_balance_df, income_df, class_nav_df=class_nav_df)
     bdc_total_return_df = extract_bdc_total_return_quarterly(bdc_ciks)
     if not bdc_df.empty and not bdc_total_return_df.empty:
         con = duckdb.connect()

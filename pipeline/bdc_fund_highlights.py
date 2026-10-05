@@ -760,6 +760,56 @@ def _normalize_highlights(df: pd.DataFrame) -> pd.DataFrame:
 # Entry point
 # ---------------------------------------------------------------------------
 
+_HIGHLIGHTS_KEY_COLUMNS = frozenset({
+    "cik", "entity_name", "accession_number", "form_type",
+    "filing_date", "period_end", "period_start", "period_type",
+    "duration_months", "share_class", "report_quarter",
+})
+
+
+def _dedup_highlights(df: pd.DataFrame, quarter_end_ciks=frozenset()) -> pd.DataFrame:
+    """Keep one row per (cik, report_quarter, share_class, period_type).
+
+    Order of preference: quarterly duration (3-4 months) over annual; 10-K over
+    10-Q; then the row carrying the most data. For the funds in quarter_end_ciks
+    (10-digit CIKs), an instant dated at a quarter end is preferred first, so a
+    cover-page share count dated mid-quarter cannot displace the quarter-end facts.
+    """
+    df = df.copy()
+    df["_dm_int"] = (
+        pd.to_numeric(df["duration_months"], errors="coerce").fillna(0).astype(int)
+    )
+    df["_dm_pref"] = df["_dm_int"].apply(
+        lambda x: 0 if 2 <= x <= 4 else (1 if 11 <= x <= 13 else 2)
+    )
+    # Instant contexts have dm=0, give them neutral rank
+    df.loc[df["period_type"] == "instant", "_dm_pref"] = 0
+    _end = pd.to_datetime(df["period_end"], errors="coerce")
+    df["_qe_pref"] = 0
+    _opted = df["cik"].astype(str).str.replace(r"[^0-9]", "", regex=True).str.zfill(10).isin(quarter_end_ciks)
+    df.loc[_opted & (df["period_type"] == "instant")
+           & ~_end.dt.is_quarter_end.fillna(False), "_qe_pref"] = 1
+    df["_form_rank"] = df["form_type"].apply(
+        lambda x: 0 if "10-K" in str(x) else 1
+    )
+
+    # Count non-null data columns per row (more data = better row to keep)
+    data_cols = [c for c in HIGHLIGHTS_COLUMNS
+                 if c in df.columns and c not in _HIGHLIGHTS_KEY_COLUMNS]
+    df["_data_count"] = df[data_cols].notna().sum(axis=1)
+
+    df = df.sort_values(
+        ["cik", "report_quarter", "share_class", "period_type",
+         "_dm_pref", "_qe_pref", "_form_rank", "_data_count"],
+        ascending=[True, True, True, True, True, True, True, False],
+    )
+    df = df.drop_duplicates(
+        subset=["cik", "report_quarter", "share_class", "period_type"],
+        keep="first",
+    )
+    return df.drop(columns=["_form_rank", "_dm_pref", "_qe_pref", "_dm_int", "_data_count"])
+
+
 def extract_bdc_fund_highlights(
     filings_index: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
@@ -851,41 +901,8 @@ def extract_bdc_fund_highlights(
     # ---- Apply normalization rules ----
     df = _normalize_highlights(df)
 
-    # Dedup: same (cik, report_quarter, share_class, period_type) from multiple
-    # filings. Prefer quarterly duration (dm 3-4) over annual, then 10-K > 10-Q.
-    df["_dm_int"] = (
-        pd.to_numeric(df["duration_months"], errors="coerce").fillna(0).astype(int)
-    )
-    df["_dm_pref"] = df["_dm_int"].apply(
-        lambda x: 0 if 2 <= x <= 4 else (1 if 11 <= x <= 13 else 2)
-    )
-    # Instant contexts have dm=0, give them neutral rank
-    df.loc[df["period_type"] == "instant", "_dm_pref"] = 0
-    df["_form_rank"] = df["form_type"].apply(
-        lambda x: 0 if "10-K" in str(x) else 1
-    )
-
-    # Count non-null data columns per row (more data = better row to keep)
-    data_cols = [
-        c for c in HIGHLIGHTS_COLUMNS
-        if c not in {
-            "cik", "entity_name", "accession_number", "form_type",
-            "filing_date", "period_end", "period_start", "period_type",
-            "duration_months", "share_class", "report_quarter",
-        }
-    ]
-    df["_data_count"] = df[data_cols].notna().sum(axis=1)
-
-    df = df.sort_values(
-        ["cik", "report_quarter", "share_class", "period_type",
-         "_dm_pref", "_form_rank", "_data_count"],
-        ascending=[True, True, True, True, True, True, False],
-    )
-    df = df.drop_duplicates(
-        subset=["cik", "report_quarter", "share_class", "period_type"],
-        keep="first",
-    )
-    df = df.drop(columns=["_form_rank", "_dm_pref", "_dm_int", "_data_count"])
+    from pipeline.fund_highlights_wrapper import class_nav_ciks
+    df = _dedup_highlights(df, quarter_end_ciks=class_nav_ciks())
 
     # Reorder and save
     df = df[[c for c in HIGHLIGHTS_COLUMNS if c in df.columns]]
@@ -900,6 +917,7 @@ def extract_bdc_fund_highlights(
     )
 
     # Coverage summary
+    data_cols = [c for c in HIGHLIGHTS_COLUMNS if c not in _HIGHLIGHTS_KEY_COLUMNS]
     _log_coverage_summary(df, data_cols)
 
     elapsed = time.time() - t0
