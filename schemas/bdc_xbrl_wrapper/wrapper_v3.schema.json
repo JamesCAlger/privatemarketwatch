@@ -548,6 +548,17 @@
           },
           "description": "Exact full identifiers that disclose cash positions; normalized whitespace and case only."
         },
+        "detached_schedule_labels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[^|=]+$"
+          },
+          "description": "Opt-in: position contexts that follow a large jump in context order within a filing and period are a second schedule in the notes (for example a joint venture's own portfolio). Staging appends this label to their dimensions as a reporting-entity segment, so they are retained as underlying_schedule rows and left out of the published basis."
+        },
         "reporting_entity_suffixes": {
           "type": "array",
           "minItems": 1,

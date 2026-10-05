@@ -21,7 +21,8 @@ def load_encodings(wrapper_directory=None):
             continue
         if wrapper.get('schema_version')!='bdc-xbrl-wrapper.v3':
             raise ValueError('Source encodings require wrapper v3: '+str(path))
-        if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes'}:
+        if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
+                'detached_schedule_labels'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -31,8 +32,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Invalid encoding values: '+str(path))
             if len(set(' '.join(v.lower().split()) for v in values))!=len(values):
                 raise ValueError('Duplicate encoding values: '+str(path))
-            if key.startswith('reporting_entity_') and any('|' in v or '=' in v for v in values):
+            if (key.startswith('reporting_entity_') or key=='detached_schedule_labels') and any('|' in v or '=' in v for v in values):
                 raise ValueError('Reporting suffix must be one bare dimension segment: '+str(path))
+            if key=='detached_schedule_labels' and len(values)!=1:
+                raise ValueError('A filer has one detached-schedule label: '+str(path))
         result[cik]=encoding
     return result
 
@@ -66,7 +69,9 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
     configured=load_encodings() if encodings is None else encodings
     cases=[]
     for key,encoding in sorted(configured.items()):
-        labels=encoding.get('reporting_entity_suffixes',[])
+        # A detached-schedule label is a reporting-entity segment this module
+        # itself appends (tag_detached_schedules); it resolves like a filed one.
+        labels=encoding.get('reporting_entity_suffixes',[])+encoding.get('detached_schedule_labels',[])
         legacy=encoding.get('reporting_entity_identifier_suffixes',[])
         if not labels and not legacy:
             continue
@@ -112,3 +117,65 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
         members="array_to_string(list_transform(list_sort(list_distinct("+matching+")),x -> 'reporting_entity='||x),'|')"
         cases.append('WHEN '+_cik_condition(cik,key)+" THEN coalesce("+members+",'')")
     return "CASE "+' '.join(cases)+" ELSE '' END" if cases else "''"
+
+
+# Position contexts of one schedule are numbered contiguously by the filing
+# software; a second schedule in the notes starts far later. HPS 0001838126:
+# largest gap inside the main schedule 4, gap to the joint-venture schedule
+# 1,353 to 2,699 across 2023-12-31..2026-03-31 (investigation 2026-10-05).
+DETACHED_MIN_CONTEXT_GAP=200
+
+
+def tag_detached_schedules(con,table='bdc_raw',encodings=None):
+    """Mark a filer's detached position schedules as their own reporting entity.
+
+    Only for filers whose wrapper declares ``detached_schedule_labels``. Within
+    one filing and period, position contexts are ordered by the number ending
+    ``src_context_id``; every context from the first jump of at least
+    DETACHED_MIN_CONTEXT_GAP onward gets the label appended to ``dimensions_raw``
+    as a bare segment. The accounting scope then reads it as an underlying
+    schedule: the rows are retained and flagged, never deleted. A row inside the
+    main block that merely lacks a filer tag is left alone. Contexts without a
+    trailing number are ignored. Returns rows tagged per CIK.
+    """
+    configured=load_encodings() if encodings is None else encodings
+    counts={}
+    present={row[0] for row in con.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name=?",[table]).fetchall()}
+    for key,encoding in sorted(configured.items()):
+        labels=encoding.get('detached_schedule_labels',[])
+        if not labels:
+            continue
+        if not {'cik','accession_number','period','src_context_id','dimensions_raw'}<=present:
+            # Rows without source contexts (HTML-extracted periods) carry no order to read.
+            counts[key]=0
+            continue
+        label=' '.join(labels[0].split())
+        suffix=' | '+label
+        scope=_cik_condition('cik',key)
+        period="coalesce(CAST(period AS VARCHAR)[:10],'')"
+        con.execute("""CREATE OR REPLACE TEMP TABLE _detached_contexts AS
+            WITH positions AS (
+                SELECT DISTINCT CAST(accession_number AS VARCHAR) AS accession,"""+period+""" AS period_key,
+                    CAST(src_context_id AS VARCHAR) AS context,
+                    TRY_CAST(regexp_extract(CAST(src_context_id AS VARCHAR),'([0-9]+)$',1) AS BIGINT) AS ordinal
+                FROM """+table+""" WHERE """+scope+"""),
+            gaps AS (
+                SELECT *,ordinal-lag(ordinal) OVER (PARTITION BY accession,period_key ORDER BY ordinal) AS gap
+                FROM positions WHERE ordinal IS NOT NULL),
+            starts AS (
+                SELECT accession,period_key,min(ordinal) FILTER (WHERE gap>=?) AS first_detached
+                FROM gaps GROUP BY ALL)
+            SELECT accession,period_key,context FROM gaps JOIN starts USING(accession,period_key)
+            WHERE ordinal>=first_detached""",[DETACHED_MIN_CONTEXT_GAP])
+        before=con.execute("SELECT count(*) FROM "+table+" WHERE "+scope+
+            " AND ends_with(coalesce(CAST(dimensions_raw AS VARCHAR),''),?)",[suffix]).fetchone()[0]
+        con.execute("UPDATE "+table+" SET dimensions_raw=coalesce(CAST(dimensions_raw AS VARCHAR),'')||? "
+            "WHERE "+scope+" AND NOT ends_with(coalesce(CAST(dimensions_raw AS VARCHAR),''),?) "
+            "AND (CAST(accession_number AS VARCHAR),"+period+",CAST(src_context_id AS VARCHAR)) IN "
+            "(SELECT (accession,period_key,context) FROM _detached_contexts)",[suffix,suffix])
+        after=con.execute("SELECT count(*) FROM "+table+" WHERE "+scope+
+            " AND ends_with(coalesce(CAST(dimensions_raw AS VARCHAR),''),?)",[suffix]).fetchone()[0]
+        con.execute("DROP TABLE _detached_contexts")
+        counts[key]=after-before
+    return counts

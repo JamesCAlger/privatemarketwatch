@@ -1,0 +1,13 @@
+{
+  "status": "retired",
+  "retired_on": "2026-10-05",
+  "previous_file": "1838126_2025q4_bare_axis_leak_exclusion.json",
+  "retired_file": "_retired_1838126_2025q4_bare_axis_leak_exclusion.json",
+  "original_sha256": "45376f91a57475853174714d1d32e28e4aaba917d7f464ac9cbffa19856cd67d",
+  "mechanism": "The rule excluded HPS rows without a Non-Affiliated Issuer member for 2025-12-31 only, with a hand-written exception list. The rows are the schedule of investments of the fund's joint venture, printed in the notes. Pinned to one quarter, it did not act on 2026-03-31, where the same rows were published as the fund's own positions (+6.3 pct against the filed total). It also deleted the rows, where the owner ruling of 2026-09-30 retains joint-venture look-through rows as underlying_schedule.",
+  "action": "Replaced by the wrapper encoding source_encodings.detached_schedule_labels in data/overrides/bdc_xbrl_wrappers/0001838126.json, applied by pipeline/source_encodings.tag_detached_schedules for every quarter. No value is changed and no row is deleted.",
+  "sources": [
+    "docs/investigations/wrapper_residuals.md, entry 2026-10-05 (HPS Corporate Lending)",
+    "filing 0001628280-26-033248, contexts c-3653 to c-3684 (ULTRA III schedule in the notes)"
+  ]
+}

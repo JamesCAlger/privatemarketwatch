@@ -478,6 +478,12 @@ def _prepare_bdc(
     else:
         raise ValueError("Either bdc_df or bdc_file must be provided")
     # --- end data source selection --------------------------------------------
+    # Before any filter or dedup reads the accounting scope: label a filer's
+    # detached position schedules (wrapper opt-in) as their own reporting entity.
+    from pipeline.source_encodings import tag_detached_schedules
+    for _detached_cik, _detached_rows in tag_detached_schedules(con).items():
+        logger.info("  Detached schedule rows labelled as an underlying schedule (cik=%s): %d",
+                    _detached_cik, _detached_rows)
     from pipeline import config as unit_config
     from pipeline.monetary_units import resolve_bdc_units
     resolve_bdc_units(con, unit_config.BDC_XBRL_CACHE_DIR)

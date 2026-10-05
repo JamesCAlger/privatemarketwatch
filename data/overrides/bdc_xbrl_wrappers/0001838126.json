@@ -252,6 +252,11 @@
       "disposition": "expected"
     }
   ],
+  "source_encodings": {
+    "detached_schedule_labels": [
+      "joint venture schedule"
+    ]
+  },
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.10,

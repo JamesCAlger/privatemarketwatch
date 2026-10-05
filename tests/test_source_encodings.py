@@ -131,3 +131,136 @@ def test_unconfigured_wrapper_preserves_old_scope_and_empty_annotation(tmp_path)
     assert source_encodings.cash_identifier_expression('cik', 'identifier', {}) == 'false'
     result = annotate(pd.DataFrame(columns=['cik', 'row_id']))
     assert list(result.columns) == ['cik', 'row_id', 'accounting_scope_id', 'accounting_record_class']
+
+
+# --- detached schedule blocks (HPS joint-venture schedules, 2026-10-05) ---------------
+
+HPS = '0001838126'
+JV = 'joint venture schedule'
+DETACHED = {HPS: {'detached_schedule_labels': [JV]}}
+
+
+def _raw(con, rows):
+    """rows: (cik, accession, period, context, dimensions)."""
+    con.execute('CREATE TABLE bdc_raw(cik VARCHAR, accession_number VARCHAR, period VARCHAR, '
+                'src_context_id VARCHAR, dimensions_raw VARCHAR)')
+    con.executemany('INSERT INTO bdc_raw VALUES (?,?,?,?,?)', rows)
+
+
+def _dims(con):
+    return dict(con.execute('SELECT src_context_id, dimensions_raw FROM bdc_raw '
+                            'ORDER BY accession_number, period, src_context_id').fetchall())
+
+
+def test_rows_after_a_large_jump_in_context_order_are_tagged_as_the_detached_schedule():
+    rows = [('1838126', 'A1', '2026-03-31', f'c-{n}', f'investmentidentifieraxis=Main {n} | Non-Affiliated Issuer')
+            for n in (10, 11, 13, 14)]
+    rows += [('1838126', 'A1', '2026-03-31', 'c-12', 'investmentidentifieraxis=Untagged Main Row'),
+             ('1838126', 'A1', '2026-03-31', 'c-3653', 'investmentidentifieraxis=Sentinel Buyer Corp. 1'),
+             ('1838126', 'A1', '2026-03-31', 'c-3654', None)]
+    with duckdb.connect() as con:
+        _raw(con, rows)
+        counts = source_encodings.tag_detached_schedules(con, encodings=DETACHED)
+        dims = _dims(con)
+    assert counts == {HPS: 2}
+    assert dims['c-3653'] == 'investmentidentifieraxis=Sentinel Buyer Corp. 1 | ' + JV
+    assert dims['c-3654'].endswith(' | ' + JV)
+    # an untagged row INSIDE the main block is a filer omission, not a second schedule
+    assert dims['c-12'] == 'investmentidentifieraxis=Untagged Main Row'
+    assert dims['c-10'].endswith('Non-Affiliated Issuer')
+
+
+def test_no_large_jump_means_no_detached_schedule():
+    rows = [('1838126', 'A1', '2023-03-31', f'c-{n}', 'investmentidentifieraxis=Main') for n in (10, 12, 60, 209)]
+    with duckdb.connect() as con:
+        _raw(con, rows)
+        assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 0}
+        assert set(_dims(con).values()) == {'investmentidentifieraxis=Main'}
+
+
+def test_a_fund_that_has_not_opted_in_is_never_tagged():
+    rows = [('1803498', 'B1', '2026-03-31', 'c-10', 'investmentidentifieraxis=Main'),
+            ('1803498', 'B1', '2026-03-31', 'c-9000', 'investmentidentifieraxis=Far Away')]
+    with duckdb.connect() as con:
+        _raw(con, rows)
+        assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 0}
+        assert _dims(con)['c-9000'] == 'investmentidentifieraxis=Far Away'
+
+
+def test_blocks_are_found_per_filing_and_per_period():
+    rows = [
+        # current period: main block then a detached block
+        ('1838126', 'A1', '2025-12-31', 'c-10', 'investmentidentifieraxis=Main'),
+        ('1838126', 'A1', '2025-12-31', 'c-2400', 'investmentidentifieraxis=JV Now'),
+        # comparative period of the same filing sits far from the current one in context
+        # order; that distance must not make its whole main block "detached"
+        ('1838126', 'A1', '2024-12-31', 'c-1200', 'investmentidentifieraxis=Main Prior'),
+        ('1838126', 'A1', '2024-12-31', 'c-1201', 'investmentidentifieraxis=Main Prior 2'),
+        ('1838126', 'A1', '2024-12-31', 'c-3100', 'investmentidentifieraxis=JV Prior'),
+        # another filing whose numbering happens to start high
+        ('1838126', 'A2', '2025-09-30', 'c-5000', 'investmentidentifieraxis=Other Filing Main'),
+    ]
+    with duckdb.connect() as con:
+        _raw(con, rows)
+        assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 2}
+        dims = _dims(con)
+    assert dims['c-2400'].endswith(JV) and dims['c-3100'].endswith(JV)
+    for untouched in ('c-10', 'c-1200', 'c-1201', 'c-5000'):
+        assert JV not in dims[untouched]
+
+
+def test_tagging_twice_does_not_stack_labels_and_odd_context_ids_are_left_alone():
+    rows = [('1838126', 'A1', '2026-03-31', 'c-10', 'investmentidentifieraxis=Main'),
+            ('1838126', 'A1', '2026-03-31', 'c-900', 'investmentidentifieraxis=JV'),
+            ('1838126', 'A1', '2026-03-31', 'ctx_abc', 'investmentidentifieraxis=No Number')]
+    with duckdb.connect() as con:
+        _raw(con, rows)
+        source_encodings.tag_detached_schedules(con, encodings=DETACHED)
+        assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 0}
+        dims = _dims(con)
+    assert dims['c-900'] == 'investmentidentifieraxis=JV | ' + JV
+    assert dims['ctx_abc'] == 'investmentidentifieraxis=No Number'
+
+
+def test_a_tagged_row_is_retained_as_an_underlying_schedule_row(monkeypatch):
+    monkeypatch.setattr(source_encodings, 'load_encodings', lambda: DETACHED)
+    frame = pd.DataFrame([
+        dict(cik=HPS, row_id='main', is_subsidiary=0, fair_value=100,
+             bdc_dimensions_raw='investmentidentifieraxis=Emerus Holdings, Inc. 1 | Non-Affiliated Issuer'),
+        dict(cik=HPS, row_id='jv', is_subsidiary=0, fair_value=245,
+             bdc_dimensions_raw='investmentidentifieraxis=Emerus Holdings, Inc. 1 | ' + JV),
+        dict(cik=HPS, row_id='untagged-main', is_subsidiary=0, fair_value=2,
+             bdc_dimensions_raw='investmentidentifieraxis=CCI Topco, Inc. - Preferred Stock'),
+    ])
+    result = annotate(frame)
+    assert result.accounting_record_class.tolist() == [
+        'parent_schedule', 'underlying_schedule', 'parent_schedule']
+    assert result.is_subsidiary.tolist() == [0, 1, 0]
+    assert result.fair_value.tolist() == [100, 245, 2]
+    assert result.accounting_scope_id.tolist()[1] == HPS + '|reporting_entity=' + JV
+
+
+@pytest.mark.parametrize('encoding', [
+    {'detached_schedule_labels': ['one', 'two']},
+    {'detached_schedule_labels': ['axis=joint venture']},
+    {'detached_schedule_labels': ['']},
+])
+def test_malformed_detached_schedule_encoding_fails(tmp_path, encoding):
+    (tmp_path / '0001838126.json').write_text(json.dumps({
+        'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': HPS, 'source_encodings': encoding,
+    }), encoding='utf-8')
+    with pytest.raises(ValueError):
+        source_encodings.load_encodings(tmp_path)
+
+
+def test_hps_wrapper_declares_its_joint_venture_schedules():
+    encodings = source_encodings.load_encodings()
+    assert encodings[HPS]['detached_schedule_labels'] == [JV]
+
+
+def test_rows_without_source_contexts_are_skipped_not_guessed():
+    with duckdb.connect() as con:
+        con.execute("CREATE TABLE bdc_raw AS SELECT '1838126' AS cik, 'A1' AS accession_number, "
+                    "'investmentidentifieraxis=Old HTML Row' AS dimensions_raw")
+        assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 0}
+        assert con.execute('SELECT dimensions_raw FROM bdc_raw').fetchone()[0].endswith('Old HTML Row')
