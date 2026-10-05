@@ -188,7 +188,7 @@ def _protected_state(directory: Path) -> dict:
             for p in directory.iterdir() if p.is_file()}
 
 
-def build(label: str, ciks: list[str], finalize: bool = True) -> Path:
+def build(label: str, ciks: list[str], finalize: bool = False) -> Path:
     """Build the funds into scratch. finalize=True runs the whole build (entity resolution,
     financial preparation, position matching, identities); False stops after staging."""
     from unittest.mock import patch
@@ -244,8 +244,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="funds to build; default = acceptance findings scope")
     parser.add_argument("--compare-to", default=None,
                         help="after building, compare with this earlier run, or 'production'")
-    parser.add_argument("--staging-only", action="store_true",
-                        help="stop after staging (faster; no position ids, matches or cost fill-ins)")
+    parser.add_argument("--finalize", action="store_true",
+                        help="also run entity resolution, matching and identities (untested here; "
+                             "prefer scripts/fund_ledger_trial.py for an end-to-end fund build)")
     parser.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"),
                         help="compare two existing runs without building")
     args = parser.parse_args(argv)
@@ -258,7 +259,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.compare:
         before_label, after_label = args.compare
     elif args.label:
-        build(args.label, ciks, finalize=not args.staging_only)
+        build(args.label, ciks, finalize=args.finalize)
         if not args.compare_to:
             return 0
         before_label, after_label = args.compare_to, args.label
