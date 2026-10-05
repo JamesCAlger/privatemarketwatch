@@ -4,6 +4,7 @@ import pytest
 from pipeline.bdc_xbrl_wrapper import (
     add_bdc_xbrl_wrapper_columns,
     classify_identifier,
+    get_wrapper_spec,
     is_non_private_market_identifier,
     supported_prefixes_for_cik,
     supported_wrapper_ciks,
@@ -6922,3 +6923,35 @@ def test_nexpoint_capital_category_total_and_cash_rows_not_leaves():
 def test_nexpoint_capital_registered_in_supported_ciks():
     assert NEXPOINT_CAPITAL_CIK in supported_wrapper_ciks()
     assert supported_prefixes_for_cik(NEXPOINT_CAPITAL_CIK) == ()
+
+
+# HPS files a flat schedule: one context per position, named by issuer only, with no
+# subtotal or category rows. Its wrapper opts in with dispatch.flat_schedule.
+@pytest.mark.parametrize("identifier", [
+    "Renaissance Financiere",
+    "SDC US Smilepay SPV",
+    "Express Wash Concepts 1",
+    "Carlyle Global Market Strategies",
+    "Shackleton Lower JVCO ULC 1 | Non-Affiliated Issuer",
+    "Forgent Intermediate IV | Non-Affiliated Issuer",
+])
+def test_flat_schedule_keeps_names_without_a_company_suffix(identifier):
+    result = classify_identifier("0001838126", identifier)
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+@pytest.mark.parametrize("identifier, disposition", [
+    ("Total Investments", "debt_total_rollup"),
+    ("Subtotal Software", "debt_total_rollup"),
+    ("J.P. Morgan U.S. Government Fund, Institutional Shares", "non_private_market"),
+])
+def test_flat_schedule_still_drops_totals_and_cash(identifier, disposition):
+    assert classify_identifier("0001838126", identifier)["wrapper_disposition"] == disposition
+
+
+def test_name_without_a_suffix_stays_a_rollup_when_the_wrapper_has_not_opted_in():
+    spec = get_wrapper_spec("0001786108")
+    assert spec.flat_schedule is False
+    result = classify_identifier("0001786108", "Debt Investments Renaissance Financiere")
+    assert not result["wrapper_disposition"].endswith("_position_leaf")

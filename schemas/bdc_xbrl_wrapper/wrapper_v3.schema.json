@@ -107,6 +107,10 @@
           "type": "boolean",
           "description": "When true, identifiers matched via fallback (no prefix text) are classified as aggregate"
         },
+        "flat_schedule": {
+          "type": "boolean",
+          "description": "When true, the schedule has no subtotal or category rows: a named identifier without a leaf marker is a position, not a category rollup"
+        },
         "category_marker_before_total": {
           "type": "boolean",
           "description": "When true, category_marker_re demotes matching total-style rows to aggregate before total-rollup classification"

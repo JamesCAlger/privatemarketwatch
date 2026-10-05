@@ -216,6 +216,9 @@ class WrapperSpec:
     canonical_strip_re: re.Pattern[str] | None = None
     no_prefix_is_aggregate: bool = False
     category_marker_before_total: bool = False
+    # The filer's schedule has no subtotal or category rows: an identifier that names
+    # no instrument and carries no company suffix is still a position.
+    flat_schedule: bool = False
 
     def normalized_cik(self) -> str:
         return normalize_cik(self.cik)
@@ -463,6 +466,7 @@ def _load_specs_from_json(directory: "Path | None" = None) -> dict[str, WrapperS
             canonical_strip_re=canonical_strip_re,
             no_prefix_is_aggregate=no_prefix_is_aggregate,
             category_marker_before_total=category_marker_before_total,
+            flat_schedule=bool(dispatch.get("flat_schedule", False)),
         )
         specs[cik_norm] = spec
     return specs
@@ -539,6 +543,11 @@ def classify_identifier(cik: Any, identifier: Any) -> dict[str, str]:
         suffix_text = raw[len(prefix):] if prefix and raw.startswith(prefix) else raw
         if spec.category_marker_re.search(suffix_text.strip()):
             has_leaf_marker = False
+    if not has_leaf_marker and spec.flat_schedule:
+        # Totals, aggregates and cash keep their own dispositions; only the
+        # "named, but no recognised suffix" fall-through becomes a position.
+        fallthrough, _ = _rollup_disposition(spec, raw, parent_key, family, prefix)
+        has_leaf_marker = fallthrough == f"{family}_category_rollup"
     if has_leaf_marker:
         investment_date_key = _extract_value_key(key_identifier, "investment")
         maturity_date_key = _extract_value_key(key_identifier, "maturity")
