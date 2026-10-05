@@ -89,7 +89,13 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             raise ValueError("Conflicting GICS parents")
         reported_rate="interest_rate_reported" if migrated else "interest_rate"
         reported_cost="cost_reported" if migrated else "cost"
-        con.execute("""CREATE TABLE typed AS SELECT *,
+        # The working tables carry only what the later steps read. Selecting
+        # every input column here held three full-width copies of the holdings
+        # (src_facts included) in memory at once: about 12 MB per 1,000 rows.
+        con.execute("""CREATE TABLE typed AS SELECT row_id,fair_value_currency,interest_rate_kind,
+            cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
+            src_field_overrides,src_transforms,source,fair_value_source,src_context_id,
+            maturity_precision,maturity_date_source,maturity_date,
             TRY_CAST("""+reported_rate+""" AS DOUBLE) AS reported_rate,
             TRY_CAST("""+reported_cost+""" AS DOUBLE) AS reported_cost,
             NULLIF(trim(CAST("""+reported_cost+""" AS VARCHAR)),'') AS raw_cost,
@@ -99,7 +105,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             lower(coalesce(json_extract_string(TRY_CAST(src_facts AS JSON),'$.interest_rate.c'),'')) AS rate_concept,
             coalesce(json_extract_string(TRY_CAST(src_facts AS JSON),'$.maturity_date.r'),'') AS maturity_raw
             FROM input""")
-        con.execute("""CREATE TABLE conventions AS SELECT typed.*,
+        con.execute("""CREATE TABLE conventions AS SELECT typed.row_id,reported_rate,reported_cost,pik,fv,
+            maturity_raw,maturity_date,
             CASE WHEN upper(trim(fair_value_currency)) NOT IN ('','USD') THEN
                       CASE WHEN json_extract_string(facts,'$._financial_fx.fair_value.conversion.method')='FX_stale'
                            THEN 'FX_stale'
@@ -150,6 +157,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN maturity_date_source IN ('xbrl_field','nport') AND TRY_CAST(maturity_date AS DATE) IS NOT NULL THEN 'day'
                  ELSE 'unknown' END AS precision_value
             FROM typed LEFT JOIN (SELECT row_id,cost_state FROM prior_states) p USING(row_id)""",[bool(migrated)])
+        con.execute("DROP TABLE typed")
         con.execute("""CREATE TABLE calculated AS SELECT *,
             CASE WHEN rate_kind='all_in' AND isfinite(reported_rate) THEN reported_rate
                  WHEN rate_kind='cash' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate+pik END AS all_in,
