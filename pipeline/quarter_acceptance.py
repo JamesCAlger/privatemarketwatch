@@ -45,6 +45,11 @@ AUDIT_FILE = config.OUTPUT_DIR / "agent_fix_application_audit.csv"
 # always describe one build.
 ADMISSION_AUDIT_NAME = "input_admission_audit.csv"
 INVESTIGATE_DIR = config.OUTPUT_DIR / "agent_investigate"
+FINDINGS_LEDGER_FILE = config.OUTPUT_DIR / "agent_b2" / "findings_ledger.csv"
+# Findings-ledger states that need no further work. Every other state, including one
+# this module has never seen, is outstanding (owner ruling 2026-10-05).
+RESOLVED_FINDING_STATES = frozenset({"adjudicated_false_alarm", "remediated_promoted",
+                                     "resolved_upstream", "gone_unadjudicated"})
 
 FUNDS_COLUMNS = [
     "cik",
@@ -162,6 +167,7 @@ def compute_acceptance(
     manifest_path: Path | None = None,
     thresholds_path: Path | None = None,
     investigate_dir: Path | None = None,
+    findings_ledger_path: Path | None = None,
     programme_evidence: Path | None = None,
     programme_thresholds: Path | None = None,
     programme_pair_cache: set | None = None,
@@ -298,6 +304,25 @@ def compute_acceptance(
     if not inv_measured:
         logger.warning("agent_investigate dir missing, stale metric unmeasured: %s", inv_dir)
 
+    # --- outstanding findings (sign-off quarter, every unresolved state) ---
+    # Scope comes from the thresholds file; absent, it is the whole cohort. A missing
+    # ledger is UNMEASURED (None) so the check fails closed, like n_stale above.
+    findings_path = findings_ledger_path or FINDINGS_LEDGER_FILE
+    findings_scope = sorted(str(c).zfill(10) for c in
+                            (thresholds.get("findings_scope") or {}).get("ciks") or cohort)
+    findings_measured = findings_path.exists()
+    outstanding_by_state: dict[str, int] = {}
+    if findings_measured:
+        for row in _read_rows(findings_path):
+            if (str(row.get("cik") or "").zfill(10) in findings_scope
+                    and str(row.get("report_date") or "")[:10] == target_quarter
+                    and row.get("state") not in RESOLVED_FINDING_STATES):
+                state = row.get("state") or ""
+                outstanding_by_state[state] = outstanding_by_state.get(state, 0) + 1
+    else:
+        logger.warning("findings ledger missing, outstanding findings unmeasured: %s",
+                       findings_path)
+
     # --- per-fund tiers ---
     funds: list[dict[str, Any]] = []
     tier_counts = {"verified": 0, "under_review": 0, "unanchored": 0, "no_holdings": 0}
@@ -390,6 +415,12 @@ def compute_acceptance(
             "stale_ciks": [s["cik"] for s in stale],
             "measured": inv_measured,
         },
+        "findings": {
+            "n_outstanding": sum(outstanding_by_state.values()) if findings_measured else None,
+            "by_state": outstanding_by_state,
+            "scope_ciks": findings_scope,
+            "measured": findings_measured,
+        },
     }
 
     checks = []
@@ -442,6 +473,7 @@ def compute_acceptance(
             "admission": str(admission_path),
             "holdings": str(holdings_path),
             "investigate": str(inv_dir),
+            "findings_ledger": str(findings_path),
         },
         "_funds": funds,  # stripped before the JSON is written (goes to the CSV)
     }
@@ -476,7 +508,8 @@ def extend_acceptance(result, observations, *, thresholds_path=None,bound_legacy
     dependencies={"reconcile_rate":{"ledger"},"flagged_fv_share":{"ledger"},
         "source_blocking_fv_share":{"queue"},"verified_fv_share":{"ledger","queue"},
         "promoted_rule_drift":{"audit"},"promoted_rule_health":{"audit","admission"},
-        "over_inclusion_fv_share":{"ledger"},"unfinished_investigations":{"investigate"}}
+        "over_inclusion_fv_share":{"ledger"},"unfinished_investigations":{"investigate"},
+        "outstanding_findings":{"findings_ledger"}}
     if bound_legacy_inputs is not None:
         for check in checks:
             missing=dependencies.get(check["id"],set())-bound_legacy_inputs
@@ -538,6 +571,8 @@ def cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--holdings", type=Path, default=None)
     parser.add_argument("--thresholds", type=Path, default=None)
     parser.add_argument("--investigate-dir", type=Path, default=None)
+    parser.add_argument("--findings-ledger", type=Path, default=None,
+                        help="Findings lifecycle ledger; default = agent_b2/findings_ledger.csv.")
     parser.add_argument("--programme-evidence", type=Path, default=None)
     parser.add_argument("--programme-thresholds", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=None, help="JSON output path override.")
@@ -553,6 +588,7 @@ def cli(argv: list[str] | None = None) -> int:
         holdings_path=args.holdings,
         thresholds_path=args.thresholds,
         investigate_dir=args.investigate_dir,
+        findings_ledger_path=args.findings_ledger,
         programme_evidence=args.programme_evidence,
         programme_thresholds=args.programme_thresholds,
     )

@@ -1,7 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "calibration": "provisional",
-  "calibration_note": "v2 signed off 2026-08-20 by the project owner. Basis: Q4 2025 (2025-12-31) is the first quarter through the full remediation cycle; v1 provisional ship-bars were set 2026-07-12 with one wave of evidence and the contract then read FAIL (verified_fv 35.45, flagged 43.99); remediation waves earned PASS 7/7 with actuals reconcile_rate 95.5, flagged_fv_share 4.85, source_blocking 0.164, verified_fv_share 80.5. v2 tightens to bars the Q4 actuals clear with honest headroom: reconcile_rate 70->90 (tolerates ~6 escalated funds of ~66 anchored without incentivizing forced reconciliation), flagged_fv_share 20->10, source_blocking_fv_share 5->1, verified_fv_share 50->70. fund_coverage, rule drift/health, and assessability unchanged. Owner proviso: Q1 2026 (2026-03-31) and Q2 2026 (2026-06-30) passes may be used to recalibrate further; record any v3 basis here. Prior v1 note (2026-07-12): set from post-Wave-1 observables; provisional ship-bar values, not validated tolerances. v3 (2026-09-07, provisional): numerator moved to the PUBLISHED basis (spec docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md); two checks added -- over_inclusion_fv_share <= 0.5 and unfinished_investigations <= 0. Q1 2026 re-run under v3 is EXPECTED to fail both FV-share checks; that result is the proof the gate sees the $4.09B over-inclusion, not a regression. Calibrate to v4 on Q2 2026 actuals.",
+  "calibration_note": "v2 signed off 2026-08-20 by the project owner. Basis: Q4 2025 (2025-12-31) is the first quarter through the full remediation cycle; v1 provisional ship-bars were set 2026-07-12 with one wave of evidence and the contract then read FAIL (verified_fv 35.45, flagged 43.99); remediation waves earned PASS 7/7 with actuals reconcile_rate 95.5, flagged_fv_share 4.85, source_blocking 0.164, verified_fv_share 80.5. v2 tightens to bars the Q4 actuals clear with honest headroom: reconcile_rate 70->90 (tolerates ~6 escalated funds of ~66 anchored without incentivizing forced reconciliation), flagged_fv_share 20->10, source_blocking_fv_share 5->1, verified_fv_share 50->70. fund_coverage, rule drift/health, and assessability unchanged. Owner proviso: Q1 2026 (2026-03-31) and Q2 2026 (2026-06-30) passes may be used to recalibrate further; record any v3 basis here. Prior v1 note (2026-07-12): set from post-Wave-1 observables; provisional ship-bar values, not validated tolerances. v3 (2026-09-07, provisional): numerator moved to the PUBLISHED basis (spec docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md); two checks added -- over_inclusion_fv_share <= 0.5 and unfinished_investigations <= 0. Q1 2026 re-run under v3 is EXPECTED to fail both FV-share checks; that result is the proof the gate sees the $4.09B over-inclusion, not a regression. Calibrate the FV-share bars on Q2 2026 actuals. v4 (2026-10-05, provisional, owner ruling): one check added -- outstanding_findings <= 0 over findings_scope (five largest funds), so a quarter can no longer be signed off on the FV-share bars while findings are open, unfixed, or waiting on a human. The nine v3 bars are unchanged. Both signed-off quarters are EXPECTED to fail this check until their backlog is cleared.",
   "assessability": {
     "metric": "conservation.anchored_rate_pct",
     "min": 50.0,
@@ -70,6 +70,17 @@
       "op": "<=",
       "value": 0,
       "note": "cohort CIKs whose staged rules are newer than their last apply/gate for the quarter"
+    },
+    {
+      "id": "outstanding_findings",
+      "metric": "findings.n_outstanding",
+      "op": "<=",
+      "value": 0,
+      "note": "findings-ledger rows for the findings_scope funds at the target quarter in any state other than adjudicated_false_alarm, remediated_promoted, resolved_upstream or gone_unadjudicated (both lanes; needs_human and evidence_backlog count)"
     }
-  ]
+  ],
+  "findings_scope": {
+    "ciks": ["0001287750", "0001803498", "0001812554", "0001837532", "0001838126"],
+    "note": "owner ruling 2026-10-05: the five largest cohort funds by 2026-03-31 fair value (Ares Capital, BCRED, Blue Owl Credit Income, Apollo Debt Solutions, HPS Corporate Lending). Remove this key to apply the check to the whole cohort."
+  }
 }

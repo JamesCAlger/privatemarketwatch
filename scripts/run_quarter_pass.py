@@ -79,7 +79,7 @@ class Stage:
     post_copy: tuple[Path, str] | None = None  # (src, dest-name-in-pass-dir)
 
 
-def _stages(quarter: str) -> list[Stage]:
+def _stages(quarter: str, pass_dir: Path | None = None) -> list[Stage]:
     py = sys.executable
     acceptance_argv = [py, "-m", "pipeline.quarter_acceptance", "--quarter", quarter]
 
@@ -106,7 +106,10 @@ def _stages(quarter: str) -> list[Stage]:
                        "(loop-until-dry input)"),
             Stage(
                 f"acceptance{suffix}",
-                acceptance_argv,
+                # the ledger this battery just wrote decides outstanding_findings
+                acceptance_argv + ([] if pass_dir is None else [
+                    "--findings-ledger",
+                    str(pass_dir / f"findings_ledger_{'post' if suffix else 'pre'}.csv")]),
                 allowed_exit=(0, 1, 2),
                 note="verdict exit codes 1/2 are outcomes, not errors",
                 post_copy=(config.QUARTER_ACCEPTANCE_FILE,
@@ -140,7 +143,7 @@ class Runner:
         self.dry_run = dry_run
         self.pass_dir = (pass_base or PASS_BASE) / pass_id
         self.state_path = self.pass_dir / "state.json"
-        self.stages = _stages(quarter)
+        self.stages = _stages(quarter, self.pass_dir)
         self._run_cmd = run_cmd or self._subprocess_run
 
     # ---------------------------------------------------------------- state

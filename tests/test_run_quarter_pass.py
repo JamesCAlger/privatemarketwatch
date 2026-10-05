@@ -245,3 +245,15 @@ def test_until_preflight_probe_stops_after_first_stage(tmp_path, monkeypatch):
 def test_preflight_allows_only_exit_zero():
     stages = {s.name: s for s in _stages(Q)}
     assert stages["preflight"].allowed_exit == (0,)
+
+
+def test_acceptance_reads_the_findings_ledger_of_its_own_round(tmp_path):
+    # Owner ruling 2026-10-05: sign-off needs zero outstanding findings, so each
+    # acceptance stage is handed the ledger its own battery just wrote.
+    runner = Runner("p1", Q, pass_base=tmp_path)
+    stages = {s.name: s for s in runner.stages}
+    pass_dir = tmp_path / "p1"
+    assert stages["acceptance"].argv[-2:] == [
+        "--findings-ledger", str(pass_dir / "findings_ledger_pre.csv")]
+    assert stages["acceptance_post"].argv[-2:] == [
+        "--findings-ledger", str(pass_dir / "findings_ledger_post.csv")]

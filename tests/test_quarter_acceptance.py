@@ -353,12 +353,12 @@ def test_over_inclusion_gate_from_thresholds(tmp_path):
     assert qa.compute_acceptance(target_quarter=Q, **kw)["verdict"] == "PASS"
 
 
-def test_thresholds_v3_file_has_nine_checks():
+def test_thresholds_file_keeps_the_nine_v3_checks():
     from pipeline import config
     t = json.loads(config.QUARTER_ACCEPTANCE_THRESHOLDS_FILE.read_text(encoding="utf-8-sig"))
     ids = [c["id"] for c in t["checks"]]
-    assert t["version"] == 3
-    assert ids == ["fund_coverage", "reconcile_rate", "flagged_fv_share", "source_blocking_fv_share",
+    assert t["version"] >= 3
+    assert ids[:9] == ["fund_coverage", "reconcile_rate", "flagged_fv_share", "source_blocking_fv_share",
                    "verified_fv_share", "promoted_rule_drift", "promoted_rule_health",
                    "over_inclusion_fv_share", "unfinished_investigations"]
     by_id = {c["id"]: c for c in t["checks"]}
@@ -549,3 +549,113 @@ def test_loader_audit_drives_rule_health_end_to_end(tmp_path):
     live = verdict(tmp_path / "live", {"classification_fix.json": leaf("SOFR")})
     assert live["metrics"]["promoted_rules"]["n_load_rejected"] == 1
     assert live["verdict"] == "FAIL"
+
+
+# --- outstanding findings (owner ruling 2026-10-05) ---------------------------------
+
+FINDINGS_HEADER = ["review_id", "state", "in_queue", "cik", "rule_name", "report_date",
+                   "lane", "engine"]
+OUTSTANDING_CHECK = {"id": "outstanding_findings", "metric": "findings.n_outstanding",
+                     "op": "<=", "value": 0}
+
+
+def _finding(n: int, state: str, *, cik: str = "0000000001", report_date: str = Q,
+             lane: str = "review") -> dict:
+    return {"review_id": f"RVQ_{n:04d}", "state": state, "in_queue": "True", "cik": cik,
+            "rule_name": "X02", "report_date": report_date, "lane": lane,
+            "engine": "row_validation"}
+
+
+def _findings_setup(tmp_path: Path, findings: list[dict] | None, *, scope: list[str] | None):
+    kw = _setup(tmp_path, ledger_rows=[_cons_row(c, "pass") for c in
+                                       ("0000000001", "0000000002", "0000000003")])
+    spec = json.loads(kw["thresholds_path"].read_text(encoding="utf-8"))
+    spec["checks"] = [OUTSTANDING_CHECK]
+    if scope is not None:
+        spec["findings_scope"] = {"ciks": scope}
+    kw["thresholds_path"].write_text(json.dumps(spec), encoding="utf-8")
+    path = tmp_path / "findings_ledger.csv"
+    if findings is not None:
+        _csv(path, FINDINGS_HEADER, findings)
+    return dict(kw, findings_ledger_path=path)
+
+
+def test_outstanding_findings_counts_every_unresolved_state_in_scope(tmp_path):
+    kw = _findings_setup(tmp_path, scope=["0000000001"], findings=[
+        _finding(1, "open", lane="review"),          # dry ignores review-lane opens; this must not
+        _finding(2, "needs_human"),
+        _finding(3, "evidence_backlog"),
+        _finding(4, "real_error_unremediated"),
+        _finding(5, "remediation_staged", report_date=Q + " 00:00:00"),
+        _finding(6, "adjudicated_false_alarm"),
+        _finding(7, "remediated_promoted"),
+        _finding(8, "resolved_upstream"),
+        _finding(9, "gone_unadjudicated"),
+        _finding(10, "open", cik="0000000002"),          # outside the scope
+        _finding(11, "open", report_date="2025-09-30"),  # not the sign-off quarter
+    ])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    findings = res["metrics"]["findings"]
+    assert findings["n_outstanding"] == 5
+    assert findings["by_state"] == {"open": 1, "needs_human": 1, "evidence_backlog": 1,
+                                    "real_error_unremediated": 1, "remediation_staged": 1}
+    assert findings["scope_ciks"] == ["0000000001"] and findings["measured"] is True
+    assert res["checks"][0]["pass"] is False and res["verdict"] == "FAIL"
+
+
+def test_outstanding_findings_passes_when_every_finding_is_resolved(tmp_path):
+    kw = _findings_setup(tmp_path, scope=["0000000001"], findings=[
+        _finding(1, "adjudicated_false_alarm"), _finding(2, "remediated_promoted"),
+        _finding(3, "resolved_upstream"), _finding(4, "gone_unadjudicated"),
+        _finding(5, "open", cik="0000000002")])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    assert res["metrics"]["findings"]["n_outstanding"] == 0
+    assert res["checks"][0]["pass"] is True and res["verdict"] == "PASS"
+
+
+def test_unknown_finding_state_counts_as_outstanding(tmp_path):
+    kw = _findings_setup(tmp_path, scope=["0000000001"],
+                         findings=[_finding(1, "some_future_state"), _finding(2, "")])
+    assert qa.compute_acceptance(target_quarter=Q, **kw)["metrics"]["findings"][
+        "n_outstanding"] == 2
+
+
+def test_outstanding_findings_defaults_to_the_cohort_without_a_scope(tmp_path):
+    kw = _findings_setup(tmp_path, scope=None, findings=[
+        _finding(1, "open"), _finding(2, "open", cik="0000000002"),
+        _finding(3, "open", cik="0000000099")])      # not a cohort fund
+    findings = qa.compute_acceptance(target_quarter=Q, **kw)["metrics"]["findings"]
+    assert findings["n_outstanding"] == 2
+    assert findings["scope_ciks"] == ["0000000001", "0000000002", "0000000003"]
+
+
+def test_outstanding_findings_fails_closed_when_ledger_missing(tmp_path):
+    kw = _findings_setup(tmp_path, scope=["0000000001"], findings=None)
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    assert res["metrics"]["findings"]["n_outstanding"] is None
+    assert res["metrics"]["findings"]["measured"] is False
+    assert res["checks"][0]["pass"] is False and res["verdict"] == "FAIL"
+    assert res["inputs"]["findings_ledger"] == str(kw["findings_ledger_path"])
+
+
+def test_outstanding_findings_is_unassessable_until_its_ledger_is_bound():
+    def status(bound):
+        prior = dict(verdict="PASS", thresholds_version=4, calibration="provisional",
+                     checks=[{"id": "outstanding_findings", "actual": 0, "pass": True}])
+        result = qa.extend_acceptance(prior, {}, bound_legacy_inputs=bound)
+        return {row["id"]: row["status"] for row in result["checks"]}["outstanding_findings"]
+
+    assert status({"ledger", "queue"}) == "UNASSESSABLE"
+    assert status({"findings_ledger"}) == "PASS"
+
+
+def test_thresholds_v4_adds_outstanding_findings_for_the_five_largest_funds():
+    from pipeline import config
+    t = json.loads(config.QUARTER_ACCEPTANCE_THRESHOLDS_FILE.read_text(encoding="utf-8-sig"))
+    assert t["version"] == 4 and t["calibration"] == "provisional"
+    assert [c["id"] for c in t["checks"]][-1] == "outstanding_findings"
+    assert len(t["checks"]) == 10
+    check = t["checks"][-1]
+    assert (check["metric"], check["op"], check["value"]) == ("findings.n_outstanding", "<=", 0)
+    assert t["findings_scope"]["ciks"] == ["0001287750", "0001803498", "0001812554",
+                                           "0001837532", "0001838126"]

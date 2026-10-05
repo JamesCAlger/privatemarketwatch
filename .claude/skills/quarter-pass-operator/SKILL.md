@@ -223,6 +223,12 @@ signed-off quarter's acceptance (observed: retain-and-flag regressed 1633336's
 signed Q4-2025 until the is_subsidiary false-positive fix). We freeze the
 ATTESTATION, not the code:
 
+- BEFORE SIGN-OFF (owner ruling 2026-10-05, thresholds v4): a PASS on the FV-share
+  bars is no longer enough. The `outstanding_findings` check needs zero findings in
+  the thresholds file's `findings_scope` funds for the quarter in any unresolved
+  state (open in either lane, real_error_unremediated, remediation_staged/pulled,
+  needs_human, evidence_backlog). Keep running rounds, or bring the needs_human
+  items to the owner; never clear it by editing the scope or the ledger.
 - AT SIGN-OFF (after the human accepts a quarter's PASS):
     python -m scripts.reattest_quarters attest --quarter <q>         --source data/output/quarter_pass/<pass_id>/acceptance_post.json
     git tag signoff-<q> <signoff-commit>
