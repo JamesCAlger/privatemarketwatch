@@ -126,6 +126,19 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
 DETACHED_MIN_CONTEXT_GAP=200
 
 
+def derived_segment_pattern(encodings=None):
+    """Regex for a trailing detached-schedule segment appended by this module, or None.
+
+    Consumers that key on the FILED dimension member (for example the inline-XBRL
+    field overlay) must remove the pipeline-derived label first.
+    """
+    configured=load_encodings() if encodings is None else encodings
+    labels=sorted({' '.join(v.split()) for e in configured.values() for v in e.get('detached_schedule_labels',[])})
+    if not labels:
+        return None
+    return r'(?i)\s*\|\s*(?:'+'|'.join(re.escape(l).replace(r'\ ',r'\s+') for l in labels)+r')\s*$'
+
+
 def tag_detached_schedules(con,table='bdc_raw',encodings=None):
     """Mark a filer's detached position schedules as their own reporting entity.
 

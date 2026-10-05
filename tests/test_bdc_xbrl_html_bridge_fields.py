@@ -632,3 +632,37 @@ def test_ixbrl_overlay_status_dedup_is_order_invariant():
     out_reversed = apply_ixbrl_field_status_overlay(df.copy(), [row_hi, row_lo])
     assert out_forward.iloc[0]["maturity_date"] == "2030-12-31"
     assert out_reversed.iloc[0]["maturity_date"] == "2030-12-31"
+
+
+def test_overlay_key_ignores_the_pipeline_derived_detached_schedule_label(monkeypatch):
+    """The detached-schedule label is appended to bdc_dimensions_raw by staging; it is
+    not part of the filed member. Found by the 2026-10-05 trial build: 85 HPS
+    joint-venture rows lost their captured maturity and lien when it leaked into the key."""
+    import pandas as pd
+    from pipeline import source_encodings
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    monkeypatch.setattr(source_encodings, "load_encodings", lambda *a, **k: {
+        "0001838126": {"detached_schedule_labels": ["joint venture schedule"]}})
+    base = {"cik": "0001838126", "accession_number": "A", "report_date": "2026-03-31",
+            "maturity_date": "", "reference_rate_type": "", "lien_position": "",
+            "reference_rate_source": ""}
+    df = pd.DataFrame([
+        dict(base, bdc_investment_identifier="Bright Light Buyer, Inc. 1",
+             bdc_dimensions_raw="investmentidentifieraxis=Bright Light Buyer, Inc. 1 | joint venture schedule"),
+        # a filed member that merely ends with similar words keeps its full key
+        dict(base, bdc_investment_identifier="Acme JV",
+             bdc_dimensions_raw="investmentidentifieraxis=Acme | joint venture schedule holdings"),
+    ])
+    status = [
+        dict(cik="0001838126", accession_number="A", report_date="2026-03-31",
+             raw_id_lower="bright light buyer, inc. 1", lien_position="First Lien",
+             lien_status="value", maturity_date="2031-06-21", maturity_status="value"),
+        dict(cik="0001838126", accession_number="A", report_date="2026-03-31",
+             raw_id_lower="acme", lien_position="Second Lien", lien_status="value",
+             maturity_date="2030-01-01", maturity_status="value"),
+    ]
+    out = apply_ixbrl_field_status_overlay(df, status)
+    assert out.iloc[0]["lien_position"] == "First Lien"
+    assert out.iloc[0]["maturity_date"] == "2031-06-21"
+    assert out.iloc[1]["lien_position"] == ""      # not stripped: different member
+    assert out.iloc[0]["bdc_dimensions_raw"].endswith("joint venture schedule")   # label kept

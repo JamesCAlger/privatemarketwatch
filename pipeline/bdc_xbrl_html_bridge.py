@@ -1077,6 +1077,12 @@ def apply_ixbrl_field_status_overlay(
             # pitfall). Coerce to StringDtype so fillna("") is valid; null rows
             # become "" and fall through to the identifier fallback below.
             dims = frame[dims_col].astype("string").fillna("")
+            # A detached-schedule label is appended by staging, not filed; the
+            # artifact's raw_id_lower is the filed member without it.
+            from pipeline import source_encodings
+            derived = source_encodings.derived_segment_pattern()
+            if derived:
+                dims = dims.str.replace(derived, "", regex=True)
             mem = dims.str.replace(r"^[^=]*=", "", regex=True).map(_norm_text)
             mem = mem.where(dims.str.contains("=", regex=False) & (mem.str.strip() != ""), ident)
         else:
