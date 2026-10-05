@@ -1084,3 +1084,66 @@ def test_unreadable_or_misplaced_promoted_rule_is_audited(tmp_path):
     assert audit.loc[str(base / "_pulled_frame_mismatch_20260722" / "p.json"),
                      "admission_status"] == "proposed_or_retired"
     assert audit.loc[str(base / "1715933" / "live.json"), "loaded"]
+
+
+# --- rules must not read columns that are resolved after rules run (2026-10-05) ---
+
+def test_rule_reading_an_entity_column_is_rejected_and_audited(tmp_path):
+    """Entity and sector columns are filled after the correction layers, so a predicate
+    on them silently matches nothing (Rand 0000081955: one duplicate stopped being
+    removed after b665895 and the identity gate halted the build)."""
+    from pipeline import rule_admission
+
+    base = tmp_path / "rules"
+    late = dict(_valid_rule(cik="81955", rule_id="late"),
+                predicate_sql="canonical_name = 'Mobile RN Holdings LLC'")
+    sector = dict(_valid_rule(cik="81955", rule_id="sector"),
+                  predicate_sql="report_date = '2025-12-31' AND gics_sector = 'Health Care'")
+    # mentions the column in its evidence only: must keep loading
+    mention = dict(_valid_rule(cik="81955", rule_id="mention"),
+                   evidence=[{"source": "query", "quote": "grouped by canonical_name"}])
+    # a column that merely contains the word is not the column
+    lookalike = dict(_valid_rule(cik="81955", rule_id="lookalike"),
+                     predicate_sql="issuer_name = 'my_entity_id_co' AND canonical_name_raw IS NULL")
+    for rule in (late, sector, mention, lookalike):
+        _write_json(base / "81955" / (rule["rule_id"] + ".json"), rule)
+
+    @rule_admission.capture_inputs(lambda: tmp_path / "audit")
+    def run():
+        loaded = ap.load_promoted_rules(base)
+        assert sorted(r["rule_id"] for r in loaded["0000081955"]) == ["lookalike", "mention"]
+        return pd.DataFrame()
+
+    run()
+    audit = pd.read_csv(tmp_path / "audit" / "input_admission_audit.csv").set_index("path")
+    for name in ("late", "sector"):
+        row = audit.loc[str(base / "81955" / (name + ".json"))]
+        assert row["admission_status"] == "rejected_contract" and not row["loaded"]
+    assert audit.loc[str(base / "81955" / "mention.json"), "loaded"]
+
+
+def test_no_live_rule_reads_a_late_resolved_column():
+    for rules in ap.load_promoted_rules().values():
+        for rule in rules:
+            assert not ap.late_resolved_columns(rule), rule.get("rule_id")
+
+
+def test_rand_duplicate_note_rule_selects_both_spellings_without_the_entity_column():
+    rule = next(r for r in ap.load_promoted_rules()["0000081955"]
+                if r["rule_id"] == "81955_2025q4_canonical_duplicate_debt_notes")
+    frame = pd.DataFrame([
+        dict(report_date="2025-12-31", issuer_name="Mobile RN Holdings LLC",
+             instrument_description="Term Note at 14%", canonical_name=""),
+        dict(report_date="2025-12-31", issuer_name="Mobile RN Holdings LLC d/b/a Mobile IV Nurses",
+             instrument_description="Term Note", canonical_name=""),
+        dict(report_date="2025-12-31", issuer_name="Mobile RN Holdings LLC",
+             instrument_description="Class A Common Units", canonical_name=""),
+        dict(report_date="2025-12-31", issuer_name="Mobile Health Partners LLC",
+             instrument_description="Term Note", canonical_name=""),
+    ])
+    import duckdb
+    with duckdb.connect() as con:
+        con.register("holdings", frame)
+        hit = con.execute("SELECT instrument_description FROM holdings WHERE "
+                          + rule["predicate_sql"] + " ORDER BY 1").fetchall()
+    assert hit == [("Term Note",), ("Term Note at 14%",)]

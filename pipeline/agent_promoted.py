@@ -461,6 +461,18 @@ def apply_raw_staging_exclusions(con, exclusions: list[dict]) -> list[dict]:
 
 # --------------------------------------------------------------------------- rules (Layer C)
 
+# Filled by the build AFTER the promoted-rule layer (in-build entity resolution,
+# then the GICS cache). A predicate on one of them sees blanks and matches nothing.
+LATE_RESOLVED_COLUMNS = ("canonical_name", "entity_id", "gics_sub_industry", "gics_sector")
+
+
+def late_resolved_columns(rule: dict) -> list[str]:
+    """Late-resolved columns named in a rule's predicate (whole identifiers only)."""
+    predicate = str(rule.get("predicate_sql") or "") if isinstance(rule, dict) else ""
+    return [c for c in LATE_RESOLVED_COLUMNS
+            if re.search(r"(?<![A-Za-z0-9_])" + c + r"(?![A-Za-z0-9_])", predicate)]
+
+
 def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict]]:
     """{cik10: [rules]} from ``<dir>/<cik>/<rule_id>.json``.
 
@@ -485,6 +497,13 @@ def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict
             from pipeline.rule_admission import reject_input
             reject_input(p, "unreadable", type(exc).__name__)
             logger.warning("promoted rule unreadable, skipped: %s (%s)", p, exc)
+            continue
+        late = late_resolved_columns(rule)
+        if late:
+            from pipeline.rule_admission import reject_input
+            reject_input(p, "rejected_contract",
+                         "predicate reads columns filled after rules run: " + ", ".join(late))
+            logger.warning("promoted rule reads late-resolved columns %s, skipped: %s", late, p)
             continue
         cik = normalize_cik10(p.parent.name)
         if cik:

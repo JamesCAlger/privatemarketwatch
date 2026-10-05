@@ -8,7 +8,7 @@
       "2025-12-31"
     ]
   },
-  "predicate_sql": "report_date = '2025-12-31' AND ((issuer_name = 'Applied Image, Inc.' AND instrument_description IN ('Term Note', 'Term Note at 12%')) OR (issuer_name = 'BMP Food Service Supply Holdco, LLC' AND instrument_description LIKE 'Third Amended and Restated Term Note%') OR (issuer_name = 'BMP Swanson Holdco, LLC' AND instrument_description IN ('Term Note', 'Term Note at 5%')) OR (issuer_name = 'Caitec, Inc.' AND instrument_description IN ('Subordinated Secured Promissory Note', 'Subordinated Secured Promissory Note One')) OR (canonical_name = 'Mobile RN Holdings LLC' AND instrument_description IN ('Term Note', 'Term Note at 14%')))",
+  "predicate_sql": "report_date = '2025-12-31' AND ((issuer_name = 'Applied Image, Inc.' AND instrument_description IN ('Term Note', 'Term Note at 12%')) OR (issuer_name = 'BMP Food Service Supply Holdco, LLC' AND instrument_description LIKE 'Third Amended and Restated Term Note%') OR (issuer_name = 'BMP Swanson Holdco, LLC' AND instrument_description IN ('Term Note', 'Term Note at 5%')) OR (issuer_name = 'Caitec, Inc.' AND instrument_description IN ('Subordinated Secured Promissory Note', 'Subordinated Secured Promissory Note One')) OR (issuer_name IN ('Mobile RN Holdings LLC', 'Mobile RN Holdings LLC d/b/a Mobile IV Nurses') AND instrument_description IN ('Term Note', 'Term Note at 14%')))",
   "match_fields": [
     "report_date",
     "fair_value"
