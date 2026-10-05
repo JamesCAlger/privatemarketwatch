@@ -5,6 +5,7 @@ rules + application audit (Layer C)."""
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from unittest.mock import patch
 
 import duckdb
@@ -1122,14 +1123,20 @@ def test_rule_reading_an_entity_column_is_rejected_and_audited(tmp_path):
     assert audit.loc[str(base / "81955" / "mention.json"), "loaded"]
 
 
+_REAL_RULES = Path(__file__).resolve().parents[1] / "data" / "overrides" / "agent_investigate_rules"
+
+
 def test_no_live_rule_reads_a_late_resolved_column():
-    for rules in ap.load_promoted_rules().values():
+    # conftest redirects the default store; name the real one, or this checks nothing
+    store = ap.load_promoted_rules(_REAL_RULES)
+    assert len(store) > 50
+    for rules in store.values():
         for rule in rules:
             assert not ap.late_resolved_columns(rule), rule.get("rule_id")
 
 
 def test_rand_duplicate_note_rule_selects_both_spellings_without_the_entity_column():
-    rule = next(r for r in ap.load_promoted_rules()["0000081955"]
+    rule = next(r for r in ap.load_promoted_rules(_REAL_RULES)["0000081955"]
                 if r["rule_id"] == "81955_2025q4_canonical_duplicate_debt_notes")
     frame = pd.DataFrame([
         dict(report_date="2025-12-31", issuer_name="Mobile RN Holdings LLC",
