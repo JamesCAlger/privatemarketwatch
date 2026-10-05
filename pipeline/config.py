@@ -183,6 +183,14 @@ QUARTER_ACCEPTANCE_FUNDS_FILE = OUTPUT_DIR / "quarter_acceptance_funds.csv"
 # Position match overrides (per-CIK JSON files with reject/force_pair directives)
 POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
 
+# Durable identity continuity. When True the finalizer pins the previous build's
+# identity registry and stops on any position chain that merges, splits or changes
+# accounting scope without a reviewed revision. Suspended by owner ruling 2026-10-05
+# for the v0.5 fix phase: extraction fixes legitimately re-chain positions and the
+# production build has no route to supply revisions. Each build then allocates
+# identities fresh (still deterministic for unchanged chains). Re-enable at sign-off.
+IDENTITY_CONTINUITY_ENABLED = False
+
 # Unlisted (non-traded) BDC reference for v1 frontend filtering
 UNLISTED_BDC_REFERENCE_FILE = (
     OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"

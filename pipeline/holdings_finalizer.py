@@ -184,6 +184,12 @@ def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool
     prior_registry=destination.parent/'identity_registry.duckdb'
     if not prior_registry.is_file(): prior_registry=config.REFERENCE_DIR/'identity_registry.duckdb'
     if not prior_registry.is_file(): prior_registry=None
+    if not config.IDENTITY_CONTINUITY_ENABLED:
+        if prior_registry is not None:
+            import logging
+            logging.getLogger(__name__).warning(
+                "Identity continuity is suspended: allocating fresh identities, prior registry not pinned")
+        prior_registry=None
     input_fingerprint=digest(dict(working_sha256=sha(working),
         raw_matching_sha256=(digest(dict(columns=list(bdc_raw_df.columns),dtypes=[str(t) for t in bdc_raw_df.dtypes],
             values=hashlib.sha256(pd.util.hash_pandas_object(bdc_raw_df,index=True).values.tobytes()).hexdigest()))

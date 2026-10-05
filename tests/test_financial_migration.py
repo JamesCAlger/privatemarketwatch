@@ -56,3 +56,38 @@ def test_unavailable_coupon_stays_null_and_zero_coupon_is_observed(tmp_path,monk
     assert pd.isna(values.loc['unknown','total_return'])
     assert values.loc['zero','income_return']==0
     assert values.loc['observed','income_return']==pytest.approx(.03)
+
+
+def _finalize_twice_capturing_registry(tmp_path,monkeypatch):
+    from pipeline import identity_finalization
+    frame=holdings([
+        dict(row_id='R1',report_date='2025-12-31',cost='0',fair_value='100',principal_amount='100'),
+        dict(row_id='R2',report_date='2026-03-31',cost='',fair_value='110',principal_amount='100')])
+    frame['src_context_id']=['C1','C2'];frame['entity_id']='E1';frame['fair_value_source']='xbrl_field'
+    frame,_=prepare_artifact(frame,tmp_path,source_frame=True)
+    hp=tmp_path/'private_markets_holdings.csv';frame.to_csv(hp,index=False)
+    seen=[];original=identity_finalization.finish
+    def recording(*args,**kwargs):
+        seen.append(kwargs.get('input_registry'))
+        return original(*args,**kwargs)
+    monkeypatch.setattr(identity_finalization,'finish',recording)
+    first,_=holdings_finalizer.finalize_existing_holdings(holdings_file=hp,bdc_raw_df=_make_bdc_raw([]))
+    second,_=holdings_finalizer.finalize_existing_holdings(holdings_file=hp,bdc_raw_df=_make_bdc_raw([]))
+    return seen,first,second
+
+
+def test_suspended_identity_continuity_allocates_without_the_prior_registry(tmp_path,monkeypatch):
+    from pipeline import config
+    assert config.IDENTITY_CONTINUITY_ENABLED is False  # owner ruling 2026-10-05, v0.5 fix phase
+    seen,first,second=_finalize_twice_capturing_registry(tmp_path,monkeypatch)
+    assert seen==[None,None]
+    # Fresh allocation is still deterministic for unchanged chains, and the replaced registry is archived.
+    assert first.set_index('row_id').position_id.to_dict()==second.set_index('row_id').position_id.to_dict()
+    assert any((tmp_path/'identity_registry_history').iterdir())
+
+
+def test_enabled_identity_continuity_pins_the_prior_registry(tmp_path,monkeypatch):
+    from pipeline import config
+    monkeypatch.setattr(config,'IDENTITY_CONTINUITY_ENABLED',True)
+    seen,_,_=_finalize_twice_capturing_registry(tmp_path,monkeypatch)
+    assert seen[0] is None and seen[1]==tmp_path/'identity_registry.duckdb'
