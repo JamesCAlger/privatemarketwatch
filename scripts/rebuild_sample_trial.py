@@ -188,7 +188,9 @@ def _protected_state(directory: Path) -> dict:
             for p in directory.iterdir() if p.is_file()}
 
 
-def build(label: str, ciks: list[str]) -> Path:
+def build(label: str, ciks: list[str], finalize: bool = True) -> Path:
+    """Build the funds into scratch. finalize=True runs the whole build (entity resolution,
+    financial preparation, position matching, identities); False stops after staging."""
     from unittest.mock import patch
 
     from pipeline import config
@@ -209,9 +211,13 @@ def build(label: str, ciks: list[str]) -> Path:
     if config.GICS_LABEL_CACHE_FILE.exists():
         shutil.copy2(config.GICS_LABEL_CACHE_FILE, label_cache)
     with patch("pipeline.gics_mapping.GICS_LABEL_CACHE_FILE", label_cache):
-        frame = build_unified_holdings(
-            bdc_df=bdc, nport_df=nport, output_file=run_dir / HOLDINGS_NAME,
-            orphan_file=run_dir / "universe_orphan_holdings.csv")
+        if finalize:
+            from pipeline.holdings_finalizer import build_final_holdings
+            frame, _ = build_final_holdings(bdc_df=bdc, nport_df=nport, output_file=run_dir / HOLDINGS_NAME)
+        else:
+            frame = build_unified_holdings(
+                bdc_df=bdc, nport_df=nport, output_file=run_dir / HOLDINGS_NAME,
+                orphan_file=run_dir / "universe_orphan_holdings.csv")
     fund_quarter_summary(frame).to_csv(run_dir / "fund_quarter_summary.csv", index=False)
     head = ""
     try:
@@ -221,7 +227,7 @@ def build(label: str, ciks: list[str]) -> Path:
     except OSError:
         pass
     (run_dir / "run.json").write_text(json.dumps(dict(
-        label=label, ciks=ciks, rows=len(frame), seconds=round(time.time() - t0, 1),
+        label=label, ciks=ciks, rows=len(frame), finalized=finalize, seconds=round(time.time() - t0, 1),
         git_head=head, built=time.strftime("%Y-%m-%d %H:%M:%S")), indent=2), encoding="utf-8")
     after = _protected_state(config.OUTPUT_DIR)
     touched = sorted(n for n in set(before) | set(after) if before.get(n) != after.get(n))
@@ -238,6 +244,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="funds to build; default = acceptance findings scope")
     parser.add_argument("--compare-to", default=None,
                         help="after building, compare with this earlier run, or 'production'")
+    parser.add_argument("--staging-only", action="store_true",
+                        help="stop after staging (faster; no position ids, matches or cost fill-ins)")
     parser.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"),
                         help="compare two existing runs without building")
     args = parser.parse_args(argv)
@@ -250,7 +258,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.compare:
         before_label, after_label = args.compare
     elif args.label:
-        build(args.label, ciks)
+        build(args.label, ciks, finalize=not args.staging_only)
         if not args.compare_to:
             return 0
         before_label, after_label = args.compare_to, args.label

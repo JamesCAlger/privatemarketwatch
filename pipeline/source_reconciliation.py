@@ -4579,6 +4579,20 @@ def _legacy_outputs_exist() -> bool:
     return all(path.exists() for path in LEGACY_RECONCILIATION_OUTPUTS)
 
 
+def _indicator_detail(detail: pd.DataFrame) -> pd.DataFrame:
+    """The detail frame as written to disk: a boolean blocking_issue becomes 0/1.
+
+    The typed Parquet companion declares blocking_issue as an integer indicator. A frame
+    assembled from a single freshly computed fund keeps the column boolean, which writes
+    'True'/'False' and fails the companion's cast; mixed or cached frames are already numeric
+    and are left as they are.
+    """
+    if "blocking_issue" in detail.columns and detail["blocking_issue"].dtype == bool:
+        detail = detail.copy()
+        detail["blocking_issue"] = detail["blocking_issue"].astype(int)
+    return detail
+
+
 def _assemble_legacy_reconciliation_outputs(detail: pd.DataFrame, metrics: pd.DataFrame) -> None:
     source_recon_review = build_reconciliation_calibration_review(detail)
     residual = build_source_reconciliation_residual_classification(detail)
@@ -4587,7 +4601,7 @@ def _assemble_legacy_reconciliation_outputs(detail: pd.DataFrame, metrics: pd.Da
     source_only_clusters = build_source_only_blocker_clusters(source_only_detail)
     source_only_md = build_source_only_blocker_markdown(source_only_detail, source_only_clusters)
 
-    detail.to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
+    _indicator_detail(detail).to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
     from pipeline.utils import write_parquet_companion
     write_parquet_companion(SOURCE_RECONCILIATION_DETAIL_FILE)
     metrics.to_csv(SOURCE_RECONCILIATION_METRICS_FILE, index=False)

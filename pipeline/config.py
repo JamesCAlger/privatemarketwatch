@@ -1,5 +1,6 @@
 """Configuration constants for the SEC universe-building pipeline."""
 
+import os
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -17,7 +18,12 @@ ENTITY_CURRENT_NAMES_FILE = REFERENCE_DIR / "entity_current_names.csv"
 SEC_DATASETS_DIR = RAW_DIR / "sec_datasets"
 FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"
-OUTPUT_DIR = DATA_DIR / "output"
+# PM_OUTPUT_DIR points every derived output path at another folder. It exists for
+# fund sandbox runs (scripts/fund_ledger_trial.py): the same build and check stages run
+# unchanged on a folder holding a few funds, and the published data/output is not
+# touched. Raw caches, reference data and overrides are never redirected.
+OUTPUT_DIR = (Path(os.environ["PM_OUTPUT_DIR"]).resolve()
+              if os.environ.get("PM_OUTPUT_DIR") else DATA_DIR / "output")
 OVERRIDES_DIR = DATA_DIR / "overrides"
 OUTPUT_CACHE_DIR = OUTPUT_DIR / "cache"
 SEC_DOWNLOAD_LOCK_DIR = OUTPUT_CACHE_DIR / "sec_download_locks"

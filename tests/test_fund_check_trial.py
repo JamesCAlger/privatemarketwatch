@@ -58,3 +58,13 @@ def test_conservation_uses_the_published_basis_and_the_band():
                           dict(report_date="2025-12-31", investments_at_fair_value="100")])
     out = conservation_status(holdings, filed, band_pct=0.5).set_index("report_date")["status"].to_dict()
     assert out == {"2026-03-31": "pass", "2025-12-31": "fail"}
+
+
+def test_boolean_blocking_flag_is_written_as_an_indicator():
+    from pipeline.source_reconciliation import _indicator_detail
+    frame = pd.DataFrame({"blocking_issue": [True, False], "status": ["a", "b"]})
+    out = _indicator_detail(frame)
+    assert out["blocking_issue"].tolist() == [1, 0]
+    assert frame["blocking_issue"].tolist() == [True, False]          # caller's frame untouched
+    numeric = pd.DataFrame({"blocking_issue": [1.0, 0.0]})
+    assert _indicator_detail(numeric) is numeric                       # already numeric: unchanged
