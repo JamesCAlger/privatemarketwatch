@@ -502,7 +502,11 @@ def check_C01_debt_has_rate(
     *,
     min_rate: float = 0.80,
 ) -> list[CheckResult]:
-    """C01: >=80% of debt-classified rows should have interest_rate or basis_spread."""
+    """C01: >=80% of funded debt-classified rows should have interest_rate or basis_spread.
+
+    Funded means fair value above zero. Undrawn revolvers and delayed draws are filed at
+    zero or a small negative value with no rate; counting them made the rule fail for
+    funds with many such lines (repaired 2026-10-06, decision D-012)."""
     results = []
     if holdings_df.empty:
         return [_make_result("C01", "global", "skip", 0, min_rate, "No holdings data")]
@@ -512,7 +516,7 @@ def check_C01_debt_has_rate(
         "senior secured debt", "subordinated debt",
     ]) | _col_str(holdings_df, "asset_category").str.lower().str.contains("debt|loan", regex=True, na=False)
 
-    debt = holdings_df[debt_mask]
+    debt = holdings_df[debt_mask & _col_float(holdings_df, "fair_value").gt(0)]
     if debt.empty:
         return [_make_result("C01", "global", "skip", 0, min_rate, "No debt rows found")]
 
@@ -527,7 +531,7 @@ def check_C01_debt_has_rate(
         no_rate = group[~has_rate]
         results.append(_make_result(
             "C01", "cik_quarter", status, rate, min_rate,
-            f"{cik_s}/{rd_s}: {rate:.1%} of {len(group)} debt rows have rate",
+            f"{cik_s}/{rd_s}: {rate:.1%} of {len(group)} funded debt rows have rate",
             detail=no_rate, cik=cik_s, report_date=rd_s,
         ))
 

@@ -53,8 +53,11 @@ def _ff() -> str:
 
 # Source config: (table_sql, where, cik_expr, report_date_expr, row_id_expr)
 SOURCES = {
+    # Published rows only: a JV's own schedule states percent of the JV's net assets, so its rows
+    # cannot satisfy an identity against the fund's (2026-10-06, decision D-014).
     "unified": (_unified(), "bdc_dimensions_raw IS NOT NULL "
-                "AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)",
+                "AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped) "
+                "AND coalesce(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'",
                 "CAST(cik AS VARCHAR)", "CAST(report_date AS VARCHAR)",
                 "bdc_investment_identifier"),
     "fund_financials": (_ff(), "source = 'companyfacts'",
@@ -84,9 +87,12 @@ RULES: list[IdentityRule] = [
         needed_cols=("fair_value", "pct_of_net_assets"),
         scalar=("fund_financials", "net_assets"),
         row_filter="pct_of_net_assets > 0 AND _scalar > 0 AND fair_value <> 0",
-        holds_sql="abs(fair_value - pct_of_net_assets/100.0*_scalar) <= 0.10*abs(fair_value)",
+        # 10 pct of fair value, or within 0.06 percentage points: filers state the percent to one
+        # or two decimals, so a small position cannot meet a relative band (decision D-014).
+        holds_sql="abs(fair_value - pct_of_net_assets/100.0*_scalar) <= 0.10*abs(fair_value) "
+                  "OR abs(pct_of_net_assets - 100.0*fair_value/_scalar) <= 0.06",
         residual_sql="fair_value - pct_of_net_assets/100.0*_scalar",
-        tol_note="FV = pct/100 * net_assets, 10% rel-to-FV (pct rounding)",
+        tol_note="FV = pct/100 * net_assets, 10% rel-to-FV or 0.06 pct points (pct rounding)",
     ),
     # RETIRED 2026-06-19 (B-trial evidence): "pik_le_interest_rate" was an unsound
     # invariant. Its row_filter (pik_rate>0 AND interest_rate>0) selects EXACTLY the

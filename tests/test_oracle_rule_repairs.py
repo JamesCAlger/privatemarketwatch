@@ -107,3 +107,39 @@ def test_b02_still_fails_on_a_repeated_fact():
     results = check_B02_unique_position_keys(frame)
     assert [r.status for r in results] == ["fail"]
     assert "2 duplicate position keys" in results[0].message
+
+
+# --- C01 and dl_rate_fill (decision D-012) -------------------------------------------------------
+
+def _loans(funded_with_rate, funded_without, undrawn):
+    rows = ([{"fair_value": "1000000", "interest_rate": "9.5", "basis_spread": "5.0"}] * funded_with_rate
+            + [{"fair_value": "1000000", "interest_rate": "", "basis_spread": ""}] * funded_without
+            + [{"fair_value": "-20000", "interest_rate": "", "basis_spread": ""}] * undrawn
+            + [{"fair_value": "0", "interest_rate": "", "basis_spread": ""}] * undrawn)
+    return pd.DataFrame([{"cik": "0001838126", "report_date": "2026-03-31", "asset_category": "LOAN",
+                          "index_classification": "DIRECT_LENDING", **row} for row in rows])
+
+
+def test_c01_measures_rate_fill_on_funded_loans():
+    # HPS: 76 pct of loan rows carry a rate, 92 pct of funded ones; the gap is undrawn lines at zero or negative value.
+    from pipeline.oracle_checks import check_C01_debt_has_rate
+    results = check_C01_debt_has_rate(_loans(funded_with_rate=92, funded_without=8, undrawn=15))
+    assert [r.status for r in results] == ["pass"]
+    assert "92.0% of 100 funded debt rows" in results[0].message
+
+
+def test_c01_still_fails_when_funded_loans_lack_rates():
+    from pipeline.oracle_checks import check_C01_debt_has_rate
+    results = check_C01_debt_has_rate(_loans(funded_with_rate=60, funded_without=40, undrawn=0))
+    assert [r.status for r in results] == ["fail"]
+
+
+def test_dl_rate_fill_gate_is_funded_direct_lending_rows():
+    import duckdb
+    from scripts.shadow_weak_engine import RULES
+    rule = next(r for r in RULES if r.name == "dl_rate_fill")
+    con = duckdb.connect()
+    # the engine reads the holdings file, where an empty cell is NULL
+    con.register("weak_base", _loans(funded_with_rate=92, funded_without=8, undrawn=15).replace("", None))
+    total, present = con.execute(f"SELECT count(*), count(*) FILTER (WHERE {rule.present_sql}) FROM weak_base WHERE ({rule.gate_sql})").fetchone()
+    assert (total, present) == (100, 92)

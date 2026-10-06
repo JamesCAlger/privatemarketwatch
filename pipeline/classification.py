@@ -151,6 +151,9 @@ _BDC_EQUITY_KEYWORDS = [
     "shares", "common stock", "warrant",
     "membership interest", "units", "common",
     "equity interest", "class a units", "class b units", "ordinary shares",
+    # Blue Owl: "Specialty finance equity investment". Without it a row with a tagged
+    # principal fell to the field heuristic and was classed a loan (2026-10-06, D-013).
+    "equity investment",
 ]
 
 # Regex for series A-F matching

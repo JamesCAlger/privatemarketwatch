@@ -160,7 +160,10 @@ SEMANTIC_RULES: list[WeakRule] = [
              "AND CAST(maturity_date AS VARCHAR) <> '9999-12-31'",
              holds_sql="TRY_CAST(maturity_date AS DATE) >= TRY_CAST(report_date AS DATE)",
              note="DL maturity >= report_date"),
-    WeakRule("dl_rate_fill", "fill", "index_classification = 'DIRECT_LENDING'",
+    # Funded loans only (fair value above zero): undrawn lines are filed with no rate
+    # (2026-10-06, decision D-012).
+    WeakRule("dl_rate_fill", "fill",
+             "index_classification = 'DIRECT_LENDING' AND TRY_CAST(fair_value AS DOUBLE) > 0",
              present_sql="interest_rate IS NOT NULL OR basis_spread IS NOT NULL",
              threshold=0.80, min_n=10, note="DL rows with rate/spread >= 80%"),
 ]

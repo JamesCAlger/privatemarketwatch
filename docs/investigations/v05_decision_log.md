@@ -148,3 +148,39 @@ Reference for "correct": `docs/production_stack/02_data_contract.md`.
 - **Re-run.** `python scratch/2026-10-05_fund_loop/row.py five9 1838126 2025-03-31 "Calabrio, Inc. 1" 4`.
 - **Not covered.** A published row found only in a prior period is still flagged (test).
 - **Applies to** every fund.
+
+### D-012 Rate-fill checks measure funded loans
+
+- **Decision.** C01 and `dl_rate_fill` count loan rows with fair value above zero.
+- **Evidence.** Sandbox `five9`: on all loan rows Blue Owl is under 80 pct in 6 quarters and HPS
+  in 7; on funded rows the lowest fill is 93.4 pct and 92.2 pct and no quarter is under 80. The
+  gap is undrawn revolvers and delayed draws filed at zero or a small negative value with no rate
+  (HPS 1,084 such rows, Blue Owl 1,634). 23 findings.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/ratefill.py five9`.
+- **Not covered.** A fund whose funded loans lack rates still fails (test).
+- **Applies to** every fund.
+
+### D-013 "Equity investment" is an equity keyword
+
+- **Decision.** `equity investment` added to the equity keywords of the instrument classifier.
+- **Evidence.** Blue Owl, 2025-12-31 and 2026-03-31: "Specialty finance equity investment" rows
+  tagged with a principal and no units were classed LOAN / DIRECT_LENDING by the field heuristic
+  (6 rows, 936M); the same wording with units was already EQUITY_COMMON (15 rows, 2.0B).
+- **Re-run.** `python scratch/2026-10-05_fund_loop/owl_class.py five9`.
+- **Not covered.** Loan keywords are still tested first, so a row naming a loan stays a loan.
+  "Specialty finance debt investment" with units and no principal is still classed equity.
+- **Applies to** every fund. Not checked outside the five; rows elsewhere that contain the phrase
+  and were classed by the field heuristic will change class.
+
+### D-014 The percent identity reads published rows and allows for rounding
+
+- **Decision.** `pct_of_net_assets_identity` excludes JV-schedule rows and passes a row within
+  0.06 percentage points as well as within 10 pct of fair value.
+- **Evidence.** Sandbox `five10`: BCRED 11,749 rows outside the band, of which 8,387 are JV
+  rows (their percent is of the JV's net assets), 3,348 are filed as 0.0 or 0.1 and 14 are other;
+  Blue Owl 2,458: 1,397 JV, 541 at the rounding floor, 520 other with a median gap of 0.039
+  points. 23 findings.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/ident_c04.py five10`.
+- **Not covered.** A percent ten times too large still fails (test). A wrong percent on a
+  position smaller than about 0.06 pct of net assets is no longer detectable by this rule.
+- **Applies to** every fund.

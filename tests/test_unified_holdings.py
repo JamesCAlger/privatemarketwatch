@@ -2131,6 +2131,24 @@ class TestPrepareBdc:
         ])
         assert float(_prepare_bdc(df).iloc[0]["pct_of_net_assets"]) == pytest.approx(1.75)
 
+    def test_equity_investment_with_a_tagged_principal_is_equity_not_a_loan(self):
+        """Blue Owl Credit Income (0001812554), 2025-12-31 and 2026-03-31: 'LSI Financing LLC |
+        Specialty finance equity investment' is tagged with a principal amount (535.2M) and no
+        units. With no equity keyword the field heuristic classed it a loan (936M over two
+        quarters), and it then failed the loan checks for having no rate (decision D-013)."""
+        base = {"cik": "0001812554", "entity_name": "Blue Owl Credit Income Corp.",
+                "accession_number": "0001812554-26-000027", "report_date": "2026-03-31"}
+        equity = "LSI Financing LLC | Specialty finance equity investment"
+        loan = "Notorious Topco, LLC (dba Beauty Industry Group) | First lien senior secured loan"
+        df = self._make_bdc_df([
+            dict(base, investment_identifier=equity, fair_value=561_430_000, cost=535_195_000, principal_amount=535_195_000),
+            dict(base, investment_identifier=loan, fair_value=51_600_000, cost=52_000_000, principal_amount=52_380_000),
+        ])
+        result = _prepare_bdc(df)
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        assert by_id[equity]["asset_category"] == "EQUITY_COMMON"
+        assert by_id[loan]["asset_category"] == "LOAN"
+
     def test_trinity_flat_hierarchy_extracts_issuer(self):
         """Trinity Capital (0001786108): 'Portfolio Company Debt Securities-
         United States <Industry> <Company> Type of Investment <type>
