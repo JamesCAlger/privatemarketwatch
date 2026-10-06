@@ -87,3 +87,57 @@ def test_source_absence_does_not_infer_currency_from_usd_like_id(tmp_path):
     result=resolve(raw_rows(dict(cost_unit='U_USD')),tmp_path)
     assert result.iloc[0]._resolved_cost_currency=='UNRESOLVED'
     assert json.loads(result.iloc[0].src_facts)['_financial_units']['cost']['status']=='source_unavailable'
+
+
+def resolve_with(frame, tmp_path, encodings):
+    with duckdb.connect() as con:
+        con.register('input',frame)
+        con.execute('CREATE TABLE bdc_raw AS SELECT * FROM input')
+        resolve_bdc_units(con,tmp_path,encodings=encodings)
+        return con.execute('SELECT * FROM bdc_raw ORDER BY row_id').fetchdf()
+
+
+def test_principal_unit_takes_the_currency_its_document_defines(tmp_path):
+    # Apollo Debt Solutions names its units U_USD, U_EUR, U_GBP: the spelling is not a currency code.
+    source(tmp_path)
+    frame=resolve(raw_rows(dict(principal_amount_unit='U001'),dict(row_id='r2',principal_amount_unit='U_USD'),
+        dict(row_id='r3',principal_amount_unit='missing'),dict(row_id='r4',principal_amount_unit='')),tmp_path)
+    assert list(frame.principal_amount_unit)==['USD','EUR','missing','']
+    facts=json.loads(frame.iloc[1].src_facts)['_financial_units']['principal_amount']
+    assert facts=={'unit_ref':'U_USD','currency':'EUR'}
+
+
+def test_rows_without_a_principal_unit_column_still_resolve(tmp_path):
+    source(tmp_path)
+    frame=resolve(raw_rows(),tmp_path)
+    assert 'principal_amount_unit' not in frame and list(frame._resolved_fv_currency)==['USD']
+
+
+def test_filer_reporting_dollar_values_under_foreign_unit_tags_is_not_converted(tmp_path):
+    # Apollo 2025-06-30, Amey term loan: fair value fact 169.1M tagged GBP beside principal GBP 125.4M;
+    # the untouched values sum to the filed total, so the tag is not the value's currency.
+    source(tmp_path,currency='GBP')
+    opted={'0000000123':{'foreign_unit_values':['reported_in_usd']}}
+    frame=resolve_with(raw_rows(dict(fair_value='169100000',cost='168000000')),tmp_path,opted)
+    assert list(frame._resolved_fv_currency)==['USD'] and list(frame._resolved_cost_currency)==['USD']
+    units=json.loads(frame.iloc[0].src_facts)['_financial_units']
+    assert units['fair_value']=={'unit_ref':'U001','currency':'GBP','status':'reported_in_usd'}
+    assert units['cost']['status']=='reported_in_usd'
+    from pipeline.monetary_fx import resolved_unit_decisions
+    assert resolved_unit_decisions(frame)==[]
+
+
+def test_foreign_unit_tag_still_converts_for_a_filer_without_the_setting(tmp_path):
+    source(tmp_path,currency='GBP')
+    frame=resolve_with(raw_rows(dict(fair_value='169100000')),tmp_path,{'0000000999':{'foreign_unit_values':['reported_in_usd']}})
+    assert list(frame._resolved_fv_currency)==['GBP']
+    assert json.loads(frame.iloc[0].src_facts)['_financial_units']['fair_value']['status']=='resolved'
+    from pipeline.monetary_fx import resolved_unit_decisions
+    assert [d['currency'] for d in resolved_unit_decisions(frame)]==['GBP']
+
+
+def test_unresolved_unit_is_not_settled_by_the_setting(tmp_path):
+    source(tmp_path)
+    opted={'0000000123':{'foreign_unit_values':['reported_in_usd']}}
+    frame=resolve_with(raw_rows(dict(fair_value_unit='missing')),tmp_path,opted)
+    assert list(frame._resolved_fv_currency)==['UNRESOLVED']

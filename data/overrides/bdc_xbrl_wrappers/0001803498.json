@@ -256,6 +256,9 @@
     "principal_usd_reference": [
       "fred_h10"
     ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
     "legal_entity_members": [
       "legalentityaxis=BCREDEmeraldJVLPMember -> Emerald JV LP",
       "legalentityaxis=BCREDVerdeliteJVLPMember -> Verdelite JV LP"

@@ -61,7 +61,8 @@
       "goldman sachs financial square",
       "government fund",
       "u.s. government",
-      "us government"
+      "us government",
+      "us bank gcts"
     ],
     "fallback_family_patterns": [
       {
@@ -90,6 +91,10 @@
       },
       {
         "regex": "(?i)\\bS\\.?a\\.?r\\.?l\\.?\\b|Patriot\\s+Growth\\s+Insurance\\s+Services.*\\bLL\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i).",
         "family": "debt"
       }
     ],
@@ -196,6 +201,9 @@
   "source_encodings": {
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
     ]
   },
   "invariants": {

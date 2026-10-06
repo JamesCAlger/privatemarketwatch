@@ -71,8 +71,23 @@ def document_units(path, cik):
     return result
 
 
-def resolve_bdc_units(con, cache_dir):
-    """Enrich the caller's bdc_raw table through two set-based unit joins."""
+def resolve_bdc_units(con, cache_dir, encodings=None):
+    """Enrich the caller's bdc_raw table through set-based unit joins.
+
+    Two filer facts are settled here from the document's own unit definitions:
+    - the principal unit reference is replaced by the currency it is defined as (a
+      filer may name its units U_USD, U_EUR; the spelling is not a currency code);
+    - for a filer whose wrapper sets source_encodings.foreign_unit_values =
+      ["reported_in_usd"], a fair value or cost fact tagged with a foreign unit is
+      recorded as a dollar value (status reported_in_usd) and is not converted. The
+      tagged currency stays in the facts.
+    """
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings = load_encodings()
+    dollar_filers = sorted(cik for cik, encoding in encodings.items() if encoding.get('foreign_unit_values'))
+    columns = {row[0] for row in con.execute('DESCRIBE bdc_raw').fetchall()}
+    has_principal = 'principal_amount_unit' in columns
     docs = con.execute("""SELECT DISTINCT CAST(cik AS VARCHAR),CAST(accession_number AS VARCHAR)
         FROM bdc_raw WHERE nullif(trim(CAST(cost_unit AS VARCHAR)),'') IS NOT NULL
             OR nullif(trim(CAST(fair_value_unit AS VARCHAR)),'') IS NOT NULL
@@ -96,28 +111,44 @@ def resolve_bdc_units(con, cache_dir):
             logger.info('Resolved cached monetary unit documents: %d/%d', index, len(docs))
     lookup = pd.DataFrame(records, columns=['cik','accession','unit_ref','currency','status','source_sha256']).astype('string')
     con.register('_monetary_unit_lookup', lookup)
-    con.execute("""CREATE TEMP TABLE _bdc_resolved_units AS SELECT r.*,
+    con.register('_dollar_value_filers', pd.DataFrame({'cik': pd.Series(dollar_filers, dtype='string')}))
+    dollar = ("lpad(regexp_replace(CAST(r.cik AS VARCHAR),'[^0-9]','','g'),10,'0') "
+              "IN (SELECT cik FROM _dollar_value_filers)")
+    principal_select = ("r.* REPLACE (coalesce(p.currency,CAST(r.principal_amount_unit AS VARCHAR)) AS principal_amount_unit)"
+                        if has_principal else "r.*")
+    principal_facts = (",'principal_amount',json_object('unit_ref',r.principal_amount_unit,'currency',p.currency)"
+                       if has_principal else "")
+    principal_join = ("""LEFT JOIN _monetary_unit_lookup p ON CAST(r.cik AS VARCHAR)=p.cik
+            AND CAST(r.accession_number AS VARCHAR)=p.accession AND CAST(r.principal_amount_unit AS VARCHAR)=p.unit_ref"""
+                      if has_principal else "")
+    con.execute("""CREATE TEMP TABLE _bdc_resolved_units AS SELECT """ + principal_select + """,
         CASE WHEN nullif(trim(CAST(r.fair_value_unit AS VARCHAR)),'') IS NULL THEN ''
+             WHEN f.currency<>'USD' AND """ + dollar + """ THEN 'USD'
              ELSE coalesce(f.currency,'UNRESOLVED') END AS _resolved_fv_currency,
         CASE WHEN nullif(trim(CAST(r.cost_unit AS VARCHAR)),'') IS NULL THEN ''
+             WHEN c.currency<>'USD' AND """ + dollar + """ THEN 'USD'
              ELSE coalesce(c.currency,'UNRESOLVED') END AS _resolved_cost_currency,
         CAST(json_merge_patch(coalesce(TRY_CAST(r.src_facts AS JSON),'{}'::JSON),
             json_object('_financial_units',json_object(
                 'source_sha256',coalesce(d.source_sha256,''),
                 'fair_value',json_object('unit_ref',r.fair_value_unit,'currency',f.currency,
                     'status',CASE WHEN nullif(trim(CAST(r.fair_value_unit AS VARCHAR)),'') IS NULL
-                        THEN 'assumed_usd' ELSE coalesce(f.status,d.status,'unit_unresolved') END),
+                        THEN 'assumed_usd' WHEN f.currency<>'USD' AND """ + dollar + """ THEN 'reported_in_usd'
+                        ELSE coalesce(f.status,d.status,'unit_unresolved') END),
                 'cost',json_object('unit_ref',r.cost_unit,'currency',c.currency,
                     'status',CASE WHEN nullif(trim(CAST(r.cost_unit AS VARCHAR)),'') IS NULL
-                        THEN 'assumed_usd' ELSE coalesce(c.status,d.status,'unit_unresolved') END)))) AS VARCHAR) AS _unit_facts
+                        THEN 'assumed_usd' WHEN c.currency<>'USD' AND """ + dollar + """ THEN 'reported_in_usd'
+                        ELSE coalesce(c.status,d.status,'unit_unresolved') END)""" + principal_facts + """))) AS VARCHAR) AS _unit_facts
         FROM bdc_raw r
         LEFT JOIN _monetary_unit_lookup f ON CAST(r.cik AS VARCHAR)=f.cik
             AND CAST(r.accession_number AS VARCHAR)=f.accession AND CAST(r.fair_value_unit AS VARCHAR)=f.unit_ref
         LEFT JOIN _monetary_unit_lookup c ON CAST(r.cik AS VARCHAR)=c.cik
             AND CAST(r.accession_number AS VARCHAR)=c.accession AND CAST(r.cost_unit AS VARCHAR)=c.unit_ref
+        """ + principal_join + """
         LEFT JOIN _monetary_unit_lookup d ON CAST(r.cik AS VARCHAR)=d.cik
             AND CAST(r.accession_number AS VARCHAR)=d.accession AND d.unit_ref IS NULL""")
     con.execute('DROP TABLE bdc_raw')
     con.execute('CREATE TABLE bdc_raw AS SELECT * EXCLUDE(_unit_facts) REPLACE(_unit_facts AS src_facts) FROM _bdc_resolved_units')
     con.execute('DROP TABLE _bdc_resolved_units')
     con.unregister('_monetary_unit_lookup')
+    con.unregister('_dollar_value_filers')

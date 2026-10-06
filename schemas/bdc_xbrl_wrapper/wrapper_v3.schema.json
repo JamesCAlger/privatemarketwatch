@@ -558,6 +558,13 @@
           "items": {"type": "string", "pattern": "^[^|=>-]+=[^|=>]+ -> [^|=>]+$"},
           "description": "Explicit axis members that name a reporting entity, each as \"axis=Member -> label\" (for example \"legalentityaxis=BCREDEmeraldJVLPMember -> Emerald JV LP\"). A position context carrying that member after its identifier belongs to the labelled entity's own schedule."
         },
+        "foreign_unit_values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "reported_in_usd"},
+          "description": "Opt-in: this filer states schedule fair value and cost in US dollars even where the fact carries a foreign-currency unit tag (the tag follows the loan's currency). Such values are kept as filed and not converted. Evidence required: the untouched values sum to the filed total, and fair value over local principal sits at the exchange rate rather than at 1."
+        },
         "principal_usd_reference": {
           "type": "array",
           "minItems": 1,

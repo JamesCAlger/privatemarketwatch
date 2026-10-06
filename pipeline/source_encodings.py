@@ -22,7 +22,8 @@ def load_encodings(wrapper_directory=None):
         if wrapper.get('schema_version')!='bdc-xbrl-wrapper.v3':
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
-                'detached_schedule_labels','principal_usd_reference','legal_entity_members'}:
+                'detached_schedule_labels','principal_usd_reference','legal_entity_members',
+                'foreign_unit_values'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -38,6 +39,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A filer has one detached-schedule label: '+str(path))
             if key=='legal_entity_members' and any(_member_mapping(v) is None for v in values):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
+            if key=='foreign_unit_values' and values!=['reported_in_usd']:
+                raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
                 raise ValueError('The only admitted principal FX reference is fred_h10: '+str(path))
         result[cik]=encoding
