@@ -74,7 +74,12 @@ COLUMN_FORMAT_CONTRACT: dict[str, dict] = {
     # of its firings duplicated C107's negative-cost rows). Negative-cost
     # review signal lives in column_validation C107.
     "cost":                {"type": "decimal", "min": -3e9, "max": 3e9},
-    "principal_amount":    {"type": "decimal", "min": 0,    "max": 1e11},
+    # The 100 billion cap is a dollar cap. Principal is in the loan's own currency (contract H03),
+    # so it applies only when that currency is USD or unstated; the dollar equivalent is capped
+    # by principal_amount_usd below (2026-10-06, decision D-005: Apollo's Delivery Hero loan is
+    # 194.8 billion Korean won, about 130 million dollars).
+    "principal_amount":    {"type": "decimal", "min": 0,    "max": 1e11,
+                            "max_only_if": "upper(trim(coalesce(CAST(principal_amount_currency AS VARCHAR), ''))) IN ('', 'USD')"},
     "principal_amount_usd":{"type": "decimal", "min": 0,    "max": 1e11},
     "shares_held":         {"type": "decimal", "min": 0,    "max": 1e12},
     "interest_rate":       {"type": "decimal", "min": 0,    "max": 25},
@@ -95,6 +100,10 @@ COLUMN_FORMAT_CONTRACT: dict[str, dict] = {
 }
 
 
+# Columns a contract condition reads that are not themselves under contract.
+BASE_CONTEXT_COLUMNS = ("principal_amount_currency",)
+
+
 def _present(col: str) -> str:
     return f"{col} IS NOT NULL AND trim(CAST({col} AS VARCHAR)) <> ''"
 
@@ -105,8 +114,11 @@ def _contract_rules() -> list[WeakRule]:
     for col, spec in COLUMN_FORMAT_CONTRACT.items():
         t = spec["type"]
         if t == "decimal":
+            upper = f"TRY_CAST({col} AS DOUBLE) <= {spec['max']:g}"
+            if spec.get("max_only_if"):
+                upper = f"(NOT ({spec['max_only_if']}) OR {upper})"
             holds = (f"TRY_CAST({col} AS DOUBLE) IS NOT NULL "
-                     f"AND TRY_CAST({col} AS DOUBLE) BETWEEN {spec['min']:g} AND {spec['max']:g}")
+                     f"AND TRY_CAST({col} AS DOUBLE) >= {spec['min']:g} AND {upper}")
             note = f"numeric in [{spec['min']:g},{spec['max']:g}]"
         elif t == "enum":
             vals = ", ".join(f"'{v}'" for v in spec["values"])
@@ -172,7 +184,7 @@ def ensure_base(con: duckdb.DuckDBPyConnection) -> None:
         return
     # cik + report_date are the keys (cast to VARCHAR); every other contract
     # column is selected RAW (the generated holds do their own TRY_CAST).
-    extra = [c for c in COLUMN_FORMAT_CONTRACT if c not in ("cik", "report_date")]
+    extra = [c for c in COLUMN_FORMAT_CONTRACT if c not in ("cik", "report_date")] + list(BASE_CONTEXT_COLUMNS)
     select = ("CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date, "
               + ", ".join(extra))
     con.execute(

@@ -35,6 +35,8 @@ from pipeline.config import (
     SOURCE_RECONCILIATION_DETAIL_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
+    UNIFIED_HOLDINGS_FILE,
+    UNIFIED_HOLDINGS_PARQUET_FILE,
     VALIDATION_RULES_AGGREGATE_FILE,
 )
 
@@ -261,17 +263,35 @@ def _html_template_select() -> str | None:
     Two checks per (cik, report_date): `html_agg` (extracted FV sum vs companyfacts;
     tight, FAIL surfaces via the generic tight_anchor path) and `html_carry`
     (cross-quarter carry continuity; weak -- a FAIL is mapped to a warn flag).
+
+    Scope (2026-10-06, decision D-004): a fund-quarter whose published BDC rows all come
+    from the XBRL lane is reported as `skip`. The HTML extraction feeds nothing published
+    there, so its totals say nothing about the published data. Fund-quarters with no
+    published rows, or with any HTML-sourced row, keep their result.
     """
     f = HTML_TEMPLATE_VALIDATION_FILE
     if not f.exists():
         logger.info("adapter: html_template_validation absent -- skip")
         return None
     t = f"read_csv_auto('{f.as_posix()}', sample_size=-1)"
+    if UNIFIED_HOLDINGS_PARQUET_FILE.exists():
+        unified = f"read_parquet('{UNIFIED_HOLDINGS_PARQUET_FILE.as_posix()}')"
+    elif UNIFIED_HOLDINGS_FILE.exists():
+        unified = f"read_csv_auto('{UNIFIED_HOLDINGS_FILE.as_posix()}', sample_size=-1, all_varchar=true)"
+    else:
+        unified = None
+    key = "lpad(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') || '|' || " + _date_key('report_date')
+    xbrl_only = (
+        f"""(SELECT {key} FROM {unified} WHERE source = 'bdc' GROUP BY 1
+            HAVING count(*) FILTER (WHERE lower(coalesce(CAST(fair_value_source AS VARCHAR), '')) LIKE '%html%') = 0)"""
+        if unified else "(SELECT CAST(NULL AS VARCHAR) WHERE false)")
+    skipped = f"bool_or({key} IN {xbrl_only})"
     return f"""
     SELECT 'html_extract' AS engine, 'html_agg' AS rule_name, 'tight' AS tier,
            'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
            'report_date' AS period_kind, {_date_key('report_date')} AS period,
-           CASE WHEN bool_or(upper(agg_status) = 'FAIL') THEN 'fail'
+           CASE WHEN {skipped} THEN 'skip'
+                WHEN bool_or(upper(agg_status) = 'FAIL') THEN 'fail'
                 WHEN bool_or(upper(agg_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
            round(any_value(TRY_CAST(adj_ratio AS DOUBLE)), 3) AS metric, 'adj_ratio' AS metric_name,
            count(*) AS n_units,
@@ -282,7 +302,8 @@ def _html_template_select() -> str | None:
     UNION ALL
     SELECT 'html_extract', 'html_carry', 'weak', 'advisory', CAST(cik AS VARCHAR),
            'report_date', {_date_key('report_date')},
-           CASE WHEN bool_or(upper(carry_status) = 'FAIL') THEN 'warn'
+           CASE WHEN {skipped} THEN 'skip'
+                WHEN bool_or(upper(carry_status) = 'FAIL') THEN 'warn'
                 WHEN bool_or(upper(carry_status) = 'PASS') THEN 'pass' ELSE 'skip' END,
            round(any_value(TRY_CAST(carry_rate AS DOUBLE)), 3), 'carry_rate', count(*),
            CAST(NULL AS VARCHAR), CAST(NULL AS VARCHAR)

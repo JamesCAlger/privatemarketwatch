@@ -1,0 +1,112 @@
+# v0.5 decision log (autonomous run, 2026-10-06 onward)
+
+Scope: the five v0.5 funds, 2022 to Q1 2026. Authority: the owner said in session on 2026-10-06
+"I give permissions" in reply to four requested permissions: (1) repair a rule that fires by
+construction, shown from the data; (2) accept my own disposition when a re-runnable check supports
+it; (3) decide whether presence signals count as outstanding; (4) change shared code on five-fund
+evidence. I am treating them as granted for this run only. Limits kept: no downloads, no 70-fund
+rebuild, no writes to published data, no push.
+
+Each entry: what was decided, the evidence, how to re-run it, what it does not cover, and the
+commit. A decision here was made by an agent without independent review. Reverse one by reverting
+its commit.
+
+Reference for "correct": `docs/production_stack/02_data_contract.md`.
+
+## Rule repairs
+
+### D-001 E07 counts source positions, not every wrapper leaf
+
+- **Decision.** `check_E07_position_count_vs_filing` counts a source row when the reconciliation
+  status is `matched`, `value_mismatch`, `diagnostic_field_mismatch` or `missing_from_pipeline`.
+  Without a status column it keeps the wrapper-leaf count.
+- **Evidence.** Sandbox `five8`, 2026-03-31: Ares 2,898 comparative-period rows and 1,456 rows
+  collapsed as a second dimension path beside 1,419 positions and 1,419 output rows; HPS 848
+  comparatives beside 835 and 835; BCRED 4,078 and 2,016 beside 2,006 and 2,006. The rule failed
+  in all 62 fund-quarters.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/e07_probe.py five8 2026-03-31`.
+- **Not covered.** The rule still fails when over 10 pct of positions are missing from, or extra
+  in, the output (tests). It no longer notices a wrapper that classifies no leaves.
+- **Applies to** every fund. Checked on the five.
+
+### D-002 A07 skips a fund-quarter that reports no percent of net assets
+
+- **Decision.** `check_A07_pct_of_net_assets_sum` returns `skip` when no row of the fund-quarter
+  has a reported percent.
+- **Evidence.** Ares, Apollo and HPS tag `InvestmentOwnedPercentOfNetAssets` per industry or
+  category only (latest filings: 51, 127 and 266 facts against about 1,400, 770 and 830
+  positions; 0 source rows with a percent). Blue Owl stopped per-position tagging at 2025-03-31.
+  46 findings.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/pctq.py five8 <cik>`.
+- **Not covered.** A fund-quarter with some reported percents summing out of range still fails
+  (test). A filer that stops tagging is no longer flagged by this rule; nothing else flags it.
+- **Applies to** every fund.
+
+### D-003 B02 flags a repeated fact, not two positions that share a key
+
+- **Decision.** `check_B02_unique_position_keys` treats two rows as duplicates only when they
+  also share accounting scope, maturity, rates, spread, principal, units and fair value.
+- **Evidence.** 1,485 repeated keys in the five funds; none has the same identifier and values;
+  every row has its own `position_id`. Apollo 441: tranches whose key drops rate and maturity.
+  BCRED 607 and Blue Owl 420: the same name in the fund's schedule and the JV's, or several loans
+  under one bare issuer name. 31 findings.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/b02.py five8`.
+- **Not covered.** Unique position ids remain J04's test. Two different loans with identical terms
+  and value would now be flagged as a repeat; that is rare and worth a look when it happens.
+- **Applies to** every fund.
+
+### D-004 HTML-extraction checks apply only where that extraction feeds published rows
+
+- **Decision.** `html_agg` and `html_carry` report `skip` for a fund-quarter whose published BDC
+  rows all come from the XBRL lane.
+- **Evidence.** The published file has 563,423 `xbrl_field` rows, 179 rule-added rows and none
+  from the HTML lane. Of 2,225 fund-quarters in `html_template_validation.csv`, 458 have published
+  rows (all XBRL) and 1,711 have none. Ares 2024-03-31: HTML extraction 129.6B against 23.1B
+  filed. 24 findings.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/html_lane.py`.
+- **Not covered.** Fund-quarters with no published rows keep their result. The HTML extraction
+  itself is still wrong for those Ares quarters; nothing published depends on it.
+- **Applies to** every fund.
+
+### D-005 The principal range check applies its dollar cap to dollars
+
+- **Decision.** `fmt_principal_amount` applies the 100 billion upper bound only when the
+  principal currency is USD or unstated. `fmt_principal_amount_usd` is unchanged.
+- **Evidence.** Apollo, Delivery Hero Finco Germany, eight quarters: principal 194,831,194,000
+  Korean won, about 128M to 148M dollars beside a fair value of 126M to 149M. Contract H03:
+  principal stays in the loan's currency.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/weakrows.py five8 1837532`.
+- **Not covered.** Ares 2022-09-30 SDLP certificates (269.8B dollars filed) still fails both
+  checks: see D-012.
+- **Applies to** every fund.
+
+### D-006 X06 reads the unfunded marker from the whole row text
+
+- **Decision.** X06's exemption for revolvers, delayed draws and commitments uses the shared
+  `_unfunded_position_sql()` (issuer name, instrument text, identifier), not the issuer name alone.
+- **Evidence.** The rule already meant to exempt these. Apollo 158 of 184 and Blue Owl 7 of 9 rows
+  with principal over ten times fair value are named revolver or delayed draw in the identifier.
+  Splitting Ares and Apollo issuer names from the instrument (this week) removed the wording from
+  the one field the rule read.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/unfunded.py five8`.
+- **Not covered.** HPS and BCRED identifiers carry no instrument wording, so their unfunded lines
+  still fire: see D-010. A ratio cut was rejected: it would also hide the Ares SDLP error (0.4 pct).
+- **Applies to** every fund.
+
+### D-007 The gross-asset reconciliation adds filed cash when the holdings hold cash rows
+
+- **Decision.** `check_gav_reconciliation` adds `cash_equivalents_at_fair_value` to filed
+  investments for a fund-quarter whose holdings include a cash-class row.
+- **Evidence.** Apollo: the residual equals the cash rows to the dollar (2025-06-30 785,933,000;
+  2025-09-30 407,439,000; 2025-12-31 227,502,000). The conservation engine already compares this
+  way (`companyfacts_fv_plus_cash`). 12 findings (gav_reconciliation, F20, GAV_BDC02).
+- **Re-run.** `python scratch/2026-10-05_fund_loop/gav.py five8 1837532`.
+- **Not covered.** With cash rows and no filed cash figure the excess still shows (test).
+- **Applies to** every fund.
+
+### D-008 C107 (negative cost) is not repaired
+
+- **Decision.** Left as is. The 35 findings are dispositioned instead (D-010).
+- **Reason.** The rule's own comment records that excluding negative-value rows lost 5 of 8
+  adjudicated real errors elsewhere in the cohort, and says not to try a row-level cut again
+  without new evidence. I have none for the other funds.

@@ -288,3 +288,43 @@ class TestReportDateKey:
         key = adp._date_key("d")
         assert con.execute(f"SELECT {key} FROM (SELECT DATE '2026-03-31' AS d)").fetchone()[0] == "2026-03-31"
         assert con.execute(f"SELECT {key} FROM (SELECT TIMESTAMP '2026-03-31 00:00:00' AS d)").fetchone()[0] == "2026-03-31"
+
+
+class TestHtmlExtractionScope:
+    """The HTML-template extraction is checked only where it feeds published rows (decision D-004).
+
+    2026-10-06: every published BDC row is XBRL-sourced (563,423 xbrl_field rows, 179 rule-added,
+    none from the HTML lane), yet html_agg fired for Ares 2024-03-31 at 5.6x the filed total."""
+
+    def _run(self, monkeypatch, tmp_path, holdings_rows):
+        import scripts.shadow_adapter as adp
+        html = tmp_path / "html_template_validation.csv"
+        pd.DataFrame([
+            {"cik": "0001287750", "report_date": "2024-03-31", "agg_status": "FAIL", "adj_ratio": 5.6038,
+             "drift_detected": False, "carry_status": "FAIL", "carry_rate": 0.2},
+            {"cik": "0000000777", "report_date": "2019-12-31", "agg_status": "FAIL", "adj_ratio": 2.0,
+             "drift_detected": False, "carry_status": "PASS", "carry_rate": 0.9},
+        ]).to_csv(html, index=False)
+        monkeypatch.setattr(adp, "HTML_TEMPLATE_VALIDATION_FILE", html, raising=False)
+        holdings = tmp_path / "private_markets_holdings.csv"
+        pd.DataFrame(holdings_rows).to_csv(holdings, index=False)
+        monkeypatch.setattr(adp, "UNIFIED_HOLDINGS_FILE", holdings, raising=False)
+        monkeypatch.setattr(adp, "UNIFIED_HOLDINGS_PARQUET_FILE", tmp_path / "absent.parquet", raising=False)
+        out = duckdb.connect().execute(adp._html_template_select()).fetchdf()
+        return {(r.cik, r.rule_name): r.status for r in out.itertuples()}
+
+    def test_fund_quarter_published_from_xbrl_is_skipped(self, monkeypatch, tmp_path):
+        status = self._run(monkeypatch, tmp_path, [
+            {"cik": "0001287750", "report_date": "2024-03-31", "source": "bdc", "fair_value_source": "xbrl_field"},
+            {"cik": "0001287750", "report_date": "2024-03-31", "source": "bdc", "fair_value_source": "xbrl_field"},
+        ])
+        assert status[("0001287750", "html_agg")] == "skip" and status[("0001287750", "html_carry")] == "skip"
+        # a fund-quarter with no published rows keeps its result
+        assert status[("0000000777", "html_agg")] == "fail"
+
+    def test_fund_quarter_with_an_html_sourced_row_is_still_checked(self, monkeypatch, tmp_path):
+        status = self._run(monkeypatch, tmp_path, [
+            {"cik": "0001287750", "report_date": "2024-03-31", "source": "bdc", "fair_value_source": "xbrl_field"},
+            {"cik": "0001287750", "report_date": "2024-03-31", "source": "bdc", "fair_value_source": "html_template"},
+        ])
+        assert status[("0001287750", "html_agg")] == "fail" and status[("0001287750", "html_carry")] == "warn"

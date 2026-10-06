@@ -1140,12 +1140,28 @@ def check_gav_reconciliation(
     # Build fund_financials CTE
     if fund_financials_df is not None and not fund_financials_df.empty:
         con.register("fund_fin", fund_financials_df)
+        # Like with like (2026-10-06, decision D-007): where the fund-quarter's holdings carry
+        # cash-equivalent rows, the filed cash equivalents are added to filed investments, as the
+        # conservation engine's companyfacts_fv_plus_cash anchor does. No filed cash figure, no
+        # addition: the cash rows then show as excess.
+        if ("cash_equivalents_at_fair_value" in fund_financials_df.columns
+                and "asset_category" in unified_df.columns):
+            cash_added = """
+                + CASE WHEN EXISTS (
+                        SELECT 1 FROM holdings hc
+                        WHERE LPAD(CAST(hc.cik AS VARCHAR), 10, '0') = LPAD(CAST(fund_fin.cik AS VARCHAR), 10, '0')
+                          AND CAST(hc.report_date AS VARCHAR) = CAST(fund_fin.report_date AS VARCHAR)
+                          AND upper(coalesce(CAST(hc.asset_category AS VARCHAR), '')) = 'CASH'
+                          AND TRY_CAST(hc.fair_value AS DOUBLE) IS NOT NULL)
+                       THEN COALESCE(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE), 0) ELSE 0 END"""
+        else:
+            cash_added = ""
         ff_cte = """
         ff_values AS (
             SELECT
                 LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
                 CAST(report_date AS VARCHAR) AS report_date,
-                TRY_CAST(investments_at_fair_value AS DOUBLE) AS inv_fv,
+                TRY_CAST(investments_at_fair_value AS DOUBLE)""" + cash_added + """ AS inv_fv,
                 TRY_CAST(total_assets AS DOUBLE) AS total_assets
             FROM fund_fin
             WHERE report_date IS NOT NULL AND report_date != ''

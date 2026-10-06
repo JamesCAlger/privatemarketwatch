@@ -405,14 +405,13 @@ def validate_column_contracts(
         _issue_query(
             "principal_amount", "X06", SEVERITY_FAIL, EVIDENCE_MODERATE,
             ACTION_REVIEW,
+            # The unfunded exemption reads the instrument text and the identifier as well as
+            # the issuer name: BDC filers put the tranche wording there, and once issuer names
+            # are split from the instrument the name alone no longer carries it (2026-10-06,
+            # decision D-006).
             "TRY_CAST(fair_value AS DOUBLE) > 0 "
             "AND TRY_CAST(principal_amount_usd AS DOUBLE) > 10 * TRY_CAST(fair_value AS DOUBLE) "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%revolver%' "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%unfunded%' "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%undrawn%' "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%commitment%' "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%delayed draw%' "
-            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%credit facility%'",
+            f"AND NOT {_unfunded_position_sql()}",
             "principal_amount_usd is more than 10x fair_value",
             "likely scale or FX error; can corrupt income and return analytics",
             value_expr="principal_amount_usd",

@@ -4131,6 +4131,52 @@ class TestCheckGavReconciliation:
         assert abs(ratio - 1.0) < 0.01
         assert result.iloc[0]["flag"] == "ok"
 
+    def test_cash_rows_are_compared_with_a_cash_inclusive_total(self):
+        """Apollo Debt Solutions 2025-06-30: holdings 20,682.1M include the schedule's cash-equivalent
+        rows (785.9M); filed investments are 19,896.1M and filed cash equivalents 785.9M. The ratio was
+        1.0395 and flagged; the residual equalled the cash rows to the dollar (decision D-007)."""
+        holdings = _make_unified_df([
+            {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",
+             "fair_value": "19896145000", "source": "bdc", "asset_category": "LOAN"},
+            {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",
+             "fair_value": "785933000", "source": "bdc", "asset_category": "CASH"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "1837532", "report_date": "2025-06-30",
+            "investments_at_fair_value": "19896145000", "cash_equivalents_at_fair_value": "785933000",
+            "total_assets": "21500000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert abs(float(result.iloc[0]["gav_ratio"]) - 1.0) < 1e-6
+        assert result.iloc[0]["reconciliation_status"] == "PASS" and result.iloc[0]["flag"] == "ok"
+
+    def test_filed_cash_is_not_added_when_no_cash_row_is_held(self):
+        holdings = _make_unified_df([
+            {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",
+             "fair_value": "19896145000", "source": "bdc", "asset_category": "LOAN"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "1837532", "report_date": "2025-06-30",
+            "investments_at_fair_value": "19896145000", "cash_equivalents_at_fair_value": "785933000",
+            "total_assets": "21500000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert abs(float(result.iloc[0]["gav_ratio"]) - 1.0) < 1e-6
+
+    def test_cash_rows_without_a_filed_cash_figure_still_show_as_excess(self):
+        holdings = _make_unified_df([
+            {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",
+             "fair_value": "19896145000", "source": "bdc", "asset_category": "LOAN"},
+            {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",
+             "fair_value": "785933000", "source": "bdc", "asset_category": "CASH"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "1837532", "report_date": "2025-06-30",
+            "investments_at_fair_value": "19896145000", "total_assets": "21500000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert float(result.iloc[0]["gav_ratio"]) > 1.03
+
     def test_falls_back_to_total_assets(self):
         """When investments_at_fair_value is missing, uses total_assets."""
         holdings = _make_unified_df([

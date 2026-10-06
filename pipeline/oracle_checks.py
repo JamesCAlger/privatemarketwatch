@@ -302,7 +302,11 @@ def check_A07_pct_of_net_assets_sum(
     max_sum: float = 250,
     outlier_threshold: float = 25,
 ) -> list[CheckResult]:
-    """A07: sum(pct_of_net_assets) should be between 50% and 250% for BDC."""
+    """A07: sum(pct_of_net_assets) should be between 50% and 250% for BDC.
+
+    A fund-quarter in which no row reports a percent is skipped: several filers tag the
+    percent per industry or category only, and a sum of nothing is not a wrong sum
+    (repaired 2026-10-06, decision D-002)."""
     holdings_df = holdings_df[published_fv_mask(holdings_df)]  # published basis (2026-09-30)
     results = []
     if holdings_df.empty or "pct_of_net_assets" not in holdings_df.columns:
@@ -311,6 +315,13 @@ def check_A07_pct_of_net_assets_sum(
 
     for (cik, rd), group in holdings_df.groupby(["cik", "report_date"], dropna=False):
         cik_s, rd_s = str(cik), str(rd)
+        if not pd.to_numeric(group["pct_of_net_assets"], errors="coerce").notna().any():
+            results.append(_make_result(
+                "A07", "cik_quarter", "skip", 0, max_sum,
+                f"{cik_s}/{rd_s}: no pct_of_net_assets reported",
+                cik=cik_s, report_date=rd_s,
+            ))
+            continue
         pcts = _col_float(group, "pct_of_net_assets")
         pct_sum = pcts.sum()
         outliers = pcts[pcts.abs() > outlier_threshold]
@@ -373,10 +384,21 @@ def check_B01_leaf_completeness(
     return results
 
 
+# Columns that separate two positions sharing a key (see check_B02).
+_B02_TERM_COLUMNS = ("accounting_scope_id", "maturity_date", "interest_rate_reported", "interest_rate", "basis_spread",
+                     "pik_rate", "principal_amount", "shares_held", "fair_value")
+
+
 def check_B02_unique_position_keys(
     holdings_df: pd.DataFrame,
 ) -> list[CheckResult]:
-    """B02: No two leaf rows share (CIK, report_date, wrapper_position_key)."""
+    """B02: No two rows of one schedule repeat a position key with the same terms and values.
+
+    The key deliberately drops rate and maturity, so two tranches to one borrower share it,
+    and so does the same instrument in the fund's schedule and in a JV's. Those are distinct
+    positions (unique position ids are J04's test). A repeated fact is a row that also repeats
+    the schedule, maturity, rate, spread, principal and fair value (repaired 2026-10-06,
+    decision D-003)."""
     results = []
     if holdings_df.empty:
         return [_make_result("B02", "global", "skip", 0, 0, "No holdings data")]
@@ -397,7 +419,9 @@ def check_B02_unique_position_keys(
         cik_s, rd_s = str(cik), str(rd)
         keys = _col_str(group, key_col)
         non_empty = keys[keys.str.strip().ne("")]
-        dupes = non_empty[non_empty.duplicated(keep=False)]
+        terms = [c for c in _B02_TERM_COLUMNS if c in group.columns]
+        identity = group.loc[non_empty.index, terms].astype(str).assign(_key=non_empty)
+        dupes = non_empty[identity.duplicated(keep=False)]
         status = "pass" if dupes.empty else "fail"
 
         results.append(_make_result(
@@ -944,23 +968,39 @@ def check_E04_nav_per_share_sanity(
     return results
 
 
+# Reconciliation statuses that denote a current source position (see check_E07).
+_E07_POSITION_STATUSES = frozenset({"matched", "value_mismatch", "diagnostic_field_mismatch", "missing_from_pipeline"})
+
+
 def check_E07_position_count_vs_filing(
     source_detail_df: pd.DataFrame,
     holdings_df: pd.DataFrame,
     *,
     tolerance: float = 0.10,
 ) -> list[CheckResult]:
-    """E07: Source leaf count vs output leaf count discrepancy < 10%.
+    """E07: Source position count vs output row count discrepancy < 10%.
 
-    Keeps underlying_schedule rows: the source leaf count includes JV-schedule
-    leaves, so this completeness check must compare like with like."""
+    Keeps underlying_schedule rows: the source count includes JV-schedule
+    positions, so this completeness check must compare like with like.
+
+    A source position is a row the reconciliation treats as one: matched, mismatched
+    or missing from the output. Prior-period comparatives, facts repeated on a second
+    dimension path, rollups and other documented exclusions are not positions; counting
+    every wrapper leaf made the rule fail in every fund-quarter (repaired 2026-10-06,
+    decision D-001). Without a reconciliation status the wrapper-leaf count is kept.
+    """
     results = []
     if source_detail_df.empty or holdings_df.empty:
         return [_make_result("E07", "global", "skip", 0, tolerance, "Missing data")]
 
-    source_leaves = source_detail_df[
-        _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
-    ]
+    statuses = (_col_str(source_detail_df, "status").str.strip()
+                if "status" in source_detail_df.columns else pd.Series("", index=source_detail_df.index))
+    if statuses.ne("").any():
+        source_leaves = source_detail_df[statuses.isin(_E07_POSITION_STATUSES)]
+    else:
+        source_leaves = source_detail_df[
+            _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
+        ]
     if source_leaves.empty:
         return [_make_result("E07", "global", "skip", 0, tolerance, "No source leaves")]
 
