@@ -55,10 +55,20 @@ def _prior_quarter_end(end_date: str) -> str:
         return ""
 
 
+def _year_to_date_step(value: float, prior: float, span_months: int, ratio: bool) -> float:
+    """This quarter's part of a year-to-date value, given the previous year-to-date value."""
+    quarters = max(2, round(span_months / 3))
+    # A running total grows by quarters/(quarters-1); an annualised ratio stays near 1.
+    if ratio and prior != 0 and abs(value) < abs(prior) * (1 + 0.5 / (quarters - 1)):
+        return value
+    return value - prior
+
+
 def _extract_duration_series(
     facts: dict,
     concept_names: list[str],
     unit_key: str = "USD",
+    ratio: bool = False,
 ) -> dict[str, float]:
     """Extract quarterly values from duration concepts.
 
@@ -67,6 +77,11 @@ def _extract_duration_series(
     2. For each end_date, prefers the shortest period (single-quarter)
     3. When only YTD exists, deltas against prior quarter's YTD
     4. Fallback: divides by period length in quarters
+
+    ``ratio`` marks a rate such as the net investment income ratio, which most filers
+    annualise for each year-to-date period. Such a value does not grow with the period, so
+    it is kept as filed; a ratio that does grow like a running total (n/(n-1) from the
+    previous year-to-date value) is still split by quarter.
     """
     if not facts:
         return {}
@@ -142,7 +157,8 @@ def _extract_duration_series(
 
             # Look for prior quarter's YTD with the same start_date
             if (best_start, prior_end) in ytd_at:
-                result[end_date] = best_value - ytd_at[(best_start, prior_end)]
+                result[end_date] = _year_to_date_step(
+                    best_value, ytd_at[(best_start, prior_end)], span, ratio)
             elif prior_end in entries_by_end:
                 # Prior end exists but wasn't YTD -- check if any entry
                 # shares same start_date (same fiscal year)
@@ -156,7 +172,7 @@ def _extract_duration_series(
                         key=lambda x: _months_between(x[0], prior_end),
                     )
                     ytd_at[(best_start, prior_end)] = prior_ytd
-                    result[end_date] = best_value - prior_ytd
+                    result[end_date] = _year_to_date_step(best_value, prior_ytd, span, ratio)
                 else:
                     # No same-FY prior YTD; divide by quarters
                     n_quarters = max(1, round(span / 3))
@@ -338,7 +354,7 @@ _INCOME_CONCEPTS = {
     "income_yield_pct": {
         "exact": ["InvestmentCompanyInvestmentIncomeLossRatio"],
         "fallback": [],
-        "unit": "pure", "instant": False,
+        "unit": "pure", "instant": False, "ratio": True,
     },
     "gross_investment_income": {
         "exact": ["GrossInvestmentIncomeOperating"],
@@ -448,11 +464,11 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
             else:
                 # Duration concepts: use YTD -> quarterly conversion
                 series = _extract_duration_series(
-                    facts, spec["exact"], spec["unit"],
+                    facts, spec["exact"], spec["unit"], ratio=bool(spec.get("ratio")),
                 )
                 if not series and spec.get("fallback"):
                     series = _extract_duration_series(
-                        facts, spec["fallback"], spec["unit"],
+                        facts, spec["fallback"], spec["unit"], ratio=bool(spec.get("ratio")),
                     )
             concept_series[field] = series
 
