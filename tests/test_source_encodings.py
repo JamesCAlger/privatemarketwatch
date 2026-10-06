@@ -264,3 +264,36 @@ def test_rows_without_source_contexts_are_skipped_not_guessed():
                     "'investmentidentifieraxis=Old HTML Row' AS dimensions_raw")
         assert source_encodings.tag_detached_schedules(con, encodings=DETACHED) == {HPS: 0}
         assert con.execute('SELECT dimensions_raw FROM bdc_raw').fetchone()[0].endswith('Old HTML Row')
+
+
+# BCRED's 2022 filings name the joint venture with an explicit legal-entity axis member.
+LEGAL = {"0001803498": {"reporting_entity_suffixes": ["Emerald JV LP"],
+                        "legal_entity_members": ["legalentityaxis=BCREDEmeraldJVLPMember -> Emerald JV LP"]}}
+
+
+def _suffix(dims, encodings=LEGAL, cik="0001803498"):
+    con = duckdb.connect()
+    con.execute("CREATE TABLE t AS SELECT ? AS cik, ? AS dims", [cik, dims])
+    return con.execute("SELECT " + source_encodings.reporting_suffix_expression("cik", "dims", encodings) + " FROM t").fetchone()[0]
+
+
+def test_legal_entity_axis_member_resolves_to_the_reviewed_label():
+    assert _suffix("investmentidentifieraxis=Smile Doctors, LLC|legalentityaxis=BCREDEmeraldJVLPMember") == "reporting_entity=emerald jv lp"
+    # same entity whether named by the member or by the bare label
+    assert _suffix("investmentidentifieraxis=Smile Doctors, LLC|Emerald JV LP") == "reporting_entity=emerald jv lp"
+
+
+def test_other_legal_entity_members_and_other_funds_are_untouched():
+    assert _suffix("investmentidentifieraxis=Smile Doctors, LLC|legalentityaxis=SomeOtherMember") == ""
+    assert _suffix("investmentidentifieraxis=BCRED Emerald JV") == ""
+    assert _suffix("investmentidentifieraxis=Smile Doctors, LLC|legalentityaxis=BCREDEmeraldJVLPMember", cik="0001838126") == ""
+
+
+@pytest.mark.parametrize("value", ["legalentityaxis=BCREDEmeraldJVLPMember", "BCREDEmeraldJVLPMember -> Emerald JV LP",
+                                   "legalentityaxis=A|b -> Emerald JV LP", "legalentityaxis=A -> x=y"])
+def test_malformed_legal_entity_member_fails(tmp_path, value):
+    (tmp_path / "0001803498.json").write_text(json.dumps(
+        {"schema_version": "bdc-xbrl-wrapper.v3", "cik": "0001803498",
+         "source_encodings": {"legal_entity_members": [value]}}), encoding="utf-8")
+    with pytest.raises(ValueError):
+        source_encodings.load_encodings(tmp_path)

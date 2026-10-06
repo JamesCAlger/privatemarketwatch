@@ -22,7 +22,7 @@ def load_encodings(wrapper_directory=None):
         if wrapper.get('schema_version')!='bdc-xbrl-wrapper.v3':
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
-                'detached_schedule_labels','principal_usd_reference'}:
+                'detached_schedule_labels','principal_usd_reference','legal_entity_members'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -36,10 +36,23 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Reporting suffix must be one bare dimension segment: '+str(path))
             if key=='detached_schedule_labels' and len(values)!=1:
                 raise ValueError('A filer has one detached-schedule label: '+str(path))
+            if key=='legal_entity_members' and any(_member_mapping(v) is None for v in values):
+                raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
                 raise ValueError('The only admitted principal FX reference is fred_h10: '+str(path))
         result[cik]=encoding
     return result
+
+
+def _member_mapping(value):
+    """('axis=member', 'label') from 'axis=Member -> Label', both normalised; None if malformed."""
+    parts=[' '.join(p.lower().split()) for p in value.split('->')]
+    if len(parts)!=2 or not all(parts):
+        return None
+    segment,label=parts
+    if segment.count('=')!=1 or '|' in segment or '|' in label or '=' in label:
+        return None
+    return segment,label
 
 
 def _literal(value):
@@ -75,9 +88,17 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
         # itself appends (tag_detached_schedules); it resolves like a filed one.
         labels=encoding.get('reporting_entity_suffixes',[])+encoding.get('detached_schedule_labels',[])
         legacy=encoding.get('reporting_entity_identifier_suffixes',[])
-        if not labels and not legacy:
+        members=[_member_mapping(v) for v in encoding.get('legal_entity_members',[])]
+        if not labels and not legacy and not members:
             continue
         matched=[]
+        # An explicit axis member after the identifier (for example
+        # legalentityaxis=...JVLPMember) names the same reporting entity as the
+        # reviewed label it maps to.
+        for segment,label in members:
+            later="string_split(coalesce(CAST("+dimensions+" AS VARCHAR),''),'|')[2:]"
+            matched.append('CASE WHEN list_contains(list_transform('+later+',x -> '+_normal('x')+'),'+_literal(segment)+')'
+                ' THEN ['+_literal(label)+'] ELSE []::VARCHAR[] END')
         if labels:
             values=','.join(_literal(' '.join(v.lower().split())) for v in labels)
             segments="string_split(coalesce(CAST("+dimensions+" AS VARCHAR),''),'|')[2:]"

@@ -552,6 +552,12 @@
           },
           "description": "Exact full identifiers that disclose cash positions; normalized whitespace and case only."
         },
+        "legal_entity_members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "pattern": "^[^|=>-]+=[^|=>]+ -> [^|=>]+$"},
+          "description": "Explicit axis members that name a reporting entity, each as \"axis=Member -> label\" (for example \"legalentityaxis=BCREDEmeraldJVLPMember -> Emerald JV LP\"). A position context carrying that member after its identifier belongs to the labelled entity's own schedule."
+        },
         "principal_usd_reference": {
           "type": "array",
           "minItems": 1,
