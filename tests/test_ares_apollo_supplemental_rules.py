@@ -128,3 +128,28 @@ def test_ares_positions_whose_issuer_has_no_legal_suffix_are_leaves(identifier, 
 def test_ares_totals_and_headings_are_not_leaves(identifier):
     from pipeline.bdc_xbrl_wrapper import classify_identifier
     assert not classify_identifier("0001287750", identifier)["wrapper_disposition"].endswith("_position_leaf")
+
+
+@pytest.mark.parametrize("rule_id,quarter,total", [
+    ("recover_2025q1_values_tagged_on_issuer_axis", "2025-03-31", 94_300_000.0),
+    ("recover_2025q2_values_tagged_on_issuer_axis", "2025-06-30", 33_200_000.0),
+])
+def test_ares_positions_valued_on_the_issuer_axis_are_restored_once(rule_id, quarter, total):
+    """Two Ares filings put four positions' cost and fair value on the context after the position's
+    own (issuer-name axis). The rows are added back with the filed values; the totals are the
+    fund's shortfall in those quarters to the dollar. Adding twice must not duplicate them."""
+    rule = _rule("1287750", rule_id)
+    assert validate_rule(rule) == [] and rule["scope"]["quarters"] == [quarter]
+    assert sum(p["fair_value"] for p in rule["positions"]) == total
+    for position in rule["positions"]:
+        assert position["index_classification"] and position["asset_category"] and position["accession_number"]
+        assert position["src_context_id"].startswith("c-") and position["fair_value_source"] == "xbrl_field"
+    frame = pd.DataFrame([dict(_row("1287750", "Other Borrower, Inc., First lien senior secured loan", 1_000_000.0, quarter,
+                                    principal=1_000_000.0),
+                               accession_number="x", index_classification="DIRECT_LENDING", asset_category="LOAN",
+                               src_context_id="c-1", fair_value_source="xbrl_field", cost=1_000_000.0)])
+    once, audits = apply_rules(frame, [rule])
+    assert all(a.get("status") == "ok" for a in audits), audits
+    assert len(once) == 5 and once["fair_value"].sum() == pytest.approx(total + 1_000_000.0)
+    twice, _ = apply_rules(once, [rule])
+    assert len(twice) == 5

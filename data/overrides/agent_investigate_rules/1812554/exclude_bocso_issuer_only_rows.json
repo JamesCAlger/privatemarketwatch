@@ -1,0 +1,32 @@
+{
+ "cik": "1812554",
+ "rule_id": "exclude_bocso_issuer_only_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "trim(CAST(bdc_investment_identifier AS VARCHAR)) = 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL",
+ "evidence": [
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'five5' (2026-10-06), 2025-09-30: row 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' carries fair value 24,600,000 and cost 24,600,000, a tagged percent of 1.0, no principal, no units and no instrument; class UNCLASSIFIED. Published total exceeds fund_financials investments_at_fair_value by 24,600,000 in that quarter and by nothing in the quarters either side."
+  },
+  {
+   "source": "query",
+   "quote": "The same identifier is filed at 2025-12-31 (303,900,000 and 24,800,000) and 2026-03-31 (378,000,000 and 24,700,000); there the rows carry no percent, are removed by exclude_affiliate_rollforward_issuer_only_rows, and the fund reconciles to the dollar. The schedule position is 'Blue Owl Cross-Strategy Opportunities 2025-1 LLC ... | Specialty finance equity investment'."
+  }
+ ],
+ "rationale": "An issuer-level fact from the notes, tagged with the investment identifier axis. The fund's general rule for such rows keeps a row that carries a percent of net assets, because in 2023 some real positions were tagged with a percent and nothing else; this row's percent (1.0) is not a share of net assets (24.6M is 0.13 pct of them). Keyed on the identifier and the missing principal and units, for every quarter. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2025-09-30": {
+   "rows": 1,
+   "fv": 24600000.0,
+   "residual_before": 24600000.0,
+   "residual_after": 0.0
+  }
+ }
+}

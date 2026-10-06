@@ -71,3 +71,19 @@ def test_instrument_rows_without_quantities_are_kept():
         _row("Hg Genesis 9 SumoCo Limited, Unsecured facility", 158_700_000.0),
     ])
     assert len(kept) == 3
+
+
+def test_bocso_note_row_is_excluded_and_its_schedule_position_kept():
+    rule = json.loads((RULE_PATH.parent / "exclude_bocso_issuer_only_rows.json").read_text(encoding="utf-8-sig"))
+    assert validate_rule(rule) == [] and late_resolved_columns(rule) == []
+    assert rule["scope"]["quarters"] == ["all"]
+    schedule = ("Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC) | "
+                "Specialty finance equity investment")
+    out, audits = apply_rules(pd.DataFrame([
+        _row("Blue Owl Cross-Strategy Opportunities LLC (BOCSO)", 24_600_000.0, pct=1.0),
+        _row(schedule, 246_660_000.0, principal=248_045_000.0),
+        # an issuer-only position with units stays
+        _row("Blue Owl Cross-Strategy Opportunities LLC (BOCSO)", 5_000_000.0, shares=5_000.0),
+    ]), [rule])
+    assert all(a.get("status") == "ok" for a in audits), audits
+    assert sorted(out["fair_value"]) == [5_000_000.0, 246_660_000.0]

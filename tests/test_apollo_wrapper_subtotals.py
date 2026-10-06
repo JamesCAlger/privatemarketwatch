@@ -44,3 +44,16 @@ def test_cash_equivalents_are_not_private_market_positions(identifier):
 ])
 def test_positions_keep_their_leaf_disposition(identifier, family):
     assert classify_identifier(CIK, identifier)["wrapper_disposition"] == family + "_position_leaf"
+
+
+def test_us_bank_sweep_is_a_reviewed_cash_identifier():
+    """2025-03-31: filed cash equivalents 625.0M = the money-market rows 593.1M + 'US BANK GCTS0095'
+    31.9M. Naming it as a reviewed cash identifier publishes it as a cash row instead of dropping it."""
+    from pipeline.source_encodings import cash_identifier_expression, load_encodings
+    assert "US BANK GCTS0095" in load_encodings()["0001837532"]["cash_identifiers"]
+    import duckdb
+    expression = cash_identifier_expression("cik", "identifier")
+    rows = duckdb.connect().execute(
+        "SELECT identifier, " + expression + " FROM (VALUES ('0001837532', 'US BANK GCTS0095'), "
+        "('0001837532', 'US Bank Holdings, Inc.'), ('0001838126', 'US BANK GCTS0095')) t(cik, identifier) ORDER BY 1, cik").fetchall()
+    assert [r[1] for r in rows] == [True, False, False]
