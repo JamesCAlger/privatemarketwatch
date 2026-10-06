@@ -193,6 +193,11 @@
       }
     }
   },
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ]
+  },
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.10

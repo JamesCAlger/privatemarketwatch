@@ -552,6 +552,13 @@
           },
           "description": "Exact full identifiers that disclose cash positions; normalized whitespace and case only."
         },
+        "principal_usd_reference": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "fred_h10"},
+          "description": "Opt-in: principal reported in a foreign currency is converted to USD with the admitted Federal Reserve H.10 quotes (report date, or the latest quote within seven days before it). The result is a reference conversion, not a filed value."
+        },
         "detached_schedule_labels": {
           "type": "array",
           "minItems": 1,

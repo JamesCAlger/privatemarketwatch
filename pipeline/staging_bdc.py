@@ -506,6 +506,12 @@ def _prepare_bdc(
         con.register("fx_rates", pd.DataFrame(columns=[
             "currency", "rate_date", "usd_per_currency",
         ]))
+    # Wrapper opt-in: principal in a foreign currency is converted with the admitted
+    # FRED H.10 quotes (same date rule as fair value) when fx_rates.csv has no rate.
+    from pipeline.monetary_fx import principal_reference_table
+    for _fx_cik, _fx_pairs in principal_reference_table(con).items():
+        logger.info("  Principal FX reference (FRED H.10) for cik=%s: %d currency-date pairs",
+                    _fx_cik, _fx_pairs)
     aggregate_overrides = load_bdc_aggregate_overrides()
     con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_header_flags = _load_aggregate_header_flags()
@@ -2617,20 +2623,21 @@ def _prepare_bdc(
                 WHEN _pa IS NULL THEN NULL
                 WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
                 THEN _pa
-                WHEN fx.usd_per_currency IS NOT NULL THEN _pa * fx.usd_per_currency
+                WHEN COALESCE(fx.usd_per_currency, fr.fr_usd_per_currency) IS NOT NULL
+                THEN _pa * COALESCE(fx.usd_per_currency, fr.fr_usd_per_currency)
                 ELSE NULL
             END AS principal_amount_usd,
             CASE
                 WHEN _pa IS NULL THEN NULL
                 WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
                 THEN 1.0
-                ELSE fx.usd_per_currency
+                ELSE COALESCE(fx.usd_per_currency, fr.fr_usd_per_currency)
             END AS principal_fx_rate_to_usd,
             CASE
                 WHEN _pa IS NULL THEN ''
                 WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
                 THEN 'source_usd'
-                WHEN fx.usd_per_currency IS NOT NULL THEN 'reference_fx'
+                WHEN COALESCE(fx.usd_per_currency, fr.fr_usd_per_currency) IS NOT NULL THEN 'reference_fx'
                 ELSE 'missing_reference_fx'
             END AS principal_fx_status,
             _raw_id AS bdc_investment_identifier,
@@ -2749,6 +2756,11 @@ def _prepare_bdc(
         LEFT JOIN fx_rates fx
           ON upper(trim(regexp_replace(COALESCE(CAST(w.principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) = fx.currency
          AND CAST(w.report_date AS VARCHAR) = fx.rate_date
+        LEFT JOIN (SELECT cik AS fr_cik, currency AS fr_currency, rate_date AS fr_rate_date,
+                          usd_per_currency AS fr_usd_per_currency FROM fx_reference) fr
+          ON LPAD(REGEXP_REPLACE(CAST(w.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = fr.fr_cik
+         AND upper(trim(regexp_replace(COALESCE(CAST(w.principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) = fr.fr_currency
+         AND CAST(w.report_date AS VARCHAR) = fr.fr_rate_date
     ),
 
     -- CTE 12a: Fix PIK rate boundary errors.

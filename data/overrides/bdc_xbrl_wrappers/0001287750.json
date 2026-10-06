@@ -223,6 +223,11 @@
       "disposition": "expected"
     }
   ],
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ]
+  },
   "invariants": {
     "fv_reconciliation": {
       "source_field": "investments_at_fair_value",

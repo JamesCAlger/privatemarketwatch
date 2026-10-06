@@ -246,3 +246,50 @@ def apply_fair_value(frame,*,quotes=(),decisions=()):
             FROM h LEFT JOIN result r USING(row_id)""").fetchdf()
     if len(output)!=len(frame): raise ValueError('FX normalization changed observation grain')
     return output
+
+
+UNIT_CURRENCY="upper(trim(regexp_replace(coalesce(CAST(principal_amount_unit AS VARCHAR),''),'^.*:','')))"
+
+
+def principal_reference_table(con,table='bdc_raw',encodings=None,quotes=None):
+    """Create TEMP TABLE fx_reference(cik,currency,rate_date,usd_per_currency) for opted-in funds.
+
+    Opt-in is the wrapper's source_encodings.principal_usd_reference = ["fred_h10"]. For each
+    (fund, principal currency, report date) in ``table`` the rate is the admitted FRED H.10
+    quote under the fair-value rule: the report date, or the latest quote within seven days
+    before it. Pairs with no such quote are left out, so the principal stays unconverted and
+    is reported as missing_reference_fx. Returns {cik: pairs resolved}.
+    """
+    from pipeline.source_encodings import load_encodings
+    configured=load_encodings() if encodings is None else encodings
+    opted=sorted(cik for cik,encoding in configured.items() if encoding.get('principal_usd_reference'))
+    con.execute("CREATE OR REPLACE TEMP TABLE fx_reference(cik VARCHAR,currency VARCHAR,rate_date VARCHAR,usd_per_currency DOUBLE)")
+    if not opted:
+        return {}
+    cik_sql="lpad(regexp_replace(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0')"
+    pairs=con.execute("SELECT DISTINCT "+cik_sql+","+UNIT_CURRENCY+",CAST(report_date AS VARCHAR) FROM "+table+
+        " WHERE "+cik_sql+" IN (SELECT unnest(?)) AND "+UNIT_CURRENCY+" NOT IN ('','USD') ORDER BY ALL",[opted]).fetchall()
+    if not pairs:
+        return {}
+    if quotes is None:
+        from pipeline import config
+        quotes=load_inputs(config.REFERENCE_DIR/'monetary_conversion')['quotes']
+    from scripts.programme_closeout.fx import convert
+    rows=[];cache={}
+    for cik,currency,report_date in pairs:
+        key=(currency,report_date[:10])
+        if key not in cache:
+            try:
+                with localcontext() as ctx:
+                    ctx.prec=60
+                    cache[key]=convert(1,currency,report_date[:10],quotes).get('value')
+            except ValueError:
+                cache[key]=None
+        if cache[key] is not None:
+            rows.append((cik,currency,report_date,float(cache[key])))
+    if rows:
+        con.executemany("INSERT INTO fx_reference VALUES (?,?,?,?)",rows)
+    counts={}
+    for cik,_,_,_ in rows:
+        counts[cik]=counts.get(cik,0)+1
+    return counts
