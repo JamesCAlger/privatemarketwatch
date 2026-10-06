@@ -119,8 +119,17 @@ def _field_sql(field: str, source_col: str) -> str:
     expected = f"({raw} * {dec} * {cik_fix} * {stag})"
     if field == 'interest_rate':
         expected = f"({expected} + CASE WHEN {ev} LIKE '%interest_rate:cash_plus_pik%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
+        # A coupon taken from the PIK tag has no plain-rate fact: its source is the PIK rate.
+        expected = f"(CASE WHEN {ev} LIKE '%interest_rate:pik_only%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE {expected} END)"
     unresolved_coupon = (
         f"WHEN {ev} LIKE '%interest_rate:coupon_unresolved%' THEN CASE WHEN {published} IS NULL THEN 'unresolved_coupon' ELSE 'fail' END"
+        if field == 'interest_rate' else ''
+    )
+
+    # A coupon taken from the PIK tag has no plain-rate fact to replay: compare it with the PIK rate.
+    pik_only_coupon = (
+        f"WHEN {ev} LIKE '%interest_rate:pik_only%' THEN CASE WHEN ABS({expected} - {published})"
+        f" <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12) THEN 'pass' ELSE 'fail' END"
         if field == 'interest_rate' else ''
     )
 
@@ -169,6 +178,7 @@ def _field_sql(field: str, source_col: str) -> str:
              WHEN COALESCE(CAST(src_context_id AS VARCHAR), '') = ''
                THEN 'no_provenance'
              {unresolved_coupon}
+             {pik_only_coupon}
              WHEN {published} IS NULL AND {raw} IS NULL AND NOT {has_event}
                THEN 'pass_trivial'
              WHEN {neg_null}
@@ -403,17 +413,24 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     pass
 
                 ctx_facts = facts.get(ctx, {})
+                # A coupon taken from the PIK tag is anchored on the PIK fact.
+                anchor_field = field
+                if field == 'interest_rate' and 'interest_rate:pik_only' in str(r.get('declared_events') or ''):
+                    anchor_field = 'pik_rate'
+                    field_sf = sf.get('pik_rate') or {}
+                    declared_c = str(field_sf.get('c') or '').lower()
+                    x_events = list(field_sf.get('x') or [])
                 if declared_c:
                     hit = ctx_facts.get(f"__local__{declared_c}")
                 else:
-                    hit = ctx_facts.get(field)
+                    hit = ctx_facts.get(anchor_field)
 
                 if hit is None:
                     out.at[i, "full_status"] = "anchor_missing"
                     continue
 
                 _local, raw_text = hit
-                instance_raw = _parse_fact_value(field, raw_text)
+                instance_raw = _parse_fact_value(anchor_field, raw_text)
                 out.at[i, "instance_raw"] = instance_raw
 
                 if not isinstance(instance_raw, (int, float)):
@@ -421,7 +438,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     continue
 
                 mult = (_extractor_multiplier(x_events)
-                        * _staging_multiplier(field, str(r.get("declared_events") or "")))
+                        * _staging_multiplier(anchor_field, str(r.get("declared_events") or "")))
                 neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
                 published = r["published"]
                 expected_value=instance_raw*mult

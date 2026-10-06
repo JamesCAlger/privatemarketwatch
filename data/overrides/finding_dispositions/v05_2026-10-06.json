@@ -1,0 +1,1202 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-001",
+   "class": "informational",
+   "engine": "nonaccrual",
+   "rule_name": "nonaccrual_flag",
+   "statement": "The rule reports that a loan is on non-accrual. That is a credit fact about the loan, not a data defect.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/shadow_adapter.py _nonaccrual_select: 'Non-accrual evidence -- a PRESENCE signal, not a pass/fail check. Non-accrual is a credit-risk fact, not a data defect, so it is ingested as a weak warn'."
+    }
+   ],
+   "rerun": "grep -n 'PRESENCE signal' scripts/shadow_adapter.py",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "*"
+   ],
+   "quarters": [
+    "all"
+   ]
+  },
+  {
+   "disposition_id": "DS-002",
+   "class": "informational",
+   "engine": "provenance_reverify",
+   "rule_name": "text_pathway",
+   "statement": "The rule records that a value was read from the row text rather than from a tag. It names a pathway, not an error.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/shadow_adapter.py: 'weak/warn = informational states'; PROV_WEAK_WARN lists text_pathway."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five10, Apollo: affected fair value 0.0M in all 12 fund-quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/family.py five10 text_pathway",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "*"
+   ],
+   "quarters": [
+    "all"
+   ]
+  },
+  {
+   "disposition_id": "DS-003-1287750",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Published holdings start at 2022-09-30 for Ares and BCRED and at 2023-03-31 for Blue Owl, HPS and Apollo (sandbox five10). The Ares row dated 2026-04-27 is a fund-level fact after the last schedule."
+    },
+    {
+     "source": "query",
+     "quote": "Whether earlier schedules exist on EDGAR was not checked: downloads are not permitted in this run."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ffval.py five10 F28",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2026-04-27"
+   ]
+  },
+  {
+   "disposition_id": "DS-003-1803498",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Published holdings start at 2022-09-30 for Ares and BCRED and at 2023-03-31 for Blue Owl, HPS and Apollo (sandbox five10). The Ares row dated 2026-04-27 is a fund-level fact after the last schedule."
+    },
+    {
+     "source": "query",
+     "quote": "Whether earlier schedules exist on EDGAR was not checked: downloads are not permitted in this run."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ffval.py five10 F28",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-003-1812554",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Published holdings start at 2022-09-30 for Ares and BCRED and at 2023-03-31 for Blue Owl, HPS and Apollo (sandbox five10). The Ares row dated 2026-04-27 is a fund-level fact after the last schedule."
+    },
+    {
+     "source": "query",
+     "quote": "Whether earlier schedules exist on EDGAR was not checked: downloads are not permitted in this run."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ffval.py five10 F28",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-003-1837532",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Published holdings start at 2022-09-30 for Ares and BCRED and at 2023-03-31 for Blue Owl, HPS and Apollo (sandbox five10). The Ares row dated 2026-04-27 is a fund-level fact after the last schedule."
+    },
+    {
+     "source": "query",
+     "quote": "Whether earlier schedules exist on EDGAR was not checked: downloads are not permitted in this run."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ffval.py five10 F28",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-003-1838126",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Published holdings start at 2022-09-30 for Ares and BCRED and at 2023-03-31 for Blue Owl, HPS and Apollo (sandbox five10). The Ares row dated 2026-04-27 is a fund-level fact after the last schedule."
+    },
+    {
+     "source": "query",
+     "quote": "Whether earlier schedules exist on EDGAR was not checked: downloads are not permitted in this run."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ffval.py five10 F28",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-004-1812554",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five12: Blue Owl to 2024-09-30, 717 negative-cost rows, cost a filed fact on every one, all with fair value at or below zero. HPS 1,328 rows, cost a filed fact on every one, 1,181 with fair value at or below zero; identifiers carry no instrument wording."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/negcost.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-004-1838126",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five12: Blue Owl to 2024-09-30, 717 negative-cost rows, cost a filed fact on every one, all with fair value at or below zero. HPS 1,328 rows, cost a filed fact on every one, 1,181 with fair value at or below zero; identifiers carry no instrument wording."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/negcost.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-004A-1837532",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "statement": "Negative cost on undrawn revolvers and delayed draws, printed in the schedule. Two reviewer verdicts called these real errors; the lines they quote show the negative cost in the filing.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Apollo 10-Q for 2025-09-30, schedule lines: 'MRO Holdings, Inc. | First Lien Secured Debt - Revolver | S + 450, 0.50 % Floor | 5/5/2032 | -- | ( 802 ) | ( 213 )' and 'TITAN BW BORROWER L.P. | Revolver | -- | ( 327 ) | ( 336 )': par blank, cost and value negative. Published cost for the Titan revolver is -327,000."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five12: 998 of 1,039 negative-cost rows carry a filed cost fact; 41 carry a labelled proxy."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/negcost.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-004B-1812554",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "statement": "From 2024-12-31 Blue Owl files undrawn lines in its commitments table with a fair value and no cost. The published cost on those rows is the pipeline's labelled proxy (cost_source first_observed_fv_proxy), not a filed figure, so a test of filed cost does not apply. The reviewers' point stands: the filing gives no cost for these rows.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001812554-26-000027 context c-925 (Ministry Brands revolving loan): InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount, InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount and InvestmentOwnedFairValueNetOfUnamortizedFees = -4083000; no InvestmentOwnedAtCost fact."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five12: 508 such rows in six quarters, cost -64.9M in total, every one with fair value at or below zero. Published total equals the filed total in all six quarters with these rows included."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/owl_commit.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-005-1287750",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10, rows the rule flags: HPS 258 rows, 163 with fair value under 2 pct of principal and 160 with cost at or below zero, largest value 4.3M (Severin Acquisition 1: value 4.26M, cost 3.65M, commitment 63.0M). BCRED Material Holdings 2: value 4.2M, cost 57.1M, principal 60.6M (a markdown). Ares Eckler Industries: value 1.5M, cost 25.5M, principal 28.8M. Apollo Mitel Networks: value 0.25M, cost 3.2M, principal 3.2M."
+    },
+    {
+     "source": "filing",
+     "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-09-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-005-1803498",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10, rows the rule flags: HPS 258 rows, 163 with fair value under 2 pct of principal and 160 with cost at or below zero, largest value 4.3M (Severin Acquisition 1: value 4.26M, cost 3.65M, commitment 63.0M). BCRED Material Holdings 2: value 4.2M, cost 57.1M, principal 60.6M (a markdown). Ares Eckler Industries: value 1.5M, cost 25.5M, principal 28.8M. Apollo Mitel Networks: value 0.25M, cost 3.2M, principal 3.2M."
+    },
+    {
+     "source": "filing",
+     "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-005-1812554",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10, rows the rule flags: HPS 258 rows, 163 with fair value under 2 pct of principal and 160 with cost at or below zero, largest value 4.3M (Severin Acquisition 1: value 4.26M, cost 3.65M, commitment 63.0M). BCRED Material Holdings 2: value 4.2M, cost 57.1M, principal 60.6M (a markdown). Ares Eckler Industries: value 1.5M, cost 25.5M, principal 28.8M. Apollo Mitel Networks: value 0.25M, cost 3.2M, principal 3.2M."
+    },
+    {
+     "source": "filing",
+     "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-005-1837532",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10, rows the rule flags: HPS 258 rows, 163 with fair value under 2 pct of principal and 160 with cost at or below zero, largest value 4.3M (Severin Acquisition 1: value 4.26M, cost 3.65M, commitment 63.0M). BCRED Material Holdings 2: value 4.2M, cost 57.1M, principal 60.6M (a markdown). Ares Eckler Industries: value 1.5M, cost 25.5M, principal 28.8M. Apollo Mitel Networks: value 0.25M, cost 3.2M, principal 3.2M."
+    },
+    {
+     "source": "filing",
+     "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-005-1838126",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10, rows the rule flags: HPS 258 rows, 163 with fair value under 2 pct of principal and 160 with cost at or below zero, largest value 4.3M (Severin Acquisition 1: value 4.26M, cost 3.65M, commitment 63.0M). BCRED Material Holdings 2: value 4.2M, cost 57.1M, principal 60.6M (a markdown). Ares Eckler Industries: value 1.5M, cost 25.5M, principal 28.8M. Apollo Mitel Networks: value 0.25M, cost 3.2M, principal 3.2M."
+    },
+    {
+     "source": "filing",
+     "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-006-1803498",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate (published in pik_rate). Reviewer verdicts for these funds cite rows that are now populated or whose only tag is the PIK one.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Blue Owl 0001812554-26-000027: AAM Series 1.1 Rail (context c-608) carries InvestmentInterestRatePaidInKind 0.12 and no other rate fact; the schedule has Ref. Rate, Cash and PIK columns and no all-in rate. ABB/Con-cise Optical, cited by the reviewer, now publishes its spread of 7.5. HPS 0001628280-26-033248 context c-922 (Daphne S.P.A.): InvestmentInterestRatePaidInKind 0.0675 only; the printed line shows 'E + 6.75 %' and 8.75 %. BCRED 0001803498-24-000044 context c-1374 (WHCG Purchaser III, Inc.): cost and value facts only; AI Altius Bidco, cited by the reviewer, is no longer flagged."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five9: Blue Owl 1,908 rows, 1,634 with fair value at or below zero, 247 PIK only. HPS 1,366 rows, 1,084 at or below zero, 130 PIK only. BCRED 3 rows."
+    },
+    {
+     "source": "query",
+     "quote": "Limit: for HPS and Blue Owl the printed schedule shows a margin or coupon on PIK loans that the tags do not carry as a spread or rate. The published fields follow the tags."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/norate2.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2025-12-31",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-006-1812554",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate (published in pik_rate). Reviewer verdicts for these funds cite rows that are now populated or whose only tag is the PIK one.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Blue Owl 0001812554-26-000027: AAM Series 1.1 Rail (context c-608) carries InvestmentInterestRatePaidInKind 0.12 and no other rate fact; the schedule has Ref. Rate, Cash and PIK columns and no all-in rate. ABB/Con-cise Optical, cited by the reviewer, now publishes its spread of 7.5. HPS 0001628280-26-033248 context c-922 (Daphne S.P.A.): InvestmentInterestRatePaidInKind 0.0675 only; the printed line shows 'E + 6.75 %' and 8.75 %. BCRED 0001803498-24-000044 context c-1374 (WHCG Purchaser III, Inc.): cost and value facts only; AI Altius Bidco, cited by the reviewer, is no longer flagged."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five9: Blue Owl 1,908 rows, 1,634 with fair value at or below zero, 247 PIK only. HPS 1,366 rows, 1,084 at or below zero, 130 PIK only. BCRED 3 rows."
+    },
+    {
+     "source": "query",
+     "quote": "Limit: for HPS and Blue Owl the printed schedule shows a margin or coupon on PIK loans that the tags do not carry as a spread or rate. The published fields follow the tags."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/norate2.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-006-1838126",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate (published in pik_rate). Reviewer verdicts for these funds cite rows that are now populated or whose only tag is the PIK one.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Blue Owl 0001812554-26-000027: AAM Series 1.1 Rail (context c-608) carries InvestmentInterestRatePaidInKind 0.12 and no other rate fact; the schedule has Ref. Rate, Cash and PIK columns and no all-in rate. ABB/Con-cise Optical, cited by the reviewer, now publishes its spread of 7.5. HPS 0001628280-26-033248 context c-922 (Daphne S.P.A.): InvestmentInterestRatePaidInKind 0.0675 only; the printed line shows 'E + 6.75 %' and 8.75 %. BCRED 0001803498-24-000044 context c-1374 (WHCG Purchaser III, Inc.): cost and value facts only; AI Altius Bidco, cited by the reviewer, is no longer flagged."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five9: Blue Owl 1,908 rows, 1,634 with fair value at or below zero, 247 PIK only. HPS 1,366 rows, 1,084 at or below zero, 130 PIK only. BCRED 3 rows."
+    },
+    {
+     "source": "query",
+     "quote": "Limit: for HPS and Blue Owl the printed schedule shows a margin or coupon on PIK loans that the tags do not carry as a spread or rate. The published fields follow the tags."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/norate2.py five12",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-007-1837532",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "statement": "Small negative fair values on undrawn lines whose identifier does not name the instrument.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value -49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/unfunded.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-007-1838126",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "statement": "Small negative fair values on undrawn lines whose identifier does not name the instrument.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value -49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/unfunded.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-008-1837532",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "statement": "One loan, Heubach Holdings USA LLC, is filed with a maturity of 4/30/2024 in six later filings.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Apollo Debt Solutions 10-Q and 10-K filings for 2024-06-30 to 2025-09-30: the position's identifier reads '... Maturity Date 4/30/2024' and the tagged maturity is 2024-04-30 (maturity_date_source xbrl_field); fair value 0.2M to 0.8M."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/weakrows.py five10 1837532",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "supersedes_real_error_verdict": true,
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-010-1837532",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "statement": "Position contexts with no fair value fact: undrawn lines with nothing filed, and a few positions the filer tagged under two spellings.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five5: 32 to 64 such contexts a quarter; about half named revolver or delayed draw; at most 4 carry units and 3 a principal. Published total equals filed investments plus cash rows in 12 of 13 quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/b01.py five10 1837532",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-011-1812554",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "statement": "Equity rows filed without a unit count.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10: HPS 345 of 367 equity rows carry units overall (22 without, 27M); Blue Owl 615 of 673 (58 without, 682M, mostly fund interests filed with a principal). The fund-quarters below are those under 70 pct."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_c04.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-011-1838126",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "statement": "Equity rows filed without a unit count.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five10: HPS 345 of 367 equity rows carry units overall (22 without, 27M); Blue Owl 615 of 673 (58 without, 682M, mostly fund interests filed with a principal). The fund-quarters below are those under 70 pct."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_c04.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-013-1287750",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "statement": "Rows the filer tagged across several contexts under the issuer names alone; the pipeline assembles them.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox ares3: Expereo USA, Inc. and Ristretto Bidco B.V., 60.2M at 2025-03-31 and 61.0M at 2025-06-30, built from four contexts (cost, fair value and principal filled); Rawlings Sporting Goods loan at 2024-12-31 (rate filled)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/merged.py five10 1287750",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-014-1837532",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "statement": "One loan's principal has no dollar equivalent because the filing names its currency as KPW, for which no rate exists.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Apollo 2024-06-30, Delivery Hero Finco Germany: principal 195,000,000,000 with document unit KPW; later filings give KRW and convert (about 148M). The data contract lists this case and says the later filing does not certify the earlier one."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/weakrows.py five10 1837532",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-015-1287750",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "statement": "Rows whose filed rate is below their PIK rate. The filed rate cannot be the all-in coupon, and the all-in coupon cannot be derived, so the published rate is left empty.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five8: 13 Ares rows (194.2M) and 2 Apollo rows (124.9M), e.g. Ares NMC Skincare 2023-12-31 filed 1.0 with PIK 11.44; Apollo Paymentsense filed 0.125 with PIK 6.25."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/rate_kind_test2.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-12-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-015-1837532",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "statement": "Rows whose filed rate is below their PIK rate. The filed rate cannot be the all-in coupon, and the all-in coupon cannot be derived, so the published rate is left empty.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five8: 13 Ares rows (194.2M) and 2 Apollo rows (124.9M), e.g. Ares NMC Skincare 2023-12-31 filed 1.0 with PIK 11.44; Apollo Paymentsense filed 0.125 with PIK 6.25."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/rate_kind_test2.py five10",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-016-1287750",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Ares: 'Visual Edge Technology, Inc.' 70.5M at 2026-03-31 equals its six published positions (14.4 + 7.8 + 34.4 + 2.5 + 9.9 + 1.5), which are named 'Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC'; 'Olympia ... Asclepius Hodlings LLC' is a misspelt issuer group. Apollo: 'Total Pharmaceuticals' and 'Insurance First Lien Secured Debt - Revolver'. Blue Owl: 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' and 'Notorious Topco, LLC (dba Beauty Industry Group)' issuer rows."
+    },
+    {
+     "source": "query",
+     "quote": "Published totals equal filed totals in these fund-quarters (sandbox five6), so no position is missing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issues2.py five10 SRC_BDC01 1287750",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-016-1812554",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Ares: 'Visual Edge Technology, Inc.' 70.5M at 2026-03-31 equals its six published positions (14.4 + 7.8 + 34.4 + 2.5 + 9.9 + 1.5), which are named 'Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC'; 'Olympia ... Asclepius Hodlings LLC' is a misspelt issuer group. Apollo: 'Total Pharmaceuticals' and 'Insurance First Lien Secured Debt - Revolver'. Blue Owl: 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' and 'Notorious Topco, LLC (dba Beauty Industry Group)' issuer rows."
+    },
+    {
+     "source": "query",
+     "quote": "Published totals equal filed totals in these fund-quarters (sandbox five6), so no position is missing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issues2.py five10 SRC_BDC01 1287750",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-016-1837532",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Ares: 'Visual Edge Technology, Inc.' 70.5M at 2026-03-31 equals its six published positions (14.4 + 7.8 + 34.4 + 2.5 + 9.9 + 1.5), which are named 'Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC'; 'Olympia ... Asclepius Hodlings LLC' is a misspelt issuer group. Apollo: 'Total Pharmaceuticals' and 'Insurance First Lien Secured Debt - Revolver'. Blue Owl: 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' and 'Notorious Topco, LLC (dba Beauty Industry Group)' issuer rows."
+    },
+    {
+     "source": "query",
+     "quote": "Published totals equal filed totals in these fund-quarters (sandbox five6), so no position is missing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issues2.py five10 SRC_BDC01 1287750",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-017-1287750",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "statement": "The same issuer-level source rows as DS-016, reported by the reconciliation's second engine.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Ares 'Olympia Acquisition, Inc., Olympia TopCo, L.P. and Asclepius Hodlings LLC' 48.6M, 44.7M, 37.5M (2022-09-30 to 2023-03-31); Blue Owl BOCSO 303.9M and 24.8M at 2025-12-31, 378.0M and 24.7M at 2026-03-31. Published totals equal filed totals in those quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/recstatus2.py five10 1287750 position_like_parser_mismatch",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-017-1812554",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "statement": "The same issuer-level source rows as DS-016, reported by the reconciliation's second engine.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Ares 'Olympia Acquisition, Inc., Olympia TopCo, L.P. and Asclepius Hodlings LLC' 48.6M, 44.7M, 37.5M (2022-09-30 to 2023-03-31); Blue Owl BOCSO 303.9M and 24.8M at 2025-12-31, 378.0M and 24.7M at 2026-03-31. Published totals equal filed totals in those quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/recstatus2.py five10 1287750 position_like_parser_mismatch",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-018-1287750",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC02",
+   "statement": "Eight positions restored by rule: their cost and fair value are filed on the issuer-name axis, so they have no source row on the position context.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001287750-25-000020 contexts c-1033, c-1491, c-1679, c-1699 and 0001287750-25-000038 contexts c-1171, c-1590, c-1729, c-1750 carry InvestmentOwnedAtCost and InvestmentOwnedAtFairValue under InvestmentIssuerNameAxis; totals 94.3M and 33.2M, the fund's shortfall in those quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ares_nofv.py five10 2025-03-31",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-019-1287750",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "anchor_missing",
+   "statement": "The same eight restored positions as DS-018: the value context is not the position's own, so the re-verifier finds no anchor.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "See DS-018: values are on the issuer-name-axis contexts of 0001287750-25-000020 and 0001287750-25-000038."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ares_nofv.py five10 2025-03-31",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-020-1803498",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "statement": "One to five rows a quarter, out of several hundred, carry a filed percent that disagrees with their fair value. The published percent is the tagged fact.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "BCRED 0001803498-23-000012, RoadOne Inc, context i8f6a38cb858548e3a3e7799099e66ff5_I20230331: percent tagged 0.07 (7 pct) on a 1.1M position in a 23.1B fund. Blue Owl 2023-06-30, Spotless Brands first lien loan: tagged 0.9 on 53.5M of 6.69B net assets (0.80)."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five11: failing rows per quarter 1, 3, 3, 3, 1 of 735 to 961 (BCRED) and 1 to 5 of 283 to 405 (Blue Owl); the median implied net assets match the filed figure within 0.7 pct in every quarter."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_left.py five11",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-020-1812554",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "statement": "One to five rows a quarter, out of several hundred, carry a filed percent that disagrees with their fair value. The published percent is the tagged fact.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "BCRED 0001803498-23-000012, RoadOne Inc, context i8f6a38cb858548e3a3e7799099e66ff5_I20230331: percent tagged 0.07 (7 pct) on a 1.1M position in a 23.1B fund. Blue Owl 2023-06-30, Spotless Brands first lien loan: tagged 0.9 on 53.5M of 6.69B net assets (0.80)."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five11: failing rows per quarter 1, 3, 3, 3, 1 of 735 to 961 (BCRED) and 1 to 5 of 283 to 405 (Blue Owl); the median implied net assets match the filed figure within 0.7 pct in every quarter."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_left.py five11",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-021-1812554",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "statement": "Net investment income is filed after fee waivers and expense support; the expenses field holds the gross figure.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "HPS 10-Q, three months to 2022-06-30: income 37,750,000, InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement 4,097,000, net investment income 33,653,000; gross expenses 16,022,000, so the gap is 11,925,000. To 2022-09-30: 83,118,000 less 19,958,000 is 63,160,000. Blue Owl 10-Q to 2022-03-31: InvestmentCompanyExpenseOffsetArrangement 4,062,000, the gap to the dollar."
+    },
+    {
+     "source": "query",
+     "quote": "HPS 2022-03-31 and 2022-12-31 have no net-expense fact for the quarter; the same waiver is assumed."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/waivers.py 1838126 2022",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2022-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-021-1838126",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "statement": "Net investment income is filed after fee waivers and expense support; the expenses field holds the gross figure.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "HPS 10-Q, three months to 2022-06-30: income 37,750,000, InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement 4,097,000, net investment income 33,653,000; gross expenses 16,022,000, so the gap is 11,925,000. To 2022-09-30: 83,118,000 less 19,958,000 is 63,160,000. Blue Owl 10-Q to 2022-03-31: InvestmentCompanyExpenseOffsetArrangement 4,062,000, the gap to the dollar."
+    },
+    {
+     "source": "query",
+     "quote": "HPS 2022-03-31 and 2022-12-31 have no net-expense fact for the quarter; the same waiver is assumed."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/waivers.py 1838126 2022",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-022-1287750",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount",
+   "statement": "Senior Direct Lending Program certificates at 2022-09-30 are filed with a principal of 269,806,000,000 against a cost and value of 1,121,000,000. The filing is wrong and offers no other figure, so the filed number stands.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001287750-22-000052 context id76f5ace86324911921d72b1dbdc0154_I20220930: InvestmentOwnedBalancePrincipalAmount = 269806000000; printed schedule line '12/2036 269,806.0 1,121.0 1,121.0'. Other quarters file a principal equal or close to cost (2022-12-31: 1,274,100,000)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1287750 000128775022000052 html \"Subordinated certificates\" 6 260",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-023-1287750",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount_usd",
+   "statement": "The dollar principal of the same row as DS-022.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "See DS-022: 0001287750-22-000052, principal tagged and printed as 269,806.0 (millions)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/sdlp.py five11",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-024-1812554",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "PP03",
+   "statement": "One small equity row a quarter is the current-period fact; its unit count was rescaled to the scale of earlier filings, which makes it equal the prior-period fact the check compares with.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Blue Owl 2024-12-31, Gloves Holdings LP Interest: published row is context c-1174 (period 2024-12-31, value 118,000, cost 100,000, units filed 1,000,000 and published 1,000 by the shares normalisation); the prior-period context c-1947 files 1,000 units. Same row at 2023-06-30 and 2024-06-30; Hercules Buyer Common Units at 2023-12-31."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/row.py five11 1812554 2024-12-31 \"Gloves Holdings, LP\" 4",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-12-31"
+   ]
+  }
+ ]
+}

@@ -553,3 +553,35 @@ def test_a_row_that_files_no_rate_is_not_tagged_coupon_unresolved():
     assert pd.isna(by_id.loc["none","interest_rate"]) and by_id.loc["none","interest_rate_kind"]=="unresolved"
     # a filed rate that cannot be read stays tagged
     assert "interest_rate:coupon_unresolved" in by_id.loc["split","src_transforms"]
+
+
+def test_a_loan_filed_with_only_a_pik_rate_takes_it_as_the_coupon_where_the_fund_files_it_so():
+    # Ares 2025-06-30: WebPT senior subordinated loan is printed "13.25 % PIK" in the coupon column and
+    # tagged with a PIK rate and no plain rate; Amerivet subordinated loan "16.50 % PIK" likewise
+    # (decision D-018). The coupon is the PIK rate.
+    credit=dict(asset_category="LOAN")
+    frame=rows(dict(credit,row_id="pikonly",cik="0001287750",interest_rate_kind="",interest_rate="",pik_rate="13.25",basis_spread="",src_facts="{}"),
+        # Ares equity units printed with a PIK dividend keep no interest rate: the rule is for loan rows.
+        dict(row_id="equity",cik="0001287750",asset_category="EQUITY_COMMON",interest_rate_kind="",interest_rate="",pik_rate="10.0",basis_spread="",src_facts="{}"),
+        # Apollo 2024-12-31 Material Holdings: "S+610 (Includes 8.03% PIK)". A spread is filed, so the PIK is a part, not the coupon.
+        dict(credit,row_id="spread",cik="0001287750",interest_rate_kind="",interest_rate="",pik_rate="8.03",basis_spread="6.1",src_facts="{}"),
+        # HPS 2026-03-31 Daphne S.P.A.: printed "E + 6.75 %" with a coupon of 8.75 %; the PIK tag holds the margin.
+        # HPS reads its plain tag as all-in but has no PIK-only setting, so nothing is published.
+        dict(credit,row_id="margin",cik="0001838126",interest_rate_kind="",interest_rate="",pik_rate="6.75",basis_spread="",src_facts="{}"),
+        dict(credit,row_id="nothing",cik="0001287750",interest_rate_kind="",interest_rate="",pik_rate="",basis_spread="",src_facts="{}"))
+    result,states=prepare(frame,rate_readings={"0001287750":"all_in","0001838126":"all_in"},pik_only_coupon={"0001287750"})
+    by_id=result.set_index("row_id")
+    assert by_id.loc["pikonly","interest_rate"]==13.25 and by_id.loc["pikonly","interest_rate_kind"]=="all_in"
+    assert pd.isna(by_id.loc["pikonly","interest_rate_reported"])
+    assert "interest_rate:pik_only" in by_id.loc["pikonly","src_transforms"]
+    assert states.set_index("row_id").loc["pikonly","coupon_state"]=="supported"
+    for row_id in ("equity","spread","margin","nothing"):
+        assert pd.isna(by_id.loc[row_id,"interest_rate"]) and by_id.loc[row_id,"interest_rate_kind"]=="unresolved"
+        assert "pik_only" not in str(by_id.loc[row_id,"src_transforms"])
+
+
+def test_pik_only_setting_is_validated_and_set_for_ares_alone():
+    from pipeline.financial_conventions import pik_only_coupon_funds
+    from pipeline.source_encodings import load_encodings
+    assert pik_only_coupon_funds()=={"0001287750"}
+    assert load_encodings()["0001287750"]["pik_only_tag_reading"]==["coupon"]

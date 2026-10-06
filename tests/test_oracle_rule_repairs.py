@@ -143,3 +143,24 @@ def test_dl_rate_fill_gate_is_funded_direct_lending_rows():
     con.register("weak_base", _loans(funded_with_rate=92, funded_without=8, undrawn=15).replace("", None))
     total, present = con.execute(f"SELECT count(*), count(*) FILTER (WHERE {rule.present_sql}) FROM weak_base WHERE ({rule.gate_sql})").fetchone()
     assert (total, present) == (100, 92)
+
+
+# --- D07 (decision D-015) ------------------------------------------------------------------------
+
+def _rated(quarter, rates):
+    return pd.DataFrame([{"cik": "0001837532", "report_date": quarter, "interest_rate": str(rate)} for rate in rates])
+
+
+def test_d07_skips_a_median_taken_over_a_handful_of_rows():
+    # Apollo files spreads; 13 rows carried a rate at 2023-09-30 (median 6.5) and 15 at 2023-12-31 (9.75).
+    from pipeline.oracle_checks import check_D07_rate_distribution_stability
+    frame = pd.concat([_rated("2023-09-30", [6.5] * 13), _rated("2023-12-31", [9.75] * 15)], ignore_index=True)
+    results = check_D07_rate_distribution_stability(frame)
+    assert [r.status for r in results] == ["skip"]
+
+
+def test_d07_still_fails_on_a_shift_across_a_full_schedule():
+    from pipeline.oracle_checks import check_D07_rate_distribution_stability
+    frame = pd.concat([_rated("2023-09-30", [6.5] * 200), _rated("2023-12-31", [9.75] * 200)], ignore_index=True)
+    results = check_D07_rate_distribution_stability(frame)
+    assert [r.status for r in results] == ["fail"]

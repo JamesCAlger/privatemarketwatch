@@ -872,3 +872,26 @@ class TestPctSenseSummary:
         assert art.exists()
         got = pd.read_csv(art, dtype={"cik": str})
         assert got.iloc[0]["n_rows"] == 1
+
+
+def test_a_coupon_taken_from_the_pik_tag_is_verified_against_the_pik_fact():
+    # Decision D-018 (Ares): a loan filed with only a PIK rate publishes it as the coupon. The source of the
+    # published interest_rate is then the PIK fact, and a re-check has to read that fact.
+    from lxml import etree
+    from pipeline.financial_conventions import prepare
+    frame=pd.DataFrame([_row(cik='0001287750',interest_rate=None,interest_rate_kind='',pik_rate=13.25,basis_spread=None,
+        asset_category='LOAN',interest_rate_source='',pik_rate_source='xbrl_field',
+        src_facts=json.dumps({'pik_rate':{'r':.1325}}),src_transforms='pik_rate:rate_x100')])
+    frame,_=prepare(frame,rate_readings={'0001287750':'all_in'},pik_only_coupon={'0001287750'})
+    assert frame.iloc[0].interest_rate==13.25 and 'interest_rate:pik_only' in frame.iloc[0].src_transforms
+    replay=cheap_tier(holdings_df=frame)
+    replay=replay[replay.field=='interest_rate']
+    assert replay.iloc[0].expected==pytest.approx(13.25)
+    assert replay.iloc[0].cheap_status=='pass'
+    def loader(cik,accession,value='.1325',ctx='ctx1'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            f'<g:InvestmentInterestRatePaidInKind contextRef="{ctx}">{value}</g:InvestmentInterestRatePaidInKind></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
+    assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,value='.10')).iloc[0].full_status=='published_mismatch'
+    assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,ctx='other-context')).iloc[0].full_status in ('anchor_missing','context_missing')

@@ -30,6 +30,10 @@ def violations(frame):
                       abs(TRY_CAST(interest_rate AS DOUBLE)-TRY_CAST(interest_rate_reported AS DOUBLE)-TRY_CAST(pik_rate AS DOUBLE))>1e-10
                  WHEN interest_rate_kind='all_in' AND isfinite(TRY_CAST(interest_rate_reported AS DOUBLE))
                  THEN TRY_CAST(interest_rate AS DOUBLE) IS DISTINCT FROM TRY_CAST(interest_rate_reported AS DOUBLE)
+                 -- A coupon taken from the PIK tag (decision D-018): labelled, and equal to the PIK rate.
+                 WHEN interest_rate_kind='all_in' AND TRY_CAST(interest_rate_reported AS DOUBLE) IS NULL
+                      AND list_contains(string_split(coalesce(CAST(src_transforms AS VARCHAR),''),';'),'interest_rate:pik_only')
+                 THEN TRY_CAST(interest_rate AS DOUBLE) IS DISTINCT FROM TRY_CAST(pik_rate AS DOUBLE)
                  ELSE TRY_CAST(interest_rate AS DOUBLE) IS NOT NULL END
         """
         checks['financial_reported_cost_preserved']="""TRY_CAST(cost_reported AS DOUBLE) IS NOT NULL AND

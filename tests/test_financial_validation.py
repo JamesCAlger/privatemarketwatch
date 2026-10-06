@@ -28,3 +28,17 @@ def test_complete_cash_plus_pik_remains_usable():
     frame=ready_holdings([dict(interest_rate=10,interest_rate_kind='cash',pik_rate=2)])
     assert frame.iloc[0].interest_rate==12
     assert violations(frame)==[]
+
+
+def test_a_coupon_taken_from_the_pik_tag_must_be_labelled_and_equal_it():
+    # Decision D-018: for a fund reviewed as filing a PIK-only coupon in the PIK tag, the published rate is
+    # the PIK rate, there is no filed plain rate, and the row says where the rate came from.
+    labelled=dict(interest_rate_kind='all_in',interest_rate_reported=None,pik_rate=13.25,interest_rate=13.25,
+        src_transforms='interest_rate:pik_only')
+    frame=ready_holdings()
+    for field,value in labelled.items(): frame[field]=value
+    assert violations(frame)==[]
+    for change in ({'src_transforms':''},{'interest_rate':12.0},{'interest_rate_kind':'unresolved'}):
+        frame=ready_holdings()
+        for field,value in {**labelled,**change}.items(): frame[field]=value
+        assert 'financial_coupon_consistency' in dict(violations(frame)),change

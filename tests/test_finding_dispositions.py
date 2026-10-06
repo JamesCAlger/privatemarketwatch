@@ -140,3 +140,14 @@ def test_as_filed_supersedes_a_real_error_verdict_only_with_the_flag_and_filing_
     assert any("filing evidence" in p for p in fd.validate(_entry(supersedes_real_error_verdict=True)))
     assert fd.validate(_entry(supersedes_real_error_verdict=True, evidence=filed)) == []
     assert _ledger_state(tmp_path, _entry(supersedes_real_error_verdict=True, evidence=filed)) == "dispositioned_as_filed"
+
+
+def test_the_recorded_store_loads_and_its_rerun_scripts_exist():
+    import re
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    entries = fd.load(root / "data" / "overrides" / "finding_dispositions")
+    assert entries
+    for entry in entries:
+        for script in re.findall(r"scripts/[\w/]+\.py", entry["rerun"]):
+            assert (root / script).exists(), (entry["disposition_id"], script)

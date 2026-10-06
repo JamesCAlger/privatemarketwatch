@@ -23,7 +23,7 @@ def load_encodings(wrapper_directory=None):
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
-                'foreign_unit_values','filed_rate_reading'}:
+                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -41,6 +41,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
             if key=='filed_rate_reading' and values not in (['all_in'],['cash_leg']):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
+            if key=='pik_only_tag_reading' and values!=['coupon']:
+                raise ValueError('The only admitted PIK-only tag reading is coupon: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:

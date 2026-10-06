@@ -826,8 +826,12 @@ def check_D07_rate_distribution_stability(
     holdings_df: pd.DataFrame,
     *,
     max_shift_bps: float = 300,
+    min_rows: int = 30,
 ) -> list[CheckResult]:
-    """D07: Median interest_rate doesn't shift >300bps between quarters."""
+    """D07: Median interest_rate doesn't shift >300bps between quarters.
+
+    A quarter with fewer than ``min_rows`` rated rows is not compared: a median over a dozen
+    rows moves with which rows happen to carry a rate (2026-10-06, decision D-015)."""
     results = []
     if holdings_df.empty or "interest_rate" not in holdings_df.columns:
         return [_make_result("D07", "global", "skip", 0, max_shift_bps, "No holdings data")]
@@ -842,7 +846,7 @@ def check_D07_rate_distribution_stability(
         for q in quarters:
             rates = _col_float(cik_group[cik_group["report_date"] == q], "interest_rate")
             rates = rates[rates.ne(0)]
-            if rates.empty:
+            if len(rates) < min_rows:
                 prev_median = None
                 continue
 
