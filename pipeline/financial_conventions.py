@@ -28,8 +28,22 @@ def raw_cost_state_sql(cost,facts):
         "ELSE 'present' END,'raw',CAST("+cost+" AS VARCHAR)))) AS VARCHAR)")
 
 
-def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False,fx_quotes=(),unit_adjudications=()):
+def filed_rate_readings(encodings=None):
+    """{cik10: 'all_in' | 'cash_leg'} from the wrappers' source_encodings.filed_rate_reading."""
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings=load_encodings()
+    return {cik:encoding['filed_rate_reading'][0] for cik,encoding in encodings.items() if encoding.get('filed_rate_reading')}
+
+
+def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False,fx_quotes=(),unit_adjudications=(),
+        rate_readings=None):
     """Prepare supported fields without allocating identity or inventing rates.
+
+    ``rate_readings`` ({cik10: 'all_in' | 'cash_leg'}; default: the wrappers' filed_rate_reading)
+    says what a fund's plain rate tag holds. It applies only where the tag does not name its own
+    kind. Under 'all_in' a row whose PIK rate exceeds the filed rate contradicts the reading and
+    stays unresolved; under 'cash_leg' the existing cash rule applies (all-in needs a PIK rate).
 
     Explicit kinds/precision may be supplied by governed source producers. A
     previous v2 row is idempotent: use the retained reported rate and cost, never
@@ -60,6 +74,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         if name in frame: frame[name]=frame[name].astype('string').fillna('')
     from pipeline.monetary_fx import apply_fair_value
     frame=apply_fair_value(frame,quotes=fx_quotes,decisions=unit_adjudications)
+    if rate_readings is None: rate_readings=filed_rate_readings()
+    readings=pd.DataFrame({'cik':pd.Series(list(rate_readings),dtype='string'),
+        'reading':pd.Series(list(rate_readings.values()),dtype='string')})
     if frame.empty:
         return frame,pd.DataFrame(columns=['row_id','cost_state','donor_valid','source_cost_value',
             'source_rate_value','rate_kind','coupon_state','maturity_precision'])
@@ -69,7 +86,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     else: hierarchy=hierarchy[["sub_industry","sector"]].copy()
     with duckdb.connect(config={"threads":2,"memory_limit":"-1"}) as con:
         con.register("input",frame);con.register("nav",nav);con.register("taxonomy",hierarchy)
-        con.register("prior_states",prior_states)
+        con.register("prior_states",prior_states);con.register("rate_readings",readings)
         if con.execute('SELECT count(*) FROM (SELECT row_id FROM prior_states GROUP BY ALL HAVING count(*)>1)').fetchone()[0]:
             raise ValueError('Retained financial states repeat observation identity')
         if migrated and con.execute('SELECT count(*) FROM input i ANTI JOIN prior_states p USING(row_id)').fetchone()[0]:
@@ -93,6 +110,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         # every input column here held three full-width copies of the holdings
         # (src_facts included) in memory at once: about 12 MB per 1,000 rows.
         con.execute("""CREATE TABLE typed AS SELECT row_id,fair_value_currency,interest_rate_kind,
+            (SELECT max(r.reading) FROM rate_readings r
+             WHERE r.cik=lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0')) AS rate_reading,
             cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
             src_field_overrides,src_transforms,source,fair_value_source,src_context_id,
             maturity_precision,maturity_date_source,maturity_date,
@@ -115,10 +134,15 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN fv IS NULL OR NOT isfinite(fv) THEN 'not_available'
                  WHEN upper(trim(fair_value_currency))='USD' THEN 'explicit_usd'
                  ELSE 'assumed_usd' END AS fv_state,
-            CASE WHEN NULLIF(interest_rate_kind,'') IS NOT NULL THEN interest_rate_kind
+            CASE WHEN NULLIF(NULLIF(interest_rate_kind,''),'unresolved') IS NOT NULL THEN interest_rate_kind
                  WHEN rate_concept LIKE '%effectiveyield%' OR rate_concept LIKE '%yieldtomaturity%' THEN 'effective_yield'
                  WHEN rate_concept IN ('investmentinterestratepaidincash','investmentcashinterestrate') THEN 'cash'
                  WHEN rate_concept LIKE '%allininterestrate%' THEN 'all_in'
+                 -- The fund's reviewed reading of its plain rate tag. A PIK rate above the
+                 -- filed rate cannot be part of it, so that row keeps its unresolved state.
+                 WHEN rate_reading='all_in' AND isfinite(reported_rate)
+                      AND NOT coalesce(isfinite(pik) AND pik>reported_rate+0.01,false) THEN 'all_in'
+                 WHEN rate_reading='cash_leg' AND isfinite(reported_rate) THEN 'cash'
                  ELSE 'unresolved' END AS rate_kind,
             CASE WHEN p.cost_state IS NOT NULL THEN p.cost_state
                  WHEN upper(trim(cost_currency)) NOT IN ('','USD') THEN 'unresolved_currency'

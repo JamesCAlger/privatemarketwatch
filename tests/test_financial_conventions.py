@@ -435,3 +435,65 @@ def test_admitted_but_malformed_unit_decision_is_rejected_at_load(tmp_path,chang
     (tmp_path/'admission_manifest.json').write_text(json.dumps(dict(format_version=1,entries={path.name:
         dict(admission_status='promoted',sha256=sha(path),evidence={'fixture':'reviewed'})})))
     with pytest.raises(ValueError,match='Malformed field-specific'): load_inputs(tmp_path)
+
+
+BARE=json.dumps({"interest_rate":{"c":"bare","r":0.0943}})
+
+
+def test_fund_reading_publishes_the_plain_rate_tag_as_all_in():
+    # BCRED 2026-03-31, Inovalon Holdings, Inc. 1: filed 9.43, PIK 2.75 (part of the 9.43); IRI Group: filed 7.95, no PIK.
+    frame=rows(dict(row_id="pik",cik="0001803498",interest_rate_kind="",interest_rate="9.43",pik_rate="2.75",src_facts=BARE),
+        dict(row_id="plain",cik="0001803498",interest_rate_kind="",interest_rate="7.95",pik_rate="",src_facts=BARE),
+        dict(row_id="other",cik="0000000999",interest_rate_kind="",interest_rate="7.95",pik_rate="",src_facts=BARE))
+    result,states=prepare(frame,rate_readings={"0001803498":"all_in"})
+    by_id=result.set_index("row_id")
+    assert by_id.loc["pik","interest_rate_kind"]=="all_in" and by_id.loc["pik","interest_rate"]==9.43
+    assert by_id.loc["pik","interest_rate_cash"]==pytest.approx(6.68)
+    assert by_id.loc["plain","interest_rate"]==7.95 and pd.isna(by_id.loc["plain","interest_rate_cash"])
+    assert "coupon_unresolved" not in by_id.loc["pik","src_transforms"]
+    # a fund with no reading is untouched
+    assert by_id.loc["other","interest_rate_kind"]=="unresolved" and pd.isna(by_id.loc["other","interest_rate"])
+    assert states.set_index("row_id").loc["pik","coupon_state"]=="supported"
+
+
+def test_pik_above_the_filed_rate_contradicts_all_in_and_stays_unresolved():
+    # Ares 2023-12-31, NMC Skincare first lien loan 1: filed 1.00, PIK 11.44. The filed rate cannot contain the PIK.
+    frame=rows(dict(row_id="split",cik="0001287750",interest_rate_kind="",interest_rate="1.0",pik_rate="11.44",src_facts=BARE),
+        dict(row_id="equal",cik="0001287750",interest_rate_kind="",interest_rate="15.0",pik_rate="15.0",src_facts=BARE))
+    result,_=prepare(frame,rate_readings={"0001287750":"all_in"})
+    by_id=result.set_index("row_id")
+    assert by_id.loc["split","interest_rate_kind"]=="unresolved" and pd.isna(by_id.loc["split","interest_rate"])
+    assert by_id.loc["split","interest_rate_reported"]==1.0
+    assert "interest_rate:coupon_unresolved" in by_id.loc["split","src_transforms"]
+    # fully PIK: the filed rate equals the PIK rate
+    assert by_id.loc["equal","interest_rate"]==15.0 and by_id.loc["equal","interest_rate_cash"]==0.0
+
+
+def test_reading_does_not_override_a_tag_that_names_its_own_kind_or_invent_a_rate():
+    cash=json.dumps({"interest_rate":{"c":"investmentinterestratepaidincash"}})
+    frame=rows(dict(row_id="cash",cik="0001803498",interest_rate_kind="",interest_rate="10",pik_rate="2",src_facts=cash),
+        dict(row_id="none",cik="0001803498",interest_rate_kind="",interest_rate="",pik_rate="",src_facts="{}"),
+        dict(row_id="rerun",cik="0001803498",interest_rate_kind="unresolved",interest_rate="8.42",pik_rate="",src_facts=BARE))
+    result,_=prepare(frame,rate_readings={"0001803498":"all_in"},source_frame=True)
+    by_id=result.set_index("row_id")
+    assert by_id.loc["cash","interest_rate_kind"]=="cash" and by_id.loc["cash","interest_rate"]==12
+    assert by_id.loc["none","interest_rate_kind"]=="unresolved" and pd.isna(by_id.loc["none","interest_rate"])
+    # a row stored as unresolved by an earlier build takes the reading
+    assert by_id.loc["rerun","interest_rate"]==8.42
+
+
+def test_cash_leg_reading_keeps_the_existing_cash_rule():
+    frame=rows(dict(row_id="pik",cik="0000000777",interest_rate_kind="",interest_rate="6.7",pik_rate="7.6",src_facts=BARE),
+        dict(row_id="plain",cik="0000000777",interest_rate_kind="",interest_rate="6.7",pik_rate="",src_facts=BARE))
+    result,_=prepare(frame,rate_readings={"0000000777":"cash_leg"})
+    by_id=result.set_index("row_id")
+    assert by_id.loc["pik","interest_rate"]==pytest.approx(14.3) and by_id.loc["pik","interest_rate_cash"]==6.7
+    assert pd.isna(by_id.loc["plain","interest_rate"])
+
+
+def test_wrapper_setting_is_validated_and_set_for_the_four_funds_that_file_rates():
+    from pipeline.source_encodings import load_encodings
+    encodings=load_encodings()
+    for cik in ("0001803498","0001287750","0001838126","0001837532"):
+        assert encodings[cik]["filed_rate_reading"]==["all_in"]
+    assert "filed_rate_reading" not in encodings.get("0001812554",{})
