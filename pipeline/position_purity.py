@@ -123,7 +123,10 @@ def build_position_purity_diagnostics(
                     cost,
                     principal_amount,
                     shares_held,
-                    MIN(period) AS source_period
+                    -- The latest matching period. A position whose values did not change is filed
+                    -- with the same numbers in the comparative and the current context; the
+                    -- published row is the current one (2026-10-06, decision D-011).
+                    MAX(period) AS source_period
                 FROM bdc_source
                 GROUP BY
                     regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'),

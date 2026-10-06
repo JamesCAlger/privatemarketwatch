@@ -538,3 +538,18 @@ def test_no_pik_rule_does_not_reach_tags_that_are_not_the_coupon():
     result,_=prepare(frame,rate_readings={})
     assert result.interest_rate.isna().all()
     assert result.set_index("row_id").loc["cash","interest_rate_cash"]==10
+
+
+def test_a_row_that_files_no_rate_is_not_tagged_coupon_unresolved():
+    # Blue Owl tags no rate at all (0 of 8,164 credit rows). "Unresolved" means a filed rate whose
+    # meaning is unknown; a row with nothing filed has nothing to resolve (decision D-010).
+    frame=rows(dict(row_id="none",cik="0001812554",interest_rate_kind="",interest_rate="",pik_rate="",src_facts="{}"),
+        dict(row_id="pikonly",cik="0001812554",interest_rate_kind="",interest_rate="",pik_rate="2.75",src_facts="{}"),
+        dict(row_id="split",cik="0001287750",interest_rate_kind="",interest_rate="1.0",pik_rate="11.44",src_facts=BARE))
+    result,states=prepare(frame,rate_readings={"0001287750":"all_in"})
+    by_id=result.set_index("row_id")
+    assert "coupon_unresolved" not in by_id.loc["none","src_transforms"]
+    assert "coupon_unresolved" not in by_id.loc["pikonly","src_transforms"]
+    assert pd.isna(by_id.loc["none","interest_rate"]) and by_id.loc["none","interest_rate_kind"]=="unresolved"
+    # a filed rate that cannot be read stays tagged
+    assert "interest_rate:coupon_unresolved" in by_id.loc["split","src_transforms"]

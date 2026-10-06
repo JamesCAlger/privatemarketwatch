@@ -45,7 +45,8 @@ NOT_SEEDED = ("private_markets_holdings", "position_matches", "position_id_edges
               "quarter_acceptance", "pass_preflight")
 SEEDED_DIRS = ("linkbase_analysis",)
 RESOLVED = frozenset({"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream",
-                      "gone_unadjudicated"})
+                      "gone_unadjudicated", "dispositioned_informational", "dispositioned_as_filed",
+                      "dispositioned_not_applicable"})
 PY = sys.executable
 STAGES = (
     ("highlights", [PY, "scripts/rebuild_outputs.py", "--highlights"]),

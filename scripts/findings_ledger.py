@@ -9,6 +9,10 @@ finding (union of current review queue + adjudicated verdicts) gets exactly one 
     adjudicated_false_alarm   false_alarm / NO_PATCH_NEEDED
     remediated_promoted       real_error with a promoted correction referencing it
     resolved_upstream         real_error adjudicated, finding no longer in the queue
+    dispositioned_*           an otherwise unresolved finding covered by a standing disposition
+                              (pipeline.finding_dispositions: informational, as_filed,
+                              not_applicable). A reviewer's real-error verdict is left standing
+                              unless the disposition is informational or carries filing evidence.
   Terminal for agents (human basket):
     needs_human               ambiguous / anchor_bad / ESCALATE / PATCH_PROPOSED
                               with no promotable route
@@ -43,6 +47,7 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from pipeline import finding_dispositions  # noqa: E402
 from scripts.check_tier_coverage import VERDICT_DIRS, load_verdict  # noqa: E402
 
 DEFAULT_QUEUE = ROOT / "data" / "output" / "review_queue" / "review_queue.csv"
@@ -184,6 +189,7 @@ def build_ledger(
     wrapper_dir: Path = DEFAULT_WRAPPERS, verdict_dirs=VERDICT_DIRS,
     seed_paths: Iterable[Path] = (), quarter: str | None = None,
     manifest_path: Path | None = None, closure_mode: bool = False,
+    dispositions_dir: Path | None = None,
 ) -> list[dict]:
     """Build the lifecycle ledger.
 
@@ -216,6 +222,7 @@ def build_ledger(
     promoted_ids = _leaf_review_ids(Path(promoted_dir)) | _wrapper_provenance_ids(Path(wrapper_dir))
     pulled_ids = _leaf_review_ids(Path(archive_dir)) - promoted_ids - staged_ids
 
+    dispositions = finding_dispositions.load(dispositions_dir)
     ledger = []
     universe = set(queue_rows) | set(seed_rows)
     # In scoped closure mode, do not accidentally pull every historic verdict into
@@ -232,8 +239,17 @@ def build_ledger(
             seeded=rid in seed_rows, has_fix_route=_has_fix_route(verdict_paths.get(rid)),
             closure_mode=closure_mode)
         q = queue_rows.get(rid, seed_rows.get(rid, {}))
+        # A standing disposition closes a finding that is still unresolved.
+        disposition = finding_dispositions.match(
+            dispositions, cik=q.get("cik"), engine=q.get("engine"),
+            rule_name=q.get("rule_name"), report_date=q.get("report_date"))
+        if disposition is not None and finding_dispositions.closes(disposition, state):
+            state = finding_dispositions.STATE_BY_CLASS[disposition["class"]]
+        else:
+            disposition = None
         ledger.append({
             "review_id": rid, "state": state, "in_queue": rid in queue_rows,
+            "disposition_id": disposition["disposition_id"] if disposition else "",
             "population_origin": ("frozen_and_live" if rid in queue_rows and rid in seed_rows
                                   else "live" if rid in queue_rows else "frozen"),
             "verdict_status": vstatus, "verdict_detail": vdetail,

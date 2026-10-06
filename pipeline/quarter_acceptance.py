@@ -49,7 +49,10 @@ FINDINGS_LEDGER_FILE = config.OUTPUT_DIR / "agent_b2" / "findings_ledger.csv"
 # Findings-ledger states that need no further work. Every other state, including one
 # this module has never seen, is outstanding (owner ruling 2026-10-05).
 RESOLVED_FINDING_STATES = frozenset({"adjudicated_false_alarm", "remediated_promoted",
-                                     "resolved_upstream", "gone_unadjudicated"})
+                                     "resolved_upstream", "gone_unadjudicated",
+                                     # standing dispositions (pipeline.finding_dispositions)
+                                     "dispositioned_informational", "dispositioned_as_filed",
+                                     "dispositioned_not_applicable"})
 
 FUNDS_COLUMNS = [
     "cik",

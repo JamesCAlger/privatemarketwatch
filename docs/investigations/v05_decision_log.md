@@ -110,3 +110,41 @@ Reference for "correct": `docs/production_stack/02_data_contract.md`.
 - **Reason.** The rule's own comment records that excluding negative-value rows lost 5 of 8
   adjudicated real errors elsewhere in the cohort, and says not to try a row-level cut again
   without new evidence. I have none for the other funds.
+
+### D-009 Standing dispositions are read by the findings ledger
+
+- **Decision.** New store `data/overrides/finding_dispositions/` and module
+  `pipeline/finding_dispositions.py`. An unresolved finding covered by an entry gets a terminal
+  state `dispositioned_informational`, `dispositioned_as_filed` or `dispositioned_not_applicable`;
+  the acceptance check and the fund sandbox count those as resolved.
+- **Why a new store.** Verdict files live under `data/output` and are keyed by review id. A
+  disposition has to be version-controlled and keyed by what the finding is (fund, engine, rule,
+  quarter).
+- **Limits built in.** Every entry needs evidence and a re-run command. `as_filed` and
+  `not_applicable` must name their funds and their quarters, so a new quarter or another fund is
+  reviewed again. Only `informational` may cover every fund and quarter. A reviewer's earlier
+  "real error" verdict is left standing unless the entry is informational or carries filing
+  evidence and says so explicitly. An unreadable entry raises; it is never skipped.
+- **Not covered.** No automatic check yet re-tests an entry's evidence when a new build runs.
+
+### D-010 The coupon-unresolved tag is written only when a rate was filed
+
+- **Decision.** The finalizer writes `interest_rate:coupon_unresolved` when a filed rate exists
+  and cannot be read as all-in. A row that files no rate is not tagged.
+- **Evidence.** Sandbox `five8`: 24,385 rows tagged in the five funds; 24,370 file no rate (all
+  8,887 Blue Owl rows, which tags no rate at all). The other 15 (13 Ares, 2 Apollo) file a rate
+  below their PIK rate and stay tagged. `financial_convention_unresolved` fired in all 69
+  fund-quarters.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/unresolved_why.py five8`.
+- **Not covered.** A loan with no filed rate is still visible through X02, C01 and dl_rate_fill.
+- **Applies to** every fund.
+
+### D-011 A published row whose values did not change is not a prior-period row
+
+- **Decision.** The purity check takes the latest matching source period, not the earliest.
+- **Evidence.** HPS 2025-03-31, Calabrio, Inc. 1: identical value, cost and principal in the
+  2024-12-31 and 2025-03-31 contexts; the published row is context c-562 (2025-03-31). PP03 fired
+  in 46 fund-quarters on one to eight such rows each.
+- **Re-run.** `python scratch/2026-10-05_fund_loop/row.py five9 1838126 2025-03-31 "Calabrio, Inc. 1" 4`.
+- **Not covered.** A published row found only in a prior period is still flagged (test).
+- **Applies to** every fund.

@@ -215,7 +215,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             concat_ws(';',nullif(array_to_string(list_filter(string_split(coalesce(i.src_transforms,''),';'),
                 event -> event NOT IN ('interest_rate:cash_plus_pik','interest_rate:coupon_unresolved')),';'),''),
                 CASE WHEN c.rate_kind='cash' AND c.all_in IS NOT NULL THEN 'interest_rate:cash_plus_pik'
-                     WHEN c.all_in IS NULL THEN 'interest_rate:coupon_unresolved' END) AS src_transforms,
+                     -- Unresolved means a filed rate whose meaning is unknown. A row that files no rate
+                     -- has nothing to resolve (2026-10-06, decision D-010).
+                     WHEN c.all_in IS NULL AND isfinite(c.reported_rate) THEN 'interest_rate:coupon_unresolved' END) AS src_transforms,
             coalesce(nullif(i.basis_spread_kind,''),'unresolved') AS basis_spread_kind,
             CASE WHEN c.fv_state IN ('explicit_usd','assumed_usd') AND isfinite(n.net_assets)
                       AND n.net_assets<>0 THEN c.fv/n.net_assets*100 END AS pct_of_net_assets_calculated,
