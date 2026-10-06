@@ -47,6 +47,12 @@
     "field_order": ["issuer_name", "instrument_description"],
     "alternate_delimiters": [" and ", " & "]
   },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^(.+),\\s*[^,]+$",
+    "hierarchy_instrument_re": ",\\s*([^,]+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i),\\s*[^,]*(?:loan|notes?|units?|stock|shares?|interests?|warrants?|equity|certificates?|bonds?|debentures?|membership|preferred|common|partnership|participation rights)[^,]*$')"
+  },
   "archetypes": {
     "senior_secured_debt": {
       "description": "First lien, second lien, unitranche, and other senior secured term loans and revolvers",

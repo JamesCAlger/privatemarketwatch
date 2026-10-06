@@ -1,0 +1,32 @@
+{
+ "cik": "1837532",
+ "rule_id": "exclude_industry_instrument_subtotal_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "NOT regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)(investment|security) type') AND regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)(first|second) lien secured debt( - (revolver|term loan|delayed draw|corporate bond))?\\s*$') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND nullif(trim(CAST(maturity_date AS VARCHAR)), '') IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "evidence": [
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'apollo' (2026-10-06), 2024-03-31: 'Insurance First Lien Secured Debt - Revolver' carries fair value 50,488,000 and cost 50,312,000 with no issuer, principal, rate or maturity. Published total 8,525.1M against filed investments 8,474.7M (no cash equivalents that quarter): excess 50.5M, equal to this row."
+  },
+  {
+   "source": "query",
+   "quote": "Across 2023-03-31 to 2026-03-31 it is the only Apollo row above 1M with a fair value and no principal, units or maturity outside the cash class."
+  }
+ ],
+ "rationale": "An industry-and-instrument heading with a value and no issuer is a subtotal, not a position. Every Apollo position names its issuer before the words Investment Type (or Security Type) and ends with a rate and maturity. The rule is structural: it keys on the missing issuer part and the missing principal, units and maturity, not on a filing's row ids, so it applies to every quarter. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2024-03-31": {
+   "rows": 1,
+   "fv": 50488000.0,
+   "residual_before": 50488000.0,
+   "residual_after": 0.0
+  }
+ }
+}

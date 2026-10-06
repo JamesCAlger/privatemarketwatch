@@ -2013,6 +2013,38 @@ class TestPrepareBdc:
         assert "Worldremit Group Limited (United Kingdom)" in by_issuer
         assert "Delayed Draw" in by_issuer["Streamland Media Midco, LLC"]["instrument_description"]
 
+    def test_ares_comma_identifier_splits_issuer_from_instrument(self):
+        """Ares Capital (0001287750): '<issuer names>, <instrument> [n]'. The issuer
+        names contain commas themselves, so the split is at the last comma and only
+        when the last part reads as an instrument. 18,195 of 18,374 published rows
+        carried the whole identifier as issuer_name (fund sandbox, 2026-10-06)."""
+        loan = ("Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC, "
+                "First lien senior secured loan 2")
+        df = self._make_bdc_df([
+            {"cik": "0001287750", "entity_name": "ARES CAPITAL CORP",
+             "accession_number": "0001628280-26-027688", "report_date": "2026-03-31",
+             "investment_identifier": loan,
+             "fair_value": 34_400_000, "cost": 34_400_000, "principal_amount": 34_400_000},
+            {"cik": "0001287750", "entity_name": "ARES CAPITAL CORP",
+             "accession_number": "0001628280-26-027688", "report_date": "2026-03-31",
+             "investment_identifier": "Ivy Hill Asset Management, L.P., Member interest",
+             "fair_value": 1_899_000_000, "cost": 1_700_000_000},
+            {"cik": "0001287750", "entity_name": "ARES CAPITAL CORP",
+             "accession_number": "0001628280-26-027688", "report_date": "2026-03-31",
+             "investment_identifier": "Expereo USA, Inc. and Ristretto Bidco B.V.",
+             "fair_value": 61_000_000, "cost": 61_000_000, "principal_amount": 61_600_000},
+        ])
+        result = _prepare_bdc(df)
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        assert by_id[loan]["issuer_name"] == "Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC"
+        assert by_id[loan]["instrument_description"] == "First lien senior secured loan 2"
+        ivy = by_id["Ivy Hill Asset Management, L.P., Member interest"]
+        assert ivy["issuer_name"] == "Ivy Hill Asset Management, L.P."
+        assert ivy["instrument_description"] == "Member interest"
+        # no instrument after the last comma: the names are left whole
+        bare = by_id["Expereo USA, Inc. and Ristretto Bidco B.V."]
+        assert bare["issuer_name"] == "Expereo USA, Inc. and Ristretto Bidco B.V."
+
     def test_trinity_flat_hierarchy_extracts_issuer(self):
         """Trinity Capital (0001786108): 'Portfolio Company Debt Securities-
         United States <Industry> <Company> Type of Investment <type>

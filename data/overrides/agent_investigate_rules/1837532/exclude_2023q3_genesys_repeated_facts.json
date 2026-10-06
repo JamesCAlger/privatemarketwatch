@@ -1,0 +1,36 @@
+{
+ "cik": "1837532",
+ "rule_id": "exclude_2023q3_genesys_repeated_facts",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2023-09-30"
+  ]
+ },
+ "predicate_sql": "report_date = '2023-09-30' AND CAST(bdc_investment_identifier AS VARCHAR) LIKE 'IT Services Genesys Cloud Greeneden U.S. Holdings II, LLC Investment Type First Lien Secured Debt Interest Rate L+400,%' AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) = 50510000",
+ "evidence": [
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'apollo' (2026-10-06), 0000950170-23-061985 (10-Q, 2023-09-30): 'IT Services Genesys Cloud Greeneden U.S. Holdings II, LLC ... Interest Rate L+400, 0.75% Floor Maturity Date 12/1/2027' carries fair value 50,510,000 and cost 53,447,000 with no principal. 'Independent Power & Renewable Electricity Producers Esdec Esdec Solar Group B.V. ... E+600' carries the same fair value 50,510,000 and cost 53,447,000 with principal 65,000,000."
+  },
+  {
+   "source": "query",
+   "quote": "The same filing's current Genesys position is the L+411 loan: fair value 11,235,000, principal 11,213,000. The L+400 loan's last own values are at 2022-12-31 (fair value 38,810,000, principal 40,350,000)."
+  },
+  {
+   "source": "query",
+   "quote": "2023-09-30 published total 5,577.8M against filed investments 5,287.2M plus cash equivalents 240.0M: excess 50.5M, equal to this row."
+  }
+ ],
+ "rationale": "The filer attached the Esdec loan's fair value and cost to the retired Genesys L+400 identifier as well. The row has no principal and its two amounts equal Esdec's to the dollar; removing it reconciles the quarter exactly. A single mis-tagged row in one filing, so the rule is pinned to that quarter. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.95,
+ "measured_impact": {
+  "2023-09-30": {
+   "rows": 1,
+   "fv": 50510000.0,
+   "residual_before": 50510000.0,
+   "residual_after": 0.0
+  }
+ }
+}

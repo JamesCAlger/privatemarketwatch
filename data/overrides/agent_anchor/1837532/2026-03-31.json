@@ -1,13 +1,18 @@
 {
   "cik": "1837532",
   "target_quarter": "2026-03-31",
-  "grand_total": 25149083000.0,
-  "method": "single_tag",
+  "grand_total": 25308482000.0,
+  "method": "sum_of_components",
   "components": [
     {
       "label": "Non-controlled/non-affiliated investments at fair value",
       "value": 25149083000.0,
       "source": "Filing table 6 row 9: Non-controlled/non-affiliated investments, March 31, 2026 fair value $25,149,083 thousand"
+    },
+    {
+      "label": "Cash equivalents at fair value",
+      "value": 159399000.0,
+      "source": "XBRL fact F_dac2dbd6-9d9e-4d70-ad24-6996733efbb4, ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents 159,399,000 on the cash equivalents context; us-gaap:CashEquivalentsAtCarryingValue 159,399,000"
     }
   ],
   "companyfacts_fv": 25149083000.0,
@@ -27,9 +32,13 @@
     {
       "source": "query",
       "quote": "fund_financials companyfacts for 2026-03-31: investments_at_fair_value=25149083000.0; total_assets=26933918000.0"
+    },
+    {
+      "source": "filing",
+      "quote": "0001193125-26-215667 XBRL fact F_75a53872-1dd7-4840-9add-cf582a8440d8, ck0001837532:InvestmentOwnedAtFairValueAfterCashEquivalents = 25,308,482,000 (schedule total after cash equivalents) = 25,149,083,000 + 159,399,000."
     }
   ],
-  "rationale": "The filing presents only non-controlled/non-affiliated investments on the balance sheet; no affiliated or controlled investment schedule is present. The undimensioned balance-sheet amount of $25,149,083 thousand agrees exactly with the schedule's final Total Investments before Cash Equivalents fair-value amount and with companyfacts. Cash equivalents of $159,399 thousand are presented separately and are excluded. The grand total is 93.37% of total assets, leaving a plausible non-investment remainder of $1,784,835 thousand.",
+  "rationale": "The filing presents only non-controlled/non-affiliated investments on the balance sheet; no affiliated or controlled investment schedule is present. The undimensioned balance-sheet amount of $25,149,083 thousand agrees exactly with the schedule's final Total Investments before Cash Equivalents fair-value amount and with companyfacts. Cash equivalents of $159,399 thousand are presented separately and are excluded. The grand total is 93.37% of total assets, leaving a plausible non-investment remainder of $1,784,835 thousand. Amended 2026-10-06 in an interactive session: the published rows include the schedule's cash equivalent row (159,399 thousand), so the anchor now reads the schedule's own total after cash equivalents and declares the published_rows basis. The ex-cash figure is unchanged and kept as the first component.",
   "confidence": 0.99,
-  "basis": "investments_ex_cash"
+  "basis": "published_rows"
 }

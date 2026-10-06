@@ -1,0 +1,120 @@
+{
+ "cik": "1287750",
+ "rule_id": "exclude_issuer_only_supplemental_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "NOT regexp_matches(lower(regexp_replace(CAST(bdc_investment_identifier AS VARCHAR), '\\s+[0-9]+$', '')), 'loan|notes?( |$)|units?( |$)|stock|shares?( |$)|interests?( |$)|warrants?( |$)|equity|certificates?|bonds?( |$)|debentures?|membership|preferred|common|partnership|participation rights|catalog of') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "evidence": [
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'five3' (2026-10-06): in 13 of 15 quarters 2022-09-30 to 2026-03-31 the rows selected by the predicate (identifier with no instrument word, no principal, no units, a fair value) sum to the published-basis excess over fund_financials investments_at_fair_value to within 400,000. Largest selected rows: 2025-12-31 'Implus Footcare, LLC, Implus Holdings, LLC, and Implus Topco, LLC' 82,200,000; 2024-09-30 'Visual Edge Technology, Inc.' 78,700,000; 2025-03-31 'VPROP Operating, LLC and V SandCo, LLC' 56,700,000; 2025-06-30 'VPROP Operating, LLC and V SandCo, LLC' 49,100,000."
+  },
+  {
+   "source": "query",
+   "quote": "Selected rows repeat schedule positions under a different issuer-group name or as their sum: 2025-03-31 'Adonis Acquisition Holdings LLC and Adonis Acquisition Holdings Parent LLC' 24,800,000 beside its Common units 13,200,000 and two first lien loans 10,700,000 and 1,000,000; 2024-09-30 'Visual Edge Technology, Inc.' 78,700,000 beside the 'Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC' positions."
+  },
+  {
+   "source": "filing",
+   "quote": "0001287750-25-000020 (10-Q, 2025-03-31): context c-1822 carries InvestmentOwnedAtFairValue 56,700,000 on the identifier 'VPROP Operating, LLC and V SandCo, LLC' (issuer names only); the schedule positions are contexts c-1694 to c-1698 (four first lien loans and Class A units)."
+  }
+ ],
+ "rationale": "The filer tags issuer-level fair values (controlled and affiliated company tables) with the investment identifier axis, using the issuer names alone. Most are recognised as issuer subtotals; those whose issuer-group name differs from the schedule's, or whose sum is a rounding step away, entered holdings as extra positions. Schedule rows end with the instrument and carry principal or units. The rule is structural and covers every quarter; it replaces the quarter-pinned rules exclude_2025q3_issuer_subtotals and exclude_prg_rollup_2023q2 in mechanism (they are left in place). Known residual: at 2025-03-31 and 2025-06-30 the fund is then about 94,500,000 and 33,400,000 below the filed total, because some schedule positions carry no fair value on their own context (for example the VPROP Class A units: 11,500,000 is tagged on the issuer-name axis, context c-1699). The issuer-level rows were masking that. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2022-09-30": {
+   "rows": 5,
+   "fv": 74000000.0,
+   "residual_before": 73900000.0,
+   "residual_after": -100000.0
+  },
+  "2022-12-31": {
+   "rows": 8,
+   "fv": 82700000.0,
+   "residual_before": 82600000.0,
+   "residual_after": -100000.0
+  },
+  "2023-03-31": {
+   "rows": 6,
+   "fv": 86100000.0,
+   "residual_before": 86000000.0,
+   "residual_after": -100000.0
+  },
+  "2023-06-30": {
+   "rows": 1,
+   "fv": 0.0,
+   "residual_before": 0.0,
+   "residual_after": 0.0
+  },
+  "2023-09-30": {
+   "rows": 1,
+   "fv": 0.0,
+   "residual_before": -100000.0,
+   "residual_after": -100000.0
+  },
+  "2023-12-31": {
+   "rows": 2,
+   "fv": 0.0,
+   "residual_before": -100000.0,
+   "residual_after": -100000.0
+  },
+  "2024-03-31": {
+   "rows": 2,
+   "fv": 0.0,
+   "residual_before": 400000.0,
+   "residual_after": 400000.0
+  },
+  "2024-06-30": {
+   "rows": 6,
+   "fv": 21900000.0,
+   "residual_before": 21900000.0,
+   "residual_after": 0.0
+  },
+  "2024-09-30": {
+   "rows": 7,
+   "fv": 100200000.0,
+   "residual_before": 100200000.0,
+   "residual_after": 0.0
+  },
+  "2024-12-31": {
+   "rows": 5,
+   "fv": 22700000.0,
+   "residual_before": 22500000.0,
+   "residual_after": -200000.0
+  },
+  "2025-03-31": {
+   "rows": 7,
+   "fv": 113300000.0,
+   "residual_before": 18800000.0,
+   "residual_after": -94500000.0
+  },
+  "2025-06-30": {
+   "rows": 6,
+   "fv": 78800000.0,
+   "residual_before": 45400000.0,
+   "residual_after": -33400000.0
+  },
+  "2025-09-30": {
+   "rows": 6,
+   "fv": 30600000.0,
+   "residual_before": 30400000.0,
+   "residual_after": -200000.0
+  },
+  "2025-12-31": {
+   "rows": 7,
+   "fv": 112400000.0,
+   "residual_before": 112200000.0,
+   "residual_after": -200000.0
+  },
+  "2026-03-31": {
+   "rows": 5,
+   "fv": 31700000.0,
+   "residual_before": 31500000.0,
+   "residual_after": -200000.0
+  }
+ }
+}
