@@ -109,3 +109,22 @@ def test_apollo_repeated_genesys_facts_are_excluded_in_their_quarter_only():
     # its own values a year earlier are a real position
     earlier = _kept(rule, [_row("1837532", stale, 38_810_000.0, "2022-12-31", principal=40_350_000.0)])
     assert earlier == {stale}
+
+
+@pytest.mark.parametrize("identifier,family", [
+    ("ARES 2007-3R, Subordinated notes", "debt"),                    # 0.1M, every quarter to 2024-03-31
+    ("Nordic Ferry Infrastructure AS, Senior subordinated loan 1", "debt"),
+    ("CREST Exeter Street Solar 2004-1, Preferred shares", "equity"),
+])
+def test_ares_positions_whose_issuer_has_no_legal_suffix_are_leaves(identifier, family):
+    """Ares identifies every position as '<issuer>, <instrument>'; it files no category rows under
+    the identifier axis. These three fell through to '<family>_category_rollup' and were dropped
+    (the fund's 0.1M to 0.2M shortfall in 13 quarters, fund sandbox 2026-10-06)."""
+    from pipeline.bdc_xbrl_wrapper import classify_identifier
+    assert classify_identifier("0001287750", identifier)["wrapper_disposition"] == family + "_position_leaf"
+
+
+@pytest.mark.parametrize("identifier", ["Total investments", "Sub-total", "Software and Services"])
+def test_ares_totals_and_headings_are_not_leaves(identifier):
+    from pipeline.bdc_xbrl_wrapper import classify_identifier
+    assert not classify_identifier("0001287750", identifier)["wrapper_disposition"].endswith("_position_leaf")
