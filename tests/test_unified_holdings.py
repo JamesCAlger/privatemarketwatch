@@ -2045,6 +2045,65 @@ class TestPrepareBdc:
         bare = by_id["Expereo USA, Inc. and Ristretto Bidco B.V."]
         assert bare["issuer_name"] == "Expereo USA, Inc. and Ristretto Bidco B.V."
 
+    def test_text_spread_in_basis_points_is_stored_as_percent_and_floats(self):
+        """Apollo Debt Solutions (0001837532) writes spreads as 'S+550'. Where the row has
+        no tagged spread the text value was stored as 550.0 beside 5.5 on its twin, and a
+        tagged rate made the row 'Fixed' (2026-03-31 RMC delayed draw: tagged rate 6.75%)."""
+        base = {"cik": "0001837532", "entity_name": "Apollo Debt Solutions BDC",
+                "accession_number": "0001193125-26-215667", "report_date": "2026-03-31"}
+        bps = ("Chemicals RMC Rochester Midland Corporation Investment Type First Lien Secured Debt - "
+               "Delayed Draw Interest Rate S+550, 1.00% Floor Maturity Date 8/1/2029")
+        pct = ("Software Example Example Holdings, Inc. Investment Type First Lien Secured Debt - "
+               "Term Loan Interest Rate SOFR + 5.25%, 1.00% Floor Maturity Date 8/1/2030")
+        tagged = ("Chemicals RMC Rochester Midland Corporation Investment Type First Lien Secured Debt - "
+                  "Delayed Draw Interest Rate S+550, 1.00% Floor Maturity Date 08/01/2029")
+        df = self._make_bdc_df([
+            dict(base, investment_identifier=bps, fair_value=4_770_000, cost=4_900_000,
+                 principal_amount=5_000_000, interest_rate=0.0675),
+            dict(base, investment_identifier=pct, fair_value=9_900_000, cost=9_900_000,
+                 principal_amount=10_000_000),
+            dict(base, investment_identifier=tagged, fair_value=12_580_000, cost=12_700_000,
+                 principal_amount=12_861_000, basis_spread=0.055),
+        ])
+        result = _prepare_bdc(df)
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        assert float(by_id[bps]["basis_spread"]) == pytest.approx(5.5)
+        assert by_id[bps]["coupon_type"] == "Floating"
+        assert float(by_id[pct]["basis_spread"]) == pytest.approx(5.25)
+        assert float(by_id[tagged]["basis_spread"]) == pytest.approx(5.5)
+
+    def test_apollo_rows_without_the_type_marker_still_split_issuer_and_instrument(self):
+        """Apollo Debt Solutions (0001837532): most rows read '<industry> <name> <legal entity>
+        Investment Type <instrument> ...'. 249 rows omit the words 'Investment Type' and 6 split
+        them ('Investment <entity> Type'); their issuer_name kept the industry and the
+        instrument (fund sandbox, 2026-10-06)."""
+        base = {"cik": "0001837532", "entity_name": "Apollo Debt Solutions BDC",
+                "accession_number": "0000950170-24-094137", "report_date": "2024-06-30"}
+        marked = ("Leisure Products Lime Neutron Holdings, Inc. Investment Type First Lien Secured Debt - "
+                  "Term Loan Interest Rate 10.00% Maturity Date 09/30/2026")
+        unmarked = ("Capital Markets Arrowhead Engineered Products Arrowhead Holdco Company First Lien "
+                    "Secured Debt Interest Rate S+450, 0.75% Floor Maturity Date 08/31/2028")
+        split = ("Automobile Components Crash Champions Investment Champions Financing Inc Type First Lien "
+                 "Secured Debt-Term Loan Interest Rate S+475, 0.00% Floor Maturity Date 2/23/2029")
+        bond = ("Household Durables HOV K Hovnanian Enterprises Inc First Lien Secured Debt - Corporate Bond "
+                "Interest Rate 11.75% Maturity Date 9/30/2029")
+        equity = "Household Durables Ergotron Ergotron Investments, LLC Common Equity - Equity Unit"
+        df = self._make_bdc_df([
+            dict(base, investment_identifier=i, fair_value=10_000_000, cost=10_000_000, principal_amount=10_000_000)
+            for i in (marked, unmarked, split, bond)
+        ] + [dict(base, investment_identifier=equity, fair_value=100_000, cost=100_000, shares_held=1000)])
+        result = _prepare_bdc(df)
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        assert by_id[marked]["issuer_name"] == "Lime Neutron Holdings, Inc."
+        assert by_id[marked]["instrument_description"].startswith("First Lien Secured Debt - Term Loan")
+        assert by_id[unmarked]["issuer_name"] == "Arrowhead Engineered Products Arrowhead Holdco Company"
+        assert by_id[unmarked]["instrument_description"].startswith("First Lien Secured Debt")
+        assert by_id[split]["issuer_name"] == "Crash Champions Investment Champions Financing Inc"
+        assert by_id[split]["instrument_description"].startswith("First Lien Secured Debt-Term Loan")
+        assert by_id[bond]["issuer_name"] == "HOV K Hovnanian Enterprises Inc"
+        assert by_id[equity]["issuer_name"] == "Ergotron Ergotron Investments, LLC"
+        assert by_id[equity]["instrument_description"].startswith("Common Equity")
+
     def test_trinity_flat_hierarchy_extracts_issuer(self):
         """Trinity Capital (0001786108): 'Portfolio Company Debt Securities-
         United States <Industry> <Company> Type of Investment <type>

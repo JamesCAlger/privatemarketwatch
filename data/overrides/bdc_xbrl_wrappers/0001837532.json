@@ -104,9 +104,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Investment|Security)\\s+Type\\s+",
-    "hierarchy_instrument_re": "(?:Investment|Security)\\s+Type\\s+(.+)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s+')",
+    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Investment|Security)\\s+Type\\s|Type\\s+(?:(?:First|Frist|Second)\\s+Li(?:en|ne)\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Secured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|First\\s+Lien)|(?:(?:First|Frist|Second)\\s+Li(?:en|ne)\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Secured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|First\\s+Lien))",
+    "hierarchy_instrument_re": "(?i)(?:\\s|-)((?:(?:First|Frist|Second)\\s+Li(?:en|ne)\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Secured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|First\\s+Lien).*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s|\\s(?:(?:First|Frist|Second)\\s+Li(?:en|ne)\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Secured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|First\\s+Lien)')",
     "extra_industry_labels": [
       "Automobile Components",
       "Beverages",

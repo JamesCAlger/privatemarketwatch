@@ -2449,13 +2449,15 @@ def _prepare_bdc(
                 NULLIF(regexp_extract(CAST(instrument_description AS VARCHAR),
                     '(?i)\\b(?:due|maturity(?:\\s+date)?)\\s+(\\d{{1,2}}/\\d{{4}})', 1), '')
             ) AS _text_maturity_month_raw,
-            -- Basis spread: "SOFR + 5.25%", "Prime + 6.0%", "S + 5.25%", "E + 5.75%"
-            TRY_CAST(COALESCE(
+            -- Basis spread: "SOFR + 5.25%", "Prime + 6.0%", "S + 5.25%", "E + 5.75%".
+            -- A value of 25 or more is written in basis points ("S+550") and is
+            -- stored as percent like every other spread.
+            list_transform([TRY_CAST(COALESCE(
                 NULLIF(regexp_extract(_raw_id,
                     '(?i)(?:SOFR|LIBOR|PRIME|EURIBOR|SONIA|CORRA)\\s*\\+\\s*(\\d+\\.?\\d*)', 1), ''),
                 NULLIF(regexp_extract(_raw_id,
                     '\\b[SLE]\\s*\\+\\s*(\\d+\\.?\\d*)', 1), '')
-            ) AS DOUBLE) AS _text_basis_spread,
+            ) AS DOUBLE)], v -> CASE WHEN v >= 25 THEN v / 100 ELSE v END)[1] AS _text_basis_spread,
             -- Interest rate: "Fixed interest rate 12.9%", "Floor rate 11.0%",
             -- "Interest Rate 9.04%" (only when not a PIK sub-rate)
             TRY_CAST(COALESCE(
@@ -2555,6 +2557,8 @@ def _prepare_bdc(
                 ELSE ''
             END AS reference_rate_source,
             CASE
+                -- A tagged rate alone reads as fixed; a spread in the row text says it floats.
+                WHEN coupon_type = 'Fixed' AND _text_basis_spread IS NOT NULL THEN 'Floating'
                 WHEN coupon_type != '' THEN coupon_type
                 WHEN _text_basis_spread IS NOT NULL THEN 'Floating'
                 WHEN _text_interest_rate IS NOT NULL
