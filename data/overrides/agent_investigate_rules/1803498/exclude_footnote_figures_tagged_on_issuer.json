@@ -1,0 +1,32 @@
+{
+ "cik": "1803498",
+ "rule_id": "exclude_footnote_figures_tagged_on_issuer",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(interest_rate AS DOUBLE) IS NULL AND TRY_CAST(basis_spread AS DOUBLE) IS NULL AND TRY_CAST(pik_rate AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) <> 0 AND TRY_CAST(fair_value AS DOUBLE) % 100000 = 0 AND TRY_CAST(cost AS DOUBLE) % 100000 = 0 AND coalesce(asset_category, '') <> 'CASH'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001803498-24-000044 (10-Q, 2024-06-30), schedule footnote: 'As of June 30, 2024, $ 54.2 million of the cost and $ 35.6 million of fair value of WHCG Purchaser III, Inc. is considered to be on non-accrual status.' Context c-1374 carries InvestmentOwnedAtCost 54200000 and InvestmentOwnedAtFairValue 35600000, decimals -5, on the identifier 'WHCG Purchaser III, Inc.' and nothing else. The schedule positions are 'WHCG Purchaser III, Inc. 1' (c-352: 102,373 par, 66,542 fair value) and 'WHCG Purchaser III, Inc. 2' (c-353: 12,455 par, 8,085 fair value)."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'five14' (2026-10-06): over 15 quarters 2022-09-30 to 2026-03-31 the predicate selects one published row, the WHCG row at 2024-06-30. The fund's published total was 35,600,000 above fund_financials investments_at_fair_value in that quarter and equals it without the row. Re-run: python scripts/v05_evidence/bcred_footnote_rows.py five14"
+  }
+ ],
+ "rationale": "The filer tags a footnote figure (the non-accrual portion of an issuer's loans, rounded to 0.1 million) with the investment identifier axis. It carries cost and fair value only. Schedule positions carry principal or units and a percent of net assets, and are filed to the thousand. The rule is structural and covers every quarter so that the same footnote in a later filing is excluded too. Residual risk: a real position filed with round-100,000 cost and fair value and no principal, units, rate or percent would be excluded; none exists in 15 quarters. Authored in an interactive session under the owner's permission of 2026-10-06 and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2024-06-30": {
+   "rows": 1,
+   "fv": 35600000.0,
+   "residual_before": 35600000.0,
+   "residual_after": 0.0
+  }
+ }
+}

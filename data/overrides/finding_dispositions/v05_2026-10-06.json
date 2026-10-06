@@ -501,7 +501,6 @@
     "0001803498"
    ],
    "quarters": [
-    "2024-06-30",
     "2025-12-31",
     "2026-03-31"
    ]
@@ -1073,6 +1072,54 @@
    ]
   },
   {
+   "disposition_id": "DS-027-1803498",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "statement": "The source rows read as missing positions are footnote figures tagged on an issuer's name, excluded by rule.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001803498-24-000044 footnote: '$ 54.2 million of the cost and $ 35.6 million of fair value of WHCG Purchaser III, Inc. is considered to be on non-accrual status'. Context c-1374 carries only that cost and fair value; c-4046 carries the JV's share (3.3M cost, 2.2M fair value) the same way. The schedule positions are contexts c-352 and c-353."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five15: with the two rows excluded the published total equals the filed total at 2024-06-30."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/bcred_footnote_rows.py five14",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-028-1803498",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "statement": "The same footnote rows as DS-027, reported by the reconciliation's second engine.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "See DS-027: 0001803498-24-000044 contexts c-1374 and c-4046, footnote figures for WHCG Purchaser III, Inc."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/bcred_footnote_rows.py five14",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ]
+  },
+  {
    "disposition_id": "DS-018-1287750",
    "class": "as_filed",
    "engine": "row_validation",
@@ -1142,9 +1189,6 @@
    ],
    "quarters": [
     "2023-03-31",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-12-31",
     "2025-03-31"
    ]
   },

@@ -354,3 +354,28 @@ def test_rate_only_context_is_left_alone_without_one_clear_partner():
     # a fund without the setting is never touched
     counts, out = _adopt(_rate_rows(APEX_RATE, APEX_VALUE), encodings={})
     assert counts == {} and out.loc["c-1206", "interest_rate"] == ""
+
+
+@pytest.mark.parametrize('dimensions,expected', [
+    # Misspelled JV labels after a comma (decision D-023). Each row's fair value is absent from the fund's printed
+    # schedule and the rows sum to the fund's excess over its filed total: 2023-09-30 9,506K, 2023-12-31 10,573K,
+    # 2024-12-31 43,002K. Sources: 0001803498-23-000021 c-4497 to c-4499; 0001803498-24-000007 c-4756 to c-4758;
+    # 0001803498-25-000021 c-4488, c-4489, c-4497, c-4507.
+    ('investmentidentifieraxis=Anticimex, Inc. , Emerald JV LP2', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Anticimex, Inc. , Emerald JV LP1', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Java Buyer, Inc, Emerald JV LP. 2', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Groundworks, LLC , Emerald JV LP1', 'reporting_entity=emerald jv lp'),
+    ('investmentidentifieraxis=Howden Group Holdings Limited, Verdelite JV 2LP 1', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=Howden Group Holdings Limited, Verdelite JV 1LP 1', 'reporting_entity=verdelite jv lp'),
+    ('investmentidentifieraxis=NFP Corp, Verdelite JV 2LP', 'reporting_entity=verdelite jv lp'),
+    # Still the fund's own rows: its JV interest, a joint name, and a longer name that only starts like the label.
+    ('investmentidentifieraxis=BCRED Emerald JV LP2', 'parent'),
+    ('investmentidentifieraxis=BCRED Emerald JV LP - LP Interest', 'parent'),
+    ('investmentidentifieraxis=Acme LLC and, Emerald JV LP2', 'parent'),
+    ('investmentidentifieraxis=Acme LLC, Emerald JV LPX Holdings', 'parent'),
+])
+def test_misspelled_jv_labels_after_a_comma_are_still_the_jv_schedule(dimensions, expected):
+    expression = source_encodings.reporting_suffix_expression('cik', 'dims', ENCODINGS)
+    with duckdb.connect() as con:
+        got = con.execute('SELECT ' + expression + ' FROM (SELECT ? AS cik, ? AS dims)', ['0001803498', dimensions]).fetchone()[0]
+    assert (got or 'parent') == expected

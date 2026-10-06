@@ -349,17 +349,42 @@ fields that store may correct, so a class correction moves the category with the
 - **Generator fix.** `make_dispositions.py` rebuilt the store from unresolved findings only, so a
   second run dropped every entry whose finding was already closed. It now keeps them.
 
+### D-023 BCRED: the four quarters above the filed total
+
+No rule flagged these, so they were not among the 35. Traced because they were the last known
+gap between published and filed totals.
+
+- **Three quarters: JV rows with misspelled labels.** Rows of a JV's own schedule are recognised
+  by the label after the borrower's name. The filer misspelled it on a few rows: "Anticimex, Inc. ,
+  Emerald JV LP2", "Java Buyer, Inc, Emerald JV LP. 2", "Howden Group Holdings Limited, Verdelite
+  JV 2LP 1". Those rows were published as the fund's own. The label match now accepts an ordinal
+  fused into the label, in the comma form only (`pipeline/source_encodings.py`).
+  Evidence: the fair values that do not appear in the fund's printed schedule are exactly these
+  rows and sum to the excess: 2023-09-30 three rows 9,506K; 2023-12-31 three rows 10,573K;
+  2024-12-31 four rows 43,002K.
+  Re-run: `python scripts/v05_evidence/unprinted_values.py five14 1803498 000180349825000021 2024-12-31 "Total Investment Portfolio 68,985,671"`.
+- **One quarter: a footnote figure.** 2024-06-30: "$ 54.2 million of the cost and $ 35.6 million of
+  fair value of WHCG Purchaser III, Inc. is considered to be on non-accrual status" is tagged on
+  the issuer's name and was published as a position (35,600K, the whole excess). New rule file
+  `data/overrides/agent_investigate_rules/1803498/exclude_footnote_figures_tagged_on_issuer.json`:
+  no principal, units, rate or percent of net assets, and cost and value in round 100,000s. It
+  selects that one row in 15 quarters.
+  Re-run: `python scripts/v05_evidence/bcred_footnote_rows.py five14`.
+- **Not covered.** The label change applies to any fund that sets
+  `reporting_entity_identifier_suffixes`; BCRED is the only fund that does. The new rule file, like
+  the others written this week, bypasses the fleet promotion gate.
+
 ## State after the second batch
 
-Sandbox `five14`: 307 findings for the five funds from 2022 on, 0 outstanding. 279 are closed by a
-recorded disposition (163 as filed, 73 informational, 43 not applicable), 27 by an earlier
-reviewer's false-alarm verdict, 1 by a promoted fix. Published equals filed within 0.5M in 65 of
-69 fund-quarters (the four misses are BCRED, +9.5M to +43.0M, untraced: no check flags them).
+Sandbox `five15` (after D-023): 305 findings for the five funds from 2022 on, 0 outstanding. 277 are
+closed by a recorded disposition (159 as filed, 73 informational, 45 not applicable), 27 by an
+earlier reviewer's false-alarm verdict, 1 by a promoted fix. Published equals filed within 0.5M
+in 69 of 69 fund-quarters (`python scripts/v05_evidence/summary.py five15`). Excluding the BCRED
+footnote rows made the reconciliation read them as missing positions; DS-027 and DS-028 record why
+they are not.
 
 Zero outstanding is not "data correct". Known and recorded, not fixed:
 
-- BCRED four quarters above the filed total by 9.5M to 43.0M. No rule fires on it, so the ledger
-  does not show it.
 - Ares SDLP principal 269.8 billion at 2022-09-30, as filed (DS-022).
 - HPS and Blue Owl: `pik_rate` holds a margin on loans whose coupon is a PIK margin; those rows
   have no rate or spread (DS-006). Blue Owl publishes no rate on any credit row.

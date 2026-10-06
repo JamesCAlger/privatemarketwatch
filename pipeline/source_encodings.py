@@ -134,13 +134,20 @@ def reporting_suffix_expression(cik,dimensions,encodings=None):
             for label in legacy:
                 label=' '.join(label.lower().split())
                 lab=re.escape(label)
+                # After a comma the filer also misspells the label with the ordinal fused into it:
+                # 'Emerald JV LP2', 'Emerald JV LP. 2', 'Verdelite JV 2LP 1' (2026-10-06, decision
+                # D-023). Only the comma form is loosened; a comma before the label is what keeps the
+                # fund's own 'BCRED Emerald JV LP' interest out.
+                head,_,last=label.rpartition(' ')
+                loose=(re.escape(head)+' [0-9]?' if head else '')+re.escape(last)+r'\.?'
+                misspelled=r'^investmentidentifieraxis=.+?,\s*'+loose+r'(?: ?[0-9]+)?$'
                 terminal=r'^investmentidentifieraxis=.+?(?:,\s*|,?\s+[0-9]+\s+)'+lab+r'(?: [0-9]+)?$'
                 bare=r'^investmentidentifieraxis=.+[^,0-9 ] '+lab+r'(?: [0-9]+)?$'
                 leading=r'^investmentidentifieraxis='+lab+r',\s*.+$'
                 own_interest=r'^investmentidentifieraxis=[a-z]+ '+lab+r'(?: [0-9]+)?$'
                 leading_joint=r'^investmentidentifieraxis='+lab+r',\s*and\b'
-                trailing_joint=r'\band,?\s+'+lab+r'(?: [0-9]+)?$'
-                matched.append('CASE WHEN (regexp_matches('+member+','+_literal(terminal)+') OR regexp_matches('+member+','+_literal(bare)+') OR regexp_matches('+member+','+_literal(leading)+'))'
+                trailing_joint=r'\band,?\s+'+loose+r'(?: ?[0-9]+)?$'
+                matched.append('CASE WHEN (regexp_matches('+member+','+_literal(terminal)+') OR regexp_matches('+member+','+_literal(misspelled)+') OR regexp_matches('+member+','+_literal(bare)+') OR regexp_matches('+member+','+_literal(leading)+'))'
                     ' AND NOT regexp_matches('+member+','+_literal(own_interest)+')'
                     ' AND NOT regexp_matches('+member+','+_literal(leading_joint)+')'
                     ' AND NOT regexp_matches('+member+','+_literal(trailing_joint)+')'

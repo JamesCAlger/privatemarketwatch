@@ -182,6 +182,18 @@ SPECS = [
                 "(2022-09-30 to 2023-03-31); Blue Owl BOCSO 303.9M and 24.8M at 2025-12-31, 378.0M and 24.7M at 2026-03-31. "
                 "Published totals equal filed totals in those quarters.")],
      S + "recstatus2.py five10 1287750 position_like_parser_mismatch"),
+    ("DS-027", "not_applicable", "row_validation", "SRC_BDC01", [BCRED], set(), False,
+     "The source rows read as missing positions are footnote figures tagged on an issuer's name, excluded by rule.",
+     [("filing", "0001803498-24-000044 footnote: '$ 54.2 million of the cost and $ 35.6 million of fair value of WHCG Purchaser "
+                 "III, Inc. is considered to be on non-accrual status'. Context c-1374 carries only that cost and fair value; "
+                 "c-4046 carries the JV's share (3.3M cost, 2.2M fair value) the same way. The schedule positions are "
+                 "contexts c-352 and c-353."),
+      ("query", "Sandbox five15: with the two rows excluded the published total equals the filed total at 2024-06-30.")],
+     S + "bcred_footnote_rows.py five14"),
+    ("DS-028", "not_applicable", "source_recon", "blocking_source_position_like_parser_mismatch", [BCRED], set(), False,
+     "The same footnote rows as DS-027, reported by the reconciliation's second engine.",
+     [("filing", "See DS-027: 0001803498-24-000044 contexts c-1374 and c-4046, footnote figures for WHCG Purchaser III, Inc.")],
+     S + "bcred_footnote_rows.py five14"),
     ("DS-018", "as_filed", "row_validation", "SRC_BDC02", [ARES], set(), False,
      "Eight positions restored by rule: their cost and fair value are filed on the issuer-name axis, so they have no "
      "source row on the position context.",
