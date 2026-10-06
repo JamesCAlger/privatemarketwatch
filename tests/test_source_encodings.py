@@ -297,3 +297,60 @@ def test_malformed_legal_entity_member_fails(tmp_path, value):
          "source_encodings": {"legal_entity_members": [value]}}), encoding="utf-8")
     with pytest.raises(ValueError):
         source_encodings.load_encodings(tmp_path)
+
+
+# --- rate facts filed on a neighbouring context with no value (decision D-020) -------------------
+
+ARES = "0001287750"
+ADOPT = {ARES: {"rate_only_contexts": ["adopt_adjacent"]}}
+
+
+def _rate_rows(*rows):
+    base = {"cik": ARES, "accession_number": "0001287750-24-000011", "period": "2023-12-31", "report_date": "2023-12-31",
+            "fair_value": "", "cost": "", "principal_amount": "", "interest_rate": "", "basis_spread": "", "pik_rate": "",
+            "src_facts": "", "dedupe_filled_fields": ""}
+    return pd.DataFrame([{**base, **row} for row in rows])
+
+
+def _adopt(frame, encodings=ADOPT):
+    con = duckdb.connect()
+    con.register("frame", frame)
+    con.execute("CREATE TABLE bdc_raw AS SELECT * FROM frame")
+    counts = source_encodings.adopt_rate_only_contexts(con, encodings=encodings)
+    return counts, con.execute("SELECT * FROM bdc_raw ORDER BY src_context_id").fetchdf().set_index("src_context_id")
+
+
+APEX_RATE = {"src_context_id": "c-1205", "investment_identifier": "Apex Service Partners, LLC, First lien senior secured loan 1",
+             "interest_rate": "0.124", "basis_spread": "0.07", "pik_rate": "0.02",
+             "src_facts": '{"basis_spread":{"r":0.07},"interest_rate":{"r":0.124},"pik_rate":{"r":0.02}}'}
+APEX_VALUE = {"src_context_id": "c-1206",
+              "investment_identifier": "Apex Service Partners, LLC and Apex Service Partners Holdings, First lien senior secured loan",
+              "fair_value": "144800000", "cost": "148500000", "principal_amount": "148500000"}
+
+
+def test_rate_only_context_is_joined_to_the_adjacent_value_row_of_the_same_issuer():
+    # Ares 2023-12-31, Apex Service Partners: the loan's value is on c-1206 and its rate, spread and PIK on c-1205,
+    # under a slightly different member name. Printed: "12.40 % (2.00 % PIK) SOFR (Q) 7.00 % ... 148.5 148.5 144.8".
+    counts, out = _adopt(_rate_rows(APEX_RATE, APEX_VALUE))
+    assert counts == {ARES: 1}
+    row = out.loc["c-1206"]
+    assert (row["interest_rate"], row["basis_spread"], row["pik_rate"]) == ("0.124", "0.07", "0.02")
+    assert set(row["dedupe_filled_fields"].split(",")) == {"interest_rate", "basis_spread", "pik_rate"}
+    assert '"interest_rate"' in row["src_facts"]
+    assert "c-1205" not in out.index          # the rate-only context is consumed, not left to match something else
+
+
+def test_rate_only_context_is_left_alone_without_one_clear_partner():
+    other_issuer = dict(APEX_VALUE, investment_identifier="Zeta Holdings, LLC, First lien senior secured loan")
+    far_away = dict(APEX_VALUE, src_context_id="c-1290")
+    has_rate = dict(APEX_VALUE, interest_rate="0.11")
+    no_principal = dict(APEX_VALUE, principal_amount="")
+    two_targets = [APEX_VALUE, dict(APEX_VALUE, src_context_id="c-1204")]
+    for rows in ([APEX_RATE, other_issuer], [APEX_RATE, far_away], [APEX_RATE, has_rate], [APEX_RATE, no_principal],
+                 [APEX_RATE, *two_targets]):
+        counts, out = _adopt(_rate_rows(*rows))
+        assert counts == {ARES: 0}, rows
+        assert "c-1205" in out.index
+    # a fund without the setting is never touched
+    counts, out = _adopt(_rate_rows(APEX_RATE, APEX_VALUE), encodings={})
+    assert counts == {} and out.loc["c-1206", "interest_rate"] == ""

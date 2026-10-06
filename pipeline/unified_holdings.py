@@ -1818,6 +1818,8 @@ _CORRECTABLE_FIELDS = frozenset({
     "principal_amount_currency", "principal_fx_rate_to_usd", "principal_fx_status",
     "interest_rate", "basis_spread", "pik_rate", "shares_held",
     "index_classification", "exposure_type", "asset_class",
+    # A class correction has to move the category with the index class (2026-10-06, decision D-021).
+    "asset_category", "issuer_category",
     "issuer_name", "instrument_description",
 })
 

@@ -565,6 +565,13 @@
           "items": {"enum": ["all_in", "cash_leg"]},
           "description": "What this filer's plain interest rate tag (InvestmentInterestRate) holds: the all-in coupon with any PIK inside it, or the cash leg with PIK on top. Read by the finalizer only where the tag does not name its own kind. Evidence required: fully PIK loans whose filed rate equals the PIK rate (all-in), or filed rates below the PIK rate across the fund (cash leg). Under all_in a row whose PIK rate exceeds the filed rate stays unresolved."
         },
+        "rate_only_contexts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"enum": ["adopt_adjacent"]},
+          "description": "Set where the filer tags a loan's rate, spread or PIK on a context of its own, next to the context that carries the value. Staging joins the two when they are adjacent, share the first 16 letters and digits of the identifier and have no other candidate; the joined fields are named in src_filled_fields. Evidence required: printed schedule lines showing the rate on the value row."
+        },
         "pik_only_tag_reading": {
           "type": "array",
           "minItems": 1,

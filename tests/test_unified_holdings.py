@@ -8776,6 +8776,24 @@ class TestApplyRowCorrections:
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert result.iloc[0]["fair_value"] == "5000000"
 
+    def test_class_fields_can_be_corrected_together(self, tmp_path):
+        """HPS 2026-03-31: 'OneTeam Partners, LLC - Class D Units' is printed as 'Preferred Units 8.00 %'.
+        A class correction has to move asset_category with index_classification (decision D-021)."""
+        key = {"cik": "0001838126", "report_date": "2026-03-31", "accession_number": "0001628280-26-033248",
+               "bdc_investment_identifier": "OneTeam Partners, LLC - Class D Units"}
+        df = self._make_holdings_df([dict(key, source="bdc", asset_category="EQUITY_COMMON", issuer_category="CORPORATE",
+                                          index_classification="COMMON_EQUITY", asset_class="PRIVATE_EQUITY")])
+        common = {"reason": "printed as Preferred Units", "source_evidence": "test", "author": "test", "date_added": "2026-10-06"}
+        corr_path = self._write_corrections(tmp_path, [
+            dict(key, field="asset_category", value="EQUITY_PREFERRED", **common),
+            dict(key, field="index_classification", value="PREFERRED_EQUITY", **common),
+            dict(key, field="issuer_category", value="CORPORATE", **common),
+        ])
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["asset_category"] == "EQUITY_PREFERRED"
+        assert result.iloc[0]["index_classification"] == "PREFERRED_EQUITY"
+        assert result.iloc[0]["issuer_category"] == "CORPORATE"
+
     def test_non_matching_correction_skipped(self, tmp_path):
         """Correction with no matching row is skipped (logged as warning)."""
         df = self._make_holdings_df([{

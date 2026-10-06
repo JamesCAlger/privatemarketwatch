@@ -580,8 +580,9 @@ def test_a_loan_filed_with_only_a_pik_rate_takes_it_as_the_coupon_where_the_fund
         assert "pik_only" not in str(by_id.loc[row_id,"src_transforms"])
 
 
-def test_pik_only_setting_is_validated_and_set_for_ares_alone():
+def test_pik_only_setting_is_validated_and_set_for_ares_and_apollo():
     from pipeline.financial_conventions import pik_only_coupon_funds
     from pipeline.source_encodings import load_encodings
-    assert pik_only_coupon_funds()=={"0001287750"}
+    # Apollo: the row text itself reads 'Interest Rate 11.45% PIK' (Material Holdings, 2024-09-30)
+    assert pik_only_coupon_funds()=={"0001287750","0001837532"}
     assert load_encodings()["0001287750"]["pik_only_tag_reading"]==["coupon"]

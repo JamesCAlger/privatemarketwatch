@@ -484,6 +484,10 @@ def _prepare_bdc(
     for _detached_cik, _detached_rows in tag_detached_schedules(con).items():
         logger.info("  Detached schedule rows labelled as an underlying schedule (cik=%s): %d",
                     _detached_cik, _detached_rows)
+    # Wrapper opt-in: rate facts filed on a neighbouring context with no value join their position.
+    from pipeline.source_encodings import adopt_rate_only_contexts
+    for _adopt_cik, _adopt_rows in adopt_rate_only_contexts(con).items():
+        logger.info("  Rate-only contexts joined to their value row (cik=%s): %d", _adopt_cik, _adopt_rows)
     from pipeline import config as unit_config
     from pipeline.monetary_units import resolve_bdc_units
     resolve_bdc_units(con, unit_config.BDC_XBRL_CACHE_DIR)

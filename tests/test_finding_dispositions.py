@@ -151,3 +151,15 @@ def test_the_recorded_store_loads_and_its_rerun_scripts_exist():
     for entry in entries:
         for script in re.findall(r"scripts/[\w/]+\.py", entry["rerun"]):
             assert (root / script).exists(), (entry["disposition_id"], script)
+
+
+def test_a_drafted_fix_that_was_never_promoted_does_not_outrank_filing_evidence():
+    # A fix staged or pulled by an earlier run is a draft, not a resolution. An entry that carries filing evidence
+    # and says it replaces the earlier verdict closes the finding; one without that stays out (decision D-022).
+    filed = [{"source": "filing", "quote": "context c-925 carries no InvestmentOwnedAtCost fact"}]
+    strong = _entry(supersedes_real_error_verdict=True, evidence=filed)
+    for state in ("remediation_staged", "remediation_pulled"):
+        assert fd.closes(strong, state)
+        assert not fd.closes(_entry(), state)
+        assert not fd.closes(_entry(**{"class": "informational"}, ciks=["*"], quarters=["all"]), state)
+    assert not fd.closes(strong, "remediated_promoted")

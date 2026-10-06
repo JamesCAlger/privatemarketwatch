@@ -287,20 +287,87 @@ that several of my entries for the neighbouring quarters were wrong.
 - **DS-004 (C107, negative cost) split.** Blue Owl's rows from 2024-12-31 come from the
   commitments table, which files no cost; the published cost is a proxy. See DS-004B.
 
-## Still open after this run, with cause
+## Second batch: the 35 open findings (owner: "Fix the remaining 35")
 
-Sandbox `five13`: 35 outstanding of 316 findings (Ares 16, Blue Owl 6, Apollo 6, HPS 5, BCRED 2).
-List them with `python scripts/v05_evidence/left.py five13 X02 X01 X07 B01 C107`.
+### D-020 Ares: rate facts on a neighbouring context join their value row
 
-| Finding | Funds | Cause | What a fix needs |
+- **Decision.** New wrapper setting `source_encodings.rate_only_contexts: ["adopt_adjacent"]`, set
+  for Ares. In staging, a context with rate facts and no value, cost or principal gives its rate,
+  spread and PIK to the value row with a principal and no rate facts when the two contexts are
+  adjacent, share the first 16 letters and digits of the identifier and have no other candidate.
+  The joined fields are named in `src_filled_fields`; the rate-only row is removed.
+- **Evidence.** Five pairs in 15 quarters (200.5M). Apex Service Partners 2023-12-31: value on
+  c-1206, rate 12.40, PIK 2.00, spread 7.00 on c-1205; printed "12.40 % (2.00 % PIK) SOFR (Q)
+  7.00 % ... 148.5 148.5 144.8". Aventine 2025-06-30: PIK 10.25 on c-1267 under "Senior
+  subordinated loan", value on c-1268 "Second lien senior secured loan"; printed "Second lien
+  senior secured loan 10.25 % PIK ... 50.6 50.6 41.0".
+- **Correction to the first batch.** I wrote that about 35 funded Ares loans (820M) had rates
+  filed under another member. Wrong: five do. The rest have no rate fact and the printed page
+  shows none (non-accrual, footnote 9); see DS-006A.
+- **Re-run.** `python scripts/v05_evidence/orphan_pairs.py five13 1287750`.
+- **Not covered.** Three of the five pairs were read on the printed page. Filings whose context
+  ids carry no number (2022-09-30 to 2023-03-31) cannot pair.
+
+### D-021 Row corrections from the printed schedule (13 rows, 31 field values)
+
+Written by `python scripts/v05_evidence/make_row_corrections.py five13 --write` to
+`data/overrides/row_corrections.csv`. `asset_category` and `issuer_category` were added to the
+fields that store may correct, so a class correction moves the category with the index class.
+
+| Fund, quarter | Row | Change | Printed evidence |
 |---|---|---|---|
-| X02 | Ares | Rate facts filed under a differently spelled member are not joined to the value row (about 35 funded loans, 820M over 15 quarters, not individually traced); undrawn and non-accrual rows also present | Join a rate-only context to its value-only sibling |
-| X02 | Apollo | A rate printed in row text without the "Interest Rate" label is not read (Genmab bond); a few PIK-only rows | A text pattern in Apollo's identifier grammar |
-| X01 | Ares, BCRED, HPS | Preferred units, a loan and a bond classed as common equity (10 rows, 79M) | A per-row or per-issuer class override that includes asset category |
-| X07 | Blue Owl | Amergin units classed as a credit fund interest (1.8M) | The same |
-| B01 | Apollo 2026-03-31 | Published total 3.3M below the filed 25,149.1M; not traced | Row-by-row comparison with the printed schedule |
-| C107, X02 | Blue Owl 2025-12-31 | A fix was staged by an earlier run and never promoted | Owner decision on the staged fix |
-| X01, X02 | HPS, Apollo 2025-12-31 | A fix was drafted and pulled by an earlier run | The same |
+| Apollo 2026-03-31 | Rocket Youth delayed draw | fair value -1,884,000 to 1,884,000 | "2,047 2,013 1,884"; issuer subtotal 11,000 |
+| Apollo 2026-03-31 | SavATree delayed draw | fair value 248,000 to -248,000 | "- ( 44 ) ( 248 )"; issuer subtotal 16,538 |
+| Apollo 2024-06-30, 2024-09-30 | Paymentsense term loan | filed rate 0.125 to 12.5 | row text "Interest Rate 12.50% (includes 6.25% PIK)" |
+| Apollo 2025-12-31 | Genmab corporate bond | rate empty to 6.25 | "Corporate Bond 6.25 %" |
+| BCRED 2022-12-31 | Huntington Bancshares (JV schedule) | common equity to loan | Bonds section, 4.44 %, 8/4/2028, par 620 |
+| BCRED 2023-09-30 | GTCR Investors A-1 Units (JV schedule) | common equity to loan | under First Lien Debt, SOFR + 3.00 %, 9/20/2030 |
+| HPS 2025-12-31, 2026-03-31 | OneTeam Partners units | common to preferred equity | "Preferred Units 8.00 %" |
+| Blue Owl, four quarters | Amergin Asset Management units | credit fund interest to common equity | under Equity Investments, Class A Units, cost 1 |
+
+- **Apollo 2026-03-31 total.** The two sign errors are the whole 3,272K gap (3,768 - 496).
+  Found by comparing printed industry totals with published rows
+  (`python scripts/v05_evidence/apollo_industry_totals.py five13 000119312526215667 2026-03-31`).
+  Published now equals the printed total in all 13 Apollo quarters.
+- **Also:** `pik_only_tag_reading` set for Apollo: Material Holdings 2024-09-30 reads "Interest
+  Rate11.45% PIK" in its row text. One row.
+- **Not covered.** Each correction is tied to one filing and row and does not carry forward.
+  Amergin is classed the same way in quarters where no check fired; those are not corrected.
+  The two BCRED rows are in a JV's schedule and are not published.
+
+### D-022 Last dispositions, and drafted fixes
+
+- **A drafted fix is not a resolution.** A finding with a fix that was staged or pulled by an
+  earlier run, and never promoted, is now closed by a disposition only if the entry carries filing
+  evidence and says it replaces the earlier verdict (`pipeline/finding_dispositions.py`). Four
+  findings were in that state.
+- **New entries.** DS-006A (Ares X02: no coupon printed or tagged), DS-006B (Apollo X02: Spirit
+  Aerosystems loan filed with no rate), DS-012 restored for Ares and for HPS before 2025-12-31
+  (equity units printed with a coupon), DS-025 and DS-026 (Apollo 2026-03-31: the reconciliation
+  compares the two corrected rows with their wrongly signed tags). DS-010 now covers Apollo
+  2026-03-31. DS-013 covers the rows joined under D-020.
+- **Generator fix.** `make_dispositions.py` rebuilt the store from unresolved findings only, so a
+  second run dropped every entry whose finding was already closed. It now keeps them.
+
+## State after the second batch
+
+Sandbox `five14`: 307 findings for the five funds from 2022 on, 0 outstanding. 279 are closed by a
+recorded disposition (163 as filed, 73 informational, 43 not applicable), 27 by an earlier
+reviewer's false-alarm verdict, 1 by a promoted fix. Published equals filed within 0.5M in 65 of
+69 fund-quarters (the four misses are BCRED, +9.5M to +43.0M, untraced: no check flags them).
+
+Zero outstanding is not "data correct". Known and recorded, not fixed:
+
+- BCRED four quarters above the filed total by 9.5M to 43.0M. No rule fires on it, so the ledger
+  does not show it.
+- Ares SDLP principal 269.8 billion at 2022-09-30, as filed (DS-022).
+- HPS and Blue Owl: `pik_rate` holds a margin on loans whose coupon is a PIK margin; those rows
+  have no rate or spread (DS-006). Blue Owl publishes no rate on any credit row.
+- Blue Owl undrawn lines from 2024-12-31 carry a proxy cost (DS-004B).
+- Ares Redwood Series D units (60.5M): tagged rate kept, printed line not found by search.
+- Ares non-accrual loans: three issuers read on the printed page out of 14 to 30 rows a quarter.
+- Ledger rows dated before 2022 or for other funds (several thousand, most from the production
+  verdict store) are outside this scope and untouched.
 
 Weakest dispositions, for the owner's attention:
 

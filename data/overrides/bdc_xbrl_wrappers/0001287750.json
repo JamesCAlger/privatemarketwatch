@@ -239,6 +239,9 @@
     ],
     "pik_only_tag_reading": [
       "coupon"
+    ],
+    "rate_only_contexts": [
+      "adopt_adjacent"
     ]
   },
   "invariants": {

@@ -88,6 +88,10 @@ def closes(entry: dict, state: str) -> bool:
         return True
     if state == "real_error_unremediated":
         return entry["class"] == "informational" or bool(entry.get("supersedes_real_error_verdict"))
+    # A fix that was drafted (staged) or drafted and withdrawn (pulled) never changed the data. It
+    # yields only to an entry that replaces the verdict behind it, which requires filing evidence.
+    if state in ("remediation_staged", "remediation_pulled"):
+        return bool(entry.get("supersedes_real_error_verdict"))
     return False
 
 

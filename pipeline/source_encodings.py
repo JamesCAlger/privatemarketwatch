@@ -23,7 +23,7 @@ def load_encodings(wrapper_directory=None):
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
-                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading'}:
+                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -41,6 +41,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
             if key=='filed_rate_reading' and values not in (['all_in'],['cash_leg']):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
+            if key=='rate_only_contexts' and values!=['adopt_adjacent']:
+                raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values!=['coupon']:
                 raise ValueError('The only admitted PIK-only tag reading is coupon: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
@@ -221,4 +223,69 @@ def tag_detached_schedules(con,table='bdc_raw',encodings=None):
             " AND ends_with(coalesce(CAST(dimensions_raw AS VARCHAR),''),?)",[suffix]).fetchone()[0]
         con.execute("DROP TABLE _detached_contexts")
         counts[key]=after-before
+    return counts
+
+
+RATE_FIELDS=('interest_rate','basis_spread','pik_rate')
+
+
+def adopt_rate_only_contexts(con,table='bdc_raw',encodings=None):
+    """Join a filer's rate facts to the position they belong to when they sit on their own context.
+
+    Only for filers whose wrapper sets ``rate_only_contexts`` to ``['adopt_adjacent']``. Ares files
+    some loans with the value on one context and the rate, spread and PIK on the neighbouring
+    one, under a slightly different member name. A pair needs, within one filing and period:
+    a context with rate facts and no value, cost or principal; a context with a value and a
+    principal and no rate facts; context numbers that differ by one; the same first 16 letters
+    and digits of the identifier; and no second candidate on either side under that key. The
+    value row takes the rate fields (named in ``dedupe_filled_fields``, with the facts merged
+    into ``src_facts``) and the rate-only row is removed. Returns rows joined per CIK.
+    """
+    configured=load_encodings() if encodings is None else encodings
+    counts={}
+    present={row[0] for row in con.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name=?",[table]).fetchall()}
+    needed={'cik','accession_number','period','src_context_id','investment_identifier','fair_value','cost',
+        'principal_amount','src_facts','dedupe_filled_fields',*RATE_FIELDS}
+    for key,encoding in sorted(configured.items()):
+        if not encoding.get('rate_only_contexts'):
+            continue
+        if not needed<=present:
+            counts[key]=0
+            continue
+        scope=_cik_condition('cik',key)
+        blank=lambda name: "nullif(trim(CAST("+name+" AS VARCHAR)),'') IS NULL"
+        any_rate=' OR '.join('NOT ('+blank(name)+')' for name in RATE_FIELDS)
+        no_rate=' AND '.join(blank(name) for name in RATE_FIELDS)
+        con.execute("""CREATE OR REPLACE TEMP TABLE _rate_pairs AS
+            WITH base AS (
+                SELECT CAST(accession_number AS VARCHAR) AS accession,coalesce(CAST(period AS VARCHAR)[:10],'') AS period_key,
+                    CAST(src_context_id AS VARCHAR) AS context,
+                    TRY_CAST(regexp_extract(CAST(src_context_id AS VARCHAR),'([0-9]+)$',1) AS BIGINT) AS ordinal,
+                    left(regexp_replace(lower(CAST(investment_identifier AS VARCHAR)),'[^a-z0-9]','','g'),16) AS issuer_key,
+                    ("""+blank('fair_value')+" AND "+blank('cost')+" AND "+blank('principal_amount')+" AND ("+any_rate+""")) AS rate_only,
+                    (NOT ("""+blank('fair_value')+") AND NOT ("+blank('principal_amount')+") AND "+no_rate+""") AS value_only,
+                    """+','.join('CAST('+name+' AS VARCHAR) AS '+name for name in RATE_FIELDS)+""",CAST(src_facts AS VARCHAR) AS facts
+                FROM """+table+" WHERE "+scope+"""),
+            givers AS (SELECT *,count(*) OVER (PARTITION BY accession,period_key,issuer_key) AS n FROM base WHERE rate_only),
+            takers AS (SELECT *,count(*) OVER (PARTITION BY accession,period_key,issuer_key) AS n FROM base WHERE value_only)
+            SELECT t.accession,t.period_key,t.context AS taker,g.context AS giver,g.facts AS giver_facts,
+                """+','.join('g.'+name+' AS '+name for name in RATE_FIELDS)+"""
+            FROM givers g JOIN takers t USING(accession,period_key,issuer_key)
+            WHERE g.n=1 AND t.n=1 AND length(g.issuer_key)>=8 AND abs(g.ordinal-t.ordinal)=1""")
+        joined=con.execute("SELECT count(*) FROM _rate_pairs").fetchone()[0]
+        if joined:
+            filled="concat_ws(',',"+','.join("CASE WHEN nullif(trim(p."+name+"),'') IS NOT NULL THEN '"+name+"' END"
+                for name in RATE_FIELDS)+")"
+            match=(scope+" AND CAST("+table+".accession_number AS VARCHAR)=p.accession"
+                " AND coalesce(CAST("+table+".period AS VARCHAR)[:10],'')=p.period_key")
+            con.execute("UPDATE "+table+" SET "+','.join(name+"=p."+name for name in RATE_FIELDS)+","
+                "dedupe_filled_fields=concat_ws(',',nullif(trim(CAST("+table+".dedupe_filled_fields AS VARCHAR)),''),"+filled+"),"
+                "src_facts=CAST(json_merge_patch(coalesce(TRY_CAST(nullif(trim(CAST("+table+".src_facts AS VARCHAR)),'') AS JSON),'{}'::JSON),"
+                "coalesce(TRY_CAST(nullif(trim(p.giver_facts),'') AS JSON),'{}'::JSON)) AS VARCHAR) "
+                "FROM _rate_pairs p WHERE "+match+" AND CAST("+table+".src_context_id AS VARCHAR)=p.taker")
+            con.execute("DELETE FROM "+table+" USING _rate_pairs p WHERE "+match+
+                " AND CAST("+table+".src_context_id AS VARCHAR)=p.giver")
+        con.execute("DROP TABLE _rate_pairs")
+        counts[key]=joined
     return counts

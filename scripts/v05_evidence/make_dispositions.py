@@ -93,6 +93,33 @@ SPECS = [
       ("query", "Limit: for HPS and Blue Owl the printed schedule shows a margin or coupon on PIK loans that the tags do "
                 "not carry as a spread or rate. The published fields follow the tags.")],
      S + "norate2.py five12"),
+    ("DS-006A", "as_filed", "row_validation", "X02", [ARES], set(), True,
+     "Credit rows with no rate and no spread because the filing prints and tags none: loans on non-accrual and undrawn "
+     "lines. The rows the reviewers cited now publish a rate (PIK-only coupons, decision D-018; rates joined from a "
+     "neighbouring context, decision D-020).",
+     [("filing", "Ares 10-Q for 2025-06-30 (0001287750-25-000038), printed lines with no coupon and footnote (9): 'Pathway Vet "
+                 "Alliance LLC and Jedi Group Holdings LLC ... Second lien senior secured loan 03/2020 06/2028 78.6 75.5 51.1 "
+                 "(2)(9)'; 'Florida Food Products, LLC ... Second lien senior secured loan 10/2021 10/2029 71.8 69.5 47.4 "
+                 "(2)(9)'; 'Continental Acquisition Holdings, Inc. ... First lien senior secured loan 01/2021 07/2028 39.3 36.8 "
+                 "22.8 (2)(9)'."),
+      ("query", "Sandbox five13: 14 to 30 funded loans a quarter carry no rate fact; fair value is well below principal on "
+                "most (2025-06-30: 25 rows, 377M). Only those three issuers were read on the printed page.")],
+     S + "orphan_rates.py five14 1287750 2025-06-30"),
+    ("DS-006B", "as_filed", "row_validation", "X02", [APOLLO], set(), False,
+     "One loan is filed with no rate in its tags or its row text.",
+     [("filing", "Apollo 10-Q for 2025-03-31 and 2025-06-30: 'Aerospace & Defense Spirit Aerosystems Spirit Aerosystems, Inc. "
+                 "Investment Type First Lien Secured Debt - Term Loan Maturity Date 6/30/2025', fair value 47.75M; no "
+                 "InvestmentInterestRate or spread fact on its context.")],
+     S + "flagged.py five14 X02 1837532 2025-03-31"),
+    ("DS-012", "as_filed", "row_validation", "X01", [ARES, HPS], set(), False,
+     "Equity units printed with a coupon. The rate is filed; the filer names the instrument units, not preferred.",
+     [("filing", "Ares 10-Q for 2024-03-31: 'LJP Purchaser, Inc. and LJP Topco, LP ... Class A units 8.00 % PIK 09/2022 "
+                 "5,098,000 5.8 6.4'. Ares 10-Q for 2025-03-31: SM Wellness 'Series D units 8.00 % PIK 03/2023 1,127 1.3 1.8'. "
+                 "HPS filings for 2025-03-31 to 2025-09-30: 'OneTeam Partners, LLC - Class D Units 8.00 % 8.00 %'."),
+      ("query", "Ares Redwood Services Series D units (60.5M, 2024-03-31) carries a tagged rate of 8.0; its printed line was "
+                "not found by text search. HPS relabels the same position 'Preferred Units' from 2025-12-31; those two "
+                "quarters are corrected to preferred equity (decision D-021).")],
+     S + "equity_with_rate.py five14"),
     ("DS-007", "as_filed", "row_validation", "C103", [HPS, APOLLO], set(), False,
      "Small negative fair values on undrawn lines whose identifier does not name the instrument.",
      [("query", "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value "
@@ -104,11 +131,16 @@ SPECS = [
                  "'... Maturity Date 4/30/2024' and the tagged maturity is 2024-04-30 (maturity_date_source xbrl_field); fair "
                  "value 0.2M to 0.8M.")],
      S + "weakrows.py five10 1837532"),
-    ("DS-010", "as_filed", "oracle", "B01", [APOLLO], set(), False,
+    ("DS-010", "as_filed", "oracle", "B01", [APOLLO], set(), True,
      "Position contexts with no fair value fact: undrawn lines with nothing filed, and a few positions the filer tagged "
      "under two spellings.",
      [("query", "Sandbox five5: 32 to 64 such contexts a quarter; about half named revolver or delayed draw; at most 4 carry "
-                "units and 3 a principal. Published total equals filed investments plus cash rows in 12 of 13 quarters.")],
+                "units and 3 a principal."),
+      ("filing", "2026-03-31 (0001193125-26-215667): the reviewer's verdict rested on the published total being 3,272 below "
+                 "the printed 'Total Investments before Cash Equivalents $ 25,426,426 $ 25,149,083'. That gap was two "
+                 "delayed-draw lines tagged with the wrong sign (Rocket Youth, printed 1,884, tagged -1,884; SavATree, "
+                 "printed ( 248 ), tagged 248), corrected in decision D-021. Published now equals the printed total in all "
+                 "13 quarters (sandbox five14).")],
      S + "b01.py five10 1837532"),
     ("DS-011", "as_filed", "oracle", "C04", [HPS, OWL], set(), False,
      "Equity rows filed without a unit count.",
@@ -119,8 +151,10 @@ SPECS = [
      "Rows the filer tagged across several contexts under the issuer names alone; the pipeline assembles them.",
      [("query", "Sandbox ares3: Expereo USA, Inc. and Ristretto Bidco B.V., 60.2M at 2025-03-31 and 61.0M at 2025-06-30, built "
                 "from four contexts (cost, fair value and principal filled); Rawlings Sporting Goods loan at 2024-12-31 "
-                "(rate filled).")],
-     S + "merged.py five10 1287750"),
+                "(rate filled)."),
+      ("query", "2023-12-31 and 2025-09-30: rates joined from a neighbouring rate-only context under decision D-020 (Apex "
+                "Service Partners c-1205 to c-1206; Flexera c-164 to c-165; Sunk Rock c-1474 to c-1475).")],
+     S + "orphan_pairs.py five13 1287750"),
     ("DS-014", "as_filed", "row_validation", "FX01", [APOLLO], set(), False,
      "One loan's principal has no dollar equivalent because the filing names its currency as KPW, for which no rate exists.",
      [("query", "Apollo 2024-06-30, Delivery Hero Finco Germany: principal 195,000,000,000 with document unit KPW; later "
@@ -196,8 +230,22 @@ SPECS = [
                 "prior-period context c-1947 files 1,000 units. Same row at 2023-06-30 and 2024-06-30; Hercules Buyer "
                 "Common Units at 2023-12-31.")],
      S + "row.py five11 1812554 2024-12-31 \"Gloves Holdings, LP\" 4"),
+    ("DS-025", "not_applicable", "row_validation", "SRC_BDC03", [APOLLO], set(), False,
+     "Two rows are published from the printed schedule, not the tag, because the tag has the wrong sign. A comparison "
+     "with the tag is expected to disagree on them.",
+     [("filing", "0001193125-26-215667: Rocket Youth Brands Holdco LLC delayed draw, printed '2,047 2,013 1,884', tag "
+                 "InvestmentOwnedAtFairValue = -1884000 (context C_7b0eb0f5-42c5-465b-a014-838550129a62); SAVATREE CI delayed "
+                 "draw, printed '- ( 44 ) ( 248 )', tagged 248. Issuer subtotals 11,000 and 16,538 and the industry total "
+                 "1,162,031 agree with the printed figures.")],
+     S + "apollo_industry_totals.py five14 000119312526215667 2026-03-31"),
+    ("DS-026", "not_applicable", "source_recon", "blocking_fair_value_disagreement", [APOLLO], set(), False,
+     "The same two corrected rows as DS-025, reported by the reconciliation's second engine.",
+     [("filing", "See DS-025: 0001193125-26-215667, Rocket Youth and SavATree delayed-draw lines; printed values 1,884 and "
+                 "( 248 ) against tags of -1,884 and 248.")],
+     S + "apollo_industry_rows.py five13 000119312526215667 2026-03-31 \"Diversified Consumer Services\""),
 ]
-RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated"} | set(fd.DISPOSITIONED_STATES)
+# A finding already closed by a disposition stays in scope, so regenerating keeps its entry.
+RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated"}
 csv.field_size_limit(10**9)
 quarters = defaultdict(set)
 with open(REPO / "scratch/fund_sandbox" / label / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:
