@@ -1,0 +1,96 @@
+{
+ "cik": "1812554",
+ "rule_id": "exclude_affiliate_rollforward_issuer_only_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "NOT regexp_matches(lower(CAST(bdc_investment_identifier AS VARCHAR)), 'first lien|second lien|senior secured|subordinated|unitranche|term loan|revolving|delayed draw|unsecured facility|unsecured note|senior convertible note|bridge loan|common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|partnership interest|partnership units|llc interest|membership interest|equity interest|equity co-invest|class [a-z][-]?[0-9]* units|class [a-z][0-9]* interests|class [a-z] interests|series [a-z][-]?[0-9]* units|lp interest|limited partner interest|specialty finance|warrant') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001812554-24-000043 (10-Q, 2024-06-30), transactions with affiliates table: 'Company | Fair value as of December 31, 2023 | Gross Additions (a) | Gross Reductions (b) | Net Change in Unrealized Gain/(Loss) | Realized Gain/(Loss) | Fair value as of June 30, 2024 | Dividend Income | Interest and PIK Income | Other Income ... OCIC SLF LLC (fka Blue Owl Credit Income Corp. Senior Loan Fund LLC) 273,441 43,750 ... 307,646'. The 307,646 is fact f-4167, InvestmentOwnedAtFairValue in context c-848, tagged with the issuer name only."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox 'five' (2026-10-05): for each of the 11 quarters 2023-03-31 to 2025-09-30 the rows selected by the predicate (issuer-only identifier with no instrument phrase, no principal, no shares, no pct of net assets) sum to the published-basis excess over fund_financials investments_at_fair_value: exactly, to the dollar, in nine quarters; 89,000 short at 2024-12-31 and 24,600,000 short at 2025-09-30. At 2025-12-31 and 2026-03-31 the predicate selects no row."
+  },
+  {
+   "source": "query",
+   "quote": "Each selected row has a schedule row for the same issuer with the instrument in its identifier and the same fair value, e.g. 2025-09-30 'LSI Financing LLC' 333,800,000 and 'LSI Financing LLC, Specialty finance equity investment' 333,800,000; 2023-03-31 'ORCIC Senior Loan Fund, LLC' 184,500,000 and 'ORCIC Senior Loan Fund LLC, LLC Interest' 184,500,000."
+  }
+ ],
+ "rationale": "The filer tags the closing fair value in its affiliate roll-forward note with the investment identifier axis, using the issuer name alone. Those facts enter holdings as extra positions beside the schedule rows they repeat. Schedule rows always name the instrument after the issuer and carry principal, units or a percent of net assets; roll-forward rows carry none of the three. The rule is structural and covers every quarter, so it does not have to be re-authored when a new filing arrives. Known residual: at 2025-09-30 one further non-schedule fact ('Blue Owl Cross-Strategy Opportunities LLC (BOCSO)', 24,600,000, context c-954, carrying a percent value) is not selected; it is inside the conservation band and is left for review. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.95,
+ "measured_impact": {
+  "2023-03-31": {
+   "rows": 5,
+   "fv": 364930000.0,
+   "residual_before": 364930000.0,
+   "residual_after": 0.0
+  },
+  "2023-06-30": {
+   "rows": 5,
+   "fv": 438872000.0,
+   "residual_before": 438872000.0,
+   "residual_after": 0.0
+  },
+  "2023-09-30": {
+   "rows": 4,
+   "fv": 496385000.0,
+   "residual_before": 496385000.0,
+   "residual_after": 0.0
+  },
+  "2023-12-31": {
+   "rows": 3,
+   "fv": 508641000.0,
+   "residual_before": 508641000.0,
+   "residual_after": 0.0
+  },
+  "2024-03-31": {
+   "rows": 3,
+   "fv": 616494000.0,
+   "residual_before": 616494000.0,
+   "residual_after": 0.0
+  },
+  "2024-06-30": {
+   "rows": 3,
+   "fv": 651692000.0,
+   "residual_before": 651692000.0,
+   "residual_after": 0.0
+  },
+  "2024-09-30": {
+   "rows": 5,
+   "fv": 700724000.0,
+   "residual_before": 700724000.0,
+   "residual_after": 0.0
+  },
+  "2024-12-31": {
+   "rows": 6,
+   "fv": 841200000.0,
+   "residual_before": 841289000.0,
+   "residual_after": 89000.0
+  },
+  "2025-03-31": {
+   "rows": 6,
+   "fv": 775997000.0,
+   "residual_before": 775997000.0,
+   "residual_after": 0.0
+  },
+  "2025-06-30": {
+   "rows": 6,
+   "fv": 879229000.0,
+   "residual_before": 879229000.0,
+   "residual_after": 0.0
+  },
+  "2025-09-30": {
+   "rows": 7,
+   "fv": 995706000.0,
+   "residual_before": 1020306000.0,
+   "residual_after": 24600000.0
+  }
+ }
+}
