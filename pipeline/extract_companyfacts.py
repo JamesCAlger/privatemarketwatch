@@ -361,6 +361,13 @@ _INCOME_CONCEPTS = {
         "fallback": [],
         "unit": "USD", "instant": False,
     },
+    # Expenses after fee waivers and expense support, where the fund files that figure. total_expenses
+    # stays the gross figure (owner ruling 2026-10-06, decision D-025).
+    "net_expenses": {
+        "exact": ["InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement"],
+        "fallback": [],
+        "unit": "USD", "instant": False,
+    },
 }
 
 # Portfolio & risk concepts (mixed instant/duration)

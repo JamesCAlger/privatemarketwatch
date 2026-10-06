@@ -43,8 +43,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
-            if key=='pik_only_tag_reading' and values!=['coupon']:
-                raise ValueError('The only admitted PIK-only tag reading is coupon: '+str(path))
+            if key=='pik_only_tag_reading' and values not in (['coupon'],['margin']):
+                raise ValueError('PIK-only tag reading must be coupon or margin: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:

@@ -39,6 +39,9 @@ CHEAP_FIELDS: dict[str, str] = {
     "shares_held": "shares_held_source",
 }
 _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets")
+# Published fields the finalizer may take from the PIK tag, and the transform that says so
+# (decisions D-018 and D-026 in docs/investigations/v05_decision_log.md).
+_FROM_PIK_EVENT = {"interest_rate": "interest_rate:pik_only", "basis_spread": "basis_spread:pik_margin"}
 
 # src_facts is included so Task 8 can use it without a join back to the
 # original holdings frame.
@@ -119,18 +122,20 @@ def _field_sql(field: str, source_col: str) -> str:
     expected = f"({raw} * {dec} * {cik_fix} * {stag})"
     if field == 'interest_rate':
         expected = f"({expected} + CASE WHEN {ev} LIKE '%interest_rate:cash_plus_pik%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
-        # A coupon taken from the PIK tag has no plain-rate fact: its source is the PIK rate.
-        expected = f"(CASE WHEN {ev} LIKE '%interest_rate:pik_only%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE {expected} END)"
+    # A coupon or a spread taken from the PIK tag has no fact of its own: its source is the PIK rate.
+    from_pik = _FROM_PIK_EVENT.get(field)
+    if from_pik:
+        expected = f"(CASE WHEN {ev} LIKE '%{from_pik}%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE {expected} END)"
     unresolved_coupon = (
         f"WHEN {ev} LIKE '%interest_rate:coupon_unresolved%' THEN CASE WHEN {published} IS NULL THEN 'unresolved_coupon' ELSE 'fail' END"
         if field == 'interest_rate' else ''
     )
 
-    # A coupon taken from the PIK tag has no plain-rate fact to replay: compare it with the PIK rate.
+    # Such a value has no fact of its own to replay: compare it with the PIK rate.
     pik_only_coupon = (
-        f"WHEN {ev} LIKE '%interest_rate:pik_only%' THEN CASE WHEN ABS({expected} - {published})"
+        f"WHEN {ev} LIKE '%{from_pik}%' THEN CASE WHEN ABS({expected} - {published})"
         f" <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12) THEN 'pass' ELSE 'fail' END"
-        if field == 'interest_rate' else ''
+        if from_pik else ''
     )
 
     # marker: match field name in comma-joined or semicolon-joined list columns
@@ -415,7 +420,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 ctx_facts = facts.get(ctx, {})
                 # A coupon taken from the PIK tag is anchored on the PIK fact.
                 anchor_field = field
-                if field == 'interest_rate' and 'interest_rate:pik_only' in str(r.get('declared_events') or ''):
+                if _FROM_PIK_EVENT.get(field, '\x00') in str(r.get('declared_events') or ''):
                     anchor_field = 'pik_rate'
                     field_sf = sf.get('pik_rate') or {}
                     declared_c = str(field_sf.get('c') or '').lower()

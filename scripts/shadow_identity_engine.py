@@ -78,6 +78,7 @@ class IdentityRule:
     tol_note: str = ""
     tier: str = "tight"
     enforcement: str = "advisory"
+    optional_cols: tuple[str, ...] = ()  # read when the source has them, NULL otherwise; never gated
 
 
 RULES: list[IdentityRule] = [
@@ -117,11 +118,16 @@ RULES: list[IdentityRule] = [
     IdentityRule(
         name="income_identity", table="fund_financials",
         needed_cols=("net_investment_income", "total_investment_income", "total_expenses"),
+        # Net investment income is after fee waivers; use the filed net expenses where there are any
+        # (2026-10-06, decision D-025). Net above gross cannot be: in a 10-K quarter the income
+        # table's figures are the annual amount divided by four while net_expenses is the true
+        # fourth quarter, so the two are on different bases and the gross figure is compared.
+        optional_cols=("net_expenses",),
         row_filter="total_investment_income <> 0",
-        holds_sql="abs(net_investment_income - (total_investment_income - total_expenses)) "
+        holds_sql="abs(net_investment_income - (total_investment_income - CASE WHEN net_expenses <= total_expenses THEN net_expenses ELSE total_expenses END)) "
                   "<= 0.05*abs(total_investment_income)",
-        residual_sql="net_investment_income - (total_investment_income - total_expenses)",
-        tol_note="NII ~ total_investment_income - total_expenses, 5%",
+        residual_sql="net_investment_income - (total_investment_income - CASE WHEN net_expenses <= total_expenses THEN net_expenses ELSE total_expenses END)",
+        tol_note="NII ~ total_investment_income - expenses (net where filed, else total), 5%",
     ),
     IdentityRule(
         name="balance_sheet_identity", table="fund_financials",
@@ -152,7 +158,10 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: IdentityRule,
         logger.info("  SKIP %-26s missing columns: %s", rule.name, missing)
         return False
 
-    col_casts = ", ".join(f"TRY_CAST({c} AS DOUBLE) AS {c}" for c in rule.needed_cols)
+    col_casts = ", ".join(
+        [f"TRY_CAST({c} AS DOUBLE) AS {c}" for c in rule.needed_cols]
+        + [f"TRY_CAST({c} AS DOUBLE) AS {c}" if c in avail else f"CAST(NULL AS DOUBLE) AS {c}"
+           for c in rule.optional_cols])
     base = f"""
         SELECT {cik_e} AS cik, {rd_e} AS report_date, {id_e} AS row_id, {col_casts}
         FROM {src_sql} WHERE {where}
@@ -176,7 +185,7 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: IdentityRule,
         CREATE OR REPLACE TABLE result_{rule.name} AS
         SELECT '{rule.name}' AS rule_name, '{rule.tier}' AS tier,
                '{rule.enforcement}' AS enforcement, b.cik, b.report_date, b.row_id,
-               {", ".join("b."+c for c in rule.needed_cols)}, {scalar_sel}
+               {", ".join("b."+c for c in rule.needed_cols + rule.optional_cols)}, {scalar_sel}
                ({rule.residual_sql.replace('_scalar','sc._scalar') if rule.scalar else rule.residual_sql}) AS residual,
                ({rule.holds_sql.replace('_scalar','sc._scalar') if rule.scalar else rule.holds_sql}) AS holds
         FROM ({base}) b

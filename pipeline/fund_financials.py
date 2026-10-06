@@ -71,6 +71,7 @@ OUTPUT_COLUMNS = [
     "income_per_share",
     "income_yield_pct",
     "gross_investment_income",
+    "net_expenses",
     # Portfolio & risk
     "portfolio_turnover",
     "asset_coverage_ratio",
@@ -560,7 +561,7 @@ def _prepare_nport(
         "distribution_ordinary_income", "distribution_return_of_capital",
         "distribution_from_nii", "distribution_from_gains",
         "total_return_pct", "gain_loss_per_share", "nav_change_per_share",
-        "income_per_share", "income_yield_pct", "gross_investment_income",
+        "income_per_share", "income_yield_pct", "gross_investment_income", "net_expenses",
         "portfolio_turnover",
     }
 
@@ -797,6 +798,7 @@ def _prepare_nport(
         {_ncsr_income_ps}
         {_ncsr_income_yield}
         CAST(NULL AS DOUBLE) AS gross_investment_income,
+        CAST(NULL AS DOUBLE) AS net_expenses,
         {_ncsr_portfolio_turnover}
         -- N-PORT risk
         cq.total_borrowings_detail,
@@ -893,6 +895,7 @@ def _prepare_nport(
         CAST(NULL AS DOUBLE) AS income_per_share,
         CAST(NULL AS DOUBLE) AS income_yield_pct,
         CAST(NULL AS DOUBLE) AS gross_investment_income,
+        CAST(NULL AS DOUBLE) AS net_expenses,
         CAST(NULL AS DOUBLE) AS portfolio_turnover,
         -- N-PORT risk
         total_borrowings_detail,

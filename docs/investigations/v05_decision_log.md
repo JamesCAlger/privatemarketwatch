@@ -420,3 +420,67 @@ Weakest dispositions, for the owner's attention:
   next session.
 - **Open with the owner:** the data choices listed in the session (SDLP principal, PIK margin in
   `pik_rate`, proxy cost on undrawn lines, gross `total_expenses`, rule files outside the gate).
+
+## Data choices ruled by the owner, 2026-10-06 ("go with your recommendations")
+
+Sandbox `five16` after these: 300 findings, 0 outstanding; published equals filed within 0.5M in 69
+of 69 fund-quarters. Nothing was rebuilt for production.
+
+### Ares SDLP principal: kept as filed
+
+No change. DS-005, DS-022 and DS-023 stand.
+
+### D-024 A negative first value is not a proxy cost
+
+- **Decision.** `cost_proxies` gives no proxy when the first observed value is negative. The cost
+  stays empty and the audit method is `no_source_valid_donor`.
+- **Narrower than recommended.** I recommended "zero or negative". An existing test
+  (`test_unrelated_field_correction_does_not_disqualify_observed_zero_fv`) keeps an observed zero
+  as a cost of zero on purpose, so zero still donates. One existing test that expected a negative
+  proxy (a foreign value of -80 converting to -120) was changed to expect no cost.
+- **Result.** Blue Owl: the 508 negative proxy costs are gone; DS-004B has nothing left to cover.
+  Three small negative-value rows with no cost, previously hidden by the proxy, now show (Blue Owl
+  Jellyfish -0.09M; HPS FH BMX -0.15M and Brandt -0.10M) and are added to DS-007.
+- **Re-run.** `python scripts/v05_evidence/negcost.py five16`.
+- **Applies to** every fund. Not checked outside the five.
+
+### D-025 `net_expenses` added to the fund-level table
+
+- **Decision.** New field `net_expenses` (tag
+  `InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement`). `total_expenses` stays
+  gross. The income identity compares net expenses where filed.
+- **Found while doing it.** In a 10-K quarter the income table's figures (`total_investment_income`,
+  `total_expenses`, `net_investment_income`) are the annual amount divided by four
+  (`pipeline/bdc_fund_income.py`, "Annual -> quarterly"), not the fourth quarter. HPS 2023-12-31:
+  gross expenses 104,167,750 is 416,671,000 / 4; the true quarter is 127,460,000. `net_expenses`
+  comes from the other extraction path and is the true quarter. The identity therefore compares
+  gross when net exceeds gross. The divide-by-four is not changed here.
+- **Not covered.** Blue Owl files only the offset (`InvestmentCompanyExpenseOffsetArrangement`),
+  not a net figure, so its 2022-03-31 gap stays under DS-021. A fund whose waiver is small will
+  not show the difference at all.
+- **Re-run.** `python scripts/v05_evidence/netexp.py five16 1838126`.
+
+### D-026 HPS: a PIK tag that is a margin is published as the spread
+
+- **Decision.** `pik_only_tag_reading` admits `["margin"]`, set for HPS. On a loan with a PIK
+  rate, no plain rate, no spread and a known reference rate, the PIK figure is published as
+  `basis_spread` (transform `basis_spread:pik_margin`). `pik_rate` keeps the filed number.
+- **Evidence.** HPS 10-K for 2024-12-31: Southern Graphics Inc. "SF + 7.50 % PIK", Foundation
+  Automotive "SF + 7.75 % PIK"; 10-Q for 2026-03-31: Daphne S.P.A. "E + 6.75 %". 60 rows (57 SOFR,
+  3 EURIBOR). Rows with no reference rate are left alone: Wildcat Car Wash is "15.00 % PIK", a
+  fixed coupon, and Aesthetics Australia is "B + 9.38 % PIK" with a reference the parser does not
+  know.
+- **Not done for Blue Owl.** Its PIK-only rows carry no reference-rate tag, so a fixed 12 % and an
+  "S+ 5.75 %" margin cannot be told apart from the tags. It needs the "Ref. Rate" column from the
+  printed page. 247 rows stay as they were. Blue Owl rows with both a spread and a PIK figure
+  carry the cash margin in `basis_spread` and the PIK margin in `pik_rate`; their total margin is
+  the sum, and nothing publishes it.
+- **Re-run.** `python scripts/v05_evidence/hps_pik_margin.py five16`.
+
+### D-027 Rule files and row corrections: acceptance record
+
+- **Decision.** `docs/investigations/v05_rule_acceptance.md` lists the nine rule files and the row
+  corrections written this week with content hashes and evidence, under the owner's ruling to
+  accept them without the fleet gate.
+- **Not done.** The live `admission_manifest.json` was not created. It would change how all 139
+  rule files of every fund load, and the owner asked for nothing to reach production for now.

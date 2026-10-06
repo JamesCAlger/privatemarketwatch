@@ -1837,7 +1837,7 @@ class TestExtendedConcepts:
             "distribution_per_share", "dividends_declared_per_share",
             "distribution_ordinary_income", "distribution_return_of_capital",
             "total_return_pct", "gain_loss_per_share", "nav_change_per_share",
-            "income_per_share", "income_yield_pct", "gross_investment_income",
+            "income_per_share", "income_yield_pct", "gross_investment_income", "net_expenses",
             "portfolio_turnover", "asset_coverage_ratio",
             "unfunded_commitments", "unrealized_appreciation",
             "unrealized_depreciation", "debt_weighted_avg_rate",

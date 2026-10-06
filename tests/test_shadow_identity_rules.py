@@ -62,3 +62,27 @@ def test_pct_identity_reads_published_rows_only():
     # A JV's own schedule states percent of the JV's net assets, not the fund's
     # (8,387 BCRED and 1,397 Blue Owl rows outside the band were such rows).
     assert "underlying_schedule" in engine.SOURCES["unified"][1]
+
+
+def _income_rows(rows):
+    import duckdb
+    import pandas as pd
+    rule = next(r for r in engine.RULES if r.name == "income_identity")
+    con = duckdb.connect()
+    con.register("ff", pd.DataFrame(rows))
+    return [bool(v[0]) for v in con.execute(f"SELECT ({rule.holds_sql}) FROM ff").fetchall()]
+
+
+def test_income_identity_uses_net_expenses_where_the_fund_files_them():
+    # HPS, three months to 2022-06-30: income 37,750,000, gross expenses 16,022,000, expenses after fee waivers
+    # 4,097,000, net investment income 33,653,000 (decision D-025). Without a net figure the gross one is used.
+    hps = dict(net_investment_income=33_653_000.0, total_investment_income=37_750_000.0, total_expenses=16_022_000.0)
+    assert _income_rows([dict(hps, net_expenses=4_097_000.0), dict(hps, net_expenses=None),
+                         dict(hps, net_expenses=9_000_000.0)]) == [True, False, False]
+    # HPS 2023-12-31: the income table's quarter is the annual figure divided by four (gross expenses
+    # 104,167,750) while net expenses are the true fourth quarter (127,460,000). Net above gross means
+    # different bases; the gross figure is compared and the identity holds as it did before.
+    q4 = dict(net_investment_income=119_177_250.0, total_investment_income=223_345_000.0, total_expenses=104_167_750.0)
+    assert _income_rows([dict(q4, net_expenses=127_460_000.0)]) == [True]
+    rule = next(r for r in engine.RULES if r.name == "income_identity")
+    assert rule.optional_cols == ("net_expenses",)

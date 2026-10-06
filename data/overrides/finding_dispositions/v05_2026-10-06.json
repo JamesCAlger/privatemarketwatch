@@ -288,38 +288,6 @@
    ]
   },
   {
-   "disposition_id": "DS-004B-1812554",
-   "class": "not_applicable",
-   "engine": "row_validation",
-   "rule_name": "C107",
-   "statement": "From 2024-12-31 Blue Owl files undrawn lines in its commitments table with a fair value and no cost. The published cost on those rows is the pipeline's labelled proxy (cost_source first_observed_fv_proxy), not a filed figure, so a test of filed cost does not apply. The reviewers' point stands: the filing gives no cost for these rows.",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001812554-26-000027 context c-925 (Ministry Brands revolving loan): InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount, InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount and InvestmentOwnedFairValueNetOfUnamortizedFees = -4083000; no InvestmentOwnedAtCost fact."
-    },
-    {
-     "source": "query",
-     "quote": "Sandbox five12: 508 such rows in six quarters, cost -64.9M in total, every one with fair value at or below zero. Published total equals the filed total in all six quarters with these rows included."
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/owl_commit.py five12",
-   "decided_by": "agent, owner permission given in session 2026-10-06",
-   "decided_on": "2026-10-06",
-   "supersedes_real_error_verdict": true,
-   "ciks": [
-    "0001812554"
-   ],
-   "quarters": [
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ]
-  },
-  {
    "disposition_id": "DS-005-1287750",
    "class": "as_filed",
    "engine": "row_validation",
@@ -708,6 +676,32 @@
    ]
   },
   {
+   "disposition_id": "DS-007-1812554",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "statement": "Small negative fair values on undrawn lines whose identifier does not name the instrument.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value -49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five16, after negative proxy costs were removed (decision D-024): one row each at Blue Owl 2026-03-31 (Jellyfish US Finco first lien loan, -0.09M, context c-738), HPS 2025-06-30 (FH BMX Buyer, -0.15M) and HPS 2025-09-30 (Brandt Information Services, -0.10M): a small negative value filed with no cost."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py five16 C103 1838126 2025-06-30",
+   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_on": "2026-10-06",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ]
+  },
+  {
    "disposition_id": "DS-007-1837532",
    "class": "as_filed",
    "engine": "row_validation",
@@ -717,9 +711,13 @@
     {
      "source": "query",
      "quote": "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value -49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five16, after negative proxy costs were removed (decision D-024): one row each at Blue Owl 2026-03-31 (Jellyfish US Finco first lien loan, -0.09M, context c-738), HPS 2025-06-30 (FH BMX Buyer, -0.15M) and HPS 2025-09-30 (Brandt Information Services, -0.10M): a small negative value filed with no cost."
     }
    ],
-   "rerun": "python scripts/v05_evidence/unfunded.py five10",
+   "rerun": "python scripts/v05_evidence/flagged.py five16 C103 1838126 2025-06-30",
    "decided_by": "agent, owner permission given in session 2026-10-06",
    "decided_on": "2026-10-06",
    "ciks": [
@@ -739,9 +737,13 @@
     {
      "source": "query",
      "quote": "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value -49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox five16, after negative proxy costs were removed (decision D-024): one row each at Blue Owl 2026-03-31 (Jellyfish US Finco first lien loan, -0.09M, context c-738), HPS 2025-06-30 (FH BMX Buyer, -0.15M) and HPS 2025-09-30 (Brandt Information Services, -0.10M): a small negative value filed with no cost."
     }
    ],
-   "rerun": "python scripts/v05_evidence/unfunded.py five10",
+   "rerun": "python scripts/v05_evidence/flagged.py five16 C103 1838126 2025-06-30",
    "decided_by": "agent, owner permission given in session 2026-10-06",
    "decided_on": "2026-10-06",
    "ciks": [
@@ -751,7 +753,9 @@
     "2023-06-30",
     "2024-06-30",
     "2024-09-30",
-    "2025-03-31"
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
    ]
   },
   {
@@ -1274,8 +1278,6 @@
    ],
    "quarters": [
     "2022-03-31",
-    "2022-06-30",
-    "2022-09-30",
     "2022-12-31"
    ]
   },

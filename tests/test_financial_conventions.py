@@ -244,7 +244,11 @@ def test_adjudicated_foreign_fv_uses_pinned_decimal_fx_then_donates_and_replays(
     assert event['conversion']['quote_id']=='synthetic-quote'
     assert states.iloc[0].donor_valid
     final,donors=cost_proxies(result,states,release_id='release')
-    assert final.iloc[0].cost==expected and donors.iloc[0].donor_row_id=='R1'
+    if expected<0:
+        # a negative first value converts like any other but is not a cost (owner ruling 2026-10-06, D-024)
+        assert pd.isna(final.iloc[0].cost) and donors.iloc[0].method=='no_source_valid_donor'
+    else:
+        assert final.iloc[0].cost==expected and donors.iloc[0].donor_row_id=='R1'
     again,_=prepare(final,prior_states=states,fx_quotes=[quote],unit_adjudications=[decision])
     assert again.iloc[0].fair_value==expected
     assert json.loads(again.iloc[0].src_facts)['_financial_fx']['fair_value']==event
@@ -586,3 +590,53 @@ def test_pik_only_setting_is_validated_and_set_for_ares_and_apollo():
     # Apollo: the row text itself reads 'Interest Rate 11.45% PIK' (Material Holdings, 2024-09-30)
     assert pik_only_coupon_funds()=={"0001287750","0001837532"}
     assert load_encodings()["0001287750"]["pik_only_tag_reading"]==["coupon"]
+
+
+def test_a_negative_first_observed_value_is_not_a_cost():
+    # Blue Owl from 2024-12-31: undrawn lines come from the commitments table with a negative fair value and no
+    # cost fact (Ministry Brands revolving loan, -4,083,000). A proxy would publish a negative cost the fund never
+    # filed (owner ruling 2026-10-06, decision D-024). An observed zero still donates (test above).
+    prepared,states=prepare(rows(dict(row_id="neg",cost="",fair_value="-4083000",position_id="P1"),
+        dict(row_id="pos",cost="",fair_value="250000",position_id="P2")))
+    result,audit=cost_proxies(prepared,states,release_id="release")
+    by_id=result.set_index("row_id");evidence=audit.set_index("row_id")
+    assert pd.isna(by_id.loc["neg","cost"]) and by_id.loc["neg","cost_source"]!="first_observed_fv_proxy"
+    assert evidence.loc["neg","method"]=="no_source_valid_donor" and pd.isna(evidence.loc["neg","proxy_value"])
+    assert by_id.loc["pos","cost"]==250000 and evidence.loc["pos","method"]=="first_observed_fv_proxy"
+
+
+def test_a_pik_tag_that_is_a_margin_over_a_known_reference_rate_is_published_as_the_spread():
+    # HPS 2024-12-31: Southern Graphics Inc. is printed "SF + 7.50 % PIK" and tagged with a PIK rate of 0.075 and
+    # no spread; Daphne S.P.A. "E + 6.75 %" likewise (decision D-026). The margin belongs in basis_spread.
+    loan=dict(asset_category="LOAN",cik="0001838126",interest_rate_kind="",interest_rate="",src_facts="{}")
+    frame=rows(dict(loan,row_id="margin",pik_rate="7.5",basis_spread="",reference_rate_type="SOFR"),
+        # Wildcat Car Wash is printed "15.00 % PIK" with no reference rate: not a margin, left alone.
+        dict(loan,row_id="fixed",pik_rate="15.0",basis_spread="",reference_rate_type=""),
+        # a spread is already filed: the PIK is a part of it (Severin Acquisition, spread 4.75, PIK 2.25)
+        dict(loan,row_id="both",pik_rate="2.25",basis_spread="4.75",interest_rate="8.42",reference_rate_type="SOFR"),
+        dict(loan,row_id="equity",asset_category="EQUITY_COMMON",pik_rate="8.0",basis_spread="",reference_rate_type="SOFR"),
+        # Blue Owl has no setting: nothing moves
+        dict(loan,row_id="other",cik="0001812554",pik_rate="5.75",basis_spread="",reference_rate_type="SOFR"))
+    result,_=prepare(frame,rate_readings={"0001838126":"all_in"},pik_only_coupon=set(),pik_only_margin={"0001838126"})
+    by_id=result.set_index("row_id")
+    assert float(by_id.loc["margin","basis_spread"])==7.5 and "basis_spread:pik_margin" in by_id.loc["margin","src_transforms"]
+    assert float(by_id.loc["margin","pik_rate"])==7.5 and pd.isna(by_id.loc["margin","interest_rate"])
+    assert float(by_id.loc["both","basis_spread"])==4.75
+    for row_id in ("fixed","equity","other"):
+        assert str(by_id.loc[row_id,"basis_spread"]) in ("","nan","None") and "pik_margin" not in str(by_id.loc[row_id,"src_transforms"])
+
+
+def test_pik_margin_setting_is_validated_and_set_for_hps_alone():
+    from pipeline.financial_conventions import pik_only_margin_funds
+    assert pik_only_margin_funds()=={"0001838126"}
+
+
+def test_the_pik_margin_label_survives_a_second_pass_over_the_finalized_rows():
+    # The build finalizes rows, then prepares them again with their retained states. On the second pass the spread
+    # is already filled, so the label has to be kept, not re-derived (found in sandbox five16: 60 HPS rows lost it).
+    loan=dict(asset_category="LOAN",cik="0001838126",interest_rate_kind="",interest_rate="",src_facts="{}",
+        pik_rate="7.5",basis_spread="",reference_rate_type="SOFR",src_transforms="pik_rate:rate_x100")
+    first,states=prepare(rows(loan),rate_readings={},pik_only_coupon=set(),pik_only_margin={"0001838126"})
+    again,_=prepare(first,prior_states=states,rate_readings={},pik_only_coupon=set(),pik_only_margin={"0001838126"})
+    assert float(again.iloc[0].basis_spread)==7.5
+    assert again.iloc[0].src_transforms.count("basis_spread:pik_margin")==1

@@ -44,8 +44,16 @@ def pik_only_coupon_funds(encodings=None):
     return {cik for cik,encoding in encodings.items() if encoding.get('pik_only_tag_reading')==['coupon']}
 
 
+def pik_only_margin_funds(encodings=None):
+    """{cik10} whose wrappers set source_encodings.pik_only_tag_reading to ['margin']."""
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings=load_encodings()
+    return {cik for cik,encoding in encodings.items() if encoding.get('pik_only_tag_reading')==['margin']}
+
+
 def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False,fx_quotes=(),unit_adjudications=(),
-        rate_readings=None,pik_only_coupon=None):
+        rate_readings=None,pik_only_coupon=None,pik_only_margin=None):
     """Prepare supported fields without allocating identity or inventing rates.
 
     ``rate_readings`` ({cik10: 'all_in' | 'cash_leg'}; default: the wrappers' filed_rate_reading)
@@ -56,6 +64,11 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     ``pik_only_coupon`` (set of cik10; default: the wrappers' pik_only_tag_reading) names the
     funds whose PIK tag, on a loan row with no plain rate and no spread, holds the whole coupon.
     It is a separate setting because the same tag holds a margin for other filers (HPS).
+
+    ``pik_only_margin`` (set of cik10; default: wrappers with pik_only_tag_reading ['margin'])
+    names the funds whose PIK tag on such a row holds a margin over the reference rate. Where
+    the row's reference rate is known the margin is published as basis_spread; pik_rate keeps
+    the filed number.
 
     Explicit kinds/precision may be supplied by governed source producers. A
     previous v2 row is idempotent: use the retained reported rate and cost, never
@@ -73,7 +86,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         "nonaccrual_footnote":"","nonaccrual_dimension":"","asset_category":"","gics_sub_industry":"",
         "corrected_fields":"","src_conflict_fields":"","src_filled_fields":"",
         "src_field_overrides":"","src_transforms":"","source":"",
-        "pct_of_net_assets":"","fair_value":"","position_id":"","instrument_description":""}
+        "pct_of_net_assets":"","fair_value":"","position_id":"","instrument_description":"",
+        "reference_rate_type":""}
     for name,value in defaults.items():
         if name not in frame: frame[name]=value
     for name,kind in ADDITIONS.items():
@@ -91,6 +105,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         'reading':pd.Series(list(rate_readings.values()),dtype='string')})
     if pik_only_coupon is None: pik_only_coupon=pik_only_coupon_funds()
     pik_coupon=pd.DataFrame({'cik':pd.Series(sorted(pik_only_coupon),dtype='string')})
+    if pik_only_margin is None: pik_only_margin=pik_only_margin_funds()
+    pik_margin=pd.DataFrame({'cik':pd.Series(sorted(pik_only_margin),dtype='string')})
     if frame.empty:
         return frame,pd.DataFrame(columns=['row_id','cost_state','donor_valid','source_cost_value',
             'source_rate_value','rate_kind','coupon_state','maturity_precision'])
@@ -101,7 +117,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     with duckdb.connect(config={"threads":2,"memory_limit":"-1"}) as con:
         con.register("input",frame);con.register("nav",nav);con.register("taxonomy",hierarchy)
         con.register("prior_states",prior_states);con.register("rate_readings",readings)
-        con.register("pik_coupon_funds",pik_coupon)
+        con.register("pik_coupon_funds",pik_coupon);con.register("pik_margin_funds",pik_margin)
         if con.execute('SELECT count(*) FROM (SELECT row_id FROM prior_states GROUP BY ALL HAVING count(*)>1)').fetchone()[0]:
             raise ValueError('Retained financial states repeat observation identity')
         if migrated and con.execute('SELECT count(*) FROM input i ANTI JOIN prior_states p USING(row_id)').fetchone()[0]:
@@ -129,6 +145,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
              WHERE r.cik=lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0')) AS rate_reading,
             lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM pik_coupon_funds)
                 AND coalesce(CAST(asset_category AS VARCHAR),'')='LOAN' AS pik_is_coupon,
+            lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM pik_margin_funds)
+                AND coalesce(CAST(asset_category AS VARCHAR),'')='LOAN'
+                AND nullif(trim(CAST(reference_rate_type AS VARCHAR)),'') IS NOT NULL AS pik_is_margin,
             regexp_matches(lower(coalesce(CAST(bdc_investment_identifier AS VARCHAR),'')||' '||
                 coalesce(CAST(instrument_description AS VARCHAR),'')),'(^|[^a-z])pik([^a-z]|$)|paid.in.kind|payment.in.kind') AS names_pik,
             cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
@@ -145,6 +164,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             coalesce(json_extract_string(TRY_CAST(src_facts AS JSON),'$.maturity_date.r'),'') AS maturity_raw
             FROM input""")
         con.execute("""CREATE TABLE conventions AS SELECT typed.row_id,reported_rate,reported_cost,pik,fv,
+            -- A PIK tag that is the margin over a known reference rate, on a loan with no plain
+            -- rate and no spread (HPS prints 'SF + 7.50 % PIK'): the margin is the spread.
+            (pik_is_margin AND reported_rate IS NULL AND spread IS NULL AND coalesce(isfinite(pik) AND pik>0,false)) AS margin_from_pik,
             maturity_raw,maturity_date,
             CASE WHEN upper(trim(fair_value_currency)) NOT IN ('','USD') THEN
                       CASE WHEN json_extract_string(facts,'$._financial_fx.fair_value.conversion.method')='FX_stale'
@@ -239,11 +261,15 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             c.all_in AS interest_rate,c.cash AS interest_rate_cash,
             concat_ws(';',nullif(array_to_string(list_filter(string_split(coalesce(i.src_transforms,''),';'),
                 event -> event NOT IN ('interest_rate:cash_plus_pik','interest_rate:coupon_unresolved','interest_rate:pik_only')),';'),''),
+                -- written once, when the spread is taken from the PIK tag; a later pass finds the spread
+                -- already filled and keeps the label it finds
+                CASE WHEN c.margin_from_pik THEN 'basis_spread:pik_margin' END,
                 CASE WHEN c.rate_kind='cash' AND c.all_in IS NOT NULL THEN 'interest_rate:cash_plus_pik'
                      WHEN c.rate_kind='all_in' AND c.reported_rate IS NULL AND c.all_in IS NOT NULL THEN 'interest_rate:pik_only'
                      -- Unresolved means a filed rate whose meaning is unknown. A row that files no rate
                      -- has nothing to resolve (2026-10-06, decision D-010).
                      WHEN c.all_in IS NULL AND isfinite(c.reported_rate) THEN 'interest_rate:coupon_unresolved' END) AS src_transforms,
+            CASE WHEN c.margin_from_pik THEN CAST(c.pik AS VARCHAR) ELSE CAST(i.basis_spread AS VARCHAR) END AS basis_spread,
             coalesce(nullif(i.basis_spread_kind,''),'unresolved') AS basis_spread_kind,
             CASE WHEN c.fv_state IN ('explicit_usd','assumed_usd') AND isfinite(n.net_assets)
                       AND n.net_assets<>0 THEN c.fv/n.net_assets*100 END AS pct_of_net_assets_calculated,
@@ -286,12 +312,14 @@ def cost_proxies(frame,states,*,release_id):
             CASE WHEN s.cost_state='present' THEN 'reported'
                  WHEN s.cost_state<>'absent' THEN s.cost_state
                  WHEN d.candidates>1 THEN 'ambiguous_earliest_donor'
-                 WHEN d.candidates=1 THEN 'first_observed_fv_proxy'
+                 -- A negative first value (an undrawn line marked below par) is not a cost the fund
+                 -- filed or could have paid: no proxy (2026-10-06, decision D-024). Zero still donates.
+                 WHEN d.candidates=1 AND d.donor_value>=0 THEN 'first_observed_fv_proxy'
                  ELSE 'no_source_valid_donor' END AS method,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 THEN d.donor_row_id END AS donor_row_id,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 THEN d.donor_date END AS donor_date,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 THEN ? END AS donor_release,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 THEN d.donor_value END AS proxy_value
+            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_row_id END AS donor_row_id,
+            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_date END AS donor_date,
+            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN ? END AS donor_release,
+            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_value END AS proxy_value
             FROM holdings h JOIN states s USING(row_id) LEFT JOIN donors d USING(cik,position_id)""",[release_id])
         result=con.execute("""SELECT h.* REPLACE(CASE WHEN a.method='first_observed_fv_proxy' THEN a.proxy_value
             ELSE h.cost_reported END AS cost,CASE WHEN a.method='first_observed_fv_proxy' THEN a.method

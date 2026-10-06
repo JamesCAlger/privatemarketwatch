@@ -576,8 +576,8 @@
           "type": "array",
           "minItems": 1,
           "maxItems": 1,
-          "items": {"enum": ["coupon"]},
-          "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Do not set where the PIK tag holds a margin over a reference rate."
+          "items": {"enum": ["coupon", "margin"]},
+          "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Use margin where the PIK tag on such a row holds the margin over the reference rate: the finalizer then publishes it as basis_spread (transform basis_spread:pik_margin) on rows whose reference rate is known, and leaves pik_rate as filed. Evidence required for margin: printed lines of the form reference + margin PIK."
         },
         "foreign_unit_values": {
           "type": "array",

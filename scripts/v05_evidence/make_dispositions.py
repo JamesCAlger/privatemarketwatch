@@ -120,11 +120,15 @@ SPECS = [
                 "not found by text search. HPS relabels the same position 'Preferred Units' from 2025-12-31; those two "
                 "quarters are corrected to preferred equity (decision D-021).")],
      S + "equity_with_rate.py five14"),
-    ("DS-007", "as_filed", "row_validation", "C103", [HPS, APOLLO], set(), False,
+    ("DS-007", "as_filed", "row_validation", "C103", [HPS, APOLLO, OWL], set(), False,
      "Small negative fair values on undrawn lines whose identifier does not name the instrument.",
      [("query", "Sandbox five4: HPS 16 rows, 10 with cost exactly zero, 1.24M in total, largest 0.28M (Femur Buyer Inc 2: value "
-                "-49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw.")],
-     S + "unfunded.py five10"),
+                "-49,000, cost 0, no principal). Apollo 62 rows across the period, 60 named revolver or delayed draw."),
+      ("query", "Sandbox five16, after negative proxy costs were removed (decision D-024): one row each at Blue Owl "
+                "2026-03-31 (Jellyfish US Finco first lien loan, -0.09M, context c-738), HPS 2025-06-30 (FH BMX Buyer, "
+                "-0.15M) and HPS 2025-09-30 (Brandt Information Services, -0.10M): a small negative value filed with no "
+                "cost.")],
+     S + "flagged.py five16 C103 1838126 2025-06-30"),
     ("DS-008", "as_filed", "weak", "maturity_not_past", [APOLLO], set(), True,
      "One loan, Heubach Holdings USA LLC, is filed with a maturity of 4/30/2024 in six later filings.",
      [("filing", "Apollo Debt Solutions 10-Q and 10-K filings for 2024-06-30 to 2025-09-30: the position's identifier reads "

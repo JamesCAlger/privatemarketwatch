@@ -895,3 +895,23 @@ def test_a_coupon_taken_from_the_pik_tag_is_verified_against_the_pik_fact():
     assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
     assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,value='.10')).iloc[0].full_status=='published_mismatch'
     assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,ctx='other-context')).iloc[0].full_status in ('anchor_missing','context_missing')
+
+
+def test_a_spread_taken_from_the_pik_tag_is_verified_against_the_pik_fact():
+    # Decision D-026 (HPS): a PIK tag that is the margin over a known reference rate is published as basis_spread.
+    from lxml import etree
+    from pipeline.financial_conventions import prepare
+    frame=pd.DataFrame([_row(cik='0001838126',interest_rate=None,interest_rate_kind='',pik_rate=7.5,basis_spread=None,
+        asset_category='LOAN',reference_rate_type='SOFR',interest_rate_source='',pik_rate_source='xbrl_field',basis_spread_source='',
+        src_facts=json.dumps({'pik_rate':{'r':.075}}),src_transforms='pik_rate:rate_x100')])
+    frame,_=prepare(frame,rate_readings={},pik_only_coupon=set(),pik_only_margin={'0001838126'})
+    assert float(frame.iloc[0].basis_spread)==7.5 and 'basis_spread:pik_margin' in frame.iloc[0].src_transforms
+    replay=cheap_tier(holdings_df=frame)
+    replay=replay[replay.field=='basis_spread']
+    assert replay.iloc[0].expected==pytest.approx(7.5) and replay.iloc[0].cheap_status=='pass'
+    def loader(cik,accession,value='.075'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            f'<g:InvestmentInterestRatePaidInKind contextRef="ctx1">{value}</g:InvestmentInterestRatePaidInKind></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
+    assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,value='.05')).iloc[0].full_status=='published_mismatch'
