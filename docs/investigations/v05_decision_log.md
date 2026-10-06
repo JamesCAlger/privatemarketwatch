@@ -410,3 +410,13 @@ Weakest dispositions, for the owner's attention:
   schema question this entry does not settle.
 - **DS-010.** "Tagged under two spellings" rests on the published total matching the filed total,
   not on a row-by-row trace.
+
+## Owner rulings, 2026-10-06 (in session, after the second batch)
+
+- **Dispositions accepted.** Owner: "i accept your dispositions". Covers the 50 entries in
+  `data/overrides/finding_dispositions/v05_2026-10-06.json` as committed at 27f106f.
+- **Nothing goes to production for now.** No rebuild of published data, no push.
+- **Permissions are not standing.** The four permissions of this run ended with it; ask again
+  next session.
+- **Open with the owner:** the data choices listed in the session (SDLP principal, PIK margin in
+  `pik_rate`, proxy cost on undrawn lines, gross `total_expenses`, rule files outside the gate).
