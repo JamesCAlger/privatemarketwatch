@@ -91,6 +91,10 @@
       {
         "regex": "(?i)\\bwarrant",
         "family": "warrant"
+      },
+      {
+        "regex": "(?i)^total\\b",
+        "family": "debt"
       }
     ],
     "category_marker_re": "(?i)^(?:ABF|BF)\\s*-\\s*",

@@ -1370,6 +1370,11 @@ def _prepare_bdc(
             TRY_CAST(basis_spread AS DOUBLE) AS _bs,
             TRY_CAST(cost AS DOUBLE) AS _cost,
             TRY_CAST(pct_of_net_assets AS DOUBLE) AS _pct,
+            -- A filing states percent of net assets on one scale. Twenty or more tagged
+            -- values summing past 20 can only be percent (fractions sum to about 2).
+            (count(TRY_CAST(pct_of_net_assets AS DOUBLE)) OVER (PARTITION BY cik, accession_number) >= 20
+             AND sum(abs(TRY_CAST(pct_of_net_assets AS DOUBLE))) OVER (PARTITION BY cik, accession_number) > 20
+            ) AS _pct_in_percent,
             TRY_CAST(pik_rate AS DOUBLE) AS _pik,
             TRY_CAST(unrealized_gain_loss AS DOUBLE) AS _ugl
         FROM bdc_raw
@@ -2499,7 +2504,8 @@ def _prepare_bdc(
             _cost AS cost,
             _resolved_fv_currency AS fair_value_currency,
             _resolved_cost_currency AS cost_currency,
-            CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN _pct * 100
+            CASE WHEN COALESCE(_pct_in_percent, false) THEN _pct
+                 WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN _pct * 100
                  WHEN _pct IS NOT NULL AND _pct > 50 THEN _pct / 100
                  ELSE _pct END AS pct_of_net_assets,
             asset_category_final AS asset_category,
@@ -2665,7 +2671,8 @@ def _prepare_bdc(
                      WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN 'pik_rate:rate_x100'
                      WHEN _pik IS NOT NULL AND _pik >= 50 THEN 'pik_rate:rate_div100'
                      ELSE NULL END,
-                CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
+                CASE WHEN COALESCE(_pct_in_percent, false) THEN NULL
+                     WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
                      ELSE NULL END
             ), '') AS src_transforms,

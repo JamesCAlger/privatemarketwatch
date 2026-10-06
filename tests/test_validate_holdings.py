@@ -1164,6 +1164,49 @@ class TestBdcSourceReconciliation:
         assert metrics.iloc[0]["blocking_issue_count"] == 0
         assert metrics.iloc[0]["documented_source_rollup_exact_rows"] == 1
 
+    def test_issuer_subtotal_ending_in_punctuation_ties_to_its_positions(self):
+        """Ares Capital 2026-03-31: 'Ivy Hill Asset Management, L.P.' 2,661.2M is the sum of its
+        member interest 1,899.0M and subordinated revolving loan 762.2M. The normalised name
+        ended in a space ('l p '), so the prefix test against its positions never matched and
+        the subtotal read as a missing position (14 fund-quarters, fund sandbox 2026-10-06)."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Ivy Hill Asset Management, L.P.",
+            "context_id": "c-1937",
+            "fair_value": "2661200000",
+        }])
+        output = _make_bdc_output([
+            {"bdc_investment_identifier": "Ivy Hill Asset Management, L.P., Member interest",
+             "bdc_dimensions_raw": "investmentidentifieraxis=Ivy Hill Asset Management, L.P., Member interest",
+             "issuer_name": "Ivy Hill Asset Management, L.P.", "fair_value": "1899000000"},
+            {"bdc_investment_identifier": "Ivy Hill Asset Management, L.P., Subordinated revolving loan",
+             "bdc_dimensions_raw": "investmentidentifieraxis=Ivy Hill Asset Management, L.P., Subordinated revolving loan",
+             "issuer_name": "Ivy Hill Asset Management, L.P.", "fair_value": "762200000"},
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "missing_from_pipeline" not in set(detail["status"])
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_issuer_subtotal_that_does_not_tie_stays_blocking(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Ivy Hill Asset Management, L.P.",
+            "context_id": "c-1937",
+            "fair_value": "2661200000",
+        }])
+        output = _make_bdc_output([
+            {"bdc_investment_identifier": "Ivy Hill Asset Management, L.P., Member interest",
+             "bdc_dimensions_raw": "investmentidentifieraxis=Ivy Hill Asset Management, L.P., Member interest",
+             "issuer_name": "Ivy Hill Asset Management, L.P.", "fair_value": "1899000000"},
+            {"bdc_investment_identifier": "Ivy Hill Asset Management, L.P., Subordinated revolving loan",
+             "bdc_dimensions_raw": "investmentidentifieraxis=Ivy Hill Asset Management, L.P., Subordinated revolving loan",
+             "issuer_name": "Ivy Hill Asset Management, L.P.", "fair_value": "500000000"},
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "missing_from_pipeline" in set(detail["status"])
+
     def test_source_rollup_remains_blocking_when_fv_tie_fails(self):
         source = _make_bdc_source([{
             "investment_identifier": "Total First Lien Debt",
@@ -1626,12 +1669,16 @@ class TestBdcSourceReconciliation:
             enable_bdc_xbrl_wrappers=False,
         )
 
-        assert "documented_source_rollup_exact" not in set(detail["status"])
-        # The parent source row is cleared by issuer subtotal arithmetic
-        # (its FV=3M matches the sum of 2 output children with issuer_name "Aledia, Inc.").
-        # The 2 output children remain extra_in_pipeline.
-        assert "documented_source_issuer_subtotal_arithmetic" in set(detail["status"])
-        assert int(metrics.iloc[0]["blocking_issue_count"]) == 2
+        # The parent source row is cleared without wrappers: its FV=3M matches the sum of
+        # the 2 output children. Since 2026-10-06 the plain prefix test does this (the
+        # normalised parent name no longer ends in a space after "Inc."); before, only the
+        # issuer subtotal arithmetic did, and it left the 2 output children as
+        # extra_in_pipeline (2 blocking). A rollup that ties covers its children, as in
+        # test_source_rollup_is_non_blocking_when_fv_ties_children.
+        assert "missing_from_pipeline" not in set(detail["status"])
+        assert set(detail["status"]) & {"documented_source_rollup_exact",
+                                        "documented_source_issuer_subtotal_arithmetic"}
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
 
     def test_source_rollup_does_not_consume_matched_parent_with_distinct_children(self):
         source = _make_bdc_source([{

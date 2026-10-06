@@ -2104,6 +2104,33 @@ class TestPrepareBdc:
         assert by_id[equity]["issuer_name"] == "Ergotron Ergotron Investments, LLC"
         assert by_id[equity]["instrument_description"].startswith("Common Equity")
 
+    def test_percent_of_net_assets_scale_is_read_per_filing(self):
+        """Blue Owl Credit Income (0001812554) 2023-06-30 tags percent of net assets in
+        percent to one decimal (0.5 means 0.5 pct). Values of 0.5 or less were multiplied
+        by 100 row by row: 195 rows, and the quarter summed to 5,084 pct. A filing whose
+        tagged values sum to more than 20 is in percent, so none of its rows is rescaled."""
+        def rows(cik, accession, values):
+            return [{"cik": cik, "entity_name": "Fund", "accession_number": accession, "report_date": "2023-06-30",
+                     "investment_identifier": "Borrower %02d, Inc., First lien senior secured loan" % i,
+                     "fair_value": 1_000_000 + i, "cost": 1_000_000, "principal_amount": 1_000_000,
+                     "pct_of_net_assets": v} for i, v in enumerate(values)]
+        percent = [0.1, 0.2, 0.3, 0.4, 0.5] * 4 + [3.4, 3.5, 4.0, 2.2, 1.9, 2.8, 3.1, 60.0]
+        fraction = [0.001, 0.002, 0.003, 0.004, 0.005] * 4 + [0.034, 0.035, 0.04, 0.022, 0.019, 0.028, 0.031]
+        result = _prepare_bdc(self._make_bdc_df(
+            rows("0009990001", "0009990001-23-000001", percent) + rows("0009990002", "0009990002-23-000001", fraction)))
+        got = {cik: sorted(float(v) for v in result.loc[result["cik"].astype(str).str.zfill(10) == cik, "pct_of_net_assets"])
+               for cik in ("0009990001", "0009990002")}
+        assert got["0009990001"] == pytest.approx(sorted(percent))
+        assert got["0009990002"] == pytest.approx(sorted(v * 100 for v in fraction))
+
+    def test_percent_of_net_assets_with_few_tagged_rows_keeps_the_row_rule(self):
+        df = self._make_bdc_df([
+            {"cik": "0009990003", "entity_name": "Fund", "accession_number": "0009990003-23-000001",
+             "report_date": "2023-06-30", "investment_identifier": "Borrower, Inc., First lien senior secured loan",
+             "fair_value": 1_000_000, "cost": 1_000_000, "principal_amount": 1_000_000, "pct_of_net_assets": 0.0175},
+        ])
+        assert float(_prepare_bdc(df).iloc[0]["pct_of_net_assets"]) == pytest.approx(1.75)
+
     def test_trinity_flat_hierarchy_extracts_issuer(self):
         """Trinity Capital (0001786108): 'Portfolio Company Debt Securities-
         United States <Industry> <Company> Type of Investment <type>

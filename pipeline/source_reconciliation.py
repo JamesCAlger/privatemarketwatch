@@ -1792,10 +1792,10 @@ def reconcile_bdc_source_to_holdings(
                 CAST(context_id AS VARCHAR) AS context_id,
                 CAST(investment_identifier AS VARCHAR) AS raw_investment_identifier,
                 {_norm_identifier_sql('investment_identifier')} AS normalized_investment_identifier,
-                regexp_replace(
+                trim(regexp_replace(
                     lower(trim({source_staging_identifier})),
                     '[^a-z0-9]+', ' ', 'g'
-                ) AS staging_normalized_investment_identifier,
+                )) AS staging_normalized_investment_identifier,
                 lower(trim({source_staging_identifier})) AS lower_id,
                 CAST(dimensions_raw AS VARCHAR) AS dimensions_raw,
                 CAST(concept_names AS VARCHAR) AS concept_names,
@@ -2029,10 +2029,10 @@ def reconcile_bdc_source_to_holdings(
                 CAST(filing_date AS VARCHAR) AS filing_date,
                 CAST(bdc_investment_identifier AS VARCHAR) AS raw_investment_identifier,
                 {_norm_identifier_sql('bdc_investment_identifier')} AS normalized_investment_identifier,
-                regexp_replace(
+                trim(regexp_replace(
                     lower(trim({output_staging_identifier})),
                     '[^a-z0-9]+', ' ', 'g'
-                ) AS staging_normalized_investment_identifier,
+                )) AS staging_normalized_investment_identifier,
                 CAST(bdc_dimensions_raw AS VARCHAR) AS dimensions_raw,
                 CAST(wrapper_disposition AS VARCHAR) AS output_wrapper_disposition,
                 CAST(wrapper_rule_id AS VARCHAR) AS output_wrapper_rule_id,
