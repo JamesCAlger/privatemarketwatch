@@ -444,14 +444,14 @@ def test_fund_reading_publishes_the_plain_rate_tag_as_all_in():
     # BCRED 2026-03-31, Inovalon Holdings, Inc. 1: filed 9.43, PIK 2.75 (part of the 9.43); IRI Group: filed 7.95, no PIK.
     frame=rows(dict(row_id="pik",cik="0001803498",interest_rate_kind="",interest_rate="9.43",pik_rate="2.75",src_facts=BARE),
         dict(row_id="plain",cik="0001803498",interest_rate_kind="",interest_rate="7.95",pik_rate="",src_facts=BARE),
-        dict(row_id="other",cik="0000000999",interest_rate_kind="",interest_rate="7.95",pik_rate="",src_facts=BARE))
+        dict(row_id="other",cik="0000000999",interest_rate_kind="",interest_rate="9.43",pik_rate="2.75",src_facts=BARE))
     result,states=prepare(frame,rate_readings={"0001803498":"all_in"})
     by_id=result.set_index("row_id")
     assert by_id.loc["pik","interest_rate_kind"]=="all_in" and by_id.loc["pik","interest_rate"]==9.43
     assert by_id.loc["pik","interest_rate_cash"]==pytest.approx(6.68)
     assert by_id.loc["plain","interest_rate"]==7.95 and pd.isna(by_id.loc["plain","interest_rate_cash"])
     assert "coupon_unresolved" not in by_id.loc["pik","src_transforms"]
-    # a fund with no reading is untouched
+    # a fund with no reading: the same PIK row stays withheld
     assert by_id.loc["other","interest_rate_kind"]=="unresolved" and pd.isna(by_id.loc["other","interest_rate"])
     assert states.set_index("row_id").loc["pik","coupon_state"]=="supported"
 
@@ -488,7 +488,8 @@ def test_cash_leg_reading_keeps_the_existing_cash_rule():
     result,_=prepare(frame,rate_readings={"0000000777":"cash_leg"})
     by_id=result.set_index("row_id")
     assert by_id.loc["pik","interest_rate"]==pytest.approx(14.3) and by_id.loc["pik","interest_rate_cash"]==6.7
-    assert pd.isna(by_id.loc["plain","interest_rate"])
+    # with no PIK on the row the cash coupon is the all-in coupon
+    assert by_id.loc["plain","interest_rate"]==6.7
 
 
 def test_wrapper_setting_is_validated_and_set_for_the_four_funds_that_file_rates():
@@ -497,3 +498,43 @@ def test_wrapper_setting_is_validated_and_set_for_the_four_funds_that_file_rates
     for cik in ("0001803498","0001287750","0001838126","0001837532"):
         assert encodings[cik]["filed_rate_reading"]==["all_in"]
     assert "filed_rate_reading" not in encodings.get("0001812554",{})
+
+
+def test_plain_rate_with_no_pik_on_the_row_is_published_for_any_fund():
+    # With no PIK the all-in coupon and the cash coupon are the same number, so no fund reading is needed.
+    plain=json.dumps({"interest_rate":{"c":"investmentinterestrate"}})
+    frame=rows(dict(row_id="none",cik="0000000999",interest_rate_kind="",interest_rate="7.95",pik_rate="",src_facts=plain),
+        dict(row_id="zero",cik="0000000999",interest_rate_kind="",interest_rate="8.42",pik_rate="0",src_facts=BARE),
+        dict(row_id="text",cik="0000000999",interest_rate_kind="",interest_rate="9.0",pik_rate="",src_facts="{}"))
+    result,states=prepare(frame,rate_readings={})
+    by_id=result.set_index("row_id")
+    for row_id,rate in (("none",7.95),("zero",8.42),("text",9.0)):
+        assert by_id.loc[row_id,"interest_rate_kind"]=="all_in" and by_id.loc[row_id,"interest_rate"]==rate
+        assert "coupon_unresolved" not in by_id.loc[row_id,"src_transforms"]
+    assert set(states.coupon_state)=={"supported"}
+
+
+def test_plain_rate_stays_withheld_when_the_row_has_or_mentions_pik():
+    frame=rows(dict(row_id="pik",cik="0000000999",interest_rate_kind="",interest_rate="9.43",pik_rate="2.75",src_facts=BARE),
+        # PIK named in the row text but no PIK rate captured: the filed number may be the cash part
+        dict(row_id="named",cik="0000000999",interest_rate_kind="",interest_rate="6.7",pik_rate="",src_facts=BARE,
+             bdc_investment_identifier="Acme Corp, First lien loan (6.7% Cash, 7.6% PIK)"),
+        dict(row_id="described",cik="0000000999",interest_rate_kind="",interest_rate="6.7",pik_rate="",src_facts=BARE,
+             instrument_description="Term loan, 2.00% PIK"))
+    result,_=prepare(frame,rate_readings={})
+    by_id=result.set_index("row_id")
+    for row_id in ("pik","named","described"):
+        assert by_id.loc[row_id,"interest_rate_kind"]=="unresolved" and pd.isna(by_id.loc[row_id,"interest_rate"])
+        assert "interest_rate:coupon_unresolved" in by_id.loc[row_id,"src_transforms"]
+
+
+def test_no_pik_rule_does_not_reach_tags_that_are_not_the_coupon():
+    def tag(name): return json.dumps({"interest_rate":{"c":name}})
+    frame=rows(dict(row_id="cash",cik="0000000999",interest_rate_kind="",interest_rate="10",pik_rate="",
+                    src_facts=tag("investmentinterestratepaidincash")),
+        dict(row_id="eot",cik="0000000999",interest_rate_kind="",interest_rate="4",pik_rate="",src_facts=tag("investmentinterestrateendofterm")),
+        dict(row_id="cap",cik="0000000999",interest_rate_kind="",interest_rate="12",pik_rate="",src_facts=tag("investmentinterestratecap")),
+        dict(row_id="yield",cik="0000000999",interest_rate_kind="",interest_rate="11",pik_rate="",src_facts=tag("investmenteffectiveyield")))
+    result,_=prepare(frame,rate_readings={})
+    assert result.interest_rate.isna().all()
+    assert result.set_index("row_id").loc["cash","interest_rate_cash"]==10

@@ -61,7 +61,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         "nonaccrual_footnote":"","nonaccrual_dimension":"","asset_category":"","gics_sub_industry":"",
         "corrected_fields":"","src_conflict_fields":"","src_filled_fields":"",
         "src_field_overrides":"","src_transforms":"","source":"",
-        "pct_of_net_assets":"","fair_value":"","position_id":""}
+        "pct_of_net_assets":"","fair_value":"","position_id":"","instrument_description":""}
     for name,value in defaults.items():
         if name not in frame: frame[name]=value
     for name,kind in ADDITIONS.items():
@@ -112,6 +112,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         con.execute("""CREATE TABLE typed AS SELECT row_id,fair_value_currency,interest_rate_kind,
             (SELECT max(r.reading) FROM rate_readings r
              WHERE r.cik=lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0')) AS rate_reading,
+            regexp_matches(lower(coalesce(CAST(bdc_investment_identifier AS VARCHAR),'')||' '||
+                coalesce(CAST(instrument_description AS VARCHAR),'')),'(^|[^a-z])pik([^a-z]|$)|paid.in.kind|payment.in.kind') AS names_pik,
             cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
             src_field_overrides,src_transforms,source,fair_value_source,src_context_id,
             maturity_precision,maturity_date_source,maturity_date,
@@ -138,6 +140,11 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN rate_concept LIKE '%effectiveyield%' OR rate_concept LIKE '%yieldtomaturity%' THEN 'effective_yield'
                  WHEN rate_concept IN ('investmentinterestratepaidincash','investmentcashinterestrate') THEN 'cash'
                  WHEN rate_concept LIKE '%allininterestrate%' THEN 'all_in'
+                 -- With no PIK the all-in and the cash coupon are one number, whatever the filer's
+                 -- convention. Only the plain rate tag (or a rate read from the row text), and
+                 -- only when the row neither carries nor names a PIK component.
+                 WHEN rate_concept IN ('','bare','investmentinterestrate') AND isfinite(reported_rate)
+                      AND NOT coalesce(isfinite(pik) AND pik<>0,false) AND NOT names_pik THEN 'all_in'
                  -- The fund's reviewed reading of its plain rate tag. A PIK rate above the
                  -- filed rate cannot be part of it, so that row keeps its unresolved state.
                  WHEN rate_reading='all_in' AND isfinite(reported_rate)
