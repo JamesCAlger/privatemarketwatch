@@ -484,3 +484,65 @@ No change. DS-005, DS-022 and DS-023 stand.
   accept them without the fleet gate.
 - **Not done.** The live `admission_manifest.json` was not created. It would change how all 139
   rule files of every fund load, and the owner asked for nothing to reach production for now.
+
+## 2026-10-07: Blue Owl reference rate read from the printed column (owner: "read the ref rate column for blue owl")
+
+### D-028 Blue Owl: the printed reference-rate column is read, and a PIK margin over it is the spread
+
+- **Decision.** Blue Owl's wrapper names its reference-rate column (`reference_rate_columns`:
+  "Interest", "Ref. Rate") and two codes the shared table lacks (`reference_rate_codes`: SR=SOFR,
+  SA=SONIA), and sets `pik_only_tag_reading: ["margin"]`. The inline field-status reader treats
+  that column as confirmed for this fund only. `scripts/refresh_ixbrl_field_status.py` re-reads one
+  fund's pages into the artifact (the unified build does not rebuild it).
+- **Cause.** The reader already found the column. It did not accept the header label ("Interest"
+  to 2025-09-30, "Ref. Rate" from 2025-12-31) or the code "SR +", so every value was marked
+  unconfirmed and never applied.
+- **Evidence.** 10-Q 2023-03-31: Hg Genesis 9 "E+ | 7.00% PIK". 10-K 2025-12-31: Inovalon second
+  lien "S+ | (no cash) | 8.50%" under Ref. Rate, Cash, PIK; Associations Finance "N/A | 14.25%".
+  Legend in the 10-Q for 2026-03-31: S = SOFR, E = EURIBOR, C = CORRA, SA = SONIA.
+- **Result, sandbox `owlref` (Blue Owl only) against `five16`.** 310 rows gain a reference rate;
+  182 of the 247 PIK-only loan rows publish the PIK margin as `basis_spread` (148 SOFR, 12
+  EURIBOR, 11 SONIA, 10 LIBOR, 1 PRIME). No other field changes on any of the 8,887 rows.
+  Ledger: 63 findings, 0 outstanding.
+- **Not covered.** 65 PIK-only rows (3.2B) stay as they were: 37 with an empty cell and 28 with
+  "N/A" or an unread code. Most are fixed PIK coupons (Associations Finance 14.25 %); they are not
+  published as a coupon. Code "C" is unread (CDOR in 2023, CORRA now), as are "B" and "BB".
+- **Found, not fixed.** For rows that already had a reference rate, the published value is an
+  inference by date (`inferred_pre_libor`, `inferred_post_libor`), and the fill is blank-only, so
+  the inference outranks the printed code. They disagree on 745 of 6,379 rows: 702 in the two
+  quarters to 2023-06-30 (printed SOFR, published LIBOR) and 43 later rows (printed EURIBOR, SONIA
+  or PRIME, published SOFR; for example Hg Genesis 9 at 2026-03-31).
+- **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py owlref five16`.
+- **Applies to** Blue Owl only. Five-fund sandbox, semantic diff and any 70-fund build not run.
+- **Superseded in part by D-029** (the 65 rows and the unread codes).
+
+### D-029 Blue Owl: both PIK readings, decided per row by the printed column (owner: "do it")
+
+- **Decision.** Three changes, all switched on by Blue Owl's wrapper.
+  1. Codes: B and BB = BBSY; C = CDOR to 2024-03-31 and CORRA from 2024-06-30 (a code entry may
+     carry `to` or `from` a date; the loader refuses two meanings on one date).
+  2. In the filer's named reference-rate column an empty cell or "N/A", on a row that names no
+     benchmark anywhere else, is recorded as `not_applicable` in the field-status artifact. The
+     overlay then sets a blank `coupon_type` to Fixed on a loan row that carries a rate and has no
+     reference rate.
+  3. `pik_only_tag_reading: ["coupon", "margin"]`. For a fund with both, a known reference rate
+     makes the PIK figure a margin (`basis_spread`); it is the coupon (`interest_rate`, all-in)
+     only where the row has no reference rate and `coupon_type` is Fixed. Any other row stays as
+     filed. Funds with one reading behave as before.
+- **Evidence.** Legends: 10-Q 2024-03-31 "CDOR or C"; 10-Q 2024-06-30 "CORRA or C" for the current
+  schedule and "CDOR or C" for the comparative one; 10-Q 2024-09-30 "BBSY or BB"; 10-Q 2026-03-31
+  "BBSY or B". Printed rows: Associations Finance "N/A | 14.25%"; Hercules Buyer "0.48% PIK" with
+  an empty code cell.
+- **Result, sandbox `owlref3` (Blue Owl only) against `five16`.** All 247 PIK-only loan rows are
+  resolved: 182 margins (D-028) and 65 fixed coupons (3.2B), from 0.48 % to 14.25 %, eight
+  issuers. `coupon_type` changes on those 65 rows only. No other field changes beyond D-028.
+  No output column, type or value is new. Ledger: 63 findings, 0 outstanding.
+- **Not covered.** A fixed-coupon reading rests on the cell being empty or "N/A" under the right
+  header. A row placed under another table's header would be misread; none was seen. A prior-year
+  row in a filing takes the current year's printed reading for the same identifier (existing
+  behaviour of the artifact). Preferred and common equity rows printed "N/A" are not marked Fixed.
+- **Still open (D-028).** The printed code against the date-inferred reference rate now disagrees
+  on 780 of 6,414 rows (the new codes add CORRA, CDOR and BBSY rows published as SOFR or LIBOR).
+- **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py owlref3 five16`.
+- **Applies to** Blue Owl only. Five-fund sandbox, full suite, semantic diff and any 70-fund
+  build not run.

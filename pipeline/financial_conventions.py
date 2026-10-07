@@ -37,19 +37,19 @@ def filed_rate_readings(encodings=None):
 
 
 def pik_only_coupon_funds(encodings=None):
-    """{cik10} whose wrappers set source_encodings.pik_only_tag_reading to ['coupon']."""
+    """{cik10} whose wrappers' source_encodings.pik_only_tag_reading includes 'coupon'."""
     if encodings is None:
         from pipeline.source_encodings import load_encodings
         encodings=load_encodings()
-    return {cik for cik,encoding in encodings.items() if encoding.get('pik_only_tag_reading')==['coupon']}
+    return {cik for cik,encoding in encodings.items() if 'coupon' in encoding.get('pik_only_tag_reading',[])}
 
 
 def pik_only_margin_funds(encodings=None):
-    """{cik10} whose wrappers set source_encodings.pik_only_tag_reading to ['margin']."""
+    """{cik10} whose wrappers' source_encodings.pik_only_tag_reading includes 'margin'."""
     if encodings is None:
         from pipeline.source_encodings import load_encodings
         encodings=load_encodings()
-    return {cik for cik,encoding in encodings.items() if encoding.get('pik_only_tag_reading')==['margin']}
+    return {cik for cik,encoding in encodings.items() if 'margin' in encoding.get('pik_only_tag_reading',[])}
 
 
 def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False,fx_quotes=(),unit_adjudications=(),
@@ -70,6 +70,11 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     the row's reference rate is known the margin is published as basis_spread; pik_rate keeps
     the filed number.
 
+    A fund in both sets files both kinds (Blue Owl). The row decides: a known reference rate
+    makes the PIK figure a margin; it is the whole coupon only where the row has no reference
+    rate and its coupon_type is Fixed (the filer's reference-rate column prints 'N/A' or
+    nothing). Anything else stays as filed.
+
     Explicit kinds/precision may be supplied by governed source producers. A
     previous v2 row is idempotent: use the retained reported rate and cost, never
     add PIK to an already normalized all-in rate or rematch using proxy cost.
@@ -87,7 +92,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         "corrected_fields":"","src_conflict_fields":"","src_filled_fields":"",
         "src_field_overrides":"","src_transforms":"","source":"",
         "pct_of_net_assets":"","fair_value":"","position_id":"","instrument_description":"",
-        "reference_rate_type":""}
+        "reference_rate_type":"","coupon_type":""}
     for name,value in defaults.items():
         if name not in frame: frame[name]=value
     for name,kind in ADDITIONS.items():
@@ -144,7 +149,11 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             (SELECT max(r.reading) FROM rate_readings r
              WHERE r.cik=lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0')) AS rate_reading,
             lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM pik_coupon_funds)
-                AND coalesce(CAST(asset_category AS VARCHAR),'')='LOAN' AS pik_is_coupon,
+                AND coalesce(CAST(asset_category AS VARCHAR),'')='LOAN'
+                -- a fund that files both kinds: only a row printed as fixed, with no reference rate
+                AND (lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') NOT IN (SELECT cik FROM pik_margin_funds)
+                     OR (lower(trim(coalesce(CAST(coupon_type AS VARCHAR),'')))='fixed'
+                         AND nullif(trim(CAST(reference_rate_type AS VARCHAR)),'') IS NULL)) AS pik_is_coupon,
             lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM pik_margin_funds)
                 AND coalesce(CAST(asset_category AS VARCHAR),'')='LOAN'
                 AND nullif(trim(CAST(reference_rate_type AS VARCHAR)),'') IS NOT NULL AS pik_is_margin,

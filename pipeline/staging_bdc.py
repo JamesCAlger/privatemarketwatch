@@ -2875,7 +2875,7 @@ def _prepare_bdc(
                            usecols=lambda c: c in _cols)
         _sdf = _sdf[(_sdf["maturity_status"] == "value")
                     | (_sdf["lien_status"] == "value")
-                    | (_sdf["reference_rate_status"] == "value")]
+                    | (_sdf["reference_rate_status"].isin(["value", "not_applicable"]))]
         result = apply_ixbrl_field_status_overlay(result, _sdf)
 
     # Agent A basis_spread corrections: audited, keyed OVERRIDE (NOT blank-only) of the

@@ -588,8 +588,37 @@ def test_pik_only_setting_is_validated_and_set_for_ares_and_apollo():
     from pipeline.financial_conventions import pik_only_coupon_funds
     from pipeline.source_encodings import load_encodings
     # Apollo: the row text itself reads 'Interest Rate 11.45% PIK' (Material Holdings, 2024-09-30)
-    assert pik_only_coupon_funds()=={"0001287750","0001837532"}
+    # Blue Owl files both kinds (below); it is in this set and in the margin set
+    assert pik_only_coupon_funds()=={"0001287750","0001837532","0001812554"}
     assert load_encodings()["0001287750"]["pik_only_tag_reading"]==["coupon"]
+    assert load_encodings()["0001812554"]["pik_only_tag_reading"]==["coupon","margin"]
+
+
+def test_a_fund_that_files_both_kinds_reads_each_row_by_its_printed_reference_rate():
+    # Blue Owl 10-K 2025-12-31: Associations Finance "N/A | 14.25%" (a fixed PIK coupon) and Inovalon second lien
+    # "S+ | 8.50%" (a PIK margin over SOFR). Both rows are tagged with a PIK rate and nothing else.
+    owl="0001812554"
+    loan=dict(asset_category="LOAN",cik=owl,interest_rate_kind="",interest_rate="",src_facts="{}",basis_spread="")
+    frame=rows(dict(loan,row_id="fixed",pik_rate="14.25",reference_rate_type="",coupon_type="Fixed"),
+        dict(loan,row_id="margin",pik_rate="8.5",reference_rate_type="SOFR",coupon_type=""),
+        # the printed cell was not read (an unknown code): a margin must not be published as a coupon
+        dict(loan,row_id="unread",pik_rate="5.75",reference_rate_type="",coupon_type=""),
+        # a reference rate outranks a Fixed label: never both readings on one row
+        dict(loan,row_id="clash",pik_rate="6.0",reference_rate_type="SOFR",coupon_type="Fixed"),
+        dict(loan,row_id="equity",asset_category="EQUITY_PREFERRED",pik_rate="11.0",reference_rate_type="",coupon_type="Fixed"),
+        # a coupon-only fund needs no printed evidence (Ares), as before
+        dict(loan,row_id="ares",cik="0001287750",pik_rate="13.25",reference_rate_type="",coupon_type=""))
+    result,_=prepare(frame,rate_readings={},pik_only_coupon={owl,"0001287750"},pik_only_margin={owl})
+    by_id=result.set_index("row_id")
+    assert float(by_id.loc["fixed","interest_rate"])==14.25 and by_id.loc["fixed","interest_rate_kind"]=="all_in"
+    assert "interest_rate:pik_only" in by_id.loc["fixed","src_transforms"] and str(by_id.loc["fixed","basis_spread"]) in ("","nan","None")
+    for row_id in ("margin","clash"):
+        assert float(by_id.loc[row_id,"basis_spread"])==float(by_id.loc[row_id,"pik_rate"])
+        assert pd.isna(by_id.loc[row_id,"interest_rate"]) and "pik_only" not in by_id.loc[row_id,"src_transforms"]
+    for row_id in ("unread","equity"):
+        assert pd.isna(by_id.loc[row_id,"interest_rate"]) and str(by_id.loc[row_id,"basis_spread"]) in ("","nan","None")
+        assert "pik_" not in str(by_id.loc[row_id,"src_transforms"]).replace("pik_rate","")
+    assert float(by_id.loc["ares","interest_rate"])==13.25
 
 
 def test_a_negative_first_observed_value_is_not_a_cost():
@@ -615,7 +644,7 @@ def test_a_pik_tag_that_is_a_margin_over_a_known_reference_rate_is_published_as_
         # a spread is already filed: the PIK is a part of it (Severin Acquisition, spread 4.75, PIK 2.25)
         dict(loan,row_id="both",pik_rate="2.25",basis_spread="4.75",interest_rate="8.42",reference_rate_type="SOFR"),
         dict(loan,row_id="equity",asset_category="EQUITY_COMMON",pik_rate="8.0",basis_spread="",reference_rate_type="SOFR"),
-        # Blue Owl has no setting: nothing moves
+        # a fund outside the setting: nothing moves
         dict(loan,row_id="other",cik="0001812554",pik_rate="5.75",basis_spread="",reference_rate_type="SOFR"))
     result,_=prepare(frame,rate_readings={"0001838126":"all_in"},pik_only_coupon=set(),pik_only_margin={"0001838126"})
     by_id=result.set_index("row_id")
@@ -626,9 +655,11 @@ def test_a_pik_tag_that_is_a_margin_over_a_known_reference_rate_is_published_as_
         assert str(by_id.loc[row_id,"basis_spread"]) in ("","nan","None") and "pik_margin" not in str(by_id.loc[row_id,"src_transforms"])
 
 
-def test_pik_margin_setting_is_validated_and_set_for_hps_alone():
+def test_pik_margin_setting_is_validated_and_set_for_hps_and_blue_owl():
     from pipeline.financial_conventions import pik_only_margin_funds
-    assert pik_only_margin_funds()=={"0001838126"}
+    # Blue Owl 10-K 2025-12-31: Inovalon second lien is printed 'S+ | (no cash) | 8.50%' under Ref. Rate, Cash, PIK;
+    # 10-Q 2023-03-31: Hg Genesis 9 'E+ 7.00% PIK'. Its reference rate comes from the printed column, not a tag.
+    assert pik_only_margin_funds()=={"0001838126","0001812554"}
 
 
 def test_the_pik_margin_label_survives_a_second_pass_over_the_finalized_rows():

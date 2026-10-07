@@ -301,6 +301,22 @@
   "source_encodings": {
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Interest",
+      "Ref. Rate"
+    ],
+    "reference_rate_codes": [
+      "SR=SOFR",
+      "SA=SONIA",
+      "B=BBSY",
+      "BB=BBSY",
+      "C=CDOR to 2024-03-31",
+      "C=CORRA from 2024-06-30"
+    ],
+    "pik_only_tag_reading": [
+      "coupon",
+      "margin"
     ]
   },
   "invariants": {

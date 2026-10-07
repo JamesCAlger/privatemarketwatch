@@ -379,3 +379,45 @@ def test_misspelled_jv_labels_after_a_comma_are_still_the_jv_schedule(dimensions
     with duckdb.connect() as con:
         got = con.execute('SELECT ' + expression + ' FROM (SELECT ? AS cik, ? AS dims)', ['0001803498', dimensions]).fetchone()[0]
     assert (got or 'parent') == expected
+
+
+OWL = '0001812554'
+
+
+def test_reference_rate_reading_is_per_fund_and_normalised():
+    encodings = {OWL: {'reference_rate_columns': ['Interest', 'Ref.  Rate'], 'reference_rate_codes': ['SR=SOFR', 'sa=SONIA']}}
+    reading = source_encodings.reference_rate_reading('1812554', encodings)
+    assert reading == {'columns': frozenset({'interest', 'ref. rate'}), 'codes': {'SR': 'SOFR', 'SA': 'SONIA'}}
+    assert source_encodings.reference_rate_reading(HPS, encodings) is None
+    assert source_encodings.reference_rate_reading(OWL, {OWL: {'reference_rate_codes': ['SR=SOFR']}}) is None
+
+
+@pytest.mark.parametrize('encoding', [
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['SR']},
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['SR=sofr rate']},
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['S1=SOFR']},
+    {'reference_rate_columns': ['']},
+    # one code, two meanings on the same date
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR', 'C=CORRA from 2024-06-30']},
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR to 2024-06-30', 'C=CORRA from 2024-06-30']},
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR to 2024-03-31', 'C=CORRA to 2025-03-31']},
+    {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR until 2024-03-31']},
+    {'pik_only_tag_reading': ['margin', 'coupon']},
+])
+def test_malformed_reference_rate_encoding_fails(tmp_path, encoding):
+    (tmp_path / '0001812554.json').write_text(json.dumps({
+        'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': OWL, 'source_encodings': encoding,
+    }), encoding='utf-8')
+    with pytest.raises(ValueError):
+        source_encodings.load_encodings(tmp_path)
+
+
+def test_blue_owl_wrapper_names_its_reference_rate_column():
+    # 10-Q 2023-03-31 prints 'SR + | 6.25% (2.75% PIK)' under 'Interest'; 10-K 2025-12-31 prints 'S+' under 'Ref. Rate'
+    reading = source_encodings.reference_rate_reading(OWL)
+    assert reading['columns'] == frozenset({'interest', 'ref. rate'})
+    assert reading['codes']['SR'] == 'SOFR' and reading['codes']['BB'] == 'BBSY'
+    # 'C' is CDOR in the legend to 2024-03-31 and CORRA from the 10-Q for 2024-06-30; undated, it is not read
+    assert 'C' not in reading['codes']
+    assert source_encodings.reference_rate_reading(OWL, report_date='2024-03-31')['codes']['C'] == 'CDOR'
+    assert source_encodings.reference_rate_reading(OWL, report_date='2024-06-30')['codes']['C'] == 'CORRA'

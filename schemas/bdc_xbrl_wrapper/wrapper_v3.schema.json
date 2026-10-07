@@ -575,9 +575,24 @@
         "pik_only_tag_reading": {
           "type": "array",
           "minItems": 1,
-          "maxItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
           "items": {"enum": ["coupon", "margin"]},
-          "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Use margin where the PIK tag on such a row holds the margin over the reference rate: the finalizer then publishes it as basis_spread (transform basis_spread:pik_margin) on rows whose reference rate is known, and leaves pik_rate as filed. Evidence required for margin: printed lines of the form reference + margin PIK."
+          "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Use margin where the PIK tag on such a row holds the margin over the reference rate: the finalizer then publishes it as basis_spread (transform basis_spread:pik_margin) on rows whose reference rate is known, and leaves pik_rate as filed. Evidence required for margin: printed lines of the form reference + margin PIK. Use coupon then margin where the filer has both kinds and names its reference-rate column (reference_rate_columns): a known reference rate makes the figure a margin, and it is the coupon only where that column prints N/A or nothing (coupon_type Fixed). Any other row stays as filed."
+        },
+        "reference_rate_columns": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Printed header labels of the column that holds the reference-rate code on this filer's schedule (Blue Owl: Interest, then Ref. Rate from 2025-12-31). The inline field-status reader then treats that column as confirmed and reads no other column for the reference rate in that table. An empty cell or N/A in it, on a row naming no benchmark elsewhere, is recorded as not_applicable and sets a blank coupon_type to Fixed on a loan row that carries a rate. The value reaches holdings only where reference_rate_type is blank, and only after the field-status artifact is regenerated for the fund. Evidence required: printed lines showing the code in that column in each layout named."
+        },
+        "reference_rate_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z]{1,8}=[A-Z]{2,12}( (to|from) [0-9]{4}-[0-9]{2}-[0-9]{2})?$"},
+          "description": "Codes this filer prints in its reference-rate column that the shared table does not know, as CODE=BENCHMARK (SR=SOFR). Take them from the filing's own legend. A code whose meaning changed is entered twice, once 'to' the last report date of the old meaning and once 'from' the first of the new (C=CDOR to 2024-03-31, C=CORRA from 2024-06-30); the loader refuses overlapping entries."
         },
         "foreign_unit_values": {
           "type": "array",

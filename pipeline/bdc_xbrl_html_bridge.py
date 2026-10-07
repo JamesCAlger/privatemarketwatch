@@ -127,10 +127,14 @@ _BENCHMARK_CODE = {
 }
 
 
-def _benchmark_from_code(cell: str) -> str:
-    """Map a bare benchmark code (letters only) from a confirmed Index column."""
+def _benchmark_from_code(cell: str, filer_codes: dict[str, str] | None = None) -> str:
+    """Map a bare benchmark code (letters only) from a confirmed Index column.
+
+    ``filer_codes`` are the codes a filer's wrapper defines (Blue Owl 'SR +' = SOFR); they are
+    read before the shared table.
+    """
     t = re.sub(r"[^A-Za-z]", "", _FOOTNOTE_STRIP_RE.sub("", cell or "")).upper()
-    return _BENCHMARK_CODE.get(t, "")
+    return (filer_codes or {}).get(t) or _BENCHMARK_CODE.get(t, "")
 
 _VALUE_RE = re.compile(r"[$(]?\d[\d,]*(?:\.\d+)?%?\)?")
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
@@ -393,6 +397,10 @@ _FIELD_COLUMN_RULES: dict[str, dict[str, str]] = {
     # rate just fails to parse and stays flagged, so it is safe.
     "reference_rate_type": {"header": r"(?i)reference\s*rate|\bindex\b|spread|basis|base\s*rate|interest\s*rate"},
 }
+# In a filer-named reference-rate column: nothing printed, or the filer's 'N/A'.
+_NOT_APPLICABLE_RE = re.compile(r"(?i)\s*(?:n\s*/?\s*a\.?)?\s*")
+# A benchmark code standing alone in a cell: 'SR +', 'E+'.
+_BARE_CODE_RE = re.compile(r"\s*[A-Za-z]{1,6}\s*\+\s*")
 _HEADER_LABEL_RE = re.compile(
     r"(?i)maturity|reference\s*rate|spread|acquisition|principal|par\s*amount|"
     r"\bcost\b|fair\s*value|interest\s*rate|coupon|industry|company|portfolio|investment"
@@ -436,7 +444,7 @@ def _detect_header_map(grid: list[str]) -> dict[int, str] | None:
 _MMYY_RE = re.compile(r"^\s*(\d{1,2})/(\d{2})\s*$")
 
 
-def _parse_field_value(field: str, cell: str) -> str:
+def _parse_field_value(field: str, cell: str, filer_codes: dict[str, str] | None = None) -> str:
     if field in ("maturity_date", "acquisition_date"):
         ds = _extract_row_dates([cell])
         if ds:
@@ -454,7 +462,7 @@ def _parse_field_value(field: str, cell: str) -> str:
                     pass
         return ""
     if field == "reference_rate_type":
-        return _extract_reference_rate([cell]) or _benchmark_from_code(cell)
+        return _extract_reference_rate([cell]) or _benchmark_from_code(cell, filer_codes)
     return _norm_text(cell)
 
 
@@ -470,18 +478,36 @@ def _heuristic_field_value(field: str, grid: list[str]) -> str:
     return ""
 
 
-def field_status(field: str, grid: list[str], header_map: dict[int, str]) -> dict[str, str]:
+def field_status(field: str, grid: list[str], header_map: dict[int, str],
+                 filer_reading: dict[str, Any] | None = None) -> dict[str, str]:
     """Resolve one field from an anchored row -> {value, status, source_column}.
 
     status: ``value`` (header-confirmed cell), ``validation_needed`` (value found
     but column unconfirmed -- heuristic, or cell present but unparsable), or
     ``blank`` (column found but empty, or nothing found). ``not_found`` (the
     flat-XBRL position has no inline row) is assigned upstream at the join.
+
+    ``filer_reading`` (``source_encodings.reference_rate_reading``) names a filer's own
+    reference-rate column and codes. Where the current header carries one of those labels,
+    only that column is read for the reference rate; other tables fall to the shared rule.
+    In such a column an empty cell or 'N/A' is the filer saying the row has no reference
+    rate: status ``not_applicable``, unless anything else on the row names a benchmark.
     """
     rule = _FIELD_COLUMN_RULES.get(field, {})
     hdr = rule.get("header")
     cols: list[int] = []
-    if hdr and header_map:
+    named: list[int] = []
+    codes: dict[str, str] | None = None
+    if field == "reference_rate_type" and filer_reading and header_map:
+        codes = filer_reading.get("codes")
+        named = [i for i in sorted(header_map) if i < len(grid)
+                 and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
+    if named:
+        cols = named
+        if (all(_NOT_APPLICABLE_RE.fullmatch(grid[i]) for i in named) and not _extract_reference_rate(grid)
+                and not any(_BARE_CODE_RE.fullmatch(c) for c in grid)):
+            return {"value": "", "status": "not_applicable", "source_column": header_map[named[0]]}
+    elif hdr and header_map:
         hr = re.compile(hdr)
         cols = [i for i in sorted(header_map) if hr.search(header_map[i]) and i < len(grid)]
     if cols:
@@ -503,7 +529,7 @@ def field_status(field: str, grid: list[str], header_map: dict[int, str]) -> dic
                 continue
             if first_nonempty is None:
                 first_nonempty = i
-            pv = _parse_field_value(field, cell)
+            pv = _parse_field_value(field, cell, codes)
             if pv:
                 return {"value": pv, "status": "value", "source_column": header_map[i]}
         if first_nonempty is not None:
@@ -1040,7 +1066,10 @@ def apply_ixbrl_field_status_overlay(
 
     Exact-keyed by (cik, accession, report_date, <full inline-XBRL member>);
     blank-only (never clobbers an existing value); consumes ONLY ``value`` status
-    (validation_needed / not_found / blank are left as-is -> Unknown). For
+    (validation_needed / not_found / blank are left as-is -> Unknown). One more
+    status is read: reference rate ``not_applicable`` (the filer's own column prints
+    'N/A' or nothing) sets a blank ``coupon_type`` to Fixed on a loan row that carries
+    a rate and no reference rate. For
     lien/sector the status already reflects the reconciliation gate (downgraded
     upstream if the filer-quarter didn't reconcile), so this is a simple value
     consumer.
@@ -1128,6 +1157,15 @@ def apply_ixbrl_field_status_overlay(
             if _src not in result.columns:
                 result[_src] = ""
             result.loc[mask.values, _src] = "ixbrl_field_status"
+    if {"reference_rate_status", "asset_category"} <= set(merged.columns) and "coupon_type" in result.columns:
+        has_rate = pd.Series(False, index=merged.index)
+        for col in ("interest_rate", "pik_rate"):
+            if col in merged.columns:
+                has_rate |= ~blank(merged[col])
+        fixed = ((merged["reference_rate_status"].astype(str) == "not_applicable") & has_rate
+                 & blank(merged["coupon_type"]) & blank(merged["reference_rate_type"])
+                 & (merged["asset_category"].astype(str) == "LOAN"))
+        result.loc[fixed.values, "coupon_type"] = "Fixed"
     result.drop(columns=["_k"], inplace=True)
     return result
 
@@ -1143,6 +1181,7 @@ def propose_field_bridges_from_ixbrl(
     report_date: str,
     html_path: Path | None = None,
     fv_concept: str = "InvestmentOwnedAtFairValue",
+    encodings: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build maturity / reference-rate bridge records by anchoring on the inline
     XBRL fair-value fact's ``contextRef`` (an exact per-position key) and reading
@@ -1153,10 +1192,15 @@ def propose_field_bridges_from_ixbrl(
     ``InvestmentIdentifierAxis`` member == ``bdc_investment_identifier``), so the
     join is exact and per-tranche, not a name guess.  Maturity / reference rate
     are read from the untagged sibling cells of the same DOM row.
+
+    A filer whose wrapper names its reference-rate column (``reference_rate_columns``) has
+    that column read as confirmed; ``encodings`` overrides the wrappers on disk (tests).
     """
     from lxml import etree
+    from pipeline.source_encodings import reference_rate_reading
 
     cik_norm = normalize_cik(cik)
+    filer_reading = reference_rate_reading(cik_norm, encodings, report_date)
     acc = _norm_text(accession_number)
     acc_nodashes = acc.replace("-", "")
     path = html_path or (BDC_HTML_CACHE_DIR / cik_norm.lstrip("0") / f"{acc_nodashes}.html")
@@ -1251,7 +1295,7 @@ def propose_field_bridges_from_ixbrl(
         # (value / validation_needed / blank) + the source column it came from.
         mat = apply_maturity_signature(field_status("maturity_date", grid, cur_header), rd)
         acq = field_status("acquisition_date", grid, cur_header)
-        rrt = field_status("reference_rate_type", grid, cur_header)
+        rrt = field_status("reference_rate_type", grid, cur_header, filer_reading)
         footnotes = re.findall(r"\((\d{1,3})\)", " ".join(cells))
         # lien tier: section header (Blackstone-style) OR, for filers that group
         # only by industry, parse it from the row's instrument text.

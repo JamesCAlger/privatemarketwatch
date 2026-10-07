@@ -666,3 +666,113 @@ def test_overlay_key_ignores_the_pipeline_derived_detached_schedule_label(monkey
     assert out.iloc[0]["maturity_date"] == "2031-06-21"
     assert out.iloc[1]["lien_position"] == ""      # not stripped: different member
     assert out.iloc[0]["bdc_dimensions_raw"].endswith("joint venture schedule")   # label kept
+
+
+# --- a filer's own reference-rate column (wrapper: reference_rate_columns / reference_rate_codes) ---
+OWL_READING = {"columns": frozenset({"interest", "ref. rate"}), "codes": {"SR": "SOFR", "SA": "SONIA"}}
+
+
+def test_filer_named_column_reads_its_reference_rate_code():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    # Blue Owl to 2025-09-30: 'Interest' spans the code cell and the rate cell
+    old = field_status("reference_rate_type", ["Hg Genesis", "Unsecured facility", "SR +", "7.00% PIK"],
+                       {0: "Company", 1: "Investment", 2: "Interest"}, OWL_READING)
+    assert old == {"value": "SOFR", "status": "value", "source_column": "Interest"}
+    # from 2025-12-31: 'Ref. Rate | Cash | PIK'
+    new = field_status("reference_rate_type", ["Inovalon", "Second lien", "S+", "", "8.50%"],
+                       {0: "Company", 1: "Investment", 2: "Ref. Rate", 3: "Cash", 4: "PIK"}, OWL_READING)
+    assert new["status"] == "value" and new["value"] == "SOFR" and new["source_column"] == "Ref. Rate"
+
+
+def test_filer_named_column_does_not_invent_a_reference_rate():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    header = {0: "Company", 1: "Investment", 2: "Ref. Rate", 3: "Cash", 4: "PIK"}
+    # a fixed coupon: 'N/A', or an empty cell, is the filer saying there is no reference rate
+    assert field_status("reference_rate_type", ["Associations Finance", "Unsecured notes", "N/A", "", "14.25%"],
+                        header, OWL_READING) == {"value": "", "status": "not_applicable", "source_column": "Ref. Rate"}
+    assert field_status("reference_rate_type", ["Associations Finance", "Unsecured notes", "", "14.25% PIK"],
+                        {2: "Interest"}, OWL_READING) == {"value": "", "status": "not_applicable", "source_column": "Interest"}
+    # a code the wrapper does not define is neither a value nor 'not applicable': the row stays unread
+    assert field_status("reference_rate_type", ["Acme", "First lien", "C +", "5.00%"],
+                        {2: "Interest"}, OWL_READING) == {"value": "", "status": "validation_needed", "source_column": "Interest"}
+    # an empty cell on a row that names a benchmark elsewhere (a shifted cell) is not 'not applicable'
+    for grid in (["Acme", "First lien", "", "SR +", "5.00%"], ["Acme", "First lien", "", "SOFR + 5.00%"]):
+        assert field_status("reference_rate_type", grid, {2: "Interest"}, OWL_READING)["status"] == "blank"
+    # a fund that names no column never gets the status
+    assert field_status("reference_rate_type", ["Acme", "Notes", "N/A", "14.25%"], {2: "Reference Rate"})["status"] == "validation_needed"
+
+
+def test_a_code_whose_meaning_changed_is_read_by_report_date(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    encodings = {"0001812554": {"reference_rate_columns": ["Interest"],
+                                "reference_rate_codes": ["C=CDOR to 2024-03-31", "C=CORRA from 2024-06-30"]}}
+    read = {}
+    for day in ("2024-03-31", "2024-06-30"):
+        folder = tmp_path / day
+        folder.mkdir()
+        p = _write_ixbrl(folder, [_ix_context("c1", "Maple Co | First lien | Non-Affiliated Issuer", instant=day)],
+                         ["<tr><td>Company</td><td>Investment</td><td>Interest</td><td></td><td>Maturity Date</td><td>Fair Value</td></tr>",
+                          _ix_row("c1", ["Maple Co", "First lien", "C +", "5.00%", "3/2029"], "100")])
+        read[day] = propose_field_bridges_from_ixbrl(cik="0001812554", accession_number="A", report_date=day,
+                                                     html_path=p, encodings=encodings)["bridges"][0]["reference_rate_type"]
+    assert read == {"2024-03-31": "CDOR", "2024-06-30": "CORRA"}
+
+
+def _status_row(status, value=""):
+    return {"cik": "0001812554", "accession_number": "A", "report_date": "2025-12-31",
+            "raw_id_lower": "acme | notes | non-affiliated issuer", "reference_rate_type": value, "reference_rate_status": status}
+
+
+def _staged(**changes):
+    row = {"cik": "0001812554", "accession_number": "A", "report_date": "2025-12-31",
+           "bdc_investment_identifier": "Acme | Notes", "bdc_dimensions_raw": "investmentidentifieraxis=Acme | Notes | Non-Affiliated Issuer",
+           "maturity_date": "", "lien_position": "", "reference_rate_type": "", "reference_rate_source": "",
+           "coupon_type": "", "interest_rate": "", "pik_rate": "14.25", "asset_category": "LOAN"}
+    return pd.DataFrame([dict(row, **changes)])
+
+
+def test_printed_not_applicable_marks_a_rated_row_as_fixed():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    out = apply_ixbrl_field_status_overlay(_staged(), [_status_row("not_applicable")])
+    assert out.iloc[0]["coupon_type"] == "Fixed" and out.iloc[0]["reference_rate_type"] == ""
+
+
+def test_printed_not_applicable_changes_nothing_else():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # no rate on the row, a preferred stake with a PIK dividend, a coupon type already set, or a reference rate already known
+    for changes in (dict(pik_rate=""), dict(asset_category="EQUITY_PREFERRED"), dict(coupon_type="Floating"), dict(reference_rate_type="SOFR")):
+        out = apply_ixbrl_field_status_overlay(_staged(**changes), [_status_row("not_applicable")])
+        assert out.iloc[0]["coupon_type"] == changes.get("coupon_type", "")
+    # an unread cell is not evidence of a fixed coupon
+    for status in ("validation_needed", "blank", "not_found"):
+        assert apply_ixbrl_field_status_overlay(_staged(), [_status_row(status)]).iloc[0]["coupon_type"] == ""
+    # a confirmed reference rate fills the rate and leaves the coupon type alone
+    out = apply_ixbrl_field_status_overlay(_staged(), [_status_row("value", "SOFR")])
+    assert out.iloc[0]["reference_rate_type"] == "SOFR" and out.iloc[0]["coupon_type"] == ""
+
+
+def test_a_fund_without_the_setting_reads_as_before():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    grid, header = ["Hg Genesis", "Unsecured facility", "SR +", "7.00% PIK"], {0: "Company", 1: "Investment", 2: "Interest"}
+    assert field_status("reference_rate_type", grid, header)["status"] != "value"
+    assert field_status("reference_rate_type", grid, header, None)["status"] != "value"
+    # the setting names columns for the reference rate only
+    assert field_status("maturity_date", ["Acme", "5/25/2029"], {1: "Maturity"}, OWL_READING)["value"] == "2029-05-25"
+
+
+def test_ixbrl_rows_take_the_filer_reading_from_the_wrapper(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("c1", "Hg Genesis 9 SumoCo Limited | Unsecured facility | Non-Affiliated Issuer"),
+            _ix_context("c2", "Associations Finance, Inc. | Unsecured notes | Non-Affiliated Issuer")]
+    rows = ["<tr><td>Company</td><td>Investment</td><td>Interest</td><td></td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            _ix_row("c1", ["Hg Genesis 9 SumoCo Limited", "Unsecured facility", "SR +", "7.00% PIK", "3/2029"], "148366"),
+            _ix_row("c2", ["Associations Finance, Inc.", "Unsecured notes", "", "14.25% PIK", "5/2030"], "164538")]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    encodings = {"0001812554": {"reference_rate_columns": ["Interest", "Ref. Rate"], "reference_rate_codes": ["SR=SOFR"]}}
+    kwargs = dict(accession_number="A", report_date="2025-12-31", html_path=p)
+    by_id = {b["issuer_name"][:10]: b for b in propose_field_bridges_from_ixbrl(cik="0001812554", encodings=encodings, **kwargs)["bridges"]}
+    assert (by_id["Hg Genesis"]["reference_rate_type"], by_id["Hg Genesis"]["reference_rate_status"]) == ("SOFR", "value")
+    assert (by_id["Associatio"]["reference_rate_type"], by_id["Associatio"]["reference_rate_status"]) == ("", "not_applicable")
+    # another fund reading the same page gets no confirmed value
+    other = propose_field_bridges_from_ixbrl(cik="0001838126", encodings=encodings, **kwargs)["bridges"]
+    assert all(b["reference_rate_status"] != "value" for b in other)

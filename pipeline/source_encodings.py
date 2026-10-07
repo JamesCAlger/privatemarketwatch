@@ -23,7 +23,8 @@ def load_encodings(wrapper_directory=None):
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
-                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts'}:
+                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
+                'reference_rate_columns','reference_rate_codes'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -43,14 +44,58 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
-            if key=='pik_only_tag_reading' and values not in (['coupon'],['margin']):
-                raise ValueError('PIK-only tag reading must be coupon or margin: '+str(path))
+            if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
+                raise ValueError('PIK-only tag reading must be coupon, margin, or coupon then margin: '+str(path))
+            if key=='reference_rate_codes' and not _codes_are_unambiguous(values):
+                raise ValueError('Reference rate code must read "CODE=BENCHMARK", optionally "to" or "from" a date, '
+                    'with one meaning per code on any date: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
                 raise ValueError('The only admitted principal FX reference is fred_h10: '+str(path))
         result[cik]=encoding
     return result
+
+
+_CODE_RE=re.compile(r'([A-Za-z]{1,8})=([A-Z]{2,12})(?: (to|from) ([0-9]{4}-[0-9]{2}-[0-9]{2}))?')
+
+
+def _codes_are_unambiguous(values):
+    """Each entry parses, and a code defined more than once has one 'to' and one later 'from'."""
+    parsed=[_CODE_RE.fullmatch(v) for v in values]
+    if not all(parsed):
+        return False
+    by_code={}
+    for match in parsed:
+        by_code.setdefault(match.group(1).upper(),[]).append((match.group(3),match.group(4)))
+    for bounds in by_code.values():
+        if len(bounds)==1:
+            continue
+        ends=dict(bounds)
+        if len(bounds)!=2 or set(ends)!={'to','from'} or ends['to']>=ends['from']:
+            return False
+    return True
+
+
+def reference_rate_reading(cik,encodings=None,report_date=None):
+    """The filer's own reference-rate column, or None: {'columns': header labels, 'codes': {code: benchmark}}.
+
+    From the wrapper's ``reference_rate_columns`` (printed header labels, compared in lower case
+    with single spaces) and ``reference_rate_codes`` ('SR=SOFR'). Codes alone name no column.
+    A code dated 'to' or 'from' a day ('C=CDOR to 2024-03-31') applies only to report dates on
+    that side of it, both ends included; without a ``report_date`` a dated code is not read.
+    """
+    configured=load_encodings() if encodings is None else encodings
+    encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
+    columns=frozenset(' '.join(v.lower().split()) for v in encoding.get('reference_rate_columns',[]))
+    if not columns:
+        return None
+    day=str(report_date or '')[:10]
+    codes={}
+    for code,name,side,bound in (_CODE_RE.fullmatch(v).groups() for v in encoding.get('reference_rate_codes',[])):
+        if side is None or (day and (day<=bound if side=='to' else day>=bound)):
+            codes[code.upper()]=name
+    return {'columns':columns,'codes':codes}
 
 
 def _member_mapping(value):
