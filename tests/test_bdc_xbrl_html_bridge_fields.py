@@ -808,6 +808,33 @@ def test_printed_margin_is_not_read_from_anything_else():
     assert printed_margin(["Acme", "Revolver", "1/2029", "5.75%"], {0: "Portfolio Company", 1: "Commitment Type"}, OWL_READING) == ""
 
 
+def test_a_printed_reference_rate_replaces_one_inferred_from_the_date():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # Blue Owl 2023-06-30, Anaplan: printed 'SR +', published LIBOR because the report date is before July 2023
+    staged = _staged(reference_rate_type="LIBOR", reference_rate_source="inferred_pre_libor")
+    out = apply_ixbrl_field_status_overlay(staged, [_status_row("value", "SOFR")])
+    assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["reference_rate_source"]) == ("SOFR", "ixbrl_field_status")
+
+
+def test_a_printed_reference_rate_replaces_nothing_else():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    cases = [
+        (dict(reference_rate_source="xbrl_field"), _status_row("value", "SOFR")),            # a tagged rate stands
+        (dict(reference_rate_source="identifier_text"), _status_row("value", "SOFR")),
+        (dict(reference_rate_source="inferred_pre_libor"), _status_row("validation_needed", "SOFR")),
+        (dict(reference_rate_source="inferred_pre_libor"), _status_row("not_applicable")),
+        # a fund that names no reference-rate column
+        (dict(reference_rate_source="inferred_pre_libor", cik="0001838126"), dict(_status_row("value", "SOFR"), cik="0001838126")),
+    ]
+    for changes, status in cases:
+        out = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="LIBOR", **changes), [status])
+        assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["reference_rate_source"]) == ("LIBOR", changes["reference_rate_source"])
+    # the same benchmark: the inferred label is kept, nothing was replaced
+    same = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="SOFR", reference_rate_source="inferred_post_libor"),
+                                            [_status_row("value", "SOFR")])
+    assert same.iloc[0]["reference_rate_source"] == "inferred_post_libor"
+
+
 def _margin_status(margin):
     return dict(_status_row("value", "SOFR"), printed_margin=margin)
 

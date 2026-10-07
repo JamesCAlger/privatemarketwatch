@@ -1,4 +1,4 @@
-"""Append the v0.5 row corrections of decision D-021 to data/overrides/row_corrections.csv.
+"""Append the v0.5 row corrections of decisions D-021 and D-032 to data/overrides/row_corrections.csv.
 
 Each spec names one published row (fund, quarter, a phrase that must match exactly one identifier in the sandbox)
 and the fields to set, with the printed-schedule evidence. Keys (accession, exact identifier) are read from the
@@ -21,6 +21,8 @@ PREFERRED = {"asset_category": "EQUITY_PREFERRED", "index_classification": "PREF
 LOAN = {"asset_category": "LOAN", "index_classification": "DIRECT_LENDING", "asset_class": "PRIVATE_CREDIT"}
 OPERATING_EQUITY = {"issuer_category": "CORPORATE", "index_classification": "COMMON_EQUITY", "exposure_type": "DIRECT",
                     "asset_class": "PRIVATE_EQUITY"}
+KASEYA = ("Spread fact tagged 0.025, the PIK part; the printed line reads 'SR + 6.25 % ( 2.50 % PIK)' "
+          "(10-Q 2023-06-30: delayed draw '06/2024 265 225 265', revolver '06/2029 1,085 1,011 1,075')")
 AMERGIN = ("Printed under Equity Investments as 'Amergin Asset Management, LLC | Class A Units | 50,000,000 | cost 1'; an operating "
            "company stake, classed as a credit fund interest because the name contains 'Asset Management'")
 SPECS = [
@@ -49,6 +51,15 @@ SPECS = [
     (OWL, "2025-03-31", "Amergin Asset Management, LLC", OPERATING_EQUITY, AMERGIN),
     (OWL, "2025-12-31", "Amergin Asset Management, LLC", OPERATING_EQUITY, AMERGIN),
     (OWL, "2026-03-31", "Amergin Asset Management, LLC", OPERATING_EQUITY, AMERGIN),
+    # decision D-032: the filer tagged the PIK part of the margin as the spread
+    (OWL, "2023-06-30", "Kaseya Inc., First lien senior secured delayed draw term loan", {"basis_spread": "6.25"}, KASEYA, "D-032"),
+    (OWL, "2023-06-30", "Kaseya Inc., First lien senior secured revolving loan", {"basis_spread": "6.25"}, KASEYA, "D-032"),
+    (OWL, "2023-09-30", "Kaseya Inc., First lien senior secured delayed draw term loan", {"basis_spread": "6.25"}, KASEYA, "D-032"),
+    (OWL, "2023-09-30", "Kaseya Inc., First lien senior secured revolving loan", {"basis_spread": "6.25"}, KASEYA, "D-032"),
+    (OWL, "2023-12-31", "Kaseya Inc., First lien senior secured delayed draw term loan", {"basis_spread": "6.25"}, KASEYA, "D-032"),
+    (OWL, "2024-06-30", "CivicPlus, LLC, First lien senior secured delayed draw term loan", {"basis_spread": "5.75"},
+     "Spread fact tagged 0.025, the PIK part; the printed line reads 'First lien senior secured delayed draw term loan SR + 5.75 % "
+     "( 2.50 % PIK) 08/2027 4,590 4,563 4,590'", "D-032"),
 ]
 con = duckdb.connect()
 target = REPO / "data/overrides/row_corrections.csv"
@@ -59,7 +70,8 @@ existing = {(r["cik"].zfill(10), r["report_date"], r["accession_number"], r["bdc
 buffer = io.StringIO()
 writer = csv.writer(buffer, lineterminator=eol)
 added = 0
-for cik, quarter, phrase, fields, reason in SPECS:
+for cik, quarter, phrase, fields, reason, *decision in SPECS:
+    author, added_on = ("v05-decision-" + decision[0], "2026-10-07") if decision else ("v05-decision-D-021", "2026-10-06")
     rows = con.execute(f"""SELECT DISTINCT accession_number, CAST(bdc_investment_identifier AS VARCHAR)
         FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?
           AND CAST(report_date AS VARCHAR)[:10] = ? AND contains(CAST(bdc_investment_identifier AS VARCHAR), ?)
@@ -74,7 +86,7 @@ for cik, quarter, phrase, fields, reason in SPECS:
             continue
         writer.writerow([cik, quarter, accession, identifier, field, value, reason,
                          "data/raw/filings/bdc_html/%s/%s.html" % (cik.lstrip("0"), accession.replace("-", "")),
-                         "v05-decision-D-021", "2026-10-06"])
+                         author, added_on])
         added += 1
     print("  %s %s %-60s %s" % (cik, quarter, identifier[:60], ", ".join("%s=%s" % kv for kv in fields.items())))
 print("corrections to add:", added)

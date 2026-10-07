@@ -1005,6 +1005,60 @@ def class_nav_consensus(highlights_df: Optional[pd.DataFrame], ciks=frozenset())
     return grouped[columns].reset_index(drop=True)
 
 
+_INCOME_FLOWS = ("total_investment_income", "net_investment_income", "management_fee",
+                 "incentive_fee", "interest_expense", "total_expenses")
+
+
+def quarter_income_sql(table: str, columns: set) -> str:
+    """Income rows of ``table`` as one quarter each: cik, report_quarter and the six flow figures.
+
+    The income table stores a 10-K's twelve-month figure divided by four. Where the three
+    quarters of that year are present (rows of two to four months ending in the eleven months
+    before the year end), the year-end quarter is the annual figure less those three, figure by
+    figure; a figure missing in any of the three keeps the quarter average. So does a year
+    figure smaller than three quarters of one sign: the fourth quarter would flip sign, which
+    means the year figure was not captured (Ares interest expense for 2022 and 2023 is stored
+    as about zero beside quarters of 93 to 145 million). Without
+    ``report_date`` and ``duration_months`` columns nothing can be told apart and the stored
+    figures are used as they are.
+    """
+    flows = ",\n                ".join(f"TRY_CAST({c} AS DOUBLE) AS {c}" for c in _INCOME_FLOWS)
+    if not {"report_date", "duration_months"} <= set(columns):
+        return f"""
+            SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik, report_quarter,
+                {flows}
+            FROM {table}"""
+    sums = ", ".join(f"sum(q.{c}) AS {c}_three, count(q.{c}) AS {c}_n, "
+                     f"count(*) FILTER (WHERE q.{c} > 0) AS {c}_up, count(*) FILTER (WHERE q.{c} < 0) AS {c}_down"
+                     for c in _INCOME_FLOWS)
+    quarter = ",\n                ".join(
+        f"CASE WHEN b.months BETWEEN 11 AND 13 AND p.quarters = 3 AND p.{c}_n = 3 "
+        f"AND NOT (p.{c}_up = 3 AND 4.0*b.{c} < p.{c}_three) AND NOT (p.{c}_down = 3 AND 4.0*b.{c} > p.{c}_three) "
+        f"THEN 4.0*b.{c} - p.{c}_three ELSE b.{c} END AS {c}" for c in _INCOME_FLOWS)
+    maxima = ", ".join(f"max({c}) AS {c}" for c in _INCOME_FLOWS)
+    return f"""
+            SELECT b.cik, b.report_quarter,
+                {quarter}
+            FROM (SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik, report_quarter,
+                         TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day,
+                         TRY_CAST(duration_months AS INTEGER) AS months,
+                {flows}
+                  FROM {table}) b
+            LEFT JOIN (
+                -- the three filed quarters of the year, one row per fund and date however the CIK is written
+                SELECT a.cik, a.day, count(*) AS quarters, {sums}
+                FROM (SELECT DISTINCT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                             TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day
+                      FROM {table} WHERE TRY_CAST(duration_months AS INTEGER) BETWEEN 11 AND 13) a
+                JOIN (SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                             TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day, {maxima}
+                      FROM (SELECT cik, report_date, {flows} FROM {table}
+                            WHERE TRY_CAST(duration_months AS INTEGER) BETWEEN 2 AND 4)
+                      GROUP BY 1, 2) q
+                  ON q.cik = a.cik AND q.day < a.day AND q.day > a.day - INTERVAL 11 MONTH
+                GROUP BY 1, 2) p ON p.cik = b.cik AND p.day = b.day"""
+
+
 def _prepare_bdc(
     cf_balance_df: pd.DataFrame,
     income_df: pd.DataFrame,
@@ -1084,20 +1138,7 @@ def _prepare_bdc(
 
     if has_income:
         join_sql = f"""
-        WITH inc AS (
-            SELECT
-                LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
-                report_quarter,
-                TRY_CAST(total_investment_income AS DOUBLE)
-                    AS total_investment_income,
-                TRY_CAST(net_investment_income AS DOUBLE)
-                    AS net_investment_income,
-                TRY_CAST(management_fee AS DOUBLE) AS management_fee,
-                TRY_CAST(incentive_fee AS DOUBLE) AS incentive_fee,
-                TRY_CAST(interest_expense AS DOUBLE) AS interest_expense,
-                TRY_CAST(total_expenses AS DOUBLE) AS total_expenses
-            FROM income
-        )
+        WITH inc AS ({quarter_income_sql("income", set(income_df.columns))})
         SELECT
             COALESCE(cf.cik, inc.cik) AS cik,
             cf.report_date,

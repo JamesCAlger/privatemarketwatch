@@ -596,3 +596,80 @@ No change. DS-005, DS-022 and DS-023 stand.
 - **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py owlref4 owlref3`.
 - **Applies to** Blue Owl only. The five-fund sandbox was not re-run after this change; the other
   four funds do not have the setting.
+
+## 2026-10-07: fixes for the new rules (owner: "keep implementing fixes until there are no outstanding issues left and the data fits the schema")
+
+Five-fund sandbox `five18` after all of these: 299 findings, 0 outstanding; published equals filed
+within 0.5M in 69 of 69 fund-quarters; every output file with a contract fits it; the five
+wrappers fit the wrapper schema; CSV and Parquet copies match in 9 of 9 artifacts checked.
+
+### D-032 Blue Owl: six spreads corrected from the printed line
+
+- **Decision.** Row corrections for Kaseya (delayed draw and revolver, 2023-06-30 to 2023-12-31,
+  spread 6.25) and CivicPlus (delayed draw, 2024-06-30, spread 5.75). The filer tagged the PIK
+  part of the margin (2.5) as the spread.
+- **Evidence.** 10-Q 2023-06-30: "Kaseya Inc. ... delayed draw term loan SR + 6.25 % ( 2.50 % PIK)
+  06/2024 265 225 265". 10-Q 2024-06-30: "CivicPlus, LLC ... delayed draw term loan SR + 5.75 %
+  ( 2.50 % PIK) 08/2027 4,590 4,563 4,590". The reader found the same margin in each quarter.
+- **Re-run.** `python scripts/v05_evidence/make_row_corrections.py five18` (reports 0 to add).
+
+### D-033 Blue Owl: a printed reference rate replaces one inferred from the report date
+
+- **Decision.** For a fund whose wrapper names its reference-rate column, a confirmed printed
+  code replaces a reference rate whose source is `inferred_pre_libor` or `inferred_post_libor`.
+  A tagged rate, or one read from the identifier, is never replaced.
+- **Result.** 692 rows changed (LIBOR to SOFR in the two quarters to 2023-06-30; SOFR to EURIBOR,
+  SONIA, PRIME, CORRA, CDOR or BBSY later). `reference_rate_printed` then holds on every row
+  compared.
+- **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py five18 five17`.
+
+### D-034 Year-end quarters are the annual figure less the three filed quarters
+
+- **Decision.** `pipeline/fund_financials.py` (`quarter_income_sql`): for income, net investment
+  income, total expenses, management fee, incentive fee and interest expense, a twelve-month row
+  with three filed quarters in the preceding eleven months becomes annual less those quarters,
+  figure by figure. Kept as the average where a quarter is missing, and where three quarters of
+  one sign exceed the year figure (the fourth quarter would flip sign). `bdc_fund_income.csv`
+  itself is unchanged: it still stores the annual figure divided by four.
+- **Result.** All 20 year-end fund-quarters of the five funds change. Total investment income
+  was understated by 2 to 50 pct (HPS 2022-12-31: 69.6M published, 139.5M implied by the
+  filings; BCRED 2022-12-31: 900.6M against 1,264.8M). `fourth_quarter_income` then holds.
+- **Check.** At 2023-12-31 the recomputed gross expenses equal the separately extracted net
+  expenses for HPS (127.5M) and Blue Owl (224.4M).
+- **Found, not fixed.** Ares interest expense at 2022-12-31 and 2023-12-31 is stored as about
+  zero (a year figure of 0.05): the 10-K's figure was not captured. It is left as stored; annual
+  less three quarters would have published -314M and -425M. Ares incentive fees are negative in
+  several quarters as filed. Other readers of `bdc_fund_income.csv` (`fee_uplift`,
+  `rate_convention`, the highlights oracle, the cross-source engine) still see the average.
+- **Re-run.** `python scripts/v05_evidence/fourth_quarter.py five18 five17`.
+- **Applies to** every fund. Not checked outside the five.
+
+### D-035 Net expenses: no average where the year figure cannot be split
+
+- **Decision.** `pipeline/extract_companyfacts.py`: a figure covering several quarters with no
+  earlier year-to-date figure is split using the quarters already known (every field). Where it
+  cannot be split, a field marked `quarter_only` gets no value; only `net_expenses` is marked.
+- **Cause.** HPS and Blue Owl file net expenses for 2024 in the 10-K only. A quarter of the year
+  (164.3M, 300.3M) was compared with the true fourth quarter's income and gross expenses, and the
+  income identity failed by 6 to 7 pct.
+- **Result.** `net_expenses` is empty for three fund-quarters; the identity then uses gross
+  expenses and holds.
+
+### D-036 The wrapper schema admits two fields the code already uses
+
+- **Decision.** `b2_provenance` (written by the B2 wrapper patcher) and
+  `invariants.unclassified_rate.max_fv_pct` (read by the content signatures) are declared in
+  `wrapper_v3.schema.json`. The build does not validate wrappers against that schema, so the two
+  had drifted. A test now holds the five v0.5 wrappers to it.
+- **Not covered.** Three wrappers of other funds carry undeclared `notes` fields under `staging`.
+- **Re-run.** `python scripts/v05_evidence/schema_fit.py five18`.
+
+### What zero outstanding does not cover (2026-10-07)
+
+- The two page rules run for Blue Owl only. For the other four funds a wrong reference rate or
+  spread on the right row is still unseen.
+- Ares year-end interest expense for 2022 and 2023 (above); Ares non-accrual loans; Ares SDLP
+  principal at 2022-09-30.
+- 271 of 299 findings are closed by a recorded disposition, not by a fix.
+- Nothing here is in the published data; the published field-status artifact predates the new
+  column and status. No quarter outside the development sample has been run.

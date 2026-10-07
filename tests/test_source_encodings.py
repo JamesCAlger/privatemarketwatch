@@ -430,3 +430,15 @@ def test_printed_margin_reading_is_set_for_blue_owl_alone():
     # 'S+ | 2.75% | 2.75%' with a spread tag of 2.75
     assert source_encodings.printed_margin_funds() == {OWL}
     assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()
+
+
+@pytest.mark.parametrize('cik', ['0001803498', '0001812554', '0001287750', '0001838126', '0001837532'])
+def test_the_v05_wrappers_fit_the_wrapper_schema(cik):
+    # The build does not validate wrappers against the JSON schema, so the two had drifted: b2_provenance (written
+    # by the B2 patcher) and invariants.unclassified_rate.max_fv_pct (read by the content signatures) were undeclared.
+    import jsonschema
+    from pathlib import Path
+    root = Path(source_encodings.__file__).resolve().parents[1]
+    schema = json.loads((root / 'schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json').read_text(encoding='utf-8'))
+    wrapper = json.loads((root / 'data/overrides/bdc_xbrl_wrappers' / (cik + '.json')).read_text(encoding='utf-8'))
+    assert [e.message for e in jsonschema.Draft202012Validator(schema).iter_errors(wrapper)] == []

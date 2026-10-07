@@ -448,12 +448,21 @@
             "max_pct": {
               "type": "number",
               "description": "Maximum allowed unclassified row fraction (e.g. 0.05 = 5%)"
+            },
+            "max_fv_pct": {
+              "type": "number",
+              "description": "Maximum allowed unclassified share of fair value (read by wrapper_content_signatures; default 0.05)"
             }
           },
           "additionalProperties": false
         }
       },
       "additionalProperties": false
+    },
+    "b2_provenance": {
+      "type": "array",
+      "items": {"type": "object"},
+      "description": "Audit trail written by pipeline/agent_b2_wrapper_patch.py: one entry per promoted wrapper fix, saying why the rule was added. Not read by the build."
     },
     "known_edge_cases": {
       "type": "array",

@@ -64,11 +64,36 @@ def _year_to_date_step(value: float, prior: float, span_months: int, ratio: bool
     return value - prior
 
 
+def _split_without_year_to_date(value: float, end_date: str, span_months: int,
+                                quarters: dict[str, float], ratio: bool, quarter_only: bool = False) -> float | None:
+    """This quarter's part of a figure covering several quarters when no earlier year-to-date figure is filed.
+
+    Where every earlier quarter of the period already has a value (a fund that files each 10-Q
+    quarter on its own and the year in the 10-K), the quarter is the figure less those quarters.
+    Otherwise, and for a ratio, the figure is spread evenly: an average, not the quarter.
+    ``quarter_only`` fields take no average: None is returned and the date gets no value.
+    """
+    count = max(1, round(span_months / 3))
+    if not ratio and count > 1:
+        earlier, day = [], end_date
+        for _ in range(count - 1):
+            day = _prior_quarter_end(day)
+            if day not in quarters:
+                break
+            earlier.append(quarters[day])
+        else:
+            return value - sum(earlier)
+    if quarter_only and count > 1:
+        return None
+    return value / count
+
+
 def _extract_duration_series(
     facts: dict,
     concept_names: list[str],
     unit_key: str = "USD",
     ratio: bool = False,
+    quarter_only: bool = False,
 ) -> dict[str, float]:
     """Extract quarterly values from duration concepts.
 
@@ -82,6 +107,9 @@ def _extract_duration_series(
     annualise for each year-to-date period. Such a value does not grow with the period, so
     it is kept as filed; a ratio that does grow like a running total (n/(n-1) from the
     previous year-to-date value) is still split by quarter.
+
+    ``quarter_only`` drops a date whose only figure covers several quarters and cannot be
+    split (step 4): the field then has no value there instead of an average.
     """
     if not facts:
         return {}
@@ -174,15 +202,13 @@ def _extract_duration_series(
                     ytd_at[(best_start, prior_end)] = prior_ytd
                     result[end_date] = _year_to_date_step(best_value, prior_ytd, span, ratio)
                 else:
-                    # No same-FY prior YTD; divide by quarters
-                    n_quarters = max(1, round(span / 3))
-                    result[end_date] = best_value / n_quarters
+                    # No same-FY prior YTD: less the filed quarters, else divide by quarters
+                    result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, ratio, quarter_only)
             else:
                 # No prior quarter data at all (Q1 or annual-only filer)
-                n_quarters = max(1, round(span / 3))
-                result[end_date] = best_value / n_quarters
+                result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, ratio, quarter_only)
 
-    return result
+    return {day: value for day, value in result.items() if value is not None}
 
 
 def _extract_concept_series(
@@ -367,6 +393,9 @@ _INCOME_CONCEPTS = {
         "exact": ["InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement"],
         "fallback": [],
         "unit": "USD", "instant": False,
+        # Compared with the quarter's income and gross expenses, so an average over the year would
+        # be on another basis. HPS and Blue Owl file this figure for 2024 in the 10-K only.
+        "quarter_only": True,
     },
 }
 
@@ -472,10 +501,12 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
                 # Duration concepts: use YTD -> quarterly conversion
                 series = _extract_duration_series(
                     facts, spec["exact"], spec["unit"], ratio=bool(spec.get("ratio")),
+                    quarter_only=bool(spec.get("quarter_only")),
                 )
                 if not series and spec.get("fallback"):
                     series = _extract_duration_series(
                         facts, spec["fallback"], spec["unit"], ratio=bool(spec.get("ratio")),
+                        quarter_only=bool(spec.get("quarter_only")),
                     )
             concept_series[field] = series
 

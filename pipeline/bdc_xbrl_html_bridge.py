@@ -1106,6 +1106,8 @@ def apply_ixbrl_field_status_overlay(
     (validation_needed / not_found / blank are left as-is -> Unknown). One more
     status is read: reference rate ``not_applicable`` (the filer's own column prints
     'N/A' or nothing) sets a blank ``coupon_type`` to Fixed on a loan row that carries
+    (and, for a fund that names its reference-rate column, a confirmed printed code
+    replaces a reference rate that was only inferred from the report date)
     a rate and no reference rate. For a fund whose wrapper sets
     ``printed_margin_reading`` the spread of a row tagged with a cash spread and a PIK
     rate becomes their sum where the page prints that total (labelled
@@ -1199,6 +1201,20 @@ def apply_ixbrl_field_status_overlay(
             if _src not in result.columns:
                 result[_src] = ""
             result.loc[mask.values, _src] = "ixbrl_field_status"
+    # A reference rate inferred from the report date (LIBOR before July 2023, SOFR after) is a
+    # guess. For a fund whose wrapper names its reference-rate column, the code printed there
+    # replaces it. A tagged rate, or one read from the identifier, is never replaced.
+    if {"reference_rate_type_ix", "reference_rate_status"} <= set(merged.columns) and "reference_rate_source" in merged.columns:
+        from pipeline.source_encodings import load_encodings
+        named = {cik for cik, encoding in load_encodings().items() if encoding.get("reference_rate_columns")}
+        printed = merged["reference_rate_type_ix"].astype("string").fillna("").str.strip()
+        inferred = merged["reference_rate_source"].astype("string").fillna("").str.startswith("inferred_")
+        replace = (merged[cik_col].map(normalize_cik).isin(named) & (merged["reference_rate_status"].astype(str) == "value")
+                   & (printed != "") & inferred
+                   & (printed.str.upper() != merged["reference_rate_type"].astype("string").fillna("").str.strip().str.upper()))
+        if replace.any():
+            result.loc[replace.values, "reference_rate_type"] = printed[replace].values
+            result.loc[replace.values, "reference_rate_source"] = "ixbrl_field_status"
     if {"reference_rate_status", "asset_category"} <= set(merged.columns) and "coupon_type" in result.columns:
         has_rate = pd.Series(False, index=merged.index)
         for col in ("interest_rate", "pik_rate"):
