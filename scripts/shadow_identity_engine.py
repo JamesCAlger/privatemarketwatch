@@ -26,6 +26,8 @@ from pathlib import Path
 import duckdb
 
 from pipeline.config import (
+    BDC_FUND_INCOME_FILE,
+    BDC_IXBRL_FIELD_STATUS_FILE,
     FUND_FINANCIALS_FILE,
     OUTPUT_DIR,
     OVERRIDES_DIR,
@@ -51,8 +53,84 @@ def _ff() -> str:
     return f"read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)"
 
 
+def _csv(path: Path) -> str:
+    # all_varchar: dates stay 'YYYY-MM-DD' strings and CIKs keep their leading zeros
+    return f"read_csv('{path.as_posix()}', header=true, all_varchar=true, sample_size=-1)"
+
+
+def year_end_income_sql(financials_sql: str, income_sql: str) -> str:
+    """One row per fund year-end quarter: the published income and the fourth quarter the filings imply.
+
+    The income table stores a 10-K's twelve-month figure divided by four. The quarter itself is the
+    annual figure less the three quarters filed in the 10-Qs of that year. A year-end without
+    exactly three such quarters in the preceding twelve months has no expected value (no row).
+    """
+    return f"""(
+        WITH inc AS (
+            SELECT lpad(regexp_replace(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
+                   TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day,
+                   TRY_CAST(duration_months AS INTEGER) AS months,
+                   max(TRY_CAST(total_investment_income AS DOUBLE)) AS income
+            FROM {income_sql} GROUP BY 1, 2, 3),
+        year_end AS (
+            SELECT a.cik, a.day, 4.0*a.income AS annual, sum(q.income) AS three_quarters, count(q.income) AS quarters
+            FROM inc a LEFT JOIN inc q ON q.cik = a.cik AND q.months BETWEEN 2 AND 4
+                 AND q.day < a.day AND q.day > a.day - INTERVAL 11 MONTH
+            WHERE a.months BETWEEN 11 AND 13 GROUP BY 1, 2, 3)
+        SELECT f.cik, f.report_date, f.entity_name, f.total_investment_income,
+               y.annual - y.three_quarters AS fourth_quarter_expected
+        FROM (SELECT lpad(regexp_replace(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
+                     CAST(report_date AS VARCHAR)[:10] AS report_date, entity_name, total_investment_income
+              FROM {financials_sql} WHERE source = 'companyfacts') f
+        JOIN year_end y ON y.cik = f.cik AND CAST(y.day AS VARCHAR) = f.report_date AND y.quarters = 3
+    )"""
+
+
+def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) -> str:
+    """Published loan rows whose reference rate can be compared with the filer's printed column.
+
+    Only funds whose wrapper names that column (``reference_rate_columns``), only rows the page
+    reader confirmed (status ``value``) and only rows that publish a reference rate. The row is
+    keyed to the page by filing, report date and the filed identifier member.
+    ``reference_rate_agrees`` is 1 when the two are the same benchmark, and empty where no
+    reference rate is published. ``printed_margin`` is the total margin read from the page
+    (empty where it was not read, or the artifact predates the column).
+    """
+    named = ", ".join("'%s'" % c for c in ciks) or "''"
+    return f"""(
+        SELECT lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
+               CAST(h.report_date AS VARCHAR)[:10] AS report_date, h.bdc_investment_identifier,
+               CASE WHEN nullif(trim(CAST(h.reference_rate_type AS VARCHAR)), '') IS NULL THEN NULL
+                    WHEN upper(trim(CAST(h.reference_rate_type AS VARCHAR))) = upper(trim(s.reference_rate_type))
+                    THEN 1.0 ELSE 0.0 END AS reference_rate_agrees,
+               h.basis_spread, s.printed_margin
+        FROM {unified_sql} h
+        JOIN (SELECT * FROM (SELECT * FROM {status_sql}
+                             UNION ALL BY NAME SELECT CAST(NULL AS VARCHAR) AS printed_margin WHERE false)
+              WHERE period_role = 'current' AND reference_rate_status = 'value') s
+          ON lpad(regexp_replace(CAST(s.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
+               = lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
+         AND s.accession_number = h.accession_number AND s.report_date = CAST(h.report_date AS VARCHAR)[:10]
+         AND s.raw_id_lower = lower(trim(regexp_replace(regexp_replace(CAST(h.bdc_dimensions_raw AS VARCHAR),
+               '^[^=]*=', ''), '[ ]+', ' ', 'g')))
+        WHERE lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN ({named})
+          AND coalesce(CAST(h.accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'
+    )"""
+
+
+def _named_reference_column_ciks() -> list[str]:
+    from pipeline.source_encodings import load_encodings
+    return sorted(cik for cik, encoding in load_encodings().items() if encoding.get("reference_rate_columns"))
+
+
 # Source config: (table_sql, where, cik_expr, report_date_expr, row_id_expr)
 SOURCES = {
+    # Derived sources. A missing input file makes the source unreadable; its rules are then skipped.
+    "year_end_income": (year_end_income_sql(_ff(), _csv(BDC_FUND_INCOME_FILE)), "TRUE",
+                        "cik", "report_date", "entity_name"),
+    "printed_reference": (printed_reference_sql(_unified(), _csv(BDC_IXBRL_FIELD_STATUS_FILE),
+                                                _named_reference_column_ciks()), "TRUE",
+                          "cik", "report_date", "bdc_investment_identifier"),
     # Published rows only: a JV's own schedule states percent of the JV's net assets, so its rows
     # cannot satisfy an identity against the fund's (2026-10-06, decision D-014).
     "unified": (_unified(), "bdc_dimensions_raw IS NOT NULL "
@@ -137,6 +215,35 @@ RULES: list[IdentityRule] = [
         residual_sql="total_assets - total_liabilities - net_assets",
         tol_note="TA - TL ~ net_assets, 1% (companyfacts schema)",
     ),
+    # A year-end quarter's income must be the annual figure less the three filed quarters, not the
+    # annual figure divided by four (HPS 2023-12-31: published 223.3M, the filings imply 264.7M).
+    IdentityRule(
+        name="fourth_quarter_income", table="year_end_income",
+        needed_cols=("total_investment_income", "fourth_quarter_expected"),
+        row_filter="fourth_quarter_expected <> 0",
+        holds_sql="abs(total_investment_income - fourth_quarter_expected) <= 0.02*abs(fourth_quarter_expected)",
+        residual_sql="total_investment_income - fourth_quarter_expected",
+        tol_note="year-end quarter income ~ annual - three filed quarters, 2%",
+    ),
+    # The published reference rate against the code printed in the filer's own column. Only for
+    # funds whose wrapper names that column (Blue Owl: 780 of 6,414 rows disagree, most of them a
+    # rate inferred from the report date).
+    IdentityRule(
+        name="reference_rate_printed", table="printed_reference",
+        needed_cols=("reference_rate_agrees",),
+        holds_sql="reference_rate_agrees = 1",
+        residual_sql="1 - reference_rate_agrees",
+        tol_note="published reference rate = code printed in the filer's reference-rate column",
+    ),
+    # The published spread against the total margin printed on the row (same funds). Catches a
+    # spread tag that holds only the cash part of a cash-plus-PIK margin, or a mis-scaled spread.
+    IdentityRule(
+        name="spread_printed", table="printed_reference",
+        needed_cols=("basis_spread", "printed_margin"),
+        holds_sql="abs(basis_spread - printed_margin) <= 0.011",
+        residual_sql="basis_spread - printed_margin",
+        tol_note="published spread = total margin printed on the row, to the second decimal",
+    ),
 ]
 
 
@@ -145,7 +252,11 @@ def wrapped_ciks() -> list[str]:
 
 
 def _columns(con: duckdb.DuckDBPyConnection, source_sql: str) -> set[str]:
-    rows = con.execute(f"DESCRIBE SELECT * FROM {source_sql} LIMIT 0").fetchall()
+    try:
+        rows = con.execute(f"DESCRIBE SELECT * FROM {source_sql} LIMIT 0").fetchall()
+    except duckdb.IOException as exc:  # an input file of a derived source is absent
+        logger.info("  source unreadable: %s", str(exc).splitlines()[0][:120])
+        return set()
     return {r[0] for r in rows}
 
 

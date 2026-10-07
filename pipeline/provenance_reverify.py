@@ -122,6 +122,9 @@ def _field_sql(field: str, source_col: str) -> str:
     expected = f"({raw} * {dec} * {cik_fix} * {stag})"
     if field == 'interest_rate':
         expected = f"({expected} + CASE WHEN {ev} LIKE '%interest_rate:cash_plus_pik%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
+    if field == 'basis_spread':
+        # the page prints the cash margin and the PIK margin apart; the published spread is their sum
+        expected = f"({expected} + CASE WHEN {ev} LIKE '%basis_spread:cash_plus_pik_margin%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
     # A coupon or a spread taken from the PIK tag has no fact of its own: its source is the PIK rate.
     from_pik = _FROM_PIK_EVENT.get(field)
     if from_pik:
@@ -447,7 +450,9 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
                 published = r["published"]
                 expected_value=instance_raw*mult
-                if field=='interest_rate' and 'interest_rate:cash_plus_pik' in str(r.get('declared_events') or ''):
+                # a rate, or a spread, published as its tagged figure plus the tagged PIK rate
+                if ((field=='interest_rate' and 'interest_rate:cash_plus_pik' in str(r.get('declared_events') or ''))
+                        or (field=='basis_spread' and 'basis_spread:cash_plus_pik_margin' in str(r.get('declared_events') or ''))):
                     pik_sf=sf.get('pik_rate') or {}
                     pik_concept=str(pik_sf.get('c') or '').lower()
                     pik_hit=ctx_facts.get('__local__'+pik_concept) if pik_concept else ctx_facts.get('pik_rate')

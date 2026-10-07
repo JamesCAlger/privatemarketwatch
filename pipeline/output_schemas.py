@@ -283,6 +283,7 @@ OUTPUT_SCHEMAS: dict[str, dict[str, str]] = {
         "maturity_status": "VARCHAR",
         "reference_rate_type": "VARCHAR",
         "reference_rate_status": "VARCHAR",
+        "printed_margin": "DOUBLE",
         "lien_position": "VARCHAR",
         "lien_status": "VARCHAR",
         "gics_sector": "VARCHAR",

@@ -41,7 +41,18 @@ def test_rows_for_a_fund_that_was_not_named_are_refused(tmp_path):
         splice(existing, fresh, ["0001812554"], tmp_path / "out.csv")
 
 
-def test_a_changed_column_set_is_refused(tmp_path):
+def test_a_column_added_since_the_artifact_was_written_is_empty_for_the_other_funds(tmp_path):
+    existing = _write(tmp_path / "existing.csv", [["0001838126", "B", "southern graphics", "SOFR", "value"]])
+    with open(tmp_path / "fresh.csv", "w", newline="", encoding="utf-8") as fh:
+        csv.writer(fh).writerows([HEADER[:4] + ["printed_margin"] + HEADER[4:], ["0001812554", "A", "inovalon", "SOFR", "5.5", "value"]])
+    splice(existing, tmp_path / "fresh.csv", ["0001812554"], tmp_path / "out.csv")
+    rows = _read(tmp_path / "out.csv")
+    assert list(rows[0]) == HEADER[:4] + ["printed_margin"] + HEADER[4:]
+    assert [(r["cik"], r["printed_margin"], r["reference_rate_status"]) for r in rows] == [
+        ("0001838126", "", "value"), ("0001812554", "5.5", "value")]
+
+
+def test_a_re_read_that_lacks_a_column_is_refused(tmp_path):
     existing = _write(tmp_path / "existing.csv", [["0001812554", "A", "x", "", "blank"]])
     with open(tmp_path / "fresh.csv", "w", newline="", encoding="utf-8") as fh:
         csv.writer(fh).writerows([HEADER[:-1], ["0001812554", "A", "x", ""]])

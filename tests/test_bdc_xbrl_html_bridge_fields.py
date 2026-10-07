@@ -727,7 +727,8 @@ def _staged(**changes):
     row = {"cik": "0001812554", "accession_number": "A", "report_date": "2025-12-31",
            "bdc_investment_identifier": "Acme | Notes", "bdc_dimensions_raw": "investmentidentifieraxis=Acme | Notes | Non-Affiliated Issuer",
            "maturity_date": "", "lien_position": "", "reference_rate_type": "", "reference_rate_source": "",
-           "coupon_type": "", "interest_rate": "", "pik_rate": "14.25", "asset_category": "LOAN"}
+           "coupon_type": "", "interest_rate": "", "pik_rate": "14.25", "asset_category": "LOAN",
+           "basis_spread": "", "src_transforms": ""}
     return pd.DataFrame([dict(row, **changes)])
 
 
@@ -776,3 +777,80 @@ def test_ixbrl_rows_take_the_filer_reading_from_the_wrapper(tmp_path):
     # another fund reading the same page gets no confirmed value
     other = propose_field_bridges_from_ixbrl(cik="0001838126", encodings=encodings, **kwargs)["bridges"]
     assert all(b["reference_rate_status"] != "value" for b in other)
+
+
+# --- the margin printed on the row, and a spread tag that holds only the cash part ---
+def test_printed_margin_reads_the_three_forms_blue_owl_prints():
+    from pipeline.bdc_xbrl_html_bridge import printed_margin
+    old = {0: "Company", 1: "Investment", 2: "Interest", 5: "Maturity Date"}
+    new = {0: "Company", 1: "Investment", 2: "Ref. Rate", 3: "Cash", 4: "PIK", 5: "Maturity Date"}
+    # 10-Q 2024-09-30, Inovalon first lien: a total of 6.25 of which 2.75 is PIK
+    assert printed_margin(["Inovalon", "First lien", "SR +", "6.25% (2.75% PIK)", "", "11/2028"], old, OWL_READING) == "6.25"
+    assert printed_margin(["Inovalon", "First lien", "SR +", "6.25%", "(2.75% PIK)", "11/2028"], old, OWL_READING) == "6.25"
+    # 10-K 2025-12-31, the same loan: cash 2.75 and PIK 2.75 in separate cells
+    assert float(printed_margin(["Inovalon", "First lien", "S+", "2.75%", "2.75%", "11/2028"], new, OWL_READING)) == 5.5
+    assert float(printed_margin(["Inovalon", "First lien", "S+", "2.75%", "2.75%", "11/2028"], old, OWL_READING)) == 5.5
+    # one figure: a cash margin, or a PIK-only margin
+    assert printed_margin(["DIRECTV", "First lien", "S+", "5.25%", "", "8/2029"], new, OWL_READING) == "5.25"
+    assert printed_margin(["Inovalon", "Second lien", "S+", "", "8.50%", "11/2033"], new, OWL_READING) == "8.50"
+
+
+def test_printed_margin_is_not_read_from_anything_else():
+    from pipeline.bdc_xbrl_html_bridge import printed_margin
+    old = {0: "Company", 1: "Investment", 2: "Interest", 5: "Maturity Date"}
+    # three figures, or a second figure in one cell that is not marked PIK: not understood, so not read
+    assert printed_margin(["Acme", "First lien", "SR +", "6.25%", "2.75%", "1.00%"], {2: "Interest"}, OWL_READING) == ""
+    assert printed_margin(["Acme", "First lien", "SR +", "6.25% (1.00% floor)", "", "1/2029"], old, OWL_READING) == ""
+    # figures after the next header column (percent of net assets) are outside the span
+    assert printed_margin(["Acme", "First lien", "SR +", "5.75%", "", "1/2029", "0.6%"], old, OWL_READING) == "5.75"
+    # a fund that names no column, and a table without the named column
+    assert printed_margin(["Acme", "First lien", "SR +", "5.75%"], old, None) == ""
+    assert printed_margin(["Acme", "Revolver", "1/2029", "5.75%"], {0: "Portfolio Company", 1: "Commitment Type"}, OWL_READING) == ""
+
+
+def _margin_status(margin):
+    return dict(_status_row("value", "SOFR"), printed_margin=margin)
+
+
+def test_a_cash_spread_printed_apart_from_its_pik_becomes_the_total_margin():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # Inovalon first lien, 2025-12-31: spread tag 2.75, PIK tag 2.75, printed 'S+ | 2.75% | 2.75%'
+    staged = _staged(basis_spread=2.75, pik_rate=2.75, reference_rate_type="SOFR", src_transforms="basis_spread:rate_x100")
+    out = apply_ixbrl_field_status_overlay(staged, [_margin_status("5.5")])
+    assert out.iloc[0]["basis_spread"] == 5.5 and float(out.iloc[0]["pik_rate"]) == 2.75
+    assert out.iloc[0]["src_transforms"] == "basis_spread:rate_x100;basis_spread:cash_plus_pik_margin"
+
+
+def test_the_spread_is_left_alone_unless_the_page_prints_the_sum():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    cases = [
+        # 2024-09-30: 'SR + 6.25% (2.75% PIK)', spread tag 6.25 is already the total
+        (dict(basis_spread=6.25, pik_rate=2.75), "6.25"),
+        # the page agrees with neither reading: a finding for the rule, not a change
+        (dict(basis_spread=6.25, pik_rate=2.75), "7.0"),
+        (dict(basis_spread=2.75, pik_rate=2.75), ""),                                   # margin not read
+        (dict(basis_spread=2.75, pik_rate=""), "5.5"),                                  # no PIK tag
+        (dict(basis_spread=2.75, pik_rate=2.75, asset_category="EQUITY_PREFERRED"), "5.5"),
+        (dict(basis_spread=2.75, pik_rate=2.75, cik="0001838126"), "5.5"),              # a fund without the setting
+    ]
+    for changes, margin in cases:
+        staged = _staged(src_transforms="", **changes)
+        status = dict(_margin_status(margin), cik=changes.get("cik", "0001812554"))
+        out = apply_ixbrl_field_status_overlay(staged, [status])
+        assert float(out.iloc[0]["basis_spread"]) == changes["basis_spread"] and out.iloc[0]["src_transforms"] == ""
+
+
+def test_ixbrl_rows_carry_the_printed_margin_only_over_a_confirmed_reference_rate(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import build_field_status_rows, propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("c1", "Inovalon | First lien | Non-Affiliated Issuer"),
+            _ix_context("c2", "Associations Finance | Notes | Non-Affiliated Issuer")]
+    rows = ["<tr><td>Company</td><td>Investment</td><td>Ref. Rate</td><td>Cash</td><td>PIK</td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            _ix_row("c1", ["Inovalon", "First lien", "S+", "2.75%", "2.75%", "11/2028"], "303221"),
+            _ix_row("c2", ["Associations Finance", "Notes", "N/A", "", "14.25%", "5/2030"], "189630")]
+    encodings = {"0001812554": {"reference_rate_columns": ["Ref. Rate"]}}
+    bridges = propose_field_bridges_from_ixbrl(cik="0001812554", accession_number="A", report_date="2025-12-31",
+                                               html_path=_write_ixbrl(tmp_path, ctxs, rows), encodings=encodings)["bridges"]
+    assert [b["printed_margin"] for b in bridges] == ["5.5", ""]
+    flat = [{"cik": "0001812554", "accession_number": "A", "report_date": "2025-12-31", "period": "2025-12-31",
+             "investment_identifier": b["issuer_name"], "fair_value": 1.0} for b in bridges]
+    assert [r["printed_margin"] for r in build_field_status_rows(bridges, flat, {})] == ["5.5", ""]

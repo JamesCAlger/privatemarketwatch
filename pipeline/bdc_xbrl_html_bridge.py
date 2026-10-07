@@ -397,6 +397,38 @@ _FIELD_COLUMN_RULES: dict[str, dict[str, str]] = {
     # rate just fails to parse and stays flagged, so it is safe.
     "reference_rate_type": {"header": r"(?i)reference\s*rate|\bindex\b|spread|basis|base\s*rate|interest\s*rate"},
 }
+_PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
+_PIK_INCLUDED_RE = re.compile(r"(?i)^\s*(\d+(?:\.\d+)?)\s*%\s*\(\s*\d+(?:\.\d+)?\s*%\s*PIK\s*\)\s*$")
+
+
+def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: dict[str, Any] | None) -> str:
+    """Total margin over the reference rate printed on a row, in percent, or '' when not read.
+
+    Read from the cells after the filer's named reference-rate column, up to the next header
+    column that is not 'Cash' or 'PIK'. Three printed forms are understood:
+    one figure ('5.75%', '7.00% PIK') is the margin; 'A% (B% PIK)' is a total A of which B is
+    PIK; two figures in two cells (cash, then PIK) add up. Anything else is not read.
+    """
+    if not filer_reading or not header_map:
+        return ""
+    named = [i for i in sorted(header_map) if i < len(grid)
+             and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
+    if not named:
+        return ""
+    later = [i for i in sorted(header_map) if i > named[0]
+             and " ".join(header_map[i].lower().split()) not in ("cash", "pik")]
+    cells = [c for c in grid[named[0] + 1:min(later[0] if later else len(grid), len(grid))] if c.strip()]
+    included = _PIK_INCLUDED_RE.match(" ".join(cells))
+    if included:
+        return included.group(1)
+    figures = [_PERCENT_RE.findall(c) for c in cells if _PERCENT_RE.search(c)]
+    if len(figures) == 1 and len(figures[0]) == 1:
+        return figures[0][0]
+    if len(figures) == 2 and all(len(f) == 1 for f in figures):
+        return repr(round(float(figures[0][0]) + float(figures[1][0]), 6))
+    return ""
+
+
 # In a filer-named reference-rate column: nothing printed, or the filer's 'N/A'.
 _NOT_APPLICABLE_RE = re.compile(r"(?i)\s*(?:n\s*/?\s*a\.?)?\s*")
 # A benchmark code standing alone in a cell: 'SR +', 'E+'.
@@ -908,6 +940,7 @@ def join_flat_positions_to_inline_status(
                 st = "value" if b.get(f) else "blank"
             rec[f"{f}_status"] = st
             rec[f"{f}_source_column"] = b.get(f"{f}_source_column", "")
+        rec["printed_margin"] = b.get("printed_margin", "") if b is not None else ""
         out.append(rec)
     return out
 
@@ -1007,6 +1040,7 @@ def build_field_status_rows(
             "maturity_status": _fs(j.get("maturity_date_status", "")),
             "reference_rate_type": j.get("reference_rate_type", ""),
             "reference_rate_status": _fs(j.get("reference_rate_type_status", "")),
+            "printed_margin": j.get("printed_margin", ""),
             "lien_position": j.get("lien_position", ""),
             "lien_status": lien_status,
             "gics_sector": j.get("gics_sector", ""),
@@ -1046,6 +1080,9 @@ def reconcile_to_subtotals(
     return {"reconciled": all_ok, "tiers": tiers}
 
 
+# Printed and tagged rates are compared to the second decimal of a percent.
+_MARGIN_TOL = 0.011
+
 # Unified-column fields the overlay can write, with their status key.
 _OVERLAY_FIELDS = {
     "maturity_date": "maturity_status",
@@ -1069,7 +1106,10 @@ def apply_ixbrl_field_status_overlay(
     (validation_needed / not_found / blank are left as-is -> Unknown). One more
     status is read: reference rate ``not_applicable`` (the filer's own column prints
     'N/A' or nothing) sets a blank ``coupon_type`` to Fixed on a loan row that carries
-    a rate and no reference rate. For
+    a rate and no reference rate. For a fund whose wrapper sets
+    ``printed_margin_reading`` the spread of a row tagged with a cash spread and a PIK
+    rate becomes their sum where the page prints that total (labelled
+    ``basis_spread:cash_plus_pik_margin``; ``pik_rate`` is unchanged). For
     lien/sector the status already reflects the reconciliation gate (downgraded
     upstream if the filer-quarter didn't reconcile), so this is a simple value
     consumer.
@@ -1135,6 +1175,8 @@ def apply_ixbrl_field_status_overlay(
         + (sdf["raw_id_lower"].map(_raw_id_lower) if "raw_id_lower" in sdf.columns else sdf[id_src].map(_raw_id_lower))
 
     keep = ["_k"] + [c for f in _OVERLAY_FIELDS for c in (f, _OVERLAY_FIELDS[f]) if c in sdf.columns]
+    if "printed_margin" in sdf.columns:
+        keep.append("printed_margin")
     # S16 tie-break: two status rows can collide on _k with different payloads.
     # The status frame has no source-location keys, so stable-sort on _k plus the
     # full payload before keep='last' -- the survivor is then a deterministic
@@ -1166,6 +1208,26 @@ def apply_ixbrl_field_status_overlay(
                  & blank(merged["coupon_type"]) & blank(merged["reference_rate_type"])
                  & (merged["asset_category"].astype(str) == "LOAN"))
         result.loc[fixed.values, "coupon_type"] = "Fixed"
+    # A filer that prints the cash margin and the PIK margin in separate cells tags the spread
+    # with the cash part only (Blue Owl from 2025-03-31; before that 'A% (B% PIK)' with the
+    # total A tagged). Where the wrapper says so and the printed total is the sum of the two
+    # tags and not the spread alone, the published spread is the total margin.
+    needed = {"basis_spread", "pik_rate", "asset_category", "src_transforms"}
+    if {"printed_margin", "reference_rate_status"} <= set(merged.columns) and needed <= set(result.columns):
+        from pipeline.source_encodings import printed_margin_funds
+        funds = printed_margin_funds()
+        if funds:
+            printed = pd.to_numeric(merged["printed_margin"], errors="coerce")
+            spread = pd.to_numeric(merged["basis_spread"], errors="coerce")
+            pik = pd.to_numeric(merged["pik_rate"], errors="coerce")
+            split = (merged[cik_col].map(normalize_cik).isin(funds) & (merged["asset_category"].astype(str) == "LOAN")
+                     & (merged["reference_rate_status"].astype(str) == "value") & (spread > 0) & (pik > 0)
+                     & ((printed - (spread + pik)).abs() <= _MARGIN_TOL) & ((printed - spread).abs() > _MARGIN_TOL))
+            if split.any():
+                result.loc[split.values, "basis_spread"] = (spread + pik)[split].round(6).values
+                events = merged.loc[split, "src_transforms"].fillna("").astype(str)
+                result.loc[split.values, "src_transforms"] = events.map(
+                    lambda e: (e + ";" if e else "") + "basis_spread:cash_plus_pik_margin").values
     result.drop(columns=["_k"], inplace=True)
     return result
 
@@ -1317,6 +1379,8 @@ def propose_field_bridges_from_ixbrl(
             "reference_rate_type": rrt["value"],
             "reference_rate_status": rrt["status"],
             "reference_rate_source_column": rrt["source_column"],
+            # a margin exists only over a confirmed reference rate
+            "printed_margin": printed_margin(grid, cur_header, filer_reading) if rrt["status"] == "value" else "",
             "lien_position": lien_tier,
             "lien_section": cur_lien,
             "gics_sector": cur_sector,

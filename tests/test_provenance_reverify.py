@@ -258,6 +258,28 @@ def test_financial_cash_plus_pik_replay_checks_both_source_facts(pik,published):
     assert again.iloc[0].src_transforms.count('interest_rate:cash_plus_pik')==1
 
 
+def test_a_spread_published_as_cash_plus_pik_margin_replays_from_both_facts():
+    # Blue Owl, Inovalon first lien 2025-12-31: spread tag 0.0275, PIK tag 0.0275, published spread 5.50
+    from lxml import etree
+    frame=pd.DataFrame([_row(interest_rate=None,basis_spread=5.5,pik_rate=2.75,pik_rate_source='xbrl_field',
+        src_facts=json.dumps({'basis_spread':{'r':.0275},'pik_rate':{'r':.0275}}),
+        src_transforms='basis_spread:rate_x100;pik_rate:rate_x100;basis_spread:cash_plus_pik_margin')])
+    replay=cheap_tier(holdings_df=frame)
+    replay=replay[replay.field=='basis_spread']
+    assert replay.iloc[0].expected==pytest.approx(5.5) and replay.iloc[0].cheap_status=='pass'
+    def loader(cik,accession,pik='.0275'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            '<g:InvestmentBasisSpreadVariableRate contextRef="ctx1">.0275</g:InvestmentBasisSpreadVariableRate>'
+            f'<g:InvestmentInterestRatePaidInKind contextRef="ctx1">{pik}</g:InvestmentInterestRatePaidInKind></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
+    # the filing's PIK fact no longer supports the sum
+    assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,'.01')).iloc[0].full_status=='published_mismatch'
+    # without the label the same published figure does not replay
+    plain=frame.assign(src_transforms='basis_spread:rate_x100;pik_rate:rate_x100')
+    assert cheap_tier(holdings_df=plain).query("field=='basis_spread'").iloc[0].cheap_status=='fail'
+
+
 def test_unresolved_coupon_and_identity_cost_proxy_are_not_source_verified():
     from pipeline.financial_conventions import prepare
     frame,_=prepare(pd.DataFrame([_row(interest_rate=10.5,interest_rate_kind='cash',pik_rate=None,

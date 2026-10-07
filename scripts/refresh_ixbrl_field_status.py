@@ -26,7 +26,7 @@ PAD = "lpad(regexp_replace(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0')"
 
 
 def splice(existing: Path, fresh: Path, ciks: list[str], out: Path) -> dict:
-    """Write ``out`` = rows of ``existing`` for other funds + all rows of ``fresh``. Returns row counts."""
+    """Write ``out`` = rows of ``existing`` for other funds + all rows of ``fresh``, in the re-read's columns. Returns row counts."""
     import duckdb
 
     def reader(path: Path) -> str:
@@ -36,13 +36,15 @@ def splice(existing: Path, fresh: Path, ciks: list[str], out: Path) -> dict:
     con.execute("CREATE TEMP TABLE subset AS SELECT unnest(?) AS cik", [ciks])
     columns = [r[0] for r in con.execute("DESCRIBE SELECT * FROM " + reader(existing)).fetchall()]
     new_columns = [r[0] for r in con.execute("DESCRIBE SELECT * FROM " + reader(fresh)).fetchall()]
-    if set(columns) != set(new_columns):
-        raise ValueError("field-status columns differ: %s" % sorted(set(columns) ^ set(new_columns)))
+    if set(columns) - set(new_columns):
+        raise ValueError("the re-read lacks columns of the artifact: %s" % sorted(set(columns) - set(new_columns)))
     outside = con.execute("SELECT count(*) FROM %s WHERE %s NOT IN (SELECT cik FROM subset)" % (reader(fresh), PAD)).fetchone()[0]
     if outside:
         raise ValueError("%d re-read rows belong to funds that were not named" % outside)
-    select = ", ".join('"%s"' % c for c in columns)
-    con.execute("CREATE TEMP TABLE kept AS SELECT %s FROM %s WHERE %s NOT IN (SELECT cik FROM subset)" % (select, reader(existing), PAD))
+    # A column added since the artifact was written is empty for the funds that are kept.
+    select = ", ".join('"%s"' % c for c in new_columns)
+    kept_select = ", ".join(('"%s"' % c) if c in columns else ('CAST(NULL AS VARCHAR) AS "%s"' % c) for c in new_columns)
+    con.execute("CREATE TEMP TABLE kept AS SELECT %s FROM %s WHERE %s NOT IN (SELECT cik FROM subset)" % (kept_select, reader(existing), PAD))
     replaced = con.execute("SELECT count(*) FROM %s WHERE %s IN (SELECT cik FROM subset)" % (reader(existing), PAD)).fetchone()[0]
     con.execute("CREATE TEMP TABLE added AS SELECT %s FROM %s" % (select, reader(fresh)))
     counts = dict(kept=con.execute("SELECT count(*) FROM kept").fetchone()[0], replaced=replaced,

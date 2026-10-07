@@ -36,7 +36,105 @@ def test_active_identity_rules_unchanged():
         "nav_identity",
         "income_identity",
         "balance_sheet_identity",
+        # added 2026-10-07 at the owner's request (decision D-030)
+        "fourth_quarter_income",
+        "reference_rate_printed",
+        "spread_printed",
     }
+
+
+def _run(rule_name, tables):
+    """Evaluate one rule over registered frames; returns {(cik, report_date, row_id): holds}."""
+    import duckdb
+    import pandas as pd
+    rule = next(r for r in engine.RULES if r.name == rule_name)
+    con = duckdb.connect()
+    for name, rows in tables.items():
+        con.register(name, pd.DataFrame(rows))
+    if rule_name == "fourth_quarter_income":
+        source = engine.year_end_income_sql("ff", "income")
+    else:
+        source = engine.printed_reference_sql("unified", "status", ["0001812554"])
+    cols = ", ".join(rule.needed_cols)
+    present = " AND ".join(f"{c} IS NOT NULL" for c in rule.needed_cols)   # the engine evaluates only such rows
+    out = con.execute(f"SELECT cik, report_date, {cols}, ({rule.holds_sql}) AS holds FROM {source} "
+                      f"WHERE {rule.row_filter} AND {present}").fetchdf()
+    return {(r.cik, r.report_date): bool(r.holds) for r in out.itertuples()}, out
+
+
+def _income(cik, day, months, income):
+    return dict(cik=cik, report_date=day, duration_months=str(months), total_investment_income=str(income))
+
+
+def _ff_row(cik, day, income):
+    return dict(cik=cik, report_date=day, entity_name="Fund", source="companyfacts", total_investment_income=income)
+
+
+def test_fourth_quarter_income_is_the_annual_figure_less_three_filed_quarters():
+    # HPS: quarters 178.8, 215.8 and 233.9 (10-Qs of 2023), annual 893.2. The income table holds 893.2 / 4 = 223.3
+    # for 2023-12-31; the filings imply 264.7.
+    quarters = [_income("1838126", "2023-03-31", 3, 178.8), _income("0001838126", "2023-06-30", 3, 215.8),
+                _income("1838126", "2023-09-30", 3, 233.9)]
+    holds, out = _run("fourth_quarter_income", dict(
+        income=quarters + [_income("1838126", "2023-12-31", 12, 223.3)],
+        ff=[_ff_row(1838126, "2023-12-31", 223.3), _ff_row(1838126, "2023-09-30", 233.9)]))
+    assert holds == {("0001838126", "2023-12-31"): False}          # only the year-end quarter is tested
+    assert abs(out.fourth_quarter_expected[0] - 264.7) < 1e-6
+    # once the published figure is the quarter itself, the rule holds
+    holds, _ = _run("fourth_quarter_income", dict(
+        income=quarters + [_income("1838126", "2023-12-31", 12, 223.3)], ff=[_ff_row(1838126, "2023-12-31", 264.7)]))
+    assert holds == {("0001838126", "2023-12-31"): True}
+
+
+def test_fourth_quarter_income_says_nothing_without_three_filed_quarters():
+    # a first year with two 10-Qs, and a year-end with no annual fact: no expected value, so no finding
+    holds, _ = _run("fourth_quarter_income", dict(
+        income=[_income("1", "2023-06-30", 3, 10.0), _income("1", "2023-09-30", 3, 12.0), _income("1", "2023-12-31", 12, 9.0),
+                _income("2", "2023-03-31", 3, 5.0), _income("2", "2023-06-30", 3, 5.0), _income("2", "2023-09-30", 3, 5.0),
+                _income("2", "2023-12-31", 3, 5.0)],
+        ff=[_ff_row(1, "2023-12-31", 9.0), _ff_row(2, "2023-12-31", 5.0)]))
+    assert holds == {}
+
+
+def _holding(context, member, published, cik="0001812554", scope="", spread=None):
+    return dict(cik=cik, report_date="2023-06-30", accession_number="A", src_context_id=context,
+                bdc_investment_identifier=member.split(" | Non-")[0], bdc_dimensions_raw="investmentidentifieraxis=" + member,
+                reference_rate_type=published, accounting_record_class=scope, basis_spread=spread)
+
+
+def _printed(member, code, status="value", role="current", cik="0001812554", margin=None):
+    row = dict(cik=cik, accession_number="A", report_date="2023-06-30", period_role=role, raw_id_lower=member.lower(),
+               reference_rate_type=code, reference_rate_status=status)
+    return row if margin is None else dict(row, printed_margin=margin)
+
+
+def test_reference_rate_printed_compares_published_with_the_printed_code():
+    # Blue Owl 2023-06-30: Anaplan is printed 'SR +' (SOFR) and published as LIBOR, a rate inferred from the date
+    members = ["Anaplan, Inc. | Non-Affiliated Issuer", "Global Music Rights, LLC | Non-Affiliated Issuer"]
+    holds, out = _run("reference_rate_printed", dict(
+        unified=[_holding("c1", members[0], "LIBOR"), _holding("c2", members[1], "libor ")],
+        status=[_printed(members[0], "SOFR"), _printed(members[1], "LIBOR")]))
+    assert sorted(out.reference_rate_agrees) == [0.0, 1.0] and len(out) == 2
+
+
+def test_reference_rate_printed_ignores_what_it_cannot_compare():
+    member = "Anaplan, Inc. | Non-Affiliated Issuer"
+    cases = [
+        (_holding("c1", member, ""), _printed(member, "SOFR")),                       # nothing published
+        (_holding("c1", member, "LIBOR"), _printed(member, "", status="not_applicable")),
+        (_holding("c1", member, "LIBOR"), _printed(member, "SOFR", status="validation_needed")),
+        (_holding("c1", member, "LIBOR"), _printed(member, "SOFR", role="comparative")),
+        (_holding("c1", member, "LIBOR", scope="underlying_schedule"), _printed(member, "SOFR")),
+        # a fund whose wrapper names no reference-rate column
+        (_holding("c1", member, "LIBOR", cik="0001838126"), _printed(member, "SOFR", cik="0001838126")),
+    ]
+    for holding, printed in cases:
+        _, out = _run("reference_rate_printed", dict(unified=[holding], status=[printed]))
+        assert len(out) == 0
+
+
+def test_reference_rate_printed_is_limited_to_funds_that_name_the_column():
+    assert engine._named_reference_column_ciks() == ["0001812554"]
 
 
 def _pct_rule():
@@ -86,3 +184,26 @@ def test_income_identity_uses_net_expenses_where_the_fund_files_them():
     assert _income_rows([dict(q4, net_expenses=127_460_000.0)]) == [True]
     rule = next(r for r in engine.RULES if r.name == "income_identity")
     assert rule.optional_cols == ("net_expenses",)
+
+
+def _spread_holds(spread, margin):
+    import duckdb
+    import pandas as pd
+    member = "Inovalon Holdings, Inc. | Non-Affiliated Issuer"
+    rule = next(r for r in engine.RULES if r.name == "spread_printed")
+    con = duckdb.connect()
+    con.register("unified", pd.DataFrame([_holding("c1", member, "SOFR", spread=spread)]))
+    con.register("status", pd.DataFrame([_printed(member, "SOFR", margin=margin)]))
+    source = engine.printed_reference_sql("unified", "status", ["0001812554"])
+    gate = " AND ".join("TRY_CAST(%s AS DOUBLE) IS NOT NULL" % c for c in rule.needed_cols)
+    typed = ", ".join("TRY_CAST(%s AS DOUBLE) AS %s" % (c, c) for c in rule.needed_cols)
+    return [bool(r[0]) for r in con.execute(f"SELECT ({rule.holds_sql}) FROM (SELECT {typed} FROM {source} WHERE {gate})").fetchall()]
+
+
+def test_spread_printed_compares_the_published_spread_with_the_printed_margin():
+    # Inovalon first lien 2025-12-31: printed 'S+ | 2.75% | 2.75%' (5.50 in all); a published 2.75 is the cash part only
+    assert _spread_holds(2.75, "5.5") == [False]
+    assert _spread_holds(5.5, "5.5") == [True]
+    assert _spread_holds(6.25, "6.250") == [True]
+    # nothing to compare: no published spread, a margin that was not read, or an artifact without the column
+    assert _spread_holds(None, "5.5") == [] and _spread_holds(2.75, "") == [] and _spread_holds(2.75, None) == []

@@ -24,7 +24,7 @@ def load_encodings(wrapper_directory=None):
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
-                'reference_rate_columns','reference_rate_codes'}:
+                'reference_rate_columns','reference_rate_codes','printed_margin_reading'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -49,6 +49,10 @@ def load_encodings(wrapper_directory=None):
             if key=='reference_rate_codes' and not _codes_are_unambiguous(values):
                 raise ValueError('Reference rate code must read "CODE=BENCHMARK", optionally "to" or "from" a date, '
                     'with one meaning per code on any date: '+str(path))
+            if key=='printed_margin_reading' and values!=['cash_plus_pik']:
+                raise ValueError('The only admitted printed margin reading is cash_plus_pik: '+str(path))
+            if key=='printed_margin_reading' and not encoding.get('reference_rate_columns'):
+                raise ValueError('A printed margin reading needs reference_rate_columns: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
@@ -96,6 +100,12 @@ def reference_rate_reading(cik,encodings=None,report_date=None):
         if side is None or (day and (day<=bound if side=='to' else day>=bound)):
             codes[code.upper()]=name
     return {'columns':columns,'codes':codes}
+
+
+def printed_margin_funds(encodings=None):
+    """{cik10} whose wrappers set printed_margin_reading: the spread tag is the cash margin where the page prints cash and PIK apart."""
+    configured=load_encodings() if encodings is None else encodings
+    return {cik for cik,encoding in configured.items() if encoding.get('printed_margin_reading')}
 
 
 def _member_mapping(value):

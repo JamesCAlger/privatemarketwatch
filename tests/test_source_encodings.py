@@ -403,6 +403,8 @@ def test_reference_rate_reading_is_per_fund_and_normalised():
     {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR to 2024-03-31', 'C=CORRA to 2025-03-31']},
     {'reference_rate_columns': ['Interest'], 'reference_rate_codes': ['C=CDOR until 2024-03-31']},
     {'pik_only_tag_reading': ['margin', 'coupon']},
+    {'reference_rate_columns': ['Interest'], 'printed_margin_reading': ['sum']},
+    {'printed_margin_reading': ['cash_plus_pik']},                                # names no column to read
 ])
 def test_malformed_reference_rate_encoding_fails(tmp_path, encoding):
     (tmp_path / '0001812554.json').write_text(json.dumps({
@@ -421,3 +423,10 @@ def test_blue_owl_wrapper_names_its_reference_rate_column():
     assert 'C' not in reading['codes']
     assert source_encodings.reference_rate_reading(OWL, report_date='2024-03-31')['codes']['C'] == 'CDOR'
     assert source_encodings.reference_rate_reading(OWL, report_date='2024-06-30')['codes']['C'] == 'CORRA'
+
+
+def test_printed_margin_reading_is_set_for_blue_owl_alone():
+    # 10-Q 2024-09-30 prints Inovalon 'SR + 6.25% (2.75% PIK)' with a spread tag of 6.25; 10-K 2025-12-31 prints
+    # 'S+ | 2.75% | 2.75%' with a spread tag of 2.75
+    assert source_encodings.printed_margin_funds() == {OWL}
+    assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()

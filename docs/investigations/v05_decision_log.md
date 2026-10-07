@@ -546,3 +546,53 @@ No change. DS-005, DS-022 and DS-023 stand.
 - **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py owlref3 five16`.
 - **Applies to** Blue Owl only. Five-fund sandbox, full suite, semantic diff and any 70-fund
   build not run.
+
+### D-030 Three new ledger rules (owner: "add these to the ledger")
+
+- **Decision.** Added to the identity engine (`scripts/shadow_identity_engine.py`), tier tight:
+  1. `fourth_quarter_income`: a year-end quarter's total investment income must equal the annual
+     figure less the three quarters filed in that year's 10-Qs, within 2 pct. Silent where a year
+     lacks three filed quarters. Every fund.
+  2. `reference_rate_printed`: the published reference rate must be the code printed in the
+     filer's own column. Only funds whose wrapper names that column (Blue Owl).
+  3. `spread_printed`: the published spread must equal the total margin printed on the row, to
+     the second decimal. Same funds.
+- **Not added.** A non-accrual total check for Ares: the fund's stated non-accrual total is not
+  extracted, so there is nothing to compare with.
+- **Result, five-fund sandbox `five17` (rules 1 and 2 only).** 332 findings, 32 outstanding, all
+  from the new rules: `fourth_quarter_income` 19 (BCRED 4, Blue Owl 4, Ares 3, HPS 4, Apollo 4) and
+  `reference_rate_printed` 13 (Blue Owl, every quarter). Totals still match in 69 of 69
+  fund-quarters. The five funds are therefore not clear.
+- **Known cause of each.** Rule 1: the income table stores the annual figure divided by four
+  (`pipeline/bdc_fund_income.py`). Rule 2: reference rates inferred from the report date, which
+  the printed value does not replace (D-028). Neither is fixed.
+- **Applies to** rule 1 every fund: on a 70-fund build it will fire for each fund with a 10-K.
+
+### D-031 Blue Owl: a cash spread printed apart from its PIK margin is published as the total (owner: "go ahead")
+
+- **Finding.** The spread tag changed meaning. To 2024-12-31 Blue Owl prints
+  "SR + 6.25% (2.75% PIK)" and tags the total, 6.25. From 2025-03-31 it prints the cash margin and
+  the PIK margin in separate cells ("S+ | 2.75% | 2.75%") and tags the cash part, 2.75. Inovalon
+  first lien: published spread 6.25, then 2.75, while the printed margin went 6.25, 5.75, 5.50.
+- **Decision.** The page reader records `printed_margin` (new column of
+  `bdc_ixbrl_field_status.csv`): one figure as is, "A% (B% PIK)" as A, two cells as their sum,
+  anything else not read. Wrapper setting `printed_margin_reading: ["cash_plus_pik"]` (Blue Owl):
+  on a loan row tagged with a spread and a PIK rate, where the printed margin equals their sum
+  and not the spread alone, `basis_spread` becomes the sum, labelled
+  `basis_spread:cash_plus_pik_margin`. `pik_rate` is unchanged. The re-verifier replays the sum
+  from both facts.
+- **Result, sandbox `owlref4` (Blue Owl only) against `owlref3`.** 111 spreads changed, all from
+  2025-03-31 on (19, 23, 25, 22 and 22 rows a quarter; 1.2B to 2.3B). No other field changes.
+- **What the rule then found.** `spread_printed` compared 6,690 rows; 6 disagree, in 4
+  fund-quarters. Kaseya delayed draw and revolver (2023-06-30 to 2023-12-31): printed
+  "SR + 6.25% (2.50% PIK)", spread tag 2.5. CivicPlus delayed draw (2024-06-30): printed
+  "SR + 5.75% (2.50% PIK)", spread tag 2.5. The filer tagged the PIK part as the spread. Left
+  open: a row correction from the printed line is the fix.
+- **Blue Owl ledger after this.** 84 findings, 21 outstanding: `reference_rate_printed` 13,
+  `fourth_quarter_income` 4, `spread_printed` 4.
+- **Not covered.** A printed form the reader does not know is not read and not compared (3 of
+  6,693 rows). The published artifact predates the new column and status; it must be re-read
+  before a real build uses any of this.
+- **Re-run.** `python scripts/v05_evidence/owl_ref_rate.py owlref4 owlref3`.
+- **Applies to** Blue Owl only. The five-fund sandbox was not re-run after this change; the other
+  four funds do not have the setting.

@@ -594,6 +594,13 @@
           "items": {"type": "string", "pattern": "^[A-Za-z]{1,8}=[A-Z]{2,12}( (to|from) [0-9]{4}-[0-9]{2}-[0-9]{2})?$"},
           "description": "Codes this filer prints in its reference-rate column that the shared table does not know, as CODE=BENCHMARK (SR=SOFR). Take them from the filing's own legend. A code whose meaning changed is entered twice, once 'to' the last report date of the old meaning and once 'from' the first of the new (C=CDOR to 2024-03-31, C=CORRA from 2024-06-30); the loader refuses overlapping entries."
         },
+        "printed_margin_reading": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "cash_plus_pik"},
+          "description": "Set where the filer prints the cash margin and the PIK margin in separate cells and tags the spread with the cash part only (Blue Owl from 2025-03-31; earlier filings print 'A% (B% PIK)' and tag the total A). Needs reference_rate_columns. On a loan row tagged with a spread and a PIK rate, where the printed total equals their sum and not the spread alone, the published basis_spread is the sum (transform basis_spread:cash_plus_pik_margin); pik_rate is unchanged. Evidence required: printed lines in both forms for one loan, with the tagged values."
+        },
         "foreign_unit_values": {
           "type": "array",
           "minItems": 1,
