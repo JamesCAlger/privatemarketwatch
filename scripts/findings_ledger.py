@@ -47,7 +47,7 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline import finding_dispositions  # noqa: E402
+from pipeline import disposition_validity, finding_dispositions  # noqa: E402
 from scripts.check_tier_coverage import VERDICT_DIRS, load_verdict  # noqa: E402
 
 DEFAULT_QUEUE = ROOT / "data" / "output" / "review_queue" / "review_queue.csv"
@@ -189,7 +189,7 @@ def build_ledger(
     wrapper_dir: Path = DEFAULT_WRAPPERS, verdict_dirs=VERDICT_DIRS,
     seed_paths: Iterable[Path] = (), quarter: str | None = None,
     manifest_path: Path | None = None, closure_mode: bool = False,
-    dispositions_dir: Path | None = None,
+    dispositions_dir: Path | None = None, validity_path: Path | None = None,
 ) -> list[dict]:
     """Build the lifecycle ledger.
 
@@ -223,6 +223,8 @@ def build_ledger(
     pulled_ids = _leaf_review_ids(Path(archive_dir)) - promoted_ids - staged_ids
 
     dispositions = finding_dispositions.load(dispositions_dir)
+    # Carry-forward checks that passed on this build; without the file no entry leaves its listed quarters.
+    validity_passes = disposition_validity.load_passes(validity_path)
     ledger = []
     universe = set(queue_rows) | set(seed_rows)
     # In scoped closure mode, do not accidentally pull every historic verdict into
@@ -242,7 +244,7 @@ def build_ledger(
         # A standing disposition closes a finding that is still unresolved.
         disposition = finding_dispositions.match(
             dispositions, cik=q.get("cik"), engine=q.get("engine"),
-            rule_name=q.get("rule_name"), report_date=q.get("report_date"))
+            rule_name=q.get("rule_name"), report_date=q.get("report_date"), passes=validity_passes)
         if disposition is not None and finding_dispositions.closes(disposition, state):
             state = finding_dispositions.STATE_BY_CLASS[disposition["class"]]
         else:
@@ -250,6 +252,9 @@ def build_ledger(
         ledger.append({
             "review_id": rid, "state": state, "in_queue": rid in queue_rows,
             "disposition_id": disposition["disposition_id"] if disposition else "",
+            "disposition_basis": ("" if not disposition else "listed" if (
+                "all" in disposition["quarters"] or str(q.get("report_date") or "")[:10] in disposition["quarters"])
+                else "carried_forward"),
             "population_origin": ("frozen_and_live" if rid in queue_rows and rid in seed_rows
                                   else "live" if rid in queue_rows else "frozen"),
             "verdict_status": vstatus, "verdict_detail": vdetail,
@@ -340,13 +345,16 @@ def main(argv=None) -> int:
     ap.add_argument("--quarter", default=None, help="restrict to report_date")
     ap.add_argument("--manifest", type=Path, default=None,
                     help="restrict to manifest CIKs")
+    ap.add_argument("--validity", type=Path, default=None,
+                    help="disposition carry-forward results (pipeline.disposition_validity); "
+                         "without it no disposition reaches a quarter it does not list")
     ap.add_argument("--closure-mode", action="store_true",
                     help="fail closed on frozen absence and missing B1 fix routes")
     args = ap.parse_args(argv)
 
     ledger = build_ledger(queue_path=args.queue, seed_paths=args.seed,
                           quarter=args.quarter, manifest_path=args.manifest,
-                          closure_mode=args.closure_mode)
+                          closure_mode=args.closure_mode, validity_path=args.validity)
     summary = write_ledger(ledger, args.out, compare_path=args.compare,
                            closure_mode=args.closure_mode)
     print(json.dumps(summary, indent=2))

@@ -673,3 +673,425 @@ wrappers fit the wrapper schema; CSV and Parquet copies match in 9 of 9 artifact
 - 271 of 299 findings are closed by a recorded disposition, not by a fix.
 - Nothing here is in the published data; the published field-status artifact predates the new
   column and status. No quarter outside the development sample has been run.
+
+## 2026-10-07 / 08: printed-page rate checks extended to the other four funds; first out-of-sample quarter
+
+Owner in session: "extend the printed-page rate checks to the other four funds"; "yes, download Q2 2026
+for the five funds"; "download companyfacts for Q2 too"; "hold out: yes. timing: run it after five19.
+then start fixing". Sandboxes: `five19` (four funds added, no fix), `q2a` (Q2 added, no fix: the
+held-out first reading), `q2e` (all fixes below). Code at 6bae284 plus uncommitted changes.
+
+### D-037 The four funds name their reference-rate column
+
+- **Decision.** Wrapper settings, from each fund's printed schedule and legend:
+  - BCRED and HPS: column "Reference Rate and Spread" (code cell, then margin cell).
+  - Ares: column "Reference" ("SOFR (Q)"), margin in the "Spread" column after it.
+  - Apollo: column "Interest Rate", code and margin in one cell ("S+625, 0.50% Floor").
+- **Codes from the legends.** BCRED: S = SONIA (the shared table reads S as SOFR), C = CDOR,
+  CA = CORRA, ST = STIBOR, CI = CIBOR, N = NIBOR, SA = SARON, B = BKBM, BB = BBSY, F = Fed Funds.
+  HPS: SN = SONIA, ST, N, TN = TONA, SORA; C = CDOR to 2025-03-31 and CORRA from 2025-06-30;
+  B = BBSW to 2024-09-30 and BBSY from 2024-12-31 (read in all 13 filings). Ares: CDOR, NIBOR,
+  BBSY, BKBM, TONA. Apollo: C = CORRA, BBSW.
+- **Reader.** `printed_margin` reads three more forms: "A% (incl B% PIK)"; a "Spread" column
+  after the reference; basis points after the code in the named cell ("S+325 Cash plus 3.00% PIK"
+  is 6.25). A filer's code may carry its reset period ("CDOR (Q)") or lead the cell ("C+525").
+- **Not read.** Ares "Base Rate" (the legend says "commonly based on the Federal Funds Rate or the
+  Prime Rate": no single benchmark); Apollo fixed coupons in that column; BCRED "Estimated Yield".
+- **Result, `five19` against `five18`, no fix.** 343 findings, 44 outstanding, all from the two page
+  rules on the four funds. Fair value unchanged on every row.
+- **Re-run.** `python scripts/v05_evidence/printed_rate_shapes.py five18 <cik> "<header>"`;
+  `python scripts/v05_evidence/printed_rates_check.py five19 five18`.
+
+### D-038 A printed code replaces a reference rate read from the label; a guess is withdrawn where the page prints none
+
+- **Finding.** For BCRED, Ares and HPS nearly every published reference rate was a guess from the
+  report date (SOFR from July 2023, LIBOR before), so non-dollar loans were published as SOFR.
+- **Decision.** For a fund that names its column: (1) the confirmed printed code replaces a
+  reference rate whose source is `identifier_text` as well as `inferred_*`; a tagged rate is never
+  replaced. (2) Where the column prints no reference rate, a guessed one is withdrawn and the
+  loan's coupon type becomes Fixed. (3) `reference_rate_printed` now also fails a published
+  reference rate on a row whose column prints none.
+- **Evidence for (1).** BCRED "Prime Security Services Borrower, LLC" and Ares "Prime Buyer,
+  L.L.C." were read as PRIME from the borrower's name; pages print SOFR or LIBOR. Apollo 10-Q
+  2023-03-31, Garda World: the member reads "L+425", the current-period line prints "S+ 425" (the
+  "L+ 425" line is the comparative schedule).
+- **Re-run.** `python scripts/v05_evidence/printed_rates_rows.py five19 <cik> reference`.
+
+### D-039 A spread tag on a loan printed with no reference rate is the fixed coupon
+
+- **Finding.** Withdrawing the guesses exposed 33 fund-quarters of X04 ("Fixed coupon row has
+  basis_spread"). The filers tag the fixed coupon under the spread concept.
+- **Decision.** For a fund that names its column, on a loan row whose column prints no reference
+  rate: a spread equal to the filed rate is not published (`basis_spread:fixed_coupon`); where no
+  rate is filed the spread figure is published as the rate (`interest_rate:from_spread_tag`) and
+  not as a spread, unless the fund's filed rate is read as the cash leg (no v0.5 fund). A spread
+  that differs from a filed rate is left alone: tags and page disagree. `provenance_reverify`
+  replays both labels from the spread fact.
+- **Evidence.** BCRED 10-Q 2022-09-30 "Altice Financing S.A. | 5.75 % | 5.75 %"; 10-Q 2023-03-31
+  "AI Altius Bidco, Inc. | 9.75 % | 9.75 % PIK". HPS 10-Q 2025-03-31 "Alliant Holdings Intermediate
+  LLC | 6.75 % | 6.75 %"; 10-Q 2024-06-30 "Eagle LNG Partners Jacksonville II LLC | 13.50 % (incl
+  6.35 % PIK)". Blue Owl 10-Q 2023-03-31 "Aptive Environmental, LLC | 12.00 % ( 6.00 % PIK)".
+- **This is a data choice made without an owner ruling.** It follows X04 and the all-in rate
+  convention, and is switched by the wrapper, but it moves a filed figure from one published
+  field to another on 109 rows and removes a published spread on 373.
+
+### D-040 Row corrections from the printed line (13 rows)
+
+- Ares 10-Qs 2025-03-31 and 2025-06-30, Clarion (two loans), Equinox, SelectQuote: the spread
+  fact holds the coupon and no rate is filed ("12.40 % ( 7.00 % PIK) SOFR (Q) 8.00 %").
+- Ares 10-K 2023-12-31, PSC Group loans 2 to 5: rate and spread facts sit one loan down.
+- Apollo 10-Q 2024-06-30 Curia ("S+ 38 5", spread fact 0.0038) and 10-Q 2026-03-31 OMH-Healthedge
+  (label "S+450", spread fact 0.005).
+- **Re-run.** `python scripts/v05_evidence/make_row_corrections.py q2e` (reports 0 to add).
+
+### D-041 One member on two printed rows confirms only what both rows print
+
+- **Finding.** Where two tranches share one member (BCRED 2022-09-30 "Cloudera, Inc." first lien
+  L + 3.75 % and second lien L + 6.00 %; HPS 2026-03-31 Sedgwick), the page reader kept the first
+  row for both. The second tranche was compared with, and took lien and maturity from, the wrong
+  line (HPS Sedgwick second lien was published as First Lien, 2031-07-31; the page prints second
+  lien, 2032-07-30). Members that differ only in case are one key ("athenahealth" / "Athenahealth").
+- **Decision.** For a fund that names its column, a field of such a member is confirmed only where
+  all its rows print the same value; otherwise that field is not read from the page.
+- **Cost.** Lien is no longer published on about 20 rows (HPS 10, BCRED 10) and maturity on 86 rows of such members.
+- **Not covered.** Funds that name no column keep the old behaviour. Keying the artifact by
+  context would read both rows correctly; not built.
+
+### D-042 Apollo: cash plus PIK is published as the total margin
+
+- **Decision.** `printed_margin_reading: ["cash_plus_pik"]` for Apollo (as Blue Owl, D-031).
+- **Evidence.** 10-Q 2025-06-30 prints "S + 610 Cash plus 9.77 % PIK"; spread tag 6.1, PIK tag 9.77.
+  107 of 109 spread disagreements were this sum.
+- **Left open.** Material Holdings then publishes a spread of 15.87 at 2025-06-30 and 2025-09-30,
+  outside the range checks (C115, fmt_basis_spread: 4 findings). It is what the page prints.
+
+### D-043 First out-of-sample quarter: 2026-06-30
+
+- **Download.** Five 10-Qs (XBRL and HTML) and five companyfacts files, owner-approved, through
+  the rate-limited client; `scripts/download_quarter_filings.py`, `scripts/download_companyfacts.py`.
+  The companyfacts files replaced the live cache copies (backups in
+  `data/raw/filings/quarter_downloads/companyfacts_2026-06-30/before`). The published filings index
+  is unchanged; `scripts/sandbox_add_quarter.py` adds the quarter to a sandbox only.
+- **First reading, `q2a`, nothing fixed.** Published equals filed investments to 0.0M for all five
+  funds (Apollo's two money-market funds, 407.9M, are printed after "Total Investments before Cash
+  Equivalents" and classed as cash). 27 findings at the quarter: 6 cleared by standing
+  dispositions, 21 open. Rows and fair value of every earlier quarter identical to `five19`.
+- **What did not carry.** (1) Dispositions and row corrections tied to listed quarters: 15 of the
+  21. (2) Ares changed its member format (D-044). (3) Three row-level items read on the Q2 page and
+  corrected: Blue Owl Amergin (class), HPS OneTeam (preferred), Blue Owl KWOR (cost fact in EUR).
+- **Re-run.** `python scripts/v05_evidence/new_quarter_reading.py q2a five19 2026-06-30`.
+
+### D-044 Ares: the member is "Issuer | Instrument" from 2026-06-30
+
+- **Finding.** 1,431 of 1,439 Ares members at 2026-06-30 use a pipe; before, a comma. The wrapper
+  cut the name at the last comma, so "Kellermeyer Bergensons Services, LLC and KBS TopCo, LLC |
+  Class A common units" became issuer "...KBS TopCo". Totals and classes were unaffected; only
+  27.3 pct of issuers matched the quarter before. Rule D06 caught it.
+- **Decision.** The Ares wrapper's issuer and instrument patterns accept both forms.
+- **Result.** 93.6 pct continuity at 2026-06-30; 0 of 18,341 earlier rows change issuer or instrument.
+- **Re-run.** `python scripts/v05_evidence/ares_member_format.py q2e five19`.
+
+### State after `q2e`
+
+331 findings, 27 outstanding (12 before 2026-06-30, 15 at it). Published equals filed in 74 of 74
+fund-quarters. Outputs and the five wrappers fit their schemas (`schema_fit.py q2e`).
+Changes to rows up to 2026-03-31 against `five18` (`printed_rates_effect.py q2e five18`):
+
+| Change | BCRED | Blue Owl | Ares | HPS | Apollo |
+|---|---|---|---|---|---|
+| Date-guessed reference rate replaced by the printed code | 2,280 | 0 | 1,719 | 1,138 | 74 |
+| Label-read reference rate replaced by the printed code | 13 | 0 | 7 | 0 | 22 |
+| Guessed reference rate withdrawn | 275 | 41 | 1 | 63 | 0 |
+| Fixed coupon no longer published as a spread | 275 | 40 | 0 | 58 | 0 |
+| Rate published from that spread tag | 64 | 40 | 0 | 5 | 0 |
+| Cash plus PIK published as the total margin | 0 | 0 | 0 | 0 | 107 |
+| Fair value changed | 0 | 0 | 0 | 0 | 0 |
+
+**Open, for the owner**
+
+1. **BCRED loses lien position on 3,304 rows (2022-09-30 to 2024-06-30) when its pages are
+   re-read.** Not caused by these changes; exposed by them, since they need the re-read. The lien
+   gate in `extract_bdc_ixbrl_field_status` takes only `lien_only` rows of `bdc_lien_breakdown.csv`
+   whenever any exist in the file. For BCRED those quarters hold one such row (Unsecured, about
+   36M, and twice, under cik `1803498` and `0001803498`), the page has no matching tier, and the
+   whole filing's lien is withheld. From 2024-09-30 BCRED has no `lien_only` row and passes with
+   no check at all. A gate on the complete grain would fail too: the page sum includes the JV
+   schedules (First Lien 51.0B on the page, 45.1B filed at 2023-12-31). No rule flags the loss.
+   `python scripts/v05_evidence/lien_gate.py q2e 0001803498`. Ares also loses lien on 7 rows on the
+   re-read; cause not traced. **Fix before any promotion.**
+2. **15 findings at 2026-06-30** (X02 and X06 for Ares, BCRED, Blue Owl, HPS; C107 for Apollo and
+   HPS; HPS C103 and X07 Thrasio; Blue Owl SRC_BDC01, source reconciliation and FX03). The earlier
+   quarters' evidence scripts give the same picture on Q2 (negative cost filed on every row; deep
+   markdowns, the same borrowers in Ares and BCRED; unfunded-commitment rows). Proposed: the same
+   dispositions. Not accepted by me: last session's permission was for that run.
+3. **Blue Owl Aptive, 7 quarters:** a rate of 12.0 with a PIK rate of 6.0 is now published and the
+   fund declares no filed-rate reading, so `financial_convention_unresolved` fires. The page
+   prints "12.00 % ( 6.00 % PIK)": all-in. `rate_convention.csv` records Blue Owl as cash leg.
+4. **Apollo Material Holdings spread 15.87** (D-042): 4 range findings; as printed.
+5. **Ares UP Intermediate revolver, 2025-09-30:** rate 8.75 and spread 4.75 are tagged on a line
+   the page prints with no rate (they are the term loan's). One finding; fair value 0.0M.
+6. **D-039** is a data choice applied without a ruling.
+7. **Ares "Base Rate" loans** (about 250 rows in five filings sampled) keep a guessed SOFR.
+
+**What this does not show.** The page rules compare a row only where the reader confirmed the
+cell; unread rows are not compared. A row keyed to the wrong printed line by a shared member is
+excluded, not checked. One out-of-sample quarter is one observation.
+
+## 2026-10-08 (later): two rule defects, Blue Owl equity labels, dispositions that carry forward
+
+Owner in session: "yes, start on step 1 and 2" (step 1: fix the two rule defects and the
+misclassified Blue Owl rows; step 2: make dispositions carry forward with a validity check).
+Sandbox `q2f` (inputs of `q2e`, rebuilt from the holdings stage). Uncommitted.
+
+### D-045 Two rules fired on rows that are not their subject
+
+- **X02** (credit row with no rate and no spread) fired on stakes in credit vehicles, which carry
+  no coupon. At 2026-06-30: Ares Ivy Hill member interest 1,897M, Blue Owl OCIC SLF 261M, BCRED
+  Muzinich LP interest 29M. **Decision:** the rule skips rows with asset category FUND or index
+  class PRIVATE_CREDIT_FUND. Shared rule, all funds; it narrows a check and changes no data.
+- **SRC_BDC01** (source row with no published position) fired on every blocking row of the
+  reconciliation detail, including rows the reconciliation's own second pass documents as totals,
+  headers or wrapper-named rollups ("Total non-controlled/affiliated - debt commitments").
+  **Decision:** the rule skips a source row that pass marks non-blocking. A row it does not list
+  fires as before.
+- **Result.** BCRED X02 gone at 2025-12-31 and 2026-03-31 and not raised at 2026-06-30; SRC_BDC01
+  gone at Blue Owl 2025-06-30 and Apollo 2024-03-31, 2024-06-30, 2025-03-31.
+- **Tests.** `tests/test_column_validation.py` (one false-positive and one still-fires case each).
+
+### D-046 Blue Owl: equity printed under labels no keyword knows
+
+- **Finding.** X02 flagged "Blue Owl Credit SLF LLC | LLC interest" (90.6M), "Blue Owl Leasing LLC |
+  LLC Interest" (1.9M) and "Valor CI Blocker Feeder LP | Investment partnership" (10.3M) as loans
+  with no rate. The 10-Q for 2026-06-30 prints Valor in the equity section ("Investment partnership
+  N/A N/A 9,912 - 9,640 10,345"). The filer tags the unit count as a principal, and the field
+  heuristic reads a principal as a loan. A blanket "as filed" disposition of X02 would have
+  buried all three.
+- **Decision.** New wrapper setting `equity_instrument_labels` (exact instrument description,
+  consulted after every keyword and before the field heuristic), set for Blue Owl to "LLC
+  interest" and "Investment partnership". A shared keyword was rejected: on the published
+  holdings it would touch about 170 loan or unclassified rows in 20 funds, some of them real
+  loans ("... LLC Interest Rate ...").
+- **Side effect found and fixed.** The first run dropped the Valor row (Blue Owl 10.3M below its
+  filed total at 2026-06-30). An equity row publishes no principal, so the row reached the fund's
+  roll-forward exclusion rule with no quantity and no instrument phrase the rule knew. The rule's
+  phrase list now includes "investment partnership". The carry-forward check of D-047 caught the
+  drop (published differs from filed by -10.3M).
+- **KWOR cost.** The correction of D-043 set the cost, but the cost's unit stayed EUR and a cost
+  whose unit is not the dollar is withheld. Row corrections may now set `cost_currency`; one row
+  added. Cost 6,675,000 is published and FX03 no longer fires.
+- **Result against `q2e`** (`python scripts/v05_evidence/holdings_field_diff.py q2f q2e`): 5 Blue
+  Owl rows move from loan to common equity (and lose the "principal" that was a unit count); 1
+  cost; 1 new row at zero value (Valor's unfunded commitment line); 89 of 99 columns identical on
+  every row. Published equals filed in 74 of 74 fund-quarters.
+- **Left open.** The unit count of those rows is not published (it is tagged as a principal).
+  Blue Owl's share of equity rows with units at 2026-06-30 falls from 73.5 to 69.4 pct, under the
+  oracle's 70 pct line, so C04 now fires there.
+
+### D-047 A disposition reaches a new quarter only through a check that passes
+
+- **Problem.** 15 of the 21 open findings at 2026-06-30 were patterns accepted for earlier
+  quarters. Entries list their quarters, so none carried; the alternative on offer was accepting
+  them again by hand each quarter.
+- **Decision.** An entry may carry `carry_forward: {from, check, params}`. It covers a quarter on
+  or after `from` only when the named check passed on that fund-quarter's own outputs
+  (`pipeline/disposition_validity.py`; the sandbox runs it before the ledger). No recorded pass,
+  no cover. The ledger marks each closure `listed` or `carried_forward`. `make_dispositions.py`
+  no longer lists a quarter after 2026-03-31.
+- **Checks.** `values_as_filed` (C107 cost, C103 fair value, X06 principal and fair value): every
+  flagged row publishes the field as the filed fact, per the provenance re-verifier.
+  `no_rate_in_source` (X02): every flagged row has no rate or spread fact and is undrawn (value
+  at or below zero), on non-accrual, or publishes a PIK rate. `missing_source_rows_known` (Blue
+  Owl SRC_BDC01 and source reconciliation): every blocking source row matches a named pattern and
+  published equals filed within 0.5M. The two Blue Owl patterns are the footnote on BOCSO's own
+  portfolio ("five investments totaling $1.25 billion and $1.24 billion at cost and fair value
+  ... ranging ... from $24.9 million to $450.6 million") and the issuer lines of the
+  controlled-affiliates table ("Notorious Topco ... 126,405", the sum of its four published
+  positions). DS-016 called these "issuer-level or subtotal rows"; for BOCSO that was loose.
+- **Result at 2026-06-30** (`q2f`): 10 findings closed by a passing check (C107 Apollo and HPS; X06
+  Ares, BCRED, Blue Owl, HPS; C103 HPS; X02 Blue Owl; Blue Owl SRC_BDC01 and source
+  reconciliation). Two checks failed and their findings stay open: HPS X02 (7 funded rows, 2.0M,
+  no rate fact) and Ares X02 ("Axiomatic, LLC | First lien senior secured notes", 0.1M).
+- **The same checks on the quarters already accepted** (not reopened; a measure of the old
+  entries): `values_as_filed` passes 77 of 77 fund-quarters. `no_rate_in_source` passes 10 of 46:
+  HPS 0 of 14 (184 rows, 40.7M), Ares 3 of 16 (33 rows, 643.9M), Blue Owl 7 of 14 (8 rows,
+  66.8M), Apollo 0 of 2 (2 rows, 95.5M, the Spirit Aerosystems loan DS-006B documents). So the
+  X02 "as filed" entries cover rows their stated reason does not explain. They need a row-level
+  reading against the printed page; another session found two wrong ones at Ares.
+- **Limits.** `values_as_filed` proves the published figure is the filed one, not that the filed
+  one is sensible; it will keep closing C107, C103 and X06 for these funds until a flagged value
+  stops being a filed fact. The X02 check does not read the printed page. A check that passes
+  closes the finding without a person looking; the owner approved the mechanism, not each
+  closure.
+- **Tests.** `tests/test_disposition_validity.py` (8), `tests/test_finding_dispositions.py`.
+
+### State after `q2f`
+
+325 findings, 17 outstanding (12 before 2026-06-30, 5 at it). Published equals filed in 74 of 74
+fund-quarters. Wrappers fit the schema.
+
+At 2026-06-30:
+
+| Finding | What it is | Proposed |
+|---|---|---|
+| HPS X07 | Thrasio LLC loan, value 300 against cost 8 (thousands) | As filed: the page prints "SF + 8.00 % 12.01 % 6/18/2029 300 8 300" and the industry cost total 24,258 is 24,250 + 8. Needs the owner's acceptance. |
+| HPS X02 | 7 funded rows with no rate fact (2.0M) | Read on the page |
+| Ares X02 | Axiomatic first lien notes, 0.1M, no rate fact | Read on the page |
+| Apollo B01 | 99 of 1,649 position contexts with no fair value fact | Same pattern as DS-010; no check written for it |
+| Blue Owl C04 | 69.4 pct of equity rows carry units (line is 70) | Publish the unit count tagged as principal (D-046) |
+
+**The first reading of 2026-06-30 was short by at least one finding.** In `q2a` to `q2e` the
+oracle did not evaluate its per-quarter checks for Apollo at 2026-06-30 (58 lines of the oracle
+log name the quarter, against 77 in `q2f`, which re-ran the same inputs from the holdings stage).
+Apollo B01 at 2026-06-30 fails in `q2f` and was absent before. Cause not traced: the oracle seems
+to take its quarters from an output of an earlier pass. A first pass on a new quarter may
+under-report until this is understood.
+
+Open items 1 and 3 to 7 of the previous entry stand unchanged (BCRED lien, Blue Owl Aptive,
+Apollo Material, Ares UP Intermediate, D-039, Ares "Base Rate").
+
+## 2026-10-08 (evening): the oracle's stale input, Thrasio, and the old X02 rows read on the page
+
+Owner in session: "yes to all three" (accept Thrasio as filed; read the old X02 rows against the
+printed pages, HPS and Ares first; trace the oracle under-reporting before other Q2 work).
+Sandbox `q2g` (inputs of `q2f`, rebuilt from the holdings stage). Uncommitted.
+
+### D-048 The oracle read the previous build's reconciliation
+
+- **Finding.** Oracle checks A01, B01, B07 and E07 read `source_reconciliation_detail.csv`. The
+  validate stage writes that file, and both the sandbox and `scripts/run_quarter_pass.py` run the
+  oracle before validate. So those four checks always described the previous build, and on the
+  first pass with a new quarter they skipped it: in `q2a` to `q2e`, 58 oracle lines name
+  2026-06-30; with the file in place, 77. The 19 missing lines were A01 for four funds and B01,
+  B07 and E07 for all five.
+- **Decision.** The sandbox runs the oracle after validate. `pipeline/oracle_runner.py` logs
+  "STALE INPUT" when the detail file is older than the holdings.
+- **Not changed.** The quarter pass has the same order (`rebuild -> oracle -> nonaccrual ->
+  validate`, and again in the post round). Every oracle result of those four checks in a past
+  quarter pass describes the build before the one it was reported for. Reordering the pass is the
+  owner's call; the warning now shows in its oracle log.
+- **Result.** `q2g`: 77 lines for 2026-06-30, no stale warning. One finding the first reading
+  missed: Apollo B01 (99 of 1,649 position contexts with no fair value fact).
+
+### D-049 Old "as filed" X02 entries, read on the printed page
+
+`python scripts/v05_evidence/x02_page_read.py q2f <cik>` prints, for each X02 row the entry's
+reason does not explain, the printed line found by issuer and value.
+
+- **Ares, 33 rows in 13 quarters (643.9M), accepted under DS-006A.**
+
+  | What the page shows | Rows | Fair value | Done |
+  |---|---|---|---|
+  | No rate printed (marked-down loans; the data carries no non-accrual flag for them) | 17 | 236M | As printed. Stay under DS-006A. |
+  | A rate is printed and none was published | 9 | 288M | 4 corrected; 4 cannot be (below); Centric Brands 2022-09-30 ("11.80 % PIK SOFR (Q) 9.00 %", 71.2M) not yet corrected |
+  | The value is an equity line; the filer's member names a loan | 5 | 113M | Corrected to the printed instrument and class |
+  | Not found by name and value | 2 | 7M | Murchison 6.7M (cost 0), Viant 0.5M |
+
+  Counts by my reading of 33 printed lines; the fair values are sums of the rows as published.
+- **Rates corrected (4 rows):** HPCC Parent 2024-12-31 (13.00, PIK 7.00); Sunrun Xanadu
+  2022-09-30 (10.43, PIK 2.77, spread 6.75); The Hiller Companies 2025-09-30 (9.05, spread 4.75);
+  Imaging Business Machines 2025-09-30 (14.00, PIK 7.00: the published PIK rate was 14.0, the
+  whole coupon).
+- **Not correctable by a row correction (4 rows, 51.6M):** Rawlings loan 2 and Infinity Home
+  Services loan 3 at 2025-03-31 and 2025-06-30 print a rate but are among the eight positions
+  restored from the issuer-name axis (D-018), built after row corrections apply. The fix belongs
+  in that restoration.
+- **Equity under a loan member (5 rows):** in the 10-Qs for 2025-09-30, 2025-12-31 and 2026-03-31
+  a member reading "... First lien senior secured loan" carries the units, cost and value of an
+  equity line of the same issuer (Implus Footcare common units 42.1M; Bragg Live Food common
+  units 22.3M; ID.me Series E preferred 16.0M; Ardonagh LP interest 26.3M; APG class A units
+  6.3M). The numbers were right; the instrument and class were not. Corrected by row.
+  A published loan with a unit count, no principal and no rate is the signature; Ares has no
+  other such row above 0.1M outside 2023-06-30 (two rows there carry a rate and were not read).
+- **HPS, 184 rows (40.8M), accepted under DS-006.** The 45 largest read on the page: undrawn
+  lines printed with par, a negative cost, a small positive value and no rate ("7/22/2031 43,333
+  ( 202 ) 433"), plus rows of the joint-venture schedule, which are not published. **Decision:**
+  the X02 check counts a negative cost as undrawn. HPS then passes at 2026-06-30 and in 6 of 14
+  quarters; the 24 rows left (17.8M) are JV-schedule rows with no cost fact, and three funded
+  positions printed with no rate (SLF V AD1 8.1M, Southern Graphics 2.3M twice).
+- **Blue Owl and Apollo** (8 and 2 rows): not read in this pass. Blue Owl's are the Aptive rows
+  of the open rate-reading question and one KOBHG "Class A Interests" row; Apollo's is the Spirit
+  Aerosystems loan DS-006B documents.
+- **What this says about the old entries.** For Ares, 14 of 33 rows accepted "as filed" were not:
+  the page had a rate, or the row was equity. They were closed without a row-level read.
+
+### D-050 Thrasio LLC, HPS 2026-06-30: as filed (owner)
+
+X07 flags a loan worth more than ten times its cost. The page prints "Thrasio LLC ... SF + 8.00 %
+12.01 % 6/18/2029 300 8 300" and the industry cost total 24,258 is 24,250 plus 8. Owner accepted
+in session. Entry DS-029, listed for 2026-06-30 only, no carry-forward.
+
+### State after `q2g`
+
+325 findings, 15 outstanding (12 before 2026-06-30, 3 at it). Published equals filed in 74 of 74
+fund-quarters. Against `q2f` (`holdings_field_diff.py q2g q2f`): 9 Ares rows change (5 class and
+instrument, 4 rate); no other fund, no row added or lost.
+
+At 2026-06-30: Ares X02 (Axiomatic notes, 0.1M, printed with no rate; needs acceptance), Apollo
+B01 (same pattern as DS-010; no check written), Blue Owl C04 (D-046).
+
+Before 2026-06-30, unchanged: Blue Owl Aptive 7, Apollo Material Holdings 4, Ares UP Intermediate 1.
+Open items of the earlier entries stand (BCRED lien loss first).
+
+## 2026-10-08 (night): the lien reader and its gate; the quarter pass order
+
+Owner in session: "do all 3" (reorder the quarter pass; fix the BCRED lien loss; commit).
+Sandbox `q2h` (inputs of `q2g`, pages re-read, rebuilt from the holdings stage).
+
+### D-051 BCRED lien: three defects in the page reader and its gate
+
+The open item was "re-reading BCRED's pages withholds lien on 3,304 rows". The cause was wider.
+
+- **The gate's reference was wrong.** It read `bdc_lien_breakdown.csv`, chose one grain for the
+  whole file, and summed a fund's rows under both spellings of its CIK. For BCRED that left one
+  stray tier (Unsecured, about 36M, counted twice) as the fund's whole breakdown; for Apollo and
+  HPS it left nothing, so they passed with no check. The fuller grain is not a good reference
+  either: at 2025-09-30 it holds Second Lien 2,216M where the page prints "Total Second Lien Debt
+  ... 3,129,503".
+- **The reader mislabelled rows.** It knew a fixed list of section headings. BCRED's "Structured
+  Finance Obligations" and "Equity and other" were not on it, so their rows kept the last lien
+  heading: at 2025-09-30, 263 rows read as Unsecured (first of them a CLO tranche) against a
+  printed Unsecured total of 87.5M, and equity units read as Second Lien. Headings with an
+  affiliation suffix ("First Lien Debt - controlled/affiliated") and the 10-Q for 2025-03-31
+  ("First Lien", "Second Lien") were not recognised either. Outside a section the reader fell
+  back to words in the row ("Subordinated Notes" of a CLO).
+- **One tier withheld every tier.** HPS 2025-09-30: First Lien 24,152M on the page rows against
+  a printed 24,171M, withheld with the rest because one 25M second-lien position was not read.
+- **Decision.**
+  1. A lien section ends at its own total row ("Total Second Lien Debt"); a heading the reader
+     does not know can no longer inherit it. Two headings added; "Debt" optional; an affiliation
+     suffix is part of the heading. In a schedule laid out in lien sections, the row's words are
+     not a lien tier.
+  2. The gate's reference is the page's own section totals (the tagged fair value on the total
+     row, in the current period), where the page prints them. The filed breakdown is the
+     fallback: distinct rows, and per fund-quarter the grain with the most fair value.
+  3. The withhold is per tier.
+  All in the shared reader. It changes published data only where a fund's page artifact is
+  re-read; measured on the five funds only.
+- **Result, BCRED** (`python scripts/v05_evidence/lien_gate.py q2h 0001803498 <quarter>`): the
+  page rows tie to the page totals in 14 of 16 quarters, to the dollar in the ones checked by hand
+  (2024-03-31 First Lien 52,802.2M, Second Lien 1,552.0M, Unsecured 26.4M; 2025-03-31 68,798.3M,
+  3,037.3M, 126.9M). Against `q2g`: 4,581 rows gain a tier (4,357 First Lien), 528 change tier
+  (520 Second Lien to First Lien), 205 lose a wrong one (146 Unsecured, 59 Second Lien). Loans
+  without a tier are 5 to 9 pct of BCRED's loans in those 14 quarters.
+- **Still withheld: BCRED 2022-09-30 and 2022-12-31** (992 of 1,034 and 1,276 of 1,277 loans
+  without a tier). Those filings use one member for several printed rows, so the rows read cover
+  37.6B of a printed 49.7B First Lien at 2022-12-31. The gate is right to fail; the reader cannot
+  tie a row to its tier there.
+- **HPS:** 30 rows change (16 Second Lien to Unsecured, 9 gain Unsecured, 5 lose Second Lien).
+  **Ares:** 1 row. Blue Owl and Apollo: none. No other column changes on any row
+  (`holdings_field_diff.py q2h q2g`: 97 of 99 columns identical; 6 position ids move).
+- **Not done.** No rule reports a lost or changed lien tier; this was found by comparing fields
+  between sandboxes. The 2022 filings need a row-level key. The other 65 funds were not re-read.
+- **Tests.** `tests/test_bdc_xbrl_html_bridge_fields.py` (five new).
+
+### D-052 The quarter pass runs the oracle after validate (owner)
+
+`scripts/run_quarter_pass.py`: `rebuild -> nonaccrual -> validate -> oracle -> ...` in both rounds
+(D-048 gives the reason). Results of oracle checks A01, B01, B07 and E07 in passes before this
+date describe the build before the one they were reported for. AGENTS.md still lists the old
+order in two places; it is the owner's file.
+
+### State after `q2h`
+
+325 findings, 15 outstanding (12 before 2026-06-30, 3 at it), unchanged from `q2g`. Published
+equals filed in 74 of 74 fund-quarters.

@@ -90,24 +90,27 @@ def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) ->
     """Published loan rows whose reference rate can be compared with the filer's printed column.
 
     Only funds whose wrapper names that column (``reference_rate_columns``), only rows the page
-    reader confirmed (status ``value``) and only rows that publish a reference rate. The row is
-    keyed to the page by filing, report date and the filed identifier member.
-    ``reference_rate_agrees`` is 1 when the two are the same benchmark, and empty where no
-    reference rate is published. ``printed_margin`` is the total margin read from the page
-    (empty where it was not read, or the artifact predates the column).
+    reader confirmed (status ``value``, or ``not_applicable`` where the column prints no
+    reference rate) and only rows that publish a reference rate. The row is keyed to the page
+    by filing, report date and the filed identifier member.
+    ``reference_rate_agrees`` is 1 when the two are the same benchmark, 0 when they differ or
+    the page prints none, and empty where no reference rate is published. ``printed_margin``
+    is the total margin read from the page (empty where it was not read, or the artifact
+    predates the column).
     """
     named = ", ".join("'%s'" % c for c in ciks) or "''"
     return f"""(
         SELECT lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
                CAST(h.report_date AS VARCHAR)[:10] AS report_date, h.bdc_investment_identifier,
                CASE WHEN nullif(trim(CAST(h.reference_rate_type AS VARCHAR)), '') IS NULL THEN NULL
-                    WHEN upper(trim(CAST(h.reference_rate_type AS VARCHAR))) = upper(trim(s.reference_rate_type))
+                    WHEN s.reference_rate_status = 'value'
+                         AND upper(trim(CAST(h.reference_rate_type AS VARCHAR))) = upper(trim(s.reference_rate_type))
                     THEN 1.0 ELSE 0.0 END AS reference_rate_agrees,
                h.basis_spread, s.printed_margin
         FROM {unified_sql} h
         JOIN (SELECT * FROM (SELECT * FROM {status_sql}
                              UNION ALL BY NAME SELECT CAST(NULL AS VARCHAR) AS printed_margin WHERE false)
-              WHERE period_role = 'current' AND reference_rate_status = 'value') s
+              WHERE period_role = 'current' AND reference_rate_status IN ('value', 'not_applicable')) s
           ON lpad(regexp_replace(CAST(s.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
                = lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
          AND s.accession_number = h.accession_number AND s.report_date = CAST(h.report_date AS VARCHAR)[:10]

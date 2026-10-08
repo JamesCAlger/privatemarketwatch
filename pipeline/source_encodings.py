@@ -24,7 +24,8 @@ def load_encodings(wrapper_directory=None):
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
-                'reference_rate_columns','reference_rate_codes','printed_margin_reading'}:
+                'reference_rate_columns','reference_rate_codes','printed_margin_reading',
+                'equity_instrument_labels'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -106,6 +107,22 @@ def printed_margin_funds(encodings=None):
     """{cik10} whose wrappers set printed_margin_reading: the spread tag is the cash margin where the page prints cash and PIK apart."""
     configured=load_encodings() if encodings is None else encodings
     return {cik for cik,encoding in configured.items() if encoding.get('printed_margin_reading')}
+
+
+def equity_instrument_expression(cik,instrument,encodings=None):
+    """True where the row's whole instrument description is one of the fund's reviewed equity labels.
+
+    For a filer that prints equity under a label no keyword recognises ("LLC interest",
+    "Investment partnership") and tags the unit count as a principal, which the field heuristic
+    then reads as a loan. An exact match on the fund's own label; a borrower name cannot trigger it."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        labels=encoding.get('equity_instrument_labels',[])
+        if labels:
+            values=','.join(_literal(' '.join(v.lower().split())) for v in labels)
+            parts.append('('+_cik_condition(cik,key)+' AND '+_normal(instrument)+' IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
 
 
 def _member_mapping(value):

@@ -89,6 +89,23 @@ def _load_fund_financials(cik: str | None = None) -> pd.DataFrame | None:
         return None
 
 
+def _warn_if_detail_predates_holdings(detail_path) -> bool:
+    """True, with a warning, when the reconciliation detail is older than the holdings.
+
+    The detail is written by the validate stage. An oracle run between a rebuild and that
+    stage reads the previous build's detail: checks A01, B01, B07 and E07 then describe the
+    old holdings and skip any quarter the old build did not have."""
+    from pipeline.config import UNIFIED_HOLDINGS_PARQUET_FILE
+    try:
+        stale = UNIFIED_HOLDINGS_PARQUET_FILE.stat().st_mtime > detail_path.stat().st_mtime
+    except OSError:
+        return False
+    if stale:
+        logger.warning("STALE INPUT: %s is older than the holdings; checks A01, B01, B07 and E07 "
+                       "describe the previous build. Run the validate stage first.", detail_path.name)
+    return stale
+
+
 def _load_source_detail(cik: str | None = None) -> pd.DataFrame:
     """Load source reconciliation detail for the given CIK (or all).
 
@@ -110,6 +127,7 @@ def _load_source_detail(cik: str | None = None) -> pd.DataFrame:
                 pass
 
     if SOURCE_RECONCILIATION_DETAIL_FILE.exists():
+        _warn_if_detail_predates_holdings(SOURCE_RECONCILIATION_DETAIL_FILE)
         try:
             df = pd.read_csv(SOURCE_RECONCILIATION_DETAIL_FILE, dtype=str)
             if cik:

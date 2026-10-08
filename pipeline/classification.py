@@ -408,8 +408,13 @@ def _sql_is_bad_issuer_name() -> str:
 
 
 
-def _sql_classify_bdc_asset() -> str:
+def _sql_classify_bdc_asset(reviewed_equity_label: str = "false") -> str:
     """Generate CASE WHEN for BDC asset classification.
+
+    ``reviewed_equity_label`` is a SQL boolean: the row's instrument description is one of its
+    fund's reviewed equity labels (wrapper ``equity_instrument_labels``). It is consulted after
+    every keyword and before the financial field heuristic, so it only changes rows the
+    heuristic alone would have classed.
 
     Mirrors the priority logic in _classify_bdc_asset():
     1. XBRL investment_type axis
@@ -446,6 +451,9 @@ def _sql_classify_bdc_asset() -> str:
         eq_kw = _sql_keyword_check(col, _BDC_EQUITY_KEYWORDS)
         series_re = f"regexp_matches({col}, '\\bseries\\s+[a-f]\\b')"
         lines.append(f"  WHEN {col} != '' AND ({eq_kw} OR {series_re}) THEN 'EQUITY_COMMON'")
+
+    # --- Reviewed per-fund equity label (wrapper), ahead of the field heuristic ---
+    lines.append(f"  WHEN {reviewed_equity_label} THEN 'EQUITY_COMMON'")
 
     # --- Priority 4: Financial field heuristic ---
     lines.append("  WHEN _has_interest_rate THEN 'LOAN'")

@@ -213,6 +213,16 @@
     ],
     "cash_identifiers": [
       "US BANK GCTS0095"
+    ],
+    "reference_rate_columns": [
+      "Interest Rate"
+    ],
+    "reference_rate_codes": [
+      "C=CORRA",
+      "BBSW=BBSW"
+    ],
+    "printed_margin_reading": [
+      "cash_plus_pik"
     ]
   },
   "invariants": {

@@ -281,6 +281,21 @@
     "reporting_entity_identifier_suffixes": [
       "Emerald JV LP",
       "Verdelite JV LP"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SONIA",
+      "C=CDOR",
+      "CA=CORRA",
+      "F=FEDFUNDS",
+      "ST=STIBOR",
+      "CI=CIBOR",
+      "N=NIBOR",
+      "SA=SARON",
+      "B=BKBM",
+      "BB=BBSY"
     ]
   }
 }

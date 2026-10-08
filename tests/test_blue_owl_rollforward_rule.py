@@ -73,6 +73,17 @@ def test_instrument_rows_without_quantities_are_kept():
     assert len(kept) == 3
 
 
+def test_an_equity_row_named_investment_partnership_is_kept_without_a_quantity():
+    """2026-06-30: 'Valor CI Blocker Feeder LP | Investment partnership', 10,345,000. The filer tags its
+    units as a principal, which an equity row does not publish, so the row reaches the rule with no
+    quantity. It names its instrument, so it is a schedule row and stays."""
+    kept = _kept([
+        _row("Valor CI Blocker Feeder LP | Investment partnership", 10_345_000.0, "2026-06-30"),
+        _row("Blue Owl Leasing LLC(d)", 1_876_000.0, "2026-06-30"),
+    ])
+    assert kept == {"Valor CI Blocker Feeder LP | Investment partnership"}
+
+
 def test_bocso_note_row_is_excluded_and_its_schedule_position_kept():
     rule = json.loads((RULE_PATH.parent / "exclude_bocso_issuer_only_rows.json").read_text(encoding="utf-8-sig"))
     assert validate_rule(rule) == [] and late_resolved_columns(rule) == []

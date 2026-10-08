@@ -50,9 +50,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "^(.+),\\s*[^,]+$",
-    "hierarchy_instrument_re": ",\\s*([^,]+)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i),\\s*[^,]*(?:loan|notes?|units?|stock|shares?|interests?|warrants?|equity|certificates?|bonds?|debentures?|membership|preferred|common|partnership|participation rights)[^,]*$')"
+    "hierarchy_issuer_re": "^(.+?)(?:\\s*\\|\\s*[^|]+|,\\s*[^,|]+)$",
+    "hierarchy_instrument_re": "(?:^.*\\|\\s*|^[^|]*,\\s*)([^|]+?)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:,|\\|)\\s*[^,|]*(?:loan|notes?|units?|stock|shares?|interests?|warrants?|equity|certificates?|bonds?|debentures?|membership|preferred|common|partnership|participation rights)[^,|]*$')"
   },
   "archetypes": {
     "senior_secured_debt": {
@@ -242,6 +242,16 @@
     ],
     "rate_only_contexts": [
       "adopt_adjacent"
+    ],
+    "reference_rate_columns": [
+      "Reference"
+    ],
+    "reference_rate_codes": [
+      "CDOR=CDOR",
+      "NIBOR=NIBOR",
+      "BBSY=BBSY",
+      "BKBM=BKBM",
+      "TONA=TONA"
     ]
   },
   "invariants": {

@@ -425,10 +425,11 @@ def test_blue_owl_wrapper_names_its_reference_rate_column():
     assert source_encodings.reference_rate_reading(OWL, report_date='2024-06-30')['codes']['C'] == 'CORRA'
 
 
-def test_printed_margin_reading_is_set_for_blue_owl_alone():
-    # 10-Q 2024-09-30 prints Inovalon 'SR + 6.25% (2.75% PIK)' with a spread tag of 6.25; 10-K 2025-12-31 prints
-    # 'S+ | 2.75% | 2.75%' with a spread tag of 2.75
-    assert source_encodings.printed_margin_funds() == {OWL}
+def test_printed_margin_reading_is_set_for_blue_owl_and_apollo_alone():
+    # Blue Owl: 10-Q 2024-09-30 prints Inovalon 'SR + 6.25% (2.75% PIK)' with a spread tag of 6.25; 10-K 2025-12-31 prints
+    # 'S+ | 2.75% | 2.75%' with a spread tag of 2.75.
+    # Apollo: 10-Q 2025-06-30 prints Curia 'S+300 Cash plus 3.25% PIK' with a spread tag of 3.0 and a PIK tag of 3.25.
+    assert source_encodings.printed_margin_funds() == {OWL, '0001837532'}
     assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()
 
 
@@ -442,3 +443,33 @@ def test_the_v05_wrappers_fit_the_wrapper_schema(cik):
     schema = json.loads((root / 'schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json').read_text(encoding='utf-8'))
     wrapper = json.loads((root / 'data/overrides/bdc_xbrl_wrappers' / (cik + '.json')).read_text(encoding='utf-8'))
     assert [e.message for e in jsonschema.Draft202012Validator(schema).iter_errors(wrapper)] == []
+
+
+def test_a_reviewed_equity_label_overrides_only_the_field_heuristic():
+    """Blue Owl prints 'LLC interest' and 'Investment partnership' in its equity section and tags the
+    unit count as a principal; without the label the field heuristic reads the row as a loan."""
+    import duckdb
+    from pipeline.classification import _sql_classify_bdc_asset
+    encodings = {'0001812554': {'equity_instrument_labels': ['LLC interest', 'Investment partnership']}}
+    label = source_encodings.equity_instrument_expression('cik', 'instrument_description', encodings)
+    con = duckdb.connect()
+    con.execute("""CREATE TABLE r AS SELECT * FROM (VALUES
+        ('0001812554', 'Valor CI Blocker Feeder LP | Investment partnership', 'Investment partnership'),
+        ('0001812554', 'Blue Owl Leasing LLC | LLC  Interest', 'LLC  Interest'),
+        ('0001812554', 'OCIC SLF LLC (fka Senior Loan Fund LLC) | LLC interest', 'LLC interest'),
+        ('0001812554', 'Acme LLC | First lien senior secured loan', 'First lien senior secured loan'),
+        ('0001812554', 'Interesting LLC interest rate swap co', 'Note'),
+        ('0001838126', 'ULTRA III, LLC - LLC Interest', 'LLC Interest')
+        ) t(cik, full_id, instrument_description)""")
+    rows = dict(con.execute(f"""
+        WITH c AS (SELECT *, lower(instrument_description) AS _lower_instr, '' AS _lower_type, lower(full_id) AS _lower_full,
+                          false AS _has_interest_rate, false AS _has_basis_spread, true AS _has_principal_amount,
+                          false AS _has_shares FROM r)
+        SELECT full_id, {_sql_classify_bdc_asset(label)} FROM c""").fetchall())
+    assert rows['Valor CI Blocker Feeder LP | Investment partnership'] == 'EQUITY_COMMON'
+    assert rows['Blue Owl Leasing LLC | LLC  Interest'] == 'EQUITY_COMMON'
+    assert rows['OCIC SLF LLC (fka Senior Loan Fund LLC) | LLC interest'] == 'FUND'      # a keyword still wins
+    assert rows['Acme LLC | First lien senior secured loan'] == 'LOAN'
+    assert rows['Interesting LLC interest rate swap co'] == 'LOAN'                       # not the whole description
+    assert rows['ULTRA III, LLC - LLC Interest'] == 'LOAN'                               # another fund: unchanged
+    assert source_encodings.equity_instrument_expression('cik', 'instrument_description', {}) == 'false'

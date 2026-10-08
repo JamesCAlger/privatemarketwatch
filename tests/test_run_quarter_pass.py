@@ -35,11 +35,12 @@ def test_stage_order_pre_dispatch_ends_at_select():
     # preflight is the machine-checked readiness gate (2026-08-21): exit 1 halts
     # the pass before hours of battery burn. pin_inputs freezes fund-strategy
     # inputs at the pass boundary (pre only); the post battery reuses the pin.
-    assert names[:12] == ["preflight", "pin_inputs", "rebuild", "oracle", "nonaccrual",
-                          "validate", "provenance", "shadow", "queue", "ledger",
+    # The oracle follows validate, whose reconciliation detail four of its checks read (2026-10-08).
+    assert names[:12] == ["preflight", "pin_inputs", "rebuild", "nonaccrual",
+                          "validate", "oracle", "provenance", "shadow", "queue", "ledger",
                           "acceptance", "select"]
-    assert names[12:] == ["rebuild_post", "oracle_post", "nonaccrual_post",
-                          "validate_post", "provenance_post", "shadow_post",
+    assert names[12:] == ["rebuild_post", "nonaccrual_post",
+                          "validate_post", "oracle_post", "provenance_post", "shadow_post",
                           "queue_post", "ledger_post", "acceptance_post", "summary"]
     assert "pin_inputs_post" not in names
     assert "preflight_post" not in names
@@ -105,7 +106,7 @@ def test_failed_stage_halts_and_records(tmp_path, monkeypatch):
     assert r.run(until_stage="queue") == 1
     state = json.loads(r.state_path.read_text(encoding="utf-8"))
     assert state["stages"]["oracle"]["status"] == "failed"
-    assert "validate" not in state["stages"]  # halted at the failure
+    assert "provenance" not in state["stages"]  # halted at the failure
 
 
 def test_from_resumes_post_dispatch_half(tmp_path, monkeypatch):

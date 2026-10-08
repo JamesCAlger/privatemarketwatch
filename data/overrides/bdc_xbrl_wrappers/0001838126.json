@@ -268,6 +268,20 @@
     ],
     "foreign_unit_values": [
       "reported_in_usd"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "SN=SONIA",
+      "C=CDOR to 2025-03-31",
+      "C=CORRA from 2025-06-30",
+      "B=BBSW to 2024-09-30",
+      "B=BBSY from 2024-12-31",
+      "ST=STIBOR",
+      "N=NIBOR",
+      "TN=TONA",
+      "SORA=SORA"
     ]
   },
   "invariants": {

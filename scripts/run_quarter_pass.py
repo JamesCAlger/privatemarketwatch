@@ -3,14 +3,18 @@
 Codifies the sequence that has so far been run by hand (Wave 1, recal1 prep):
 
   PRE-DISPATCH (deterministic, cache-only):
-    rebuild -> oracle -> nonaccrual -> validate -> shadow -> queue
+    rebuild -> nonaccrual -> validate -> oracle -> shadow -> queue
             -> acceptance -> select
   [ STOP: operator dispatches the Codex fleet from an admin terminal --
     B1/B2/anchor/B3 via the existing chain scripts; see the printed guidance.
     One fleet per machine; MaxParallel <= 2. ]
   POST-DISPATCH (after promotions land in the override stores):
-    rebuild_post -> oracle_post -> nonaccrual_post -> validate_post
+    rebuild_post -> nonaccrual_post -> validate_post -> oracle_post
                  -> shadow_post -> queue_post -> acceptance_post -> summary
+
+The oracle runs after validate (owner ruling 2026-10-08): its checks A01, B01, B07 and E07
+read the source reconciliation detail that validate writes. Run before it, as every pass up
+to that date did, they described the previous build.
 
 Each stage is checkpointed in ``data/output/quarter_pass/<pass_id>/state.json``;
 re-running skips completed stages (``--force`` re-runs). ``--until select``
@@ -94,9 +98,10 @@ def _stages(quarter: str, pass_dir: Path | None = None) -> list[Stage]:
         return pin + [
             Stage(f"rebuild{suffix}", [py, "scripts/rebuild_outputs.py", "--unified"],
                   note="unified rebuild from cached inputs (applies promoted rules + audit)"),
-            Stage(f"oracle{suffix}", [py, "-m", "pipeline.oracle_runner"]),
             Stage(f"nonaccrual{suffix}", [py, "-m", "pipeline.extract_nonaccrual_flags"]),
             Stage(f"validate{suffix}", [py, "-m", "pipeline.main", "--validate"]),
+            Stage(f"oracle{suffix}", [py, "-m", "pipeline.oracle_runner"],
+                  note="after validate: reads the source reconciliation detail it writes"),
             Stage(f"provenance{suffix}", [py, "-m", "pipeline.provenance_reverify",
                                           "--cohort"]),
             Stage(f"shadow{suffix}", [py, "scripts/shadow_validation_runner.py"]),

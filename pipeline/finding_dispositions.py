@@ -17,12 +17,18 @@ One entry::
      "evidence": [{"source": "code" | "query" | "filing", "quote": "..."}],
      "rerun": "command that reproduces the evidence",
      "supersedes_real_error_verdict": true,   (optional; needs evidence with source "filing")
+     "carry_forward": {"from": "YYYY-MM-DD", "check": "...", "params": {...}},   (optional)
      "decided_by": "...", "decided_on": "YYYY-MM-DD"}
 
 Reach is limited on purpose. ``informational`` says the rule reports a fact, not a defect, so it
 may cover every fund and quarter. ``as_filed`` and ``not_applicable`` are judgments about specific
 filings: they must name their funds and their quarters, so a new quarter or another fund is
-reviewed again and is never cleared by an old decision.
+reviewed again and is never cleared by an old decision alone.
+
+``carry_forward`` is the one way such an entry reaches a later quarter: it names a deterministic
+check (``pipeline.disposition_validity``) that restates the entry's reason as a test of every
+flagged row. The entry covers a quarter on or after ``from`` only when that check passed on that
+fund-quarter's own outputs. With no recorded pass the quarter is reviewed as before.
 """
 from __future__ import annotations
 
@@ -73,6 +79,11 @@ def validate(entry) -> list[str]:
     if entry.get("supersedes_real_error_verdict") and not (
             isinstance(evidence, list) and any(isinstance(e, dict) and e.get("source") == "filing" for e in evidence)):
         errs.append("superseding a real-error verdict needs filing evidence")
+    if entry.get("carry_forward") is not None:
+        from pipeline import disposition_validity
+        errs.extend(disposition_validity.validate_carry_forward(entry["carry_forward"]))
+        if kind == "informational":
+            errs.append("informational already covers every quarter; carry_forward does not apply")
     if not _DATE.fullmatch(str(entry.get("decided_on") or "")):
         errs.append("decided_on must be YYYY-MM-DD")
     return errs
@@ -122,8 +133,11 @@ def load(directory: Path | None = None) -> list[dict]:
     return entries
 
 
-def match(entries: list[dict], *, cik, engine, rule_name, report_date) -> dict | None:
-    """The first entry covering this finding, or None. A specific fund wins over '*'."""
+def match(entries: list[dict], *, cik, engine, rule_name, report_date, passes=frozenset()) -> dict | None:
+    """The first entry covering this finding, or None. A specific fund wins over '*'.
+
+    ``passes`` holds (disposition_id, cik, quarter) whose carry-forward check passed; an entry
+    reaches a quarter it does not list only through one of those."""
     cik = str(cik or "").zfill(10)
     quarter = str(report_date or "")[:10]
     found = None
@@ -131,7 +145,9 @@ def match(entries: list[dict], *, cik, engine, rule_name, report_date) -> dict |
         if entry["engine"] != (engine or "") or entry["rule_name"] != (rule_name or ""):
             continue
         if "all" not in entry["quarters"] and quarter not in entry["quarters"]:
-            continue
+            carry = entry.get("carry_forward")
+            if not (carry and quarter >= carry["from"] and (entry["disposition_id"], cik, quarter) in passes):
+                continue
         if cik in entry["ciks"]:
             return entry
         if "*" in entry["ciks"] and found is None:

@@ -285,6 +285,25 @@ class TestColumnContracts:
         issues, _ = validate_column_contracts(df)
         assert len(_issues_by_rule(issues, "X07")) == 1
 
+    # --- X02: a credit row with no rate is a finding only on a debt instrument ---
+    def test_x02_does_not_fire_on_a_stake_in_a_credit_vehicle(self):
+        # False alarm: an LP, LLC or member interest is classed private credit and carries no coupon.
+        blank = {"interest_rate": "", "basis_spread": ""}
+        df = _make_unified_df([
+            {**blank, "asset_category": "FUND", "index_classification": "PRIVATE_CREDIT_FUND", "exposure_type": "FUND",
+             "bdc_investment_identifier": "Muzinich Enhanced Loan Origination Fund I, LP - LP Interest"},
+            {**blank, "asset_category": "OTHER", "index_classification": "PRIVATE_CREDIT_FUND",
+             "bdc_investment_identifier": "Ivy Hill Asset Management, L.P. | Member interest"},
+        ])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X02")) == 0
+
+    def test_x02_still_fires_on_a_loan_with_no_rate(self):
+        df = _make_unified_df([{"interest_rate": "", "basis_spread": ""},
+                               {"interest_rate": "", "basis_spread": "", "asset_category": "OTHER"}])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X02")) == 2
+
     # --- FX02 / FX03 USD-unit canonicalization -------------------------------
     def test_fx02_noncanonical_usd_token_is_not_flagged(self):
         # False alarm: non-canonical USD unit tokens are still dollars.
@@ -591,6 +610,24 @@ class TestReportAdapters:
         assert result.iloc[0]["action"] == "BLOCK_VERIFIED"
         assert len(_issues_by_rule(issues, "collapsed_duplicate_dimension_path")) == 0
         assert len(_issues_by_rule(issues, "SRC_BDC03")) == 0
+
+    def test_src_bdc01_skips_a_source_row_the_reconciliation_documents_as_a_non_position(self):
+        missing = {"status": "missing_from_pipeline", "blocking_issue": True, "cik": "0000000100",
+                   "report_date": "2024-03-31"}
+        detail = pd.DataFrame([
+            {**missing, "source_row_id": "src:a:c-1", "raw_investment_identifier": "Total non-controlled - debt commitments"},
+            {**missing, "source_row_id": "src:a:c-2", "raw_investment_identifier": "Acme Corp - Term Loan"},
+            {**missing, "source_row_id": "src:a:c-3", "raw_investment_identifier": "Beta Corp - Term Loan"},
+        ])
+        source_only = pd.DataFrame([
+            {"source_row_id": "src:a:c-1", "is_blocking": False},     # documented total: not a missing position
+            {"source_row_id": "src:a:c-2", "is_blocking": True},      # still a missing position
+        ])                                                           # c-3 is not listed: the rule fires as before
+        issues = adapt_validation_reports({"source_reconciliation_detail": detail,
+                                           "source_reconciliation_source_only_detail": source_only})
+        assert sorted(_issues_by_rule(issues, "SRC_BDC01")["value"]) == ["Acme Corp - Term Loan", "Beta Corp - Term Loan"]
+        # without the classification every blocking row fires
+        assert len(_issues_by_rule(adapt_validation_reports({"source_reconciliation_detail": detail}), "SRC_BDC01")) == 3
 
     def test_position_purity_adapter_warns_without_blocking_verified(self):
         diagnostics = pd.DataFrame([

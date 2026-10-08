@@ -1821,6 +1821,9 @@ _CORRECTABLE_FIELDS = frozenset({
     # A class correction has to move the category with the index class (2026-10-06, decision D-021).
     "asset_category", "issuer_category",
     "issuer_name", "instrument_description",
+    # A cost corrected from the printed page needs its unit corrected with it: a cost whose
+    # unit is not the dollar is withheld downstream (2026-10-08, Blue Owl KWOR, decision D-046).
+    "cost_currency",
 })
 
 # Required columns in row_corrections.csv.

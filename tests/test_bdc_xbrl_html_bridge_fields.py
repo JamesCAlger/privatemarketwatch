@@ -820,13 +820,15 @@ def test_a_printed_reference_rate_replaces_nothing_else():
     from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
     cases = [
         (dict(reference_rate_source="xbrl_field"), _status_row("value", "SOFR")),            # a tagged rate stands
-        (dict(reference_rate_source="identifier_text"), _status_row("value", "SOFR")),
         (dict(reference_rate_source="inferred_pre_libor"), _status_row("validation_needed", "SOFR")),
         (dict(reference_rate_source="inferred_pre_libor"), _status_row("not_applicable")),
         # a fund that names no reference-rate column
-        (dict(reference_rate_source="inferred_pre_libor", cik="0001838126"), dict(_status_row("value", "SOFR"), cik="0001838126")),
+        (dict(reference_rate_source="inferred_pre_libor", cik="0001655888"), dict(_status_row("value", "SOFR"), cik="0001655888")),
+        (dict(reference_rate_source="identifier_text", cik="0001655888"), dict(_status_row("value", "SOFR"), cik="0001655888")),
     ]
     for changes, status in cases:
+        if status["reference_rate_status"] == "not_applicable":
+            continue    # withdrawn, not replaced: tested below
         out = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="LIBOR", **changes), [status])
         assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["reference_rate_source"]) == ("LIBOR", changes["reference_rate_source"])
     # the same benchmark: the inferred label is kept, nothing was replaced
@@ -881,3 +883,286 @@ def test_ixbrl_rows_carry_the_printed_margin_only_over_a_confirmed_reference_rat
     flat = [{"cik": "0001812554", "accession_number": "A", "report_date": "2025-12-31", "period": "2025-12-31",
              "investment_identifier": b["issuer_name"], "fair_value": 1.0} for b in bridges]
     assert [r["printed_margin"] for r in build_field_status_rows(bridges, flat, {})] == ["5.5", ""]
+
+
+# --- the same reading for the other printed layouts (BCRED and HPS, Ares, Apollo) ---
+def test_a_code_printed_with_its_reset_period_or_ahead_of_the_margin_is_read():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    ares = {"columns": frozenset({"reference"}), "codes": {"CDOR": "CDOR"}}
+    header = {0: "Company", 3: "Coupon", 4: "Reference", 5: "Spread", 6: "Acquisition Date"}
+    # Ares 10-Q 2024-06-30: 'SOFR (Q)', and a benchmark the shared table lacks
+    assert field_status("reference_rate_type", ["Actfy", "x", "First lien", "10.58%", "SOFR (Q)", "5.25%", "05/2024"], header, ares)["value"] == "SOFR"
+    assert field_status("reference_rate_type", ["Acme", "x", "First lien", "9.10%", "CDOR (Q)", "5.00%", "05/2024"], header, ares)["value"] == "CDOR"
+    # an undefined name stays unread, and the reset period alone is not a code
+    assert field_status("reference_rate_type", ["Acme", "x", "First lien", "9.10%", "Base Rate (Q)", "4.50%", "05/2024"], header, ares)["status"] == "validation_needed"
+    apollo = {"columns": frozenset({"interest rate"}), "codes": {"C": "CORRA"}}
+    cell = {0: "Industry/Company", 1: "Investment Type", 2: "Interest Rate", 3: "Maturity Date"}
+    assert field_status("reference_rate_type", ["Acme", "First Lien", "C+525, 0.75% Floor", "1/1/2030"], cell, apollo)["value"] == "CORRA"
+    # a fixed coupon in that column is not a code
+    assert field_status("reference_rate_type", ["Acme", "First Lien", "8.50%", "1/1/2030"], cell, apollo)["status"] == "validation_needed"
+    # without the filer's codes neither form is read from the shared table
+    from pipeline.bdc_xbrl_html_bridge import _benchmark_from_code
+    assert _benchmark_from_code("CDOR (Q)") == "" and _benchmark_from_code("C+525, 0.75% Floor") == ""
+    assert _benchmark_from_code("S (Q)", {"X": "SOFR"}) == ""
+
+
+def test_printed_margin_reads_the_forms_the_other_four_funds_print():
+    from pipeline.bdc_xbrl_html_bridge import printed_margin
+    shared = {"columns": frozenset({"reference rate and spread"}), "codes": {"SF": "SOFR"}}
+    header = {0: "Company", 1: "Reference Rate and Spread", 4: "Interest Rate", 5: "Maturity Date"}
+    # HPS 10-Q 2023-03-31, Captive Resources: 'SF + | 5.75% (incl 3.13% PIK) | 10.56%'
+    assert printed_margin(["Captive", "SF +", "", "5.75% (incl 3.13% PIK)", "10.56%", "7/2/2029"], header, shared) == "5.75"
+    # BCRED: the PIK note sits in the rate column, outside the span
+    assert printed_margin(["Acme", "SOFR +", "", "6.50%", "11.83% (incl. 2.00% PIK)", "5/3/2027"], header, shared) == "6.50"
+    assert printed_margin(["Acme", "SF +", "", "7.00% PIK", "", "5/3/2027"], header, shared) == "7.00"
+    # Ares: the margin has its own 'Spread' column after the reference
+    ares = {"columns": frozenset({"reference"}), "codes": {}}
+    split = {0: "Company", 3: "Coupon", 4: "Reference", 5: "Spread", 6: "Acquisition Date", 7: "Maturity Date"}
+    assert printed_margin(["2U", "x", "First lien", "8.87%", "LIBOR (M)", "5.75%", "6/2021", "12/2024"], split, ares) == "5.75"
+    # Apollo: basis points after the code, in the named cell
+    apollo = {"columns": frozenset({"interest rate"}), "codes": {}}
+    cell = {0: "Industry/Company", 1: "Investment Type", 2: "Interest Rate", 3: "Maturity Date"}
+    assert float(printed_margin(["MRO", "First Lien", "L+625, 0.50% Floor", "12/18/2028"], cell, apollo)) == 6.25
+    assert float(printed_margin(["Bellis", "First Lien", "SONIA+603, 0.00% Floor", "10/22/2029"], cell, apollo)) == 6.03
+    assert float(printed_margin(["Acme", "First Lien", "S+325 Cash plus 3.00% PIK, 0.75% Floor", "1/1/2030"], cell, apollo)) == 6.25
+
+
+def test_printed_margin_still_refuses_what_it_does_not_understand():
+    from pipeline.bdc_xbrl_html_bridge import printed_margin
+    apollo = {"columns": frozenset({"interest rate"}), "codes": {}}
+    cell = {0: "Industry/Company", 1: "Investment Type", 2: "Interest Rate", 3: "Maturity Date"}
+    # a fixed coupon, a percent margin in the cell, and a floor with no margin are not basis points after a code
+    for text in ("8.50%", "S+6.25%", "0.50% Floor", "N/A", "S+625 or P+525"):
+        assert printed_margin(["Acme", "First Lien", text, "1/1/2030"], cell, apollo) == ""
+    # the maturity column is outside the span even though the named cell holds no margin
+    assert printed_margin(["Acme", "First Lien", "SOFR", "5.00%"], cell, apollo) == ""
+    # 'incl' does not turn a floor note into a PIK total
+    shared = {"columns": frozenset({"reference rate and spread"}), "codes": {}}
+    header = {0: "Company", 1: "Reference Rate and Spread", 4: "Interest Rate"}
+    assert printed_margin(["Acme", "SF +", "", "5.75% (incl 1.00% floor)", "10.56%"], header, shared) == ""
+
+
+def test_a_printed_code_replaces_a_reference_rate_read_from_the_identifier_text():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # BCRED: 'Prime Security Services Borrower, LLC' was read as PRIME from the borrower's name; the page prints 'SOFR +'.
+    # Apollo 10-Q 2023-03-31, Garda World: the member still reads 'L+425', the page prints 'S+ 425'.
+    staged = _staged(reference_rate_type="PRIME", reference_rate_source="identifier_text")
+    out = apply_ixbrl_field_status_overlay(staged, [_status_row("value", "SOFR")])
+    assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["reference_rate_source"]) == ("SOFR", "ixbrl_field_status")
+    # agreeing text keeps its label
+    same = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="SOFR", reference_rate_source="identifier_text"),
+                                            [_status_row("value", "SOFR")])
+    assert same.iloc[0]["reference_rate_source"] == "identifier_text"
+
+
+def test_a_guessed_reference_rate_is_withdrawn_where_the_page_prints_none():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # BCRED 2022-09-30, Camelot Return Merger: '8.75% | 8.75%' under an empty code cell; the spread tag made it LIBOR, Floating
+    staged = _staged(reference_rate_type="LIBOR", reference_rate_source="inferred_pre_libor", coupon_type="Floating",
+                     interest_rate="8.75", basis_spread="8.75", pik_rate="")
+    out = apply_ixbrl_field_status_overlay(staged, [_status_row("not_applicable")])
+    row = out.iloc[0]
+    assert (row["reference_rate_type"], row["reference_rate_source"], row["coupon_type"]) == ("", "", "Fixed")
+    # the spread tag repeated the coupon: it is not published as a spread, and the rate stands
+    assert pd.isna(row["basis_spread"]) and float(row["interest_rate"]) == 8.75
+    assert row["src_transforms"] == "basis_spread:fixed_coupon"
+    # not withdrawn: a tagged rate, one read from the identifier, an unread cell, or a fund that names no column
+    for changes, status in (
+            (dict(reference_rate_source="xbrl_field"), _status_row("not_applicable")),
+            (dict(reference_rate_source="identifier_text"), _status_row("not_applicable")),
+            (dict(reference_rate_source="inferred_pre_libor"), _status_row("validation_needed")),
+            (dict(reference_rate_source="inferred_pre_libor"), _status_row("blank")),
+            (dict(reference_rate_source="inferred_pre_libor", cik="0001655888"), dict(_status_row("not_applicable"), cik="0001655888"))):
+        out = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="LIBOR", coupon_type="Floating", interest_rate="8.75", **changes), [status])
+        assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["coupon_type"]) == ("LIBOR", "Floating")
+    # a preferred stake loses the guess but is not marked as a fixed loan
+    out = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="SOFR", reference_rate_source="inferred_post_libor",
+                                                   coupon_type="Floating", asset_category="EQUITY_PREFERRED"), [_status_row("not_applicable")])
+    assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["coupon_type"]) == ("", "Floating")
+
+
+def test_one_member_on_two_position_rows_confirms_only_what_both_rows_print(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    # BCRED 10-Q 2022-09-30: 'Cloudera, Inc.' first lien L + 3.75% and second lien L + 6.00% under one member
+    ctxs = [_ix_context("c1", "Cloudera, Inc."), _ix_context("c2", "Cloudera, Inc."), _ix_context("c3", "Acme, Inc.")]
+    rows = ["<tr><td>Investments</td><td>Reference Rate and Spread</td><td></td><td>Interest Rate</td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            _ix_row("c1", ["Cloudera, Inc.", "L +", "3.75%", "6.87%", "10/8/2028"], "53700"),
+            _ix_row("c2", ["Cloudera, Inc.", "L +", "6.00%", "9.12%", "10/8/2029"], "56700"),
+            _ix_row("c3", ["Acme, Inc.", "L +", "5.00%", "8.12%", "1/1/2029"], "100")]
+    page = _write_ixbrl(tmp_path, ctxs, rows)
+    named = {"0001803498": {"reference_rate_columns": ["Reference Rate and Spread"]}}
+    kwargs = dict(cik="0001803498", accession_number="A", report_date="2025-12-31", html_path=page)
+    by_id = {b["issuer_name"]: b for b in propose_field_bridges_from_ixbrl(encodings=named, **kwargs)["bridges"]}
+    cloudera = by_id["Cloudera, Inc."]
+    # both rows print 'L +': the reference rate is confirmed; margin and maturity differ, so neither is
+    assert (cloudera["reference_rate_type"], cloudera["reference_rate_status"]) == ("LIBOR", "value")
+    assert (cloudera["maturity_status"], cloudera["printed_margin"]) == ("validation_needed", "")
+    assert (by_id["Acme, Inc."]["reference_rate_status"], by_id["Acme, Inc."]["printed_margin"]) == ("value", "5.00")
+    # a fund that names no column reads as before: the first row stands
+    plain = {b["issuer_name"]: b for b in propose_field_bridges_from_ixbrl(encodings={}, **kwargs)["bridges"]}
+    assert plain["Cloudera, Inc."]["maturity_status"] == "value"
+    # Blue Owl 10-Q 2023-06-30: two rows of one member that print the same line keep every reading
+    same = ["<tr><td>Investments</td><td>Reference Rate and Spread</td><td></td><td>Interest Rate</td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            _ix_row("c1", ["Cloudera, Inc.", "SOFR +", "5.75%", "10.99%", "10/8/2028"], "53700"),
+            _ix_row("c2", ["Cloudera, Inc.", "SOFR +", "5.75%", "10.99%", "10/8/2028"], "1200")]
+    folder = tmp_path / "same"
+    folder.mkdir()
+    both = propose_field_bridges_from_ixbrl(encodings=named, **dict(kwargs, html_path=_write_ixbrl(folder, ctxs[:2], same)))["bridges"][0]
+    assert (both["reference_rate_type"], both["reference_rate_status"], both["printed_margin"], both["maturity_status"]) == (
+        "SOFR", "value", "5.75", "value")
+
+
+def test_two_members_that_differ_only_in_case_are_one_key(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    # BCRED 10-K 2022-12-31: 'athenahealth, Inc.' first lien 'SOFR + 3.50%' and 'Athenahealth, Inc.' notes '6.50% | 6.50%'
+    ctxs = [_ix_context("c1", "athenahealth, Inc."), _ix_context("c2", "Athenahealth, Inc.")]
+    rows = ["<tr><td>Investments</td><td>Reference Rate and Spread</td><td></td><td>Interest Rate</td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            _ix_row("c1", ["athenahealth, Inc.", "SOFR +", "3.50%", "7.82%", "2/15/2029"], "33015"),
+            _ix_row("c2", ["Athenahealth, Inc.", "", "6.50%", "6.50%", "2/15/2030"], "2436")]
+    named = {"0001803498": {"reference_rate_columns": ["Reference Rate and Spread"]}}
+    bridges = propose_field_bridges_from_ixbrl(cik="0001803498", accession_number="A", report_date="2025-12-31",
+                                               html_path=_write_ixbrl(tmp_path, ctxs, rows), encodings=named)["bridges"]
+    assert len(bridges) == 2 and {b["reference_rate_status"] for b in bridges} == {"validation_needed"}
+    assert {b["printed_margin"] for b in bridges} == {""}
+
+
+def _fixed(**changes):
+    row = dict(reference_rate_type="SOFR", reference_rate_source="inferred_post_libor", coupon_type="Floating",
+               interest_rate="", pik_rate="", basis_spread="", cik="0001803498", src_transforms="basis_spread:rate_x100")
+    return _staged(**dict(row, **changes))
+
+
+def _no_reference(cik):
+    return [dict(_status_row("not_applicable"), cik=cik)]
+
+
+def test_a_spread_tag_that_is_the_only_rate_figure_on_a_fixed_row_is_published_as_the_rate():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # no rate and no PIK: the spread tag is the coupon
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="11.5"), _no_reference("0001803498")).iloc[0]
+    assert float(out["interest_rate"]) == 11.5 and pd.isna(out["basis_spread"]) and out["coupon_type"] == "Fixed"
+    assert out["src_transforms"] == "basis_spread:rate_x100;interest_rate:from_spread_tag;basis_spread:fixed_coupon"
+    assert out["reference_rate_type"] == ""
+    # BCRED 10-Q 2023-03-31, AI Altius Bidco: '9.75% | 9.75% PIK', spread 9.75, PIK 9.75, no rate; BCRED files all-in rates
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="9.75", pik_rate="9.75"), _no_reference("0001803498")).iloc[0]
+    assert float(out["interest_rate"]) == 9.75 and float(out["pik_rate"]) == 9.75 and pd.isna(out["basis_spread"])
+    # HPS 10-Q 2024-06-30, Eagle LNG: '13.50% (incl 6.35% PIK)', spread 13.5, PIK 6.35, no rate; HPS files all-in rates
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="13.5", pik_rate="6.35", cik="0001838126"),
+                                           _no_reference("0001838126")).iloc[0]
+    assert float(out["interest_rate"]) == 13.5 and pd.isna(out["basis_spread"])
+
+
+def test_the_spread_tag_is_left_where_it_cannot_be_read_as_the_coupon(monkeypatch):
+    from pipeline import financial_conventions
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    # Blue Owl, Aptive Environmental '12.00% (6.00% PIK)', spread 12, PIK 6, no rate: the coupon is 12
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="12", pik_rate="6", cik="0001812554"), _no_reference("0001812554")).iloc[0]
+    assert float(out["interest_rate"]) == 12 and pd.isna(out["basis_spread"]) and float(out["pik_rate"]) == 6
+    # were the fund's filed rate read as the cash leg, the PIK would be added to that 12 again: the figures stay as filed
+    # (the guessed reference rate is still withdrawn)
+    monkeypatch.setattr(financial_conventions, "filed_rate_readings", lambda encodings=None: {"0001812554": "cash_leg"})
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="12", pik_rate="6", cik="0001812554"), _no_reference("0001812554")).iloc[0]
+    assert float(out["basis_spread"]) == 12 and out["interest_rate"] == "" and out["reference_rate_type"] == ""
+    monkeypatch.undo()
+    # a spread below the PIK rate cannot be an all-in coupon
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="3", pik_rate="6"), _no_reference("0001803498")).iloc[0]
+    assert float(out["basis_spread"]) == 3 and out["interest_rate"] == ""
+    # BCRED 10-K 2022-12-31, athenahealth: rate 7.82 and spread 3.5 say the loan floats; tags and page disagree, nothing changes
+    out = apply_ixbrl_field_status_overlay(_fixed(basis_spread="3.5", interest_rate="7.82"), _no_reference("0001803498")).iloc[0]
+    assert (float(out["basis_spread"]), float(out["interest_rate"]), out["reference_rate_type"], out["coupon_type"]) == (3.5, 7.82, "SOFR", "Floating")
+    # a preferred stake, a row whose reference rate the page confirms, and a fund that names no column
+    for staged, status in ((_fixed(basis_spread="9", interest_rate="9", asset_category="EQUITY_PREFERRED"), _no_reference("0001803498")),
+                           (_fixed(basis_spread="9", interest_rate="9"), [dict(_status_row("value", "SOFR"), cik="0001803498")]),
+                           (_fixed(basis_spread="9", interest_rate="9", cik="0001655888"), _no_reference("0001655888"))):
+        out = apply_ixbrl_field_status_overlay(staged, status).iloc[0]
+        assert float(out["basis_spread"]) == 9 and out["src_transforms"] == "basis_spread:rate_x100"
+
+
+# --- lien sections end at their own total; the page's totals feed the gate (2026-10-08) ---
+def _ix_total(label, cref, value, scale="3"):
+    return (f'<tr><td>{label}</td><td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" '
+            f'contextRef="{cref}" scale="{scale}">{value}</ix:nonFraction></td></tr>')
+
+
+def _heading(text):
+    return f"<tr><td>{text}</td></tr>"
+
+
+def test_a_lien_section_ends_at_its_total_and_is_not_inherited(tmp_path):
+    """BCRED prints 'Structured Finance Obligations' and 'Equity and other' after its debt
+    sections; their rows read as the last lien section while those headings were unknown."""
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("c1", "Acme Co"), _ix_context("c2", "Beta Co"), _ix_context("c3", "522 Funding CLO - Class ER"),
+            _ix_context("c4", "AGI Group - Common Units"), _ix_context("c5", "Odd Co"), _ix_context("t", None),
+            _ix_context("p1", "Acme Co", "2024-12-31"), _ix_context("tp", None, "2024-12-31")]
+    rows = [_heading("Second Lien Debt"), _ix_row("c1", ["Acme Co", "SOFR +", "6.00 %"], "100"),
+            _heading("Second Lien Debt - controlled/affiliated"), _ix_row("c2", ["Beta Co", "SOFR +", "7.00 %"], "50"),
+            _ix_total("Total Second Lien Debt - controlled/affiliated", "t", "50"),
+            _ix_total("Total Second Lien Debt", "t", "150"),
+            _heading("Structured Finance Obligations"), _ix_row("c3", ["522 Funding CLO - Class ER", "Subordinated Notes"], "30"),
+            _heading("Equity and other"), _ix_row("c4", ["AGI Group - Common Units"], "20"),
+            _heading("A Heading Nobody Listed"), _ix_row("c5", ["Odd Co"], "10"),
+            # the prior year's schedule: its total is not this period's
+            _heading("Second Lien Debt"), _ix_row("p1", ["Acme Co", "SOFR +", "6.00 %"], "90"),
+            _ix_total("Total Second Lien Debt", "tp", "90")]
+    out = propose_field_bridges_from_ixbrl(cik="0001803498", accession_number="A", report_date="2025-12-31",
+                                           html_path=_write_ixbrl(tmp_path, ctxs, rows))
+    lien = {b["raw_id_lower"]: b["lien_position"] for b in out["bridges"]}
+    assert lien["acme co"] == "Second Lien" and lien["beta co"] == "Second Lien"   # a part total does not close it
+    assert lien["522 funding clo - class er"] == "" and lien["agi group - common units"] == ""
+    assert lien["odd co"] == ""                                                    # closed by the total, not by the heading
+    assert out["printed_lien_totals"] == {"Second Lien": 150000.0}                 # scale 3; prior period ignored
+
+
+def test_filed_lien_subtotals_take_one_grain_per_fund_quarter_and_count_copies_once():
+    import pandas as pd
+    from pipeline.bdc_xbrl_html_bridge import filed_lien_subtotals
+    row = lambda cik, quarter, tier, grain, fv: {"cik": cik, "report_date": quarter, "lien_tier": tier, "grain": grain,
+                                                 "fair_value": fv}
+    frame = pd.DataFrame([
+        # BCRED 2023-12-31, read under both spellings of its CIK: a stray lien_only tier beside the full set
+        row("0001803498", "2023-12-31", "Unsecured", "lien_only", 36.3e6),
+        row("0001803498", "2023-12-31", "Unsecured", "lien_only", 36.3e6),
+        row("0001803498", "2023-12-31", "First Lien", "lien_sector_sum", 45132.5e6),
+        row("0001803498", "2023-12-31", "First Lien", "lien_sector_sum", 45132.5e6),
+        row("0001803498", "2023-12-31", "Second Lien", "lien_sector_sum", 1355.2e6),
+        # another fund has only the other grain; a file-wide choice of lien_only left it with nothing
+        row("0001838126", "2023-12-31", "First Lien", "lien_sector_sum", 9000e6),
+        row("0001287750", "2023-12-31", "First Lien", "lien_only", 15748e6),
+    ])
+    out = filed_lien_subtotals(frame)
+    assert out[("0001803498", "2023-12-31")] == {"First Lien": 45132.5e6, "Second Lien": 1355.2e6}
+    assert out[("0001838126", "2023-12-31")] == {"First Lien": 9000e6}
+    assert out[("0001287750", "2023-12-31")] == {"First Lien": 15748e6}
+
+
+def test_a_schedule_without_lien_sections_still_reads_the_tier_from_the_row(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("c1", "Acme Co")]
+    rows = [_heading("Software"), _ix_row("c1", ["Acme Co", "Second lien senior secured loan", "SOFR +", "6.00 %"], "100")]
+    out = propose_field_bridges_from_ixbrl(cik="0001287750", accession_number="A", report_date="2025-12-31",
+                                           html_path=_write_ixbrl(tmp_path, ctxs, rows))
+    assert out["bridges"][0]["lien_position"] == "Second Lien" and out["printed_lien_totals"] == {}
+
+
+def test_the_lien_gate_withholds_the_tier_that_fails_and_keeps_the_tier_that_ties():
+    from pipeline.bdc_xbrl_html_bridge import build_field_status_rows
+    bridges = [{"investment_identifier": "Senior 1", "lien_position": "First Lien"},
+               {"investment_identifier": "Junior 1", "lien_position": "Second Lien"}]
+    common = {"cik": "1", "accession_number": "A", "report_date": "2025-12-31", "period": "2025-12-31"}
+    flat = [{**common, "investment_identifier": "Senior 1", "fair_value": 24_152e6},
+            {**common, "investment_identifier": "Junior 1", "fair_value": 1.9e6}]
+    rows = {r["raw_id_lower"]: r for r in build_field_status_rows(bridges, flat, {"First Lien": 24_171e6, "Second Lien": 27.1e6})}
+    assert rows["senior 1"]["lien_status"] == "value" and rows["senior 1"]["lien_reconciled"] is True
+    assert rows["junior 1"]["lien_status"] == "validation_needed" and rows["junior 1"]["lien_reconciled"] is False
+
+
+def test_section_headings_with_an_affiliation_suffix_or_without_the_word_debt():
+    from pipeline.bdc_xbrl_html_bridge import _closed_section, _section_for_row
+    assert _section_for_row(["First Lien"]) == ("debt", "First Lien Debt")                     # BCRED 10-Q 2025-03-31
+    assert _section_for_row(["Second Lien Debt - non-controlled/non-affiliated (continued)"]) == ("debt", "Second Lien Debt")
+    assert _section_for_row(["Equity - controlled/affiliated (excluding Investments in Joint Ventures)"]) == ("equity", "Equity Investments")
+    assert _section_for_row(["First Lien Capital Partners - Term Loan"]) is None              # a borrower, not a heading
+    assert _closed_section(["Total First Lien Debt", "62,860,907"]) == "First Lien Debt"
+    assert _closed_section(["Total First Lien Debt - controlled/affiliated", "391,920"]) is None   # a part of the section
+    assert _closed_section(["Total Investment Portfolio", "69,784,151"]) is None

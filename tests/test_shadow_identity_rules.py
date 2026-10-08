@@ -121,7 +121,6 @@ def test_reference_rate_printed_ignores_what_it_cannot_compare():
     member = "Anaplan, Inc. | Non-Affiliated Issuer"
     cases = [
         (_holding("c1", member, ""), _printed(member, "SOFR")),                       # nothing published
-        (_holding("c1", member, "LIBOR"), _printed(member, "", status="not_applicable")),
         (_holding("c1", member, "LIBOR"), _printed(member, "SOFR", status="validation_needed")),
         (_holding("c1", member, "LIBOR"), _printed(member, "SOFR", role="comparative")),
         (_holding("c1", member, "LIBOR", scope="underlying_schedule"), _printed(member, "SOFR")),
@@ -134,7 +133,20 @@ def test_reference_rate_printed_ignores_what_it_cannot_compare():
 
 
 def test_reference_rate_printed_is_limited_to_funds_that_name_the_column():
-    assert engine._named_reference_column_ciks() == ["0001812554"]
+    # the five v0.5 funds; every other wrapper names no column
+    assert engine._named_reference_column_ciks() == ["0001287750", "0001803498", "0001812554", "0001837532", "0001838126"]
+
+
+def test_reference_rate_printed_fails_a_reference_rate_the_page_does_not_print():
+    # BCRED 2022-09-30, Camelot Return Merger: printed '8.75% | 8.75%' with an empty code cell, published LIBOR by date
+    member = "Camelot Return Merger SU | Non-Affiliated Issuer"
+    holds, out = _run("reference_rate_printed", dict(
+        unified=[_holding("c1", member, "LIBOR")], status=[_printed(member, "", status="not_applicable")]))
+    assert list(out.reference_rate_agrees) == [0.0]
+    # nothing published on such a row is not a finding
+    _, out = _run("reference_rate_printed", dict(
+        unified=[_holding("c1", member, "")], status=[_printed(member, "", status="not_applicable")]))
+    assert len(out) == 0
 
 
 def _pct_rule():

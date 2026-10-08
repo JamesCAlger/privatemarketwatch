@@ -42,6 +42,8 @@ _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets"
 # Published fields the finalizer may take from the PIK tag, and the transform that says so
 # (decisions D-018 and D-026 in docs/investigations/v05_decision_log.md).
 _FROM_PIK_EVENT = {"interest_rate": "interest_rate:pik_only", "basis_spread": "basis_spread:pik_margin"}
+# A fixed coupon the filer tagged as a spread, published as the rate (bdc_xbrl_html_bridge overlay).
+_FROM_SPREAD_EVENT = "interest_rate:from_spread_tag"
 
 # src_facts is included so Task 8 can use it without a join back to the
 # original holdings frame.
@@ -108,7 +110,8 @@ def _field_sql(field: str, source_col: str) -> str:
         f")"
     )
 
-    neg_null = f"({ev} LIKE '%{field}:neg_null%')"
+    # fixed_coupon: a spread tag that repeats the coupon of a loan printed with no reference rate is not published
+    neg_null = f"({ev} LIKE '%{field}:neg_null%' OR {ev} LIKE '%{field}:fixed_coupon%')"
 
     # has_event: either src_transforms mentions this field, or src_facts.x is present
     has_event = (
@@ -129,6 +132,18 @@ def _field_sql(field: str, source_col: str) -> str:
     from_pik = _FROM_PIK_EVENT.get(field)
     if from_pik:
         expected = f"(CASE WHEN {ev} LIKE '%{from_pik}%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE {expected} END)"
+    # A rate taken from the spread tag (a fixed coupon the filer tagged as a spread) replays the spread fact;
+    # the spread itself is not published, so the fact is read from src_facts.
+    from_spread = _FROM_SPREAD_EVENT if field == 'interest_rate' else ''
+    if from_spread:
+        spread_x = "json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.basis_spread.x')"
+        spread_replay = (
+            "(TRY_CAST(json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.basis_spread.r') AS DOUBLE)"
+            f" * (CASE WHEN {spread_x} LIKE '%decimals_rescale:10^%' THEN POWER(10.0, TRY_CAST("
+            f"regexp_extract({spread_x}, 'decimals_rescale:10\\^(-?\\d+)', 1) AS INTEGER)) ELSE 1.0 END)"
+            f" * (CASE WHEN {ev} LIKE '%basis_spread:rate_x100%' THEN 100.0 ELSE 1.0 END)"
+            f" * (CASE WHEN {ev} LIKE '%basis_spread:rate_div100%' THEN 0.01 ELSE 1.0 END))")
+        expected = f"(CASE WHEN {ev} LIKE '%{from_spread}%' THEN {spread_replay} ELSE {expected} END)"
     unresolved_coupon = (
         f"WHEN {ev} LIKE '%interest_rate:coupon_unresolved%' THEN CASE WHEN {published} IS NULL THEN 'unresolved_coupon' ELSE 'fail' END"
         if field == 'interest_rate' else ''
@@ -140,6 +155,10 @@ def _field_sql(field: str, source_col: str) -> str:
         f" <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12) THEN 'pass' ELSE 'fail' END"
         if from_pik else ''
     )
+    if from_spread:
+        pik_only_coupon += (
+            f" WHEN {ev} LIKE '%{from_spread}%' THEN CASE WHEN ABS({expected} - {published})"
+            f" <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12) THEN 'pass' ELSE 'fail' END")
 
     # marker: match field name in comma-joined or semicolon-joined list columns
     def marker(col: str) -> str:
@@ -428,6 +447,11 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     field_sf = sf.get('pik_rate') or {}
                     declared_c = str(field_sf.get('c') or '').lower()
                     x_events = list(field_sf.get('x') or [])
+                elif field == 'interest_rate' and _FROM_SPREAD_EVENT in str(r.get('declared_events') or ''):
+                    anchor_field = 'basis_spread'
+                    field_sf = sf.get('basis_spread') or {}
+                    declared_c = str(field_sf.get('c') or '').lower()
+                    x_events = list(field_sf.get('x') or [])
                 if declared_c:
                     hit = ctx_facts.get(f"__local__{declared_c}")
                 else:
@@ -448,6 +472,8 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 mult = (_extractor_multiplier(x_events)
                         * _staging_multiplier(anchor_field, str(r.get("declared_events") or "")))
                 neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
+                # a spread tag that holds a fixed coupon is declared as not published, whatever its sign
+                not_published = f"{field}:fixed_coupon" in str(r.get("declared_events") or "")
                 published = r["published"]
                 expected_value=instance_raw*mult
                 # a rate, or a spread, published as its tagged figure plus the tagged PIK rate
@@ -466,7 +492,9 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     expected_value += (pik_raw*_extractor_multiplier(list(pik_sf.get('x') or []))
                         *_staging_multiplier('pik_rate',str(r.get('declared_events') or '')))
 
-                if neg_null:
+                if not_published:
+                    pub_ok = pd.isna(published)
+                elif neg_null:
                     pub_ok = pd.isna(published) and instance_raw < 0
                 else:
                     pub_ok = (not pd.isna(published)

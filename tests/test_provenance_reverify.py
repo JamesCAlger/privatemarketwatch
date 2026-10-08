@@ -280,6 +280,36 @@ def test_a_spread_published_as_cash_plus_pik_margin_replays_from_both_facts():
     assert cheap_tier(holdings_df=plain).query("field=='basis_spread'").iloc[0].cheap_status=='fail'
 
 
+def test_a_fixed_coupon_tagged_as_a_spread_replays_from_the_spread_fact():
+    # BCRED-style row printed '11.50% | 11.50%' with no reference rate: spread tag 0.115, no rate tag;
+    # published as interest_rate 11.5 with no spread
+    from lxml import etree
+    events='basis_spread:rate_x100;interest_rate:from_spread_tag;basis_spread:fixed_coupon'
+    frame=pd.DataFrame([_row(interest_rate=11.5,basis_spread=None,pik_rate=None,
+        src_facts=json.dumps({'basis_spread':{'r':.115}}),src_transforms=events)])
+    replay=cheap_tier(holdings_df=frame)
+    rate=replay[replay.field=='interest_rate']
+    assert rate.iloc[0].expected==pytest.approx(11.5) and rate.iloc[0].cheap_status=='pass'
+    assert replay[replay.field=='basis_spread'].iloc[0].cheap_status=='pass'      # declared as not published
+    def loader(cik,accession,spread='.115'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            f'<g:InvestmentBasisSpreadVariableRate contextRef="ctx1">{spread}</g:InvestmentBasisSpreadVariableRate></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(rate,xml_loader=loader).iloc[0].full_status=='raw_match'
+    assert full_tier(rate,xml_loader=lambda c,a:loader(c,a,'.09')).iloc[0].full_status=='published_mismatch'
+    # the unpublished spread is checked against the filing too: its fact is there and nothing is published
+    spread=replay[replay.field=='basis_spread']
+    assert full_tier(spread,xml_loader=loader).iloc[0].full_status=='raw_match'
+    # a spread still published under the 'not published' label fails, and so does a rate that is not the spread fact
+    kept=frame.assign(basis_spread=11.5)
+    assert cheap_tier(holdings_df=kept).query("field=='basis_spread'").iloc[0].cheap_status=='fail'
+    other=frame.assign(interest_rate=9.0)
+    assert cheap_tier(holdings_df=other).query("field=='interest_rate'").iloc[0].cheap_status=='fail'
+    # without the label a rate with no fact of its own does not pass
+    plain=frame.assign(src_transforms='basis_spread:rate_x100')
+    assert cheap_tier(holdings_df=plain).query("field=='interest_rate'").iloc[0].cheap_status!='pass'
+
+
 def test_unresolved_coupon_and_identity_cost_proxy_are_not_source_verified():
     from pipeline.financial_conventions import prepare
     frame,_=prepare(pd.DataFrame([_row(interest_rate=10.5,interest_rate_kind='cash',pik_rate=None,

@@ -127,14 +127,26 @@ _BENCHMARK_CODE = {
 }
 
 
+_RESET_PERIOD_RE = re.compile(r"\(\s*[A-Za-z]\s*\)\s*$")
+_LEADING_CODE_RE = re.compile(r"\s*([A-Za-z]{1,8})\s*\+\s*\d")
+
+
 def _benchmark_from_code(cell: str, filer_codes: dict[str, str] | None = None) -> str:
     """Map a bare benchmark code (letters only) from a confirmed Index column.
 
     ``filer_codes`` are the codes a filer's wrapper defines (Blue Owl 'SR +' = SOFR); they are
-    read before the shared table.
+    read before the shared table. A filer's code may be printed with its reset period
+    (Ares 'CDOR (Q)') or ahead of the margin in the same cell (Apollo 'C+525, 0.50% Floor').
     """
-    t = re.sub(r"[^A-Za-z]", "", _FOOTNOTE_STRIP_RE.sub("", cell or "")).upper()
-    return (filer_codes or {}).get(t) or _BENCHMARK_CODE.get(t, "")
+    text = _FOOTNOTE_STRIP_RE.sub("", cell or "")
+    t = re.sub(r"[^A-Za-z]", "", text).upper()
+    if filer_codes:
+        leading = _LEADING_CODE_RE.match(text)
+        for form in (t, re.sub(r"[^A-Za-z]", "", _RESET_PERIOD_RE.sub("", text)).upper(),
+                     leading.group(1).upper() if leading else ""):
+            if form and form in filer_codes:
+                return filer_codes[form]
+    return _BENCHMARK_CODE.get(t, "")
 
 _VALUE_RE = re.compile(r"[$(]?\d[\d,]*(?:\.\d+)?%?\)?")
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
@@ -184,13 +196,18 @@ def _parse_inline_instrument_type(cell_text: str) -> str | None:
     return None
 
 _SECTION_PATTERNS: tuple[tuple[re.Pattern[str], str, str], ...] = (
-    (re.compile(r"(?i)^first\s+lien\s+debt$"), "debt", "First Lien Debt"),
-    (re.compile(r"(?i)^second\s+lien\s+debt$"), "debt", "Second Lien Debt"),
+    # 'Debt' is optional: BCRED's 10-Q for 2025-03-31 heads the sections 'First Lien' and 'Second Lien'.
+    (re.compile(r"(?i)^first\s+lien(?:\s+debt)?$"), "debt", "First Lien Debt"),
+    (re.compile(r"(?i)^second\s+lien(?:\s+debt)?$"), "debt", "Second Lien Debt"),
     (re.compile(r"(?i)^unsecured\s+debt$"), "debt", "Unsecured Debt"),
     (re.compile(r"(?i)^senior\s+secured\s+(?:loans?|debt)$"), "debt", "Senior Secured Debt"),
     (re.compile(r"(?i)^subordinated\s+(?:debt|notes?)$"), "debt", "Subordinated Debt"),
     (re.compile(r"(?i)^other\s+secured\s+debt$"), "debt", "Other Secured Debt"),
     (re.compile(r"(?i)^structured\s+finance(?:\s+investments?)?$"), "debt", "Structured Finance"),
+    # BCRED prints these two after its debt sections. Unrecognised, they left the last lien
+    # section open, so CLO tranches and equity read as Unsecured or Second Lien (2026-10-08).
+    (re.compile(r"(?i)^structured\s+finance\s+obligations$"), "debt", "Structured Finance"),
+    (re.compile(r"(?i)^equity(?:\s+and\s+other)?$"), "equity", "Equity Investments"),
     (re.compile(r"(?i)^common\s+equity$"), "equity", "Common Equity"),
     (re.compile(r"(?i)^preferred\s+equity$"), "equity", "Preferred Equity"),
     (re.compile(r"(?i)^equity\s+investments?$"), "equity", "Equity Investments"),
@@ -398,16 +415,21 @@ _FIELD_COLUMN_RULES: dict[str, dict[str, str]] = {
     "reference_rate_type": {"header": r"(?i)reference\s*rate|\bindex\b|spread|basis|base\s*rate|interest\s*rate"},
 }
 _PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
-_PIK_INCLUDED_RE = re.compile(r"(?i)^\s*(\d+(?:\.\d+)?)\s*%\s*\(\s*\d+(?:\.\d+)?\s*%\s*PIK\s*\)\s*$")
+_PIK_INCLUDED_RE = re.compile(r"(?i)^\s*(\d+(?:\.\d+)?)\s*%\s*\(\s*(?:incl\.?\s*)?\d+(?:\.\d+)?\s*%\s*PIK\s*\)\s*$")
+# The margin in basis points after the code, in the reference-rate cell itself.
+_BPS_MARGIN_RE = re.compile(
+    r"(?i)^\s*[A-Za-z]{1,8}\s*\+\s*(\d{1,4})(?:\s+cash\s+plus\s+(\d+(?:\.\d+)?)\s*%\s*PIK)?\s*(?:,.*)?$")
 
 
 def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: dict[str, Any] | None) -> str:
     """Total margin over the reference rate printed on a row, in percent, or '' when not read.
 
     Read from the cells after the filer's named reference-rate column, up to the next header
-    column that is not 'Cash' or 'PIK'. Three printed forms are understood:
-    one figure ('5.75%', '7.00% PIK') is the margin; 'A% (B% PIK)' is a total A of which B is
-    PIK; two figures in two cells (cash, then PIK) add up. Anything else is not read.
+    column that is not 'Cash', 'PIK' or 'Spread'. Three printed forms are understood:
+    one figure ('5.75%', '7.00% PIK') is the margin; 'A% (B% PIK)' or 'A% (incl B% PIK)' is a
+    total A of which B is PIK; two figures in two cells (cash, then PIK) add up. A fourth form
+    sits in the named cell itself: basis points after the code ('S+625, 0.50% Floor' is 6.25;
+    'S+325 Cash plus 3.00% PIK, 0.75% Floor' is 6.25). Anything else is not read.
     """
     if not filer_reading or not header_map:
         return ""
@@ -415,8 +437,11 @@ def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: d
              and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
     if not named:
         return ""
+    own = _BPS_MARGIN_RE.match(grid[named[0]])
+    if own:
+        return repr(round(int(own.group(1)) / 100 + float(own.group(2) or 0), 6))
     later = [i for i in sorted(header_map) if i > named[0]
-             and " ".join(header_map[i].lower().split()) not in ("cash", "pik")]
+             and " ".join(header_map[i].lower().split()) not in ("cash", "pik", "spread")]
     cells = [c for c in grid[named[0] + 1:min(later[0] if later else len(grid), len(grid))] if c.strip()]
     included = _PIK_INCLUDED_RE.match(" ".join(cells))
     if included:
@@ -668,17 +693,55 @@ def apply_html_section_bridge_field_overlays(
     return result
 
 
+_AFFILIATION_SUFFIX_RE = re.compile(r"(?i)\s+-\s+(?:non-)?controlled\s*/\s*(?:non-)?affiliated(?:\s*\([^)]*\))?\s*$")
+
+
 def _section_for_row(row: list[str]) -> tuple[str, str] | None:
     cells = [_norm_text(cell) for cell in row if _norm_text(cell)]
     if len(cells) != 1:
         return None
     # "First Lien Debt (continued)" on continuation pages -> same section
     text = _CONTINUED_RE.sub("", cells[0])
+    # "First Lien Debt - non-controlled/affiliated": the section, split by affiliation
+    text = _AFFILIATION_SUFFIX_RE.sub("", _CONTINUED_RE.sub("", text))
     if _VALUE_RE.search(text):
         return None
     for pattern, family, instrument in _SECTION_PATTERNS:
         if pattern.match(text):
             return family, instrument
+    return None
+
+
+def _closed_section(row: list[str]) -> str | None:
+    """The section a 'Total <section>' row closes, by its instrument label; None otherwise.
+
+    Only the section's own grand total closes it: 'Total First Lien Debt' does,
+    'Total First Lien Debt - controlled/affiliated' (a part of the section) does not."""
+    cells = [_norm_text(cell) for cell in row if _norm_text(cell)]
+    if not cells:
+        return None
+    match = re.match(r"(?i)^total\s+(.+)$", _CONTINUED_RE.sub("", cells[0]))
+    if not match:
+        return None
+    for pattern, _family, instrument in _SECTION_PATTERNS:
+        if pattern.match(match.group(1).strip()):
+            return instrument
+    return None
+
+
+def _tagged_fair_value(tr: Any, contexts: dict[str, tuple[str, str]], report_date: str, fv_concept: str) -> float | None:
+    """The row's tagged current-period fair value in dollars (the fact's own scale and sign), or None."""
+    for el in tr.iter():
+        if _ixbrl_local(el.tag) != "nonFraction" or (el.get("name") or "").rsplit(":", 1)[-1] != fv_concept:
+            continue
+        if contexts.get(el.get("contextRef"), ("", ""))[1] != report_date:
+            continue
+        digits = re.sub(r"[^0-9.]", "", "".join(el.itertext()))
+        try:
+            value = float(digits) * 10 ** int(el.get("scale") or 0)
+        except ValueError:
+            return None
+        return -value if el.get("sign") == "-" else value
     return None
 
 
@@ -979,9 +1042,12 @@ def build_field_status_rows(
     Benign classes set every field status to the class label, so a downstream
     review filter on status==``not_found`` skips them.
 
-    If the filing's value-status lien doesn't roll up to ``lien_subtotals``
-    (reconcile_to_subtotals fails), value-status lien is downgraded to
-    validation_needed for the whole filing -> the overlay then won't apply it.
+    A lien tier whose rows do not roll up to its subtotal in ``lien_subtotals`` has its
+    value-status lien downgraded to validation_needed, so the overlay will not apply it. The
+    downgrade is per tier (2026-10-08): the test is arithmetic on one tier, and a tier that ties
+    to its own total is not put in doubt by another that does not (HPS 2025-09-30: First Lien
+    24,152M against a printed 24,171M, withheld with everything else because one 25M second-lien
+    position was not read).
     """
     flat_rows = list(flat_rows)
     joined = join_flat_positions_to_inline_status(flat_rows, bridges, identifier_key=identifier_key)
@@ -1000,7 +1066,8 @@ def build_field_status_rows(
                for j in joined
                if j.get("lien_position_status") == "value" and j.get("lien_position")
                and j.get("period_role") == "current"]
-    lien_ok = reconcile_to_subtotals(per_pos, lien_subtotals)["reconciled"] if lien_subtotals else True
+    failed_tiers = ({tier for tier, result in reconcile_to_subtotals(per_pos, lien_subtotals)["tiers"].items()
+                     if not result["ok"]} if lien_subtotals else set())
 
     rows: list[dict[str, Any]] = []
     for j in joined:
@@ -1023,8 +1090,9 @@ def build_field_status_rows(
             anchor_class = benign or "missing"
 
         lien_status = j.get("lien_position_status", "")
+        lien_ok = j.get("lien_position") not in failed_tiers
         if lien_status == "value" and not lien_ok:
-            lien_status = "validation_needed"  # filer-quarter failed rollup
+            lien_status = "validation_needed"  # this tier failed its rollup
         if benign:  # OK row -> every field carries the benign label, not not_found
             lien_status = benign
 
@@ -1202,27 +1270,71 @@ def apply_ixbrl_field_status_overlay(
                 result[_src] = ""
             result.loc[mask.values, _src] = "ixbrl_field_status"
     # A reference rate inferred from the report date (LIBOR before July 2023, SOFR after) is a
-    # guess. For a fund whose wrapper names its reference-rate column, the code printed there
-    # replaces it. A tagged rate, or one read from the identifier, is never replaced.
+    # guess, and one read from the identifier text can be a borrower's name ('Prime Security
+    # Services Borrower') or a label the filer did not update (Apollo 10-Q 2023-03-31, Garda
+    # World: member 'L+425', page 'S+ 425'). For a fund whose wrapper names its reference-rate
+    # column, the code printed there replaces both. A tagged rate is never replaced. Where that
+    # column prints no reference rate, a guessed one is withdrawn.
+    withdrawn = pd.Series(False, index=merged.index)
+    moved = pd.Series(False, index=merged.index)
     if {"reference_rate_type_ix", "reference_rate_status"} <= set(merged.columns) and "reference_rate_source" in merged.columns:
         from pipeline.source_encodings import load_encodings
         named = {cik for cik, encoding in load_encodings().items() if encoding.get("reference_rate_columns")}
+        in_named = merged[cik_col].map(normalize_cik).isin(named)
         printed = merged["reference_rate_type_ix"].astype("string").fillna("").str.strip()
-        inferred = merged["reference_rate_source"].astype("string").fillna("").str.startswith("inferred_")
-        replace = (merged[cik_col].map(normalize_cik).isin(named) & (merged["reference_rate_status"].astype(str) == "value")
-                   & (printed != "") & inferred
+        source = merged["reference_rate_source"].astype("string").fillna("")
+        inferred = source.str.startswith("inferred_")
+        replace = (in_named & (merged["reference_rate_status"].astype(str) == "value")
+                   & (printed != "") & (inferred | (source == "identifier_text"))
                    & (printed.str.upper() != merged["reference_rate_type"].astype("string").fillna("").str.strip().str.upper()))
         if replace.any():
             result.loc[replace.values, "reference_rate_type"] = printed[replace].values
             result.loc[replace.values, "reference_rate_source"] = "ixbrl_field_status"
+        no_reference = in_named & (merged["reference_rate_status"].astype(str) == "not_applicable")
+        # The guess came from a spread tag. On such a row the tag holds the fixed coupon, not a
+        # margin (BCRED 'Altice Financing S.A. | 5.75% | 5.75%': rate 5.75, spread 5.75; 'AI Altius
+        # Bidco | 9.75% | 9.75% PIK': PIK 9.75, spread 9.75, no rate; HPS 'Eagle LNG | 13.50% (incl
+        # 6.35% PIK)': spread 13.5, PIK 6.35, no rate). It is not published as a spread
+        # (basis_spread:fixed_coupon). Where no rate is filed it is published as the rate
+        # (interest_rate:from_spread_tag), since the printed coupon includes any PIK part; not for
+        # a fund whose filed rate is read as the cash leg, where the PIK would be added again.
+        # A spread that differs from a filed rate says the loan floats: the tags and the page
+        # disagree, and nothing is changed.
+        conflict = pd.Series(False, index=merged.index)
+        if {"basis_spread", "interest_rate", "pik_rate", "asset_category", "src_transforms"} <= set(result.columns):
+            from pipeline.financial_conventions import filed_rate_readings
+            cash_leg = {cik for cik, reading in filed_rate_readings().items() if reading == "cash_leg"}
+            spread = pd.to_numeric(merged["basis_spread"], errors="coerce")
+            rate = pd.to_numeric(merged["interest_rate"], errors="coerce")
+            pik = pd.to_numeric(merged["pik_rate"], errors="coerce")
+            repeats = (spread - rate).abs() <= _MARGIN_TOL
+            conflict = spread.notna() & rate.notna() & ~repeats
+            candidate = no_reference & (merged["asset_category"].astype(str) == "LOAN") & (spread > 0)
+            moved = candidate & rate.isna() & (~(pik > 0) | (~merged[cik_col].map(normalize_cik).isin(cash_leg)
+                                                             & (spread >= pik - _MARGIN_TOL)))
+            coupon = candidate & (repeats | moved)
+            if coupon.any():
+                events = merged["src_transforms"].fillna("").astype(str)
+                label = pd.Series("basis_spread:fixed_coupon", index=merged.index).where(
+                    ~moved, "interest_rate:from_spread_tag;basis_spread:fixed_coupon")
+                result.loc[moved.values, "interest_rate"] = spread[moved].values
+                result.loc[coupon.values, "basis_spread"] = None
+                result.loc[coupon.values, "src_transforms"] = (events.where(events == "", events + ";") + label)[coupon].values
+        withdrawn = no_reference & inferred & ~conflict
+        if withdrawn.any():
+            result.loc[withdrawn.values, "reference_rate_type"] = ""
+            result.loc[withdrawn.values, "reference_rate_source"] = ""
     if {"reference_rate_status", "asset_category"} <= set(merged.columns) and "coupon_type" in result.columns:
         has_rate = pd.Series(False, index=merged.index)
         for col in ("interest_rate", "pik_rate"):
             if col in merged.columns:
                 has_rate |= ~blank(merged[col])
+        has_rate |= moved
+        # 'Floating' on a withdrawn row came from the same guess (a spread tag was present).
         fixed = ((merged["reference_rate_status"].astype(str) == "not_applicable") & has_rate
-                 & blank(merged["coupon_type"]) & blank(merged["reference_rate_type"])
-                 & (merged["asset_category"].astype(str) == "LOAN"))
+                 & (merged["asset_category"].astype(str) == "LOAN")
+                 & ((blank(merged["coupon_type"]) & blank(merged["reference_rate_type"]))
+                    | (withdrawn & (merged["coupon_type"].astype(str) == "Floating"))))
         result.loc[fixed.values, "coupon_type"] = "Fixed"
     # A filer that prints the cash margin and the PIK margin in separate cells tags the spread
     # with the cash part only (Blue Owl from 2025-03-31; before that 'A% (B% PIK)' with the
@@ -1313,10 +1425,19 @@ def propose_field_bridges_from_ixbrl(
     bridges: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen: set[str] = set()
+    first_context: dict[str, str] = {}
+    repeated: set[str] = set()
+    read_contexts: set[str] = set()
+    readings: dict[str, list[dict[str, Any]]] = {}
     cur_lien = ""
     cur_sector = ""
     cur_header: dict[int, str] = {}
     rd = _norm_text(report_date)
+    # The page's own section totals by lien tier ('Total Second Lien Debt ... 3,129,503'), for the
+    # lien reconciliation gate. Counted only for a section in which a current-period position was read.
+    printed_lien_totals: dict[str, float] = {}
+    section_positions = 0
+    lien_sections_seen = False
 
     # Commitment evidence: a current-instant identifier that the filer DID tag
     # (any fact) but for which there is NO InvestmentOwnedAtFairValue fact is an
@@ -1349,7 +1470,23 @@ def propose_field_bridges_from_ixbrl(
             continue
         sec = _section_for_row(cells)
         if sec:
+            if sec[1] != cur_lien:  # a '(continued)' heading on the next page is the same section
+                section_positions = 0
             cur_lien = sec[1]
+            from pipeline.lien_classification import classify_lien as _tier_of
+            lien_sections_seen = lien_sections_seen or bool(_tier_of("", cur_lien))
+            continue
+        closed = _closed_section(cells)
+        if closed is not None:
+            # The section ends at its own total. A heading the reader does not know may follow;
+            # its rows must not inherit this section's lien.
+            from pipeline.lien_classification import classify_lien as _tier_of
+            tier = _tier_of("", closed) or ""
+            total = _tagged_fair_value(tr, contexts, rd, fv_concept) if tier and section_positions else None
+            if total is not None:
+                printed_lien_totals[tier] = printed_lien_totals.get(tier, 0.0) + total
+            cur_lien = ""
+            section_positions = 0
             continue
         # industry sub-header: a lone non-value, non-subtotal label row
         if len(nonempty) == 1 and not _VALUE_RE.search(nonempty[0]) and not _SUBTOTAL_RE.search(nonempty[0]):
@@ -1366,9 +1503,9 @@ def propose_field_bridges_from_ixbrl(
             if i and inst == rd:
                 ident, cref = i, el.get("contextRef")
                 break
-        if not ident or ident in seen:
+        if not ident:
             continue
-        seen.add(ident)
+        section_positions += 1
         # Column-aware field resolution: each field carries value + status
         # (value / validation_needed / blank) + the source column it came from.
         mat = apply_maturity_signature(field_status("maturity_date", grid, cur_header), rd)
@@ -1378,7 +1515,23 @@ def propose_field_bridges_from_ixbrl(
         # lien tier: section header (Blackstone-style) OR, for filers that group
         # only by industry, parse it from the row's instrument text.
         from pipeline.lien_classification import classify_lien
-        lien_tier = classify_lien("", cur_lien) or classify_lien("", " ".join(cells)) or ""
+        # A schedule laid out in lien sections says the tier by section and nowhere else: outside
+        # one, a word in the row ('Subordinated Notes' of a CLO) is not a lien tier.
+        lien_tier = classify_lien("", cur_lien) or ("" if lien_sections_seen else classify_lien("", " ".join(cells))) or ""
+        margin = printed_margin(grid, cur_header, filer_reading) if rrt["status"] == "value" else ""
+        # the artifact keys a row by its member in lower case, so two members that differ only in
+        # case are one key ('athenahealth, Inc.' first lien and 'Athenahealth, Inc.' notes, BCRED 10-K 2022)
+        key = _raw_id_lower(ident)
+        if first_context.setdefault(key, cref) != cref:
+            repeated.add(key)
+        if cref not in read_contexts:
+            read_contexts.add(cref)
+            readings.setdefault(key, []).append({
+                "reference": (rrt["value"], rrt["status"]), "margin": margin,
+                "maturity": (mat["value"], mat["status"]), "lien": lien_tier})
+        if ident in seen:
+            continue
+        seen.add(ident)
         bridges.append({
             "accession_number": acc,
             "report_date": rd,
@@ -1396,7 +1549,7 @@ def propose_field_bridges_from_ixbrl(
             "reference_rate_status": rrt["status"],
             "reference_rate_source_column": rrt["source_column"],
             # a margin exists only over a confirmed reference rate
-            "printed_margin": printed_margin(grid, cur_header, filer_reading) if rrt["status"] == "value" else "",
+            "printed_margin": margin,
             "lien_position": lien_tier,
             "lien_section": cur_lien,
             "gics_sector": cur_sector,
@@ -1405,9 +1558,45 @@ def propose_field_bridges_from_ixbrl(
                                "context_ref": cref, "anchor_concept": fv_concept},
         })
 
+    # One member on two position rows (BCRED 10-Q 2022-09-30: 'Cloudera, Inc.' first lien at
+    # L + 3.75% and second lien at L + 6.00%) cannot say which row a published position is. For a
+    # fund that names its reference-rate column, where these values are compared and may
+    # replace published ones, a field is confirmed only where every row of the member prints the
+    # same thing (both Cloudera rows print 'L +': the reference rate stands, the margin does not).
+    if filer_reading and repeated:
+        for bridge in bridges:
+            rows = readings.get(bridge["raw_id_lower"], [])
+            if bridge["raw_id_lower"] not in repeated or len(rows) < 2:
+                continue
+            agree = {name: all(row[name] == rows[0][name] for row in rows) for name in rows[0]}
+            if not agree["reference"] and bridge["reference_rate_status"] in ("value", "not_applicable"):
+                bridge["reference_rate_status"] = "validation_needed"
+            if not agree["maturity"] and bridge["maturity_status"] == "value":
+                bridge["maturity_status"] = "validation_needed"
+            if not agree["margin"] or not agree["reference"]:
+                bridge["printed_margin"] = ""
+            if not agree["lien"]:
+                bridge["lien_position"] = ""
+
     return {"schema_version": BRIDGE_SCHEMA_VERSION, "cik": cik_norm, "version": 1,
             "source": "bdc_xbrl_ixbrl", "bridges": bridges, "rejected": rejected,
-            "commitment_ids": commitment_ids}
+            "commitment_ids": commitment_ids, "printed_lien_totals": printed_lien_totals}
+
+
+def filed_lien_subtotals(lien: "pd.DataFrame") -> dict[tuple[str, str], dict[str, float]]:
+    """(cik, report_date) -> tier -> filed fair value, from bdc_lien_breakdown rows.
+
+    Exact copies count once, and each fund-quarter uses the one grain that holds the most fair
+    value, so a stray tier in a second grain is not mistaken for the fund's whole breakdown."""
+    out: dict[tuple[str, str], dict[str, float]] = {}
+    if lien is None or lien.empty:
+        return out
+    lien = lien.drop_duplicates(subset=["cik", "report_date", "lien_tier", "grain", "fair_value"])
+    for (c, rd), grp in lien.groupby(["cik", "report_date"]):
+        by_grain = grp.assign(_size=grp["fair_value"].abs()).groupby("grain")["_size"].sum()
+        best = grp[grp["grain"] == by_grain.sort_index().idxmax()]
+        out[(c, rd)] = best.groupby("lien_tier")["fair_value"].sum().to_dict()
+    return out
 
 
 def extract_bdc_ixbrl_field_status(
@@ -1453,20 +1642,21 @@ def extract_bdc_ixbrl_field_status(
     if wanted:
         flat = flat[flat["cik"].isin(wanted)]
 
-    # lien subtotals per (cik, report_date): prefer the lien_only grain
+    # Filed lien subtotals per (cik, report_date), used where the page prints no section total.
+    # The file holds a fund under both spellings of its CIK, and a fund-quarter may hold a stray
+    # tier in one grain beside the full set in the other (BCRED: one 'lien_only' Unsecured row of
+    # about 36M next to First and Second Lien in 'lien_sector_sum'). So: distinct rows, and for
+    # each fund-quarter the grain with the most fair value. Before 2026-10-08 the grain was
+    # chosen once for the whole file and the copies were summed.
     subtotals: dict[tuple[str, str], dict[str, float]] = {}
     if lien_f.exists():
         lien = con.execute(
-            "SELECT LPAD(CAST(cik AS VARCHAR),10,'0') AS cik, report_date, lien_tier, "
+            "SELECT DISTINCT LPAD(CAST(cik AS VARCHAR),10,'0') AS cik, report_date, lien_tier, "
             "grain, CAST(fair_value AS DOUBLE) AS fair_value "
             f"FROM read_csv_auto('{lien_f.as_posix()}', "
             "types={'cik':'VARCHAR','report_date':'VARCHAR'})"
         ).df()
-        if not lien.empty:
-            lo = lien[lien["grain"] == "lien_only"]
-            use = lo if not lo.empty else lien
-            for (c, rd), grp in use.groupby(["cik", "report_date"]):
-                subtotals[(c, rd)] = grp.groupby("lien_tier")["fair_value"].sum().to_dict()
+        subtotals = filed_lien_subtotals(lien)
 
     rows: list[dict[str, Any]] = []
     groups = list(flat.groupby(["cik", "accession_number", "report_date"]))
@@ -1477,8 +1667,11 @@ def extract_bdc_ixbrl_field_status(
         flat_rows = grp.to_dict("records")
         for fr in flat_rows:
             fr["cik"], fr["accession_number"], fr["report_date"] = c, acc, rd
+        # The page's own section totals are the reference where it prints them: the same
+        # document, the same rows. The filed breakdown is the fallback.
+        reference = prop.get("printed_lien_totals") or subtotals.get((c, rd), {})
         rows.extend(build_field_status_rows(
-            bridges, flat_rows, subtotals.get((c, rd), {}),
+            bridges, flat_rows, reference,
             commitment_ids=prop.get("commitment_ids") or [],
         ))
         if i % progress_every == 0:

@@ -3,7 +3,7 @@
 Creates ``scratch/fund_sandbox/<label>/output`` holding only the chosen funds' inputs, then runs
 the production commands unchanged with ``PM_OUTPUT_DIR`` pointing at it:
 
-    fund highlights -> fund financials -> unified rebuild -> oracle -> non-accrual -> validate
+    fund highlights -> fund financials -> unified rebuild -> non-accrual -> validate -> oracle
     -> provenance -> shadow -> queue -> ledger
 
 So the ledger is produced by the same code as the official one, for those funds only. Verdicts
@@ -52,9 +52,12 @@ STAGES = (
     ("highlights", [PY, "scripts/rebuild_outputs.py", "--highlights"]),
     ("financials", [PY, "scripts/rebuild_outputs.py", "--financials"]),
     ("rebuild", [PY, "scripts/rebuild_outputs.py", "--unified"]),
-    ("oracle", [PY, "-m", "pipeline.oracle_runner"]),
     ("nonaccrual", [PY, "-m", "pipeline.extract_nonaccrual_flags"]),
     ("validate", [PY, "-m", "pipeline.main", "--validate"]),
+    # After validate, which writes the source reconciliation detail that oracle checks A01, B01,
+    # B07 and E07 read. Run before it, they saw the previous build's file and skipped a quarter
+    # that build did not have (2026-06-30 in sandboxes q2a to q2e; decision D-048).
+    ("oracle", [PY, "-m", "pipeline.oracle_runner"]),
     ("provenance", [PY, "-m", "pipeline.provenance_reverify", "--cohort"]),
     ("shadow", [PY, "scripts/shadow_validation_runner.py"]),
     ("queue", [PY, "-m", "pipeline.review_queue", "--emit-bdc-worklist"]),
@@ -123,6 +126,15 @@ def run_stage(name: str, argv: list[str] | None, sandbox: Path, quarter: str | N
     if name == "ledger":
         argv = [PY, "scripts/findings_ledger.py", "--queue", str(output / "review_queue" / "review_queue.csv"),
                 "--out", str(sandbox / "findings_ledger.csv")]
+        # Carry-forward checks of the standing dispositions, on this sandbox's own outputs. If the step
+        # fails no result file is passed, so no disposition leaves its listed quarters.
+        validity = sandbox / "disposition_validity.csv"
+        validity.unlink(missing_ok=True)
+        with open(logs / "disposition_validity.log", "w", encoding="utf-8", errors="replace") as log:
+            checked = subprocess.run([PY, "-m", "pipeline.disposition_validity", "--output-dir", str(output), "--out", str(validity)],
+                                     cwd=ROOT, stdout=log, stderr=subprocess.STDOUT).returncode
+        if checked == 0 and validity.exists():
+            argv += ["--validity", str(validity)]
         if quarter:
             argv += ["--quarter", quarter]
     env = dict(os.environ, PM_OUTPUT_DIR=str(output), PYTHONIOENCODING="utf-8")

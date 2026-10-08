@@ -8,7 +8,7 @@
    "all"
   ]
  },
- "predicate_sql": "NOT regexp_matches(lower(CAST(bdc_investment_identifier AS VARCHAR)), 'first lien|second lien|senior secured|subordinated|unitranche|term loan|revolving|delayed draw|unsecured facility|unsecured note|senior convertible note|bridge loan|common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|partnership interest|partnership units|llc interest|membership interest|equity interest|equity co-invest|class [a-z][-]?[0-9]* units|class [a-z][0-9]* interests|class [a-z] interests|series [a-z][-]?[0-9]* units|lp interest|limited partner interest|specialty finance|warrant') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "predicate_sql": "NOT regexp_matches(lower(CAST(bdc_investment_identifier AS VARCHAR)), 'first lien|second lien|senior secured|subordinated|unitranche|term loan|revolving|delayed draw|unsecured facility|unsecured note|senior convertible note|bridge loan|common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|partnership interest|partnership units|investment partnership|llc interest|membership interest|equity interest|equity co-invest|class [a-z][-]?[0-9]* units|class [a-z][0-9]* interests|class [a-z] interests|series [a-z][-]?[0-9]* units|lp interest|limited partner interest|specialty finance|warrant') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
  "evidence": [
   {
    "source": "filing",

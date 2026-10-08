@@ -72,8 +72,7 @@
    ],
    "quarters": [
     "2022-03-31",
-    "2022-06-30",
-    "2026-04-27"
+    "2022-06-30"
    ]
   },
   {
@@ -248,7 +247,16 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "cost"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-004A-1837532",
@@ -285,7 +293,16 @@
     "2025-06-30",
     "2025-09-30",
     "2026-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "cost"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-005-1287750",
@@ -319,7 +336,17 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "principal_amount",
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-005-1803498",
@@ -348,7 +375,17 @@
     "2024-12-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "principal_amount",
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-005-1812554",
@@ -374,7 +411,17 @@
    ],
    "quarters": [
     "2025-06-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "principal_amount",
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-005-1837532",
@@ -402,7 +449,17 @@
     "2023-12-31",
     "2024-03-31",
     "2025-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "principal_amount",
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-005-1838126",
@@ -439,39 +496,17 @@
     "2025-06-30",
     "2025-09-30",
     "2026-03-31"
-   ]
-  },
-  {
-   "disposition_id": "DS-006-1803498",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "X02",
-   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate (published in pik_rate). Reviewer verdicts for these funds cite rows that are now populated or whose only tag is the PIK one.",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "Blue Owl 0001812554-26-000027: AAM Series 1.1 Rail (context c-608) carries InvestmentInterestRatePaidInKind 0.12 and no other rate fact; the schedule has Ref. Rate, Cash and PIK columns and no all-in rate. ABB/Con-cise Optical, cited by the reviewer, now publishes its spread of 7.5. HPS 0001628280-26-033248 context c-922 (Daphne S.P.A.): InvestmentInterestRatePaidInKind 0.0675 only; the printed line shows 'E + 6.75 %' and 8.75 %. BCRED 0001803498-24-000044 context c-1374 (WHCG Purchaser III, Inc.): cost and value facts only; AI Altius Bidco, cited by the reviewer, is no longer flagged."
-    },
-    {
-     "source": "query",
-     "quote": "Sandbox five9: Blue Owl 1,908 rows, 1,634 with fair value at or below zero, 247 PIK only. HPS 1,366 rows, 1,084 at or below zero, 130 PIK only. BCRED 3 rows."
-    },
-    {
-     "source": "query",
-     "quote": "Limit: for HPS and Blue Owl the printed schedule shows a margin or coupon on PIK loans that the tags do not carry as a spread or rate. The published fields follow the tags."
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "principal_amount",
+      "fair_value"
+     ]
     }
-   ],
-   "rerun": "python scripts/v05_evidence/norate2.py five12",
-   "decided_by": "agent, owner permission given in session 2026-10-06",
-   "decided_on": "2026-10-06",
-   "supersedes_real_error_verdict": true,
-   "ciks": [
-    "0001803498"
-   ],
-   "quarters": [
-    "2025-12-31",
-    "2026-03-31"
-   ]
+   }
   },
   {
    "disposition_id": "DS-006-1812554",
@@ -514,7 +549,12 @@
     "2025-09-30",
     "2025-12-31",
     "2026-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "no_rate_in_source",
+    "params": {}
+   }
   },
   {
    "disposition_id": "DS-006-1838126",
@@ -555,7 +595,12 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "no_rate_in_source",
+    "params": {}
+   }
   },
   {
    "disposition_id": "DS-006A-1287750",
@@ -595,7 +640,12 @@
     "2025-06-30",
     "2025-09-30",
     "2026-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "no_rate_in_source",
+    "params": {}
+   }
   },
   {
    "disposition_id": "DS-006B-1837532",
@@ -618,7 +668,12 @@
    "quarters": [
     "2025-03-31",
     "2025-06-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "no_rate_in_source",
+    "params": {}
+   }
   },
   {
    "disposition_id": "DS-012-1287750",
@@ -699,7 +754,16 @@
    ],
    "quarters": [
     "2026-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-007-1837532",
@@ -725,7 +789,16 @@
    ],
    "quarters": [
     "2023-09-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-007-1838126",
@@ -756,7 +829,16 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "values_as_filed",
+    "params": {
+     "fields": [
+      "fair_value"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-008-1837532",
@@ -995,37 +1077,18 @@
     "0001812554"
    ],
    "quarters": [
-    "2025-06-30",
     "2025-09-30"
-   ]
-  },
-  {
-   "disposition_id": "DS-016-1837532",
-   "class": "not_applicable",
-   "engine": "row_validation",
-   "rule_name": "SRC_BDC01",
-   "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
-   "evidence": [
-    {
-     "source": "query",
-     "quote": "Ares: 'Visual Edge Technology, Inc.' 70.5M at 2026-03-31 equals its six published positions (14.4 + 7.8 + 34.4 + 2.5 + 9.9 + 1.5), which are named 'Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC'; 'Olympia ... Asclepius Hodlings LLC' is a misspelt issuer group. Apollo: 'Total Pharmaceuticals' and 'Insurance First Lien Secured Debt - Revolver'. Blue Owl: 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' and 'Notorious Topco, LLC (dba Beauty Industry Group)' issuer rows."
-    },
-    {
-     "source": "query",
-     "quote": "Published totals equal filed totals in these fund-quarters (sandbox five6), so no position is missing."
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "missing_source_rows_known",
+    "params": {
+     "patterns": [
+      "^Blue Owl Cross-Strategy Opportunities LLC \\(BOCSO\\)$",
+      "\\| (?:Non-)?Controlled Affiliates$"
+     ]
     }
-   ],
-   "rerun": "python scripts/v05_evidence/issues2.py five10 SRC_BDC01 1287750",
-   "decided_by": "agent, owner permission given in session 2026-10-06",
-   "decided_on": "2026-10-06",
-   "ciks": [
-    "0001837532"
-   ],
-   "quarters": [
-    "2024-03-31",
-    "2024-06-30",
-    "2025-03-31"
-   ]
+   }
   },
   {
    "disposition_id": "DS-017-1287750",
@@ -1073,7 +1136,17 @@
     "2025-09-30",
     "2025-12-31",
     "2026-03-31"
-   ]
+   ],
+   "carry_forward": {
+    "from": "2026-06-30",
+    "check": "missing_source_rows_known",
+    "params": {
+     "patterns": [
+      "^Blue Owl Cross-Strategy Opportunities LLC \\(BOCSO\\)$",
+      "\\| (?:Non-)?Controlled Affiliates$"
+     ]
+    }
+   }
   },
   {
    "disposition_id": "DS-027-1803498",
@@ -1277,8 +1350,7 @@
     "0001838126"
    ],
    "quarters": [
-    "2022-03-31",
-    "2022-12-31"
+    "2022-03-31"
    ]
   },
   {
@@ -1392,6 +1464,28 @@
    ],
    "quarters": [
     "2026-03-31"
+   ]
+  },
+  {
+   "disposition_id": "DS-029-1838126",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X07",
+   "statement": "One loan, Thrasio LLC, is printed and tagged with a cost of 8 against a principal and fair value of 300 (thousands).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "HPS 10-Q for 2026-06-30 (0001628280-26-056772): 'Thrasio LLC (4)(10)(23)(25) SF + 8.00 % 12.01 % 6/18/2029 300 8 300 Total Broadline Retail 24,258 24,550'; the industry cost total 24,258 is Auctane 24,250 plus 8."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1838126 000162828026056772 html \"Thrasio LLC\" 3 120",
+   "decided_by": "owner, in session 2026-10-08",
+   "decided_on": "2026-10-08",
+   "ciks": [
+    "0001838126"
+   ],
+   "quarters": [
+    "2026-06-30"
    ]
   }
  ]

@@ -570,7 +570,8 @@ def _prepare_bdc(
     _sql_has_entity_in_raw = " OR ".join(
         f"contains(lower(_raw_id), '{s}')" for s in _entity_sigs
     )
-    asset_case = _sql_classify_bdc_asset()
+    from pipeline.source_encodings import equity_instrument_expression
+    asset_case = _sql_classify_bdc_asset(equity_instrument_expression('cik', 'instrument_description'))
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
     # Cash-identity check: a row is a genuine cash position only when its own

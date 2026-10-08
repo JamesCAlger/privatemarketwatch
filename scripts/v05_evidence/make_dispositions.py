@@ -4,7 +4,9 @@
 
 Each spec below is one decision recorded in docs/investigations/v05_decision_log.md. For `as_filed` and
 `not_applicable` the fund-quarters are taken from the ledger's unresolved findings for that rule, so an
-entry names exactly the quarters that were looked at. Nothing is written without --write.
+entry names exactly the quarters that were looked at, and none after LAST_REVIEWED. A later quarter is
+reached only through an entry's carry-forward check (CARRY, pipeline/disposition_validity.py).
+Nothing is written without --write.
 """
 import csv
 import json
@@ -23,6 +25,28 @@ S = "python scripts/v05_evidence/"
 ALLQ = ["%d-%s" % (y, md) for y in range(2022, 2027) for md in ("03-31", "06-30", "09-30", "12-31")]
 # Blue Owl: from 2024-12-31 undrawn lines come from the commitments table, which files no cost.
 OWL_PROXY = {q for q in ALLQ if q >= "2024-12-31"}
+
+# The last quarter whose findings were reviewed and accepted. Later quarters are never listed here.
+LAST_REVIEWED = "2026-03-31"
+CARRY_FROM = "2026-06-30"
+_FILED = lambda *fields: {"from": CARRY_FROM, "check": "values_as_filed", "params": {"fields": list(fields)}}
+_NO_RATE = {"from": CARRY_FROM, "check": "no_rate_in_source", "params": {}}
+# Blue Owl source rows that are not positions: the footnote describing the portfolio of BOCSO (total and
+# range, 10-Q 2026-06-30: "five investments totaling $1.25 billion and $1.24 billion at cost and fair
+# value ... ranging ... from $24.9 million to $450.6 million"), and the issuer lines of the
+# controlled-affiliates transactions table ("Notorious Topco ... 126,405").
+_OWL_ROWS = {"from": CARRY_FROM, "check": "missing_source_rows_known", "params": {"patterns": [
+    r"^Blue Owl Cross-Strategy Opportunities LLC \(BOCSO\)$", r"\| (?:Non-)?Controlled Affiliates$"]}}
+# Quarters after LAST_REVIEWED that the owner accepted for one entry, by name, in session.
+OWNER_ACCEPTED = {("DS-029", HPS): (["2026-06-30"], "owner, in session 2026-10-08", "2026-10-08")}
+# spec id, or (spec id, fund) -> carry-forward check
+CARRY = {
+    ("DS-004", HPS): _FILED("cost"), "DS-004A": _FILED("cost"),
+    "DS-005": _FILED("principal_amount", "fair_value"),
+    "DS-007": _FILED("fair_value"),
+    "DS-006": _NO_RATE, "DS-006A": _NO_RATE, "DS-006B": _NO_RATE,
+    ("DS-016", OWL): _OWL_ROWS, ("DS-017", OWL): _OWL_ROWS,
+}
 
 # id, class, engine, rule, funds or None (all funds in the ledger with that rule), skip {(cik, quarter)}, supersede, statement, evidence, rerun
 SPECS = [
@@ -259,6 +283,11 @@ SPECS = [
      [("filing", "See DS-025: 0001193125-26-215667, Rocket Youth and SavATree delayed-draw lines; printed values 1,884 and "
                  "( 248 ) against tags of -1,884 and 248.")],
      S + "apollo_industry_rows.py five13 000119312526215667 2026-03-31 \"Diversified Consumer Services\""),
+    ("DS-029", "as_filed", "row_validation", "X07", [HPS], set(), False,
+     "One loan, Thrasio LLC, is printed and tagged with a cost of 8 against a principal and fair value of 300 (thousands).",
+     [("filing", "HPS 10-Q for 2026-06-30 (0001628280-26-056772): 'Thrasio LLC (4)(10)(23)(25) SF + 8.00 % 12.01 % 6/18/2029 300 8 "
+                 "300 Total Broadline Retail 24,258 24,550'; the industry cost total 24,258 is Auctane 24,250 plus 8.")],
+     S + "filing_grep.py 1838126 000162828026056772 html \"Thrasio LLC\" 3 120"),
 ]
 # A finding already closed by a disposition stays in scope, so regenerating keeps its entry.
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated"}
@@ -266,7 +295,7 @@ csv.field_size_limit(10**9)
 quarters = defaultdict(set)
 with open(REPO / "scratch/fund_sandbox" / label / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:
     for row in csv.DictReader(fh):
-        if row["state"] not in RESOLVED and row["report_date"][:10] >= "2022-01-01":
+        if row["state"] not in RESOLVED and "2022-01-01" <= row["report_date"][:10] <= LAST_REVIEWED:
             quarters[(row["engine"], row["rule_name"], row["cik"].zfill(10))].add(row["report_date"][:10])
 entries = []
 for did, kind, engine, rule, funds, skip, supersede, statement, evidence, rerun in SPECS:
@@ -278,20 +307,28 @@ for did, kind, engine, rule, funds, skip, supersede, statement, evidence, rerun 
         entries.append({**base, "ciks": ["*"], "quarters": ["all"]})
         continue
     ciks = funds or sorted({c for (e, r, c) in quarters if e == engine and r == rule})
-    covered = {c: sorted(q for q in quarters.get((engine, rule, c), ()) if (c, q) not in skip) for c in ciks}
+    covered = {c: sorted({q for q in quarters.get((engine, rule, c), ()) if (c, q) not in skip}
+                         | set(OWNER_ACCEPTED.get((did, c), ([],))[0])) for c in ciks}
     covered = {c: q for c, q in covered.items() if q}
     if not covered:
         print("no open findings for", did, engine, rule)
         continue
     for i, (cik, qs) in enumerate(sorted(covered.items())):
-        entries.append({**base, "disposition_id": "%s-%s" % (did, cik[-7:]), "ciks": [cik], "quarters": qs})
+        entry = {**base, "disposition_id": "%s-%s" % (did, cik[-7:]), "ciks": [cik], "quarters": qs}
+        if (did, cik) in OWNER_ACCEPTED:
+            entry["decided_by"], entry["decided_on"] = OWNER_ACCEPTED[(did, cik)][1:]
+        carry = CARRY.get((did, cik), CARRY.get(did))
+        if carry:
+            entry["carry_forward"] = carry
+        entries.append(entry)
 for entry in entries:
     problems = fd.validate(entry)
     assert not problems, (entry["disposition_id"], problems)
 print("entries:", len(entries), "| fund-quarters named:", sum(len(e["quarters"]) for e in entries if e["quarters"] != ["all"]))
 for entry in entries:
     print("  %-16s %-14s %-48s %s %s" % (entry["disposition_id"], entry["class"], entry["engine"] + "/" + entry["rule_name"],
-                                         entry["ciks"][0], "all" if entry["quarters"] == ["all"] else len(entry["quarters"])))
+                                         entry["ciks"][0], "all" if entry["quarters"] == ["all"] else len(entry["quarters"])),
+          entry.get("carry_forward", {}).get("check", ""))
 if "--write" in sys.argv:
     target = REPO / "data/overrides/finding_dispositions/v05_2026-10-06.json"
     target.parent.mkdir(parents=True, exist_ok=True)

@@ -708,6 +708,12 @@ def validate_column_contracts(
             "interest_rate", "X02", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
             "asset_class = 'PRIVATE_CREDIT' "
+            # A stake in a credit vehicle (LP, LLC or member interest) is classed private
+            # credit by exposure but is not a debt instrument and carries no coupon. On the
+            # five v0.5 funds those rows were most of the flagged fair value (2026-06-30:
+            # Ares Ivy Hill 1,897M, Blue Owl OCIC SLF 261M, BCRED Muzinich 29M).
+            "AND COALESCE(CAST(asset_category AS VARCHAR), '') <> 'FUND' "
+            "AND COALESCE(CAST(index_classification AS VARCHAR), '') <> 'PRIVATE_CREDIT_FUND' "
             f"AND {_blank_sql('interest_rate')} "
             f"AND {_blank_sql('basis_spread')}",
             "PRIVATE_CREDIT row has no interest_rate or basis_spread",
@@ -915,7 +921,8 @@ def adapt_validation_reports(reports: dict[str, pd.DataFrame]) -> pd.DataFrame:
         _adapt_position_purity(reports.get("position_purity_diagnostics")),
         _adapt_coverage(reports.get("coverage")),
         _adapt_cross_source_duplicates(reports.get("duplicate_holdings")),
-        _adapt_source_reconciliation(reports.get("source_reconciliation_detail")),
+        _adapt_source_reconciliation(reports.get("source_reconciliation_detail"),
+                                     reports.get("source_reconciliation_source_only_detail")),
     ]
     issue_frames = [df for df in issue_frames if df is not None and not df.empty]
     return pd.concat(issue_frames, ignore_index=True) if issue_frames else _empty_issues()
@@ -1266,9 +1273,22 @@ def _adapt_cross_source_duplicates(df: Optional[pd.DataFrame]) -> pd.DataFrame:
     return _make_issue_frame(rows)
 
 
-def _adapt_source_reconciliation(df: Optional[pd.DataFrame]) -> pd.DataFrame:
+def _adapt_source_reconciliation(
+    df: Optional[pd.DataFrame], source_only: Optional[pd.DataFrame] = None,
+) -> pd.DataFrame:
+    """Issue rows from the source reconciliation detail.
+
+    ``source_only`` is the reconciliation's own classification of the source rows with no
+    published position. A row it documents as a non-position (a total, a header, a rollup named
+    by the fund's wrapper) is not a missing position, so SRC_BDC01 does not fire on it. Without
+    that frame, or for a row it does not list, the rule fires as before."""
     if df is None or df.empty or "status" not in df.columns:
         return _empty_issues()
+    documented: set[str] = set()
+    if (source_only is not None and not source_only.empty
+            and {"source_row_id", "is_blocking"} <= set(source_only.columns)):
+        not_blocking = ~source_only["is_blocking"].astype(str).str.lower().isin(["true", "1", "yes"])
+        documented = set(source_only.loc[not_blocking, "source_row_id"].dropna().astype(str)) - {""}
     rule_by_status = {
         "missing_from_pipeline": "SRC_BDC01",
         "extra_in_pipeline": "SRC_BDC02",
@@ -1290,6 +1310,9 @@ def _adapt_source_reconciliation(df: Optional[pd.DataFrame]) -> pd.DataFrame:
         legacy_missing = raw_blocking.isna()
         blocking = blocking | legacy_missing
         flagged = flagged[blocking]
+    if documented and "source_row_id" in flagged.columns:
+        flagged = flagged[~(flagged["status"].eq("missing_from_pipeline")
+                            & flagged["source_row_id"].astype(str).isin(documented))]
     for _, row in flagged.iterrows():
         status = str(row.get("status", ""))
         rows.append({
