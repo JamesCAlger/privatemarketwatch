@@ -6,7 +6,42 @@
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "ARES_STRATEGIC_INCOME",
-    "prefix_rules": {}
+    "prefix_rules": {},
+    "flat_schedule": true,
+    "leaf_markers_by_family": {},
+    "aggregate_markers": [
+      "sub-total",
+      "subtotal",
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|term loan|revolving|delayed draw",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|senior preferred|partnership interest|LLC interest|equity interest|equity co-invest",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)warrant",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)collateralized loan obligation|collaterized loan obligation|CLO",
+        "family": "clo"
+      }
+    ]
   },
   "identifier_format": {
     "delimiter": ", ",
@@ -17,7 +52,15 @@
       "interest_rate",
       "maturity_date"
     ],
-    "alternate_delimiters": [" | "]
+    "alternate_delimiters": [
+      " | "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^(.+?)(?:\\s*\\|\\s*[^|]+?(?:\\s*\\|\\s*[\\d.]+\\s*%)?|,\\s*[^,|]+)$",
+    "hierarchy_instrument_re": "(?:^[^|]*\\|\\s*|^[^|]*,\\s*)([^|]+?)(?:\\s*\\|\\s*[\\d.]+\\s*%)?$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:,|\\|)\\s*[^,|]*(?:loan|notes?|units?|stock|shares?|interests?|warrants?|equity|certificates?|bonds?|debentures?|membership|preferred|common|partnership|participation rights)[^,|]*(?:\\s*\\|\\s*[\\d.]+\\s*%)?$')"
   },
   "archetypes": {
     "senior_secured_debt": {
@@ -213,5 +256,19 @@
       "detection_pattern": "(?i)Steward Partners",
       "disposition": "expected"
     }
-  ]
+  ],
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "unspecified_reference_labels": [
+      "Base Rate"
+    ],
+    "reference_rate_columns": [
+      "Reference"
+    ]
+  }
 }

@@ -1207,3 +1207,49 @@ detects a wrong value on the right row. Nothing here has been checked on the oth
   page checks added for the first five do not run for them until a wrapper names the column.
 - **Re-run.** `bash scratch/2026-10-07_printed_rates/run_next5a.sh`;
   `python scripts/v05_evidence/matrix.py next5a`.
+
+## 2026-10-08 (night, 2): next five funds, first two (Oaktree, Ares Strategic Income)
+
+Owner in session: "yes to 1 and 2. widen scope after" (commit; start fixing the next five; the
+sign-off scope stays at five funds until the next five are clean). Sandbox `n2a` (these two funds,
+2022 to 2026-06-30). Uncommitted.
+
+### D-057 Ares Strategic Income (0001918712): the Ares Capital wrapper settings, each checked on its page
+
+- **Issuer and instrument were not split before 2026-06-30.** The wrapper had no label patterns,
+  so the issuer was the whole label ("1261229 B.C. LTD., First lien senior secured loan"): 1,222
+  issuers for 1,223 rows at 2025-12-31. With the patterns, 867. The published build has the same
+  defect for this fund.
+- **Nine CLO tranches were dropped at 2026-06-30 (22.7M, the whole gap to the filed total).** From
+  that filing two tranches of one CLO are told apart by a third segment holding the coupon
+  ("SIXST 2022-21 | Collaterized loan obligation | 9.42%"). A shared rule reads a label ending in
+  a percentage as a subtotal unless the name looks like a company or the wrapper classes it as a
+  position; then the fund's label condition refused a last segment with no instrument word.
+  The wrapper now classes instruments (the filer spells it "Collaterized"), and its label
+  patterns and condition accept the coupon segment.
+- **Rate settings** (page: "Coupon | Reference | Spread"; "9.94 % ( 3.13 % PIK) SOFR (Q) 6.25 %",
+  published rate 9.94; "11.37 % PIK SOFR (Q) 7.50 %"; "Base Rate (Q)" 15 times in the 10-K for
+  2025-12-31): `filed_rate_reading` all_in, `pik_only_tag_reading` coupon,
+  `reference_rate_columns` Reference, `unspecified_reference_labels` Base Rate.
+- **Result.** 46 outstanding to 23. Published equals filed within 0.5M in 13 of 14 quarters.
+- **Open.** 2025-03-31 is 28.7M short (13,626.4M against a printed 13,655.1M): the filing's
+  tagged position rows themselves sum to 13,626.1M, so about 29M of positions carry no position
+  tag. Not traced to rows. X02 (10 findings) and X06 (5) not yet read on the page.
+
+### D-058 Oaktree Strategic Credit (0001872371)
+
+- **Rate settings** (page: "Index | Spread | Cash Interest Rate | PIK"; Legends Hospitality cash
+  6.41, PIK 2.75, spread 5.50): `filed_rate_reading` cash_leg, `reference_rate_columns` Index,
+  `principal_usd_reference` fred_h10 (39 to 44 rows a quarter had a foreign principal and no
+  dollar equivalent).
+- **Joint-venture stake counted twice at 2026-06-30 (13.15M, the whole gap).** The schedule row
+  (context c-53: shares 0.250, cost 13,104, fair value 13,148) and a second row from the
+  joint-venture note (c-2092: ownership percentage, fair value, percent of net assets; no cost or
+  share fact) were both published. New promoted rule
+  `agent_investigate_rules/1872371/exclude_edl_jv_note_row.json`: structural, every quarter, one
+  issuer. One quarter of evidence (the venture was formed in May 2026).
+- **Result.** 74 outstanding to 42. Published equals filed within 0.5M in 14 of 14 quarters.
+- **Open, mostly for dispositions.** C107 negative cost (10 quarters), X02 (9), X06 (5), F28 (4):
+  the patterns the first five funds closed by disposition; not proposed yet. At 2026-06-30 two
+  euro-tagged fair values are converted (882,000 to 1,006,979); the total ties with the
+  converted figures, so the reconciliation's mismatch on them is a rule artefact.

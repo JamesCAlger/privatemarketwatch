@@ -173,5 +173,16 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "filed_rate_reading": [
+      "cash_leg"
+    ],
+    "reference_rate_columns": [
+      "Index"
+    ]
   }
 }

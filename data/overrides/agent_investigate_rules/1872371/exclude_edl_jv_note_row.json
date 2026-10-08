@@ -1,0 +1,32 @@
+{
+ "cik": "1872371",
+ "rule_id": "exclude_edl_jv_note_row",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "lower(CAST(bdc_investment_identifier AS VARCHAR)) LIKE 'oscf edl jv, llc |%' AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001872371-26-000013 (10-Q, 2026-06-30): the schedule prints 'OSCF EDL JV, LLC | Multi-Sector Holdings | Membership Interest | 25.0% | $ 13,104 | $ 13,148' and 'Total Portfolio Investments ( 158.9 % of net assets) $ 6,897,681 $ 6,796,814'. Context c-53 carries the schedule row (InvestmentOwnedBalanceShares 0.250, InvestmentOwnedAtCost 13104000, InvestmentOwnedAtFairValue 13148000). Context c-2092, member 'OSCF EDL JV, LLC | Multi-Sector Holdings | Membership Interest', carries the joint-venture note's facts (oscf:InvestmentOwnedOwnershipPercentage 0.2500, InvestmentOwnedAtFairValue 13148000, InvestmentOwnedPercentOfNetAssets 0.003) and no cost or share fact."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox n2a (2026-10-08): both contexts are published at 2026-06-30, 13,148,000 each; published investments are 6,809.96M against the filed 6,796.81M, a difference of 13.15M."
+  }
+ ],
+ "rationale": "The filer tags the fair value of its joint-venture interest a second time in the joint-venture note, on a member of the investment identifier axis. The note row carries no share and no cost fact; the schedule row carries both. The rule names the one issuer and is structural, so it holds in later quarters without being re-authored. One quarter of evidence: the joint venture was formed in May 2026. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2026-06-30": {
+   "rows": 1,
+   "fv": 13148000.0,
+   "residual_before": 13148000.0,
+   "residual_after": 0.0
+  }
+ }
+}
