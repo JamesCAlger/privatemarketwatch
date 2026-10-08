@@ -10,7 +10,7 @@ from typing import Any
 
 from lxml import etree
 
-from pipeline.bdc_filings import _local_name, _parse_xbrl_contexts
+from pipeline.bdc_filings import _local_name, _parse_xbrl_contexts, parse_filing_contexts
 
 XBRL_PARSER = etree.XMLParser(huge_tree=True, recover=True)
 MAX_AUDIT_FOOTNOTE_CHARS = 1000
@@ -216,7 +216,7 @@ def extract_nonaccrual_candidates(
     """Extract accepted and rejected position-level non-accrual candidates."""
     tree = etree.parse(str(xml_path), parser=XBRL_PARSER)
     root = tree.getroot()
-    contexts = _parse_xbrl_contexts(tree)
+    contexts = parse_filing_contexts(tree, {"cik": cik, "accession_number": accession_number})
     rows: list[dict[str, Any]] = []
 
     for ctx_id, context in contexts.items():

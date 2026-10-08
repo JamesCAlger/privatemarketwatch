@@ -685,6 +685,22 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
     return contexts
 
 
+def parse_filing_contexts(tree: etree._ElementTree, filing_meta: dict[str, Any]) -> dict[str, dict]:
+    """Contexts of one filing, with the two readings a wrapper can switch on applied.
+
+    Every consumer that decides which contexts are positions, or which period a context belongs
+    to, reads them here so the extractor, source reconciliation and the evidence extractors agree:
+    a position tagged on its group's subtotal context is named from the cached page
+    (``page_labelled_contexts``), and a context the filer dated to the wrong period is re-dated
+    (``misdated_contexts``). Needs ``cik`` and ``accession_number`` in ``filing_meta``.
+    """
+    from pipeline.page_labelled_contexts import adopt_page_labelled_contexts, correct_misdated_contexts
+    contexts = _parse_xbrl_contexts(tree)
+    adopt_page_labelled_contexts(contexts, filing_meta)
+    correct_misdated_contexts(contexts, filing_meta)
+    return contexts
+
+
 def _is_non_position_identifier(value: str) -> bool:
     """Return true when an XBRL investment identifier is not position identity."""
     text = str(value or "").strip()
@@ -1034,7 +1050,7 @@ def _parse_single_filing(
         logger.warning("XML parse error for %s: %s", xml_path, exc)
         return []
 
-    contexts = _parse_xbrl_contexts(tree)
+    contexts = parse_filing_contexts(tree, filing_meta)
     facts = _extract_investment_facts(tree, contexts)
 
     # --- Non-accrual evidence: footnotes + dimensions ---

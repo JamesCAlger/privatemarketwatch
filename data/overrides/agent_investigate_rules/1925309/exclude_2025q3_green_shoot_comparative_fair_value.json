@@ -1,0 +1,32 @@
+{
+ "cik": "1925309",
+ "rule_id": "exclude_2025q3_green_shoot_comparative_fair_value",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2025-09-30"
+  ]
+ },
+ "predicate_sql": "report_date = '2025-09-30' AND lower(CAST(bdc_investment_identifier AS VARCHAR)) LIKE 'debt investments financial services green shoot bidco b.v. first-lien loan (eur 5,107 par, due 5/2030)%interest rate 8.66%' AND TRY_CAST(principal_amount AS DOUBLE) IS NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001193125-25-266848 (10-Q, 2025-09-30): the September 30, 2025 schedule prints 'GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030) 5/28/2024 E + 5.75 % 7.78 % 5,426 5,936 (EUR 5,052)'; the December 31, 2024 schedule in the same filing prints the row at '8.66 % 5,413 5,246 (EUR 5,066)'. 'Total Debt Investments 7,307,185 7,564,830' and 'Total Investments $ 7,440,176 $ 7,724,072'."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox n3a (2026-10-08): the member ending 'Interest Rate 8.66%' carries a 2025-09-30 fair value of 5,246,000 and no cost or principal fact; the member ending 'Interest Rate 7.78%' carries 5,936,000 with cost 5,426,000 and principal 5,107,000. Tagged debt rows sum to 7,570,076 thousand against the printed 7,564,830, a difference of 5,246."
+  }
+ ],
+ "rationale": "The filer tagged the prior year-end fair value of this loan on a current-period context. The page prints one row for the loan at 2025-09-30. The rule names the one member and quarter; it cannot carry forward, and does not need to. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.97,
+ "measured_impact": {
+  "2025-09-30": {
+   "rows": 1,
+   "fv": -5246000.0,
+   "residual_before": 5246000.0,
+   "residual_after": 0.0
+  }
+ }
+}

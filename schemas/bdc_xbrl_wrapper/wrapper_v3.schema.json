@@ -177,6 +177,10 @@
             "instrument_re": {
               "type": "string",
               "description": "Regex to extract instrument from cleaned identifier"
+            },
+            "issuer_trailing_strip_re": {
+              "type": "string",
+              "description": "Regex for text to drop from the end of the extracted issuer (Sixth Street from 2026-03-31: the column word 'Investment' sits between issuer and instrument in the label)"
             }
           },
           "additionalProperties": false
@@ -215,6 +219,10 @@
             "type": "string"
           },
           "description": "Additional industry labels beyond the built-in set, used to expand the MSD_INDUSTRY_LABELS placeholder"
+        },
+        "distinct_member_suffix_re": {
+          "type": "string",
+          "description": "Regex matched on the raw identifier; its match joins the duplicate-row key, so two positions with equal issuer, instrument and figures that differ only in this trailing member token are both kept"
         },
         "pipe_field_map": {
           "type": "object",
@@ -616,6 +624,20 @@
           "uniqueItems": true,
           "items": {"type": "string", "minLength": 1},
           "description": "Labels this filer prints in its reference-rate column that name no single benchmark (Ares 'Base Rate': the legend says it is commonly based on the Federal Funds Rate or the Prime Rate). The row floats; a reference rate guessed from the report date is withdrawn and nothing else changes. Needs reference_rate_columns."
+        },
+        "misdated_contexts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+          "description": "Contexts the filer dated to the wrong period, each as 'ACCESSION CONTEXT FILED-DATE -> CORRECT-DATE' (Ares Strategic Income 0001918712-25-000030 c-285: the 2025-03-31 Grant Thornton loan tagged on a context dated 2024-12-31). The parser re-dates the context, so the row keeps every tagged fact. Evidence required: the printed row in the schedule of the correct date, the context's filed date, and the gap to the printed total it closes."
+        },
+        "page_labelled_contexts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+axis(\\+[a-z0-9]+axis)*$"},
+          "description": "Axis combinations (lower-case local names joined by '+') of contexts on which this filer tags a schedule row that is the only position in its group, with no investment-identifier member (Golub 10-Qs from 2023-12-31). A context with exactly that axis set is read as a position when exactly one printed row carries its fair-value tag and the row starts with a label, not an amount and not 'Total'; its identifier is the row's first two text cells joined by ' | '. Subtotal rows print amounts only and are never adopted. Evidence required: the printed row, its context's members, and the gap between the tagged rows and the printed total it closes."
         },
         "equity_instrument_labels": {
           "type": "array",

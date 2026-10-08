@@ -179,6 +179,29 @@ def _load_staging_configs() -> dict[str, dict[str, Any]]:
     return configs
 
 
+def distinct_member_suffix_sql(configs: dict[str, dict[str, Any]] | None, raw_id_column: str) -> str:
+    """SQL for the member token that keeps equal-valued twin positions apart, '' for other filers.
+
+    A filer may tag two real positions with equal issuer, instrument and figures under members
+    told apart only by a trailing token ("... One" / "... Two"; Goldman Sachs Private Credit).
+    Its wrapper's ``staging.distinct_member_suffix_re`` names the token; the match joins every
+    duplicate-row key that would otherwise fold the two rows into one.
+    """
+    if configs is None:
+        configs = _load_staging_configs()
+    whens = []
+    for cfg in configs.values():
+        pattern = cfg["staging"].get("distinct_member_suffix_re")
+        if not pattern:
+            continue
+        pattern_sql = pattern.replace("'", "''")
+        whens.append(
+            "WHEN LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = "
+            f"'{cfg['cik']}' THEN regexp_extract(CAST({raw_id_column} AS VARCHAR), '{pattern_sql}', 0)"
+        )
+    return "CASE " + " ".join(whens) + " ELSE '' END" if whens else "''"
+
+
 def _load_identifier_parsers() -> dict[str, dict]:
     """Load identifier_parser configs from v3 wrapper JSON files.
 
@@ -210,13 +233,11 @@ def _load_identifier_parsers() -> dict[str, dict]:
 
 
 def _load_issuer_bridges_from_json() -> list[dict[str, str]]:
-    """Load issuer bridge rows from all v3 JSON files with issuer_bridge strategy."""
+    """Load issuer bridge rows from every v3 JSON file that lists them, whatever its strategy."""
     configs = _load_staging_configs()
     bridges: list[dict[str, str]] = []
     for cik_norm, cfg in configs.items():
         staging = cfg["staging"]
-        if staging.get("strategy") != "issuer_bridge":
-            continue
         for bridge in staging.get("issuer_bridges") or []:
             bridges.append({
                 "cik": cfg["cik"],
@@ -683,6 +704,8 @@ def _prepare_bdc(
     _leaf_guard_cfgs = {k: v for k, v in _staging_configs.items()
                         if v["staging"].get("strategy") == "hierarchy_leaf_guard"}
 
+    _member_suffix_key = distinct_member_suffix_sql(_staging_configs, '_raw_id')
+
     # --- pipe_field_map: CIK-scoped overrides for pipe-delimited segment layout ---
     _pipe_field_map_cfgs: list[dict[str, Any]] = []
     for _pfm_norm, _pfm_cfg in _staging_configs.items():
@@ -1096,6 +1119,10 @@ def _prepare_bdc(
             "clean_raw": f"regexp_replace(_raw_id, '{_lg_prefix_re}', '')",
             "marker_re": lg["marker_re"],
             "evidence_re": lg["evidence_re"],
+            # Optional: text to drop from the end of the extracted issuer. Sixth Street's labels
+            # from 2026-03-31 carry the column word between issuer and instrument
+            # ("Truck-Lite Co., LLC Investment First-lien loan ...").
+            "issuer_trailing_strip_re": lg.get("issuer_trailing_strip_re", ""),
         })
     # Chain per-CIK type_industry_prefix_re patterns via nested regexp_replace()
     # Since prefixes are anchored (^) and CIK-specific, non-matching patterns
@@ -1111,7 +1138,8 @@ def _prepare_bdc(
     _lg_marker_set = {lg["marker_re"] for lg in _lg_per_cik}
     _lg_evidence_set = {lg["evidence_re"] for lg in _lg_per_cik}
     _all_same_marker_evidence = (len(_lg_marker_set) <= 1
-                                 and len(_lg_evidence_set) <= 1)
+                                 and len(_lg_evidence_set) <= 1
+                                 and not any(lg["issuer_trailing_strip_re"] for lg in _lg_per_cik))
 
     def _cik_check_sql(cik_norm: str) -> str:
         return (
@@ -1166,13 +1194,18 @@ def _prepare_bdc(
             _lg_cond_parts.append(_cik_cond)
             _i_re = rf"(?i)^(.+?)\s+{_lg['marker_re']}\b"
             _d_re = rf"(?i)^.+?\s+({_lg['marker_re']}\b.*)$"
-            _lg_issuer_parts.append(
-                f"WHEN {_cik_cond}\n"
-                f"                THEN trim(regexp_extract(\n"
+            _lg_issuer = (
+                f"regexp_extract(\n"
                 f"                    {_lg['clean_raw']},\n"
                 f"                    '{_i_re}',\n"
                 f"                    1\n"
-                f"                ))"
+                f"                )"
+            )
+            if _lg["issuer_trailing_strip_re"]:
+                _lg_issuer = f"regexp_replace({_lg_issuer}, '{_lg['issuer_trailing_strip_re']}', '')"
+            _lg_issuer_parts.append(
+                f"WHEN {_cik_cond}\n"
+                f"                THEN trim({_lg_issuer})"
             )
             _lg_instrument_parts.append(
                 f"WHEN {_cik_cond}\n"
@@ -2197,7 +2230,8 @@ def _prepare_bdc(
                                  ROUND(COALESCE(_fv, 0), 0),
                                  ROUND(COALESCE(_cost, 0), 0),
                                  ROUND(COALESCE(_pa, 0), 0),
-                                 ROUND(COALESCE(_sh, 0), 0)
+                                 ROUND(COALESCE(_sh, 0), 0),
+                                 {_member_suffix_key}
                     ORDER BY
                         CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-controlled') THEN 1 ELSE 0 END
                       + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-control') THEN 1 ELSE 0 END

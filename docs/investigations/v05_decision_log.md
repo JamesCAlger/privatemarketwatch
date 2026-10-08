@@ -1253,3 +1253,248 @@ sign-off scope stays at five funds until the next five are clean). Sandbox `n2a`
   the patterns the first five funds closed by disposition; not proposed yet. At 2026-06-30 two
   euro-tagged fair values are converted (882,000 to 1,006,979); the total ties with the
   converted figures, so the reconciliation's mismatch on them is a rule artefact.
+
+## 2026-10-08 (night, 3): next five funds, the other three (Golub, Sixth Street, Goldman Sachs)
+
+Owner in session: "commit, then do the next three in any way you deem fit". Sandbox `n3a` (these
+three funds, 2022 to 2026-06-30). Uncommitted.
+
+### D-059 Goldman Sachs Private Credit (0001920145)
+
+- **A promoted rule had invented 349.4M of fair value at 2026-03-31; pulled.**
+  `restore_2026q1_principal_only_debt_positions` added Auctane, Inc. (193.0M) and Tiger
+  Acquisition, LLC (156.4M) with the principal as the fair value. The 10-Q prints both with a par
+  and no cost or value ("Auctane, Inc. ... S + 4.75 % 12/31/32 193,000 - -"): undrawn commitments.
+  The gap the rule closed was measured against "Total Investments and Investments in Affiliated
+  Money Market Fund ... 16,852,129"; the filed total of investments is 16,508,590. The gap was the
+  money-market fund (343.5M) plus one 5.8M row. Moved to
+  `agent_investigate_rules/_pulled_fabricated_fair_value_2026-10-08/` with a note. **The published
+  build of 2026-10-01 carries the two invented rows.**
+- **Fair values tagged with a foreign unit are dollars.** The 10-Q for 2026-03-31 prints "Prestige
+  Bidco Pty Ltd ... AUD 72,042 $ 46,361 $ 49,457"; the fair value fact (49.5M) carries an AUD
+  unit and was converted to 33.9M. 19 rows, 141.9M too low in that quarter.
+  `foreign_unit_values: reported_in_usd`.
+- **Labels from 2026-06-30 carry no percentages** ("Debt Investments Australia 1st Lien/Senior
+  Secured Debt Prestige Bidco ... Industry ..."), which the fund's parser needs; issuers read
+  "Reference Rate and Spread S + 5.00%" (74 rows) and the like. New label patterns for that form.
+  Issuers at 2026-06-30: 389 for 784 rows (369 for 765 a quarter earlier).
+- **Rate settings** (page: "Interest Rate 9.90% Reference Rate and Spread S + 6.25% (Incl. 2.75%
+  PIK)"): `filed_rate_reading` all_in; `reference_rate_columns` "Reference Rate andSpread".
+- **Result.** 107 outstanding to 71. 2026-03-31 goes from 201.7M over to 5.8M under.
+- **Open.** Six quarters are 4.3M or 5.8M under: one tranche of Airwavz Solutions, whose member
+  ends "One" and whose figures equal another tranche's, is lost in every one. A switch in the
+  affiliation dedup did not bring it back and was removed; the step that drops it is not found.
+  The fund's reference-rate codes (B, E and others) are not mapped: its legend was not located.
+
+### D-060 Golub Capital Private Credit (0001930087)
+
+- **Issuer and instrument were not split before 2026-03-31** (1,004 issuers for 1,004 rows at
+  2025-12-31; now 457). Label patterns added for "Issuer, Instrument" and "Issuer | Instrument".
+  About 20 labels with no separator ("Artifact Bidco, Inc. One stop 1") are not covered.
+- **Rate settings** (page: "SF + 4.75 % (i) 6.23 % cash/ 2.25 % PIK"): `filed_rate_reading`
+  cash_leg; `reference_rate_columns` "SpreadAboveIndex".
+- **Result.** 63 outstanding to 50.
+- **Open.** Four quarters are short (2023-12-31 3.5M; 2025-12-31 84.5M; 2026-03-31 84.8M;
+  2026-06-30 70.1M). At 2026-06-30 every tagged position row is published (9,546.4M) and the page
+  prints "Total investments ... 9,616,525": the filing tags about 70M fewer positions than it
+  prints. Not the money-market funds, which the page totals separately. Not traced to rows.
+
+### D-061 Sixth Street Lending Partners (0001925309)
+
+- **Labels from 2026-03-31 put the column word between issuer and instrument** ("Truck-Lite Co.,
+  LLC Investment First-lien loan ..."), so the issuer read "Truck-Lite Co., LLC Investment".
+  New optional wrapper key `leaf_guard.issuer_trailing_strip_re`, set to drop it.
+- **Rate settings** (label: "Interest Rate 8.89% (incl. 2.25% PIK)"): `filed_rate_reading`
+  all_in; `principal_usd_reference` fred_h10; `reference_rate_columns` "ReferenceRate andSpread".
+- **Result.** 119 outstanding to 81.
+- **Open, not examined.** Totals miss in five quarters (worst 12.9M under at 2023-12-31, 5.2M over
+  at 2025-09-30). C206 (13), A01 (9), B01 (8) and the spread range checks (11), counted at the
+  first reading, not read.
+
+### State of the next five
+
+| Fund | First reading | Now | Totals within 0.5M |
+|---|---|---|---|
+| Ares Strategic Income | 46 | 23 | 13 of 14 |
+| Goldman Sachs Private Credit | 107 | 71 | 7 of 13 |
+| Golub Capital Private Credit | 63 | 50 | 8 of 12 |
+| Sixth Street Lending Partners | 119 | 81 | 9 of 14 |
+| Oaktree Strategic Credit | 74 | 42 | 14 of 14 |
+| **Total** | **409** | **267** | **51 of 67** |
+
+Sandboxes `n2a` and `n3a`; the five have not been run together since the changes. No disposition
+has been proposed for these funds. What is fixed so far is label parsing, rate reading and three
+totals errors; the rule-by-rule reading on the page that the first five had is still to do.
+
+## 2026-10-08 (night, 4): next five funds, the totals gaps traced
+
+Owner instruction: clear the blockers, then move on, with standing permission to download filings.
+Sandboxes `n5b`, `n5c` (the five together). Not run: the full suite, the semantic diff, any 70-fund
+build. Published data is unchanged.
+
+### D-062 Sixth Street (0001925309): two totals gaps, both a single row
+
+- **2023-12-31, 12.9M under.** The filer's label for one equity row has no issuer: "Equity and
+  Other Investments Healthcare 128,321 Ordinary Shares Initial Acquisition Date 3/24/2023". The
+  extractor dropped it (the issuer began with a number). The page prints the issuer: "Healthcare
+  Raptor US Buyer II Corp. (8)(10) 128,321 Ordinary Shares 3/24/2023 12,875 12,875". The same
+  unnamed label occurs at 2023-03-31 to 2023-09-30 (ten share classes each) and 2024-12-31.
+  Fix: `staging.issuer_bridges` in the wrapper, 32 exact labels, each given the printed issuer.
+  The loader read bridges only for the `issuer_bridge` strategy; it now reads them for any.
+  The promoted rule `add_healthcare_ordinary_shares_2024q4` (it added the 2024-12-31 row under
+  the issuer "Healthcare Ordinary Shares") is superseded and moved to
+  `agent_investigate_rules/_pulled_superseded_2026-10-08/`.
+- **2025-09-30, 5.2M over.** One member, Green Shoot BidCo at "Interest Rate 8.66%", carries a
+  2025-09-30 fair value of 5,246 and no cost or principal. The page prints one row for the loan at
+  2025-09-30 (7.78%, value 5,936); 8.66% and 5,246 are the 2024-12-31 comparative row. New rule
+  `1925309/exclude_2025q3_green_shoot_comparative_fair_value`, pinned to that member and quarter.
+- **Labels.** 2026 equity labels start "Equity Investments" (was "Equity and Other
+  Investments"); the prefix pattern now takes both. A share count between issuer and instrument
+  ("Raptor US Buyer II Corp. 128,321 Ordinary Shares") is stripped from the issuer.
+- Re-run: `python scripts/v05_evidence/filing_grep.py 1925309 000095017024016336 html "128,321"`;
+  `... 000119312525266848 html "EUR 5,107" 12`. Tests: `tests/test_page_labelled_contexts.py`.
+
+### D-063 Goldman Sachs (0001920145): the lost tranche
+
+- **Cause.** The filer tags two real tranches of Airwavz Solutions with equal issuer, instrument,
+  principal, cost and value, on members that differ only in a trailing "One" / "Two". Two
+  duplicate filters fold rows that agree on those fields: the affiliation filter in staging and
+  the dimension-path filter in the unified build. The second one dropped the row; the first
+  attempt (staging only) had no effect for that reason.
+- **Fix.** New optional wrapper key `staging.distinct_member_suffix_re`. Its match on the raw
+  member joins both filters' keys. Set for Goldman Sachs to the number words One to Ten at the
+  end of the member. A member on two affiliation paths still folds to one row (tested).
+- **Evidence.** Page, 2026-06-30: two rows "Airwavz Solutions, Inc. ... 9.07 % S + 5.25 % 03/31/27
+  5,817 5,793 5,759". Published was 4.3M to 5.8M under the filed total in six quarters, the value
+  of the one row.
+
+### D-064 Golub (0001930087): positions tagged on a subtotal context
+
+- **Cause.** In the 10-Qs from 2025-12-31, a schedule row that is the only position in its
+  industry and type group has no investment-identifier member. Its facts sit on the group's own
+  context (industry, affiliation, type), the context a multi-row group uses for its subtotal. The
+  instance holds the value, cost, principal and rate but not the name. 18 rows a quarter: 84.5M,
+  84.8M and 72.8M at 2025-12-31, 2026-03-31 and 2026-06-30. The 10-K tags every row.
+- **Fix.** New module `pipeline/page_labelled_contexts.py`, switched on by the wrapper key
+  `source_encodings.page_labelled_contexts` (axis combinations). A context with exactly that axis
+  set is read as a position when exactly one printed row carries its fair-value tag and the row
+  starts with a label, not an amount and not "Total". The identifier is the row's first two text
+  cells ("Star Holding, LLC | Senior secured"). Subtotal rows print amounts only and are never
+  adopted. The extractor, source reconciliation and the PIK and non-accrual evidence extractors
+  read contexts through one function (`bdc_filings.parse_filing_contexts`) so they agree. The
+  source-fact cache key takes the filer's setting, so other filers' caches stay valid.
+- **Second item.** The affiliate roll-forward table tags one issuer's closing value on the
+  identifier axis with the issuer name alone ("RW AM Holdco LLC" 2,631, the sum of its four
+  schedule rows). New structural rule `1930087/exclude_affiliate_rollforward_issuer_only_rows`,
+  the same pattern as Blue Owl's.
+- **2023-12-31, 3.5M under: as filed.** The printed Containers and Packaging rows sum to 32,366;
+  the printed subtotal is 35,834. Principal and cost are short by 3,482 and 3,450. The prior
+  quarter lists an eighth row, WP Deluxe Merger Sub (par 3,491). The 2023-12-31 schedule neither
+  prints nor tags it but its subtotal includes it. Nothing to extract.
+- Re-run: `python scripts/v05_evidence/page_labelled_dry_run.py 1930087`;
+  `python scripts/v05_evidence/page_row_contexts.py 1930087 000193008726000099 2026-06-30`;
+  `python scripts/v05_evidence/page_block_sums.py 1930087 000193008724000010 2023-12-31`.
+- **Limits.** The rule reads the first two text cells; a filer with another column order needs
+  its own check. The page reader that confirms printed fields keys on identifier members, so
+  these rows have no printed-field confirmation yet.
+
+### D-065 Ares Strategic Income (0001918712): 2025-03-31, 28.7M under
+
+- **31.2M: a misdated context.** The 2025-03-31 schedule row "Grant Thornton Advisors LLC First
+  lien senior secured loan 7.07 % SOFR (M) 2.75 % 06/2031 31,393.4 31,461.1 31,206.9" is tagged
+  on context c-285, dated 2024-12-31. The filing's 2024-12-31 schedule has its own two Grant
+  Thornton rows on other contexts. The row read as a comparative and left the quarter.
+  Fix: new wrapper key `source_encodings.misdated_contexts`
+  ("0001918712-25-000030 c-285 2024-12-31 -> 2025-03-31"); the parser re-dates the context, so
+  the row keeps every tagged fact. A listing whose filed date does not match is left alone.
+- **2.5M over: as filed.** The 226 printed Investment Funds and Vehicles rows sum to 707,193.1;
+  the printed subtotal is 704,669.0. The rows are published as tagged.
+- **Not a gap.** Two issuer-only members (Fitness Ventures 54.67M, OPH NEP 40.56M) are the
+  affiliate roll-forward closing values; their schedule rows sum to the same amounts and the
+  issuer-only rows are already dropped.
+- Re-run: `python scripts/v05_evidence/page_heading_sums.py 1918712 000191871225000030 2025-03-31`
+  against `python scripts/v05_evidence/page_axis_facts.py 1918712 000191871225000030 2025-03-31
+  EquitySecuritiesByIndustryAxis`.
+
+### D-066 Goldman Sachs: reference-rate codes from the filer's own legend
+
+- The schedule note defines the codes. To 2024-06-30: LIBOR "L", Euribor "E", SOFR "S", SONIA
+  "SN", NIBOR "N", CDOR "C", BBSW "B", Prime "P". From 2024-09-30: CORRA "C", SARON "SARON". From
+  2025-09-30: STIBOR "STIBOR". At 2026-06-30: BBSW "BW", BBSY "B". Set as
+  `reference_rate_codes`, with dates for C and B.
+- Before this, rows printed B, C, N, SN, SARON and STIBOR kept a guessed SOFR (about 200 rows).
+- **Disagreement to know about.** From 2025-12-31 the filer also tags each row's benchmark. At
+  2026-06-30, of the rows printed "B", 14 are tagged BBSW and 7 BBSY; the legend says BBSY. The
+  legend is used. "BY" is not in the legend; its two rows are tagged BBSY.
+- Re-run: `python scripts/v05_evidence/rate_code_enum.py 1920145 000119312526340582`;
+  `python scripts/v05_evidence/filing_grep.py 1920145 000119312526340582 html "Euribor (" 1 400`.
+
+### D-067 Three more extraction gaps, fixed
+
+- **Sixth Street net investment income was the incentive fee** (2025-03-31: 21,359 published,
+  152,562 printed; same at 2025-06-30). The income concept map matches by substring, and the
+  filer's own concept `IncentiveFeesOnNetInvestmentIncome` comes before `us-gaap:NetInvestmentIncome`.
+  Fix in `pipeline/bdc_fund_income.py`: a concept naming both an incentive fee and net investment
+  income is never net investment income; the expense itself maps to the incentive fee.
+  **This is shared code, not a wrapper setting.** Its effect on the other 65 funds is not
+  measured (no semantic diff was run). A scan of cached filings found such concept names in ten
+  funds outside the cohort, none of them a net investment income figure (payables, percentages).
+- **Goldman Sachs foreign principal had no dollar value** (FX01, 13 quarters):
+  `principal_usd_reference` fred_h10 in the wrapper.
+- **Sixth Street issuer names kept the whole label** for notes, partnership units and preference
+  shares (C206, 12 quarters): instrument markers added to the wrapper.
+- Result: 273 outstanding to 246.
+
+### D-068 Sixth Street reference-rate codes: set, and only partly effective
+
+- The schedule note defines them (10-K 2023-12-31 onward): Euribor "E", SOFR "SOFR", SONIA "S",
+  NIBOR "N", STIBOR, Prime "P"; CORRA "C" from 2025. The filer's row tags from 2025-09-30 agree
+  (11 rows printed "S" are tagged SONIA). Set as `reference_rate_codes`.
+- **Effect:** N and STIBOR rows now read correctly (22 rows). **Not fixed:** rows printed "S" still
+  publish SOFR (12 rows read; the filer says SONIA), and rows printed "C" still publish a guessed
+  SOFR (Cast & Crew, CAD, 37.6M to 98.9M). The page reader finds this fund's reference column in
+  only some filings (many rows read "blank"). Open defect.
+
+### D-069 Proposed dispositions for the next five (not accepted)
+
+- `scripts/v05_evidence/make_proposed_dispositions.py n5e --write` writes
+  `data/overrides/finding_dispositions_proposed/next5_2026-10-08.json` and
+  `docs/investigations/next5_proposed_dispositions.md`. The ledger does not read that directory.
+- 30 proposals. 19 are the first five's reasons (negative cost or value on undrawn lines,
+  principal above value, no rate in the source, quarters before the first schedule), proposed only
+  for fund-quarters where the row-by-row check passes on sandbox `n5e`. 11 were read this session
+  and quote the page or the tags.
+- If the owner accepted all of them the five funds would stand at 109 outstanding, from 246.
+- The owner has not accepted any. The scope in `findings_scope.ciks` is unchanged.
+
+### State of the next five (sandbox `n5e`, the five built together from empty)
+
+| Fund | First reading | Start of this session | Now | If proposals accepted | Totals within 0.5M |
+|---|---|---|---|---|---|
+| Ares Strategic Income | 46 | 23 | 23 | 15 | 13 of 14 |
+| Goldman Sachs Private Credit | 107 | 71 | 64 | 15 | 13 of 13 |
+| Golub Capital Private Credit | 63 | 50 | 49 | 17 | 11 of 12 |
+| Sixth Street Lending Partners | 119 | 81 | 68 | 46 | 14 of 14 |
+| Oaktree Strategic Credit | 74 | 42 | 42 | 16 | 14 of 14 |
+| **Total** | **409** | **267** | **246** | **109** | **65 of 67** |
+
+The two fund-quarters outside 0.5M are as filed (D-064, D-065): the filer's printed rows do not
+add to its printed subtotal.
+
+**Not cleared.** 95 findings have no proposal: 58 rule groups not read, and three rate rules
+whose check fails on named rows. Known real defects left in place:
+
+- Sixth Street: "S" and "C" reference rates (D-068); the Elysium preference shares at 2024-12-31
+  are added by rule and carry no class or accession.
+- Ares Strategic Income: Steward Partners prints "9.08 % SOFR (Q) 4.75 %" at 2025-12-31 and
+  2026-03-31 and publishes no rate.
+- Oaktree: five quarters of loans with no rate (Impel, BioXcel, Verona) not read on the page.
+- Goldman Sachs: rows printed "B" at 2026-06-30 follow the legend (BBSY); 14 are tagged BBSW.
+- Golub: the 18 rows a quarter named from the page have no printed-field confirmation.
+
+**Process notes.** I ran `git stash` and `git stash pop` once on the shared working tree to compare
+a hash. Everything came back, but a staged rename became an unstaged delete plus a staged add. I
+should not have used it there. A stray bare `python -` hung once and was killed.
+
+**Next fund by size:** MSD Investment Corp. (0001849894), then North Haven Private Income Fund,
+Monroe Capital Income Plus, Blue Owl Technology Income, Barings Private Credit. Not started.

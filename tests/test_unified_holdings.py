@@ -8258,6 +8258,23 @@ class TestDimensionPathDedup:
         assert len(acme) == 2
         assert set(acme["instrument_description"]) == {"Term Loan A", "Term Loan B"}
 
+    def test_twin_members_told_apart_by_a_wrapper_token_are_preserved(self, tmp_path):
+        # Goldman Sachs Private Credit tags two real tranches with equal figures on members
+        # ending " One" / " Two"; its wrapper names the token (distinct_member_suffix_re).
+        base = ("Investment Debt Investments United States 1st Lien/Senior Secured Debt Airwavz Solutions, Inc. "
+                "Industry Wireless Telecommunication Services Interest Rate 9.07% Reference Rate and Spread "
+                "S + 5.25% Maturity 03/31/27")
+        twins = [{"cik": "0001920145", "investment_identifier": base + suffix, "fair_value": 5759000.0,
+                  "cost": 5778000.0, "principal_amount": 5817000.0} for suffix in (" One", " Two")]
+        result = self._build(tmp_path, bdc_rows=twins)
+        assert len(result[result["issuer_name"].str.contains("Airwavz")]) == 2
+        # One member on two affiliation paths is still one position for the same filer.
+        same = [{**twins[0], "investment_identifier": base,
+                 "dimensions_raw": "investmentidentifieraxis=" + base + "|investmentissueraffiliationaxis=" + path}
+                for path in ("nonaffiliated", "affiliated")]
+        result = self._build(tmp_path, bdc_rows=same)
+        assert len(result[result["issuer_name"].str.contains("Airwavz")]) == 1
+
     def test_same_issuer_fv_different_shares_preserved(self, tmp_path):
         result = self._build(tmp_path, bdc_rows=[
             {"investment_identifier": "Acme Corp - Common Stock",

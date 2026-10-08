@@ -1,0 +1,30 @@
+{
+ "cik": "1930087",
+ "rule_id": "exclude_affiliate_rollforward_issuer_only_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "position('|' IN CAST(bdc_investment_identifier AS VARCHAR)) = 0 AND NOT regexp_matches(lower(CAST(bdc_investment_identifier AS VARCHAR)), ',\\s*(one stop|senior secured|second lien|subordinated debt|structured finance note|lp interest|lp units|llc interest|llc units|common stock|preferred stock|warrant)|cusip') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001930087-26-000099 (10-Q, 2026-06-30), transactions with affiliates table: 'Fair value as of June 30, 2026 ... RW AM Holdco LLC $ - $ 2,744 $ - $ ( 113 ) $ - $ 2,631 $ 5 Total Non-Controlled Affiliates ... 2,631'. The schedule prints four RW AM Holdco, LLC rows (One stop 582 and 620; LLC interest 1,129 and 300) and 'Total non-controlled/affiliate company investments 2,744 - 2,631'."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox n3a (2026-10-08): context c-1227, member 'RW AM Holdco LLC', carries InvestmentOwnedAtFairValue 2,631,000 and no cost, principal, share or percent fact; contexts c-1214, c-1215, c-1218 and c-1219 carry the four schedule rows, which sum to 2,631,000."
+  }
+ ],
+ "rationale": "The filer tags the closing fair value in its affiliate roll-forward note on the investment identifier axis, with the issuer name alone. Schedule members always name the type after the issuer ('Issuer | One stop 1', earlier 'Issuer, One stop 1') and carry principal, shares or a percent of net assets; the roll-forward member carries none. The rule is structural and covers every quarter. The same pattern as Blue Owl's rule of the same name. Authored in an interactive session and checked by fund-sandbox reconciliation, not by the fleet promotion gate.",
+ "confidence": 0.95,
+ "measured_impact": {
+  "2026-06-30": {
+   "rows": 1,
+   "fv": -2631000.0
+  }
+ }
+}

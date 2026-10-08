@@ -27,6 +27,7 @@ from pipeline.bdc_filings import (
     _match_concept,
     _parse_fact_value,
     _parse_xbrl_contexts,
+    parse_filing_contexts,
     _apply_stepstone_2025q4_monetary_scale_correction,
     _normalize_mixed_decimals_monetary_facts,
 )
@@ -1572,7 +1573,7 @@ def _extract_single_xbrl_source_file(
         logger.debug("Source reconciliation XML parse failed for %s: %s", xml_path, exc)
         return []
 
-    contexts = _parse_xbrl_contexts(tree)
+    contexts = parse_filing_contexts(tree, filing_meta)
     investment_contexts = {
         cid: info for cid, info in contexts.items() if info.get("is_investment")
     }
@@ -4332,9 +4333,13 @@ _SOURCE_FACT_EXTRACTION_VERSION = "4"
 
 def _filing_metadata_hash(filing: dict[str, Any]) -> str:
     keys = ["cik", "entity_name", "accession_number", "form_type", "filing_date", "report_date"]
+    from pipeline.page_labelled_contexts import encoding_signature
+    signature = encoding_signature(str(filing.get("cik", "") or ""))
     payload = "\x1f".join(
         [_SOURCE_FACT_EXTRACTION_VERSION]
         + [str(filing.get(k, "") or "") for k in keys]
+        # a filer's page-labelled / misdated context settings change what is extracted
+        + ([signature] if signature else [])
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 

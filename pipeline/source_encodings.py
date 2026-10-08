@@ -9,6 +9,9 @@ import json
 import re
 
 
+_MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
+
+
 def load_encodings(wrapper_directory=None):
     if wrapper_directory is None:
         from pipeline.config import OVERRIDES_DIR
@@ -25,7 +28,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -56,6 +59,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Unspecified reference labels need reference_rate_columns: '+str(path))
             if key=='printed_margin_reading' and not encoding.get('reference_rate_columns'):
                 raise ValueError('A printed margin reading needs reference_rate_columns: '+str(path))
+            if key=='page_labelled_contexts' and any(not re.fullmatch(r'[a-z0-9]+axis(?:\+[a-z0-9]+axis)*',v) for v in values):
+                raise ValueError('A page-labelled context reads "axis+axis", lower-case local names: '+str(path))
+            if key=='misdated_contexts' and any(not _MISDATED_CONTEXT_RE.fullmatch(v) for v in values):
+                raise ValueError('A misdated context reads "ACCESSION CONTEXT YYYY-MM-DD -> YYYY-MM-DD": '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:

@@ -841,6 +841,9 @@ def build_unified_holdings(
         "nullif(CAST(nport_holding_id AS VARCHAR),''),'row:'||CAST(row_number() OVER () AS VARCHAR))",
     )
 
+    from pipeline.staging_bdc import distinct_member_suffix_sql
+    member_suffix_key = distinct_member_suffix_sql(None, 'bdc_investment_identifier')
+
     sql = f"""
     WITH nport_deduped AS (
         -- N-PORT within-source dedup: the same monthly filing can appear in
@@ -965,7 +968,8 @@ def build_unified_holdings(
                     ),
                     ROUND(COALESCE(TRY_CAST(fair_value AS DOUBLE), 0), 0),
                     ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
-                    ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
+                    ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0),
+                    {member_suffix_key}
                 ORDER BY
                     LENGTH(COALESCE(CAST(issuer_name AS VARCHAR), '')),
                     COALESCE(CAST(issuer_name AS VARCHAR), ''),

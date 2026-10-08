@@ -137,6 +137,13 @@
     "no_prefix_is_aggregate": true,
     "category_marker_re": "^(?:common stock|preferred stock|equity securities)(?:\\s+united\\s+states|\\s+cayman\\s+islands)?(?:\\s+(?:common|preferred)\\s+stock)?(?:\\s*-\\s*[\\d.]+%)?$"
   },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "distinct_member_suffix_re": "\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)$",
+    "hierarchy_issuer_re": "^(?:Investment\\s+)?(?:Debt Investments|Equity and Other)\\s+(?:United Arab Emirates|United Kingdom|Cayman Islands|United States|Switzerland|Netherlands|New Zealand|Luxembourg|Australia|Singapore|Hong Kong|Ireland|Germany|Belgium|Denmark|Finland|Bermuda|Canada|France|Sweden|Norway|Jersey|Israel|Spain|Italy|Japan)\\s+(?:1st Lien/Senior Secured Debt|1st Lien/Last-Out Unitranche(?:\\s*\\(\\d+\\))?|2nd Lien/\\s?Senior Secured Debt|Structured Finance Obligations?|Unsecured Debt|Common Stock|Preferred Stock|Warrants)\\s+(.+?)\\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Initial Acquisition Date)\\b",
+    "hierarchy_instrument_re": "^(?:Investment\\s+)?(?:Debt Investments|Equity and Other)\\s+(?:United Arab Emirates|United Kingdom|Cayman Islands|United States|Switzerland|Netherlands|New Zealand|Luxembourg|Australia|Singapore|Hong Kong|Ireland|Germany|Belgium|Denmark|Finland|Bermuda|Canada|France|Sweden|Norway|Jersey|Israel|Spain|Italy|Japan)\\s+(1st Lien/Senior Secured Debt|1st Lien/Last-Out Unitranche(?:\\s*\\(\\d+\\))?|2nd Lien/\\s?Senior Secured Debt|Structured Finance Obligations?|Unsecured Debt|Common Stock|Preferred Stock|Warrants)\\s",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '^(?:Investment\\s+)?(?:Debt Investments|Equity and Other)\\s+(?:United Arab Emirates|United Kingdom|Cayman Islands|United States|Switzerland|Netherlands|New Zealand|Luxembourg|Australia|Singapore|Hong Kong|Ireland|Germany|Belgium|Denmark|Finland|Bermuda|Canada|France|Sweden|Norway|Jersey|Israel|Spain|Italy|Japan)\\s+(?:1st Lien/Senior Secured Debt|1st Lien/Last-Out Unitranche(?:\\s*\\(\\d+\\))?|2nd Lien/\\s?Senior Secured Debt|Structured Finance Obligations?|Unsecured Debt|Common Stock|Preferred Stock|Warrants)\\s')"
+  },
   "archetypes": {
     "debt": {
       "description": "All debt instruments including senior secured, unitranche, and unsecured",
@@ -220,22 +227,79 @@
   "identifier_parser": {
     "type": "hierarchical_pct",
     "issuer_boundary_keywords": [
-      "Industry", "Interest Rate", "Reference Rate", "Maturity",
-      "Floor", "PIK", "Effective Yield", "Initial Acquisition Date"
+      "Industry",
+      "Interest Rate",
+      "Reference Rate",
+      "Maturity",
+      "Floor",
+      "PIK",
+      "Effective Yield",
+      "Initial Acquisition Date"
     ],
     "industry_keyword": "Industry",
-    "rate_shorthand": {"S + ": "SOFR", "L + ": "LIBOR", "E + ": "EURIBOR"},
+    "rate_shorthand": {
+      "S + ": "SOFR",
+      "L + ": "LIBOR",
+      "E + ": "EURIBOR"
+    },
     "country_list": [
-      "United States", "United Kingdom", "Canada", "Australia",
-      "Cayman Islands", "Switzerland", "Luxembourg", "France",
-      "Ireland", "Netherlands", "Germany", "Belgium", "Sweden",
-      "Norway", "Denmark", "Finland", "Spain", "Italy",
-      "Japan", "Singapore", "Hong Kong", "United Arab Emirates"
+      "United States",
+      "United Kingdom",
+      "Canada",
+      "Australia",
+      "Cayman Islands",
+      "Switzerland",
+      "Luxembourg",
+      "France",
+      "Ireland",
+      "Netherlands",
+      "Germany",
+      "Belgium",
+      "Sweden",
+      "Norway",
+      "Denmark",
+      "Finland",
+      "Spain",
+      "Italy",
+      "Japan",
+      "Singapore",
+      "Hong Kong",
+      "United Arab Emirates"
     ]
   },
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "reference_rate_codes": [
+      "L=LIBOR",
+      "E=EURIBOR",
+      "S=SOFR",
+      "SN=SONIA",
+      "N=NIBOR",
+      "P=PRIME",
+      "C=CDOR to 2024-06-30",
+      "C=CORRA from 2024-09-30",
+      "SARON=SARON",
+      "STIBOR=STIBOR",
+      "B=BBSW to 2026-03-31",
+      "B=BBSY from 2026-06-30",
+      "BW=BBSW",
+      "BY=BBSY"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate andSpread"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ]
   }
 }

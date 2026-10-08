@@ -76,6 +76,12 @@
       }
     ]
   },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^(.+?)(?:\\s*\\|\\s*[^|]+|\\s*,\\s*[^,|]+)$",
+    "hierarchy_instrument_re": "(?:^[^|]*\\|\\s*|^[^|]*,\\s*)([^|,]+?)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:,|\\|)\\s*(?:one stop|senior secured|second lien|subordinated debt|structured finance note|preferred stock|common stock|lp units|lp interest|llc units|llc interest|warrant)[^,|]*$')"
+  },
   "archetypes": {
     "debt": {
       "description": "Debt positions including one-stop loans, senior secured loans, second lien loans, subordinated debt, and structured finance notes",
@@ -167,7 +173,19 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "page_labelled_contexts": [
+      "equitysecuritiesbyindustryaxis+investmentissueraffiliationaxis+investmenttypeaxis",
+      "equitysecuritiesbyindustryaxis+investmenttypeaxis"
+    ],
+    "filed_rate_reading": [
+      "cash_leg"
+    ],
+    "reference_rate_columns": [
+      "SpreadAboveIndex"
+    ]
   }
 }

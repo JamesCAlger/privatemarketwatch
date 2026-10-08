@@ -15,7 +15,7 @@ from typing import Any
 import pandas as pd
 from lxml import etree
 
-from pipeline.bdc_filings import _local_name, _parse_xbrl_contexts
+from pipeline.bdc_filings import _local_name, _parse_xbrl_contexts, parse_filing_contexts
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
     BDC_POSITION_PIK_EVIDENCE_FILE,
@@ -161,7 +161,7 @@ def extract_bdc_position_pik_evidence(
         }
         try:
             tree = etree.parse(xml_path)
-            contexts = _parse_xbrl_contexts(tree)
+            contexts = parse_filing_contexts(tree, filing_meta)
             all_records.extend(_extract_pik_evidence_facts(tree, contexts, filing_meta))
             parsed += 1
         except Exception as exc:

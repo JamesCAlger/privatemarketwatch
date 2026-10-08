@@ -1,0 +1,107 @@
+"""Positions tagged on a subtotal context and named from the page; twin members; unnamed labels."""
+import pandas as pd
+import pytest
+
+from pipeline import page_labelled_contexts as plc
+from pipeline import staging_bdc
+
+
+def _row(context, cells, concept='us-gaap:InvestmentOwnedAtFairValue'):
+    tds = ''.join('<td style="x">%s</td>' % cell for cell in cells[:-1])
+    tds += '<td><ix:nonFraction name="%s" contextRef="%s" scale="3">%s</ix:nonFraction></td>' % (concept, context, cells[-1])
+    return '<tr class="r">' + tds + '</tr>'
+
+
+def test_single_row_group_is_named_from_its_printed_row():
+    page = _row('c-283', ['Star Holding, LLC<sup>@#(8)(26)</sup>', 'Senior secured', 'SF +', '4.50', '17,079', '16,939', '17,104'])
+    assert plc.labelled_contexts(page, {'c-283'}) == {'c-283': 'Star Holding, LLC | Senior secured'}
+
+
+def test_subtotal_and_total_rows_are_not_positions():
+    page = (_row('c-118', ['161,373', '160,771', '3.5', '158,632'])
+            + _row('c-119', ['Total equity investments', '61,047', '1.5', '64,837'])
+            + _row('c-120', ['Southeast', '$', '1,892,252']))
+    assert plc.labelled_contexts(page, {'c-118', 'c-119', 'c-120'}) == {}
+
+
+def test_context_printed_on_two_rows_or_tagged_with_another_concept_is_left_alone():
+    page = (_row('c-1', ['Acme, Inc.', 'One stop', '100'])
+            + _row('c-1', ['Beta, LLC', 'One stop', '100'])
+            + _row('c-2', ['Gamma, LLC', 'One stop', '5'], concept='us-gaap:InvestmentOwnedAtCost')
+            + _row('c-9', ['Delta, LLC', 'One stop', '7']))
+    assert plc.labelled_contexts(page, {'c-1', 'c-2'}) == {}
+
+
+def test_only_a_listed_axis_combination_is_adopted(monkeypatch, tmp_path):
+    combo = frozenset({'equitysecuritiesbyindustryaxis', 'investmenttypeaxis'})
+    monkeypatch.setattr(plc, '_combos_by_cik', lambda: {'0000000042': frozenset({combo})})
+    (tmp_path / '42').mkdir()
+    (tmp_path / '42' / '000000004226000001.html').write_text(
+        _row('c-1', ['Acme, Inc.', 'Senior secured', '10']) + _row('c-2', ['Northeast', 'Region', '10']), encoding='utf-8')
+    contexts = {
+        'c-1': {'is_investment': False, 'investment_identifier': '',
+                'dimensions_raw': 'equitysecuritiesbyindustryaxis=SoftwareMember|investmenttypeaxis=SeniorMember'},
+        'c-2': {'is_investment': False, 'investment_identifier': '', 'dimensions_raw': 'statementgeographicalaxis=NortheastMember'},
+    }
+    meta = {'cik': '42', 'accession_number': '0000000042-26-000001'}
+    assert plc.adopt_page_labelled_contexts(contexts, meta, html_cache_dir=tmp_path) == 1
+    assert contexts['c-1']['is_investment'] and contexts['c-1']['investment_identifier'] == 'Acme, Inc. | Senior secured'
+    assert not contexts['c-2']['is_investment']
+    assert plc.adopt_page_labelled_contexts(dict(contexts), {'cik': '43', 'accession_number': 'x'}, html_cache_dir=tmp_path) == 0
+
+
+def _raw(rows):
+    columns = ('cik entity_name accession_number form_type filing_date report_date '
+               'investment_identifier fair_value cost principal_amount interest_rate '
+               'basis_spread reference_rate_type maturity_date pct_of_net_assets pik_rate '
+               'shares_held unrealized_gain_loss dimensions_raw investment_type industry affiliation').split()
+    return pd.DataFrame([{**dict.fromkeys(columns, ''), **row} for row in rows])
+
+
+@pytest.fixture
+def no_production_overlay(monkeypatch, tmp_path):
+    monkeypatch.setattr('pipeline.config.BDC_IXBRL_FIELD_STATUS_FILE', tmp_path / 'absent.csv')
+
+
+def test_goldman_equal_valued_twin_members_are_both_kept(no_production_overlay):
+    base = ('Investment Debt Investments United States 1st Lien/Senior Secured Debt Airwavz Solutions, Inc. Industry Wireless '
+            'Telecommunication Services Interest Rate 9.07% Reference Rate and Spread S + 5.25% Maturity 03/31/27')
+    rows = [dict(cik='0001920145', report_date='2025-12-31', accession_number='a', investment_identifier=base + suffix,
+                 dimensions_raw='investmentidentifieraxis=' + base + suffix, fair_value='5759000', cost='5778000',
+                 principal_amount='5817000', interest_rate='0.0907', src_context_id='twin' + suffix.strip())
+            for suffix in (' One', ' Two')]
+    # Control: the same member under two affiliation paths is still one position.
+    other = base.replace('Airwavz Solutions, Inc.', 'Other Borrower, Inc.')
+    for path in ('nonaffiliated', 'affiliated'):
+        rows.append(dict(cik='0001920145', report_date='2025-12-31', accession_number='a', investment_identifier=other,
+                         dimensions_raw='investmentidentifieraxis=' + other + '|investmentissueraffiliationaxis=' + path,
+                         fair_value='100000', cost='100000', principal_amount='100000', interest_rate='0.0907',
+                         src_context_id='same' + path))
+    result = staging_bdc._prepare_bdc(bdc_df=_raw(rows))
+    assert sorted(c for c in result.src_context_id if c.startswith('twin')) == ['twinOne', 'twinTwo']
+    assert sum(c.startswith('same') for c in result.src_context_id) == 1
+
+
+def test_sixth_street_unnamed_equity_label_takes_the_issuer_printed_on_the_page(no_production_overlay):
+    label = 'Equity and Other Investments Healthcare 128,321 Ordinary Shares Initial Acquisition Date 3/24/2023'
+    rows = [dict(cik='0001925309', report_date='2023-12-31', accession_number='a', investment_identifier=label,
+                 dimensions_raw='investmentidentifieraxis=' + label, fair_value='12875000', cost='12875000',
+                 shares_held='128321', src_context_id='raptor')]
+    result = staging_bdc._prepare_bdc(bdc_df=_raw(rows)).set_index('src_context_id')
+    assert result.loc['raptor', 'issuer_name'] == 'Raptor US Buyer II Corp.'
+    assert result.loc['raptor', 'fair_value'] == 12875000
+
+
+def test_a_listed_misdated_context_is_redated_and_a_stale_listing_is_left_alone(monkeypatch):
+    listing = {('0000000042', '0000000042-25-000030'): {'c-285': ('2024-12-31', '2025-03-31'),
+                                                         'c-9': ('2024-12-31', '2025-03-31')}}
+    monkeypatch.setattr(plc, '_misdated_by_accession', lambda: listing)
+    contexts = {'c-285': {'period': '2024-12-31'}, 'c-286': {'period': '2024-12-31'}, 'c-9': {'period': '2025-03-31'}}
+    meta = {'cik': '42', 'accession_number': '0000000042-25-000030'}
+    assert plc.correct_misdated_contexts(contexts, meta) == 1
+    assert contexts['c-285']['period'] == '2025-03-31'
+    assert contexts['c-286']['period'] == '2024-12-31'
+    assert contexts['c-9']['period'] == '2025-03-31'
+    other = {'c-285': {'period': '2024-12-31'}}
+    assert plc.correct_misdated_contexts(other, {'cik': '42', 'accession_number': '0000000042-25-000031'}) == 0
+    assert other['c-285']['period'] == '2024-12-31'

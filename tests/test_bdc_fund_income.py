@@ -340,6 +340,13 @@ class TestConceptMatching:
     def test_fee_income_concept(self):
         assert _match_income_concept("feeincome") == "fee_income"
 
+    def test_a_fee_measured_on_net_investment_income_is_not_net_investment_income(self):
+        # Sixth Street: ck:IncentiveFeesOnNetInvestmentIncome was read as net investment income.
+        assert _match_income_concept("incentivefeesonnetinvestmentincome") == "incentive_fee"
+        assert _match_income_concept("incentivefeesonnetinvestmentincomepayabletoaffiliate") is None
+        assert _match_income_concept("percentageofpreincentivefeenetinvestmentincomehurdleratequarterly") is None
+        assert _match_income_concept("netinvestmentincome") == "net_investment_income"
+
     def test_management_fee_concept(self):
         assert _match_income_concept("managementfeeexpense") == "management_fee"
 

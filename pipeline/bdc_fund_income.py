@@ -79,6 +79,13 @@ def _local_name(tag: str) -> str:
 
 def _match_income_concept(local_lower: str) -> Optional[str]:
     """Match a lowercase local name to an income column."""
+    if "netinvestmentincome" in local_lower and "incentivefee" in local_lower:
+        # A fee measured on net investment income is not net investment income. Sixth Street tags
+        # ck:IncentiveFeesOnNetInvestmentIncome (21,359) ahead of us-gaap:NetInvestmentIncome
+        # (152,562) and the substring match took the fee. The expense itself is the incentive fee;
+        # payables, changes in payables and percentage terms are neither.
+        return "incentive_fee" if local_lower in ("incentivefeesonnetinvestmentincome",
+                                                  "incentivefeeonnetinvestmentincome") else None
     for pattern, col in FUND_INCOME_CONCEPT_MAP:
         if pattern in local_lower:
             return col

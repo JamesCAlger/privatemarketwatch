@@ -1,0 +1,841 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "n5e",
+ "dispositions": [
+  {
+   "disposition_id": "PD-fv_conservation-1872371",
+   "class": "not_applicable",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "In the two quarters where the schedule lists a short-term investment fund, the check adds the filed cash-equivalents figure to the filed investments. That figure is larger than the schedule row, so the comparison cannot close. Published investments equal filed investments in every quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5d, published investments / filed investments / published cash rows / filed cash equivalents ($M): 2025-06-30 6,362.9 / 6,362.9 / 100.7 / 471.3 (residual -5.42 pct); 2025-09-30 6,899.0 / 6,899.0 / 210.6 / 260.4 (-0.70 pct). In the four quarters with no cash row the check uses investments alone and passes."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/oak1.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-fv_conservation-1920145",
+   "class": "not_applicable",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "The fund's affiliated money market fund is published as a cash row. The filed investments total excludes it, and the fund files no cash-equivalents figure outside the schedule, so the check compares rows including the fund with a total that leaves it out. Without that row the published total equals the filed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-25-107338 (10-Q, 2025-06-30) balance sheet: 'Investments, at fair value (cost of $ 9,644,562 ...) $ 9,630,944 ... Investments in affiliated money market fund (cost of $ 233,261 ...) 233,261'."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox n5c: the residual is the money market row in each failing quarter (233.3M of 9,630.9M is 2.42 pct at 2025-06-30; 518.2M, 273.7M and 156.6M at the next three). Published excluding that row equals the filed total within 0.5M in all 13 quarters."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-fv_conservation-1930087",
+   "class": "as_filed",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "At 2023-12-31 the filer's printed subtotal includes a position its schedule neither prints nor tags (D-064).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001930087-24-000010 (10-Q, 2023-12-31), Containers and Packaging: the seven printed rows sum to 32,366; the printed subtotal is 35,834. Principal and cost are short by 3,482 and 3,450. The prior quarter lists an eighth row, WP Deluxe Merger Sub (par 3,491)."
+    },
+    {
+     "source": "query",
+     "quote": "Every tagged row is published: 256 rows, 1,400.4M, against the filed 1,403.9M."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_block_sums.py 1930087 000193008724000010 2023-12-31",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F28-1872371",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "basis": "checked",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5e: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F28-1918712",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "basis": "checked",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5e: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F28-1920145",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31"
+   ],
+   "basis": "checked",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5e: the fund's first quarter with published holdings is 2023-06-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F28-1925309",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "basis": "checked",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5e: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F28-1930087",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2022-09-30",
+    "2023-06-30"
+   ],
+   "basis": "checked",
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5e: the fund's first quarter with published holdings is 2023-09-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1925309",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "One to seven rows a quarter, out of 38 to 108, carry a filed percent that disagrees with their fair value. The published percent is the tagged fact, printed to one decimal.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5b: failing rows per quarter 1, 1, 2, 1, 5, 2, 7, 7, 1; the median implied net assets is within 0.5 pct of the filed figure in every quarter (4,527M against 4,530M at 2026-06-30)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_left.py n5e",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1930087",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "One to thirteen rows a quarter, out of 170 to 580, carry a filed percent that disagrees with their fair value. The published percent is the tagged fact, printed to one decimal.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5b: failing rows per quarter 1, 5, 3, 1, 6, 4, 4, 3, 6, 8, 6, 13; the median implied net assets is within 1 pct of the filed figure in every quarter (4,448M against 4,475M at 2026-06-30)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_left.py n5e",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-B01-1920145",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Position contexts with no fair value fact: undrawn commitments printed with a par amount and no cost or value, and members the filer defines for other facts. No value is filed on them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5c: 7 to 90 such contexts a quarter; 8 to 34 carry a principal and at most six a cost. Published excluding the money market fund equals the filed total within 0.5M in all 13 quarters."
+    },
+    {
+     "source": "filing",
+     "quote": "The pulled rule of D-059 had read two such rows (Auctane, Tiger Acquisition) as positions and invented 349.4M; the page prints them with a par amount only."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/b01.py n5e 1920145",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-B01-1925309",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Position contexts with no fair value fact: members the filer defines for rate and period facts or under an earlier spelling. No value is filed on them; the positions with values tie to the filed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox n5c: 52 to 107 such contexts a quarter, none with a cost and at most two with a principal; published equals the filed investments total within 0.5M in all 14 quarters."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/b01.py n5e 1925309",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C103-1872371",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C103 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C103-1920145",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 42 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C103 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C103-1930087",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 38 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C103 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C107-1872371",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 492 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C107-1920145",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 780 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C107-1925309",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-C107-1930087",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 829 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-PP02-1920145",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Pairs of tranches the filer prints as two rows with equal figures and tags on members ending 'One' / 'Two'. Both are positions; the filed total needs both (D-063).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001193125-26-340582 (10-Q, 2026-06-30): two rows 'Airwavz Solutions, Inc. Wireless Telecommunication Services 9.07 % S + 5.25 % 03/31/27 5,817 5,793 5,759'."
+    },
+    {
+     "source": "query",
+     "quote": "Before the fix one row of each pair was dropped and published was 4.3M to 5.8M under the filed total in six quarters; with both rows it equals the filed total."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issues.py n5e PP02 1920145",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X02-1872371",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox n5e for each quarter listed: 8 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py n5e <cik>",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X02-1918712",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox n5e for each quarter listed: 52 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py n5e <cik>",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X02-1930087",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001930087"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox n5e for each quarter listed: 253 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py n5e <cik>",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X06-1872371",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001872371"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 12 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X06-1918712",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 20 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X06-1920145",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001920145"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 120 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X06-1925309",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "basis": "checked",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox n5e for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-X02-1918712-READ",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Rows printed with no rate: one private asset-backed investment and the lowest tranche of three collateralized loan obligations. No rate is tagged or printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001918712-25-000065 (10-Q, 2025-06-30): 'Quintain Investments Holdings Limited (11) Private asset-backed investment 08/2031 32,775.6 42,469.6 48,861.1'; 'STKPK 2022-1 ... Collaterized loan obligation 10/2037 20,240.0 194.4 602.8'; 'CLRMPK 2025-1 ... Collaterized loan obligation 04/2038 15,725.0 - 573.5'; 'BERRY 2024-1 ... Collaterized loan obligation 10/2037 2,610.0 - 154.4'. The tranches above each print a rate."
+    },
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source on sandbox n5d names these rows and no others in the two quarters. Not covered: 2025-12-31 and 2026-03-31, where Steward Partners prints '9.08 % SOFR (Q) 4.75 %' and publishes no rate (a real gap), and 2026-06-30, not read."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000191871225000065 html \"STKPK 2022-1\" 8 330",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1925309-READ",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30"
+   ],
+   "statement": "The source row read as a missing position is a prior-period value the filer tagged on a current-period context. The page prints one row for the loan; a rule excludes the stray member.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-25-021144 (10-K, 2024-12-31): the 2024 schedule prints 'Artisan Bidco, Inc. (3) First-lien loan ($ 114,848 par, due 11/2029) ... 112,663 114,848'; the 2023 schedule prints '($ 141,889 par ...) 138,686 139,850'. The member '$141,889 par' carries a 2024-12-31 value of 139,850 and no principal."
+    },
+    {
+     "source": "filing",
+     "quote": "0001193125-25-266848 (10-Q, 2025-09-30): Green Shoot BidCo, the same pattern (D-062)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000095017025021144 html \"Artisan Bidco, Inc. (\" 3 420",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-blocking_source_pct_leaf_parser_mismatch-1925309-READ",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_pct_leaf_parser_mismatch",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30"
+   ],
+   "statement": "The same two stray prior-period members as SRC_BDC01, reported by the reconciliation's second engine.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "See PD-SRC_BDC01 for Sixth Street: Artisan Bidco 139,850 at 2024-12-31 and Green Shoot BidCo 5,246 at 2025-09-30, each the comparative row's value on a current-period context."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000119312525266848 html \"EUR 5,107\" 12",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  }
+ ]
+}
