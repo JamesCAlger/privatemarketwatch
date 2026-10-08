@@ -8776,6 +8776,21 @@ class TestApplyRowCorrections:
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert result.iloc[0]["fair_value"] == "5000000"
 
+    def test_an_empty_value_withdraws_the_field_as_a_missing_value(self, tmp_path):
+        """Ares 10-Q 2025-09-30, UP Intermediate revolver: a rate tagged on a line the page prints with none.
+        The withdrawn rate must be a missing value: empty text broke the numeric casts of later steps."""
+        key = {"cik": "0001287750", "report_date": "2025-09-30", "accession_number": "0001287750-25-000046",
+               "bdc_investment_identifier": "UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured revolving loan"}
+        df = self._make_holdings_df([dict(key, source="bdc", interest_rate="8.75", basis_spread="4.75",
+                                          reference_rate_type="SOFR", reference_rate_source="inferred_post_libor")])
+        common = {"value": "", "reason": "page prints no rate", "source_evidence": "test", "author": "test", "date_added": "2026-10-08"}
+        corr_path = self._write_corrections(tmp_path, [dict(key, field=f, **common) for f in (
+            "interest_rate", "basis_spread", "reference_rate_type", "reference_rate_source")])
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        for field in ("interest_rate", "basis_spread", "reference_rate_type", "reference_rate_source"):
+            assert pd.isna(result.iloc[0][field]), field
+        assert pd.to_numeric(result["interest_rate"]).isna().all()
+
     def test_class_fields_can_be_corrected_together(self, tmp_path):
         """HPS 2026-03-31: 'OneTeam Partners, LLC - Class D Units' is printed as 'Preferred Units 8.00 %'.
         A class correction has to move asset_category with index_classification (decision D-021)."""

@@ -110,7 +110,7 @@ def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) ->
         FROM {unified_sql} h
         JOIN (SELECT * FROM (SELECT * FROM {status_sql}
                              UNION ALL BY NAME SELECT CAST(NULL AS VARCHAR) AS printed_margin WHERE false)
-              WHERE period_role = 'current' AND reference_rate_status IN ('value', 'not_applicable')) s
+              WHERE period_role = 'current' AND reference_rate_status IN ('value', 'not_applicable', 'unspecified')) s
           ON lpad(regexp_replace(CAST(s.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
                = lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
          AND s.accession_number = h.accession_number AND s.report_date = CAST(h.report_date AS VARCHAR)[:10]

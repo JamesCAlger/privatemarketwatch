@@ -115,6 +115,42 @@ SPECS = [
     (ARES, "2022-09-30", "Xanadu Holdings 2019-1, LLC, Senior subordinated loan",
      {"interest_rate": "10.43", "pik_rate": "2.77", "basis_spread": "6.75"},
      NO_RATE_FACT + "'Senior subordinated loan 10.43 % ( 2.77 % PIK) LIBOR (Q) 6.75 % 6/2019 7/2030 71.3 71.3 67.1'", "D-049"),
+    # decision D-053 (owner, 2026-10-08): Blue Owl Aptive prints the whole coupon; the rate tag is published as the rate
+    (OWL, "2023-03-31", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 $ 8,689 $ 7,402 $ 8,037': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2023-06-30", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 $ 8,821 $ 7,630 $ 8,314': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2023-09-30", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 $ 8,955 $ 7,865 $ 9,179': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2023-12-31", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 9,091 $ 8,102 $ 9,318': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2024-03-31", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 9,228 $ 8,348 $ 9,482': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2024-06-30", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 9,368 $ 8,598 $ 9,532': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    (OWL, "2024-09-30", "Aptive Environmental, LLC, First lien senior secured loan", {"interest_rate": "12"},
+     "Rate fact 0.12 and PIK fact 0.06; the printed line reads 'First lien senior secured loan 12.00 % ( 6.00 % PIK) 01/2026 9,515 $ 8,859 $ 9,801': "
+     "12.00 is the whole coupon, of which 6.00 is paid in kind", "D-053"),
+    # decision D-053 (owner, 2026-10-08): Ares 10-Q 2025-09-30, UP Intermediate: the members are one line out. The page prints
+    # 'First lien senior secured revolving loan 03/2024 03/2031 - - -', 'First lien senior secured loan 8.75 % SOFR (Q) 4.75 %
+    # 07/2025 03/2032 15.2 15.2 15.2' and 'Senior preferred units 15.00 % PIK 07/2025 10,340 1.1 1.1'.
+    (ARES, "2025-09-30", "UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured revolving loan",
+     {"interest_rate": "", "basis_spread": "", "reference_rate_type": "", "reference_rate_source": "", "coupon_type": ""},
+     "Rate 8.75 and spread 4.75 are tagged on the revolver, which the page prints with no rate: 'First lien senior secured "
+     "revolving loan 03/2024 03/2031 - - -'; they are the term loan's", "D-053"),
+    (ARES, "2025-09-30", "UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured loan",
+     {"interest_rate": "8.75", "basis_spread": "4.75", "pik_rate": ""},
+     "A PIK rate of 0.15 is tagged on the term loan; the page prints 'First lien senior secured loan 8.75 % SOFR (Q) 4.75 % "
+     "07/2025 03/2032 15.2 15.2 15.2' and the 15.00 % PIK on the preferred units below it", "D-053"),
+    (ARES, "2025-09-30", "UP Intermediate II LLC and UPBW Blocker LLC, Senior preferred units",
+     {"interest_rate": "15", "pik_rate": "15"},
+     "No rate fact on the preferred units; the page prints 'Senior preferred units 15.00 % PIK 07/2025 10,340 1.1 1.1'", "D-053"),
     # Not correctable here: Rawlings loan 2 and Infinity Home Services loan 3 at 2025-03-31 and 2025-06-30 print a rate
     # ("9.20 % SOFR (Q) 4.75 %", "9.80 % SOFR (Q) 5.50 %", "8.66 % CORRA (M) 6.00 %") but are among the eight positions
     # restored from the issuer-name axis (D-018), which are built after row corrections are applied.
@@ -140,6 +176,9 @@ SPECS = [
      {**EQUITY, "instrument_description": "Class A membership units"},
      WRONG_MEMBER + "'Class A membership units 01/2020 9,750,000 9.8 6.3'", "D-049"),
 ]
+# Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
+EXACT = {"UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured loan",
+         "Aptive Environmental, LLC, First lien senior secured loan"}
 con = duckdb.connect()
 target = REPO / "data/overrides/row_corrections.csv"
 data = target.read_bytes()
@@ -154,8 +193,9 @@ for cik, quarter, phrase, fields, reason, *decision in SPECS:
                         if decision else ("v05-decision-D-021", "2026-10-06"))
     rows = con.execute(f"""SELECT DISTINCT accession_number, CAST(bdc_investment_identifier AS VARCHAR)
         FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?
-          AND CAST(report_date AS VARCHAR)[:10] = ? AND contains(CAST(bdc_investment_identifier AS VARCHAR), ?)
-          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL""", [cik, quarter, phrase]).fetchall()
+          AND CAST(report_date AS VARCHAR)[:10] = ?
+          AND (contains(CAST(bdc_investment_identifier AS VARCHAR), ?) AND NOT ? OR CAST(bdc_investment_identifier AS VARCHAR) = ?)
+          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL""", [cik, quarter, phrase, phrase in EXACT, phrase]).fetchall()
     # the JV schedule may repeat a name; keep the row the finding is about (cost of 1,000 for Amergin)
     if len(rows) != 1:
         raise SystemExit("expected one row for %s %s %r, found %d: %s" % (cik, quarter, phrase, len(rows), rows[:4]))

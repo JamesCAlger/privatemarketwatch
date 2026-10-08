@@ -387,7 +387,10 @@ OWL = '0001812554'
 def test_reference_rate_reading_is_per_fund_and_normalised():
     encodings = {OWL: {'reference_rate_columns': ['Interest', 'Ref.  Rate'], 'reference_rate_codes': ['SR=SOFR', 'sa=SONIA']}}
     reading = source_encodings.reference_rate_reading('1812554', encodings)
-    assert reading == {'columns': frozenset({'interest', 'ref. rate'}), 'codes': {'SR': 'SOFR', 'SA': 'SONIA'}}
+    assert reading == {'columns': frozenset({'interest', 'ref. rate'}), 'codes': {'SR': 'SOFR', 'SA': 'SONIA'},
+                       'unspecified': frozenset()}
+    ares = {'0001287750': {'reference_rate_columns': ['Reference'], 'unspecified_reference_labels': ['Base  Rate']}}
+    assert source_encodings.reference_rate_reading('0001287750', ares)['unspecified'] == frozenset({'base rate'})
     assert source_encodings.reference_rate_reading(HPS, encodings) is None
     assert source_encodings.reference_rate_reading(OWL, {OWL: {'reference_rate_codes': ['SR=SOFR']}}) is None
 

@@ -572,6 +572,12 @@ def _prepare_bdc(
     )
     from pipeline.source_encodings import equity_instrument_expression
     asset_case = _sql_classify_bdc_asset(equity_instrument_expression('cik', 'instrument_description'))
+    # A filer that prints equity under one of its reviewed labels tags the unit count with the
+    # principal concept (Blue Owl 'Valor CI Blocker Feeder LP | Investment partnership': 9,912
+    # in the Units column, tagged InvestmentOwnedBalancePrincipalAmount). Equity publishes no
+    # principal, so without this the count is lost. Declared as shares_held:from_principal_tag.
+    units_from_principal = ("(" + equity_instrument_expression('cik', 'instrument_description')
+                            + " AND asset_category_final = 'EQUITY_COMMON' AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0)")
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
     # Cash-identity check: a row is a genuine cash position only when its own
@@ -2631,7 +2637,7 @@ def _prepare_bdc(
                       AND (_text_maturity_raw IS NOT NULL OR _text_maturity_month_raw IS NOT NULL)
                      THEN 'identifier_text'
                  ELSE '' END AS maturity_date_source,
-            _sh AS shares_held,
+            CASE WHEN {units_from_principal} THEN _pa ELSE _sh END AS shares_held,
             _pa AS principal_amount,
             upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) AS principal_amount_currency,
             CASE
@@ -2679,7 +2685,8 @@ def _prepare_bdc(
                 CASE WHEN COALESCE(_pct_in_percent, false) THEN NULL
                      WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
-                     ELSE NULL END
+                     ELSE NULL END,
+                CASE WHEN {units_from_principal} THEN 'shares_held:from_principal_tag' ELSE NULL END
             ), '') AS src_transforms,
             '' AS src_field_overrides,
             '' AS cost_source,

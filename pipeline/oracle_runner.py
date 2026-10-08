@@ -89,21 +89,27 @@ def _load_fund_financials(cik: str | None = None) -> pd.DataFrame | None:
         return None
 
 
-def _warn_if_detail_predates_holdings(detail_path) -> bool:
-    """True, with a warning, when the reconciliation detail is older than the holdings.
+def _quarters_missing_from_detail(holdings_df: pd.DataFrame, source_detail_df: pd.DataFrame) -> list[tuple[str, str]]:
+    """(cik, report_date) pairs the holdings have and the reconciliation detail lacks, with a warning.
 
-    The detail is written by the validate stage. An oracle run between a rebuild and that
-    stage reads the previous build's detail: checks A01, B01, B07 and E07 then describe the
-    old holdings and skip any quarter the old build did not have."""
-    from pipeline.config import UNIFIED_HOLDINGS_PARQUET_FILE
-    try:
-        stale = UNIFIED_HOLDINGS_PARQUET_FILE.stat().st_mtime > detail_path.stat().st_mtime
-    except OSError:
-        return False
-    if stale:
-        logger.warning("STALE INPUT: %s is older than the holdings; checks A01, B01, B07 and E07 "
-                       "describe the previous build. Run the validate stage first.", detail_path.name)
-    return stale
+    The detail is written by the validate stage. An oracle run before that stage reads the detail
+    of the previous build, so checks A01, B01, B07 and E07 skip any quarter that build did not
+    have. (The file's age is not the test: validate keeps a fund's detail when nothing it reads
+    has changed.)"""
+    def pairs(frame: pd.DataFrame) -> set[tuple[str, str]]:
+        if frame is None or frame.empty or not {"cik", "report_date"} <= set(frame.columns):
+            return set()
+        ciks = frame["cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10)
+        return set(zip(ciks, frame["report_date"].astype(str).str[:10]))
+    bdc = holdings_df
+    if holdings_df is not None and "source" in getattr(holdings_df, "columns", []):
+        bdc = holdings_df[holdings_df["source"].astype(str).str.lower() == "bdc"]
+    missing = sorted(pairs(bdc) - pairs(source_detail_df))
+    if missing:
+        logger.warning("STALE INPUT: the source reconciliation detail has no rows for %d fund-quarter(s) "
+                       "the holdings have (first: %s %s); checks A01, B01, B07 and E07 skip them. "
+                       "Run the validate stage first.", len(missing), missing[0][0], missing[0][1])
+    return missing
 
 
 def _load_source_detail(cik: str | None = None) -> pd.DataFrame:
@@ -127,7 +133,6 @@ def _load_source_detail(cik: str | None = None) -> pd.DataFrame:
                 pass
 
     if SOURCE_RECONCILIATION_DETAIL_FILE.exists():
-        _warn_if_detail_predates_holdings(SOURCE_RECONCILIATION_DETAIL_FILE)
         try:
             df = pd.read_csv(SOURCE_RECONCILIATION_DETAIL_FILE, dtype=str)
             if cik:
@@ -292,6 +297,7 @@ def run_oracle(
     fund_financials_df = _load_fund_financials(cik)
     source_detail_df = _load_source_detail(cik)
     matches_df = _load_matches(cik)
+    _quarters_missing_from_detail(holdings_df, source_detail_df)
 
     logger.info("Loaded: holdings=%d rows, financials=%s, source_detail=%d rows, matches=%s",
                 len(holdings_df),

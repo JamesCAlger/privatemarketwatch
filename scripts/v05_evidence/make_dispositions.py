@@ -38,7 +38,15 @@ _NO_RATE = {"from": CARRY_FROM, "check": "no_rate_in_source", "params": {}}
 _OWL_ROWS = {"from": CARRY_FROM, "check": "missing_source_rows_known", "params": {"patterns": [
     r"^Blue Owl Cross-Strategy Opportunities LLC \(BOCSO\)$", r"\| (?:Non-)?Controlled Affiliates$"]}}
 # Quarters after LAST_REVIEWED that the owner accepted for one entry, by name, in session.
-OWNER_ACCEPTED = {("DS-029", HPS): (["2026-06-30"], "owner, in session 2026-10-08", "2026-10-08")}
+OWNER = "owner, in session 2026-10-08"
+OWNER_ACCEPTED = {("DS-029", HPS): (["2026-06-30"], OWNER, "2026-10-08"),
+                  ("DS-030", ARES): (["2026-06-30"], OWNER, "2026-10-08"),
+                  # same pattern as the quarters DS-010 lists; the owner accepted the new quarter by name
+                  ("DS-010", APOLLO): (["2026-06-30"], WHO + "; 2026-06-30 accepted by the owner in session 2026-10-08", WHEN)}
+# Entries that cover the owner-accepted quarters and nothing else (another entry holds the fund's earlier quarters).
+OWNER_ONLY = {"DS-029", "DS-030"}
+# Entries decided by the owner for every quarter they list.
+OWNER_DECIDED = {"DS-031", "DS-032"}
 # spec id, or (spec id, fund) -> carry-forward check
 CARRY = {
     ("DS-004", HPS): _FILED("cost"), "DS-004A": _FILED("cost"),
@@ -288,6 +296,23 @@ SPECS = [
      [("filing", "HPS 10-Q for 2026-06-30 (0001628280-26-056772): 'Thrasio LLC (4)(10)(23)(25) SF + 8.00 % 12.01 % 6/18/2029 300 8 "
                  "300 Total Broadline Retail 24,258 24,550'; the industry cost total 24,258 is Auctane 24,250 plus 8.")],
      S + "filing_grep.py 1838126 000162828026056772 html \"Thrasio LLC\" 3 120"),
+    ("DS-030", "as_filed", "row_validation", "X02", [ARES], set(), False,
+     "One small note is printed and tagged with no rate.",
+     [("filing", "Ares 10-Q for 2026-06-30 (0001628280-26-050307): 'Axiomatic, LLC Premiere e-sports and video game "
+                 "investment platform First lien senior secured notes 06/2026 12/2027 0.1 0.1 0.1 (2)': no coupon, reference or "
+                 "spread on the line. Every other X02 row of the quarter is undrawn or on non-accrual (check "
+                 "no_rate_in_source: 70 of 71 rows).")],
+     S + "x02_page_read.py q2h 0001287750 5"),
+    ("DS-031", "as_filed", "row_validation", "C115", [APOLLO], set(), False,
+     "One loan publishes a spread of 15.87: the cash margin of 6.10 plus the PIK margin of 9.77, as the page prints them.",
+     [("filing", "Apollo 10-Q for 2025-06-30 (0000950170-25-105984) and 2025-09-30 (0001193125-25-277723), Material Holdings, "
+                 "LLC term loan: the row reads 'Interest Rate S+610 Cash plus 9.77% PIK, 0.00% Floor'; spread fact 0.061, PIK "
+                 "fact 0.0977. The fund's printed margin is read as cash plus PIK (decision D-042).")],
+     S + "flagged.py q2h C115 1837532 2025-06-30"),
+    ("DS-032", "as_filed", "weak", "fmt_basis_spread", [APOLLO], set(), False,
+     "The same Material Holdings spread of 15.87 as DS-031, reported by the range check.",
+     [("filing", "See DS-031: 'Interest Rate S+610 Cash plus 9.77% PIK, 0.00% Floor' in both filings.")],
+     S + "weakrows.py q2h 1837532"),
 ]
 # A finding already closed by a disposition stays in scope, so regenerating keeps its entry.
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated"}
@@ -307,7 +332,7 @@ for did, kind, engine, rule, funds, skip, supersede, statement, evidence, rerun 
         entries.append({**base, "ciks": ["*"], "quarters": ["all"]})
         continue
     ciks = funds or sorted({c for (e, r, c) in quarters if e == engine and r == rule})
-    covered = {c: sorted({q for q in quarters.get((engine, rule, c), ()) if (c, q) not in skip}
+    covered = {c: sorted({q for q in quarters.get((engine, rule, c), ()) if (c, q) not in skip and did not in OWNER_ONLY}
                          | set(OWNER_ACCEPTED.get((did, c), ([],))[0])) for c in ciks}
     covered = {c: q for c, q in covered.items() if q}
     if not covered:
@@ -317,6 +342,8 @@ for did, kind, engine, rule, funds, skip, supersede, statement, evidence, rerun 
         entry = {**base, "disposition_id": "%s-%s" % (did, cik[-7:]), "ciks": [cik], "quarters": qs}
         if (did, cik) in OWNER_ACCEPTED:
             entry["decided_by"], entry["decided_on"] = OWNER_ACCEPTED[(did, cik)][1:]
+        if did in OWNER_DECIDED:
+            entry["decided_by"], entry["decided_on"] = OWNER, "2026-10-08"
         carry = CARRY.get((did, cik), CARRY.get(did))
         if carry:
             entry["carry_forward"] = carry

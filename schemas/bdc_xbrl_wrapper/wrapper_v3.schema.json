@@ -610,6 +610,13 @@
           "items": {"const": "cash_plus_pik"},
           "description": "Set where the filer prints the cash margin and the PIK margin in separate cells and tags the spread with the cash part only (Blue Owl from 2025-03-31; earlier filings print 'A% (B% PIK)' and tag the total A). Needs reference_rate_columns. On a loan row tagged with a spread and a PIK rate, where the printed total equals their sum and not the spread alone, the published basis_spread is the sum (transform basis_spread:cash_plus_pik_margin); pik_rate is unchanged. Evidence required: printed lines in both forms for one loan, with the tagged values."
         },
+        "unspecified_reference_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Labels this filer prints in its reference-rate column that name no single benchmark (Ares 'Base Rate': the legend says it is commonly based on the Federal Funds Rate or the Prime Rate). The row floats; a reference rate guessed from the report date is withdrawn and nothing else changes. Needs reference_rate_columns."
+        },
         "equity_instrument_labels": {
           "type": "array",
           "minItems": 1,

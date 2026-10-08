@@ -69,10 +69,17 @@ def main(argv: list[str] | None = None) -> int:
             row.update(xbrl_download_status=status, xbrl_local_path=str(target) if status != "not_found" else "")
             rows.append(row)
             # The guard reads the filing from an index file; give it this run's.
+            # Keep the filings of funds downloaded on an earlier run: the index is per quarter, not
+            # per run. (A second run for other funds once replaced the first run's five rows.)
+            kept = []
+            if index_file.exists():
+                with index_file.open(encoding="utf-8", newline="") as handle:
+                    named = {r["accession_number"] for r in rows}
+                    kept = [r for r in csv.DictReader(handle) if r.get("accession_number") not in named]
             with index_file.open("w", encoding="utf-8", newline="") as handle:
                 writer = csv.DictWriter(handle, fieldnames=COLUMNS)
                 writer.writeheader()
-                writer.writerows(rows)
+                writer.writerows(sorted(kept + rows, key=lambda r: (r["cik"], r["accession_number"])))
             receipt = download_bdc_html(client=client, cik=cik, accession=row["accession_number"],
                                         primary_doc=row["primary_document"], agent="download_quarter_filings",
                                         reason="owner request: quarter %s" % args.quarter,

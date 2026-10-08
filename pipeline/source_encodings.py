@@ -25,7 +25,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels'}:
+                'equity_instrument_labels','unspecified_reference_labels'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -52,6 +52,8 @@ def load_encodings(wrapper_directory=None):
                     'with one meaning per code on any date: '+str(path))
             if key=='printed_margin_reading' and values!=['cash_plus_pik']:
                 raise ValueError('The only admitted printed margin reading is cash_plus_pik: '+str(path))
+            if key=='unspecified_reference_labels' and not encoding.get('reference_rate_columns'):
+                raise ValueError('Unspecified reference labels need reference_rate_columns: '+str(path))
             if key=='printed_margin_reading' and not encoding.get('reference_rate_columns'):
                 raise ValueError('A printed margin reading needs reference_rate_columns: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
@@ -100,7 +102,10 @@ def reference_rate_reading(cik,encodings=None,report_date=None):
     for code,name,side,bound in (_CODE_RE.fullmatch(v).groups() for v in encoding.get('reference_rate_codes',[])):
         if side is None or (day and (day<=bound if side=='to' else day>=bound)):
             codes[code.upper()]=name
-    return {'columns':columns,'codes':codes}
+    # Labels the filer prints in that column that name no single benchmark (Ares 'Base Rate': "commonly
+    # based on the Federal Funds Rate or the Prime Rate"). The loan floats; its benchmark is not stated.
+    unspecified=frozenset(' '.join(v.lower().split()) for v in encoding.get('unspecified_reference_labels',[]))
+    return {'columns':columns,'codes':codes,'unspecified':unspecified}
 
 
 def printed_margin_funds(encodings=None):

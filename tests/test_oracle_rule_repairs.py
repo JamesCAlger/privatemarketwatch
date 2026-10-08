@@ -164,3 +164,24 @@ def test_d07_still_fails_on_a_shift_across_a_full_schedule():
     frame = pd.concat([_rated("2023-09-30", [6.5] * 200), _rated("2023-12-31", [9.75] * 200)], ignore_index=True)
     results = check_D07_rate_distribution_stability(frame)
     assert [r.status for r in results] == ["fail"]
+
+
+def test_the_oracle_names_fund_quarters_the_reconciliation_detail_lacks(caplog):
+    """A new quarter in the holdings with no reconciliation detail yet: four checks would skip it
+    silently (2026-06-30 in the first sandbox passes, decision D-048)."""
+    import logging
+
+    import pandas as pd
+
+    from pipeline.oracle_runner import _quarters_missing_from_detail
+    holdings = pd.DataFrame({"source": ["bdc", "bdc", "nport"], "cik": ["1837532", "0001837532", "0000000001"],
+                             "report_date": ["2026-03-31", "2026-06-30", "2026-06-30"]})
+    detail = pd.DataFrame({"cik": ["0001837532"], "report_date": ["2026-03-31"]})
+    with caplog.at_level(logging.WARNING):
+        assert _quarters_missing_from_detail(holdings, detail) == [("0001837532", "2026-06-30")]
+    assert "STALE INPUT" in caplog.text
+    caplog.clear()
+    both = pd.DataFrame({"cik": ["1837532", "1837532"], "report_date": ["2026-03-31", "2026-06-30"]})
+    with caplog.at_level(logging.WARNING):
+        assert _quarters_missing_from_detail(holdings, both) == []
+    assert "STALE INPUT" not in caplog.text

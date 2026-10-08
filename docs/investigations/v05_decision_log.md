@@ -1095,3 +1095,115 @@ order in two places; it is the owner's file.
 
 325 findings, 15 outstanding (12 before 2026-06-30, 3 at it), unchanged from `q2g`. Published
 equals filed in 74 of 74 fund-quarters.
+
+## 2026-10-08 (late night): owner rulings on the open items; final validation of the five funds
+
+Owner in session: "yes to 1, 2, 3, 4, 7. do 5, 6 and 8", then "do a final validation of the 5 funds,
+then prepare the next 5 by size for the same exercise, for data to Q2 2026".
+Sandbox `final5`: the whole chain from an empty sandbox, then one re-run from the holdings stage.
+
+### D-053 Owner rulings recorded
+
+| Ruling | What was done |
+|---|---|
+| Ares Axiomatic notes at 2026-06-30: as filed | DS-030, that quarter only |
+| Apollo Material Holdings spread 15.87: as printed | DS-031 (C115), DS-032 (fmt_basis_spread), 2025-06-30 and 2025-09-30 |
+| Apollo B01 at 2026-06-30: as earlier quarters | 2026-06-30 added to DS-010 |
+| Fixed coupon tagged as a spread (D-039): keep | Ratified; no change |
+| Ares UP Intermediate revolver: follow the page | Three rows corrected (below) |
+| Blue Owl Aptive: correct the seven rows | Rate 12.0 published, PIK 6.0 unchanged |
+
+- **Aptive.** All seven 10-Qs and 10-Ks from 2023-03-31 to 2024-09-30 print "First lien senior
+  secured loan 12.00 % ( 6.00 % PIK) 01/2026" (each read; the row's printed value matches the
+  published one). Blue Owl still declares no fund-wide rate reading.
+- **UP Intermediate, Ares 10-Q 2025-09-30.** The members are one line out, as in D-049. The page
+  prints the revolver with no rate, "First lien senior secured loan 8.75 % SOFR (Q) 4.75 % ...
+  15.2 15.2 15.2" and "Senior preferred units 15.00 % PIK". Published before: revolver 8.75 and
+  4.75, term loan 15.0 PIK, preferred units nothing. Corrected on all three rows; the ruling
+  named the revolver only. Row corrections may now set `reference_rate_type`,
+  `reference_rate_source` and `coupon_type`, and an empty value is stored as a missing value.
+
+### D-054 Ares "Base Rate": the guessed benchmark is withdrawn (owner)
+
+- **Decision.** New wrapper setting `unspecified_reference_labels`, set for Ares to "Base Rate".
+  The reader gives such a cell the status `unspecified`; the overlay then withdraws a reference
+  rate that was guessed from the report date or read from the identifier text, and changes
+  nothing else on the row (the loan floats; its rate and spread stand).
+- **Result.** 380 Ares rows lose a reference rate, 20 to 35 a quarter. One was not a date guess:
+  "Prime Buyer, L.L.C." at 2022-09-30 published PRIME, read from the borrower's name; the page
+  rule caught it on the first run.
+- **Tests.** `tests/test_bdc_xbrl_html_bridge_fields.py`, `tests/test_source_encodings.py`.
+
+### D-055 Blue Owl: the unit count tagged as a principal is published as units (owner)
+
+- **Decision.** For a row classed equity through `equity_instrument_labels` with no unit fact and
+  a principal fact, the principal is published as `shares_held` (transform
+  `shares_held:from_principal_tag`; the re-verifier anchors it on the principal fact).
+- **Result.** Seven Blue Owl rows (Credit SLF, Leasing, Valor CI). Equity rows with units at
+  2026-06-30: 73.6 pct (was 69.4); C04 passes.
+- **Not clean.** At 2025-12-31 the two rows already carried a derived unit count. They now show
+  the tagged figure but keep the label of the unit-normalisation step (`derived_proxy`,
+  `pow10_shares`), and Blue Owl Leasing shows 1,900,000 units against a value of 17.2M there and
+  1.9M a quarter later. Not checked against the page.
+
+### Final validation, `final5`
+
+| Check | Result |
+|---|---|
+| Findings, five funds, 2022 to 2026-06-30 | 316; 0 outstanding |
+| Published against filed investments | within 0.5M in 74 of 74 fund-quarters (worst: Ares 0.5M) |
+| Row ids | 71,434 rows, 71,434 distinct, none empty |
+| Provenance re-check | no failing state; 9 `anchor_missing` (dispositioned, DS-019) |
+| Outputs and wrappers against their schemas | fit |
+| Oracle coverage of 2026-06-30 | 77 lines (all five funds, all per-quarter checks) |
+| Against `q2h`, field by field | only the rows of D-053 to D-055 differ; no row added or lost |
+
+How the 316 are closed is in `scratch/fund_sandbox/final5/findings_ledger.csv` (`state`,
+`disposition_basis`).
+
+**What the clean build caught that the incremental ones had not.**
+- The first full run stopped in the rebuild: an empty correction value was written as empty text
+  and a later numeric cast failed. Fixed (missing value), with a test.
+- Two findings appeared and were fixed: the Prime Buyer reference rate (D-054) and a coupon type
+  left "Floating" on the revolver whose rate was withdrawn.
+
+**What "0 outstanding" does not say.** Of the 316 findings, 288 are closed by a disposition (173
+"as filed", 79 informational, 36 not applicable), 27 by an earlier reviewer's
+false-alarm verdict and 1 by a promoted fix. Eleven of the dispositions, all at 2026-06-30, are
+carried forward by a check with nobody looking. The X02 "as filed" entries for earlier
+quarters still cover rows their reason does not explain (D-047, D-049). BCRED has no lien tier
+for 2022-09-30 and 2022-12-31. Five Ares rows print a rate that is not published. No rule
+detects a wrong value on the right row. Nothing here has been checked on the other 65 funds.
+
+### D-056 The next five funds: data to 2026-06-30 and an untouched first reading
+
+- **Which five.** The next five of the 70-fund cohort by published fair value at 2026-03-31 (the
+  basis the first five were chosen on; published build of 2026-10-01): Ares Strategic Income Fund
+  (0001918712, 21.3B), Goldman Sachs Private Credit Corp. (0001920145, 17.1B), Golub Capital
+  Private Credit Fund (0001930087, 9.8B), Sixth Street Lending Partners (0001925309, 8.6B),
+  Oaktree Strategic Credit Fund (0001872371, 7.0B). By size over all filers the list would
+  differ: FS KKR Capital, Blue Owl Capital Corp and Blue Owl Technology Finance are larger but
+  are not in the cohort and have no wrapper.
+- **Downloads (network, on the owner's request for data to Q2 2026).** Five 10-Qs for 2026-06-30
+  and five companyfacts files, through the rate-limited client. The companyfacts files replaced
+  the live cache copies (backups in `data/raw/filings/quarter_downloads/companyfacts_2026-06-30/before`).
+  `download_quarter_filings.py` replaced the quarter's index with the new five on this second
+  run; the index was restored to ten funds from a copy before any build read it, and the script
+  now merges.
+- **Not changed.** `findings_scope.ciks` still names the first five: widening the sign-off scope
+  is the owner's decision. Nothing was fixed for these funds.
+- **First reading, sandbox `next5a`, 2022 to 2026-06-30.** 501 findings, 409 outstanding (Sixth
+  Street 119, Goldman Sachs 107, Oaktree 74, Golub 63, Ares Strategic Income 46); 41 of them at
+  2026-06-30. Published equals filed investments within 0.5M in 49 of 67 fund-quarters (Oaktree
+  13 of 14, Ares Strategic Income 12 of 14, Sixth Street 9 of 14, Golub 8 of 12, Goldman Sachs 7
+  of 13; worst gap 201.7M at Goldman Sachs, the one fund-quarter more than 1 pct out). At
+  2026-06-30 the gaps are 13M, 23M, 6M, 0M and 71M of 6.8B to 21.8B.
+- **Largest groups of outstanding findings.** No declared rate reading (65), credit rows with no
+  rate (X02, 47), principal with no dollar equivalent (FX01, 41), negative cost (C107, 29),
+  principal far above value (X06, 20), percent of net assets (20), negative value (C103, 17).
+  Several are the patterns the first five funds needed a wrapper setting or a disposition for.
+- **State of their configuration.** All five have a v3 wrapper; none has `source_encodings`
+  (no named reference-rate column, no rate reading), and none has a fund-highlights wrapper. The
+  page checks added for the first five do not run for them until a wrapper names the column.
+- **Re-run.** `bash scratch/2026-10-07_printed_rates/run_next5a.sh`;
+  `python scripts/v05_evidence/matrix.py next5a`.

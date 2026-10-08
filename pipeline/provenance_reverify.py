@@ -44,6 +44,8 @@ _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets"
 _FROM_PIK_EVENT = {"interest_rate": "interest_rate:pik_only", "basis_spread": "basis_spread:pik_margin"}
 # A fixed coupon the filer tagged as a spread, published as the rate (bdc_xbrl_html_bridge overlay).
 _FROM_SPREAD_EVENT = "interest_rate:from_spread_tag"
+# A unit count the filer tagged with the principal concept (equity printed under a fund's reviewed label).
+_UNITS_FROM_PRINCIPAL_EVENT = "shares_held:from_principal_tag"
 
 # src_facts is included so Task 8 can use it without a join back to the
 # original holdings frame.
@@ -155,6 +157,12 @@ def _field_sql(field: str, source_col: str) -> str:
         f" <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12) THEN 'pass' ELSE 'fail' END"
         if from_pik else ''
     )
+    if field == 'shares_held':
+        # The count has no fact of its own in src_facts; like a principal it is the stored fact by
+        # construction here, and the full tier compares it with the principal fact in the filing.
+        pik_only_coupon += (
+            f" WHEN {ev} LIKE '%{_UNITS_FROM_PRINCIPAL_EVENT}%' THEN CASE WHEN {published} IS NOT NULL"
+            f" THEN 'pass_trivial' ELSE 'fail' END")
     if from_spread:
         pik_only_coupon += (
             f" WHEN {ev} LIKE '%{from_spread}%' THEN CASE WHEN ABS({expected} - {published})"
@@ -445,6 +453,11 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 if _FROM_PIK_EVENT.get(field, '\x00') in str(r.get('declared_events') or ''):
                     anchor_field = 'pik_rate'
                     field_sf = sf.get('pik_rate') or {}
+                    declared_c = str(field_sf.get('c') or '').lower()
+                    x_events = list(field_sf.get('x') or [])
+                elif field == 'shares_held' and _UNITS_FROM_PRINCIPAL_EVENT in str(r.get('declared_events') or ''):
+                    anchor_field = 'principal_amount'
+                    field_sf = sf.get('principal_amount') or {}
                     declared_c = str(field_sf.get('c') or '').lower()
                     x_events = list(field_sf.get('x') or [])
                 elif field == 'interest_rate' and _FROM_SPREAD_EVENT in str(r.get('declared_events') or ''):

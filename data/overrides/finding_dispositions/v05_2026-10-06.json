@@ -885,7 +885,7 @@
     }
    ],
    "rerun": "python scripts/v05_evidence/b01.py five10 1837532",
-   "decided_by": "agent, owner permission given in session 2026-10-06",
+   "decided_by": "agent, owner permission given in session 2026-10-06; 2026-06-30 accepted by the owner in session 2026-10-08",
    "decided_on": "2026-10-06",
    "supersedes_real_error_verdict": true,
    "ciks": [
@@ -896,7 +896,8 @@
     "2024-12-31",
     "2025-03-31",
     "2025-06-30",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ]
   },
   {
@@ -1486,6 +1487,74 @@
    ],
    "quarters": [
     "2026-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-030-1287750",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "statement": "One small note is printed and tagged with no rate.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Ares 10-Q for 2026-06-30 (0001628280-26-050307): 'Axiomatic, LLC Premiere e-sports and video game investment platform First lien senior secured notes 06/2026 12/2027 0.1 0.1 0.1 (2)': no coupon, reference or spread on the line. Every other X02 row of the quarter is undrawn or on non-accrual (check no_rate_in_source: 70 of 71 rows)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py q2h 0001287750 5",
+   "decided_by": "owner, in session 2026-10-08",
+   "decided_on": "2026-10-08",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-031-1837532",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "statement": "One loan publishes a spread of 15.87: the cash margin of 6.10 plus the PIK margin of 9.77, as the page prints them.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Apollo 10-Q for 2025-06-30 (0000950170-25-105984) and 2025-09-30 (0001193125-25-277723), Material Holdings, LLC term loan: the row reads 'Interest Rate S+610 Cash plus 9.77% PIK, 0.00% Floor'; spread fact 0.061, PIK fact 0.0977. The fund's printed margin is read as cash plus PIK (decision D-042)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py q2h C115 1837532 2025-06-30",
+   "decided_by": "owner, in session 2026-10-08",
+   "decided_on": "2026-10-08",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ]
+  },
+  {
+   "disposition_id": "DS-032-1837532",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "statement": "The same Material Holdings spread of 15.87 as DS-031, reported by the range check.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "See DS-031: 'Interest Rate S+610 Cash plus 9.77% PIK, 0.00% Floor' in both filings."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/weakrows.py q2h 1837532",
+   "decided_by": "owner, in session 2026-10-08",
+   "decided_on": "2026-10-08",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
    ]
   }
  ]

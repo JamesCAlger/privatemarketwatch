@@ -561,6 +561,10 @@ def field_status(field: str, grid: list[str], header_map: dict[int, str],
                  and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
     if named:
         cols = named
+        unspecified = filer_reading.get("unspecified") or ()
+        if unspecified and any(" ".join(_RESET_PERIOD_RE.sub("", grid[i]).lower().split()) in unspecified for i in named):
+            # the filer's own label for a floating rate with no single benchmark
+            return {"value": "", "status": "unspecified", "source_column": header_map[named[0]]}
         if (all(_NOT_APPLICABLE_RE.fullmatch(grid[i]) for i in named) and not _extract_reference_rate(grid)
                 and not any(_BARE_CODE_RE.fullmatch(c) for c in grid)):
             return {"value": "", "status": "not_applicable", "source_column": header_map[named[0]]}
@@ -1324,6 +1328,15 @@ def apply_ixbrl_field_status_overlay(
         if withdrawn.any():
             result.loc[withdrawn.values, "reference_rate_type"] = ""
             result.loc[withdrawn.values, "reference_rate_source"] = ""
+        # The column prints a label that names no single benchmark (Ares 'Base Rate'). The loan
+        # floats, so nothing else on the row changes; only the guessed benchmark is withdrawn. So is
+        # one read from the identifier text: 'Prime Buyer, L.L.C.' printed with 'Base Rate' is not a
+        # loan at Prime.
+        unnamed = (in_named & (merged["reference_rate_status"].astype(str) == "unspecified")
+                   & (inferred | (source == "identifier_text")))
+        if unnamed.any():
+            result.loc[unnamed.values, "reference_rate_type"] = ""
+            result.loc[unnamed.values, "reference_rate_source"] = ""
     if {"reference_rate_status", "asset_category"} <= set(merged.columns) and "coupon_type" in result.columns:
         has_rate = pd.Series(False, index=merged.index)
         for col in ("interest_rate", "pik_rate"):
@@ -1569,7 +1582,7 @@ def propose_field_bridges_from_ixbrl(
             if bridge["raw_id_lower"] not in repeated or len(rows) < 2:
                 continue
             agree = {name: all(row[name] == rows[0][name] for row in rows) for name in rows[0]}
-            if not agree["reference"] and bridge["reference_rate_status"] in ("value", "not_applicable"):
+            if not agree["reference"] and bridge["reference_rate_status"] in ("value", "not_applicable", "unspecified"):
                 bridge["reference_rate_status"] = "validation_needed"
             if not agree["maturity"] and bridge["maturity_status"] == "value":
                 bridge["maturity_status"] = "validation_needed"

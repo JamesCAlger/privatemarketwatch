@@ -1166,3 +1166,34 @@ def test_section_headings_with_an_affiliation_suffix_or_without_the_word_debt():
     assert _closed_section(["Total First Lien Debt", "62,860,907"]) == "First Lien Debt"
     assert _closed_section(["Total First Lien Debt - controlled/affiliated", "391,920"]) is None   # a part of the section
     assert _closed_section(["Total Investment Portfolio", "69,784,151"]) is None
+
+
+# --- a label that names no single benchmark (Ares 'Base Rate', owner ruling 2026-10-08) ---
+ARES_READING = {"columns": frozenset({"reference"}), "codes": {}, "unspecified": frozenset({"base rate"})}
+
+
+def test_an_unspecified_reference_label_is_read_as_unspecified():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    header = {0: "Company", 1: "Investment", 2: "Coupon", 3: "Reference", 4: "Spread"}
+    grid = ["Acme", "First lien senior secured revolving loan", "10.50 %", "Base Rate (Q)", "3.00 %"]
+    assert field_status("reference_rate_type", grid, header, ARES_READING) == {
+        "value": "", "status": "unspecified", "source_column": "Reference"}
+    # a named benchmark in the same column is still read; a fund without the label reads as before
+    assert field_status("reference_rate_type", grid[:3] + ["SOFR (Q)", "3.00 %"], header, ARES_READING)["value"] == "SOFR"
+    plain = {"columns": frozenset({"reference"}), "codes": {}}
+    assert field_status("reference_rate_type", grid, header, plain)["status"] != "unspecified"
+
+
+def test_an_unspecified_reference_withdraws_a_guess_and_nothing_else():
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+    guessed = dict(reference_rate_type="SOFR", reference_rate_source="inferred_post_libor", coupon_type="Floating",
+                   interest_rate="10.5", basis_spread="3.0", pik_rate="")
+    out = apply_ixbrl_field_status_overlay(_staged(**guessed), [_status_row("unspecified")]).iloc[0]
+    assert out["reference_rate_type"] == "" and out["reference_rate_source"] == ""
+    assert out["coupon_type"] == "Floating" and str(out["basis_spread"]) == "3.0" and str(out["interest_rate"]) == "10.5"
+    # one read from the identifier text goes too ('Prime Buyer, L.L.C.' printed with 'Base Rate', Ares 2022-09-30)
+    named = dict(guessed, reference_rate_type="PRIME", reference_rate_source="identifier_text")
+    assert apply_ixbrl_field_status_overlay(_staged(**named), [_status_row("unspecified")]).iloc[0]["reference_rate_type"] == ""
+    # a reference rate the filer tagged is not a guess and stays
+    tagged = dict(guessed, reference_rate_source="xbrl_field")
+    assert apply_ixbrl_field_status_overlay(_staged(**tagged), [_status_row("unspecified")]).iloc[0]["reference_rate_type"] == "SOFR"

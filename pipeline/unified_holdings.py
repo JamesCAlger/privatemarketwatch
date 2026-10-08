@@ -1824,6 +1824,9 @@ _CORRECTABLE_FIELDS = frozenset({
     # A cost corrected from the printed page needs its unit corrected with it: a cost whose
     # unit is not the dollar is withheld downstream (2026-10-08, Blue Owl KWOR, decision D-046).
     "cost_currency",
+    # A reference rate guessed for a row whose printed line carries no rate is withdrawn with the
+    # rate (2026-10-08, Ares UP Intermediate revolver, decision D-053).
+    "reference_rate_type", "reference_rate_source", "coupon_type",
 })
 
 # Required columns in row_corrections.csv.
@@ -1931,6 +1934,10 @@ def _apply_row_corrections(
             )
 
         for field, value, reason in patches:
+            # An empty value withdraws the field. It is stored as a missing value, not as empty
+            # text: later steps cast these columns to numbers.
+            if pd.isna(value) or str(value).strip() == "":
+                value = None
             df.loc[mask, field] = value
             if "corrected_fields" in df.columns:
                 from pipeline.agent_promoted import append_corrected_fields
