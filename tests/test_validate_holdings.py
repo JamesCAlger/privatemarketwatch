@@ -4163,6 +4163,32 @@ class TestCheckGavReconciliation:
         result = check_gav_reconciliation(holdings, fund_financials_df=ff)
         assert abs(float(result.iloc[0]["gav_ratio"]) - 1.0) < 1e-6
 
+    @pytest.mark.parametrize("cik, filed_cash, cash_row, loans, ok", [
+        # Oaktree 2025-06-30: the filed cash figure (471.3M) also holds deposits; the schedule row is 100.7M.
+        ("1872371", "471299000", "100700000", "6362926000", True),
+        # Goldman Sachs 2025-06-30: no cash figure is filed outside the schedule.
+        ("1920145", "", "233261000", "6362926000", True),
+        # A cash row above the filed figure is still excess.
+        ("1872371", "100000000", "471299000", "6362926000", False),
+        # Missing investments are not hidden by the cash row.
+        ("1872371", "471299000", "100700000", "6000000000", False),
+    ])
+    def test_filer_whose_investments_total_excludes_cash_rows(self, cik, filed_cash, cash_row, loans, ok):
+        """Decision D-070: for a filer that declares investments_total_excludes = ["cash_rows"], the
+        published cash rows are added to the filed investments, up to the filed cash figure."""
+        holdings = _make_unified_df([
+            {"cik": cik, "entity_name": "Fund", "report_date": "2025-06-30",
+             "fair_value": loans, "source": "bdc", "asset_category": "LOAN"},
+            {"cik": cik, "entity_name": "Fund", "report_date": "2025-06-30",
+             "fair_value": cash_row, "source": "bdc", "asset_category": "CASH"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": cik, "report_date": "2025-06-30", "investments_at_fair_value": "6362926000",
+            "cash_equivalents_at_fair_value": filed_cash, "total_assets": "6998196000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert (abs(float(result.iloc[0]["gav_ratio"]) - 1.0) < 1e-6) == ok
+
     def test_cash_rows_without_a_filed_cash_figure_still_show_as_excess(self):
         holdings = _make_unified_df([
             {"cik": "1837532", "entity_name": "Apollo Debt Solutions BDC", "report_date": "2025-06-30",

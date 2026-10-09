@@ -1592,3 +1592,72 @@ any 70-fund build. Published data unchanged. Uncommitted.
   carry a flag for that, these do not, so 17 such findings stay open for a reading.
 - AGENTS.md is not edited (owner only); it still says an agent may propose and a deterministic
   check or the owner accepts, which this instruction is consistent with.
+
+## 2026-10-09 (later): the unread findings of the next five, read
+
+Owner: "commit, then read the 95 unread findings". Commit 65fddd9. Sandboxes `n5f` to `n5h`.
+Not run: the full suite, the semantic diff, any 70-fund build. Published data unchanged.
+
+### D-074 What the reading found, and what was done
+
+**Fixed in a wrapper or in shared code**
+
+- **Oaktree issuer names (every quarter to 2026-03-31).** The label is "Issuer, Instrument" and
+  the issuer was never split from it: 368 "issuers" for 368 rows at 2025-09-30. The continuity
+  check caught it only when the 2026-06-30 label changed form (5 pct of names carried over).
+  Fix: `staging` patterns in the wrapper. Now 162 issuers for 368 rows; continuity passes.
+  **The published build has the unsplit names.** I reported Oaktree as "14 of 14 totals" without
+  looking at its issuer names; totals cannot see this.
+- **Gross-asset check and cash rows.** The check had the same cash problem as the conservation
+  check (D-070). `pipeline/validate_holdings.py` now applies the same wrapper declaration: for a
+  declared filer the published cash rows are added to the filed investments, up to the filed cash
+  figure. Other filers unchanged. 12 findings gone (Goldman Sachs 9, Oaktree 3).
+- **`maturity_date` can now be set by a row correction** (`pipeline/unified_holdings.py`).
+
+**Corrected from the page, row by row** (`data/overrides/row_corrections.csv`, 30 values on 11
+rows; specs in `scripts/v05_evidence/make_row_corrections.py`, each with the printed line)
+
+| Fund, quarter | Row | Published before | Page | Cause |
+|---|---|---|---|---|
+| Goldman Sachs 2025-06-30 | Berkeley Research Group | cost 854K | 8,540 | printed "8,54 0", the tag took 854 |
+| Goldman Sachs 2025-09-30 | 123Dentist | maturity 2002-08-08 | 08/08/29 | printed "08/08/2 9", page reading took 2002 |
+| Sixth Street 2023-12-31, 2024-09-30 | ASP Unifrax (two rows) | principal negative | 1,130 and 1,993 | tag sign |
+| Sixth Street 2024-12-31 | Flight Intermediate HoldCo | floating, SOFR | fixed 11.50 % | member text says "SOFR +" |
+| Sixth Street 2025-06-30 | X Holdings | floating, SOFR | fixed 9.50 % | member text says "SOFR +" |
+| Sixth Street 2024-12-31 | Price Fx | maturity 2024-10-31 | due 10/2029 | member says "due 10/2024" |
+| Oaktree 2023-09-30 | Impel Pharmaceuticals term loan 1 | no rate | SOFR + 10.75 %, 16.06 % | no rate tag |
+| Ares Strategic Income 2025-03-31 | WRE Sports | spread 5.5, SOFR | 11.00 % (5.50 % PIK), fixed | PIK tagged as spread in one filing |
+| Ares Strategic Income 2025-12-31, 2026-03-31 | Steward Partners "first lien loan" | a loan with no rate | warrant, 138,674 units, cost 2,644.6 | member names a loan |
+
+**Read and proposed as a disposition** (new reasons, for the owner; in
+`docs/investigations/next5_proposed_dispositions.md`)
+
+- Sixth Street subtotal arithmetic (9): the check adds current and comparative rows together.
+- Sixth Street holdings against total assets (4): the filed investments figure is missing from
+  the fund-level data for 2023-06-30 and 2023-09-30; published equals the printed total exactly
+  (1,758,911 and 2,048,389).
+- Oaktree euro rows (3): rows of the joint venture's own schedule, kept and not published.
+- Oaktree loans with no rate (4 quarters), Ares Strategic Income rows with no rate (4 quarters),
+  Goldman Sachs loan with a printed cost of 1, Ares Strategic Income 27.20 % CLO rate, Golub
+  equity rows with no unit count, Golub's two year-end filings.
+
+**Real defects found and left open**
+
+- Golub 2023-06-30 fund-level figures are wrong (published net assets 50,000; the page prints
+  total assets 653,733 and net assets 650,323, in thousands). The fund had not started
+  investing; there are no holdings that quarter. Five findings.
+- Oaktree 2022-03-31: share count is filed in thousands (4,000), so net asset value per share
+  reads 25,040. No holdings that quarter.
+- Sixth Street 2024-12-31: the distribution per share is the full-year figure (2.53), not the
+  quarter's.
+- Sixth Street: the filed investments figure is missing from fund-level data for two 2023
+  quarters.
+- Sixth Street Elysium preference shares (2024-12-31) and Golub's two money market rows
+  (2025-12-31) are added by rule and carry no accession or class. Seven findings.
+- Sixth Street reference rates "S" and "C" (D-068), still open.
+
+**Not read** (listed in the proposals file): the launch-quarter heuristics (F16, F25, F26), Ares
+Strategic Income income identity and one rate convention row, Oaktree's derivative finding and
+one comparative-row finding, two non-accrual findings whose earlier fix was pulled, and the
+findings an earlier reviewer marked as confirmed errors where the check-based entry does not
+override the verdict.

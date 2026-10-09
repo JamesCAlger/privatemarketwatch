@@ -1831,6 +1831,9 @@ _CORRECTABLE_FIELDS = frozenset({
     # A reference rate guessed for a row whose printed line carries no rate is withdrawn with the
     # rate (2026-10-08, Ares UP Intermediate revolver, decision D-053).
     "reference_rate_type", "reference_rate_source", "coupon_type",
+    # A maturity the page reading or the filer's member has wrong, where the other one and the
+    # printed row agree (2026-10-09, Goldman Sachs 123Dentist and Sixth Street Price Fx, D-074).
+    "maturity_date",
 })
 
 # Required columns in row_corrections.csv.

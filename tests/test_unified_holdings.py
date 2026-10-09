@@ -8808,6 +8808,18 @@ class TestApplyRowCorrections:
             assert pd.isna(result.iloc[0][field]), field
         assert pd.to_numeric(result["interest_rate"]).isna().all()
 
+    def test_a_maturity_misread_from_the_page_can_be_corrected(self, tmp_path):
+        """Goldman Sachs 10-Q 2025-09-30, 123Dentist: the member reads 'Maturity 08/08/29'; the page prints
+        '08/08/2 9' with a stray space and the page reading published 2002-08-08 (decision D-074)."""
+        key = {"cik": "0001920145", "report_date": "2025-09-30", "accession_number": "0001193125-25-277550",
+               "bdc_investment_identifier": "123Dentist Inc. Maturity 08/08/29"}
+        df = self._make_holdings_df([dict(key, source="bdc", maturity_date="2002-08-08")])
+        corr_path = self._write_corrections(tmp_path, [dict(
+            key, field="maturity_date", value="2029-08-08", reason="member reads 08/08/29",
+            source_evidence="test", author="test", date_added="2026-10-09")])
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["maturity_date"] == "2029-08-08"
+
     def test_class_fields_can_be_corrected_together(self, tmp_path):
         """HPS 2026-03-31: 'OneTeam Partners, LLC - Class D Units' is printed as 'Preferred Units 8.00 %'.
         A class correction has to move asset_category with index_classification (decision D-021)."""

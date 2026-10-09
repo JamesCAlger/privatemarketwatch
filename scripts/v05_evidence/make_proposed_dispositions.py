@@ -67,17 +67,71 @@ CHECKED = {
 # the rows of each were read on the page. Other open quarters of the same rule stay open.
 READ_QUARTERS = {
     ("row_validation", "X02", ASIF): (
-        {"2025-06-30", "2025-09-30"}, "as_filed",
-        "Rows printed with no rate: one private asset-backed investment and the lowest tranche of three collateralized loan "
-        "obligations. No rate is tagged or printed.",
+        {"2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"}, "as_filed",
+        "Rows printed with no rate: private asset-backed investments, the lowest tranche of collateralized loan "
+        "obligations, and (2026-03-31) three loans of one issuer marked down and printed with no rate.",
         [("filing", "0001918712-25-000065 (10-Q, 2025-06-30): 'Quintain Investments Holdings Limited (11) Private asset-backed "
                     "investment 08/2031 32,775.6 42,469.6 48,861.1'; 'STKPK 2022-1 ... Collaterized loan obligation 10/2037 "
                     "20,240.0 194.4 602.8'; 'CLRMPK 2025-1 ... Collaterized loan obligation 04/2038 15,725.0 - 573.5'; 'BERRY "
                     "2024-1 ... Collaterized loan obligation 10/2037 2,610.0 - 154.4'. The tranches above each print a rate."),
-         ("query", "Check no_rate_in_source on sandbox n5d names these rows and no others in the two quarters. Not covered: "
-                   "2025-12-31 and 2026-03-31, where Steward Partners prints '9.08 % SOFR (Q) 4.75 %' and publishes no rate "
-                   "(a real gap), and 2026-06-30, not read.")],
+         ("filing", "0001628280-26-034133 (2026-03-31): 'Avalign Holdings, Inc. and Avalign Technologies, Inc. First lien "
+                    "senior secured revolving loan 12/2028 2,344.9 2,283.2 1,373.3 ... First lien senior secured loan 12/2028 "
+                    "16,873.3 16,684.3 12,108.3'; 'Kohlberg Private Credit Investors Rated Feeder-L ... Private asset-backed "
+                    "investment 12/2036 513.8 513.8 513.8'."),
+         ("query", "The Steward Partners row flagged at 2025-12-31 and 2026-03-31 is a warrant tagged on a member that names "
+                   "a loan; it is corrected from the page (D-074). Not covered: 2026-06-30, not read.")],
         S + "filing_grep.py 1918712 000191871225000065 html \"STKPK 2022-1\" 8 330"),
+    ("row_validation", "X02", OAKTREE): (
+        {"2023-03-31", "2023-06-30", "2023-09-30", "2024-09-30"}, "as_filed",
+        "Loans printed with no rate. No rate is tagged or printed for them.",
+        [("filing", "0001872371-23-000008 (2023-03-31): 'Impel Neuropharma, Inc. Health Care Technology First Lien Term Loan "
+                    "2/15/2031 5,408 5,408 5,284'. 0001872371-23-000017 (2023-09-30): 'BioXcel Therapeutics, Inc. "
+                    "Pharmaceuticals First Lien Term Loan 9/30/2032 1,580 1,580 1,510'. 0001872371-24-000014 (2024-09-30): "
+                    "'Verona Pharma, Inc. Pharmaceuticals First Lien Term Loan 5/9/2029 $ 9,177 $ 9,177 $ 9,269'. The other "
+                    "tranches of each issuer print a rate."),
+         ("query", "The one row in these quarters that does print a rate (Impel, 2023-09-30, 'SOFR+ 10.75 % 16.06 %') is "
+                   "corrected from the page (D-074). Not covered: 2024-06-30, not read.")],
+        S + "filing_grep.py 1872371 000187237123000017 html \"BioXcel Therapeutics, Inc.\" 20 330"),
+    ("row_validation", "FX03", OAKTREE): (
+        {"2026-06-30"}, "not_applicable",
+        "The two rows belong to the joint venture's own schedule, which is kept but not published. The page prints their "
+        "cost and value in euros and the tags say euros.",
+        [("filing", "0001872371-26-000013 (2026-06-30), joint venture schedule: 'ACESO Holding 4 S.A.R.L. ... 9/27/2031 "
+                    "EUR 890 EUR 882 EUR 882'; 'Empire Bidco AB ... 9/22/2032 GBP 2,279 EUR 2,596 EUR 2,599'."),
+         ("query", "Sandbox n5e: 47 rows on contexts c-1400 and above, 107.1M, all classed underlying_schedule. The "
+                   "published rows of the same two issuers are in dollars and equal the printed schedule.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/oak5.sql" % label),
+    ("row_validation", "SRC_BDC03", OAKTREE): (
+        {"2026-06-30"}, "not_applicable", "The same two joint-venture rows as FX03: the source value is in euros.",
+        [("filing", "See the FX03 entry for Oaktree: the joint venture schedule prints both rows in euros.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/oak4.sql" % label),
+    ("source_recon", "blocking_fair_value_disagreement", OAKTREE): (
+        {"2026-06-30"}, "not_applicable", "The same two joint-venture rows as FX03, reported by the reconciliation's second engine.",
+        [("filing", "See the FX03 entry for Oaktree: the joint venture schedule prints both rows in euros.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/oak4.sql" % label),
+    ("row_validation", "X07", GS): (
+        {"2024-03-31"}, "as_filed", "One loan is printed and tagged with a cost of 1 against a fair value of 166 (thousands).",
+        [("filing", "0000950170-24-056854 (2024-03-31): 'LCG Vardiman Black, LLC (dba Specialty Dental Brands) Health Care "
+                    "Providers & Services 12.43 % S + 7.00 % 03/18/27 $ 2,439 $ 1 $ 166'.")],
+        S + "filing_grep.py 1920145 000095017024056854 html \"LCG Vardiman Black\" 12 200"),
+    ("oracle", "A04", SIXTH): (
+        {"2023-06-30", "2023-09-30"}, "not_applicable",
+        "The fund-level data holds no filed investments figure for these two quarters, so the check compared the holdings "
+        "with total assets. The holdings equal the printed schedule total.",
+        [("filing", "0000950170-23-038548 (2023-06-30): 'Total Investments $ 1,744,507 $ 1,758,911'. 0000950170-23-058792 "
+                    "(2023-09-30): 'Total Investments $ 2,007,948 $ 2,048,389'."),
+         ("query", "Published: 1,758,911 thousand and 2,048,389 thousand. Open defect, not closed by this entry: the "
+                   "investments figure is missing from fund_financials for both quarters.")],
+        S + "filing_grep.py 1925309 000095017023058792 html \"Total Investments\" 12 110"),
+    ("oracle", "E01", SIXTH): (
+        {"2023-06-30", "2023-09-30"}, "not_applicable", "The same comparison with total assets as A04.",
+        [("filing", "See the A04 entry for Sixth Street: published equals the printed 'Total Investments' in both quarters.")],
+        S + "filing_grep.py 1925309 000095017023058792 html \"Total Investments\" 12 110"),
+    ("oracle", "B07", GOLUB): (
+        {"2025-09-30"}, "as_filed", "The year-end has two filings, a 10-K and a 10-K/A. Their schedules are identical.",
+        [("query", "Sandbox n3a flat file: 0001930087-25-000070 (10-K) and 0001930087-26-000078 (10-K/A), 909 rows and "
+                   "8,555.3M each at 2025-09-30. One is published.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/gol6.sql" % label),
     ("row_validation", "SRC_BDC01", SIXTH): (
         {"2024-12-31", "2025-09-30"}, "not_applicable",
         "The source row read as a missing position is a prior-period value the filer tagged on a current-period context. "
@@ -134,6 +188,30 @@ READ = {
          ("query", "The median implied net assets is within 0.5 pct of the filed figure in every quarter (4,527M against "
                    "4,530M at 2026-06-30), so the percents are read at the right scale.")],
         S + "pct_rows_on_page.py %s 1925309" % label),
+    ("oracle", "C04", GOLUB): (
+        "as_filed",
+        "A few equity rows are printed with a dash in the share column, or have their unit count tagged as a principal "
+        "amount. Most equity rows carry units.",
+        [("filing", "0001930087-25-000030 (2025-03-31): 'Eclipse Buyer, Inc. Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A "
+                    "- 3,543 0.1 3,607' (no units printed); 'PB Group Holdings, LLC LP units N/A N/A 08/2024 N/A 113 262 - 330' "
+                    "(the 113 is tagged as a principal amount)."),
+         ("query", "Sandbox n5f, 2025-03-31: 25 of 28 equity rows publish a unit count.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/gol12.sql" % label),
+    ("weak", "fmt_interest_rate", ASIF): (
+        "as_filed", "One collateralized loan obligation is printed with a rate of 27.20 %.",
+        [("filing", "0001918712-25-000065 (2025-06-30): 'Riviera Loan Funding Warehouse 72, Ltd. Collaterized loan obligation "
+                    "27.20 % 03/2035 1,519.0 1,519.0 1,519.0'.")],
+        S + "filing_grep.py 1918712 000191871225000065 html \"Riviera Loan Funding Warehouse 72\" 12 260"),
+    ("oracle", "A01", SIXTH): (
+        "not_applicable",
+        "The check adds the current rows and the prior year-end comparative rows together and compares the sum with each "
+        "period's subtotal, so both subtotals fail. The filer's subtotal members carry no period in their name.",
+        [("query", "Sandbox n5f, 'debt investments' ($K), the two subtotals against the children summed: 2023-12-31 "
+                   "3,036,500 + 800,995 against 3,837,494; 2024-12-31 7,089,771 + 3,036,500 against 10,126,271; "
+                   "2025-03-31 7,191,850 + 7,089,771 against 14,281,621. The same holds in all nine quarters."),
+         ("query", "Published equals the printed 'Total Investments' in every quarter (D-062, and the two 2023 quarters "
+                   "read on the page).")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/a01b.sql" % label),
     ("oracle", "B01", SIXTH): (
         "as_filed",
         "Position contexts with no fair value fact: members the filer defines for rate and period facts or under an earlier "

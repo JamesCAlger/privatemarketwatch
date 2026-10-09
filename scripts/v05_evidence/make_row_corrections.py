@@ -17,6 +17,7 @@ REPO = Path(__file__).resolve().parents[2]
 label = sys.argv[1]
 S = (REPO / "scratch/fund_sandbox" / label / "output").as_posix()
 BCRED, OWL, HPS, APOLLO, ARES = "0001803498", "0001812554", "0001838126", "0001837532", "0001287750"
+ASIF, GS, SIXTH, OAKTREE = "0001918712", "0001920145", "0001925309", "0001872371"
 COUPON_AS_SPREAD = "Spread fact holds the coupon and there is no rate fact; the printed line reads "
 PSC = ("Printed: 'First lien senior secured loan 11.53 % SOFR (Q) 6.00 % 07/2019 07/2025 34.2' then 11.29 / 5.75 (0.2), "
        "11.41 / 6.00 (11.3), 11.53 / 6.00 (2.4), 11.54 / 6.00 (6.6); ")
@@ -175,9 +176,41 @@ SPECS = [
     (ARES, "2026-03-31", "APG Intermediate Holdings Corporation and APG Holdings, LLC, First lien senior secured loan",
      {**EQUITY, "instrument_description": "Class A membership units"},
      WRONG_MEMBER + "'Class A membership units 01/2020 9,750,000 9.8 6.3'", "D-049"),
+    # decision D-074 (2026-10-09): rows of the next five funds read on the page
+    (GS, "2025-06-30", "Berkeley Research Group LLC Industry Professional Services Interest Rate 7.55%", {"cost": "8540000"},
+     "Cost tag reads 854; the printed line reads '7.55 % S + 3.25 % 05/01/32 8,600 8,54 0 8,624' (a stray space inside 8,540)", "D-074"),
+    (GS, "2025-09-30", "123Dentist Inc. Industry HealthCare Providers & Services Reference Rate and Spread C+ 5.00% Maturity 08/08/29",
+     {"maturity_date": "2029-08-08"},
+     "The member reads 'Maturity 08/08/29'; the page prints '08/08/2 9' with a stray space and the page reading took 2002", "D-074"),
+    (SIXTH, "2023-12-31", "ASP Unifrax Holdings, Inc. First-lien loan ($1,130 par", {"principal_amount": "1130000", "principal_amount_usd": "1130000"},
+     "Principal tag is negative; the printed line reads 'First-lien loan ($ 1,130 par, due 12/2025 ) (3) 8/25/2023 SOFR + 3.90 % 9.25 % 1,055 1,051'", "D-074"),
+    (SIXTH, "2024-09-30", "ASP Unifrax Holdings, Inc. First-lien loan ($1,993 par", {"principal_amount": "1993000", "principal_amount_usd": "1993000"},
+     "Principal tag is negative; the printed line reads 'Second-lien note ($ 1,993 par, due 9/2029 ) 8/31/2023 7.10 % 7.10 % (incl. 1.25 % PIK) 1,488 1,355'", "D-074"),
+    (SIXTH, "2024-12-31", "Flight Intermediate HoldCo, Inc. First-lien loan ($46,500 par",
+     {"reference_rate_type": "", "reference_rate_source": "", "coupon_type": "Fixed"},
+     "The member reads 'SOFR + 11.50%'; the page prints a fixed rate: 'First-lien loan ($ 46,500 par, due 4/2030 ) 10/3/2024 11.50 % 11.50 % 45,164 45,221'", "D-074"),
+    (SIXTH, "2025-06-30", "X Holdings. Inc. First-lien loan (29,710 par",
+     {"reference_rate_type": "", "reference_rate_source": "", "coupon_type": "Fixed"},
+     "The member reads 'SOFR + 9.50%'; the page prints a fixed rate: 'First-lien loan ($ 29,710 par, due 10/2029 ) 5/6/2025 9.50 % 9.50 % 28,975 28,865'", "D-074"),
+    (SIXTH, "2024-12-31", "Price Fx Inc. First-lien loan (EUR 910 par, due 10/2024)", {"maturity_date": "2029-10-31"},
+     "The member reads 'due 10/2024'; the page prints 'First-lien loan (EUR 910 par, due 10/2029 ) 12/19/2024 E + 6.25 % 9.12 % 921 919'", "D-074"),
+    (OAKTREE, "2023-09-30", "Impel Pharmaceuticals Inc., First Lien Term Loan 1", {"interest_rate": "16.06", "basis_spread": "10.75"},
+     NO_RATE_FACT + "'First Lien Term Loan SOFR+ 10.75 % 16.06 % 3/17/2027 9,679 9,613 8,904'", "D-074"),
+    (ASIF, "2025-03-31", "WRE Sports Investments LLC, First lien senior secured loan",
+     {"basis_spread": "", "pik_rate": "5.5", "reference_rate_type": "", "reference_rate_source": "", "coupon_type": "Fixed"},
+     "In this one filing the 5.50 % PIK part is tagged as a spread; the printed line reads 'First lien senior secured loan "
+     "11.00 % ( 5.50 % PIK) 07/2031 35,206.6 34,454.6 35,206.6', and every other quarter tags it as PIK", "D-074"),
+    (ASIF, "2025-12-31", "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",
+     {**EQUITY, "instrument_description": "Warrant to purchase Class W units", "shares_held": "138674"},
+     WRONG_MEMBER + "'Warrant to purchase Class W units 12/2025 12/2032 138,674 2,644.6 2,644.6'", "D-074"),
+    (ASIF, "2026-03-31", "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",
+     {**EQUITY, "instrument_description": "Warrant to purchase common stock", "shares_held": "138674"},
+     WRONG_MEMBER + "'Warrant to purchase common stock 12/2025 12/2032 138,674 2,644.6 2,727.3'", "D-074"),
 ]
 # Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
-EXACT = {"UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured loan",
+EXACT = {"Impel Pharmaceuticals Inc., First Lien Term Loan 1",
+         "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",
+         "UP Intermediate II LLC and UPBW Blocker LLC, First lien senior secured loan",
          "Aptive Environmental, LLC, First lien senior secured loan"}
 con = duckdb.connect()
 target = REPO / "data/overrides/row_corrections.csv"
@@ -188,8 +221,14 @@ existing = {(r["cik"].zfill(10), r["report_date"], r["accession_number"], r["bdc
 buffer = io.StringIO()
 writer = csv.writer(buffer, lineterminator=eol)
 added = 0
+# A sandbox holds some funds only: specs for a fund it does not hold are left alone, not failed.
+held = {r[0] for r in con.execute(
+    f"SELECT DISTINCT lpad(CAST(cik AS VARCHAR),10,'0') FROM read_parquet('{S}/private_markets_holdings.parquet')").fetchall()}
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
-    author, added_on = (("v05-decision-" + decision[0], "2026-10-08" if decision[0] >= "D-046" else "2026-10-07")
+    if cik not in held:
+        continue
+    author, added_on = (("v05-decision-" + decision[0],
+                         "2026-10-09" if decision[0] >= "D-074" else "2026-10-08" if decision[0] >= "D-046" else "2026-10-07")
                         if decision else ("v05-decision-D-021", "2026-10-06"))
     rows = con.execute(f"""SELECT DISTINCT accession_number, CAST(bdc_investment_identifier AS VARCHAR)
         FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?

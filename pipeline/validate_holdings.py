@@ -1146,8 +1146,25 @@ def check_gav_reconciliation(
         # addition: the cash rows then show as excess.
         if ("cash_equivalents_at_fair_value" in fund_financials_df.columns
                 and "asset_category" in unified_df.columns):
+            # Owner ruling 2026-10-09 (decision D-070): a filer whose wrapper declares
+            # investments_total_excludes = ["cash_rows"] has an investments line with no cash in
+            # it and, where it files a cash figure at all, one that also holds deposits. For that
+            # filer the published cash rows themselves are added, up to the filed cash figure
+            # where there is one, so the investments are compared with the investments line and
+            # cash rows above the filed figure still show as excess. Other filers are unchanged.
+            from pipeline.source_encodings import load_encodings
+            declared = sorted(cik for cik, encoding in load_encodings().items()
+                              if encoding.get("investments_total_excludes") == ["cash_rows"])
+            declared_sql = ", ".join("'%s'" % cik for cik in declared) or "''"
+            cash_rows = """(SELECT COALESCE(SUM(TRY_CAST(hc.fair_value AS DOUBLE)), 0) FROM holdings hc
+                        WHERE LPAD(CAST(hc.cik AS VARCHAR), 10, '0') = LPAD(CAST(fund_fin.cik AS VARCHAR), 10, '0')
+                          AND CAST(hc.report_date AS VARCHAR) = CAST(fund_fin.report_date AS VARCHAR)
+                          AND upper(coalesce(CAST(hc.asset_category AS VARCHAR), '')) = 'CASH')"""
             cash_added = """
-                + CASE WHEN EXISTS (
+                + CASE WHEN LPAD(CAST(fund_fin.cik AS VARCHAR), 10, '0') IN (""" + declared_sql + """)
+                       THEN CASE WHEN TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE) IS NULL THEN """ + cash_rows + """
+                                 ELSE LEAST(""" + cash_rows + """, TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) END
+                       WHEN EXISTS (
                         SELECT 1 FROM holdings hc
                         WHERE LPAD(CAST(hc.cik AS VARCHAR), 10, '0') = LPAD(CAST(fund_fin.cik AS VARCHAR), 10, '0')
                           AND CAST(hc.report_date AS VARCHAR) = CAST(fund_fin.report_date AS VARCHAR)
