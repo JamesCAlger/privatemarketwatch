@@ -132,6 +132,13 @@ READ_QUARTERS = {
         [("query", "Sandbox n3a flat file: 0001930087-25-000070 (10-K) and 0001930087-26-000078 (10-K/A), 909 rows and "
                    "8,555.3M each at 2025-09-30. One is published.")],
         "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/gol6.sql" % label),
+    ("fund_financials", "F33", SIXTH): (
+        {"2024-12-31"}, "as_filed",
+        "The quarter's distribution per share is the filed year figure less the filed nine-month figure.",
+        [("query", "Company facts, InvestmentCompanyDistributionToShareholdersPerShare: 2.01 for 2024-01-01 to 2024-09-30 "
+                   "(10-Q) and 4.54 for the year (10-K). The fourth quarter is 2.53, on a net asset value of 28.79."),
+         ("filing", "0000950170-25-021144 (10-K): 'Dividends declared during the period $ 478,109' for 2024.")],
+        S + "companyfacts_concept.py 1925309 DistributionToShareholdersPerShare 2024"),
     ("row_validation", "SRC_BDC01", SIXTH): (
         {"2024-12-31", "2025-09-30"}, "not_applicable",
         "The source row read as a missing position is a prior-period value the filer tagged on a current-period context. "
@@ -202,16 +209,6 @@ READ = {
         [("filing", "0001918712-25-000065 (2025-06-30): 'Riviera Loan Funding Warehouse 72, Ltd. Collaterized loan obligation "
                     "27.20 % 03/2035 1,519.0 1,519.0 1,519.0'.")],
         S + "filing_grep.py 1918712 000191871225000065 html \"Riviera Loan Funding Warehouse 72\" 12 260"),
-    ("oracle", "A01", SIXTH): (
-        "not_applicable",
-        "The check adds the current rows and the prior year-end comparative rows together and compares the sum with each "
-        "period's subtotal, so both subtotals fail. The filer's subtotal members carry no period in their name.",
-        [("query", "Sandbox n5f, 'debt investments' ($K), the two subtotals against the children summed: 2023-12-31 "
-                   "3,036,500 + 800,995 against 3,837,494; 2024-12-31 7,089,771 + 3,036,500 against 10,126,271; "
-                   "2025-03-31 7,191,850 + 7,089,771 against 14,281,621. The same holds in all nine quarters."),
-         ("query", "Published equals the printed 'Total Investments' in every quarter (D-062, and the two 2023 quarters "
-                   "read on the page).")],
-        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/a01b.sql" % label),
     ("oracle", "B01", SIXTH): (
         "as_filed",
         "Position contexts with no fair value fact: members the filer defines for rate and period facts or under an earlier "

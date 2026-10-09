@@ -177,6 +177,17 @@
     }
   },
   "source_encodings": {
+    "fair_value_concepts": [
+      "MoneyMarketFundsFairValueDisclosure"
+    ],
+    "cash_identifiers": [
+      "JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375)",
+      "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582)",
+      "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582)"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
     "page_labelled_contexts": [
       "equitysecuritiesbyindustryaxis+investmentissueraffiliationaxis+investmenttypeaxis",
       "equitysecuritiesbyindustryaxis+investmenttypeaxis"

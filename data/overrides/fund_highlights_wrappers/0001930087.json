@@ -1,0 +1,27 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001930087",
+ "entity_name": "Golub Capital Private Credit Fund",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-06-30",
+   "field": "total_assets",
+   "value": 653733000,
+   "evidence": "0001930087-23-000010 (10-Q, 2023-06-30) balance sheet: 'Total Assets $ 653,733' (thousands). The fund had not started investing."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "total_liabilities",
+   "value": 3410000,
+   "evidence": "Same balance sheet: 'Total Liabilities 3,410'."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "net_assets",
+   "value": 650323000,
+   "evidence": "Same balance sheet: 'Total Net Assets 650,323'. A later 10-K files us-gaap:StockholdersEquity = 50,000 for this date and company facts keep the last value filed."
+  }
+ ],
+ "notes": "Company facts hold two values of StockholdersEquity for 2023-06-30: 650,323,000 from the 10-Q and 50,000 from the later 10-K and 10-K/A. The 10-Q's balance sheet is the statement for that date."
+}

@@ -1661,3 +1661,82 @@ Strategic Income income identity and one rate convention row, Oaktree's derivati
 one comparative-row finding, two non-accrual findings whose earlier fix was pulled, and the
 findings an earlier reviewer marked as confirmed errors where the check-based entry does not
 override the verdict.
+
+## 2026-10-09 (evening): two checks repaired, defects fixed
+
+Owner: "commit, repair the two checks, then fix the defects". Commit eaccc65. Sandbox `n5i`.
+Not run: the full suite, the semantic diff, any 70-fund build. Published data unchanged.
+
+### D-075 What was changed
+
+**The two checks (shared code, every fund; effect measured read-only on the published build)**
+
+- **Subtotal arithmetic (oracle A01).** It summed a subtotal's rows across the current and the
+  comparative period. It now takes the rows of the subtotal's own period. Published build: 39
+  fund-quarters go from failing to passing, none the other way (117 failures to 78).
+- **Holdings against filed investments (oracle A04, E01).** With no investments figure filed it
+  compared holdings with total assets inside a 5 pct band, which a correct schedule fails. My
+  first repair skipped the check there; measured, that would also have stopped flagging funds
+  whose holdings are half of total assets. It now keeps total assets as a stand-in with a
+  one-sided band: fail above 105 pct or below 70 pct of total assets. **The 70 pct floor is a
+  judgement, not a measured bar.** Published build: 18 fund-quarters go from failing to passing,
+  none the other way; funds near 50 pct still fail.
+- Re-run: `git show eaccc65:pipeline/oracle_checks.py > before.py`, then
+  `python scripts/v05_evidence/oracle_check_effect.py before.py`.
+
+**Defects fixed**
+
+- **Fund-level figures corrected from the page.** New `figure_corrections` in the fund-level
+  wrapper (`data/overrides/fund_highlights_wrappers/`, each with its evidence), applied before
+  scale detection.
+  - Golub 2023-06-30: net assets 650,323K, total assets 653,733K, liabilities 3,410K. Company
+    facts keep the last value filed for a date, and a later 10-K files 50,000 for this one.
+  - Oaktree 2022-03-31: 4,000,000 shares at 25.04. The first 10-Q files both in thousands.
+  - Sixth Street 2023-06-30 and 2023-09-30: investments 1,758,911K and 2,048,389K, the printed
+    "Total Investments". No undimensioned fact is filed for those dates.
+- **Golub money market rows.** They were published in one quarter only, by a rule that added
+  them as cash (81.8M at 2025-12-31). That rule's own record shows the gap to the filed total
+  going from 84.5M to 2.7M: cash rows covering for missing positions. The cause: the filer tags
+  their fair value with its own concept. New wrapper key `source_encodings.fair_value_concepts`
+  (read for this filer only; 17 funds have a concept of that name). The rows are now published as
+  cash in every quarter, named in `cash_identifiers`, and Golub declares
+  `investments_total_excludes`. The rule is pulled.
+- **Sixth Street Elysium preference shares (2024-12-31).** The page prints a fair value of
+  49,063; only the cost is tagged. New wrapper key `source_encodings.untagged_values`; a missing
+  value is filled, a tagged one never replaced. The row now has its accession and class. The rule
+  that added it by hand is pulled.
+- **Sixth Street reference rates.** Two causes in the page reader, both fixed in shared code:
+  the shared reading of "S +" as SOFR ran before the filer's own code (its note: "SONIA or S"),
+  and rows shifted one column off their header were not read. On Sixth Street's pages 414 rows
+  now read (196 SOFR, 169 EURIBOR, 44 SONIA, 5 CORRA) and 11 change from SOFR to SONIA.
+  **Measured on the first five funds' pages: no reading changes.**
+
+**Not defects after all** (I had listed them as defects)
+
+- Sixth Street's distribution per share at 2024-12-31 (2.53) is the filed year figure (4.54) less
+  the filed nine-month figure (2.01). As filed.
+- Sixth Street's missing 2023 investments figure was never tagged by the filer; now supplied
+  from the page as above.
+
+**New wrapper keys this round:** `fair_value_concepts`, `untagged_values` (holdings wrapper);
+`figure_corrections` (fund-level wrapper). The source-fact cache key takes them, and other
+filers' keys are unchanged (checked on one CIK).
+
+### D-076 The total-assets stand-in floor is 85 pct (owner ruling)
+
+- Owner, 2026-10-09: "70% seems low", then, after the measurement below, "let's roll with that"
+  (85 pct).
+- **Measured** on the published build of 2026-10-01, the 886 wrapper fund-quarters that file both
+  figures: filed investments over total assets has a median of 95 pct, 25th percentile 92 pct,
+  10th percentile 85 pct, 5th percentile 75 pct. By band: 727 at 90 pct and over, 71 at 85 to 90,
+  26 at 80 to 85, 28 at 70 to 80, 34 below 70.
+- **Why not 100 pct:** total assets also hold cash and receivables, so a correct schedule sits
+  below them. The exact comparison is the conservation check (0.5 pct band against the filed
+  investments figure, or the filer's printed schedule total where none is filed).
+- **Effect on the published build, read-only:** oracle A04 goes from 138 failures to 126; 12
+  fund-quarters go from failing to passing and none the other way (it was 18 at 70 pct).
+- **Standing consequence.** A fund-quarter with no filed investments figure that fails the floor
+  gets its printed "Total Investments" supplied through the fund-level wrapper
+  (`figure_corrections`), not a disposition. 39 fund-quarters in 11 funds file no investments
+  figure today.
+- `pipeline/oracle_checks.py` (`_TOTAL_ASSETS_FLOOR`), `tests/test_oracle_checks.py`.

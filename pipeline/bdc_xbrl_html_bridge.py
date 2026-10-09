@@ -458,6 +458,7 @@ def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: d
 _NOT_APPLICABLE_RE = re.compile(r"(?i)\s*(?:n\s*/?\s*a\.?)?\s*")
 # A benchmark code standing alone in a cell: 'SR +', 'E+'.
 _BARE_CODE_RE = re.compile(r"\s*[A-Za-z]{1,6}\s*\+\s*")
+_FILER_CODE_PLUS_RE = re.compile(r"\s*([A-Za-z]{1,8})\s*\+")
 _HEADER_LABEL_RE = re.compile(
     r"(?i)maturity|reference\s*rate|spread|acquisition|principal|par\s*amount|"
     r"\bcost\b|fair\s*value|interest\s*rate|coupon|industry|company|portfolio|investment"
@@ -519,8 +520,19 @@ def _parse_field_value(field: str, cell: str, filer_codes: dict[str, str] | None
                     pass
         return ""
     if field == "reference_rate_type":
-        return _extract_reference_rate([cell]) or _benchmark_from_code(cell, filer_codes)
+        # A code the filer defines is read before the shared reading: Sixth Street prints
+        # 'S + 5.66%' for SONIA (its note: 'SONIA or S'), which the shared rule takes for SOFR.
+        return (_filer_leading_code(cell, filer_codes) or _extract_reference_rate([cell])
+                or _benchmark_from_code(cell, filer_codes))
     return _norm_text(cell)
+
+
+def _filer_leading_code(cell: str, filer_codes: dict[str, str] | None) -> str:
+    """The benchmark of a cell that starts with one of the filer's own codes and a plus sign."""
+    if not filer_codes:
+        return ""
+    match = _FILER_CODE_PLUS_RE.match(_FOOTNOTE_STRIP_RE.sub("", cell or ""))
+    return filer_codes.get(match.group(1).upper(), "") if match else ""
 
 
 def _heuristic_field_value(field: str, grid: list[str]) -> str:
@@ -565,6 +577,14 @@ def field_status(field: str, grid: list[str], header_map: dict[int, str],
         if unspecified and any(" ".join(_RESET_PERIOD_RE.sub("", grid[i]).lower().split()) in unspecified for i in named):
             # the filer's own label for a floating rate with no single benchmark
             return {"value": "", "status": "unspecified", "source_column": header_map[named[0]]}
+        if codes and all(_NOT_APPLICABLE_RE.fullmatch(grid[i]) for i in named):
+            # The row's cells sit one or two columns off the header (a row with no '$' cells
+            # under a header laid out for one that has them): the named column is empty and the
+            # reference sits beside it. Read a cell that starts with one of the filer's codes.
+            for i, cell in enumerate(grid):
+                shifted = _filer_leading_code(cell, codes)
+                if shifted:
+                    return {"value": shifted, "status": "value", "source_column": header_map[named[0]] + " (shifted)"}
         if (all(_NOT_APPLICABLE_RE.fullmatch(grid[i]) for i in named) and not _extract_reference_rate(grid)
                 and not any(_BARE_CODE_RE.fullmatch(c) for c in grid)):
             return {"value": "", "status": "not_applicable", "source_column": header_map[named[0]]}

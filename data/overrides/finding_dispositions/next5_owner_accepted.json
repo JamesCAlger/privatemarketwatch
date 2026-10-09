@@ -26,7 +26,7 @@
      "quote": "The pulled rule of D-059 had read two such rows (Auctane, Tiger Acquisition) as positions and invented 349.4M; the page prints them with a par amount only."
     }
    ],
-   "rerun": "python scripts/v05_evidence/b01.py n5h 1920145",
+   "rerun": "python scripts/v05_evidence/b01.py n5i 1920145",
    "decided_by": "owner, in session 2026-10-09",
    "decided_on": "2026-10-09"
   },
@@ -103,11 +103,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox n5h for each quarter listed: 1 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox n5i for each quarter listed: 1 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py n5h C103 3",
-   "decided_by": "check passed on sandbox n5h; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5i C103 3",
+   "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -384,11 +384,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check no_rate_in_source passed on sandbox n5h for each quarter listed: 27 flagged rows tested, none failing."
+     "quote": "Check no_rate_in_source passed on sandbox n5i for each quarter listed: 27 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/x02_page_read.py n5h <cik>",
-   "decided_by": "check passed on sandbox n5h; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/x02_page_read.py n5i <cik>",
+   "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -413,11 +413,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check no_rate_in_source passed on sandbox n5h for each quarter listed: 8 flagged rows tested, none failing."
+     "quote": "Check no_rate_in_source passed on sandbox n5i for each quarter listed: 8 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/x02_page_read.py n5h <cik>",
-   "decided_by": "check passed on sandbox n5h; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/x02_page_read.py n5i <cik>",
+   "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -465,11 +465,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox n5h for each quarter listed: 5 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox n5i for each quarter listed: 5 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py n5h X06 3",
-   "decided_by": "check passed on sandbox n5h; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py n5i X06 3",
+   "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

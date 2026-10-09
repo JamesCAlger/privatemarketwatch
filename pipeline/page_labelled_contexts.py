@@ -160,6 +160,48 @@ def correct_misdated_contexts(contexts: dict[str, dict[str, Any]], filing_meta: 
     return changed
 
 
+_UNTAGGED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) (fair_value|cost|principal_amount) (-?\d+(?:\.\d+)?)")
+
+
+@lru_cache(maxsize=1)
+def _untagged_by_accession() -> dict[tuple[str, str], dict[str, dict[str, float]]]:
+    from pipeline.source_encodings import load_encodings
+    result: dict[tuple[str, str], dict[str, dict[str, float]]] = {}
+    for cik, encoding in load_encodings().items():
+        for value in encoding.get("untagged_values", []):
+            accession, context, name, number = _UNTAGGED_RE.fullmatch(value.strip()).groups()
+            result.setdefault((cik, accession), {}).setdefault(context, {})[name] = float(number)
+    return result
+
+
+def fill_untagged_values(facts_by_context: dict[str, dict[str, Any]], filing_meta: dict[str, str]) -> int:
+    """Give a context the value its printed row shows and its tags lack. Returns the number filled.
+
+    A filer can print a row's fair value and tag only its cost and units (Sixth Street
+    0000950170-25-021144: Elysium BidCo preference shares, printed '49,063 49,063', tagged with a
+    cost of 49,063 and no fair value). A row with no fair value is not a position, so it was lost.
+    The wrapper's ``source_encodings.untagged_values`` lists each one as
+    'ACCESSION CONTEXT FIELD VALUE' with the printed row as evidence. Only a missing value is
+    filled: a tagged value is never replaced, and a context with no facts at all is left alone.
+    """
+    cik = re.sub(r"\D", "", str(filing_meta.get("cik", ""))).zfill(10)
+    listed = _untagged_by_accession().get((cik, str(filing_meta.get("accession_number", ""))))
+    if not listed:
+        return 0
+    filled = 0
+    for context, values in listed.items():
+        facts = facts_by_context.get(context)
+        if not facts:
+            logger.warning("untagged value %s %s %s: the context carries no facts; left alone",
+                           cik, filing_meta.get("accession_number", ""), context)
+            continue
+        for name, number in values.items():
+            if facts.get(name) is None:
+                facts[name] = number
+                filled += 1
+    return filled
+
+
 def encoding_signature(cik: str) -> str:
     """The two readings as configured for one filer, '' when it uses neither.
 
@@ -171,4 +213,8 @@ def encoding_signature(cik: str) -> str:
     misdated = sorted("%s %s %s %s" % (accession, context, filed, corrected)
                       for (owner, accession), listed in _misdated_by_accession().items() if owner == cik
                       for context, (filed, corrected) in listed.items())
-    return "|".join(combos + misdated)
+    from pipeline.bdc_filings import fair_value_aliases
+    untagged = sorted("%s %s %s %s" % (accession, context, name, number)
+                      for (owner, accession), listed in _untagged_by_accession().items() if owner == cik
+                      for context, values in listed.items() for name, number in values.items())
+    return "|".join(combos + misdated + untagged + sorted("fv:" + name for name in fair_value_aliases(cik)))

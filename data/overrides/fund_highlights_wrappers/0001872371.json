@@ -1,0 +1,21 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001872371",
+ "entity_name": "Oaktree Strategic Credit Fund",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2022-03-31",
+   "field": "shares_outstanding",
+   "value": 4000000,
+   "evidence": "The 10-Q for 2022-03-31 tags CommonStockSharesOutstanding = 4000 and NetAssetValuePerShare = 25040, both in thousands; net assets are 100,172,000, which is 4,000,000 shares at 25.04."
+  },
+  {
+   "report_date": "2022-03-31",
+   "field": "nav_per_share",
+   "value": 25.04,
+   "evidence": "Same filing: net assets 100,172,000 over 4,000,000 shares. The next quarter files 11,301,000 shares at 23.71."
+  }
+ ],
+ "notes": "The first 10-Q files the share count and the net asset value per share in thousands."
+}

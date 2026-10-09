@@ -28,6 +28,8 @@ from pipeline.bdc_filings import (
     _parse_fact_value,
     _parse_xbrl_contexts,
     parse_filing_contexts,
+    fair_value_aliases,
+    match_concept_for,
     _apply_stepstone_2025q4_monetary_scale_correction,
     _normalize_mixed_decimals_monetary_facts,
 )
@@ -1598,7 +1600,7 @@ def _extract_single_xbrl_source_file(
         if not raw_text:
             continue
         local = _local_name(elem.tag)
-        col = _match_concept(local.lower())
+        col = match_concept_for(local.lower(), fair_value_aliases(filing_meta.get("cik", "")))
         if col is None and ctx_ref in liquid_fund_contexts:
             col = _match_liquid_fund_concept(local.lower())
         if col is None:
@@ -1617,6 +1619,8 @@ def _extract_single_xbrl_source_file(
         concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
 
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
+    from pipeline.page_labelled_contexts import fill_untagged_values
+    fill_untagged_values(facts_by_ctx, filing_meta)
 
     rows: list[dict[str, Any]] = []
     for ctx_id, ctx_info in admitted_contexts.items():

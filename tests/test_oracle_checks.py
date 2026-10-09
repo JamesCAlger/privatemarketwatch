@@ -229,6 +229,25 @@ class TestA01SubtotalArithmetic:
         results = check_A01_subtotal_arithmetic(pd.DataFrame())
         assert results[0].status == "skip"
 
+    def test_a_subtotal_is_compared_with_the_rows_of_its_own_period(self):
+        """Sixth Street: a filing carries the prior year-end rows and subtotal as well, on members
+        with no period in their name. Each subtotal must meet its own period's rows."""
+        def rollup(period, value):
+            return {"source_wrapper_disposition": "debt_issuer_rollup", "source_wrapper_parent_key": "debt investments",
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+
+        def leaf(period, value, name):
+            return {"source_wrapper_disposition": "debt_position_leaf", "source_wrapper_parent_key": "debt investments " + name,
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+        rows = [rollup("2023-12-31", "3000"), rollup("2022-12-31", "800000"),
+                leaf("2023-12-31", "1000", "a"), leaf("2023-12-31", "2000", "b"), leaf("2022-12-31", "800000", "a")]
+        assert all(r.status == "pass" for r in check_A01_subtotal_arithmetic(_source_detail(rows)))
+        # a row missing from the current period still fails its subtotal
+        short = [r for r in rows if not (r["period"] == "2023-12-31" and r["source_fair_value"] == "2000")]
+        short[0] = rollup("2023-12-31", "3000000")
+        short[2] = leaf("2023-12-31", "1000000", "a")
+        assert any(r.status == "fail" for r in check_A01_subtotal_arithmetic(_source_detail(short)))
+
 
 class TestA04GavReconciliation:
     def test_pass_within_tolerance(self):
@@ -247,6 +266,20 @@ class TestA04GavReconciliation:
         holdings = _holdings([{}])
         results = check_A04_gav_reconciliation(holdings, None)
         assert results[0].status == "skip"
+
+    @pytest.mark.parametrize("holdings_fv, status", [
+        ("1758911000", "pass"),   # Sixth Street 2023-06-30: equal to the printed total, 85.2 pct of total assets
+        ("1960000000", "pass"),   # 95 pct, the usual share
+        ("1630000000", "fail"),   # 79 pct: below the 85 pct floor (owner ruling, D-076)
+        ("1000000000", "fail"),   # under half of total assets
+        ("2200000000", "fail"),   # above total assets
+    ])
+    def test_total_assets_stand_in_with_a_one_sided_band(self, holdings_fv, status):
+        holdings = _holdings([{"fair_value": holdings_fv}])
+        ff = _fund_financials([{"investments_at_fair_value": "", "total_assets": "2063418000"}])
+        results = check_A04_gav_reconciliation(holdings, ff)
+        assert [r.status for r in results] == [status]
+        assert "no investments figure filed" in results[0].message
 
 
 class TestA07PctSum:

@@ -684,6 +684,34 @@ def test_filer_named_column_reads_its_reference_rate_code():
     assert new["status"] == "value" and new["value"] == "SOFR" and new["source_column"] == "Ref. Rate"
 
 
+SIXTH_READING = {"columns": frozenset({"referencerate andspread"}),
+                 "codes": {"SOFR": "SOFR", "S": "SONIA", "E": "EURIBOR", "C": "CORRA", "P": "PRIME"}}
+SIXTH_HEADER = {0: "Company", 1: "Investment", 2: "InitialAcquisitionDate", 3: "ReferenceRate andSpread", 4: "Interest Rate"}
+
+
+def test_a_filers_own_code_is_read_before_the_shared_reading():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    # Sixth Street's note: 'SONIA or S'. The shared rule reads 'S + n' as SOFR.
+    row = ["Skylark UK DebtCo Limited", "First-lien loan (GBP 57,691 par, due 9/2030)", "9/7/2023", "S + 5.66%", "10.36"]
+    assert field_status("reference_rate_type", row, SIXTH_HEADER, SIXTH_READING)["value"] == "SONIA"
+    # with no code map the shared reading is unchanged
+    assert field_status("reference_rate_type", row, {3: "Reference Rate and Spread"})["value"] == "SOFR"
+
+
+def test_a_row_shifted_off_its_header_is_read_from_the_cell_beside_the_named_column():
+    from pipeline.bdc_xbrl_html_bridge import field_status
+    # A row with no '$' cells under a header laid out for one that has them: the named column is empty.
+    shifted = ["Cast & Crew, LLC", "First-lien loan (CAD 141,298 par, due 1/2029)", "2/27/2025", "", "C + 5.50%", "7.80"]
+    got = field_status("reference_rate_type", shifted, SIXTH_HEADER, SIXTH_READING)
+    assert got["value"] == "CORRA" and got["status"] == "value" and got["source_column"].endswith("(shifted)")
+    # a fixed-rate row has no code anywhere: still the filer saying there is no reference rate
+    fixed = ["Flight Intermediate HoldCo, Inc.", "First-lien loan ($46,500 par, due 4/2030)", "10/3/2024", "", "11.50", "%"]
+    assert field_status("reference_rate_type", fixed, SIXTH_HEADER, SIXTH_READING)["status"] == "not_applicable"
+    # a word that is not one of the filer's codes is not read as one
+    other = ["Acme", "First-lien loan", "1/1/2025", "", "Senior + junior", "9.00"]
+    assert field_status("reference_rate_type", other, SIXTH_HEADER, SIXTH_READING)["status"] == "not_applicable"
+
+
 def test_filer_named_column_does_not_invent_a_reference_rate():
     from pipeline.bdc_xbrl_html_bridge import field_status
     header = {0: "Company", 1: "Investment", 2: "Ref. Rate", 3: "Cash", 4: "PIK"}
@@ -696,8 +724,11 @@ def test_filer_named_column_does_not_invent_a_reference_rate():
     assert field_status("reference_rate_type", ["Acme", "First lien", "C +", "5.00%"],
                         {2: "Interest"}, OWL_READING) == {"value": "", "status": "validation_needed", "source_column": "Interest"}
     # an empty cell on a row that names a benchmark elsewhere (a shifted cell) is not 'not applicable'
-    for grid in (["Acme", "First lien", "", "SR +", "5.00%"], ["Acme", "First lien", "", "SOFR + 5.00%"]):
-        assert field_status("reference_rate_type", grid, {2: "Interest"}, OWL_READING)["status"] == "blank"
+    assert field_status("reference_rate_type", ["Acme", "First lien", "", "SOFR + 5.00%"], {2: "Interest"}, OWL_READING)["status"] == "blank"
+    # ... unless the shifted cell starts with one of the filer's own codes: then it is read (decision D-075;
+    # no row of the first five funds changes, measured on their pages)
+    assert field_status("reference_rate_type", ["Acme", "First lien", "", "SR +", "5.00%"], {2: "Interest"}, OWL_READING) == {
+        "value": "SOFR", "status": "value", "source_column": "Interest (shifted)"}
     # a fund that names no column never gets the status
     assert field_status("reference_rate_type", ["Acme", "Notes", "N/A", "14.25%"], {2: "Reference Rate"})["status"] == "validation_needed"
 

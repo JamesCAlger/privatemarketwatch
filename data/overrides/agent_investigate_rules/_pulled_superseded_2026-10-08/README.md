@@ -1,3 +1,5 @@
 # Rules pulled 2026-10-08: superseded by a wrapper fix
 
 - `1925309_add_healthcare_ordinary_shares_2024q4.json`: added the 2024-12-31 Healthcare ordinary-shares row with the issuer 'Healthcare Ordinary Shares'. The Sixth Street wrapper now bridges the unnamed label to its issuer (Raptor US Buyer II Corp., read from the page), so the extractor keeps the row itself. Decision log D-062.
+- `1930087_add_2025q4_money_market_rows.json` (pulled 2026-10-09): added Golub's two money market rows at 2025-12-31 only, as cash, 81.8M. Its own record shows the residual going from -84.5M to -2.7M: the cash rows covered for 84.5M of positions the extractor was missing (decision D-064). The rows now come from the filing in every quarter through the wrapper's `fair_value_concepts`. Decision log D-075.
+- `1925309_add_elysium_convertible_preference_2024q4.json` (pulled 2026-10-09): added the Elysium preference shares at 2024-12-31 as a row with no accession or class. The filer prints the fair value and tags only the cost; the wrapper's `untagged_values` now supplies the printed value and the extractor keeps the row. Decision log D-075.

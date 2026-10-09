@@ -3,17 +3,37 @@
   "$id": "fund-highlights-wrapper.v1",
   "title": "Fund highlights per-CIK wrapper for concept mapping and share class aliases",
   "type": "object",
-  "required": ["schema_version", "cik", "entity_name", "version"],
+  "required": [
+    "schema_version",
+    "cik",
+    "entity_name",
+    "version"
+  ],
   "properties": {
-    "schema_version": {"const": "fund-highlights-wrapper.v1"},
-    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
-    "entity_name": {"type": "string", "minLength": 1},
-    "version": {"type": "integer", "minimum": 1},
+    "schema_version": {
+      "const": "fund-highlights-wrapper.v1"
+    },
+    "cik": {
+      "type": "string",
+      "pattern": "^[0-9]{10}$"
+    },
+    "entity_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
     "concept_overrides": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["xbrl_concept_substring", "target_field", "action"],
+        "required": [
+          "xbrl_concept_substring",
+          "target_field",
+          "action"
+        ],
         "properties": {
           "xbrl_concept_substring": {
             "type": "string",
@@ -26,7 +46,11 @@
           },
           "action": {
             "type": "string",
-            "enum": ["map", "suppress", "prefer"],
+            "enum": [
+              "map",
+              "suppress",
+              "prefer"
+            ],
             "description": "map=alias, suppress=ignore concept, prefer=override global priority"
           },
           "evidence": {
@@ -40,7 +64,9 @@
     },
     "share_class_aliases": {
       "type": "object",
-      "additionalProperties": {"type": "string"},
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Raw XBRL member substring -> canonical class label. Applied before global regex chain."
     },
     "oracle_tolerances": {
@@ -49,13 +75,13 @@
         "nav_identity_tol": {
           "type": "number",
           "minimum": 0,
-          "maximum": 0.20,
+          "maximum": 0.2,
           "description": "Per-CIK NAV identity tolerance (fraction, max 20%)"
         },
         "income_identity_tol": {
           "type": "number",
           "minimum": 0,
-          "maximum": 0.20,
+          "maximum": 0.2,
           "description": "Per-CIK income identity tolerance (fraction, max 20%)"
         }
       },
@@ -63,12 +89,51 @@
     },
     "source_preferences": {
       "type": "object",
-      "additionalProperties": {"type": "string"},
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Per-field source preference when cross-source values diverge"
     },
     "notes": {
       "type": "string",
       "description": "Free-text notes on why this wrapper exists"
+    },
+    "figure_corrections": {
+      "type": "array",
+      "description": "Fund-level figures the filing page states and the filer's undimensioned facts get wrong, miss, or file at the wrong scale. Applied to the company-facts balance frame before scale detection. Each needs the printed evidence.",
+      "items": {
+        "type": "object",
+        "required": [
+          "report_date",
+          "field",
+          "value",
+          "evidence"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "report_date": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "field": {
+            "enum": [
+              "total_assets",
+              "total_liabilities",
+              "net_assets",
+              "investments_at_fair_value",
+              "nav_per_share",
+              "shares_outstanding"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 20
+          }
+        }
+      }
     }
   },
   "additionalProperties": false

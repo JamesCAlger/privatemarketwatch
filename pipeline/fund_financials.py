@@ -1818,7 +1818,8 @@ def build_fund_financials(
     # 4. Prepare BDC side
     highlights_df = (pd.read_csv(BDC_FUND_HIGHLIGHTS_FILE, dtype=str)
                      if BDC_FUND_HIGHLIGHTS_FILE.exists() else None)
-    from pipeline.fund_highlights_wrapper import class_nav_ciks
+    from pipeline.fund_highlights_wrapper import apply_figure_corrections, class_nav_ciks
+    cf_balance_df = apply_figure_corrections(cf_balance_df)
     class_nav_df = class_nav_consensus(highlights_df, class_nav_ciks())
     logger.info("Per-class NAV consensus: %d fund-quarters across %d funds",
                 len(class_nav_df), class_nav_df["cik"].nunique())

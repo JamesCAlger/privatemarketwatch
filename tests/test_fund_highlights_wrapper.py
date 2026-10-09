@@ -371,3 +371,47 @@ class TestFrozenSpec:
         )
         with pytest.raises(AttributeError):
             spec.version = 2
+
+
+class TestFigureCorrections:
+    """A fund-level figure the page states and the undimensioned facts get wrong (decision D-075)."""
+
+    def _spec(self, tmp_path, corrections):
+        from pipeline.fund_highlights_wrapper import _load_wrapper_from_path
+        path = tmp_path / "0001930087.json"
+        path.write_text(json.dumps({"schema_version": "fund-highlights-wrapper.v1", "cik": "0001930087",
+                                    "entity_name": "Golub Capital Private Credit Fund", "version": 1,
+                                    "figure_corrections": corrections}), encoding="utf-8")
+        return _load_wrapper_from_path(path)
+
+    def test_a_correction_needs_a_date_a_known_field_a_number_and_evidence(self, tmp_path):
+        good = {"report_date": "2023-06-30", "field": "net_assets", "value": 650323000,
+                "evidence": "10-Q balance sheet: 'Total Net Assets 650,323'"}
+        spec = self._spec(tmp_path, [good, {**good, "evidence": ""}, {**good, "field": "fair_value"},
+                                     {**good, "value": "650323000"}, {**good, "report_date": "2023-06"}])
+        assert spec.figure_corrections == (("2023-06-30", "net_assets", 650323000.0),)
+
+    def test_the_figure_replaces_the_filed_one_and_other_funds_are_untouched(self, tmp_path, monkeypatch):
+        import pandas as pd
+        from pipeline import fund_highlights_wrapper as fhw
+        spec = self._spec(tmp_path, [
+            {"report_date": "2023-06-30", "field": "net_assets", "value": 650323000, "evidence": "10-Q balance sheet, net assets"},
+            {"report_date": "2023-03-31", "field": "total_assets", "value": 5, "evidence": "a date the frame does not hold"}])
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        frame = pd.DataFrame([
+            {"cik": "0001930087", "report_date": "2023-06-30", "net_assets": 50000.0},
+            {"cik": "0001803498", "report_date": "2023-06-30", "net_assets": 7.0}])
+        out = fhw.apply_figure_corrections(frame).set_index(["cik", "report_date"])
+        assert out.loc[("0001930087", "2023-06-30"), "net_assets"] == 650323000.0
+        assert out.loc[("0001803498", "2023-06-30"), "net_assets"] == 7.0
+        assert out.loc[("0001930087", "2023-03-31"), "total_assets"] == 5.0
+        assert frame.loc[0, "net_assets"] == 50000.0  # the input frame is not changed
+
+    def test_the_live_wrappers_load_with_their_corrections(self):
+        from pipeline import fund_highlights_wrapper as fhw
+        fhw.invalidate_cache()
+        wrappers = fhw.get_all_highlights_wrappers()
+        assert dict((d, v) for d, f, v in wrappers["0001925309"].figure_corrections) == {
+            "2023-06-30": 1758911000.0, "2023-09-30": 2048389000.0}
+        assert ("2022-03-31", "nav_per_share", 25.04) in wrappers["0001872371"].figure_corrections

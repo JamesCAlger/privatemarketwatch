@@ -9,6 +9,7 @@ extract_bdc_holdings(client, bdc_universe=None) -> pd.DataFrame
 """
 
 import json
+from functools import lru_cache
 import logging
 import re
 import time
@@ -885,6 +886,7 @@ def _apply_stepstone_2025q4_monetary_scale_correction(
 def _extract_investment_facts(
     tree: etree._ElementTree,
     contexts: dict[str, dict],
+    fair_value_concepts: frozenset[str] = frozenset(),
 ) -> list[dict[str, Any]]:
     """Extract investment-level XBRL facts and group by context.
 
@@ -923,7 +925,7 @@ def _extract_investment_facts(
             continue
 
         # Match concept
-        col = _match_concept(local)
+        col = match_concept_for(local, fair_value_concepts)
         if col is None:
             continue
 
@@ -1008,6 +1010,29 @@ def _extract_investment_facts(
     return records
 
 
+@lru_cache(maxsize=1)
+def _fair_value_aliases_by_cik() -> dict[str, frozenset[str]]:
+    from pipeline.source_encodings import load_encodings
+    return {cik: frozenset(v.lower() for v in encoding["fair_value_concepts"])
+            for cik, encoding in load_encodings().items() if encoding.get("fair_value_concepts")}
+
+
+def fair_value_aliases(cik: Any) -> frozenset[str]:
+    """Concept local names (lower case) this filer uses for a position's fair value.
+
+    From the wrapper's ``source_encodings.fair_value_concepts``. Golub tags the fair value of
+    its money market rows with its own ``MoneyMarketFundsFairValueDisclosure``; seventeen funds
+    have a concept of that name, so it is read per filer and not mapped for everyone.
+    """
+    return _fair_value_aliases_by_cik().get(_normalize_cik_digits(cik).zfill(10), frozenset())
+
+
+def match_concept_for(local_lower: str, aliases: frozenset[str] = frozenset()) -> str | None:
+    """``_match_concept``, then the filer's own fair-value concepts."""
+    col = _match_concept(local_lower)
+    return "fair_value" if col is None and local_lower in aliases else col
+
+
 def _match_concept(local_lower: str) -> str | None:
     """Match a lowercase local name to an output column via CONCEPT_MAP."""
     for pattern, col in CONCEPT_MAP:
@@ -1051,7 +1076,10 @@ def _parse_single_filing(
         return []
 
     contexts = parse_filing_contexts(tree, filing_meta)
-    facts = _extract_investment_facts(tree, contexts)
+    facts = _extract_investment_facts(tree, contexts, fair_value_aliases(filing_meta.get("cik", "")))
+    # A value the printed row shows and the tags lack, listed in the filer's wrapper.
+    from pipeline.page_labelled_contexts import fill_untagged_values
+    fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)
 
     # --- Non-accrual evidence: footnotes + dimensions ---
     from pipeline.nonaccrual_evidence import (

@@ -198,6 +198,13 @@ def check_A01_subtotal_arithmetic(
                     re.escape(parent_key), na=False, regex=True
                 )
             )
+            # ... and that belong to the rollup's own period. A filing carries the prior period's
+            # rows and subtotals too; summing both periods' rows against one period's subtotal
+            # failed every subtotal of a filer whose subtotal members carry no period in their
+            # name (Sixth Street: 800,995 + 3,036,500 against 3,837,494; decision D-075).
+            if "period" in group_leaves.columns:
+                child_mask = child_mask & (
+                    _col_str(group_leaves, "period").str[:10] == str(rollup_row.get("period", "") or "")[:10])
             if family:
                 child_mask = child_mask & (_col_str(group_leaves, "source_wrapper_family") == family)
 
@@ -232,6 +239,15 @@ def check_A01_subtotal_arithmetic(
         ))
 
     return results
+
+
+# Lowest share of total assets a schedule may be when total assets stand in for a missing
+# investments figure. Owner ruling 2026-10-09 (decision D-076): 85 pct, the 10th percentile of
+# filed investments over total assets across the 886 wrapper fund-quarters of the 2026-10-01
+# build that file both (median 95 pct). A correct schedule of a fund holding much cash fails
+# it; the fix there is to supply the printed investments total (fund-level wrapper
+# figure_corrections), after which the investments comparison applies and this does not.
+_TOTAL_ASSETS_FLOOR = 0.85
 
 
 def check_A04_gav_reconciliation(
@@ -275,6 +291,22 @@ def check_A04_gav_reconciliation(
             results.append(_make_result(
                 "A04", "cik_quarter", "skip", 0, bdc_tolerance,
                 f"{cik_s}/{rd_s}: No nonzero comparison value in fund financials",
+                cik=cik_s, report_date=rd_s,
+            ))
+            continue
+        if inv_fv <= 0:
+            # No investments figure is filed, so total assets stand in. They also hold cash and
+            # receivables: a correct schedule sits below them, not within 5 pct of them (Sixth
+            # Street 2023-06-30: holdings equal the printed total and are 85 pct of total
+            # assets). The band is therefore one-sided; it fails holdings above total assets or
+            # below _TOTAL_ASSETS_FLOOR of them. A proxy, labelled as one.
+            ratio = holdings_fv / total_assets
+            status = "pass" if _TOTAL_ASSETS_FLOOR <= ratio <= 1.05 else "fail"
+            results.append(_make_result(
+                "A04", "cik_quarter", status, abs(1 - ratio), 1 - _TOTAL_ASSETS_FLOOR,
+                f"{cik_s}/{rd_s}: holdings_fv={holdings_fv:,.0f} vs total_assets={total_assets:,.0f} "
+                f"({ratio:.0%} of total assets; no investments figure filed, band "
+                f"{_TOTAL_ASSETS_FLOOR:.0%} to 105%)",
                 cik=cik_s, report_date=rd_s,
             ))
             continue

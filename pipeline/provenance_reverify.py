@@ -376,7 +376,8 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
     pct_recompute_divergence | anchor_missing | context_missing |
     source_unavailable | not_checked.
     """
-    from pipeline.bdc_filings import _local_name, _match_concept, _parse_fact_value
+    from pipeline.bdc_filings import (_local_name, _match_concept, _parse_fact_value,
+                                      fair_value_aliases, match_concept_for)
 
     if xml_loader is None:
         if filings_index is None:
@@ -416,7 +417,7 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
             raw_text = (elem.text or "").strip()
             if not raw_text:
                 continue
-            col = _match_concept(local)
+            col = match_concept_for(local, fair_value_aliases(cik))
             if col is None:
                 continue
             ctx_facts = facts.setdefault(ctx, {})

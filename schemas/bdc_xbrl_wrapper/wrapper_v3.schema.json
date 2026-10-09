@@ -632,6 +632,20 @@
           "items": {"enum": ["cash_rows"]},
           "description": "Set where the filer's balance-sheet investments line leaves out the money market or short-term fund rows its schedule lists (Goldman Sachs: 'Investments, at fair value 9,630,944' and, on its own line, 'Investments in affiliated money market fund 233,261'). The fair-value conservation check then compares that line with the published rows that are not cash, and checks the cash rows against the filed cash-equivalents figure where one exists. The cash rows stay published. Evidence required: the balance-sheet lines, and published non-cash rows equal to the investments line in each quarter."
         },
+        "fair_value_concepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$"},
+          "description": "Concept local names this filer uses for a position's fair value besides the shared ones (Golub: MoneyMarketFundsFairValueDisclosure on its money market rows, which otherwise carry a cost and no value and are dropped). Read for this filer only, by the extractor, source reconciliation and the re-verifier. Evidence required: the tag on a printed row."
+        },
+        "untagged_values": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?$"},
+          "description": "Values a printed row shows and its tags lack, each as 'ACCESSION CONTEXT FIELD VALUE' in dollars (Sixth Street 0000950170-25-021144: the Elysium BidCo preference shares print a fair value of 49,063 and tag only the cost). Only a missing value is filled; a tagged value is never replaced. Evidence required: the printed row and the context's tagged facts."
+        },
         "misdated_contexts": {
           "type": "array",
           "minItems": 1,

@@ -45,6 +45,8 @@ class HighlightsWrapperSpec:
     share_class_aliases: dict[str, str] = field(default_factory=dict)
     oracle_tolerances: dict[str, float] = field(default_factory=dict)
     source_preferences: dict[str, str] = field(default_factory=dict)
+    # (report_date, field, value) the filer's page states and its undimensioned facts get wrong
+    figure_corrections: tuple[tuple[str, str, float], ...] = ()
     notes: str = ""
 
 
@@ -96,6 +98,16 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
     raw_prefs = data.get("source_preferences", {})
     prefs = {str(k): str(v) for k, v in raw_prefs.items()} if raw_prefs else {}
 
+    # Parse figure_corrections: each needs a date, a known field, a number and its evidence.
+    corrections = []
+    for entry in data.get("figure_corrections", []) or []:
+        day, name, value = str(entry.get("report_date", "")), str(entry.get("field", "")), entry.get("value")
+        if (not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) or name not in FIGURE_FIELDS
+                or not isinstance(value, (int, float)) or not str(entry.get("evidence", "")).strip()):
+            logger.warning("Highlights wrapper %s: figure correction ignored: %r", path.name, entry)
+            continue
+        corrections.append((day, name, float(value)))
+
     return HighlightsWrapperSpec(
         cik=cik,
         entity_name=data.get("entity_name", ""),
@@ -104,6 +116,7 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
         share_class_aliases=aliases,
         oracle_tolerances=tolerances,
         source_preferences=prefs,
+        figure_corrections=tuple(corrections),
         notes=data.get("notes", ""),
     )
 
@@ -135,6 +148,48 @@ def load_highlights_wrapper(cik: Any) -> HighlightsWrapperSpec | None:
 
 
 CLASS_NAV_PREFERENCE = "share_class_consensus"
+
+# Fund-level figures a wrapper may correct from the filing page.
+FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "investments_at_fair_value",
+                           "nav_per_share", "shares_outstanding"})
+
+
+def apply_figure_corrections(balance_df):
+    """Set the fund-level figures a wrapper corrects, on the company-facts balance frame.
+
+    Company facts hold one undimensioned value per concept and date, the last one filed. That
+    value can be wrong for a date (Golub 2023-06-30: a later 10-K files 50,000 where the 10-Q's
+    balance sheet says 650,323,000), filed at the wrong scale (Oaktree 2022-03-31: 4,000 shares
+    and 25,040 a share, in thousands), or not filed at all (Sixth Street 2023-06-30: the printed
+    'Total Investments' has no undimensioned fact). A wrapper lists the figure with the page as
+    evidence; it is applied before scale detection, so the detection sees the right numbers.
+    A correction for a date the fund's rows do not hold adds the row. A fund with no rows in the
+    frame is left alone: a correction never brings a fund into a build that did not load it.
+    Returns the frame.
+    """
+    _ensure_cache_loaded()
+    if balance_df is None or balance_df.empty or "cik" not in balance_df.columns or "report_date" not in balance_df.columns:
+        return balance_df
+    frame = balance_df.copy()
+    added = []
+    for cik, spec in _WRAPPER_CACHE.items():
+        mine = frame["cik"].astype(str).str.zfill(10) == cik
+        if not spec.figure_corrections or not mine.any():
+            continue
+        for day, name, value in spec.figure_corrections:
+            if name not in frame.columns:
+                frame[name] = None
+            hit = mine & (frame["report_date"].astype(str).str[:10] == day)
+            if hit.any():
+                frame.loc[hit, name] = value
+            else:
+                added.append({"cik": cik, "report_date": day, name: value})
+            logger.info("fund figure corrected from the page: %s %s %s = %s", cik, day, name, value)
+    if added:
+        import pandas as pd
+        extra = pd.DataFrame(added).groupby(["cik", "report_date"], as_index=False).first()
+        frame = pd.concat([frame, extra], ignore_index=True)
+    return frame
 
 
 def class_nav_ciks() -> frozenset[str]:

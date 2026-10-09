@@ -1,0 +1,21 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001925309",
+ "entity_name": "Sixth Street Lending Partners",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-06-30",
+   "field": "investments_at_fair_value",
+   "value": 1758911000,
+   "evidence": "0000950170-23-038548 (10-Q, 2023-06-30) schedule: 'Total Investments $ 1,744,507 $ 1,758,911'. No undimensioned InvestmentOwnedAtFairValue fact is filed for this date."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "investments_at_fair_value",
+   "value": 2048389000,
+   "evidence": "0000950170-23-058792 (10-Q, 2023-09-30) schedule: 'Total Investments $ 2,007,948 $ 2,048,389'. No undimensioned InvestmentOwnedAtFairValue fact is filed for this date."
+  }
+ ],
+ "notes": "Company facts hold InvestmentOwnedAtFairValue for 2023-03-31 and 2023-12-31 but not for the two quarters between."
+}

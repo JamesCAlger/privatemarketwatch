@@ -9,6 +9,7 @@ import json
 import re
 
 
+_UNTAGGED_VALUE_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
 
 
@@ -28,7 +29,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -63,6 +64,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A page-labelled context reads "axis+axis", lower-case local names: '+str(path))
             if key=='misdated_contexts' and any(not _MISDATED_CONTEXT_RE.fullmatch(v) for v in values):
                 raise ValueError('A misdated context reads "ACCESSION CONTEXT YYYY-MM-DD -> YYYY-MM-DD": '+str(path))
+            if key=='fair_value_concepts' and any(not re.fullmatch('[A-Za-z][A-Za-z0-9]*',v) for v in values):
+                raise ValueError('A fair-value concept is one local name, no prefix: '+str(path))
+            if key=='untagged_values' and any(not _UNTAGGED_VALUE_RE.fullmatch(v) for v in values):
+                raise ValueError('An untagged value reads "ACCESSION CONTEXT fair_value|cost|principal_amount NUMBER": '+str(path))
             if key=='investments_total_excludes' and values!=['cash_rows']:
                 raise ValueError('The only admitted exclusion from the investments total is cash_rows: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:

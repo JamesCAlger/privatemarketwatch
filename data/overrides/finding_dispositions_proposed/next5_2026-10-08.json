@@ -1,34 +1,7 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "n5h",
+ "sandbox": "n5i",
  "dispositions": [
-  {
-   "disposition_id": "PD-fv_conservation-1930087",
-   "class": "as_filed",
-   "engine": "conservation",
-   "rule_name": "fv_conservation",
-   "ciks": [
-    "0001930087"
-   ],
-   "quarters": [
-    "2025-12-31"
-   ],
-   "statement": "At 2023-12-31 the filer's printed subtotal includes a position its schedule neither prints nor tags (D-064).",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001930087-24-000010 (10-Q, 2023-12-31), Containers and Packaging: the seven printed rows sum to 32,366; the printed subtotal is 35,834. Principal and cost are short by 3,482 and 3,450. The prior quarter lists an eighth row, WP Deluxe Merger Sub (par 3,491)."
-    },
-    {
-     "source": "query",
-     "quote": "Every tagged row is published: 256 rows, 1,400.4M, against the filed 1,403.9M."
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/page_block_sums.py 1930087 000193008724000010 2023-12-31",
-   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
-   "decided_on": "2026-10-08"
-  },
   {
    "disposition_id": "PD-pct_of_net_assets_identity-1925309",
    "class": "as_filed",
@@ -59,7 +32,7 @@
      "quote": "The median implied net assets is within 0.5 pct of the filed figure in every quarter (4,527M against 4,530M at 2026-06-30), so the percents are read at the right scale."
     }
    ],
-   "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5h 1925309",
+   "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5i 1925309",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -97,42 +70,7 @@
      "quote": "The median implied net assets is within 1 pct of the filed figure in every quarter (4,448M against 4,475M at 2026-06-30), so the percents are read at the right scale."
     }
    ],
-   "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5h 1930087",
-   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
-   "decided_on": "2026-10-08"
-  },
-  {
-   "disposition_id": "PD-A01-1925309",
-   "class": "not_applicable",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001925309"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31"
-   ],
-   "statement": "The check adds the current rows and the prior year-end comparative rows together and compares the sum with each period's subtotal, so both subtotals fail. The filer's subtotal members carry no period in their name.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "query",
-     "quote": "Sandbox n5f, 'debt investments' ($K), the two subtotals against the children summed: 2023-12-31 3,036,500 + 800,995 against 3,837,494; 2024-12-31 7,089,771 + 3,036,500 against 10,126,271; 2025-03-31 7,191,850 + 7,089,771 against 14,281,621. The same holds in all nine quarters."
-    },
-    {
-     "source": "query",
-     "quote": "Published equals the printed 'Total Investments' in every quarter (D-062, and the two 2023 quarters read on the page)."
-    }
-   ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/a01b.sql",
+   "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5i 1930087",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -162,7 +100,7 @@
      "quote": "Sandbox n5c: 52 to 107 such contexts a quarter, none with a cost and at most two with a principal; published equals the filed investments total within 0.5M in all 14 quarters."
     }
    ],
-   "rerun": "python scripts/v05_evidence/b01.py n5h 1925309",
+   "rerun": "python scripts/v05_evidence/b01.py n5i 1925309",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -190,7 +128,7 @@
      "quote": "Sandbox n5f, 2025-03-31: 25 of 28 equity rows publish a unit count."
     }
    ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/gol12.sql",
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5i scratch/2026-10-07_printed_rates/gol12.sql",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -222,7 +160,7 @@
      "quote": "Before the fix one row of each pair was dropped and published was 4.3M to 5.8M under the filed total in six quarters; with both rows it equals the filed total."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issues.py n5h PP02 1920145",
+   "rerun": "python scripts/v05_evidence/issues.py n5i PP02 1920145",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -336,7 +274,7 @@
      "quote": "Sandbox n5e: 47 rows on contexts c-1400 and above, 107.1M, all classed underlying_schedule. The published rows of the same two issuers are in dollars and equal the printed schedule."
     }
    ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/oak5.sql",
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5i scratch/2026-10-07_printed_rates/oak5.sql",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -359,7 +297,7 @@
      "quote": "See the FX03 entry for Oaktree: the joint venture schedule prints both rows in euros."
     }
    ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/oak4.sql",
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5i scratch/2026-10-07_printed_rates/oak4.sql",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -382,59 +320,7 @@
      "quote": "See the FX03 entry for Oaktree: the joint venture schedule prints both rows in euros."
     }
    ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/oak4.sql",
-   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
-   "decided_on": "2026-10-08"
-  },
-  {
-   "disposition_id": "PD-A04-1925309-READ",
-   "class": "not_applicable",
-   "engine": "oracle",
-   "rule_name": "A04",
-   "ciks": [
-    "0001925309"
-   ],
-   "quarters": [
-    "2023-06-30",
-    "2023-09-30"
-   ],
-   "statement": "The fund-level data holds no filed investments figure for these two quarters, so the check compared the holdings with total assets. The holdings equal the printed schedule total.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "0000950170-23-038548 (2023-06-30): 'Total Investments $ 1,744,507 $ 1,758,911'. 0000950170-23-058792 (2023-09-30): 'Total Investments $ 2,007,948 $ 2,048,389'."
-    },
-    {
-     "source": "query",
-     "quote": "Published: 1,758,911 thousand and 2,048,389 thousand. Open defect, not closed by this entry: the investments figure is missing from fund_financials for both quarters."
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000095017023058792 html \"Total Investments\" 12 110",
-   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
-   "decided_on": "2026-10-08"
-  },
-  {
-   "disposition_id": "PD-E01-1925309-READ",
-   "class": "not_applicable",
-   "engine": "oracle",
-   "rule_name": "E01",
-   "ciks": [
-    "0001925309"
-   ],
-   "quarters": [
-    "2023-06-30",
-    "2023-09-30"
-   ],
-   "statement": "The same comparison with total assets as A04.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "See the A04 entry for Sixth Street: published equals the printed 'Total Investments' in both quarters."
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000095017023058792 html \"Total Investments\" 12 110",
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5i scratch/2026-10-07_printed_rates/oak4.sql",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
@@ -457,7 +343,34 @@
      "quote": "Sandbox n3a flat file: 0001930087-25-000070 (10-K) and 0001930087-26-000078 (10-K/A), 909 rows and 8,555.3M each at 2025-09-30. One is published."
     }
    ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5h scratch/2026-10-07_printed_rates/gol6.sql",
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py n5i scratch/2026-10-07_printed_rates/gol6.sql",
+   "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
+   "decided_on": "2026-10-08"
+  },
+  {
+   "disposition_id": "PD-F33-1925309-READ",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "The quarter's distribution per share is the filed year figure less the filed nine-month figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Company facts, InvestmentCompanyDistributionToShareholdersPerShare: 2.01 for 2024-01-01 to 2024-09-30 (10-Q) and 4.54 for the year (10-K). The fourth quarter is 2.53, on a net asset value of 28.79."
+    },
+    {
+     "source": "filing",
+     "quote": "0000950170-25-021144 (10-K): 'Dividends declared during the period $ 478,109' for 2024."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/companyfacts_concept.py 1925309 DistributionToShareholdersPerShare 2024",
    "decided_by": "PROPOSED by agent 2026-10-08; not accepted by the owner",
    "decided_on": "2026-10-08"
   },
