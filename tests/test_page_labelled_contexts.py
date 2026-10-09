@@ -105,3 +105,68 @@ def test_a_listed_misdated_context_is_redated_and_a_stale_listing_is_left_alone(
     other = {'c-285': {'period': '2024-12-31'}}
     assert plc.correct_misdated_contexts(other, {'cik': '42', 'accession_number': '0000000042-25-000031'}) == 0
     assert other['c-285']['period'] == '2024-12-31'
+
+
+class TestUntaggedValues:
+    """A value the filer printed and did not tag, declared in the wrapper."""
+
+    DECLARED = {("0001925309", "0000950170-25-021144"): {"C_1": {"fair_value": 49063000.0}}}
+
+    def _declare(self, monkeypatch):
+        monkeypatch.setattr(plc, "_untagged_by_accession", lambda: self.DECLARED)
+        return {"cik": "1925309", "accession_number": "0000950170-25-021144"}
+
+    def test_fills_a_missing_value_only(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        facts = {"C_1": {"cost": 49063000.0}}
+        assert plc.fill_untagged_values(facts, meta) == 1
+        assert facts["C_1"]["fair_value"] == 49063000.0
+
+    def test_never_replaces_a_tagged_value(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        facts = {"C_1": {"cost": 49063000.0, "fair_value": 48000000.0}}
+        assert plc.fill_untagged_values(facts, meta) == 0
+        assert facts["C_1"]["fair_value"] == 48000000.0
+
+    def test_leaves_other_filings_and_empty_contexts_alone(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        assert plc.fill_untagged_values({"C_1": {}}, meta) == 0
+        assert plc.fill_untagged_values({"C_1": {"cost": 1.0}}, {"cik": "1925309", "accession_number": "other"}) == 0
+
+    def test_the_declared_value_can_be_looked_up_for_reverification(self, monkeypatch):
+        self._declare(monkeypatch)
+        assert plc.untagged_value("1925309", "0000950170-25-021144", "C_1", "fair_value") == 49063000.0
+        assert plc.untagged_value("1925309", "0000950170-25-021144", "C_1", "cost") is None
+        assert plc.untagged_value("1925309", "0000950170-25-021144", "C_2", "fair_value") is None
+        assert plc.untagged_value("1803498", "0000950170-25-021144", "C_1", "fair_value") is None
+
+
+class TestDeclaredContextIdentifiers:
+    """A wrapper names a position context the filer left without an identifier member."""
+
+    DECLARED = {("0001588272", "0001193125-25-180608"): {"P_Bio": "Common Stocks | Bioplastics | PlantSwitch, Inc. (Series A-2)"}}
+
+    def _declare(self, monkeypatch):
+        monkeypatch.setattr(plc, "_named_by_accession", lambda: self.DECLARED)
+        return {"cik": "1588272", "accession_number": "0001193125-25-180608"}
+
+    def test_names_an_unnamed_context(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        contexts = {"P_Bio": {"is_investment": False, "dimensions_raw": "x"}, "other": {"is_investment": False}}
+        assert plc.name_declared_contexts(contexts, meta) == 1
+        assert contexts["P_Bio"]["is_investment"] is True
+        assert contexts["P_Bio"]["investment_identifier"] == "Common Stocks | Bioplastics | PlantSwitch, Inc. (Series A-2)"
+        assert contexts["other"]["is_investment"] is False
+
+    def test_never_renames_a_context_that_already_names_a_position(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        contexts = {"P_Bio": {"is_investment": True, "investment_identifier": "as filed"}}
+        assert plc.name_declared_contexts(contexts, meta) == 0
+        assert contexts["P_Bio"]["investment_identifier"] == "as filed"
+
+    def test_other_filings_and_missing_contexts_are_left_alone(self, monkeypatch):
+        meta = self._declare(monkeypatch)
+        assert plc.name_declared_contexts({"elsewhere": {"is_investment": False}}, meta) == 0
+        other = {"P_Bio": {"is_investment": False}}
+        assert plc.name_declared_contexts(other, {"cik": "1588272", "accession_number": "0001193125-25-282550"}) == 0
+        assert other["P_Bio"]["is_investment"] is False

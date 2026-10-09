@@ -471,6 +471,14 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 else:
                     hit = ctx_facts.get(anchor_field)
 
+                if hit is None and not declared_c:
+                    # A value the filer printed and did not tag, declared in the wrapper with the
+                    # printed row as evidence (source_encodings.untagged_values). There is no fact
+                    # to re-read; the published value is checked against the declaration.
+                    from pipeline.page_labelled_contexts import untagged_value
+                    declared_number = untagged_value(r.get("cik"), r.get("accession_number"), ctx, anchor_field)
+                    if declared_number is not None:
+                        hit = ("wrapper_untagged_value", repr(float(declared_number)))
                 if hit is None:
                     out.at[i, "full_status"] = "anchor_missing"
                     continue

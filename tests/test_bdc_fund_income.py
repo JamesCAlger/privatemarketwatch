@@ -189,6 +189,33 @@ class TestFactExtraction:
         assert len(facts) == 1
         assert facts[0]["net_investment_income"] == 30000000.0
 
+    def test_after_tax_concept_fills_a_missing_net_investment_income(self):
+        """Ares Strategic Income 2023-03-31 tags only the after-tax supplement concept."""
+        ctx_xml = _duration_ctx("d1", "2023-01-01", "2023-03-31")
+        facts_xml = (_fact("GrossInvestmentIncomeOperating", "d1", "5352000")
+                     + _fact("InvestmentIncomeOperatingAfterExpenseAndTax", "d1", "5042000"))
+        tree = _build_xbrl(ctx_xml, facts_xml)
+        facts = _extract_fund_income_facts(tree, _parse_income_contexts(tree))
+        assert facts[0]["net_investment_income"] == 5042000.0
+        assert not [key for key in facts[0] if key.startswith("_")]
+
+    def test_after_tax_concept_alone_makes_no_period_row(self):
+        """Oaktree: a prior-quarter context with only this fact must not become a thin row."""
+        ctx_xml = _duration_ctx("d1", "2022-10-01", "2022-12-31")
+        tree = _build_xbrl(ctx_xml, _fact("InvestmentIncomeOperatingAfterExpenseAndTax", "d1", "10097000"))
+        assert _extract_fund_income_facts(tree, _parse_income_contexts(tree)) == []
+
+    def test_after_tax_concept_never_replaces_a_filed_net_investment_income(self):
+        """Either order: the filed net investment income stays (2023 10-K: 69,433 and 68,487)."""
+        ctx_xml = _duration_ctx("d1", "2023-01-01", "2023-12-31")
+        for first, second in (("InvestmentIncomeOperatingAfterExpenseAndTax", "NetInvestmentIncome"),
+                              ("NetInvestmentIncome", "InvestmentIncomeOperatingAfterExpenseAndTax")):
+            values = {"NetInvestmentIncome": "69433000", "InvestmentIncomeOperatingAfterExpenseAndTax": "68487000"}
+            tree = _build_xbrl(ctx_xml, _fact(first, "d1", values[first]) + _fact(second, "d1", values[second]))
+            facts = _extract_fund_income_facts(tree, _parse_income_contexts(tree))
+            assert facts[0]["net_investment_income"] == 69433000.0
+            assert not [key for key in facts[0] if key.startswith("_")]
+
     def test_alt_net_income_concept(self):
         """investmentincomenet also maps to net_investment_income."""
         ctx_xml = _duration_ctx("d1", "2024-01-01", "2024-03-31")
@@ -304,6 +331,21 @@ class TestQuarterlyDerivation:
         result = _derive_quarterly_income(raw, meta)
         expected = 100000000.0 * 3.0 / 6.0
         assert abs(result[0]["total_investment_income"] - expected) < 1
+
+    def test_launch_stub_is_not_scaled_up(self):
+        """A one-month first period is the quarter's income as filed (183), not three times it."""
+        raw = [{"start_date": "2022-12-05", "end_date": "2022-12-31", "duration_months": 1,
+                "total_investment_income": 183000.0, "net_investment_income": 183000.0}]
+        result = _derive_quarterly_income(raw, {"cik": "1918712"})
+        assert result[0]["total_investment_income"] == 183000.0
+        assert result[0]["net_investment_income"] == 183000.0
+
+    def test_five_month_period_is_still_averaged(self):
+        """False-positive guard: only periods shorter than a quarter are left alone."""
+        raw = [{"start_date": "2024-08-01", "end_date": "2024-12-31", "duration_months": 5,
+                "total_investment_income": 50000000.0}]
+        result = _derive_quarterly_income(raw, {"cik": "123"})
+        assert abs(result[0]["total_investment_income"] - 30000000.0) < 1
 
     def test_zero_duration_skipped(self):
         """Zero or negative duration is skipped."""

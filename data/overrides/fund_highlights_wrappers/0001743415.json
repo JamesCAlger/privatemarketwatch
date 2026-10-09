@@ -1,0 +1,75 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001743415",
+ "entity_name": "SCP Private Credit Income BDC LLC",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-09-30",
+   "field": "investments_at_fair_value",
+   "value": 514219000,
+   "evidence": "0001193125-23-272466 schedule: 'Total Investments ... $ 518,679 $ 514,219'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "investments_at_fair_value",
+   "value": 420568000,
+   "evidence": "0000950170-24-021072 schedule: 'Total Investments ... $ 425,763 $ 420,568'. The undimensioned InvestmentOwnedAtFairValue fact for this date is 14,025 thousand, the total of the affiliate roll-forward note."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "investments_at_fair_value",
+   "value": 405809000,
+   "evidence": "0000950170-24-055583 schedule: 'Total Investments ... $ 410,341 $ 405,809'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "investments_at_fair_value",
+   "value": 397985000,
+   "evidence": "0000950170-24-092747 schedule: 'Total Investments ... $ 403,199 $ 397,985'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "investments_at_fair_value",
+   "value": 354340000,
+   "evidence": "0000950170-24-122233 schedule: 'Total Investments ... $ 359,741 $ 354,340'. The undimensioned InvestmentOwnedAtFairValue fact for this date is 28,689 thousand, the total of the affiliate roll-forward note."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "investments_at_fair_value",
+   "value": 316555000,
+   "evidence": "0000950170-25-026599 schedule: 'Total Investments ... $ 325,237 $ 316,555'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "investments_at_fair_value",
+   "value": 275373000,
+   "evidence": "0000950170-25-065623 schedule: 'Total Investments ... $ 287,317 $ 275,373'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "investments_at_fair_value",
+   "value": 242528000,
+   "evidence": "0000950170-25-103003 schedule: 'Total Investments ... $ 256,860 $ 242,528'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "investments_at_fair_value",
+   "value": 234510000,
+   "evidence": "0001193125-25-264653 schedule: 'Total Investments ... $ 247,600 $ 234,510'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "investments_at_fair_value",
+   "value": 184466000,
+   "evidence": "0001193125-26-066960 schedule: 'Total Investments ... $ 199,200 $ 184,466'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "investments_at_fair_value",
+   "value": 179475000,
+   "evidence": "0001193125-26-206308 schedule: 'Total Investments ... $ 196,338 $ 179,475'. Company facts hold no schedule total for this date, or hold the affiliate note's total."
+  }
+ ],
+ "notes": "The filer tags the closing total of its affiliated-investments note with InvestmentOwnedAtFairValue and no dimension (28,689 thousand at 2024-09-30), so company facts show that figure, or none, as the fund's investments. The schedule total is supplied from the page for every quarter read."
+}

@@ -142,3 +142,56 @@ class TestExtractFiling:
         assert "INTEREST_RATE_FLOOR" not in self.data["type_notional"]
         for v in self.data["per_type_net"].values():
             assert abs(v) < 60_000_000  # 78M loan never enters net FV
+
+
+class TestTotalLevel:
+    """A type's total, its parts and repeated facts are one position, not several."""
+
+    DRA = "us-gaap:DerivativeInstrumentRiskAxis"
+
+    def _extract(self, contexts, facts):
+        xml = (f'<xbrl {_NS}><unit id="u"><measure>iso4217:USD</measure></unit>'
+               + "".join(contexts) + "".join(facts) + "</xbrl>")
+        return _extract_filing(etree.fromstring(xml.encode()), "2025-12-31")
+
+    @staticmethod
+    def _fact(concept, ctx, value):
+        return f'<us-gaap:{concept} contextRef="{ctx}" unitRef="u">{value}</us-gaap:{concept}>'
+
+    def test_parent_member_is_not_added_to_its_parts_and_repeats_count_once(self):
+        # Oaktree 2025-06-30: two swaps (8,995 and 6,084; 350M and 400M) and their total 15,079.
+        contexts = [_ctx("all", [(self.DRA, "us-gaap:InterestRateSwapMember")]),
+                    _ctx("a", [(self.DRA, "ck:InterestRateSwapMaturingNovember2028Member")]),
+                    _ctx("b", [(self.DRA, "ck:InterestRateSwapMaturingJuly2029Member")])]
+        facts = [self._fact("DerivativeAssets", "all", 15079000),
+                 self._fact("DerivativeAssets", "a", 8995000), self._fact("DerivativeAssets", "a", 8995000),
+                 self._fact("DerivativeAssets", "b", 6084000), self._fact("DerivativeAssets", "b", 6084000),
+                 self._fact("DerivativeNotionalAmount", "a", 350000000), self._fact("DerivativeNotionalAmount", "a", 350000000),
+                 self._fact("DerivativeNotionalAmount", "b", 400000000), self._fact("DerivativeNotionalAmount", "b", 400000000)]
+        data = self._extract(contexts, facts)
+        assert data["per_type_net"]["INTEREST_RATE_SWAP"] == 15079000
+        assert data["type_notional"]["INTEREST_RATE_SWAP"] == 750000000
+
+    def test_two_separate_members_of_one_type_are_still_added(self):
+        # False-positive guard: neither name starts with the other, so both are positions.
+        contexts = [_ctx("a", [(self.DRA, "ck:InterestRateSwap2028NotesMember")]),
+                    _ctx("b", [(self.DRA, "ck:InterestRateSwap2030NotesMember")])]
+        facts = [self._fact("DerivativeAssets", "a", 400), self._fact("DerivativeAssets", "b", 400),
+                 self._fact("DerivativeNotionalAmount", "a", 1000), self._fact("DerivativeNotionalAmount", "b", 1000)]
+        data = self._extract(contexts, facts)
+        assert data["per_type_net"]["INTEREST_RATE_SWAP"] == 800
+        assert data["type_notional"]["INTEREST_RATE_SWAP"] == 2000
+
+    def test_a_breakdown_on_a_further_axis_is_not_added_to_its_total(self):
+        contexts = [_ctx("all", [(self.DRA, "us-gaap:InterestRateSwapMember")]),
+                    _ctx("x", [(self.DRA, "us-gaap:InterestRateSwapMember"), ("us-gaap:CounterpartyNameAxis", "ck:BankAMember")]),
+                    _ctx("y", [(self.DRA, "us-gaap:InterestRateSwapMember"), ("us-gaap:CounterpartyNameAxis", "ck:BankBMember")])]
+        facts = [self._fact("DerivativeNotionalAmount", "all", 750), self._fact("DerivativeNotionalAmount", "x", 350),
+                 self._fact("DerivativeNotionalAmount", "y", 400)]
+        assert self._extract(contexts, facts)["type_notional"]["INTEREST_RATE_SWAP"] == 750
+
+    def test_a_breakdown_with_no_total_is_added_up(self):
+        contexts = [_ctx("x", [(self.DRA, "us-gaap:InterestRateSwapMember"), ("us-gaap:CounterpartyNameAxis", "ck:BankAMember")]),
+                    _ctx("y", [(self.DRA, "us-gaap:InterestRateSwapMember"), ("us-gaap:CounterpartyNameAxis", "ck:BankBMember")])]
+        facts = [self._fact("DerivativeNotionalAmount", "x", 350), self._fact("DerivativeNotionalAmount", "y", 400)]
+        assert self._extract(contexts, facts)["type_notional"]["INTEREST_RATE_SWAP"] == 750

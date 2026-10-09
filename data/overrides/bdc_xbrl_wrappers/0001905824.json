@@ -35,7 +35,8 @@
         "filo term",
         "discount note",
         "144a",
-        "n/a"
+        "n/a",
+        "class s units"
       ],
       "equity": [
         "common stock",
@@ -98,11 +99,18 @@
       "discount note"
     ],
     "fallback_family_patterns": [
-      {"regex": "(?i)one month sofr|three month sofr|six month sofr|one month euribor|three month euribor|six month euribor", "family": "metadata"},
-      {"regex": "(?i)^total ", "family": "aggregate"}
+      {
+        "regex": "(?i)one month sofr|three month sofr|six month sofr|one month euribor|three month euribor|six month euribor",
+        "family": "metadata"
+      },
+      {
+        "regex": "(?i)^total ",
+        "family": "aggregate"
+      }
     ],
     "canonical_strip_re": "\\| [\\d.]+ ?%",
-    "category_marker_re": "(?i)^(Debt Investments \\| (First Lien Senior Secured|Second Lien Senior Secured|Senior Unsecured|Corporate Bonds|Short-Term Investments|Common Stocks|Warrants) \\| (?:Total |[A-Z][A-Za-z &,/]+$))"
+    "category_marker_re": "(?i)^(Debt Investments \\| (First Lien Senior Secured|Second Lien Senior Secured|Senior Unsecured|Corporate Bonds|Short-Term Investments|Common Stocks|Warrants) \\| (?:Total |[A-Z][A-Za-z &,/]+$))",
+    "leaf_marker_re": "\\|\\s*\\d{1,2}/\\d{1,2}/\\d{4}\\s*$|U\\.S\\. Treasury Bills \\|\\s*$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -115,7 +123,9 @@
       "interest_rate",
       "maturity_date"
     ],
-    "alternate_delimiters": ["|"]
+    "alternate_delimiters": [
+      "|"
+    ]
   },
   "staging": {
     "strategy": "prefix_strip",

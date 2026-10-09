@@ -18,6 +18,7 @@ label = sys.argv[1]
 S = (REPO / "scratch/fund_sandbox" / label / "output").as_posix()
 BCRED, OWL, HPS, APOLLO, ARES = "0001803498", "0001812554", "0001838126", "0001837532", "0001287750"
 ASIF, GS, SIXTH, OAKTREE = "0001918712", "0001920145", "0001925309", "0001872371"
+TCWSTAR = "0001916608"
 COUPON_AS_SPREAD = "Spread fact holds the coupon and there is no rate fact; the printed line reads "
 PSC = ("Printed: 'First lien senior secured loan 11.53 % SOFR (Q) 6.00 % 07/2019 07/2025 34.2' then 11.29 / 5.75 (0.2), "
        "11.41 / 6.00 (11.3), 11.53 / 6.00 (2.4), 11.54 / 6.00 (6.6); ")
@@ -206,6 +207,32 @@ SPECS = [
     (ASIF, "2026-03-31", "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",
      {**EQUITY, "instrument_description": "Warrant to purchase common stock", "shares_held": "138674"},
      WRONG_MEMBER + "'Warrant to purchase common stock 12/2025 12/2032 138,674 2,644.6 2,727.3'", "D-074"),
+    (SIXTH, "2023-03-31", "BTRS Holdings, Inc, LLC First-lien loan ($1,988 par", {"basis_spread": "7.25"},
+     "The member reads 'SOFR + 8.0'; the page prints 'First-lien revolving loan ($ 1,988 par, due 12/2028 ) 12/16/2022 "
+     "SOFR + 7.25 % 12.06 % 1,575 1,663' (8.00 is the term loan's margin on the row above)", "D-077"),
+    (SIXTH, "2023-03-31", "Disco Parent, Inc First-lien loan ($57,756 par", {"basis_spread": "7.5"},
+     "The member reads 'SOFR + 6.75%'; the page prints 'First-lien loan ($ 57,756 par, due 3/2029 ) 3/30/2023 SOFR + 7.50 % "
+     "12.39 % 56,169 56,326', and every later quarter's member reads 7.50", "D-077"),
+    (ASIF, "2026-06-30", "AX VI VET Holding I ApS | First lien senior secured loan 5", {"interest_rate": "9.15", "pik_rate": "2.45"},
+     "The rate and PIK tags are swapped (rate 0.0245, PIK 0.0915); the page prints 'First lien senior secured loan 9.15 % "
+     "( 2.45 % PIK) NIBOR (S) 4.50 % 01/2029 304.2 299.8 33.5', and the prior quarter tags 9.15 and 2.45", "D-077"),
+    (TCWSTAR, "2025-06-30", "Superior Industries International, Inc, Acquisition Date - 06/04/25",
+     {"fair_value": "72532", "cost": "72532", "principal_amount": "72532", "principal_amount_usd": "72532"},
+     "The three value tags carry scale 3 (thousands) on a schedule printed in dollars, giving 72,532,000; the page prints "
+     "'Delayed Draw Term Loan - 12.32 % inc PIK ( SOFR + 8.00 %, 3.50 % Floor, all PIK) 0.0 % 72,532 06/04/26 72,532 72,532' "
+     "beside the same issuer's term loan at 3,591,534 par, and 'Total Debt Investments 98.6 % 201,294,980 196,275,290'", "D-079"),
+] + [
+    (ASIF, quarter, phrase, {"reference_rate_type": "", "reference_rate_source": ""},
+     "The member's label carries a loan's rate terms ('%s'); the page prints the row with no rate or reference rate: %s"
+     % (terms, printed), "D-077")
+    for quarter in ("2025-03-31", "2025-06-30")
+    for phrase, terms, printed in (
+        ("United Digestive MSO Parent, LLC and Koln Co-Invest Unblocked, LP, Class A interests", "0.1005, SOFR (Q), 0.0575",
+         "'Class A interests 03/2023 100 100.0 139.8' (10-Q 2025-06-30)"),
+        ("Bluejack Fire Acquisition, Inc. and Bluejack Fire Holdings LLC, Class A-1 units", "0.0905, SOFR (Q), 0.0475",
+         "'Class A-1 units 01/2025 1,134 1,134.0 1,141.1' (10-Q 2025-06-30)"),
+        ("Dorado Bidco, Inc., First lien senior secured revolving loan", "0.0632, SOFR (B), 0.02",
+         "'First lien senior secured revolving loan 09/2031' with dashes for principal, cost and value (10-Q 2025-06-30)"))
 ]
 # Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
 EXACT = {"Impel Pharmaceuticals Inc., First Lien Term Loan 1",

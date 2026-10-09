@@ -67,7 +67,7 @@ CHECKED = {
 # the rows of each were read on the page. Other open quarters of the same rule stay open.
 READ_QUARTERS = {
     ("row_validation", "X02", ASIF): (
-        {"2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"}, "as_filed",
+        {"2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"}, "as_filed",
         "Rows printed with no rate: private asset-backed investments, the lowest tranche of collateralized loan "
         "obligations, and (2026-03-31) three loans of one issuer marked down and printed with no rate.",
         [("filing", "0001918712-25-000065 (10-Q, 2025-06-30): 'Quintain Investments Holdings Limited (11) Private asset-backed "
@@ -79,10 +79,13 @@ READ_QUARTERS = {
                     "16,873.3 16,684.3 12,108.3'; 'Kohlberg Private Credit Investors Rated Feeder-L ... Private asset-backed "
                     "investment 12/2036 513.8 513.8 513.8'."),
          ("query", "The Steward Partners row flagged at 2025-12-31 and 2026-03-31 is a warrant tagged on a member that names "
-                   "a loan; it is corrected from the page (D-074). Not covered: 2026-06-30, not read.")],
+                   "a loan; it is corrected from the page (D-074)."),
+         ("filing", "0001628280-26-054923 (2026-06-30): 'Kohlberg Private Credit Investors Rated Feeder-L, L.L.C. ... Private "
+                    "asset-backed investment 13.00 % SOFR (S) 9.25 % 12/2036 5,453.4 5,359.4 5,453.4 ... Private asset-backed "
+                    "investment 12/2036 706.4 706.4 289.6'. The second row prints no rate.")],
         S + "filing_grep.py 1918712 000191871225000065 html \"STKPK 2022-1\" 8 330"),
     ("row_validation", "X02", OAKTREE): (
-        {"2023-03-31", "2023-06-30", "2023-09-30", "2024-09-30"}, "as_filed",
+        {"2023-03-31", "2023-06-30", "2023-09-30", "2024-06-30", "2024-09-30"}, "as_filed",
         "Loans printed with no rate. No rate is tagged or printed for them.",
         [("filing", "0001872371-23-000008 (2023-03-31): 'Impel Neuropharma, Inc. Health Care Technology First Lien Term Loan "
                     "2/15/2031 5,408 5,408 5,284'. 0001872371-23-000017 (2023-09-30): 'BioXcel Therapeutics, Inc. "
@@ -90,7 +93,9 @@ READ_QUARTERS = {
                     "'Verona Pharma, Inc. Pharmaceuticals First Lien Term Loan 5/9/2029 $ 9,177 $ 9,177 $ 9,269'. The other "
                     "tranches of each issuer print a rate."),
          ("query", "The one row in these quarters that does print a rate (Impel, 2023-09-30, 'SOFR+ 10.75 % 16.06 %') is "
-                   "corrected from the page (D-074). Not covered: 2024-06-30, not read.")],
+                   "corrected from the page (D-074)."),
+         ("filing", "0001872371-24-000011 (2024-06-30): 'Verona Pharma, Inc. Pharmaceuticals First Lien Term "
+                    "Loan 9/30/2024 9,011 9,011 9,011'. The two tranches above it print 11.00 %.")],
         S + "filing_grep.py 1872371 000187237123000017 html \"BioXcel Therapeutics, Inc.\" 20 330"),
     ("row_validation", "FX03", OAKTREE): (
         {"2026-06-30"}, "not_applicable",
@@ -132,12 +137,94 @@ READ_QUARTERS = {
         [("query", "Sandbox n3a flat file: 0001930087-25-000070 (10-K) and 0001930087-26-000078 (10-K/A), 909 rows and "
                    "8,555.3M each at 2025-09-30. One is published.")],
         "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/gol6.sql" % label),
+    ("identity", "income_identity", ASIF): (
+        {"2022-12-31"}, "as_filed",
+        "Net investment income is filed after expense support, which exceeded the fund's expenses in its first month; the "
+        "expenses field holds the gross figure (the reason of DS-021, accepted for the first five).",
+        [("filing", "0001918712-24-000048 (10-K), period from 2022-12-05 to 2022-12-31: 'Total investment income ... 183'; "
+                    "'Total expenses 57,138 1,440'; 'Expense support (Note 3) ( 16,762 ) ( 1,449 )'; 'Net expenses 40,376 ( 9 )'; "
+                    "'NET INVESTMENT INCOME BEFORE INCOME TAXES 69,433 192'."),
+         ("query", "Published 2022-12-31: total investment income 183K, net investment income 192K, total expenses 1,440K. "
+                   "Before D-077 the three figures were published at three times the filed amounts.")],
+        S + "filing_before.py 1918712 000191871224000048 \"Expense support\" 700 2 400"),
+    ("row_validation", "X02", GOLUB): (
+        {"2025-09-30"}, "as_filed",
+        "Undrawn lines printed with 'N/A' in the rate column and a small value: no principal, a cost of a few thousand "
+        "(often negative) and a fair value of a few thousand.",
+        [("filing", "0001930087-25-000070 (10-K, 2025-09-30): 'OEConnection, LLC One stop N/A(6) 04/2031 - ( 35 ) - 15'; "
+                    "'Signia Aerospace, LLC Senior secured N/A(6) 12/2031 - ( 1 ) - 1'; 'Aegion Corporation Senior secured "
+                    "N/A(6) 05/2028 - 1 - 1'. The drawn tranche of each issuer prints a spread and a rate.")],
+        S + "x02_page_read.py %s 1930087" % label),
+    ("row_validation", "PP03", OAKTREE): (
+        {"2025-03-31"}, "not_applicable",
+        "The two rows are current-period rows of the 2025-03-31 schedule. The rule tracks them because their unit counts "
+        "(2 and 25) equal the prior period's.",
+        [("filing", "0001872371-25-000008 (2025-03-31): 'Delta Leasing SPV II LLC Specialized Finance Common Stock 2 - 2 2'; "
+                    "'Delta Leasing SPV II LLC Specialized Finance Warrants 25 - - -'. Published: common stock 2 units, "
+                    "2,000; warrants 25 units, 0."),
+         ("query", "Open defect, not closed by this entry: at 2024-12-31 the same two rows publish with their labels "
+                   "swapped, and at 2025-06-30 the preferred and common rows publish 25 units where the page prints "
+                   "139,677 and 139,794. Values are right in all three quarters.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/oak6.sql" % label),
+    ("oracle", "A01", SIXTH): (
+        {"2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31"}, "as_filed",
+        "The filer's subtotal tags and row tags name different headings, so the check cannot pair them. Read on the page, "
+        "each printed subtotal equals its printed rows, and the published rows equal the printed total in every quarter.",
+        [("filing", "0000950170-23-021762 (2023-03-31): the subtotal tagged 'Debt Investments Insurance' is 132,459, which the "
+                    "page prints under Internet Services (Coupa 126,948 + SMA 5,511); Insurance has one row, 56,326. The "
+                    "extra 6,864 under Chemicals is the prior period's euro amount ('(EUR 6,864 )') tagged as a value at "
+                    "2023-03-31; it is not published."),
+         ("filing", "0000950170-24-016336 (10-K, 2023-12-31): the page prints Business Services '750,042 761,855 42.1 %' over ten "
+                    "rows; four of them (BCTO Ignition 105,918, Galileo 148,798 and 7,387, Wrangler 93,072 = 355,175) are "
+                    "tagged 'Debt Investments Business Service', without the final s. 406,680 + 355,175 = 761,855."),
+         ("query", "2024-06-30: the subtotals tagged Chemicals (219,764) and Oil, Gas (26,226) are each other's rows' sums, and "
+                   "so are Financial Services (532,064) and Manufacturing (569,193). 2024-09-30: one Internet Services row "
+                   "(10,414) is tagged 'DebDebt Investments'. 2024-12-31: 139,850 is the comparative row of Artisan Bidco "
+                   "tagged on the current date (see PD-SRC_BDC01). Later filings repeat the 2023-12-31 subtotal 761,855 "
+                   "with part of its rows. Not every failing subtotal of every quarter was traced to its rows."),
+         ("query", "Published equals the printed 'Total Investments' within 0.5M in all eight quarters (n5_tot.sql).")],
+        S + "filing_before.py 1925309 000095017024016336 761,855 3600 1 50"),
+    ("fund_financials", "F25", SIXTH): (
+        {"2023-12-31"}, "as_filed",
+        "Holdings grew 51 pct in the quarter and total assets 21 pct, as filed: the fund held 540M of cash and receivables "
+        "at 2023-09-30 and invested it.",
+        [("query", "Filed total assets 2,590.2M (2023-09-30) and 3,138.3M (2023-12-31); printed Total Investments 2,048.4M "
+                   "and 3,099.2M; published holdings equal both.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/ff3.sql" % label),
+    ("fund_financials", "F16", GS): (
+        {"2023-06-30"}, "as_filed",
+        "The fund's first quarter of operations: a distribution of 0.59 a share against income earned on a portfolio that "
+        "was 495M at the end of the quarter and near zero at its start.",
+        [("query", "fund_financials 2023-06-30: distribution per share 0.59, net asset value 25.24, investments 495.4M, "
+                   "net assets 476.5M; 2023-03-31: net assets 1.9M, no investments.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/ff3.sql" % label),
+    ("fund_financials", "F25", GS): (
+        {"2023-09-30"}, "as_filed",
+        "The fund's second quarter: holdings grew from 495M to 1,198M and total assets from 705M to 1,394M, as filed. The "
+        "fund held 210M outside investments at 2023-06-30.",
+        [("query", "Filed total assets 705.3M and 1,393.6M; filed investments 495.4M and 1,197.6M; published holdings equal "
+                   "the filed investments in both quarters.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/ff3.sql" % label),
+    ("fund_financials", "F26", GS): (
+        {"2023-06-30"}, "as_filed",
+        "The fund's first quarter: 30 pct of total assets were not investments, so leverage measured on liabilities and "
+        "leverage measured on holdings differ. Both use filed figures.",
+        [("query", "fund_financials 2023-06-30: total assets 705.3M, investments 495.4M, liabilities 228.8M, net assets 476.5M.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/ff3.sql" % label),
+    ("fund_financials", "F26", ASIF): (
+        {"2023-06-30"}, "as_filed",
+        "The fund's third quarter of operations: liabilities were 154 pct of net assets while investments were 228 pct, "
+        "because 110M of total assets were not investments. Both use filed figures.",
+        [("query", "fund_financials 2023-06-30: total assets 1,052.4M, investments 942.4M, liabilities 638.2M, net assets 414.2M.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/ff3.sql" % label),
     ("fund_financials", "F33", SIXTH): (
-        {"2024-12-31"}, "as_filed",
-        "The quarter's distribution per share is the filed year figure less the filed nine-month figure.",
+        {"2022-12-31", "2024-12-31"}, "as_filed",
+        "2024-12-31: the quarter's distribution per share is the filed year figure less the filed nine-month figure. "
+        "2022-12-31: the fund filed a distribution of zero for its first period.",
         [("query", "Company facts, InvestmentCompanyDistributionToShareholdersPerShare: 2.01 for 2024-01-01 to 2024-09-30 "
                    "(10-Q) and 4.54 for the year (10-K). The fourth quarter is 2.53, on a net asset value of 28.79."),
-         ("filing", "0000950170-25-021144 (10-K): 'Dividends declared during the period $ 478,109' for 2024.")],
+         ("filing", "0000950170-25-021144 (10-K): 'Dividends declared during the period $ 478,109' for 2024."),
+         ("query", "Company facts, InvestmentCompanyDistributionToShareholdersPerShare for 2022-04-05 to 2022-12-31: 0 (10-K).")],
         S + "companyfacts_concept.py 1925309 DistributionToShareholdersPerShare 2024"),
     ("row_validation", "SRC_BDC01", SIXTH): (
         {"2024-12-31", "2025-09-30"}, "not_applicable",
@@ -158,6 +245,27 @@ READ_QUARTERS = {
 
 # (engine, rule, cik) -> class, statement, [(source, quote)], rerun. Read in this session.
 READ = {
+    ("provenance_reverify", "merged_context_excluded", GOLUB): (
+        "as_filed",
+        "One row whose rate is not on its own context: the filer tags the rate on a neighbouring context of the same "
+        "issuer and the pipeline assembles the row. The published rate equals the page.",
+        [("filing", "0001930087-25-000012 (2024-12-31): 'Camelia Bidco Limited One stop SN + 5.25 % (f) 9.95 % 08/2030 635 "
+                    "612 - 635'. Published: rate 9.95, spread 5.25, fair value 635.")],
+        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/prov4.sql" % label),
+    ("nonaccrual", "nonaccrual_flag", SIXTH): (
+        "informational",
+        "The rule reports that a loan is on non-accrual. That is a credit fact about the loan, not a data defect (the "
+        "reason of DS-001, accepted for the first five).",
+        [("filing", "0001193125-26-051289 (10-K, 2025-12-31): ASP Unifrax Holdings second-lien note, footnote 'Investment is "
+                    "on non-accrual status as of December 31, 2025.'")],
+        S + "filing_grep.py 1925309 000119312526051289 html non-accrual 4 200"),
+    ("nonaccrual", "nonaccrual_flag", GOLUB): (
+        "informational",
+        "The rule reports that three loans are on non-accrual. That is a credit fact about the loans, not a data defect "
+        "(the reason of DS-001, accepted for the first five).",
+        [("query", "nonaccrual_flags.csv, 0001930087-26-000024 (2025-12-31), from the filer's footnote: Inhance Parent, Inc. "
+                   "One stop 3; Pluralsight, LLC One stop 1; RW AM Holdco LLC One stop.")],
+        S + "filing_grep.py 1930087 000193008726000024 html non-accrual 4 200"),
     ("row_validation", "PP02", GS): (
         "as_filed",
         "Pairs of tranches the filer prints as two rows with equal figures and tags on members ending 'One' / 'Two'. Both "
@@ -227,6 +335,78 @@ READ = {
         S + "b01.py %s 1920145" % label),
 }
 
+# (engine, rule, cik) -> ({quarters}, what the earlier reviewer's 'real error' verdict said and why it no longer
+# holds, [(source, quote)] with at least one filing line). The quarters are split out of the fund's entry into
+# one that replaces the verdict (pipeline.finding_dispositions: supersedes_real_error_verdict). Always a proposal.
+SUPERSEDES = {
+    ("row_validation", "X02", ASIF): (
+        {"2024-03-31", "2024-06-30", "2024-12-31", "2025-06-30", "2025-12-31", "2026-03-31"},
+        "The reviewers cited two loans whose coupon is printed as PIK. Both now publish what is tagged (22 HoldCo: PIK rate, "
+        "a 7.50 spread on SONIA; 15484880 Canada: 14.00) and are no longer flagged. The rows still flagged have no rate or "
+        "spread fact. Open, not closed here: 22 HoldCo publishes no all-in rate where its coupon is tagged only as PIK.",
+        [("filing", "0001918712-24-000069 (2024-03-31): '22 HoldCo Limited (10) | Senior subordinated loan | 12.96 % PIK | "
+                    "SONIA (S) | 7.50 % | 08/2033 | 15,462.9 | 14,974.1 | 14,840.7'. 0001918712-26-000018 (2025-12-31): "
+                    "'Senior subordinated loan | 14.00 % PIK | 04/2035 | 13,520.1 | 12,735.5 | 13,520.1'."),
+         ("query", "Sandbox n5j: 22 HoldCo 2024-03-31 publishes PIK 12.96, spread 7.5, SONIA, no rate; 15484880 Canada "
+                   "2025-12-31 publishes rate 14.0 and PIK 14.0.")]),
+    ("row_validation", "X02", GOLUB): (
+        {"2024-03-31", "2024-06-30", "2024-12-31"},
+        "The reviewers cited undrawn lines printed with a spread and 'N/A' for the rate, and one loan whose coupon is printed "
+        "as PIK. The undrawn lines publish their spread and no rate, as printed; the PIK loan publishes 15.00 through the "
+        "wrapper's PIK-only reading (D-077).",
+        [("filing", "0001930087-24-000045 (2024-06-30): 'Amberfield Acquisition Co. | One stop | SF + | 5.00 | % | "
+                    "N/A(6) | 05/2030 | - | ( 10 ) | - | ( 10 )'. 0001930087-24-000027 (2024-03-31): 'Super REGO, LLC | Subordinated debt | "
+                    "N/A | 15.00 | % | PIK | 03/2030 | 50 | 49 | -- | 49'."),
+         ("query", "Sandbox n5j, 2024-06-30: Amberfield One stop 2 and 3 publish spread 5.0 on SOFR, no rate, values -10 and -1.")]),
+    ("row_validation", "C103", GOLUB): (
+        {"2023-09-30"},
+        "The reviewer read -18 as a footnote marker taken for a value. It is the printed value of an undrawn line. No money "
+        "market row is published for this quarter.",
+        [("filing", "0001930087-23-000047 (10-K, 2023-09-30): 'Bamboo US Bidco LLC One stop SF + 6.00 % N/A(6) 9/1/2030 - "
+                    "( 18 ) - ( 18 )' and, the row above, '9/1/2029 - ( 50 ) - ( 50 )'.")]),
+    ("row_validation", "X06", ASIF): (
+        {"2025-12-31"},
+        "The reviewer cited equity rows carrying a principal amount. Those rows publish no principal now. The rows flagged "
+        "are the lowest tranches of collateralized loan obligations, printed with a par far above their value.",
+        [("filing", "0001918712-26-000018 (10-K, 2025-12-31): 'STKPK 2022-1 ... Collaterized loan obligation 10/2037 20,240.0 "
+                    "185.3 597.7'."),
+         ("query", "Sandbox n5j, 2025-12-31: Eclipse Topco Class A common units and Amerivet Class A units publish units "
+                   "(261; 1,575) and no principal.")]),
+    ("oracle", "B01", SIXTH): (
+        {"2024-09-30", "2024-12-31", "2025-09-30"},
+        "The reviewers read the contexts with no value as positions the extractor lost. The published rows equal the "
+        "printed total in each quarter; the contexts with no value are members that carry rate and period facts only.",
+        [("filing", "0000950170-24-122238 (2024-09-30): 'Total Investments $ 5,774,926 $ 5,926,828'. 0000950170-25-021144 "
+                    "(2024-12-31): 'Total Investments $ 7,079,994 $ 7,244,282'. 0001193125-25-266848 (2025-09-30): 'Total "
+                    "Investments $ 7,440,176 $ 7,724,072'."),
+         ("query", "Published: 5,926.8M, 7,244.3M and 7,724.1M (n5_tot.sql lists no difference above 0.5M).")]),
+    ("oracle", "B01", GS): (
+        {"2025-12-31"},
+        "The reviewer wanted rows printed with a dash for fair value published as zero. The owner's ruling of 2026-10-09 "
+        "('keep the undrawn lines') leaves them as filed: no value fact, no published row.",
+        [("filing", "The reviewer's cited rows (10-K 2025-12-31, tables 49 and 68) print a par amount and a dash for cost and "
+                    "fair value; no cost or value fact is tagged on their contexts.")]),
+    ("identity", "pct_of_net_assets_identity", SIXTH): (
+        {"2025-12-31"},
+        "The reviewer found a real disagreement, and it is in the filing: the page prints 0.5 pct for a 25,228 position "
+        "against net assets of 4,170,488 (0.60 pct). The published percent is the filed one.",
+        [("filing", "0001193125-26-051289 (10-K, 2025-12-31): 'Insight Hideaway Aggregator, L.P. (8) | Partnership Interest "
+                    "( 2,170,139 units) | 3/19/2024 | 21,701 | 25,228 | 0.5 | %'; 'Total Net Assets | 4,170,488'.")]),
+    ("nonaccrual", "nonaccrual_flag", SIXTH): (
+        {"2025-12-31"},
+        "The reviewer confirmed the loan is on non-accrual, which is what the rule reports. A drafted change was withdrawn; "
+        "nothing in the published row is wrong.",
+        [("filing", "0001193125-26-051289: 'Second-lien note ($ 2,024 par, due 9/2029 ) (13) | 8/31/2023 | 7.10 % | 7.10 % "
+                    "(incl. 1.25 % PIK) | 1,559 | 223 | 0.0 %', footnote 13 'Investment is on non-accrual status'.")]),
+    ("nonaccrual", "nonaccrual_flag", GOLUB): (
+        {"2025-12-31"},
+        "The reviewer confirmed the three loans are on non-accrual, which is what the rule reports. A drafted change was "
+        "withdrawn; nothing in the published rows is wrong.",
+        [("filing", "0001930087-26-000024 (2025-12-31): 'Inhance Parent, Inc.^(7)(24) | One stop | N/A | 20.00 % PIK | 06/2029 | "
+                    "5,325 | 2,133 | 0.1 | 2,503'; 'Pluralsight, LLC^(7)(24) | One stop | SF + 7.50 % (i) | 11.32 % PIK | 08/2029 | "
+                    "2,085 | 2,032 | -- | 1,626'.")]),
+}
+
 csv.field_size_limit(10 ** 9)
 open_by = defaultdict(set)
 with open(SANDBOX / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:
@@ -291,12 +471,46 @@ for (engine, rule, cik), (read, kind, statement, evidence, rerun) in READ_QUARTE
                     "evidence": [{"source": s, "quote": q} for s, q in evidence], "rerun": rerun,
                     "decided_by": WHO, "decided_on": WHEN})
 
+# Split the quarters that carry an earlier 'real error' verdict into entries that replace it.
+split = []
+for entry in entries:
+    listed = SUPERSEDES.get((entry["engine"], entry["rule_name"], entry["ciks"][0]))
+    mine = sorted(set(entry["quarters"]) & listed[0]) if listed else []
+    if not mine:
+        split.append(entry)
+        continue
+    rest = sorted(set(entry["quarters"]) - set(mine))
+    if rest:
+        split.append({**entry, "quarters": rest})
+    split.append({**entry, "disposition_id": entry["disposition_id"] + "-VERDICT", "quarters": mine, "basis": "read",
+                  "statement": entry["statement"] + " Replaces an earlier reviewer's verdict: " + listed[1],
+                  "evidence": [{"source": src, "quote": quote} for src, quote in listed[2]] + list(entry["evidence"]),
+                  "supersedes_real_error_verdict": True, "decided_by": WHO, "decided_on": WHEN})
+entries = split
+# A live entry without the replacement cannot close these quarters and would be matched first: take them out of it.
+moved = defaultdict(set)
+for entry in entries:
+    if entry.get("supersedes_real_error_verdict"):
+        moved[(entry["engine"], entry["rule_name"], entry["ciks"][0])] |= set(entry["quarters"])
+
+
+def without_moved(listed):
+    kept_entries = []
+    for e in listed:
+        gone = moved.get((e["engine"], e["rule_name"], e["ciks"][0]), set()) if len(e.get("ciks", [])) == 1 else set()
+        quarters = [q for q in e["quarters"] if q not in gone]
+        if quarters:
+            kept_entries.append({**e, "quarters": quarters})
+    return kept_entries
+
 # Owner standing instruction 2026-10-09 (decision D-073): "a disposition i already accepted may be
 # accepted by its check". The reasons in CHECKED, and the F28 reason, are the first five's accepted
 # entries DS-003 to DS-007; a fund-quarter where the row-by-row check passes is accepted by that check.
 BY_CHECK = "check passed on sandbox %s; accepted under the owner's standing instruction of 2026-10-09 (D-073)" % label
 for entry in entries:
     accepted = OWNER_ACCEPTED.get((entry["engine"], entry["rule_name"], entry["ciks"][0]))
+    if entry.get("supersedes_real_error_verdict"):
+        continue
     if accepted:
         entry["decided_by"], entry["decided_on"], entry["basis"] = accepted[0], accepted[1], "accepted"
     elif entry["basis"] == "checked":
@@ -313,6 +527,10 @@ import findings_ledger  # noqa: E402
 with tempfile.TemporaryDirectory() as tmp:
     store = Path(tmp) / "store"
     shutil.copytree(fd.default_dir(), store)
+    live_copy = store / LIVE_NAME
+    if live_copy.exists():
+        live_copy.write_text(json.dumps({"dispositions": without_moved(
+            json.loads(live_copy.read_text(encoding="utf-8"))["dispositions"])}), encoding="utf-8")
     # the live file already holds what the owner accepted; add only what is still a proposal
     (store / "proposed.json").write_text(json.dumps({"dispositions": [{k: v for k, v in e.items() if k != "basis"}
                                                                       for e in entries if e["basis"] not in LIVE]}), encoding="utf-8")
@@ -356,7 +574,7 @@ if "--write" in sys.argv:
         if e["basis"] in LIVE:
             quarters = sorted(set(e["quarters"]) | set(kept.get(e["disposition_id"], {}).get("quarters", [])))
             kept[e["disposition_id"]] = {**{k: v for k, v in e.items() if k != "basis"}, "quarters": quarters}
-    live.write_text(json.dumps({"dispositions": [kept[k] for k in sorted(kept)]}, indent=1) + "\n", encoding="utf-8")
+    live.write_text(json.dumps({"dispositions": without_moved([kept[k] for k in sorted(kept)])}, indent=1) + "\n", encoding="utf-8")
     lines = ["# Next five funds: proposed dispositions (not accepted)", "",
              "Generated by `scripts/v05_evidence/make_proposed_dispositions.py %s --write` on 2026-10-08." % label,
              "`accepted` entries are in force (the owner accepted them by name; live store, `%s`). The rest are not." % LIVE_NAME,

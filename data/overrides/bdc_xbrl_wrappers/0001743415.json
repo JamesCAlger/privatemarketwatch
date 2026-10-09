@@ -80,7 +80,7 @@
         "family": "mixed"
       }
     ],
-    "category_marker_re": "(?i)^\\s*(?:[-,]?\\s*)?(?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity(?:\\s+Interests/Warrants)?|Preferred\\s+Equity|Investments|Total\\s+.*|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other(?:\\s+Assets)?)(?:\\s*(?:[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*\\(?[-\\d.]+%\\)?)?\\s*$",
+    "category_marker_re": "(?i)^\\s*(?:[-,]?\\s*)?(?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity(?:\\s+Interests/Warrants)?|Preferred\\s+Equity|Investments|Total\\s+.*|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other(?:\\s+Assets)?)(?:\\s*(?:[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*\\(?[-\\d.]+%\\)?)?\\s*$|^\\W{1,3}\\s*\\(?[\\d.]+\\s*%\\)?\\s*$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)\\s*(?:[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*\\(?[-\\d.]+%\\)?|\\s+Spread\\s+above\\s+Index\\s+[A-Z]\\+\\d+|\\s+Floor\\s+\\d+(?:\\.\\d+)?%?|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|\\s*\\|\\s*[SLP]\\+\\d+\\s*(?=\\|)|\\s*\\|\\s*\\d+(?:\\.\\d+)?%?\\s*(?=\\|)|\\b(?:Industry|Acquisition\\s+Date|Maturity\\s+Date)\\b\\s*|/\\d{1,2}(?=/\\d{2,4}\\b)|\\b0(?=\\d/\\d{4}\\b)"
   },
@@ -98,8 +98,8 @@
     ],
     "alternate_delimiters": [
       " - ",
-      " \u2014 ",
-      " \u2013 "
+      " — ",
+      " – "
     ]
   },
   "staging": {
@@ -216,7 +216,7 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   }
 }

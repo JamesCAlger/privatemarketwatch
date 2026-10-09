@@ -1740,3 +1740,152 @@ filers' keys are unchanged (checked on one CIK).
   (`figure_corrections`), not a disposition. 39 fund-quarters in 11 funds file no investments
   figure today.
 - `pipeline/oracle_checks.py` (`_TOTAL_ASSETS_FLOOR`), `tests/test_oracle_checks.py`.
+
+### D-077 Next five: the unread findings read; defects found by reading fixed (2026-10-09, night)
+
+Owner instruction: "commit, read the unread findings, then keep iterating over funds from smallest to
+largest ... fixing each of the ledger items, keeping human review items for the end."
+
+Sandbox `n5j`. Next five: 92 outstanding to 82, all 82 read and covered by a reading-based proposal
+(34 entries, `docs/investigations/next5_proposed_dispositions.md`); none accepted. Totals unchanged
+(65 of 67 fund-quarters within 0.5M; the two others as filed).
+
+**Fixed (real errors):**
+
+- **Sixth Street, issuer names.** 460 published rows carried the schedule heading on the issuer name
+  ("Debt Investments Business Service Galileo Parent, Inc."). No rule flagged it. Cause: the filer's
+  own headings (Communications, Internet Services, Manufacturing, Human Resource Support Services,
+  Hotel, Gaming, and Leisure, Other) and its misspellings (Business Service, Busines Services,
+  Automative, a doubled prefix, "DebDebt") were not in the shared label list. They are now spelled
+  out in the fund's own leaf-guard prefix (`0001925309.json`). 460 rows to 1.
+  The same defect is in the published build for Sixth Street Specialty Lending (0001508655, 1,015
+  of 2,573 rows); its wrapper is not changed here. The leaf-guard prefixes of the four leaf-guard
+  funds are applied in a chain, so the new headings also strip from 0001508655's rows on its next
+  build. Not measured on that fund.
+- **Reference rates read as SOFR.** Golub's sterling, Australian and Canadian loans, and the Nordic,
+  Swiss, Australian and Japanese loans of Ares Strategic Income and Oaktree, published "SOFR"
+  because the filer's printed codes were not declared. `reference_rate_codes` added from each
+  filer's legend (Golub: SF, SN, E, P, L, C, CA, A; A = BBSW from footnote "Three-Month AUD ...
+  4.42 %"). At 2025-12-31: Golub 27 rows, Ares Strategic Income 11, Oaktree 6 change.
+- **Row corrections from the page** (`row_corrections.csv`, D-077): Sixth Street 2023-03-31 two
+  spreads the member label misstates (7.25, 7.50); Ares Strategic Income, three rows in two
+  quarters whose label carries a loan's rate terms on an equity or undrawn row; AX VI VET loan 5
+  at 2026-06-30, rate and PIK tags swapped.
+- **Fund income (shared code, `pipeline/bdc_fund_income.py`).**
+  (a) `us-gaap-supplement:InvestmentIncomeOperatingAfterExpenseAndTax` is read as net investment
+  income where a period has an income statement and no net investment income fact. Ares Strategic
+  Income's first two 10-Qs tag only that; its 2023-12-31 quarter then fell back to the annual
+  figure divided by four (17.4M; now 33.3M = 69.4M less three filed quarters). A period known only
+  by that fact makes no row.
+  (b) A first period shorter than two months is no longer scaled to three months. Ares Strategic
+  Income's 2022 stub published 549K of income against the filed 183K. Published build: 20 such
+  periods in 20 funds.
+- **Derivatives (shared code, `pipeline/bdc_derivatives.py`).** Each fact is counted once, only the
+  least-dimensioned contexts are read, and a parent member is not added to its parts. Oaktree
+  2025-06-30: 3,000M notional and 45.2M to the printed 750M and 15.1M. Measured on the 1,004 cached
+  filings of the 77 wrapper funds: 281 type-quarters change in 24 funds. Only Oaktree's were read
+  against the page. `bdc_derivatives.csv` is not a published holdings field.
+- **Re-verifier:** a value declared in `untagged_values` is checked against the declaration
+  (`provenance_reverify.py`); the 49.1M Elysium row no longer reads as "no source tag".
+- **Golub:** `pik_only_tag_reading: coupon` (Super REGO, printed "N/A 15.00 % PIK", published no rate).
+
+**Read and proposed (owner to accept; nothing closed):** Sixth Street A01 in eight quarters (the
+filer's subtotal and row tags name different headings; holdings equal the printed total);
+launch-period heuristics F16, F25, F26, F33; X02 rows printed with no rate; non-accrual flags;
+18 findings that carried an earlier reviewer's "real error" verdict, each now a proposal that
+replaces the verdict with the filing line (new `SUPERSEDES` table in the generator).
+
+**Open, not fixed:**
+
+- Loans whose coupon is tagged only as PIK and that also carry a spread (22 HoldCo, Ares Strategic
+  Income; the same pattern was accepted as filed for Ares Capital, DS-006A) publish no all-in
+  rate. A convention question for the owner; changing it changes the first five.
+- Oaktree, Delta Leasing: labels of two rows swapped at 2024-12-31 (2K), unit counts of two rows
+  wrong at 2025-06-30. Values right.
+- The stub-period and after-tax changes, the derivative change and the chained leaf-guard prefix
+  are shared code: effect on other funds measured only as stated above.
+- The sandbox's sector step called an OpenAI endpoint for industry labels and got "no credits".
+  Not an SEC call; it is existing pipeline behaviour that a sandbox run triggers.
+
+**Tests:** `test_bdc_fund_income.py` 33, `test_bdc_derivatives.py` 20, `test_page_labelled_contexts.py`
+and `test_provenance_reverify.py` 81, and the wrapper, bridge, encoding and staging files 863,
+all pass. **Not run:** full suite, semantic diff, any 70-fund build.
+
+### D-078 Smallest-first batch 1: Saratoga, NexPoint Capital, SCP, PIMCO Capital Solutions, BlackRock Direct Lending (2026-10-09, night)
+
+Owner instruction: "keep iterating over funds from smallest to largest". Read literally: the cohort
+ranked by published fair value at 2026-03-31, smallest first (`scripts/v05_evidence/cohort_by_size.py`;
+77 CIKs in the manifest). Earlier batches went largest first; the owner may have meant that order.
+
+No 2026-06-30 filings are cached for these funds and none were downloaded: the batch runs to
+2026-03-31 (Saratoga to 2026-05-31). Chain: `scratch/2026-10-07_printed_rates/run_batch.sh`.
+
+Sandboxes `s1a` (as published) to `s1c`. Outstanding 520 to 329; 274 with the reasons the owner
+already accepted applied by their checks (`small1_accepted_by_check.json`, 12 entries, D-073).
+Nothing else is dispositioned: the 274 are not read.
+
+| Fund | Published against filed, as published | Now (s1c) |
+|---|---|---|
+| Saratoga (0001377936) | 336M to 514M over in six quarters, 65M over in one | within 0.5M in four of seven; +0.9M, +2.2M, -5.0M in three |
+| NexPoint Capital (0001588272) | 23.5M under in two quarters | equal in all twelve |
+| SCP Private Credit Income (0001743415) | no usable filed figure; 10M to 21M over the printed total in four quarters | equal to the printed total in all eleven |
+| PIMCO Capital Solutions (0001905824) | 19M to 75M under in ten of eleven quarters | within 0.5M in eight, counting Treasury bills; +2.8M, +1.9M, -0.8M in three |
+| BlackRock Direct Lending (0001834543) | 0.7M under in one quarter | unchanged |
+
+**Causes and fixes (each in the fund's wrapper; shared code only where named):**
+
+- **Saratoga.** (a) 233 to 335 rows a quarter are the loans of its own CLO, tagged with the CLO as
+  legal entity; published as the fund's positions. `legal_entity_members` now classes them as the
+  CLO's own schedule (kept, not published). (b) The joint venture's two positions ("Unsecured
+  Loan", "Membership Interest", about 20M) were read as subtotals; two leaf markers added.
+  (c) The 10-K for 2025-02-28 tags the Healthcare Services subtotal (85.1M) on a loan's label with
+  the industry appended; `category_marker_re` extended.
+- **NexPoint Capital.** In the 10-Qs for 2025-06-30 and 2025-09-30 ten of the printed positions
+  carry no identifier member. New wrapper key `source_encodings.context_identifiers`
+  ('ACCESSION CONTEXT => IDENTIFIER'; shared code in `page_labelled_contexts.py`,
+  `bdc_filings.py`, `source_encodings.py`, schema) names them as the filer names them in its other
+  filings. 20 entries drafted by `unnamed_position_rows.py` and read against the page.
+- **SCP.** (a) A heading tagged with a value ("Preferred Equity - 5.2%") published as a position;
+  `category_marker_re` extended. (b) Rows of the affiliate roll-forward note published as
+  positions; rule `1743415/exclude_affiliate_rollforward_rows` (the Golub precedent of D-066).
+  (c) Company facts hold the affiliate note's total as the fund's investments; the printed
+  "Total Investments" is supplied for eleven quarters (`fund_highlights_wrappers/0001743415.json`).
+- **PIMCO Capital Solutions.** Rows named by issuer alone ("... | GCOM | 17% | 02/16/2029") were
+  read as subtotals. New wrapper key `dispatch.leaf_marker_re` (shared code in
+  `bdc_xbrl_wrapper.py`, schema): a row ending with a maturity date is a position. Treasury bills
+  now publish as cash in every quarter (they did from 2024-12-31 only). An existing test expected
+  the warrant under the debt heading to be a category rollup; it was excluded and the fund
+  published short, so the expectation is changed.
+- **BlackRock Direct Lending.** `filed_rate_reading: all_in`: the label states "Total Coupon 10.28%"
+  and the rate fact is that figure. 9 to 25 rows a quarter published no rate; now 2.
+
+**Open on these five (not fixed):** Saratoga's three small differences and issuer names that keep a
+percent prefix ("229.3% - Innergy, Inc.- Custom ..."); PIMCO's three small differences; BlackRock,
+two rows whose rate fact is not the label's total coupon; the 274 unread findings.
+
+**Tests:** wrapper, encoding, page-context, promoted-rule and fund-level wrapper files pass (654,
+63, 575 in the runs made). **Not run:** full suite, semantic diff, any 70-fund build.
+
+### D-079 Smallest-first batch 2, first reading: TCW Star, Onex, TriplePoint Private Venture, Audax, Stellus Private Credit (2026-10-09, night)
+
+Sandbox `s2a`, as published plus the shared fixes of D-077 and D-078. 386 outstanding; 346 with
+the reasons the owner already accepted applied by their checks (computed, not written). Not read
+beyond the totals below.
+
+- **TriplePoint Private Venture (0001792509), Stellus Private Credit (0001901037):** published
+  equals filed in every quarter.
+- **Audax (0001633858):** 1.2M under in one quarter (2025-09-30). Not read.
+- **TCW Star (0001916608):** no filed investments figure in eight quarters; the printed
+  "Total Investments" includes Treasury bills and a money market fund, which are not published.
+  Published debt equals the printed debt subtotal where read (2023-03-31: 36,507 thousand).
+  **One real error fixed:** at 2025-06-30 the Superior Industries delayed draw loan is tagged with
+  scale 3 on a schedule printed in dollars and published 72.5M for a 72,532 dollar position, so
+  the fund published 270.1M against a printed 203.1M. Row correction from the page
+  (`row_corrections.csv`). Not yet rebuilt.
+- **Onex (0001860424):** 26.4M under at 2023-03-31. Three tagged rows (Connect America term
+  facility 20,516 and incremental 1,212; S4T equity units 287) have no published row. Cause not
+  found; about 4.4M more is unexplained.
+
+Next by size after these: Manulife Private Credit 0001988280, Silver Capital Holdings 0001674760,
+TCW Direct Lending 0001603480, Senior Credit Investments 0001959568, Commonwealth Credit Partners
+0001841514.

@@ -272,6 +272,15 @@
     ],
     "reference_rate_columns": [
       "Reference"
+    ],
+    "reference_rate_codes": [
+      "BBSY=BBSY",
+      "NIBOR=NIBOR",
+      "CDOR=CDOR",
+      "TONA=TONA",
+      "SARON=SARON",
+      "CIBOR=CIBOR",
+      "STIBOR=STIBOR"
     ]
   }
 }

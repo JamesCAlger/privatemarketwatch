@@ -1,0 +1,30 @@
+{
+ "cik": "1743415",
+ "rule_id": "exclude_affiliate_rollforward_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "regexp_matches(trim(CAST(bdc_investment_identifier AS VARCHAR)), '^[^|]+\\((Preferred Equity|Common Equity)\\)$') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-122233 (10-Q, 2024-09-30), transactions in affiliated investments: 'Name of Issuer ... Fair Value at September 30, 2024 ... Veronica Holdings, LLC (Preferred Equity) - 9,487 - - 507 9,998 32 Veronica Holdings, LLC (Common Equity) - 118 - - 106 224 - ... 28,689'. The schedule prints the same two positions under Preferred Equity and Common Equity; 'Total Investments $ 359,741 $ 354,340'."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox s1a (2026-10-09), 2024-09-30: published 374.6M against the printed 354.3M. The excess is the two roll-forward rows (9,998 and 224 thousand) and a heading subtotal (9,998)."
+  }
+ ],
+ "rationale": "The filer tags the closing fair values of its affiliate roll-forward note on the investment identifier axis. Schedule members start with the schedule heading ('Preferred Equity - 5.2% Veronica Holdings, LLC (Vapotherm) Industry ...'); the roll-forward members are the issuer and a class in brackets, with no principal or share fact.",
+ "confidence": 0.95,
+ "measured_impact": {
+  "2024-09-30": {
+   "rows": 2,
+   "fv": -10222000.0
+  }
+ }
+}

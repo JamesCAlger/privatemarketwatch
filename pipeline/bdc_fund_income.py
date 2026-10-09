@@ -77,6 +77,15 @@ def _local_name(tag: str) -> str:
     return tag
 
 
+# us-gaap-supplement:InvestmentIncomeOperatingAfterExpenseAndTax is net investment income after
+# tax. Ares Strategic Income tags only this in its first two 10-Qs (2023-03-31: 5,042, printed
+# 'Net investment income $ 5,042') and us-gaap:NetInvestmentIncome from the third. It is held
+# apart and used only where the period has no net investment income fact, so a period that
+# already had one is unchanged.
+_NII_AFTER_TAX_CONCEPT = "investmentincomeoperatingafterexpenseandtax"
+_NII_FALLBACK = "_net_investment_income_after_tax"
+
+
 def _match_income_concept(local_lower: str) -> Optional[str]:
     """Match a lowercase local name to an income column."""
     if "netinvestmentincome" in local_lower and "incentivefee" in local_lower:
@@ -86,6 +95,8 @@ def _match_income_concept(local_lower: str) -> Optional[str]:
         # payables, changes in payables and percentage terms are neither.
         return "incentive_fee" if local_lower in ("incentivefeesonnetinvestmentincome",
                                                   "incentivefeeonnetinvestmentincome") else None
+    if local_lower == _NII_AFTER_TAX_CONCEPT:
+        return _NII_FALLBACK
     for pattern, col in FUND_INCOME_CONCEPT_MAP:
         if pattern in local_lower:
             return col
@@ -226,7 +237,21 @@ def _extract_fund_income_facts(
         if col not in facts_by_period[period_key]:
             facts_by_period[period_key][col] = value
 
-    return list(facts_by_period.values())
+    # The fallback fills a period that already has its income statement, and nothing else. A
+    # period known only by the fallback fact is dropped, as it was before the concept was read:
+    # such a thin row would displace a later filing's full row for the same period (Oaktree
+    # 2022-12-31: the 10-Q of 2023-03-31 carries only this fact for the prior quarter).
+    kept = []
+    for period in facts_by_period.values():
+        fallback = period.pop(_NII_FALLBACK, None)
+        if not set(period) - {"start_date", "end_date", "duration_months"}:
+            continue
+        if (fallback is not None and "net_investment_income" not in period
+                and "total_investment_income" in period):
+            period["net_investment_income"] = fallback
+        kept.append(period)
+
+    return kept
 
 
 # ---------------------------------------------------------------------------
@@ -241,6 +266,9 @@ def _derive_quarterly_income(
 
     Logic:
     - Direct quarterly (2-4 months): use as-is
+    - Under 2 months: use as-is. It is a launch stub, and the stub's income is all the income
+      of that quarter (Ares Strategic Income, 2022-12-05 to 2022-12-31: filed total investment
+      income 183; scaling to three months published 549, a figure no filing states).
     - Annual (11-13 months): divide by 4
     - Other durations: divide by (duration_months / 3)
     """
@@ -262,8 +290,8 @@ def _derive_quarterly_income(
             continue
 
         # Determine scaling factor
-        if 2 <= dm <= 4:
-            scale = 1.0  # Already quarterly
+        if dm <= 4:
+            scale = 1.0  # A quarter, or a launch stub shorter than one
         elif 11 <= dm <= 13:
             scale = 1.0 / 4.0  # Annual -> quarterly
         else:

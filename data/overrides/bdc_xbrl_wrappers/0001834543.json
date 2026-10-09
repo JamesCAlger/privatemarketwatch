@@ -184,5 +184,10 @@
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:Debt\\s+Investments|Equity\\s+Securities|Investments?)\\s') AND regexp_matches(_clean, '(?i)\\b(?:Instrument|Ref|Maturity|Warrants?|Stock|Units|Shares|Term\\s+Loan|Revolver)\\b')",
     "extra_industry_labels": [],
     "notes": "2026-09-06: flat 'Debt Investments <Industry> <Company> [Instrument] <instr> Ref ... Maturity' dialect; 3,020/3,028 cohort rows were unparsed (mg3 F1). Probe: 99.3% of rows extract."
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

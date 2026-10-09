@@ -44,7 +44,9 @@
         "partnership interest",
         "other/structured finance securities",
         "warrant",
-        " - loan"
+        " - loan",
+        "unsecured loan",
+        "membership interest"
       ]
     },
     "aggregate_markers": [
@@ -56,18 +58,48 @@
       "structured finance securities",
       "non-profit services"
     ],
-    "category_marker_re": "\\d[\\d.]*%\\s*-\\s*[^-]+$",
+    "category_marker_re": "\\d[\\d.]*%\\s*-\\s*[^-]+$|\\s-\\s(?P<industry>[A-Za-z][^-]*?)\\s-\\s.*\\d{1,2}/\\d{1,2}/\\d{4}\\s+-\\s+(?P=industry)\\s*$",
     "fallback_family_patterns": [
-      {"regex": "^\\d[\\d.]*%\\s+-\\s+[^-]+\\s+-\\s+[^-]+\\s+-\\s+.+", "family": "mixed"},
-      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
-      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
-      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+(?:First\\s+Lien\\s+Term\\s+Loan|Limited\\s+Partner\\s+Interests|Other/Structured\\s+Finance\\s+Securities).*$", "family": "mixed"},
-      {"regex": "^.+-.+-.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
-      {"regex": "^.+-.+Term-Loan.+-Loan$", "family": "mixed"},
-      {"regex": "^Non-profit\\s+Services$", "family": "mixed"},
-      {"regex": "^[A-Za-z][A-Za-z0-9&/()., ]+(?:\\s+-\\s+(?:Affiliate|Affiliated|Control|Controlled|Non-control/Non-affiliate|Non-Control/Non-Affiliate)\\s+investments)?$", "family": "mixed"},
-      {"regex": "^total\\s+investments\\s+-\\s+\\d[\\d.]*%$", "family": "mixed"},
-      {"regex": "^sub\\s+total\\s+(?:affiliate|affiliated|control|controlled|non-control/non-affiliate|non-controlled/non-affiliated)\\s+investments$", "family": "mixed"}
+      {
+        "regex": "^\\d[\\d.]*%\\s+-\\s+[^-]+\\s+-\\s+[^-]+\\s+-\\s+.+",
+        "family": "mixed"
+      },
+      {
+        "regex": "^.+\\s+-\\s+.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^.+\\s+-\\s+.+\\s+-\\s+(?:First\\s+Lien\\s+Term\\s+Loan|Limited\\s+Partner\\s+Interests|Other/Structured\\s+Finance\\s+Securities).*$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^.+-.+-.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^.+-.+Term-Loan.+-Loan$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^Non-profit\\s+Services$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^[A-Za-z][A-Za-z0-9&/()., ]+(?:\\s+-\\s+(?:Affiliate|Affiliated|Control|Controlled|Non-control/Non-affiliate|Non-Control/Non-Affiliate)\\s+investments)?$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^total\\s+investments\\s+-\\s+\\d[\\d.]*%$",
+        "family": "mixed"
+      },
+      {
+        "regex": "^sub\\s+total\\s+(?:affiliate|affiliated|control|controlled|non-control/non-affiliate|non-controlled/non-affiliated)\\s+investments$",
+        "family": "mixed"
+      }
     ],
     "canonical_strip_re": "^(?:Affiliate investments|Affiliated investments|Control investments|Controlled investments|Non-Control/Non-Affiliate investments|Non-control/Non-affiliate investments|Non-Controlled/Non-Affiliated investments|Non-controlled/Non-affiliated investments)\\s*-\\s*",
     "no_prefix_is_aggregate": true
@@ -293,7 +325,12 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "legal_entity_members": [
+      "legalentityaxis=SaratogaInvestmentCorpCLO20131LtdMember -> Saratoga Investment Corp. CLO 2013-1, Ltd."
+    ]
   }
 }

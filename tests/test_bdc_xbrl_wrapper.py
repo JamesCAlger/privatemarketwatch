@@ -2277,18 +2277,19 @@ def test_pimco_warrant_leaf():
 
 
 def test_pimco_warrant_under_debt_prefix():
-    """Warrants nested under 'Debt Investments | Warrants' are classified as debt family.
+    """Warrants nested under 'Debt Investments | Warrants' are debt family and a position.
 
-    These lack typical debt leaf markers (SOFR, interest rate, maturity keywords)
-    so they classify as category rollup, which is acceptable -- the staging pipeline
-    handles them separately via the Warrants prefix variant.
+    Until 2026-10-09 this row was expected to be a category rollup, on the view that staging
+    picked it up through the Warrants prefix. It did not: in sandbox s1a the row (1,546
+    thousand at 2024-09-30) was excluded and the fund published short of its filed total.
+    The wrapper's leaf_marker_re now reads a row that ends with a maturity date as a position.
     """
     ident = (
         "Debt Investments | Warrants | Technology | GCOM | 08/11/2033"
     )
     result = classify_identifier(PIMCO_CIK, ident)
     assert result["wrapper_family"] == "debt"
-    assert result["wrapper_disposition"] == "debt_category_rollup"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
 
 
 def test_pimco_aggregate_total_investments():
@@ -6955,3 +6956,45 @@ def test_name_without_a_suffix_stays_a_rollup_when_the_wrapper_has_not_opted_in(
     assert spec.flat_schedule is False
     result = classify_identifier("0001786108", "Debt Investments Renaissance Financiere")
     assert not result["wrapper_disposition"].endswith("_position_leaf")
+
+
+# PIMCO Capital Solutions names some rows by issuer alone; what marks them as positions is the
+# maturity date they end with. Its wrapper opts in with dispatch.leaf_marker_re.
+@pytest.mark.parametrize("identifier, disposition", [
+    ("Debt Investments | Senior Unsecured | Consumer Service | LEAF Home Solutions Note | 12% | 02/26/2027", "debt_position_leaf"),
+    ("Debt Investments | Senior Unsecured | Technology | GCOM | 17% | 02/16/2029", "debt_position_leaf"),
+    ("Debt Investments | Warrants | Technology | GCOM | 08/11/2033", "debt_position_leaf"),
+    # subtotals carry no date and stay subtotals
+    ("Debt Investments | Warrants | Technology | Total Technology", "debt_total_rollup"),
+    ("Debt Investments | Total Senior Unsecured", "debt_total_rollup"),
+    # a Treasury bill is a row too (published as cash downstream), also where the filer cut its label short
+    ("Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 4.537% | 10/31/2024", "debt_position_leaf"),
+    ("Debt Investments |Short-Term Investments | U.S. Treasury Bills |", "debt_position_leaf"),
+    ("Short-Term Investments | Total U.S. Treasury Bills", "non_private_market"),
+    ("Debt Investments | Common Stocks | Chemicals | K2 Propco Class S Units", "debt_position_leaf"),
+    ("Debt Investments |First Lien Senior Secured | Chemicals | Chemicals", "debt_category_rollup"),
+])
+def test_leaf_marker_pattern_marks_rows_that_end_with_a_maturity_date(identifier, disposition):
+    assert classify_identifier("0001905824", identifier)["wrapper_disposition"] == disposition
+
+
+def test_leaf_marker_pattern_is_off_unless_the_wrapper_sets_it():
+    assert get_wrapper_spec("0001838126").leaf_marker_re is None
+    assert get_wrapper_spec("0001905824").leaf_marker_re is not None
+
+
+# Saratoga: the joint venture's two positions name no instrument keyword the wrapper knew, and
+# the 10-K for 2025-02-28 tags an industry subtotal on a loan's label with the industry appended.
+@pytest.mark.parametrize("identifier, disposition", [
+    ("Control investments - 10.3% - Saratoga Senior Loan Fund I JV, LLC - Investment Fund - Unsecured Loan 10.00%, 10/20/2033",
+     "mixed_position_leaf"),
+    ("Control investments - 10.3% - Saratoga Senior Loan Fund I JV, LLC - Investment Fund - Membership Interest",
+     "mixed_position_leaf"),
+    ("Control investments - 10.3% - Investment Fund", "aggregate"),
+    ("229.3% - ComForCare Health Care - Healthcare Services - First Lien Term Loan (3M USD TERM SOFR+6.25%), 10.57% Cash, "
+     "12/31/2027 - Healthcare Services", "aggregate"),
+    ("229.3% - ComForCare Health Care - Healthcare Services - First Lien Term Loan (3M USD TERM SOFR+6.25%), 10.57% Cash, "
+     "12/31/2027", "mixed_position_leaf"),
+])
+def test_saratoga_joint_venture_rows_and_the_subtotal_tagged_on_a_loan_label(identifier, disposition):
+    assert classify_identifier("0001377936", identifier)["wrapper_disposition"] == disposition

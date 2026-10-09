@@ -165,5 +165,29 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "context_identifiers": [
+      "0001193125-25-180608 PAsOn06_30_2025_BioplasticsMemberusgaapEquitySecuritiesByIndustryAxis_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Bioplastics | PlantSwitch, Inc. (Series A-2)",
+      "0001193125-25-180608 PAsOn06_30_2025_ChemicalsSectorMemberusgaapEquitySecuritiesByIndustryAxis_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Chemicals | MPM Holdings, Inc.",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_EnergySectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Energy | Talos Energy",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_FinancialServicesSectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Financials | American Banknote Corp.",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate | IQHQ, Inc.",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate | Nexpoint Real Estate Finance, Inc.",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateInvestmentTrustMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate Investment Trust (REIT) | NexPoint Residential Trust, Inc.",
+      "0001193125-25-180608 PAsOn06_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_TelecommunicationServicesMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Telecommunication Services | MidWave Wireless, Inc.",
+      "0001193125-25-180608 PAsOn06_30_2025_ConsumerSectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_LlcInterestsMemberusgaapInvestmentTypeAxis => LLC Interests | Consumer Products | US Gaming, LLC",
+      "0001193125-25-180608 PAsOn06_30_2025_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_LlcInterestsMemberusgaapInvestmentTypeAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => LLC Interests | Real Estate | NexPoint Capital REIT, LLC",
+      "0001193125-25-282550 PAsOn09_30_2025_BioplasticsMemberusgaapEquitySecuritiesByIndustryAxis_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Bioplastics | PlantSwitch, Inc. (Series A-2)",
+      "0001193125-25-282550 PAsOn09_30_2025_ChemicalsSectorMemberusgaapEquitySecuritiesByIndustryAxis_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Chemicals | MPM Holdings, Inc.",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_EnergySectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Energy | Talos Energy",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_FinancialServicesSectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis => Common Stocks | Financials | American Banknote Corp.",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate | IQHQ, Inc.",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate | Nexpoint Real Estate Finance, Inc.",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_RealEstateInvestmentTrustMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Real Estate Investment Trust (REIT) | NexPoint Residential Trust, Inc.",
+      "0001193125-25-282550 PAsOn09_30_2025_CommonStockMemberusgaapInvestmentTypeAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_TelecommunicationServicesMemberusgaapEquitySecuritiesByIndustryAxis => Common Stocks | Telecommunication Services | MidWave Wireless, Inc.",
+      "0001193125-25-282550 PAsOn09_30_2025_ConsumerSectorMemberusgaapEquitySecuritiesByIndustryAxis_InvestmentUnaffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_LlcInterestsMemberusgaapInvestmentTypeAxis => LLC Interests | Consumer Products | US Gaming, LLC",
+      "0001193125-25-282550 PAsOn09_30_2025_InvestmentAffiliatedIssuerMemberusgaapInvestmentIssuerAffiliationAxis_LlcInterestsMemberusgaapInvestmentTypeAxis_RealEstateSectorMemberusgaapEquitySecuritiesByIndustryAxis => LLC Interests | Real Estate | NexPoint Capital REIT, LLC"
+    ]
   }
 }

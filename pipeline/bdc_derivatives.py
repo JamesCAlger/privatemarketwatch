@@ -143,6 +143,7 @@ def _parse_contexts(root: etree._Element) -> dict[str, dict]:
             continue
         end = ""
         deriv_type = None
+        deriv_member = ""
         designated = False
         own_debt = False
         n_dims = 0
@@ -159,6 +160,7 @@ def _parse_contexts(root: etree._Element) -> dict[str, dict]:
                     t = _canon_type(member_ln)
                     if t and deriv_type is None:
                         deriv_type = t
+                        deriv_member = member_ln
                     if _OWN_DEBT_RE.search(member_ln):
                         own_debt = True
                 if _DESIGNATION_RE.search(dim) or _DESIGNATION_RE.search(member_ln):
@@ -166,6 +168,8 @@ def _parse_contexts(root: etree._Element) -> dict[str, dict]:
         contexts[cid] = {
             "end": end,
             "deriv_type": deriv_type,
+            "deriv_member": deriv_member,
+            "n_dims": n_dims,
             "designated": designated,
             "names_own_debt": own_debt,
             "is_entity": n_dims == 0,
@@ -173,13 +177,38 @@ def _parse_contexts(root: etree._Element) -> dict[str, dict]:
     return contexts
 
 
+def _member_stem(member: str) -> str:
+    return re.sub(r"member$", "", member.lower())
+
+
+def _total_level(by_member: dict[tuple[int, str], float]) -> Optional[float]:
+    """One figure from the facts of a type: the least-dimensioned contexts, parents over children.
+
+    A filer tags a type's total and its parts on the same axis (Oaktree 2025-06-30:
+    InterestRateSwapMember 15,079 beside InterestRateSwapMaturingNovember2028Member 8,995 and
+    InterestRateSwapMaturingJuly2029Member 6,084), and breaks either down on further axes. Adding
+    every fact counts the position several times. Only the contexts with the fewest dimensions
+    are read, and a member whose name another member's name starts with is that member's
+    parent: where a parent carries a figure its children are left out.
+    """
+    if not by_member:
+        return None
+    lowest = min(n for n, _member in by_member)
+    members = {member: value for (n, member), value in by_member.items() if n == lowest}
+    stems = {member: _member_stem(member) for member in members}
+    top = [m for m in members
+           if not any(o != m and stems[m] != stems[o] and stems[m].startswith(stems[o]) for o in members)]
+    return sum(members[m] for m in top)
+
+
 def _extract_filing(root: etree._Element, report_date: str) -> dict:
     """Return per-type net FV/notional + entity-level net FV at report_date."""
     contexts = _parse_contexts(root)
-    # per-type accumulators
-    type_asset: dict[str, dict[str, float]] = {}   # type -> {pref, fallback}
-    type_liab: dict[str, dict[str, float]] = {}
-    type_notional: dict[str, float] = {}
+    # per-type accumulators: type -> kind -> {(dimension count, risk-axis member): amount}
+    type_asset: dict[str, dict[str, dict[tuple[int, str], float]]] = {}   # type -> {pref, fallback}
+    type_liab: dict[str, dict[str, dict[tuple[int, str], float]]] = {}
+    notional_levels: dict[str, dict[tuple[int, str], float]] = {}
+    seen: set[tuple[str, str]] = set()   # an instance repeats a fact printed in several tables
     type_designated: set[str] = set()
     type_own_debt: set[str] = set()
     ent_asset: dict[str, float] = {}
@@ -200,14 +229,19 @@ def _extract_filing(root: etree._Element, report_date: str) -> dict:
         if val is None:
             continue
         t = info["deriv_type"]
+        level = (info["n_dims"], info["deriv_member"])
+        if (local in _NET_CONCEPTS or "notional" in local):
+            if (cref, local) in seen:
+                continue
+            seen.add((cref, local))
         # net-FV concepts
         if local in _NET_CONCEPTS:
             is_asset = local in (_ASSET_PREF, _ASSET_FALLBACK)
             pref = "pref" if local in (_ASSET_PREF, _LIAB_PREF) else "fallback"
             if t is not None:
                 tgt = type_asset if is_asset else type_liab
-                tgt.setdefault(t, {}).setdefault(pref, 0.0)
-                tgt[t][pref] += abs(val)
+                slot = tgt.setdefault(t, {}).setdefault(pref, {})
+                slot[level] = slot.get(level, 0.0) + abs(val)
                 if info["designated"]:
                     type_designated.add(t)
                 if info["names_own_debt"]:
@@ -217,7 +251,8 @@ def _extract_filing(root: etree._Element, report_date: str) -> dict:
                 tgt[pref] = tgt.get(pref, 0.0) + abs(val)
         # notional (period-end; exclude averages)
         elif "notional" in local and "average" not in local and t is not None:
-            type_notional[t] = type_notional.get(t, 0.0) + abs(val)
+            slot = notional_levels.setdefault(t, {})
+            slot[level] = slot.get(level, 0.0) + abs(val)
             if info["designated"]:
                 type_designated.add(t)
             if info["names_own_debt"]:
@@ -230,9 +265,11 @@ def _extract_filing(root: etree._Element, report_date: str) -> dict:
             return None
         return (a or 0.0) - (l or 0.0)
 
+    type_notional = {t: _total_level(levels) or 0.0 for t, levels in notional_levels.items()}
     per_type_net: dict[str, float] = {}
     for t in set(type_asset) | set(type_liab):
-        n = _net(type_asset.get(t, {}), type_liab.get(t, {}))
+        n = _net({pref: _total_level(levels) for pref, levels in type_asset.get(t, {}).items()},
+                 {pref: _total_level(levels) for pref, levels in type_liab.get(t, {}).items()})
         if n is not None:
             per_type_net[t] = n
     entity_net = _net(ent_asset, ent_liab)

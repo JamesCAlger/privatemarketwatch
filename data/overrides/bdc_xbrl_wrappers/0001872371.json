@@ -192,6 +192,14 @@
     ],
     "reference_rate_columns": [
       "Index"
+    ],
+    "reference_rate_codes": [
+      "NIBOR=NIBOR",
+      "STIBOR=STIBOR",
+      "TONA=TONA",
+      "BBSW=BBSW",
+      "L=LIBOR",
+      "E=EURIBOR"
     ]
   }
 }

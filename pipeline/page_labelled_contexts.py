@@ -119,6 +119,50 @@ def adopt_page_labelled_contexts(contexts: dict[str, dict[str, Any]], filing_met
     return len(adopted)
 
 
+_NAMED_CONTEXT_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) => (.+)")
+
+
+@lru_cache(maxsize=1)
+def _named_by_accession() -> dict[tuple[str, str], dict[str, str]]:
+    from pipeline.source_encodings import load_encodings
+    result: dict[tuple[str, str], dict[str, str]] = {}
+    for cik, encoding in load_encodings().items():
+        for value in encoding.get("context_identifiers", []):
+            accession, context, identifier = _NAMED_CONTEXT_RE.fullmatch(value.strip()).groups()
+            result.setdefault((cik, accession), {})[context] = identifier.strip()
+    return result
+
+
+def name_declared_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dict[str, str]) -> int:
+    """Name the contexts a wrapper lists for this filing, in place. Returns the number named.
+
+    A filer can leave the identifier member off its position rows in one filing and tag them on
+    the group's context instead (NexPoint Capital, 10-Qs for 2025-06-30 and 2025-09-30: 13 of
+    27 printed rows, 23.5M of 39.6M). Where the page-labelled reading does not fit the filer's
+    layout, the wrapper's ``source_encodings.context_identifiers`` lists each one as
+    'ACCESSION CONTEXT => IDENTIFIER', the identifier written as the filer writes it in its
+    other filings. A context that already names a position is never renamed, and a context the
+    filing does not hold is skipped with a warning.
+    """
+    cik = re.sub(r"\D", "", str(filing_meta.get("cik", ""))).zfill(10)
+    listed = _named_by_accession().get((cik, str(filing_meta.get("accession_number", ""))))
+    if not listed:
+        return 0
+    named = 0
+    for context, identifier in listed.items():
+        info = contexts.get(context)
+        if info is None:
+            logger.warning("declared context %s %s %s: not in the filing; skipped",
+                           cik, filing_meta.get("accession_number", ""), context)
+            continue
+        if info.get("is_investment"):
+            continue
+        info["investment_identifier"] = identifier
+        info["is_investment"] = True
+        named += 1
+    return named
+
+
 _MISDATED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) (\d{4}-\d{2}-\d{2}) -> (\d{4}-\d{2}-\d{2})")
 
 
@@ -202,6 +246,12 @@ def fill_untagged_values(facts_by_context: dict[str, dict[str, Any]], filing_met
     return filled
 
 
+def untagged_value(cik: Any, accession: Any, context: Any, field: str) -> float | None:
+    """The value a wrapper declares for a field its filer printed and did not tag, else None."""
+    owner = re.sub(r"\D", "", str(cik or "")).zfill(10)
+    return _untagged_by_accession().get((owner, str(accession or "")), {}).get(str(context or ""), {}).get(field)
+
+
 def encoding_signature(cik: str) -> str:
     """The two readings as configured for one filer, '' when it uses neither.
 
@@ -214,7 +264,10 @@ def encoding_signature(cik: str) -> str:
                       for (owner, accession), listed in _misdated_by_accession().items() if owner == cik
                       for context, (filed, corrected) in listed.items())
     from pipeline.bdc_filings import fair_value_aliases
+    named = sorted("%s %s => %s" % (accession, context, identifier)
+                   for (owner, accession), listed in _named_by_accession().items() if owner == cik
+                   for context, identifier in listed.items())
     untagged = sorted("%s %s %s %s" % (accession, context, name, number)
                       for (owner, accession), listed in _untagged_by_accession().items() if owner == cik
                       for context, values in listed.items() for name, number in values.items())
-    return "|".join(combos + misdated + untagged + sorted("fv:" + name for name in fair_value_aliases(cik)))
+    return "|".join(combos + misdated + untagged + named + sorted("fv:" + name for name in fair_value_aliases(cik)))

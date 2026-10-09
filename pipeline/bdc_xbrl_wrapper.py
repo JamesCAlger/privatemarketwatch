@@ -219,6 +219,10 @@ class WrapperSpec:
     # The filer's schedule has no subtotal or category rows: an identifier that names
     # no instrument and carries no company suffix is still a position.
     flat_schedule: bool = False
+    # A pattern that marks a position where no keyword does. PIMCO Capital Solutions names some
+    # rows by issuer alone ('... | GCOM | 17% | 02/16/2029'); what makes them positions is the
+    # maturity date they end with, which no subtotal carries.
+    leaf_marker_re: re.Pattern[str] | None = None
 
     def normalized_cik(self) -> str:
         return normalize_cik(self.cik)
@@ -297,6 +301,8 @@ def _has_leaf_marker(spec: WrapperSpec, identifier: str, family: str) -> bool:
     compact = re.sub(r"[^a-z0-9]+", "", identifier.lower())
     lower = identifier.lower()
     markers = spec.leaf_markers_by_family.get(family, ())
+    if spec.leaf_marker_re is not None and spec.leaf_marker_re.search(identifier):
+        return True
     return any(marker in lower or marker.replace(" ", "") in compact for marker in markers)
 
 
@@ -467,6 +473,8 @@ def _load_specs_from_json(directory: "Path | None" = None) -> dict[str, WrapperS
             no_prefix_is_aggregate=no_prefix_is_aggregate,
             category_marker_before_total=category_marker_before_total,
             flat_schedule=bool(dispatch.get("flat_schedule", False)),
+            leaf_marker_re=(re.compile(dispatch["leaf_marker_re"], re.IGNORECASE)
+                            if dispatch.get("leaf_marker_re") else None),
         )
         specs[cik_norm] = spec
     return specs

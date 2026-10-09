@@ -197,6 +197,19 @@
     ],
     "reference_rate_columns": [
       "SpreadAboveIndex"
+    ],
+    "reference_rate_codes": [
+      "SF=SOFR",
+      "SN=SONIA",
+      "E=EURIBOR",
+      "P=PRIME",
+      "L=LIBOR",
+      "C=CDOR",
+      "CA=CORRA",
+      "A=BBSW"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
     ]
   }
 }

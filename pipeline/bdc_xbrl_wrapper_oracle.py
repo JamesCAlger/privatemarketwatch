@@ -2810,6 +2810,7 @@ def validate_wrapper_json_coherence(raw: dict[str, Any]) -> list[str]:
     _REGEX_FIELDS_DISPATCH = [
         ("dispatch", "canonical_strip_re"),
         ("dispatch", "category_marker_re"),
+        ("dispatch", "leaf_marker_re"),
     ]
     _REGEX_FIELDS_STAGING = [
         ("staging", "hierarchy_prefix_re"),

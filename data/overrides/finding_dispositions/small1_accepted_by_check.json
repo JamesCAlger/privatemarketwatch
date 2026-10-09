@@ -1,0 +1,311 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-SMALL1-C103-1834543",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001834543"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox s1c for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py s1c C103 3",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-C107-1588272",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001588272"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox s1c for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py s1c C107 3",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-C107-1834543",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001834543"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox s1c for each quarter listed: 317 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py s1c C107 3",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-F28-1377936",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001377936"
+   ],
+   "quarters": [
+    "2022-02-28",
+    "2022-05-31",
+    "2022-08-31",
+    "2022-11-30",
+    "2023-02-28",
+    "2023-05-31",
+    "2023-08-31",
+    "2023-11-30",
+    "2024-02-29",
+    "2024-05-31",
+    "2024-08-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox s1c: the fund's first quarter with published holdings is 2024-11-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-F28-1588272",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001588272"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox s1c: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-F28-1743415",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001743415"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox s1c: the fund's first quarter with published holdings is 2023-09-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-F28-1834543",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001834543"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox s1c: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-F28-1905824",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001905824"
+   ],
+   "quarters": [
+    "2022-06-09",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox s1c: the fund's first quarter with published holdings is 2023-09-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-X02-1377936",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001377936"
+   ],
+   "quarters": [
+    "2024-11-30",
+    "2025-02-28",
+    "2025-05-31",
+    "2025-08-31",
+    "2025-11-30",
+    "2026-02-28",
+    "2026-05-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox s1c for each quarter listed: 28 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py s1c 0001377936",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-X02-1834543",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001834543"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox s1c for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py s1c 0001834543",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-X06-1588272",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001588272"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox s1c for each quarter listed: 5 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py s1c X06 3",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-SMALL1-X06-1834543",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001834543"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox s1c for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py s1c X06 3",
+   "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  }
+ ]
+}
