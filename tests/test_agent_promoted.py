@@ -509,6 +509,60 @@ def test_engine_companyfacts_plus_cash_skipped_when_column_absent(monkeypatch, t
     sce.run_rule(con, rule)
     row = con.execute("SELECT anchor_used, anchor_basis, status FROM result_fv_nocol").fetchone()
     assert row == ("companyfacts_fv", "investments_ex_cash", "overshoot")
+    # Owner ruling 2026-10-09: for a filer whose wrapper says its investments total leaves the
+    # cash rows out, that total is compared with the rows that are not cash. The cash row stays
+    # in value_sum and is reported as not anchored.
+    monkeypatch.setattr(sce, "cash_outside_total_ciks", lambda: ["0000000001"])
+    sce.run_rule(con, rule)
+    row = con.execute("SELECT anchor_used, anchor_basis, status, value_sum, compared_sum, cash_status "
+                      "FROM result_fv_nocol").fetchone()
+    assert row == ("companyfacts_fv", "investments_ex_cash", "reconciles", 1020.0, 1000.0, "no_filed_figure")
+
+
+def _cash_case(monkeypatch, tmp_path, loans, cash_row, filed_cash, declared=True):
+    import scripts.shadow_conservation_engine as sce
+    monkeypatch.setattr(sce, "cash_outside_total_ciks", lambda: ["0000000001"] if declared else [])
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+                  "0000000001,2026-03-31,companyfacts,1000,%s\n" % filed_cash, encoding="utf-8")
+    monkeypatch.setattr(sce, "FUND_FINANCIALS_FILE", ff)
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.execute("INSERT INTO wrapped VALUES ('0000000001')")
+    con.execute(f"""CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+        ('0000000001', '2026-03-31', {loans}, 'x=y', 'LOAN', 'parent_schedule'),
+        ('0000000001', '2026-03-31', {cash_row}, 'c=MMF', 'CASH', 'parent_schedule')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, accounting_record_class)""")
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    rule = sce.ConservationRule(
+        name="fv_like", value_column="fair_value",
+        anchors=(sce.Anchor("fund_financials_plus_cash", "companyfacts_fv_plus_cash",
+                            "investments_at_fair_value", basis="published_rows"),
+                 sce.Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value",
+                            basis="investments_ex_cash")))
+    sce.run_rule(con, rule)
+    return con.execute("SELECT anchor_used, status, value_sum, cash_status FROM result_fv_like").fetchone()
+
+
+def test_engine_filed_cash_larger_than_the_schedule_row_does_not_fail_the_investments(monkeypatch, tmp_path):
+    # Oaktree 2025-06-30: the filed cash-equivalents figure (471) holds more than the schedule's
+    # one cash row (100). The rows are compared with the investments line; the cash row is in range.
+    assert _cash_case(monkeypatch, tmp_path, 1000.0, 100.0, 471) == ("companyfacts_fv", "reconciles", 1100.0, "within_filed")
+
+
+def test_engine_without_the_wrapper_declaration_the_comparison_is_unchanged(monkeypatch, tmp_path):
+    # Other filers count their cash funds inside the investments line; nothing changes for them.
+    assert _cash_case(monkeypatch, tmp_path, 1000.0, 100.0, 471, declared=False) == (
+        "companyfacts_fv_plus_cash", "undershoot", 1100.0, "")
+
+
+def test_engine_cash_rows_above_the_filed_figure_still_fail(monkeypatch, tmp_path):
+    assert _cash_case(monkeypatch, tmp_path, 1000.0, 100.0, 20) == ("companyfacts_fv", "overshoot", 1100.0, "exceeds_filed")
+
+
+def test_engine_missing_investments_fail_whatever_the_cash_row_holds(monkeypatch, tmp_path):
+    # 900 of loans plus a 100 cash row sums to the anchor; the old comparison passed this.
+    assert _cash_case(monkeypatch, tmp_path, 900.0, 100.0, 471)[:2] == ("companyfacts_fv", "undershoot")
 
 
 # --------------------------------------------------------------------------- integration

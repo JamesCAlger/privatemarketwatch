@@ -33,6 +33,8 @@ from pipeline import disposition_validity as dv  # noqa: E402
 from pipeline import finding_dispositions as fd  # noqa: E402
 
 label = sys.argv[1]
+LIVE_NAME = "next5_owner_accepted.json"
+LIVE = ("accepted", "accepted by check")
 ASIF, GS, GOLUB, SIXTH, OAKTREE = "0001918712", "0001920145", "0001930087", "0001925309", "0001872371"
 NAMES = {ASIF: "Ares Strategic Income", GS: "Goldman Sachs Private Credit", GOLUB: "Golub Capital Private Credit",
          SIXTH: "Sixth Street Lending Partners", OAKTREE: "Oaktree Strategic Credit"}
@@ -42,6 +44,10 @@ SANDBOX = REPO / "scratch/fund_sandbox" / label
 OUTSTANDING = {"open", "needs_human", "evidence_backlog", "real_error_unremediated", "remediation_pulled", "remediation_staged"}
 _FILED = lambda *fields: {"from": "2022-01-01", "check": "values_as_filed", "params": {"fields": list(fields)}}
 _NO_RATE = {"from": "2022-01-01", "check": "no_rate_in_source", "params": {}}
+
+# Entries the owner accepted by name. They go to the live store; everything else stays a proposal.
+# 2026-10-09, on the Goldman Sachs members with no value: "keep the undrawn lines".
+OWNER_ACCEPTED = {("oracle", "B01", GS): ("owner, in session 2026-10-09", "2026-10-09")}
 
 # (engine, rule) -> class, statement, check, rerun. The first five's reasons, tested row by row here.
 CHECKED = {
@@ -91,26 +97,6 @@ READ_QUARTERS = {
 
 # (engine, rule, cik) -> class, statement, [(source, quote)], rerun. Read in this session.
 READ = {
-    ("conservation", "fv_conservation", GS): (
-        "not_applicable",
-        "The fund's affiliated money market fund is published as a cash row. The filed investments total excludes it, and "
-        "the fund files no cash-equivalents figure outside the schedule, so the check compares rows including the fund "
-        "with a total that leaves it out. Without that row the published total equals the filed total.",
-        [("filing", "0000950170-25-107338 (10-Q, 2025-06-30) balance sheet: 'Investments, at fair value (cost of $ 9,644,562 "
-                    "...) $ 9,630,944 ... Investments in affiliated money market fund (cost of $ 233,261 ...) 233,261'."),
-         ("query", "Sandbox n5c: the residual is the money market row in each failing quarter (233.3M of 9,630.9M is 2.42 pct "
-                   "at 2025-06-30; 518.2M, 273.7M and 156.6M at the next three). Published excluding that row equals the "
-                   "filed total within 0.5M in all 13 quarters.")],
-        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/n5_tot.sql" % label),
-    ("conservation", "fv_conservation", OAKTREE): (
-        "not_applicable",
-        "In the two quarters where the schedule lists a short-term investment fund, the check adds the filed cash-equivalents "
-        "figure to the filed investments. That figure is larger than the schedule row, so the comparison cannot close. "
-        "Published investments equal filed investments in every quarter.",
-        [("query", "Sandbox n5d, published investments / filed investments / published cash rows / filed cash equivalents ($M): "
-                   "2025-06-30 6,362.9 / 6,362.9 / 100.7 / 471.3 (residual -5.42 pct); 2025-09-30 6,899.0 / 6,899.0 / 210.6 / "
-                   "260.4 (-0.70 pct). In the four quarters with no cash row the check uses investments alone and passes.")],
-        "python scratch/2026-10-07_printed_rates/q.py %s scratch/2026-10-07_printed_rates/oak1.sql" % label),
     ("row_validation", "PP02", GS): (
         "as_filed",
         "Pairs of tranches the filer prints as two rows with equal figures and tags on members ending 'One' / 'Two'. Both "
@@ -132,16 +118,22 @@ READ = {
         "as_filed",
         "One to thirteen rows a quarter, out of 170 to 580, carry a filed percent that disagrees with their fair value. The "
         "published percent is the tagged fact, printed to one decimal.",
-        [("query", "Sandbox n5b: failing rows per quarter 1, 5, 3, 1, 6, 4, 4, 3, 6, 8, 6, 13; the median implied net assets "
-                   "is within 1 pct of the filed figure in every quarter (4,448M against 4,475M at 2026-06-30).")],
-        S + "ident_left.py %s" % label),
+        [("filing", "Every failing row read on its filing page (2026-10-09): 60 rows in 12 filings, each published with the "
+                    "percent and the fair value the page prints. Examples: 2023-12-31 Bleriot US Bidco, printed '0.5' on 3,001 "
+                    "(the value implies 0.44); 2025-12-31 AQA Acquisition Holding, printed '0.6' on 24,058 (implies 0.54)."),
+         ("query", "The median implied net assets is within 1 pct of the filed figure in every quarter (4,448M against 4,475M "
+                   "at 2026-06-30), so the percents are read at the right scale.")],
+        S + "pct_rows_on_page.py %s 1930087" % label),
     ("identity", "pct_of_net_assets_identity", SIXTH): (
         "as_filed",
         "One to seven rows a quarter, out of 38 to 108, carry a filed percent that disagrees with their fair value. The "
         "published percent is the tagged fact, printed to one decimal.",
-        [("query", "Sandbox n5b: failing rows per quarter 1, 1, 2, 1, 5, 2, 7, 7, 1; the median implied net assets is within "
-                   "0.5 pct of the filed figure in every quarter (4,527M against 4,530M at 2026-06-30).")],
-        S + "ident_left.py %s" % label),
+        [("filing", "Every failing row read on its filing page (2026-10-09): 27 rows in 9 filings, each published with the "
+                    "percent and the fair value the page prints. Examples: 2024-12-31 Erling Lux Bidco, printed '0.3' on 7,650 "
+                    "(the value implies 0.19); 2026-03-31 Shiftmove GMBH, printed '0.3' on 18,435 (implies 0.44)."),
+         ("query", "The median implied net assets is within 0.5 pct of the filed figure in every quarter (4,527M against "
+                   "4,530M at 2026-06-30), so the percents are read at the right scale.")],
+        S + "pct_rows_on_page.py %s 1925309" % label),
     ("oracle", "B01", SIXTH): (
         "as_filed",
         "Position contexts with no fair value fact: members the filer defines for rate and period facts or under an earlier "
@@ -224,6 +216,19 @@ for (engine, rule, cik), (read, kind, statement, evidence, rerun) in READ_QUARTE
                     "evidence": [{"source": s, "quote": q} for s, q in evidence], "rerun": rerun,
                     "decided_by": WHO, "decided_on": WHEN})
 
+# Owner standing instruction 2026-10-09 (decision D-073): "a disposition i already accepted may be
+# accepted by its check". The reasons in CHECKED, and the F28 reason, are the first five's accepted
+# entries DS-003 to DS-007; a fund-quarter where the row-by-row check passes is accepted by that check.
+BY_CHECK = "check passed on sandbox %s; accepted under the owner's standing instruction of 2026-10-09 (D-073)" % label
+for entry in entries:
+    accepted = OWNER_ACCEPTED.get((entry["engine"], entry["rule_name"], entry["ciks"][0]))
+    if accepted:
+        entry["decided_by"], entry["decided_on"], entry["basis"] = accepted[0], accepted[1], "accepted"
+    elif entry["basis"] == "checked":
+        entry["decided_by"], entry["decided_on"], entry["basis"] = BY_CHECK, "2026-10-09", "accepted by check"
+    if entry["basis"] in LIVE:
+        entry["disposition_id"] = entry["disposition_id"].replace("PD-", "DS-N5-")
+
 for entry in entries:
     problems = fd.validate({k: v for k, v in entry.items() if k != "basis"})
     assert not problems, (entry["disposition_id"], problems)
@@ -233,7 +238,9 @@ import findings_ledger  # noqa: E402
 with tempfile.TemporaryDirectory() as tmp:
     store = Path(tmp) / "store"
     shutil.copytree(fd.default_dir(), store)
-    (store / "proposed.json").write_text(json.dumps({"dispositions": [{k: v for k, v in e.items() if k != "basis"} for e in entries]}), encoding="utf-8")
+    # the live file already holds what the owner accepted; add only what is still a proposal
+    (store / "proposed.json").write_text(json.dumps({"dispositions": [{k: v for k, v in e.items() if k != "basis"}
+                                                                      for e in entries if e["basis"] not in LIVE]}), encoding="utf-8")
     ledger = findings_ledger.build_ledger(queue_path=SANDBOX / "output" / "review_queue" / "review_queue.csv", dispositions_dir=store,
                                           validity_path=SANDBOX / "disposition_validity.csv")
 left = defaultdict(int)
@@ -251,8 +258,9 @@ print("fund | outstanding now | covered by a proposal | outstanding if all accep
 for cik in NAMES:
     print("   %s %s | %d | %d | %d" % (cik, NAMES[cik], now[cik], proposed[cik], left[cik]))
 print("   total | %d | %d | %d" % (sum(now.values()), sum(proposed.values()), sum(left.values())))
-print("proposals: %d (checked %d, read %d) | findings left open: %d" % (
-    len(entries), sum(e["basis"] == "checked" for e in entries), sum(e["basis"] == "read" for e in entries), len(held)))
+print("entries: %d (accepted by the owner %d, accepted by a check %d, proposed on a reading %d) | findings left open: %d" % (
+    len(entries), sum(e["basis"] == "accepted" for e in entries), sum(e["basis"] == "accepted by check" for e in entries),
+    sum(e["basis"] == "read" for e in entries), len(held)))
 groups = defaultdict(list)
 for cik, engine, rule, quarter, why in held:
     groups[(cik, engine, rule, why if why == "not read" else "check failed")].append(quarter)
@@ -263,11 +271,23 @@ if "--write" in sys.argv:
     target = REPO / "data/overrides/finding_dispositions_proposed/next5_2026-10-08.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps({"status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
-                                  "sandbox": label, "dispositions": entries}, indent=1) + "\n", encoding="utf-8")
+                                  "sandbox": label, "dispositions": [e for e in entries if e["basis"] not in LIVE]},
+                                 indent=1) + "\n", encoding="utf-8")
+    # An accepted entry closes its findings, so a later run no longer sees them as open and would
+    # not produce the entry again: keep what the live file already holds, replace only by id.
+    live = fd.default_dir() / LIVE_NAME
+    kept = {e["disposition_id"]: e for e in (json.loads(live.read_text(encoding="utf-8"))["dispositions"] if live.exists() else [])}
+    for e in entries:
+        if e["basis"] in LIVE:
+            quarters = sorted(set(e["quarters"]) | set(kept.get(e["disposition_id"], {}).get("quarters", [])))
+            kept[e["disposition_id"]] = {**{k: v for k, v in e.items() if k != "basis"}, "quarters": quarters}
+    live.write_text(json.dumps({"dispositions": [kept[k] for k in sorted(kept)]}, indent=1) + "\n", encoding="utf-8")
     lines = ["# Next five funds: proposed dispositions (not accepted)", "",
              "Generated by `scripts/v05_evidence/make_proposed_dispositions.py %s --write` on 2026-10-08." % label,
-             "Nothing here is in force. `checked` means the first five's reason passed its row-by-row test on these",
-             "funds; `read` means the reason was found on the page or in the tags this session.", "",
+             "`accepted` entries are in force (the owner accepted them by name; live store, `%s`). The rest are not." % LIVE_NAME,
+             "`accepted by check` means a reason the owner accepted for the first five passed its row-by-row test on",
+             "this fund-quarter (standing instruction, D-073); those are in force too. `read` means the reason was",
+             "found on the page or in the tags and is still a proposal.", "",
              "| Fund | Outstanding now | Covered by a proposal | Outstanding if all accepted |", "|---|---|---|---|"]
     lines += ["| %s | %d | %d | %d |" % (NAMES[c], now[c], proposed[c], left[c]) for c in NAMES]
     lines += ["| **Total** | **%d** | **%d** | **%d** |" % (sum(now.values()), sum(proposed.values()), sum(left.values())), "",

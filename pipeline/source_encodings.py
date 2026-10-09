@@ -28,7 +28,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -63,6 +63,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A page-labelled context reads "axis+axis", lower-case local names: '+str(path))
             if key=='misdated_contexts' and any(not _MISDATED_CONTEXT_RE.fullmatch(v) for v in values):
                 raise ValueError('A misdated context reads "ACCESSION CONTEXT YYYY-MM-DD -> YYYY-MM-DD": '+str(path))
+            if key=='investments_total_excludes' and values!=['cash_rows']:
+                raise ValueError('The only admitted exclusion from the investments total is cash_rows: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:

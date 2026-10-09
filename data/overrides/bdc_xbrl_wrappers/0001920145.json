@@ -273,6 +273,9 @@
     }
   },
   "source_encodings": {
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
     "reference_rate_codes": [
       "L=LIBOR",
       "E=EURIBOR",

@@ -1498,3 +1498,97 @@ should not have used it there. A stray bare `python -` hung once and was killed.
 
 **Next fund by size:** MSD Investment Corp. (0001849894), then North Haven Private Income Fund,
 Monroe Capital Income Plus, Blue Owl Technology Income, Barings Private Credit. Not started.
+
+## 2026-10-09: owner rulings on three of the proposed dispositions
+
+Owner, in session: "on cash: fix the check, but still include cash items. pct of net assets:
+check them. keep the undrawn lines."
+
+### D-070 The fair-value conservation check compares like with like, by wrapper setting
+
+- **Ruling.** Fix the check; cash rows stay published and stay in the published total.
+- **First attempt, measured and rejected.** Comparing every investments-only anchor with the rows
+  that are not cash would move 49 fund-quarters on the published build of 2026-10-01. About 20 of
+  them go from reconciled to short: those filers count their cash funds inside the balance-sheet
+  investments line. Whether cash sits inside that line is a fact about each filer.
+- **Fix.** New wrapper key `source_encodings.investments_total_excludes: ["cash_rows"]`. For a
+  filer that declares it (`scripts/shadow_conservation_engine.py`):
+  - an investments-only anchor is compared with the published rows that are not cash;
+  - the cash rows are checked against the filed cash-equivalents figure, which they may not
+    exceed; where none is filed the result says `cash_status = no_filed_figure`;
+  - the investments-plus-cash anchor is used only when the filed cash figure equals the
+    schedule's cash rows.
+  `value_sum` is unchanged (it includes cash). New result columns: `compared_sum`, `cash_sum`,
+  `filed_cash`, `cash_status`. Fair value only. Every other fund is unchanged.
+- **Declared for** Goldman Sachs (balance sheet, 2025-06-30: "Investments, at fair value ...
+  9,630,944" and on its own line "Investments in affiliated money market fund ... 233,261") and
+  Oaktree (schedule, 2025-06-30: "Cash and Cash Equivalents and Restricted Cash $ 471,299" and
+  "Total Portfolio Investments, Cash and Cash Equivalents and Restricted Cash $ 6,834,225", which
+  is 6,362,926 of investments plus that figure; the schedule's one fund row is 100.7M of it).
+- **Measured on the published build, read-only:** five fund-quarters change, all from failing to
+  reconciled: Goldman Sachs 2025-06-30, 2025-09-30, 2025-12-31; Oaktree 2025-06-30, 2025-09-30.
+  In the sandbox the six findings are gone and the two proposals for them are withdrawn.
+- **Residual.** Goldman Sachs files no cash-equivalents figure the pipeline reads, so its money
+  market row (156M to 518M) is published but checked against nothing. The result says so.
+- Re-run: `git show 8bf71b0:scripts/shadow_conservation_engine.py > before.py`, then
+  `python scripts/v05_evidence/conservation_like_for_like_effect.py before.py`.
+  Tests: `tests/test_agent_promoted.py -k engine` (five new or changed).
+
+### D-071 Percent of net assets: every failing row read on the page
+
+- 60 Golub rows in 12 filings and 27 Sixth Street rows in 9 filings fail the identity. Each is
+  published with exactly the percent and the fair value the page prints and tags. The percents
+  are the filers' own, printed to one decimal and often one step off what the value implies
+  (Golub 2025-12-31, AQA Acquisition Holding: printed 0.6 on 24,058, which implies 0.54).
+- The proposals stay proposals, now with this evidence. The owner asked for the check, not yet
+  for acceptance.
+- Re-run: `python scripts/v05_evidence/pct_rows_on_page.py n5e 1930087` and `... 1925309`.
+
+### D-072 Goldman Sachs members with no fair value: accepted
+
+- Owner: "keep the undrawn lines". Read as: accept the proposed disposition for Goldman Sachs
+  oracle rule B01 (position contexts with no value: undrawn commitments printed with a par amount
+  only, and members defined for other facts). If the owner meant "publish those lines as rows",
+  this entry is the wrong action and should be withdrawn: it changes no data either way.
+- Recorded in the live store as `DS-N5-B01-1920145`
+  (`data/overrides/finding_dispositions/next5_owner_accepted.json`), five quarters named.
+  Four findings close; one stays open because an earlier fix for it is staged.
+
+### State (sandbox `n5e`, check stages re-run)
+
+| Fund | Before these rulings | Now | If the remaining proposals were accepted |
+|---|---|---|---|
+| Ares Strategic Income | 23 | 23 | 15 |
+| Goldman Sachs Private Credit | 64 | 56 | 15 |
+| Golub Capital Private Credit | 49 | 49 | 17 |
+| Sixth Street Lending Partners | 68 | 68 | 46 |
+| Oaktree Strategic Credit | 42 | 40 | 16 |
+| **Total** | **246** | **236** | **109** |
+
+27 proposals remain (19 on a check, 8 on a reading). Not run: the full suite, the semantic diff,
+any 70-fund build. Published data unchanged. Uncommitted.
+
+### D-073 Standing instruction: an accepted reason may be accepted by its check
+
+- Owner, in session 2026-10-09: "yes, a disposition i already accepted may be accepted by its
+  check". Asked because every proposal for the next five had been sent for approval one by one.
+- **What it covers.** A reason the owner has already accepted for some fund, restated as a
+  deterministic row-by-row check. On another fund, a fund-quarter where that check passes is
+  accepted without asking. Today that is five reasons, the first five's DS-003 to DS-007:
+  quarters before the first schedule (F28), negative cost on undrawn lines (C107), principal far
+  above value (X06), no rate in the source (X02), negative value on undrawn lines (C103).
+- **What it does not cover.** A new reason; a reason supported only by a reading; a fund-quarter
+  where the check fails (it stays open and the rows are read); anything that changes shared
+  code; widening `findings_scope.ciks`. New reasons are collected and brought to the owner in one
+  batch per group of funds, grouped by reason.
+- **Applied.** 19 entries for the next five moved to the live store
+  (`data/overrides/finding_dispositions/next5_owner_accepted.json`, ids `DS-N5-...`), each
+  recording the check and this decision as its acceptance. With the owner-accepted B01 entry the
+  file holds 20 entries naming 104 fund-quarters.
+- **Limits to remember.** The "published equals the tag" check cannot see a wrong tag. The F28
+  check (quarter earlier than the fund's first published schedule) is computed in
+  `make_proposed_dispositions.py`, not in `pipeline/disposition_validity.py`. An entry does not
+  close a finding that an earlier reviewer marked a confirmed error; the first five's X02 entries
+  carry a flag for that, these do not, so 17 such findings stay open for a reading.
+- AGENTS.md is not edited (owner only); it still says an agent may propose and a deterministic
+  check or the owner accepts, which this instruction is consistent with.
