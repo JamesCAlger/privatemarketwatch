@@ -194,7 +194,31 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "reference_rate_columns": [
+      "Interest Rate"
+    ],
+    "reference_rate_codes": [
+      "C=CORRA",
+      "BBSW=BBSW"
+    ],
+    "printed_margin_reading": [
+      "cash_plus_pik"
+    ]
   }
 }

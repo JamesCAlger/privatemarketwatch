@@ -271,5 +271,10 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "unfunded_rows": [
+      "net_of_tagged_commitment"
+    ]
   }
 }

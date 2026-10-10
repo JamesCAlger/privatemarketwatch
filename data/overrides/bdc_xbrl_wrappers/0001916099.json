@@ -184,5 +184,10 @@
     "unclassified_rate": {
       "max_pct": 0.01
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

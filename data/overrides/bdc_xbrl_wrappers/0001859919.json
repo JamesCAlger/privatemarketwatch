@@ -249,7 +249,27 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "reference_rate_columns": [
+      "Interest"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^([^,|]+(?:,\\s*(?:(?i:LLC|L\\.L\\.C\\.?|Inc\\.?|L\\.P\\.?|LP|Ltd\\.?|Limited|Corp\\.?|S\\.A\\.?|GmbH|B\\.V\\.|PLC|LLP|Co\\.?))(?:\\s*\\([^)]*\\))?)*)\\s*,",
+    "hierarchy_instrument_re": ",\\s*([^,]+)$",
+    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',\\s*[^,]+$')"
   }
 }

@@ -421,6 +421,15 @@ _BPS_MARGIN_RE = re.compile(
     r"(?i)^\s*[A-Za-z]{1,8}\s*\+\s*(\d{1,4})(?:\s+cash\s+plus\s+(\d+(?:\.\d+)?)\s*%\s*PIK)?\s*(?:,.*)?$")
 
 
+def _named_header(text: str) -> str:
+    """A printed header as a wrapper names it: lower case, single spaces, footnote marks dropped.
+
+    'Reference Rate and Spread (5)' and 'Reference (4)' are the columns a wrapper names
+    'Reference Rate and Spread' and 'Reference'.
+    """
+    return re.sub(r"(?:\s*\(\d{1,2}\))+$", "", " ".join(str(text).lower().split()))
+
+
 def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: dict[str, Any] | None) -> str:
     """Total margin over the reference rate printed on a row, in percent, or '' when not read.
 
@@ -434,7 +443,7 @@ def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: d
     if not filer_reading or not header_map:
         return ""
     named = [i for i in sorted(header_map) if i < len(grid)
-             and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
+             and _named_header(header_map[i]) in filer_reading["columns"]]
     if not named:
         return ""
     own = _BPS_MARGIN_RE.match(grid[named[0]])
@@ -570,7 +579,7 @@ def field_status(field: str, grid: list[str], header_map: dict[int, str],
     if field == "reference_rate_type" and filer_reading and header_map:
         codes = filer_reading.get("codes")
         named = [i for i in sorted(header_map) if i < len(grid)
-                 and " ".join(header_map[i].lower().split()) in filer_reading["columns"]]
+                 and _named_header(header_map[i]) in filer_reading["columns"]]
     if named:
         cols = named
         unspecified = filer_reading.get("unspecified") or ()

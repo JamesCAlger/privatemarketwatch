@@ -1,0 +1,430 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-LARGE3-C103-1851322",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 12 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C103 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-C103-1859919",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C103 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-C107-1849894",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 194 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C107 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-C107-1851322",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 1081 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C107 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-C107-1859919",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 495 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C107 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-C107-1869453",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001869453"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 332 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d C107 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-F28-1742313",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-F28-1849894",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-F28-1851322",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-F28-1859919",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-F28-1869453",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001869453"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d: the fund's first quarter with published holdings is 2023-03-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-X02-1742313",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox l3d for each quarter listed: 100 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py l3d 0001742313",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-X02-1869453",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001869453"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-09-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox l3d for each quarter listed: 297 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py l3d 0001869453",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-X06-1742313",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 9 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d X06 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-X06-1851322",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 8 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d X06 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE3-X06-1859919",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l3d for each quarter listed: 4 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l3d X06 3",
+   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "cik": "1993402",
+ "rule_id": "exclude_commitment_table_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)Commitment\\s+Type|Commitment\\s+Expiration\\s+Date')",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "Antares Strategic Credit, 10-Q for 2026-03-31: a separate table 'Commitment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value' ends 'Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )' and sits outside Total Investments; Movati DDTL prints 'CAD 3,500 ( 27 ) 25' in the schedule and its commitment context C_fc7bf067 carries fair value 25,000 again."
+  },
+  {
+   "source": "query",
+   "quote": "Reading docs/investigations/v05_readings/0001993402.md and 0001976336.md: 94 to 375 such rows a quarter are published (fair value -0.2M to -9.5M); the other rows plus the money-market row equal the filed total in every quarter but one."
+  }
+ ],
+ "rationale": "A member that carries the commitment table's own column words is a row of that table. The schedule row of the same loan is published separately.",
+ "confidence": 0.9,
+ "measured_impact": {}
+}

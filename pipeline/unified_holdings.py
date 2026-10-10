@@ -1315,6 +1315,15 @@ def build_unified_holdings(
             combined, _promoted_corrections, _promoted_rules)
         _agent_fix_audits.extend(_plan_audits)
 
+    # A filer's own trailing text on the issuer name (a row number), removed last so that the
+    # duplicate filters, rules and corrections above still see the name as filed.
+    from pipeline.staging_bdc import issuer_name_strip_patterns
+    for _strip_cik, _strip_re in issuer_name_strip_patterns().items():
+        _strip_rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == _strip_cik)
+        if _strip_rows.any():
+            _stripped = combined.loc[_strip_rows, "issuer_name"].astype("string").str.replace(_strip_re, "", regex=True)
+            combined.loc[_strip_rows, "issuer_name"] = _stripped.where(_stripped.str.strip() != "", combined.loc[_strip_rows, "issuer_name"])
+
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",

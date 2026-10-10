@@ -203,5 +203,31 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Interest",
+      "Ref. Rate"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "SA=SONIA",
+      "E=EURIBOR",
+      "L=LIBOR",
+      "P=PRIME"
+    ],
+    "pik_only_tag_reading": [
+      "coupon",
+      "margin"
+    ],
+    "printed_margin_reading": [
+      "cash_plus_pik"
+    ]
   }
 }

@@ -134,5 +134,10 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "reference_rate_columns": [
+      "Reference Rate"
+    ]
   }
 }

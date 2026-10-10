@@ -1,0 +1,177 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-LARGE11-C107-1965934",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l11a for each quarter listed: 18 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-C107-2008748",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l11a for each quarter listed: 154 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-C107-2011498",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox l11a for each quarter listed: 89 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-F28-1965934",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l11a: the fund's first quarter with published holdings is 2024-06-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-F28-2008748",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-02-22",
+    "2024-06-30"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l11a: the fund's first quarter with published holdings is 2024-09-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-F28-2011498",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2024-01-17",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l11a: the fund's first quarter with published holdings is 2024-12-31; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-LARGE11-X02-2008748",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox l11a for each quarter listed: 38 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py l11a 0002008748",
+   "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  }
+ ]
+}

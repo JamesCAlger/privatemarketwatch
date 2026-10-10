@@ -1889,3 +1889,558 @@ beyond the totals below.
 Next by size after these: Manulife Private Credit 0001988280, Silver Capital Holdings 0001674760,
 TCW Direct Lending 0001603480, Senior Credit Investments 0001959568, Commonwealth Credit Partners
 0001841514.
+
+### D-080 Largest-first, third batch: MSD, North Haven, Monroe, Blue Owl Technology Income, Barings Private Credit (2026-10-09/10)
+
+Owner correction 2026-10-09: "i meant largest first. commit, then keep going". The two
+smallest-first batches (D-078, D-079) were a misreading of the order; their fixes are committed
+(ae19926) and those funds are parked.
+
+Sandboxes `l3a` (as published plus earlier shared fixes) to `l3d`. No 2026-06-30 filings are cached
+for these funds and none were downloaded; the batch runs to 2026-03-31.
+
+Outstanding 550 to 349; 263 with the reasons the owner already accepted applied by their checks
+(`large3_accepted_by_check.json`, 16 entries, D-073). The 263 are not read.
+
+| Fund | Published against filed, as published | Now (l3d) |
+|---|---|---|
+| Monroe Capital Income Plus (0001742313) | 38M to 273M over in ten quarters | equal in all thirteen |
+| Barings Private Credit (0001859919) | 17M to 390M over in all thirteen | equal in twelve; 203.4M over at 2023-06-30 |
+| Blue Owl Technology Income (0001869453) | 5M to 19M over in five quarters | equal in all |
+| MSD Investment Corp. (0001849894) | 20.0M over in one quarter | equal in all |
+| North Haven Private Income (0001851322) | 0.5M to 1.2M off in four quarters | equal in all |
+
+**Causes and fixes:**
+
+- **Monroe, Barings: the affiliate roll-forward note published as positions** (the Golub and SCP
+  pattern). The note's members carry no percent of net assets and no principal. Rules
+  `1742313/exclude_affiliate_rollforward_rows` (ten quarters) and
+  `1859919/exclude_affiliate_rollforward_rows` (seven quarters) plus
+  `1859919/exclude_affiliate_rollforward_rows_2024q4_on` (five quarters, keeping the Thompson
+  Rivers member interest and unit rows, which are schedule rows there). Each rule lists only the
+  quarters in which removing those rows makes published equal filed, measured on `l3a`. They are
+  quarter-listed, so a new quarter needs the same measurement before the rule is extended.
+- **Blue Owl Technology Income, North Haven: dollar values tagged with a foreign unit** and
+  converted a second time (Armstrong Bidco: par GBP 26,570, value fact 33,618 in "GBP", published
+  42,839; North Haven's Tempo Acquisition, a dollar loan, 3,999 published as 2,777).
+  `foreign_unit_values: reported_in_usd`.
+- **MSD: a printed subtotal tagged as a loan** at 2025-03-31 ('21,145 19,967 0.82' after the
+  issuer's two rows). Rule `1849894/exclude_2025q1_lj_perimeter_subtotal`, one filing.
+- **Rates:** `filed_rate_reading: all_in` for MSD, North Haven and Barings (the label or the
+  arithmetic shows the rate fact is the whole coupon); loans with a PIK part published no rate
+  before. Blue Owl Technology Income gets the reference-rate column and codes, and the
+  cash-plus-PIK margin reading of the adviser's other fund.
+- **Foreign principal:** `principal_usd_reference: fred_h10` for MSD, North Haven and Blue Owl
+  Technology Income (principal had no dollar equivalent).
+
+**Open on these five:** Barings 2023-06-30 (203.4M over; the same test leaves 6.9M unexplained, so
+no rule); Barings, three or four loans a quarter whose PIK fact exceeds the rate fact and publish
+no rate (the reason accepted for Ares Capital as DS-015, which has no check); Barings, the
+excluded note rows now read as missing source rows (SRC_BDC01, 12 quarters; the DS-016 pattern);
+Monroe, Evolve Biologics publishes a 16.00 spread as tagged; the 263 unread findings.
+
+**Tests:** `test_source_encodings.py` 97 (one pinned set extended with its evidence),
+`test_agent_promoted.py` 63. **Not run:** full suite, semantic diff, any 70-fund build.
+
+### D-081 Largest-first, fourth batch: TPG Twin Brook, Antares Strategic Credit, Ares Core Infrastructure, Sixth Street Specialty Lending, Stepstone Private Credit (2026-10-10)
+
+Sandboxes `l4a` to `l4c`, to 2026-03-31 (no later filings cached, none downloaded). Outstanding 456
+to 380; 311 with the reasons the owner already accepted applied by their checks
+(`large4_accepted_by_check.json`, 17 entries). The 311 are not read.
+
+| Fund | Published against filed, as published | Now (l4c) |
+|---|---|---|
+| Stepstone (0001950803) | 1M to 119M off in eight quarters, both directions | 1M to 25M under in six quarters |
+| Antares Strategic Credit (0001993402) | 2M to 19M under in seven quarters | 2M to 9.5M under in five |
+| Sixth Street Specialty Lending (0001508655) | 1.0M over in one quarter | unchanged |
+| TPG Twin Brook (0001913724), Ares Core Infrastructure (0002031750) | equal | equal |
+
+**Fixes:**
+
+- **Stepstone:** members ending ' One' / ' Two' are separate schedule rows (the Goldman Sachs
+  pattern, D-063); 23 rows, 96.9M, were dropped as duplicates at 2025-09-30
+  (`staging.distinct_member_suffix_re`). Two subtotal members of the private credit funds section
+  published as positions at 2025-03-31 (32.4M each); `category_marker_re` extended.
+- **Antares:** dollar values tagged with the loan's currency and converted twice
+  (`foreign_unit_values`); `filed_rate_reading: all_in` (label: 'Interest Rate 9.40% (Incl. 3.13%
+  PIK)'); `principal_usd_reference`.
+- **TPG Twin Brook, Sixth Street Specialty Lending:** `filed_rate_reading: all_in`,
+  `principal_usd_reference`.
+- **Sixth Street Specialty Lending, issuer names:** 1,077 of 2,573 rows kept the schedule heading
+  on the issuer name. Its own headings and instrument markers are now in its leaf guard; 384 rows
+  were left after the first pass and a second pass (instrument markers) is applied but not yet
+  rebuilt. Correction to D-077: the leaf-guard prefix of 0001925309 does not strip this fund's
+  rows; each fund's prefix is applied to its own rows only.
+
+**Open:** Antares, the tagged rows sum 2M to 9.5M below the filed figure (at 2026-03-31 all 1,392
+tagged rows are published; the rest is printed and not tagged, or not in the schedule);
+Stepstone, six quarters short, cause not found; the 311 unread findings.
+
+**Tests:** wrapper, encoding and staging files pass. **Not run:** full suite, semantic diff,
+any 70-fund build.
+
+### D-082 Largest-first, fifth batch: KKR FS Income Trust, Goldman Sachs BDC, T. Rowe Price OHA, MidCap Financial, Stone Point Credit (2026-10-10)
+
+Sandboxes `l5a`, `l5b`, to 2026-03-31. Outstanding 707 to 645; 555 with the reasons the owner
+already accepted applied by their checks (`large5_accepted_by_check.json`, 14 entries). Not read
+beyond totals.
+
+| Fund | Published against filed, as published | Now (l5b) |
+|---|---|---|
+| KKR FS Income Trust (0001930679) | 13M to 571M over in all twelve quarters | unchanged (owner decision, below) |
+| Goldman Sachs BDC (0001572694) | 46M to 135M over in six quarters, up to 15M under in others | 0.6M to 20M under in eleven, 16.4M over in one |
+| MidCap Financial (0001278752) | 9M to 67M over in nine quarters | within 0.5M in eight; 5.2M and 17.9M over, 3.6M and 12.5M under in four |
+| T. Rowe Price OHA (0001901164) | 2M to 19M off in seven quarters | equal in all |
+| Stone Point Credit (0001825384) | 10.6M under in one quarter | unchanged |
+
+**FOR THE OWNER: KKR FS Income Trust prints its loans gross of undrawn commitments.** The schedule
+lists each loan at its full amount and then subtracts section lines: at 2026-03-31
+'Total Senior Secured Loans - First Lien 2,415,774 2,396,109; Unfunded Loan Commitments (430,150)
+(430,150); Net Senior Secured Loans - First Lien 1,985,624 1,965,959' and 'Total Asset Based
+Finance 834,553 851,164; Unfunded Commitments (140,884) (140,884)'. The published rows are what
+the filer tags, and their sum is 571.0M (430.150 + 140.884) above 'TOTAL INVESTMENTS 2,678,325'.
+The two offset lines are tagged (InvestmentOwnedAtFairValue -430,150 on context c-509). Nothing
+is changed here: publishing an offset row, or netting each loan, changes what a row means and is
+the owner's call. KKR FS Income Trust Select (0001975736) is the same adviser and is likely the
+same; not checked.
+
+**Fixes:**
+
+- **Goldman Sachs BDC:** from the 10-K for 2023-12-31 the equity and unsecured sections are filed
+  under headings the wrapper did not know ('Investment Equity Securities', 'Investment Unsecured
+  Debt', 'Investment Common Stock', ...), so their section subtotals were published as positions
+  (136.1M at 2023-12-31). Prefix rules added and 'Total <section>' members read as subtotals.
+- **T. Rowe Price OHA:** dollar values tagged with a foreign unit and converted twice
+  (`foreign_unit_values`).
+- **MidCap Financial:** members made of the industry and a group name alone ('Business Services
+  Escalent', 9,381, beside the group's one loan at 9,381) are group subtotals; rule
+  `1278752/exclude_group_name_subtotal_rows`.
+
+**Open:** Goldman Sachs BDC is now short of its filed total in most quarters (with the subtotals
+gone, positions missing elsewhere show); MidCap's four quarters; Stone Point 2025-12-31; the 555
+unread findings.
+
+### D-083 Largest-first, sixth batch: Diameter Credit, Carlyle Credit Solutions, Fidelity Private Credit Fund, Trinity Capital, Golub Capital BDC 4 (2026-10-10)
+
+Sandboxes `l6a`, `l6b`, to 2026-03-31. Outstanding 423 to 366; 296 with the reasons the owner
+already accepted applied by their checks (`large6_accepted_by_check.json`). Not read beyond totals.
+
+**Fixes (settings only):** `filed_rate_reading: all_in` for Diameter ('Interest Rate 9.42% (2.75
+PIK) ... Spread 5.75%'), Fidelity ('SOFR + 7.00% (0.50% PIK) Interest Rate 10.79%') and Carlyle;
+`principal_usd_reference` for Carlyle; Golub Capital BDC 4 gets the adviser's rate reading,
+reference-rate column and codes from 0001930087 (same layout and legend, read on its 10-Q for
+2025-12-31), and `page_labelled_contexts` (63 rows sit on a group context; applied, not rebuilt).
+
+**FOR THE OWNER: Fidelity Private Credit Fund's mutual funds.** The fund holds 'Fidelity Floating
+Rate Central Fund' and 'Fidelity High Income Central Fund' (48.0M at 2024-12-31, 88.1M at
+2025-06-30) in a 'Fixed Income Mutual Funds' section that is inside its filed investments total.
+Its wrapper names them as not private-market, so they are left out and published sits 13M to
+208M under the filed total in nine quarters. Leaving them out is a deliberate earlier choice;
+whether they are published under a non-private class (as cash rows are since D-070) is the
+owner's call.
+
+**Open:** Carlyle 2024-12-31, 62.5M under: every tagged row is published (176 rows, 1,888.8M), so
+the missing part is printed and not tagged, or tagged without an identifier; Trinity, up to 7.9M
+off in seven quarters, and no rate published for its loans (the rate is in the label text only);
+Golub Capital BDC 4, 10M under in two quarters until the page-labelled reading is rebuilt.
+
+### D-084 Largest-first, seventh batch: Nuveen Churchill PCAP, BlackRock Private Credit, HPS Corporate Capital Solutions, T Series BDC, New Mountain Guardian IV (2026-10-10)
+
+Sandboxes `l7a`, `l7b`, to 2026-03-31. Outstanding 347 to 250; 150 with the reasons the owner
+already accepted applied by their checks (`large7_accepted_by_check.json`, 19 entries). Golub
+Capital BDC 4, re-run in `l7a` with the page-labelled reading of D-083, now equals its filed total
+in every quarter (57 outstanding to 32).
+
+**Fixes (settings only):** `filed_rate_reading: all_in` for T Series ('S+ 5.00% (incl. 1.75% PIK)
+Interest Rate 8.67%'), Nuveen Churchill, New Mountain Guardian IV and HPS Corporate Capital
+Solutions (rate fact = reference rate + cash spread + PIK in each); `principal_usd_reference` for
+T Series and HPS Corporate Capital Solutions; `foreign_unit_values` for T Series (Excelitas, par
+EUR 6,487, value 7,581 published as 8,897).
+
+**Open:** BlackRock Private Credit, loans with a PIK part publish the cash margin plus the PIK
+margin as their rate (5.76 where the label says 'Total Coupon 9.42%'): its rate fact holds the
+cash margin, unlike BlackRock Direct Lending's; T Series 14M to 20M over in two quarters and 2M in
+two; Nuveen Churchill 5M to 16M under in three 2023 quarters (every tagged row is published);
+HPS Corporate Capital Solutions 2M to 5M over in four quarters; the 150 unread findings.
+
+### D-085 Largest-first, eighth batch: New Mountain Private Credit, Blackstone Private Real Estate Credit, AB Private Credit Investors, KKR FS Income Trust Select, Bain Capital Private Credit (2026-10-10)
+
+Sandboxes `l8a`, `l8b`, to 2026-03-31. Outstanding 392 to 357; 301 with the reasons the owner
+already accepted applied by their checks (`large8_accepted_by_check.json`, 12 entries).
+
+**Fixes (settings only):** `filed_rate_reading: all_in` for AB Private Credit Investors ('9.46% (S +
+3.00%; 1.00% Floor; 2.75% PIK)'), Bain Capital Private Credit ('7.50% (8.00% PIK) Interest Rate
+15.50%') and New Mountain Private Credit; `principal_usd_reference` for Bain and KKR FS Income
+Trust Select.
+
+**FOR THE OWNER:** KKR FS Income Trust Select (0001975736) publishes 2.5M to 316M above its filed
+total in eight quarters, growing with the fund: the same gross-of-undrawn-commitments schedule as
+KKR FS Income Trust (D-082). Not changed.
+
+**Open:** Bain, 33.5M and 41.5M under at 2025-09-30 and 2025-12-31: about eighteen rows of close to
+5M each share the identifier of a larger row of the fund and are dropped as duplicates or never
+published; whether they are the fund's own second tranche or the loans of its senior loan
+programme was not read. Bain also has dollar values tagged with a foreign unit (six rows, 9.7M)
+not yet set. New Mountain Private Credit, 36.9M over at 2024-12-31, not read. The 301 unread
+findings.
+
+### D-086 Largest-first, ninth batch: APS BDC, Jefferies Credit Partners, Antares Private Credit, Fortress Private Lending, Fidelity Private Credit Co (2026-10-10)
+
+Sandboxes `l9a`, `l9b`, to 2026-03-31. Outstanding 254 to 211; 162 with the reasons the owner
+already accepted applied by their checks (`large9_accepted_by_check.json`, 14 entries).
+
+**Fixes:** `filed_rate_reading: all_in` for Fidelity Private Credit Co and Antares Private Credit
+(labels state the rate including PIK); `principal_usd_reference` for Antares Private Credit;
+`foreign_unit_values` for Jefferies and Fortress (Fortress is now equal to its filed total in
+every quarter); Antares Private Credit's investments figure at 2025-03-31 supplied from the page
+(company facts hold two values for the date and the smaller, 39.5M, was taken; the schedule
+prints 1,103,954).
+
+**Open:** Fidelity Private Credit Co, 9M to 67M under in five quarters: the same excluded Fidelity
+mutual funds as the Fidelity Private Credit Fund (owner question of D-083); Jefferies, 0.5M to
+1.6M under in seven quarters; the 162 unread findings.
+
+### D-087 Largest-first, tenth batch: VISTA Credit Strategic Lending, 26North BDC, Goldman Sachs Private Middle Market Credit II, Crescent Capital BDC, Apollo Origination II (Levered) (2026-10-10)
+
+Sandboxes `l10a`, `l10b`, to 2026-03-31. Outstanding 297 to 251; 166 with the reasons the owner
+already accepted applied by their checks (`large10_accepted_by_check.json`, 18 entries). Published
+equals filed in every quarter for four of the five; Crescent Capital BDC is 1M to 31M off in five.
+
+**Fixes (settings only):** `filed_rate_reading: all_in` for Crescent ('S + 250 (plus 400 PIK)
+Interest Rate 10.27%'), Goldman Sachs Private Middle Market Credit II, VISTA ('SOFR + 9.00% (9.00%
+PIK) Interest Rate 12.83%') and 26North ('SOFR + 5.550 (Incl. 2.925% PIK)|9.277%'); Apollo
+Origination II (Levered) gets the rate, margin, currency and reference-rate settings of Apollo
+Debt Solutions (same layout: 'S+275 Cash plus 2.75% PIK').
+
+**Open:** Crescent 2023-12-31 30.8M under and four smaller differences, not read; the 166 unread
+findings.
+
+### D-088 Largest-first, eleventh batch: Overland Advantage, NMF SLF I, Lord Abbett Private Credit, TCW Direct Lending VIII, AGL Private Credit Income (2026-10-10)
+
+Sandbox `l11a`, to 2026-03-31. 376 outstanding as built; 327 with the reasons the owner already
+accepted applied by their checks. `filed_rate_reading: all_in` set for NMF SLF I and TCW Direct
+Lending VIII ('12.17% inc PIK (SOFR + 8.50%, 2.00% Floor, 1.00% PIK)'); both are re-run with the
+twelfth batch.
+
+**Open, real and large:**
+
+- **Lord Abbett Private Credit (0002008748): 48M to 199M under its filed total in seven quarters.**
+  The schedule names each issuer's main term loan by the issuer alone ('Accession Risk Management
+  Group, Inc 3M S + 4.75% 9.05 % 11/1/2029 17,064 17,003 17,021') and its other tranches with a
+  bracket ('... (Delayed Draw Term)'). At 2025-03-31 ten such main loans, 176.1M, have a tagged
+  row and no published row; thirteen others are published. Where they are dropped was not found.
+- **Overland Advantage (0001965934): 91M to 215M under in five quarters.** Every tagged row is
+  published (71 rows, 1,151.0M at 2025-06-30, against a filed 1,366.1M). The missing part is not
+  among the tagged position rows; not read on the page.
+- NMF SLF I, 3M to 16M off in four quarters; TCW Direct Lending VIII has no filed investments
+  figure in three 2023 quarters.
+
+### D-089 Largest-first, twelfth batch: Silver Point Specialty Lending, TCW Direct Lending VII, MidCap Apollo Institutional, Phillip Street BDC, Crescent Private Credit Income (2026-10-10)
+
+Sandbox `l12a`, to 2026-03-31, first build only (MidCap Apollo Institutional already carries the
+Apollo settings of D-088). 631 outstanding for the five; 562 with the reasons the owner already
+accepted applied by their checks (`large12_accepted_by_check.json`). NMF SLF I and TCW Direct
+Lending VIII, re-run here with their rate reading: 99 to 86 and 97 to 79.
+
+Totals, not read further: Silver Point within 1.5M; Phillip Street and Crescent Private Credit
+Income within 2M except Crescent's two latest quarters (4.3M and 7.7M over). **TCW Direct Lending
+VII has no usable filed investments figure** in nine quarters and two that are far below the
+schedule (847.2M against 1,061.8M published at 2024-12-31; 657.3M against 1,013.2M at 2026-03-31);
+its printed totals were not read. The fund-level figures need supplying from the page as for SCP
+(D-078) and TCW Star (D-079), which belongs to the same adviser family.
+
+Addendum to D-088 (Lord Abbett, lead for the fix): the parsed file holds the main loans
+('Accession Risk Management Group Inc', 17,021 thousand, context c92 at 2025-03-31); they are lost
+in staging. The wrapper declares prefix rules ('First Lien Secured Debt', 'Total ...') that only
+its subtotal members use, and for a fund with prefix rules staging treats a row that has no
+declared prefix and no instrument word, and whose name starts other rows' names, as a heading
+(`pipeline/staging_bdc.py`, the prefix-rules block near line 840). The likely fix is to restate
+this wrapper as a flat schedule (`dispatch.flat_schedule`, as for HPS) with the subtotal members
+as aggregate markers. Not done.
+
+### D-090 Largest-first, thirteenth batch, and where the cohort stands (2026-10-10)
+
+Sandbox `l13a`, first build only: Varagon, Apollo Origination II (UL), Commonwealth Credit
+Partners, Senior Credit Investments, TCW Direct Lending, Silver Capital Holdings, Manulife Private
+Credit. 644 outstanding; 564 with the reasons the owner already accepted applied by their checks
+(`large13_accepted_by_check.json`). Totals, not read further: Manulife 12M to 92M over in seven
+quarters and 24M under in one; TCW Direct Lending has no usable filed investments figure;
+Commonwealth 10M to 12M over in four quarters; Varagon up to 6M under in eight.
+
+**Every fund of the 77-CIK manifest has now had a first sandbox pass.** Outstanding findings after
+the check-accepted entries, by batch (sandbox of record):
+
+| Batch | Funds | Outstanding | Read |
+|---|---|---|---|
+| First five (`final5`) | 5 | 0 | all |
+| Next five (`n5j`, D-077) | 5 | 82 | all; 34 proposals await the owner |
+| Largest-first 3 to 13 (`l3d` to `l13a`) | 57 | 3,624 | totals only |
+| Smallest-first 1 and 2 (`s1c`, `s2a`; parked) | 10 | 620 | totals only |
+
+The counts are sandbox ledgers to 2026-03-31 (2026-06-30 for the first ten). "Read" means read
+against the filing. A fund whose published total equals its filed total can still carry wrong
+rates, classes or names; the unread findings are where those would show.
+
+## 2026-10-10 (later): owner rulings; reading every fund against its filings
+
+Owner, verbatim, answering D-090's three questions: "1. net each loan 2. yes 3. explain the pik only
+loans with spread issue" and "i want the same attention given to the largest first batches than to
+the first 10. read against filings."
+
+### D-091 KKR FS Income Trust and KKR FS Income Trust Select: undrawn commitment rows are published net
+
+- **Decision (owner: "net each loan").** New wrapper setting `source_encodings.unfunded_rows:
+  ["net_of_tagged_commitment"]`, set for 0001930679 and 0001975736. Module
+  `pipeline/unfunded_commitments.py`, called by the extractor and by source reconciliation; the
+  re-verifier replays the event `net_of_commitment:<amount>` recorded in `src_facts`.
+- **Mechanism.** The schedule lists an undrawn commitment as its own row at the committed amount
+  ("Sotheby's, Revolver (i) ... 31,849 31,849 31,849", footnote (i) "Security is an unfunded
+  commitment") and subtracts "Unfunded Loan Commitments (430,150) (430,150)" per section. The same
+  filing tags every commitment in its commitments note
+  (`InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount` on the investment's member). A
+  schedule row of the same date whose name starts with the commitment's name and whose cost equals
+  the tagged amount is that commitment's row: its cost and fair value are reduced by the amount
+  (cost 0, fair value = the mark, e.g. AGS Health 1,628 - 1,679 = -51); principal keeps the
+  committed amount.
+- **Measured** (`python scripts/v05_evidence/commitment_match.py 1930679`): 0001930679 matches every
+  tagged commitment in ten of twelve filings (165 of 165, 570,751K, at 2026-03-31; 3 unmatched in
+  the other two); 0001975736 matches all in six of nine (6 unmatched in three).
+- **Two older rules removed** (`git rm`): `1930679/exclude_exact_par_commitment_rows_2025h2` and
+  `1975736/exclude_2025_12_unfunded_commitment_rows`. They dropped "exact par" rows by value in
+  listed quarters; with the netting they removed funded rows too (first run `k1a`: 220M to 287M
+  under in three quarters).
+- **Result, sandbox `k1b`.** Published against filed: 0001930679 was 13M to 571M over in all twelve
+  quarters, now equal in three and 1.5M to 14.1M over in nine; 0001975736 was 2.5M to 316M over in
+  eight, now equal in four and 1.7M to 9.7M over in five. The remainder is not read (unmatched
+  commitments, or a row the note does not list: at 2026-03-31 the offsets print 571,034 and the
+  note 570,751).
+- **Both funds are held back from the public 70** (manifest note: over-inclusion 1.15x and 1.18x).
+  Whether they now pass admission was not tested.
+- **Also fixed:** the provenance summary failed when no fund of a run is in the 70-fund cohort
+  list (`pipeline/provenance_reverify.py`, typed empty frame). The re-verifier does not cover the
+  seven held-back funds.
+- Tests: `tests/test_unfunded_commitments.py` (8). Re-run: `commitment_match.py <cik>`.
+
+### D-092 The PIK-only-with-spread question, explained (nothing changed)
+
+Two different cases publish no `interest_rate` today:
+
+| Case | Printed | Tagged | Count in the first five (rows, all quarters) |
+|---|---|---|---|
+| Whole coupon is PIK | Ares Strategic Income, 22 HoldCo: "11.55 % PIK SONIA (S) 7.50 %" | PIK 11.55, spread 7.50, no plain rate | Ares 302, BCRED 140 (e.g. CB Nike 11.02 / 7.35) |
+| PIK is part of the margin | Blue Owl, Deerfield Dakota: spread 5.75, PIK 2.75, no coupon printed | spread, PIK margin | Blue Owl 491, Apollo 199, HPS 88 |
+
+`pik_only_tag_reading: coupon` fills the rate from the PIK tag only when no spread is tagged
+(D-018). Recommendation put to the owner: fill the first case (PIK figure above the spread) and
+leave the second empty. Not done: it changes first-five rows.
+
+### D-093 What no finding reports: field defects measured across all 77 funds
+
+`python scripts/v05_evidence/cohort_field_health.py` (output kept in
+`scratch/2026-10-10_read/cohort_field_health.txt`; each fund from its latest sandbox). Published
+loan rows:
+
+- **Reference rate guessed from the report date** (`reference_rate_source` = inferred): above 60 pct
+  of loan rows in 31 funds, among them Ares Capital 75, BCRED 79, HPS 62, Blue Owl 66. The guess is
+  LIBOR before July 2023 and SOFR after, so it is wrong for SOFR loans in early 2023 and for every
+  EURIBOR, SONIA, CORRA or BBSY loan. Read on the page so far: Barings 2023-06-30, all 376 rows
+  LIBOR, page prints SOFR 162, EURIBOR 83, LIBOR 79, SONIA 29, BBSY 18; North Haven 348 loans
+  (2,127.6M) LIBOR at 2023-03-31 where the page mixes "S +" and "L +"; Monroe 275 loans (1,440M).
+  A fund whose wrapper names its printed column (`reference_rate_columns`) has the printed code
+  replace the guess; from 2025 filers also tag the benchmark per row
+  (`InvestmentVariableInterestRateTypeExtensibleEnumeration`), which nothing reads into holdings.
+- **No interest rate on 90 pct or more of loans:** KKR FS Income Trust Select, Senior Credit
+  Investments, Jefferies, Overland, the three Apollo-layout funds, MidCap Financial, both Blue Owl
+  funds, Stellus, Stepstone at the latest date. Some are as filed (Blue Owl prints no all-in rate);
+  most are not read.
+- **Issuer not split from the label** (distinct issuers above 90 pct of rows): every quarter for
+  BCRED, HPS, Stone Point, T. Rowe Price OHA, Monroe, Manulife, Diameter, Lord Abbett, HPS Corporate
+  Capital Solutions, SCP, Blackstone Private Real Estate Credit; most quarters for Barings, Blue Owl
+  (both), Golub Capital BDC 4, T Series, North Haven, NexPoint, Carlyle. The measure is a screen:
+  a fund with one tranche per borrower would also trip it. BCRED and HPS need a look.
+- **No maturity:** Blue Owl 41 to 46 pct at the latest date (both funds), Antares Strategic 28,
+  Senior Credit Investments 25, Jefferies 17, APS 100.
+
+None of this is counted in "outstanding findings". It is the measured form of "all findings
+cleared is not data correct".
+
+### D-094 Reading against filings: first fixes built (Barings, Lord Abbett, Overland), and one that failed its first form
+
+Readings are kept in `docs/investigations/v05_readings/<cik>.md`; the list of real errors and their
+state is `docs/investigations/v05_reading_backlog.md`. 21 funds read so far.
+
+- **Barings (sandbox `b1a`).** New wrapper setting `source_encodings.schedule_row_tags:
+  ["cost_or_percent_unrounded"]` (`pipeline/schedule_row_tags.py`, extractor and source
+  reconciliation): a context is a position only if it carries a cost tag or a percent-of-net-assets
+  tag and no value fact rounded more coarsely than the thousand. It replaces four row-exclusion
+  rules (moved to `1859919/_pulled_superseded_by_schedule_row_tags_2026-10-10/`). Result: 2023-06-30
+  from 203.4M over to 6.9M under (two real rows still missing: CPCF schedule row c-838 4,534 and
+  Finexvet c-329 2,388); the other twelve quarters equal filed; cost at 2026-03-31 equals the
+  printed 5,231,456 (was 31.1M over). Staging block `hierarchy_extract` splits the older
+  'issuer, [industry,] instrument' member: 288 issuers for 494 rows at 2023-06-30 (was 491 for
+  503). `pik_only_tag_reading: coupon`; `reference_rate_columns: ["Interest"]` (at 2023-06-30
+  LIBOR falls from 376 rows to 193; the page prints 79, so the printed read is still partial).
+  Outstanding findings for the fund 107 to 45. Tests `tests/test_schedule_row_tags.py` (4).
+- **Lord Abbett (sandbox `b2a`).** New wrapper key `dispatch.bare_entity_rows: "positions"`
+  (`pipeline/staging_bdc.py`): the bare-entity subtotal filter of prefix-rule filers (condition 2d)
+  does not apply. Published now equals filed in all seven quarters (was 48M to 199M under; 32 rows,
+  662.1M). One context named through `context_identifiers` (Arkas Bidco equity). Open: the
+  restored joint-venture interest and equity rows class as loans; percent of net assets 100 times
+  too small at 2025-06-30; issuer names.
+- **Overland (sandbox `b2a`).** The Treasury bill the filer tags with no identifier in three
+  filings is named through `context_identifiers`; it now publishes, as a cash-class row. The filer
+  counts it inside 'Total Investments' (2025-06-30: 1,150,961 + 215,151 = 1,366,112), so published
+  excluding cash still reads 91M to 215M under. FOR THE OWNER: cash class (as now) or an investment
+  row. Open: money funds from 2025-06-30, Summit Materials 4.0M at 2024-06-30.
+- **Issuer row numbers (BCRED, HPS, North Haven, Monroe): first form rejected.** New key
+  `dispatch.issuer_name_strip_re` ('\s+\d{1,2}$'). Applied in staging (sandbox `b2a`) it made twin
+  rows collapse and unhooked rules that name a row: BCRED 48M under in nine quarters, HPS up to
+  70M under, North Haven 22M over in two. It now runs at the end of the unified build, after the
+  duplicate filters, rules and corrections; rebuilt as `c1a` (result in the next entry). In `b2a`
+  the names themselves came out right: BCRED 833 issuers for 1,288 rows at 2026-03-31 (was 1,257),
+  HPS 403 for 812 (was 794).
+
+### D-095 Reading against filings: second round of builds (sandboxes `c1a`, `c2a`); 31 funds read
+
+- **Issuer row numbers, second form: holds.** `dispatch.issuer_name_strip_re` now runs at the end
+  of the unified build (`pipeline/unified_holdings.py`). Sandbox `c1a`: BCRED, HPS, North Haven,
+  Monroe and MSD equal filed in every quarter; issuers at 2026-03-31: BCRED 833 for 1,288 rows
+  (was 1,257), HPS 404 for 813 (was 794), North Haven 324 for 680, Monroe 705 for 923. This changes
+  first-five rows (issuer_name only); position ids and the first five's findings were not compared
+  with `final5` yet.
+- **Fidelity Private Credit Co and Fund (c1a).** Shared double-prefix regex widened to the comma,
+  em-dash and truncated forms (only these two filers use them; MSD, the third filer declaring the
+  prefix, is unchanged in totals); 72 industry labels, leaf guard, twin suffix and dispatch
+  patterns from the reader's tested proposal (`v05_readings/proposals/`); rule
+  `exclude_mutual_fund_section_rows` for both. Co: equal to filed in all quarters but 2023-06-30
+  (1.4M under); it was 9M to 67M off in five. Fund: names repaired (12 of 345 still carry a heading
+  at 2026-03-31, was 110); still under in nine quarters: the central funds did not publish because
+  `cash_identifiers` is matched after the prefix is stripped (stripped forms added, rebuilt in
+  `d1a`), and 104.9M at 2025-06-30 is twelve positions whose fair value sits on a context dated
+  2025-03-31 (no setting covers a value on another date's context of the same member). Not
+  applied from the proposal: `leaf_guard.allow_dash` and the markerless equity path (new code).
+- **Settings from the readings (c2a).** Carlyle: 23 structured-credit contexts re-dated
+  (`misdated_contexts`), now equal to filed in every quarter (was 62.5M under at 2024-12-31).
+  Goldman Sachs BDC: `foreign_unit_values`, `filed_rate_reading: all_in`, `principal_usd_reference`,
+  `investments_total_excludes`, twin suffix: off in three quarters by 0.9M to 4.1M (was eleven
+  quarters, up to 20M); loans with no rate 34 to 41 pct down to 24 to 31. MidCap Financial:
+  `foreign_unit_values`: two quarters left (the two rows the filing tags wrongly). T. Rowe Price
+  OHA: `filed_rate_reading: all_in`: PIK-part loans with no rate 50 to 0 at the latest date.
+- **Printed reference-rate column: header match.** A named header did not match a printed header
+  ending in a footnote mark ('Reference Rate and Spread (5)'), so the setting did nothing for
+  T. Rowe Price OHA and Ares Core in `c2a`. `pipeline/bdc_xbrl_html_bridge.py::_named_header` now
+  drops trailing footnote marks before comparing. Columns named for nine more funds; HPS Corporate
+  Capital Solutions takes its sister's code table, whose change dates were NOT read on its own
+  pages. Rebuilding as `d1a`, `d2a`.
+- **Two promoted corrections pulled** (moved to `_pulled_wrong_remap_2026-10-10/`): Bain
+  `column_remap` moved cost into principal on 310 rows (cost 122.3M wrong at 2025-12-31; the filing
+  tags all three columns correctly, Caliber "2,856 2,856 2,863"); Stepstone `column_remap` erased
+  PIK on 40 rows at 2025-12-31 (Pave America printed "8.92 % / 2.88 %").
+- **Corrections to earlier statements of mine.** Golub Capital BDC 4 does not tie in every quarter
+  (D-084 read a build made before its settings applied); Bain's 'dropped twin rows' (D-085) are its
+  senior loan programme's loans, rightly unpublished; BlackRock Direct Lending's PIK-loan rates are
+  wrong in the same way as BlackRock Private Credit's (D-084 said they differed); Nuveen
+  Churchill's rate tag is the cash figure, so D-084's `all_in` was wrong (now `cash_leg`).
+- **Shared defects with no fix yet:** a position's value filed on a prior date's context (Fidelity
+  Fund, Bain, Trinity, AB, Goldman Sachs BDC); values filed without the thousands scale (Bain,
+  Stone Point, Stepstone); rows printed with a dash for fair value dropped, which understates cost
+  (Goldman Sachs BDC up to 132.6M, Trinity, Diameter, AB, MidCap, Sixth Street); coupon, cash
+  margin and PIK margin tagged apart (both BlackRock funds, TPG Twin Brook, Stepstone); the
+  per-row benchmark tag filed from 2025 read by nothing; net investment income holding total
+  income or a per-share figure (Goldman Sachs BDC, AB, Monroe, Blackstone Real Estate Credit).
+
+### D-096 Third round (sandboxes `d1a`, `d2a`, `e1a`); the promoted column-remap corrections; 40 funds read
+
+- **Results.** HPS Corporate Capital Solutions equal to filed in all eight quarters (roll-forward
+  rows removed by `schedule_row_tags`; issuer row marks stripped). T Series equal in twelve of
+  thirteen (1.7M under at 2024-12-31). Fidelity Private Credit Fund: central funds now publish as
+  cash-class rows; nine of thirteen quarters tie; left are 104.9M at 2025-06-30 (values on a
+  prior-dated context) and 60.6M over at 2025-03-31 (two subtotals tagged on position labels), both
+  filing errors, and two 2023 quarters not read. Crescent Capital BDC: six contexts re-dated; left
+  are the Ancora issuer subtotal (6.3M, 6.4M over) and one untagged cell (1.2M). Bain: six
+  contexts re-dated; left are 33.5M (two rows filed without the thousands scale) and 11.2M (two
+  rows filed in whole dollars). Jefferies: commitment-table contexts removed
+  (`schedule_row_tags: not_commitment_only`), equal in nine of ten quarters (1.2M over at
+  2025-03-31, two subtotals). Antares Private Credit equal in all. Antares Strategic: commitment
+  rows removed by rule `exclude_commitment_table_rows`; now 3.3M to 4.2M OVER in three quarters,
+  which is the add rule `add_blackrock_short_term_investment_2025` (a plug sized to the old gap):
+  to retire once the tagged money-market row is published. New Mountain Guardian IV equal in all
+  (`quantity_or_percent` removes one note aggregate).
+- **A test that failed on one fund.** `quantity_or_percent` on New Mountain Private Credit removed
+  a real row at 2025-12-31 (Bonterra LLC, 7,308): the filer tags that loan's values on c-263 and
+  its principal and rates on c-262. Setting withdrawn for that fund; the one note aggregate is
+  excluded by a rule pinned to its filing and context
+  (`2037804/exclude_2024q4_nonaccrual_note_aggregate`).
+- **Printed reference rate.** With the header fix, T. Rowe Price OHA at 2023-06-30 publishes SOFR
+  113, LIBOR 36, CDOR 4, EURIBOR 1, the page's own counts (was 154 LIBOR). `reference_rate_source`
+  stays 'inferred' where the printed code agrees with the guess, so the screen in D-093 overstates
+  what is still wrong for a fund whose column is named.
+- **New setting** `source_encodings.rate_tag_reading: ["coupon_with_margins"]`
+  (`pipeline/rate_tag_reading.py`, extractor and source reconciliation): the plain rate tag is the
+  coupon and the paid-in-cash tag the cash margin. Set for BlackRock Private Credit, BlackRock
+  Direct Lending and TPG Twin Brook; building as `f1a`. Tests `tests/test_rate_tag_reading.py` (5).
+- **Promoted `column_remap` corrections (agent_b2_corrections), all scoped to 2025-12-31, the
+  signed-off quarter.** Ten existed. Read so far: Bain (cost moved into principal, 310 rows, cost
+  122.3M wrong) and Stepstone (PIK erased, 40 rows): pulled (D-095). Golub Capital BDC 4 (spread
+  moved to PIK on every loan: 543 loans, 2.34B, publish no spread and a rate of the coupon plus the
+  spread, Denali 14.73 for a printed 9.23; confidence recorded 0.62): to pull. Crescent Capital BDC
+  (share counts moved into principal: 75 rows with a share count at 2025-09-30, none at
+  2025-12-31): to pull. Senior Credit Investments (same remap, share counts 4 to 0): to pull.
+  Audax, Silver Capital, TPG Twin Brook (confidence 0.42) and AGL (0.41) show no change in the
+  counted fields; not read. These are in the published build.
+
+### D-097 All 57 largest-first funds read; fourth round of builds (`f1a`, `g1a`, `h1a`)
+
+- **Coverage.** A report exists for every fund of batches 3 to 13 (55 files in
+  `docs/investigations/v05_readings/`; the two KKR funds were read by me, D-091). The ten parked
+  small funds (D-078, D-079) are not read. No reader rebuilt anything; every proposed fix is
+  untested until a sandbox shows it.
+- **`f1a`.** `rate_tag_reading: coupon_with_margins`: BlackRock Private Credit and BlackRock Direct
+  Lending PIK loans publish the printed coupon (IQN 9.45, cash margin 2.63, PIK 3.13; was 5.76);
+  no PIK loan without a rate in either fund. TPG Twin Brook takes the setting; its rows were not
+  re-read on the page. New Mountain Private Credit equal to filed in all quarters.
+- **`g1a`.** Three `column_remap` corrections pulled (Golub Capital BDC 4, Crescent Capital BDC,
+  Senior Credit Investments): Golub BDC 4 at 2025-12-31 back to 91 PIK loans and an average rate
+  of 8.86 (was 543 and 13.32); Crescent share counts back (73 rows); Senior Credit 4 rows. A
+  seventh, AGL's (moves the principal of its largest loan, 60.3M, into shares), pulled after its
+  reading. Left unread: Audax, Silver Capital, TPG Twin Brook.
+- **`h1a`.** Phillip Street (`foreign_unit_values`, `all_in`) and MidCap Apollo Institutional (plug
+  rule `add_2026q1_seko_common_equity` pulled) equal to filed in all quarters. Crescent Private
+  Credit Income: two quarters left (1.5M, 2.3M under; real rows dropped as duplicates). **Silver
+  Point regressed**: with the value-matching dedup rules 01 and 02 pulled and
+  `schedule_row_tags` set, published is 20.1M to 59.0M OVER in four quarters (category subtotals
+  the old rules had been hiding). Rule `exclude_rows_without_a_leaf_marker` added (a schedule row
+  names its acquisition or maturity date); rebuilt in `i1a`.
+- **Applied for `i1a`, not yet checked:** TCW Direct Lending VII (`schedule_row_tags`,
+  `filed_rate_reading: all_in`, `bare_entity_rows`), TCW Direct Lending VIII (`schedule_row_tags`),
+  Varagon, Commonwealth, Silver Capital (`all_in`), Senior Credit (`not_commitment_only`,
+  `foreign_unit_values`, `principal_usd_reference`; rule removing a real National Express row
+  pulled).
+- **Read and not yet acted on (largest):** Manulife's undrawn commitments are published gross
+  (17.5M to 105.6M a quarter; tagged `us-gaap:OtherCommitment`, so `unfunded_rows` does not fire)
+  and a rule sets cost equal to fair value on all 1,707 rows; TCW Direct Lending publishes a
+  Treasury bill and affiliate-note rows as positions (323.1M over at 2026-03-31, 288.3M at
+  2025-06-30) through five rules; the printed investments totals of TCW Direct Lending (13
+  quarters) and TCW Direct Lending VIII (three 2023 quarters) are in their reports, to be supplied
+  as the filed figure; TCW Direct Lending VII and VIII publish paid-in capital as net assets; three
+  TCW VIII loans (92.4M, 2023-09-30) carry no tag at all.
+
+### D-098 Fifth build (`i1a`) and state at the end of the day
+
+- **`i1a`.** Silver Point equal to filed in all twelve quarters with rule
+  `exclude_rows_without_a_leaf_marker` (the regression of D-097 is gone; the two value-matching
+  dedup rules stay pulled). TCW Direct Lending VII: affiliate roll-forward rows removed; the two
+  quarters that have a filed figure now tie (2024-12-31, 2026-03-31; published had been 215M and
+  356M above them); eight quarters still have no filed figure in the fund-level data (printed
+  totals are in its report, not yet supplied); loans with no rate 73 to 87 pct down to 0 to 1.
+  Senior Credit: one quarter left (7.1M under, two rows filed without the thousands scale); loans
+  with no maturity 25 pct to 0. Varagon: PIK loans with no rate 62 to 0; totals unchanged (rows
+  without the thousands scale, twins). Commonwealth: PIK loans with no rate 15 to 0; the Kent
+  Water Sports note rows (9.6M to 11.5M over in four quarters) still published. AGL correction
+  pulled.
+- **Tests:** 1,047 pass across the fourteen test files of the modules touched since ae19926
+  (rate tags, schedule-row tags, unfunded commitments, encodings, wrapper, oracle, page contexts,
+  staging refactor, signatures, promoted rules, re-verifier, fund income, derivatives, fund-level
+  wrapper). **Not run:** the full suite, the semantic diff, any 70-fund build, re-attestation.
+  The builds above are per-fund sandboxes of different dates; no single build holds all 77 funds
+  with today's settings.

@@ -14,14 +14,24 @@
       "Investment 1st Lien/Senior Secured Debt": "debt",
       "Investment 1st Lien/Last-Out Unitranche": "debt",
       "Investment 2nd Lien/Senior Secured Debt": "debt",
-      "Investment Equity Investments": "equity"
+      "Investment Equity Investments": "equity",
+      "Investment Equity Securities": "equity",
+      "Investment Common Stock": "equity",
+      "Investment Preferred Stock": "equity",
+      "Investment Warrants": "equity",
+      "Investment Unsecured Debt": "debt",
+      "Investment Canada": "equity",
+      "Investment United Kingdom": "equity",
+      "Investment Singapore": "equity",
+      "Investment Germany": "equity",
+      "Investment United States": "equity"
     },
     "aggregate_markers": [
       "total investments",
       "total debt investments",
       "total equity investments"
     ],
-    "category_marker_re": "^(?:\\(\\d+\\)\\s*)?(?:\\s*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)(?:.*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)*$"
+    "category_marker_re": "^(?:\\(\\d+\\)\\s*)?(?:\\s*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)(?:.*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)*$|(?:^|\\s)Total\\s+[A-Za-z][A-Za-z /&-]*$"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -73,7 +83,8 @@
       "Technology Distributors",
       "Trading Companies & Distributors",
       "Trucking"
-    ]
+    ],
+    "distinct_member_suffix_re": "(?i)\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\\s*$"
   },
   "archetypes": {
     "debt": {
@@ -157,7 +168,33 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "L=LIBOR",
+      "E=EURIBOR",
+      "S=SOFR",
+      "SN=SONIA",
+      "N=NIBOR",
+      "B=BBSW",
+      "P=PRIME"
+    ]
   }
 }

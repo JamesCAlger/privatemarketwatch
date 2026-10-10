@@ -172,7 +172,18 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ]
   }
 }

@@ -1,0 +1,30 @@
+{
+ "cik": "1849894",
+ "rule_id": "exclude_2025q1_lj_perimeter_subtotal",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2025-03-31"
+  ]
+ },
+ "predicate_sql": "regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), 'LJ Perimeter Buyer, Inc\\. - Delayed Draw Term Loan\\s*$') AND TRY_CAST(principal_amount AS DOUBLE) IS NULL",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-25-071644 (10-Q, 2025-03-31): 'LJ Perimeter Buyer, Inc. S + 6.65 % 1.00 % 10.94 % 10/31/2028 19,073 18,695 17,652 0.72 LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82'. The last three figures are the subtotal row."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox l3c: a third row, member '... LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan' with no rate terms, carries cost 21,145, fair value 19,967, percent 0.82 and no principal. Published 4,963.0M against the filed 4,943.1M; the difference is this row."
+  }
+ ],
+ "rationale": "The filer tagged the subtotal of the issuer's two loans on a member named like the delayed draw loan. The two loans are published; the subtotal is not a position. One filing only.",
+ "confidence": 0.95,
+ "measured_impact": {
+  "2025-03-31": {
+   "rows": 1,
+   "fv": -19967000.0
+  }
+ }
+}

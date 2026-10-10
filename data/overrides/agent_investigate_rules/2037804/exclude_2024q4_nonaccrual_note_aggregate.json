@@ -1,0 +1,30 @@
+{
+ "cik": "2037804",
+ "rule_id": "exclude_2024q4_nonaccrual_note_aggregate",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2024-12-31"
+  ]
+ },
+ "predicate_sql": "CAST(src_context_id AS VARCHAR) = 'c-708' AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND round(TRY_CAST(fair_value AS DOUBLE)) = 36886000",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "10-K for 2024-12-31, non-accrual paragraph: 'aggregate cost basis of $45.3 million, an aggregate fair value of $36.9 million'; context c-708 ('KWOR Acquisition, Inc., First lien') carries only cost 45,323 and fair value 36,886. The schedule rows of the issuer are 32,267 and 4,573."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox d2a: published at 2024-12-31 is 36.9M above the filed total; published less c-708 equals filed on fair value and cost (reading docs/investigations/v05_readings/0002037804.md)."
+  }
+ ],
+ "rationale": "The context is a note aggregate of rows already in the schedule. It is pinned to its filing and context because the filing is what is unusual: the generic test 'a position carries a principal, share count or percent tag' (schedule_row_tags quantity_or_percent) was tried in sandbox e1a and removed a real row whose values and principal the filer tags on two sibling contexts (Bonterra LLC, 7,308, c-263 / c-262 at 2025-12-31).",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2024-12-31": {
+   "rows": 1,
+   "fv": -36886000.0
+  }
+ }
+}

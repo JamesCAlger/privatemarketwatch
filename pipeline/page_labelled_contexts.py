@@ -270,4 +270,13 @@ def encoding_signature(cik: str) -> str:
     untagged = sorted("%s %s %s %s" % (accession, context, name, number)
                       for (owner, accession), listed in _untagged_by_accession().items() if owner == cik
                       for context, values in listed.items() for name, number in values.items())
-    return "|".join(combos + misdated + untagged + named + sorted("fv:" + name for name in fair_value_aliases(cik)))
+    from pipeline.unfunded_commitments import nets_unfunded_rows
+    netting = ["unfunded:net_of_tagged_commitment"] if nets_unfunded_rows(cik) else []
+    from pipeline.schedule_row_tags import reads_schedule_row_tags
+    from pipeline.rate_tag_reading import reads_margins
+    if reads_margins(cik):
+        netting.append("rates:coupon_with_margins")
+    from pipeline.schedule_row_tags import schedule_row_tests
+    netting.extend("rows:" + name for name in sorted(schedule_row_tests(cik)))
+    return "|".join(combos + misdated + untagged + named + netting
+                    + sorted("fv:" + name for name in fair_value_aliases(cik)))

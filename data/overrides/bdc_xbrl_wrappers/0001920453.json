@@ -13,7 +13,11 @@
       "Investments Investments - non-controlled /non-affiliate": "debt",
       "Investments Investments - non-controlled non-affiliate": "debt",
       "Investments Investments -- non-controlled / non-affiliate": "debt",
-      "Investments Investments": "debt"
+      "Investments Investments": "debt",
+      "Investments, Investments": "debt",
+      "Investments -- non-controlled": "debt",
+      "Investments - non-controlled": "debt",
+      "Investments-non-controlled": "debt"
     },
     "aggregate_markers": [
       "total investments",
@@ -23,7 +27,7 @@
       "total investment portfolio",
       "non-controlled / non-affiliate first lien debt"
     ],
-    "category_marker_re": "(?i)^(?!.*\\b(?:term\\s+loan|delayed\\s+draw|revolv\\w*|unitranche|warrants?|units?|stock|shares|notes?|bonds?)\\b)\\s*(?:(?:First|Second)\\s+Lien\\s+)?(?:Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)(?:\\s+[A-Z][A-Za-z,&:]+(?:\\s+[&A-Z]?[A-Za-z,&]+)*)?\\s*$",
+    "category_marker_re": "(?i)^(?!.*\\b(?:term\\s+loan|delayed\\s+draw|revolv\\w*|unitranche|warrants?|units?|stock|shares|notes?|bonds?|obligation|maturity|type|interests?|class|fund)\\b)(?!.*\\bpreferred\\s*$)(?!.*affiliated?\\s*,\\s*(?:Preferred\\s+|Common\\s+)?Equity,[^,]+,\\s*\\S)[\\s,/-]*(?:non-?controlled\\s*/?\\s*(?:non-?)?affiliated?\\s*,?\\s*)?(?:(?:First|Second)\\s+Lien\\s*)?(?:Unsecured\\s+Debt|Debt|Preferred\\s+Equity|Common\\s+Equity|Equity|Preferred\\s+Securities|Asset-Backed\\s+Securities)?(?:,?\\s*[A-Z][A-Za-z,&:]+(?:\\s+[&A-Z]?[A-Za-z,&-]+)*)?[\\s,]*$",
     "non_private_markers": [
       "cash",
       "money market",
@@ -34,15 +38,98 @@
       "mutual fund",
       "floating rate central fund",
       "high income central fund"
-    ]
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "^\\W*\\w*vestments(?:,?\\s+Investments\\b|\\s*-)",
+        "family": "debt"
+      }
+    ],
+    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*(?:Equity|Preferred\\s+Equity|Common\\s+Equity),\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S|\\bType\\s+\\w|\\bClass\\s+[A-Z0-9-]+\\b|\\b(?:Preferred|Common)\\s+(?:Units|Stock)\\b|\\bFloating\\s+Rate\\s+Note\\b|\\bCollateralized\\s+Loan\\s+Obligation\\b|\\b(?:Equity|Partnership)\\s+Interests?\\b"
   },
   "staging": {
     "strategy": "hierarchy_leaf_guard",
     "leaf_guard": {
-      "type_industry_prefix_re": "(?i)^(?:(?:First|Second)\\s+Lien\\s+Debt|Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)?\\s*(?:MSD_INDUSTRY_LABELS)\\s+",
-      "marker_re": "(?:first[-\\s]lien|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:term\\s+loan|delayed\\s+draw\\s+term\\s+loan|revolving\\s+credit\\s+facility)|class\\s+[a-z0-9-]+|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|warrants?)",
-      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b"
-    }
+      "type_industry_prefix_re": "(?i)^(?:(?:Debt\\s+)?Investments\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s+)?(?:(?:(?:First|Second)\\s+Lien\\s+Debt|Unsecured\\s+Debt|Debt|Preferred\\s+Equity|Common\\s+Equity|Equity|Asset-Backed\\s+Securities|Preferred\\s+Securities|(?:(?:Fixed\\s+Income|Money\\s+Market)\\s+)?Mutual\\s+Funds(?:\\s*,?\\s+(?:Money\\s+Market\\s+)?Mutual\\s+Funds)?)\\s*,?\\s*)?(?:(?:MSD_INDUSTRY_LABELS)\\s*,?\\s+)?",
+      "marker_re": "(?:type\\s+\\w+|term\\s+loan\\d?|delayed\\s+draw(?:\\s+term\\s+loan\\d?)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|convertible\\s+promissory\\s+note|floating\\s+rate\\s+notes?|senior\\s+notes?|corporate\\s+bonds?|collateralized\\s+loan\\s+obligation|maturity\\s+date|series\\s+[a-z0-9-]+\\s+preferred(?:\\s+(?:stock|units?))?|class\\s+[a-z0-9-]+(?:\\s+(?:lp\\s+)?(?:interests?|units?|shares|membership\\s+units|common\\s+units?|preferred\\s+units?))?|investor\\s+class\\s+units|administration\\s+class\\s+units|common\\s+units?|preferred\\s+units?|preferred|equity\\s+(?:interests?|units?)|membership\\s+units?|partnership\\s+interests?|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?|mutual\\s+fund)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest|preferred|term\\s+loan|credit\\s+facility|delayed\\s+draw|notes?|bonds?|obligation|mutual\\s+fund)\\b",
+      "issuer_trailing_strip_re": "(?i)(?:\\s*,|\\s+Type|\\s+(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)|\\s+-\\s+\\d+(?:\\.\\d+)?%|\\s*\\([a-z]{1,2}\\))+\\s*$"
+    },
+    "extra_industry_labels": [
+      "Advertising",
+      "Aerospace & Defense",
+      "Air Freight & Logistics",
+      "Application Software",
+      "Asset Management & Custody Banks",
+      "Auto Parts & Equipment",
+      "Automotive Parts & Equipment",
+      "Broadline Retail",
+      "Building Products",
+      "Commercial & Residential Mortgage Finance",
+      "Commodity Chemicals",
+      "Construction & Engineering",
+      "Construction Materials",
+      "Copper",
+      "Data Processing & Outsourced Services",
+      "Distributors",
+      "Diversified Chemicals",
+      "Diversified Financial Services",
+      "Diversified Support Services",
+      "Education Services",
+      "Electrical Components",
+      "Electrical Components & Equipment",
+      "Electronic Components",
+      "Electronic Manufacturing Services",
+      "Environmental & Facilities Service",
+      "Environmental & Facilities Services",
+      "Environmental, & Facilities Services",
+      "Fertilizers & Agricultural Chemicals",
+      "Food Distributors",
+      "Food Retail",
+      "Health Care Distributors",
+      "Health Care Facilities",
+      "Health Care Services",
+      "Health Care Supplies",
+      "Health Care Technology",
+      "Home Improvement Retail",
+      "Hotels, Resorts & Cruise Lines",
+      "Human Resource & Employment Services",
+      "IT Consulting & Other Services",
+      "Independent Power Producers & Energy Traders",
+      "Industrial Machinery",
+      "Industrial Machinery & Supplies & Components",
+      "Insurance Brokers",
+      "Integrated Telecommunication Services",
+      "Internet Services & Infrastructure",
+      "Investment Companies",
+      "Leisure Facilities",
+      "Life Sciences Tools & Services",
+      "Metal, Glass & Plastic Containers",
+      "Multi Sub Industrial Commercial Services & Supplies",
+      "Office Services & Supplies",
+      "Oil & Gas Refining & Marketing",
+      "Oil & Gas Storage & Transportation",
+      "Packaged Foods & Meats",
+      "Paper & Plastic Packaging Products & Material",
+      "Paper & Plastic Packaging Products & Materials",
+      "Personal Care Products",
+      "Pharmaceuticals",
+      "Property & Casualty Insurance",
+      "Research & Consulting Services",
+      "Security & Alarm Services",
+      "Soft Drinks",
+      "Soft Drinks & Non-alcoholic Beverages",
+      "Specialized Consumer Service",
+      "Specialized Consumer Services",
+      "Specialized Finance",
+      "Specialty Chemicals",
+      "Steel",
+      "System Software",
+      "Systems Software",
+      "Trading Companies & Distributors",
+      "Transaction & Payment Processing Services"
+    ],
+    "distinct_member_suffix_re": "\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:\\s+Type\\b|\\s*$)"
   },
   "archetypes": {
     "debt": {
@@ -135,7 +222,26 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "cash_identifiers": [
+      "Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "Investments Investments - non-controlled / affiliate Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "Investments Investments - non-controlled / affiliate Fixed Income Mutual Funds Mutual Funds Fidelity High Income Central Fund Mutual Fund",
+      "Fixed Income Mutual Funds Mutual Funds Fidelity High Income Central Fund Mutual Fund",
+      "Investments Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "Investments Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds Fidelity High Income Central Fund Mutual Fund",
+      "Investments, Investments - non-controlled / affiliate, Fixed Income Mutual Funds, Mutual Funds, Fidelity Floating Rate Central Fund, Mutual Fund",
+      "Fixed Income Mutual Funds, Mutual Funds, Fidelity Floating Rate Central Fund, Mutual Fund",
+      "Investments, Investments - non-controlled / affiliate, Mutual Funds, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund",
+      "Mutual Funds, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund",
+      "Investments, Investments - non-controlled / affiliated, Mutual Funds, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund"
+    ]
   }
 }

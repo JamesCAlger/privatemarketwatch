@@ -59,12 +59,30 @@
       "portfolio investments, cash and cash equivalents"
     ],
     "fallback_family_patterns": [
-      {"regex": "(?i)^Cash and Cash Equivalents", "family": "cash"},
-      {"regex": "(?i)^Total Cash", "family": "cash"},
-      {"regex": "(?i)^Total Portfolio Investments", "family": "cash"},
-      {"regex": "(?i)^Portfolio Investments,? Cash", "family": "cash"},
-      {"regex": "(?i)^Foreign Currency Forward Contracts", "family": "derivative"},
-      {"regex": "(?i)^Media:\\s", "family": "mixed"}
+      {
+        "regex": "(?i)^Cash and Cash Equivalents",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^Total Cash",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^Total Portfolio Investments",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^Portfolio Investments,? Cash",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^Foreign Currency Forward Contracts",
+        "family": "derivative"
+      },
+      {
+        "regex": "(?i)^Media:\\s",
+        "family": "mixed"
+      }
     ],
     "category_marker_re": "(?i)^(?:Investments Investments|INVESTMENTS INVESTMENTS|nvestments Investments|Member Investments Investments)\\s*-\\s*(?:non[- ]?control(?:led)?(?:/non[- ]?affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED)\\s+(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Senior Secured Debt|Common Equity|Preferred Equity|Equity(?:\\s+and\\s+Other\\s+Investments)?|SECOND LIEN DEBT|FIRST LIEN DEBT)(?:\\s+(?:Aerospace & Defense|Automobile|Automotive|Banking, Finance, Insurance & Real Estate|Beverage, Food & Tobacco|Capital Equipment|Chemicals, Plastics & Rubber|Construction & Building|Consumer Goods:? (?:Durable|Non-durable)|Consumer goods:? Non-durable|Containers, Packaging & Glass|Energy: Oil & Gas|Environmental Industries|Environmental & Facilities Services|Healthcare & Pharmaceuticals|High Tech Industries|Hotel, Gaming & Leisure|Media: (?:Advertising, Printing & Publishing|Broadcasting & Subscription|Diversified & Production)|Metals & Mining|Retail|Services: (?:Business|Consumer)|Sovereign & Public Finance|Telecommunications|Transportation: (?:Cargo|Consumer)|Wholesale|Diversified Support Services|Specialized Consumer Services|Application Software|Advertising|Consumer|and Other Investments))?$",
     "canonical_strip_re": " Interest Rate Floor \\d+[\\d.]*%| Interest Rate \\d+[\\d.]*%"
@@ -218,7 +236,15 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ]
   }
 }

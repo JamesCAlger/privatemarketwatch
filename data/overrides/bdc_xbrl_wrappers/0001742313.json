@@ -114,7 +114,8 @@
       }
     ],
     "no_prefix_is_aggregate": true,
-    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Senior\\s+Secured\\s+Loans|Junior\\s+Secured\\s+Loans|Unitranche\\s+Secured\\s+Loans|Subtotal|Sub-Total)\\s*$"
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Senior\\s+Secured\\s+Loans|Junior\\s+Secured\\s+Loans|Unitranche\\s+Secured\\s+Loans|Subtotal|Sub-Total)\\s*$",
+    "issuer_name_strip_re": "\\s+\\d{1,2}$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -245,7 +246,7 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   }
 }

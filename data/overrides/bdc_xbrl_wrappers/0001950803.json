@@ -107,7 +107,7 @@
         "family": "debt"
       }
     ],
-    "category_marker_re": "(?i)(?:^|\\|\\s*|\\bl\\s+)(?:Total\\s+|Net\\s+Assets|Liabilities\\s+Less\\s+Other\\s+Assets|First\\s+Lien\\s+Senior\\s+Secured\\s*$|Second\\s+Lien\\s+Senior\\s+Secured\\s*$|Collateralized\\s+Loan\\s+Obligations\\s*$)",
+    "category_marker_re": "(?i)(?:^|\\|\\s*|\\bl\\s+)(?:Total\\s+|Net\\s+Assets|Liabilities\\s+Less\\s+Other\\s+Assets|First\\s+Lien\\s+Senior\\s+Secured\\s*$|Second\\s+Lien\\s+Senior\\s+Secured\\s*$|Collateralized\\s+Loan\\s+Obligations\\s*$)|^\\s*(?:\\|\\s*[^|]+){0,2}\\s*$",
     "canonical_strip_re": "\"|\\s+\\b(?:One|Two|Three|Four)\\b$|\\s*\\|\\s*Total\\s+(?:Investments?|First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds?|Private\\s+Equity\\s+Fund))\\b.*$|\\bTotal\\s+|\\s*\\|\\s*Reference\\s+Rate\\s+Spread\\s*(?:/\\s*Floor)?\\s*\\|\\s*[^|]+|\\s*\\|\\s*Cash\\s+Interest\\s+Rate\\s*/\\s*PIK\\s+Rate\\s*\\|\\s*[\\d.]+%|\\s*\\|\\s*Maturity\\s+Date\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}|\\s*\\|\\s*(?:[36]M\\s+)?SOFR\\s*\\+\\s*[\\d.]+%\\s*/\\s*[\\d.]+%\\s*\\|\\s*[\\d.]+%\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}",
     "category_marker_before_total": true
   },
@@ -134,8 +134,12 @@
       "issuer_segment": 4,
       "industry_segment": 3,
       "lien_segment": 2,
-      "instrument_segments": [2, 4]
-    }
+      "instrument_segments": [
+        2,
+        4
+      ]
+    },
+    "distinct_member_suffix_re": "\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)$"
   },
   "archetypes": {
     "debt": {
@@ -244,7 +248,7 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   },
   "segment_assertions": [
@@ -253,7 +257,7 @@
       "field_name": "industry",
       "expected_pattern": "gics_sector_like",
       "segment_count": 7,
-      "min_prevalence": 0.80,
+      "min_prevalence": 0.8,
       "description": "Segment 3 should be a GICS industry label for 7-segment pipe identifiers"
     },
     {
@@ -261,7 +265,7 @@
       "field_name": "issuer_instrument",
       "expected_pattern": "entity_name_like",
       "segment_count": 7,
-      "min_prevalence": 0.80,
+      "min_prevalence": 0.8,
       "description": "Segment 4 should contain an entity name (issuer + instrument) for 7-segment identifiers"
     },
     {
@@ -269,7 +273,7 @@
       "field_name": "reference_rate",
       "expected_pattern": "rate_like",
       "segment_count": 7,
-      "min_prevalence": 0.70,
+      "min_prevalence": 0.7,
       "description": "Segment 5 should be a reference rate for 7-segment identifiers"
     },
     {
@@ -277,7 +281,7 @@
       "field_name": "maturity_date",
       "expected_pattern": "date_like",
       "segment_count": 7,
-      "min_prevalence": 0.70,
+      "min_prevalence": 0.7,
       "description": "Segment 7 should be a maturity date for 7-segment identifiers"
     }
   ]

@@ -1,0 +1,25 @@
+{
+ "cik": "1646614",
+ "rule_id": "exclude_rows_without_a_leaf_marker",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "coalesce(asset_category, '') <> 'CASH' AND NOT regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)Original\\s+Acquisition\\s+Date|Maturity\\s+Date')",
+ "evidence": [
+  {
+   "source": "query",
+   "quote": "Reading docs/investigations/v05_readings/0001646614.md: in all 12 quarters the tagged rows that carry a cost or percent tag and whose member holds 'Original Acquisition Date' or 'Maturity Date' sum to the filed fair value exactly; six category subtotal rows without either stand in for positions, e.g. 'Japan Senior Secured Bonds' 21,803 at 2024-06-30."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox h1a (rules 01 and 02 pulled, schedule_row_tags set, this rule absent): published is 20.1M to 59.0M over filed in four quarters, 2024-06-30 to 2025-03-31."
+  }
+ ],
+ "rationale": "Every schedule row of this filer names its acquisition date or its maturity date in the member; a category subtotal ('<country> <category>') names neither. Replaces the value-matching dedup rules 01 and 02, which kept the note twin of a position in place of its schedule row.",
+ "confidence": 0.85,
+ "measured_impact": {}
+}

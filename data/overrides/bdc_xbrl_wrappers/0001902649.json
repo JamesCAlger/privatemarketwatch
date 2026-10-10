@@ -233,5 +233,16 @@
       "detection_pattern": "Treasury LLC",
       "disposition": "expected"
     }
-  ]
+  ],
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "rate_tag_reading": [
+      "coupon_with_margins"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ]
+  }
 }

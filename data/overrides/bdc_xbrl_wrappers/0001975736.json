@@ -243,5 +243,13 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "unfunded_rows": [
+      "net_of_tagged_commitment"
+    ]
   }
 }

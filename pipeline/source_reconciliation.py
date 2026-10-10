@@ -1592,6 +1592,8 @@ def _extract_single_xbrl_source_file(
     concepts_by_ctx: dict[str, set[str]] = {}
     monetary_facts_stored: list[tuple[str, str, int, str]] = []
     root = tree.getroot()
+    from pipeline.rate_tag_reading import reads_margins, settle as _settle_margins
+    _margin_tags = reads_margins(filing_meta.get("cik", ""))
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
         if ctx_ref not in admitted_contexts:
@@ -1600,6 +1602,11 @@ def _extract_single_xbrl_source_file(
         if not raw_text:
             continue
         local = _local_name(elem.tag)
+        if _margin_tags and local.lower() == "investmentinterestratepaidincash":
+            from pipeline.rate_tag_reading import hold_cash_margin
+            hold_cash_margin(facts_by_ctx.setdefault(ctx_ref, {}), _parse_fact_value("interest_rate", raw_text))
+            concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
+            continue
         col = match_concept_for(local.lower(), fair_value_aliases(filing_meta.get("cik", "")))
         if col is None and ctx_ref in liquid_fund_contexts:
             col = _match_liquid_fund_concept(local.lower())
@@ -1619,8 +1626,15 @@ def _extract_single_xbrl_source_file(
         concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
 
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
+    if _margin_tags:
+        _settle_margins(facts_by_ctx)
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values(facts_by_ctx, filing_meta)
+    from pipeline.schedule_row_tags import drop_non_schedule_contexts
+    drop_non_schedule_contexts(tree, contexts, facts_by_ctx, filing_meta)
+    # an undrawn commitment row is compared net of its tagged commitment, as the extractor publishes it
+    from pipeline.unfunded_commitments import net_unfunded_rows
+    net_unfunded_rows(tree, contexts, facts_by_ctx, filing_meta, record_events=False)
 
     rows: list[dict[str, Any]] = []
     for ctx_id, ctx_info in admitted_contexts.items():

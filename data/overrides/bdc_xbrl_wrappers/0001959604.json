@@ -194,5 +194,19 @@
     "unclassified_rate": {
       "max_pct": 0.02
     }
+  },
+  "source_encodings": {
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "schedule_row_tags": [
+      "not_commitment_only"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ]
   }
 }

@@ -266,5 +266,19 @@
     "unclassified_rate": {
       "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ]
   }
 }

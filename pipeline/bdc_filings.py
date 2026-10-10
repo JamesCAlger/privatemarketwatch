@@ -889,6 +889,7 @@ def _extract_investment_facts(
     tree: etree._ElementTree,
     contexts: dict[str, dict],
     fair_value_concepts: frozenset[str] = frozenset(),
+    margin_rate_tags: bool = False,
 ) -> list[dict[str, Any]]:
     """Extract investment-level XBRL facts and group by context.
 
@@ -924,6 +925,12 @@ def _extract_investment_facts(
         local = _local_name(elem.tag).lower()
         raw_text = (elem.text or "").strip()
         if not raw_text:
+            continue
+
+        if margin_rate_tags and local == "investmentinterestratepaidincash":
+            # this filer tags the coupon in the plain tag; the paid-in-cash tag is the cash margin
+            from pipeline.rate_tag_reading import hold_cash_margin
+            hold_cash_margin(facts_by_ctx.setdefault(ctx_ref, {}), _parse_fact_value("interest_rate", raw_text))
             continue
 
         # Match concept
@@ -984,6 +991,9 @@ def _extract_investment_facts(
     #   4. Outlier value must be > 100x the median of dominant-decimals values
     #      (prevents false corrections when decimals differ only in precision)
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored, prov_by_ctx)
+    if margin_rate_tags:
+        from pipeline.rate_tag_reading import settle
+        settle(facts_by_ctx, prov_by_ctx)
 
     # Build output records
     records: list[dict[str, Any]] = []
@@ -1078,10 +1088,20 @@ def _parse_single_filing(
         return []
 
     contexts = parse_filing_contexts(tree, filing_meta)
-    facts = _extract_investment_facts(tree, contexts, fair_value_aliases(filing_meta.get("cik", "")))
+    from pipeline.rate_tag_reading import reads_margins
+    facts = _extract_investment_facts(tree, contexts, fair_value_aliases(filing_meta.get("cik", "")),
+                                      margin_rate_tags=reads_margins(filing_meta.get("cik", "")))
     # A value the printed row shows and the tags lack, listed in the filer's wrapper.
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)
+    # Contexts that reuse a schedule member in another note are not positions (wrapper setting).
+    from pipeline.schedule_row_tags import non_schedule_contexts
+    _not_rows = non_schedule_contexts(tree, contexts, filing_meta)
+    if _not_rows:
+        facts = [rec for rec in facts if rec["_context_id"] not in _not_rows]
+    # A schedule row that is an undrawn commitment, netted by the commitment the filer tags.
+    from pipeline.unfunded_commitments import net_unfunded_rows
+    net_unfunded_rows(tree, contexts, {rec["_context_id"]: rec for rec in facts}, filing_meta)
 
     # --- Non-accrual evidence: footnotes + dimensions ---
     from pipeline.nonaccrual_evidence import (

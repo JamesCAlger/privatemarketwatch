@@ -211,11 +211,19 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     },
     "rate_sanity": {
       "min_pct": 1.0,
       "max_pct": 30.0
     }
+  },
+  "source_encodings": {
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ]
   }
 }

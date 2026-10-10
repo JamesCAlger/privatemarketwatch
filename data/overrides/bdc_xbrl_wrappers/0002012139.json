@@ -237,5 +237,10 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ]
   }
 }

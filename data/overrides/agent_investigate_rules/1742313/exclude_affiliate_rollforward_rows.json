@@ -1,0 +1,39 @@
+{
+ "cik": "1742313",
+ "rule_id": "exclude_affiliate_rollforward_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2023-03-31",
+   "2023-09-30",
+   "2023-12-31",
+   "2024-03-31",
+   "2024-06-30",
+   "2024-09-30",
+   "2024-12-31",
+   "2025-03-31",
+   "2025-06-30",
+   "2025-09-30"
+  ]
+ },
+ "predicate_sql": "TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND TRY_CAST(principal_amount AS DOUBLE) IS NULL AND coalesce(CAST(index_classification AS VARCHAR), '') <> 'CASH'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001742313-25-000080 (10-Q, 2025-09-30), transactions with affiliated companies: rows named 'Nastel Technologies, LLC (Class A units)', 'NFS Intermediate HoldCo, LLC (Series B preferred units) - 2,293 ...', 'SFR Holdco, LLC ...'. Balance sheet: 'Total investments, at fair value ... 5,398,323'. The schedule names the same position 'NFS Intermediate HoldCo, LLC, Equity Securities, Series B preferred units' and gives it 2.1 pct of net assets."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox l3a (2026-10-09): in each quarter listed the rows with no percent of net assets and no principal sum to the excess of published over filed investments to within 0.05M (41.9M at 2023-03-31 rising to 273.2M at 2025-09-30). 2023-06-30 is not listed: its two such rows (13.0M) are schedule rows and published equals filed."
+  }
+ ],
+ "rationale": "The filer tags the closing fair values of its affiliate roll-forward note on the investment identifier axis. Those members carry no percent of net assets and no principal; schedule members carry a percent. The rule is limited to the quarters where removing them makes published equal filed.",
+ "confidence": 0.9,
+ "measured_impact": {
+  "2025-09-30": {
+   "rows": 49,
+   "fv": -273200000.0
+  }
+ }
+}

@@ -221,5 +221,19 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Reference"
+    ],
+    "schedule_row_tags": [
+      "quantity_or_percent"
+    ]
   }
 }

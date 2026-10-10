@@ -73,7 +73,8 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:Total\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Investments)|(?:Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated\\s+(?:MSD_INDUSTRY_LABELS))\\s*$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})"
+    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})",
+    "issuer_name_strip_re": "\\s+\\d{1,2}$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -193,7 +194,30 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "L=LIBOR",
+      "P=PRIME",
+      "E=EURIBOR"
+    ]
   }
 }

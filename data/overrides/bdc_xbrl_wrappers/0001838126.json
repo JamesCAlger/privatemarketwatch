@@ -81,12 +81,25 @@
       "j.p. morgan u.s. government fund"
     ],
     "fallback_family_patterns": [
-      {"regex": "(?i)\\bWarrant", "family": "warrant"},
-      {"regex": "(?i)(?:Preferred Stock|Preferred Shares|Preferred Units|Common Stock|Common Units|Class A[- ]\\d*\\s*Units|Class [A-D]\\s+(?:Common )?Units|Ordinary Shares|LLC Interest|LP Interest|L\\.P\\. Interest|Membership Interest|Equity Interest|Class A Common Units)", "family": "equity"},
-      {"regex": "(?i)(?:CLO|Class [A-E]\\d?R?\\d?|Subordinated Note)", "family": "clo"},
-      {"regex": "(?i).", "family": "debt"}
+      {
+        "regex": "(?i)\\bWarrant",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)(?:Preferred Stock|Preferred Shares|Preferred Units|Common Stock|Common Units|Class A[- ]\\d*\\s*Units|Class [A-D]\\s+(?:Common )?Units|Ordinary Shares|LLC Interest|LP Interest|L\\.P\\. Interest|Membership Interest|Equity Interest|Class A Common Units)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)(?:CLO|Class [A-E]\\d?R?\\d?|Subordinated Note)",
+        "family": "clo"
+      },
+      {
+        "regex": "(?i).",
+        "family": "debt"
+      }
     ],
-    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|\\|\\s*Non-Affiliated Issuer|\\|\\s*Affiliated Issuer)\\s*$"
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|\\|\\s*Non-Affiliated Issuer|\\|\\s*Affiliated Issuer)\\s*$",
+    "issuer_name_strip_re": "\\s+\\d{1,2}$"
   },
   "archetypes": {
     "warrant": {
@@ -286,8 +299,8 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10,
-      "max_fv_pct": 0.10
+      "max_pct": 0.1,
+      "max_fv_pct": 0.1
     }
   }
 }

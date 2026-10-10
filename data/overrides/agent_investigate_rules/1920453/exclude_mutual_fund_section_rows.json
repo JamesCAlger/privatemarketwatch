@@ -1,0 +1,25 @@
+{
+ "cik": "1920453",
+ "rule_id": "exclude_mutual_fund_section_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)\\bmutual\\s+funds\\s*,?\\s*$')",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-094714 (10-Q, 2024-06-30), Fidelity Private Credit Co: the section member '... non-affiliated Money Market Mutual Funds Mutual Funds' carries 58,480, the sum of its two fund rows (50,670 State Street U.S. Government and 7,820 State Street Treasury Plus)."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandboxes l6b and l9b: members ending 'Mutual Funds' ('Money Market Mutual Funds', 'Money Market Mutual Funds Mutual Funds') are published as cash beside the fund row with the same value in 2024-06-30 to 2025-03-31 (cash counted two or three times)."
+  }
+ ],
+ "rationale": "A member that ends in the section name 'Mutual Funds' is the section's subtotal. A fund row ends in the fund's name, its yield, or 'Mutual Fund' / 'Units'.",
+ "confidence": 0.9,
+ "measured_impact": {}
+}

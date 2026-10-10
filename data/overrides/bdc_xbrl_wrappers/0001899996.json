@@ -80,35 +80,101 @@
       {
         "regex": "(?i)^\\s*Commodity\\s+Chemicals\\s*$",
         "family": "mixed"
+      },
+      {
+        "regex": "^\\W*\\w*vestments,?\\s+Investments\\b",
+        "family": "mixed"
       }
     ],
     "category_marker_re": "(?i)^(?!.*\\b(?:llc|l\\.l\\.c|inc|corp|company|ltd|limited|lp|l\\.p|class|units?|interest|term\\s+loan|credit\\s+facility|maturity|stock|warrants?)\\b).*(?:total|commodity\\s+chemicals|equity\\s+[A-Za-z &/,]+|first\\s+lien\\s+debt\\s+[A-Za-z &/,]+|second\\s+lien\\s+debt\\s+[A-Za-z &/,]+)\\s*$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)^\\s*(?:Investments,?\\s+Investments|Investments|Investment)\\s*(?:--|-|,)\\s*(?:non-?control(?:led)?\\s*/\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/\\s*non-?affiliated|non-?control(?:led)?\\s*/\\s*non-?affiliate|non-?control(?:led)?\\s*,\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/?\\s*non-?affiliated|non-?control(?:led)?\\s*/?\\s*non-?affiliate|non-?control(?:led)?|affiliated|affiliate|affiliatd)\\s*,?\\s*|\\bReference\\s+Rate\\s+and\\s+Spread\\s+(?:SOFR|LIBOR|EURIBOR|Prime|Base\\s+Rate|S|L|E)(?:\\s*\\+\\s*\\d+(?:\\.\\d+)?%)?|\\bInterest\\s+Rate\\s+[-\\u2014]?\\s*\\d+(?:\\.\\d+)?%|\\s*\\([^)]*PIK[^)]*\\)"
+    "canonical_strip_re": "(?i)^\\s*(?:Investments,?\\s+Investments|Investments|Investment)\\s*(?:--|-|,)\\s*(?:non-?control(?:led)?\\s*/\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/\\s*non-?affiliated|non-?control(?:led)?\\s*/\\s*non-?affiliate|non-?control(?:led)?\\s*,\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/?\\s*non-?affiliated|non-?control(?:led)?\\s*/?\\s*non-?affiliate|non-?control(?:led)?|affiliated|affiliate|affiliatd)\\s*,?\\s*|\\bReference\\s+Rate\\s+and\\s+Spread\\s+(?:SOFR|LIBOR|EURIBOR|Prime|Base\\s+Rate|S|L|E)(?:\\s*\\+\\s*\\d+(?:\\.\\d+)?%)?|\\bInterest\\s+Rate\\s+[-\\u2014]?\\s*\\d+(?:\\.\\d+)?%|\\s*\\([^)]*PIK[^)]*\\)",
+    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*Equity,\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S"
   },
   "staging": {
     "strategy": "hierarchy_leaf_guard",
     "extra_industry_labels": [
+      "Advertising",
+      "Aerospace & Defense",
+      "Air Freight & Logistics",
       "Application Software",
+      "Asset Management & Custody Banks",
+      "Auto Parts & Equipment",
       "Automotive Parts & Equipment",
+      "Broadline Retail",
+      "Building Products",
+      "Commercial & Residential Mortgage Finance",
+      "Commodity Chemicals",
+      "Construction & Engineering",
+      "Construction Materials",
+      "Copper",
+      "Data Processing & Outsourced Services",
+      "Distributors",
+      "Diversified Chemicals",
+      "Diversified Financial Services",
       "Diversified Support Services",
+      "Education Services",
       "Electrical Components",
+      "Electrical Components & Equipment",
       "Electronic Components",
       "Electronic Manufacturing Services",
+      "Environmental & Facilities Service",
+      "Environmental & Facilities Services",
+      "Environmental, & Facilities Services",
+      "Fertilizers & Agricultural Chemicals",
       "Food Distributors",
+      "Food Retail",
+      "Health Care Distributors",
+      "Health Care Facilities",
       "Health Care Services",
       "Health Care Supplies",
+      "Health Care Technology",
+      "Home Improvement Retail",
+      "Hotels, Resorts & Cruise Lines",
       "Human Resource & Employment Services",
+      "IT Consulting & Other Services",
+      "Independent Power Producers & Energy Traders",
+      "Industrial Machinery",
       "Industrial Machinery & Supplies & Components",
+      "Insurance Brokers",
+      "Integrated Telecommunication Services",
+      "Internet Services & Infrastructure",
+      "Investment Companies",
+      "Leisure Facilities",
+      "Life Sciences Tools & Services",
+      "Metal, Glass & Plastic Containers",
+      "Multi Sub Industrial Commercial Services & Supplies",
+      "Office Services & Supplies",
+      "Oil & Gas Refining & Marketing",
+      "Oil & Gas Storage & Transportation",
       "Packaged Foods & Meats",
-      "Specialized Consumer Services"
+      "Paper & Plastic Packaging Products & Material",
+      "Paper & Plastic Packaging Products & Materials",
+      "Personal Care Products",
+      "Pharmaceuticals",
+      "Property & Casualty Insurance",
+      "Research & Consulting Services",
+      "Security & Alarm Services",
+      "Soft Drinks",
+      "Soft Drinks & Non-alcoholic Beverages",
+      "Specialized Consumer Service",
+      "Specialized Consumer Services",
+      "Specialized Finance",
+      "Specialty Chemicals",
+      "Steel",
+      "System Software",
+      "Systems Software",
+      "Trading Companies & Distributors",
+      "Transaction & Payment Processing Services"
     ],
     "leaf_guard": {
-      "type_industry_prefix_re": "(?i)^(?:(?:First|Second)\\s+Lien\\s+Debt|Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)?\\s*(?:MSD_INDUSTRY_LABELS)\\s+",
-      "marker_re": "(?:type\\s+)?(?:term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|convertible\\s+promissory\\s+note|maturity\\s+date|series\\s+[a-z0-9-]+\\s+preferred\\s+stock|type\\s+(?:class\\s+[a-z0-9-]+\\s+units?|common\\s+units?|equity\\s+units?|preferred\\s+units?)|class\\s+[a-z0-9-]+\\s+(?:lp\\s+)?(?:interests?|units|shares|membership\\s+units)|common\\s+units?|preferred\\s+units?|equity\\s+(?:interest|units?)|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?)",
-      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest)\\b",
-      "notes_2026_09_07": "marker accepts an optional leading 'Type ' (filer change 2025-09-30: 283/342 current-quarter names ended in ' Type'), instrument-less 'Type Maturity Date', 'Convertible Promissory Note', 'Class A LP Units', 'Class A Interests', 'Series A Preferred Stock'."
-    }
+      "type_industry_prefix_re": "(?i)^(?:(?:Debt\\s+)?Investments\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s+)?(?:(?:(?:First|Second)\\s+Lien\\s+Debt|Unsecured\\s+Debt|Debt|Preferred\\s+Equity|Common\\s+Equity|Equity|Asset-Backed\\s+Securities|Preferred\\s+Securities|(?:(?:Fixed\\s+Income|Money\\s+Market)\\s+)?Mutual\\s+Funds(?:\\s*,?\\s+(?:Money\\s+Market\\s+)?Mutual\\s+Funds)?)\\s*,?\\s*)?(?:(?:MSD_INDUSTRY_LABELS)\\s*,?\\s+)?",
+      "marker_re": "(?:type\\s+\\w+|term\\s+loan\\d?|delayed\\s+draw(?:\\s+term\\s+loan\\d?)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|convertible\\s+promissory\\s+note|floating\\s+rate\\s+notes?|senior\\s+notes?|corporate\\s+bonds?|collateralized\\s+loan\\s+obligation|maturity\\s+date|series\\s+[a-z0-9-]+\\s+preferred(?:\\s+(?:stock|units?))?|class\\s+[a-z0-9-]+(?:\\s+(?:lp\\s+)?(?:interests?|units?|shares|membership\\s+units|common\\s+units?|preferred\\s+units?))?|investor\\s+class\\s+units|administration\\s+class\\s+units|common\\s+units?|preferred\\s+units?|preferred|equity\\s+(?:interests?|units?)|membership\\s+units?|partnership\\s+interests?|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?|mutual\\s+fund)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest|preferred|term\\s+loan|credit\\s+facility|delayed\\s+draw|notes?|bonds?|obligation|mutual\\s+fund)\\b",
+      "notes_2026_09_07": "marker accepts an optional leading 'Type ' (filer change 2025-09-30: 283/342 current-quarter names ended in ' Type'), instrument-less 'Type Maturity Date', 'Convertible Promissory Note', 'Class A LP Units', 'Class A Interests', 'Series A Preferred Stock'.",
+      "issuer_trailing_strip_re": "(?i)(?:\\s*,|\\s+Type|\\s+(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)|\\s+-\\s+\\d+(?:\\.\\d+)?%|\\s*\\([a-z]{1,2}\\))+\\s*$"
+    },
+    "distinct_member_suffix_re": "\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:\\s+Type\\b|\\s*$)"
   },
   "archetypes": {
     "mixed": {
@@ -144,5 +210,10 @@
     "unclassified_rate": {
       "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

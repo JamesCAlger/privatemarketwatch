@@ -190,5 +190,27 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "cash_leg"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "fair_value_concepts": [
+      "CashEquivalentsFairValueDisclosure"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "reference_rate_columns": [
+      "Spread Above Reference Rate"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "L=LIBOR",
+      "P=PRIME"
+    ]
   }
 }

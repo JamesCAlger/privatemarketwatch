@@ -95,7 +95,8 @@
     ],
     "no_prefix_is_aggregate": true,
     "category_marker_re": "(?i)^(?:Investment\\s+(?:One|Two|Three)|(?:One|Two|Three)\\s+(?:Debt\\s+Investments|Preferred\\s+Equity\\s+Positions|Unsecured\\s+Debt\\s+Position)|Investments\\s+-\\s+non-controlled/affiliated\\b|Investments(?:[-\\s](?:controlled/affiliated|non-controlled/\\s*non-affiliated|non-controlled/non-affiliated|non-controlled/affiliated))?(?:\\s+(?:Debt\\s+Investments|Equity\\s+Investments))?\\s*$)",
-    "canonical_strip_re": "\\s+Interest\\s+Rate\\s+.*$|\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\s*$"
+    "canonical_strip_re": "\\s+Interest\\s+Rate\\s+.*$|\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\s*$",
+    "issuer_name_strip_re": "\\s+\\d{1,2}$"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -245,7 +246,18 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ]
   }
 }

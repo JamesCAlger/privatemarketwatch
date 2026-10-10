@@ -81,7 +81,8 @@
       }
     ],
     "category_marker_re": "(?i)^\\s*(?:First\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Second\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Equity\\s+\\[Member\\]|Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?))\\s*$",
-    "category_marker_before_total": true
+    "category_marker_before_total": true,
+    "bare_entity_rows": "positions"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -210,7 +211,12 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "context_identifiers": [
+      "0000930413-26-001612 c355 => Arkas Bidco Limited Equity"
+    ]
   }
 }

@@ -1,0 +1,30 @@
+{
+ "cik": "1278752",
+ "rule_id": "exclude_group_name_subtotal_rows",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "TRY_CAST(principal_amount AS DOUBLE) IS NULL AND TRY_CAST(shares_held AS DOUBLE) IS NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NULL AND NOT regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)debt|equity|stock|units?|interests?|warrants?|loan|notes?|securit|fund|maturity|sofr|libor|revolv|delayed|bond|shares')",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-122744 (10-Q, 2024-09-30): the schedule groups rows under a short group name, 'Advantage Sales Advantage Sales & Marketing Inc. (ASM) First Lien Secured Debt - Term Loan SOFR+ 425 , 0.75 % Floor 10/28/27 1,769 1,719 1,722', and prints a subtotal after a group of several rows ('... 648 ... 4,384 4,466')."
+  },
+  {
+   "source": "query",
+   "quote": "Fund sandbox l5a, 2024-09-30: members 'Business Services Advantage Sales' (22,779), 'Business Services Escalent' (9,381) and 'Business Services Smith System' (8,806) are published beside the positions of the same groups ('Business Services Escalent M&M OPCO, LLC First Lien Secured Debt Term Loan ...' is 9,381). They carry no principal, units or percent. Thirteen such group names across the quarters."
+  }
+ ],
+ "rationale": "A member made of the industry and the group name alone carries the group's subtotal. Positions name the legal entity and the instrument. Removing them does not make published equal filed in every quarter: MidCap stays open (D-082).",
+ "confidence": 0.85,
+ "measured_impact": {
+  "2024-09-30": {
+   "rows": 3,
+   "fv": -40966000.0
+  }
+ }
+}

@@ -428,11 +428,14 @@ def test_blue_owl_wrapper_names_its_reference_rate_column():
     assert source_encodings.reference_rate_reading(OWL, report_date='2024-06-30')['codes']['C'] == 'CORRA'
 
 
-def test_printed_margin_reading_is_set_for_blue_owl_and_apollo_alone():
+def test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alone():
     # Blue Owl: 10-Q 2024-09-30 prints Inovalon 'SR + 6.25% (2.75% PIK)' with a spread tag of 6.25; 10-K 2025-12-31 prints
     # 'S+ | 2.75% | 2.75%' with a spread tag of 2.75.
     # Apollo: 10-Q 2025-06-30 prints Curia 'S+300 Cash plus 3.25% PIK' with a spread tag of 3.0 and a PIK tag of 3.25.
-    assert source_encodings.printed_margin_funds() == {OWL, '0001837532'}
+    # Blue Owl Technology Income (0001869453, added 2026-10-09): 10-K 2025-12-31 prints Inovalon 'S+ 2.75 % | 2.75 %'
+    # under 'Ref. Rate | Cash | PIK', the same layout, with a spread tag of 2.75 and a PIK tag of 2.75.
+    # Apollo Origination II (Levered) (0002052152, added 2026-10-10): the adviser's layout, 'S+275 Cash plus 2.75% PIK'.
+    assert source_encodings.printed_margin_funds() == {OWL, '0001837532', '0001869453', '0002052152'}
     assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()
 
 

@@ -87,7 +87,7 @@
         "family": "cash"
       },
       {
-        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-\u2013])",
+        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-–])",
         "family": "debt"
       },
       {
@@ -103,7 +103,7 @@
         "family": "debt"
       },
       {
-        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-\u2013])",
+        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-–])",
         "family": "debt"
       }
     ],
@@ -124,7 +124,7 @@
       "maturity"
     ],
     "alternate_delimiters": [
-      " \u2013 ",
+      " – ",
       ", "
     ]
   },
@@ -288,5 +288,10 @@
     "hierarchy_condition_extra": "regexp_matches(_clean, '^Investment ([^%|]+) Industry .+? (?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) ')",
     "hierarchy_issuer_re": "^Investment ([^%|]+) Industry .+? (?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) ",
     "hierarchy_instrument_re": "^Investment [^%|]+ Industry .+? ((?:Interest Rate|Reference Rate|Maturity|Initial Acquisition Date) .+)$"
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

@@ -308,6 +308,48 @@ def _get_prefix_rules_data() -> dict[str, list[str]]:
     return result
 
 
+def issuer_name_strip_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
+    """CIK -> regex removed from the end of that filer's issuer name (dispatch.issuer_name_strip_re).
+
+    BCRED and HPS number the rows of one borrower in the member name ('Riser Merger Sub, Inc. 1',
+    '... 2'); the number is the row's, not the issuer's. Applied at the end of the unified build,
+    after duplicate filters, promoted rules and row corrections, which all read the name as filed
+    (a first version applied in staging dropped twin rows and unhooked rules that name a row).
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, str] = {}
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        pattern = raw.get("dispatch", {}).get("issuer_name_strip_re")
+        if pattern:
+            re.compile(pattern)
+            result[raw["cik"]] = pattern
+    return result
+
+
+def _bare_entity_position_ciks() -> set[str]:
+    """CIKs whose wrapper says a bare company name is a position (dispatch.bare_entity_rows).
+
+    Lord Abbett names each issuer's main term loan by the issuer alone ('Spark Buyer LLC') and its
+    other tranches with a suffix; the bare-entity subtotal filter of prefix_rules filers dropped
+    every such loan whose name holds 'llc', 'group', 'limited' or ' plc' (32 rows, 662.1M).
+    """
+    result: set[str] = set()
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return result
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("dispatch", {}).get("bare_entity_rows") == "positions":
+            result.add(raw["cik"])
+    return result
+
+
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
 
@@ -826,6 +868,7 @@ def _prepare_bdc(
     _prefix_rules_hierarchy_parts: list[str] = []
     _double_investments_cik_norms: list[str] = []
     _prefix_strip_cik_set = {v["cik"] for v in _prefix_strip_cfgs.values()}
+    _bare_entity_ciks = _bare_entity_position_ciks()
     for _pr_cik, _pr_prefixes in _prefix_rules_data.items():
         _pr_cik_norm = _pr_cik.lstrip("0").zfill(10)
         _pr_cik_sql = (
@@ -905,6 +948,9 @@ def _prepare_bdc(
                 f"AND NOT regexp_matches(lower(_raw_id), '(?i){_pr_instrument_re}'))"
             ),
         ]
+        if _pr_cik in _bare_entity_ciks:
+            # the wrapper declares bare company names to be positions: condition 2d does not apply
+            _pr_hier_conds = _pr_hier_conds[:3]
         _pr_hier_condition = (
             f"({_pr_cik_sql} AND ({' OR '.join(_pr_hier_conds)}))"
         )
@@ -935,15 +981,10 @@ def _prepare_bdc(
             f"'{c}'" for c in _double_investments_cik_norms
         ) + ")"
     ) if _double_investments_cik_norms else "FALSE"
+    # Comma, em-dash and truncated-first-word forms are stripped too (both Fidelity funds; the only
+    # filers that declare the double prefix and use those forms).
     _DOUBLE_INVESTMENTS_HIERARCHY_RE = (
-        r"(?i)^Investments\s+Investments\s*(?:--|-|/)\s*"
-        r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed|d))?"
-        r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed|d))?"
-        r"|affiliat(?:e|ed|d))"
-        r"(?:\s+(?:equity|debt|first\s+lien|second\s+lien|senior\s+secured"
-        r"|subordinated|unsecured|mezzanine|unitranche|preferred|common"
-        r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"
-        r"\s+"
+        '(?i)^[\\s.]*(?:[a-z]*vestments,?\\s+)?[a-z]*vestments\\s*(?:--|-|/|,|\\x{2014}|\\x{2013})\\s*(?:non-?\\s*control(?:led)?(?:\\s*[/,]?\\s*(?:non-?\\s*)?affiliat(?:ed|e|d)?)?|control(?:led)?(?:\\s*[/,]\\s*affiliat(?:ed|e|d))?|affiliat(?:ed|e|d))\\s*,?(?:\\s+(?:equity|debt|first\\s+lien|second\\s+lien|senior\\s+secured|subordinated|unsecured|mezzanine|unitranche|preferred|common|warrant|structured|other)(?:\\s+(?:securities|investments|interests))?)?\\s*,?\\s+'
     )
 
     # Entity signal check on seg[1] (for pct-prefix category detection)

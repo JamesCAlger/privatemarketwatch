@@ -115,7 +115,8 @@
     ],
     "category_marker_re": "(?i)^(?!.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Incremental\\s+Term\\s+Loan|Protective\\s+Advance|Revolver|Last\\s+Out|Super\\s+Senior|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%|\\s*)$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%"
+    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%",
+    "bare_entity_rows": "positions"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -262,7 +263,15 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

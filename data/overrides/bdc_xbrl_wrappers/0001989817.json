@@ -113,7 +113,8 @@
       }
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
-    "category_marker_re": "(?i)^\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|Non-Controlled/Affiliated\\s+Investments|Total\\s+Investments|Subtotal|Sub-Total)\\s*$"
+    "category_marker_re": "(?i)^\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|Non-Controlled/Affiliated\\s+Investments|Total\\s+Investments|Subtotal|Sub-Total)\\s*$",
+    "issuer_name_strip_re": "(?:(?:\\s*\\(\\d{1,2}\\))+|[,\\s]*\\d{1,2}|,)\\s*$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -220,7 +221,32 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "SN=SONIA",
+      "C=CDOR to 2025-03-31",
+      "C=CORRA from 2025-06-30",
+      "B=BBSW to 2024-09-30",
+      "B=BBSY from 2024-12-31",
+      "ST=STIBOR",
+      "N=NIBOR",
+      "TN=TONA",
+      "SORA=SORA"
+    ]
   }
 }

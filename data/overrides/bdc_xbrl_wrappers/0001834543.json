@@ -188,6 +188,9 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "rate_tag_reading": [
+      "coupon_with_margins"
     ]
   }
 }

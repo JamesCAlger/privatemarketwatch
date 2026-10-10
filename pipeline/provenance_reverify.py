@@ -125,6 +125,10 @@ def _field_sql(field: str, source_col: str) -> str:
 
     published = f"TRY_CAST({field} AS DOUBLE)"
     expected = f"({raw} * {dec} * {cik_fix} * {stag})"
+    if field in ('fair_value', 'cost'):
+        # an undrawn commitment row is published net of the commitment the filer tags
+        expected = (f"({expected} - COALESCE(TRY_CAST(regexp_extract({x_str}, "
+                    f"'net_of_commitment:(-?[0-9.]+)', 1) AS DOUBLE), 0))")
     if field == 'interest_rate':
         expected = f"({expected} + CASE WHEN {ev} LIKE '%interest_rate:cash_plus_pik%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE 0 END)"
     if field == 'basis_spread':
@@ -497,7 +501,8 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 # a spread tag that holds a fixed coupon is declared as not published, whatever its sign
                 not_published = f"{field}:fixed_coupon" in str(r.get("declared_events") or "")
                 published = r["published"]
-                expected_value=instance_raw*mult
+                from pipeline.unfunded_commitments import net_offset
+                expected_value=instance_raw*mult-net_offset(x_events)
                 # a rate, or a spread, published as its tagged figure plus the tagged PIK rate
                 if ((field=='interest_rate' and 'interest_rate:cash_plus_pik' in str(r.get('declared_events') or ''))
                         or (field=='basis_spread' and 'basis_spread:cash_plus_pik_margin' in str(r.get('declared_events') or ''))):
@@ -674,6 +679,8 @@ def build_ledger(
             "verified_fv", "derived_fv", "corrected_fv", "total_fv",
             "verified_fv_share",
         ])
+        # an empty frame's keys are untyped; give them the ledger's types so the merge below holds
+        summary = summary.astype({"cik": ledger["cik"].dtype, "report_date": ledger["report_date"].dtype})
     else:
         grp = fv.groupby(["cik", "report_date"], dropna=False)
         summary = grp.apply(

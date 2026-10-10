@@ -1,0 +1,15 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001976336",
+ "entity_name": "Antares Private Credit Fund",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2025-03-31",
+   "field": "investments_at_fair_value",
+   "value": 1103954000,
+   "evidence": "0000950170-25-071352 (10-Q, 2025-03-31) schedule: 'Total Investments - non-controlled/non-affiliated 1,107,219 1,103,954 172.84 %'. Company facts hold two undimensioned InvestmentOwnedAtFairValue values for this date, 1,103,954,000 and 39,527,000; the smaller one was taken."
+  }
+ ],
+ "notes": "One quarter only: the filer filed a second undimensioned fact under the investments concept."
+}

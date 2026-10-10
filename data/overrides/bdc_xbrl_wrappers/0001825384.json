@@ -160,5 +160,13 @@
       "detection_pattern": "^[A-Za-z0-9 .,&'-]+,?\\s+(?:Inc\\.|LLC|L\\.P\\.)$",
       "disposition": "warn"
     }
-  ]
+  ],
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ]
+  }
 }

@@ -73,7 +73,8 @@
         "family": "clo"
       }
     ],
-    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Emerald JV LP|Verdelite JV LP|Controlled Affiliated Issuer|Non-Controlled Affiliated Issuer|Non-Controlled Affiliated User)$"
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Emerald JV LP|Verdelite JV LP|Controlled Affiliated Issuer|Non-Controlled Affiliated Issuer|Non-Controlled Affiliated User)$",
+    "issuer_name_strip_re": "\\s+\\d{1,2}$"
   },
   "archetypes": {
     "debt": {
