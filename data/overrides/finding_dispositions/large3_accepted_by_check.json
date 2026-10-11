@@ -339,17 +339,21 @@
     "2024-03-31",
     "2024-06-30",
     "2024-12-31",
-    "2025-09-30"
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
    ],
    "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
    "evidence": [
     {
      "source": "query",
-     "quote": "Check no_rate_in_source passed on sandbox l3d for each quarter listed: 297 flagged rows tested, none failing."
+     "quote": "Check no_rate_in_source passed on sandbox o1b for each quarter listed: 622 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/x02_page_read.py l3d 0001869453",
-   "decided_by": "check passed on sandbox l3d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/x02_page_read.py o1b 0001869453",
+   "decided_by": "check passed on sandbox o1b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

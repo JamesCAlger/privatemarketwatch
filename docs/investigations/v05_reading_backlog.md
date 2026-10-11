@@ -55,3 +55,34 @@ the other 15 funds of batches 11 to 13; the ten parked small funds not read.
 
 Per-fund detail beyond totals (rates, names, classes, fund-level figures, one-row filing errors) is
 in each report; most of it is not yet fixed.
+
+## 2026-10-11: one fund at a time, largest first (decisions D-099 to D-104)
+
+Each fund built alone, every published field compared with its earlier sandbox, fixes read on the
+page first. Nothing published, pushed or committed. "Proposed" = a reason written for the owner in
+`data/overrides/finding_dispositions_proposed/fund_<cik>.json`; the ledger does not read it.
+
+| Fund | Sandbox | Published vs filed | Outstanding | Proposed | Left open | Main changes |
+|---|---|---|---|---|---|---|
+| MSD 0001849894 | `m1a` | equal, 13 of 13 | 42 (was 58) | 38 | 4 | SONIA / SARON / BBSW / CDOR read from the page (65 rows, 2.7B); names 196 to 162; 17 row corrections (Accession loan tagged as Titan, 49.3M) |
+| North Haven 0001851322 | `n1b` | equal, 13 of 13 | 31 | 23 | 8 | names split (69 loans, 778M at 2025-09-30) and ordinals stripped; preferred equity no longer loans (up to 39M a quarter); 659 reference rates; net assets 2023-09-30; hierarchy-note row removed |
+| Monroe 0001742313 | `mo1c` | equal, 13 of 13 | 63 | 28 | 35 | names 3,536 to 578 with the instrument kept; 113 equity rows classed; 575 reference rates; PIK-only coupons (299 to 204 loans without a rate) |
+| Blue Owl Technology 0001869453 | `o1b` | equal, 13 of 13 | 6 (was 35) | 5 | 1 | names 900 to 334; OEConnection loan (17.1M) and five other rows corrected; net assets of two 2023 quarters; LLC interests no longer loans |
+| Barings 0001859919 | `ba1e` | equal, 13 of 13 (was 6.9M under in one) | 48 | 11 | 37 | two real rows restored; 300 reference rates (BBSY, BKBM, STIBOR ...); seven loans get rates from a sibling context |
+| TPG Twin Brook 0001913724 | `tb1c` | equal in every quarter | 25 (was 36) | 15 | 10 | a harmful promoted correction pulled (SimiTree); verifier fixed for coupon-and-margin filers; 401 reference rates |
+| Antares Strategic Credit 0001993402 | `as1d` | equal to the printed total, 8 of 9 (0.3M over in one) | 45 (was 70) | 32 | 13 | plugged money-market rule pulled, tagged row published as cash; 115 reference rates; two unnamed rows named; two share counts |
+
+Next by size: Ares Core Infrastructure 0002031750, Sixth
+Street Specialty Lending 0001508655, Stepstone Private Credit 0001950803, then the D-082 list.
+
+Defects found today that are not fixed (owner to hear):
+- The cost proxy invents a cost from the first fair value of a position's chain; cleaner names
+  chain more rows (Blue Owl Technology: 4,994,000 on an undrawn line worth -0.3M; 631 proxy rows
+  in that fund).
+- Year-end and per-share fund-level income errors (North Haven, Monroe, Blue Owl Technology):
+  shared extractor.
+- Rows printed 'x % Cash, y % PIK' publish no rate for a fund read as all-in (Barings, 13 quarters).
+- Loans printed 'S + x % PIK' or with a PIK tag and a spread still wait on D-092 (Monroe 204 loans,
+  Twin Brook 5 to 18 a quarter).
+- GICS labels move when a name is cleaned (814 to 1,007 rows a fund); not checked against the
+  printed industry heading.

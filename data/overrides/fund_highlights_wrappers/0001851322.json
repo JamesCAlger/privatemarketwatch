@@ -1,0 +1,15 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001851322",
+ "entity_name": "North Haven Private Income Fund LLC",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-09-30",
+   "field": "net_assets",
+   "value": 1898269000,
+   "evidence": "0001851322-23-000097 (10-Q, 2023-09-30) balance sheet: 'Total members' capital $ 1,898,269 $ 1,266,213 Total liabilities and members' capital $ 3,082,164 $ 2,075,223'. The published 1,266,213,000 is the 2022-12-31 column; total assets 3,082,164 less total liabilities 1,183,895 is 1,898,269."
+  }
+ ],
+ "notes": "One quarter only: the prior year-end net assets were taken for 2023-09-30."
+}

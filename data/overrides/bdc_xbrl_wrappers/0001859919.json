@@ -264,6 +264,27 @@
     ],
     "reference_rate_columns": [
       "Interest"
+    ],
+    "context_identifiers": [
+      "0001859919-23-000040 c-329 => Finexvet, Consumer Cyclical, First Lien Senior Secured Term Loan 2",
+      "0001859919-24-000075 c-86 => Adhefin International, Industrial Other, Subordinated Term Loan"
+    ],
+    "rate_only_contexts": [
+      "adopt_adjacent"
+    ],
+    "reference_rate_codes": [
+      "SOFR=SOFR",
+      "LIBOR=LIBOR",
+      "EURIBOR=EURIBOR",
+      "SONIA=SONIA",
+      "BBSY=BBSY",
+      "STIBOR=STIBOR",
+      "CORRA=CORRA",
+      "CDOR=CDOR",
+      "SARON=SARON",
+      "NIBOR=NIBOR",
+      "BKBM=BKBM",
+      "PRIME=PRIME"
     ]
   },
   "staging": {

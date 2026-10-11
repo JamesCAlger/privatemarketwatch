@@ -474,6 +474,14 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     hit = ctx_facts.get(f"__local__{declared_c}")
                 else:
                     hit = ctx_facts.get(anchor_field)
+                    if anchor_field == 'interest_rate':
+                        # A filer that tags coupon, cash margin and PIK margin apart
+                        # (source_encodings.rate_tag_reading) publishes the plain tag as the rate; the
+                        # first rate fact on the context is the cash margin (TPG Twin Brook c-401:
+                        # paid-in-cash 0.0625, plain 0.1010, printed 'S + 6.25 % 10.10 %').
+                        from pipeline.rate_tag_reading import reads_margins
+                        if reads_margins(r.get('cik')):
+                            hit = ctx_facts.get('__local__investmentinterestrate') or hit
 
                 if hit is None and not declared_c:
                     # A value the filer printed and did not tag, declared in the wrapper with the

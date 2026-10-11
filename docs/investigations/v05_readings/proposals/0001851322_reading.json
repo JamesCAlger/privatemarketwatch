@@ -1,0 +1,43 @@
+{
+ "decision": "D-100",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0001851322.md",
+ "groups": [
+  {"engine": "row_validation", "rule_name": "X02", "class": "as_filed",
+   "statement": "Loans with no rate and no spread because none is tagged: Sweep Midco second lien (two rows a quarter) is printed with no rate; at 2025-06-30 three non-accrual loans print a rate that the filer did not tag, so the published rows are incomplete as filed.",
+   "evidence": [
+    {"source": "filing", "quote": "0001193125-26-221623: 'Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02'. 0001851322-25-000070: 'First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249' (Continental Battery, context c-41) with no InvestmentInterestRate fact."}]},
+  {"engine": "row_validation", "rule_name": "SRC_BDC01", "class": "as_filed",
+   "statement": "Rows reported as missing are removed on purpose: the look-through schedule of the joint venture North Haven Keystone, LLC (2025-12-31, 2026-03-31; rule exclude_keystone_lookthrough) and the KWOR Acquisition issuer subtotal (2025-03-31, 2025-06-30; rule exclude_kwor_bare_issuer_aggregate).",
+   "evidence": [
+    {"source": "filing", "quote": "0001193125-26-221623: consolidated 'Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %'; the Keystone schedule's own total is 296,441 / 294,975. 0001851322-25-000044: four KWOR debt lines '13,405 ... 4,468 ... 75 ... 111 ... 17,876 18,059 0.53 Total Debt Investments - non-controlled/affiliated'; context c-1029 holds the issuer subtotal 22,107."},
+    {"source": "query", "quote": "Sandbox n1b: published excluding cash equals the filed investments total within 0.5M in all 13 quarters."}]},
+  {"engine": "source_recon", "rule_name": "blocking_source_position_like_parser_mismatch", "class": "as_filed",
+   "statement": "The KWOR Acquisition issuer subtotal (2025-03-31, 2025-06-30), excluded by rule.",
+   "evidence": [{"source": "filing", "quote": "0001851322-25-000044: 'KWOR Acquisition, Inc. 5' context c-1029, 22,107: the four debt lines 18,059 plus the equity line."}]},
+  {"engine": "source_recon", "rule_name": "blocking_source_pct_leaf_parser_mismatch", "class": "as_filed",
+   "statement": "The joint venture's look-through rows (2025-12-31 97 rows 249.685M, 2026-03-31 120 rows 294.975M), excluded by rule; their percent is of the joint venture's net assets.",
+   "evidence": [{"source": "filing", "quote": "Context C_2cb91b05-bd37-41a1-82c4-5b3df09d0263: 'TA Polaris Buyer, Inc. Investment First Lien Debt Reference Rate and Spread S + 4.50% Maturity Date 12/13/2032', fair value 9,681,000, percent 0.0987; the fund's own row for the borrower is context C_b9823564, 10,327,000."}]},
+  {"engine": "row_validation", "rule_name": "SRC_BDC02", "class": "as_filed",
+   "statement": "One row added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags no fact for it, so it has no source context.",
+   "evidence": [{"source": "filing", "quote": "0001851322-25-000044: 'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03'; the instance has no fact of 1,093,000."}]},
+  {"engine": "provenance_reverify", "rule_name": "no_provenance", "class": "as_filed",
+   "statement": "The same page-added Atlas Purchaser row (1.09M): there is no tag to verify it against.",
+   "evidence": [{"source": "filing", "quote": "0001851322-25-000044: 'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03'."}]},
+  {"engine": "identity", "rule_name": "reference_rate_printed", "class": "rule_problem",
+   "statement": "One row of 631: the page reader took the cell 'S + 7.00 % PIK' as no reference rate; the published SOFR is what the page and the member print.",
+   "evidence": [{"source": "filing", "quote": "Continental Battery Company, 2025-09-30, member '... First Lien Debt Reference Rate and Spread S + 7.00% PIK Interest Rate 11.29% Maturity Date 07/20/2028'; printed 'First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028'."}]},
+  {"engine": "identity", "rule_name": "income_identity", "class": "as_filed",
+   "statement": "A fund-level row of 2022-03-31, before the first published schedule (2023-03-31); no holdings are published for it.",
+   "evidence": [{"source": "query", "quote": "Sandbox n1b: first published holdings quarter 2023-03-31; fund-level rows exist from 2021-03-03."}]},
+  {"engine": "oracle", "rule_name": "B07", "class": "as_filed",
+   "statement": "Two filings for 2025-12-31: the 10-K 0001193125-26-088367 and the 10-K/A 0001193125-26-096532 (832 rows each); the amendment is the one published.",
+   "evidence": [{"source": "query", "quote": "Reconciliation status superseded_amendment on the 10-K's rows (97 debt, 22 equity look-through and the rest), sandbox n1b."}]},
+  {"engine": "oracle", "rule_name": "B02", "class": "as_filed",
+   "statement": "Position keys counted as duplicates are tranche twins whose members differ only by a trailing ' One' / ' Two'; each is published as its own row.",
+   "evidence": [{"source": "query", "quote": "2025-12-31 Vehlo Purchaser: three rows 2.015M / 46.013M / 0.0; the only affiliation-dedup exclusions are inside the Keystone look-through set (reading, group 11)."}]},
+  {"engine": "oracle", "rule_name": "B01", "class": "rule_problem",
+   "statement": "Leaves counted without a fair value are equity contexts that carry only an acquisition date (duration contexts), comparative-period rows and the superseded 10-K.",
+   "evidence": [{"source": "query", "quote": "37 / 40 such equity contexts at 2025-09-30 / 2025-12-31 (reading, group 12); published equals filed in both quarters."}]}
+ ]
+}

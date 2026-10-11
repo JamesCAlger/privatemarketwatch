@@ -81,7 +81,9 @@
       }
     ],
     "no_prefix_is_aggregate": true,
-    "category_marker_re": "(?i)^(?:abf\\s+-\\s+.+|total\\s+.+)$"
+    "category_marker_re": "(?i)^(?:abf\\s+-\\s+.+|total\\s+.+)$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*\\d?\\s*(?:Firs?t?[\\s-]lien|Second[\\s-]lien|Senior secured|Unsecured notes?|Subordinated|Perpetual Preferred|Senior [A-D] Preferred|Series [A-Z0-9-]+ (?:Preferred|Common)|Preferred|Class [A-Z0-9-]+|Common|LP Interest|L\\.P\\. Interest|LLC Interest|Limited Partner Interest|Specialty finance|Warrants?)|\\s+(?:Firs?t?[\\s-]lien senior secured|Second[\\s-]lien senior secured|L\\.P\\. Interest))\\b[^,]*(?:,\\s*\\d+)?\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -228,6 +230,9 @@
     ],
     "printed_margin_reading": [
       "cash_plus_pik"
+    ],
+    "equity_instrument_labels": [
+      "LLC Interest"
     ]
   }
 }

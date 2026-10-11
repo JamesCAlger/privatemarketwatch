@@ -11,7 +11,8 @@ decimals -5).
 A filer's wrapper names the test that fits its filings in ``source_encodings.schedule_row_tags``:
 
 - ``cost_or_percent_unrounded``: a position carries a cost tag or a percent-of-net-assets tag, and
-  none of its value facts is rounded more coarsely than the thousand (decimals below -3).
+  none of its value columns (fair value, cost, principal) is filed only in a form rounded more
+  coarsely than the thousand (decimals below -3).
 - ``quantity_or_percent``: a position carries a principal, a share count or a percent tag (New
   Mountain: the non-accrual paragraph's 'aggregate cost basis of $45.3 million, an aggregate fair
   value of $36.9 million' is tagged with cost and fair value on the issuer's member, c-708).
@@ -56,7 +57,8 @@ def non_schedule_contexts(tree: Any, contexts: dict[str, dict[str, Any]], filing
     aliases = fair_value_aliases(filing_meta.get("cik", ""))
     wanted = {cid for cid, info in contexts.items() if info.get("is_investment")}
     seen: dict[str, set[str]] = {}
-    rounded: set[str] = set()
+    coarse: set[tuple[str, str]] = set()
+    exact: set[tuple[str, str]] = set()
     for elem in tree.getroot().iter():
         context = elem.get("contextRef")
         if context not in wanted or not isinstance(elem.tag, str) or not (elem.text or "").strip():
@@ -68,8 +70,12 @@ def non_schedule_contexts(tree: Any, contexts: dict[str, dict[str, Any]], filing
         seen.setdefault(context, set()).add(column)
         if column in _VALUE_COLUMNS:
             decimals = elem.get("decimals") or ""
-            if re.fullmatch(r"-\d+", decimals) and int(decimals) < -3:
-                rounded.add(context)
+            (coarse if re.fullmatch(r"-\d+", decimals) and int(decimals) < -3 else exact).add((context, column))
+    # A value column filed only in rounded form marks a note row. A schedule row whose figures a note
+    # repeats in rounded form on the same context keeps its exact facts and stays a position (Barings
+    # 2023-06-30, c-838: cost 4,622,000 and fair value 4,534,000 at decimals -3 beside 4,600,000 and
+    # 4,500,000 at -5; a note row is c-775, 2025-03-31: fair value at -3, cost 2,900,000 at -5 only).
+    rounded = {context for context, _ in coarse - exact}
     dropped: set[str] = set()
     for context, columns in seen.items():
         if not columns & set(_VALUE_COLUMNS):

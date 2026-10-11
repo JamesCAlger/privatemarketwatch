@@ -68,7 +68,8 @@
       }
     ],
     "category_marker_re": "(?i)^\\s*(?:-|\\s)*\\s*(?:non-controlled/non-affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS))?\\s*$",
-    "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})"
+    "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})",
+    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -119,7 +120,9 @@
       "Technology Hardware, Storage and Peripherals",
       "Textiles, Apparel and Luxury Goods",
       "Trading Companies and Distributors",
-      "Transportation Infrastructure"
+      "Transportation Infrastructure",
+      "Diversified Consumer Service",
+      "Speciality Retail"
     ],
     "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$)",
     "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s+((?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$).*)$",
@@ -184,6 +187,21 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "cash_identifiers": [
+      "BlackRock Liquidity T-Fund - Institutional Shares",
+      "Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "SON=SONIA",
+      "E=EURIBOR",
+      "P=PRIME",
+      "C=CDOR to 2025-09-30",
+      "C=CORRA from 2025-12-31"
     ]
   }
 }

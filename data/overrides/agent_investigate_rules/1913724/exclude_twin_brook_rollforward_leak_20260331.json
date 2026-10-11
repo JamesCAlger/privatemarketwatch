@@ -8,7 +8,7 @@
       "2026-03-31"
     ]
   },
-  "predicate_sql": "report_date = '2026-03-31' AND issuer_name = 'Twin Brook Equity Holdings, LLC' AND COALESCE(instrument_description, '') = '' AND bdc_dimensions_raw = 'investmentidentifieraxis=Twin Brook Equity Holdings, LLC'",
+  "predicate_sql": "report_date = '2026-03-31' AND COALESCE(instrument_description, '') = '' AND bdc_dimensions_raw IN ('investmentidentifieraxis=Twin Brook Equity Holdings, LLC', 'investmentidentifieraxis=Twin Brook Segregated Equity Holdings, LLC')",
   "evidence": [
     {
       "source": "query",
@@ -21,6 +21,10 @@
     {
       "source": "filing",
       "quote": "Schedule table 42 reports 'Total non-controlled/affiliated investments | 86,501 | 98,605' and 'Total investments | $ | 4,479,699 | $ | 4,481,018'. The 16000 difference between the detailed Twin Brook fair value and the affiliated subtotal is rounding/another small schedule component, not another 98589000 position."
+    },
+    {
+      "source": "filing",
+      "quote": "2026-10-11 (D-104): the bare member 'Twin Brook Segregated Equity Holdings, LLC' (context c-2152, fair value 16) is the affiliate roll-forward row; the schedule row is '... | Equity interest' (c-874, 16). Printed total: 'Total investments $ 4,479,699 $ 4,481,018 175.76 %'; published had been 4,481,034."
     }
   ],
   "rationale": "A disclosure/roll-forward context with issuer-only dimensions leaked into unified holdings and duplicates the fair value of the actual schedule position. Excluding the issuer-only, no-instrument representation preserves the real Equity interest position and does not affect earlier quarters. COALESCE(instrument_description, '') = '' matches both frames: mid-build Layer C sees '' (staging fills empty string) while the published CSV frame round-trips '' to NULL; the original IS NULL form was inert in production (reauthored 2026-09-02).",

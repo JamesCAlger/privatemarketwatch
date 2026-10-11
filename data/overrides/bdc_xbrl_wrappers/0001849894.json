@@ -85,7 +85,8 @@
       }
     ],
     "category_marker_re": "(?i)^(?:Investments Investments|INVESTMENTS INVESTMENTS|nvestments Investments|Member Investments Investments)\\s*-\\s*(?:non[- ]?control(?:led)?(?:/non[- ]?affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED)\\s+(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Senior Secured Debt|Common Equity|Preferred Equity|Equity(?:\\s+and\\s+Other\\s+Investments)?|SECOND LIEN DEBT|FIRST LIEN DEBT)(?:\\s+(?:Aerospace & Defense|Automobile|Automotive|Banking, Finance, Insurance & Real Estate|Beverage, Food & Tobacco|Capital Equipment|Chemicals, Plastics & Rubber|Construction & Building|Consumer Goods:? (?:Durable|Non-durable)|Consumer goods:? Non-durable|Containers, Packaging & Glass|Energy: Oil & Gas|Environmental Industries|Environmental & Facilities Services|Healthcare & Pharmaceuticals|High Tech Industries|Hotel, Gaming & Leisure|Media: (?:Advertising, Printing & Publishing|Broadcasting & Subscription|Diversified & Production)|Metals & Mining|Retail|Services: (?:Business|Consumer)|Sovereign & Public Finance|Telecommunications|Transportation: (?:Cargo|Consumer)|Wholesale|Diversified Support Services|Specialized Consumer Services|Application Software|Advertising|Consumer|and Other Investments))?$",
-    "canonical_strip_re": " Interest Rate Floor \\d+[\\d.]*%| Interest Rate \\d+[\\d.]*%"
+    "canonical_strip_re": " Interest Rate Floor \\d+[\\d.]*%| Interest Rate \\d+[\\d.]*%",
+    "issuer_name_strip_re": "(?i)(?:\\s*[-\u2013\u2014\ufffd]\\s*|\\s+)(?:(?:Revolving Credit Facility(?: Term Loan)?|Delayed Draw Term Loan|DDTL [A-Z]|Term Loan Add on|Term Loan|Revolver|Add on|Second Incremental|Incremental|Equity)(?:\\s+(?:EUR|GBP))?|One|EUR|GBP)\\s*$"
   },
   "staging": {
     "strategy": "prefix_strip",
@@ -245,6 +246,19 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "L=LIBOR",
+      "E=EURIBOR",
+      "SO=SONIA",
+      "SA=SARON",
+      "B=BBSW",
+      "C=CDOR",
+      "P=PRIME"
     ]
   }
 }

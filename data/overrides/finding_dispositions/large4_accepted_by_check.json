@@ -153,11 +153,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox l4c for each quarter listed: 878 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox as1d for each quarter listed: 202 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py l4c C107 3",
-   "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py as1d C107 3",
+   "decided_by": "check passed on sandbox as1d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -333,17 +333,18 @@
    "quarters": [
     "2024-03-31",
     "2024-06-30",
-    "2024-09-30"
+    "2024-09-30",
+    "2026-03-31"
    ],
    "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
    "evidence": [
     {
      "source": "query",
-     "quote": "Check no_rate_in_source passed on sandbox l4c for each quarter listed: 411 flagged rows tested, none failing."
+     "quote": "Check no_rate_in_source passed on sandbox as1d for each quarter listed: 2 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/x02_page_read.py l4c 0001993402",
-   "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/x02_page_read.py as1d 0001993402",
+   "decided_by": "check passed on sandbox as1d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

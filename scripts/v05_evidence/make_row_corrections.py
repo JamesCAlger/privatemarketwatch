@@ -234,6 +234,46 @@ SPECS = [
         ("Dorado Bidco, Inc., First lien senior secured revolving loan", "0.0632, SOFR (B), 0.02",
          "'First lien senior secured revolving loan 09/2031' with dashes for principal, cost and value (10-Q 2025-06-30)"))
 ]
+# decision D-099: MSD Investment Corp., one-row filing errors read on the page (2026-10-11)
+MSD = "0001849894"
+MSD_NO_PIK = ("The whole rate is tagged with the paid-in-kind concept and there is no plain rate fact; the printed line "
+              "carries no 'PIK': ")
+MSD_SKY = ("No cost fact on the context; the published 5,000 is a proxy from the first fair value. The printed line shows "
+           "a dash for par and for cost: 'Sky Merger Sub, LLC - Delayed Draw Term Loan ... 5/28/2029 -- -- ")
+MSD_SKY_ID = "Sky Merger Sub, LLC - Delayed Draw Term Loan"
+SPECS += [
+    (MSD, "2024-12-31", "Titan Purchaser, Inc. Reference Rate and Spread S + 6.00% Interest Rate Floor 1.00% Interest Rate 9.34%",
+     {"issuer_name": "Accession Risk Management",
+      "instrument_description": "Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate Floor 0.75% "
+                                "Interest Rate 9.34% Maturity Date 11/1/2029"},
+     "The filer tagged this line on a second 'Titan Purchaser' member; the printed line reads 'Accession Risk Management - "
+     "Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05' under Banking, Finance, "
+     "Insurance & Real Estate, whose printed subtotal 308,744 includes it", "D-099"),
+    (MSD, "2025-09-30", "Watchguard Technologies, Inc. Reference Rate and Spread S + 5.25%", {"pik_rate": ""},
+     MSD_NO_PIK + "'S + 5.25 % 0.75 % 9.41 % 7/2/2029 74,147 72,308 73,962 2.67'", "D-099"),
+    (MSD, "2025-09-30", "7Ridge Investments - Delayed Draw Term Loan", {"pik_rate": ""},
+     MSD_NO_PIK + "'7Ridge Investments - Delayed Draw Term Loan (10)(11) S + 8.00 % 1.00 % 11.98 % 7/7/2028 -- 33 34 --'", "D-099"),
+    (MSD, "2025-12-31", "Legends Hospitality Holding Company - Delayed Draw Term Loan", {"pik_rate": ""},
+     MSD_NO_PIK + "'Delayed Draw Term Loan (6)(11) S + 5.00 % 0.75 % 8.73 % 8/22/2031 3,099 3,044 3,047 0.09'", "D-099"),
+    (MSD, "2025-12-31", "Legends Hospitality Holding Company - Revolving Credit Facility", {"pik_rate": ""},
+     MSD_NO_PIK + "'Revolving Credit Facility (6)(11) S + 5.00 % 0.75 % 8.73 % 8/22/2030 2,437 2,322 2,321 0.07'", "D-099"),
+    (MSD, "2026-03-31", "Legends Hospitality Holding Company - Delayed Draw Term Loan", {"pik_rate": ""},
+     MSD_NO_PIK + "'Delayed Draw Term Loan (6) S + 5.00 % 0.75 % 8.66 % 8/22/2031 3,727 3,669 3,669 0.11'", "D-099"),
+    (MSD, "2026-03-31", "Legends Hospitality Holding Company - Revolving Credit Facility", {"pik_rate": ""},
+     MSD_NO_PIK + "'Revolving Credit Facility (6)(11) S + 5.00 % 0.75 % 8.67 % 8/22/2030 3,938 3,828 3,827 0.12'", "D-099"),
+    (MSD, "2024-06-30", "Beacon Mobility Corp. - Delayed Draw Term Loan", {"interest_rate": "13.94"},
+     "Only the paid-in-kind concept is tagged (0.1394) and no plain rate; the printed line reads 'Beacon Mobility Corp. - "
+     "Delayed Draw Term Loan (8)(9)(12) S + 8.60 % 0.00 % 13.94 % PIK 12/31/2025 1,285 1,263 1,266 0.08'", "D-099"),
+    (MSD, "2024-06-30", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "5'", "D-099"),
+    (MSD, "2024-09-30", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "21'", "D-099"),
+    (MSD, "2024-12-31", "Sky Merger Sub, LLC Reference Rate and Spread S + 6.60% Interest Rate Floor 1.50% Interest Rate 10.91%",
+     {"cost": "0"}, MSD_SKY + "37'", "D-099"),
+    (MSD, "2025-03-31", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "52'", "D-099"),
+    (MSD, "2025-06-30", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "68'", "D-099"),
+    (MSD, "2025-09-30", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "84'", "D-099"),
+    (MSD, "2025-12-31", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "99'", "D-099"),
+    (MSD, "2026-03-31", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "115'", "D-099"),
+]
 # Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
 EXACT = {"Impel Pharmaceuticals Inc., First Lien Term Loan 1",
          "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",
@@ -251,10 +291,167 @@ added = 0
 # A sandbox holds some funds only: specs for a fund it does not hold are left alone, not failed.
 held = {r[0] for r in con.execute(
     f"SELECT DISTINCT lpad(CAST(cik AS VARCHAR),10,'0') FROM read_parquet('{S}/private_markets_holdings.parquet')").fetchall()}
+# decision D-101: Monroe Capital Income Plus, one row (2026-10-11)
+MONROE = "0001742313"
+SPECS.append((MONROE, "2025-12-31", "FLEET Response, LLC (fka RS Acquisition, LLC) 1 | Senior Secured Loans", {"interest_rate": ""},
+              "Rate published 25.25 = a paid-in-cash tag of 15.28 plus the PIK tag 9.97; the page prints no cash rate, so the cash "
+              "tag is withdrawn and the row reads like its two sibling rows (PIK 9.97, spread 6.10): 'FLEET Response, "
+              "LLC (fka RS Acquisition, LLC) (21) SF 6.10 % 9.97 % PIK 12/13/2021 12/14/2026 11,577 11,521 8,671 0.3 %'", "D-101"))
+# decision D-102: Blue Owl Technology Income Corp., one-row filing errors read on the page (2026-10-11)
+OWLTECH = "0001869453"
+OWLTECH_REALPAGE = ("No spread fact on the row's context (principal, cost and fair value only); the printed line reads "
+                    "'RealPage, Inc.(8)(14) First lien senior secured loan S+ 3.00 % 4/2028 ")
+SPECS += [
+    (OWLTECH, "2025-12-31", "McQueen Bidco PTY LTD. (dba Infomedia) | First lien senior secured loan 1",
+     {"issuer_name": "OECONNECTION LLC", "basis_spread": "4.5"},
+     "The filer tagged this line on a second McQueen Bidco member (context c-416); the printed line reads 'OECONNECTION LLC(3)(4)(8) "
+     "First lien senior secured loan S+ 4.50 % 12/2032 17,228 17,142 17,142'. McQueen's own line is 'S+ 4.50 % 12/2032 34,002 "
+     "34,002 33,917'", "D-102"),
+    (OWLTECH, "2025-03-31", "RealPage, Inc., First lien senior secured loan", {"basis_spread": "3"},
+     OWLTECH_REALPAGE + "20,114 19,831 19,824'", "D-102"),
+    (OWLTECH, "2025-06-30", "RealPage, Inc., First lien senior secured loan", {"basis_spread": "3"},
+     OWLTECH_REALPAGE + "20,062 19,801 19,907'", "D-102"),
+    (OWLTECH, "2023-09-30", "Engage Debtco Limited, First lien senior secured loan", {"basis_spread": "5.9", "pik_rate": "2.4"},
+     "No spread or PIK fact on the row's context; the printed line reads 'Engage Debtco Limited(8)(21) First lien senior secured "
+     "loan S + 5.90% (2.40% PIK) 7/2029 12,500 12,232 12,281 0.8 %'", "D-102"),
+    (OWLTECH, "2024-09-30", "Blue Owl Credit SLF LLC, LLC Interest", {**EQUITY, "principal_amount": ""},
+     "Printed under Equity Investments, Joint Ventures: 'Blue Owl Credit SLF LLC(21)(23)(26)(27)(28) LLC Interest N/A N/A N/A "
+     "2,188 2,189 2,187 0.1 %'; the filer tagged the units as a principal amount and the row was classed a loan", "D-102"),
+]
+SPECS += [
+    (OWLTECH, "2024-03-31", "Kaseya Inc., First lien senior secured loan", {"basis_spread": "6", "pik_rate": "2.5"},
+     "Spread and PIK facts are swapped (spread 0.025, PIK 0.06); the printed line reads 'Kaseya Inc.(8) First lien senior secured "
+     "loan S + 6.00 % ( 2.50 % PIK) 06/2029 67,903 66,830 67,903 3.1 %'", "D-102"),
+    (OWLTECH, "2024-03-31", "Associations, Inc., First lien senior secured loan", {"basis_spread": "6.5", "pik_rate": "2.5"},
+     "Spread and PIK facts are swapped (spread 0.025, PIK 0.065); the printed line reads 'Associations, Inc.(8) First lien senior "
+     "secured loan S + 6.50 % ( 2.50 % PIK) 07/2027 21,120 20,938 21,120 1.0 %'", "D-102"),
+    (OWLTECH, "2026-03-31", "Blue Owl Credit SLF LLC | LLC Interest", {"shares_held": "16161000"},
+     "The units are tagged as a principal amount of 16,161,000; once the row is classed as equity the share count was filled with "
+     "a proxy from an earlier quarter (14,293). Printed: 'Blue Owl Credit SLF LLC(3)(5)(24)(26)(30)(31) LLC Interest N/A N/A "
+     "16,161 - 16,162 14,946'", "D-102"),
+]
+EXACT |= {"RealPage, Inc., First lien senior secured loan", "Engage Debtco Limited, First lien senior secured loan",
+          "Blue Owl Credit SLF LLC, LLC Interest", "Kaseya Inc., First lien senior secured loan",
+          "Associations, Inc., First lien senior secured loan", "Blue Owl Credit SLF LLC | LLC Interest"}
+# decision D-103: Barings Private Credit Corp, 2023-06-30: three loans whose rate facts sit on a sibling context; the
+# reference rate was guessed from the date. Run against a sandbox that holds the fund with D-103's wrapper settings.
+BARINGS = "0001859919"
+BARINGS_FINEXVET = ("Reference rate guessed from the report date (LIBOR); the printed lines read 'Finexvet Consumer Cyclical First Lien "
+                    "Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 03/22 03/29 2,454 2,391 2,388 0.2 %' and 'First Lien "
+                    "Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 05/23 03/29 5,500 5,304 5,278 0.4 %'")
+SPECS += [
+    (BARINGS, "2023-06-30", "Finexvet, Consumer Cyclical, First Lien Senior Secured Term Loan 1",
+     {"reference_rate_type": "EURIBOR", "reference_rate_source": ""}, BARINGS_FINEXVET, "D-103"),
+    (BARINGS, "2023-06-30", "Finexvet, Consumer Cyclical, First Lien Senior Secured Term Loan 2",
+     {"reference_rate_type": "EURIBOR", "reference_rate_source": ""}, BARINGS_FINEXVET, "D-103"),
+    (BARINGS, "2023-06-30", "Innovad Group II BV, Beverage, Food & Tobacco, First Lien Senior Secured Term Loan 2",
+     {"reference_rate_type": "SARON", "reference_rate_source": ""},
+     "Reference rate guessed from the report date (LIBOR); the printed line reads 'First Lien Senior Secured Term Loan SARON + "
+     "6.50 %, 8.2 % Cash 05/23 04/28 162 161 156'", "D-103"),
+]
+# decision D-104: TPG Twin Brook, SimiTree Acquisition at 2025-12-31: the PIK margin is tagged 1.75 (not 0.0175), and the
+# spread was then published as the PIK rate. Run against a sandbox that holds the fund.
+TWINBROOK = "0001913724"
+TWINBROOK_SIMITREE = ("PIK fact tagged 1.75 instead of 0.0175; the spread was published as the PIK rate and no spread. Printed: "
+                      "'SimiTree Acquisition, LLC First lien senior secured ")
+SPECS += [
+    (TWINBROOK, "2025-12-31", "SimiTree Acquisition, LLC, First lien senior secured term loan",
+     {"basis_spread": "5.25", "pik_rate": "1.75"},
+     TWINBROOK_SIMITREE + "term loan S + 5.25 % + 1.75 PIK 11.10 % 2/26/2025 5/17/2026 1,239 1,236 1,232 0.05 %'", "D-104"),
+    (TWINBROOK, "2025-12-31", "SimiTree Acquisition, LLC, First lien senior secured delayed draw term loan 1",
+     {"basis_spread": "5.25", "pik_rate": "1.75"},
+     TWINBROOK_SIMITREE + "delayed draw term loan S + 5.25 % + 1.75 PIK 11.10 % 7/28/2023 5/17/2026 4 4 4 0.00 %'", "D-104"),
+    (TWINBROOK, "2025-12-31", "SimiTree Acquisition, LLC, First lien senior secured delayed draw term loan 2",
+     {"basis_spread": "5.25", "pik_rate": "1.75"},
+     TWINBROOK_SIMITREE + "delayed draw term loan S + 5.25 % + 1.75 PIK 11.10 % 2/26/2025 5/17/2026 886 884 881 0.04 %'", "D-104"),
+    (TWINBROOK, "2025-12-31", "SimiTree Acquisition, LLC, First lien senior secured revolving loan",
+     {"basis_spread": "7", "pik_rate": ""},
+     "The margin was published as a PIK rate and no spread; the printed line has no PIK: 'SimiTree Acquisition, LLC First lien "
+     "senior secured revolving loan S + 7.00 % 11.10 % 7/28/2023 5/17/2026 178 49 49 0.00 %'", "D-104"),
+]
+EXACT |= {"SimiTree Acquisition, LLC, First lien senior secured term loan", "SimiTree Acquisition, LLC, First lien senior secured revolving loan"}
+# decision D-105: Antares Strategic Credit Fund, two rows whose member names no issuer (2026-10-11)
+ANTARES_SC = "0001993402"
+ANTARES_SC_WST = ("First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 1.00% Interest Rate 9.66% "
+                  "Maturity Date 3/31/2027")
+EXACT.add(ANTARES_SC_WST)
+SPECS += [
+    (ANTARES_SC, "2024-12-31", ANTARES_SC_WST,
+     {"issuer_name": "WST USA Holdco, Inc.", "instrument_description": "First Lien Delayed Draw Term Loan"},
+     "The member carries no issuer (context C_d395e38e); the printed line reads 'WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed "
+     "Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910' (Building Products)", "D-105"),
+    (ANTARES_SC, "2025-09-30", "Retrieving data. Wait a few seconds and try to cut or copy again.",
+     {"issuer_name": "Enverus Holdings, Inc.", "instrument_description": "First Lien Revolver"},
+     "The member text is a spreadsheet error message (context C_0b017253); the printed line reads 'Enverus Holdings, Inc. "
+     "(7)(15)(17) First Lien Revolver S + 5.50 % 9.63 % 12/24/2029 174 6 7'", "D-105"),
+]
+# decision D-100: North Haven Private Income Fund, bare-identifier quarters (to 2025-06-30). Preferred and common
+# equity published as loans, and one loan published as a fund. The specs are built from the rows the sandbox still
+# shows in the wrong class, so a sandbox built after the corrections adds nothing; rows already written stay.
+NH = "0001851322"
+NH_PREFERRED = ["FORTIS Solutions Group,  LLC", "FORTIS Solutions Group, LLC", "Integrity Marketing Acquisition, LLC",
+                "Knockout Intermediate Holdings I, Inc.", "RSK Holdings, Inc. (Riskonnect)", "Revalize, Inc.",
+                "Verdantas LLC 5", "Verdantas, LLC 4", "Verdantas, LLC 5"]
+# Printed with a floating rate in the 'Reference Rate and Spread' column ('RSK Holdings, Inc. (Riskonnect) ... Preferred Equity
+# S + 10.50 %', 'Revalize, Inc. ... S + 10.00 %'): the tagged spread is a spread and stays. The others print a fixed rate there.
+NH_FLOATING_PREFERRED = {"RSK Holdings, Inc. (Riskonnect)", "Revalize, Inc."}
+NH_COMMON_2023Q3 = ["Amerilife Holdings, LLC", "Frisbee Holdings, LP (Fetch)", "LUV Car Wash", "Reveal Data Solutions",
+                    "Surewerx Topco, LP"]
+NH_PREFERRED_REASON = ("Printed under Preferred Equity with a share count and a fixed rate, e.g. 10-K 2024-12-31: 'FORTIS Solutions "
+                       "Group, LLC (6) (16) Preferred Equity 12.25 % 06/24/2022 4,000,000 5,064 3,920 0.12', 'Integrity Marketing "
+                       "Acquisition, LLC (6) (16) Preferred Equity 10.50 % 07/15/2024 750,000 1,013 998 0.03'; published as a loan, "
+                       "the rate held as a spread or the shares as principal")
+NH_COMMON_REASON = ("Printed under Common Equity with a share count (10-Q 2023-09-30: 'Amerilife Holdings, LLC (5) (13) 9/1/2022 "
+                    "9,880 273 354 0.02 Frisbee Holdings, LP (Fetch) (5) (13) 10/31/2022 28,531 363 363 0.02 LUV Car Wash (5) (13) "
+                    "4/6/2022 1,260 1,260 901 0.05 Reveal Data Solutions (5) (13) 8/29/2023 849,231 1,104 1,104 0.06 Surewerx "
+                    "Topco, LP (5) (11) (13) 12/28/2022 189 189 204 0.01'); the filer tagged the shares as a principal amount")
+NH_TRUGREEN_REASON = ("A first lien loan (par, rate, spread and maturity 11/02/2027 are tagged and printed); classed as a fund "
+                      "because the name ends in 'Limited Partnership'")
+if NH in held:
+    _nh = con.execute(f"""SELECT CAST(report_date AS VARCHAR)[:10], CAST(bdc_investment_identifier AS VARCHAR), asset_category,
+            interest_rate, basis_spread, principal_amount, shares_held
+        FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?
+          AND CAST(report_date AS VARCHAR)[:10] <= '2025-06-30' AND maturity_date IS NULL AND asset_category = 'LOAN'
+          AND CAST(bdc_investment_identifier AS VARCHAR) IN (SELECT unnest(?))
+        ORDER BY 1, 2""", [NH, NH_PREFERRED + NH_COMMON_2023Q3]).fetchall()
+    for quarter, identifier, category, rate, spread, principal, shares in _nh:
+        common = identifier in NH_COMMON_2023Q3
+        if common and quarter != "2023-09-30":
+            continue
+        fields = dict(EQUITY if common else {**PREFERRED, "asset_class": "PRIVATE_EQUITY"})
+        if not common and spread is not None and identifier not in NH_FLOATING_PREFERRED:
+            if rate is None:
+                fields["interest_rate"] = "%g" % spread
+            fields["basis_spread"] = ""
+            fields.update({"coupon_type": "Fixed", "reference_rate_type": "", "reference_rate_source": ""})
+        if shares is None and principal is not None:
+            fields["shares_held"] = ("%d" % principal) if float(principal).is_integer() else repr(principal)
+            fields["principal_amount"] = ""
+        SPECS.append((NH, quarter, identifier, fields, NH_COMMON_REASON if common else NH_PREFERRED_REASON, "D-100"))
+        EXACT.add(identifier)
+    for (quarter,) in con.execute(f"""SELECT DISTINCT CAST(report_date AS VARCHAR)[:10] FROM read_parquet('{S}/private_markets_holdings.parquet')
+            WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND CAST(bdc_investment_identifier AS VARCHAR) = 'TruGreen Limited Partnership'
+              AND asset_category = 'FUND' ORDER BY 1""", [NH]).fetchall():
+        SPECS.append((NH, quarter, "TruGreen Limited Partnership", {"asset_category": "LOAN", "issuer_category": "CORPORATE"},
+                      NH_TRUGREEN_REASON, "D-100"))
+# decision D-101: Monroe rows of the Equity Securities section whose label names no share class ('..., Equity Securities',
+# '(Equity commitment funded) | Equity Securities', '(LLC interest)') are published with category OTHER. Built from the rows
+# the sandbox still shows as OTHER; every one of them carries the section or an equity word in its member.
+MONROE_EQUITY_REASON = ("The member places the row in the filer's Equity Securities section (or names an equity commitment or LLC "
+                        "interest) and names no share class, so it was given no class: ")
+if MONROE in held:
+    for quarter, identifier in con.execute(f"""SELECT CAST(report_date AS VARCHAR)[:10], CAST(bdc_investment_identifier AS VARCHAR)
+            FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?
+              AND asset_category = 'OTHER'
+              AND regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '(?i)equity|LLC interest|profit sharing')
+            ORDER BY 1, 2""", [MONROE]).fetchall():
+        SPECS.append((MONROE, quarter, identifier, EQUITY, MONROE_EQUITY_REASON + "'" + identifier + "'", "D-101"))
+        EXACT.add(identifier)
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
     author, added_on = (("v05-decision-" + decision[0],
+                         "2026-10-11" if decision[0] >= "D-099" or decision[0][2:3] != "0" else
                          "2026-10-09" if decision[0] >= "D-074" else "2026-10-08" if decision[0] >= "D-046" else "2026-10-07")
                         if decision else ("v05-decision-D-021", "2026-10-06"))
     rows = con.execute(f"""SELECT DISTINCT accession_number, CAST(bdc_investment_identifier AS VARCHAR)

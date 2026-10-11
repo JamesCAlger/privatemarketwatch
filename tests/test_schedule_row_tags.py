@@ -66,3 +66,19 @@ def test_a_commitment_table_context_is_not_a_row(monkeypatch):
     tree = etree.ElementTree(etree.fromstring(xml))
     # 'row' carries a cost, so it stays a schedule row even with a commitment amount
     assert srt.non_schedule_contexts(tree, CONTEXTS, META) == {"rollforward"}
+
+
+def test_a_schedule_row_repeated_in_rounded_form_on_its_own_context_is_kept(monkeypatch):
+    # Barings 2023-06-30, c-838: exact cost and fair value, plus the joint-venture note's rounded copies.
+    xml = """<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2025">
+      <us-gaap:InvestmentOwnedAtCost contextRef="both" decimals="-3">4622000</us-gaap:InvestmentOwnedAtCost>
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="both" decimals="-3">4534000</us-gaap:InvestmentOwnedAtFairValue>
+      <us-gaap:InvestmentOwnedAtCost contextRef="both" decimals="-5">4600000</us-gaap:InvestmentOwnedAtCost>
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="both" decimals="-5">4500000</us-gaap:InvestmentOwnedAtFairValue>
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="note" decimals="-3">2395000</us-gaap:InvestmentOwnedAtFairValue>
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="note" decimals="-5">2400000</us-gaap:InvestmentOwnedAtFairValue>
+      <us-gaap:InvestmentOwnedAtCost contextRef="note" decimals="-5">2900000</us-gaap:InvestmentOwnedAtCost>
+    </xbrl>"""
+    monkeypatch.setattr(srt, "_tagged_ciks", lambda: {"0001859919": frozenset({"cost_or_percent_unrounded"})})
+    contexts = {"both": {"is_investment": True}, "note": {"is_investment": True}}
+    assert srt.non_schedule_contexts(etree.ElementTree(etree.fromstring(xml)), contexts, META) == {"note"}

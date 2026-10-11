@@ -1,0 +1,27 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001869453",
+ "entity_name": "Blue Owl Technology Income Corp.",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-03-31",
+   "field": "net_assets",
+   "value": 1149711000,
+   "evidence": "0001869453-23-000010 (10-Q, 2023-03-31) balance sheet: 'Total Net Assets 1,149,711 989,497'. Published 2,159,225,000. Company facts hold a second StockholdersEquity value for this date, filed a year later on a prior-year context (the following year's balance); the later filing had been taken."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "total_assets",
+   "value": 2153216000,
+   "evidence": "Same balance sheet: 'Total Assets $ 2,153,216 $ 2,043,570'. Published empty."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "net_assets",
+   "value": 1340153000,
+   "evidence": "0001869453-23-000017 (10-Q, 2023-06-30) balance sheet: 'Total Net Assets 1,340,153 989,497'. Published 2,641,061,000. Company facts hold a second StockholdersEquity value for this date, filed a year later on a prior-year context (the following year's balance); the later filing had been taken."
+  }
+ ],
+ "notes": "Two quarters: a later 10-Q refiled the following year's net assets on these dates' contexts."
+}

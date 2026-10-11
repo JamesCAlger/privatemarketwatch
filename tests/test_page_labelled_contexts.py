@@ -164,6 +164,17 @@ class TestDeclaredContextIdentifiers:
         assert plc.name_declared_contexts(contexts, meta) == 0
         assert contexts["P_Bio"]["investment_identifier"] == "as filed"
 
+    def test_a_member_the_wrapper_reads_as_a_category_row_takes_the_declared_name(self, monkeypatch):
+        import re
+        meta = self._declare(monkeypatch)
+        monkeypatch.setattr(plc, "_category_marker", lambda cik: re.compile(r"(?i)^\s*(?:First\s+Lien\s+Senior\s+Secured\s+Term\s+Loan)\s*$"))
+        bare = {"P_Bio": {"is_investment": True, "investment_identifier": "First Lien Senior Secured Term Loan"}}
+        assert plc.name_declared_contexts(bare, meta) == 1
+        assert bare["P_Bio"]["investment_identifier"] == "Common Stocks | Bioplastics | PlantSwitch, Inc. (Series A-2)"
+        named = {"P_Bio": {"is_investment": True, "investment_identifier": "Acme, First Lien Senior Secured Term Loan"}}
+        assert plc.name_declared_contexts(named, meta) == 0
+        assert named["P_Bio"]["investment_identifier"] == "Acme, First Lien Senior Secured Term Loan"
+
     def test_other_filings_and_missing_contexts_are_left_alone(self, monkeypatch):
         meta = self._declare(monkeypatch)
         assert plc.name_declared_contexts({"elsewhere": {"is_investment": False}}, meta) == 0

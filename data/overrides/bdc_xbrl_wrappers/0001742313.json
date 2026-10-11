@@ -115,7 +115,8 @@
     ],
     "no_prefix_is_aggregate": true,
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Senior\\s+Secured\\s+Loans|Junior\\s+Secured\\s+Loans|Unitranche\\s+Secured\\s+Loans|Subtotal|Sub-Total)\\s*$",
-    "issuer_name_strip_re": "\\s+\\d{1,2}$"
+    "issuer_name_strip_re": "(?i)(?:\\s*\\(\\s*(?:Delayed\\s+Draw|Revolver|[^()]*(?:units?|interests?|stock|shares|warrants?|commitments?|equity|profit\\s+sharing)[^()]*)\\))?(?:\\s*,\\s*(?:(?:Senior|Junior|Unitranche)(?:\\s+Secured)?\\s+Loans?|Equity\\s+Securit(?:ie|e)s|Delayed\\s+Draw\\b|Revolver\\b).*|\\s*,|(?:\\s+\\d{1,2})?)$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -248,5 +249,23 @@
     "unclassified_rate": {
       "max_pct": 0.1
     }
+  },
+  "source_encodings": {
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "reference_rate_columns": [
+      "Index"
+    ],
+    "reference_rate_codes": [
+      "SF=SOFR",
+      "L=LIBOR",
+      "P=PRIME",
+      "C=CDOR",
+      "CA=CORRA",
+      "SN=SONIA",
+      "BB=BBSW",
+      "EU=EURIBOR"
+    ]
   }
 }

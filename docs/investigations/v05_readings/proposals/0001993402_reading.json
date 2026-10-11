@@ -1,0 +1,33 @@
+{
+ "decision": "D-105",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0001993402.md",
+ "groups": [
+  {"engine": "source_recon", "rule_name": "blocking_source_position_like_parser_mismatch", "class": "as_filed",
+   "statement": "The rows reported as missing are the filer's separate unfunded-commitments table, removed on purpose (rule exclude_commitment_table_rows). They are outside 'Total Investments' and repeat value already in the schedule.",
+   "evidence": [
+    {"source": "filing", "quote": "0001193125-26-221769: 'AAH Topco., LLC Delayed Draw Term Loan 4/1/2027 $ 3,179 $ ( 8 )' ... 'Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )'; schedule 'Total Investments at fair value $ 4,537,269 $ 4,493,774 208.26 %'."},
+    {"source": "query", "quote": "Sandbox as1d: published rows equal the filed investments figure in all nine quarters once the commitment-table rows are out (2025-03-31 differs by 0.294M, two subtotal rows)."}]},
+  {"engine": "row_validation", "rule_name": "SRC_BDC01", "class": "as_filed",
+   "statement": "The same commitment-table rows, reported by the row check.",
+   "evidence": [{"source": "filing", "quote": "0001193125-26-221769: 'Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )'; Movati Athletic delayed draw prints in the schedule 'CAD 3,500 ( 27 ) 25' and its commitment-table context C_fc7bf067 carries commitment 2,515,000 and fair value 25,000."}]},
+  {"engine": "conservation", "rule_name": "fv_conservation", "class": "rule_problem",
+   "statement": "Published equals the printed 'Total Investments at fair value' exactly in the three quarters. The check adds a cash-equivalents figure to the filed investments line, but from 2025-06-30 that line already includes the money market fund, and the fund-level cash-equivalents figure it adds (62,915,000) is the 2024-12-31 balance carried forward.",
+   "evidence": [
+    {"source": "query", "quote": "Sandbox as1d: published 3,160.570 / 3,582.748 / 4,246.035 = filed investments 3,160.570 / 3,582.748 / 4,246.035 (2025-06-30, 2025-09-30, 2025-12-31); residual -1.95 / -1.73 / -1.46 pct is 62.915 / anchor."},
+    {"source": "filing", "quote": "0001193125-26-115988: 'BlackRock Liquidity T-Fund - Institutional Shares (14) ... 71,644 71,644 3.55'; 0000950170-25-040578: 'Cash Equivalents BlackRock Liquidity T-Fund ... 62,915 62,915 5.05' (2024-12-31)."}]},
+  {"engine": "oracle", "rule_name": "C04", "class": "as_filed",
+   "statement": "To 2025-06-30 the filer tags the printed unit count of equity rows as a principal amount, so no share fact exists (36 to 65 rows a quarter); from 2025-09-30 it files share counts.",
+   "evidence": [{"source": "filing", "quote": "0000950170-24-095485: 'Holocene Topco LP (5)(10)(11) Preferred 136 322 420 0.08'; context C_bfbd703f carries InvestmentOwnedBalancePrincipalAmount 136000 and no share fact."}]},
+  {"engine": "fund_financials", "rule_name": "F27", "class": "as_filed",
+   "statement": "Income yield above the weighted coupon while the fund ramps: investments grew from 480M to 2,132M during 2024, so a quarter's income sits over a fast-growing base.",
+   "evidence": [{"source": "query", "quote": "fund_financials: investments at fair value 479.9M (2024-03-31), 1,031.9M, 1,565.6M, 2,131.8M (2024-12-31)."}]},
+  {"engine": "fund_financials", "rule_name": "F33", "class": "as_filed",
+   "statement": "A fund-level row before operations began; net assets 25,000.",
+   "evidence": [{"source": "filing", "quote": "The fund 'commenced investment operations on January 19, 2024'."}]},
+  {"engine": "row_validation", "rule_name": "X01", "class": "as_filed",
+   "quarters": ["2025-09-30"],
+   "statement": "An equity row with a PIK rate, as printed and tagged.",
+   "evidence": [{"source": "filing", "quote": "0001193125-25-280638: 'Concord Global Acquisition, LLC ... Preferred N/A 8.00 % PIK -- 2,670 2,930 2,930'."}]}
+ ]
+}

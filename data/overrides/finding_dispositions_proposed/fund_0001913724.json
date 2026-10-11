@@ -1,0 +1,153 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "tb1c",
+ "dispositions": [
+  {
+   "disposition_id": "PD-C04-1913724-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "statement": "The one or two equity rows a quarter with no share count are membership interests in the fund's affiliated holding vehicles; the page prints a percentage interest and no unit count.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "'Twin Brook Equity Holdings, LLC (32) (33) (34) | Equity - 16.72 % membership interest | 85,570 | 96,653'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-D01-1913724-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D01",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "Row count 141 to 478 and fair value 984.3M to 1,212.4M between 2023-06-30 and 2023-09-30: the added rows are printed positions and the published total equals the printed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001913724-23-000141: '50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %'; 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-D03-1913724-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D03",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The same growth of the schedule at 2023-09-30 (many small positions acquired 7/28/2023).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 1,212.4M."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-CNT02-1913724-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "CNT02",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The same growth of the schedule at 2023-09-30, reported by the row-count check.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 478 rows, 1,212.4M."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-F24-1913724-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F24",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The same growth of the schedule at 2023-09-30, reported at fund level.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-nonaccrual_flag-1913724-6",
+   "class": "as_filed",
+   "engine": "nonaccrual",
+   "rule_name": "nonaccrual_flag",
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The 23 rows flagged non-accrual at 2025-12-31 carry a cost of 8.60M, the figure the filing prints for non-accrual investments.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001913724-26-000007: 'Performing $ 4,269,041 99.8 % ... Non-accrual 8,602 0.2 %'; unflagged cost 4,269.04M."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001913724.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  }
+ ]
+}

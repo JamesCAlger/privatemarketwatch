@@ -1,0 +1,15 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001742313",
+ "entity_name": "Monroe Capital Income Plus Corp",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-03-31",
+   "field": "shares_outstanding",
+   "value": 83765000,
+   "evidence": "0001410578-23-001083 (10-Q, 2023-03-31) balance sheet: 'Common stock, $ 0.001 par value, 100,000 shares authorized, 83,765 and 74,533 shares issued and outstanding, respectively'. The published 74,533,000 is the 2022-12-31 figure; net asset value per share 10.25 x 83,765K = net assets 858,859K."
+  }
+ ],
+ "notes": "One quarter only: the prior year-end share count was taken for 2023-03-31."
+}

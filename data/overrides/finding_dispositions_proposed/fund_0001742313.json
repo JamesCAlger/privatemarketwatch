@@ -1,0 +1,144 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "mo1c",
+ "dispositions": [
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1742313-1",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The filer prints percent of net assets to one decimal; the rows that differ from fair value over net assets by more than 0.1 are the filer's own printed figures. Published is the page.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001742313-26-000013: 'PNE Interco LLC (6)(7)(8)(11) SF 5.75 % 9.74 % 2/12/2024 2/12/2030 13,790 13,585 13,790 0.6 %' (13.79M / 2,830.6M = 0.49). 0001742313-25-000012: 'Bonterra LLC SF 7.75 % 12.08 % PIK ... 3,070 3,042 3,101 0.3 %' (0.15)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001742313.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-fmt_basis_spread-1742313-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "Spreads are printed including a credit spread adjustment, so they are not quarter-point values.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001742313-26-000026: 'SF 6.36 % 10.03 %', 'SF 5.11 % 10.32 %', 'BTR Opco LLC (Delayed Draw) (19)(20)(21) SF 8.76 % 12.47 % PIK'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001742313.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-C115-1742313-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "The spread of 16.00 on Evolve Biologics is the printed spread. (2023-03-31 is not included: the Vice Group Holding spreads of 15.0 in that quarter were not read.)",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001742313-24-000084: 'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001742313.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-B01-1742313-4",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "statement": "Leaves counted without a fair value are comparative-period rows and contexts that carry no fair value fact; the published total equals the filed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "2023-03-31: 691 of 1,692 leaves have a fair value; of 200 sampled others 103 are comparative-period rows and 97 have no fair value fact, e.g. '300 N. Michigan Mezz, LLC (Delayed Draw), Senior Secured Loans, Due 7/15/2024' (reading, group 13)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001742313.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-PP02-1742313-5",
+   "class": "rule_problem",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "The check compares rows by issuer name and values. With the tranche words taken out of the name (D-101), two undrawn or zero-value lines of one issuer look alike; they are different members and both are printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox mo1c, 2025-12-31: Mooring Primary, LLC '(Delayed Draw) | Senior Secured Loans' and '(Revolver) | Senior Secured Loans', both fair value 0 and commitment 6,333,000; Arcserve Cayman GP LLC '(Class A common units)' and '(Class B common units)', both 0 (scratch/2026-10-11_monroe/dup.sql)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001742313.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  }
+ ]
+}

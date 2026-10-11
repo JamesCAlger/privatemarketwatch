@@ -1,0 +1,228 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "m1a",
+ "dispositions": [
+  {
+   "disposition_id": "PD-B01-1849894-1",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "statement": "The check counts a second context of the same member that carries only the text fact InvestmentInterestRateTerms as a position with no fair value. About 98 pct of the counted contexts are these; the rest are undrawn lines printed with a dash for fair value and no value tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox l3d, current-period rows without fair value by quarter 51/65/70/83/102/123/129/133/102/104/112/119/105; text-only 51/64/69/82/101/121/127/129/101/102/111/119/104; every text-only member but 0 to 3 a quarter has a published row with the same identifier (scratch/2026-10-10_read/0001849894/b01b.sql)."
+    },
+    {
+     "source": "filing",
+     "quote": "0001193125-25-280735: 'Frontgrade Technologies Inc. - Revolving Credit Facility (11) S + 5.00 % 0.75 % 8.98 % 1/9/2028 -- ( 92 ) -- --' (context C_c91f73b7, cost -92 only)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-C04-1849894-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Four to six equity rows a quarter (under 0.5 pct of fair value) have no share fact. The filer tags the printed unit count as a principal amount in thousands; shares and principal are both published empty.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-24-124249: 'Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01'; context C_404c5916 (2026-03-31) carries InvestmentOwnedBalancePrincipalAmount 4000, cost 189000, fair value 1896000 and no share fact."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-A01-1849894-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "The filer's own subtotal tags do not match their children: a section total tagged on one industry member, two industry subtotals swapped, children under a different spelling of the industry, a prior-year figure on a current context. None of these subtotals is published. The one real row behind them (2024-12-31, Accession Risk Management 49.3M tagged on a Titan Purchaser member) is corrected by a row correction (D-099).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-23-062232: 'Total Second Lien Debt 228,495 219,547 27.17 %' is tagged on the member 'Second Lien Debt Telecommunications'. 0000950170-25-042155: first lien Banking subtotal 308,744 against tagged children 259,467; the 49,277 gap is 'Accession Risk Management - Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05'."
+    },
+    {
+     "source": "query",
+     "quote": "Published equals the filed investments total within 0.5M in all 13 quarters (sandbox m1a)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1849894-4",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "statement": "One loan, Ligado Networks LLC, is printed with its original maturity of 11/1/2023 while in default and restructuring.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-25-042155: 'Ligado Networks LLC (13) N/A N/A 15.5 % PIK 11/1/2023 12,853 11,071 4,391 0.18'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-PCT01-1849894-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "The sum of percent of net assets, 234.35, is the filer's printed total; the fund is levered about two times (188 to 234 pct in every quarter).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-24-035561: 'Total Investments - non-controlled/non-affiliated $ 2,208,817 $ 2,197,053 234.35 %'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1849894-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "The row reported as missing is an issuer subtotal that rule exclude_2025q1_lj_perimeter_subtotal removes on purpose.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-25-071644: '...LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82'; context C_ec8245a0 carries cost 21,145, fair value 19,967, percent 0.0082 and nothing else."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1849894-7",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "The same excluded issuer subtotal (LJ Perimeter Buyer, 2025-03-31) reported by the reconciliation.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-25-071644: context C_ec8245a0, cost 21,145, fair value 19,967, percent 0.82: the printed subtotal after the LJ Perimeter lines."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1849894-8",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "One row of 152: the printed percent 0.17 is split across two cells and the filer tagged 0.1. Published is the tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001193125-25-280735: 'Confluent Holdings LLC - Delayed Draw Term Loan Add On (11) S + 7.00 % 2.00 % 11.00 % 3/28/2029 4,774 4,657 4,660 0.1 7'; context C_e335b187 tagged 0.001."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001849894.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-099); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  }
+ ]
+}

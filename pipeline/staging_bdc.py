@@ -330,6 +330,22 @@ def issuer_name_strip_patterns(wrapper_dir: Path | None = None) -> dict[str, str
     return result
 
 
+def issuer_name_strip_to_instrument_ciks(wrapper_dir: Path | None = None) -> set[str]:
+    """CIKs whose wrapper sends the text removed by issuer_name_strip_re to a blank instrument_description
+    (dispatch.issuer_name_strip_to_instrument: true)."""
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: set[str] = set()
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        dispatch = raw.get("dispatch", {})
+        if dispatch.get("issuer_name_strip_to_instrument") is True and dispatch.get("issuer_name_strip_re"):
+            result.add(raw["cik"])
+    return result
+
+
 def _bare_entity_position_ciks() -> set[str]:
     """CIKs whose wrapper says a bare company name is a position (dispatch.bare_entity_rows).
 

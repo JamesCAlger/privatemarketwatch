@@ -1,0 +1,26 @@
+{
+ "decision": "D-103",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0001859919.md",
+ "groups": [
+  {"engine": "row_validation", "rule_name": "C110", "class": "as_filed",
+   "statement": "Negative principal, cost and fair value on an undrawn revolver, as printed and tagged.",
+   "evidence": [{"source": "filing", "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (context c-156); Raven Acquisition tagged -134,000 on all three (c-696)."}]},
+  {"engine": "weak", "rule_name": "fmt_principal_amount", "class": "as_filed",
+   "statement": "The same negative principal on undrawn revolvers, as tagged.",
+   "evidence": [{"source": "filing", "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (c-156); Raven Acquisition -134,000 (c-696)."}]},
+  {"engine": "weak", "rule_name": "fmt_principal_amount_usd", "class": "as_filed",
+   "statement": "The dollar copy of the same negative principal.",
+   "evidence": [{"source": "filing", "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (c-156); Raven Acquisition -134,000 (c-696)."}]},
+  {"engine": "row_validation", "rule_name": "X01", "class": "as_filed",
+   "statement": "An equity-labelled row with a rate: the page itself labels a loan 'Partnership Units'.",
+   "evidence": [{"source": "filing", "quote": "0001859919-24-000053: 'Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 %' (Perforce Software)."}]},
+  {"engine": "identity", "rule_name": "pct_of_net_assets_identity", "class": "as_filed",
+   "statement": "The filer prints and tags two percents on the wrong rows of one issuer. Published is the tag.",
+   "evidence": [{"source": "filing", "quote": "'Durare Bidco, LLC First Lien ... 44,545 43,992 43,982 0.3 % ... Revolver ... - ( 115 ) ( 117 ) 1.': contexts c-341 0.003 and c-342 0.017."}]},
+  {"engine": "provenance_reverify", "rule_name": "merged_context_excluded", "class": "as_filed",
+   "quarters": ["2023-06-30", "2023-09-30", "2024-12-31"],
+   "statement": "A context that holds only a loan's rate facts, joined to the sibling context that holds its values (rate_only_contexts, D-103); the rate-only context is then removed by design.",
+   "evidence": [{"source": "filing", "quote": "0001859919-23-000040: values on '... Term Loan 1' (c-287: principal 17,313, cost 16,969, fair value 17,021) and rates on '... Term Loan' (c-286: spread 0.0575, rate 0.111); printed 'Dwyer Instruments ... First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 %'."}]}
+ ]
+}

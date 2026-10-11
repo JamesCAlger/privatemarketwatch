@@ -1317,12 +1317,8 @@ def build_unified_holdings(
 
     # A filer's own trailing text on the issuer name (a row number), removed last so that the
     # duplicate filters, rules and corrections above still see the name as filed.
-    from pipeline.staging_bdc import issuer_name_strip_patterns
-    for _strip_cik, _strip_re in issuer_name_strip_patterns().items():
-        _strip_rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == _strip_cik)
-        if _strip_rows.any():
-            _stripped = combined.loc[_strip_rows, "issuer_name"].astype("string").str.replace(_strip_re, "", regex=True)
-            combined.loc[_strip_rows, "issuer_name"] = _stripped.where(_stripped.str.strip() != "", combined.loc[_strip_rows, "issuer_name"])
+    from pipeline.staging_bdc import issuer_name_strip_patterns, issuer_name_strip_to_instrument_ciks
+    combined = _strip_issuer_names(combined, issuer_name_strip_patterns(), issuer_name_strip_to_instrument_ciks())
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
@@ -1823,6 +1819,35 @@ def _apply_re_fund_gics_overrides(
     )
 
     return df
+
+
+def _strip_issuer_names(combined: pd.DataFrame, patterns: dict[str, str],
+                        to_instrument: set[str] | frozenset[str] = frozenset()) -> pd.DataFrame:
+    """Remove a filer's own trailing text from issuer_name (dispatch.issuer_name_strip_re), per CIK.
+
+    A name the pattern would empty is left as filed. For a CIK in ``to_instrument``
+    (dispatch.issuer_name_strip_to_instrument) the removed text becomes the row's
+    instrument_description where that is blank and the text holds a letter: Monroe's member is
+    'issuer, Senior Secured Loans (Delayed Draw) 1' with no separate instrument, and two undrawn
+    lines of one issuer are otherwise told apart only by the identifier. One fund's rows only.
+    """
+    for cik, pattern in patterns.items():
+        rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        if not rows.any():
+            continue
+        filed = combined.loc[rows, "issuer_name"].astype("string")
+        stripped = filed.str.replace(pattern, "", regex=True)
+        stripped = stripped.where(stripped.str.strip().fillna("") != "", filed)
+        combined.loc[rows, "issuer_name"] = stripped
+        if cik in to_instrument and "instrument_description" in combined.columns:
+            removed = pd.Series(
+                [f[len(s):] if isinstance(f, str) and isinstance(s, str) and f.startswith(s) else "" for f, s in zip(filed, stripped)],
+                index=filed.index, dtype="string").str.replace("^[\\s,|.\\-\\u2013\\u2014]+|\\s+$", "", regex=True)
+            current = combined.loc[rows, "instrument_description"].astype("string").fillna("").str.strip()
+            fill = (current == "") & removed.str.contains("[A-Za-z]", regex=True)
+            if fill.any():
+                combined.loc[fill[fill].index, "instrument_description"] = removed[fill]
+    return combined
 
 
 # Fields that row_corrections.csv is allowed to override.

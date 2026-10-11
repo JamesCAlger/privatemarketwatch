@@ -1,0 +1,25 @@
+{
+ "cik": "1851322",
+ "rule_id": "exclude_fair_value_hierarchy_nav_row",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "CAST(bdc_dimensions_raw AS VARCHAR) ILIKE '%cashandcashequivalentsaxis=InvestmentMeasuredAtNetAssetValueMember%'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001193125-26-221623, fair value hierarchy table: 'Investment measured at net asset value (1) $ 99,225 $ 85,276 Total Investments $ 6,342,711 $ 6,610,610'. Schedule: 'North Haven Keystone, LLC (15) (17) (20) LLC Interest 10/30/2025 100,438,800 100,439 99,225 3.07'."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox n1a: the member is published as a cash position of 85,276,000 (2025-12-31, context C_f34fe8a0-dfbc-4765-9c10-e244b5742c48) and 99,225,000 (2026-03-31, context C_f4099541-f10d-4391-9f76-3b4516decd29), beside the North Haven Keystone, LLC row of the same amount; fv_conservation residual 1.564 pct at 2026-03-31 = 99.225 / 6,342.7."
+  }
+ ],
+ "rationale": "A line of the fair value hierarchy note, tagged on the cash axis with a member that names no cash: it is the joint venture stake already in the schedule, repeated. The shared rule reads any cash-axis member as a cash position; this member is not one.",
+ "confidence": 0.97,
+ "measured_impact": {}
+}

@@ -133,6 +133,19 @@ def _named_by_accession() -> dict[tuple[str, str], dict[str, str]]:
     return result
 
 
+@lru_cache(maxsize=None)
+def _category_marker(cik: str) -> re.Pattern[str] | None:
+    """The fund wrapper's dispatch.category_marker_re, compiled; None where the wrapper has none."""
+    import json
+    from pipeline.config import OVERRIDES_DIR
+    path = OVERRIDES_DIR / "bdc_xbrl_wrappers" / (cik + ".json")
+    try:
+        pattern = json.loads(path.read_text(encoding="utf-8")).get("dispatch", {}).get("category_marker_re")
+    except (OSError, json.JSONDecodeError):
+        return None
+    return re.compile(pattern) if pattern else None
+
+
 def name_declared_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dict[str, str]) -> int:
     """Name the contexts a wrapper lists for this filing, in place. Returns the number named.
 
@@ -156,7 +169,13 @@ def name_declared_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dic
                            cik, filing_meta.get("accession_number", ""), context)
             continue
         if info.get("is_investment"):
-            continue
+            # A member that names only an instrument ('First Lien Senior Secured Term Loan') is one the
+            # fund's own wrapper reads as a category row (dispatch.category_marker_re): it names no
+            # position, so a listed context that carries it takes the declared name (Barings 2023-06-30,
+            # c-329: Finexvet's first tranche, 2,388, filed without the issuer). Any other member stays.
+            marker = _category_marker(cik)
+            if marker is None or not marker.search(str(info.get("investment_identifier", "")).strip()):
+                continue
         info["investment_identifier"] = identifier
         info["is_investment"] = True
         named += 1

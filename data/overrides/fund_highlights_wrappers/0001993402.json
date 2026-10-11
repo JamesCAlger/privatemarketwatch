@@ -1,0 +1,21 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001993402",
+ "entity_name": "Antares Strategic Credit Fund",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2026-03-31",
+   "field": "shares_outstanding",
+   "value": 86731536,
+   "evidence": "0001193125-26-221769 (10-Q, 2026-03-31) balance sheet: '( 86,731,536 and 79,355,653 shares issued and outstanding as of March 31, 2026 and December 31, 2025, respectively)'. The published 79,355,653 is the prior year-end; 86,731,536 x 24.88 = 2,157.9M = net assets 2,157,751K."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "shares_outstanding",
+   "value": 74543881,
+   "evidence": "0001193125-25-280638 (10-Q, 2025-09-30) balance sheet: '74,543,881 and 48,823,039' shares issued and outstanding as of September 30, 2025 and December 31, 2024. Published empty."
+  }
+ ],
+ "notes": "Share counts taken from the comparative column or missing in two quarters."
+}

@@ -1,0 +1,149 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "ba1e",
+ "dispositions": [
+  {
+   "disposition_id": "PD-C110-1859919-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C110",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "Negative principal, cost and fair value on an undrawn revolver, as printed and tagged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (context c-156); Raven Acquisition tagged -134,000 on all three (c-696)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-fmt_principal_amount-1859919-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "statement": "The same negative principal on undrawn revolvers, as tagged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (c-156); Raven Acquisition -134,000 (c-696)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-fmt_principal_amount_usd-1859919-3",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount_usd",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "statement": "The dollar copy of the same negative principal.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "'Momentum Textiles, LLC Revolver ... ( 14 ) ( 27 ) ( 27 )' (c-156); Raven Acquisition -134,000 (c-696)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-X01-1859919-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X01",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "An equity-labelled row with a rate: the page itself labels a loan 'Partnership Units'.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001859919-24-000053: 'Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 %' (Perforce Software)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1859919-5",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The filer prints and tags two percents on the wrong rows of one issuer. Published is the tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "'Durare Bidco, LLC First Lien ... 44,545 43,992 43,982 0.3 % ... Revolver ... - ( 115 ) ( 117 ) 1.': contexts c-341 0.003 and c-342 0.017."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1859919-6",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-12-31"
+   ],
+   "statement": "A context that holds only a loan's rate facts, joined to the sibling context that holds its values (rate_only_contexts, D-103); the rate-only context is then removed by design.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001859919-23-000040: values on '... Term Loan 1' (c-287: principal 17,313, cost 16,969, fair value 17,021) and rates on '... Term Loan' (c-286: spread 0.0575, rate 0.111); printed 'Dwyer Instruments ... First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 %'."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001859919.md",
+   "decided_by": "PROPOSED by agent 2026-10-11 (D-103); not accepted by the owner",
+   "decided_on": "2026-10-11"
+  }
+ ]
+}

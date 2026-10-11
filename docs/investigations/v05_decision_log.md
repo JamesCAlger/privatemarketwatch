@@ -2444,3 +2444,270 @@ state is `docs/investigations/v05_reading_backlog.md`. 21 funds read so far.
   wrapper). **Not run:** the full suite, the semantic diff, any 70-fund build, re-attestation.
   The builds above are per-fund sandboxes of different dates; no single build holds all 77 funds
   with today's settings.
+
+## 2026-10-11: funds one at a time, largest first (owner: "keep processing funds, one at a time, from largest to smallest")
+
+Order: cohort by 2026-03-31 fair value. The first five are at 0; the next five wait on the owner's
+view of 34 proposals; so the run starts at the eleventh fund. Per fund: apply the fixes its reading
+(`v05_readings/<cik>.md`) calls for, each checked on the page first; build the fund alone; compare
+every field with the previous sandbox; write proposals for what a reading explains
+(`scripts/v05_evidence/make_fund_proposals.py`, spec in `v05_readings/proposals/<cik>_reading.json`,
+output in `data/overrides/finding_dispositions_proposed/fund_<cik>.json`, which the ledger does not
+read). Nothing is published, pushed or accepted by me.
+
+### D-099 MSD Investment Corp. 0001849894 (sandbox `m1a`, before `l3d`)
+
+- **Reference rates read from the page.** `reference_rate_columns: ["Reference Rate and Spread"]`
+  and codes S, L, E, SO=SONIA, SA=SARON, B=BBSW, C=CDOR, P=PRIME, from the schedule note of five
+  filings (2023-03-31 to 2026-03-31). 65 rows change: SONIA 44 rows (1,291.6M), SARON 10 (788.3M),
+  BBSW 4 (198.3M), CDOR 5 (404.2M) had been published SOFR or LIBOR. Two rows now differ from the
+  member label and match the page: Boasso revolver 2024-03-31 'P + 5.75 %', Dellner 2024-06-30
+  'L + 5.50 %'.
+- **Issuer names.** `dispatch.issuer_name_strip_re` removes a trailing tranche phrase, ' One',
+  ' EUR' / ' GBP' and the en-dash separator: 196 distinct names to 162, 107 rows, no other name
+  touched (dry run `scratch/2026-10-11_msd/strip_dry_run.py`). The filer's own spellings
+  ('Parfums Holding Co.' in four forms, 'USA Debusk / Debunk') stay.
+- **Row corrections (17, `row_corrections.csv`, each line read on the page):** the 49.3M Accession
+  Risk Management loan the filer tagged on a Titan Purchaser member (2024-12-31; issuer and
+  description corrected, industry not correctable); six rows whose whole rate is tagged with the
+  PIK concept while the page prints no PIK (Watchguard 74.0M, 7Ridge delayed draw, Legends x4):
+  PIK withdrawn; Beacon delayed draw 2024-06-30 rate 13.94; Sky Merger delayed draw, eight
+  quarters, cost 0 (page prints a dash; 5,000 had been a proxy). The reader's seventh PIK row,
+  Ligado 2024-12-31, is NOT changed: the page prints '15.5 % PIK'.
+- **Result.** Published equals filed in all 13 quarters, before and after. Ledger 58 outstanding
+  to 42 (X07 gone). Field comparison: only the fields above changed, plus entity and industry
+  labels on rows whose name changed (7 rows change GICS sub-industry).
+- **Proposed, not accepted (38 findings, eight reasons):** B01 (the check counts text-only
+  contexts; a rule problem), C04, A01, maturity_not_past (Ligado), PCT01, the excluded LJ Perimeter
+  subtotal (2), one percent tag. **Left open (4):** F27 x3 and F16 x1, weak fund-level heuristics
+  whose cause was not found.
+- **Not done:** the Titan/Accession row keeps industry Automotive; warrant rows class as common
+  equity; no check exists that would have caught the Accession mis-tag, the rate codes or the names.
+
+### D-100 North Haven Private Income Fund 0001851322 (sandbox `n1b`, before `l3d`)
+
+- **Names.** 2025-09-30 on: the label's word "Investment" is now optional and "Other Debt" /
+  "First Debt" are instrument types, so 69 loans (778.3M at 2025-09-30) that had published the
+  whole label as the issuer are split; the joint venture row is 'North Haven Keystone, LLC' in
+  both quarters. To 2025-06-30: the row ordinal is stripped (354 names to 212 at 2023-03-31, 640
+  to 325 at 2024-12-31). Left: two Spectrum Automotive rows at 2025-09-30 whose label has no
+  instrument type (C206).
+- **Classes (row corrections, 325 field values, quarters to 2025-06-30).** Preferred equity
+  published as loans, 4 to 6 rows and 25.9M to 39.4M a quarter (FORTIS, Knockout, RSK, Revalize,
+  Integrity Marketing, Verdantas): class corrected; at 2023-09-30 also five common equity rows,
+  with the share count moved out of principal. FORTIS, Knockout, Integrity and Verdantas print a
+  fixed rate in the reference column ('Preferred Equity 12.25 %'): rate published, spread
+  withdrawn, coupon Fixed. **RSK and Revalize print 'S + 10.50 %' / 'S + 10.00 %': floating, the
+  spread stays.** My first build had moved their spread into the rate as well; caught on the page
+  and removed before the second build. TruGreen Limited Partnership (a first lien loan, 4.5M to
+  4.8M) is a loan, not a fund.
+- **Reference rates read from the page.** Column 'Reference Rate and Spread', codes S, L, E, P,
+  F=FEDFUNDS, C=CORRA, SA=SONIA (legend read in all 13 filings). 659 rows change, mostly 2023-03-31
+  and 2023-06-30 loans published LIBOR that print 'S +'; CORRA 13 rows, SONIA 6, PRIME 72. Where
+  the page agrees with the date guess the source label still says 'inferred' (3,961 rows): the
+  value is confirmed, the label is not updated (shared code, not changed).
+- **A hierarchy-note line published as cash.** 'Investment measured at net asset value' (85.3M,
+  99.2M; the Keystone stake again) is tagged on the cash axis, and shared code reads any cash-axis
+  member as cash. Removed for this fund by rule `exclude_fair_value_hierarchy_nav_row` (all
+  quarters). An aggregate marker did not reach it. Shared rule not changed: owner question whether
+  a cash-axis member that names no cash should be read as cash for any fund.
+- **Fund level.** Net assets 2023-09-30 corrected to 1,898,269,000 (page; the prior year-end had
+  been taken) in a new fund-level wrapper. Side effect by design: the calculated percent of net
+  assets is blank for that quarter (the corrected figure no longer equals the company-facts value).
+- **Atlas Purchaser added row** now carries its accession and classes.
+- **Result.** Published equals filed in all 13 quarters. Ledger 31 outstanding (the l3d count for
+  this fund was not recorded separately); conservation and the 2023-09-30 net-asset group (8) are
+  gone. Field comparison against `l3d`: only the fields above, plus entity and industry labels
+  following the name change (936 rows change GICS sub-industry: labels are keyed on the issuer
+  name; not checked against the printed industry heading).
+- **Proposed, not accepted (23 findings).** Left open (8): year-end distribution per share holds
+  the full-year figure (F16 x3, F33 x2; real, fund-level, shared code); non-accrual list not
+  compared with the footnote; C103 2024-12-31 (an earlier reviewer called it a real error, the
+  reading says undrawn lines); C206.
+- **Not done:** the Keystone look-through rule stays pinned to two quarters (a format-only
+  predicate also matched two real rows at 2025-09-30, so it was not generalised; the carry-over
+  check will flag the next quarter); the tagged benchmark enumeration (2025-09-30 on) is not read;
+  'P +' member labels are unreliable (Sonny's) and the page reading now overrides them; three
+  non-accrual loans at 2025-06-30 print a rate the filer did not tag; year-end income is blank.
+
+### D-101 Monroe Capital Income Plus 0001742313 (sandbox `mo1c`, before `l3d`)
+
+- **Names.** `dispatch.issuer_name_strip_re` now removes ', Senior Secured Loans ...',
+  ', Equity Securities ...', a tranche parenthetical and the row number: 3,536 distinct names to
+  578 over 8,523 rows. New opt-in `dispatch.issuer_name_strip_to_instrument` (generic code, set
+  for this fund only; `_strip_issuer_names` in `pipeline/unified_holdings.py`, six tests in
+  `tests/test_issuer_name_strip.py`): the removed text becomes the instrument description where
+  that was blank (6,598 rows, e.g. 'Senior Secured Loans (Delayed Draw) 1'). From 2025-12-31 the
+  member already gives 'Senior Secured Loans' as the instrument, so there a tranche parenthetical
+  is dropped from the name and kept only in the identifier.
+- **A class regression found and fixed in the same run.** 113 rows of the Equity Securities
+  section with no share-class word had category OTHER; 106 of them got their index class from a
+  cache keyed on the old full name. Stripping the name lost the key (85 rows became UNCLASSIFIED,
+  17 took the issuer's loan class, 80.0M). Now set by row correction (339 values): category
+  EQUITY_COMMON, class COMMON_EQUITY. This also classes the seven rows (90.6M) that had been
+  UNCLASSIFIED before. Quarter-pinned: a later quarter's rows of this kind will need the same.
+- **Reference rates from the page.** Column 'Index'; codes SF, L, P, C=CDOR, CA=CORRA, SN=SONIA,
+  BB=BBSW, EU=EURIBOR (legends of four filings). 575 rows change (2023 loans printed 'SF'
+  published LIBOR; PRIME 87, SONIA 13, CDOR 12, CORRA 4, EURIBOR 3, BBSW 3).
+- **PIK-only loans.** `pik_only_tag_reading: coupon`: a loan whose only rate tag is the PIK tag
+  and that has no spread publishes that figure as its rate (Witkoff/Monroe 700 JV 'n/a n/a
+  13.25 % PIK'). Loans with a PIK tag and no rate 299 to 204. The 204 left have a spread
+  ('SF 8.76 % 12.47 % PIK'): the open owner question of D-092.
+- **One row.** FLEET Response 2025-12-31 published 25.25 (a cash tag of 15.28 not on the page plus
+  PIK 9.97). A correction to 9.97 was read as a cash rate and published 19.94, so the cash tag is
+  withdrawn instead: the row now reads like its two sibling rows (PIK 9.97, spread 6.10, no rate).
+- **Fund level.** Shares outstanding 2023-03-31 corrected to 83,765,000 (page; the prior year-end
+  had been taken). F11, nav_identity and E04 cleared.
+- **Result.** Published equals filed in all 13 quarters. Ledger 63 outstanding: 28 proposed (five
+  reasons), 35 left open. Open and real: net investment income holds a per-share figure in four
+  2022-2023 quarters and wrong year-end remainders (income_identity x5, F27 x7: fund-level
+  extractor, shared code); X02 x5 (PIK with spread, D-092); the rest unread (C04 2023 share
+  counts, PP03, eight provenance rows of no value, X05 Argano, C115 2023-03-31).
+- **Side effects seen:** two warrant rows at 2024-09-30 lose a maturity (the expiry date) that had
+  come from the page reading; ten zero-value twin rows now trip PP02 (proposed as a rule problem);
+  entity and industry labels move with the names (814 rows change GICS sub-industry, not checked
+  against the printed heading).
+- **Not done:** warrants still class as common equity with the expiry in maturity; SingleStore
+  equity commitment (9.3M) still a loan; three of the four exclusion rules stay pinned to one
+  filing.
+
+### D-102 Blue Owl Technology Income Corp. 0001869453 (sandbox `o1b`, before `l3d`)
+
+- **Names.** To 2025-09-30 the issuer name was the whole member ('Certify, Inc., First lien senior
+  secured loan'). `issuer_name_strip_re` cuts at the instrument words and
+  `issuer_name_strip_to_instrument` keeps them as the instrument description: 900 distinct names to
+  334 over 3,957 rows. One name left unsplit (a filer typo, 'Bracket Intermediate ... loanidCo LLC').
+- **Rates** (the printed 'Interest' / 'Ref. Rate' column was named in an earlier round; this is the
+  first single-fund build with it): 288 rows take the printed reference rate (2023 loans printed
+  'S +' published LIBOR); Inovalon second lien 'S + 10.50 % PIK' publishes its margin; fixed
+  coupons on XRL, Acrisure, Associations Finance and TK Operations publish as rates.
+- **Row corrections (15 values, each read on the page).** OEConnection 17.1M loan tagged on a
+  McQueen Bidco member (2025-12-31): issuer and spread 4.50. RealPage spread 3.00 (2025-03-31,
+  2025-06-30) and Engage Debtco 5.90 with 2.40 PIK (2023-09-30): printed, not tagged. Kaseya and
+  Associations 2024-03-31: spread and PIK tags swapped (89M), found by the printed-spread check.
+  Blue Owl Credit SLF 2024-09-30 classed equity.
+- **LLC interests as loans** (three rows, 25.0M, 2026-03-31): `equity_instrument_labels:
+  ["LLC Interest"]`. Blue Owl Credit SLF then took a proxy share count from an earlier quarter
+  (14,293 against a printed 16,161): corrected to the printed units.
+- **Fund level.** Net assets 2023-03-31 1,149,711 and 2023-06-30 1,340,153, total assets
+  2023-03-31 2,153,216 (pages; a later 10-Q had refiled the next year's balance on those dates).
+  Calculated percent of net assets is blank for the two quarters (265 rows), by design.
+- **Result.** Published equals filed in all 13 quarters. Ledger 35 outstanding to 6: X02 accepted
+  by its check in four more quarters (D-073); 5 proposed (two reasons); 1 left open and real:
+  fourth-quarter 2022 income is the year divided by four (fund-level extractor, shared code).
+- **A defect the cleaner names exposed, not fixed.** The cost proxy takes the first fair value of
+  a position's chain. With names split, an undrawn Packaging Coordinators delayed-draw line
+  (fair value -0.3M) is chained to a different 5.0M loan of the same issuer and publishes a cost of
+  4,994,000 in two quarters. 631 rows of this fund carry a proxy cost (14.5M in all; four are more
+  than ten times their fair value). The proxy is shared code. Owner question: publish no cost
+  where none is filed, instead of a proxy.
+- **Not done:** LP interests class three ways; warrants class as common equity; Inovalon
+  2023-03-31 keeps a date-guessed LIBOR; net assets of 2022-03-31 and 2022-06-30 (before the first
+  schedule) hold the 2023 balances; NAV per share and shares outstanding are empty in every quarter.
+
+### D-103 Barings Private Credit Corp 0001859919 (sandbox `ba1e`; built alone first as `ba1a`)
+
+Names, the roll-forward note rows (`schedule_row_tags`), PIK-only coupons and the printed rate
+column were set in earlier rounds (D-094). Built alone with those: 45 outstanding, published 6.9M
+under filed at 2023-06-30, equal in the other twelve quarters.
+
+- **The 6.9M: two real rows, both restored; published equals filed in all 13 quarters.**
+  (1) 'CPCF BPCC LLC ... 1' (c-838, 4,534) carries its exact cost and fair value and also the joint
+  venture note's rounded copies on one context. The test "none of its value facts is rounded" took
+  it for a note row. Refined in `pipeline/schedule_row_tags.py`: a context is a note row when a
+  value column is filed ONLY in rounded form (test added; c-775, a true note row, still goes).
+  (2) Finexvet's first tranche (c-329, 2,388) is filed under a member that names no issuer ('First
+  Lien Senior Secured Term Loan') and was dropped as a category row. `context_identifiers` may now
+  name a context whose member the fund's own `category_marker_re` reads as a category row
+  (`pipeline/page_labelled_contexts.py`, test added; a member that names a position is still never
+  renamed). Also restores Adhefin International's subordinated loan (c-86, 350, 2024-09-30), read
+  on the page above its line.
+- **Rates on a sibling context.** `rate_only_contexts: adopt_adjacent` (the Ares setting): seven
+  2023 loans get the rate and spread the filer tagged on the neighbouring member (Dwyer 17.0M:
+  'SOFR + 5.75 %, 11.1 % Cash'). Three reference rates the date guess then got wrong are corrected
+  from the page (Finexvet x2 EURIBOR, Innovad SARON).
+- **Benchmarks the page prints by name.** `reference_rate_codes` for BBSY, BKBM, STIBOR, NIBOR,
+  SARON, CDOR, CORRA, SONIA, EURIBOR, SOFR, LIBOR, PRIME (legend read): 300 rows change from a
+  date guess (BBSY 206 rows 632.1M, BKBM 20, STIBOR 18, NIBOR 13, SARON 12, CDOR 7, others to
+  EURIBOR and SONIA).
+- **Result.** Ledger 48 outstanding (three more than before: rate-only contexts now joined are
+  reported as merged, by design). 11 proposed (six reasons). Left open 37.
+- **Open and real, not fixed:** (a) rows printed 'x % Cash, y % PIK' (Amalfi Midco '2.0 % Cash,
+  9.0 % PIK'): the fund's rate tag is read as all-in, the PIK exceeds it, so the row publishes no
+  rate (these are the 13 financial_convention_unresolved findings and part of X02); the all-in rate
+  is cash plus PIK for those rows. (b) Coastal Marina: the filer tags the 8.0 pct cash loan with
+  the PIK concept in five quarters (8M a row); not corrected. (c) Cardinal Senior Loan Fund member
+  interest (40.5M, 2026-03-31) is classed private credit. (d) cost on the rows where the
+  roll-forward twin had been published (reading 3d) was not re-checked after the changes.
+  (e) F26 x7, F27, C103, two merged-context findings: not read.
+- Tests: `tests/test_schedule_row_tags.py`, `tests/test_page_labelled_contexts.py`,
+  `tests/test_issuer_name_strip.py`: 28 pass.
+- **Effect of the two refined tests on the other funds that use them (sandbox `chk1`).** Silver
+  Point, TCW Direct Lending VII and VIII, T Series, HPS Corporate Capital Solutions
+  (`cost_or_percent_unrounded`) and NexPoint, Overland, Lord Abbett (`context_identifiers`), built
+  together and compared with their latest earlier sandbox (`i1a`, `d1a`, `b2a`, `s1c`): the same
+  row count and the same published fair value in every one of 86 fund-quarters
+  (`scratch/2026-10-11_shared/compare.py`). Other fields were not compared.
+
+### D-104 TPG Twin Brook Capital Income Fund 0001913724 (sandbox `tb1c`; built alone first as `tb1a`)
+
+`rate_tag_reading: coupon_with_margins` was set in D-096 without a page read. Built alone: no loan
+lacks a rate in any quarter; the rows the reading lists (Spectrum revolver 'S + 6.25 % 10.50 %',
+BPCP 10.10, BBG 12.21) publish the printed coupon.
+
+- **The verifier was re-reading the wrong tag.** Ten provenance findings (119 rows) said the
+  published rate differed from the filing. The re-verifier took the first rate fact on the
+  context, the cash margin; the published rate is the plain tag and matches the page. For a fund
+  with `rate_tag_reading` it now re-reads the plain tag (`pipeline/provenance_reverify.py`). All
+  7,375 rates of this fund verify. BlackRock Private Credit and BlackRock Direct Lending use the
+  same setting; not rebuilt here.
+- **A promoted fleet correction was wrong and is pulled.** `agent_b2_corrections/0001913724/
+  column_remap.json` moved the spread of four SimiTree rows into the PIK rate at 2025-12-31 (the
+  signed-off quarter). The filer tagged the PIK margin 1.75 instead of 0.0175. Row corrections set
+  spread 5.25 and PIK 1.75 on three rows ('S + 5.25 % + 1.75 PIK 11.10 %') and spread 7.00, no PIK,
+  on the revolver. That is seven of the ten `column_remap` corrections at 2025-12-31 found harmful
+  (D-095, D-096); Audax and Silver Capital are still unread.
+- **Reference rates from the page.** Column 'Reference Rate and Spread', codes S=SOFR, T=CORRA,
+  P=PRIME (legends of 2023-03-31 and 2026-03-31; the 2023 legend lists no LIBOR). 401 rows change:
+  the 2023-03-31 and 2023-06-30 loans had been published LIBOR by date guess.
+- **Totals.** The 16,000 roll-forward row at 2026-03-31 is removed (rule extended to the second
+  vehicle, still pinned to that quarter). Published equals filed in every quarter.
+- **Result.** Ledger 36 outstanding to 25. 15 proposed (six reasons). Left open 10: fixed coupons
+  the filer tags as a spread on a few small rows (C115 x2, fmt_basis_spread x2: Spectrum 18.00,
+  Canadian Orthodontic 17.00, Kaizen 5.00; the page reading did not convert them), F16 x4 and
+  F33 x2 (start-up quarters, not read).
+- **Not done:** loans printed 'S + x % PIK' publish the margin as a PIK rate with no spread (5 to
+  18 rows a quarter; the D-092 question); 2022-12-31 has a schedule on the page and no tags;
+  2023-06-30 doubled member names (7 rows, 38M); the two roll-forward rules stay hand-listed.
+
+### D-105 Antares Strategic Credit Fund 0001993402 (sandbox `as1d`; built alone first as `as1a`)
+
+The commitment-table rows were already excluded by rule. Built alone: 70 outstanding, published
+3.3M to 4.2M above filed in three quarters.
+
+- **The plug is gone.** Rule `add_blackrock_short_term_investment_2025` added the money market
+  fund with a fair value set to the residual (61,955 / 46,814 / 75,879 against a printed 58,644 /
+  42,836 / 71,644): pulled. So is the fleet correction that added the 2026-03-31 row with no class.
+  The tagged row now publishes as a cash row with its filed value (`cash_identifiers`, two
+  spellings, 2025-06-30 on). Published including that row equals the printed 'Total Investments at
+  fair value' exactly in all four quarters; in the five earlier quarters the fund prints the money
+  market fund outside the total and published equals filed without it (2025-03-31: 0.294M over,
+  two subtotal rows, open).
+- **Reference rates from the page.** Column 'Reference Rate and Spread'; S, SON=SONIA, E, P,
+  C=CDOR to 2025-09-30 and CORRA from 2025-12-31 (the filer's own tag member changes name then).
+  115 rows change (PRIME, CDOR / CORRA, SONIA had been published SOFR).
+- **Names.** Twin suffix ' One' to ' Four' stripped (39 rows); 'Diversified Consumer Service' and
+  'Speciality Retail' added as industry labels (the filer's spellings; 67 rows lose the industry
+  from the name); two rows the filer tagged with no issuer named from the page (WST USA Holdco
+  0.9M; Enverus, whose member text is a spreadsheet error message).
+- **Fund level.** Shares outstanding 2026-03-31 86,731,536 and 2025-09-30 74,543,881 (pages).
+- **Result.** Ledger 70 to 45 after one more check-accepted X02 entry. 32 proposed (seven
+  reasons); 13 left open: A01 x4 (labels, not read line by line), C201 x3 and C206 x2 (labels with
+  no space or no 'Asset Type' marker; a few rows), X05 (Apex spread 0.0 for a printed 5.00), X01
+  2025-06-30 (Accelerate Topco carries the next line's 10.50 pct PIK), C107, X02.
+- **Conservation flags at three quarters are a check problem, proposed as such, not silenced:**
+  the check adds a stale cash-equivalents figure (62,915,000 in five quarters) to an investments
+  line that already includes the fund. I did not write a verified total into the anchor store.
+- **Not done:** principal is the commitment, not the drawn amount, on about 190 rows a quarter
+  (as filed; changes what principal means); equity unit counts to 2025-06-30; the stale fund-level
+  cash-equivalents figure; 'Debt Investments <industry>' prefix on 45 small rows.

@@ -1,0 +1,25 @@
+{
+ "decision": "D-104",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0001913724.md",
+ "groups": [
+  {"engine": "oracle", "rule_name": "C04", "class": "as_filed",
+   "statement": "The one or two equity rows a quarter with no share count are membership interests in the fund's affiliated holding vehicles; the page prints a percentage interest and no unit count.",
+   "evidence": [{"source": "filing", "quote": "'Twin Brook Equity Holdings, LLC (32) (33) (34) | Equity - 16.72 % membership interest | 85,570 | 96,653'."}]},
+  {"engine": "oracle", "rule_name": "D01", "class": "as_filed",
+   "statement": "Row count 141 to 478 and fair value 984.3M to 1,212.4M between 2023-06-30 and 2023-09-30: the added rows are printed positions and the published total equals the printed total.",
+   "evidence": [{"source": "filing", "quote": "0001913724-23-000141: '50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %'; 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."}]},
+  {"engine": "oracle", "rule_name": "D03", "class": "as_filed",
+   "statement": "The same growth of the schedule at 2023-09-30 (many small positions acquired 7/28/2023).",
+   "evidence": [{"source": "filing", "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 1,212.4M."}]},
+  {"engine": "row_validation", "rule_name": "CNT02", "class": "as_filed",
+   "statement": "The same growth of the schedule at 2023-09-30, reported by the row-count check.",
+   "evidence": [{"source": "filing", "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 478 rows, 1,212.4M."}]},
+  {"engine": "fund_financials", "rule_name": "F24", "class": "as_filed",
+   "statement": "The same growth of the schedule at 2023-09-30, reported at fund level.",
+   "evidence": [{"source": "filing", "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."}]},
+  {"engine": "nonaccrual", "rule_name": "nonaccrual_flag", "class": "as_filed",
+   "statement": "The 23 rows flagged non-accrual at 2025-12-31 carry a cost of 8.60M, the figure the filing prints for non-accrual investments.",
+   "evidence": [{"source": "filing", "quote": "0001913724-26-000007: 'Performing $ 4,269,041 99.8 % ... Non-accrual 8,602 0.2 %'; unflagged cost 4,269.04M."}]}
+ ]
+}

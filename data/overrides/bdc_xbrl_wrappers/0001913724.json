@@ -201,6 +201,14 @@
     ],
     "rate_tag_reading": [
       "coupon_with_margins"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "T=CORRA",
+      "P=PRIME"
     ]
   }
 }

@@ -1,0 +1,16 @@
+{
+ "decision": "D-102",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0001869453.md",
+ "groups": [
+  {"engine": "identity", "rule_name": "pct_of_net_assets_identity", "class": "as_filed",
+   "statement": "One row of 99, 134 and 149: the percent is printed to one decimal and the tag carries that rounded figure (0.1 on a fair value of 378; -0.1 on -11 and -82). Published is the tag. The reason accepted for Blue Owl Credit Income (rounding floor).",
+   "evidence": [
+    {"source": "query", "quote": "Sandbox o1b: violation 1.01 pct of 99 rows (2023-06-30), 0.75 pct of 134 (2023-09-30), 0.67 pct of 149 (2023-12-31), after net assets for 2023-03-31 and 2023-06-30 were corrected to the page (D-102)."}]},
+  {"engine": "row_validation", "rule_name": "X02", "class": "as_filed",
+   "statement": "After the corrections of D-102 (the OEConnection loan tagged on a McQueen Bidco member; three LLC interests classed as loans) every flagged row is a line of the commitments table: no principal, no rate, fair value zero or negative. An earlier reviewer's 'real error' verdict on these two quarters referred to the rows now corrected.",
+   "evidence": [
+    {"source": "filing", "quote": "0001869453-26-000033: 'Total Portfolio Company Commitments $ 145,193 $ 715,611 $ ( 7,322 )', '(23) The negative cost and fair value results from unamortized fees'."},
+    {"source": "query", "quote": "Sandbox o1b: no X02 row at 2025-12-31 or 2026-03-31 has a principal amount or a positive fair value (scratch/2026-10-11_owltech/x02.sql)."}]}
+ ]
+}
