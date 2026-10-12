@@ -99,7 +99,8 @@
         "family": "mixed"
       }
     ],
-    "canonical_strip_re": "(?i)(?:^\\s*investment,\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer,\\s*|\\s*\\|\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer\\s*$)"
+    "canonical_strip_re": "(?i)(?:^\\s*investment,\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer,\\s*|\\s*\\|\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer\\s*$)",
+    "issuer_name_strip_re": "(?i)^Investment,\\s*Unaffiliated Issuer,\\s*|(?:,\\s*Debt Securities)?(?:,\\s*(?:First|Second) Lien|,\\s*Common Stock|,\\s*Preferred (?:Equity|Stock))?(?:\\s+\\d{1,2})?\\s*$"
   },
   "identifier_format": {
     "delimiter": " | ",

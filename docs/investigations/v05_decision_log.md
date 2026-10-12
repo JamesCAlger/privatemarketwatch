@@ -2937,3 +2937,21 @@ commits at checkpoints; nothing pushed or published.
   2025-06-30); 63 share counts carry the proxy of D-111; 861 rows have no instrument description;
   Goldman Sachs Private Credit and Private Middle Market Credit II use the same member form and
   have not been given the industry option.
+
+### D-115 T. Rowe Price OHA Select Private Credit 0001901164 (sandbox `tr1a`, before `l5b`)
+
+- Rates, reference codes, foreign principal were set in an earlier round. Built alone: published
+  equals filed in all 12 quarters; 13 findings outstanding (X02 x6, F33 x3, C04 x2, B07, C107).
+- **Names.** Prefix 'Investment, Unaffiliated Issuer, ', the row ordinal and trailing lien or class
+  words stripped (`issuer_name_strip_re`): 916 distinct names to 207 over 3,282 rows.
+- **Industry.** Every row carries the filer's heading; 7 headings added to the table ('High Tech',
+  'Retail Stores', 'Cargo Transport' ...).
+- **A label made honest (shared).** Where the printed column confirms a date-guessed reference
+  rate, `reference_rate_source` now says `ixbrl_field_status`. Before, the value was right and the
+  source still said 'inferred' (2,913 of this fund's 3,282 rows), which overstated guessed rates
+  in every count. One test that pinned the old label is updated.
+- **Not done (real):** every row of 2026-03-31 is classed a loan, although 12 rows (66.4M) sit under
+  'Preferred Equity', 'Common Stocks' and 'Asset Backed Securities' on the page; the unit counts
+  of those rows are tagged as principal. The fix is a class read from the page section, which also
+  serves HPS Corporate Capital Solutions, Stone Point, T Series and Blackstone Real Estate Credit;
+  not built. No row has an instrument description (the member carries none).

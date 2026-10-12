@@ -577,7 +577,7 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
     # A filer that carries the industry inside the member text (dispatch.industry_from_identifier_re):
     # read it where the row has none yet.
     from pipeline.staging_bdc import industry_from_identifier_patterns
-    for cik, pattern in industry_from_identifier_patterns().items():
+    for cik, pattern in (industry_from_identifier_patterns().items() if {"cik", "bdc_investment_identifier"} <= set(combined.columns) else ()):
         mine = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
         mine &= combined["extracted_industry"].astype("string").fillna("").str.strip() == ""
         if mine.any():

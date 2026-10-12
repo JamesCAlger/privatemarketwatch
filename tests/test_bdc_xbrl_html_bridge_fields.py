@@ -862,10 +862,11 @@ def test_a_printed_reference_rate_replaces_nothing_else():
             continue    # withdrawn, not replaced: tested below
         out = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="LIBOR", **changes), [status])
         assert (out.iloc[0]["reference_rate_type"], out.iloc[0]["reference_rate_source"]) == ("LIBOR", changes["reference_rate_source"])
-    # the same benchmark: the inferred label is kept, nothing was replaced
+    # the same benchmark: nothing is replaced, and the source now says the page confirmed the guess
+    # (2026-10-12, decision D-115; before, confirmed rows still counted as guessed)
     same = apply_ixbrl_field_status_overlay(_staged(reference_rate_type="SOFR", reference_rate_source="inferred_post_libor"),
                                             [_status_row("value", "SOFR")])
-    assert same.iloc[0]["reference_rate_source"] == "inferred_post_libor"
+    assert (same.iloc[0]["reference_rate_type"], same.iloc[0]["reference_rate_source"]) == ("SOFR", "ixbrl_field_status")
 
 
 def _margin_status(margin):

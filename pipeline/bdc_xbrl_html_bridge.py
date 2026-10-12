@@ -1355,6 +1355,13 @@ def apply_ixbrl_field_status_overlay(
         if replace.any():
             result.loc[replace.values, "reference_rate_type"] = printed[replace].values
             result.loc[replace.values, "reference_rate_source"] = "ixbrl_field_status"
+        # A date guess the printed column confirms is no longer a guess: the value stays, the
+        # source says where it was read (before, 2,000 to 4,000 confirmed rows a fund still
+        # counted as guessed).
+        confirmed = (in_named & (merged["reference_rate_status"].astype(str) == "value") & (printed != "") & inferred
+                     & (printed.str.upper() == merged["reference_rate_type"].astype("string").fillna("").str.strip().str.upper()))
+        if confirmed.any():
+            result.loc[confirmed.values, "reference_rate_source"] = "ixbrl_field_status"
         no_reference = in_named & (merged["reference_rate_status"].astype(str) == "not_applicable")
         # The guess came from a spread tag. On such a row the tag holds the fixed coupon, not a
         # margin (BCRED 'Altice Financing S.A. | 5.75% | 5.75%': rate 5.75, spread 5.75; 'AI Altius
