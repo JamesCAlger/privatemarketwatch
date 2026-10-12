@@ -1,0 +1,25 @@
+{
+ "cik": "1920453",
+ "rule_id": "exclude_industry_subtotals_on_position_members_2025q1",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2025-03-31"
+  ]
+ },
+ "predicate_sql": "report_date = '2025-03-31' AND ((CAST(bdc_dimensions_raw AS VARCHAR) ILIKE '%RxStrategies%Revolving Credit Facility%' AND fair_value = 52262801) OR (CAST(bdc_dimensions_raw AS VARCHAR) ILIKE '%EDS Buyer%Revolving Credit Facility%' AND fair_value = 8306361))",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-25-070240: 'RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %': 52,262,801 is the Health Care Technology subtotal; the revolver's own value is ( 2,500 )."
+  },
+  {
+   "source": "query",
+   "quote": "Contexts C_28f8562d-d03e-4db5-98d7-f80987dc7032 (RxStrategies revolver member, 52,262,801; the true row is C_b3599ebf-3724-4b33-af59-4cdd2fcef11e, -2,500) and C_b558f5df-1153-4bdc-951d-4366fc650c2e (EDS Buyer revolver member, 8,306,361 = the Electronic Components subtotal = the term loan on C_b740dd95-4cee-40ab-a659-2075181e888f)."
+  }
+ ],
+ "rationale": "Two industry subtotals the filer tagged on a second member of a revolver. The revolvers themselves are published from their own contexts.",
+ "confidence": 0.95,
+ "measured_impact": {}
+}

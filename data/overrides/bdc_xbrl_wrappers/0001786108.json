@@ -322,5 +322,11 @@
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^P?ortfolio\\s*Company\\s') AND regexp_matches(_clean, '(?i)Type\\s+of\\s+Investment|Investment\\s+Date')",
     "notes": "2026-09-06: 'Portfolio Company <Section>- <Region> <Industry> <Company> Type of Investment ...' dialect; 5,008/5,065 cohort rows were unparsed (mg3 F1). Industry labels are Trinity's own vocabulary derived from its identifiers (trinity_industries.py, 38 labels, cleaned to 30) and kept inline so they do not enter the global MSD_INDUSTRY_LABELS union. Probe: 99.1% of rows extract. 2026-09-07: instrument keeps 'Investment Date ...' and warrants their 'Series ...' tail (trailing_re) because several draws on one company differ only by investment date; without it 62 rows / $83.3M FV collapsed under the filing-level dedup keys in the first rebuild.",
     "hierarchy_trailing_re": "(?i)\\s+(Series\\s+.+)$"
+  },
+  "source_encodings": {
+    "misdated_contexts": [
+      "0001193125-26-207620 C_801b0e29-31f3-4647-9e25-df94149ee6c4 2025-09-30 -> 2026-03-31",
+      "0001193125-26-207620 C_f6a5bcbc-e44e-4ad2-b869-1e795c59229b 2025-09-30 -> 2026-03-31"
+    ]
   }
 }

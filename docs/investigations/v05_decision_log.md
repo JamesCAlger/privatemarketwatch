@@ -3015,3 +3015,33 @@ commits at checkpoints; nothing pushed or published.
 - Ledger 30 outstanding; nothing proposed. Open: F16 x16 (fund-level, not read), C115 x6 and
   fmt_basis_spread x5 (the equity table's 'All-In Rate' tagged as a spread on one row), FX03
   (Project Carbo cost tagged in euro), 1,520 rows with no instrument description.
+
+### D-120 Fidelity Private Credit Fund 0001920453 (sandbox `fi1c`, before `d1a`)
+
+- **2025-06-30, 104.9M missing.** Twelve positions have their fair value tagged on a context dated
+  2025-03-31 inside the 10-Q for 2025-06-30; the current context carries cost and no fair value.
+  Each current context is paired with the prior-dated context of the same member from the tagged
+  facts (`scratch/2026-10-13_b6/fi_pairs.py`) and its value declared (`untagged_values`, 13
+  entries; printed e.g. 'Dpt Management, LLC ... Term Loan SOFR + 5.25 % 9.58 % 12/18/2027
+  23,938,607 23,741,489 23,794,975'). Only the Dpt line was read on the page; the other eleven
+  rest on the member match and on the total, which now ties.
+- **2025-03-31, 60.6M over.** Two industry subtotals tagged on revolver members (RxStrategies
+  52,262,801; EDS Buyer 8,306,361) removed by a one-quarter rule.
+- **Result.** Published equals filed in every quarter but 2023-06-30 and 2023-09-30 (12.8M and
+  46.4M under: a money market fund and central-fund rows of 2023 that are not published; cash
+  class by the owner's ruling, so outside the investments comparison once published). Ledger 50
+  to 38. Nothing proposed. Open: B01 x8, X02 x7, C04 x7, four conservation flags of 2023.
+
+### D-121 Trinity Capital 0001786108 (sandbox `tn1b`)
+
+- 2026-03-31: two Metabolon loans tagged wholly on a 2025-09-30 context while printed in the
+  current schedule ('... 5,230 5,247 5,272' and '... 2,595 2,591 2,604'; 'Total Metabolon, Inc.
+  52,613 52,632 53,477') re-dated (`misdated_contexts`). Published equals filed there (was 7.9M under).
+- Six quarters keep small gaps, each explained in the reading and not fixed: NextCar twin loans
+  whose members differ by one non-ASCII space (0.7M to 0.8M, three quarters); warrant rows with a
+  cost and no fair value at 2024-09-30 (3.5M); one extra row at 2024-03-31 (4.6M); 2023-12-31 2.5M.
+- Four industry headings added to the table ('Real Estate Technology', 'Software as a Service
+  ("SaaS")' ...). 51 share counts carry the proxy of D-111.
+- Ledger 88 outstanding; nothing proposed. Open and real in the reading: the published rate is the
+  floor rate on variable loans (F27 x12: income yield 3.8 to 7.0 points above the holdings rate);
+  zero-fair-value rows dropped (28 to 77 a quarter); issuer name missing on 1 to 8 rows a quarter.
