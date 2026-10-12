@@ -1,0 +1,25 @@
+{
+ "cik": "1508655",
+ "rule_id": "exclude_price_fx_local_currency_twin_2023q4",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2023-12-31"
+  ]
+ },
+ "predicate_sql": "report_date = '2023-12-31' AND CAST(bdc_dimensions_raw AS VARCHAR) LIKE '%Business Services Price fx Inc. First-lien loan (EUR 910 par%'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-015845: 'Price Fx Inc. (3)(4) First-lien loan (EUR 910 par, due 10/2029 ) 10/27/2023 E + 7.00 % 10.94 % 962 983 (EUR 890 ) 0.1 %'."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox ss1a: context C_a1bb7e31-faff-4810-87c3-efdceefadc6a (member 'Price fx Inc.', lower-case f) holds only a fair value of 890,000 in EUR, published as 984,518; the real row is context C_86e5e730-3a8a-47c8-84b7-c733f602c685 (983,000, cost 962,000). Published 3,284.05M against filed 3,283.065M."
+  }
+ ],
+ "rationale": "The filer tagged the printed local-currency fair value '(EUR 890)' as a second fair-value fact on a member that differs from the position's only in the case of one letter. It is the same position, not a second one.",
+ "confidence": 0.97,
+ "measured_impact": {}
+}

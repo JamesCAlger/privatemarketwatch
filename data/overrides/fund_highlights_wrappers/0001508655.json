@@ -1,0 +1,39 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001508655",
+ "entity_name": "Sixth Street Specialty Lending, Inc.",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2024-03-31",
+   "field": "nav_per_share",
+   "value": 17.17,
+   "evidence": "0000950170-24-051235 (10-Q, 2024-03-31) balance sheet: 'Net Asset Value Per Share $ 17.17'. The published figure was the value of the same quarter one year earlier."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "nav_per_share",
+   "value": 17.19,
+   "evidence": "0000950170-24-088524 (10-Q, 2024-06-30) balance sheet: 'Net Asset Value Per Share $ 17.19'. The published figure was the value of the same quarter one year earlier."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "nav_per_share",
+   "value": 17.12,
+   "evidence": "0000950170-24-121434 (10-Q, 2024-09-30) balance sheet: 'Net Asset Value Per Share $ 17.12'. The published figure was the value of the same quarter one year earlier."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "nav_per_share",
+   "value": 17.17,
+   "evidence": "0000950170-25-100204 (10-Q, 2025-06-30) balance sheet: 'Net Asset Value Per Share $ 17.17'. The published figure was the value of the same quarter one year earlier."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "nav_per_share",
+   "value": 17.14,
+   "evidence": "0001193125-25-264618 (10-Q, 2025-09-30) balance sheet: 'Net Asset Value Per Share $ 17.14'. The published figure was the value of the same quarter one year earlier."
+  }
+ ],
+ "notes": "NAV per share shifted by one year in five quarters; three rows dated after the last filing (2026-06-30 to 2026-12-31) hold the true 2025 values and are not corrected here."
+}

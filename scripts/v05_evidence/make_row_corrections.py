@@ -394,6 +394,13 @@ SPECS += [
     (ARES_CORE, "2025-03-31", "Denali Equity Holdings LLC, Class A units", {"shares_held": "3749"}, ARES_CORE_UNITS, "D-107"),
     (ARES_CORE, "2025-03-31", "Aspen Renewables Equity Holdings LLC, Ordinary units", {"shares_held": "4900"}, ARES_CORE_UNITS, "D-107"),
 ]
+# decision D-110: Sixth Street Specialty Lending, Khoros earnout interests. Their class came from a cache keyed on the full
+# member text; with the issuer name split it was lost. The class they were published with is kept (2026-10-12).
+SSSL = "0001508655"
+for _quarter in ("2025-06-30", "2025-09-30", "2025-12-31"):
+    SPECS.append((SSSL, _quarter, "Khoros, LLC Earnout Interests", {"index_classification": "COMMON_EQUITY", "asset_class": "PRIVATE_EQUITY"},
+                  "Printed in the Equity and Other Investments section: 'Khoros, LLC ... Earnout Interests'; an equity-type interest "
+                  "with no share class word, left unclassified once its name no longer carried the section", "D-110"))
 # decision D-100: North Haven Private Income Fund, bare-identifier quarters (to 2025-06-30). Preferred and common
 # equity published as loans, and one loan published as a fund. The specs are built from the rows the sandbox still
 # shows in the wrong class, so a sandbox built after the corrections adds nothing; rows already written stay.

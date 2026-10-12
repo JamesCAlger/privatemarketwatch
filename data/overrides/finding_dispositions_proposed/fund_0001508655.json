@@ -1,0 +1,182 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "ss1c",
+ "dispositions": [
+  {
+   "disposition_id": "PD-blocking_source_short_plain_unresolved-1508655-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_short_plain_unresolved",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "The rows reported are the affiliate roll-forward total for IRGSE Holding Corp. ('Controlled Affiliated Investments', 'IRGSE Holding Corp'). The four IRGSE positions are published and sum to it exactly in every quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "2025-03-31: roll-forward member 66.756M = the four published IRGSE rows 66.756M; 2026-03-31: 58.505M = 58.505M (scratch/2026-10-10_read/0001508655/f2.sql, f3.sql)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1508655-2",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The same IRGSE affiliate roll-forward total, not a position.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "The four published IRGSE rows sum to the roll-forward member in every quarter (2025-03-31 66.756M; 2026-03-31 58.505M)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1508655-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "The same IRGSE affiliate roll-forward total, reported by the row check. 2026-03-31 is not included: that quarter also holds the Structured Credit Partners JV row, published through a pinned add rule with fields missing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "The four published IRGSE rows sum to the roll-forward member in every quarter (2025-03-31 66.756M; 2026-03-31 58.505M)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1508655-4",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The filer prints percent of net assets to one decimal; one to eight rows a quarter differ from fair value over net assets by 0.11 to 0.15 points. Published is the printed figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001193125-26-206313: Blazing Star printed '68,201 68,434 4.3 %'; computed 4.44."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  },
+  {
+   "disposition_id": "PD-B01-1508655-5",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "statement": "About 200 leaf contexts a quarter carry only an acquisition date (duration contexts) and no fair value; the check counts them as positions without a value.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "2025-03-31: 204 rows with status excluded_no_fair_value whose only concept is InvestmentAcquisitionDate (scratch/2026-10-10_read/0001508655/b2.sql)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  },
+  {
+   "disposition_id": "PD-X01-1508655-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X01",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Units that print a dividend rate: TradingScreen / TS Imagine Class AA Units, as labelled by the filer.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Member text: 'Class AA Units (19,093 units) ... Reference Rate and Spread 20.00% Interest Rate 20.00%' (0.04M to 0.05M)."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001508655.md",
+   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
+   "decided_on": "2026-10-12"
+  }
+ ]
+}

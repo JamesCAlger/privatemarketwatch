@@ -2812,3 +2812,46 @@ The commitment-table rows were already excluded by rule. Built alone: 70 outstan
   read; the frontend industry donut, which reads `gics_sub_industry`.
 - Tests: `tests/test_printed_industry.py` (5 new); with the mapping and page-reader test files 192
   pass. Full suite not run.
+
+### D-110 Sixth Street Specialty Lending 0001508655 (sandbox `ss1c`; built alone first as `ss1a`)
+
+- Built alone: 130 outstanding, published 1.0M above filed at 2023-12-31.
+- **Totals.** The 1.0M was one position published twice: the filer tagged the printed
+  local-currency value '(EUR 890)' as a second fair value on a member spelled 'Price fx Inc.'.
+  Removed by a one-quarter rule. Published equals filed in all 13 quarters.
+- **Reference rates from the page.** Column 'Reference Rate and Spread'; SOFR, S / SONIA, E, L,
+  B=BBSY, N=NIBOR, STIBOR, P, C=CDOR to 2024-03-31 and CORRA from 2024-06-30 (legends of
+  2023-09-30, 2024-06-30, 2024-12-31; the switch quarter for C is taken from those two legends,
+  the two filings between were not read). 116 rows change: SONIA 47 rows (462.3M), BBSY 15
+  (331.1M), CDOR 13 (312.6M), STIBOR 12, NIBOR 9, PRIME 15 had been published SOFR or nothing.
+- **Names.** The reader's tested patterns installed in `staging.leaf_guard` (heading and industry
+  prefixes such as 'and Leisure ...', 'Structured Credit Investments ...', more instrument
+  markers, trailing punctuation): 380 rows renamed, 351 distinct names to 331. Not reached by
+  pattern (code-side): CLO rows written 'Series 2020 -4A', a byte-order mark in two members,
+  16 members that name no issuer.
+- **Fund level.** NAV per share corrected from the page in five quarters (17.17, 17.19, 17.12,
+  17.17, 17.14); each had held the value of the same quarter a year earlier.
+- **Class kept.** Three Khoros earnout rows lost their class when the name was split (the
+  name-keyed cache again); restored by row correction.
+- **Result.** Ledger 130 to 105. 44 proposed (six reasons). Left open 61, among them real and
+  unfixed: fixed-rate loans published as floating with spread equal to coupon (C115 x8,
+  fmt_basis_spread x9); principal tagged negative on 40 rows of 2023 (C110, fmt x9); positions
+  printed with a dash for fair value dropped (Astra second lien, cost 39.5M); one position tagged
+  across two members (162.4M at 2023-09-30); structured-credit rows classed direct lending (60
+  rows, 116M); three phantom fund-level rows dated after the last filing; distribution per share.
+- Industry headings added to the reviewed table for this fund ('Internet Services', 'Human
+  Resource Support Services', 'Office Products'); they apply at its next build.
+
+### D-111 Share counts replaced by another row's: found on Sixth Street, applies to every fund (not fixed)
+
+- `pipeline/unified_holdings.py` (`with_shares_fix`) treats all rows of one fund with the same
+  issuer NAME as one position, compares fair value per share with the group median and replaces an
+  "outlier" share count with the nearest other row's (`shares_held_source = 'derived_proxy'`).
+  An issuer with two share classes is not one position. With names split from the instrument, more
+  rows share a name: IRGSE Class A units, labelled '(33,790,171 units)', now publish 8,800,000;
+  ReliaQuest Series A preferred '(1,667 Units)' publishes 16,957.
+- Size: 1,653 share counts in 92 funds carry this proxy in the published build of 2026-10-01. In
+  the funds processed here it rose with the name clean-up: Sixth Street Specialty Lending 8 to 17,
+  Barings 12 to 52; unchanged in the other six.
+- Same kind of invention as the cost proxy the owner switched off (D-106), but for share counts,
+  and nothing was changed: no ruling covers it.
