@@ -2955,3 +2955,26 @@ commits at checkpoints; nothing pushed or published.
   of those rows are tagged as principal. The fix is a class read from the page section, which also
   serves HPS Corporate Capital Solutions, Stone Point, T Series and Blackstone Real Estate Credit;
   not built. No row has an instrument description (the member carries none).
+
+### D-116 MidCap Financial Investment Corp 0001278752 (sandbox `mc1c`, before `c2a`; a held-back fund)
+
+- **Totals.** Published (before cash equivalents) equals filed in all 13 quarters; it had been
+  18.0M over at 2024-09-30 and 12.9M under at 2025-03-31. Three fixes, each read on the page:
+  the ExactCare group subtotal 17,843 the filer tagged on a second GrayMatter member (one-quarter
+  rule); Cool Buyer's fair value 13,111, tagged twice with the cost concept and never as fair value
+  (`untagged_values`); the bare 'Warrants' and 'Unsecured Debt' members read as category rows.
+- **A guard added to the industry change (shared, test added).** In the Apollo layout the heading
+  above a row is the company group ('Paladone', 'FingerPaint Marketing'); the industry sits one
+  heading higher. D-109 would have published 6,021 company-group names as industries. Now, where
+  fewer than half of a filing's labels map to the standard list (20 rows or more), that filing's
+  unmapped labels are withdrawn. For this fund no filer industry is published (6,021 rows) and
+  the label stays the name-keyed one (587 rows with none). Reading the higher heading is not built;
+  the same applies to Apollo Debt Solutions and the two Apollo Origination funds.
+- **Result.** Ledger 139 to 120. Nothing proposed in this pass. Open as in the reading: group-name
+  subtotal and affiliate-table members reported as missing (26; totals tie without them), 13
+  maturity-not-past, C206 x11 (names: 1,692 distinct names, the member dumps industry, group,
+  entity and lien words), no coupon published on 5,043 of 5,273 loans (as filed: the page prints
+  margin and floor only).
+- **Not done:** positions carried at a dash fair value are dropped (7M to 26M of cost a quarter);
+  money-market rows missing from 2025-06-30; net assets missing in 10 of 13 quarters; Kauffman
+  equity row (35K) dropped at 2025-03-31.

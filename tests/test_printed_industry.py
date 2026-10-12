@@ -108,3 +108,16 @@ def test_the_industry_inside_the_member_text_is_read_for_a_fund_that_declares_it
     out = uh._apply_printed_industry(frame)
     assert out["extracted_industry"].tolist() == ["Software", "Chemicals", ""]
     assert out["gics_sub_industry"].tolist() == ["Application Software", "", "Advertising"]
+
+
+def test_labels_of_a_filing_where_under_half_map_are_withdrawn(monkeypatch):
+    # Apollo layout: the heading above a row is the company group, not the industry.
+    monkeypatch.setattr(uh, "printed_industry_gics", lambda labels: {"Software": ("Application Software", "alias")})
+    groups = [{"cik": "0001278752", "accession_number": "A", "extracted_industry": "Paladone %d" % (i % 7), "gics_sub_industry": "Advertising"}
+              for i in range(24)]
+    good = [{"cik": "0001278752", "accession_number": "B", "extracted_industry": "Software", "gics_sub_industry": ""} for _ in range(24)]
+    odd = [{"cik": "0001278752", "accession_number": "B", "extracted_industry": "Unknown Heading", "gics_sub_industry": "Food Retail"}]
+    out = uh._apply_printed_industry(_holdings(groups + good + odd))
+    assert (out["extracted_industry"][:24] == "").all() and (out["gics_sub_industry"][:24] == "Advertising").all()
+    assert (out["gics_sub_industry"][24:48] == "Application Software").all()
+    assert out["extracted_industry"].iloc[48] == "Unknown Heading" and out["gics_sub_industry"].iloc[48] == "Food Retail"

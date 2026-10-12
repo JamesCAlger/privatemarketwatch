@@ -107,7 +107,7 @@
     ],
     "no_prefix_is_aggregate": true,
     "canonical_strip_re": "\\s+(?:Interest\\s+Rate\\s+)?(?:SOFR|LIBOR|EURIBOR)\\+.*$",
-    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Total\\s+.+|(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments(?:,.*)?|(?:First|Second)\\s+Lien\\s+-\\s+Secured\\s+Debt|Common\\s+Equity/Interests|Preferred\\s+Equity|Structured\\s+Products\\s+and\\s+Other)$"
+    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Total\\s+.+|(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments(?:,.*)?|(?:First|Second)\\s+Lien\\s+-\\s+Secured\\s+Debt|Common\\s+Equity/Interests|Preferred\\s+Equity|Structured\\s+Products\\s+and\\s+Other|Warrants|Unsecured\\s+Debt)$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -224,6 +224,9 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "untagged_values": [
+      "0000950170-25-069131 C_bedea232-8852-4cf3-8850-cf9752197c51 fair_value 13111000"
     ]
   }
 }

@@ -1,0 +1,25 @@
+{
+ "cik": "1278752",
+ "rule_id": "exclude_graymatter_group_subtotal_2024q3",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2024-09-30"
+  ]
+ },
+ "predicate_sql": "report_date = '2024-09-30' AND ends_with(CAST(bdc_dimensions_raw AS VARCHAR), 'GrayMatter Systems Genius Bidco LLC First Lien Secured Debt - Revolver SOFR+525, 1.00% Floor Maturity 05/01/30')",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-122744: '... First Lien Secured Debt - Revolver SOFR+ 650 , 1.00 % Floor 11/05/29 - ( 46 ) ( 10 ) (8)(9)(21)(23) 17,450 17,843 Gainwell Gainwell Acquisition Corp. ...': 17,450 / 17,843 is the ExactCare group subtotal. The real GrayMatter revolver prints 'Revolver SOFR+ 525 , 1.00 % Floor 05/01/30 - ( 22 ) ( 17 )'."
+  },
+  {
+   "source": "query",
+   "quote": "Context C_df37910e-c96e-4c32-b159-f5b299993ab6 (member '... Maturity 05/01/30', without the word 'Date') carries cost 17,450 and fair value 17,843 and nothing else; published as a loan of 17,843 with no principal; sandbox mc1a: published 18.0M above filed at 2024-09-30."
+  }
+ ],
+ "rationale": "A group subtotal the filer tagged on a second member of a position. The position itself is published from its own context (-17).",
+ "confidence": 0.95,
+ "measured_impact": {}
+}

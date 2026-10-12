@@ -592,6 +592,21 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
         return combined
     mapping = printed_industry_gics(label[rows].unique().tolist())
     mapped = label.map({key: value[0] for key, value in mapping.items()})
+    # Where most of a filing's labels map to nothing, the labels are not industries: in the Apollo
+    # layout the heading above a row is the company group ('Paladone', 'FingerPaint Marketing'), the
+    # industry sits one heading higher. Such a filing's unmapped labels are withdrawn, not published.
+    if {"cik", "accession_number"} <= set(combined.columns):
+        filing = combined["cik"].astype("string").fillna("") + "|" + combined["accession_number"].astype("string").fillna("")
+        counted = pd.DataFrame({"filing": filing[rows], "mapped": mapped[rows].notna()})
+        share = counted.groupby("filing")["mapped"].agg(["size", "mean"])
+        weak = set(share[(share["size"] >= 20) & (share["mean"] < 0.5)].index)
+        if weak:
+            withdraw = rows & filing.isin(weak) & mapped.isna()
+            combined.loc[withdraw, "extracted_industry"] = ""
+            logger.info("  Printed industry: %d labels withdrawn in %d filings where under half map (not industry headings)",
+                        int(withdraw.sum()), len(weak))
+            label = combined["extracted_industry"].astype("string").fillna("").str.strip()
+            rows = rows & ~withdraw
     take = rows & mapped.notna()
     changed = take & (combined["gics_sub_industry"].astype("string").fillna("") != mapped.fillna(""))
     combined.loc[take, "gics_sub_industry"] = mapped[take]
