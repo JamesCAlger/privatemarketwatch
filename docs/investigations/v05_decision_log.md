@@ -2993,3 +2993,25 @@ commits at checkpoints; nothing pushed or published.
   as loans, 21M), C206 x5, B01 x8.
 - The filer's industry is read on 1,487 of 2,939 rows (all mapped); the other half of the
   quarters have no heading reading.
+
+### D-118 Diameter Credit Co 0001916099 (sandbox `di1b`)
+
+- Published equals filed in every quarter. Names: tranche words stripped from the issuer and put
+  in front of the instrument text (shared refinement of `_strip_issuer_names`, test added): 254
+  distinct names to 136 over 836 rows. Industry: the filer's heading on 835 of 836 rows, all mapped.
+- The 225 loans with no rate are undrawn lines whose member carries no rate (as filed).
+- Ledger 34 outstanding, unchanged; nothing proposed. Open as in the reading: C206 x6 (a few rows
+  whose member is a maturity date or the whole identifier), F33 x6 (distribution per share taken
+  from a preferred-dividend tag: 0.0 for a printed 0.63; fund-level extractor), rows printed with a
+  dash for fair value dropped (2 to 17 a quarter), F27 x4, C04 x4, B01 x4.
+
+### D-119 Carlyle Credit Solutions 0001702510 (sandbox `ca1b`)
+
+- Published equals filed in every quarter (the 62.5M of 2024-12-31 was re-dated in an earlier
+  round). Names: the member is '<lien>, <issuer> [n], <industry> [n]'; lien prefix, row numbers
+  and the trailing industry (the fund's own 38 printed industries) stripped, plus a filer glitch
+  that prefixed 'SPF Borrower, LLC, Healthcare & Pharmaceuticals 2' to other issuers at
+  2024-06-30: 654 distinct names to 345 over 2,526 rows (1,520 rows renamed).
+- Ledger 30 outstanding; nothing proposed. Open: F16 x16 (fund-level, not read), C115 x6 and
+  fmt_basis_spread x5 (the equity table's 'All-In Rate' tagged as a spread on one row), FX03
+  (Project Carbo cost tagged in euro), 1,520 rows with no instrument description.

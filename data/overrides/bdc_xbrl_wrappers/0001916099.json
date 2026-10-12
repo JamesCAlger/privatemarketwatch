@@ -80,7 +80,9 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:Investments\\s+Non-Controlled/Non-Affiliated\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Equity(?:\\s+Other\\s+Equity)?)\\s+(?:MSD_INDUSTRY_LABELS)\\s*$|\\bTotal\\s+(?:Investments|Preferred\\s+Equity|Common\\s+Equity|Cash\\s+and\\s+Cash\\s+Equivalents|Portfolio\\s+Investments)\\b|Preferred\\s+EquityInvestments\\s+Non-Controlled/Non-Affiliated\\s+Total\\s+Preferred\\s+Equity",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%\\s*(?:\\(\\d+(?:\\.\\d+)?%\\s+PIK\\)|\\d+(?:\\.\\d+)?%\\s+PIK)?|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})"
+    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%\\s*(?:\\(\\d+(?:\\.\\d+)?%\\s+PIK\\)|\\d+(?:\\.\\d+)?%\\s+PIK)?|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})",
+    "issuer_name_strip_re": "(?i)\\s+(?:Delayed Draw Term Loan|Term Loan|Revolving Line of Credit|Preferred (?:Shares|Units|Stock)|Bond)(?:\\s+Acquisition Date.*)?$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " ",

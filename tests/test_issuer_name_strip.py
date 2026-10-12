@@ -27,8 +27,14 @@ def test_removed_text_fills_a_blank_instrument_when_switched_on():
         _frame(["Acme, LLC, Senior Secured Loans (Delayed Draw) 1", "Acme, LLC (Revolver)", "Beta Inc., Equity Securities"],
                [None, "", "Class A units"]), {MONROE: PATTERN}, {MONROE})
     assert out["issuer_name"].tolist() == ["Acme, LLC", "Acme, LLC", "Beta Inc."]
-    # a blank instrument takes the removed text without its leading separator; a filled one is kept
-    assert out["instrument_description"].tolist() == ["Senior Secured Loans (Delayed Draw) 1", "(Revolver)", "Class A units"]
+    # a blank instrument takes the removed text without its leading separator; a filled one gets it in front
+    assert out["instrument_description"].tolist() == ["Senior Secured Loans (Delayed Draw) 1", "(Revolver)",
+                                                     "Equity Securities Class A units"]
+
+
+def test_removed_text_already_in_the_instrument_is_not_repeated():
+    out = _strip_issuer_names(_frame(["Acme, LLC, Senior Secured Loans"], ["Senior Secured Loans due 2030"]), {MONROE: PATTERN}, {MONROE})
+    assert out["instrument_description"].tolist() == ["Senior Secured Loans due 2030"]
 
 
 def test_removed_row_number_alone_is_not_an_instrument():

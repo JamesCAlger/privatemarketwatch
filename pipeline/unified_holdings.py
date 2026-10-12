@@ -1932,9 +1932,16 @@ def _strip_issuer_names(combined: pd.DataFrame, patterns: dict[str, str],
                 [f[len(s):] if isinstance(f, str) and isinstance(s, str) and f.startswith(s) else "" for f, s in zip(filed, stripped)],
                 index=filed.index, dtype="string").str.replace("^[\\s,|.\\-\\u2013\\u2014]+|\\s+$", "", regex=True)
             current = combined.loc[rows, "instrument_description"].astype("string").fillna("").str.strip()
-            fill = (current == "") & removed.str.contains("[A-Za-z]", regex=True)
+            lettered = removed.str.contains("[A-Za-z]", regex=True).fillna(False)
+            fill = (current == "") & lettered
             if fill.any():
                 combined.loc[fill[fill].index, "instrument_description"] = removed[fill]
+            # Where the member already gave an instrument (its rate and maturity text), the tranche
+            # words taken off the name are put in front of it, unless it already holds them.
+            holds = pd.Series([r.lower() in c.lower() for r, c in zip(removed.fillna(""), current)], index=current.index)
+            front = (current != "") & lettered & ~holds
+            if front.any():
+                combined.loc[front[front].index, "instrument_description"] = (removed[front] + " " + current[front]).values
     return combined
 
 

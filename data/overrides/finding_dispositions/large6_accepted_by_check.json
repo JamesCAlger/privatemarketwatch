@@ -138,11 +138,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox l6b for each quarter listed: 130 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox di1b for each quarter listed: 34 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py l6b C107 3",
-   "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py di1b C107 3",
+   "decided_by": "check passed on sandbox di1b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
