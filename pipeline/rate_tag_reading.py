@@ -44,7 +44,8 @@ def reading(cik: Any) -> str:
 
 
 def reads_margins(cik: Any) -> bool:
-    return re.sub(r"\D", "", str(cik or "")).zfill(10) in _margin_ciks()
+    """True for a fund whose plain tag is the coupon and whose paid-in-cash tag is a margin."""
+    return _readings().get(re.sub(r"\D", "", str(cik or "")).zfill(10), "") == "coupon_with_margins"
 
 
 def hold_cash_margin(facts: dict[str, Any], value: Any) -> None:

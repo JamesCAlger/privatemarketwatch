@@ -1,0 +1,14 @@
+{
+ "decision": "D-113",
+ "date": "2026-10-12",
+ "report": "docs/investigations/v05_decision_log.md (D-091, D-113; no reader report exists for this fund)",
+ "groups": [
+  {"engine": "row_validation", "rule_name": "X06", "class": "as_filed",
+   "statement": "Principal far above fair value on undrawn commitment rows: by the owner's ruling of 2026-10-10 ('net each loan') such a row keeps the committed amount as principal and publishes cost 0 and the mark as fair value.",
+   "evidence": [{"source": "filing", "quote": "Schedule: 'Sotheby's, Revolver (i) ... 31,849 31,849 31,849', footnote 'Security is an unfunded commitment', and per section 'Unfunded Loan Commitments ( 259,939 ) ( 259,939 )' (0001628280-25-040140)."},
+                {"source": "query", "quote": "python scripts/v05_evidence/commitment_match.py 1930679: every tagged commitment matched in ten of twelve filings (165 of 165 at 2026-03-31)."}]},
+  {"engine": "row_validation", "rule_name": "C103", "class": "as_filed",
+   "statement": "Small negative fair values on the same netted commitment rows (the mark on an undrawn line, e.g. 1,628 - 1,679 = -51).",
+   "evidence": [{"source": "query", "quote": "Decision D-091: AGS Health commitment row cost 0, fair value -51 after netting; principal keeps the committed amount."}]}
+ ]
+}

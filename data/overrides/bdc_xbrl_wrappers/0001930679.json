@@ -140,7 +140,14 @@
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "^(.+?),\\s+.+$",
     "hierarchy_instrument_re": "^.+?,\\s+(.+)$",
-    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',')"
+    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',')",
+    "pipe_field_map": {
+      "issuer_segment": 1,
+      "industry_segment": 2,
+      "instrument_segments": [
+        2
+      ]
+    }
   },
   "archetypes": {
     "debt": {
@@ -275,6 +282,15 @@
   "source_encodings": {
     "unfunded_rows": [
       "net_of_tagged_commitment"
+    ],
+    "reference_rate_columns": [
+      "Rate"
+    ],
+    "reference_rate_codes": [
+      "SF=SOFR",
+      "SA=SONIA",
+      "E=EURIBOR",
+      "P=PRIME"
     ]
   }
 }

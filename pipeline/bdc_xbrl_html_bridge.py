@@ -425,9 +425,9 @@ def _named_header(text: str) -> str:
     """A printed header as a wrapper names it: lower case, single spaces, footnote marks dropped.
 
     'Reference Rate and Spread (5)' and 'Reference (4)' are the columns a wrapper names
-    'Reference Rate and Spread' and 'Reference'.
+    'Reference Rate and Spread' and 'Reference'; 'Rate (b)' (KKR FS Income Trust) is 'Rate'.
     """
-    return re.sub(r"(?:\s*\(\d{1,2}\))+$", "", " ".join(str(text).lower().split()))
+    return re.sub(r"(?:\s*\((?:\d{1,2}|[a-z])\))+$", "", " ".join(str(text).lower().split()))
 
 
 def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: dict[str, Any] | None) -> str:
@@ -1306,6 +1306,18 @@ def apply_ixbrl_field_status_overlay(
             result["extracted_industry"] = ""
         heading = merged["_printed_industry"].astype("string").fillna("").str.strip()
         industry = (heading != "") & ~heading.str.contains(_NOT_AN_INDUSTRY_RE, regex=True)
+        # One heading over most of a filing's rows is a page or statement heading, not an industry
+        # (KKR FS Income Trust prints the industry in a column; the reader's last heading there is
+        # 'Supplemental disclosure', on every row).
+        filing = result[cik_col].map(normalize_cik).astype(str).values + "|" + result["accession_number"].map(_norm_text).astype(str).values
+        counted = pd.DataFrame({"filing": filing, "heading": heading.values, "ok": industry.values})
+        counted = counted[counted["ok"]]
+        if not counted.empty:
+            per_filing = counted.groupby("filing")["heading"].agg(["size", lambda s: s.value_counts().iloc[0], lambda s: s.value_counts().index[0]])
+            per_filing.columns = ["rows", "top_rows", "top"]
+            dominant = per_filing[(per_filing["rows"] >= 20) & (per_filing["top_rows"] > 0.5 * per_filing["rows"])]["top"].to_dict()
+            if dominant:
+                industry &= ~pd.Series([dominant.get(f) == h for f, h in zip(filing, heading.values)], index=heading.index)
         take = industry.values & blank(result["extracted_industry"]).values
         result.loc[take, "extracted_industry"] = heading[take].values
     for fld, status_key in _OVERLAY_FIELDS.items():

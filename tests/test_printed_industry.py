@@ -66,3 +66,28 @@ def test_the_printed_heading_fills_a_blank_industry_only():
         "gics_sector": ["Software", "Machinery", "Unfunded"], "sector_status": ["value", "value", "value"]})
     out = apply_ixbrl_field_status_overlay(staged, status)
     assert out["extracted_industry"].tolist() == ["Software", "Chemicals", ""]
+
+
+def test_one_heading_over_most_of_a_filing_is_not_an_industry():
+    # KKR FS Income Trust: the industry is a column; the reader's heading is 'Supplemental disclosure' on every row.
+    n = 30
+    staged = pd.DataFrame({
+        "cik": ["0000000001"] * n, "accession_number": ["A"] * n, "report_date": ["2026-03-31"] * n,
+        "bdc_investment_identifier": ["Row %d" % i for i in range(n)],
+        "bdc_dimensions_raw": ["investmentidentifieraxis=Row %d" % i for i in range(n)],
+        "extracted_industry": [""] * n, "maturity_date": [""] * n, "reference_rate_type": [""] * n, "lien_position": [""] * n})
+    status = pd.DataFrame({
+        "cik": ["0000000001"] * n, "accession_number": ["A"] * n, "report_date": ["2026-03-31"] * n,
+        "raw_id_lower": ["row %d" % i for i in range(n)],
+        "maturity_date": [""] * n, "maturity_status": ["blank"] * n, "reference_rate_type": [""] * n,
+        "reference_rate_status": ["blank"] * n, "lien_position": [""] * n, "lien_status": ["blank"] * n,
+        "gics_sector": ["Supplemental disclosure"] * 28 + ["Software", "Machinery"], "sector_status": ["value"] * n})
+    out = apply_ixbrl_field_status_overlay(staged, status)
+    assert out["extracted_industry"].tolist() == [""] * 28 + ["Software", "Machinery"]
+
+
+def test_a_numbered_industry_label_maps_like_the_plain_one(monkeypatch):
+    from pipeline import gics_mapping
+    monkeypatch.setattr(gics_mapping, "_load_cache", lambda: {})
+    mapping = uh.printed_industry_gics(["Aerospace & Defense 2", "Aerospace & Defense"])
+    assert mapping["Aerospace & Defense 2"][0] == mapping["Aerospace & Defense"][0] == "Aerospace & Defense"

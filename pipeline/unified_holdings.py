@@ -554,7 +554,8 @@ def printed_industry_gics(labels) -> dict[str, tuple[str, str]]:
         found = gics_mapping._try_remap_stale(text, exact, names)
         if found is None:
             # the reviewed table is keyed without punctuation ('beverage food and tobacco')
-            plain = " ".join(re.sub(r"[^A-Za-z0-9 ]", " ", text.replace("&", " and ")).split())
+            # ... and a filer can number the rows of one industry in the member ('Capital Goods 2')
+            plain = " ".join(re.sub(r"[^A-Za-z0-9 ]", " ", re.sub(r"\s+\d{1,2}$", "", text).replace("&", " and ")).split())
             found = gics_mapping._try_remap_stale(plain, exact, names)
         if found is None and text in cached:
             found = (cached[text][0], "label_cache")

@@ -1592,8 +1592,8 @@ def _extract_single_xbrl_source_file(
     concepts_by_ctx: dict[str, set[str]] = {}
     monetary_facts_stored: list[tuple[str, str, int, str]] = []
     root = tree.getroot()
-    from pipeline.rate_tag_reading import reads_margins, settle as _settle_margins
-    _margin_tags = reads_margins(filing_meta.get("cik", ""))
+    from pipeline.rate_tag_reading import reading as _rate_tag_reading, settle as _settle_margins
+    _margin_tags = _rate_tag_reading(filing_meta.get("cik", ""))
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
         if ctx_ref not in admitted_contexts:
@@ -1627,7 +1627,7 @@ def _extract_single_xbrl_source_file(
 
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
     if _margin_tags:
-        _settle_margins(facts_by_ctx)
+        _settle_margins(facts_by_ctx, mode=_margin_tags)
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values(facts_by_ctx, filing_meta)
     from pipeline.schedule_row_tags import drop_non_schedule_contexts

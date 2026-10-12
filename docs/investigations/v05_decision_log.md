@@ -2892,3 +2892,28 @@ commits at checkpoints; nothing pushed or published.
   facility; the hard-coded scale repair for the 2025 10-K stays in `bdc_filings.py`.
 - Tests: 256 pass (`test_financial_conventions`, `test_rate_tag_reading`, `test_source_encodings`,
   `test_provenance_reverify`); two added.
+
+### D-113 KKR FS Income Trust 0001930679 (sandbox `kk1c`; a held-back fund, not on the public site; no reader report)
+
+- **Three shared weaknesses found here and fixed (tests added, 94 pass).**
+  (1) A named column header with a lettered footnote mark ('Rate (b)') was not recognised
+  (`_named_header`). (2) The page reader's "industry heading" for this fund is a statement heading
+  ('Supplemental disclosure') on all 2,707 rows; the industry change of D-109 would have published
+  it. A heading that covers more than half of a filing's rows (20 rows or more) is now not taken as
+  an industry. (3) An industry label with a row number ('Capital Goods 2') maps like the plain one.
+- **Industry from the member.** The member is 'issuer | industry N'; `staging.pipe_field_map`
+  now declares the industry segment: 2,707 rows carry the filer's industry (GICS industry groups,
+  e.g. Capital Goods, Insurance), 2,138 map; one group added to the table.
+- **Reference rates.** Column 'Rate', codes SF, SA=SONIA, E, P (legends of 2023-09-30 and
+  2026-03-31): 106 rows change (SONIA 44, EURIBOR 26; the 2023-06-30 loans had been LIBOR by
+  guess); 24 rows become Fixed. The page prints a spread only ('SF+ 625'), no coupon: no
+  interest rate is published for most loans, as filed.
+- **Result.** Ledger 90 outstanding (84 before; six new findings from the printed-spread check,
+  which now runs for this fund: two rows a quarter printed 'SF+ 500 , 2.0 % PIK' differ from the
+  tagged spread; real, not fixed). 24 proposed (netted commitment rows, the owner's ruling of
+  2026-10-10). Left open 66.
+- **Totals, not solved.** Published is 1.5M to 14.1M above filed in nine quarters although every
+  tagged debt commitment is matched and netted. The page also subtracts 'Unfunded Commitments
+  ( 80,013 )' in Asset Based Finance and the notes mention 'unfunded equity/other commitments of
+  $ 19,594' (2025-06-30), which carry no commitment tag. Lead only; rows not traced.
+- 2025-03-31 uses a different member form (214 names for 290 rows, 144 with no instrument): not fixed.
