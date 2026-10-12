@@ -197,6 +197,13 @@ POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
 # identities fresh (still deterministic for unchanged chains). Re-enable at sign-off.
 IDENTITY_CONTINUITY_ENABLED = False
 
+# Cost proxy. When True a row with no filed cost takes the first fair value of its position
+# chain as its cost (cost_source 'first_observed_fv_proxy'). Off by owner ruling 2026-10-11
+# ("should a row with no filed cost publish no cost instead of a proxy": "yes"): the proxy is
+# an invented number, and a wrongly chained row took another loan's value (Blue Owl Technology,
+# an undrawn line worth -0.3M published with a cost of 4,994,000). Such a row now has no cost.
+COST_PROXY_ENABLED = False
+
 # Unlisted (non-traded) BDC reference for v1 frontend filtering
 UNLISTED_BDC_REFERENCE_FILE = (
     OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"

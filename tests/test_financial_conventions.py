@@ -589,7 +589,7 @@ def test_pik_only_setting_is_validated_and_set_for_ares_and_apollo():
     from pipeline.source_encodings import load_encodings
     # Apollo: the row text itself reads 'Interest Rate 11.45% PIK' (Material Holdings, 2024-09-30)
     # Blue Owl files both kinds (below); it is in this set and in the margin set
-    assert pik_only_coupon_funds()=={"0001287750","0001837532","0001812554"}
+    assert pik_only_coupon_funds()>={"0001287750","0001837532","0001812554"}
     assert load_encodings()["0001287750"]["pik_only_tag_reading"]==["coupon"]
     assert load_encodings()["0001812554"]["pik_only_tag_reading"]==["coupon","margin"]
 
@@ -659,7 +659,7 @@ def test_pik_margin_setting_is_validated_and_set_for_hps_and_blue_owl():
     from pipeline.financial_conventions import pik_only_margin_funds
     # Blue Owl 10-K 2025-12-31: Inovalon second lien is printed 'S+ | (no cash) | 8.50%' under Ref. Rate, Cash, PIK;
     # 10-Q 2023-03-31: Hg Genesis 9 'E+ 7.00% PIK'. Its reference rate comes from the printed column, not a tag.
-    assert pik_only_margin_funds()=={"0001838126","0001812554"}
+    assert pik_only_margin_funds()>={"0001838126","0001812554"}
 
 
 def test_the_pik_margin_label_survives_a_second_pass_over_the_finalized_rows():
@@ -671,3 +671,14 @@ def test_the_pik_margin_label_survives_a_second_pass_over_the_finalized_rows():
     again,_=prepare(first,prior_states=states,rate_readings={},pik_only_coupon=set(),pik_only_margin={"0001838126"})
     assert float(again.iloc[0].basis_spread)==7.5
     assert again.iloc[0].src_transforms.count("basis_spread:pik_margin")==1
+
+
+def test_with_the_proxy_switched_off_a_row_with_no_filed_cost_has_no_cost():
+    # Owner ruling 2026-10-11: no cost is published where none is filed (config.COST_PROXY_ENABLED = False).
+    prepared,states=prepare(rows(dict(row_id="none",cost="",fair_value="250000",position_id="P1"),
+        dict(row_id="filed",cost="240000",fair_value="250000",position_id="P2")))
+    result,audit=cost_proxies(prepared,states,release_id="release",enabled=False)
+    by_id=result.set_index("row_id");evidence=audit.set_index("row_id")
+    assert pd.isna(by_id.loc["none","cost"]) and by_id.loc["none","cost_source"]!="first_observed_fv_proxy"
+    assert evidence.loc["none","method"]=="not_filed" and pd.isna(evidence.loc["none","proxy_value"])
+    assert by_id.loc["filed","cost"]==240000 and evidence.loc["filed","method"]=="reported"

@@ -7,7 +7,9 @@ from pipeline.identity_finalization import finish
 from tests.test_financial_conventions import rows
 
 
-def test_final_packet_assigns_proxy_after_identity_and_synchronizes_raw_rates(tmp_path):
+def test_final_packet_assigns_proxy_after_identity_and_synchronizes_raw_rates(tmp_path,monkeypatch):
+    # the proxy is off in production by owner ruling 2026-10-11; this test covers the switched-on path
+    monkeypatch.setattr('pipeline.config.COST_PROXY_ENABLED',True)
     frame=rows(dict(row_id='A',report_date='2025-12-31',cost='0',fair_value='0',entity_id='E'),
         dict(row_id='B',report_date='2026-03-31',cost='',fair_value='110',entity_id='E'))
     prepared,states=prepare(frame)

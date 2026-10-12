@@ -22,7 +22,8 @@ def finish(holdings,matches,states,*,directory,release_id,build_fingerprint,inpu
     prior_hash=sha(input_registry) if input_registry is not None else None
     final,updated,mapping,counts=allocate(holdings,matches,input_registry=input_registry,output_registry=registry,
         release_id=release_id,build_fingerprint=build_fingerprint,revisions=revisions)
-    final,donors=cost_proxies(final,states,release_id=release_id)
+    from pipeline.config import COST_PROXY_ENABLED
+    final,donors=cost_proxies(final,states,release_id=release_id,enabled=COST_PROXY_ENABLED)
     updated=synchronize_matches(updated,final)
     states.to_csv(directory/'financial_state_audit.csv',index=False)
     donors.to_csv(directory/'cost_donor_audit.csv',index=False)

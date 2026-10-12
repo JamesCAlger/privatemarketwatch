@@ -71,8 +71,9 @@ page first. Nothing published, pushed or committed. "Proposed" = a reason writte
 | Barings 0001859919 | `ba1e` | equal, 13 of 13 (was 6.9M under in one) | 48 | 11 | 37 | two real rows restored; 300 reference rates (BBSY, BKBM, STIBOR ...); seven loans get rates from a sibling context |
 | TPG Twin Brook 0001913724 | `tb1c` | equal in every quarter | 25 (was 36) | 15 | 10 | a harmful promoted correction pulled (SimiTree); verifier fixed for coupon-and-margin filers; 401 reference rates |
 | Antares Strategic Credit 0001993402 | `as1d` | equal to the printed total, 8 of 9 (0.3M over in one) | 45 (was 70) | 32 | 13 | plugged money-market rule pulled, tagged row published as cash; 115 reference rates; two unnamed rows named; two share counts |
+| Ares Core Infrastructure 0002031750 | `ac1b` | equal, 7 of 7 | 30 (was 32) | 19 | 11 | names 128 to 80 with the instrument kept; two unit counts corrected |
 
-Next by size: Ares Core Infrastructure 0002031750, Sixth
+Next by size: Sixth
 Street Specialty Lending 0001508655, Stepstone Private Credit 0001950803, then the D-082 list.
 
 Defects found today that are not fixed (owner to hear):
@@ -86,3 +87,9 @@ Defects found today that are not fixed (owner to hear):
   Twin Brook 5 to 18 a quarter).
 - GICS labels move when a name is cleaned (814 to 1,007 rows a fund); not checked against the
   printed industry heading.
+
+Owner rulings applied the same day (D-106): no proxy cost where none is filed (all funds); a
+cash-axis member naming a fair-value-hierarchy category is not cash and not a position.
+Found the same day (D-108): industry labels are a name-keyed guess with a cache; cleaning names
+empties the label in fund sandboxes (North Haven +516 rows without one, Monroe +659, Blue Owl
+Technology +344, Ares Core +42).

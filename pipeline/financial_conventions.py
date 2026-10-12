@@ -303,8 +303,12 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     return result,audit
 
 
-def cost_proxies(frame,states,*,release_id):
-    """Use the unique earliest source-valid observation of an established position."""
+def cost_proxies(frame,states,*,release_id,enabled=True):
+    """Use the unique earliest source-valid observation of an established position.
+
+    With ``enabled`` False no proxy is given: a row with no filed cost publishes no cost and its
+    audit method is 'not_filed' (owner ruling 2026-10-11; the build passes config.COST_PROXY_ENABLED).
+    """
     if not release_id: raise ValueError("Cost donor requires a release identity")
     with duckdb.connect(config={"threads":2,"memory_limit":"-1"}) as con:
         con.register("holdings",frame);con.register("states",states)
@@ -320,16 +324,18 @@ def cost_proxies(frame,states,*,release_id):
         con.execute("""CREATE TABLE proxy_audit AS SELECT h.row_id,
             CASE WHEN s.cost_state='present' THEN 'reported'
                  WHEN s.cost_state<>'absent' THEN s.cost_state
+                 WHEN NOT ? THEN 'not_filed'
                  WHEN d.candidates>1 THEN 'ambiguous_earliest_donor'
                  -- A negative first value (an undrawn line marked below par) is not a cost the fund
                  -- filed or could have paid: no proxy (2026-10-06, decision D-024). Zero still donates.
                  WHEN d.candidates=1 AND d.donor_value>=0 THEN 'first_observed_fv_proxy'
                  ELSE 'no_source_valid_donor' END AS method,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_row_id END AS donor_row_id,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_date END AS donor_date,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN ? END AS donor_release,
-            CASE WHEN s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_value END AS proxy_value
-            FROM holdings h JOIN states s USING(row_id) LEFT JOIN donors d USING(cik,position_id)""",[release_id])
+            CASE WHEN ? AND s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_row_id END AS donor_row_id,
+            CASE WHEN ? AND s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_date END AS donor_date,
+            CASE WHEN ? AND s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN ? END AS donor_release,
+            CASE WHEN ? AND s.cost_state='absent' AND d.candidates=1 AND d.donor_value>=0 THEN d.donor_value END AS proxy_value
+            FROM holdings h JOIN states s USING(row_id) LEFT JOIN donors d USING(cik,position_id)""",
+            [bool(enabled),bool(enabled),bool(enabled),bool(enabled),release_id,bool(enabled)])
         result=con.execute("""SELECT h.* REPLACE(CASE WHEN a.method='first_observed_fv_proxy' THEN a.proxy_value
             ELSE h.cost_reported END AS cost,CASE WHEN a.method='first_observed_fv_proxy' THEN a.method
             ELSE h.cost_source END AS cost_source) FROM holdings h JOIN proxy_audit a USING(row_id)""").fetchdf()

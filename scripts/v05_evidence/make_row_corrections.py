@@ -385,6 +385,15 @@ SPECS += [
      "The member text is a spreadsheet error message (context C_0b017253); the printed line reads 'Enverus Holdings, Inc. "
      "(7)(15)(17) First Lien Revolver S + 5.50 % 9.63 % 12/24/2029 174 6 7'", "D-105"),
 ]
+# decision D-107: Ares Core Infrastructure Fund, 2025-03-31: the filer put Aspen's unit count on Denali's context (2026-10-11)
+ARES_CORE = "0002031750"
+ARES_CORE_UNITS = ("The share fact on Denali's context (c-5) holds 4,900, Aspen's units; Aspen's context (c-6) has no share fact. Printed: "
+                   "'Aspen Renewables Equity Holdings LLC (1)(5) Ordinary units 03/2025 4,900 $ 407,340 $ 407,340 (2) Denali Equity "
+                   "Holdings LLC (1)(5) Class A units 09/2024 3,749 341,183 353,033'")
+SPECS += [
+    (ARES_CORE, "2025-03-31", "Denali Equity Holdings LLC, Class A units", {"shares_held": "3749"}, ARES_CORE_UNITS, "D-107"),
+    (ARES_CORE, "2025-03-31", "Aspen Renewables Equity Holdings LLC, Ordinary units", {"shares_held": "4900"}, ARES_CORE_UNITS, "D-107"),
+]
 # decision D-100: North Haven Private Income Fund, bare-identifier quarters (to 2025-06-30). Preferred and common
 # equity published as loans, and one loan published as a fund. The specs are built from the rows the sandbox still
 # shows in the wrong class, so a sandbox built after the corrections adds nothing; rows already written stay.

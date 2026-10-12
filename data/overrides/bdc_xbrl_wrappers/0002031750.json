@@ -56,7 +56,9 @@
       }
     ],
     "canonical_strip_re": "\\.|(?<=\\bloan)s\\b",
-    "category_marker_re": "^(?:First\\s+Lien\\s+Senior\\s+Secured\\s+Loans|Senior\\s+Subordinated\\s+Loans)$"
+    "category_marker_re": "^(?:First\\s+Lien\\s+Senior\\s+Secured\\s+Loans|Senior\\s+Subordinated\\s+Loans)$",
+    "issuer_name_strip_re": "(?i)(?:(?:\\s*,\\s*|\\s+)(?:First lien s[a-z]*nior secured loans?|Senior subordinated loans?|Delayed Draw Term Loans?)|\\s*,\\s*(?:Common equity|Other equity|Class [A-Z] units|Ordinary units|Equity))(?:\\s+\\d{1,2})?\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": ", ",

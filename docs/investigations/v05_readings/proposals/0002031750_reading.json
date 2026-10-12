@@ -1,0 +1,28 @@
+{
+ "decision": "D-107",
+ "date": "2026-10-11",
+ "report": "docs/investigations/v05_readings/0002031750.md",
+ "groups": [
+  {"engine": "fund_strategy", "rule_name": "fund_strategy_validation", "class": "as_filed",
+   "statement": "The fund is an infrastructure fund that files as a BDC: about three quarters of net assets is equity in holding vehicles for infrastructure assets, as the schedule prints.",
+   "evidence": [{"source": "filing", "quote": "0002031750-26-000032: 'Total equity investments 2,161,404 2,318,602 74.08 %' plus controlled '338,429 10.81 %'; 'Total investments $ 3,293,622 $ 3,466,654 110.76 %'."}]},
+  {"engine": "source_recon", "rule_name": "blocking_source_position_like_parser_mismatch", "class": "as_filed",
+   "statement": "The row reported as missing is a footnote aggregate tagged on the Denali member, in millions; rule exclude_denali_bare_duplicate_rows removes it. It equals the sum of the eight equity rows, which are published.",
+   "evidence": [{"source": "filing", "quote": "0002031750-26-000032, footnote (1): 'the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Fund's net assets'; context c-121 carries 2,657,000 on the bare member 'Denali Equity Holdings LLC'."}]},
+  {"engine": "row_validation", "rule_name": "SRC_BDC01", "class": "as_filed",
+   "statement": "The same footnote aggregate on the bare Denali member (760,400 / 782,500 / 1,544,900 / 2,522,500 / 2,657,000 by quarter), reported by the row check.",
+   "evidence": [{"source": "filing", "quote": "0002031750-26-000032, footnote (1): 'the aggregate fair value of these securities is $ 2,657.0 million'; the eight published equity rows sum to 2,657.03M."}]},
+  {"engine": "oracle", "rule_name": "B01", "class": "as_filed",
+   "statement": "Tagged rows with a principal and no fair value are the commitments note, not positions.",
+   "evidence": [{"source": "filing", "quote": "Footnote 6: 'the Fund had commitments to fund various delayed draw term loans and equity investments ... Principal reflects the funded principal'; e.g. 'CMH01 Holdings LP, Delayed Draw Term Loan' 125,000,000 (c-412), 'Pioneer JV Holdings LLC, Equity' 770,725,000 (c-422)."}]},
+  {"engine": "oracle", "rule_name": "D01", "class": "as_filed",
+   "statement": "The schedule grew from one holding to 27 rows in the first quarter of 2025; published equals the filed total in both quarters.",
+   "evidence": [{"source": "filing", "quote": "0001628280-25-001722: 'Total Investments $ 347,854 $ 347,854 224.22 %' (one row, Denali) at 2024-09-30; filed 783.786M at 2025-03-31 = published."}]},
+  {"engine": "row_validation", "rule_name": "CNT01", "class": "as_filed",
+   "statement": "The same growth from one holding to 27 rows at 2025-03-31.",
+   "evidence": [{"source": "filing", "quote": "0001628280-25-001722: 'Total Investments $ 347,854 $ 347,854 224.22 %'; filed 783.786M at 2025-03-31 = published."}]},
+  {"engine": "fund_financials", "rule_name": "F24", "class": "as_filed",
+   "statement": "The same growth at 2025-03-31, reported at fund level.",
+   "evidence": [{"source": "filing", "quote": "Filed investments 339.136M (2024-12-31) and 783.786M (2025-03-31), both equal to published."}]}
+ ]
+}

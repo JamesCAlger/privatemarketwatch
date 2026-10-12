@@ -2711,3 +2711,64 @@ The commitment-table rows were already excluded by rule. Built alone: 70 outstan
 - **Not done:** principal is the commitment, not the drawn amount, on about 190 rows a quarter
   (as filed; changes what principal means); equity unit counts to 2025-06-30; the stale fund-level
   cash-equivalents figure; 'Debt Investments <industry>' prefix on 45 small rows.
+
+### D-106 Owner rulings 2026-10-11 ("1. yes 2. no 3. commit, then keep going")
+
+- **No proxy cost (ruling 1: "yes").** A row with no filed cost publishes no cost.
+  `config.COST_PROXY_ENABLED = False`; `financial_conventions.cost_proxies(..., enabled=)`; the
+  cost-donor audit records method 'not_filed'. All funds. Tests: one added; the finalizer test of
+  the proxy path now switches it on; two tests that pinned the exact set of funds with a PIK
+  setting (already out of date) now require the named funds as a subset. 83 pass.
+  Checked in sandbox `r1a` (North Haven, Fidelity Private Credit Co): no proxy-cost row.
+  Not measured: the number of rows that lose a cost across the cohort (Blue Owl Technology alone
+  had 631, 14.5M), and what any return or income series does with a missing cost.
+- **A cash-axis member that names no cash is not cash (ruling 2: "no").** Measured first on the
+  published build of 2026-10-01: 46 distinct cash-axis members, 45 name a money market, treasury
+  or liquidity fund (or the filer's 'Non Money Market Cash'); one does not,
+  'InvestmentMeasuredAtNetAssetValueMember' (North Haven, 2 rows, 184.5M). A keyword test for
+  "names cash" would have dropped real funds ('JP Morgan US Government', 'Black Rock Federal FD
+  Institutional Eighty One'), so the shared rule in `pipeline/staging_bdc.py` instead excludes a
+  cash-axis member that names a fair-value-hierarchy category (measured at net asset value, fair
+  value level, fair value measurement); such a row is not a position and is dropped. North Haven's
+  fund rule `exclude_fair_value_hierarchy_nav_row` is removed as redundant. `r1a`: the North Haven
+  row is gone by the shared rule (6,978 rows, as in `n1b`); Fidelity's 12 cash rows (218.7M) stay.
+  17 cash and money-market tests of `tests/test_unified_holdings.py` pass.
+- **Commit 911dc26** holds D-099 to D-105.
+
+### D-107 Ares Core Infrastructure Fund 0002031750 (sandbox `ac1b`; built alone first as `ac1a`)
+
+- Built alone with the settings of earlier rounds: published equals filed in all seven quarters;
+  the two fixed-rate subordinated loans (141.5M at 2026-03-31) publish Fixed with no spread, as
+  printed ('9.25 N/A 9.25').
+- **Names.** Every row had the instrument in the issuer name and no instrument description
+  ('CMH01 Holdings LP, First lien senior secured loan'). Split by `issuer_name_strip_re` with the
+  instrument kept: 128 distinct names to 80 over 235 rows; the filer's change of wording at
+  2025-12-31 ('loan' to 'loans') no longer breaks every name.
+- **One filing error.** 2025-03-31: Aspen's unit count sat on Denali's context. Corrected from the
+  page (Denali 3,749; Aspen 4,900).
+- **Result.** Ledger 32 to 30. 19 proposed (seven reasons). Left open 11: the first two quarters
+  publish percent of net assets 2.2422 and 2.1677 for a printed 224.22 pct and 216.77 pct (the
+  ratio-to-percent step skips a ratio above 1; pct identity x2, F22 x2, F23 x2; shared scale
+  logic, real, not fixed); inception-quarter fund-level flags (F16 x2, F33, F30); income_identity
+  2024-12-31 (not read).
+- **Not done:** unit counts are filed a thousand times larger from the 2025 10-K on (Denali 3,749
+  then 3,749,000) while the page prints the same figure; published as filed. Controlled vehicles
+  are not flagged as subsidiaries. NAV per share is a blend across share classes from 2025-09-30.
+
+### D-108 Industry labels: found while comparing Ares Core, applies to every fund (not fixed)
+
+- `gics_sub_industry` is filled by a language-model labeller keyed on the company NAME, with a
+  cache (`company_gics_cache.csv`, `pipeline/gics_classification.py`). It is not read from the
+  industry heading the filer prints above every row. Labels already in the cache can be plainly
+  wrong: Denali Equity Holdings, a renewable-energy holding vehicle, was 'Advertising'.
+- In a fund sandbox the labeller cannot run (no API credit, and I may not make that call), so a
+  name the cache has not seen gets no label. Cleaning names therefore removed labels. Non-cash
+  rows with no label, before and after (`scratch/2026-10-11_rulings/gics_nulls.py`): North Haven
+  2,189 to 2,705; Monroe 6,019 to 6,678; Blue Owl Technology 324 to 668; Ares Core 98 to 140;
+  Barings 3,142 to 6,156 (mostly from the name changes of the earlier round, D-094); MSD and Twin
+  Brook unchanged; Antares Strategic 5,512 to 4,168 (better).
+- Even before today roughly half of these funds' rows had no label. A build with the labeller
+  available would fill the new names, by a guess from the name.
+- Owner question: read the industry from the filer's printed heading (and map that to GICS) rather
+  than guess it from the name. Until then the published industry field is weak and today's name
+  clean-up makes it emptier in fund sandboxes.

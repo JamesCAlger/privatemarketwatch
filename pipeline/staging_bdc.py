@@ -2483,7 +2483,7 @@ def _prepare_bdc(
     -- constituents (position matching excludes asset_class='CASH'), so the
     -- position-level indices are unchanged.
     no_mm AS (
-        SELECT * EXCLUDE (asset_category_final, _cash_filter_match, _cash_identity, _cash_dim),
+        SELECT * EXCLUDE (asset_category_final, _cash_filter_match, _cash_identity, _cash_dim, _hierarchy_note_dim),
             CASE
                 WHEN (_cash_filter_match AND _cash_identity) OR _cash_dim THEN 'CASH'
                 ELSE asset_category_final
@@ -2500,11 +2500,22 @@ def _prepare_bdc(
                 -- is the published basis (pipeline.published_basis; carve-outs
                 -- retired 2026-09-07) -- it counts this row regardless of category.
                 contains(lower(COALESCE(CAST(dimensions_raw AS VARCHAR), '')),
-                         'cashandcashequivalent') AS _cash_dim
+                         'cashandcashequivalent') AS _cash_dim,
+                -- A cash-axis member that names a fair-value-hierarchy category, not a cash
+                -- vehicle, is a line of the hierarchy note and repeats a schedule position
+                -- (North Haven 2025-12-31: 'Investment measured at net asset value' 85,276 is
+                -- the North Haven Keystone, LLC stake again). Owner ruling 2026-10-11: such a
+                -- member is not read as cash; it is not a position either, so the row goes.
+                -- On the published build of 2026-10-01 this member is the only cash-axis
+                -- member of 46 that names no cash vehicle (2 rows, 1 fund).
+                regexp_matches(lower(COALESCE(CAST(dimensions_raw AS VARCHAR), '')),
+                    'cashandcashequivalentsaxis=[^|]*(measuredatnetassetvalue|fairvalueinputslevel|fairvaluemeasurement)')
+                    AS _hierarchy_note_dim
             FROM with_reclass wr
             LEFT JOIN _wrapper_non_private wnp ON wr._row_id = wnp._row_id
         )
         WHERE NOT (_cash_filter_match AND NOT _cash_identity AND NOT _cash_dim)
+          AND NOT _hierarchy_note_dim
     ),
 
     -- CTE 10: Infer coupon type
