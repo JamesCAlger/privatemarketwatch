@@ -65,7 +65,9 @@
         "regex": "(?i)(?:^|[,\\s])warrants?(?:[,\\s]|$)",
         "family": "warrant"
       }
-    ]
+    ],
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:(?:First|Second)[\\s-]+Lien|Unsecured|Subordinated|Senior\\s+(?:Secured|Unsecured|Subordinated)|Equity\\s+Investment|Preferred\\s+(?:Equity|Stock|Units)|Common\\s+(?:Equity|Stock|Units)|Class\\s+[A-Z0-9-]+\\s+(?:Units|Shares|Common|Preferred)|Warrants?|Term\\s+Loan|Revolving\\s+Loan|Delayed\\s+Draw)\\b.*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": ", ",

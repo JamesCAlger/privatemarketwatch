@@ -2978,3 +2978,18 @@ commits at checkpoints; nothing pushed or published.
 - **Not done:** positions carried at a dash fair value are dropped (7M to 26M of cost a quarter);
   money-market rows missing from 2025-06-30; net assets missing in 10 of 13 quarters; Kauffman
   equity row (35K) dropped at 2025-03-31.
+
+### D-117 Stone Point Credit Corp 0001825384 (sandbox `sp1a`, before `l5b`)
+
+- **Totals.** Three rows of the 2025 10-K filed without the thousands scale (Helpsystems 8,182;
+  MRI Software 1,888 and 494; each printed line quoted) corrected: 9 values. Published equals
+  filed within 0.5M in all 13 quarters (was 10.6M under at 2025-12-31). 2026-03-31 stays 0.1M
+  under: the filed total includes two interest rate swaps on the fund's own notes (as filed).
+- **Names.** The member was the whole issuer name ('Cliffwater, LLC, First Lien Term Loan, Due
+  9/30/2030'); split at the instrument words with the instrument kept: 958 distinct names to 283
+  over 2,939 rows; rows with no instrument description 2,939 to 34.
+- **Result.** Ledger 45 outstanding; nothing proposed in this pass. Open as in the reading: C04
+  x13 (units tagged as par on equity rows), X02 x6 and X01 x6 (PIK-only notes; equity rows classed
+  as loans, 21M), C206 x5, B01 x8.
+- The filer's industry is read on 1,487 of 2,939 rows (all mapped); the other half of the
+  quarters have no heading reading.

@@ -489,6 +489,28 @@ if STEPSTONE in held:
                       "Facts tagged decimals=0 with the thousands figure as the value (context " + context + "); "
                       + STEPSTONE_UNSCALED[context], "D-112"))
         EXACT.add(identifier)
+# decision D-117: Stone Point Credit, 10-K 2025-12-31. Three rows whose value cells are tagged decimals="0" with no scale
+# attribute (every other row: scale 3): par, cost and fair value are a thousand times too small.
+STONEPOINT = "0001825384"
+STONEPOINT_UNSCALED = {
+    "C_2afcd7c5-7ba2-478a-8ebb-d1154749ee6c": "Helpsystems Holdings, Inc. Second Lien Term Loan: printed '10,175 10,003 8,182 0.6 %'",
+    "C_6fa7a5ca-32a6-4b80-ab6f-04110c0fabde": "MRI Software LLC First Lien Delayed Draw Term Loan: printed '1,971 1,929 1,888 0.1 %'",
+    "C_a196223c-7936-4dd3-84dc-3ad5991ab90d": "MRI Software LLC First Lien Revolving Loan: printed '506 495 494 0.0 %'",
+}
+if STONEPOINT in held:
+    for identifier, context, value, cost, principal in con.execute(f"""SELECT CAST(bdc_investment_identifier AS VARCHAR), CAST(src_context_id AS VARCHAR),
+            fair_value, cost, principal_amount FROM read_parquet('{S}/private_markets_holdings.parquet')
+            WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND CAST(report_date AS VARCHAR)[:10] = '2025-12-31'
+              AND CAST(src_context_id AS VARCHAR) IN (SELECT unnest(?)) AND abs(fair_value) < 10000 ORDER BY 1""",
+            [STONEPOINT, list(STONEPOINT_UNSCALED)]).fetchall():
+        fields = {"fair_value": "%d" % round(value * 1000)}
+        if cost is not None:
+            fields["cost"] = "%d" % round(cost * 1000)
+        if principal is not None:
+            fields["principal_amount"] = "%d" % round(principal * 1000)
+        SPECS.append((STONEPOINT, "2025-12-31", identifier, fields,
+                      "Value cells tagged decimals=0 with no scale (context " + context + "); " + STONEPOINT_UNSCALED[context], "D-117"))
+        EXACT.add(identifier)
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
