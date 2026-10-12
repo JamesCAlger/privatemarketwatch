@@ -531,6 +531,65 @@ def _apply_gics_cache(combined: pd.DataFrame) -> pd.DataFrame:
     return combined
 
 
+def printed_industry_gics(labels) -> dict[str, tuple[str, str]]:
+    """{filer industry label: (GICS sub-industry, how)} for the labels that map without a model call.
+
+    'alias' and 'exact' come from the reviewed table and the GICS names in pipeline.gics_mapping;
+    'label_cache' is an earlier mapping of the same label kept in that module's cache. A label that
+    maps to nothing, or to 'Other', is left out.
+    """
+    import re
+    from pipeline import gics_mapping
+    names = gics_mapping._load_gics_names()
+    exact = {gics_mapping._gics_lookup_key(name): name for name in names}
+    try:
+        cached = gics_mapping._load_cache()
+    except Exception:  # an unreadable cache is no mapping, not a failed build
+        cached = {}
+    result: dict[str, tuple[str, str]] = {}
+    for label in labels:
+        text = str(label or "").strip()
+        if not text:
+            continue
+        found = gics_mapping._try_remap_stale(text, exact, names)
+        if found is None:
+            # the reviewed table is keyed without punctuation ('beverage food and tobacco')
+            plain = " ".join(re.sub(r"[^A-Za-z0-9 ]", " ", text.replace("&", " and ")).split())
+            found = gics_mapping._try_remap_stale(plain, exact, names)
+        if found is None and text in cached:
+            found = (cached[text][0], "label_cache")
+        if found is not None and found[0] and found[0] != "Other" and found[1] != "aggregate":
+            result[text] = found
+    return result
+
+
+def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
+    """Set gics_sub_industry from the industry the filer prints for the row (extracted_industry).
+
+    Owner ruling 2026-10-11: the industry is read from the filer's heading, not guessed from the
+    company name. Where a BDC row carries the filer's industry and that label maps to a GICS
+    sub-industry without a model call, the mapping replaces the name-keyed label. A row whose
+    label does not map keeps what it had; the log counts those rows so the table can be extended.
+    """
+    if "extracted_industry" not in combined.columns or "gics_sub_industry" not in combined.columns:
+        return combined
+    label = combined["extracted_industry"].astype("string").fillna("").str.strip()
+    rows = (combined["source"] == "bdc") & (label != "")
+    if "index_classification" in combined.columns:
+        rows &= combined["index_classification"].astype("string").fillna("") != "CASH"
+    if not rows.any():
+        return combined
+    mapping = printed_industry_gics(label[rows].unique().tolist())
+    mapped = label.map({key: value[0] for key, value in mapping.items()})
+    take = rows & mapped.notna()
+    changed = take & (combined["gics_sub_industry"].astype("string").fillna("") != mapped.fillna(""))
+    combined.loc[take, "gics_sub_industry"] = mapped[take]
+    logger.info("  Printed industry: %d BDC rows carry the filer's industry; %d mapped to GICS (%d changed); "
+                "%d rows in %d labels not mapped", int(rows.sum()), int(take.sum()), int(changed.sum()),
+                int((rows & ~take).sum()), int(label[rows & ~take].nunique()))
+    return combined
+
+
 def _apply_lien_cache(combined: pd.DataFrame) -> pd.DataFrame:
     """Apply cached lien position classifications from lien_cache.csv.
 
@@ -1347,6 +1406,9 @@ def build_unified_holdings(
 
     # Apply cached GICS classifications (if cache exists on disk)
     combined = _apply_gics_cache(combined)
+    # The filer's own industry for the row, where it maps to GICS, takes the place of the
+    # name-keyed label above.
+    combined = _apply_printed_industry(combined)
 
     # Apply cached lien position classifications (if cache exists on disk)
     combined = _apply_lien_cache(combined)

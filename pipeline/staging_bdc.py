@@ -2980,13 +2980,15 @@ def _prepare_bdc(
         # narrow, pre-filtered DataFrame passed straight through.
         _cols = ["cik", "accession_number", "report_date", "raw_id_lower",
                  "maturity_date", "maturity_status", "reference_rate_type",
-                 "reference_rate_status", "lien_position", "lien_status", "printed_margin"]
+                 "reference_rate_status", "lien_position", "lien_status", "printed_margin",
+                 "gics_sector", "sector_status"]
         _sdf = pd.read_csv(BDC_IXBRL_FIELD_STATUS_FILE, dtype=str,
                            usecols=lambda c: c in _cols)
         # a printed margin is read only on a row whose reference rate has status value
         _sdf = _sdf[(_sdf["maturity_status"] == "value")
                     | (_sdf["lien_status"] == "value")
-                    | (_sdf["reference_rate_status"].isin(["value", "not_applicable"]))]
+                    | (_sdf["reference_rate_status"].isin(["value", "not_applicable"]))
+                    | (_sdf.get("sector_status", pd.Series("", index=_sdf.index)) == "value")]
         result = apply_ixbrl_field_status_overlay(result, _sdf)
 
     # Agent A basis_spread corrections: audited, keyed OVERRIDE (NOT blank-only) of the

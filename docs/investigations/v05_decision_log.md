@@ -2772,3 +2772,43 @@ The commitment-table rows were already excluded by rule. Built alone: 70 outstan
 - Owner question: read the industry from the filer's printed heading (and map that to GICS) rather
   than guess it from the name. Until then the published industry field is weak and today's name
   clean-up makes it emptier in fund sandboxes.
+
+### D-109 Industry read from the printed heading (owner ruling 2026-10-11: "yes, read industry from the printed heading")
+
+- **What was there.** The page reader already recorded the heading above each row in the
+  field-status artifact (`gics_sector`, status `value` on nearly every row). Nothing published it.
+  In a cache-only build the published label came only from the name-keyed cache.
+- **What changed (all funds, no model call).**
+  1. `pipeline/staging_bdc.py` / `bdc_xbrl_html_bridge.apply_ixbrl_field_status_overlay`: the
+     printed heading goes to `extracted_industry` where the member itself gave no industry. A
+     heading that names an affiliation block, a commitments table, a column, a total, a joint
+     venture block or a share class is not taken (`_NOT_AN_INDUSTRY_RE`).
+  2. `pipeline/unified_holdings.py` `_apply_printed_industry`: where a BDC row carries the filer's
+     industry and that label maps to a GICS sub-industry through the reviewed table, an exact GICS
+     name, or an earlier mapping of the same label kept in the label cache, the mapping replaces
+     the name-keyed label. A row whose label does not map keeps the label it had.
+  3. `pipeline/gics_mapping.py`: 25 headings added to the reviewed table (my choices, e.g.
+     'Insurance Services' to Insurance Brokers, 'FIRE: Real Estate' to Real Estate Services,
+     'Renewable Energy' to Renewable Electricity).
+- **Measured on the eight funds processed so far, built together (sandbox `in2a`), against each
+  fund's sandbox of 2026-10-11** (`scratch/2026-10-12_industry/compare.py`). Non-cash rows with no
+  standard label, before to after: MSD 974 to 4; North Haven 2,705 to 103; Monroe 6,678 to 807;
+  Blue Owl Technology 668 to 100; Barings 6,156 to 718; Twin Brook 5,324 to 341; Antares
+  Strategic 4,168 to 2; Ares Core 140 to 21. Rows carrying the filer's own industry: 3,614 to
+  41,583 of 43,990. Row counts and fair value by fund are unchanged. 34,293 rows changed label.
+- **What the label now means.** The sector (11 groups) follows the filer's heading. The
+  sub-industry is one representative pick per heading: a filer heading such as 'Services:
+  Business' or 'Healthcare & Pharmaceuticals' is broader than one GICS sub-industry, so the
+  published sub-industry (Diversified Support Services; Pharmaceuticals) is finer than what the
+  filer states. `extracted_industry` holds the filer's words.
+- **Left without a mapping on purpose** (524 rows in these funds; they keep the name-keyed label):
+  headings that name no industry: 'Structured Product', 'Consumer Cyclical', 'Other Financial',
+  'Industrial Other', 'Credit Card ABS', 'Multisector holdings', 'Other Investments'.
+- **Also in this build (ruling of D-106):** rows with a cost fall where the proxy is gone: Blue
+  Owl Technology 3,666 to 3,035, Monroe 8,523 to 8,500, Antares 7,039 to 7,022.
+- **Not checked:** the 2,068 rows mapped through the label cache rest on earlier model mappings of
+  the label (stable, not reviewed); whether the heading the page reader attaches is the right one
+  for every row (a row under a continued heading across a page break); funds whose page was not
+  read; the frontend industry donut, which reads `gics_sub_industry`.
+- Tests: `tests/test_printed_industry.py` (5 new); with the mapping and page-reader test files 192
+  pass. Full suite not run.

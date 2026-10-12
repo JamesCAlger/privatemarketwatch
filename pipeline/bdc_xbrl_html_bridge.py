@@ -1185,6 +1185,10 @@ def reconcile_to_subtotals(
 _MARGIN_TOL = 0.011
 
 # Unified-column fields the overlay can write, with their status key.
+# Section headings the page reader can mistake for an industry heading.
+_NOT_AN_INDUSTRY_RE = (r"(?i)non-?\s*controlled|affiliate|unfunded|\bcommitments?\b|^interest$|^cash\b|^total\b|^none$|^nan$"
+                       r"|revolvers?\)?$|:$|^investments\b|^joint ventures?$|\b(?:shares|units)$|\bdebt\b|\blien\b|^equity\b")
+
 _OVERLAY_FIELDS = {
     "maturity_date": "maturity_status",
     "reference_rate_type": "reference_rate_status",
@@ -1280,6 +1284,11 @@ def apply_ixbrl_field_status_overlay(
     keep = ["_k"] + [c for f in _OVERLAY_FIELDS for c in (f, _OVERLAY_FIELDS[f]) if c in sdf.columns]
     if "printed_margin" in sdf.columns:
         keep.append("printed_margin")
+    if {"gics_sector", "sector_status"} <= set(sdf.columns):
+        # the industry heading printed above the row; carried under its own name so that it
+        # never collides with a staged column
+        sdf["_printed_industry"] = sdf["gics_sector"].where(sdf["sector_status"].astype(str) == "value", "")
+        keep.append("_printed_industry")
     # S16 tie-break: two status rows can collide on _k with different payloads.
     # The status frame has no source-location keys, so stable-sort on _k plus the
     # full payload before keep='last' -- the survivor is then a deterministic
@@ -1288,6 +1297,17 @@ def apply_ixbrl_field_status_overlay(
     merged = result.merge(sdf, on="_k", how="left", suffixes=("", "_ix"))
 
     blank = lambda col: col.isna() | col.astype(str).str.strip().isin(["", "nan", "NaT"])
+    # Industry as the filer prints it (owner ruling 2026-10-11: read the industry from the printed
+    # heading, do not guess it from the company name). The heading above the row goes to
+    # extracted_industry where the member itself gave none. A heading that names an affiliation
+    # block, a commitments table, a column or a total is not an industry and is not taken.
+    if "_printed_industry" in merged.columns:
+        if "extracted_industry" not in result.columns:
+            result["extracted_industry"] = ""
+        heading = merged["_printed_industry"].astype("string").fillna("").str.strip()
+        industry = (heading != "") & ~heading.str.contains(_NOT_AN_INDUSTRY_RE, regex=True)
+        take = industry.values & blank(result["extracted_industry"]).values
+        result.loc[take, "extracted_industry"] = heading[take].values
     for fld, status_key in _OVERLAY_FIELDS.items():
         vcol, scol = f"{fld}_ix", f"{status_key}"
         if vcol not in merged.columns or scol not in merged.columns:
