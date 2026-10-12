@@ -9,20 +9,25 @@
     "0001572694"
    ],
    "quarters": [
+    "2023-03-31",
     "2023-06-30",
     "2023-09-30",
     "2024-09-30",
-    "2025-09-30"
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
    ],
    "statement": "Small negative fair values on undrawn lines, as tagged.",
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox l5b for each quarter listed: 21 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox gs1a for each quarter listed: 58 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py l5b C103 3",
-   "decided_by": "check passed on sandbox l5b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py gs1a C103 3",
+   "decided_by": "check passed on sandbox gs1a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -336,6 +341,7 @@
     "2023-12-31",
     "2024-03-31",
     "2024-06-30",
+    "2024-09-30",
     "2024-12-31",
     "2025-03-31",
     "2025-06-30",
@@ -347,11 +353,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox l5b for each quarter listed: 107 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox gs1a for each quarter listed: 6 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py l5b X06 3",
-   "decided_by": "check passed on sandbox l5b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py gs1a X06 3",
+   "decided_by": "check passed on sandbox gs1a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

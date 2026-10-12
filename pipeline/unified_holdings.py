@@ -574,6 +574,16 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
     """
     if "extracted_industry" not in combined.columns or "gics_sub_industry" not in combined.columns:
         return combined
+    # A filer that carries the industry inside the member text (dispatch.industry_from_identifier_re):
+    # read it where the row has none yet.
+    from pipeline.staging_bdc import industry_from_identifier_patterns
+    for cik, pattern in industry_from_identifier_patterns().items():
+        mine = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        mine &= combined["extracted_industry"].astype("string").fillna("").str.strip() == ""
+        if mine.any():
+            found = combined.loc[mine, "bdc_investment_identifier"].astype("string").str.extract(pattern, expand=True)[0]
+            found = found.fillna("").str.strip()
+            combined.loc[found[found != ""].index, "extracted_industry"] = found[found != ""]
     label = combined["extracted_industry"].astype("string").fillna("").str.strip()
     rows = (combined["source"] == "bdc") & (label != "")
     if "index_classification" in combined.columns:

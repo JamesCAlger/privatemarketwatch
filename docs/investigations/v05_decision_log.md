@@ -2917,3 +2917,23 @@ commits at checkpoints; nothing pushed or published.
   ( 80,013 )' in Asset Based Finance and the notes mention 'unfunded equity/other commitments of
   $ 19,594' (2025-06-30), which carry no commitment tag. Lead only; rows not traced.
 - 2025-03-31 uses a different member form (214 names for 290 rows, 144 with no instrument): not fixed.
+
+### D-114 Goldman Sachs BDC 0001572694 (sandbox `gs1b`, before `d2a`)
+
+- **Totals.** Three fair values the page prints and the filing does not tag are declared with
+  their printed lines (`untagged_values`: Omega Midwest Buyer 4,079 at 2025-12-31; 4,069 and 41 at
+  2026-03-31), and Engage2Excel's 903 row, tagged on the prior balance date, is re-dated
+  (`misdated_contexts`). Published (without the money market fund) equals filed in all 13 quarters;
+  it had been 0.9M to 4.1M under in three.
+- **Industry from the member text.** This filer prints the industry in a column and carries it in
+  the member ('... Industry Software Interest Rate 11.94% ...'); there is no heading. New wrapper
+  option `dispatch.industry_from_identifier_re` (generic code in `_apply_printed_industry`, loader
+  in `staging_bdc.py`, test added): 5,571 of 5,858 rows now carry the filer's industry; rows with
+  no standard label 1,287 to 100.
+- **Result.** Ledger 97 to 92 with check-accepted entries updated. Nothing proposed in this pass.
+  Left open, as in the reading: C201 x13 (names), SRC_BDC01 x13 and parser mismatch x12 (twin and
+  roll-forward members, not re-read), X02 x13, B01 x13, F27 x11, PP02 x9.
+- **Not done:** rows printed with a dash for fair value are dropped (cost 33M to 79M a quarter to
+  2025-06-30); 63 share counts carry the proxy of D-111; 861 rows have no instrument description;
+  Goldman Sachs Private Credit and Private Middle Market Credit II use the same member form and
+  have not been given the industry option.

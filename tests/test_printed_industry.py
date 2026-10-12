@@ -91,3 +91,20 @@ def test_a_numbered_industry_label_maps_like_the_plain_one(monkeypatch):
     monkeypatch.setattr(gics_mapping, "_load_cache", lambda: {})
     mapping = uh.printed_industry_gics(["Aerospace & Defense 2", "Aerospace & Defense"])
     assert mapping["Aerospace & Defense 2"][0] == mapping["Aerospace & Defense"][0] == "Aerospace & Defense"
+
+
+def test_the_industry_inside_the_member_text_is_read_for_a_fund_that_declares_it(monkeypatch):
+    from pipeline import staging_bdc
+    monkeypatch.setattr(staging_bdc, "industry_from_identifier_patterns",
+                        lambda wrapper_dir=None: {"0001572694": r"Industry\s+(?:Industry\s+)?(.+?)\s+(?:Interest Rate|Reference Rate)"})
+    monkeypatch.setattr(uh, "printed_industry_gics", lambda labels: {"Software": ("Application Software", "alias")})
+    frame = _holdings([
+        {"cik": "0001572694", "bdc_investment_identifier": "... AI Titan Parent, Inc. Industry Industry Software Interest Rate 11.94%",
+         "extracted_industry": "", "gics_sub_industry": "Advertising"},
+        {"cik": "0001572694", "bdc_investment_identifier": "... Acme Industry Machinery Interest Rate 9%",
+         "extracted_industry": "Chemicals", "gics_sub_industry": ""},
+        {"cik": "0000000009", "bdc_investment_identifier": "... Other Industry Software Interest Rate 9%",
+         "extracted_industry": "", "gics_sub_industry": "Advertising"}])
+    out = uh._apply_printed_industry(frame)
+    assert out["extracted_industry"].tolist() == ["Software", "Chemicals", ""]
+    assert out["gics_sub_industry"].tolist() == ["Application Software", "", "Advertising"]

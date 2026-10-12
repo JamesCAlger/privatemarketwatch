@@ -31,7 +31,8 @@
       "total debt investments",
       "total equity investments"
     ],
-    "category_marker_re": "^(?:\\(\\d+\\)\\s*)?(?:\\s*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)(?:.*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)*$|(?:^|\\s)Total\\s+[A-Za-z][A-Za-z /&-]*$"
+    "category_marker_re": "^(?:\\(\\d+\\)\\s*)?(?:\\s*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)(?:.*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)*$|(?:^|\\s)Total\\s+[A-Za-z][A-Za-z /&-]*$",
+    "industry_from_identifier_re": "(?i)Industry\\s*(?:Industry\\s+)?(.+?)\\s+(?:Interest\\s+Rate|Reference\\s+Rate|Maturity|Initial\\s+Acquisition)"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -195,6 +196,14 @@
       "N=NIBOR",
       "B=BBSW",
       "P=PRIME"
+    ],
+    "untagged_values": [
+      "0001193125-26-077458 C_b16c0ae3-28a4-4dcc-8e03-1fc89d4ac996 fair_value 4079000",
+      "0001193125-26-212431 C_64b6f80e-0e37-4a7c-8a29-e9577a4ae05f fair_value 4069000",
+      "0001193125-26-212431 C_8c094e3d-6347-494c-bfd5-156f1d61221b fair_value 41000"
+    ],
+    "misdated_contexts": [
+      "0000950170-25-067098 C_9986ce28-ec84-48f4-97cc-d437d8ac5c55 2024-12-31 -> 2025-03-31"
     ]
   }
 }

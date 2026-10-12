@@ -330,6 +330,28 @@ def issuer_name_strip_patterns(wrapper_dir: Path | None = None) -> dict[str, str
     return result
 
 
+def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
+    """CIK -> regex whose first group is the filer's industry inside the member text
+    (dispatch.industry_from_identifier_re).
+
+    Goldman Sachs BDC writes '... AI Titan Parent, Inc. (dba Prometheus) Industry Software Interest Rate
+    11.94% ...': the industry is a column of the schedule, carried in the member, with no heading.
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, str] = {}
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        pattern = raw.get("dispatch", {}).get("industry_from_identifier_re")
+        if pattern:
+            if re.compile(pattern).groups < 1:
+                raise ValueError("industry_from_identifier_re needs one capture group: " + str(path))
+            result[raw["cik"]] = pattern
+    return result
+
+
 def issuer_name_strip_to_instrument_ciks(wrapper_dir: Path | None = None) -> set[str]:
     """CIKs whose wrapper sends the text removed by issuer_name_strip_re to a blank instrument_description
     (dispatch.issuer_name_strip_to_instrument: true)."""
