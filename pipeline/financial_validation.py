@@ -30,6 +30,11 @@ def violations(frame):
                       abs(TRY_CAST(interest_rate AS DOUBLE)-TRY_CAST(interest_rate_reported AS DOUBLE)-TRY_CAST(pik_rate AS DOUBLE))>1e-10
                  WHEN interest_rate_kind='all_in' AND isfinite(TRY_CAST(interest_rate_reported AS DOUBLE))
                  THEN TRY_CAST(interest_rate AS DOUBLE) IS DISTINCT FROM TRY_CAST(interest_rate_reported AS DOUBLE)
+                 -- A cash rate with no PIK tag, published as the coupon for a fund whose wrapper says an
+                 -- untagged PIK does not exist (decision D-112): labelled, and equal to the filed rate.
+                 WHEN interest_rate_kind='cash' AND isfinite(TRY_CAST(interest_rate_reported AS DOUBLE))
+                      AND list_contains(string_split(coalesce(CAST(src_transforms AS VARCHAR),''),';'),'interest_rate:cash_no_pik')
+                 THEN TRY_CAST(interest_rate AS DOUBLE) IS DISTINCT FROM TRY_CAST(interest_rate_reported AS DOUBLE)
                  -- A coupon taken from the PIK tag (decision D-018): labelled, and equal to the PIK rate.
                  WHEN interest_rate_kind='all_in' AND TRY_CAST(interest_rate_reported AS DOUBLE) IS NULL
                       AND list_contains(string_split(coalesce(CAST(src_transforms AS VARCHAR),''),';'),'interest_rate:pik_only')

@@ -2855,3 +2855,40 @@ The commitment-table rows were already excluded by rule. Built alone: 70 outstan
   Barings 12 to 52; unchanged in the other six.
 - Same kind of invention as the cost proxy the owner switched off (D-106), but for share counts,
   and nothing was changed: no ruling covers it.
+
+## 2026-10-12: eight-hour run (owner: "keep going, leaving all human decisions for the end ... run without interruption")
+
+Human decisions are collected in `docs/investigations/v05_owner_decisions_2026-10-12.md`. Local
+commits at checkpoints; nothing pushed or published.
+
+### D-112 Stepstone Private Credit Fund 0001950803 (sandbox `st1b`, before `d1a`)
+
+- **Rates, the largest error in this fund.** The filer changed its rate tags twice. For four
+  filings (2024-12-31 to 2025-09-30) the plain rate tag holds the SPREAD and the paid-in-cash tag
+  the rate; the pipeline kept the first and published the spread as the rate on 664 to 1,147 loans
+  a quarter (median 5.25). For the last two filings only the paid-in-cash tag exists and no rate
+  was published on 1,193 of 1,233 and 1,273 of 1,303 loans. Two wrapper-switched readings added
+  in shared code and set for this fund:
+  - `rate_tag_reading: ["cash_rate_with_plain_spread"]` (`pipeline/rate_tag_reading.py`): the
+    paid-in-cash tag is the rate; a plain tag beside it with no spread tag is the spread.
+  - `untagged_pik: ["none"]` (`pipeline/financial_conventions.py`): a rate tagged as the cash rate
+    with no PIK tag is the whole coupon, labelled `interest_rate:cash_no_pik` and admitted by the
+    schema check. The fund's column is 'Cash Interest Rate / PIK Rate' and a PIK row prints both.
+  - `filed_rate_reading: ["cash_leg"]` for the earlier filings.
+  Result: loans with no rate 5 / 15 / 15 / 16 / 18 / 21 / 39 / 86 / 1,193 / 1,273 by quarter to
+  1 / 1 / 0 / 1 / 4 / 2 / 8 / 6 / 5 / 6; median rate 9.78 at 2024-12-31 (was 5.25), 8.70 at
+  2026-03-31. Creek Parent 2024-12-31 printed '1M SOFR + 5.25 % / 0.75 % 12.75 %'.
+- **Totals.** Twin members told apart by a lower-case or glued suffix are kept
+  (`distinct_member_suffix_re` widened); CIFC Funding sub notes are a position (two leaf markers);
+  five rows of 2026-03-31 filed without the thousands scale corrected (15 values, each printed
+  line quoted). Published short of filed in six quarters before, three now: 2023-09-30 1.2M (Apex
+  twin whose label and cost differ), 2024-12-31 2.4M (Campany Roof twin whose member names no
+  issuer), 2025-09-30 10.0M (Puma Buyer: the page itself prints 3,829 for a 13,829 loan; owner).
+- **Result.** Ledger 48 outstanding. 15 proposed (printed twins flagged as duplicates). Left open
+  33: X05 x9, X02 x4, four provenance anchors, the two row-add rules that publish bare rows.
+- **Not done:** rows where the filer tagged the single printed rate with the PIK concept and no
+  cash tag (2025-03-31 to 2025-09-30, about 80 rows: PIK share overstated); issuer names still
+  carry the instrument (1,789 distinct names for 7,812 rows); 2023-09-30 names are the financing
+  facility; the hard-coded scale repair for the 2025 10-K stays in `bdc_filings.py`.
+- Tests: 256 pass (`test_financial_conventions`, `test_rate_tag_reading`, `test_source_encodings`,
+  `test_provenance_reverify`); two added.

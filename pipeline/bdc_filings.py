@@ -993,7 +993,7 @@ def _extract_investment_facts(
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored, prov_by_ctx)
     if margin_rate_tags:
         from pipeline.rate_tag_reading import settle
-        settle(facts_by_ctx, prov_by_ctx)
+        settle(facts_by_ctx, prov_by_ctx, mode=margin_rate_tags if isinstance(margin_rate_tags, str) else "coupon_with_margins")
 
     # Build output records
     records: list[dict[str, Any]] = []
@@ -1088,9 +1088,9 @@ def _parse_single_filing(
         return []
 
     contexts = parse_filing_contexts(tree, filing_meta)
-    from pipeline.rate_tag_reading import reads_margins
+    from pipeline.rate_tag_reading import reading as rate_tag_reading
     facts = _extract_investment_facts(tree, contexts, fair_value_aliases(filing_meta.get("cik", "")),
-                                      margin_rate_tags=reads_margins(filing_meta.get("cik", "")))
+                                      margin_rate_tags=rate_tag_reading(filing_meta.get("cik", "")))
     # A value the printed row shows and the tags lack, listed in the filer's wrapper.
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)

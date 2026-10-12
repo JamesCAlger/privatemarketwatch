@@ -51,3 +51,21 @@ def test_a_filer_without_the_setting_keeps_the_first_rate_fact():
 def test_settle_without_provenance():
     facts = {"a": {"interest_rate": 0.09, "_cash_margin": 0.02}}
     assert rtr.settle(facts) == 1 and facts["a"] == {"interest_rate": 0.09, "basis_spread": 0.02}
+
+
+def test_cash_rate_with_plain_spread_reads_the_plain_tag_as_the_spread():
+    # Stepstone 10-K 2024-12-31, Creek Parent: plain 0.0525 (the spread), paid-in-cash 0.1275 (the cash rate)
+    from pipeline import rate_tag_reading as rtr
+    facts = {"both": {"interest_rate": 0.0525}, "cash_only": {}, "tagged_spread": {"basis_spread": 0.05}, "untouched": {"interest_rate": 0.09}}
+    rtr.hold_cash_margin(facts["both"], 0.1275)
+    rtr.hold_cash_margin(facts["cash_only"], 0.087)
+    rtr.hold_cash_margin(facts["tagged_spread"], 0.087)
+    marks = {}
+    assert rtr.settle(facts, marks, mode="cash_rate_with_plain_spread") == 1
+    assert facts["both"]["interest_rate"] == 0.1275 and facts["both"]["basis_spread"] == 0.0525
+    assert facts["both"]["interest_rate_concept"] == "paid_in_cash"
+    assert marks["both"]["interest_rate"] == {"c": rtr.PAID_IN_CASH, "r": 0.1275}
+    assert marks["both"]["basis_spread"]["c"] == "investmentinterestrate"
+    assert facts["cash_only"]["interest_rate"] == 0.087 and "basis_spread" not in facts["cash_only"]
+    assert facts["tagged_spread"] == {"basis_spread": 0.05, "interest_rate": 0.087, "interest_rate_concept": "paid_in_cash"}
+    assert facts["untouched"] == {"interest_rate": 0.09}

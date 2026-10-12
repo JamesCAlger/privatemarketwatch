@@ -52,8 +52,16 @@ def pik_only_margin_funds(encodings=None):
     return {cik for cik,encoding in encodings.items() if 'margin' in encoding.get('pik_only_tag_reading',[])}
 
 
+def no_untagged_pik_funds(encodings=None):
+    """{cik10} whose wrappers set source_encodings.untagged_pik: ['none']."""
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings=load_encodings()
+    return {cik for cik,encoding in encodings.items() if encoding.get('untagged_pik')==['none']}
+
+
 def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False,fx_quotes=(),unit_adjudications=(),
-        rate_readings=None,pik_only_coupon=None,pik_only_margin=None):
+        rate_readings=None,pik_only_coupon=None,pik_only_margin=None,no_untagged_pik=None):
     """Prepare supported fields without allocating identity or inventing rates.
 
     ``rate_readings`` ({cik10: 'all_in' | 'cash_leg'}; default: the wrappers' filed_rate_reading)
@@ -69,6 +77,11 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     names the funds whose PIK tag on such a row holds a margin over the reference rate. Where
     the row's reference rate is known the margin is published as basis_spread; pik_rate keeps
     the filed number.
+
+    ``no_untagged_pik`` (set of cik10; default: wrappers with untagged_pik ['none']) names the
+    funds whose page shows a PIK figure on every row that has one, so a rate tagged as the cash
+    rate with no PIK tag on its context is the whole coupon (Stepstone prints 'Cash Interest Rate /
+    PIK Rate': '8.92 % / 2.88 %' on a PIK row, one figure otherwise).
 
     A fund in both sets files both kinds (Blue Owl). The row decides: a known reference rate
     makes the PIK figure a margin; it is the whole coupon only where the row has no reference
@@ -112,6 +125,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     pik_coupon=pd.DataFrame({'cik':pd.Series(sorted(pik_only_coupon),dtype='string')})
     if pik_only_margin is None: pik_only_margin=pik_only_margin_funds()
     pik_margin=pd.DataFrame({'cik':pd.Series(sorted(pik_only_margin),dtype='string')})
+    if no_untagged_pik is None: no_untagged_pik=no_untagged_pik_funds()
+    no_pik=pd.DataFrame({'cik':pd.Series(sorted(no_untagged_pik),dtype='string')})
     if frame.empty:
         return frame,pd.DataFrame(columns=['row_id','cost_state','donor_valid','source_cost_value',
             'source_rate_value','rate_kind','coupon_state','maturity_precision'])
@@ -123,6 +138,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         con.register("input",frame);con.register("nav",nav);con.register("taxonomy",hierarchy)
         con.register("prior_states",prior_states);con.register("rate_readings",readings)
         con.register("pik_coupon_funds",pik_coupon);con.register("pik_margin_funds",pik_margin)
+        con.register("no_untagged_pik_funds",no_pik)
         if con.execute('SELECT count(*) FROM (SELECT row_id FROM prior_states GROUP BY ALL HAVING count(*)>1)').fetchone()[0]:
             raise ValueError('Retained financial states repeat observation identity')
         if migrated and con.execute('SELECT count(*) FROM input i ANTI JOIN prior_states p USING(row_id)').fetchone()[0]:
@@ -159,6 +175,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                 AND nullif(trim(CAST(reference_rate_type AS VARCHAR)),'') IS NOT NULL AS pik_is_margin,
             regexp_matches(lower(coalesce(CAST(bdc_investment_identifier AS VARCHAR),'')||' '||
                 coalesce(CAST(instrument_description AS VARCHAR),'')),'(^|[^a-z])pik([^a-z]|$)|paid.in.kind|payment.in.kind') AS names_pik,
+            lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM no_untagged_pik_funds)
+                AS no_untagged_pik,
             cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
             src_field_overrides,src_transforms,source,fair_value_source,src_context_id,
             maturity_precision,maturity_date_source,maturity_date,
@@ -173,6 +191,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             coalesce(json_extract_string(TRY_CAST(src_facts AS JSON),'$.maturity_date.r'),'') AS maturity_raw
             FROM input""")
         con.execute("""CREATE TABLE conventions AS SELECT typed.row_id,reported_rate,reported_cost,pik,fv,
+            -- the fund's own column heading can name PIK on every row ('Cash Interest Rate / PIK Rate'),
+            -- so the row text is not consulted here: the setting says an untagged PIK does not exist
+            (no_untagged_pik AND NOT coalesce(isfinite(pik) AND pik<>0,false)) AS cash_is_all_in,
             -- A PIK tag that is the margin over a known reference rate, on a loan with no plain
             -- rate and no spread (HPS prints 'SF + 7.50 % PIK'): the margin is the spread.
             (pik_is_margin AND reported_rate IS NULL AND spread IS NULL AND coalesce(isfinite(pik) AND pik>0,false)) AS margin_from_pik,
@@ -247,7 +268,8 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
         con.execute("""CREATE TABLE calculated AS SELECT *,
             CASE WHEN rate_kind='all_in' AND isfinite(reported_rate) THEN reported_rate
                  WHEN rate_kind='all_in' AND reported_rate IS NULL AND isfinite(pik) THEN pik
-                 WHEN rate_kind='cash' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate+pik END AS all_in,
+                 WHEN rate_kind='cash' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate+pik
+                 WHEN rate_kind='cash' AND isfinite(reported_rate) AND cash_is_all_in THEN reported_rate END AS all_in,
             CASE WHEN rate_kind='cash' AND isfinite(reported_rate) THEN reported_rate
                  WHEN rate_kind='all_in' AND isfinite(reported_rate) AND isfinite(pik) THEN reported_rate-pik END AS cash,
             CASE WHEN precision_value='month' THEN last_day(coalesce(TRY_CAST(maturity_raw||'-01' AS DATE),TRY_CAST(maturity_date AS DATE)))
@@ -269,11 +291,13 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
             c.reported_rate AS interest_rate_reported,c.rate_kind AS interest_rate_kind,
             c.all_in AS interest_rate,c.cash AS interest_rate_cash,
             concat_ws(';',nullif(array_to_string(list_filter(string_split(coalesce(i.src_transforms,''),';'),
-                event -> event NOT IN ('interest_rate:cash_plus_pik','interest_rate:coupon_unresolved','interest_rate:pik_only')),';'),''),
+                event -> event NOT IN ('interest_rate:cash_plus_pik','interest_rate:cash_no_pik','interest_rate:coupon_unresolved','interest_rate:pik_only')),';'),''),
                 -- written once, when the spread is taken from the PIK tag; a later pass finds the spread
                 -- already filled and keeps the label it finds
                 CASE WHEN c.margin_from_pik THEN 'basis_spread:pik_margin' END,
-                CASE WHEN c.rate_kind='cash' AND c.all_in IS NOT NULL THEN 'interest_rate:cash_plus_pik'
+                CASE WHEN c.rate_kind='cash' AND c.all_in IS NOT NULL AND coalesce(isfinite(c.pik),false) THEN 'interest_rate:cash_plus_pik'
+                     -- a cash rate published as the coupon for a fund whose page shows every PIK part (untagged_pik: none)
+                     WHEN c.rate_kind='cash' AND c.all_in IS NOT NULL THEN 'interest_rate:cash_no_pik'
                      WHEN c.rate_kind='all_in' AND c.reported_rate IS NULL AND c.all_in IS NOT NULL THEN 'interest_rate:pik_only'
                      -- Unresolved means a filed rate whose meaning is unknown. A row that files no rate
                      -- has nothing to resolve (2026-10-06, decision D-010).

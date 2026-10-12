@@ -36,7 +36,9 @@
         "revolver",
         "incremental term loan",
         "initial term loan",
-        "closing date term loan"
+        "closing date term loan",
+        "sub notes",
+        "cifc funding"
       ],
       "equity": [
         "common stock",
@@ -139,7 +141,7 @@
         4
       ]
     },
-    "distinct_member_suffix_re": "\\s(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)$"
+    "distinct_member_suffix_re": "(?i)(?:[\\s|]+(?:one|two|three|four|five|six|seven|eight|nine|ten|[1-9])|/(?:19|20)\\d{2}(?:one|two|three|[1-9]))\\s*$"
   },
   "archetypes": {
     "debt": {
@@ -284,5 +286,19 @@
       "min_prevalence": 0.7,
       "description": "Segment 7 should be a maturity date for 7-segment identifiers"
     }
-  ]
+  ],
+  "source_encodings": {
+    "rate_tag_reading": [
+      "cash_rate_with_plain_spread"
+    ],
+    "untagged_pik": [
+      "none"
+    ],
+    "filed_rate_reading": [
+      "cash_leg"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ]
+  }
 }

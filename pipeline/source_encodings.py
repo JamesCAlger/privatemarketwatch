@@ -30,7 +30,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -73,8 +73,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('An untagged value reads "ACCESSION CONTEXT fair_value|cost|principal_amount NUMBER": '+str(path))
             if key=='schedule_row_tags' and set(values)-{'cost_or_percent_unrounded','quantity_or_percent','not_commitment_only'}:
                 raise ValueError('A schedule row test is cost_or_percent_unrounded, quantity_or_percent or not_commitment_only: '+str(path))
-            if key=='rate_tag_reading' and values!=['coupon_with_margins']:
-                raise ValueError('The only admitted rate tag reading is coupon_with_margins: '+str(path))
+            if key=='rate_tag_reading' and values not in (['coupon_with_margins'],['cash_rate_with_plain_spread']):
+                raise ValueError('A rate tag reading is coupon_with_margins or cash_rate_with_plain_spread: '+str(path))
+            if key=='untagged_pik' and values!=['none']:
+                raise ValueError('The only admitted untagged PIK reading is none: '+str(path))
             if key=='unfunded_rows' and values!=['net_of_tagged_commitment']:
                 raise ValueError('The only admitted unfunded row handling is net_of_tagged_commitment: '+str(path))
             if key=='investments_total_excludes' and values!=['cash_rows']:

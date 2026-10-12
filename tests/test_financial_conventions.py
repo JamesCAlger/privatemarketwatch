@@ -682,3 +682,17 @@ def test_with_the_proxy_switched_off_a_row_with_no_filed_cost_has_no_cost():
     assert pd.isna(by_id.loc["none","cost"]) and by_id.loc["none","cost_source"]!="first_observed_fv_proxy"
     assert evidence.loc["none","method"]=="not_filed" and pd.isna(evidence.loc["none","proxy_value"])
     assert by_id.loc["filed","cost"]==240000 and evidence.loc["filed","method"]=="reported"
+
+
+def test_a_cash_rate_with_no_pik_tag_is_the_coupon_only_for_a_fund_that_says_so():
+    # Stepstone prints 'Cash Interest Rate / PIK Rate' and shows a PIK figure on every row that has one (decision D-112).
+    cash={"interest_rate":{"r":0.087,"c":"investmentinterestratepaidincash"}}
+    frame=rows(dict(row_id="plain",interest_rate="8.7",pik_rate="",src_facts=json.dumps(cash),
+            instrument_description="Term Loan | Cash Interest Rate / PIK Rate | 8.70%"),
+        dict(row_id="pik",interest_rate="8.92",pik_rate="2.88",src_facts=json.dumps(cash)))
+    off,_=prepare(frame,no_untagged_pik=set())
+    on,_=prepare(frame,no_untagged_pik={"0000000123"})
+    off=off.set_index("row_id");on=on.set_index("row_id")
+    assert pd.isna(off.loc["plain","interest_rate"])
+    assert float(on.loc["plain","interest_rate"])==8.7 and "cash_plus_pik" not in str(on.loc["plain","src_transforms"])
+    assert round(float(on.loc["pik","interest_rate"]),2)==11.8 and round(float(off.loc["pik","interest_rate"]),2)==11.8

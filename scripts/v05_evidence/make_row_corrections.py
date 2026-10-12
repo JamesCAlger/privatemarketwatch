@@ -463,6 +463,32 @@ if MONROE in held:
             ORDER BY 1, 2""", [MONROE]).fetchall():
         SPECS.append((MONROE, quarter, identifier, EQUITY, MONROE_EQUITY_REASON + "'" + identifier + "'", "D-101"))
         EXACT.add(identifier)
+# decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
+# thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
+# thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).
+STEPSTONE = "0001950803"
+STEPSTONE_UNSCALED = {
+    "C_04d9b75a-b568-46a1-982e-5ed17907b776": "AKAM Buyer, Inc. Term A Loan: printed '2,158 2,126 2,137 0.10 %'",
+    "C_f3f8249a-840a-494c-972c-b36dd96ca1b5": "BBG, Inc. Initial Term Loan: printed '6,237 6,131 5,813 0.28 %'",
+    "C_c98bc2f5-33ff-4dfc-a955-379f2929fd2c": "Vacation Rental Brands, LLC Amendment No. 2 Incremental Term Loan: printed '2,209 2,189 2,187 0.10 %'",
+    "C_8eb7718f-54c7-47ca-a8af-43acd5177a10": "Accelevation LLC Delayed Draw Term Loan: printed '$ 2,380 $ 2,341 $ 2,380 0.11 %'",
+    "C_daddbb32-4155-4d60-b813-6dd811efe045": "Accelevation LLC Initial Term Loan: printed '2,848 2,813 2,802 0.13 %'",
+}
+if STEPSTONE in held:
+    for identifier, context, value, cost, principal in con.execute(f"""SELECT CAST(bdc_investment_identifier AS VARCHAR), CAST(src_context_id AS VARCHAR),
+            fair_value, cost, principal_amount FROM read_parquet('{S}/private_markets_holdings.parquet')
+            WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND CAST(report_date AS VARCHAR)[:10] = '2026-03-31'
+              AND CAST(src_context_id AS VARCHAR) IN (SELECT unnest(?)) AND abs(fair_value) < 10000 ORDER BY 1""",
+            [STEPSTONE, list(STEPSTONE_UNSCALED)]).fetchall():
+        fields = {"fair_value": "%d" % round(value * 1000)}
+        if cost is not None:
+            fields["cost"] = "%d" % round(cost * 1000)
+        if principal is not None:
+            fields["principal_amount"] = "%d" % round(principal * 1000)
+        SPECS.append((STEPSTONE, "2026-03-31", identifier, fields,
+                      "Facts tagged decimals=0 with the thousands figure as the value (context " + context + "); "
+                      + STEPSTONE_UNSCALED[context], "D-112"))
+        EXACT.add(identifier)
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
