@@ -53,6 +53,8 @@ def _prepare_holdings(df: pd.DataFrame) -> pd.DataFrame:
         "issuer_name", "instrument_description", "bdc_investment_identifier",
         "bdc_dimensions_raw", "fair_value", "cost", "principal_amount",
         "shares_held", "cusip", "isin",
+        # the context the published row was read from: its period is the row's period
+        "src_context_id",
     ]
     for col in needed:
         if col not in prepared.columns:
@@ -80,7 +82,7 @@ def _prepare_bdc_source(df: Optional[pd.DataFrame]) -> Optional[pd.DataFrame]:
     needed = [
         "cik", "report_date", "period", "accession_number",
         "investment_identifier", "dimensions_raw", "fair_value", "cost",
-        "principal_amount", "shares_held",
+        "principal_amount", "shares_held", "src_context_id",
     ]
     for col in needed:
         if col not in prepared.columns:
@@ -143,8 +145,25 @@ def build_position_purity_diagnostics(
              AND COALESCE(CAST(h.cost AS VARCHAR), '') = COALESCE(CAST(s.cost AS VARCHAR), '')
              AND COALESCE(CAST(h.principal_amount AS VARCHAR), '') = COALESCE(CAST(s.principal_amount AS VARCHAR), '')
              AND COALESCE(CAST(h.shares_held AS VARCHAR), '') = COALESCE(CAST(s.shares_held AS VARCHAR), '')
+            -- The row's own context, where the build recorded it. A published value can differ from
+            -- the source value (a unit count rescaled to the scale of earlier filings) and then match
+            -- only the prior-period fact: Blue Owl, Insight CP LP Interest, flagged in eight quarters
+            -- although published from the current context (decisions D-024, D-146, D-153).
+            LEFT JOIN (
+                SELECT
+                    right('0000000000' || regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10) AS ctx_cik,
+                    accession_number AS ctx_accession_number,
+                    src_context_id AS ctx_id,
+                    MAX(period) AS context_period
+                FROM bdc_source
+                WHERE NULLIF(TRIM(CAST(src_context_id AS VARCHAR)), '') IS NOT NULL
+                GROUP BY 1, 2, 3
+            ) c
+              ON right('0000000000' || regexp_replace(CAST(h.cik AS VARCHAR), '[^0-9]', '', 'g'), 10) = c.ctx_cik
+             AND COALESCE(CAST(h.accession_number AS VARCHAR), '') = COALESCE(CAST(c.ctx_accession_number AS VARCHAR), '')
+             AND NULLIF(TRIM(CAST(h.src_context_id AS VARCHAR)), '') = CAST(c.ctx_id AS VARCHAR)
         """
-        period_expr = "COALESCE(NULLIF(CAST(h.period AS VARCHAR), ''), s.source_period, '')"
+        period_expr = "COALESCE(NULLIF(CAST(h.period AS VARCHAR), ''), CAST(c.context_period AS VARCHAR), s.source_period, '')"
     else:
         period_join = ""
         period_expr = "COALESCE(CAST(h.period AS VARCHAR), '')"

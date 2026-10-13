@@ -266,3 +266,17 @@ def test_field_coverage_drop_says_nothing_on_thin_or_first_quarters_or_unpublish
     assert result[("2026-03-31", "principal on drawn loans")] is True
     assert not any(field == "unit count on equity" for _, field in result)
     assert not any(date == "2025-12-31" for date, _ in result)   # no previous quarter to compare with
+
+
+def test_field_coverage_counts_rows_with_a_positive_value_only():
+    # Blue Owl 2024-12-31: the commitments table is tagged from this filing; its rows carry a fair value of
+    # zero or below and no cost, maturity, industry or percent. The positions lost nothing.
+    bare = {"fair_value": -1.0, "cost": None, "maturity_date": None, "extracted_industry": None, "pct_of_net_assets": None,
+            "principal_amount": None}
+    rows = [{"report_date": "2024-09-30"} for _ in range(30)]
+    rows += [{"report_date": "2024-12-31"} for _ in range(30)] + [{"report_date": "2024-12-31", **bare} for _ in range(15)]
+    result = _coverage(rows)
+    assert all(holds for (date, _field), holds in result.items() if date == "2024-12-31")
+    # a field lost on the positions themselves is still a finding
+    rows += [{"report_date": "2025-03-31", "pct_of_net_assets": None} for _ in range(30)]
+    assert _coverage(rows)[("2025-03-31", "percent of net assets")] is False

@@ -3,32 +3,6 @@
  "sandbox": "t10a",
  "dispositions": [
   {
-   "disposition_id": "PD-field_coverage_drop-1812554-COMMITMENTS",
-   "class": "as_filed",
-   "engine": "identity",
-   "rule_name": "field_coverage_drop",
-   "ciks": [
-    "0001812554"
-   ],
-   "quarters": [
-    "2024-12-31"
-   ],
-   "statement": "From the 10-K for 2024-12-31 Blue Owl Credit Income tags the rows of its commitments table (about 220 undrawn lines a quarter). That table prints a commitment type, an expiration date, the funded and unfunded commitment and a fair value: no cost, no maturity, no industry and no percent of net assets. Coverage of those four fields falls from 100 to about 69 pct because these rows were added, not because a field was lost on the position rows. The rows are published under the owner's ruling 'keep the undrawn lines'.",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001812554-25-000009: 'Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Unfunded Commitment Fair Value (34) ... PetVet Care Centers, LLC First lien senior secured revolving loan 11/2029 - 33,258 ( 1,413 )'. Context c-1419 carries InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount 33,258,000 and a fair value net of unamortized fees of -1,413,000; no cost, maturity or percent fact."
-    },
-    {
-     "source": "query",
-     "quote": "Sandbox t5u: 2024-09-30 971 rows, all with cost and percent; 2024-12-31 714 rows, of which 494 carry cost, industry and percent and 220 carry none of cost and maturity (fair value -9.7M in total)."
-    }
-   ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/owl.sql",
-   "decided_by": "proposed by agent 2026-10-13; a new reason, for the owner",
-   "decided_on": "2026-10-13"
-  },
-  {
    "disposition_id": "PD-field_coverage_drop-1812554-PERCENT",
    "class": "as_filed",
    "engine": "identity",
@@ -132,35 +106,6 @@
     }
    ],
    "rerun": "python scratch/2026-10-13_left/pg.py 1925309 000095017025101397 \"Cordance\" 1 420",
-   "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
-   "decided_on": "2026-10-13"
-  },
-  {
-   "disposition_id": "PD-PP03-1812554-B",
-   "class": "not_applicable",
-   "engine": "row_validation",
-   "rule_name": "PP03",
-   "ciks": [
-    "0001812554"
-   ],
-   "quarters": [
-    "2023-09-30",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30"
-   ],
-   "statement": "The flagged equity rows are current-period rows of each schedule. The rule tracks them because their unit count, cost and value equal the prior period's. They appeared once the unit counts of these rows were published (D-150). The reason already recorded for this fund (DS-024-1812554) and accepted for Oaktree (DS-N5-PP03-1872371-READ, D-146).",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC), 'LP Interest N/A N/A 989 989 1,239' printed in the schedules of 0001812554-25-000030 (2025-03-31), 0001812554-25-000052 (2025-06-30) and 0001812554-25-000081 (2025-09-30); published from the filings' own contexts c-568, c-610 and c-584."
-    },
-    {
-     "source": "filing",
-     "quote": "0001812554-23-000030 (2023-09-30): 'Amergin Asset Management, LLC Class A Units N/A N/A 50,000,000 $ - $ -'; 'Hercules Buyer, LLC (dba The Vincit Group) Common Units N/A N/A 10 10 11'; 'Maia Aggregator, LP Class A-2 Units N/A N/A 12,921,348 $ 12,921 $ 13,711'; 'PCF Holdco, LLC (dba PCF Insurance Services) Class A Units N/A N/A 6,047,390 15,3..'. Published from contexts c-560, c-571, c-578 and c-602 of that filing with the same figures as at 2023-06-30."
-    }
-   ],
-   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/pp03.sql",
    "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
    "decided_on": "2026-10-13"
   }

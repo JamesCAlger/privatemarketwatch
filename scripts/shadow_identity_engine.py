@@ -126,14 +126,18 @@ COVERAGE_FIELDS = (
     ("principal on drawn loans", "asset_category = 'LOAN' AND fair_value > 0", "principal_amount IS NOT NULL"),
     ("rate or spread on drawn loans", "asset_category = 'LOAN' AND fair_value > 0",
      "(interest_rate IS NOT NULL OR basis_spread IS NOT NULL)"),
-    ("maturity on loans", "asset_category = 'LOAN'", "maturity_date IS NOT NULL"),
+    ("maturity on drawn loans", "asset_category = 'LOAN' AND fair_value > 0", "maturity_date IS NOT NULL"),
     ("reference rate on floating loans", "asset_category = 'LOAN' AND basis_spread IS NOT NULL",
      "nullif(trim(CAST(reference_rate_type AS VARCHAR)), '') IS NOT NULL"),
-    ("cost", "TRUE", "cost IS NOT NULL"),
+    ("cost", "fair_value > 0", "cost IS NOT NULL"),
     ("unit count on equity", "asset_category LIKE 'EQUITY%'", "shares_held IS NOT NULL"),
-    ("percent of net assets", "TRUE", "pct_of_net_assets IS NOT NULL"),
-    ("filer industry", "TRUE", "nullif(trim(CAST(extracted_industry AS VARCHAR)), '') IS NOT NULL"),
+    ("percent of net assets", "fair_value > 0", "pct_of_net_assets IS NOT NULL"),
+    ("filer industry", "fair_value > 0", "nullif(trim(CAST(extracted_industry AS VARCHAR)), '') IS NOT NULL"),
 )
+# Every field counts rows with a positive fair value only (owner, 2026-10-13). A filer that starts
+# tagging its commitments table adds rows that never carry cost, maturity, industry or percent
+# (Blue Owl from 2024-12-31: about 220 a quarter, fair value zero or negative); counted, they read
+# as a drop on the positions, which lost nothing. A field lost on undrawn lines alone is not seen.
 COVERAGE_MIN_ROWS = 20
 
 

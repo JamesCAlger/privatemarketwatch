@@ -36,3 +36,21 @@ def test_unchanged_position_present_in_both_periods_is_current():
 
 def test_row_found_only_in_the_prior_period_is_still_flagged():
     assert "comparative_period" in _families(_source(["2024-12-31"]))
+
+
+def _with_contexts(holding_context, holding_units, source_rows):
+    """Blue Owl shape: units 989 in the current context and 989,000 in the comparative one; published 989,000."""
+    holdings = _holdings().assign(src_context_id=holding_context, shares_held=holding_units)
+    source = pd.concat([_source([period]).assign(src_context_id=context, shares_held=units)
+                        for period, context, units in source_rows], ignore_index=True)
+    diagnostics, _ = build_position_purity_diagnostics(holdings, source)
+    return set(diagnostics["issue_family"]) if len(diagnostics) else set()
+
+
+def test_a_row_takes_the_period_of_its_own_context_when_its_values_match_only_the_prior_fact():
+    rows = [("2024-12-31", "c-1947", "989000.0"), ("2025-03-31", "c-568", "989.0")]
+    assert "comparative_period" not in _with_contexts("c-568", "989000.0", rows)
+    # published from the comparative context: still a prior-period row
+    assert "comparative_period" in _with_contexts("c-1947", "989000.0", rows)
+    # no context recorded on the row: the value match decides, as before
+    assert "comparative_period" in _with_contexts("", "989000.0", rows)

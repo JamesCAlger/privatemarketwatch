@@ -3697,3 +3697,29 @@ rows, unit count on 1), 49 quotes found in the filings, no forbidden file touche
   would have killed another session's build. Both go into the brief.
 
 "39 with a proposal" is not "data correct".
+
+### D-155 Two rule repairs, by owner ruling (sandbox `owlr1`)
+
+Owner, 2026-10-13: "do it" to both repairs proposed after the reversal of D-153's self-accepted
+dispositions.
+
+- **PP03 (prior-period row)** found a row's period by matching its published values against the
+  source rows. A published value that differs from the source value (a unit count rescaled to the
+  scale of earlier filings) then matched only the prior-period fact. The rule now takes the period
+  of the row's own context where the build recorded one (`src_context_id`), and matches on values
+  only where it did not. `pipeline/position_purity.py`, one test with the Blue Owl shape and its
+  two counter-cases.
+- **field_coverage_drop** counted every published row for cost, maturity, industry and percent of
+  net assets. It now counts rows with a positive fair value for every field, as it already did for
+  principal and rate. A filer that starts tagging its commitments table (Blue Owl from 2024-12-31,
+  about 220 rows a quarter with a value of zero or below) no longer reads as a drop on the
+  positions. Not seen any more: a field lost on undrawn lines alone.
+  `scripts/shadow_identity_engine.py`, one test.
+- **Measured on Blue Owl with 2026-06-30** (`owlr1` against `t10a`): outstanding 6 to 1; the four
+  PP03 findings and the 2024-12-31 coverage finding are gone; no new finding; no quarter stopped
+  tying. The one left is the 2025-03-31 percent-of-net-assets drop, which is real (the filer
+  stopped printing it) and stays a proposal. Eight rows lost their GICS label between the two
+  builds; cause not traced (the fund was built alone this time).
+- Not measured: any other fund. Both rules are shared.
+- Top ten after this: 11 outstanding, all with a proposal, in four groups (Ares 2007-3R x6, Sixth
+  Street LP no par printed x3, Blue Owl percent x1, Ares Strategic Income JPMMT x1).
