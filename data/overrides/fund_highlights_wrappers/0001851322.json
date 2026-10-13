@@ -9,7 +9,31 @@
    "field": "net_assets",
    "value": 1898269000,
    "evidence": "0001851322-23-000097 (10-Q, 2023-09-30) balance sheet: 'Total members' capital $ 1,898,269 $ 1,266,213 Total liabilities and members' capital $ 3,082,164 $ 2,075,223'. The published 1,266,213,000 is the 2022-12-31 column; total assets 3,082,164 less total liabilities 1,183,895 is 1,898,269."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "distribution_per_share",
+   "value": 0.4524,
+   "evidence": "0001851322-24-000048 (10-K, 2023-12-31) distributions table: 'October 27, 2023 October 31, 2023 November 03, 2023 0.1510 15,903 November 28, 2023 November 30, 2023 December 05, 2023 0.1502 16,848 December 27, 2023 December 31, 2023 January 4, 2024 0.1512 18,455 Total Distributions $ 1.7666 $ 161,416'. The three declarations of the quarter sum to 0.4524. The filer tagged the year's 1.77 on a context dated 2023-10-01 to 2023-12-31 as well as on the year, so the year's figure was published for the quarter."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "distribution_per_share",
+   "value": 0.4485,
+   "evidence": "0001851322-25-000023 (10-K, 2024-12-31) distributions table: 'October 25, 2024 October 31, 2024 November 05, 2024 0.1498 25,240 November 27, 2024 November 29, 2024 December 04, 2024 0.1495 25,681 December 26, 2024 December 31, 2024 January 06, 2025 0.1492 26,178 Total Distributions $ 1.8067 $ 282,812'. The three declarations of the quarter sum to 0.4485. The filer tagged the year's 1.81 on a context dated 2024-10-01 to 2024-12-31 as well as on the year."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "income_yield_pct",
+   "value": 6.39,
+   "evidence": "0001851322-22-000075 (10-Q, 2022-09-30) financial highlights: 'Ratio of net investment income to average Members Capital (5) 6.39 % - %'. The filed ratio for the nine months is 0.0639 (annualised); the year-to-date split read it as a running total and published 6.39 less 4.94 = 1.45."
+  },
+  {
+   "report_date": "2022-03-31",
+   "field": "net_expenses",
+   "value": 1608000,
+   "evidence": "0001851322-23-000045 (10-Q, 2023-03-31, comparative column for the three months ended March 31, 2022): 'Total expenses 26,616 3,244 Expense support (Note 3) - ( 535 ) Management fees waiver (Note 3) - ( 1,101 ) Net expenses 26,616 1,608 Net investment income (loss) 30,486 3,758'. No net-expenses fact is filed for that quarter (the first is for the three months to 2022-06-30)."
   }
  ],
- "notes": "One quarter only: the prior year-end net assets were taken for 2023-09-30."
+ "notes": "Fund-level figures read from the page: 2023-09-30 net assets (the prior year-end had been taken); the fourth-quarter distribution per unit of 2023 and 2024 (the year's figure is also tagged on a three-month context); the annualised income ratio at 2022-09-30; net expenses for the first quarter of 2022."
 }

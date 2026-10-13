@@ -1,12 +1,13 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "n1b",
+ "sandbox": "nhxb",
  "dispositions": [
   {
    "disposition_id": "PD-X02-1851322-1",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
    "ciks": [
     "0001851322"
    ],
@@ -20,53 +21,71 @@
     "2025-09-30",
     "2026-03-31"
    ],
-   "statement": "Loans with no rate and no spread because none is tagged: Sweep Midco second lien (two rows a quarter) is printed with no rate; at 2025-06-30 three non-accrual loans print a rate that the filer did not tag, so the published rows are incomplete as filed.",
+   "statement": "Every row still flagged is one of the two Sweep Midco, LLC second lien lines (fair value 0 to 0.7M). The schedule prints no reference rate, no spread and no interest rate on them in any of the eight filings, and the filer tags none. The two other rows flagged at 2025-06-30 printed a rate and were corrected from the page, not dispositioned. No fix applies to the Sweep Midco lines: there is no rate on the page to declare.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001193125-26-221623: 'Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02'. 0001851322-25-000070: 'First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249' (Continental Battery, context c-41) with no InvestmentInterestRate fact."
+     "accession": "0001851322-24-000076",
+     "verbatim": "Sweep Midco LLC (5) (8) (17) 03/12/2034 528 264 264 0.01",
+     "quote": "'Sweep Midco LLC (5) (8) (17) 03/12/2034 528 264 264 0.01': 2024-03-31, nothing between the footnotes and the maturity."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-24-000115",
+     "verbatim": "Sweep Midco, LLC (6) (15) Second Lien Debt 3/12/2034 528 264 264 0.01",
+     "quote": "'Sweep Midco, LLC (6) (15) Second Lien Debt 3/12/2034 528 264 264 0.01': 2024-06-30, no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-24-000148",
+     "verbatim": "Sweep Midco, LLC (6) (7) (10) (15) Second Lien Debt 3/12/2034 1,086 542 543 0.02",
+     "quote": "'Sweep Midco, LLC (6) (7) (10) (15) Second Lien Debt 3/12/2034 1,086 542 543 0.02': 2024-09-30, no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "verbatim": "Sweep Midco, LLC (6) (7) (18) Second Lien Debt 03/12/2034 1,086 543 703 0.02",
+     "quote": "'Sweep Midco, LLC (6) (7) (18) Second Lien Debt 03/12/2034 1,086 543 703 0.02': 2024-12-31, no rate cells; the second line reads '03/12/2036 3,156 - - -'."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "Sweep Midco, LLC (6) (7) (10) (17) Second Lien Debt 3/12/2034 1,086 543 539 0.02",
+     "quote": "'Sweep Midco, LLC (6) (7) (10) (17) Second Lien Debt 3/12/2034 1,086 543 539 0.02': 2025-03-31, no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000070",
+     "verbatim": "Sweep Midco, LLC (6) (7) (18) Second Lien Debt 3/12/2034 1,086 542 674 0.02",
+     "quote": "'Sweep Midco, LLC (6) (7) (18) Second Lien Debt 3/12/2034 1,086 542 674 0.02': 2025-06-30, no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-274423",
+     "verbatim": "Sweep Midco, LLC (6) (7) (17) Second Lien Debt 03/12/2034 1,086 542 679 0.02",
+     "quote": "'Sweep Midco, LLC (6) (7) (17) Second Lien Debt 03/12/2034 1,086 542 679 0.02': 2025-09-30, no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02",
+     "quote": "'Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02': 2026-03-31, no rate cells; the second line reads '03/12/2036 3,156 - - 0.00'."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer cited two GB Eagle Buyer, Inc. rows printed 'S + 4.75 % 11/29/2030 8,547 $ 8,466 $ 8,462 7.42 %' and '1,998 1,978 1,978 1.73' and found the 4.75 spread missing. Those are rows of the joint venture North Haven Keystone's own schedule (the percent is of the joint venture's net assets). They are no longer published (rule exclude_keystone_lookthrough), so the finding no longer covers them. The two rows the rule flags in this build are the Sweep Midco lines, which print no rate."
+   },
+   "rerun": "python scripts/v05_evidence/flagged.py nhxb X02 0001851322 2026-03-31",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-SRC_BDC01-1851322-2",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
-   "ciks": [
-    "0001851322"
-   ],
-   "quarters": [
-    "2025-03-31",
-    "2025-06-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "statement": "Rows reported as missing are removed on purpose: the look-through schedule of the joint venture North Haven Keystone, LLC (2025-12-31, 2026-03-31; rule exclude_keystone_lookthrough) and the KWOR Acquisition issuer subtotal (2025-03-31, 2025-06-30; rule exclude_kwor_bare_issuer_aggregate).",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001193125-26-221623: consolidated 'Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %'; the Keystone schedule's own total is 296,441 / 294,975. 0001851322-25-000044: four KWOR debt lines '13,405 ... 4,468 ... 75 ... 111 ... 17,876 18,059 0.53 Total Debt Investments - non-controlled/affiliated'; context c-1029 holds the issuer subtotal 22,107."
-    },
-    {
-     "source": "query",
-     "quote": "Sandbox n1b: published excluding cash equals the filed investments total within 0.5M in all 13 quarters."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
-  },
-  {
-   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1851322-3",
-   "class": "as_filed",
-   "engine": "source_recon",
-   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
    "ciks": [
     "0001851322"
    ],
@@ -74,23 +93,77 @@
     "2025-03-31",
     "2025-06-30"
    ],
-   "statement": "The KWOR Acquisition issuer subtotal (2025-03-31, 2025-06-30), excluded by rule.",
+   "statement": "The one source row reported as missing in each quarter (22,107 thousand at 2025-03-31, 22,417 at 2025-06-30) is the total of the fund's KWOR positions from the affiliated-investments roll-forward note, which the filer tagged on a member spelled like a position ('KWOR Acquisition, Inc. 5'). Rule exclude_kwor_bare_issuer_aggregate removes it; the six KWOR schedule lines it sums are published. No fix applies: publishing it would count the issuer twice.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001851322-25-000044: 'KWOR Acquisition, Inc. 5' context c-1029, 22,107: the four debt lines 18,059 plus the equity line."
+     "accession": "0001851322-25-000044",
+     "verbatim": "KWOR Acquisition, Inc. (a) $ - $ 21,924 $ - $ 183 $ - $ 22,107 $ 179",
+     "quote": "'KWOR Acquisition, Inc. (a) $ - $ 21,924 $ - $ 183 $ - $ 22,107 $ 179': 2025-03-31, the affiliated-investments roll-forward in the notes; 22,107 is the fair value of all KWOR positions together. Footnote: '(a) Inclusive of positions titled KWOR Intermediate I, Inc.'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "Non-controlled/affiliated investments, at fair value (amortized cost of $ 21,924 and $ - ) 22,107 -",
+     "quote": "'Non-controlled/affiliated investments, at fair value (amortized cost of $ 21,924 and $ - ) 22,107 -': the same figure on the balance sheet. The six schedule lines are published: debt 13,405 + 4,468 + 75 + 111 = 18,059 and equity 1,069 + 2,979 = 4,048, together 22,107."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000070",
+     "verbatim": "KWOR Acquisition, Inc. (a) $ - $ 22,243 $ - $ 174 $ - $ 22,417 $ 695",
+     "quote": "'KWOR Acquisition, Inc. (a) $ - $ 22,243 $ - $ 174 $ - $ 22,417 $ 695': 2025-06-30, the same roll-forward line; 22,417 is the figure reported as missing."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/page_line.py 0001851322 0001851322-25-000044 \"KWOR Acquisition, Inc. (a)\"",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-blocking_source_pct_leaf_parser_mismatch-1851322-4",
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1851322-3",
    "class": "as_filed",
    "engine": "source_recon",
-   "rule_name": "blocking_source_pct_leaf_parser_mismatch",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "The one source row reported as missing in each quarter (22,107 thousand at 2025-03-31, 22,417 at 2025-06-30) is the total of the fund's KWOR positions from the affiliated-investments roll-forward note, which the filer tagged on a member spelled like a position ('KWOR Acquisition, Inc. 5'). Rule exclude_kwor_bare_issuer_aggregate removes it; the six KWOR schedule lines it sums are published. No fix applies: publishing it would count the issuer twice.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "KWOR Acquisition, Inc. (a) $ - $ 21,924 $ - $ 183 $ - $ 22,107 $ 179",
+     "quote": "'KWOR Acquisition, Inc. (a) $ - $ 21,924 $ - $ 183 $ - $ 22,107 $ 179': 2025-03-31, the affiliated-investments roll-forward in the notes; 22,107 is the fair value of all KWOR positions together. Footnote: '(a) Inclusive of positions titled KWOR Intermediate I, Inc.'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "Non-controlled/affiliated investments, at fair value (amortized cost of $ 21,924 and $ - ) 22,107 -",
+     "quote": "'Non-controlled/affiliated investments, at fair value (amortized cost of $ 21,924 and $ - ) 22,107 -': the same figure on the balance sheet. The six schedule lines are published: debt 13,405 + 4,468 + 75 + 111 = 18,059 and equity 1,069 + 2,979 = 4,048, together 22,107."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000070",
+     "verbatim": "KWOR Acquisition, Inc. (a) $ - $ 22,243 $ - $ 174 $ - $ 22,417 $ 695",
+     "quote": "'KWOR Acquisition, Inc. (a) $ - $ 22,243 $ - $ 174 $ - $ 22,417 $ 695': 2025-06-30, the same roll-forward line; 22,417 is the figure reported as missing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001851322 0001851322-25-000044 \"KWOR Acquisition, Inc. (a)\"",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1851322-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-rows-are-a-joint-ventures-own-schedule",
    "ciks": [
     "0001851322"
    ],
@@ -98,178 +171,348 @@
     "2025-12-31",
     "2026-03-31"
    ],
-   "statement": "The joint venture's look-through rows (2025-12-31 97 rows 249.685M, 2026-03-31 120 rows 294.975M), excluded by rule; their percent is of the joint venture's net assets.",
+   "statement": "The source rows reported as missing (60 rows, 249.6M at 2025-12-31; 76 rows, 289.2M at 2026-03-31) are all rows of the schedule of the joint venture North Haven Keystone, LLC printed in the notes. The filer tags them on the plain investment-identifier axis with no joint-venture member, so they read as the fund's own positions; rule exclude_keystone_lookthrough removes them and the fund's totals tie. The fund's stake is published as one line. Not fixed here: the repository's standing treatment is to keep such rows flagged as an underlying schedule, and no wrapper setting can mark them for this filer (the contexts carry no joint-venture member and no running number); the rule is also pinned to these two quarters. Both points are parked in the fund report.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Context C_2cb91b05-bd37-41a1-82c4-5b3df09d0263: 'TA Polaris Buyer, Inc. Investment First Lien Debt Reference Rate and Spread S + 4.50% Maturity Date 12/13/2032', fair value 9,681,000, percent 0.0987; the fund's own row for the borrower is context C_b9823564, 10,327,000."
+     "accession": "0001193125-26-221623",
+     "verbatim": "Total First Lien Debt $ 296,441 $ 294,975 258.51 % Total Portfolio Investments $ 296,441 $ 294,975 258.51 %",
+     "quote": "'Total First Lien Debt $ 296,441 $ 294,975 258.51 % Total Portfolio Investments $ 296,441 $ 294,975 258.51 %': 2026-03-31, the total of the joint venture's own schedule in the notes (percent of the joint venture's net assets)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "GB Eagle Buyer, Inc. (3) (5) First Lien Debt S + 4.75 % 11/29/2030 8,547 $ 8,466 $ 8,462 7.42 %",
+     "quote": "'GB Eagle Buyer, Inc. (3) (5) First Lien Debt S + 4.75 % 11/29/2030 8,547 $ 8,466 $ 8,462 7.42 %': a row of that schedule: 7.42 pct of the joint venture's net assets, no interest rate column."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "North Haven Keystone, LLC (15) (17) (20) LLC Interest 10/30/2025 100,438,800 100,439 99,225 3.07",
+     "quote": "'North Haven Keystone, LLC (15) (17) (20) LLC Interest 10/30/2025 100,438,800 100,439 99,225 3.07': the fund's own schedule carries its stake in the joint venture as one line, 99,225; that line is published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %",
+     "quote": "'Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %': the fund's own total at 2026-03-31; published rows sum to it without the joint venture's rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "Total Portfolio Investments $ 249,905 $ 249,685 254.62 %",
+     "quote": "'Total Portfolio Investments $ 249,905 $ 249,685 254.62 %': 2025-12-31 (10-K/A), the total of the joint venture's schedule."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %",
+     "quote": "'Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %': the fund's own total at 2025-12-31; published rows sum to it without the joint venture's rows."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/so.sql",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-SRC_BDC02-1851322-5",
+   "disposition_id": "PD-blocking_source_pct_leaf_parser_mismatch-1851322-5",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_pct_leaf_parser_mismatch",
+   "reason_key": "src-missing-rows-are-a-joint-ventures-own-schedule",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "The source rows reported as missing (60 rows, 249.6M at 2025-12-31; 76 rows, 289.2M at 2026-03-31) are all rows of the schedule of the joint venture North Haven Keystone, LLC printed in the notes. The filer tags them on the plain investment-identifier axis with no joint-venture member, so they read as the fund's own positions; rule exclude_keystone_lookthrough removes them and the fund's totals tie. The fund's stake is published as one line. Not fixed here: the repository's standing treatment is to keep such rows flagged as an underlying schedule, and no wrapper setting can mark them for this filer (the contexts carry no joint-venture member and no running number); the rule is also pinned to these two quarters. Both points are parked in the fund report.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "Total First Lien Debt $ 296,441 $ 294,975 258.51 % Total Portfolio Investments $ 296,441 $ 294,975 258.51 %",
+     "quote": "'Total First Lien Debt $ 296,441 $ 294,975 258.51 % Total Portfolio Investments $ 296,441 $ 294,975 258.51 %': 2026-03-31, the total of the joint venture's own schedule in the notes (percent of the joint venture's net assets)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "GB Eagle Buyer, Inc. (3) (5) First Lien Debt S + 4.75 % 11/29/2030 8,547 $ 8,466 $ 8,462 7.42 %",
+     "quote": "'GB Eagle Buyer, Inc. (3) (5) First Lien Debt S + 4.75 % 11/29/2030 8,547 $ 8,466 $ 8,462 7.42 %': a row of that schedule: 7.42 pct of the joint venture's net assets, no interest rate column."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "North Haven Keystone, LLC (15) (17) (20) LLC Interest 10/30/2025 100,438,800 100,439 99,225 3.07",
+     "quote": "'North Haven Keystone, LLC (15) (17) (20) LLC Interest 10/30/2025 100,438,800 100,439 99,225 3.07': the fund's own schedule carries its stake in the joint venture as one line, 99,225; that line is published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "verbatim": "Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %",
+     "quote": "'Total Portfolio Investments $ 6,472,428 $ 6,342,711 196.38 %': the fund's own total at 2026-03-31; published rows sum to it without the joint venture's rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "Total Portfolio Investments $ 249,905 $ 249,685 254.62 %",
+     "quote": "'Total Portfolio Investments $ 249,905 $ 249,685 254.62 %': 2025-12-31 (10-K/A), the total of the joint venture's schedule."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %",
+     "quote": "'Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %': the fund's own total at 2025-12-31; published rows sum to it without the joint venture's rows."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/so.sql",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC02-1851322-6",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "SRC_BDC02",
+   "reason_key": "page-added-row-has-no-tagged-fact",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-03-31"
    ],
-   "statement": "One row added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags no fact for it, so it has no source context.",
+   "statement": "One row (fair value 1.09M) is added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags none of its values, so the row has no source context to reconcile or re-verify against. Its values are the printed ones. No fix applies: a value can be declared on an existing context only, and this line has none.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001851322-25-000044: 'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03'; the instance has no fact of 1,093,000."
+     "accession": "0001851322-25-000044",
+     "verbatim": "Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03",
+     "quote": "'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03': 2025-03-31, the first of two printed Atlas Purchaser lines. The instance holds no fact of 1,093,000 and no cost fact of 915,000 on an Atlas member (members 'Atlas Purchaser, Inc.', '... 1', '... 2' exist; the second printed line, 2,524 / 1,674 / 1,287, is tagged and published)."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/fact_members.py 0001851322 0001851322-25-000044 1093000",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-no_provenance-1851322-6",
+   "disposition_id": "PD-no_provenance-1851322-7",
    "class": "as_filed",
    "engine": "provenance_reverify",
    "rule_name": "no_provenance",
+   "reason_key": "page-added-row-has-no-tagged-fact",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-03-31"
    ],
-   "statement": "The same page-added Atlas Purchaser row (1.09M): there is no tag to verify it against.",
+   "statement": "One row (fair value 1.09M) is added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags none of its values, so the row has no source context to reconcile or re-verify against. Its values are the printed ones. No fix applies: a value can be declared on an existing context only, and this line has none.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001851322-25-000044: 'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03'."
+     "accession": "0001851322-25-000044",
+     "verbatim": "Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03",
+     "quote": "'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03': 2025-03-31, the first of two printed Atlas Purchaser lines. The instance holds no fact of 1,093,000 and no cost fact of 915,000 on an Atlas member (members 'Atlas Purchaser, Inc.', '... 1', '... 2' exist; the second printed line, 2,524 / 1,674 / 1,287, is tagged and published)."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/fact_members.py 0001851322 0001851322-25-000044 1093000",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-reference_rate_printed-1851322-7",
-   "class": "rule_problem",
+   "disposition_id": "PD-reference_rate_printed-1851322-8",
+   "class": "as_filed",
    "engine": "identity",
    "rule_name": "reference_rate_printed",
+   "reason_key": "reference-rate-code-in-the-member-not-on-the-printed-row",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-09-30"
    ],
-   "statement": "One row of 631: the page reader took the cell 'S + 7.00 % PIK' as no reference rate; the published SOFR is what the page and the member print.",
+   "statement": "One row of 631 tested: Continental Battery Company (fair value 4.0M, on non-accrual). In the 10-Q for 2025-09-30 the printed row omits the reference-rate code and shows '7.00 % PIK' alone, so the page reader records no reference rate; the filer's own member for the row reads 'Reference Rate and Spread S + 7.00% PIK Interest Rate 11.29%', and the filings before and after print 'S + 7.00 % PIK'. Published is SOFR, from the member. No fix applies: the published value is the filer's.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Continental Battery Company, 2025-09-30, member '... First Lien Debt Reference Rate and Spread S + 7.00% PIK Interest Rate 11.29% Maturity Date 07/20/2028'; printed 'First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028'."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
-  },
-  {
-   "disposition_id": "PD-income_identity-1851322-8",
-   "class": "as_filed",
-   "engine": "identity",
-   "rule_name": "income_identity",
-   "ciks": [
-    "0001851322"
-   ],
-   "quarters": [
-    "2022-03-31"
-   ],
-   "statement": "A fund-level row of 2022-03-31, before the first published schedule (2023-03-31); no holdings are published for it.",
-   "basis": "read",
-   "evidence": [
+     "accession": "0001193125-25-274423",
+     "verbatim": "Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11",
+     "quote": "'Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11': 2025-09-30, the printed row without the 'S +'."
+    },
     {
-     "source": "query",
-     "quote": "Sandbox n1b: first published holdings quarter 2023-03-31; fund-level rows exist from 2021-03-03."
+     "source": "filing",
+     "accession": "0001851322-25-000070",
+     "verbatim": "Continental Battery Company (6) (7) (8) (14) First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249 0.12",
+     "quote": "'Continental Battery Company (6) (7) (8) (14) First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249 0.12': 2025-06-30, the same loan printed with the code."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/ref.sql",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-B07-1851322-9",
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "B07",
+   "reason_key": "b07-original-and-amendment-filed-for-one-period",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-12-31"
    ],
-   "statement": "Two filings for 2025-12-31: the 10-K 0001193125-26-088367 and the 10-K/A 0001193125-26-096532 (832 rows each); the amendment is the one published.",
+   "statement": "Two filings exist for 2025-12-31: the 10-K 0001193125-26-088367 and the 10-K/A 0001193125-26-096532, which repeats the whole report to correct the auditor's signature. The amendment is the one published; both print the same schedule total. The earlier reviewer could not see the first accession and left it for a human; both are on disk and were read here.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "Reconciliation status superseded_amendment on the 10-K's rows (97 debt, 22 equity look-through and the rest), sandbox n1b."
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "is filing this Amendment No. 1 to the Annual Report on Form 10-K/A (the Amendment) solely for the purpose of correcting the signature in the Report of Independent Registered Public Accounting Firm",
+     "quote": "'is filing this Amendment No. 1 to the Annual Report on Form 10-K/A (the Amendment) solely for the purpose of correcting the signature in the Report of Independent Registered Public Accounting Firm': the amendment's explanatory note."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088367",
+     "verbatim": "Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %",
+     "quote": "'Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %': the original 10-K's schedule total."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %",
+     "quote": "'Total Portfolio Investments $ 6,699,473 $ 6,610,610 195.59 %': the amendment's schedule total, the same."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/page_line.py 0001851322 0001193125-26-096532 \"Amendment No. 1\"",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-B02-1851322-10",
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "B02",
+   "reason_key": "b02-twin-undrawn-lines-printed-separately",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-09-30"
    ],
-   "statement": "Position keys counted as duplicates are tranche twins whose members differ only by a trailing ' One' / ' Two'; each is published as its own row.",
+   "statement": "The 26 rows counted are 13 pairs of undrawn lines of one borrower with the same terms, no par and the same fair value (0 in twelve pairs, -10 thousand in one). Each line of a pair is printed separately, sits on its own context and member (ending 'One' / 'Two'), has its own cost and its own position id. Nothing is repeated. No fix applies.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "2025-12-31 Vehlo Purchaser: three rows 2.015M / 46.013M / 0.0; the only affiliation-dedup exclusions are inside the Keystone look-through set (reading, group 11)."
+     "source": "filing",
+     "accession": "0001193125-25-274423",
+     "verbatim": "AuditBoard, Inc. (6) (10) (18) First Lien Debt S + 4.50 % 8.50 % 07/14/2031 - ( 67 ) - -",
+     "quote": "'AuditBoard, Inc. (6) (10) (18) First Lien Debt S + 4.50 % 8.50 % 07/14/2031 - ( 67 ) - -': 2025-09-30, the first undrawn AuditBoard line, cost -67."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-274423",
+     "verbatim": "AuditBoard, Inc. (6) (10) (18) First Lien Debt S + 4.50 % 8.50 % 07/14/2031 - ( 54 ) - -",
+     "quote": "'AuditBoard, Inc. (6) (10) (18) First Lien Debt S + 4.50 % 8.50 % 07/14/2031 - ( 54 ) - -': the second, cost -54."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-274423",
+     "verbatim": "Emburse, Inc. (6) (11) (18) First Lien Debt S + 4.25 % 8.25 % 05/28/2032 - ( 5 ) ( 10 ) 0.00",
+     "quote": "'Emburse, Inc. (6) (11) (18) First Lien Debt S + 4.25 % 8.25 % 05/28/2032 - ( 5 ) ( 10 ) 0.00': the pair with a fair value: this line cost -5, the next cost -9, both fair value -10."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/b02.sql",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-B01-1851322-11",
-   "class": "rule_problem",
-   "engine": "oracle",
-   "rule_name": "B01",
+   "disposition_id": "PD-C103-1851322-11",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "Two rows: undrawn revolvers of Pound Bidco, Inc. (fair value -1 thousand) and Zarya Intermediate, LLC (-4 thousand), printed with a dash for par and for cost and a negative mark; the same marks are in the unfunded-commitments table. Published equals the page. The same reason is already accepted by check for this fund's other quarters (DS-LARGE3-C103-1851322).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "verbatim": "Pound Bidco, Inc. (6) (10) (15) (19) First Lien Debt S + 6.00 % 10.86 % 02/01/2027 - - ( 1 ) -",
+     "quote": "'Pound Bidco, Inc. (6) (10) (15) (19) First Lien Debt S + 6.00 % 10.86 % 02/01/2027 - - ( 1 ) -': 2024-12-31, the flagged Pound Bidco row; footnote (19) marks an unfunded commitment."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "verbatim": "Pound Bidco, Inc. Revolver 02/01/2027 388 ( 1 )",
+     "quote": "'Pound Bidco, Inc. Revolver 02/01/2027 388 ( 1 )': the same mark in the unfunded-commitments table."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "verbatim": "Zarya Intermediate, LLC (6) (10) (15) (19) First Lien Debt S + 6.50 % 11.01 % 07/01/2027 - - ( 4 ) -",
+     "quote": "'Zarya Intermediate, LLC (6) (10) (15) (19) First Lien Debt S + 6.50 % 11.01 % 07/01/2027 - - ( 4 ) -': the flagged Zarya row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "verbatim": "Zarya Intermediate, LLC Revolver 07/01/2027 3,789 ( 4 )",
+     "quote": "'Zarya Intermediate, LLC Revolver 07/01/2027 3,789 ( 4 )': the same mark in the unfunded-commitments table."
+    }
+   ],
+   "addresses_verdict": {
+    "2024-12-31": "The reviewer found the negative values correct as filed ('not a fair-value amount error') and asked that the rows carry an unfunded-commitment marker; it cited the commitments-table lines of Helios Service Partners and Tidi Legacy Products, which are not the flagged rows. The flagged rows are Pound Bidco and Zarya Intermediate; both print '- - ( 1 ) -' and '- - ( 4 ) -' and are published so. The holdings have no unfunded-marker column to set, so there is no published value to correct."
+   },
+   "rerun": "python scripts/v05_evidence/flagged.py nhxb C103 0001851322 2024-12-31",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-nonaccrual_flag-1851322-12",
+   "class": "informational",
+   "engine": "nonaccrual",
+   "rule_name": "nonaccrual_flag",
+   "reason_key": "nonaccrual-flag-confirmed-by-the-filed-non-accrual-total",
    "ciks": [
     "0001851322"
    ],
    "quarters": [
     "2025-12-31"
    ],
-   "statement": "Leaves counted without a fair value are equity contexts that carry only an acquisition date (duration contexts), comparative-period rows and the superseded 10-K.",
+   "statement": "The rule reports that loans are on non-accrual, a credit fact and not a data defect (standing disposition DS-001). Nine published rows carry the flag at 2025-12-31; their cost sums to 121,125 thousand, the amortized cost of non-accrual investments the filing states. Nothing to correct.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "37 / 40 such equity contexts at 2025-09-30 / 2025-12-31 (reading, group 12); published equals filed in both quarters."
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "The amortized cost of investments on non-accrual status as of December 31, 2025 and December 31, 2024 was $ 121,125 and $ 29,237 , respectively.",
+     "quote": "'The amortized cost of investments on non-accrual status as of December 31, 2025 and December 31, 2024 was $ 121,125 and $ 29,237 , respectively.': the filed totals; the nine flagged rows at 2025-12-31 sum to 121,125 and the four at 2024-12-31 to 29,237."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "verbatim": "(14) Investment was on non-accrual status as of December 31, 2025",
+     "quote": "'(14) Investment was on non-accrual status as of December 31, 2025': the footnote the flag is read from."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001851322.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-100); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer's verdict of a real error is a confirmation, not a defect: it found the nine flagged rows' cost sums to the filed 121,125 and wrote 'the flag is therefore source-grounded and not a false alarm'. The remediation staged from it was pulled because there was nothing to change. Re-checked here: the same nine rows carry the flag and sum to 121,125."
+   },
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/na.sql",
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
+   "decided_on": "2026-10-14"
   }
  ]
 }

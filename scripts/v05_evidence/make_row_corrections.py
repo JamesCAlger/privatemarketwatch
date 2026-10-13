@@ -489,6 +489,140 @@ if NH in held:
               AND asset_category = 'FUND' ORDER BY 1""", [NH]).fetchall():
         SPECS.append((NH, quarter, "TruGreen Limited Partnership", {"asset_category": "LOAN", "issuer_category": "CORPORATE"},
                       NH_TRUGREEN_REASON, "D-100"))
+# North Haven, fund loop 2026-10-14: values the page prints and the filer left untagged, or tagged with another concept.
+# Each printed line was read with page_line.py in the filing of that quarter.
+NH_LOOP = "D-1851322-fundloop"
+NH_MARGIN = ("The filer tagged the margin of this loan with the PIK concept only (no spread fact), so it was published with no "
+             "spread and a Fixed coupon; the printed line reads ")
+NH_FLOAT = {"coupon_type": "Floating"}
+NH_SPECTRUM_27 = ("Automobile Components Spectrum Automotive Holdings Corp. Investment Reference Rate and Spread S + 5.25% Interest "
+                  "Rate 9.41% Maturity Date 06/29/2027")
+NH_SPECTRUM_28 = ("Automobile Components Spectrum Automotive Holdings Corp. Investment Reference Rate and Spread S + 5.25% Interest "
+                  "Rate 9.41% Maturity Date 06/29/2028 One")
+NH_SPECTRUM = ("The member names no instrument type, so the whole member was published as the issuer; the printed lines read "
+               "'Spectrum Automotive Holdings Corp. (6) (11) (18) First Lien Debt S + 5.25 % 9.41 % 06/29/2028 3,225 3,181 3,225 0.09' "
+               "and 'Spectrum Automotive Holdings Corp. (6) (11) (18) First Lien Debt S + 5.25 % 9.41 % 06/29/2027 - ( 2 ) - -' "
+               "(0001193125-25-274423)")
+NH_FAMILIA = "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods)"
+NH_LOOP_SPECS = [
+    # margin printed as 'S + x % PIK' or 'S + x % (incl. y % PIK)', spread not tagged
+    ("2023-06-30", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. (5) (8) (10) S + 6.25 % PIK 11.35 % PIK 5/25/2029 10,925 10,751 10,457 0.64'"),
+    ("2023-09-30", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. (5) (9) (11) S + 6.25 % PIK 11.35 % 05/25/2029 11,246 11,077 10,912 0.57'"),
+    ("2023-09-30", "Applitools, Inc. 2", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. (5) (9) (11) (14) S + 6.25 % PIK 11.35 % 05/25/2028 - ( 22 ) ( 42 ) -'"),
+    ("2023-12-31", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (5) (9) (11) | S + | 6.25% PIK | 11.61% | 05/25/2029 | 11,578 | 11,415 | 11,301 | 0.49'"),
+    ("2024-03-31", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (5) (9) (12) | S + | 6.25% PIK | 11.58% | 05/25/2029 | 11,921 | 11,763 | 11,674 | 0.43'"),
+    ("2024-06-30", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (6) (10) (13) | First Lien Debt | S + | 6.25% PIK | 11.59% | 5/25/2029 | 12,273 | 12,121 | 12,128 | 0.40'"),
+    ("2024-09-30", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (6) (7) (11) (13) | First Lien Debt | S + | 6.25% PIK | 10.85% | 5/25/2029 | 14,453 | 14,288 | 14,307 | 0.46'"),
+    ("2024-12-31", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (6) (7) (11) (15) | First Lien Debt | S + | 6.25% PIK | 10.58% | 05/25/2029 | 14,855 | 14,696 | 14,727 | 0.45'"),
+    ("2025-03-31", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (6) (7) (11) (15) | First Lien Debt | S + | 6.25% PIK | 10.55% | 5/25/2029 | 15,247 | 15,096 | 15,152 | 0.44'"),
+    ("2025-06-30", "Applitools, Inc. 1", {"basis_spread": "6.25", **NH_FLOAT},
+     NH_MARGIN + "'Applitools, Inc. | (6) (7) (11) (15) | First Lien Debt | S + | 6.25% PIK | 10.55% | 5/25/2029 | 15,654 | 15,510 | 15,497 | 0.45'"),
+    ("2024-03-31", "Sweep Purchaser, LLC 1", {"basis_spread": "5.75", **NH_FLOAT},
+     NH_MARGIN + "'Sweep Purchaser, LLC | (5) | S + | 5.75% PIK | 11.07% | 06/30/2027 | 1,804 | 1,804 | 1,804 | 0.07'"),
+    ("2024-12-31", "Sweep Purchaser, LLC 1", {"basis_spread": "5.75", **NH_FLOAT},
+     NH_MARGIN + "'Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.24 % 06/30/2027 3,986 3,986 3,986 0.12'"),
+    ("2025-03-31", "Sweep Purchaser, LLC 1", {"basis_spread": "5.75", **NH_FLOAT},
+     NH_MARGIN + "'Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.15 % 6/30/2027 4,077 4,077 4,077 0.12'"),
+    ("2025-06-30", "Sweep Purchaser, LLC 1", {"basis_spread": "5.75", **NH_FLOAT},
+     NH_MARGIN + "'Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.17 % 6/30/2027 4,171 4,171 4,171 0.12'"),
+    ("2024-12-31", "Abracon Group Holdings, LLC 1", {"basis_spread": "6.6", **NH_FLOAT},
+     NH_MARGIN + "'Abracon Group Holdings, LLC (6) (7) (8) (11) First Lien Debt S + 6.60 % (incl. 4.60 % PIK) 11.30 % 07/06/2028 "
+     "28,077 27,329 20,825 0.64'"),
+    ("2024-12-31", "Abracon Group Holdings, LLC 2", {"basis_spread": "6.6", **NH_FLOAT},
+     NH_MARGIN + "'Abracon Group Holdings, LLC (6) (11) First Lien Debt S + 6.60 % (incl. 4.60 % PIK) 11.30 % 07/06/2028 1,858 "
+     "1,810 1,378 0.04'"),
+    ("2024-12-31", "Magneto Components Buyco, LLC 1", {"basis_spread": "6", **NH_FLOAT},
+     NH_MARGIN + "'Magneto Components Buyco, LLC (6) (7) (8) (9) (11) First Lien Debt S + 6.00 % (incl. 1.50 % PIK) 10.33 % "
+     "12/05/2030 48,174 47,401 47,846 1.46'"),
+    ("2024-12-31", "Magneto Components Buyco, LLC 2", {"basis_spread": "6", **NH_FLOAT},
+     NH_MARGIN + "'Magneto Components Buyco, LLC (6) (11) (19) First Lien Debt S + 6.00 % (incl. 1.50 % PIK) 10.33 % 12/05/2030 - "
+     "( 74 ) ( 65 ) -'"),
+    ("2024-12-31", "Magneto Components Buyco, LLC 3", {"basis_spread": "6", **NH_FLOAT},
+     NH_MARGIN + "'Magneto Components Buyco, LLC (6) (11) (19) First Lien Debt S + 6.00 % (incl. 1.50 % PIK) 10.33 % 12/05/2029 - "
+     "( 119 ) ( 54 ) -'"),
+    ("2025-03-31", "BP Purchaser, LLC 1", {"basis_spread": "5.5", **NH_FLOAT},
+     NH_MARGIN + "'BP Purchaser, LLC (6) (7) (8) (11) First Lien Debt S + 5.50 % PIK 10.06 % 12/11/2028 34,285 32,916 30,191 0.89'"),
+    ("2025-03-31", "KWOR Acquisition, Inc. 2", {"basis_spread": "8", **NH_FLOAT},
+     NH_MARGIN + "'KWOR Acquisition, Inc. (6) (10) (20) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 4,468 4,468 4,468 0.13'"),
+    ("2025-06-30", "KWOR Acquisition, Inc. 1", {"basis_spread": "8", **NH_FLOAT},
+     NH_MARGIN + "'KWOR Acquisition, Inc. (6) (10) (20) Other Debt S + 8.00 % PIK 12.30 % 2/28/2030 4,604 4,604 4,604 0.13'"),
+    ("2025-03-31", "Atlas Purchaser, Inc.", {"basis_spread": "7.5", "pik_rate": "6.5", **NH_FLOAT},
+     "No spread or PIK fact on the row's context (rate 11.94 only); the printed line reads 'Atlas Purchaser, Inc. (6) (7) First "
+     "Lien Debt S + 7.50% (incl. 6.50% PIK) 11.94 % 5/5/2028 2,524 1,674 1,287 0.04'"),
+    ("2025-06-30", "Continental Battery Company", {"interest_rate": "11.29", "basis_spread": "7", **NH_FLOAT},
+     "On non-accrual; the context carries the PIK fact only (no rate, no spread). The printed line reads 'Continental Battery "
+     "Company (6) (7) (8) (14) First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249 0.12'"),
+    # rate printed, not tagged
+    ("2023-03-31", "Applitools, Inc. 1", {"interest_rate": "11.06"},
+     "The rate is tagged with the PIK concept only; the printed line reads 'Applitools, Inc. (5) (8) (10) S + 6.25 % PIK 11.06 % "
+     "PIK 05/25/2029 10,621 10,442 10,100 0.72'"),
+    ("2023-03-31", "Applitools, Inc. 2", {"interest_rate": "11.06"},
+     "The rate is tagged with the PIK concept only; the printed line reads 'Applitools, Inc. (5) (8) (10) (12) S + 6.25 % PIK "
+     "11.06 % PIK 05/25/2028 - ( 24 ) ( 69 ) -'"),
+    ("2024-09-30", "Ascend Learning, LLC", {"interest_rate": "8.44"},
+     "No rate fact on the row's context; the printed line reads 'Ascend Learning, LLC (12) First Lien Debt S + 3.50 % 8.44% "
+     "12/11/2028 4,869 4,862 4,844 0.15'"),
+    ("2025-06-30", "Astra Acquisition Corp. 1", {"interest_rate": "9.55"},
+     "On non-accrual; no rate fact on the row's context. The printed line reads 'Astra Acquisition Corp. (14) First Lien Debt "
+     "S + 5.25 % 9.55% 2/25/2028 844 759 206 0.01'"),
+    ("2025-06-30", "Astra Acquisition Corp. 2", {"interest_rate": "9.55"},
+     "On non-accrual; no rate fact on the row's context. The printed line reads 'Astra Acquisition Corp. (14) First Lien Debt "
+     "S + 5.25 % 9.55% 10/25/2028 1,185 676 8 -'"),
+    ("2025-06-30", NH_FAMILIA, {"interest_rate": "16.25"},
+     "On non-accrual; the context carries the PIK fact only. The printed line reads 'Familia Intermediate Holdings I Corp. "
+     "(Teasdale Latin Foods) (6) (14) Other Debt 16.25 % PIK 6/18/2028 500 328 28 -': a fixed coupon of 16.25, all of it PIK"),
+    ("2023-06-30", "Fetch Insurance Services, LLC",
+     {"interest_rate": "12.75", "basis_spread": "", "coupon_type": "Fixed", "reference_rate_type": "", "reference_rate_source": ""},
+     "The fixed coupon is tagged with the spread concept and no rate fact, so it was published as a floating spread over LIBOR; "
+     "the printed line reads 'Fetch Insurance Services, LLC (5) 12.75 % (incl. 3.75 % PIK) 10/31/2027 2,513 $ 2,447 $ 2,438 0.15 %'"),
+    # preferred equity printed with a floating margin, tagged as a rate in this one filing
+    ("2023-06-30", "RSK Holdings, Inc. (Riskonnect)", {"interest_rate": "", "basis_spread": "10.5", **NH_FLOAT},
+     "The margin is tagged with the rate concept in this filing (spread concept in the others); the printed line reads 'RSK "
+     "Holdings, Inc. (Riskonnect) (5) (8) (11) S + 10.50 % 7/7/2022 10,358,600 10,774 11,705 0.72'"),
+    ("2023-06-30", "Revalize, Inc.", {"interest_rate": "", "basis_spread": "10", **NH_FLOAT},
+     "The margin is tagged with the rate concept in this filing (spread concept in the others); the printed line reads "
+     "'Revalize, Inc. (5) (7) (11) S + 10.00 % 4/14/2022 1,164 1,302 1,327 0.08'"),
+    # PIK printed, not tagged
+    ("2024-06-30", "Any Hour, LLC 4", {"pik_rate": "13"},
+     "No PIK fact on the row's context; the printed line reads 'Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 5/23/2031 2,982 "
+     "2,924 2,924 0.10'"),
+    ("2024-12-31", NH_FAMILIA, {"pik_rate": "16.25"},
+     "No PIK fact on the row's context; the printed line reads 'Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) (6) "
+     "(17) Other Debt 16.25 % PIK 16.25 % 06/18/2026 500 277 295 0.01'"),
+    ("2024-06-30", "Sweep Purchaser, LLC 1", {"pik_rate": "5.75"},
+     "The margin is tagged with the spread concept and no PIK fact; the printed line reads 'Sweep Purchaser, LLC (6) (9) First "
+     "Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 1,850 1,850 1,850 0.06'"),
+    ("2024-09-30", "Sweep Purchaser, LLC 1", {"pik_rate": "5.75"},
+     "The margin is tagged with the spread concept and no PIK fact; the printed line reads 'Sweep Purchaser, LLC (6) (7) (10) "
+     "First Lien Debt S + 5.75 % PIK 10.80 % 6/30/2027 3,892 3,892 3,892 0.12'"),
+    # preferred equity published as common
+    ("2025-03-31", "KWOR Intermediate I, Inc. 2", {**PREFERRED, "asset_class": "PRIVATE_EQUITY", "basis_spread": "8", **NH_FLOAT},
+     "Printed under Equity Investments as preferred equity with a floating PIK margin, tagged with the PIK concept only: 'KWOR "
+     "Intermediate I, Inc. (6) (18) (20) Preferred Equity S + 8.00 % PIK 2/28/2025 2,978,848 2,979 2,979 0.09'"),
+    ("2025-06-30", "KWOR Intermediate I, Inc. 2", {**PREFERRED, "asset_class": "PRIVATE_EQUITY", "basis_spread": "8", **NH_FLOAT},
+     "Printed under Equity Investments as preferred equity with a floating PIK margin, tagged with the PIK concept only: 'KWOR "
+     "Intermediate I, Inc. (6) (16) (20) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09'"),
+    # member without an instrument type
+    ("2025-09-30", NH_SPECTRUM_27,
+     {"issuer_name": "Spectrum Automotive Holdings Corp.",
+      "instrument_description": "First Lien Debt Reference Rate and Spread S + 5.25% Interest Rate 9.41% Maturity Date 06/29/2027"},
+     NH_SPECTRUM),
+    ("2025-09-30", NH_SPECTRUM_28,
+     {"issuer_name": "Spectrum Automotive Holdings Corp.",
+      "instrument_description": "First Lien Debt Reference Rate and Spread S + 5.25% Interest Rate 9.41% Maturity Date 06/29/2028"},
+     NH_SPECTRUM),
+]
+SPECS += [(NH, quarter, phrase, fields, reason, NH_LOOP) for quarter, phrase, fields, reason in NH_LOOP_SPECS]
+EXACT |= {phrase for _quarter, phrase, _fields, _reason in NH_LOOP_SPECS}
 # decision D-101: Monroe rows of the Equity Securities section whose label names no share class ('..., Equity Securities',
 # '(Equity commitment funded) | Equity Securities', '(LLC interest)') are published with category OTHER. Built from the rows
 # the sandbox still shows as OTHER; every one of them carries the section or an equity word in its member.

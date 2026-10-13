@@ -151,7 +151,12 @@ CLASS_NAV_PREFERENCE = "share_class_consensus"
 
 # Fund-level figures a wrapper may correct from the filing page.
 FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "investments_at_fair_value",
-                           "nav_per_share", "shares_outstanding"})
+                           "nav_per_share", "shares_outstanding",
+                           # Quarter figures of the same frame that a filer's duration facts can get wrong (North
+                           # Haven: the year's distribution per unit filed again on a three-month context; an
+                           # annualised income ratio that the year-to-date split reads as a running total; net
+                           # expenses printed for a quarter and not tagged).
+                           "distribution_per_share", "income_yield_pct", "net_expenses"})
 
 
 def apply_figure_corrections(balance_df):

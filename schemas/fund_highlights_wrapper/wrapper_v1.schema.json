@@ -122,7 +122,10 @@
               "net_assets",
               "investments_at_fair_value",
               "nav_per_share",
-              "shares_outstanding"
+              "shares_outstanding",
+              "distribution_per_share",
+              "income_yield_pct",
+              "net_expenses"
             ]
           },
           "value": {

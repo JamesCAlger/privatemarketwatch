@@ -3781,3 +3781,32 @@ refuse a proposal over an earlier real-error verdict that it does not answer).
 - The page check was changed after it failed 12 of the 34 rows (MSD prints the percent as '0.00'
   without a sign; a figure equal to the row's own percent is now accounted for). Tested, but it is
   a check adjusted after seeing it fail.
+
+### D-158 North Haven Private Income cleared through the fund-clearing skill (sandbox `nhxb`)
+
+Overnight run of 2026-10-13/14 (owner: "you have 8 hours to run funds and assess the output").
+Gate PASS on the first round; two builds.
+
+- **Ledger:** 61 findings, 23 outstanding (30 before), all 23 with a proposal (12 entries). Totals
+  tie in 13 of 13 quarters with holdings; the 2022 quarters have no holdings.
+- **Fixed, findings:** C206 2025-09-30 (two Spectrum Automotive rows named by their whole member);
+  F16 and F33 at 2023-12-31 and 2024-12-31 (the year's distribution per unit filed on a
+  three-month context); F16 2022-09-30 (income ratio 1.45 published, page 6.39); income_identity
+  2022-03-31 (net expenses printed, not tagged); two X02 rows at 2025-06-30.
+- **Fixed, no rule had flagged it:** 85 values on 41 rows to 2025-06-30, mostly loans whose margin
+  is printed 'S + x % PIK' and tagged as PIK only, published Fixed with no spread (24 rows).
+- **Shared code:** `FIGURE_FIELDS` in `pipeline/fund_highlights_wrapper.py` gains
+  distribution_per_share, income_yield_pct and net_expenses (acts only where a fund's highlights
+  wrapper lists one). Module tests pass. Not measured on another fund until the end-of-run check.
+- **Orchestrator's sample:** five corrected rows read on the page (Applitools 2023-06-30, Magneto
+  2024-12-31, Atlas 2025-03-31, Fetch Insurance 2023-06-30, KWOR Intermediate preferred
+  2025-03-31): all five match. The proposals were not sampled.
+- **Parked or left, in the observations log** (`docs/investigations/v05_observations.csv`, 13
+  entries): the Keystone joint venture's schedule is dropped by a rule pinned to two quarters where
+  the standing treatment is retain and flag; preferred dividend rates not published from
+  2025-09-30; one lien tier differs from the page and is not a correctable field; fund income for
+  two year-ends holds only a mis-dated incentive fee; a position chain links rows of very
+  different size; cash and money-market rows are never published for this fund.
+- A stale test of mine from D-146 (two Sixth Street corrections expected, three exist) is fixed.
+- Rows from 2025-09-30 on were not read against the page by the agent (the page-reader join it
+  used ends at 2025-06-30).

@@ -413,5 +413,39 @@ class TestFigureCorrections:
         fhw.invalidate_cache()
         wrappers = fhw.get_all_highlights_wrappers()
         assert dict((d, v) for d, f, v in wrappers["0001925309"].figure_corrections) == {
-            "2023-06-30": 1758911000.0, "2023-09-30": 2048389000.0}
+            "2023-06-30": 1758911000.0, "2023-09-30": 2048389000.0, "2024-03-31": 4277564000.0}
         assert ("2022-03-31", "nav_per_share", 25.04) in wrappers["0001872371"].figure_corrections
+
+    def test_a_quarter_figure_is_corrected_only_for_the_fund_that_lists_it(self, tmp_path, monkeypatch):
+        """North Haven files the year's distribution per unit (1.77) on a three-month context as well."""
+        import pandas as pd
+        from pipeline import fund_highlights_wrapper as fhw
+        spec = self._spec(tmp_path, [
+            {"report_date": "2023-12-31", "field": "distribution_per_share", "value": 0.4524,
+             "evidence": "10-K: per unit amounts 0.1510, 0.1502 and 0.1512 declared in October to December 2023"},
+            {"report_date": "2022-09-30", "field": "income_yield_pct", "value": 6.39,
+             "evidence": "10-Q: 'Ratio of net investment income to average Members Capital (5) 6.39 %'"},
+            {"report_date": "2022-03-31", "field": "net_expenses", "value": 1608000,
+             "evidence": "10-Q: 'Net expenses 26,616 1,608'"}])
+        assert len(spec.figure_corrections) == 3
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        frame = pd.DataFrame([
+            {"cik": "0001930087", "report_date": "2023-12-31", "distribution_per_share": 1.77, "income_yield_pct": 0.0934},
+            {"cik": "0001930087", "report_date": "2022-09-30", "distribution_per_share": 0.32, "income_yield_pct": 0.0145},
+            {"cik": "0001930087", "report_date": "2022-03-31", "distribution_per_share": 0.13, "income_yield_pct": 0.0418},
+            # another fund whose year-end figure is also a full-year one: no wrapper entry, so it is not touched
+            {"cik": "0001803498", "report_date": "2023-12-31", "distribution_per_share": 2.53, "income_yield_pct": 0.1}])
+        out = fhw.apply_figure_corrections(frame).set_index(["cik", "report_date"])
+        assert out.loc[("0001930087", "2023-12-31"), "distribution_per_share"] == 0.4524
+        assert out.loc[("0001930087", "2022-09-30"), "income_yield_pct"] == 6.39
+        assert out.loc[("0001930087", "2022-03-31"), "net_expenses"] == 1608000.0
+        assert out.loc[("0001930087", "2022-09-30"), "distribution_per_share"] == 0.32  # other dates keep the filed figure
+        assert out.loc[("0001803498", "2023-12-31"), "distribution_per_share"] == 2.53
+        assert pd.isna(out.loc[("0001803498", "2023-12-31"), "net_expenses"])
+
+    def test_an_income_statement_total_is_still_not_a_correctable_figure(self, tmp_path):
+        spec = self._spec(tmp_path, [
+            {"report_date": "2023-12-31", "field": "total_investment_income", "value": 1.0, "evidence": "not a field a wrapper may set"},
+            {"report_date": "2023-12-31", "field": "distribution_rate", "value": 9.5, "evidence": "a derived ratio, never corrected"}])
+        assert spec.figure_corrections == ()
