@@ -511,6 +511,24 @@ if STONEPOINT in held:
         SPECS.append((STONEPOINT, "2025-12-31", identifier, fields,
                       "Value cells tagged decimals=0 with no scale (context " + context + "); " + STONEPOINT_UNSCALED[context], "D-117"))
         EXACT.add(identifier)
+# decision D-127: Bain Capital Private Credit. Facts filed unscaled (decimals 0, the thousands figure as the value).
+BAIN = "0001899017"
+BAIN_UNSCALED = {  # context prefix: (quarter, fields to scale, printed line)
+    "C_22bde640-5d46-4955-8bb8-e49a7f3a69b9": ("2025-09-30", ("fair_value",), "KAMC Holdings, Inc. First Lien Senior Secured Loan: printed '$ 32,926 32,566 32,556'"),
+    "C_36e891cf-dc76-4eea-84bf-58986d2ce511": ("2025-09-30", ("fair_value",), "KAMC Holdings, Inc. Revolver: printed '$ 986 944 943'"),
+    "C_942fddf9": ("2025-12-31", ("fair_value", "cost", "principal_amount"), "Spotless Brands Delayed Draw: printed '$ 9,618 9,586 9,618'"),
+    "C_4f113ac1": ("2025-12-31", ("fair_value", "cost", "principal_amount"), "Spindrift Subordinated Debt: printed '$ 1,574 1,536 1,574'"),
+}
+if BAIN in held:
+    for prefix, (quarter, columns, printed) in BAIN_UNSCALED.items():
+        for identifier, context, value, cost, principal in con.execute(f"""SELECT CAST(bdc_investment_identifier AS VARCHAR),
+                CAST(src_context_id AS VARCHAR), fair_value, cost, principal_amount FROM read_parquet('{S}/private_markets_holdings.parquet')
+                WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND CAST(report_date AS VARCHAR)[:10] = ?
+                  AND starts_with(CAST(src_context_id AS VARCHAR), ?) AND abs(fair_value) < 100000""", [BAIN, quarter, prefix]).fetchall():
+            current = {"fair_value": value, "cost": cost, "principal_amount": principal}
+            fields = {name: "%d" % round(current[name] * 1000) for name in columns if current[name] is not None and abs(current[name]) < 100000}
+            SPECS.append((BAIN, quarter, identifier, fields, "Filed unscaled (context " + context + "); " + printed, "D-127"))
+            EXACT.add(identifier)
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

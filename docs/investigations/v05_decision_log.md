@@ -3094,3 +3094,34 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   then the industry on the next line, and the reader takes the company as the heading (183
   "headings", all withdrawn by the guard of D-116). Same layout in New Mountain Private Credit.
   The 1,315 loans with no rate are undrawn rows that print none (as filed).
+
+### D-126 New Mountain Private Credit 0002037804, Blackstone Private Real Estate Credit 0002049733, AB Private Credit Investors 0001634452, KKR FS Income Trust Select 0001975736
+
+- **New Mountain Private Credit** (`np1a`, held back): published equals filed; 42 outstanding, 41
+  after a check-accepted entry. No change. Industry cannot be read (same layout as Guardian IV).
+- **Blackstone Private Real Estate Credit** (`br1a`): 1 finding outstanding; published equals filed.
+  All 379 rows are classed direct lending, with no industry and no instrument description (the
+  member is the property or sponsor name). Its class is an owner question.
+- **AB Private Credit Investors** (`ab1b`): the industry is the member segment after the issuer;
+  read by `industry_from_identifier_re`: rows carrying the filer's industry 341 to 5,228 of 6,762;
+  rows with no standard label 2,801 to 1,065. A guard was added to that option (shared, test
+  added): a rare catch that maps to nothing ('Term Loan', an issuer name, where the filer's
+  segments are out of order) is not taken. 'Services' (348 rows) and 'Consumer Non-Cyclical' (140)
+  are the filer's own broad labels and stay unmapped. Ledger 66 outstanding, unchanged. Open in
+  the reading: no rate tags at all in the two filings of early 2023 (383 and 398 loans; the page
+  prints them), 781 loans without maturity, F26 x10, F21 x10.
+- **KKR FS Income Trust Select** (`ks1a`, held back): given its sister's settings (rate column
+  'Rate', codes, industry segment): filer industry on 1,625 of 1,926 rows. Published is 1.7M to
+  9.7M above filed in five quarters, the same unexplained excess as its sister (D-113). 43
+  outstanding.
+
+### D-127 Bain Capital Private Credit 0001899017 (sandbox `bn1b`, before `bn1a`)
+
+- **Totals.** Four rows filed unscaled corrected from the page (KAMC Holdings 32,556 and 943 at
+  2025-09-30; Spotless Brands and Spindrift at 2025-12-31; 8 values). Published equals filed in
+  both quarters (was 33.5M and 11.2M under).
+- **Names.** The issuer carried the instrument and 'SOFR Spread' ('AEG Vision First Lien Senior
+  Secured Loan SOFR Spread'); stripped with the words put in front of the instrument text: 950
+  distinct names to 390 over 2,030 rows. Rows with no standard label rose 264 to 346 with the names.
+- Ledger 80 to 71; nothing proposed. Open in the reading: C04 x9, B01 x9, nav identity x5 and the
+  GAV-type findings (fund-level figures), fund_strategy x3.

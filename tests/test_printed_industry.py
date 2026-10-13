@@ -121,3 +121,15 @@ def test_labels_of_a_filing_where_under_half_map_are_withdrawn(monkeypatch):
     assert (out["extracted_industry"][:24] == "").all() and (out["gics_sub_industry"][:24] == "Advertising").all()
     assert (out["gics_sub_industry"][24:48] == "Application Software").all()
     assert out["extracted_industry"].iloc[48] == "Unknown Heading" and out["gics_sub_industry"].iloc[48] == "Food Retail"
+
+
+def test_a_rare_unmapped_catch_of_the_member_pattern_is_not_an_industry(monkeypatch):
+    from pipeline import staging_bdc
+    monkeypatch.setattr(staging_bdc, "industry_from_identifier_patterns", lambda wrapper_dir=None: {"0001634452": r"Debt \| [^|]+\| ([^|]+?) \|"})
+    monkeypatch.setattr(uh, "printed_industry_gics", lambda labels: {"Healthcare": ("Health Care Services", "alias")})
+    rows = ([{"cik": "0001634452", "bdc_investment_identifier": "Secured Debt | Acme | Healthcare | Term Loan", "extracted_industry": "", "gics_sub_industry": ""}] * 3
+            + [{"cik": "0001634452", "bdc_investment_identifier": "Secured Debt | Acme | Term Loan | 10%", "extracted_industry": "", "gics_sub_industry": "Advertising"}]
+            + [{"cik": "0001634452", "bdc_investment_identifier": "Secured Debt | Co %d | Services | Term Loan" % i, "extracted_industry": "", "gics_sub_industry": ""} for i in range(20)])
+    out = uh._apply_printed_industry(_holdings(rows))
+    assert out["extracted_industry"].tolist() == ["Healthcare"] * 3 + [""] + ["Services"] * 20
+    assert out["gics_sub_industry"].tolist()[:4] == ["Health Care Services"] * 3 + ["Advertising"]

@@ -110,7 +110,8 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:INVESTMENTS|Investment|NET\\s+ASSETS.*|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|(?:Total\\s+)?(?:Cash|Cash\\s+Equivalents|Cash\\s+and\\s+Cash\\s+Equivalents)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:Total\\s+Cash(?:\\s+and\\s+Cash\\s+Equivalents|\\s+Equivalents)?|US\\s+Dollar|US\\s+DOLLAR|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|NET\\s+ASSETS.*))?|(?:Total\\s+)?(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt|(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*)?Total\\b.*)?|(?:Investment|INVESTMENTS)\\s*\\|\\s*Total\\s+Investments?)\\s*$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)^\\s*(?:U\\.?\\s*S\\.?|US)\\.?\\s*|\\s*-\\s*\\d+(?:\\.\\d+)?%|\\s*\\|\\s*(?:\\u2014|-|\\d+(?:\\.\\d+)?%)?\\s*\\([^|)]*(?:\\+|floor|pik)[^|)]*\\)\\s*|\\s*\\|\\s*(?:[A-Z]\\s*\\+\\s*)?\\d+(?:\\.\\d+)?%\\s*(?:PIK|Floor)?\\s*|\\s*\\|\\s*(?:\\u2014|-)\\s*%\\s*"
+    "canonical_strip_re": "(?i)^\\s*(?:U\\.?\\s*S\\.?|US)\\.?\\s*|\\s*-\\s*\\d+(?:\\.\\d+)?%|\\s*\\|\\s*(?:\\u2014|-|\\d+(?:\\.\\d+)?%)?\\s*\\([^|)]*(?:\\+|floor|pik)[^|)]*\\)\\s*|\\s*\\|\\s*(?:[A-Z]\\s*\\+\\s*)?\\d+(?:\\.\\d+)?%\\s*(?:PIK|Floor)?\\s*|\\s*\\|\\s*(?:\\u2014|-)\\s*%\\s*",
+    "industry_from_identifier_re": "(?i)Secured\\s+Debts?\\s*\\|\\s*[^|]+\\|\\s*([^|]+?)\\s*\\|"
   },
   "identifier_format": {
     "delimiter": "|",

@@ -130,7 +130,14 @@
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "(?i)^(?:(?:Affiliated|Non-Affiliated)\\s+Issuer\\s*\\|\\s*)?(.+?),\\s+.+$",
     "hierarchy_instrument_re": "(?i)^(?:(?:Affiliated|Non-Affiliated)\\s+Issuer\\s*\\|\\s*)?.+?,\\s+(.+)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Affiliated|Non-Affiliated)\\s+Issuer\\s*\\|\\s*)?.+?,\\s+.+$')"
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Affiliated|Non-Affiliated)\\s+Issuer\\s*\\|\\s*)?.+?,\\s+.+$')",
+    "pipe_field_map": {
+      "issuer_segment": 1,
+      "industry_segment": 2,
+      "instrument_segments": [
+        2
+      ]
+    }
   },
   "archetypes": {
     "debt": {
@@ -250,6 +257,15 @@
     ],
     "unfunded_rows": [
       "net_of_tagged_commitment"
+    ],
+    "reference_rate_columns": [
+      "Rate"
+    ],
+    "reference_rate_codes": [
+      "SF=SOFR",
+      "SA=SONIA",
+      "E=EURIBOR",
+      "P=PRIME"
     ]
   }
 }

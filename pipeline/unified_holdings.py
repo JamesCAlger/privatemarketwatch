@@ -583,6 +583,13 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
         if mine.any():
             found = combined.loc[mine, "bdc_investment_identifier"].astype("string").str.extract(pattern, expand=True)[0]
             found = found.fillna("").str.strip()
+            # Where the member's segments are out of order the pattern catches another field ('Term
+            # Loan', an issuer). Such a catch is rare for the fund and maps to nothing; a real industry
+            # the table does not know yet is frequent. Rare and unmapped is not taken.
+            counts = found[found != ""].value_counts()
+            known = printed_industry_gics(counts.index.tolist())
+            rare = {text for text, n in counts.items() if n < 20 and text not in known}
+            found = found.where(~found.isin(rare), "")
             combined.loc[found[found != ""].index, "extracted_industry"] = found[found != ""]
     label = combined["extracted_industry"].astype("string").fillna("").str.strip()
     rows = (combined["source"] == "bdc") & (label != "")

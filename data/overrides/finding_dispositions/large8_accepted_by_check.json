@@ -231,6 +231,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-LARGE8-X02-2037804",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0002037804"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox np1a for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py np1a 0002037804",
+   "decided_by": "check passed on sandbox np1a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-LARGE8-X06-1634452",
    "class": "as_filed",
    "engine": "row_validation",
