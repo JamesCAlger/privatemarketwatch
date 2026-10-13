@@ -1229,3 +1229,12 @@ def test_an_unspecified_reference_withdraws_a_guess_and_nothing_else():
     # a reference rate the filer tagged is not a guess and stays
     tagged = dict(guessed, reference_rate_source="xbrl_field")
     assert apply_ixbrl_field_status_overlay(_staged(**tagged), [_status_row("unspecified")]).iloc[0]["reference_rate_type"] == "SOFR"
+
+
+def test_a_country_heading_is_not_an_industry():
+    import re
+    from pipeline.bdc_xbrl_html_bridge import _NOT_AN_INDUSTRY_RE
+    for heading in ("Canada", "United Kingdom", "United States of America", "Cayman Islands"):
+        assert re.search(_NOT_AN_INDUSTRY_RE, heading), heading
+    for heading in ("Software", "Canadian Oil & Gas", "Health Care Providers & Services", "Multi-Family"):
+        assert not re.search(_NOT_AN_INDUSTRY_RE, heading), heading

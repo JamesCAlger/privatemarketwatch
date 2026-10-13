@@ -3329,3 +3329,20 @@ either before the change exists in this run, so there is no before / after).
   40 of 41 findings outstanding: five source rows unresolved with their row checks (SRC_BDC01 x5,
   C107 x5), four rows with no class and zero value that carry the C30x checks (rows added by a
   rule), C04 x4, spread_printed x3. Not worked.
+
+### D-142 Silver Point Specialty Lending 0001646614 (`sv1b`, before `sv1a`) and TCW Direct Lending VII 0001715933 (`t71a`)
+
+- **Shared: a country is not an industry.** Silver Point groups its schedule by country, and the
+  heading read from the page ('Canada', 'United Kingdom', ...) was published as the filer's
+  industry on 158 rows. Country names are added to the not-an-industry filter (test added).
+  Silver Point now has no filer industry on 1,848 of 1,856 rows and no standard label on 1,081:
+  its industry is not read at all. No other column changed.
+- **Silver Point: read, not worked.** 123 findings outstanding. The reading says published
+  excluding cash equals filed in 8 quarters and that most conservation / GAV-type findings compare
+  against a base that includes the cash row. FX01 x11 is real, but the reading warns the
+  principal unit tag is not stable, so the reference-rate conversion was not switched on.
+- **TCW Direct Lending VII: read, not worked.** 143 findings outstanding. No filed investments
+  total is found in eight quarters (the comparison has nothing to compare). F10 x14 and
+  balance-sheet identity x13 look like the net-assets concept error of D-139 (same filer); not
+  verified on the page. Row data: 5 of 521 loans without a rate, one guessed reference rate,
+  filer industry on every row (one heading added to the table).
