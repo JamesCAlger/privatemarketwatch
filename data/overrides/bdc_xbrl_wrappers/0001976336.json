@@ -76,7 +76,8 @@
     ],
     "category_marker_re": "(?i)(?:^\\s*Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*Total\\s+Investments\\s+-\\s+non-controlled/non-affiliated\\s*$|^\\s*Total\\s+Secured\\s+Debt\\s+Investments\\s*$|^\\s*(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS))?\\s*$)",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})"
+    "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})",
+    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -131,7 +132,9 @@
       "Technology Hardware, Storage and Peripherals",
       "Textiles, Apparel and Luxury Goods",
       "Trading Companies and Distributors",
-      "Transportation Infrastructure"
+      "Transportation Infrastructure",
+      "Diversified Consumer Service",
+      "Speciality Retail"
     ],
     "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Debt\\s+Investments|Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:Media\\s*|(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Assets?\\s+Type|Commitment\\s+Type)\\s*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)",
     "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s+((?:Assets?\\s+Type|Commitment\\s+Type)\\s*.*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date\\s*.*)$",
@@ -194,6 +197,20 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "cash_identifiers": [
+      "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "SON=SONIA",
+      "E=EURIBOR",
+      "P=PRIME",
+      "C=CDOR to 2025-09-30",
+      "C=CORRA from 2025-12-31"
     ]
   }
 }

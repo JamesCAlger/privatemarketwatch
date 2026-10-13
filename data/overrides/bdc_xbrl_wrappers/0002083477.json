@@ -107,6 +107,15 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate"
+    ],
+    "reference_rate_codes": [
+      "SOFR=SOFR",
+      "PRIME=PRIME",
+      "S=SOFR",
+      "P=PRIME"
     ]
   }
 }

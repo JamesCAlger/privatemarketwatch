@@ -500,6 +500,7 @@ def _detect_header_map(grid: list[str]) -> dict[int, str] | None:
     def _nofn(s: str) -> str:
         s = re.sub(r"\(\d{1,3}\)", "", s)
         s = re.sub(r"(?:\s+\d{1,2}\b)+\s*$", "", s)  # trailing 1-2 digit footnote refs
+        s = re.sub(r"(?<=[A-Za-z])\d{1,2}\s*$", "", s)  # a superscript glued to the label ('Company1', 'Cost3')
         return _norm_text(s)
     labeled = sum(1 for c in grid if c and _HEADER_LABEL_RE.search(c))
     numeric = sum(1 for c in grid if c and re.search(r"\d", _nofn(c)))
@@ -1305,6 +1306,8 @@ def apply_ixbrl_field_status_overlay(
         if "extracted_industry" not in result.columns:
             result["extracted_industry"] = ""
         heading = merged["_printed_industry"].astype("string").fillna("").str.strip()
+        # 'Software, continued' / 'Specialized Consumer Services (continued' on a later page is the same heading
+        heading = heading.str.replace(r"(?i)[,\s]*\(?\s*continued\s*\)?\s*$", "", regex=True).str.strip()
         industry = (heading != "") & ~heading.str.contains(_NOT_AN_INDUSTRY_RE, regex=True)
         # One heading over most of a filing's rows is a page or statement heading, not an industry
         # (KKR FS Income Trust prints the industry in a column; the reader's last heading there is

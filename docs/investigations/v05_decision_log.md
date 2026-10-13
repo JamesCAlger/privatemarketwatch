@@ -3125,3 +3125,22 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   distinct names to 390 over 2,030 rows. Rows with no standard label rose 264 to 346 with the names.
 - Ledger 80 to 71; nothing proposed. Open in the reading: C04 x9, B01 x9, nav identity x5 and the
   GAV-type findings (fund-level figures), fund_strategy x3.
+
+### D-128 APS BDC 0002083477, Jefferies Credit Partners 0001959604, Antares Private Credit 0001976336
+
+- **Shared: a column header with a superscript glued on is still a header.** APS prints
+  'Portfolio Company1', 'Interest Rate2', 'Cost3'; the page reader counted the digit as data and
+  never recognised the header row, so no printed field was read. Fixed in the header detection
+  (`_detect_header_map`). APS (`ap1c`): loans without maturity 131 to 1, reference rate guessed
+  from the date 130 to 0 (rate column named in the wrapper). 2 findings outstanding (F28, X02).
+- **Shared: 'Software, continued' is the heading 'Software'.** The continuation word is dropped
+  when the printed heading is taken as the industry. Jefferies (`jf1b`): rows with no standard
+  label 68 to 0 (203 rows had a 'continued' heading). 11 outstanding, unchanged. 1,555 of 1,563
+  Jefferies loans publish no interest rate: the schedule prints the spread only ('S + 4.75 %'),
+  no all-in rate, and none is tagged. As filed; not a finding to fix.
+- **Antares Private Credit** (`an1b`, before `an1a`): given its sister's settings (D-105): rate
+  column and codes (reference rate guessed 95 to 0; 82 rows SOFR to PRIME and similar from the
+  page), row-number words stripped from 41 names. The money-market row of the last three quarters
+  is now the filing's own tagged row (`cash_identifiers`), and the two rules that added it by
+  hand are pulled (`_pulled_replaced_by_tagged_row_2026-10-13`): same values (29.0M, 56.0M,
+  43.0M), now with accession and class. Published still equals filed. Ledger 47 to 32.
