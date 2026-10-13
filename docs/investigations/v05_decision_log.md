@@ -3290,3 +3290,18 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   label), 515 reference rates guessed from the date, 8 loans without maturity. Cause not looked at.
 - 21 findings outstanding, unchanged (B01 x6, PCT01 x4, concentration x4, X02 x3). One
   unclassified row of 48.4M (SBLA Private Credit LLC, the fund's own vehicle) is an owner question.
+
+### D-139 TCW Direct Lending VIII 0001825265 (sandbox `tw1a`)
+
+- Row data is in good order: every loan has a rate and maturity, no guessed reference rate, filer
+  industry on every row (two headings added to the table). No fund setting changed.
+- 76 findings outstanding, and most are one fund-level error, not fixed: **net assets is read from
+  the paid-in line.** Page (0001193125-26-221923): 'Common Unitholders' capital 879,986 ...
+  Total Members' Capital 815,597'; published net assets 879,986,000. The extractor takes
+  us-gaap:MembersCapital; the right concepts for this filer are MembersEquity or AssetsNet
+  (815,597). Cause of F10 x10 and balance-sheet identity x9, and part of pct-of-net-assets
+  identity x5. The concept order is shared by every fund (`extract_companyfacts.py`), so changing
+  it needs a cohort measurement; a per-fund correction needs ten quarters read from the page.
+  Neither done. TCW Direct Lending VII likely has the same error.
+- Also open: B01 x10 (reading says false alarm, date-only contexts), cost conservation x5 (two
+  real), no filed total found for the first three quarters of 2023.
