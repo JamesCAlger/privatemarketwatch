@@ -3144,3 +3144,21 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   is now the filing's own tagged row (`cash_identifiers`), and the two rules that added it by
   hand are pulled (`_pulled_replaced_by_tagged_row_2026-10-13`): same values (29.0M, 56.0M,
   43.0M), now with accession and class. Published still equals filed. Ledger 47 to 32.
+
+### D-129 Fortress Private Lending Fund 0002012139 (sandbox `fo1b`, before `fo1a`)
+
+- **Shared: a header with a footnote list is still a header.** 'Amortized Cost (3,5)' and 'Fair
+  Value (4,5)' were counted as data, so the header row was not recognised. The footnote strip now
+  takes lists. Fortress: 303 rows now read their reference rate and maturity from the page; 20
+  rows change from a date-guessed SOFR to the printed CORRA / EURIBOR / SONIA; guessed 12 to 3.
+- Foreign principal converted with the reference rate (`principal_usd_reference`): 18 rows, FX01
+  x4 cleared. Ledger 17 to 13. Published equals filed.
+- **Not fixed: net assets at 2025-06-30.** The page prints total assets 346,971, liabilities
+  345,967, net assets 1,004 (thousands): a seed quarter with 335M of investments on 1.0M of net
+  assets. The pipeline publishes net assets 1,004,000,000 and no total assets. A fund-level
+  correction was written and logged as applied, but the scale detector that runs after it
+  (`fund_financials.py`, 'TA/NA ratio' fix) re-scales the row because the ratio is 346 against a
+  median near 1.5, so the correction had no effect and was withdrawn. Five findings (A07, PCT01,
+  pct identity, F21, F23) rest on it. Needs a rule that a page-corrected figure is exempt from
+  scale detection. Also open: percent of net assets tagged as 24.28 for a printed 2,428.
+- Two rows per quarter with no ' Investment ' word in the member have no issuer (C201 x2).

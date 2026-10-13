@@ -498,7 +498,7 @@ def _detect_header_map(grid: list[str]) -> dict[int, str] | None:
     # strip footnote markers so header labels aren't counted as numeric:
     # parenthesized "(2)(15)" AND bare trailing refs "Maturity 6" / "Company 1 2 3 4"
     def _nofn(s: str) -> str:
-        s = re.sub(r"\(\d{1,3}\)", "", s)
+        s = re.sub(r"\(\d{1,3}(?:\s*,\s*\d{1,3})*\)", "", s)  # "(2)" and footnote lists "(3,5)"
         s = re.sub(r"(?:\s+\d{1,2}\b)+\s*$", "", s)  # trailing 1-2 digit footnote refs
         s = re.sub(r"(?<=[A-Za-z])\d{1,2}\s*$", "", s)  # a superscript glued to the label ('Company1', 'Cost3')
         return _norm_text(s)
