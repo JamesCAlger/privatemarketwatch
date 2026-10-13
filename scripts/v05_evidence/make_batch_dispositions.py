@@ -4,8 +4,8 @@
 
 Owner standing instruction 2026-10-09 (decision D-073): "a disposition i already accepted may be
 accepted by its check". This applies exactly that and nothing else: the reasons the owner accepted
-for the first five funds that have a deterministic row-by-row test (C107, C103, X06, X02 through
-pipeline/disposition_validity.py, and F28 for quarters before the fund's first schedule). A
+that have a deterministic row-by-row test: those listed in data/reference/accepted_disposition_reasons.json
+(checks in pipeline/disposition_validity.py), and F28 for quarters before the fund's first schedule. A
 fund-quarter where the test passes gets an entry; one where it fails stays open. A finding that
 carries an earlier reviewer's 'real error' verdict is not closed by these entries (the ledger
 keeps the verdict standing). Every other outstanding finding is listed as needing a reading.
@@ -32,20 +32,10 @@ label, batch, ciks = args[0], args[1], [c.zfill(10) for c in args[2:]]
 SANDBOX = REPO / "scratch/fund_sandbox" / label
 S = "python scripts/v05_evidence/"
 OUTSTANDING = {"open", "needs_human", "evidence_backlog", "real_error_unremediated", "remediation_pulled", "remediation_staged"}
-_FILED = lambda *fields: {"from": "2022-01-01", "check": "values_as_filed", "params": {"fields": list(fields)}}
-CHECKED = {
-    ("row_validation", "C107"): ("as_filed", "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
-                                 _FILED("cost"), S + "issue_shape.py %s C107 3" % label),
-    ("row_validation", "C103"): ("as_filed", "Small negative fair values on undrawn lines, as tagged.",
-                                 _FILED("fair_value"), S + "issue_shape.py %s C103 3" % label),
-    ("row_validation", "X06"): ("as_filed", "Principal far above fair value on partly drawn commitments (principal is the "
-                                "commitment) and on positions the fund has marked down, as filed.",
-                                _FILED("principal_amount", "fair_value"), S + "issue_shape.py %s X06 3" % label),
-    ("row_validation", "X02"): ("as_filed", "Credit rows with no rate and no spread because no rate or spread fact is tagged "
-                                "for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
-                                {"from": "2022-01-01", "check": "no_rate_in_source", "params": {}},
-                                S + "x02_page_read.py %s <cik>" % label),
-}
+# The reasons and their checks are data: data/reference/accepted_disposition_reasons.json (owner-controlled).
+REASONS = json.loads((REPO / "data/reference/accepted_disposition_reasons.json").read_text(encoding="utf-8"))["reasons"]
+CHECKED = {(r["engine"], r["rule_name"]): (r["class"], r["statement"], r["check"], r["rerun"].replace("{label}", label).replace("{cik}", "<cik>"))
+           for r in REASONS}
 BY_CHECK = "check passed on sandbox %s; accepted under the owner's standing instruction of 2026-10-09 (D-073)" % label
 
 csv.field_size_limit(10 ** 9)

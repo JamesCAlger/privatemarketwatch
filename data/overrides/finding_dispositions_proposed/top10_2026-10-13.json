@@ -75,6 +75,94 @@
    "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000162828026034133 xml c-778",
    "decided_by": "proposed by agent 2026-10-13; a variant of an accepted reason, for the owner",
    "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2007-3R",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "ARES 2007-3R subordinated notes: the filer reports 20,000,000 in the Shares/Units column, nothing in the Principal column, a dash for cost and a fair value of 0.1M. No principal fact is filed. The count stays a unit count (the reason the owner accepted for Ares Strategic Income, D-151).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001287750-24-000028 (2024-03-31), header '... Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets': 'ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6)'. The same line is printed at 2023-12-31 (0001287750-24-000011)."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox ax3: the row carries a share-count fact of 20,000,000, cost 0, fair value 100,000 and no principal fact in each of the six quarters. The cost is zero, so the near-cost test of par_tagged_as_units cannot say whether the count is a par."
+    }
+   ],
+   "rerun": "python scratch/2026-10-13_left/pg.py 1287750 000128775024000028 \"ARES 2007-3R\" 2 300 300",
+   "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
+   "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "PD-X11-1925309-NOPAR",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Three Sixth Street Lending Partners lines for which the page prints no par and the filing tags no principal: the second Galileo Parent line at 2023-06-30 (the par is printed once for two lines) and the Cordance Operations loan at 2025-06-30 and 2025-09-30, whose par is printed as a dash (an undrawn line carried at a negative cost and a small positive value). The reason the owner accepted for BCRED Pigments Services (D-152).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0000950170-23-038548 (2023-06-30): 'Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %'. Context C_012cef69-358f-4851-8931-cca0016c3e6f carries rate, cost 9,745,000, fair value 10,020,000 and percent; no principal fact."
+    },
+    {
+     "source": "filing",
+     "quote": "0000950170-25-101397 (2025-06-30): 'Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %'. 0001193125-25-266848 (2025-09-30): 'First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %'."
+    }
+   ],
+   "rerun": "python scratch/2026-10-13_left/pg.py 1925309 000095017025101397 \"Cordance\" 1 420",
+   "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
+   "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "PD-PP03-1812554-B",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "PP03",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "The flagged equity rows are current-period rows of each schedule. The rule tracks them because their unit count, cost and value equal the prior period's. They appeared once the unit counts of these rows were published (D-150). The reason already recorded for this fund (DS-024-1812554) and accepted for Oaktree (DS-N5-PP03-1872371-READ, D-146).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC), 'LP Interest N/A N/A 989 989 1,239' printed in the schedules of 0001812554-25-000030 (2025-03-31), 0001812554-25-000052 (2025-06-30) and 0001812554-25-000081 (2025-09-30); published from the filings' own contexts c-568, c-610 and c-584."
+    },
+    {
+     "source": "filing",
+     "quote": "0001812554-23-000030 (2023-09-30): 'Amergin Asset Management, LLC Class A Units N/A N/A 50,000,000 $ - $ -'; 'Hercules Buyer, LLC (dba The Vincit Group) Common Units N/A N/A 10 10 11'; 'Maia Aggregator, LP Class A-2 Units N/A N/A 12,921,348 $ 12,921 $ 13,711'; 'PCF Holdco, LLC (dba PCF Insurance Services) Class A Units N/A N/A 6,047,390 15,3..'. Published from contexts c-560, c-571, c-578 and c-602 of that filing with the same figures as at 2023-06-30."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/pp03.sql",
+   "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
+   "decided_on": "2026-10-13"
   }
  ]
 }

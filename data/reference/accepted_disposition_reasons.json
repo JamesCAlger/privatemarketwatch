@@ -1,0 +1,59 @@
+{
+ "note": "Reasons the owner has accepted that may be applied to any fund by a deterministic check (standing instruction 2026-10-09, decision D-073). Read by scripts/v05_evidence/make_batch_dispositions.py. A reason belongs here only if its check tests every flagged row and cannot pass on a row the reason does not explain. Adding or changing an entry is an owner decision.",
+ "reasons": [
+  {
+   "reason_id": "R-C107-negative-cost-undrawn",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "class": "as_filed",
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "check": {"from": "2022-01-01", "check": "values_as_filed", "params": {"fields": ["cost"]}},
+   "rerun": "python scripts/v05_evidence/issue_shape.py {label} C107 3",
+   "accepted": "owner, 2026-10-06 (first five funds); by check on any fund from 2026-10-09 (D-073)"
+  },
+  {
+   "reason_id": "R-C103-negative-value-undrawn",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "class": "as_filed",
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "check": {"from": "2022-01-01", "check": "values_as_filed", "params": {"fields": ["fair_value"]}},
+   "rerun": "python scripts/v05_evidence/issue_shape.py {label} C103 3",
+   "accepted": "owner, 2026-10-06 (first five funds); by check on any fund from 2026-10-09 (D-073)"
+  },
+  {
+   "reason_id": "R-X06-principal-above-value",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "class": "as_filed",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "check": {"from": "2022-01-01", "check": "values_as_filed", "params": {"fields": ["principal_amount", "fair_value"]}},
+   "rerun": "python scripts/v05_evidence/issue_shape.py {label} X06 3",
+   "accepted": "owner, 2026-10-06 (first five funds); by check on any fund from 2026-10-09 (D-073)"
+  },
+  {
+   "reason_id": "R-X02-no-rate-in-source",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "class": "as_filed",
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "check": {"from": "2022-01-01", "check": "no_rate_in_source", "params": {}},
+   "rerun": "python scripts/v05_evidence/x02_page_read.py {label} {cik}",
+   "accepted": "owner, 2026-10-06 (first five funds); by check on any fund from 2026-10-09 (D-073)"
+  }
+ ],
+ "not_by_check": [
+  {
+   "rule_name": "X11",
+   "why": "The checks that exist (no principal fact; a unit count and no principal fact) also pass on a real missing par: HPS 2026-03-31 tagged 696 pars as unit counts. The owner accepted the reason for named funds and rows (D-151, D-152). On another fund it is a proposal with the printed line."
+  },
+  {
+   "rule_name": "PP03",
+   "why": "No check tests that a flagged row is a current-period row. Accepted per fund on a page reading (D-024, D-146)."
+  },
+  {
+   "rule_name": "field_coverage_drop",
+   "why": "No reason accepted yet."
+  }
+ ]
+}
