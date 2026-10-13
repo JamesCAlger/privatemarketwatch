@@ -3305,3 +3305,13 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   Neither done. TCW Direct Lending VII likely has the same error.
 - Also open: B01 x10 (reading says false alarm, date-only contexts), cost conservation x5 (two
   real), no filed total found for the first three quarters of 2023.
+
+### D-140 AGL Private Credit Income Fund 0002011498 (sandbox `ag1c`, before `ag1a`)
+
+- Published equals filed in every quarter; every loan has a rate and maturity, none guessed.
+- Instrument text cleaned of the member's header words ('First Lien Revolving Loan Industry
+  Semiconductors ... Reference Rate and Spread ...' to 'First Lien Revolving Loan', 532 rows).
+- Industry read from the member in the two early quarters that had none (82 rows; label changed on
+  58, sector on 36). 89 rows of 2026-03-31 still have none: there the member puts the industry in
+  front of the issuer with nothing between them.
+- Ledger 18 to 19 (one finding more after the instrument change; not traced). Nothing proposed.
