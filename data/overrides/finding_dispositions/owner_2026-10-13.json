@@ -1,0 +1,70 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-X11-1918712",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Coupon-bearing tranches the filer reports in the Shares/Units column of its schedule: a face amount in whole dollars, and nothing in the Principal column. No principal fact is filed for them. The count stays a unit count (owner: 'let's leave it as is', D-151).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001628280-26-034133, schedule header '... Maturity Date Shares/ Units Principal Amortized Cost Fair Value % of Net Assets'; 'Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4'; 'TI VI Holdings 1, L.P. Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5'."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox ax2: every flagged row of these quarters carries a share-count fact and no principal fact (1, 4, 4, 8, 5, 4, 5 and 107 rows). The count equals cost at issue for new tranches (MDPK 2025-75: 21,935,000 against 21,935K) and stays at original face while cost amortises (Mars: 28.7M to 8.6M)."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py ax2 scratch/2026-10-13_q2/facts.sql",
+   "carry_forward": {
+    "from": "2026-09-30",
+    "check": "no_principal_in_source",
+    "params": {
+     "requires_count": true
+    }
+   },
+   "decided_by": "owner, in session 2026-10-13",
+   "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "DS-X11-1803498-PIGMENTS",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Two Pigments Services loans for which the filer printed and tagged no par in this one filing. The next quarter's filing tags it (18,572 and 9,596).",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001803498-23-000017: 'Pigments Services, Inc. (4)(6)(11)(16)(17) SOFR + 8.25 % 13.24 % 4/14/2030 15,344 11,710 0.05 Pigments Services, Inc. (4)(6)(11)(16) SOFR + 8.25 % 13.24 % (incl. 13.24 % PIK) 4/14/2030 9,069 9,069 0.04': cost and fair value, no par figure."
+    },
+    {
+     "source": "filing",
+     "quote": "Tagged facts of contexts c-702 and c-703 in the same filing: InvestmentBasisSpreadVariableRate, InvestmentInterestRate, (InvestmentInterestRatePaidInKind,) InvestmentOwnedAtCost, InvestmentOwnedAtFairValue, InvestmentOwnedPercentOfNetAssets. No principal and no share-count fact."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_q2/pig.sql",
+   "decided_by": "owner, in session 2026-10-13",
+   "decided_on": "2026-10-13"
+  }
+ ]
+}

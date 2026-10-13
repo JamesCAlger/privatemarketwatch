@@ -21,13 +21,13 @@ def _csv(path, rows):
 def _holdings(output, rows):
     base = {"row_id": "", "cik": HPS, "report_date": "2026-06-30", "fair_value": 0.0, "cost": None, "pik_rate": None,
             "nonaccrual_status": "unknown", "src_facts": "{}", "index_classification": "DIRECT_LENDING",
-            "accounting_record_class": "parent_schedule"}
+            "accounting_record_class": "parent_schedule", "shares_held": None, "principal_amount": None}
     con = duckdb.connect()
     con.execute("CREATE TABLE h (row_id VARCHAR, cik VARCHAR, report_date VARCHAR, fair_value DOUBLE, cost DOUBLE, pik_rate DOUBLE, "
-                "nonaccrual_status VARCHAR, src_facts VARCHAR, index_classification VARCHAR, accounting_record_class VARCHAR)")
+                "nonaccrual_status VARCHAR, src_facts VARCHAR, index_classification VARCHAR, accounting_record_class VARCHAR, shares_held DOUBLE, principal_amount DOUBLE)")
     for row in rows:
         full = {**base, **row}
-        con.execute("INSERT INTO h VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", list(full.values()))
+        con.execute("INSERT INTO h VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [full[k] for k in base])
     con.execute("COPY h TO '%s' (FORMAT PARQUET)" % (output / "private_markets_holdings.parquet").as_posix())
     con.close()
 
@@ -156,3 +156,23 @@ def test_the_ledger_closes_a_new_quarter_through_a_pass_and_says_so(tmp_path):
     assert (rows["RQ-3"]["state"], rows["RQ-3"]["disposition_basis"]) == ("open", "")
     # without the results file nothing is carried
     assert {r["review_id"]: r["state"] for r in build_ledger(**kwargs)}["RQ-2"] == "open"
+
+
+def test_no_principal_in_source_passes_only_while_the_filer_reports_units_and_no_par(tmp_path):
+    untagged = '{"_financial_units":{"principal_amount":{}}}'
+    tagged = '{"_financial_units":{"principal_amount":{"unit_ref":"usd","currency":"USD"}}}'
+    _csv(tmp_path / "row_validation_issues.csv", [_issue("A", "X11"), _issue("B", "X11"),
+                                                  _issue("C", "X11", quarter="2026-09-30", name="No count Co note"),
+                                                  _issue("D", "X11", quarter="2026-12-31", name="Tagged Co note")])
+    _holdings(tmp_path, [
+        {"row_id": "A", "fair_value": 10e6, "shares_held": 29990339.0, "src_facts": untagged},   # units, no par: as filed
+        {"row_id": "B", "fair_value": 4e6, "shares_held": 4145.0, "src_facts": untagged},
+        {"row_id": "C", "fair_value": 75e6, "src_facts": untagged},                              # neither: not the accepted reason
+        {"row_id": "D", "fair_value": 5e6, "shares_held": 100.0, "src_facts": tagged}])          # the filer now tags a par
+    results = dv.evaluate([_entry("X11", "no_principal_in_source", {"requires_count": True})], tmp_path)
+    assert _result(results)["passed"] is True and _result(results)["rows_tested"] == 2
+    assert _result(results, "2026-09-30")["passed"] is False and "No count Co" in _result(results, "2026-09-30")["detail"]
+    assert _result(results, "2026-12-31")["passed"] is False
+    # without the count requirement the row with neither is the accepted reason (a par the filer left out)
+    relaxed = dv.evaluate([_entry("X11", "no_principal_in_source", {"requires_count": False})], tmp_path)
+    assert _result(relaxed, "2026-09-30")["passed"] is True

@@ -22,6 +22,11 @@ Kinds:
                              pattern, and published fair value excluding cash equals the filed
                              investments total within the tolerance.
 
+``no_principal_in_source``   params ``requires_count`` (default true). Every flagged row is published,
+                             has no principal fact among its filed facts and publishes no principal;
+                             with ``requires_count`` it also carries a unit count (the filer reports
+                             the position in units). A row that gains a principal tag fails.
+
 Read-only on the build outputs. Results: one row per (disposition, fund, quarter).
 """
 from __future__ import annotations
@@ -32,7 +37,7 @@ from pathlib import Path
 
 import duckdb
 
-KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known")
+KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known", "no_principal_in_source")
 RESULT_COLUMNS = ["disposition_id", "cik", "report_date", "check", "passed", "rows_tested", "rows_failing",
                   "failing_fair_value_m", "detail"]
 _FIELDS = ("fair_value", "cost", "principal_amount", "shares_held", "interest_rate", "basis_spread", "pik_rate")
@@ -58,6 +63,8 @@ def validate_carry_forward(spec) -> list[str]:
         fields = params.get("fields")
         if not isinstance(fields, list) or not fields or not all(f in _FIELDS for f in fields):
             errs.append("values_as_filed needs params.fields from " + ", ".join(_FIELDS))
+    if kind == "no_principal_in_source" and not isinstance(params.get("requires_count", True), bool):
+        errs.append("no_principal_in_source: params.requires_count must be true or false")
     if kind == "missing_source_rows_known":
         patterns = params.get("patterns")
         if not isinstance(patterns, list) or not patterns or not all(isinstance(p, str) and p.strip() for p in patterns):
@@ -115,6 +122,25 @@ def _no_rate_in_source(con, output: Path, rule: str, ciks, params) -> list[tuple
         FROM t GROUP BY 1, 2""").fetchall()
 
 
+def _no_principal_in_source(con, output: Path, rule: str, ciks, params) -> list[tuple]:
+    count_needed = "TRUE" if params.get("requires_count", True) else "FALSE"
+    return con.execute(f"""
+        WITH i AS ({_issues_sql(output, rule, ciks)}),
+        h AS (SELECT CAST(row_id AS VARCHAR) AS row_id, TRY_CAST(fair_value AS DOUBLE) AS fv,
+                     TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL AS has_principal,
+                     TRY_CAST(shares_held AS DOUBLE) IS NOT NULL AS has_count,
+                     -- the extractor records a tagged principal's unit; an empty object means no such fact
+                     coalesce(CAST(src_facts AS VARCHAR), '') LIKE '%"principal_amount":{{"unit_ref"%' AS principal_tagged
+              FROM {_holdings_sql(output)}),
+        t AS (SELECT i.cik, i.q, i.id, coalesce(h.fv, 0) AS fv,
+                     h.row_id IS NOT NULL AND NOT h.has_principal AND NOT h.principal_tagged
+                     AND (h.has_count OR NOT {count_needed}) AS good
+              FROM i LEFT JOIN h USING (row_id))
+        SELECT cik, q, count(*), count(*) FILTER (WHERE NOT good), coalesce(sum(abs(fv)) FILTER (WHERE NOT good), 0) / 1e6,
+               list(id ORDER BY abs(fv) DESC) FILTER (WHERE NOT good)
+        FROM t GROUP BY 1, 2""").fetchall()
+
+
 def _missing_source_rows_known(con, output: Path, rule: str, ciks, params) -> list[tuple]:
     pattern = "|".join("(?:%s)" % p for p in params["patterns"]).replace("'", "''")
     tolerance = float(params.get("tolerance_m", 0.5))
@@ -149,7 +175,8 @@ def _missing_source_rows_known(con, output: Path, rule: str, ciks, params) -> li
 
 
 _RUNNERS = {"values_as_filed": _values_as_filed, "no_rate_in_source": _no_rate_in_source,
-            "missing_source_rows_known": _missing_source_rows_known}
+            "missing_source_rows_known": _missing_source_rows_known,
+            "no_principal_in_source": _no_principal_in_source}
 
 
 def evaluate(entries: list[dict], output_dir: Path) -> list[dict]:

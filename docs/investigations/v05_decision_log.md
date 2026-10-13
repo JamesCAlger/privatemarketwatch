@@ -3585,3 +3585,20 @@ is left is listed with its cause.
 - Also confirmed the same day: BCRED Pigments Services 2023-06-30 has no principal or share-count
   fact on either context in the filing itself (tags: spread, rate, cost, fair value, percent) and
   none on the page. As filed.
+
+### D-152 Two dispositions recorded for rule X11 (owner, 2026-10-13: "yes, record both")
+
+Store `data/overrides/finding_dispositions/owner_2026-10-13.json`.
+- **DS-X11-1918712, Ares Strategic Income, as filed.** Coupon-bearing tranches reported in the
+  Shares/Units column with no principal fact (D-151). Eight quarters listed. It carries forward
+  from 2026-09-30 through a new check, `no_principal_in_source` (`pipeline/disposition_validity.py`,
+  test added): every flagged row must still carry a unit count and no principal fact, so the
+  entry stops applying the quarter the filer starts tagging a par or a row arrives with neither.
+  **2026-03-31 is not covered:** one flagged row there (JPMMT 2026-ACES1, a residential
+  mortgage-backed security, 75M) has neither a count nor a par and has not been read.
+- **DS-X11-1803498-PIGMENTS, BCRED 2023-06-30, as filed.** Two Pigments Services loans with no
+  par on the page and no principal or share-count fact in the filing. One quarter, no
+  carry-forward (the next filing tags the par).
+- Ledger: Ares Strategic Income X11 9 to 1; BCRED X11 2 to 1 (the New Mountain CLO 6 note with
+  zero cost at 2024-12-31 is a different row and stays). Top ten about 26 outstanding, pieced
+  together from several sandboxes; one build of the ten is still owed before quoting it.
