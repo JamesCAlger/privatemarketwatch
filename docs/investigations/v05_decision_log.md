@@ -3315,3 +3315,17 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   58, sector on 36). 89 rows of 2026-03-31 still have none: there the member puts the industry in
   front of the issuer with nothing between them.
 - Ledger 18 to 19 (one finding more after the instrument change; not traced). Nothing proposed.
+
+### D-141 MidCap Apollo Institutional Private Lending 0002006758 (`ma1a`) and Apollo Origination II Capital Trust 0002052153 (`au1a`)
+
+Both built alone with the Apollo-layout settings of D-135 already in their wrappers (no build of
+either before the change exists in this run, so there is no before / after).
+
+- **MidCap Apollo Institutional:** published equals filed in every quarter. Filer industry on
+  1,678 of 1,734 rows; 14 rows without a standard label; instrument text without the rate. 1,646
+  of 1,681 loans publish no rate (spread only on the page; as filed). 26 findings outstanding
+  (spread_printed x6, F27 x6, a source / pipeline-only pair in one quarter, single others).
+- **Apollo Origination II (unlevered):** published equals filed. Filer industry on all 576 rows.
+  40 of 41 findings outstanding: five source rows unresolved with their row checks (SRC_BDC01 x5,
+  C107 x5), four rows with no class and zero value that carry the C30x checks (rows added by a
+  rule), C04 x4, spread_printed x3. Not worked.
