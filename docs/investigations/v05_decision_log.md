@@ -3362,3 +3362,15 @@ either before the change exists in this run, so there is no before / after).
   (rows with no issuer), B01 x11, A01 x7.
 - **Varagon:** built and recorded, not worked. 64 findings outstanding; published 0.7M to 6.4M
   under filed in at least five quarters; 43 rows with no class (11.1M); C201 x8, conservation x5.
+
+### D-144 Check: MSD and Monroe rebuilt with the code as of the end of the run (sandbox `chk2`, before `in2a`)
+
+Purpose: measure the shared changes made since 2026-10-12 on two funds finished before them.
+- Ledger: 103 outstanding for the two together (42 + 63 = 105 when each was finished).
+- No value, rate, class, name or maturity changed on any of their 10,350 rows.
+- Changed: `reference_rate_source` on 6,242 Monroe rows (a date-guessed rate the page confirms is
+  now marked as read from the page; the rate itself is the same); Monroe instrument text on 935
+  rows ('Senior Secured Loans' to '(Revolver) Senior Secured Loans': the tranche word taken off
+  the name is kept in front of the instrument) with 40 position ids; 4 MSD rows gained a label.
+- Entity ids and canonical names differ only because the two sandboxes hold different sets of
+  funds. This is two funds, not the cohort: the first five and next five are still unmeasured.
