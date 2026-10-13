@@ -45,8 +45,14 @@
   },
   "identifier_format": {
     "delimiter": ", ",
-    "field_order": ["issuer_name", "instrument_description"],
-    "alternate_delimiters": [" and ", " & "]
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      " and ",
+      " & "
+    ]
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -255,6 +261,14 @@
       "BBSY=BBSY",
       "BKBM=BKBM",
       "TONA=TONA"
+    ],
+    "par_tagged_as_units": [
+      "rated_rows_near_cost"
+    ],
+    "untagged_values": [
+      "0001287750-22-000052 i6cfa6b6a64b94b83856418b04b8626a0_I20220930 principal_amount 74200000",
+      "0001287750-22-000052 i6cfa6b6a64b94b83856418b04b8626a0_I20220930 cost 74100000",
+      "0001287750-23-000010 ie6a91f4a72834ea4b64f0579f8515441_I20221231 principal_amount 52800000"
     ]
   },
   "invariants": {

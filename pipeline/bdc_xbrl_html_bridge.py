@@ -1580,6 +1580,11 @@ def propose_field_bridges_from_ixbrl(
             continue
         # industry sub-header: a lone non-value, non-subtotal label row
         if len(nonempty) == 1 and not _VALUE_RE.search(nonempty[0]) and not _SUBTOTAL_RE.search(nonempty[0]):
+            # A lone 'Interest' is the upper line of a two-line column header (Blue Owl: 'Interest' over
+            # 'Ref. Rate | Cash | PIK'), repeated on every page. It is not a heading and must not replace
+            # the industry the rows above the page break sat under.
+            if re.fullmatch(r"(?i)\s*interest(?:\s+rate)?\s*", nonempty[0]):
+                continue
             cur_sector = _CONTINUED_RE.sub("", nonempty[0])
             continue
         # position row? find a leaf FV fact tagged with a current-period context

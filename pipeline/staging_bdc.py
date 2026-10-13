@@ -700,13 +700,44 @@ def _prepare_bdc(
     # principal concept (Blue Owl 'Valor CI Blocker Feeder LP | Investment partnership': 9,912
     # in the Units column, tagged InvestmentOwnedBalancePrincipalAmount). Equity publishes no
     # principal, so without this the count is lost. Declared as shares_held:from_principal_tag.
-    units_from_principal = ("(" + equity_instrument_expression('cik', 'instrument_description')
-                            + " AND asset_category_final = 'EQUITY_COMMON' AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0)")
+    # ... or, for a filing a wrapper lists (source_encodings.units_tagged_as_par), on every equity row.
+    from pipeline.source_encodings import units_tagged_as_par_expression
+    units_from_principal = ("((" + equity_instrument_expression('cik', 'instrument_description')
+                            + " AND asset_category_final = 'EQUITY_COMMON' AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0)"
+                            + " OR (" + units_tagged_as_par_expression('cik', 'accession_number')
+                            + " AND asset_category_final IN ('EQUITY_COMMON', 'EQUITY_PREFERRED')"
+                            + " AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0))")
     # The reverse filing error: the par of a loan tagged with the share-count concept, for the filings a
     # wrapper lists (source_encodings.par_tagged_as_units). Declared as principal_amount:from_shares_tag.
-    from pipeline.source_encodings import par_tagged_as_units_expression
-    par_from_units = ("(" + par_tagged_as_units_expression('cik', 'accession_number')
-                      + " AND asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0)")
+    # A fund can also declare single rows ('rows_near_cost'): there the count is taken only where it lies
+    # within 0.8 to 1.25 times the row's cost, the range a par amount of a loan bought near par sits in.
+    from pipeline.source_encodings import par_tagged_as_units_expression, par_tagged_as_units_rows_expression
+    # The count carries no scale attribute, so a filer that prints in thousands or millions can file it
+    # unscaled (Goldman Sachs Private Credit: 8,770 against a cost of 8,770,000; Ares: 1,289 against
+    # 1,288.8M). The scale is the one power of a thousand that puts the count in the band; the bands of
+    # the three scales do not overlap. 'rows_within_twice_cost' widens the band to 0.5 to 2 times cost for
+    # a fund whose flagged rows are notes bought at a discount (BCRED CLO subordinated notes).
+    _near = par_tagged_as_units_rows_expression('cik')
+    _wide = par_tagged_as_units_rows_expression('cik', mode='rows_within_twice_cost')
+    # 'rated_rows_near_cost': the near band, and the row must carry a rate or a spread fact. For a fund
+    # that also tags equity unit counts under loan members (Ares: a published loan with a unit count, no
+    # principal and no rate is a mis-tagged equity row, D-018); such a row keeps its count.
+    _rated = ("(" + par_tagged_as_units_rows_expression('cik', mode='rated_rows_near_cost')
+              + " AND (_ir IS NOT NULL OR _bs IS NOT NULL))")
+    # In the row modes a row whose own text names an equity instrument keeps its count: a membership
+    # unit classed as a loan costs about a dollar a unit and would pass the band (Ares, APG Intermediate
+    # Holdings Class A membership units: 9,750,000 units, cost 9.8M).
+    _names_equity = ("regexp_matches(lower(coalesce(CAST(instrument_description AS VARCHAR), '') || ' ' || "
+                     "coalesce(CAST(_raw_id AS VARCHAR), '')), "
+                     "'(^|[^a-z])(units?|shares?|stock|membership|warrants?)([^a-z]|$)')")
+    par_scale = ("CASE WHEN NOT (asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0) THEN NULL"
+                 " WHEN " + par_tagged_as_units_expression('cik', 'accession_number') + " THEN 1.0"
+                 " WHEN " + _names_equity + " THEN NULL"
+                 + "".join(
+                     f" WHEN _cost > 0 AND ((({_near} OR {_rated}) AND _sh * {k} BETWEEN 0.8 * _cost AND 1.25 * _cost)"
+                     f" OR ({_wide} AND _sh * {k} BETWEEN 0.5 * _cost AND 2.0 * _cost)) THEN {k}"
+                     for k in ("1.0", "1000.0", "1000000.0"))
+                 + " END")
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
     # Cash-identity check: a row is a genuine cash position only when its own
@@ -2571,9 +2602,9 @@ def _prepare_bdc(
     -- CTE 10: Infer coupon type
     with_par AS (
         SELECT * REPLACE (
-            CASE WHEN {par_from_units} THEN _sh ELSE _pa END AS _pa,
-            CASE WHEN {par_from_units} THEN NULL ELSE _sh END AS _sh),
-            {par_from_units} AS _par_from_units
+            CASE WHEN {par_scale} IS NOT NULL THEN _sh * ({par_scale}) ELSE _pa END AS _pa,
+            CASE WHEN {par_scale} IS NOT NULL THEN NULL ELSE _sh END AS _sh),
+            {par_scale} AS _par_scale
         FROM no_mm
     ),
     with_coupon AS (
@@ -2849,7 +2880,9 @@ def _prepare_bdc(
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
                      ELSE NULL END,
                 CASE WHEN {units_from_principal} THEN 'shares_held:from_principal_tag' ELSE NULL END,
-                CASE WHEN _par_from_units THEN 'principal_amount:from_shares_tag' ELSE NULL END
+                CASE WHEN _par_scale IS NOT NULL THEN 'principal_amount:from_shares_tag' ELSE NULL END,
+                CASE WHEN _par_scale = 1000.0 THEN 'principal_amount:count_x1000'
+                     WHEN _par_scale = 1000000.0 THEN 'principal_amount:count_x1000000' ELSE NULL END
             ), '') AS src_transforms,
             '' AS src_field_overrides,
             '' AS cost_source,

@@ -31,7 +31,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -49,8 +49,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
             if key=='filed_rate_reading' and values not in (['all_in'],['cash_leg']):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
-            if key=='par_tagged_as_units' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
-                raise ValueError('par_tagged_as_units lists accession numbers: '+str(path))
+            if key=='units_tagged_as_par' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('units_tagged_as_par lists accession numbers: '+str(path))
+            if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost') and not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('par_tagged_as_units lists accession numbers or a row mode: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
@@ -190,10 +192,39 @@ def par_tagged_as_units_expression(cik,accession,encodings=None):
     configured=load_encodings() if encodings is None else encodings
     parts=[]
     for key,encoding in sorted(configured.items()):
-        filings=encoding.get('par_tagged_as_units',[])
+        filings=[v for v in encoding.get('par_tagged_as_units',[]) if _ACCESSION_RE.fullmatch(v)]
         if filings:
             values=','.join(_literal(v) for v in filings)
             parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def units_tagged_as_par_expression(cik,accession,encodings=None):
+    """True for a row of a filing whose wrapper says equity unit counts were tagged with the principal concept.
+
+    Blue Owl Credit Income's 10-Q for 2023-09-30 tags the units of 33 of its 44 equity rows as
+    InvestmentOwnedBalancePrincipalAmount ('Minerva Holdco ... Series A Preferred Stock ... 100,000');
+    the filings before and after use the share-count concept. Listed per filing."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        filings=encoding.get('units_tagged_as_par',[])
+        if filings:
+            values=','.join(_literal(v) for v in filings)
+            parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def par_tagged_as_units_rows_expression(cik,encodings=None,mode='rows_near_cost'):
+    """True for a fund whose wrapper says single rows tag their par as a share count ('rows_near_cost').
+
+    BCRED's CLO subordinated notes, Blue Owl's Pluralsight loans and others carry the par under
+    InvestmentOwnedBalanceShares in filings that otherwise use the principal concept. The caller
+    takes the count as the par only where it lies near the row's cost, so a count filed at
+    another scale or in another currency is left alone and stays a finding."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[_cik_condition(cik,key) for key,encoding in sorted(configured.items())
+        if mode in encoding.get('par_tagged_as_units',[])]
     return '('+' OR '.join(parts)+')' if parts else 'false'
 
 

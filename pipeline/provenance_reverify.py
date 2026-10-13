@@ -517,6 +517,11 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
 
                 mult = (_extractor_multiplier(x_events)
                         * _staging_multiplier(anchor_field, str(r.get("declared_events") or "")))
+                # a par read from an unscaled share count (source_encodings.par_tagged_as_units, row modes)
+                if field == 'principal_amount' and 'principal_amount:count_x1000000' in str(r.get('declared_events') or ''):
+                    mult *= 1000000.0
+                elif field == 'principal_amount' and 'principal_amount:count_x1000' in str(r.get('declared_events') or ''):
+                    mult *= 1000.0
                 neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
                 # a spread tag that holds a fixed coupon is declared as not published, whatever its sign
                 not_published = f"{field}:fixed_coupon" in str(r.get("declared_events") or "")

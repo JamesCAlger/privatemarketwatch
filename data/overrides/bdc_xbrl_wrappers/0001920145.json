@@ -135,7 +135,8 @@
       }
     ],
     "no_prefix_is_aggregate": true,
-    "category_marker_re": "^(?:common stock|preferred stock|equity securities)(?:\\s+united\\s+states|\\s+cayman\\s+islands)?(?:\\s+(?:common|preferred)\\s+stock)?(?:\\s*-\\s*[\\d.]+%)?$"
+    "category_marker_re": "^(?:common stock|preferred stock|equity securities)(?:\\s+united\\s+states|\\s+cayman\\s+islands)?(?:\\s+(?:common|preferred)\\s+stock)?(?:\\s*-\\s*[\\d.]+%)?$",
+    "industry_from_identifier_re": "(?i)\\sIndustry\\s+(.+?)\\s+(?:Interest\\s+Rate|Reference\\s+Rate|Maturity|Initial\\s+Acquisition)"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -303,6 +304,9 @@
     ],
     "foreign_unit_values": [
       "reported_in_usd"
+    ],
+    "par_tagged_as_units": [
+      "rows_near_cost"
     ]
   }
 }

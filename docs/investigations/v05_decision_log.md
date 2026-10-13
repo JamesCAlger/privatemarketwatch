@@ -3513,3 +3513,58 @@ Owner, 2026-10-13: "fix it. how can such issues be captured in the ledger", then
   row printed with a dash; the fund-level C04 covers the bulk). Not built: a floor on coverage
   for a field a fund never carries (the drop rule cannot see that), and a tag-mix check at source.
 - Both rules are shared and fire on every fund; their cohort count is not measured.
+
+### D-150 Top ten: the findings of the two new rules worked through (sandboxes `t5u`, `n5v`, `ax1`, `ax3`, with 2026-06-30)
+
+Owner, 2026-10-13: "fix the top 10 new issues". 49 outstanding to 35. What was fixed is data; what
+is left is listed with its cause.
+
+**Fixed**
+- **Par tagged as a share count on single rows** (`par_tagged_as_units` row modes, per fund; shared
+  code). The count becomes the par only where it sits next to the row's cost, multiplied by the
+  one power of a thousand that puts it there (a count carries no scale: Goldman Sachs Private
+  Credit files 8,770 against a cost of 8,770,000; Ares files 1,289 against 1,288.8M, page 'Senior
+  Direct Lending Program ... 1,289 1,288.8 1,237.1'). A row that names units, shares, stock,
+  membership or warrants keeps its count. Three modes: `rows_near_cost` (0.8 to 1.25 times cost:
+  Blue Owl, Apollo, HPS, Goldman Sachs Private Credit); `rows_within_twice_cost` (0.5 to 2: BCRED,
+  whose CLO subordinated notes are bought at a discount, page 'Signal Peak CLO 14 ... 26,000,000
+  20,345 20,975'); `rated_rows_near_cost` (the near band and a rate or spread fact: Ares, which also
+  tags equity units under loan members, D-018). Rows converted: BCRED 41, Goldman 15, Blue Owl 8,
+  Ares 2, HPS 2, Apollo 1.
+- **Two mistakes of mine caught by reading the result and reverted.** Ares Strategic Income was
+  switched on and off again: its counts are unit counts of asset-backed investments ('Mars
+  Downstop Loan Purchaser Trust ... 29,990,339' while cost amortises 28.7M to 8.6M), and the rule
+  read them as par in two quarters of ten. And at Ares Capital the near band took 9,750,000
+  membership units (APG Intermediate) for a par before the rate requirement was added.
+- **Blue Owl 2023-09-30, equity unit counts** (`units_tagged_as_par`, per filing): that 10-Q tags
+  the units of 33 of 44 equity rows with the principal concept (57 share-count tags against 94 and
+  92 in the neighbouring filings; page 'Minerva Holdco ... Series A Preferred Stock ... 100,000').
+- **Blue Owl 2025-12-31, industry:** the upper line of a two-line column header ('Interest') was
+  read as an industry heading on every page; the reader now ignores it. 149 rows regain their
+  industry.
+- **Goldman Sachs Private Credit 2026-06-30, industry:** the member format changed in that filing;
+  the industry is read from the member (`industry_from_identifier_re`): 781 rows.
+- **Par declared from the page** (`untagged_values`): Sixth Street LP Severin (216,386); Apollo
+  McGraw-Hill (33,903), Allied Universal (41,733, cost 41,554), Convergint (26,254, cost 26,147),
+  Jagex (68,523, cost 66,965), Waystar (11,933, cost 11,919); Ares Centric Brands (74.2M, cost
+  74.1M) and Neptune Bidco (52.8M). Each printed line is quoted in the wrapper script of record
+  (`scratch/2026-10-13_q2/par4.py`, `apollo_par.py`, `sev_apply.py`).
+
+**Left, with cause (35 findings)**
+- Ares Capital X11 x8: ARES 2007-3R subordinated notes in six quarters (page '20,000,000 - 0.1':
+  cost zero, so the band cannot apply); Sunrun, Viant and Murchison rows with no par tag, not read.
+- Apollo X11 x5: foreign loans whose par is printed in euros or sterling and not tagged (SumUp EUR
+  40,000; JOA Joker EUR 126,725; Version 1 GBP 6,559; Waystone), and one small row. **JOA Joker
+  2025-12-31 also publishes a wrong cost:** page 'EUR 126,725 132,847 147,810'; published cost
+  126,725,000 (the par figure sits in the cost tag). Not corrected.
+- BCRED X11 x2: Pigments Services (the page prints no par for those two lines: as printed) and one
+  CLO note with zero cost.
+- Blue Owl x6: the commitments table the filer tags from 2024-12-31 (about 220 rows a quarter with
+  no cost, maturity, industry or percent; kept under 'keep the undrawn lines') and the percent of
+  net assets the filer stopped printing on position rows from 2025-03-31 (both as filed); and four
+  PP03 findings that appeared once unit counts and pars were filled (the rule reads a count equal
+  to last quarter's as a prior-period row; the reason accepted for Oaktree in D-146).
+- Ares Strategic Income X11 x9: asset-backed investments printed with a unit count and classed as
+  loans. A classification or rule-scope question, not a missing par.
+- Sixth Street LP X11 x4: Price Fx (EUR par on its own context) and three small rows not read.
+- Oaktree x1: its industry is printed in a column the page reader does not read.

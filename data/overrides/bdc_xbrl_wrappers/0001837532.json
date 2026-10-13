@@ -223,11 +223,25 @@
     ],
     "printed_margin_reading": [
       "cash_plus_pik"
+    ],
+    "par_tagged_as_units": [
+      "rows_near_cost"
+    ],
+    "untagged_values": [
+      "0000950170-23-061985 C_a04db2b3-019f-4436-a096-e46e89d656a7 principal_amount 33903000",
+      "0000950170-24-094137 C_f9b16d68-f444-4e30-b9e0-a3259fb1f0f8 principal_amount 41733000",
+      "0000950170-24-094137 C_f9b16d68-f444-4e30-b9e0-a3259fb1f0f8 cost 41554000",
+      "0001193125-26-215667 C_6b014dad-6d9f-434a-b3da-75d7a0ee5542 principal_amount 26254000",
+      "0001193125-26-215667 C_6b014dad-6d9f-434a-b3da-75d7a0ee5542 cost 26147000",
+      "0000950170-25-068013 C_a68b516e-007c-4093-932d-5b8e129623a3 principal_amount 68523000",
+      "0000950170-25-068013 C_a68b516e-007c-4093-932d-5b8e129623a3 cost 66965000",
+      "0000950170-24-124223 C_872a2779-174d-4329-b131-bd8d70a7414e principal_amount 11933000",
+      "0000950170-24-124223 C_872a2779-174d-4329-b131-bd8d70a7414e cost 11919000"
     ]
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   }
 }

@@ -658,12 +658,19 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*$"},
           "description": "Position contexts a filing leaves without an identifier member, each as 'ACCESSION CONTEXT => IDENTIFIER', the identifier written as the filer writes it in its other filings (NexPoint Capital, 10-Qs for 2025-06-30 and 2025-09-30: ten of the printed rows sit on industry, affiliation and type members only). A context that already names a position is never renamed. Evidence required: the printed row whose fair-value tag uses the context."
         },
-        "par_tagged_as_units": {
+        "units_tagged_as_par": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
-          "description": "Accession numbers of filings in which the filer tagged the par amount of its loans with the share-count concept (InvestmentOwnedBalanceShares) instead of the principal concept (HPS Corporate Lending, 10-Q for 2026-03-31: 696 of 835 position contexts; the filings before and after use the principal concept on about 95 pct). In a listed filing a row classed as a loan that carries a count and no principal publishes the count as its principal (transform principal_amount:from_shares_tag). Evidence required: the concept counts of the filing against its neighbours, and a printed line whose par equals the tagged count."
+          "description": "Accession numbers of filings in which the filer tagged the unit count of its equity rows with the principal concept (Blue Owl Credit Income, 10-Q for 2023-09-30: 33 of 44 equity rows; the filings before and after use the share-count concept). In a listed filing an equity row with a principal tag and no share count publishes the tagged number as its unit count (transform shares_held:from_principal_tag). Evidence required: the concept counts of the filing against its neighbours, and a printed line whose unit count equals the tagged number."
+        },
+        "par_tagged_as_units": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^([0-9]{10}-[0-9]{2}-[0-9]{6}|rows_near_cost|rows_within_twice_cost|rated_rows_near_cost)$"},
+          "description": "'rows_within_twice_cost': as rows_near_cost with a band of 0.5 to 2 times cost, for a fund whose rows are notes bought at a discount (evidence: printed par lines). In both row modes a count filed unscaled is multiplied by the one power of a thousand that puts it in the band. 'rows_near_cost': single rows of any filing tag their par as a share count (CLO subordinated notes, asset-backed securities); the count is taken as the par only where it lies within 0.8 to 1.25 times the row's cost, so a count at another scale or in another currency stays a finding. Or accession numbers of filings in which the filer tagged the par amount of its loans with the share-count concept (InvestmentOwnedBalanceShares) instead of the principal concept (HPS Corporate Lending, 10-Q for 2026-03-31: 696 of 835 position contexts; the filings before and after use the principal concept on about 95 pct). In a listed filing a row classed as a loan that carries a count and no principal publishes the count as its principal (transform principal_amount:from_shares_tag). Evidence required: the concept counts of the filing against its neighbours, and a printed line whose par equals the tagged count."
         },
         "rate_tag_reading": {
           "type": "array",
