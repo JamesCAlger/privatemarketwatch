@@ -27,17 +27,26 @@ Kinds:
                              with ``requires_count`` it also carries a unit count (the filer reports
                              the position in units). A row that gains a principal tag fails.
 
+``par_not_printed``          Every flagged row is published with no principal, no unit count and no
+                             principal fact, and its printed row (page artifact, ``printed_row``)
+                             shows no par: the fair value is found among the row's amount cells,
+                             every other amount cell is the cost, and no label on the row states a
+                             par figure. A row the page reader did not read, or any number on it
+                             that is not accounted for, fails. It reads the page, not the tags, so a
+                             par the filer printed and tagged elsewhere does not pass.
+
 Read-only on the build outputs. Results: one row per (disposition, fund, quarter).
 """
 from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
 
 import duckdb
 
-KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known", "no_principal_in_source")
+KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known", "no_principal_in_source", "par_not_printed")
 RESULT_COLUMNS = ["disposition_id", "cik", "report_date", "check", "passed", "rows_tested", "rows_failing",
                   "failing_fair_value_m", "detail"]
 _FIELDS = ("fair_value", "cost", "principal_amount", "shares_held", "interest_rate", "basis_spread", "pik_rate")
@@ -174,9 +183,99 @@ def _missing_source_rows_known(con, output: Path, rule: str, ciks, params) -> li
         FROM g LEFT JOIN pub USING (cik, q) LEFT JOIN filed USING (cik, q)""").fetchall()
 
 
+_DATE_CELL = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}|\d{1,2}/\d{2,4}|[A-Za-z]{3,9}\.? \d{1,2}, \d{4}")
+_FOOTNOTE = re.compile(r"\(\s*\d{1,2}\s*\)")
+_CURRENCY = re.compile(r"\b(?:USD|EUR|GBP|CAD|AUD|CHF|SEK|NOK|DKK|JPY|NZD)\b|[$]")
+_NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+_PAR_IN_LABEL = re.compile(r"(?i)(\d[\d,]*(?:\.\d+)?)\s*(?:par|principal)\b")
+
+
+def _printed_amount_matches(text: str, value: float | None) -> bool:
+    """Is the printed figure this value, in dollars, thousands or millions, to the digits printed?"""
+    if value is None:
+        return False
+    printed = float(text.replace(",", ""))
+    unit = 10.0 ** -(len(text.split(".")[1]) if "." in text else 0)
+    return any(abs(printed * scale - abs(value)) <= 0.51 * unit * scale for scale in (1.0, 1e3, 1e6))
+
+
+def unexplained_on_printed_row(printed_row: str, fair_value: float | None, cost: float | None) -> list[str]:
+    """What stops a printed row from showing 'no par': an empty list when nothing does.
+
+    The row's cells are separated by ' | '. A cell of words is searched only for a stated par
+    ('$ 151,442 par'). A cell of figures is a percentage, a date, or an amount; every amount has to
+    be the fair value or the cost. Footnote marks of one or two digits are ignored.
+    """
+    if not str(printed_row or "").strip():
+        return ["row not read on the page"]
+    problems, value_seen = [], False
+    # a percent sign or a closing bracket printed in a cell of its own belongs to the figure before it
+    joined = re.sub(r" \| (?=[%)]\s*(?: \||$))", "", str(printed_row))
+    for cell in joined.split(" | "):
+        cell = _FOOTNOTE.sub(" ", cell)
+        figures = _CURRENCY.sub(" ", cell)
+        if re.search(r"[A-Za-z]", figures):
+            stated = _PAR_IN_LABEL.search(cell)
+            if stated:
+                problems.append("label states a par: " + stated.group(0))
+            continue
+        if "%" in cell or _DATE_CELL.search(cell):
+            continue
+        for number in _NUMBER.findall(figures):
+            if _printed_amount_matches(number, fair_value):
+                value_seen = True
+            elif not _printed_amount_matches(number, cost):
+                problems.append("figure not accounted for: " + number)
+    if not value_seen:
+        problems.append("fair value not found on the row")
+    return problems
+
+
+def _par_not_printed(con, output: Path, rule: str, ciks, params) -> list[tuple]:
+    artifact = output / "bdc_ixbrl_field_status.csv"
+    if not artifact.exists():
+        return []
+    columns = {r[0] for r in con.execute(
+        f"DESCRIBE SELECT * FROM read_csv('{artifact.as_posix()}', header=true, all_varchar=true, sample_size=-1)").fetchall()}
+    printed = "a.printed_row" if "printed_row" in columns else "NULL"
+    rows = con.execute(f"""
+        WITH i AS ({_issues_sql(output, rule, ciks)}),
+        h AS (SELECT CAST(row_id AS VARCHAR) AS row_id, TRY_CAST(fair_value AS DOUBLE) AS fv, TRY_CAST(cost AS DOUBLE) AS cost,
+                     TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL AS has_principal,
+                     TRY_CAST(shares_held AS DOUBLE) IS NOT NULL AS has_count,
+                     coalesce(CAST(src_facts AS VARCHAR), '') LIKE '%"principal_amount":{{"unit_ref"%' AS principal_tagged,
+                     CAST(accession_number AS VARCHAR) AS accession,
+                     lower(trim(CAST(bdc_investment_identifier AS VARCHAR))) AS raw_id
+              FROM {_holdings_sql(output)}),
+        a AS (SELECT lpad(regexp_replace(cik, '[^0-9]', '', 'g'), 10, '0') AS cik, accession_number AS accession, raw_id_lower AS raw_id,
+                     any_value({printed.replace('a.', '')}) AS printed_row, count(*) AS n
+              FROM read_csv('{artifact.as_posix()}', header=true, all_varchar=true, sample_size=-1)
+              WHERE period_role = 'current' GROUP BY 1, 2, 3)
+        SELECT i.cik, i.q, i.id, h.row_id IS NOT NULL, coalesce(h.has_principal, FALSE), coalesce(h.has_count, FALSE),
+               coalesce(h.principal_tagged, FALSE), h.fv, h.cost, CASE WHEN a.n = 1 THEN a.printed_row END
+        FROM i LEFT JOIN h USING (row_id) LEFT JOIN a ON a.cik = i.cik AND a.accession = h.accession AND a.raw_id = h.raw_id""").fetchall()
+    by_quarter: dict[tuple[str, str], list] = {}
+    for cik, quarter, name, published, has_principal, has_count, tagged, fv, cost, printed_row in rows:
+        problems = []
+        if not published:
+            problems.append("row not published")
+        if has_principal or tagged:
+            problems.append("a principal is published or tagged")
+        if has_count:
+            problems.append("a unit count is published")
+        problems += unexplained_on_printed_row(printed_row, fv, cost)
+        by_quarter.setdefault((cik, quarter), []).append((name, abs(fv or 0.0), problems))
+    results = []
+    for (cik, quarter), tested in sorted(by_quarter.items()):
+        failing = sorted((t for t in tested if t[2]), key=lambda t: -t[1])
+        results.append((cik, quarter, len(tested), len(failing), sum(t[1] for t in failing) / 1e6,
+                        ["%s [%s]" % (str(t[0])[:60], "; ".join(t[2])[:120]) for t in failing]))
+    return results
+
+
 _RUNNERS = {"values_as_filed": _values_as_filed, "no_rate_in_source": _no_rate_in_source,
             "missing_source_rows_known": _missing_source_rows_known,
-            "no_principal_in_source": _no_principal_in_source}
+            "no_principal_in_source": _no_principal_in_source, "par_not_printed": _par_not_printed}
 
 
 def evaluate(entries: list[dict], output_dir: Path) -> list[dict]:

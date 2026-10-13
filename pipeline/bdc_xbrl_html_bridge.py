@@ -1038,6 +1038,7 @@ def join_flat_positions_to_inline_status(
             rec[f"{f}_status"] = st
             rec[f"{f}_source_column"] = b.get(f"{f}_source_column", "")
         rec["printed_margin"] = b.get("printed_margin", "") if b is not None else ""
+        rec["printed_row"] = b.get("printed_row", "") if b is not None else ""
         out.append(rec)
     return out
 
@@ -1147,6 +1148,7 @@ def build_field_status_rows(
             "lien_status": lien_status,
             "gics_sector": j.get("gics_sector", ""),
             "sector_status": _fs(j.get("gics_sector_status", "")),
+            "printed_row": j.get("printed_row", ""),
             "lien_reconciled": lien_ok,
         })
     return rows
@@ -1658,6 +1660,9 @@ def propose_field_bridges_from_ixbrl(
             "lien_position": lien_tier,
             "lien_section": cur_lien,
             "gics_sector": row_sector,
+            # The row as printed, cell by cell. A check that says 'the page prints no par for this
+            # row' reads it (pipeline.disposition_validity, par_not_printed).
+            "printed_row": " | ".join(nonempty)[:800],
             "footnote_markers": footnotes,
             "match_evidence": {"method": "ixbrl_contextref_anchor",
                                "context_ref": cref, "anchor_concept": fv_concept},
@@ -1668,6 +1673,10 @@ def propose_field_bridges_from_ixbrl(
     # fund that names its reference-rate column, where these values are compared and may
     # replace published ones, a field is confirmed only where every row of the member prints the
     # same thing (both Cloudera rows print 'L +': the reference rate stands, the margin does not).
+    # A member printed on two rows has no single printed row.
+    for bridge in bridges:
+        if bridge["raw_id_lower"] in repeated:
+            bridge["printed_row"] = ""
     if filer_reading and repeated:
         for bridge in bridges:
             rows = readings.get(bridge["raw_id_lower"], [])

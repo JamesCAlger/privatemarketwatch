@@ -3723,3 +3723,28 @@ dispositions.
 - Not measured: any other fund. Both rules are shared.
 - Top ten after this: 11 outstanding, all with a proposal, in four groups (Ares 2007-3R x6, Sixth
   Street LP no par printed x3, Blue Owl percent x1, Ares Strategic Income JPMMT x1).
+
+### D-156 A check that reads the page: 'no par printed on this row' (sandbox `sslr1`)
+
+Owner, 2026-10-13: "do it" (make the reversed dispositions testable). Every check so far read the
+tags; the errors to guard against are the cases where tags and page disagree.
+
+- The inline page reader now keeps each anchored row as printed, cell by cell (`printed_row` in
+  `bdc_ixbrl_field_status.csv`; a schema change to that artifact). A member printed on two rows
+  keeps none.
+- New check kind `par_not_printed` (`pipeline/disposition_validity.py`): a flagged row passes only
+  if it is published with no principal, no unit count and no principal fact, its fair value is
+  found among the amount cells of its printed row, every other amount cell is its cost, and no
+  label on the row states a par. A row not read on the page, or any figure not accounted for,
+  fails.
+- Measured on Sixth Street Lending Partners with 2026-06-30 (`sslr1`): the three findings it is
+  meant for pass (second Galileo line 2023-06-30; Cordance 2025-06-30 and 2025-09-30, par printed
+  as a dash). Negatives are unit tests on the printed text of real rows: Apollo SumUp
+  ('EUR 40,000 | 42,858 | 42,303') and the HPS 2026-03-31 shape both fail.
+- NOT added to `data/reference/accepted_disposition_reasons.json`: that is the owner's decision.
+  Until then the three findings stay proposals.
+- Not built: a test for 'the count sits in the units column, not the principal column' (Ares
+  2007-3R, Ares Strategic Income). It needs the row lined up with its header, and a misaligned
+  row would read as blank and pass. Those stay per-fund owner decisions, as does Blue Owl's
+  percent of net assets.
+- `scripts/v05_evidence/check_probe.py <label> <rule> <cik> <kind>` runs any check on a sandbox.

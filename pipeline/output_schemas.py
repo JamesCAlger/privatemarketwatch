@@ -289,6 +289,7 @@ OUTPUT_SCHEMAS: dict[str, dict[str, str]] = {
         "lien_status": "VARCHAR",
         "gics_sector": "VARCHAR",
         "sector_status": "VARCHAR",
+        "printed_row": "VARCHAR",
         "lien_reconciled": "BOOLEAN",
         "in_unified": "BOOLEAN",
     },
