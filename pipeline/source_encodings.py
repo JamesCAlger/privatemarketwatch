@@ -9,7 +9,7 @@ import json
 import re
 
 
-_UNTAGGED_VALUE_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?')
+_UNTAGGED_VALUE_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?( [A-Z]{3})?')
 _ACCESSION_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6}')
 _CONTEXT_IDENTIFIER_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
@@ -31,7 +31,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -86,6 +86,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('The only admitted unfunded row handling is net_of_tagged_commitment: '+str(path))
             if key=='investments_total_excludes' and values!=['cash_rows']:
                 raise ValueError('The only admitted exclusion from the investments total is cash_rows: '+str(path))
+            if key=='cost_in_two_units' and values!=['foreign_is_par']:
+                raise ValueError('The only admitted reading of a cost in two units is foreign_is_par: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
@@ -136,6 +138,13 @@ def reference_rate_reading(cik,encodings=None,report_date=None):
     # based on the Federal Funds Rate or the Prime Rate"). The loan floats; its benchmark is not stated.
     unspecified=frozenset(' '.join(v.lower().split()) for v in encoding.get('unspecified_reference_labels',[]))
     return {'columns':columns,'codes':codes,'unspecified':unspecified}
+
+
+def industry_columns(cik,encodings=None):
+    """Printed header labels (lower case, single spaces) of the column that holds each row's industry, or an empty set."""
+    configured=load_encodings() if encodings is None else encodings
+    encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
+    return frozenset(' '.join(v.lower().split()) for v in encoding.get('industry_columns',[]))
 
 
 def printed_margin_funds(encodings=None):

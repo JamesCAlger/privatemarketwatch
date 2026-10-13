@@ -1094,6 +1094,9 @@ def _parse_single_filing(
     # A value the printed row shows and the tags lack, listed in the filer's wrapper.
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)
+    # A cost tagged in dollars and again in a foreign unit: the foreign fact is the par (wrapper setting).
+    from pipeline.cost_in_two_units import settle_cost_in_two_units
+    settle_cost_in_two_units(tree, {rec["_context_id"]: rec for rec in facts}, filing_meta)
     # Contexts that reuse a schedule member in another note are not positions (wrapper setting).
     from pipeline.schedule_row_tags import non_schedule_contexts
     _not_rows = non_schedule_contexts(tree, contexts, filing_meta)

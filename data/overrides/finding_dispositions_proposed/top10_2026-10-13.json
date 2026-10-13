@@ -1,0 +1,80 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "t10a",
+ "dispositions": [
+  {
+   "disposition_id": "PD-field_coverage_drop-1812554-COMMITMENTS",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "From the 10-K for 2024-12-31 Blue Owl Credit Income tags the rows of its commitments table (about 220 undrawn lines a quarter). That table prints a commitment type, an expiration date, the funded and unfunded commitment and a fair value: no cost, no maturity, no industry and no percent of net assets. Coverage of those four fields falls from 100 to about 69 pct because these rows were added, not because a field was lost on the position rows. The rows are published under the owner's ruling 'keep the undrawn lines'.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001812554-25-000009: 'Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Unfunded Commitment Fair Value (34) ... PetVet Care Centers, LLC First lien senior secured revolving loan 11/2029 - 33,258 ( 1,413 )'. Context c-1419 carries InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount 33,258,000 and a fair value net of unamortized fees of -1,413,000; no cost, maturity or percent fact."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox t5u: 2024-09-30 971 rows, all with cost and percent; 2024-12-31 714 rows, of which 494 carry cost, industry and percent and 220 carry none of cost and maturity (fair value -9.7M in total)."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/owl.sql",
+   "decided_by": "proposed by agent 2026-10-13; a new reason, for the owner",
+   "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "PD-field_coverage_drop-1812554-PERCENT",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "From the 10-Q for 2025-03-31 Blue Owl Credit Income keeps the '% of Net Assets' column header and prints no percent on its position rows, and tags none. The filed percent goes from 494 rows to 0; the recomputed percent is published for every row.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001812554-25-000030 (2025-03-31): '... LP Interest N/A N/A 989 989 1,239 Bird Holding B.V. ...' (par or units, cost, fair value, then the next company). 0001812554-25-000009 (2024-12-31): 'PetVet Care Centers, LLC(6) First lien senior secured loan S+ 6.00 % 11/2030 240,536 238,412 230,313 1.6 %'."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox t5u: rows with a filed percent 494 at 2024-12-31 and 0 from 2025-03-31 through 2026-06-30; rows with a recomputed percent equal the row count in every quarter."
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/owl.sql",
+   "decided_by": "proposed by agent 2026-10-13; a new reason, for the owner",
+   "decided_on": "2026-10-13"
+  },
+  {
+   "disposition_id": "PD-X11-1918712-2026Q1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The six flagged rows are tranches the filer reports in the Shares/Units column with no principal (the reason of DS-X11-1918712). Five carry a share-count fact. The sixth, JPMMT 2026-ACES1, prints 1,405,613,866 in that column and the filer tagged it with its percent-of-shares concept, so the row publishes neither a count nor a par. Not covered by the accepted entry, whose check requires a share-count fact.",
+   "evidence": [
+    {
+     "source": "filing",
+     "quote": "0001628280-26-034133: 'JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)'. Context c-778: InvestmentInterestRate 0.0466, asif:InvestmentOwnedBalancePercentOfShares 1405613866, cost 75,618,200, fair value 75,244,400; no principal and no share-count fact."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000162828026034133 xml c-778",
+   "decided_by": "proposed by agent 2026-10-13; a variant of an accepted reason, for the owner",
+   "decided_on": "2026-10-13"
+  }
+ ]
+}

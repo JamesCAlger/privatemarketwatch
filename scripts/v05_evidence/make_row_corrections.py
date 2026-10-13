@@ -535,10 +535,30 @@ if BAIN in held:
             fields = {name: "%d" % round(current[name] * 1000) for name in columns if current[name] is not None and abs(current[name]) < 100000}
             SPECS.append((BAIN, quarter, identifier, fields, "Filed unscaled (context " + context + "); " + printed, "D-127"))
             EXACT.add(identifier)
+# decision D-153: two rows of the first five funds read on the page while clearing rule X11
+ARES_MURCHISON = "Murchison Oil and Gas, LLC and Murchison Holdings, LLC, First lien senior secured loan"
+APOLLO_VERSION1_EUR = ("IT Services Version 1 Investment Company 24 Bidco Limited Investment Type First Lien Secured Debt - Term Loan "
+                       "Interest Rate E+490, 0.00% Floor Maturity Date 7/11/2029")
+EXACT |= {ARES_MURCHISON, APOLLO_VERSION1_EUR}
+SPECS += [
+    (ARES, "2024-12-31", ARES_MURCHISON,
+     {"asset_category": "EQUITY_PREFERRED", "index_classification": "PREFERRED_EQUITY", "asset_class": "PRIVATE_EQUITY",
+      "instrument_description": "Preferred units", "shares_held": "41000"},
+     WRONG_MEMBER + "'Murchison Holdings, LLC Exploration and production company Preferred units 06/2022 41,000 - 6.7' "
+     "(the loan, 78.3 at 2023-12-31, is no longer on the schedule; the context carries cost 0 and fair value 6.7M)", "D-153"),
+    (APOLLO, "2025-12-31", APOLLO_VERSION1_EUR,
+     {"principal_amount": "4029000", "principal_amount_currency": "EUR", "principal_amount_usd": "4728434.4",
+      "principal_fx_rate_to_usd": "1.1736"},
+     "The context carries two principal facts, 6,559,000 in GBP (the sterling term loan's par, printed on the line above) and "
+     "4,029,000 in EUR; the first was published. The printed line reads 'First Lien Secured Debt - Term Loan E + 490 , 0.00 % "
+     "Floor 7/11/2029 EUR 4,029 3,994 4,711'. Dollar amount at 1.1736, the reference rate the build applies to the fund's other "
+     "euro pars on that date (JOA Joker)", "D-153"),
+]
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
     author, added_on = (("v05-decision-" + decision[0],
+                         "2026-10-13" if "D-145" <= decision[0] < "D-999" and decision[0][2:3] != "0" else
                          "2026-10-11" if decision[0] >= "D-099" or decision[0][2:3] != "0" else
                          "2026-10-09" if decision[0] >= "D-074" else "2026-10-08" if decision[0] >= "D-046" else "2026-10-07")
                         if decision else ("v05-decision-D-021", "2026-10-06"))

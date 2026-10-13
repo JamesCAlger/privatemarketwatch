@@ -1481,6 +1481,8 @@ def propose_field_bridges_from_ixbrl(
 
     cik_norm = normalize_cik(cik)
     filer_reading = reference_rate_reading(cik_norm, encodings, report_date)
+    from pipeline.source_encodings import industry_columns
+    filer_industry_columns = industry_columns(cik_norm, encodings)
     acc = _norm_text(accession_number)
     acc_nodashes = acc.replace("-", "")
     path = html_path or (BDC_HTML_CACHE_DIR / cik_norm.lstrip("0") / f"{acc_nodashes}.html")
@@ -1614,6 +1616,14 @@ def propose_field_bridges_from_ixbrl(
         # one, a word in the row ('Subordinated Notes' of a CLO) is not a lien tier.
         lien_tier = classify_lien("", cur_lien) or ("" if lien_sections_seen else classify_lien("", " ".join(cells))) or ""
         margin = printed_margin(grid, cur_header, filer_reading) if rrt["status"] == "value" else ""
+        # A filer that prints the industry in a column of its own (source_encodings.industry_columns):
+        # the row's cell is its industry; a lone heading above is a section label, not an industry.
+        row_sector = cur_sector
+        if filer_industry_columns:
+            printed_industry = [grid[i] for i in sorted(cur_header) if i < len(grid) and grid[i].strip()
+                                and _named_header(cur_header[i]) in filer_industry_columns]
+            row_sector = (printed_industry[0].strip() if printed_industry and not _VALUE_RE.search(printed_industry[0])
+                          else "")
         # the artifact keys a row by its member in lower case, so two members that differ only in
         # case are one key ('athenahealth, Inc.' first lien and 'Athenahealth, Inc.' notes, BCRED 10-K 2022)
         key = _raw_id_lower(ident)
@@ -1647,7 +1657,7 @@ def propose_field_bridges_from_ixbrl(
             "printed_margin": margin,
             "lien_position": lien_tier,
             "lien_section": cur_lien,
-            "gics_sector": cur_sector,
+            "gics_sector": row_sector,
             "footnote_markers": footnotes,
             "match_evidence": {"method": "ixbrl_contextref_anchor",
                                "context_ref": cref, "anchor_concept": fv_concept},

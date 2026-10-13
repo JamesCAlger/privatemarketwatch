@@ -223,7 +223,20 @@ def correct_misdated_contexts(contexts: dict[str, dict[str, Any]], filing_meta: 
     return changed
 
 
-_UNTAGGED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) (fair_value|cost|principal_amount) (-?\d+(?:\.\d+)?)")
+_UNTAGGED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) (fair_value|cost|principal_amount) (-?\d+(?:\.\d+)?)(?: ([A-Z]{3}))?")
+
+
+@lru_cache(maxsize=1)
+def _untagged_currency() -> dict[tuple[str, str, str], str]:
+    """Currency a wrapper declares for an untagged principal: (cik, accession, context) -> code."""
+    from pipeline.source_encodings import load_encodings
+    result: dict[tuple[str, str, str], str] = {}
+    for cik, encoding in load_encodings().items():
+        for value in encoding.get("untagged_values", []):
+            accession, context, name, _number, currency = _UNTAGGED_RE.fullmatch(value.strip()).groups()
+            if currency and name == "principal_amount":
+                result[(cik, accession, context)] = currency
+    return result
 
 
 @lru_cache(maxsize=1)
@@ -232,7 +245,7 @@ def _untagged_by_accession() -> dict[tuple[str, str], dict[str, dict[str, float]
     result: dict[tuple[str, str], dict[str, dict[str, float]]] = {}
     for cik, encoding in load_encodings().items():
         for value in encoding.get("untagged_values", []):
-            accession, context, name, number = _UNTAGGED_RE.fullmatch(value.strip()).groups()
+            accession, context, name, number, _currency = _UNTAGGED_RE.fullmatch(value.strip()).groups()
             result.setdefault((cik, accession), {}).setdefault(context, {})[name] = float(number)
     return result
 
@@ -244,7 +257,8 @@ def fill_untagged_values(facts_by_context: dict[str, dict[str, Any]], filing_met
     0000950170-25-021144: Elysium BidCo preference shares, printed '49,063 49,063', tagged with a
     cost of 49,063 and no fair value). A row with no fair value is not a position, so it was lost.
     The wrapper's ``source_encodings.untagged_values`` lists each one as
-    'ACCESSION CONTEXT FIELD VALUE' with the printed row as evidence. Only a missing value is
+    'ACCESSION CONTEXT FIELD VALUE' (a principal may add its currency code: '... principal_amount
+    40000000 EUR') with the printed row as evidence. Only a missing value is
     filled: a tagged value is never replaced, and a context with no facts at all is left alone.
     """
     cik = re.sub(r"\D", "", str(filing_meta.get("cik", ""))).zfill(10)
@@ -261,6 +275,10 @@ def fill_untagged_values(facts_by_context: dict[str, dict[str, Any]], filing_met
         for name, number in values.items():
             if facts.get(name) is None:
                 facts[name] = number
+                currency = _untagged_currency().get((cik, str(filing_meta.get("accession_number", "")), context))
+                if currency and name == "principal_amount":
+                    # a par printed in another currency ('EUR 40,000'); cost and fair value are dollar figures
+                    facts["principal_amount_unit"] = currency
                 filled += 1
     return filled
 
@@ -289,6 +307,8 @@ def encoding_signature(cik: str) -> str:
     untagged = sorted("%s %s %s %s" % (accession, context, name, number)
                       for (owner, accession), listed in _untagged_by_accession().items() if owner == cik
                       for context, values in listed.items() for name, number in values.items())
+    untagged += sorted("%s %s par in %s" % (accession, context, currency)
+                       for (owner, accession, context), currency in _untagged_currency().items() if owner == cik)
     from pipeline.unfunded_commitments import nets_unfunded_rows
     netting = ["unfunded:net_of_tagged_commitment"] if nets_unfunded_rows(cik) else []
     from pipeline.schedule_row_tags import reads_schedule_row_tags
@@ -297,5 +317,8 @@ def encoding_signature(cik: str) -> str:
         netting.append("rates:coupon_with_margins")
     from pipeline.schedule_row_tags import schedule_row_tests
     netting.extend("rows:" + name for name in sorted(schedule_row_tests(cik)))
+    from pipeline.cost_in_two_units import reads_cost_in_two_units
+    if reads_cost_in_two_units(cik):
+        netting.append("cost:foreign_is_par")
     return "|".join(combos + misdated + untagged + named + netting
                     + sorted("fv:" + name for name in fair_value_aliases(cik)))

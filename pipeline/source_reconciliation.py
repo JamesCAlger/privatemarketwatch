@@ -1630,6 +1630,8 @@ def _extract_single_xbrl_source_file(
         _settle_margins(facts_by_ctx, mode=_margin_tags)
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values(facts_by_ctx, filing_meta)
+    from pipeline.cost_in_two_units import settle_cost_in_two_units
+    settle_cost_in_two_units(tree, facts_by_ctx, filing_meta, record_events=False)
     from pipeline.schedule_row_tags import drop_non_schedule_contexts
     drop_non_schedule_contexts(tree, contexts, facts_by_ctx, filing_meta)
     # an undrawn commitment row is compared net of its tagged commitment, as the extractor publishes it

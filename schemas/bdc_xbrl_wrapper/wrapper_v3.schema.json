@@ -609,6 +609,13 @@
           "items": {"enum": ["coupon", "margin"]},
           "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Use margin where the PIK tag on such a row holds the margin over the reference rate: the finalizer then publishes it as basis_spread (transform basis_spread:pik_margin) on rows whose reference rate is known, and leaves pik_rate as filed. Evidence required for margin: printed lines of the form reference + margin PIK. Use coupon then margin where the filer has both kinds and names its reference-rate column (reference_rate_columns): a known reference rate makes the figure a margin, and it is the coupon only where that column prints N/A or nothing (coupon_type Fixed). Any other row stays as filed."
         },
+        "industry_columns": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Printed header labels of the column in which this filer prints each row's industry (Oaktree Strategic Credit: 'Portfolio Company | Industry | Type of Investment ...', every row 'MRI Software LLC | Application Software | First Lien Term Loan ...'). The inline field-status reader then takes a row's industry from that cell and not from the last lone heading above it (which for such a layout is a section label). An empty cell gives no industry. Evidence required: the printed header and two printed rows."
+        },
         "reference_rate_columns": {
           "type": "array",
           "minItems": 1,
@@ -693,11 +700,18 @@
           "items": {"enum": ["net_of_tagged_commitment"]},
           "description": "The filer lists each undrawn commitment in its schedule as a row at the committed amount and subtracts the commitments again as one line per section (KKR FS Income Trust, 10-Q for 2026-03-31: 'Sotheby's, Revolver (i) 31,849 31,849 31,849', footnote (i) 'Security is an unfunded commitment', then 'Unfunded Loan Commitments (430,150) (430,150)'). Each such row is published net: cost and fair value less the commitment the filing tags for it in its commitments note; the principal keeps the committed amount. A row is netted only when its name starts with the commitment's name and its cost equals the tagged amount. Evidence required: the printed offset line and a commitment-note fact beside its schedule row."
         },
+        "cost_in_two_units": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"enum": ["foreign_is_par"]},
+          "description": "The filer tags the par of a foreign loan with the cost concept and the foreign unit, beside the dollar cost, and tags no principal (Apollo Debt Solutions, 10-K for 2025-12-31, JOA Joker Holdco 3: printed 'EUR 126,725 132,847 147,810'; tagged InvestmentOwnedAtCost 126,725,000 in EUR and 132,847,000 in USD). A context with exactly two cost facts, one in a unit the filing defines as USD and one in another currency, publishes the dollar fact as its cost and the foreign fact as its principal in that currency (transforms cost:of_two_units, principal_amount:from_foreign_cost_tag). Evidence required: printed lines beside the two cost facts of their contexts."
+        },
         "untagged_values": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?$"},
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?( [A-Z]{3})?$"},
           "description": "Values a printed row shows and its tags lack, each as 'ACCESSION CONTEXT FIELD VALUE' in dollars (Sixth Street 0000950170-25-021144: the Elysium BidCo preference shares print a fair value of 49,063 and tag only the cost). Only a missing value is filled; a tagged value is never replaced. Evidence required: the printed row and the context's tagged facts."
         },
         "misdated_contexts": {

@@ -495,6 +495,16 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                         if reads_margins(r.get('cik')):
                             hit = ctx_facts.get('__local__investmentinterestrate') or hit
 
+                # A cost tagged in dollars and again in a foreign unit (source_encodings.cost_in_two_units):
+                # the published cost is the dollar fact, the published par the foreign one. The event
+                # names the unit; the fact of that unit on the context is the one re-read.
+                from pipeline.cost_in_two_units import COST_CONCEPT, declared_unit
+                two_unit = declared_unit(field, x_events)
+                if two_unit is not None:
+                    of_unit = [text for text, unit in fact_variants.get((ctx, COST_CONCEPT), set()) if unit == two_unit]
+                    hit = (COST_CONCEPT, of_unit[0]) if len(of_unit) == 1 else None
+                    anchor_field = 'cost'
+
                 if hit is None and not declared_c:
                     # A value the filer printed and did not tag, declared in the wrapper with the
                     # printed row as evidence (source_encodings.untagged_values). There is no fact

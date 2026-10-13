@@ -3602,3 +3602,70 @@ Store `data/overrides/finding_dispositions/owner_2026-10-13.json`.
 - Ledger: Ares Strategic Income X11 9 to 1; BCRED X11 2 to 1 (the New Mountain CLO 6 note with
   zero cost at 2024-12-31 is a different row and stays). Top ten about 26 outstanding, pieced
   together from several sandboxes; one build of the ten is still owed before quoting it.
+
+### D-153 Top ten: the remaining findings worked through, one build of the ten (sandboxes `t10a`, `ap2`, with 2026-06-30)
+
+Owner, 2026-10-13: "fix the remaining 35". About 26 were left after D-152. Each row was read on the
+printed schedule before a change. Result: top ten 3 outstanding of 517 findings, all three waiting
+for the owner. Published equals filed within 0.5M in 139 of 141 fund-quarters (Ares Strategic
+Income 2025-03-31 +2.5M and Golub 2023-12-31 -3.5M, not re-read in this round); every quarter has
+a filed total.
+
+**Fixed**
+- **Apollo: par tagged as a second cost fact in a foreign unit** (new setting
+  `source_encodings.cost_in_two_units: ["foreign_is_par"]`, module `pipeline/cost_in_two_units.py`,
+  Apollo only). JOA Joker 2025-09-30 and 2025-12-31 and Waystone delayed draw 2026-06-30 carry
+  InvestmentOwnedAtCost twice (EUR 126,725,000 and USD 132,847,000; page 'EUR 126,725 132,847
+  147,810') and no principal fact. The extractor keeps the first fact, so the euro par was
+  published as the dollar cost. A context with exactly one dollar and one foreign cost fact now
+  publishes the dollar fact as cost and the foreign one as par in that currency. Five such contexts
+  in all Apollo filings, none with a principal fact. The re-verifier re-reads the fact of the unit
+  named in the event.
+- **Par declared from the page** (`untagged_values`, which now takes an optional currency code for
+  a principal): Apollo SumUp 2024-06-30 (EUR 40,000), Version 1 2025-12-31 (GBP 6,559), Rise and
+  Brill revolver 2024-09-30 (356, cost 330); Ares Sunrun Xanadu 2022-09-30 (71.3M par and cost;
+  first lien cost 0.4M); BCRED New Mountain CLO 6 2024-12-31 (1,875,000); Sixth Street LP Price Fx
+  2024-12-31 (EUR 910). Lines quoted in `scratch/2026-10-13_left/apply_wrappers.py`.
+- **Ares Viant 2024-03-31:** the flagged row was the company's total line (0.5 / 0.5) tagged on a
+  member spelled like a position and published beside the two positions it sums. Excluded
+  (`agent_investigate_rules/1287750/exclude_viant_issuer_total_2024q1.json`).
+- **Ares Murchison 2024-12-31:** 41,000 preferred units (cost dash, value 6.7M) tagged under the
+  loan member; reclassed by row correction.
+- **Oaktree industry** (new setting `source_encodings.industry_columns`, Oaktree only): the fund
+  prints each row's industry in a column; the page reader took nothing. Now 100 pct of rows in 11
+  of 14 quarters carry the printed industry and a GICS label (before: none, except 48 rows at
+  2023-06-30 whose members carried it).
+
+**Found while reading, no rule had flagged it**
+- Apollo Version 1 euro term loan 2025-12-31 published the sterling loan's par: its context carries
+  two principal facts (GBP 6,559,000 and EUR 4,029,000) and the first won. Corrected by row
+  correction to EUR 4,029,000; dollar amount at the build's own reference rate for that date
+  (1.1736). One such context in all Apollo filings.
+
+**Closed on a reason the owner had accepted** (`finding_dispositions/accepted_reasons_2026-10-13.json`)
+- Ares 2007-3R subordinated notes, six quarters: 20,000,000 in the Shares/Units column, no
+  principal (reason of D-151). Carries forward through `no_principal_in_source`.
+- Sixth Street LP Galileo 2023-06-30 and Cordance 2025-06-30, 2025-09-30: no par printed, no
+  principal fact (reason of the Pigments entry, D-152).
+- Blue Owl PP03, four quarters: current-period rows whose count and values equal the prior
+  period's (reason of DS-024 and of the Oaktree entry, D-146).
+
+**Left for the owner** (`finding_dispositions_proposed/top10_2026-10-13.json`)
+1. Blue Owl 2024-12-31 coverage drop: about 220 commitment-table rows tagged from that filing; the
+   table prints no cost, maturity, industry or percent.
+2. Blue Owl 2025-03-31 coverage drop: no percent of net assets printed or tagged on position rows
+   from that filing; the recomputed percent is published.
+3. Ares Strategic Income 2026-03-31: JPMMT 2026-ACES1 prints 1,405,613,866 in the unit column and
+   tags it with the filer's percent-of-shares concept, so the accepted entry's check (which needs
+   a share-count fact) does not cover the quarter.
+
+**Mistakes of mine in this round**
+- The first build showed four new Apollo findings caused by the fix itself: the cost event recorded
+  the euro figure as the declared raw value (re-verifier: anchor_stale, three rows), and the
+  Version 1 correction withdrew the dollar par (FX01). Both corrected; Apollo rebuilt alone (`ap2`:
+  64 findings, 0 outstanding).
+- The count of 35 quoted to the owner earlier that day was read from ledgers written before D-152.
+
+Not measured: the two new settings and the currency suffix are wrapper-switched and touch no other
+fund by construction, but no fund outside the ten was rebuilt. "3 outstanding" is not "data
+correct": the Version 1 par shows what no rule sees.

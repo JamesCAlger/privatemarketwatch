@@ -810,6 +810,24 @@ def test_ixbrl_rows_take_the_filer_reading_from_the_wrapper(tmp_path):
     assert all(b["reference_rate_status"] != "value" for b in other)
 
 
+def test_industry_is_read_from_the_filers_named_column(tmp_path):
+    # Oaktree Strategic Credit prints 'Portfolio Company | Industry | Type of Investment'; the lone label above is a section
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("c1", "MRI Software LLC, First Lien Term Loan"), _ix_context("c2", "Other cash accounts")]
+    rows = ["<tr><td>Portfolio Company</td><td>Industry</td><td>Type of Investment</td><td>Maturity Date</td><td>Fair Value</td></tr>",
+            "<tr><td>Non-Control/Non-Affiliate Investments</td></tr>",
+            _ix_row("c1", ["MRI Software LLC", "Application Software", "First Lien Term Loan", "2/10/2026"], "4502"),
+            _ix_row("c2", ["Other cash accounts", "", "", ""], "12")]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    kwargs = dict(cik="0001872371", accession_number="A", report_date="2025-12-31", html_path=p)
+    named = {b["issuer_name"][:3]: b["gics_sector"] for b in propose_field_bridges_from_ixbrl(
+        encodings={"0001872371": {"industry_columns": ["Industry"]}}, **kwargs)["bridges"]}
+    assert named == {"MRI": "Application Software", "Oth": ""}
+    # without the setting the last lone label is the row's heading, as before
+    plain = {b["issuer_name"][:3]: b["gics_sector"] for b in propose_field_bridges_from_ixbrl(encodings={}, **kwargs)["bridges"]}
+    assert plain == {"MRI": "Non-Control/Non-Affiliate Investments", "Oth": "Non-Control/Non-Affiliate Investments"}
+
+
 # --- the margin printed on the row, and a spread tag that holds only the cash part ---
 def test_printed_margin_reads_the_three_forms_blue_owl_prints():
     from pipeline.bdc_xbrl_html_bridge import printed_margin
