@@ -1,0 +1,57 @@
+{
+ "cik": "0001849894",
+ "label": "msdxa",
+ "before": "f15a",
+ "shared_code": false,
+ "declared_changes": [
+  {"column": "principal_amount", "rows": 2, "why": "par declared from the page for the Mattress Firm loan at 2023-06-30 (1,326) and 2023-09-30 (1,322); the filer tagged the par on another context"},
+  {"column": "principal_amount_usd", "rows": 2, "why": "follows principal_amount on the same two rows (dollar loan, rate 1.0)"},
+  {"column": "principal_fx_rate_to_usd", "rows": 2, "why": "follows principal_amount on the same two rows (None to 1.0)"},
+  {"column": "principal_fx_status", "rows": 2, "why": "follows principal_amount on the same two rows (None to source_usd)"},
+  {"column": "principal_amount_source", "rows": 2, "why": "follows principal_amount on the same two rows (None to xbrl_field, the label the declared-value path writes)"},
+  {"column": "shares_held", "rows": 1, "why": "Metropolis warrant 2024-09-30: 6,314 (the Class B preferred row's count, written by the unit-scale normaliser) corrected to the tagged and printed 4"},
+  {"column": "corrected_fields", "rows": 1, "why": "marks the corrected shares_held on that row"}
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {"what": "Mattress Firm first lien loan had no principal: the row's context carries rate, cost, fair value and percent, and the filer tagged the printed par (1,326 / 1,322) on a different, stale context (C_8de50605 in the 2023-06-30 filing). Par declared from the page in source_encodings.untagged_values. Clears X11 at 2023-06-30 and 2023-09-30.",
+   "kind": "untagged_value",
+   "quarters": ["2023-06-30", "2023-09-30"],
+   "quotes": [
+    {"accession": "0000950170-23-041924", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,326 1,265 1,295 0.19"},
+    {"accession": "0000950170-23-062232", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,322 1,263 1,310 0.16"}]},
+  {"what": "Metropolis Technologies warrant, 2024-09-30: published unit count 6,314 was the count of the Class B preferred row of the same issuer (transform shares_held:pow10_shares, source derived_proxy); the context's share-count fact and the page say 4. Row correction of shares_held. No rule had flagged it.",
+   "kind": "row_correction",
+   "quarters": ["2024-09-30"],
+   "quotes": [
+    {"accession": "0000950170-24-124249", "text": "Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01"}]}
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "found_without_a_rule": [
+  "Metropolis warrant 2024-09-30 published 6,314 units for a printed and tagged 4 (fixed above). Cause is shared: the unit-scale normaliser in pipeline/unified_holdings.py compares price per unit across all rows of one issuer (cik + issuer_name), so a warrant beside a preferred of the same issuer is read as a scale outlier and given the neighbour's count. Not changed (shared code); other funds not measured.",
+  "Protective Industrial Products Series A Preferred, 2023-12-31: the page prints 31,597 and the share-count fact is 31597; published shares_held is 31 (same normaliser, labelled derived_proxy). The filer prints the figure in two scales (30, 31, 31, then 31,597, then 33 to 38), so neither value is clearly right; left as is.",
+  "The 'Par Amount / Shares' figure on the PIK preferred rows is an amount in thousands of dollars, not a count: Metropolis Class B 6,314 / 6,950 / 7,535 / 8,162 and Class A 18,041 / 19,184 / 20,166 grow at the PIK rate, and Protective 30 to 38 is in millions. Where the filer tagged it with the share-count concept (2024-09-30, 2024-12-31, Protective to 2024-12-31) it is published as shares_held: as filed, but a reader will take 18,041 for a number of shares.",
+  "The earlier reading (docs/investigations/v05_readings/0001849894.md, C04 row) says the printed units are tagged as a principal amount; for the preferred rows that is a par amount correctly tagged as principal, and only the warrant (4) and Class D (24) look like counts.",
+  "The two declared pars carry principal_amount_source 'xbrl_field' although the value comes from the page, not from a fact of that context (label written by the shared declared-value path).",
+  "Ligado Networks first lien loan: the 10-Qs for 2024-06-30 and 2024-09-30 print '15.50 %' without 'PIK' (every other filing prints '15.50 % PIK'); published pik_rate is empty in those two quarters and 15.5 in the others. As printed; the series is not continuous.",
+  "2024-06-30: first lien Services: Consumer rows sit on members reading 'First Lien Debt Services: <issuer>' (no 'Consumer'); published industry is Services: Consumer for the seven rows read, from the page heading."
+ ],
+ "tests_run": [
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py: 654 passed",
+  "tests/test_v05_fund_gate.py tests/test_audit_wrapper_cohort.py tests/test_unified_holdings.py -k 'correction or gate or cohort': 204 passed, 771 deselected",
+  "scratch/fund_runs/0001849894/check_quotes.py on the proposals spec: 46 quotes checked, 0 missing"
+ ],
+ "not_done": [
+  "No second build: msdxa is the only build of this run, made after the two fixes and compared with f15a (holdings_field_diff: only the declared columns differ, plus entity_id and canonical_name).",
+  "Full pytest suite not run; no shared code was changed.",
+  "X11: all 34 remaining flagged rows were read on the schedule; the unfunded-commitments table was read for a sample only (Momentive, Sandlot, Boasso, PetVet, Sky Merger, CareVet, TIC Bidco, Spartan, 7Ridge, S.A.F.E., Trillium appear in the page output; not each quarter matched line by line).",
+  "A01: the member each subtotal is tagged on was taken from the check's output and the published identifiers, not read tag by tag in the filings; the printed subtotals and rows were read. The 2024-12-31 Second Lien Services: Business figure (50,363) was only located in the prior-year schedule; its context was not inspected.",
+  "F27: the weighted coupon side was not re-read on the page in this run (the earlier reading compared the 10 largest loans at 2023-06-30). The leverage explanation is arithmetic on filed figures, not a proof that every rate is right.",
+  "C04 2025-12-31 and 2026-03-31 carry an earlier reviewer's 'real error' verdict with no detail recorded; not found what that reviewer saw. Same for maturity_not_past 2024-06-30 and 2025-03-31.",
+  "Not checked: non-accrual flags, GICS labels, position identity across quarters, cost beyond the rows quoted, reference-rate codes and names fixed in D-099 (not re-read), the 2021-12-31 to 2022-12-31 quarters (no schedule published).",
+  "The fund has no 2026-06-30 filing on disk; builds end at 2026-03-31.",
+  "39 outstanding findings all have a proposal; none is accepted. 'All findings covered' is not 'data correct'."
+ ]
+}

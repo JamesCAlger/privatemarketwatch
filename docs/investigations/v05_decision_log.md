@@ -3669,3 +3669,31 @@ a filed total.
 Not measured: the two new settings and the currency suffix are wrapper-switched and touch no other
 fund by construction, but no fund outside the ten was rebuilt. "3 outstanding" is not "data
 correct": the Version 1 par shows what no rule sees.
+
+### D-154 MSD Investment Corp. cleared through the fund-clearing skill, first run (sandbox `msdxa`)
+
+Owner, 2026-10-13: "do it" (build the skill), then a first run on fund 11. One agent owned the
+fund; the orchestrator ran the gate (`scripts/v05_evidence/fund_gate.py`). Verdict PASS on the
+first round: stages clean, 13 of 13 quarters tie, every changed column declared (principal on 2
+rows, unit count on 1), 49 quotes found in the filings, no forbidden file touched.
+
+- **Fixed:** Mattress Firm par at 2023-06-30 and 2023-09-30 declared from the page (1,326 and
+  1,322; the filer tagged it on another context); Metropolis warrant at 2024-09-30 published 6,314
+  units where the tag and the page say 4 (row correction; no rule had flagged it).
+- **Ledger:** 74 findings, 39 outstanding (41 before), all 39 with a proposal in
+  `finding_dispositions_proposed/fund_0001849894.json` (12 entries). None accepted.
+- **Agent's correction of the earlier reading (D-099):** the 'Par Amount / Shares' figure on the
+  PIK preferred rows is a dollar amount that grows at the PIK rate, not a unit count;
+  `units_tagged_as_par` would publish wrong values and was not used.
+- **Seen on the page, no rule:** the shared unit-scale normaliser compares all rows of one issuer
+  and rescaled the warrant count (and Protective Industrial preferred at 2023-12-31: 31,597
+  published as 31). Other funds not measured. Two declared pars carry the source label
+  `xbrl_field` although they come from the page.
+- **Not checked by the agent:** four findings carry an earlier reviewer's 'real error' verdict with
+  no detail; the A01 subtotal members were taken from the check's output; non-accrual flags,
+  labels and position identity were not re-read. One build only.
+- What the run showed about the skill: the agent ran the gate itself before reporting (allowed,
+  but it lets an agent work to the gate); it killed a stray Python process by image name, which
+  would have killed another session's build. Both go into the brief.
+
+"39 with a proposal" is not "data correct".

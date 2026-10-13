@@ -273,6 +273,12 @@ SPECS += [
     (MSD, "2025-09-30", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "84'", "D-099"),
     (MSD, "2025-12-31", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "99'", "D-099"),
     (MSD, "2026-03-31", MSD_SKY_ID, {"cost": "0"}, MSD_SKY + "115'", "D-099"),
+    # fund-clearing loop, 2026-10-13: the count published for the warrant was the Class B preferred row's
+    (MSD, "2024-09-30", "Metropolis Technologies Inc. - Warrant", {"shares_held": "4"},
+     "The context's share-count fact is 4 (C_ef95e4b5, InvestmentOwnedBalanceShares) and the printed line reads 'Metropolis "
+     "Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01'; the published 6,314 is the count of the Class B preferred "
+     "row above it, put there by the unit-scale normaliser (shares_held:pow10_shares), which compares rows of one issuer",
+     "D-1849894-fundloop"),
 ]
 # Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
 EXACT = {"Impel Pharmaceuticals Inc., First Lien Term Loan 1",
