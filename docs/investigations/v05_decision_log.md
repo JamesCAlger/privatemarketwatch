@@ -3068,3 +3068,29 @@ commits at checkpoints; nothing pushed or published.
   in the three 2023 quarters: the reading found the filed figure includes cash equivalents there
   (as filed); nine conservation and ten GAV-type findings rest on that and are not proposed here.
 - 148 share counts carry the proxy of D-111 (44 changed value with the names).
+
+### D-124 BlackRock Private Credit Fund 0001902649 (sandbox `bk1a`)
+
+- Built alone with the settings of earlier rounds: published equals filed in every quarter; 2 of
+  3,994 loans without a rate; names and instruments split; 22 findings outstanding (A01 x9, C04
+  x4, negative-principal formats x6, B02, X02, F33). Three industry headings added to the table.
+  Nothing else changed; nothing proposed.
+
+### D-125 HPS Corporate Capital Solutions 0001989817, T Series BDC 0001885968, New Mountain Guardian IV 0001925531
+
+Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, `ng1b`).
+
+- **HPS Corporate Capital Solutions:** published equals filed in every quarter; 12 findings
+  outstanding (X02 x5, F27 x4, C107 x2, income_identity). No change. Open in the reading: equity
+  classed as loans (up to 145M), no instrument description on 1,826 of 1,837 rows (the member
+  names none), filer industry on 1,044 rows.
+- **T Series BDC:** 25 outstanding; published 1.7M under filed at 2024-12-31 only. No change. Open:
+  X02 x8, F27 x8, four conservation flags, the Surewerx row the filing did not tag (0.2M), BP
+  Purchaser cost on a prior-dated context.
+- **New Mountain Guardian IV:** names split from the lien words with the instrument kept
+  (`issuer_name_strip_re`): 568 distinct names to 227 over 3,532 rows; rows with no instrument
+  1,340 to 9. Ledger 22 to 21. **Cost of the clean-up:** rows with no standard industry label rose
+  from 861 to 1,054, because this fund's industry cannot be read yet: the page prints the company,
+  then the industry on the next line, and the reader takes the company as the heading (183
+  "headings", all withdrawn by the guard of D-116). Same layout in New Mountain Private Credit.
+  The 1,315 loans with no rate are undrawn rows that print none (as filed).
