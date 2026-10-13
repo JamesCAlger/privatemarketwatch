@@ -3249,3 +3249,18 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
 - The same two settings are written to the two sister funds (0002052153, 0002006758), measured
   when each is built. **Not applied to Apollo Debt Solutions (0001837532)**, a first-five fund at
   zero outstanding: same layout, same gain available, owner's call.
+
+### D-136 Overland Advantage 0001965934 (sandbox `ov1c`, before `ov1a`)
+
+- 2024-06-30: the filer's member for one Summit Materials loan is cut off ('... Construction
+  Materia'), so it read as a heading and was dropped. The context is named in full
+  (`context_identifiers`; page: 'Summit Materials LLC First lien senior secured term loan SOFR +
+  2.50 % 1/12/2029 3,990 4,026 4,015'). Published equals filed there (was 4.0M under).
+- **Five quarters stay 91M to 215M under filed, and the published rows are right.** The filer
+  prints a U.S. Treasury bill inside 'Total Investments'; it is published in every one of those
+  quarters, classed cash, and the totals check leaves cash out. Gap = the bill to the thousand in
+  each quarter. Six conservation and about twenty GAV-type findings rest on this one fact. Owner
+  decision: count a Treasury bill printed inside the investments total in the comparison (a
+  wrapper statement), or class it as an investment.
+- All 461 loans publish no interest rate: the schedule prints the spread only. As filed.
+- Three headings added to the table. 44 findings outstanding, unchanged; nothing proposed.
