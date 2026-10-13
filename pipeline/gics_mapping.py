@@ -361,6 +361,8 @@ _ALIAS_MAP: dict[str, str] = {
     "other diversified financial services": "Diversified Financial Services",
     "paper packaging": "Paper & Plastic Packaging Products & Materials",
     "soft drinks": "Soft Drinks & Non-alcoholic Beverages",
+    "technology hardware and equipment": "Technology Hardware, Storage & Peripherals",
+    "semiconductor and semiconductor equipment": "Semiconductors",
     "chemicas": "Specialty Chemicals",
     "it services and it systems management ex security": "IT Consulting & Other Services",
     "data and analytics": "Application Software",

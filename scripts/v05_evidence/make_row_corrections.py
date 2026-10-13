@@ -511,6 +511,12 @@ if STONEPOINT in held:
         SPECS.append((STONEPOINT, "2025-12-31", identifier, fields,
                       "Value cells tagged decimals=0 with no scale (context " + context + "); " + STONEPOINT_UNSCALED[context], "D-117"))
         EXACT.add(identifier)
+# decision D-134: Crescent Capital BDC. One row tagged on another issuer's member.
+SPECS.append(("0001633336", "2026-03-31", "Interest Rate 10.77% Maturity/ Dissolution Date 09/2027 One",
+              {"issuer_name": "Safco Dental Supply, LLC", "instrument_description": "Unitranche First Lien Revolver"},
+              "Tagged on a Lash Opco member; the page prints the line under Health Care: 'Safco Dental Supply, LLC (5) Unitranche "
+              "First Lien Revolver S + 700 ( 400 PIK), 100 Floor 10.77 % 06/2028 342 342 0.0 298' (0001193125-26-221936, context "
+              "C_80f8aecd-63d3-4238-8bbc-97543cfa2f21; the maturity tag is 2028-06-30)", "D-134"))
 # decision D-127: Bain Capital Private Credit. Facts filed unscaled (decimals 0, the thousands figure as the value).
 BAIN = "0001899017"
 BAIN_UNSCALED = {  # context prefix: (quarter, fields to scale, printed line)

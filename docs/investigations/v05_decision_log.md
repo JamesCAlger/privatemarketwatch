@@ -3212,3 +3212,24 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   10.94%'). Cleaned before the industry is mapped (any fund; test added): 44 rows here.
 - Ledger 54 to 42. Open in the reading: B01 x11 (dash-fair-value rows dropped), X02 x8, cost
   conservation x4 (cost sign in the tag on undrawn rows, 53 rows), fund-level figures.
+
+### D-134 Crescent Capital BDC 0001633336 (sandbox `cc1c`, before `cc1a`)
+
+- **Totals.** Published now equals filed in every quarter (was +6.3M, +6.4M, -1.2M in three).
+  - Ancora Bidco, 2024-12-31 and 2025-03-31: the issuer's loan subtotal, tagged by the filer on a
+    delayed-draw member, was published as a third loan (6,271 = 6,298 - 27; 6,438 = 6,446 - 8;
+    cost likewise). Removed by a two-quarter rule with the printed line and the arithmetic.
+  - MB2 Dental, 2026-03-31: fair value cell not tagged; declared from the page ('... 02/2031 1,246
+    1,238 0.2 1,234', `untagged_values`).
+- Safco Dental Supply, 2026-03-31: one row tagged on a Lash Opco member; issuer and instrument
+  corrected from the page (row correction; the total is unaffected).
+- Two headings added to the table (70 rows).
+- **The ledger went up, 45 to 51, and that is the honest reading.** With the subtotal no longer
+  published, source reconciliation reports the Ancora fact as a source row with no published row
+  (two findings a quarter) and one GAV finding appears. Its subtotal test sums every row of the
+  issuer, equity included, so it does not see a subtotal of the loans alone. The check needs
+  extending (subtotal of the issuer's rows of one section); until then these are five findings
+  whose answer is 'the filing's subtotal, correctly not published'. Not proposed here.
+- Open: C201 x13 (rows whose member carries no 'Investment Type' word have no issuer), pct of net
+  assets identity x7, X02 x7, 267 guessed reference rates (the page prints 'S + 500' in an
+  'Interest Term' column the reader does not take as a reference-rate column), 47 proxy shares.
