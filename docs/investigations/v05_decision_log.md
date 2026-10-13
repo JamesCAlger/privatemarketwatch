@@ -3461,3 +3461,26 @@ Owner, 2026-10-13, after the page re-read of each one-off: "do as recommended an
   on its own context under a slightly different member); Rooster BidCo preferred tags 1,601,000
   and 2,000 as principal in two quarters, unit count or not unknown; the validation checks still
   run on unpublished joint-venture rows.
+
+### D-148 Sixth Street Lending Partners: zero-value position published; HPS missing principal traced (sandboxes `sm1`, `t5q`)
+
+- **SMA Technologies Class B units published at zero** (owner, 2026-10-13: "publish SMA at zero").
+  The other nine top-ten funds publish zero-value rows where the filer tags 0 (Ares Capital
+  1,658, Blue Owl 1,623, Golub 957 ...); this filer tagged units and percent and no value. All
+  seven filings print '142,038 units) 11/21/2022 - - 0.0 %' (read on each page). Declared with
+  `untagged_values` (fair value 0, cost 0; 14 entries). The position is now continuous from
+  2023-03-31 into the quarters where it carries a value. Sixth Street Lending Partners: 48
+  findings, 0 outstanding; the top ten together 0.
+- **Seen on the same rows, not fixed:** from 2024-12-31 the row's label and tag say 173,048 units
+  and the published count is 244. That is the share-count proxy of D-111 replacing a filed count
+  with another row's; the owner decision on it is still open.
+- **HPS Corporate Lending, 2026-03-31: 522 of 637 drawn loans (20.4B) publish no principal.**
+  Cause: in that one filing (0001628280-26-033248) the filer tagged the par column with the
+  share-count concept (InvestmentOwnedBalanceShares) on 696 of 835 position contexts; the
+  filings before and after use InvestmentOwnedBalancePrincipalAmount on about 95 pct (752 of 784,
+  785 of 820, 808 of 847, then 772 of 818). Page: 'Global Music Rights, LLC ... SF + 4.50 % 8.20 %
+  12/20/2031 439,167 435,568 443,558'; the 439,167 is tagged as shares. The par is published in
+  `shares_held` on those loans and `principal_amount` is empty. Present in the sandbox signed off
+  on 2026-10-08; no rule looks for a drawn loan without principal. Not fixed yet.
+- Same shape, smaller, cause not read: Ares Strategic Income 144 loans (0.9B), Apollo Debt
+  Solutions 12 (0.5B), BCRED 44 (0.4B), Sixth Street LP 5, Goldman Sachs Private Credit 15, Blue Owl 8.
