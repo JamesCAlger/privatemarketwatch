@@ -280,6 +280,39 @@ SPECS += [
      "row above it, put there by the unit-scale normaliser (shares_held:pow10_shares), which compares rows of one issuer",
      "D-1849894-fundloop"),
 ]
+# fund-clearing loop, round 2: equity unit counts the page prints and the build published empty. The column is
+# 'Par Amount / Shares' and its footnote reads 'Equity investments are recorded as number of shares owned'; the
+# filer tagged these figures with the principal concept (times a thousand), so no share count was read.
+MSD_UNITS = ("The schedule note reads 'Equity investments are recorded as number of shares owned'; the filer tagged the printed "
+             "figure with the principal concept and no share-count fact, so no count was published. Printed line: ")
+MSD_PIP, MSD_MA = "Protective Industrial Products Inc. - Series A Preferred", "Metropolis Technologies Inc. - Class A Preferred Stock"
+MSD_MB, MSD_MD = "Metropolis Technologies Inc. - Class B Preferred Stock", "Metropolis Technologies Inc. - Class D Preferred Stock"
+MSD_MW, MSD_SAFE = "Metropolis Technologies Inc. - Warrant", "S.A.F.E. Management Equity"
+SPECS += [(MSD, quarter, phrase, {"shares_held": count}, MSD_UNITS + "'" + printed + "'", "D-1849894-fundloop") for quarter, phrase, count, printed in [
+    ("2024-03-31", MSD_PIP, "33", "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 33 32,519 28,247 2.36"),
+    ("2024-06-30", MSD_PIP, "34", "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 34 33,580 33,411 2.05"),
+    ("2024-06-30", MSD_MA, "18041", "Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,891 17,863 1.09"),
+    ("2024-06-30", MSD_MB, "6314", "Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,072 6,064 0.37"),
+    ("2024-06-30", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant (8)(9) 4 189 249 0.02"),
+    ("2025-03-31", MSD_PIP, "38", "Protective Industrial Products Inc. - Series A Preferred 13.00 % PIK 38 38,236 38,362 1.57"),
+    ("2025-03-31", MSD_MA, "19184", "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 19,184 19,044 19,009 0.78"),
+    ("2025-03-31", MSD_MB, "6950", "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 6,950 6,712 6,696 0.27"),
+    ("2025-03-31", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 48 -"),
+    ("2025-06-30", MSD_MA, "20166", "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 19,988 0.81"),
+    ("2025-06-30", MSD_MB, "7535", "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,268 0.30"),
+    ("2025-06-30", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 69 -"),
+    ("2025-09-30", MSD_MA, "20166", "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 20,050 0.72"),
+    ("2025-09-30", MSD_MB, "7535", "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,362 0.27"),
+    ("2025-09-30", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 659 0.02"),
+    ("2025-12-31", MSD_MB, "8162", "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25"),
+    ("2025-12-31", MSD_MD, "24", "Metropolis Technologies Inc. - Class D Preferred Stock - 24 778 778 0.02"),
+    ("2025-12-31", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"),
+    ("2025-12-31", MSD_SAFE, "3478", "S.A.F.E. Management Equity (11) 11/24/2031 3,478 3,478 3,478 0.11"),
+    ("2026-03-31", MSD_MB, "8162", "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25"),
+    ("2026-03-31", MSD_MD, "24", "Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02"),
+    ("2026-03-31", MSD_MW, "4", "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"),
+    ("2026-03-31", MSD_SAFE, "5000", "S.A.F.E. Management Equity 11/24/2031 5,000 5,054 5,000 0.15"),
+]]
 # Phrases that are a whole identifier and also the start of another ('... secured loan' and '... secured loan 2').
 EXACT = {"Impel Pharmaceuticals Inc., First Lien Term Loan 1",
          "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC, First lien senior secured loan",

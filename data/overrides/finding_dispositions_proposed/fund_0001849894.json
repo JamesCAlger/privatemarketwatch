@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "msdxa",
+ "sandbox": "msdxc",
  "dispositions": [
   {
    "disposition_id": "PD-X11-1849894-1",
@@ -92,13 +92,13 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "x11-undrawn-line-par-printed-as-dash"
   },
   {
    "disposition_id": "PD-C04-1849894-2",
    "class": "as_filed",
-   "supersedes_real_error_verdict": true,
    "engine": "oracle",
    "rule_name": "C04",
    "ciks": [
@@ -113,72 +113,76 @@
     "2024-09-30",
     "2024-12-31",
     "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
+    "2025-06-30"
    ],
-   "statement": "The schedule has one column, 'Par Amount / Shares', and the filer files no share count for most equity rows (2 to 6 rows a quarter, under 0.5 pct of fair value): the cell is a dash (Xponential, Accession) or its figure is tagged with the principal concept in thousands of dollars. On the preferred rows the figure is an amount, not a count: it grows at the row's PIK rate (Metropolis Class B 6,314, 6,950, 7,535, 8,162). No fix applies: the one wrapper setting that reads a principal tag as a unit count (units_tagged_as_par) would publish 4,000 for the warrant's printed 4 and a dollar amount as a share count for the preferred rows.",
+   "statement": "The equity rows left without a unit count are two preferred stocks, Xponential Fitness and Accession Risk Management, whose 'Par Amount / Shares' cell the filer prints as a dash and for which it files no share-count or principal fact. Every equity row whose cell prints a figure now publishes it (the column note reads 'Equity investments are recorded as number of shares owned'; 23 counts set from the page in this run). With one or two dash rows among two to six equity rows the check's 70 pct bar is missed in nine quarters. No fix applies: there is no figure on the page to publish.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
      "accession": "0001193125-26-222241",
-     "verbatim": "Par Amount / Shares (7) Cost (8) Fair Value Percentage of Net Assets",
-     "quote": "'Par Amount / Shares (7) Cost (8) Fair Value Percentage of Net Assets': one column for par and for shares."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-222241",
-     "verbatim": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06",
-     "quote": "'Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06': 2026-03-31 (the 2025-12-31 filing prints the same three lines); the contexts carry InvestmentOwnedBalancePrincipalAmount 8,162,000, 24,000 and 4,000 in USD and no share-count fact."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-108316",
-     "verbatim": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,268 0.30 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 69 -",
-     "quote": "'Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,268 0.30 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 69 -': 2025-06-30 (2025-09-30 prints 7,535 again); principal tags 7,535,000 and 4,000."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 6,950 6,712 6,696 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 48 -",
-     "quote": "'Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 6,950 6,712 6,696 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 48 -': 2025-03-31; principal tags 6,950,000 and 4,000. The same row carried a share-count tag of 6,950 at 2024-12-31 and 6,314 at 2024-09-30 (C04 fails those two quarters on the Accession and Xponential dashes, 4 of 6 rows with a count)."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-124249",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01': 2024-09-30, a dash in the Par Amount / Shares cell; the Xponential line of the same filing prints '- 270 189 0.01'."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-058054",
-     "verbatim": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 33 32,519 28,247 2.36 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 272 224 0.02",
-     "quote": "'Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 33 32,519 28,247 2.36 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 272 224 0.02': 2024-03-31; Protective tagged InvestmentOwnedBalancePrincipalAmount 33,000 USD, Xponential and Accession no figure. 2024-06-30 is the same shape (Protective principal tag 34,000; Metropolis 18,041,000, 6,314,000, 4,000)."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-062232",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01 Consumer goods: Non-durable Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31 30,432 24,720 3.06 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 278 222 0.03",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01 Consumer goods: Non-durable Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31 30,432 24,720 3.06 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 278 222 0.03': 2023-09-30, one of three rows with a figure (share-count tag 31); two dashes."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-041924",
-     "verbatim": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31 30,432 25,585 3.66 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03",
-     "quote": "'Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31 30,432 25,585 3.66 Retail Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03': 2023-06-30, one of two rows with a figure."
+     "verbatim": "Equity investments are recorded as number of shares owned.",
+     "quote": "'Equity investments are recorded as number of shares owned.': the note to the 'Par Amount / Shares' column, printed in all 13 filings; the basis for reading a printed figure on an equity row as a count."
     },
     {
      "source": "filing",
      "accession": "0000950170-23-021707",
      "verbatim": "Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 284 395 0.07",
-     "quote": "'Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 284 395 0.07': 2023-03-31, one of two equity rows, a dash."
+     "quote": "'Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 284 395 0.07': 2023-03-31, a dash; 1 of 2 equity rows has a count."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041924",
+     "verbatim": "Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03",
+     "quote": "'Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03': 2023-06-30, a dash; 1 of 2."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062232",
+     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01': 2023-09-30, a dash; the Xponential line of the same filing prints '- 278 222 0.03'; 1 of 3."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058054",
+     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 106 106 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 106 106 0.01': 2024-03-31, a dash; Xponential prints '- 272 224 0.02'; 1 of 3."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096970",
+     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 109 110 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 109 110 0.01': 2024-06-30, a dash; Xponential prints '7.5 % PIK 7/27/2031 - 273 206 0.01'; 4 of 6."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124249",
+     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01': 2024-09-30, a dash; Xponential prints '- 270 189 0.01'; 4 of 6."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-042155",
+     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 117 118 -",
+     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 117 118 -': 2024-12-31, a dash; Xponential prints '- 267 189 0.01'; 4 of 6."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071644",
+     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 121 123 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 121 123 0.01': 2025-03-31, a dash; Xponential prints '- 261 174 0.01'; 4 of 6."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108316",
+     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 125 132 0.01",
+     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 125 132 0.01': 2025-06-30, a dash; Xponential prints '- 258 174 0.01'; 3 of 5."
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "c04-share-cell-printed-as-dash"
   },
   {
    "disposition_id": "PD-A01-1849894-3",
@@ -214,8 +218,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "a01-subtotal-tagged-on-wrong-member"
   },
   {
    "disposition_id": "PD-A01-1849894-4",
@@ -252,8 +257,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members"
   },
   {
    "disposition_id": "PD-A01-1849894-5",
@@ -296,13 +302,13 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "a01-row-tagged-on-another-issuers-member"
   },
   {
    "disposition_id": "PD-maturity_not_past-1849894-6",
    "class": "as_filed",
-   "supersedes_real_error_verdict": true,
    "engine": "weak",
    "rule_name": "maturity_not_past",
    "ciks": [
@@ -347,11 +353,29 @@
      "accession": "0000950170-25-071644",
      "verbatim": "Ligado Networks LLC (12) N/A N/A 15.50 % PIK 11/1/2023 14,912 9,605 4,697 0.19",
      "quote": "'Ligado Networks LLC (12) N/A N/A 15.50 % PIK 11/1/2023 14,912 9,605 4,697 0.19': 10-Q for 2025-03-31 (the second quarter with a standing 'real error' verdict); the DIP loans printed beside it carry 6/30/2025."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096970",
+     "verbatim": "Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74",
+     "quote": "'Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74': the row the 2024-06-30 reviewer cited; it stands in the December 31, 2023 schedule of the 10-Q for 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071644",
+     "verbatim": "LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82",
+     "quote": "'LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82': the subtotal the 2025-03-31 reviewer cited, after the two lines it sums; excluded by rule."
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "maturity-not-past-defaulted-loan-printed-with-original-maturity",
+   "addresses_verdict": {
+    "2024-06-30": "The reviewer cited 'Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74' as a prior-period row published at 2024-06-30. That line is printed in the December 31, 2023 schedule of the 10-Q, and the build publishes no Equinox row at 2024-06-30 (sandbox msdxc: Equinox appears at 2023-12-31 only, where 3/8/2024 is not past). The verdict does not describe the current build. The one row the rule flags at 2024-06-30 is Ligado Networks, maturity 11/1/2023 as printed.",
+    "2025-03-31": "The reviewer cited the unlabelled LJ Perimeter Buyer subtotal (cost 21,145, fair value 19,967, no maturity) published as a position. That was a real error and is fixed: rule exclude_2025q1_lj_perimeter_subtotal removes the row, and sandbox msdxc holds the two LJ Perimeter lines only (17,652 and 2,315, both maturing 10/31/2028). The one row the rule flags at 2025-03-31 is Ligado Networks, maturity 11/1/2023 as printed."
+   },
+   "supersedes_real_error_verdict": true
   },
   {
    "disposition_id": "PD-F27-1849894-7",
@@ -407,8 +431,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund"
   },
   {
    "disposition_id": "PD-F16-1849894-8",
@@ -432,8 +457,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "f16-special-distribution-in-the-quarter"
   },
   {
    "disposition_id": "PD-PCT01-1849894-9",
@@ -457,8 +483,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund"
   },
   {
    "disposition_id": "PD-SRC_BDC01-1849894-10",
@@ -482,8 +509,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal"
   },
   {
    "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1849894-11",
@@ -507,8 +535,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal"
   },
   {
    "disposition_id": "PD-pct_of_net_assets_identity-1849894-12",
@@ -532,8 +561,9 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxa); not accepted by the owner",
-   "decided_on": "2026-10-13"
+   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
+   "decided_on": "2026-10-13",
+   "reason_key": "pct-identity-printed-percent-split-across-cells"
   }
  ]
 }

@@ -1,27 +1,38 @@
 {
  "cik": "0001849894",
- "label": "msdxa",
- "before": "f15a",
+ "label": "msdxc",
+ "before": "msdxa",
  "shared_code": false,
  "declared_changes": [
-  {"column": "principal_amount", "rows": 2, "why": "par declared from the page for the Mattress Firm loan at 2023-06-30 (1,326) and 2023-09-30 (1,322); the filer tagged the par on another context"},
-  {"column": "principal_amount_usd", "rows": 2, "why": "follows principal_amount on the same two rows (dollar loan, rate 1.0)"},
-  {"column": "principal_fx_rate_to_usd", "rows": 2, "why": "follows principal_amount on the same two rows (None to 1.0)"},
-  {"column": "principal_fx_status", "rows": 2, "why": "follows principal_amount on the same two rows (None to source_usd)"},
-  {"column": "principal_amount_source", "rows": 2, "why": "follows principal_amount on the same two rows (None to xbrl_field, the label the declared-value path writes)"},
-  {"column": "shares_held", "rows": 1, "why": "Metropolis warrant 2024-09-30: 6,314 (the Class B preferred row's count, written by the unit-scale normaliser) corrected to the tagged and printed 4"},
-  {"column": "corrected_fields", "rows": 1, "why": "marks the corrected shares_held on that row"}
+  {"column": "shares_held", "rows": 23, "why": "unit counts set from the printed 'Par Amount / Shares' cell on 23 equity rows that published none (2024-03-31 x1, 2024-06-30 x4, 2025-03-31 x4, 2025-06-30 x3, 2025-09-30 x3, 2025-12-31 x4, 2026-03-31 x4)"},
+  {"column": "corrected_fields", "rows": 23, "why": "marks the corrected shares_held on the same 23 rows"}
  ],
  "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Mattress Firm first lien loan had no principal: the row's context carries rate, cost, fair value and percent, and the filer tagged the printed par (1,326 / 1,322) on a different, stale context (C_8de50605 in the 2023-06-30 filing). Par declared from the page in source_encodings.untagged_values. Clears X11 at 2023-06-30 and 2023-09-30.",
+  {"what": "Round 2. Equity unit counts the page prints and the build published empty: 23 rows in seven quarters (Protective Industrial Products Series A Preferred; Metropolis Class A, Class B and Class D Preferred and Warrant; S.A.F.E. Management Equity). The filer tagged the printed figure with the principal concept, times a thousand, and no share-count fact. Read as a count on the filer's own statement: the column is 'Par Amount / Shares', the schedule is headed '(in thousands, except shares)' and its note, printed in all 13 filings, reads 'Equity investments are recorded as number of shares owned'. One row correction of shares_held per row and quarter, each with its printed line. C04 12 to 9; the two quarters with an earlier real-error verdict (2025-12-31, 2026-03-31) now pass at 4 of 4.",
+   "kind": "row_correction",
+   "quarters": ["2024-03-31", "2024-06-30", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "quotes": [
+    {"accession": "0001193125-26-222241", "text": "Equity investments are recorded as number of shares owned."},
+    {"accession": "0000950170-24-058054", "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 33 32,519 28,247 2.36"},
+    {"accession": "0000950170-24-096970", "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 34 33,580 33,411 2.05"},
+    {"accession": "0000950170-24-096970", "text": "Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,891 17,863 1.09 Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,072 6,064 0.37 Metropolis Technologies Inc. - Warrant (8)(9) 4 189 249 0.02"},
+    {"accession": "0000950170-25-071644", "text": "Protective Industrial Products Inc. - Series A Preferred 13.00 % PIK 38 38,236 38,362 1.57"},
+    {"accession": "0000950170-25-071644", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 19,184 19,044 19,009 0.78 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 6,950 6,712 6,696 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 48 -"},
+    {"accession": "0000950170-25-108316", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 19,988 0.81 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,268 0.30 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 69 -"},
+    {"accession": "0001193125-25-280735", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 20,050 0.72 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,362 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 659 0.02"},
+    {"accession": "0001193125-26-124538", "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock - 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"},
+    {"accession": "0001193125-26-124538", "text": "S.A.F.E. Management Equity (11) 11/24/2031 3,478 3,478 3,478 0.11"},
+    {"accession": "0001193125-26-222241", "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"},
+    {"accession": "0001193125-26-222241", "text": "S.A.F.E. Management Equity 11/24/2031 5,000 5,054 5,000 0.15"}]},
+  {"what": "Round 1 (already in msdxa, the sandbox before). Mattress Firm first lien loan had no principal: the filer tagged the printed par on a different context. Par declared from the page (untagged_values). Cleared X11 at 2023-06-30 and 2023-09-30.",
    "kind": "untagged_value",
    "quarters": ["2023-06-30", "2023-09-30"],
    "quotes": [
     {"accession": "0000950170-23-041924", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,326 1,265 1,295 0.19"},
     {"accession": "0000950170-23-062232", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,322 1,263 1,310 0.16"}]},
-  {"what": "Metropolis Technologies warrant, 2024-09-30: published unit count 6,314 was the count of the Class B preferred row of the same issuer (transform shares_held:pow10_shares, source derived_proxy); the context's share-count fact and the page say 4. Row correction of shares_held. No rule had flagged it.",
+  {"what": "Round 1 (already in msdxa). Metropolis warrant, 2024-09-30: published unit count 6,314 was the Class B preferred row's (transform shares_held:pow10_shares); tag and page say 4. Row correction.",
    "kind": "row_correction",
    "quarters": ["2024-09-30"],
    "quotes": [
@@ -29,29 +40,35 @@
  ],
  "total_exceptions": [],
  "parked": [],
+ "orchestrator_requests": [],
+ "earlier_verdicts": [
+  {"finding": "oracle C04 2025-12-31", "reviewer_found": "four equity rows print a Par Amount / Shares figure (8,162, 24, 4, 3,478) and none was extracted", "outcome": "correct and fixed: the four counts are published in msdxc (row corrections); C04 passes the quarter, 4 of 4"},
+  {"finding": "oracle C04 2026-03-31", "reviewer_found": "the same four rows (8,162, 24, 4, 5,000), none extracted", "outcome": "correct and fixed: the four counts are published in msdxc; C04 passes the quarter, 4 of 4"},
+  {"finding": "weak maturity_not_past 2024-06-30", "reviewer_found": "Equinox Holdings, maturity 3/8/2024, published at 2024-06-30 as a comparative-period leak", "outcome": "does not describe the current build: the line is in the December 31, 2023 schedule of the 10-Q and msdxc has no Equinox row at 2024-06-30; the row the rule flags is Ligado (11/1/2023 as printed). Proposal carries the answer"},
+  {"finding": "weak maturity_not_past 2025-03-31", "reviewer_found": "the LJ Perimeter subtotal (21,145 / 19,967, no maturity) published as a position", "outcome": "was a real error, fixed before this run by rule exclude_2025q1_lj_perimeter_subtotal; msdxc holds the two LJ lines only; the row the rule flags is Ligado. Proposal carries the answer"}
+ ],
  "found_without_a_rule": [
-  "Metropolis warrant 2024-09-30 published 6,314 units for a printed and tagged 4 (fixed above). Cause is shared: the unit-scale normaliser in pipeline/unified_holdings.py compares price per unit across all rows of one issuer (cik + issuer_name), so a warrant beside a preferred of the same issuer is read as a scale outlier and given the neighbour's count. Not changed (shared code); other funds not measured.",
-  "Protective Industrial Products Series A Preferred, 2023-12-31: the page prints 31,597 and the share-count fact is 31597; published shares_held is 31 (same normaliser, labelled derived_proxy). The filer prints the figure in two scales (30, 31, 31, then 31,597, then 33 to 38), so neither value is clearly right; left as is.",
-  "The 'Par Amount / Shares' figure on the PIK preferred rows is an amount in thousands of dollars, not a count: Metropolis Class B 6,314 / 6,950 / 7,535 / 8,162 and Class A 18,041 / 19,184 / 20,166 grow at the PIK rate, and Protective 30 to 38 is in millions. Where the filer tagged it with the share-count concept (2024-09-30, 2024-12-31, Protective to 2024-12-31) it is published as shares_held: as filed, but a reader will take 18,041 for a number of shares.",
-  "The earlier reading (docs/investigations/v05_readings/0001849894.md, C04 row) says the printed units are tagged as a principal amount; for the preferred rows that is a par amount correctly tagged as principal, and only the warrant (4) and Class D (24) look like counts.",
-  "The two declared pars carry principal_amount_source 'xbrl_field' although the value comes from the page, not from a fact of that context (label written by the shared declared-value path).",
-  "Ligado Networks first lien loan: the 10-Qs for 2024-06-30 and 2024-09-30 print '15.50 %' without 'PIK' (every other filing prints '15.50 % PIK'); published pik_rate is empty in those two quarters and 15.5 in the others. As printed; the series is not continuous.",
-  "2024-06-30: first lien Services: Consumer rows sit on members reading 'First Lien Debt Services: <issuer>' (no 'Consumer'); published industry is Services: Consumer for the seven rows read, from the page heading."
+  "CORRECTION of my round-1 report: I wrote that the 'Par Amount / Shares' figure on the PIK preferred rows is a dollar amount. The schedule note in every filing says equity is recorded as number of shares owned, so the figures are counts by the filer's statement and are now published as counts. Growth at the PIK rate (Class B 6,314 / 6,950 / 7,535 / 8,162) fits PIK paid in further shares as well as it fits an accreting amount; the page does not settle it beyond the note.",
+  "Protective Industrial Products Series A Preferred: the filer prints the count in two scales (30, 31, 31, then 31,597 at 2023-12-31, then 33, 34, 36, 37, 38; cost 29.5M to 38.2M, so the small figures are thousands of shares). Published as printed and tagged in each quarter except 2023-12-31, where the unit-scale normaliser publishes 31 for the tagged and printed 31,597 (labelled derived_proxy). The series is 1,000 times too small against the footnote's 'number of shares' in every quarter but that one; not changed, because the page prints those figures.",
+  "The unit-scale normaliser (pipeline/unified_holdings.py, shares_held:pow10_shares) compares price per unit across all rows of one issuer, so a warrant beside a preferred of the same issuer was given the preferred's count (Metropolis 2024-09-30, corrected in round 1). Shared code, not changed; other funds not measured. It runs before row corrections, so the 23 counts set in round 2 are not touched by it (checked: all 23 publish the corrected value).",
+  "Metropolis warrant: 4 units against a cost of 189 thousand and a fair value of up to 1,896 thousand; Class D preferred: 24 against 778. Published as printed; whether the filer means 4 and 24 or thousands is not on the page.",
+  "The two declared Mattress Firm pars carry principal_amount_source 'xbrl_field' although the value comes from the page (label written by the shared declared-value path).",
+  "Ligado Networks first lien loan: the 10-Qs for 2024-06-30 and 2024-09-30 print '15.50 %' without 'PIK'; published pik_rate is empty in those two quarters and 15.5 in the others. As printed.",
+  "2024-06-30: first lien Services: Consumer rows sit on members reading 'First Lien Debt Services: <issuer>'; published industry is Services: Consumer for the seven rows read."
  ],
  "tests_run": [
-  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py: 654 passed",
-  "tests/test_v05_fund_gate.py tests/test_audit_wrapper_cohort.py tests/test_unified_holdings.py -k 'correction or gate or cohort': 204 passed, 771 deselected",
-  "scratch/fund_runs/0001849894/check_quotes.py on the proposals spec: 46 quotes checked, 0 missing"
+  "Round 1: tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py: 654 passed; tests/test_v05_fund_gate.py tests/test_audit_wrapper_cohort.py tests/test_unified_holdings.py -k 'correction or gate or cohort': 204 passed",
+  "Round 2: no test run (23 lines added to row_corrections.csv and their spec; no code or wrapper change). Build log: 0 unmatched row corrections for this fund.",
+  "scratch/fund_runs/0001849894/check_quotes.py on proposals and report: all quotes found"
  ],
  "not_done": [
-  "No second build: msdxa is the only build of this run, made after the two fixes and compared with f15a (holdings_field_diff: only the declared columns differ, plus entity_id and canonical_name).",
-  "Full pytest suite not run; no shared code was changed.",
-  "X11: all 34 remaining flagged rows were read on the schedule; the unfunded-commitments table was read for a sample only (Momentive, Sandlot, Boasso, PetVet, Sky Merger, CareVet, TIC Bidco, Spartan, 7Ridge, S.A.F.E., Trillium appear in the page output; not each quarter matched line by line).",
-  "A01: the member each subtotal is tagged on was taken from the check's output and the published identifiers, not read tag by tag in the filings; the printed subtotals and rows were read. The 2024-12-31 Second Lien Services: Business figure (50,363) was only located in the prior-year schedule; its context was not inspected.",
-  "F27: the weighted coupon side was not re-read on the page in this run (the earlier reading compared the 10 largest loans at 2023-06-30). The leverage explanation is arithmetic on filed figures, not a proof that every rate is right.",
-  "C04 2025-12-31 and 2026-03-31 carry an earlier reviewer's 'real error' verdict with no detail recorded; not found what that reviewer saw. Same for maturity_not_past 2024-06-30 and 2025-03-31.",
-  "Not checked: non-accrual flags, GICS labels, position identity across quarters, cost beyond the rows quoted, reference-rate codes and names fixed in D-099 (not re-read), the 2021-12-31 to 2022-12-31 quarters (no schedule published).",
-  "The fund has no 2026-06-30 filing on disk; builds end at 2026-03-31.",
-  "39 outstanding findings all have a proposal; none is accepted. 'All findings covered' is not 'data correct'."
+  "Builds used: 2 of 6 by me (msdxa, msdxc).",
+  "Count or amount was decided from the column note and header, not from any document outside the filing; no share price or certificate terms were read.",
+  "The remaining C04 quarters (9) fail only on dash rows (Xponential, Accession); each dash was read on the page for each quarter.",
+  "Earlier verdicts: the reviewers' table and row indices were not opened; their quoted text was matched to the printed page and to the build.",
+  "A01: the member each subtotal is tagged on was taken from the check's output and the published identifiers, not read tag by tag (2023-09-30 confirmed by the orchestrator).",
+  "F27: the weighted coupon side was not re-read on the page in this run.",
+  "Not checked: non-accrual flags, GICS labels, position identity across quarters, cost beyond the rows quoted, the D-099 rate-code and name fixes, 2021-12-31 to 2022-12-31 (no schedule published). No 2026-06-30 filing on disk.",
+  "36 outstanding findings all have a proposal; none is accepted. 'All findings covered' is not 'data correct'."
  ]
 }

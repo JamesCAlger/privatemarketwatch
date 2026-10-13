@@ -3748,3 +3748,36 @@ tags; the errors to guard against are the cases where tags and page disagree.
   row would read as blank and pass. Those stay per-fund owner decisions, as does Blue Owl's
   percent of net assets.
 - `scripts/v05_evidence/check_probe.py <label> <rule> <cik> <kind>` runs any check on a sandbox.
+
+### D-157 MSD second round: the orchestrator's check of the first round, and the send-back (sandbox `msdxc`)
+
+Owner, 2026-10-13: "do it" (read a sample of the MSD proposals against the page; make the gate
+refuse a proposal over an earlier real-error verdict that it does not answer).
+
+- **Check of round one, 28 of 39 findings read by the orchestrator.** Held: the X11 proposal (all
+  34 rows pass the page check `par_not_printed` on a fresh build), the 2023-09-30 A01 proposal
+  (the three subtotal figures are on the members stated, read from the filing's facts), the
+  Ligado maturity proposal. Did not hold: C04 'as filed, no fix applies' (12 findings): the page
+  prints unit counts the build did not publish. Not read beyond their verified quotes: F27, F16,
+  PCT01, the percent row, the excluded subtotal, two A01 entries.
+- **Gate:** a proposal that covers a finding in state real_error_unremediated, remediation_staged
+  or remediation_pulled must carry `addresses_verdict` for that quarter. The brief now points at
+  `verdicts.py`; the agent had reported the verdicts as having no detail because it did not know
+  where they were.
+- **Round two, same agent, gate PASS:** 23 equity unit counts published from the page by row
+  correction over seven quarters; C04 12 to 9 (what is left: Xponential and Accession rows printed
+  as a dash); outstanding 39 to 36, all with a proposal and a reason key; the four earlier verdicts
+  answered (two were right and are fixed, one no longer describes the build, one was fixed by an
+  existing exclusion). Fields changed against `msdxa`: `shares_held` and `corrected_fields` on 23
+  rows, nothing else.
+- **The agent overruled the orchestrator, correctly.** I had told it the Class B and S.A.F.E.
+  figures looked like dollar amounts. Schedule note (7) in every filing reads 'Equity investments
+  are recorded as number of shares owned'; it published them as counts on that statement.
+- **Open:** Protective Industrial preferred is printed in two scales (30 to 38 in most quarters,
+  31,597 at 2023-12-31) and is published as printed, so the series is probably a thousand times
+  too small in most quarters. Whether the warrant's 4 and Class D's 24 are units or thousands is
+  not on the page. The shared unit-count normaliser that produced 6,314 for the warrant is
+  unchanged and unmeasured on other funds.
+- The page check was changed after it failed 12 of the 34 rows (MSD prints the percent as '0.00'
+  without a sign; a figure equal to the row's own percent is now accounted for). Tested, but it is
+  a check adjusted after seeing it fail.
