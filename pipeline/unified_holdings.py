@@ -84,6 +84,9 @@ UNIFIED_COLUMNS = [
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
     "bdc_investment_country",
+    # The filer's tagged acquisition date (us-gaap:InvestmentAcquisitionDate), BDC only. Many filers tag
+    # it on a twin context of the position; the extractor merges the twins (owner, 2026-10-13).
+    "bdc_acquisition_date",
     "src_context_id",
     "src_context_count",
     "src_conflict_fields",

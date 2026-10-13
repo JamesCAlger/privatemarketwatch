@@ -536,6 +536,7 @@ def _prepare_bdc(
         "fair_value_unit", "cost_unit", "principal_amount_unit",
         "industry", "investment_type", "affiliation",
         "nonaccrual_footnote", "nonaccrual_dimension",
+        "acquisition_date",
         "src_context_id",
         "dedupe_context_count", "dedupe_conflict_fields",
         "src_facts", "dedupe_filled_fields",
@@ -2812,6 +2813,9 @@ def _prepare_bdc(
             dimensions_raw AS bdc_dimensions_raw,
             _ugl AS bdc_unrealized_gain_loss,
             COALESCE(_hier_country, '') AS bdc_investment_country,
+            CASE WHEN TRY_CAST(acquisition_date AS DATE) >= DATE '1950-01-01'
+                      AND TRY_CAST(acquisition_date AS DATE) <= TRY_CAST(report_date AS DATE)
+                 THEN CAST(TRY_CAST(acquisition_date AS DATE) AS VARCHAR) ELSE '' END AS bdc_acquisition_date,
             COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
             COALESCE(CAST(dedupe_context_count AS VARCHAR), '') AS src_context_count,
             COALESCE(CAST(dedupe_conflict_fields AS VARCHAR), '') AS src_conflict_fields,

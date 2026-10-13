@@ -297,6 +297,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS bdc_dimensions_raw,
             NULL AS bdc_unrealized_gain_loss,
             '' AS bdc_investment_country,
+            '' AS bdc_acquisition_date,
             '' AS src_context_id,
             '' AS src_context_count,
             '' AS src_conflict_fields,

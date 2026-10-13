@@ -313,6 +313,30 @@ class TestB01LeafCompleteness:
         results = check_B01_leaf_completeness(pd.DataFrame())
         assert results[0].status == "skip"
 
+    def test_a_date_only_twin_of_a_valued_context_is_not_a_leaf_without_value(self):
+        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        detail = _source_detail([
+            {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
+            {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
+            {**twin, "raw_investment_identifier": "Beta first-lien loan", "source_fair_value": "3000000"},
+            {**twin, "raw_investment_identifier": "Beta first-lien loan", "source_fair_value": ""},
+        ])
+        results = check_B01_leaf_completeness(detail)
+        assert [r.status for r in results] == ["pass"]
+        assert "2/2 leaves" in results[0].message
+
+    def test_a_context_without_value_and_without_a_valued_twin_still_counts(self):
+        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        detail = _source_detail([
+            {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
+            {**twin, "raw_investment_identifier": "Hippo first-lien loan", "source_fair_value": ""},
+            # the same member in another period is not a twin
+            {"accession_number": "a1", "period": "2025-12-31", "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
+        ])
+        results = check_B01_leaf_completeness(detail)
+        assert [r.status for r in results] == ["fail"]
+        assert "1/3 leaves" in results[0].message
+
 
 class TestB02UniquePositionKeys:
     def test_pass_no_dupes(self):

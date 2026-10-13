@@ -3430,3 +3430,34 @@ The 82 outstanding findings were explained to the owner in ten groups by reason.
   and no acquisition date is published.
 - The script's handling of an entry that replaces a reviewer's verdict changed: the owner can now
   accept one by name (it was always left a proposal, and then dropped from the live file).
+
+### D-147 Next five: one-offs accepted, twin contexts, acquisition date, Golub unit counts (sandbox `n5s`, before `n5r`)
+
+Owner, 2026-10-13, after the page re-read of each one-off: "do as recommended and commit".
+- **Accepted (five):** CLO warehouse rates of 22.10 / 23.10 / 27.20 pct and par far above value
+  (Ares Strategic Income); negative values on undrawn lines, the identical 10-K and 10-K/A, the
+  Camelia Bidco rate (Golub). Each as printed.
+- **Golub unit counts (fix, not a disposition).** PB Group Holdings LP units print 113 (thousand)
+  units; the filer tags the count with the principal concept. The fund's wrapper now lists 'LP
+  units' and 'LP interest' as equity labels (`equity_instrument_labels`), the existing option for
+  this: 5 rows gain 113,000 units; nothing else changed. C04 no longer fires.
+- **Twin contexts (shared rule fix, test added).** The extractor already merges a position's value
+  context with its date-only twin; the B01 check read the raw contexts and counted the twin as a
+  position with no value. It now leaves out a context with no value whose member, filing and
+  period also have a valued context. Cohort effect not measured: it can only remove findings, and
+  only where an identical member carries a value.
+- **Acquisition date is published.** New column `bdc_acquisition_date` in the unified holdings
+  (the filer's tagged date, BDC only; blank before 1950 or after the report date). In this
+  sandbox: Sixth Street Lending Partners 1,169 of 1,238 rows, Goldman Sachs Private Credit 215 of
+  5,947, the other three funds tag none. Schema check passes; no existing column changed.
+  **Schema change to the central artifact:** not yet in the Parquet / dbt contract documents, the
+  baseline, or any 70-fund build.
+- **Result:** 246 findings, 2 outstanding for the next five (was 82 this morning); the top ten
+  together 2. Both are one question: SMA Technologies Class B units at Sixth Street (142,038
+  units, printed with a dash for cost and value, 0.0 pct) in 2023-09-30 and 2023-12-31, a
+  zero-value position that is not published. Owner to rule: publish zero-value positions, or
+  accept as printed.
+- Still open and not findings: Severin and Price Fx (2024-12-31) publish no principal (par tagged
+  on its own context under a slightly different member); Rooster BidCo preferred tags 1,601,000
+  and 2,000 as principal in two quarters, unit count or not unknown; the validation checks still
+  run on unpublished joint-venture rows.

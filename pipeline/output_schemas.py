@@ -154,6 +154,7 @@ OUTPUT_SCHEMAS: dict[str, dict[str, str]] = {
         "bdc_dimensions_raw": "VARCHAR",
         "bdc_unrealized_gain_loss": "VARCHAR",
         "bdc_investment_country": "VARCHAR",
+        "bdc_acquisition_date": "DATE",
         "src_context_id": "VARCHAR",
         "src_context_count": "BIGINT",
         "src_conflict_fields": "VARCHAR",

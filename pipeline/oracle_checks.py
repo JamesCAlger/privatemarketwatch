@@ -401,6 +401,19 @@ def check_B01_leaf_completeness(
             group.get("source_fair_value", pd.Series(dtype=str)).isin(["", None])
             | group.get("source_fair_value", pd.Series(dtype=str)).isna()
         ] if "source_fair_value" in group.columns else pd.DataFrame()
+        # A filer can tag one position on two contexts with the same member: the instant context
+        # carries the value, the duration context only the acquisition date (Sixth Street Lending
+        # Partners, half of all leaf contexts). The extractor merges them into one row. A context
+        # with no value whose member, filing and period also have a valued context is that twin,
+        # not a position without a value (owner, 2026-10-13).
+        twin_keys = [c for c in ("accession_number", "period", "raw_investment_identifier") if c in group.columns]
+        if len(no_fv) and "raw_investment_identifier" in twin_keys:
+            key = lambda frame: frame[twin_keys].astype(str).agg("|".join, axis=1)
+            member = _col_str(no_fv, "raw_investment_identifier").str.strip()
+            valued = set(key(group.drop(index=no_fv.index)))
+            twins = no_fv[key(no_fv).isin(valued) & member.ne("")]
+            no_fv = no_fv.drop(index=twins.index)
+            group = group.drop(index=twins.index)
 
         total = len(group)
         with_fv = total - len(no_fv)
