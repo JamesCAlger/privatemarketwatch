@@ -3278,3 +3278,15 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
 - Not fixed: published differs from filed in four quarters (-6.1M, +16.4M, +6.9M, +3.0M); 1,534
   loans without a rate (undrawn lines); 2,947 reference rates guessed from the date; F23 x13,
   PCT02 x10, A07 x10, F22 x10.
+
+### D-138 Lord Abbett Private Credit Fund 0002008748 (sandbox `la1b`, before `la1a`)
+
+- Published equals filed in every quarter. Names split from the loan words, kept as the
+  instrument ('BCM One Inc Delayed Draw' to 'BCM One Inc' / 'Delayed Draw'): 266 distinct names to
+  112 over 650 rows; rows with no instrument 650 to 71. 70 position ids changed. Two rows of
+  'Security 101 Inc' now resolve to the entity name 'Security' (entity naming, not the strip).
+- **Open, and the largest gap for this fund:** the page reader locates none of its rows (693 'not
+  found'), so nothing printed is read: no filer industry on any row (475 without a standard
+  label), 515 reference rates guessed from the date, 8 loans without maturity. Cause not looked at.
+- 21 findings outstanding, unchanged (B01 x6, PCT01 x4, concentration x4, X02 x3). One
+  unclassified row of 48.4M (SBLA Private Credit LLC, the fund's own vehicle) is an owner question.

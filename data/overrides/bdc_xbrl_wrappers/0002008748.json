@@ -82,7 +82,9 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:First\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Second\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Equity\\s+\\[Member\\]|Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?))\\s*$",
     "category_marker_before_total": true,
-    "bare_entity_rows": "positions"
+    "bare_entity_rows": "positions",
+    "issuer_name_strip_re": "(?i)\\s+(?:Incremental\\s+)?(?:Delayed\\s+Draw(?:\\s+Term\\s+Loan)?|Term\\s+Loan|Revolver)(?:\\s+(?:[A-C]|One|Two|Three|USD|EUR|AUD|GBP|CAD|\\d{1,2}|20\\d\\d|20\\d\\d\\d|\\d\\s*(?:st|nd|rd|th)\\s+Amendment))*\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " ",
