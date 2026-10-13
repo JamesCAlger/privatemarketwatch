@@ -48,6 +48,33 @@ _NO_RATE = {"from": "2022-01-01", "check": "no_rate_in_source", "params": {}}
 # Entries the owner accepted by name. They go to the live store; everything else stays a proposal.
 # 2026-10-09, on the Goldman Sachs members with no value: "keep the undrawn lines".
 OWNER_ACCEPTED = {("oracle", "B01", GS): ("owner, in session 2026-10-09", "2026-10-09")}
+# 2026-10-13, after the reasons were explained group by group: "accept all elements except 3 and 10"
+# (3 = position members with no fair value, B01; 10 = the one-off 'as printed' items). On the percent
+# of net assets the owner chose the recomputed figure where the fund's total ties; on the
+# joint-venture rows, "skip unpublished JV rows for now".
+_OWNER_1013 = ("owner, in session 2026-10-13", "2026-10-13")
+OWNER_ACCEPTED.update({key: _OWNER_1013 for key in [
+    ("identity", "pct_of_net_assets_identity", SIXTH), ("identity", "pct_of_net_assets_identity", GOLUB),
+    ("row_validation", "X02", ASIF), ("row_validation", "X02", OAKTREE), ("row_validation", "X02", GOLUB),
+    ("oracle", "A01", SIXTH),
+    ("fund_financials", "F16", GS), ("fund_financials", "F25", GS), ("fund_financials", "F26", GS),
+    ("fund_financials", "F25", SIXTH), ("fund_financials", "F33", SIXTH),
+    ("fund_financials", "F26", ASIF), ("identity", "income_identity", ASIF),
+    ("row_validation", "PP02", GS),
+    ("row_validation", "FX03", OAKTREE), ("row_validation", "SRC_BDC03", OAKTREE), ("row_validation", "PP03", OAKTREE),
+    ("source_recon", "blocking_fair_value_disagreement", OAKTREE),
+    ("row_validation", "SRC_BDC01", SIXTH), ("source_recon", "blocking_source_pct_leaf_parser_mismatch", SIXTH),
+    ("nonaccrual", "nonaccrual_flag", SIXTH), ("nonaccrual", "nonaccrual_flag", GOLUB),
+]})
+# 2026-10-13, later, after each one-off was re-read on the page: "do as recommended" (accept the
+# CLO warehouse rates, par above value, negative undrawn values, the identical 10-K/A, the Camelia rate).
+OWNER_ACCEPTED.update({key: ("owner, in session 2026-10-13, after the page re-read", "2026-10-13") for key in [
+    ("weak", "fmt_interest_rate", ASIF), ("row_validation", "X06", ASIF), ("row_validation", "C103", GOLUB),
+    ("oracle", "B07", GOLUB), ("provenance_reverify", "merged_context_excluded", GOLUB),
+]})
+# The Goldman Sachs B01 acceptance of 2026-10-09 covered the entry that replaces no reviewer verdict;
+# its verdict-replacing twin stays a proposal (group 3 is not accepted).
+_VERDICT_STAYS_PROPOSED = {("oracle", "B01", GS)}
 
 # (engine, rule) -> class, statement, check, rerun. The first five's reasons, tested row by row here.
 CHECKED = {
@@ -497,6 +524,9 @@ for entry in entries:
 def without_moved(listed):
     kept_entries = []
     for e in listed:
+        if e.get("supersedes_real_error_verdict"):  # the replacing entry itself keeps its quarters (owner-accepted, 2026-10-13)
+            kept_entries.append(e)
+            continue
         gone = moved.get((e["engine"], e["rule_name"], e["ciks"][0]), set()) if len(e.get("ciks", [])) == 1 else set()
         quarters = [q for q in e["quarters"] if q not in gone]
         if quarters:
@@ -508,8 +538,10 @@ def without_moved(listed):
 # entries DS-003 to DS-007; a fund-quarter where the row-by-row check passes is accepted by that check.
 BY_CHECK = "check passed on sandbox %s; accepted under the owner's standing instruction of 2026-10-09 (D-073)" % label
 for entry in entries:
-    accepted = OWNER_ACCEPTED.get((entry["engine"], entry["rule_name"], entry["ciks"][0]))
-    if entry.get("supersedes_real_error_verdict"):
+    key = (entry["engine"], entry["rule_name"], entry["ciks"][0])
+    accepted = OWNER_ACCEPTED.get(key)
+    # An entry that replaces a reviewer's verdict is never accepted by a check, only by the owner by name.
+    if entry.get("supersedes_real_error_verdict") and (not accepted or key in _VERDICT_STAYS_PROPOSED):
         continue
     if accepted:
         entry["decided_by"], entry["decided_on"], entry["basis"] = accepted[0], accepted[1], "accepted"

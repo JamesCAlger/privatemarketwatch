@@ -15,6 +15,12 @@
    "field": "investments_at_fair_value",
    "value": 2048389000,
    "evidence": "0000950170-23-058792 (10-Q, 2023-09-30) schedule: 'Total Investments $ 2,007,948 $ 2,048,389'. No undimensioned InvestmentOwnedAtFairValue fact is filed for this date."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "investments_at_fair_value",
+   "value": 4277564000,
+   "evidence": "0000950170-24-052859 (10-Q, 2024-03-31) schedule of investments, in thousands: 'Total Investments $ 4,197,705 $ 4,277,564 179.7 %'. No undimensioned fact is filed for the printed total, so the published rows had nothing to be compared with. Decision D-146."
   }
  ],
  "notes": "Company facts hold InvestmentOwnedAtFairValue for 2023-03-31 and 2023-12-31 but not for the two quarters between."

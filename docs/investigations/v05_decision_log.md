@@ -3393,3 +3393,40 @@ Purpose: measure the shared changes made since 2026-10-12 on two funds finished 
   - `reference_rate_source` on 36,889 rows (guess confirmed by the page; values unchanged);
   - **unexplained, to check:** three HPS rows moved from common equity to direct lending; 19
     share counts changed (Ares 9, Blue Owl 6, HPS 4; the proxy of D-111).
+
+### D-146 Next five funds: owner rulings of 2026-10-13 on the proposed dispositions (sandbox `n5r`, with 2026-06-30)
+
+The 82 outstanding findings were explained to the owner in ten groups by reason. Owner (verbatim):
+"accept all elements except 3 and 10". Recorded in `next5_owner_accepted.json`
+(`make_proposed_dispositions.py`, `OWNER_ACCEPTED`). Ledger: 82 to 16 outstanding of 262.
+
+- **Accepted:** percent of net assets (owner: "id lean towards using recomputed, if total FV's
+  match"; the filed percent is on net assets, printed to one decimal, and the recomputed
+  `pct_of_net_assets_calculated` is the figure to use where the fund's total ties and net assets is
+  confirmed); loans with no rate filed; the Sixth Street subtotal pairing ("so long as total FV
+  matches the sum of each position"); start-up quarter ratios; twin tranches; the Oaktree
+  joint-venture rows ("skip unpublished JV rows for now") and PP03; the stray prior-period
+  members; non-accrual as information.
+- **Not accepted, group 3 (members with no fair value, B01 x9).** Owner's point, confirmed: at
+  Sixth Street 1,164 of 1,184 such contexts are duplicates of a valued position (same member; the
+  duration context carries only the acquisition date). The other 20: 12 are SMA Technologies
+  Class B units printed with a dash (a zero-value position, not published); 5 are the same
+  duplicates under a changed label; 2 (Severin, Price Fx, 2024-12-31) carry the par amount on its
+  own context, so those loans publish no principal; **1 was a missing position.**
+- **Fixed: Hippo XPA Bidco, 2024-03-31.** Page: '... STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK)
+  7,281 7,102 (SEK 75,938) 0.3 %'. Cost tagged, fair value not; the row was dropped. Declared
+  (`untagged_values`). No filed total had been extracted for that quarter, so the 7.1M gap was
+  invisible; the printed total is added ('Total Investments $ 4,197,705 $ 4,277,564'). Published
+  now equals it (4,277.6M). The earlier statement that this fund ties in every quarter was wrong
+  for this one.
+- **Not accepted, group 10: six separate questions,** each re-read on the page 2026-10-13:
+  CLO warehouses at 22.10 / 23.10 / 27.20 pct (Ares Strategic Income, as printed); par far above
+  value on CLO bottom tranches and Flexsys (as printed); negative values on undrawn lines (Golub,
+  as printed); the 10-K and 10-K/A (1,693 fair-value facts each, identical); Camelia Bidco rate
+  (published 9.95 equals the page); equity with no unit count: Eclipse Buyer preferred prints a
+  dash, but **PB Group LP units print 113 units and none is published** (not as filed).
+- **Not done, owner informed:** the checks themselves still run on unpublished joint-venture rows
+  (shared validation modules; needs a test and a cohort measurement); twin contexts are not merged
+  and no acquisition date is published.
+- The script's handling of an entry that replaces a reviewer's verdict changed: the owner can now
+  accept one by name (it was always left a proposal, and then dropped from the live file).
