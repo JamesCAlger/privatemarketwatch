@@ -3374,3 +3374,22 @@ Purpose: measure the shared changes made since 2026-10-12 on two funds finished 
   the name is kept in front of the instrument) with 40 position ids; 4 MSD rows gained a label.
 - Entity ids and canonical names differ only because the two sandboxes hold different sets of
   funds. This is two funds, not the cohort: the first five and next five are still unmeasured.
+
+### D-145 Check: the first five funds rebuilt with the code as of the end of the run (sandbox `chk5`, before `final5` of 2026-10-08)
+
+- **Ledger to 2026-03-31: 0 outstanding of 296.** Five more findings show as outstanding (F28 at
+  2026-06-30, one per fund): this build ran to 2026-03-31 while fund-level figures for 2026-06-30
+  are on disk, so the rule reports a fund-quarter with figures and no holdings. An artifact of
+  the check build, not of the code.
+- **No fair value, principal, rate, spread, PIK, maturity or lien value differs** on the 65,649
+  rows common to both.
+- Differences, all traceable to rulings or decisions since 2026-10-08 except the last two:
+  - cost withdrawn on 1,151 rows (no proxy cost, owner ruling 2026-10-11; Blue Owl 1,131);
+  - `extracted_industry` on 55,509 rows and the standard label on 40,662 (industry from the
+    printed heading, owner ruling 2026-10-11). **Not verified row by row for these five funds:**
+    the example the diff prints is an Ares row going from 'Automotive' to 'Software & Services',
+    which needs a page check before anyone relies on it;
+  - issuer names without the row number (BCRED, HPS; 12,413 rows) and the position ids that follow;
+  - `reference_rate_source` on 36,889 rows (guess confirmed by the page; values unchanged);
+  - **unexplained, to check:** three HPS rows moved from common equity to direct lending; 19
+    share counts changed (Ares 9, Blue Owl 6, HPS 4; the proxy of D-111).
