@@ -16,6 +16,9 @@ decides, without judgment, whether the agent's run can be accepted:
                removed, is declared in the report with a count at least as large
   quotes       every quote the report or the fund's proposals cite is found in the cached filing
   files        nothing the agent may not touch changed since the snapshot
+  verdicts     a proposal over a finding an earlier reviewer judged a real error answers that
+               verdict, quarter by quarter ("addresses_verdict": {"<quarter>": "<what they found and
+               why it does not stand, or was fixed>"}, 60 characters or more)
   ledger       every outstanding finding of the fund is covered by a written proposal
 
 Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
@@ -45,6 +48,8 @@ TOLERANCE = 5e5
 SINCE = "2022-01-01"
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated",
             "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable"}
+# An earlier reviewer found a real error here (verdict on record; python scripts/v05_evidence/verdicts.py <label>).
+PRIOR_REAL_ERROR = {"real_error_unremediated", "remediation_staged", "remediation_pulled"}
 # Recomputed across whichever funds share a sandbox, so they differ between any two builds.
 INFORMATIONAL_COLUMNS = {"entity_id", "canonical_name"}
 WATCHED = ("pipeline", "scripts", "schemas", "tests", "data/overrides", "data/reference", "docs/investigations",
@@ -274,7 +279,7 @@ def check_files(snapshot_path: str | None, report: dict) -> dict:
 
 def check_ledger(label: str, cik: str) -> dict:
     csv.field_size_limit(10 ** 9)
-    findings, outstanding = 0, []
+    findings, outstanding, judged = 0, [], []
     with open(SANDBOXES / label / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:
         for row in csv.DictReader(fh):
             if row["cik"].zfill(10) != cik or row["report_date"][:10] < SINCE or row["state"] in RESOLVED - {
@@ -283,13 +288,21 @@ def check_ledger(label: str, cik: str) -> dict:
             findings += 1
             if row["state"] not in RESOLVED:
                 outstanding.append((row["engine"], row["rule_name"], row["report_date"][:10]))
-    covered = set()
+                if row["state"] in PRIOR_REAL_ERROR:
+                    judged.append((row["engine"], row["rule_name"], row["report_date"][:10]))
+    covered, answered = set(), set()
     for entry in _proposals(cik):
         if cik in entry.get("ciks", []):
-            covered |= {(entry.get("engine"), entry.get("rule_name"), q) for q in entry.get("quarters", [])}
+            keys = {(entry.get("engine"), entry.get("rule_name"), q) for q in entry.get("quarters", [])}
+            covered |= keys
+            # quarter -> what the earlier reviewer found and why it does not stand, in the agent's words
+            replies = entry.get("addresses_verdict") or {}
+            answered |= {(entry.get("engine"), entry.get("rule_name"), q) for q, text in replies.items() if len(str(text).strip()) >= 60}
     uncovered = sorted(set(outstanding) - covered)
+    unanswered = sorted(set(judged) & covered - answered)
     return {"ok": not uncovered, "findings": findings, "outstanding": len(outstanding), "with_proposal": len(outstanding) - len(uncovered),
-            "uncovered": [" ".join(u) for u in uncovered]}
+            "uncovered": [" ".join(u) for u in uncovered], "prior_real_error": len(judged),
+            "unanswered_verdicts": [" ".join(u) for u in unanswered]}
 
 
 def park(snapshot_path: str, cik: str) -> int:
@@ -371,6 +384,9 @@ def main(argv=None) -> int:
     if args.before:
         checks["fields"] = check_fields(args.label, args.before, cik, report)
     ledger = check_ledger(args.label, cik)
+    # A proposal over a finding an earlier reviewer called a real error must answer that verdict.
+    checks["verdicts"] = {"ok": not ledger["unanswered_verdicts"], "problems": [
+        "proposal does not answer the earlier real-error verdict: " + item for item in ledger["unanswered_verdicts"]]}
     failed = [name for name, result in checks.items() if not result["ok"]]
     # A change the agent may not make itself (a check, the re-verifier, a rule) is asked for in the report.
     requests = report.get("orchestrator_requests") or []

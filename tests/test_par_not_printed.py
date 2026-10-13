@@ -20,6 +20,15 @@ def test_rows_that_print_no_par_pass():
     assert dv.unexplained_on_printed_row("Senior subordinated loan | 13.00 % | 09/2024 | 09/2030 | 78.4 | 76.2 | (2)(11)", 76200000.0, 78400000.0) == []
 
 
+def test_a_percent_printed_without_its_sign_is_the_rows_percent_and_nothing_else():
+    # MSD 2024-03-31: 'Momentive Global - Revolving Credit Facility ... 5/31/2029 - ( 98 ) 45 0.00'
+    row = "Momentive Global - Revolving Credit Facility | S + 7.00% | 1.00% | 12.33% | 5/31/2029 | - | (98 | ) | 45 | 0.00"
+    assert dv.unexplained_on_printed_row(row, 45000.0, -98000.0) == ["figure not accounted for: 0.00"]
+    assert dv.unexplained_on_printed_row(row, 45000.0, -98000.0, 0.002) == []
+    # a figure that is not the row's percent is still unexplained
+    assert dv.unexplained_on_printed_row(row.replace("0.00", "1.50"), 45000.0, -98000.0, 0.002) == ["figure not accounted for: 1.50"]
+
+
 def test_a_printed_par_fails_however_it_is_tagged():
     # Apollo SumUp 2024-06-30: 'EUR 40,000 42,858 42,303' and no principal fact
     sumup = "SumUp Holdings Luxembourg S.a.r.l. | First Lien Secured Debt - Delayed Draw | E+ 650 , 1.50 % Floor | 4/25/2031 | EUR 40,000 | 42,858 | 42,303 | (3)(4)(8)"
@@ -50,7 +59,8 @@ def _outputs(tmp_path, holdings, printed):
 
 def _row(row_id, name, fair_value, cost, **more):
     return {"row_id": row_id, "cik": SSLP, "report_date": "2025-06-30", "accession_number": "A", "bdc_investment_identifier": name,
-            "fair_value": fair_value, "cost": cost, "principal_amount": None, "shares_held": None, "src_facts": "{}", **more}
+            "fair_value": fair_value, "cost": cost, "principal_amount": None, "shares_held": None, "src_facts": "{}",
+            "pct_of_net_assets": 0.0, "pct_of_net_assets_calculated": 0.0, **more}
 
 
 def _entry():

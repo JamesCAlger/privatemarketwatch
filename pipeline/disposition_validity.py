@@ -199,12 +199,23 @@ def _printed_amount_matches(text: str, value: float | None) -> bool:
     return any(abs(printed * scale - abs(value)) <= 0.51 * unit * scale for scale in (1.0, 1e3, 1e6))
 
 
-def unexplained_on_printed_row(printed_row: str, fair_value: float | None, cost: float | None) -> list[str]:
+def _printed_percent_matches(text: str, percent: float | None) -> bool:
+    """Is the printed figure the row's percent of net assets (a filer may print it without a % sign)?"""
+    if percent is None:
+        return False
+    printed = float(text.replace(",", ""))
+    unit = 10.0 ** -(len(text.split(".")[1]) if "." in text else 0)
+    return any(abs(printed - candidate) <= 0.51 * unit for candidate in (percent, percent * 100.0))
+
+
+def unexplained_on_printed_row(printed_row: str, fair_value: float | None, cost: float | None,
+                               percent: float | None = None) -> list[str]:
     """What stops a printed row from showing 'no par': an empty list when nothing does.
 
     The row's cells are separated by ' | '. A cell of words is searched only for a stated par
     ('$ 151,442 par'). A cell of figures is a percentage, a date, or an amount; every amount has to
-    be the fair value or the cost. Footnote marks of one or two digits are ignored.
+    be the fair value or the cost, or the row's published percent of net assets (MSD prints
+    '0.00' with no sign). Footnote marks of one or two digits are ignored.
     """
     if not str(printed_row or "").strip():
         return ["row not read on the page"]
@@ -224,7 +235,7 @@ def unexplained_on_printed_row(printed_row: str, fair_value: float | None, cost:
         for number in _NUMBER.findall(figures):
             if _printed_amount_matches(number, fair_value):
                 value_seen = True
-            elif not _printed_amount_matches(number, cost):
+            elif not _printed_amount_matches(number, cost) and not _printed_percent_matches(number, percent):
                 problems.append("figure not accounted for: " + number)
     if not value_seen:
         problems.append("fair value not found on the row")
@@ -241,6 +252,7 @@ def _par_not_printed(con, output: Path, rule: str, ciks, params) -> list[tuple]:
     rows = con.execute(f"""
         WITH i AS ({_issues_sql(output, rule, ciks)}),
         h AS (SELECT CAST(row_id AS VARCHAR) AS row_id, TRY_CAST(fair_value AS DOUBLE) AS fv, TRY_CAST(cost AS DOUBLE) AS cost,
+                     coalesce(TRY_CAST(pct_of_net_assets AS DOUBLE), TRY_CAST(pct_of_net_assets_calculated AS DOUBLE)) AS pct,
                      TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL AS has_principal,
                      TRY_CAST(shares_held AS DOUBLE) IS NOT NULL AS has_count,
                      coalesce(CAST(src_facts AS VARCHAR), '') LIKE '%"principal_amount":{{"unit_ref"%' AS principal_tagged,
@@ -252,10 +264,10 @@ def _par_not_printed(con, output: Path, rule: str, ciks, params) -> list[tuple]:
               FROM read_csv('{artifact.as_posix()}', header=true, all_varchar=true, sample_size=-1)
               WHERE period_role = 'current' GROUP BY 1, 2, 3)
         SELECT i.cik, i.q, i.id, h.row_id IS NOT NULL, coalesce(h.has_principal, FALSE), coalesce(h.has_count, FALSE),
-               coalesce(h.principal_tagged, FALSE), h.fv, h.cost, CASE WHEN a.n = 1 THEN a.printed_row END
+               coalesce(h.principal_tagged, FALSE), h.fv, h.cost, CASE WHEN a.n = 1 THEN a.printed_row END, h.pct
         FROM i LEFT JOIN h USING (row_id) LEFT JOIN a ON a.cik = i.cik AND a.accession = h.accession AND a.raw_id = h.raw_id""").fetchall()
     by_quarter: dict[tuple[str, str], list] = {}
-    for cik, quarter, name, published, has_principal, has_count, tagged, fv, cost, printed_row in rows:
+    for cik, quarter, name, published, has_principal, has_count, tagged, fv, cost, printed_row, pct in rows:
         problems = []
         if not published:
             problems.append("row not published")
@@ -263,7 +275,7 @@ def _par_not_printed(con, output: Path, rule: str, ciks, params) -> list[tuple]:
             problems.append("a principal is published or tagged")
         if has_count:
             problems.append("a unit count is published")
-        problems += unexplained_on_printed_row(printed_row, fv, cost)
+        problems += unexplained_on_printed_row(printed_row, fv, cost, pct)
         by_quarter.setdefault((cik, quarter), []).append((name, abs(fv or 0.0), problems))
     results = []
     for (cik, quarter), tested in sorted(by_quarter.items()):

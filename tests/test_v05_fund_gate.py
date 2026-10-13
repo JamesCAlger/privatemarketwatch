@@ -106,6 +106,24 @@ def test_outstanding_findings_need_a_proposal(sandbox):
     assert fund_gate.check_ledger("s1", CIK)["ok"]
 
 
+def test_a_proposal_over_an_earlier_real_error_verdict_must_answer_it(sandbox):
+    (sandbox / "s1").mkdir()
+    pd.DataFrame([{"cik": CIK, "report_date": "2025-12-31", "state": "real_error_unremediated", "engine": "oracle", "rule_name": "C04"},
+                  {"cik": CIK, "report_date": "2025-09-30", "state": "open", "engine": "oracle", "rule_name": "C04"}]
+                 ).to_csv(sandbox / "s1" / "findings_ledger.csv", index=False)
+    store = sandbox / "data/overrides/finding_dispositions_proposed"
+    store.mkdir(parents=True)
+    entry = {"ciks": [CIK], "engine": "oracle", "rule_name": "C04", "quarters": ["2025-09-30", "2025-12-31"]}
+    (store / ("fund_%s.json" % CIK)).write_text(json.dumps({"dispositions": [entry]}), encoding="utf-8")
+    assert fund_gate.check_ledger("s1", CIK)["unanswered_verdicts"] == ["oracle C04 2025-12-31"]
+    entry["addresses_verdict"] = {"2025-12-31": "too short"}
+    (store / ("fund_%s.json" % CIK)).write_text(json.dumps({"dispositions": [entry]}), encoding="utf-8")
+    assert fund_gate.check_ledger("s1", CIK)["unanswered_verdicts"] == ["oracle C04 2025-12-31"]
+    entry["addresses_verdict"] = {"2025-12-31": "The reviewer cited four rows with a Par Amount / Shares figure; two are dollar amounts and two are counts now published."}
+    (store / ("fund_%s.json" % CIK)).write_text(json.dumps({"dispositions": [entry]}), encoding="utf-8")
+    assert fund_gate.check_ledger("s1", CIK)["unanswered_verdicts"] == []
+
+
 def test_file_rules():
     forbidden = lambda path: any(re.search(rule, path) for rule in fund_gate.FORBIDDEN)
     for path in ("AGENTS.md", "pipeline/column_validation.py", "scripts/shadow_identity_engine.py", "scripts/v05_evidence/fund_gate.py",

@@ -25,6 +25,10 @@ JSON you must write).
      the owner accepted clears by check; add `--write`, then
      `python scripts/fund_ledger_trial.py --label <label> --from ledger`)
    - `python scripts/v05_evidence/left.py <label> <rule> ...` and `flagged.py <label> <rule> <cik> <quarter>`
+   - `python scripts/v05_evidence/verdicts.py <label> 1500` for what earlier reviewers found. A finding
+     in state `real_error_unremediated`, `remediation_staged` or `remediation_pulled` has a verdict
+     with the rows it cites: read it and check each cited row on the page. They are sometimes
+     wrong and sometimes already fixed, and you must say which.
 3. **Read every remaining finding on the page** before deciding anything:
    `python scripts/v05_evidence/page_line.py <cik> <accession> "<phrase>"` for the printed line,
    `python scripts/v05_evidence/filing_grep.py <cik> <accession no dashes> xml <context>` for the
@@ -51,6 +55,10 @@ JSON you must write).
    (`python scripts/v05_evidence/make_fund_proposals.py <label> <cik> --write` from a spec, or by
    hand in the same shape). Each entry needs at least one evidence item
    `{"source": "filing", "accession": "<with dashes>", "verbatim": "<line copied from page_line.py>", "quote": "<the same, with your reading>"}`.
+   An entry that covers a finding with an earlier real-error verdict needs
+   `"addresses_verdict": {"<quarter>": "<what that reviewer found, and why it does not stand or how it was fixed>"}`.
+   A figure the page prints and the build does not publish is a gap to fix or to park, never
+   "as filed": if one row correction can set it in one quarter, the same holds in the others.
    One reason per entry. Say why no fix applies. Give each entry a `reason_key`: a short slug for
    the reason itself, not the fund (`x11-undrawn-line-par-printed-as-dash`), reusing a key from
    `docs/investigations/v05_owner_queue.md` where the reason is the same, so the owner is asked once.
