@@ -3045,3 +3045,14 @@ commits at checkpoints; nothing pushed or published.
 - Ledger 88 outstanding; nothing proposed. Open and real in the reading: the published rate is the
   floor rate on variable loans (F27 x12: income yield 3.8 to 7.0 points above the holdings rate);
   zero-fair-value rows dropped (28 to 77 a quarter); issuer name missing on 1 to 8 rows a quarter.
+
+### D-122 Golub Capital BDC 4 0001901612 (sandbox `gb1b`)
+
+- Published equals filed in every quarter. Names: the member is 'issuer, One stop 1'; the
+  instrument words and row number are stripped and kept as the instrument: 1,379 distinct names to
+  317 over 6,579 rows; rows with no instrument description 5,659 to 2. One heading added to the
+  table ('Healthcare Equipment & Supplies'): rows with no standard label 98 to 16.
+- The 2,118 loans with no rate are undrawn lines with no rate tag (as filed). The harmful
+  `column_remap` of this fund was pulled in an earlier round (D-097).
+- Ledger 28 outstanding; nothing proposed. Open: pct_of_net_assets_identity x12 and F27 x6 (not
+  read in this pass), C115 x2, X02 x2.

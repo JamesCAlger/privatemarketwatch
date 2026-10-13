@@ -67,7 +67,9 @@
         "family": "equity"
       }
     ],
-    "category_marker_re": "(?i)^\\s*(?:Total\\s+Investments|Subtotal|Sub-Total)\\s*$"
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+Investments|Subtotal|Sub-Total)\\s*$",
+    "issuer_name_strip_re": "(?i)\\s*,\\s*(?:One stop|Senior secured|Second lien|Subordinated debt|(?:LP|LLC) (?:units|interest)|(?:Preferred|Common) stock|Warrant)(?:\\s+\\d{1,2})?\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": ", ",
