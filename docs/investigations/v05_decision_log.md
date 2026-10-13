@@ -3568,3 +3568,20 @@ is left is listed with its cause.
   loans. A classification or rule-scope question, not a missing par.
 - Sixth Street LP X11 x4: Price Fx (EUR par on its own context) and three small rows not read.
 - Oaktree x1: its industry is printed in a column the page reader does not read.
+
+### D-151 Ares Strategic Income: unit counts on coupon-bearing tranches stay unit counts (owner, 2026-10-13)
+
+- Question put to the owner: the fund's 'Private asset-backed investment' rows that carry a coupon
+  and a figure in the Shares/Units column (about 80 positions, mostly CLO tranches) - is that
+  figure a par? Evidence: it is the face amount in whole dollars (MDPK 2025-75: 21,935,000 units,
+  cost 21,935K; ANCHF 2025-19: 37,070,000 against 34,584K), original face for older and
+  amortising positions (Mars Downstop: 29,990,339 throughout, cost 28.7M to 8.6M), and a notional
+  for an interest-only strip (JPMMT 2026-ACES1: 1.28B against a 36M cost).
+- **Owner: "let's leave it as is".** The count stays in `shares_held`; no principal is published
+  for these rows; `par_tagged_as_units` stays off for this fund. The rows stay classed as loans.
+- Consequence: rule X11 keeps firing on this fund (9 fund-quarters now, more from 2026-06-30 when
+  the filing labels many more CLO tranches this way). They need a disposition ('as filed: the
+  filer reports a face amount in the unit column and no principal'), not yet recorded.
+- Also confirmed the same day: BCRED Pigments Services 2023-06-30 has no principal or share-count
+  fact on either context in the filing itself (tags: spread, rate, cost, fair value, percent) and
+  none on the page. As filed.
