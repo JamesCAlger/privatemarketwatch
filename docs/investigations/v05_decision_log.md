@@ -3056,3 +3056,15 @@ commits at checkpoints; nothing pushed or published.
   `column_remap` of this fund was pulled in an earlier round (D-097).
 - Ledger 28 outstanding; nothing proposed. Open: pct_of_net_assets_identity x12 and F27 x6 (not
   read in this pass), C115 x2, X02 x2.
+
+### D-123 Nuveen Churchill Private Capital Income Fund 0001911066 (sandbox `nu1b`, before `nu1a`)
+
+- **Names were being cut at the legal form.** In the older member form ('Kenco Group, Inc.',
+  '..., LLC 2') the comma before 'Inc.' or 'LLC' was read as the issuer / instrument separator:
+  issuer 'Kenco Group', instrument 'Inc.' on 1,804 rows. The wrapper's split condition now leaves a
+  comma before a legal form alone, and the row number is stripped: 2,405 rows renamed, 1,219
+  distinct names to 873; the false instruments are gone (the member carries none in that form).
+- Ledger 35 to 27 (C202 x4 and fmt_issuer_name x4 cleared). Published is 5.4M to 16.0M under filed
+  in the three 2023 quarters: the reading found the filed figure includes cash equivalents there
+  (as filed); nine conservation and ten GAV-type findings rest on that and are not proposed here.
+- 148 share counts carry the proxy of D-111 (44 changed value with the names).
