@@ -702,6 +702,11 @@ def _prepare_bdc(
     # principal, so without this the count is lost. Declared as shares_held:from_principal_tag.
     units_from_principal = ("(" + equity_instrument_expression('cik', 'instrument_description')
                             + " AND asset_category_final = 'EQUITY_COMMON' AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0)")
+    # The reverse filing error: the par of a loan tagged with the share-count concept, for the filings a
+    # wrapper lists (source_encodings.par_tagged_as_units). Declared as principal_amount:from_shares_tag.
+    from pipeline.source_encodings import par_tagged_as_units_expression
+    par_from_units = ("(" + par_tagged_as_units_expression('cik', 'accession_number')
+                      + " AND asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0)")
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
     # Cash-identity check: a row is a genuine cash position only when its own
@@ -2564,6 +2569,13 @@ def _prepare_bdc(
     ),
 
     -- CTE 10: Infer coupon type
+    with_par AS (
+        SELECT * REPLACE (
+            CASE WHEN {par_from_units} THEN _sh ELSE _pa END AS _pa,
+            CASE WHEN {par_from_units} THEN NULL ELSE _sh END AS _sh),
+            {par_from_units} AS _par_from_units
+        FROM no_mm
+    ),
     with_coupon AS (
         SELECT *,
             CASE
@@ -2571,7 +2583,7 @@ def _prepare_bdc(
                 WHEN _ir IS NOT NULL AND _ir != 0 THEN 'Fixed'
                 ELSE ''
             END AS coupon_type
-        FROM no_mm
+        FROM with_par
     ),
 
     -- CTE 10b: Text enrichment from investment_identifier
@@ -2836,7 +2848,8 @@ def _prepare_bdc(
                      WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
                      ELSE NULL END,
-                CASE WHEN {units_from_principal} THEN 'shares_held:from_principal_tag' ELSE NULL END
+                CASE WHEN {units_from_principal} THEN 'shares_held:from_principal_tag' ELSE NULL END,
+                CASE WHEN _par_from_units THEN 'principal_amount:from_shares_tag' ELSE NULL END
             ), '') AS src_transforms,
             '' AS src_field_overrides,
             '' AS cost_source,

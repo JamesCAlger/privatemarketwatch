@@ -40,6 +40,8 @@ def test_active_identity_rules_unchanged():
         "fourth_quarter_income",
         "reference_rate_printed",
         "spread_printed",
+        # added 2026-10-13 at the owner's request (decision D-149)
+        "field_coverage_drop",
     }
 
 
@@ -133,8 +135,12 @@ def test_reference_rate_printed_ignores_what_it_cannot_compare():
 
 
 def test_reference_rate_printed_is_limited_to_funds_that_name_the_column():
-    # the five v0.5 funds; every other wrapper names no column
-    assert engine._named_reference_column_ciks() == ["0001287750", "0001803498", "0001812554", "0001837532", "0001838126"]
+    # the five v0.5 funds name it; since 2026-10-10 so do the funds whose wrapper was given the
+    # column as each was read (the list is the wrappers' own, so it is not pinned here)
+    from pipeline.source_encodings import load_encodings
+    named = engine._named_reference_column_ciks()
+    assert {"0001287750", "0001803498", "0001812554", "0001837532", "0001838126"} <= set(named)
+    assert all(load_encodings()[cik].get("reference_rate_columns") for cik in named)
 
 
 def test_reference_rate_printed_fails_a_reference_rate_the_page_does_not_print():
@@ -219,3 +225,44 @@ def test_spread_printed_compares_the_published_spread_with_the_printed_margin():
     assert _spread_holds(6.25, "6.250") == [True]
     # nothing to compare: no published spread, a margin that was not read, or an artifact without the column
     assert _spread_holds(None, "5.5") == [] and _spread_holds(2.75, "") == [] and _spread_holds(2.75, None) == []
+
+
+def _coverage(rows):
+    import duckdb
+    import pandas as pd
+    base = {"source": "bdc", "cik": "0001838126", "asset_category": "LOAN", "fair_value": 100.0, "principal_amount": 100.0,
+            "interest_rate": 9.0, "basis_spread": 5.0, "cost": 99.0, "shares_held": None, "pct_of_net_assets": 0.1,
+            "maturity_date": "2031-12-20", "reference_rate_type": "SOFR", "extracted_industry": "Software",
+            "accounting_record_class": "parent_schedule"}
+    con = duckdb.connect()
+    con.register("unified", pd.DataFrame([{**base, **r} for r in rows]))
+    rule = next(r for r in engine.RULES if r.name == "field_coverage_drop")
+    out = con.execute(f"SELECT report_date, field_name, ({rule.holds_sql}) AS holds FROM {engine.field_coverage_sql('unified')} "
+                      "WHERE coverage IS NOT NULL AND prior_coverage IS NOT NULL").fetchall()
+    return {(d, f): bool(h) for d, f, h in out}
+
+
+def test_field_coverage_drop_flags_the_quarter_a_field_disappears():
+    # HPS 2026-03-31: par tagged as a share count, so most drawn loans lose their principal for one quarter.
+    rows = [{"report_date": "2025-12-31"} for _ in range(30)]
+    rows += [{"report_date": "2026-03-31", "principal_amount": None, "shares_held": 100.0} for _ in range(25)]
+    rows += [{"report_date": "2026-03-31"} for _ in range(5)]
+    rows += [{"report_date": "2026-06-30"} for _ in range(30)]
+    result = _coverage(rows)
+    assert result[("2026-03-31", "principal on drawn loans")] is False
+    assert result[("2026-03-31", "cost")] is True               # the other fields did not move
+    assert result[("2026-06-30", "principal on drawn loans")] is True   # a recovery is not a finding
+
+
+def test_field_coverage_drop_says_nothing_on_thin_or_first_quarters_or_unpublished_rows():
+    rows = [{"report_date": "2025-12-31"} for _ in range(30)]
+    # a small drop is not a finding; fewer than 20 equity rows say nothing about unit counts
+    rows += [{"report_date": "2026-03-31", "cost": None} for _ in range(4)] + [{"report_date": "2026-03-31"} for _ in range(26)]
+    rows += [{"report_date": "2026-03-31", "asset_category": "EQUITY_COMMON", "shares_held": None} for _ in range(5)]
+    # a joint venture's own schedule is not published and is not counted
+    rows += [{"report_date": "2026-03-31", "principal_amount": None, "accounting_record_class": "underlying_schedule"} for _ in range(40)]
+    result = _coverage(rows)
+    assert result[("2026-03-31", "cost")] is True
+    assert result[("2026-03-31", "principal on drawn loans")] is True
+    assert not any(field == "unit count on equity" for _, field in result)
+    assert not any(date == "2025-12-31" for date, _ in result)   # no previous quarter to compare with

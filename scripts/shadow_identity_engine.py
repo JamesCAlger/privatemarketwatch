@@ -121,6 +121,64 @@ def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) ->
     )"""
 
 
+# Fields a published row of a given kind is expected to carry: (label, rows that count, rows that carry it).
+COVERAGE_FIELDS = (
+    ("principal on drawn loans", "asset_category = 'LOAN' AND fair_value > 0", "principal_amount IS NOT NULL"),
+    ("rate or spread on drawn loans", "asset_category = 'LOAN' AND fair_value > 0",
+     "(interest_rate IS NOT NULL OR basis_spread IS NOT NULL)"),
+    ("maturity on loans", "asset_category = 'LOAN'", "maturity_date IS NOT NULL"),
+    ("reference rate on floating loans", "asset_category = 'LOAN' AND basis_spread IS NOT NULL",
+     "nullif(trim(CAST(reference_rate_type AS VARCHAR)), '') IS NOT NULL"),
+    ("cost", "TRUE", "cost IS NOT NULL"),
+    ("unit count on equity", "asset_category LIKE 'EQUITY%'", "shares_held IS NOT NULL"),
+    ("percent of net assets", "TRUE", "pct_of_net_assets IS NOT NULL"),
+    ("filer industry", "TRUE", "nullif(trim(CAST(extracted_industry AS VARCHAR)), '') IS NOT NULL"),
+)
+COVERAGE_MIN_ROWS = 20
+
+
+def field_coverage_sql(unified_sql: str, cik_filter: str = "TRUE") -> str:
+    """One row per fund, quarter and field: the share of published rows that carry the field, and
+    the same share in the fund's previous quarter.
+
+    HPS Corporate Lending tagged the par of its loans with the share-count concept in one filing:
+    principal on drawn loans went from 100 pct to 16 pct and back, every row still had a value, a
+    cost and a rate, totals tied, and no rule looked (2026-10-13). The check needs no knowledge of
+    which field will break. Published rows only (a joint venture's own schedule is left out); a
+    fund-quarter with fewer than COVERAGE_MIN_ROWS rows of the kind says nothing, and neither does
+    a fund's first quarter. ``prior_coverage`` is the previous quarter the fund has such rows in.
+    """
+    parts = []
+    for label, counted, carried in COVERAGE_FIELDS:
+        parts.append(f"""
+            SELECT cik, report_date, '{label}' AS field_name,
+                   count(*) FILTER (WHERE {counted}) AS n_rows,
+                   count(*) FILTER (WHERE ({counted}) AND {carried}) AS n_carried
+            FROM h GROUP BY 1, 2""")
+    return f"""(
+        WITH h AS (
+            SELECT lpad(regexp_replace(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
+                   CAST(report_date AS VARCHAR)[:10] AS report_date,
+                   CAST(asset_category AS VARCHAR) AS asset_category,
+                   TRY_CAST(fair_value AS DOUBLE) AS fair_value, TRY_CAST(principal_amount AS DOUBLE) AS principal_amount,
+                   TRY_CAST(interest_rate AS DOUBLE) AS interest_rate, TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
+                   TRY_CAST(cost AS DOUBLE) AS cost, TRY_CAST(shares_held AS DOUBLE) AS shares_held,
+                   TRY_CAST(pct_of_net_assets AS DOUBLE) AS pct_of_net_assets,
+                   TRY_CAST(maturity_date AS DATE) AS maturity_date, reference_rate_type, extracted_industry
+            FROM {unified_sql}
+            WHERE source = 'bdc' AND ({cik_filter})
+              AND coalesce(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'
+        ), counted AS ({" UNION ALL ".join(parts)}
+        ), shares AS (
+            SELECT cik, report_date, field_name, n_rows, 1.0 * n_carried / n_rows AS coverage
+            FROM counted WHERE n_rows >= {COVERAGE_MIN_ROWS}
+        )
+        SELECT cik, report_date, field_name, n_rows, coverage,
+               lag(coverage) OVER (PARTITION BY cik, field_name ORDER BY report_date) AS prior_coverage
+        FROM shares
+    )"""
+
+
 def _named_reference_column_ciks() -> list[str]:
     from pipeline.source_encodings import load_encodings
     return sorted(cik for cik, encoding in load_encodings().items() if encoding.get("reference_rate_columns"))
@@ -134,6 +192,8 @@ SOURCES = {
     "printed_reference": (printed_reference_sql(_unified(), _csv(BDC_IXBRL_FIELD_STATUS_FILE),
                                                 _named_reference_column_ciks()), "TRUE",
                           "cik", "report_date", "bdc_investment_identifier"),
+    "field_coverage": (field_coverage_sql(_unified(), "CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)"), "TRUE",
+                       "cik", "report_date", "field_name"),
     # Published rows only: a JV's own schedule states percent of the JV's net assets, so its rows
     # cannot satisfy an identity against the fund's (2026-10-06, decision D-014).
     "unified": (_unified(), "bdc_dimensions_raw IS NOT NULL "
@@ -246,6 +306,15 @@ RULES: list[IdentityRule] = [
         holds_sql="abs(basis_spread - printed_margin) <= 0.011",
         residual_sql="basis_spread - printed_margin",
         tol_note="published spread = total margin printed on the row, to the second decimal",
+    ),
+    # A field's coverage against the fund's own previous quarter (owner, 2026-10-13: "add the rule").
+    # One violating row per fund, quarter and field; the row id is the field's label.
+    IdentityRule(
+        name="field_coverage_drop", table="field_coverage",
+        needed_cols=("coverage", "prior_coverage"),
+        holds_sql="prior_coverage - coverage < 0.20",
+        residual_sql="coverage - prior_coverage",
+        tol_note="share of rows carrying a field falls less than 20 points against the fund's previous quarter",
     ),
 ]
 

@@ -3484,3 +3484,32 @@ Owner, 2026-10-13, after the page re-read of each one-off: "do as recommended an
   on 2026-10-08; no rule looks for a drawn loan without principal. Not fixed yet.
 - Same shape, smaller, cause not read: Ares Strategic Income 144 loans (0.9B), Apollo Debt
   Solutions 12 (0.5B), BCRED 44 (0.4B), Sixth Street LP 5, Goldman Sachs Private Credit 15, Blue Owl 8.
+
+### D-149 HPS par restored; two new rules so the ledger sees missing fields (sandboxes `t5r`, `n5t`, with 2026-06-30)
+
+Owner, 2026-10-13: "fix it. how can such issues be captured in the ledger", then "add the rule".
+
+- **HPS 2026-03-31 fixed.** New wrapper setting `source_encodings.par_tagged_as_units` (a list of
+  filings). In a listed filing a row classed as a loan that carries a share count and no
+  principal publishes the count as its principal (`principal_amount:from_shares_tag`); the
+  provenance re-verifier reads it against the share-count fact. HPS lists 0001628280-26-033248:
+  drawn loans without principal at 2026-03-31 go from 522 (20.4B) to 0. Other quarters untouched.
+- **Rule X11 (row level): a drawn BDC loan with a fair value and no principal.** Published rows
+  only. Fires in 43 fund-quarters of the top ten that were at zero. A first look at the top five:
+  BCRED CLO subordinated notes and Ares' SDLP certificates carry the par as a unit count (the HPS
+  error, row by row); Apollo's JOA Joker and Jagex loans carry neither; Blue Owl Pluralsight; one
+  HPS row named 'Holdings 2, L.P.' classed as a loan. None read on the page yet.
+- **Rule `field_coverage_drop` (fund, quarter, field):** the share of rows carrying a field falls
+  20 points or more against the fund's previous quarter (eight fields; at least 20 rows; a
+  recovery or a first quarter is not a finding). Needs no knowledge of which field will break; it
+  finds the HPS quarter unaided. Fires in six fund-quarters, none investigated: Blue Owl
+  2023-09-30 (equity units 100 to 25 pct), 2024-12-31 (cost, maturity, industry and percent of
+  net assets all to about 69 pct: one block of about 220 rows), 2025-03-31 (percent of net assets
+  to 0), 2025-12-31 (industry); Oaktree 2023-09-30 and Goldman Sachs Private Credit 2026-06-30
+  (industry to 0).
+- **Ledger, top ten:** 49 outstanding (top five 30 of 346, next five 19 of 262), all from the two
+  new rules. The earlier zero stood for 'no rule fired', as warned.
+- Not added: a row rule for equity with a principal tag and no unit count (it would fire on every
+  row printed with a dash; the fund-level C04 covers the bulk). Not built: a floor on coverage
+  for a field a fund never carries (the drop rule cannot see that), and a tag-mix check at source.
+- Both rules are shared and fire on every fund; their cohort count is not measured.

@@ -88,6 +88,7 @@ REQUIRED_COLUMNS = [
     "issuer_category", "exposure_type", "asset_class", "coupon_type",
     "maturity_date", "pct_of_net_assets", "reference_rate_type",
     "gics_sub_industry", "nport_asset_cat", "nport_issuer_type",
+    "accounting_record_class",
 ]
 
 NUMERIC_COLUMNS = {
@@ -771,6 +772,22 @@ def validate_column_contracts(
             "AND TRY_CAST(fair_value AS DOUBLE) / TRY_CAST(cost AS DOUBLE) < 0.05",
             "fair_value is below 5% of cost",
             "severely distressed position or data error",
+        ),
+        # X11 added 2026-10-13 (owner: "how can such issues be captured in the ledger"). HPS Corporate
+        # Lending tagged the par of 522 drawn loans (20.4B) with the share-count concept in one filing;
+        # the rows published a value, a cost and a rate and no principal, and no rule looked. A BDC
+        # loan that carries a value prints a par amount; without one, par analytics and the
+        # price-to-par reading of the row are missing. Unpublished joint-venture schedule rows are
+        # left out (owner, same day).
+        _issue_query(
+            "principal_amount", "X11", SEVERITY_WARN, EVIDENCE_STRONG,
+            ACTION_REVIEW,
+            "source = 'bdc' AND COALESCE(CAST(asset_category AS VARCHAR), '') = 'LOAN' "
+            "AND TRY_CAST(fair_value AS DOUBLE) > 0 "
+            f"AND {_blank_sql('principal_amount')} "
+            "AND COALESCE(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'",
+            "drawn BDC loan has a fair value and no principal_amount",
+            "the printed schedule carries a par amount for a funded loan; check which tag holds it",
         ),
     ]
 

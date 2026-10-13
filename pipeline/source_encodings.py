@@ -10,6 +10,7 @@ import re
 
 
 _UNTAGGED_VALUE_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?')
+_ACCESSION_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6}')
 _CONTEXT_IDENTIFIER_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
 
@@ -30,7 +31,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -48,6 +49,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
             if key=='filed_rate_reading' and values not in (['all_in'],['cash_leg']):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
+            if key=='par_tagged_as_units' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('par_tagged_as_units lists accession numbers: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
@@ -176,6 +179,22 @@ def _normal(expression):
 
 def _cik_condition(expression,cik):
     return "lpad(regexp_replace(CAST("+expression+" AS VARCHAR),'[^0-9]','','g'),10,'0')="+_literal(cik)
+
+
+def par_tagged_as_units_expression(cik,accession,encodings=None):
+    """True for a row of a filing whose wrapper says the par column was tagged with the share-count concept.
+
+    HPS Corporate Lending's 10-Q for 2026-03-31 tags the par of 696 of 835 positions as
+    InvestmentOwnedBalanceShares; the filings before and after use the principal concept. Listed
+    per filing (source_encodings.par_tagged_as_units), so another quarter is not touched."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        filings=encoding.get('par_tagged_as_units',[])
+        if filings:
+            values=','.join(_literal(v) for v in filings)
+            parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
 
 
 def cash_identifier_expression(cik,identifier,encodings=None):

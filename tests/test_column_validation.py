@@ -285,6 +285,27 @@ class TestColumnContracts:
         issues, _ = validate_column_contracts(df)
         assert len(_issues_by_rule(issues, "X07")) == 1
 
+    # --- X11: a drawn BDC loan with no principal ---
+    def test_x11_fires_on_a_drawn_bdc_loan_with_no_principal(self):
+        # HPS 2026-03-31: par tagged with the share-count concept, so principal_amount is empty.
+        df = _make_unified_df([{"source": "bdc", "asset_category": "LOAN", "fair_value": "443558000",
+                                "principal_amount": "", "shares_held": "439167000"}])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X11")) == 1
+
+    def test_x11_does_not_fire_where_no_par_is_expected(self):
+        base = {"source": "bdc", "asset_category": "LOAN", "fair_value": "443558000", "principal_amount": ""}
+        df = _make_unified_df([
+            {**base, "principal_amount": "439167000"},                       # has its principal
+            {**base, "fair_value": "0"},                                     # undrawn line
+            {**base, "fair_value": "-382000"},                               # undrawn line carried negative
+            {**base, "asset_category": "EQUITY_COMMON"},                     # equity prints units, not par
+            {**base, "source": "nport"},                                     # another source's fields
+            {**base, "accounting_record_class": "underlying_schedule"},      # unpublished joint-venture row
+        ])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X11")) == 0
+
     # --- X02: a credit row with no rate is a finding only on a debt instrument ---
     def test_x02_does_not_fire_on_a_stake_in_a_credit_vehicle(self):
         # False alarm: an LP, LLC or member interest is classed private credit and carries no coupon.
