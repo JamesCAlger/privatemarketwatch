@@ -3199,3 +3199,16 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   for most of this fund (e.g. Adelaide Borrower: 'Application Software' to 'Multi-Utilities').
 - Rate column named: 565 reference rates now come from the page; guessed 614 to 49.
 - 17 findings outstanding (C04 x6, B01 x5, F26 x2, four single). Nothing proposed.
+
+### D-133 Goldman Sachs Private Middle Market Credit II 0001772704 (sandbox `gp1b`, before `gp1a`)
+
+- Published equals filed in every quarter. Given the settings of Goldman Sachs BDC (D-114):
+  foreign principal converted with the reference rate (50 rows; FX01 x12 cleared), rate column
+  and codes named (78 reference rates now from the page: 40 GBP loans printed 'SN +' change from
+  SOFR to SONIA, 36 printed 'CDN P +' change to PRIME, i.e. Canadian prime under the PRIME code;
+  guessed 103 to 31), industry read from the member where staging found none.
+- **Shared: a rate left behind the industry is removed.** Where the member writes 'Interest Rate'
+  with a non-breaking space the staging split let it through ('IT Services Interest Rate
+  10.94%'). Cleaned before the industry is mapped (any fund; test added): 44 rows here.
+- Ledger 54 to 42. Open in the reading: B01 x11 (dash-fair-value rows dropped), X02 x8, cost
+  conservation x4 (cost sign in the tag on undrawn rows, 53 rows), fund-level figures.

@@ -574,6 +574,14 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
     """
     if "extracted_industry" not in combined.columns or "gics_sub_industry" not in combined.columns:
         return combined
+    # A member that writes its column words with a non-breaking space ('Interest\xa0Rate 10.93%')
+    # passes the staging split and leaves the rate behind the industry. No industry holds these words.
+    if "source" in combined.columns:
+        text = combined["extracted_industry"].astype("string")
+        tailed = (combined["source"] == "bdc") & text.str.contains(r"(?i)\s(?:Interest|Reference)\s+Rate\b", regex=True).fillna(False)
+        if tailed.any():
+            combined.loc[tailed, "extracted_industry"] = text[tailed].str.replace(
+                r"(?i)\s+(?:Interest|Reference)\s+Rate\b.*$", "", regex=True).str.strip()
     # A filer that carries the industry inside the member text (dispatch.industry_from_identifier_re):
     # read it where the row has none yet.
     from pipeline.staging_bdc import industry_from_identifier_patterns

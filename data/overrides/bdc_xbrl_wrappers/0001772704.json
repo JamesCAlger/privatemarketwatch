@@ -87,7 +87,7 @@
         "family": "cash"
       },
       {
-        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-–])",
+        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-\u2013])",
         "family": "debt"
       },
       {
@@ -103,14 +103,15 @@
         "family": "debt"
       },
       {
-        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-–])",
+        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-\u2013])",
         "family": "debt"
       }
     ],
     "no_prefix_is_aggregate": true,
     "category_marker_before_total": true,
     "category_marker_re": "(?i)^\\s*(?:(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%\\s*(?:,\\s*)?)?(?:investment\\s+)?(?:total\\s+investments(?:\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund)?|common\\s+stock|preferred\\s+stock|warrants?|equity\\s+securities|1st\\s+lien/senior\\s+secured\\s+debt|1st\\s+lien/last-out\\s+unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+lien/senior\\s+secured\\s+debt|unsecured\\s+debt|debt\\s+investments|investments|non-controlled\\s+affiliates|(?:total\\s+)?(?:canada|united\\s+states|united\\s+kingdom|cayman\\s+islands))(?:\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%)?(?:\\s*,?\\s*(?:total\\s+investments(?:\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund)?|common\\s+stock|preferred\\s+stock|warrants?|equity\\s+securities|1st\\s+lien/senior\\s+secured\\s+debt|1st\\s+lien/last-out\\s+unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+lien/senior\\s+secured\\s+debt|unsecured\\s+debt|debt\\s+investments|investments|(?:total\\s+)?(?:canada|united\\s+states|united\\s+kingdom|cayman\\s+islands))(?:\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%)?)*\\s*$|^\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%\\s*$",
-    "canonical_strip_re": "(?i)(?:^\\s*(?:I?Investment|nvestment|vestment)?\\s*(?:(?:Debt\\s+Investments|Equity\\s+Securities|1st\\s+Lien/Senior\\s+Secured\\s+Debt|1st\\s+Lien/Last-Out\\s+Unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+Lien/Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investments\\s+in\\s+Affiliated\\s+Money\\s+Market\\s+Fund|Investments|United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands)(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?(?:\\s+(?:United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands))?(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?\\s*)+|\\bIndustry\\s+|\\s*Interest\\s*Rate\\s*\\d+(?:\\.\\d+)?%?|\\s*Interest\\s*Rate\\b|\\s+Initial\\s+Acquisition\\s+Date\\s+\\d{2}/\\d{2}/\\d{2,4})"
+    "canonical_strip_re": "(?i)(?:^\\s*(?:I?Investment|nvestment|vestment)?\\s*(?:(?:Debt\\s+Investments|Equity\\s+Securities|1st\\s+Lien/Senior\\s+Secured\\s+Debt|1st\\s+Lien/Last-Out\\s+Unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+Lien/Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investments\\s+in\\s+Affiliated\\s+Money\\s+Market\\s+Fund|Investments|United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands)(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?(?:\\s+(?:United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands))?(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?\\s*)+|\\bIndustry\\s+|\\s*Interest\\s*Rate\\s*\\d+(?:\\.\\d+)?%?|\\s*Interest\\s*Rate\\b|\\s+Initial\\s+Acquisition\\s+Date\\s+\\d{2}/\\d{2}/\\d{2,4})",
+    "industry_from_identifier_re": "(?i)Industry\\s*(?:Industry\\s+)?(.+?)\\s+(?:Interest\\s+Rate|Reference\\s+Rate|Maturity|Initial\\s+Acquisition)"
   },
   "identifier_format": {
     "delimiter": " - ",
@@ -124,7 +125,7 @@
       "maturity"
     ],
     "alternate_delimiters": [
-      " – ",
+      " \u2013 ",
       ", "
     ]
   },
@@ -292,6 +293,21 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "L=LIBOR",
+      "E=EURIBOR",
+      "S=SOFR",
+      "SN=SONIA",
+      "N=NIBOR",
+      "B=BBSW",
+      "P=PRIME"
     ]
   }
 }

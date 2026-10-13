@@ -133,3 +133,13 @@ def test_a_rare_unmapped_catch_of_the_member_pattern_is_not_an_industry(monkeypa
     out = uh._apply_printed_industry(_holdings(rows))
     assert out["extracted_industry"].tolist() == ["Healthcare"] * 3 + [""] + ["Services"] * 20
     assert out["gics_sub_industry"].tolist()[:4] == ["Health Care Services"] * 3 + ["Advertising"]
+
+
+def test_a_rate_left_behind_the_industry_by_a_non_breaking_space_is_removed(monkeypatch):
+    monkeypatch.setattr(uh, "printed_industry_gics", lambda labels: {l: ("IT Consulting & Other Services", "alias") for l in labels if l == "IT Services"})
+    rows = [{"cik": "0001772704", "bdc_investment_identifier": "x", "extracted_industry": "IT Services Interest\u00a0Rate 10.94%", "gics_sub_industry": "Advertising"},
+            {"cik": "0001772704", "bdc_investment_identifier": "x", "extracted_industry": "Health Care Providers & Services Reference\u00a0Rate\u00a0and Spread S + 6.75", "gics_sub_industry": "Advertising"},
+            {"cik": "0001772704", "bdc_investment_identifier": "x", "extracted_industry": "IT Services", "gics_sub_industry": "Advertising"}]
+    out = uh._apply_printed_industry(_holdings(rows))
+    assert out["extracted_industry"].tolist() == ["IT Services", "Health Care Providers & Services", "IT Services"]
+    assert out["gics_sub_industry"].tolist() == ["IT Consulting & Other Services", "Advertising", "IT Consulting & Other Services"]
