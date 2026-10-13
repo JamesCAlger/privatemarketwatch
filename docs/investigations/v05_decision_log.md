@@ -3176,3 +3176,14 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   unchanged (43 and 38).
 - Not done: 25 rows of 2023 whose issuer carries the industry in front ('Building Products,
   Copperweld Investor, LLC'); 15 proxy share counts (D-111).
+
+### D-131 VISTA Credit Strategic Lending 0001919369 (sandbox `vi1b`, before `vi1a`)
+
+- Published equals filed in every quarter. Rate column named ('Reference Rate and Spread'): the
+  152 reference rates of 2023-12-31 to 2025-03-31 that were guessed from the date are now the
+  page's (all SOFR, so no value changed; the source did). Guessed 152 to 0. Nothing else moved.
+- Seven of the fund's own software headings added to the table (representative picks: 'Data &
+  Analytics' and 'Diversified Software' to Application Software, 'IT Security' and
+  'Infrastructure Software & DevOps' to Systems Software, and so on): unmapped rows 89 to 18.
+  Four broad headings are left unmapped on purpose ('Media, Entertainment & Publishing', ...).
+- 19 findings outstanding (F16 x6, C04 x3, X02 x2, F33 x2, six single). Nothing proposed.

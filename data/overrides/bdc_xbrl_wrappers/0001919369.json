@@ -131,9 +131,9 @@
       "Transportation, Logistics & Supply Chain",
       "Utilities & Utility Equipment"
     ],
-    "hierarchy_issuer_re": "(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b",
-    "hierarchy_instrument_re": "(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?((?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity))\\s+",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+') AND regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b')"
+    "hierarchy_issuer_re": "(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?((?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity))\\s+",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+') AND regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b')"
   },
   "archetypes": {
     "debt": {
@@ -202,6 +202,15 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "SOFR=SOFR",
+      "SONIA=SONIA",
+      "EURIBOR=EURIBOR",
+      "PRIME=PRIME"
     ]
   }
 }
