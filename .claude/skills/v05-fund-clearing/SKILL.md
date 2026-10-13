@@ -74,11 +74,14 @@ digraph fund {
    them and run `regression_check.py`; a fund that MOVED without an explanation in the report
    parks this fund. A NEW setting is on for one fund: nothing else is rebuilt until the end of
    the run.
-8. **Record:** set the fund's entry in `docs/investigations/v05_readings/accepted_sandboxes.json`
+8. **Observations:** `python scripts/v05_evidence/observations.py add <REPORT>` (the gate has
+   verified their printed lines). An observation whose cause is `shared` goes in the end-of-run
+   report by name.
+9. **Record:** set the fund's entry in `docs/investigations/v05_readings/accepted_sandboxes.json`
    to the sandbox that passed; append one entry to `docs/investigations/v05_decision_log.md` (next D-number: what
    was fixed, what is proposed, what is parked, gate verdict, sandbox label) and one line to the
    run table in `docs/investigations/v05_reading_backlog.md`. Commit.
-9. Next fund.
+10. Next fund.
 
 **INCOMPLETE** means the build is clean but some findings have neither a fix nor a proposal. It
 is recorded and committed like a pass, with the uncovered findings listed. It is not sent back
@@ -97,7 +100,10 @@ reading (findings cleared by carry-forward against findings newly open) before a
    the run in sandboxes of at most ten (`build_fund.sh`, with `--add-quarter` where they have it)
    and run `python scripts/v05_evidence/regression_check.py <label>`. A fund that MOVED: find the
    commit that did it (one commit per fund), report it, and do not call the run clean.
-2. **Owner decision ledger.** `python scripts/v05_evidence/owner_queue.py build`. The owner rules
+2. **Observations.** `python scripts/v05_evidence/observations.py show --open`. One seen on several
+   funds is a candidate rule; one caused by shared code reaches funds nobody has read. Report
+   both kinds; propose rules, do not add them.
+3. **Owner decision ledger.** `python scripts/v05_evidence/owner_queue.py build`. The owner rules
    per reason: `owner_queue.py rule <reason key> accept|reject|more --words "<their words>"`.
    Only that command turns a proposal into an accepted disposition.
 
@@ -121,6 +127,7 @@ build showed; what was not run. Lead with what failed.
 | Gate | `python scripts/v05_evidence/fund_gate.py check ...` (verdict in `scratch/fund_sandbox/<label>/gate_<cik>.json`) |
 | Field comparison | `python scripts/v05_evidence/holdings_field_diff.py <new> <old>` |
 | Have accepted funds moved | `python scripts/v05_evidence/regression_check.py <label>` |
+| What agents saw that no rule reported | `python scripts/v05_evidence/observations.py add <report> | show [--open]` |
 | Owner decisions | `python scripts/v05_evidence/owner_queue.py build | show [key] | rule ...` |
 | Take a failed fund out | `python scripts/v05_evidence/fund_gate.py park --snapshot <file> --cik <cik>` |
 

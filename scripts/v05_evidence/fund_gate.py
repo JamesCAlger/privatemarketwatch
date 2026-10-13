@@ -19,6 +19,8 @@ decides, without judgment, whether the agent's run can be accepted:
   verdicts     a proposal over a finding an earlier reviewer judged a real error answers that
                verdict, quarter by quarter ("addresses_verdict": {"<quarter>": "<what they found and
                why it does not stand, or was fixed>"}, 60 characters or more)
+  observations the report lists what the agent saw that no rule reported (the list may be empty),
+               each entry well formed and with a printed line
   ledger       every outstanding finding of the fund is covered by a written proposal
 
 Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
@@ -41,6 +43,8 @@ import sys
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 REPO = Path(__file__).resolve().parents[2]
 SANDBOXES = REPO / "scratch" / "fund_sandbox"
@@ -246,6 +250,8 @@ def check_quotes(cik: str, report: dict) -> dict:
         quotes += [(q, "fix: %s" % str(fix.get("what"))[:60]) for q in fix.get("quotes", [])]
     for item in report.get("total_exceptions", []):
         quotes.append((item.get("quote") or {"accession": "", "text": ""}, "total exception %s" % item.get("quarter")))
+    for item in report.get("observations", []):
+        quotes.append((item.get("quote") or {"accession": "", "text": ""}, "observation: %s" % str(item.get("what"))[:60]))
     for entry in _proposals(cik):
         cited = [e for e in entry.get("evidence", []) if e.get("source") == "filing"]
         if not any(e.get("verbatim") for e in cited):
@@ -378,7 +384,13 @@ def main(argv=None) -> int:
         print("FAIL: no report at", report_path)
         return 2
     report = json.loads(report_path.read_text(encoding="utf-8"))
-    checks = {"stages": check_stages(args.label, cik), "corrections": check_corrections(args.label, cik),
+    # What the agent saw that no rule reported: the list must be there (it may be empty) and well formed.
+    from observations import problems as observation_problems
+    listed = report.get("observations")
+    malformed = (["report has no 'observations' list"] if not isinstance(listed, list) else
+                 ["observation %d: %s" % (i + 1, "; ".join(bad)) for i, bad in enumerate(map(observation_problems, listed)) if bad])
+    checks = {"observations": {"ok": not malformed, "problems": malformed, "count": len(listed) if isinstance(listed, list) else 0},
+              "stages": check_stages(args.label, cik), "corrections": check_corrections(args.label, cik),
               "totals": check_totals(args.label, cik, report.get("total_exceptions", [])),
               "quotes": check_quotes(cik, report), "files": check_files(args.snapshot, report)}
     if args.before:

@@ -123,7 +123,9 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
  "total_exceptions": [{"quarter": "2023-06-30", "why": "...", "quote": {"accession": "...", "text": "..."}}],
  "parked": [{"finding": "engine rule quarter", "hypotheses": ["..."]}],
  "orchestrator_requests": [{"file": "pipeline/provenance_reverify.py", "what": "...", "why": "...", "quotes": []}],
- "found_without_a_rule": ["errors you saw on the page that no rule flagged"],
+ "observations": [{"observation_key": "unit-count-rescaled-by-issuer-normaliser", "what": "...", "field": "shares_held",
+                   "quarters": ["2024-09-30"], "fair_value_m": 0.2, "cause": "row|fund|shared", "action": "fixed|parked|left",
+                   "suggested_check": "...", "quote": {"accession": "...", "text": "..."}}],
  "tests_run": ["tests/test_x.py: 12 passed"],
  "not_done": ["what you did not check"]
 }
@@ -133,5 +135,19 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
 large as the actual one. `entity_id` and `canonical_name` need no entry. Every fix carries at least
 one quote. A quote is copied from `page_line.py` output, 20 characters or more, unedited.
 
-"All findings cleared" is not "data correct". Write down anything wrong on the page that no rule
-reported.
+"All findings cleared" is not "data correct". `observations` is where you write down anything
+wrong that no rule reported: a published value that differs from the page, a field the build
+dropped, a row that should not be there, a shared step that changed a value. It is required (an
+empty list if you truly saw nothing). For each one:
+
+- `observation_key`: a slug for the PROBLEM, not the fund, so the same problem on another fund
+  groups with it. Reuse a key from `python scripts/v05_evidence/observations.py show`.
+- `cause`: `row` (this row only), `fund` (this fund's settings or filings), `shared` (a step every
+  fund goes through; it may be wrong elsewhere, so say which step).
+- `action`: `fixed`, `parked`, or `left` (seen, not touched; say why in `what`).
+- `suggested_check`: the rule that would have caught it, in one sentence, if you can state one.
+- `quote`: the printed line that shows it, copied from `page_line.py`.
+
+While reading a finding's rows you see its neighbours. Look at them: compare a few published rows
+per quarter with their printed lines on fields no finding names (unit count, rate, maturity,
+industry, name).

@@ -124,6 +124,20 @@ def test_a_proposal_over_an_earlier_real_error_verdict_must_answer_it(sandbox):
     assert fund_gate.check_ledger("s1", CIK)["unanswered_verdicts"] == []
 
 
+def test_observations_are_required_well_formed_and_quoted(sandbox):
+    import observations
+    good = {"observation_key": "unit-count-rescaled", "what": "warrant published with 6,314 units, page says 4", "field": "shares_held",
+            "quarters": ["2024-09-30"], "cause": "shared", "action": "parked",
+            "quote": {"accession": ACC, "text": "Acme Holdings, Inc. First lien EUR 40,000 42,858"}}
+    assert observations.problems(good) == []
+    assert observations.problems({**good, "cause": "somewhere"}) and observations.problems({**good, "quote": {}})
+    assert observations.problems({**good, "quarters": []}) and observations.problems({**good, "observation_key": ""})
+    # the gate verifies the printed line like any other quote
+    assert fund_gate.check_quotes(CIK, {"observations": [good]})["ok"]
+    invented = {**good, "quote": {"accession": ACC, "text": "Acme Holdings, Inc. First lien EUR 99,999 42,858"}}
+    assert not fund_gate.check_quotes(CIK, {"observations": [invented]})["ok"]
+
+
 def test_file_rules():
     forbidden = lambda path: any(re.search(rule, path) for rule in fund_gate.FORBIDDEN)
     for path in ("AGENTS.md", "pipeline/column_validation.py", "scripts/shadow_identity_engine.py", "scripts/v05_evidence/fund_gate.py",
