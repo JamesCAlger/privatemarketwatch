@@ -41,10 +41,14 @@ STATES = {"accept": "accepted", "reject": "rejected", "more": "more_evidence"}
 
 
 def _proposals() -> list[tuple[str, dict]]:
+    """Proposals that carry a reason key. One written before the fund-clearing loop has none: it
+    predates the verbatim-quote rule and its fund has not been through the gate, so it is not put
+    in front of the owner (its fund's next run rewrites or drops it)."""
     found = []
     for path in sorted(PROPOSED.glob("*.json")):
         for entry in json.loads(path.read_text(encoding="utf-8")).get("dispositions", []):
-            found.append((path.name, entry))
+            if str(entry.get("reason_key") or "").strip():
+                found.append((path.name, entry))
     return found
 
 

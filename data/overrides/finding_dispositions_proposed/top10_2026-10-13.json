@@ -26,7 +26,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/owl.sql",
    "decided_by": "proposed by agent 2026-10-13; a new reason, for the owner",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "reason_key": "coverage-percent-of-net-assets-no-longer-printed"
   },
   {
    "disposition_id": "PD-X11-1918712-2026Q1",
@@ -48,7 +49,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000162828026034133 xml c-778",
    "decided_by": "proposed by agent 2026-10-13; a variant of an accepted reason, for the owner",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "reason_key": "x11-count-in-units-column-no-principal"
   },
   {
    "disposition_id": "PD-X11-1287750-2007-3R",
@@ -79,7 +81,8 @@
    ],
    "rerun": "python scratch/2026-10-13_left/pg.py 1287750 000128775024000028 \"ARES 2007-3R\" 2 300 300",
    "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "reason_key": "x11-count-in-units-column-no-principal"
   },
   {
    "disposition_id": "PD-X11-1925309-NOPAR",
@@ -107,7 +110,8 @@
    ],
    "rerun": "python scratch/2026-10-13_left/pg.py 1925309 000095017025101397 \"Cordance\" 1 420",
    "decided_by": "proposed by agent 2026-10-13; first recorded as accepted on a reason the owner accepted for another fund or row, withdrawn the same day: no check tests the reason (data/reference/accepted_disposition_reasons.json)",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "reason_key": "x11-no-par-printed-on-the-row"
   }
  ]
 }
