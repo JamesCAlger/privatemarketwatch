@@ -585,20 +585,25 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
     # A filer that carries the industry inside the member text (dispatch.industry_from_identifier_re):
     # read it where the row has none yet.
     from pipeline.staging_bdc import industry_from_identifier_patterns
-    for cik, pattern in (industry_from_identifier_patterns().items() if {"cik", "bdc_investment_identifier"} <= set(combined.columns) else ()):
-        mine = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
-        mine &= combined["extracted_industry"].astype("string").fillna("").str.strip() == ""
-        if mine.any():
-            found = combined.loc[mine, "bdc_investment_identifier"].astype("string").str.extract(pattern, expand=True)[0]
-            found = found.fillna("").str.strip()
-            # Where the member's segments are out of order the pattern catches another field ('Term
-            # Loan', an issuer). Such a catch is rare for the fund and maps to nothing; a real industry
-            # the table does not know yet is frequent. Rare and unmapped is not taken.
-            counts = found[found != ""].value_counts()
-            known = printed_industry_gics(counts.index.tolist())
-            rare = {text for text, n in counts.items() if n < 20 and text not in known}
-            found = found.where(~found.isin(rare), "")
-            combined.loc[found[found != ""].index, "extracted_industry"] = found[found != ""]
+    member_patterns = industry_from_identifier_patterns() if {"cik", "bdc_investment_identifier"} <= set(combined.columns) else {}
+
+    def fill_from_member() -> None:
+        for cik, pattern in member_patterns.items():
+            mine = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+            mine &= combined["extracted_industry"].astype("string").fillna("").str.strip() == ""
+            if mine.any():
+                found = combined.loc[mine, "bdc_investment_identifier"].astype("string").str.extract(pattern, expand=True)[0]
+                found = found.fillna("").str.strip()
+                # Where the member's segments are out of order the pattern catches another field ('Term
+                # Loan', an issuer). Such a catch is rare for the fund and maps to nothing; a real industry
+                # the table does not know yet is frequent. Rare and unmapped is not taken.
+                counts = found[found != ""].value_counts()
+                known = printed_industry_gics(counts.index.tolist())
+                rare = {text for text, n in counts.items() if n < 20 and text not in known}
+                found = found.where(~found.isin(rare), "")
+                combined.loc[found[found != ""].index, "extracted_industry"] = found[found != ""]
+
+    fill_from_member()
     label = combined["extracted_industry"].astype("string").fillna("").str.strip()
     rows = (combined["source"] == "bdc") & (label != "")
     if "index_classification" in combined.columns:
@@ -620,8 +625,14 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
             combined.loc[withdraw, "extracted_industry"] = ""
             logger.info("  Printed industry: %d labels withdrawn in %d filings where under half map (not industry headings)",
                         int(withdraw.sum()), len(weak))
+            # A row whose heading was withdrawn can still carry the industry in its member text.
+            fill_from_member()
             label = combined["extracted_industry"].astype("string").fillna("").str.strip()
-            rows = rows & ~withdraw
+            rows = (combined["source"] == "bdc") & (label != "")
+            if "index_classification" in combined.columns:
+                rows &= combined["index_classification"].astype("string").fillna("") != "CASH"
+            mapping = printed_industry_gics(label[rows].unique().tolist())
+            mapped = label.map({key: value[0] for key, value in mapping.items()})
     take = rows & mapped.notna()
     changed = take & (combined["gics_sub_industry"].astype("string").fillna("") != mapped.fillna(""))
     combined.loc[take, "gics_sub_industry"] = mapped[take]

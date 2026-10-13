@@ -92,7 +92,9 @@
     ],
     "no_prefix_is_aggregate": true,
     "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+.*?(?=\\s+Maturity\\s+Date|$)",
-    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$"
+    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$",
+    "industry_from_identifier_re": "(?i)^\\s*(Independent\\s+Power\\s+\\&\\s+Renewable\\s+Electricity\\s+Producers|Electronic\\s+Equipment,\\s+Instruments\\s+\\&\\s+Components|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Technology\\s+Hardware,\\s+Storage\\s+\\&\\s+Peripherals|Semiconductors\\s+\\&\\s+Semiconductor\\s+Equipment|Consumer\\s+Staples\\s+Distribution\\s+\\&\\s+Retail|Wireless\\s+Telecommunication\\s+Services|Health\\s+Care\\s+Equipment\\s+\\&\\s+Supplies|Health\\s+Care\\s+Providers\\s+\\&\\s+Services|Textiles,\\s+Apparel\\s+\\&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+\\&\\s+Distributors|Commercial\\s+Services\\s+\\&\\s+Supplies|Life\\s+Sciences\\s+Tools\\s+\\&\\s+Services|Diversified\\s+Consumer\\s+Services|Hotels,\\s+Restaurants\\s+\\&\\s+Leisure|Transportation\\s+Infrastructure|Energy\\s+Equipment\\s+\\&\\s+Services|Construction\\s+\\&\\s+Engineering|Communications\\s+Equipment|Air\\s+Freight\\s+\\&\\s+Logistics|Asset\\s+Backed\\s+Securities|Containers\\s+\\&\\s+Packaging|Health\\s+Care\\s+Technology|Personal\\s+Care\\s+Products|Special\\s+Purpose\\s+Entity|Automobile\\s+Components|Ground\\s+Transportation|Marine\\s+Transportation|Professional\\s+Services|Electrical\\s+Equipment|Aerospace\\s+\\&\\s+Defense|Electric\\s+Utilities|Financial\\s+Services|Household\\s+Durables|Building\\s+Products|Diversified\\s+REITs|Consumer\\s+Finance|Leisure\\s+Products|Specialty\\s+Retail|Capital\\s+Markets|Multi\\-Utilities|Pharmaceuticals|Entertainment|Food\\s+Products|Distributors|IT\\s+Services|Beverages|Chemicals|Financing|Insurance|Machinery|Software|Media)\\s",
+    "instrument_description_strip_re": "(?i)\\s+Interest\\s+Rate\\b.*$"
   },
   "staging": {
     "strategy": "hierarchy_extract",

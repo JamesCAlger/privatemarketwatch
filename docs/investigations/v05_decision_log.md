@@ -3233,3 +3233,19 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
 - Open: C201 x13 (rows whose member carries no 'Investment Type' word have no issuer), pct of net
   assets identity x7, X02 x7, 267 guessed reference rates (the page prints 'S + 500' in an
   'Interest Term' column the reader does not take as a reference-rate column), 47 proxy shares.
+
+### D-135 Apollo Origination II (Levered) Capital Trust 0002052152 (sandbox `ao1c`, before `ao1a`)
+
+- Published equals filed. 20 findings outstanding, unchanged. 538 of 557 loans publish no rate:
+  the Apollo schedule prints 'S+450, 0.50% Floor' and no all-in rate; as filed.
+- **Industry in the Apollo layout is now read.** The page reader takes the company group as the
+  heading ('MRO Holdings'); the guard of D-116 withdraws those. The member text starts with the
+  industry ('Aerospace & Defense MRO Holdings MRO Holdings, Inc. Investment Type ...'), with no
+  separator, so the wrapper lists the fund's industries (`industry_from_identifier_re`, 53 names).
+  Shared change (test added): the member is read again after a heading is withdrawn. Filer
+  industry on 565 of 565 rows (was 0); the standard label changed on 202 rows, the sector on 98.
+- Instrument text no longer carries the rate ('First Lien Secured Debt - Term Loan Interest Rate
+  S+450, ...' to 'First Lien Secured Debt - Term Loan', 556 rows, `instrument_description_strip_re`).
+- The same two settings are written to the two sister funds (0002052153, 0002006758), measured
+  when each is built. **Not applied to Apollo Debt Solutions (0001837532)**, a first-five fund at
+  zero outstanding: same layout, same gain available, owner's call.

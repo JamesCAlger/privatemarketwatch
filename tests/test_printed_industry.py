@@ -143,3 +143,19 @@ def test_a_rate_left_behind_the_industry_by_a_non_breaking_space_is_removed(monk
     out = uh._apply_printed_industry(_holdings(rows))
     assert out["extracted_industry"].tolist() == ["IT Services", "Health Care Providers & Services", "IT Services"]
     assert out["gics_sub_industry"].tolist() == ["IT Consulting & Other Services", "Advertising", "IT Consulting & Other Services"]
+
+
+def test_a_withdrawn_group_heading_gives_way_to_the_industry_in_the_member(monkeypatch):
+    # Apollo layout: the heading read from the page is the company group; the member starts with the industry.
+    from pipeline import staging_bdc
+    monkeypatch.setattr(staging_bdc, "industry_from_identifier_patterns", lambda wrapper_dir=None: {"0002052152": r"^(Software|Media)\s"})
+    monkeypatch.setattr(uh, "printed_industry_gics", lambda labels: {l: ("Application Software", "alias") for l in labels if l == "Software"})
+    rows = [{"cik": "0002052152", "accession_number": "a1", "bdc_investment_identifier": "Software Group %d Co %d Investment Type Term Loan" % (i, i),
+             "extracted_industry": "Group %d" % i, "gics_sub_industry": "Advertising"} for i in range(22)]
+    rows.append({"cik": "0002052152", "accession_number": "a1", "bdc_investment_identifier": "Media Gannett Holdings Investment Type Term Loan",
+                 "extracted_industry": "Gannett", "gics_sub_industry": "Advertising"})
+    out = uh._apply_printed_industry(_holdings(rows))
+    assert out["extracted_industry"].tolist()[:22] == ["Software"] * 22
+    assert out["gics_sub_industry"].tolist()[:22] == ["Application Software"] * 22
+    # a rare member catch that maps to nothing is not taken: the row keeps its earlier label and no filer industry
+    assert out["extracted_industry"].tolist()[22] == "" and out["gics_sub_industry"].tolist()[22] == "Advertising"
