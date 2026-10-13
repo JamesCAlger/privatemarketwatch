@@ -3187,3 +3187,15 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   'Infrastructure Software & DevOps' to Systems Software, and so on): unmapped rows 89 to 18.
   Four broad headings are left unmapped on purpose ('Media, Entertainment & Publishing', ...).
 - 19 findings outstanding (F16 x6, C04 x3, X02 x2, F33 x2, six single). Nothing proposed.
+
+### D-132 26North BDC 0001950976 (sandbox `tn2b`, before `tn2a`)
+
+- Published equals filed in every quarter. The 262 loans without a rate are undrawn lines that
+  print a spread and no rate (one drawn row, 0.8M, at 2026-03-31): as filed.
+- **Industry is a column, not a heading, and sits in the member** ('...|Term Loan|IT Services|SOFR
+  + 6.500%|...', in three quarters glued to the rate: 'SoftwareSOFR + 6.750'). Read with
+  `industry_from_identifier_re`: filer industry on 683 of 687 rows (was 12). The standard label
+  changed on 619 rows and the sector on 505: the label derived from the company name was wrong
+  for most of this fund (e.g. Adelaide Borrower: 'Application Software' to 'Multi-Utilities').
+- Rate column named: 565 reference rates now come from the page; guessed 614 to 49.
+- 17 findings outstanding (C04 x6, B01 x5, F26 x2, four single). Nothing proposed.

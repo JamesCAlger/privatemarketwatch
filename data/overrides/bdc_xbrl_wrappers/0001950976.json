@@ -57,7 +57,8 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:|Debt\\s+Investments|Common\\s+Equity|Equity|Total\\s+(?:Debt\\s+Investments|Common\\s+Equity|Equity|Investments))\\s*$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)\\s*\\|\\s*[^|]*(?:SOFR|LIBOR|Prime|Base\\s+Rate|\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d+(?:\\.\\d+)?%).*$"
+    "canonical_strip_re": "(?i)\\s*\\|\\s*[^|]*(?:SOFR|LIBOR|Prime|Base\\s+Rate|\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d+(?:\\.\\d+)?%).*$",
+    "industry_from_identifier_re": "^[^|]*\\|[^|]*\\|[^|]*\\|\\s*([A-Za-z][A-Za-z ,&'/-]*?)\\s*(?:SOFR|SONIA|EURIBOR|PRIME|\\||\\d|$)"
   },
   "identifier_format": {
     "delimiter": "|",
@@ -147,6 +148,15 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "SOFR=SOFR",
+      "SONIA=SONIA",
+      "EURIBOR=EURIBOR",
+      "PRIME=PRIME"
     ]
   }
 }
