@@ -103,7 +103,9 @@
       }
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
-    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer)\\s*$"
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer)\\s*$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:First\\s+lien|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock))(?:\\s*-?\\s*(?:Undrawn|Drawn|Funded|Unfunded|Revolver|Delayed\\s+Draw))?(?:\\s+\\d{1,2})?\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " | ",

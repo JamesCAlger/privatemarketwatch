@@ -3264,3 +3264,17 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   wrapper statement), or class it as an investment.
 - All 461 loans publish no interest rate: the schedule prints the spread only. As filed.
 - Three headings added to the table. 44 findings outstanding, unchanged; nothing proposed.
+
+### D-137 NMF SLF I 0001766037 (sandbox `nm1b`, before `nm1a`)
+
+- Names split from the lien words, with the words kept as the instrument (same pattern as New
+  Mountain Guardian IV, D-125, plus 'Undrawn' / 'Drawn'): 994 distinct names to 333 over 4,586
+  rows; rows with no instrument 2,870 to 131. 277 position ids changed. Ledger 65 to 63.
+- **Cost of the clean-up, and a warning about the old labels:** the standard industry label, which
+  for this fund still comes from the company name, changed on 900 rows and went missing on 395
+  more (979 to 1,374 unlabeled). The same company got a different label once its name lost the
+  suffix. Neither set is evidenced; the fund's printed industry cannot be read yet (company line,
+  then industry line, D-125).
+- Not fixed: published differs from filed in four quarters (-6.1M, +16.4M, +6.9M, +3.0M); 1,534
+  loans without a rate (undrawn lines); 2,947 reference rates guessed from the date; F23 x13,
+  PCT02 x10, A07 x10, F22 x10.
