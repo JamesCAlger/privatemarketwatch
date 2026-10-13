@@ -118,3 +118,24 @@ def test_file_rules():
                  "data/overrides/finding_dispositions/fundloop_accepted_by_check.json", "tests/test_new_setting.py"):
         assert not forbidden(path), path
     assert fund_gate.check_files(None, {})["ok"] is False      # no snapshot: not checked, so not passed
+
+
+def test_stages_need_a_complete_build_log_that_shows_published_data_untouched(sandbox):
+    box = sandbox / "s1"
+    box.mkdir()
+    stages = [{"stage": name, "exit": 1 if name == "ledger" else 0} for name in
+              ("rebuild", "validate", "oracle", "provenance", "shadow", "queue", "ledger")]
+    (box / "run.json").write_text(json.dumps({"ciks": [CIK], "stages": stages}), encoding="utf-8")
+    assert not fund_gate.check_stages("s1", CIK)["ok"]                      # no build log
+    runs = sandbox / "scratch" / "fund_runs"
+    runs.mkdir(parents=True)
+    (runs / "s1.log").write_text("published files touched: none\n", encoding="utf-8")
+    assert not fund_gate.check_stages("s1", CIK)["ok"]                      # did not finish
+    (runs / "s1.log").write_text("published files touched: none\nCHAIN_DONE\n", encoding="utf-8")
+    assert fund_gate.check_stages("s1", CIK)["ok"]
+    (runs / "s1.log").write_text("RuntimeError: fund sandbox changed published files: x.csv\nCHAIN_DONE\n", encoding="utf-8")
+    assert not fund_gate.check_stages("s1", CIK)["ok"]
+    stages[0]["exit"] = 1
+    (box / "run.json").write_text(json.dumps({"ciks": [CIK], "stages": stages}), encoding="utf-8")
+    (runs / "s1.log").write_text("published files touched: none\nCHAIN_DONE\n", encoding="utf-8")
+    assert not fund_gate.check_stages("s1", CIK)["ok"]                      # a stage failed

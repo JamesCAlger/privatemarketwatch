@@ -51,8 +51,18 @@ JSON you must write).
    (`python scripts/v05_evidence/make_fund_proposals.py <label> <cik> --write` from a spec, or by
    hand in the same shape). Each entry needs at least one evidence item
    `{"source": "filing", "accession": "<with dashes>", "verbatim": "<line copied from page_line.py>", "quote": "<the same, with your reading>"}`.
-   One reason per entry. Say why no fix applies.
+   One reason per entry. Say why no fix applies. Give each entry a `reason_key`: a short slug for
+   the reason itself, not the fund (`x11-undrawn-line-par-printed-as-dash`), reusing a key from
+   `docs/investigations/v05_owner_queue.md` where the reason is the same, so the owner is asked once.
 8. **Write the report** (below) and stop. Do not commit.
+
+Write as you go: after every build, update `REPORT` and your notes under
+`scratch/fund_runs/<cik10>/notes.md` (what you read, what you changed, what is left). A run that is
+cut off must be resumable from those two files. At most six builds; if findings you could fix
+remain after that, list them under `parked` and stop.
+
+You may run the gate on your own result (`fund_gate.py check`, without `--snapshot`, so its
+`files` check will fail: ignore that one). The orchestrator runs it again.
 
 ## What you may not do
 
@@ -65,6 +75,11 @@ JSON you must write).
 - Use the network, run a build of more than this fund, write under `data/output/` or
   `frontend/public/data/`, run `git stash`, `git commit`, `git push`, or edit `AGENTS.md`.
 - Edit a file that another session has modified (`git status` shows it before you start).
+- Change something the gate forbids even if the fix needs it (a check, the provenance
+  re-verifier, a rule, the ledger). Describe the change under `orchestrator_requests` in your
+  report, with the evidence; the orchestrator makes it and re-runs your gate.
+- Kill a process by image name (`taskkill /IM python.exe` kills another session's build). Kill
+  only a process you started, by its id.
 - Start a command with a bare `python -` or an empty heredoc. Write scripts with the Write tool
   and run the file. Any file holding a regular expression goes through the Write or Edit tool.
 
@@ -99,6 +114,7 @@ JSON you must write).
             "quotes": [{"accession": "0001234567-24-000028", "text": "<line copied from page_line.py>"}]}],
  "total_exceptions": [{"quarter": "2023-06-30", "why": "...", "quote": {"accession": "...", "text": "..."}}],
  "parked": [{"finding": "engine rule quarter", "hypotheses": ["..."]}],
+ "orchestrator_requests": [{"file": "pipeline/provenance_reverify.py", "what": "...", "why": "...", "quotes": []}],
  "found_without_a_rule": ["errors you saw on the page that no rule flagged"],
  "tests_run": ["tests/test_x.py: 12 passed"],
  "not_done": ["what you did not check"]

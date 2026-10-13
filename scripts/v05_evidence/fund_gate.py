@@ -18,8 +18,9 @@ decides, without judgment, whether the agent's run can be accepted:
   files        nothing the agent may not touch changed since the snapshot
   ledger       every outstanding finding of the fund is covered by a written proposal
 
-Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain) or FAIL. Written to
-scratch/fund_sandbox/<label>/gate_<cik>.json. Exit code 0, 1, 2.
+Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
+NEEDS_ORCHESTRATOR (clean, and the report asks for a change the agent may not make: a check, the
+re-verifier, a rule). Written to scratch/fund_sandbox/<label>/gate_<cik>.json. Exit code 0, 1, 2, 3.
 
 The report is the fund agent's own JSON (see .claude/skills/v05-fund-clearing/fund-agent-brief.md).
 A quote is {"accession": "0001234567-25-000001", "text": "<as printed by page_line.py>"}.
@@ -125,6 +126,16 @@ def check_stages(label: str, cik: str) -> dict:
         text = log.read_text(encoding="utf-8", errors="replace")
         if "Traceback (most recent call last)" in text:
             problems.append("traceback in %s" % log.name)
+    # The runner compares the published folder before and after each call and says so in the build log.
+    build_log = REPO / "scratch" / "fund_runs" / (label + ".log")
+    text = build_log.read_text(encoding="utf-8", errors="replace") if build_log.exists() else ""
+    if not text:
+        problems.append("no build log at scratch/fund_runs/%s.log (build with build_fund.sh)" % label)
+    else:
+        if "CHAIN_DONE" not in text:
+            problems.append("build log does not end in CHAIN_DONE")
+        if "changed published files" in text or "published files touched: none" not in text:
+            problems.append("published data not shown untouched in the build log")
     return {"ok": not problems, "problems": problems, "stages": stages}
 
 
@@ -361,9 +372,11 @@ def main(argv=None) -> int:
         checks["fields"] = check_fields(args.label, args.before, cik, report)
     ledger = check_ledger(args.label, cik)
     failed = [name for name, result in checks.items() if not result["ok"]]
-    verdict = "FAIL" if failed else ("PASS" if ledger["ok"] else "INCOMPLETE")
+    # A change the agent may not make itself (a check, the re-verifier, a rule) is asked for in the report.
+    requests = report.get("orchestrator_requests") or []
+    verdict = "FAIL" if failed else ("NEEDS_ORCHESTRATOR" if requests else ("PASS" if ledger["ok"] else "INCOMPLETE"))
     result = {"verdict": verdict, "cik": cik, "label": args.label, "before": args.before, "failed": failed,
-              "checks": checks, "ledger": ledger, "fields_checked": bool(args.before)}
+              "checks": checks, "ledger": ledger, "fields_checked": bool(args.before), "orchestrator_requests": requests}
     (SANDBOXES / args.label / ("gate_%s.json" % cik)).write_text(json.dumps(result, indent=1), encoding="utf-8")
     print("%s  %s in %s%s" % (verdict, cik, args.label, "" if args.before else "  (no sandbox before: fields not compared)"))
     for name, outcome in checks.items():
@@ -373,7 +386,9 @@ def main(argv=None) -> int:
     print("   ledger: %d findings, %d outstanding, %d with a proposal%s" % (
         ledger["findings"], ledger["outstanding"], ledger["with_proposal"],
         "" if ledger["ok"] else "; without: " + "; ".join(ledger["uncovered"][:12])))
-    return {"PASS": 0, "INCOMPLETE": 1, "FAIL": 2}[verdict]
+    for request in requests:
+        print("   asks the orchestrator: %s" % json.dumps(request)[:400])
+    return {"PASS": 0, "INCOMPLETE": 1, "FAIL": 2, "NEEDS_ORCHESTRATOR": 3}[verdict]
 
 
 if __name__ == "__main__":

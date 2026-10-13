@@ -16,8 +16,11 @@ setting, a column, a member format); work pinned to one quarter does not carry f
 
 ## Hard rules (a violation stops the run; never work around one)
 
-1. **One fund agent at a time.** Builds, shared files and shared code are not safe in parallel.
-2. **The gate decides.** `scripts/v05_evidence/fund_gate.py check` PASS, INCOMPLETE or FAIL. Never
+1. **One fund agent at a time, and nothing else writing in this working tree.** Builds, shared
+   files and shared code are not safe in parallel. If `git log` or `git status` shows another
+   session's work appearing during a run, stop and report.
+2. **The gate decides.** `scripts/v05_evidence/fund_gate.py check` PASS, INCOMPLETE, FAIL or
+   NEEDS_ORCHESTRATOR. Never
    edit the gate, a rule, a threshold, a check or the reasons list to change a verdict.
 3. **Nobody in the loop accepts a new reason.** A disposition is accepted only by a check listed
    in `data/reference/accepted_disposition_reasons.json` (through `make_batch_dispositions.py`)
@@ -59,15 +62,23 @@ digraph fund {
    keeps its context). At most three gate rounds. Then
    `fund_gate.py park --snapshot <snapshot> --cik <cik>` and record the fund as parked with the
    last verdict. If `park` prints STOP, stop the whole run and report.
-6. **PASS or INCOMPLETE:** if the report says `shared_code`, or the gate lists shared code:
-   run the changed modules' tests, then rebuild the regression set (the funds already cleared
-   that the changed path can reach; if unsure, the first five with `--add-quarter 2026-06-30`)
-   and run `holdings_field_diff.py <new> <their last accepted sandbox>`. Any difference outside
-   `entity_id` and `canonical_name` that the fund's report does not explain: park the fund.
-7. **Record:** append one entry to `docs/investigations/v05_decision_log.md` (next D-number: what
+6. **NEEDS_ORCHESTRATOR:** the agent asks for a change it may not make (a check, the re-verifier,
+   a rule). Read its evidence. A change to how a published value is VERIFIED (the re-verifier
+   reading a new event) you make yourself, with a test, then re-snapshot, have the agent rebuild
+   and gate again. A change to what counts as a FINDING or as ACCEPTED is the owner's: record
+   the request, leave the finding outstanding, and continue. List every such change in the
+   end-of-run report.
+7. **PASS or INCOMPLETE with shared code changed** (the report says so, or the gate lists it):
+   run the changed modules' tests now. If the change altered an EXISTING wrapper setting, find
+   the other funds that use it (search `data/overrides/bdc_xbrl_wrappers/` for the key), rebuild
+   them and run `regression_check.py`; a fund that MOVED without an explanation in the report
+   parks this fund. A NEW setting is on for one fund: nothing else is rebuilt until the end of
+   the run.
+8. **Record:** set the fund's entry in `docs/investigations/v05_readings/accepted_sandboxes.json`
+   to the sandbox that passed; append one entry to `docs/investigations/v05_decision_log.md` (next D-number: what
    was fixed, what is proposed, what is parked, gate verdict, sandbox label) and one line to the
    run table in `docs/investigations/v05_reading_backlog.md`. Commit.
-8. Next fund.
+9. Next fund.
 
 **INCOMPLETE** means the build is clean but some findings have neither a fix nor a proposal. It
 is recorded and committed like a pass, with the uncovered findings listed. It is not sent back
@@ -81,6 +92,14 @@ A new quarter for a cleared fund is the same loop with `ADD_QUARTER`: record the
 reading (findings cleared by carry-forward against findings newly open) before any fix.
 
 ## End of run
+
+1. **Regression, only if shared code changed during the run.** Rebuild the funds accepted before
+   the run in sandboxes of at most ten (`build_fund.sh`, with `--add-quarter` where they have it)
+   and run `python scripts/v05_evidence/regression_check.py <label>`. A fund that MOVED: find the
+   commit that did it (one commit per fund), report it, and do not call the run clean.
+2. **Owner decision ledger.** `python scripts/v05_evidence/owner_queue.py build`. The owner rules
+   per reason: `owner_queue.py rule <reason key> accept|reject|more --words "<their words>"`.
+   Only that command turns a proposal into an accepted disposition.
 
 One report to the owner:
 
@@ -101,6 +120,8 @@ build showed; what was not run. Lead with what failed.
 | Reasons accepted by check | `data/reference/accepted_disposition_reasons.json` |
 | Gate | `python scripts/v05_evidence/fund_gate.py check ...` (verdict in `scratch/fund_sandbox/<label>/gate_<cik>.json`) |
 | Field comparison | `python scripts/v05_evidence/holdings_field_diff.py <new> <old>` |
+| Have accepted funds moved | `python scripts/v05_evidence/regression_check.py <label>` |
+| Owner decisions | `python scripts/v05_evidence/owner_queue.py build | show [key] | rule ...` |
 | Take a failed fund out | `python scripts/v05_evidence/fund_gate.py park --snapshot <file> --cik <cik>` |
 
 ## Red flags: stop and report

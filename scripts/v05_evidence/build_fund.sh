@@ -14,6 +14,8 @@ if [ -z "$L" ] || [ -z "$C" ]; then echo "usage: build_fund.sh <label> [--add-qu
 if [ -e "scratch/fund_sandbox/$L" ]; then echo "sandbox $L exists: use a new label"; exit 2; fi
 if tasklist | grep -qi "python"; then echo "a Python process is running: not started"; exit 3; fi
 mkdir -p scratch/fund_runs
+# No model call from a sandbox build: industry labels come from the page and the cache only.
+export OPENAI_API_KEY=
 LOG="scratch/fund_runs/$L.log"
 {
   python scripts/fund_ledger_trial.py --label $L --ciks $C --until highlights
