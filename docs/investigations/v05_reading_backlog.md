@@ -93,3 +93,59 @@ cash-axis member naming a fair-value-hierarchy category is not cash and not a po
 Found the same day (D-108): industry labels are a name-keyed guess with a cache; cleaning names
 empties the label in fund sandboxes (North Haven +516 rows without one, Monroe +659, Blue Owl
 Technology +344, Ares Core +42).
+
+## Run of 2026-10-12 night to 2026-10-13 (funds 19 to 62 by size, one at a time)
+
+Each fund built alone in its own sandbox. 'Outstanding' is that sandbox's ledger; nothing was
+published. Detail per fund is in the decision log entry named.
+
+| Fund | Sandbox | Published v filed | Outstanding | Main change | Decision |
+|---|---|---|---|---|---|
+| Sixth Street Specialty Lending 0001508655 | `ss1c` | see log | 105 | names, class of three rows | D-110 |
+| Stepstone Private Credit 0001950803 | `st1b` | short in 3 quarters (1.2M to 10.0M) | 48 | no-PIK reading | D-112 |
+| KKR FS Income Trust 0001930679 | `kk1c` | over in 9 quarters (1.5M to 14.1M) | 90 | rate column, industry segment | D-113 |
+| Goldman Sachs BDC 0001572694 | `gs1b` | equal, 13 of 13 | 92 | untagged and misdated values | D-114 |
+| T. Rowe Price OHA 0001901612 | `tr1a` | equal | 13 | none | D-115 |
+| MidCap Financial 0001578620 | `mc1c` | equal, 13 of 13 | 120 | rules, industry guards | D-116 |
+| Stone Point Credit 0001825384 | `sp1a` | equal | 45 | none | D-117 |
+| Diameter Credit 0001906381 | `di1b` | see log | 34 | settings | D-118 |
+| Carlyle Secured Lending III 0001872371 | `ca1b` | see log | 30 | settings | D-119 |
+| Fidelity Private Credit Fund 0001920453 | `fi1c`, `fd1a` | equal but two 2023 quarters | 38 | 13 untagged values; instrument text | D-120, D-130 |
+| Trinity Capital 0001786108 | `tn1b` | small gaps in six quarters | 88 | two misdated loans | D-121 |
+| Golub Capital BDC 4 0001901164 | `gb1b` | see log | 28 | names | D-122 |
+| Nuveen Churchill PCAP 0001911066 | `nu1b` | short in three 2023 quarters (as filed) | 27 (was 35) | names no longer cut at the legal form | D-123 |
+| BlackRock Private Credit 0001902649 | `bk1a` | equal | 22 | three headings | D-124 |
+| HPS Corporate Capital Solutions 0001989817 | `hc1a` | equal | 12 | none | D-125 |
+| T Series BDC 0001885968 | `ts1a` | 1.7M under in one quarter | 25 | none | D-125 |
+| New Mountain Guardian IV 0001925531 | `ng1b` | equal | 21 | names 568 to 227 | D-125 |
+| New Mountain Private Credit 0002037804 | `np1a` | equal | 41 | check-accepted entry | D-126 |
+| Blackstone Private Real Estate Credit 0002049733 | `br1a` | equal | 1 | none | D-126 |
+| AB Private Credit Investors 0001634452 | `ab1b` | see log | 66 | industry from the member (341 to 5,228 rows) | D-126 |
+| KKR FS Income Trust Select 0001975736 | `ks1a` | over in five quarters (1.7M to 9.7M) | 43 | sister settings | D-126 |
+| Bain Capital Private Credit 0001899017 | `bn1b` | equal (was 33.5M and 11.2M under) | 71 (was 80) | four unscaled rows; names 950 to 390 | D-127 |
+| APS BDC 0002083477 | `ap1c` | equal | 2 | maturities and rates now read from the page | D-128 |
+| Jefferies Credit Partners 0001959604 | `jf1b` | 1.2M over in one quarter | 11 | 'continued' headings | D-128 |
+| Antares Private Credit 0001976336 | `an1b` | equal | 32 (was 47) | tagged money-market row replaces two add rules | D-128 |
+| Fortress Private Lending 0002012139 | `fo1b` | equal | 13 (was 17) | rate column, foreign principal | D-129 |
+| Fidelity Private Credit Company 0001899996 | `fc1b`, `fd1a` | 1.4M under in one quarter | 43 | instrument text | D-130 |
+| VISTA Credit Strategic Lending 0001919369 | `vi1b` | equal | 19 | rate source, software headings | D-131 |
+| 26North BDC 0001950976 | `tn2b` | equal | 17 | industry from the member (12 to 683 rows) | D-132 |
+| Goldman Sachs PMMC II 0001772704 | `gp1b` | equal | 42 (was 54) | sister settings; SONIA and Canadian prime | D-133 |
+| Crescent Capital BDC 0001633336 | `cc1c` | equal (was off in three quarters) | 51 (was 45) | subtotal removed, untagged value | D-134 |
+| Apollo Origination II (Levered) 0002052152 | `ao1c` | equal | 20 | industry on every row | D-135 |
+| Overland Advantage 0001965934 | `ov1c` | 'under' by the Treasury bill in five quarters | 44 | cut-off member named | D-136 |
+| NMF SLF I 0001766037 | `nm1b` | off in four quarters (-6.1M to +16.4M) | 63 (was 65) | names 994 to 333 | D-137 |
+| Lord Abbett Private Credit 0002008748 | `la1b` | equal | 21 | names 266 to 112 | D-138 |
+| TCW Direct Lending VIII 0001825265 | `tw1a` | 1.1M under in one; no filed total in three | 76 | none | D-139 |
+| AGL Private Credit Income 0002011498 | `ag1c` | equal | 19 | instrument text, industry | D-140 |
+| MidCap Apollo Institutional 0002006758 | `ma1a` | equal | 26 | Apollo settings | D-141 |
+| Apollo Origination II (unlevered) 0002052153 | `au1a` | equal | 40 | Apollo settings | D-141 |
+| Silver Point Specialty Lending 0001646614 | `sv1b` | see log | 123 | country headings no longer an industry | D-142 |
+| TCW Direct Lending VII 0001715933 | `t71a` | no filed total in eight quarters | 143 | none | D-142 |
+| Phillip Street Middle Market Lending 0001948368 | `ps1b` | equal | 35 (was 41) | foreign principal, rate column | D-143 |
+| Crescent Private Credit Income 0001954360 | `cp1b` | 1.5M and 2.3M under in two quarters | 61 (was 67) | footer no longer an industry; foreign principal | D-143 |
+| Varagon Capital 0001784700 | `va1a` | 0.7M to 6.4M under in five quarters | 64 | none | D-143 |
+
+Not reached in this run: the ten parked small funds (D-078, D-079) and Commonwealth 0001841514,
+Senior Credit Investments 0001959568, TCW Direct Lending 0001603480, Silver Capital 0001674760,
+Manulife 0001988280.

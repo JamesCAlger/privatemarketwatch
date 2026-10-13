@@ -1238,3 +1238,11 @@ def test_a_country_heading_is_not_an_industry():
         assert re.search(_NOT_AN_INDUSTRY_RE, heading), heading
     for heading in ("Software", "Canadian Oil & Gas", "Health Care Providers & Services", "Multi-Family"):
         assert not re.search(_NOT_AN_INDUSTRY_RE, heading), heading
+
+
+def test_a_page_footer_is_not_an_industry():
+    import re
+    from pipeline.bdc_xbrl_html_bridge import _NOT_AN_INDUSTRY_RE
+    for heading in ("See accompanying notes", "See accompanying notes to consolidated financial statements"):
+        assert re.search(_NOT_AN_INDUSTRY_RE, heading), heading
+    assert not re.search(_NOT_AN_INDUSTRY_RE, "Financial Services")

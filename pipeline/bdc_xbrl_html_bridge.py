@@ -1189,6 +1189,8 @@ _MARGIN_TOL = 0.011
 # Section headings the page reader can mistake for an industry heading.
 _NOT_AN_INDUSTRY_RE = (r"(?i)non-?\s*controlled|affiliate|unfunded|\bcommitments?\b|^interest$|^cash\b|^total\b|^none$|^nan$"
                        r"|revolvers?\)?$|:$|^investments\b|^joint ventures?$|\b(?:shares|units)$|\bdebt\b|\blien\b|^equity\b"
+                       # a page footer read as the last heading (Crescent Private Credit Income)
+                       r"|^see (?:the )?accompanying notes|\bfinancial statements\b"
                        # a schedule grouped by country prints the country as the heading (Silver Point)
                        r"|^(?:united states(?: of america)?|u\.?s\.?a?\.?|canada|united kingdom|u\.?k\.?|luxembourg|netherlands|australia"
                        r"|germany|france|ireland|singapore|cayman islands|japan|sweden|switzerland|spain|italy|belgium|denmark|norway"

@@ -3346,3 +3346,19 @@ either before the change exists in this run, so there is no before / after).
   balance-sheet identity x13 look like the net-assets concept error of D-139 (same filer); not
   verified on the page. Row data: 5 of 521 loans without a rate, one guessed reference rate,
   filer industry on every row (one heading added to the table).
+
+### D-143 Phillip Street Middle Market Lending 0001948368 (`ps1b`), Crescent Private Credit Income 0001954360 (`cp1b`), Varagon Capital 0001784700 (`va1a`)
+
+- **Shared: a page footer is not an industry.** Crescent Private Credit Income published 'See
+  accompanying notes' as the filer's industry on 631 rows (1.36B). Added to the not-an-industry
+  filter (test added). Those rows now carry no filer industry (632 of 2,290; 521 without a
+  standard label, unchanged): the fund's industry is not read for them.
+- **Phillip Street** (a Goldman fund): foreign principal converted with the reference rate (13
+  rows; FX01 x6 cleared) and the rate column named (18 rows change from a guessed SOFR to the
+  printed rate; guessed 18 to 0). Published equals filed. Ledger 41 to 35. The 639 loans without
+  a rate are undrawn lines. 94 proxy share counts (D-111).
+- **Crescent Private Credit Income:** foreign principal converted (107 rows; FX01 x6 cleared).
+  Ledger 67 to 61. Published 1.5M and 2.3M under filed in two quarters, not traced. Open: C201 x11
+  (rows with no issuer), B01 x11, A01 x7.
+- **Varagon:** built and recorded, not worked. 64 findings outstanding; published 0.7M to 6.4M
+  under filed in at least five quarters; 43 rows with no class (11.1M); C201 x8, conservation x5.

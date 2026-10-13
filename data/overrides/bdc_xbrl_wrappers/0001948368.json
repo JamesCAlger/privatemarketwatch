@@ -282,6 +282,21 @@
     ],
     "filed_rate_reading": [
       "all_in"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "L=LIBOR",
+      "E=EURIBOR",
+      "S=SOFR",
+      "SN=SONIA",
+      "N=NIBOR",
+      "B=BBSW",
+      "P=PRIME"
     ]
   }
 }
