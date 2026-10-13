@@ -64,3 +64,16 @@ def test_switch_needs_the_pattern_and_a_true_value(tmp_path):
     wrapper("c.json", "0000000003", {"issuer_name_strip_re": r"\s+\d$", "issuer_name_strip_to_instrument": "yes"})
     wrapper("d.json", "0000000004", {"issuer_name_strip_re": r"\s+\d$"})
     assert issuer_name_strip_to_instrument_ciks(tmp_path) == {"0000000001"}
+
+
+def test_instrument_header_words_are_removed_for_one_fund_only():
+    from pipeline.unified_holdings import _strip_instrument_text
+    pattern = r"(?i)^\s*Type\s+|\s+(?:Reference\s+Rate\s+and\s+Spread|Interest\s+Rate|Maturity\s+Date)\b.*$"
+    frame = pd.concat([
+        _frame(["A", "B", "C", "D"], ["Type Term Loan Reference Rate and Spread SOFR + 5.25% Interest Rate 9.58% Maturity Date 12/18/2027",
+                                      "Type Class A Units", "Revolving Credit Facility Maturity Date 01/11/2029", "Type"]),
+        _frame(["E"], ["Type Term Loan Interest Rate 9%"], cik="0000000001"),
+    ], ignore_index=True)
+    out = _strip_instrument_text(frame, {MONROE: pattern})
+    # the last of the fund's rows would be emptied, so it stays as filed; another fund is untouched
+    assert out["instrument_description"].tolist() == ["Term Loan", "Class A Units", "Revolving Credit Facility", "Type", "Type Term Loan Interest Rate 9%"]

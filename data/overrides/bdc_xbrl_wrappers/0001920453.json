@@ -45,7 +45,8 @@
         "family": "debt"
       }
     ],
-    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*(?:Equity|Preferred\\s+Equity|Common\\s+Equity),\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S|\\bType\\s+\\w|\\bClass\\s+[A-Z0-9-]+\\b|\\b(?:Preferred|Common)\\s+(?:Units|Stock)\\b|\\bFloating\\s+Rate\\s+Note\\b|\\bCollateralized\\s+Loan\\s+Obligation\\b|\\b(?:Equity|Partnership)\\s+Interests?\\b"
+    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*(?:Equity|Preferred\\s+Equity|Common\\s+Equity),\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S|\\bType\\s+\\w|\\bClass\\s+[A-Z0-9-]+\\b|\\b(?:Preferred|Common)\\s+(?:Units|Stock)\\b|\\bFloating\\s+Rate\\s+Note\\b|\\bCollateralized\\s+Loan\\s+Obligation\\b|\\b(?:Equity|Partnership)\\s+Interests?\\b",
+    "instrument_description_strip_re": "(?i)^\\s*Type\\s+|[\\s,]+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b.*$|[\\s,]+$"
   },
   "staging": {
     "strategy": "hierarchy_leaf_guard",

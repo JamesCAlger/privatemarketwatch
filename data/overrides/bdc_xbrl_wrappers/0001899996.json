@@ -89,7 +89,8 @@
     "category_marker_re": "(?i)^(?!.*\\b(?:llc|l\\.l\\.c|inc|corp|company|ltd|limited|lp|l\\.p|class|units?|interest|term\\s+loan|credit\\s+facility|maturity|stock|warrants?)\\b).*(?:total|commodity\\s+chemicals|equity\\s+[A-Za-z &/,]+|first\\s+lien\\s+debt\\s+[A-Za-z &/,]+|second\\s+lien\\s+debt\\s+[A-Za-z &/,]+)\\s*$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)^\\s*(?:Investments,?\\s+Investments|Investments|Investment)\\s*(?:--|-|,)\\s*(?:non-?control(?:led)?\\s*/\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/\\s*non-?affiliated|non-?control(?:led)?\\s*/\\s*non-?affiliate|non-?control(?:led)?\\s*,\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/?\\s*non-?affiliated|non-?control(?:led)?\\s*/?\\s*non-?affiliate|non-?control(?:led)?|affiliated|affiliate|affiliatd)\\s*,?\\s*|\\bReference\\s+Rate\\s+and\\s+Spread\\s+(?:SOFR|LIBOR|EURIBOR|Prime|Base\\s+Rate|S|L|E)(?:\\s*\\+\\s*\\d+(?:\\.\\d+)?%)?|\\bInterest\\s+Rate\\s+[-\\u2014]?\\s*\\d+(?:\\.\\d+)?%|\\s*\\([^)]*PIK[^)]*\\)",
-    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*Equity,\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S"
+    "leaf_marker_re": "^\\W*\\w*vestments,?\\s+Investments\\s*-+\\s*non-controlled\\s*/\\s*non-affiliated?\\s*,\\s*Equity,\\s*(?!Total\\b)[^,]+,\\s*(?!Total\\b)\\S",
+    "instrument_description_strip_re": "(?i)^\\s*Type\\s+|[\\s,]+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b.*$|[\\s,]+$"
   },
   "staging": {
     "strategy": "hierarchy_leaf_guard",

@@ -1411,6 +1411,8 @@ def build_unified_holdings(
     # duplicate filters, rules and corrections above still see the name as filed.
     from pipeline.staging_bdc import issuer_name_strip_patterns, issuer_name_strip_to_instrument_ciks
     combined = _strip_issuer_names(combined, issuer_name_strip_patterns(), issuer_name_strip_to_instrument_ciks())
+    from pipeline.staging_bdc import instrument_description_strip_patterns
+    combined = _strip_instrument_text(combined, instrument_description_strip_patterns())
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
@@ -1949,6 +1951,25 @@ def _strip_issuer_names(combined: pd.DataFrame, patterns: dict[str, str],
             front = (current != "") & lettered & ~holds
             if front.any():
                 combined.loc[front[front].index, "instrument_description"] = (removed[front] + " " + current[front]).values
+    return combined
+
+
+def _strip_instrument_text(combined: pd.DataFrame, patterns: dict[str, str]) -> pd.DataFrame:
+    """Remove a filer's own header words from instrument_description (dispatch.instrument_description_strip_re).
+
+    Every match is removed and the ends trimmed. Text the pattern would empty is left as filed.
+    One fund's rows only.
+    """
+    if "instrument_description" not in combined.columns:
+        return combined
+    for cik, pattern in patterns.items():
+        rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        if not rows.any():
+            continue
+        filed = combined.loc[rows, "instrument_description"].astype("string")
+        stripped = filed.str.replace(pattern, "", regex=True).str.strip()
+        stripped = stripped.where(stripped.fillna("") != "", filed)
+        combined.loc[rows, "instrument_description"] = stripped
     return combined
 
 

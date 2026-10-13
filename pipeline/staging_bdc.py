@@ -330,6 +330,28 @@ def issuer_name_strip_patterns(wrapper_dir: Path | None = None) -> dict[str, str
     return result
 
 
+def instrument_description_strip_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
+    """CIK -> regex removed from that filer's instrument text (dispatch.instrument_description_strip_re).
+
+    Fidelity's member carries the column headers of its schedule ('Type Term Loan Reference Rate and
+    Spread SOFR + 5.25% Interest Rate 9.58% Maturity Date 12/18/2027'): the header words and the
+    terms after them are not the instrument. Applied with the issuer-name strip, at the end of the
+    unified build, for the same reason (rules and corrections read the text as filed).
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, str] = {}
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        pattern = raw.get("dispatch", {}).get("instrument_description_strip_re")
+        if pattern:
+            re.compile(pattern)
+            result[raw["cik"]] = pattern
+    return result
+
+
 def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
     """CIK -> regex whose first group is the filer's industry inside the member text
     (dispatch.industry_from_identifier_re).

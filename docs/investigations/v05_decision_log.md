@@ -3162,3 +3162,17 @@ Each built alone with the settings of earlier rounds (sandboxes `hc1a`, `ts1a`, 
   pct identity, F21, F23) rest on it. Needs a rule that a page-corrected figure is exempt from
   scale detection. Also open: percent of net assets tagged as 24.28 for a printed 2,428.
 - Two rows per quarter with no ' Investment ' word in the member have no issuer (C201 x2).
+
+### D-130 Fidelity Private Credit Company 0001899996 (sandboxes `fc1a`, `fc1b`, `fd1a` with its sister)
+
+- Built alone: published equals filed in every quarter but 2023-06-30 (1.4M under). 43 findings
+  outstanding (F27 x12, B01 x9, C04 x8, X02 x6). The 432 loans without a rate are undrawn lines
+  that print none (26 to 49 a quarter, fair value near zero): as filed.
+- **New wrapper option `dispatch.instrument_description_strip_re`** (shared code, test added): the
+  filer's header words are removed from the instrument text. Fidelity's member carries its column
+  headers ('Type Term Loan Reference Rate and Spread SOFR + 5.25% Interest Rate 9.58% Maturity
+  Date 12/18/2027'). Set on both Fidelity funds: 2,220 and 2,215 rows now read 'Term Loan',
+  'Delayed Draw Term Loan', 'Class A Units'. No other column changed, no row moved, ledgers
+  unchanged (43 and 38).
+- Not done: 25 rows of 2023 whose issuer carries the industry in front ('Building Products,
+  Copperweld Investor, LLC'); 15 proxy share counts (D-111).
