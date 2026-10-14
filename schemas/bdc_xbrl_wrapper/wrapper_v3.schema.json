@@ -111,6 +111,22 @@
           "type": "string",
           "description": "Regex removed from the end of this filer's staged issuer name. For a filer that numbers the rows of one borrower in the member name (BCRED 'Riser Merger Sub, Inc. 1' and '... 2'; HPS, North Haven, Monroe the same), so the number is not part of the issuer. The raw identifier keeps it. Evidence required: two numbered members of one borrower beside their printed rows."
         },
+        "issuer_name_strip_to_instrument": {
+          "type": "boolean",
+          "description": "When true, the text issuer_name_strip_re removes becomes the row's instrument_description where that is blank (or goes in front of it). Monroe, Blue Owl Technology Income and Blue Owl Credit Income name a context 'Issuer, Instrument' with no separate instrument."
+        },
+        "instrument_description_strip_re": {
+          "type": "string",
+          "description": "Regex removed from this filer's instrument_description (a filer's own column headers or holder labels in the member text). Text it would empty is left as filed unless instrument_description_strip_may_empty is true."
+        },
+        "instrument_description_strip_may_empty": {
+          "type": "boolean",
+          "description": "When true, instrument_description_strip_re may leave the instrument blank: BCRED's 'Issuer | Emerald JV LP' puts only the joint venture's name after the separator (D-164)."
+        },
+        "global_issuer_split": {
+          "enum": [false],
+          "description": "false opts this filer out of the shared issuer/instrument split (pipeline/issuer_instrument_split.py). Manulife Private Credit: its instrument text carries a per-quarter section heading, so instrument text moved there breaks position chains (cohort A/B 2026-10-14)."
+        },
         "bare_entity_rows": {
           "enum": ["positions"],
           "description": "The filer names a position by its company alone (Lord Abbett: 'Spark Buyer LLC' is the main term loan, 46.2M at 2025-03-31, beside 'Spark Buyer LLC Delayed Draw' and 'Spark Buyer LLC Revolver'). Without this, a filer with prefix_rules has every bare company name holding 'llc', 'group', 'limited' and the like dropped as an issuer subtotal. Evidence required: printed rows, and the quarter totals with the rows restored."

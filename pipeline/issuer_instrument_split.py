@@ -55,19 +55,29 @@ def enabled(reference: Path = REFERENCE) -> bool:
     return json.loads(reference.read_text(encoding="utf-8")).get("enabled") is True
 
 
-def split_name(name: str) -> tuple[str, str]:
-    """(issuer, cut text) for one name; the cut text is '' when nothing is cut."""
+# What is left in front of the cut is a section heading, not an issuer ('Debt Investments, First Lien
+# Senior Secured, Military Retail Solutions': the issuer is at the end).
+_HEADING = re.compile(r"(?i)(?:\binvestments?|\baffiliated|\bcontrolled)\s*$")
+# The cut text names a company: the cut is inside the issuer ('Wilnat, Inc. - Revolving Credit Lin, LLC').
+_LEGAL_FORM = re.compile(r"(?i),\s*(?:LLC|L\.L\.C\.|Inc\.?|Ltd\.?|LP|L\.P\.|Corp\.?|Limited|GmbH|plc)\b")
+
+
+def split_name(name: str) -> tuple[str, str, str]:
+    """(issuer, cut instrument text, cut row number) for one name; '' where nothing is cut."""
     if not isinstance(name, str) or not name.strip():
-        return name, ""
-    issuer, cut = name, ""
+        return name, "", ""
+    issuer, cut, number = name, "", ""
     m = INSTRUMENT_CUT.search(issuer)
-    if m and issuer[:m.start()].strip(" ,-") and re.search(r"[A-Za-z]{2}", issuer[:m.start()]):
-        cut = m.group(1).strip()
-        issuer = issuer[:m.start()].rstrip(" ,-")
+    if m:
+        before, after = issuer[:m.start()].rstrip(" ,-"), m.group(1).strip()
+        if before.strip() and re.search(r"[A-Za-z]{2}", before) and not _HEADING.search(before) \
+                and not _LEGAL_FORM.search(after):
+            issuer, cut = before, after
     n = ROW_NUMBER.search(issuer)
     if n and issuer[:n.start()].strip():
+        number = re.sub(r"\D", "", n.group(0))
         issuer = issuer[:n.start()].rstrip(" ,")
-    return issuer, cut
+    return issuer, cut, number
 
 
 def shapes(name: str) -> list[str]:
@@ -95,19 +105,34 @@ def split_issuer_instrument(combined: pd.DataFrame, opted_out: set[str] | frozen
     filed = combined.loc[rows, "issuer_name"]
     # unique names only: the same name repeats across quarters and tranches
     table = {name: split_name(name) for name in pd.unique(filed.dropna())}
-    issuer = filed.map(lambda v: table[v][0] if v in table else v)
-    cut = filed.map(lambda v: table[v][1] if v in table else "").fillna("")
-    combined.loc[rows, "issuer_name"] = issuer
-    if "instrument_description" in combined.columns:
-        current = combined.loc[rows, "instrument_description"].astype("string").fillna("").str.strip()
-        has_cut = cut != ""
-        fill = has_cut & (current == "")
-        holds = pd.Series([c.lower() in i.lower() for c, i in zip(cut, current)], index=current.index)
-        front = has_cut & (current != "") & ~holds
-        idx = fill[fill].index
-        combined.loc[idx, "instrument_description"] = cut[fill].values
-        idx = front[front].index
-        combined.loc[idx, "instrument_description"] = (cut[front] + " " + current[front]).values
+    changed = {k: v for k, v in table.items() if v[0] != k}
+    if not changed:
+        return combined
+    hit = filed.isin(list(changed))
+    idx = filed[hit].index
+    names = filed[hit]
+    combined.loc[idx, "issuer_name"] = names.map({k: v[0] for k, v in changed.items()}).values
+    if "instrument_description" not in combined.columns:
+        return combined
+    cut = names.map({k: v[1] for k, v in changed.items()}).fillna("")
+    number = names.map({k: v[2] for k, v in changed.items()}).fillna("")
+    current = combined.loc[idx, "instrument_description"].astype("string").fillna("").str.strip()
+    out = current.copy()
+    # the instrument text cut off the name: fills a blank instrument, or goes in front of one that
+    # does not already hold it
+    has_cut = cut != ""
+    holds = pd.Series([c.lower() in i.lower() for c, i in zip(cut[has_cut], current[has_cut])], index=cut[has_cut].index, dtype=bool)
+    fill = has_cut & (current == "")
+    front = has_cut & (current != "")
+    front.loc[holds.index] &= ~holds
+    out[fill] = cut[fill]
+    out[front] = cut[front] + " " + current[front]
+    # a row number cut off the name stays with the row: two warrants of one issuer, both
+    # 'Warrant Investments', are told apart only by it
+    tail = out.str.extract(r"(\d{1,2})\s*$", expand=False).fillna("")
+    keep = (number != "") & (tail != number)
+    out[keep] = (out[keep] + " " + number[keep]).str.strip()
+    combined.loc[idx, "instrument_description"] = out.values
     return combined
 
 

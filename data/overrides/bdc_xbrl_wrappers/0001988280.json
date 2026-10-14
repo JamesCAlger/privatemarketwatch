@@ -5,6 +5,7 @@
   "version": 1,
   "source": "bdc_xbrl",
   "dispatch": {
+    "global_issuer_split": false,
     "rule_prefix": "MANULIFE_PRIVATE_CREDIT",
     "prefix_rules": {
       "Senior loans": "debt",

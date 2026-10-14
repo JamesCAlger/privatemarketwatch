@@ -7,35 +7,42 @@ import pytest
 from pipeline.issuer_instrument_split import enabled, opted_out_ciks, shapes, split_issuer_instrument, split_name
 
 
-@pytest.mark.parametrize("name, issuer, cut", [
-    ("Auctane, Inc., First lien senior secured loan", "Auctane, Inc.", "First lien senior secured loan"),
+@pytest.mark.parametrize("name, issuer, cut, number", [
+    ("Auctane, Inc., First lien senior secured loan", "Auctane, Inc.", "First lien senior secured loan", ""),
     ("Pediatric Associates Holding Company, LLC, First lien senior secured loan 2", "Pediatric Associates Holding Company, LLC",
-     "First lien senior secured loan 2"),
-    ("Keel Platform, LLC, Senior Secured Loans (Delayed Draw)", "Keel Platform, LLC", "Senior Secured Loans (Delayed Draw)"),
-    ("Midwest Veterinary Partners, LLC, Preferred stock 1", "Midwest Veterinary Partners, LLC", "Preferred stock 1"),
+     "First lien senior secured loan 2", ""),
+    ("Keel Platform, LLC, Senior Secured Loans (Delayed Draw)", "Keel Platform, LLC", "Senior Secured Loans (Delayed Draw)", ""),
+    ("Midwest Veterinary Partners, LLC, Preferred stock 1", "Midwest Veterinary Partners, LLC", "Preferred stock 1", ""),
     ("Lido Advisors, LLC and LAL Group Holdings, LLC, Class A-0 common units", "Lido Advisors, LLC and LAL Group Holdings, LLC",
-     "Class A-0 common units"),
-    ("Ascent Midco, L L C, Equity Securities, Class A units", "Ascent Midco, L L C", "Equity Securities, Class A units"),
-    ("Red Griffin ParentCo, LLC - Class A Common Units", "Red Griffin ParentCo, LLC", "Class A Common Units"),
-    ("CH Buyer, LLC, Revolver", "CH Buyer, LLC", "Revolver"),
-    ("Amalfi Midco, Warrants", "Amalfi Midco", "Warrants"),
-    # row numbers after a legal form
-    ("Plasma Buyer LLC 3", "Plasma Buyer LLC", ""),
-    ("Rocket Software, Inc.2", "Rocket Software, Inc.", ""),
-    ("Project Ruby Ultimate Parent Corp.,1", "Project Ruby Ultimate Parent Corp.", ""),
+     "Class A-0 common units", ""),
+    ("Ascent Midco, L L C, Equity Securities, Class A units", "Ascent Midco, L L C", "Equity Securities, Class A units", ""),
+    ("Red Griffin ParentCo, LLC - Class A Common Units", "Red Griffin ParentCo, LLC", "Class A Common Units", ""),
+    ("CH Buyer, LLC, Revolver", "CH Buyer, LLC", "Revolver", ""),
+    ("Amalfi Midco, Warrants", "Amalfi Midco", "Warrants", ""),
+    # row numbers after a legal form: cut off the name, kept as the row's number
+    ("Plasma Buyer LLC 3", "Plasma Buyer LLC", "", "3"),
+    ("Rocket Software, Inc.2", "Rocket Software, Inc.", "", "2"),
+    ("Project Ruby Ultimate Parent Corp.,1", "Project Ruby Ultimate Parent Corp.", "", "1"),
     # false positives: left as filed
-    ("Senior Secured Holdings, Inc.", "Senior Secured Holdings, Inc.", ""),
-    ("Caerus US 1, Inc.", "Caerus US 1, Inc.", ""),
-    ("Broad River Ltd 2020-1", "Broad River Ltd 2020-1", ""),
-    ("Pikes Peak CLO 10", "Pikes Peak CLO 10", ""),
-    ("Aerosmith Bidco 1 Limited (dba Audiotonix)", "Aerosmith Bidco 1 Limited (dba Audiotonix)", ""),
-    ("Mimecast Borrowerco, Inc. and Magnesium Co- Invest SCSp", "Mimecast Borrowerco, Inc. and Magnesium Co- Invest SCSp", ""),
-    ("Class Valuation, LLC", "Class Valuation, LLC", ""),
-    ("Common Sense Media, Inc.", "Common Sense Media, Inc.", ""),
-    (", First lien senior secured loan", ", First lien senior secured loan", ""),
+    ("Senior Secured Holdings, Inc.", "Senior Secured Holdings, Inc.", "", ""),
+    ("Caerus US 1, Inc.", "Caerus US 1, Inc.", "", ""),
+    ("Broad River Ltd 2020-1", "Broad River Ltd 2020-1", "", ""),
+    ("Pikes Peak CLO 10", "Pikes Peak CLO 10", "", ""),
+    ("Aerosmith Bidco 1 Limited (dba Audiotonix)", "Aerosmith Bidco 1 Limited (dba Audiotonix)", "", ""),
+    ("Mimecast Borrowerco, Inc. and Magnesium Co- Invest SCSp", "Mimecast Borrowerco, Inc. and Magnesium Co- Invest SCSp", "", ""),
+    ("Class Valuation, LLC", "Class Valuation, LLC", "", ""),
+    ("Common Sense Media, Inc.", "Common Sense Media, Inc.", "", ""),
+    (", First lien senior secured loan", ", First lien senior secured loan", "", ""),
+    # the issuer is at the end, after a section heading (cohort A/B 2026-10-14, 0001841514)
+    ("Debt Investments, First Lien Senior Secured, Military Retail Solutions",
+     "Debt Investments, First Lien Senior Secured, Military Retail Solutions", "", ""),
+    ("Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Acme",
+     "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Acme", "", ""),
+    # the cut text names a company: the cut would be inside the issuer
+    ("Wilnat, Inc. - Revolving Credit Lin, LLC", "Wilnat, Inc. - Revolving Credit Lin, LLC", "", ""),
 ])
-def test_split_name(name, issuer, cut):
-    assert split_name(name) == (issuer, cut)
+def test_split_name(name, issuer, cut, number):
+    assert split_name(name) == (issuer, cut, number)
 
 
 def test_shapes_name_what_is_left():
@@ -52,12 +59,22 @@ def _frame(names, instruments, cik="0001111111", source="bdc"):
 
 def test_the_cut_fills_a_blank_instrument_or_goes_in_front():
     out = split_issuer_instrument(_frame(
-        ["Acme, Inc., First lien senior secured loan", "Beta, LLC, Senior Secured Loans", "Gamma, LLC, Revolver", "Delta, Inc. 2"],
-        [None, "Senior Secured Loans due 2030", "SOFR + 5.00%", None]))
-    assert out["issuer_name"].tolist() == ["Acme, Inc.", "Beta, LLC", "Gamma, LLC", "Delta, Inc."]
-    assert out["instrument_description"].tolist()[:3] == ["First lien senior secured loan", "Senior Secured Loans due 2030",
-                                                         "Revolver SOFR + 5.00%"]
-    assert pd.isna(out["instrument_description"].tolist()[3])
+        ["Acme, Inc., First lien senior secured loan", "Beta, LLC, Senior Secured Loans", "Gamma, LLC, Revolver", "Zeta Co"],
+        [None, "Senior Secured Loans due 2030", "SOFR + 5.00%", "Term loan"]))
+    assert out["issuer_name"].tolist() == ["Acme, Inc.", "Beta, LLC", "Gamma, LLC", "Zeta Co"]
+    assert out["instrument_description"].tolist() == ["First lien senior secured loan", "Senior Secured Loans due 2030",
+                                                      "Revolver SOFR + 5.00%", "Term loan"]
+
+
+def test_a_row_number_stays_with_the_row():
+    # 0001792509 numbers two warrants of one issuer and calls both 'Warrant Investments'
+    out = split_issuer_instrument(_frame(
+        ["Appex Group, Inc. 1", "Appex Group, Inc. 2", "Delta, Inc. 2", "Echo LLC 3"],
+        ["Warrant Investments", "Warrant Investments", None, "Term loan 3"]))
+    assert out["issuer_name"].tolist() == ["Appex Group, Inc.", "Appex Group, Inc.", "Delta, Inc.", "Echo LLC"]
+    assert out["instrument_description"].tolist() == ["Warrant Investments 1", "Warrant Investments 2", "2", "Term loan 3"]
+    # the two warrants stay two positions
+    assert out[["issuer_name", "instrument_description"]].drop_duplicates().shape[0] == 4
 
 
 def test_opted_out_funds_and_other_sources_are_untouched(tmp_path):
