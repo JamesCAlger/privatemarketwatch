@@ -364,10 +364,12 @@ SPECS += [
     (OWLTECH, "2024-03-31", "Associations, Inc., First lien senior secured loan", {"basis_spread": "6.5", "pik_rate": "2.5"},
      "Spread and PIK facts are swapped (spread 0.025, PIK 0.065); the printed line reads 'Associations, Inc.(8) First lien senior "
      "secured loan S + 6.50 % ( 2.50 % PIK) 07/2027 21,120 20,938 21,120 1.0 %'", "D-102"),
-    (OWLTECH, "2026-03-31", "Blue Owl Credit SLF LLC | LLC Interest", {"shares_held": "16161000"},
-     "The units are tagged as a principal amount of 16,161,000; once the row is classed as equity the share count was filled with "
-     "a proxy from an earlier quarter (14,293). Printed: 'Blue Owl Credit SLF LLC(3)(5)(24)(26)(30)(31) LLC Interest N/A N/A "
-     "16,161 - 16,162 14,946'", "D-102"),
+    # D-102 set 16,161,000 units here; withdrawn in the fund-clearing loop (2026-10-14): the page prints 16,161 under 'Par'
+    # with a dash under 'Unit', a dollar par, not a count.
+    (OWLTECH, "2026-03-31", "Blue Owl Credit SLF LLC | LLC Interest", {"shares_held": ""},
+     "Tagged as a principal amount of 16,161,000 and printed under the 'Par' column with a dash under 'Unit': a dollar par in "
+     "thousands, not a unit count, so no count is published (D-102 had set 16,161,000 units; withdrawn in the fund-clearing loop). "
+     "Printed: 'Blue Owl Credit SLF LLC(3)(5)(24)(26)(30)(31) LLC Interest N/A N/A 16,161 - 16,162 14,946'", "D-102"),
 ]
 EXACT |= {"RealPage, Inc., First lien senior secured loan", "Engage Debtco Limited, First lien senior secured loan",
           "Blue Owl Credit SLF LLC, LLC Interest", "Kaseya Inc., First lien senior secured loan",
@@ -643,6 +645,15 @@ if MONROE in held and MONROE_LOOP_FILE.exists():
     import json
     for spec in json.loads(MONROE_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((MONROE, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1742313-fundloop"))
+        EXACT.add(spec["identifier"])
+# Blue Owl Technology Income, fund-clearing loop (2026-10-14): unit counts, a maturity, instrument text and preferred
+# dividend margins read on the printed row. One spec per row, each with its printed line, in
+# row_correction_specs/0001869453.json (exact identifiers).
+OWLTECH_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001869453.json"
+if OWLTECH in held and OWLTECH_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(OWLTECH_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((OWLTECH, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1869453-fundloop"))
         EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a

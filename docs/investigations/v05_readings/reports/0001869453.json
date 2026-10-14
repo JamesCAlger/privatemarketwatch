@@ -1,0 +1,552 @@
+{
+ "cik": "0001869453",
+ "label": "otxe",
+ "before": "f15a",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 3,
+   "why": "AAlphaSense 2024-06-30, Bracket 2025-03-31 (unsplit member) and Project Alpha 2024-06-30 (trailing period) set to the printed issuer; set together with the instrument text on eight other rows to the name already published"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 10,
+   "why": "member instrument text differs from the printed row (Asurion second lien, Project Boost first lien, loans tagged as revolver or delayed draw, Armstrong delayed draw, Bracket)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 12,
+   "why": "set to the printed count where the unit normaliser had replaced it or the 10-K for 2024-12-31 filed it x1000 (Minerva, Project Alpine 2023-12-31, CloudPay, TravelPerk, KWOL, Halo warrant, Nscale Series B: 7 rows); withdrawn where the figure is a dollar par, not a count (Project Alpine 2023-03-31, Credit SLF 2024-12-31 and 2026-03-31, Blue Owl Leasing and Stripe 2026-03-31: 5 rows; rule in the fixes)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 16,
+   "why": "preferred rows printing 'S+ x %' (Knockout x9, Zoro TopCo x6, Picard 2024-06-30): margin published"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Picard 2024-03-31 prints 'S + 12.00 % PIK' and tags no PIK"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 1,
+   "why": "Fiesta revolver 2026-03-31 printed 2/2029, none published"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 1,
+   "why": "same Fiesta row: status follows the corrected maturity (not_disclosed to unresolved)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 39,
+   "why": "every row a row correction touched"
+  },
+  {
+   "column": "position_id",
+   "rows": 11,
+   "why": "identity follows the corrected issuer / instrument text on the rows above"
+  },
+  {
+   "column": "total_investment_income",
+   "rows": 1,
+   "why": "fund level, 2022-12-31: 24,139,250 to 50,685,000 (first income year: annual less the two filed quarters)"
+  },
+  {
+   "column": "net_investment_income",
+   "rows": 1,
+   "why": "fund level, 2022-12-31: 14,782,500 to 28,307,000"
+  },
+  {
+   "column": "total_expenses",
+   "rows": 1,
+   "why": "fund level, 2022-12-31: 11,401,000 to 24,460,000"
+  },
+  {
+   "column": "management_fee",
+   "rows": 1,
+   "why": "fund level, 2022-12-31, same derivation"
+  },
+  {
+   "column": "incentive_fee",
+   "rows": 1,
+   "why": "fund level, 2022-12-31, same derivation"
+  },
+  {
+   "column": "interest_expense",
+   "rows": 1,
+   "why": "fund level, 2022-12-31, same derivation"
+  }
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "One rule for the 'Par / Units' figure of LP, LLC, specialty-finance and fund-interest rows (round 2, after the orchestrator found two readings). The 10-Q for 2026-03-31 splits the column into 'Par' and 'Unit': every such interest prints its figure under Par with a dash under Unit (Chrome 8,754; Project Alpine 6,667; Credit SLF 16,161; Stripe 7,797; Leasing 350), while counts print under Unit (Nscale preferred equity '- 3,038', Snowbird '- 393,246', Rome Topco '- 3,127,449'), and the commitments table prints the same figures as the '$' funded commitment ('Chrome Investors LP LP Interest N/A $ 8,754 $ 2,189'). The '$' the 2025 10-Qs print is the dollar sign of that par: in the four 10-Qs scanned (2025-03-31, 2025-09-30, 2025-12-31, 2026-03-31) no warrant, common-unit or preferred-share count carries one. So a figure printed in thousands that is the par is not a count: no unit count is published (Nscale preferred equity '$ 3,346' included, unchanged); a full count printed as such (Project Alpine 6,666,667 at 2023-12-31, Hotel California 6,711,769) stays a count. Applied: the 37 counts I had set on such rows in round 1 (30 row corrections, 7 through added wrapper labels) are withdrawn; the wrapper labels are back to 'LLC Interest' only; counts withdrawn by row correction (empty value) on Project Alpine 2023-03-31, Credit SLF 2024-12-31, Blue Owl Leasing and Stripe 2026-03-31; Credit SLF 2026-03-31, set to 16,161,000 units by D-102, withdrawn by changing that D-102 entry in make_row_corrections.py and row_corrections.csv. Earlier-published counts of the same kind that the filer tagged as shares are left and listed under observations.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Chrome Investors LP(3)(4)(22)(29)(30)(31) LP Interest N/A N/A 8,754 - 8,757 8,757"
+    },
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Blue Owl Credit SLF LLC(3)(5)(24)(26)(30)(31) LLC Interest N/A N/A 16,161 - 16,162 14,946"
+    },
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Stripe Blue Owl Holdings LLC(3)(5)(24)(29)(30)(31) LLC Interest N/A N/A 7,797 - 7,797 9,679"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts replaced by the shared unit normaliser (pow10_shares, derived_proxy) or filed a thousand times too large, set to the printed figure: Minerva 2023-03-31 45,140; Project Alpine 2023-12-31 6,666,667; CloudPay 30,846, TravelPerk 46,173 and KWOL 317 at 2024-12-31 (the 10-K tags every count x1000); Halo Class E warrant 2026-03-31 16,825 (had taken the preferred's 10,000); Nscale Series B 2025-09-30 5,871 (tagged as principal, unpublished; the 10-Q for 2026-03-31 prints it under Unit: '- 5,871').",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Halo Purchaser, LLC(3)(4)(29)(30) Class E Warrant Units N/A N/A - 16,825 422 152"
+    },
+    {
+     "accession": "0001869453-25-000011",
+     "text": "KWOL Acquisition Inc. (dba Worldwide Clinical Trials)(18)(22) Class A Interest N/A N/A 317 3,171 3,594 0.1 %"
+    },
+    {
+     "accession": "0001869453-23-000010",
+     "text": "Minerva Holdco, Inc.(14)(22) Senior A Preferred Stock N/A 10.75 % PIK N/A 45,140 44,437 41,304 3.6 %"
+    }
+   ]
+  },
+  {
+   "what": "Member instrument text differs from the printed row; issuer and instrument set from the page on 10 rows (238.5M): Asurion 2025-06-30 'loan4' is the second lien; Project Boost 2025-06-30 first lien tagged second lien; loans tagged as revolver or delayed draw (Storable, Qlik 2024-06-30; PCF 2023-12-31; Dawn Bidco 2025-12-31); Fiesta 2025-12-31 revolver tagged as loan; Armstrong 2024-06-30 delayed draw; Bracket 2025-03-31 unsplit member; AAlphaSense 2024-06-30 issuer typo.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-25-000040",
+     "text": "Asurion, LLC(7)(14) Second lien senior secured loan S+ 5.25 % 1/2029 29,332 28,052 27,156"
+    },
+    {
+     "accession": "0001869453-24-000036",
+     "text": "Storable, Inc.(7)(14) First lien senior secured loan S + 3.50 % 04/2028 49,872 49,522 49,882 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "Maturity printed and not published: Fiesta Purchaser revolver 2026-03-31, 2029-02-28.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Fiesta Purchaser, Inc. (dba Shearer's Foods)(3)(9)(22) First lien senior secured revolving loan S+ 2.75 % 2/2029 310 - 290 269"
+    }
+   ]
+  },
+  {
+   "what": "Preferred rows printing a floating dividend 'S+ x %' tag the margin as PIK only, so no margin was published (566.1M over 16 rows): Knockout 2024-03-31 to 2026-03-31, Zoro TopCo 2024-12-31 to 2026-03-31, Picard 2024-06-30. Picard 2024-03-31 prints PIK and tags none: pik_rate 12.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Knockout Intermediate Holdings I Inc. (dba Kaseya Inc.)(3)(4)(10)(30) Perpetual Preferred Stock S+ 10.75 % N/A - 31,500 43,570 34,394"
+    },
+    {
+     "accession": "0001869453-24-000023",
+     "text": "Picard Holdco, Inc.(8)(23) Senior A Preferred Stock S + 12.00 % PIK N/A 52,848 55,887 60,955 2.8 %"
+    }
+   ]
+  },
+  {
+   "what": "income_identity 2022-12-31 cleared. The fund began on 2022-05-02, so 2022 has two 10-Qs and the year-end quarter kept the year divided by four (24,139,250). New highlights-wrapper key first_income_year_ends (pipeline/fund_highlights_wrapper.py, pipeline/fund_financials.py quarter_income_sql, schemas/fund_highlights_wrapper/wrapper_v1.schema.json): for a declared (fund, year-end) the fourth quarter is the annual figure less the one or two quarters filed. Set for this fund, 2022-12-31 only; every other fund-year still needs three quarters. Total investment income 50,685, net investment income 28,307 (thousands); identity holds. Tests: tests/test_fourth_quarter_income.py, a positive and a false-positive test.",
+   "kind": "shared_code",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001869453-23-000005",
+     "text": "Total Investment Income $ 96,557 Less: Net operating expenses (37,427) Net Investment Income (Loss) Before Taxes 59,130"
+    },
+    {
+     "accession": "0001869453-22-000013",
+     "text": "Total Investment Income 35,696 45,872 Operating Expenses Interest expense 11,628 14,981"
+    },
+    {
+     "accession": "0001869453-23-000005",
+     "text": "(1) The Company commenced operations on May 2, 2022."
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "no ledger rule: 2024-06-30 Securonix first lien loan (19,774 / 19,636 / 17,404 thousand) tagged on a second 'Sitecore USA, Inc., First lien senior secured loan' member (context c-348); published under Sitecore USA with no maturity, next to the real Sitecore USA row (c-352) with the same identifier",
+   "hypotheses": [
+    "row correction: keyed by identifier, so it would rename and re-date both Sitecore USA rows (rejected)",
+    "wrapper context_identifiers: never renames a context that already names a position (schema)",
+    "agent_investigate_rules value_expression: numeric fields only, cannot set issuer or maturity",
+    "needs an optional context key on row corrections (pipeline/unified_holdings.py _apply_row_corrections); not attempted: shared code beyond this fund's need for one row"
+   ]
+  },
+  {
+   "finding": "no ledger rule: maturity printed and not published on two more rows that share an identifier with another row: OneOncology delayed draw 2025-06-30 (funded 24,897, printed 6/2030; its commitments-table twin prints 3/2027) and the real Sitecore USA row 2024-06-30 (printed 03/2029)",
+   "hypotheses": [
+    "a row correction would set the same date on both rows of the identifier; the two dates differ on the page"
+   ]
+  },
+  {
+   "finding": "no ledger rule: lien_position still First Lien on Asurion 2025-06-30 (printed second lien, 27.2M) and Second Lien on Project Boost 2025-06-30 (printed first lien, 12.3M); instrument text fixed",
+   "hypotheses": [
+    "lien_position is not a correctable field of row_corrections.csv (_CORRECTABLE_FIELDS); adding it is a shared-code change not made here"
+   ]
+  },
+  {
+   "finding": "no ledger rule: ModMed Series A Preferred Units 2025-12-31 publishes the normaliser's 13,733,060 where that 10-K prints 13,733 (the 10-Qs before print 13,733,060 and the 10-Q after 13,733): the filer scales the printed count differently from filing to filing",
+   "hypotheses": [
+    "no single page value is the count without a reading of scale; left as built"
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The shared unit normaliser (shares_held:pow10_shares, derived_proxy) replaced 15 filed counts with a neighbouring quarter's; on 8 the result differed from the page (Minerva 2023-03-31 45,000 for 45,140; Project Alpine 2023-12-31 7,000 for 6,666,667; CloudPay 29,654 for 30,846 and TravelPerk 70,728 for 46,173 at 2024-12-31; Halo Class E warrant 2026-03-31 10,000, the count of the issuer's Class B preferred, for 16,825; Project Alpine 2023-03-31 7,000 and Credit SLF 2024-12-31 12,210 where the printed figure is a dollar par and no count applies; Credit SLF 2026-03-31 16,161,000). Fixed by row correction (set or withdrawn); ModMed 2025-12-31 left.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 79.2,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A unit count marked derived_proxy that differs from the row's own share-count fact by other than a power of ten, or that equals the count of a different instrument of the same issuer.",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "Halo Purchaser, LLC(3)(4)(29)(30) Class E Warrant Units N/A N/A - 16,825 422 152"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "what": "The 10-K for 2024-12-31 tags every unit count a thousand times the printed one (46,173,000 for 46,173; 96,072,000 for 96,072). Most rows were then replaced by the normaliser; KWOL Class A Interest kept the tag and published 317,000 for a printed 317 (317 in every other quarter). Fixed.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 3.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A unit count that moves by a factor of 1,000 for one quarter and back.",
+   "quote": {
+    "accession": "0001869453-25-000011",
+    "text": "KWOL Acquisition Inc. (dba Worldwide Clinical Trials)(18)(22) Class A Interest N/A N/A 317 3,171 3,594 0.1 %"
+   }
+  },
+  {
+   "observation_key": "par-of-fund-interest-published-as-unit-count",
+   "what": "The figure in the 'Par / Units' column of the fund's LP, LLC and specialty-finance interests is a dollar par in thousands, not a count: the 10-Q for 2026-03-31 splits the column and prints these figures under 'Par' with a dash under 'Unit' (and the commitments table prints the same figure as the '$' funded commitment). Earlier filings tagged several of these figures with the share-count concept, and they are published as unit counts. Left as filed and listed here (24 rows, 226.3M, figure equal to the par in thousands x1000 or the bare thousands figure): Baypine 904,000 at 2025-06-30 and 2025-09-30; Blue Owl Cross-Strategy 2,150,000 at 2025-09-30 and 25,250,000 at 2025-12-31; Blue Owl Leasing 2,233,000 and Stripe 7,797,000 at 2025-12-31; Credit SLF 14,293 at 2025-12-31; Elliott Alto 7,836 from 2023-03-31 to 2025-03-31 and at 2025-12-31 (10 rows; 2026-03-31 prints 7,836 under Par); LSI Financing 1 DAC 12,317,000 at 2023-12-31 and 3,052,000 at 2024-12-31; LSI Financing LLC 20,746,000 at 2024-12-31; Project Alpine 7,000 at 2023-06-30 and 2023-09-30 (printed '7') and 6,667,000 at 2024-12-31; Hotel California 6,712,000 at 2025-03-31. Full counts printed as such stay counts (Hotel California 6,711,769 in 2023-2024, Project Alpine 6,666,667, LSI Financing 1 DAC 13,789,488, Credit SLF 49,560 against a cost of 4,958 at 2025-06-30, Snowbird 393,246 printed under Unit). Round 1 of this run had set counts on 37 more such rows; withdrawn in round 2.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 226.3,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "An equity or fund row whose published unit count equals its cost or par in thousands (or that figure x1000).",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "Elliott Alto Co-Investor Aggregator L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 7,836 - 7,887 15,533"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "2024-06-30: the Securonix first lien loan (fair value 17.4M) is tagged on a second 'Sitecore USA, Inc., First lien senior secured loan' member and published under Sitecore USA with no maturity; Securonix has no first lien row that quarter. Parked: the identifier is shared with the real Sitecore USA row.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 17.4,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Two published rows with one identifier in one quarter whose cost and fair value differ.",
+   "quote": {
+    "accession": "0001869453-24-000036",
+    "text": "Securonix, Inc.(8) First lien senior secured loan S + 7.00 % 04/2028 19,774 19,636 17,404 0.7 %"
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "Four funded loan rows print a maturity and publish none: Fiesta revolver 2026-03-31 (fixed), OneOncology delayed draw 2025-06-30 and both Sitecore USA rows 2024-06-30 (parked: each shares its identifier with another row).",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-06-30",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 47.2,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "A funded loan row with no maturity whose printed line carries a month/year.",
+   "quote": {
+    "accession": "0001869453-25-000040",
+    "text": "OneOncology, LLC(8) First lien senior secured delayed draw term loan S+ 5.00 % 6/2030 24,897 24,733 24,897"
+   }
+  },
+  {
+   "observation_key": "lien-tier-in-member-differs-from-page",
+   "what": "Asurion 2025-06-30: member 'First lien senior secured loan4', printed Second lien (27.2M); Project Boost 2025-06-30: member second lien, printed First lien (12.3M). Instrument text fixed; lien_position still follows the member (not correctable).",
+   "field": "lien_position",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 39.4,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Lien tier read from the member against the printed instrument words of the same row.",
+   "quote": {
+    "accession": "0001869453-25-000040",
+    "text": "Asurion, LLC(7)(14) Second lien senior secured loan S+ 5.25 % 1/2029 29,332 28,052 27,156"
+   }
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "what": "Funded loans whose member names a revolver or delayed draw while the printed row is a term loan, or the reverse (Storable 49.9M and Qlik 30.0M 2024-06-30, PCF 24.5M 2023-12-31, Dawn Bidco 37.4M 2025-12-31, Fiesta revolver 2025-12-31, Armstrong delayed draw 2024-06-30). Fixed by row correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 159.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Instrument words of the published row compared with the printed row found by cost and fair value.",
+   "quote": {
+    "accession": "0001869453-24-000036",
+    "text": "Storable, Inc.(7)(14) First lien senior secured loan S + 3.50 % 04/2028 49,872 49,522 49,882 1.9 %"
+   }
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "what": "A row correction of instrument_description alone came out as '<member tail> <correction>' ('First lien senior secured loan4 Second lien senior secured loan'): for a fund with issuer_name_strip_to_instrument the corrections run before the issuer split, which then puts the cut-off words in front of the corrected description. Seen in build otxb on 9 rows; fixed by correcting issuer_name with it.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 199.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A corrected field whose published value differs from the value in row_corrections.csv.",
+   "quote": {
+    "accession": "0001869453-26-000017",
+    "text": "Dawn Bidco, LLC (dba Dayforce)(3)(8) First lien senior secured loan S+ 3.00 % 10/2032 37,500 37,406 37,365"
+   }
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "what": "Preferred rows printing 'S+ 10.75 %' (Knockout) and 'S+ 9.50 %' (Zoro TopCo), 'S + 12.00 % PIK' (Picard) carry the margin in a PIK tag only; reference SOFR was published but no margin (the wrapper's pik_only_tag_reading reaches loans only). Fixed on 16 rows.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 566.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row with a reference rate and no spread or rate.",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "Knockout Intermediate Holdings I Inc. (dba Kaseya Inc.)(3)(4)(10)(30) Perpetual Preferred Stock S+ 10.75 % N/A - 31,500 43,570 34,394"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "Picard 2024-03-31 prints 'S + 12.00 % PIK' and its context has no PIK fact (the filings before tag 12.00 as PIK). Fixed.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 61.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Printed 'PIK' on a row with no published PIK.",
+   "quote": {
+    "accession": "0001869453-24-000023",
+    "text": "Picard Holdco, Inc.(8)(23) Senior A Preferred Stock S + 12.00 % PIK N/A 52,848 55,887 60,955 2.8 %"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "22 funded rows (641.9M over the quarters) publish no extracted_industry: Storable, Inc. and Storable Intermediate under the heading 'Equity Real Estate Investment Trusts (REITs)' from 2024-06-30, Blue Owl Credit SLF and Blue Owl Leasing under 'Joint Ventures', Stripe Blue Owl Holdings. Left: industry is not a correctable field.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 641.9,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Share of funded rows with an industry, by fund and quarter; any funded row without one is listed.",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "Equity Real Estate Investment Trusts (REITs) Storable, Inc.(3)(8) First lien senior secured loan S+ 3.25 % 4/2031 48,209 - 48,158 46,064"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "Rows printed as Warrants or Warrant Units (TravelPerk, XOMA, Easypost, Halo) are classed EQUITY_COMMON: 36 rows, 17.7M over the quarters. Left.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-06-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 17.7,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Instrument text naming a warrant on a row not classed as a warrant.",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "XOMA Corporation(3)(4)(29)(30) Warrants N/A N/A - 4,200 29 51"
+   }
+  },
+  {
+   "observation_key": "twin-commitment-lines-published-once",
+   "what": "2025-12-31: two Himalaya Topco delayed-draw lines in the commitments table (expiring 12/2027 and 6/2027, each 5,762 unfunded, fair value ( 29 )) sit on one member and publish one row: published commitments sum -1,917 against a printed ( 1,946 ), and the quarter's total is 29 thousand over the filed 6,207,136. Left (within the totals tolerance).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": -0.03,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Sum of published commitments-table rows against the printed misc. debt commitments line.",
+   "quote": {
+    "accession": "0001869453-26-000017",
+    "text": "Himalaya Topco LLC (dba HealthEdge) First lien senior secured delayed draw term loan 6/2027 - 5,762 ( 29 )"
+   }
+  },
+  {
+   "observation_key": "commitment-table-amounts-not-published",
+   "what": "From 2024-12-31 the commitments-table rows (132 to 177 a quarter, fair values match the page on 919 of 922 rows compared) publish only a fair value: the printed expiration date and funded and unfunded amounts are not published. Left (the pattern accepted for the sibling Blue Owl Credit Income).",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": -16.4,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Commitments-table rows with no published commitment amount.",
+   "quote": {
+    "accession": "0001869453-26-000033",
+    "text": "Aerosmith Bidco 1 Limited (dba Audiotonix) First lien senior secured delayed draw term loan 7/2027 $ - $ 19,693 $ -"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Published issuer differs from the printed name where the member spells it differently: 'Certinia, Inc.' for the printed 'Certinia Inc.' (2025-03-31 to 2025-12-31), 'CVET Midco 2, L.P.' for the printed 'Covetrus Inc.' (2023-06-30); member typos 'Firs lien' and 'Senior D Preferred' (printed 'Series D') in instrument text. Left (AAlphaSense fixed).",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 83.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Issuer name of the published row against the printed name of the row found by cost and fair value.",
+   "quote": {
+    "accession": "0001869453-23-000017",
+    "text": "Covetrus Inc.(11) Second lien senior secured loan S + 9.25 % 10/2030 25,000 24,517 24,188 1.8 %"
+   }
+  }
+ ],
+ "tests_run": [
+  "tests/test_fourth_quarter_income.py: 12 passed (2 new)",
+  "tests/test_fund_highlights_wrapper.py: 24 passed",
+  "tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py -k 'schema or equity or label or valid': 110 passed"
+ ],
+ "not_done": [
+  "Page comparison: 3,085 funded rows (non-zero cost and fair value) in all 13 quarters 2023-03-31 to 2026-03-31, 3,078 found by issuer, cost and fair value; compared maturity month, reference code, margin, PIK, rate, par or units, percent of net assets, instrument words. Plus 922 commitments-table rows (2024-12-31 on), 919 found, fair value compared. Scripts: scratch/fund_runs/0001869453/compare.py, compare2.py.",
+  "Which column (Cash or PIK) a single printed figure sits in cannot be read from the page text: the empty cell is dropped. Inovalon second lien, Storable Intermediate, Plasma Buyer (non-accrual), Pacific BidCo publish the tag (PIK) unverified.",
+  "Industry checked on a sample only (about 10 rows at 2026-03-31); GICS labels not checked.",
+  "Non-accrual: only the 2026-03-31 footnote (28) count (4 Plasma Buyer rows) checked.",
+  "Undrawn schedule lines before 2024-12-31 with a cost or value rounding to zero were not compared by the script.",
+  "Cohort effect of the shared-code change not measured with the semantic diff: it applies only to a (fund, year) a highlights wrapper declares, and only this fund declares one.",
+  "field_coverage_drop 2024-12-31 (outstanding in f15a) is not in this build: the rule changed after f15a was built (it now counts rows with a positive fair value only). Not my change.",
+  "Sibling pattern (Blue Owl Credit Income) checked on this fund's own pages: the commitments table is tagged from 2024-12-31 and percent of net assets is printed per industry only from 2025-03-31; both hold here.",
+  "Slips: I edited scripts/v05_evidence/sandbox_sql.py by mistake and reverted it at once (git shows no change); one bare 'python -' with an empty heredoc hung and was stopped by its process id."
+ ]
+}

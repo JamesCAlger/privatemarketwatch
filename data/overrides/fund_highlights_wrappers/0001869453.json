@@ -23,5 +23,8 @@
    "evidence": "0001869453-23-000017 (10-Q, 2023-06-30) balance sheet: 'Total Net Assets 1,340,153 989,497'. Published 2,641,061,000. Company facts hold a second StockholdersEquity value for this date, filed a year later on a prior-year context (the following year's balance); the later filing had been taken."
   }
  ],
- "notes": "Two quarters: a later 10-Q refiled the following year's net assets on these dates' contexts."
+ "first_income_year_ends": [
+  "2022-12-31"
+ ],
+ "notes": "Two quarters: a later 10-Q refiled the following year's net assets on these dates' contexts. First income year 2022: 0001869453-23-000005 (10-K, 2022-12-31) '(1) The Company commenced operations on May 2, 2022.' and 'Total Investment Income $ 96,557 Less: Net operating expenses (37,427) Net Investment Income (Loss) Before Taxes 59,130'; 0001869453-22-000013 (10-Q, 2022-09-30) 'Total Investment Income 35,696 45,872' (quarter, period to date). There is no first quarter, so the fourth quarter is 96,557 less 45,872 = 50,685; it had been published as 96,557 / 4 = 24,139."
 }

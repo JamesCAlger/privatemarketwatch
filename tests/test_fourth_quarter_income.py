@@ -43,6 +43,46 @@ def test_a_year_without_three_filed_quarters_keeps_the_stored_figure():
     assert out[("0001838126", "2024q4")][0] == 356.5
 
 
+# Blue Owl Technology Income began on 2022-05-02: two 10-Qs (10,176 and 35,696) and a 10-K of 96,557, stored as 24,139.25
+OWLTECH_2022 = [_income("1869453", "2022-06-30", 3, 10176.0, 4485.0), _income("1869453", "2022-09-30", 3, 35696.0, 16659.0),
+                _income("1869453", "2022-12-31", 12, 24139.25, 11401.0)]
+
+
+def _quarters_declared(rows, declared):
+    con = duckdb.connect()
+    frame = pd.DataFrame(rows)
+    con.register("income", frame)
+    out = con.execute("SELECT cik, report_quarter, total_investment_income, total_expenses FROM ("
+                      + quarter_income_sql("income", set(frame.columns), declared) + ") ORDER BY 1, 2").fetchall()
+    return {(r[0], r[1]): (r[2], r[3]) for r in out}
+
+
+def test_a_declared_first_year_is_the_annual_figure_less_the_quarters_filed():
+    out = _quarters_declared(OWLTECH_2022, {("0001869453", "2022-12-31")})
+    assert out[("0001869453", "2022q4")][0] == pytest.approx(96557.0 - 10176.0 - 35696.0)      # 50,685
+    assert out[("0001869453", "2022q4")][1] == pytest.approx(4 * 11401.0 - 4485.0 - 16659.0)
+    assert out[("0001869453", "2022q3")] == (35696.0, 16659.0)      # filed quarters are untouched
+    # a figure missing in one of the filed quarters keeps its average
+    rows = [dict(r) for r in OWLTECH_2022]
+    rows[0]["total_expenses"] = None
+    assert _quarters_declared(rows, {("0001869453", "2022-12-31")})[("0001869453", "2022q4")] == (pytest.approx(50685.0), 11401.0)
+
+
+def test_a_year_with_two_quarters_keeps_the_average_unless_its_fund_and_year_are_declared():
+    # not declared at all, as for every other fund
+    assert _quarters_declared(OWLTECH_2022, ())[("0001869453", "2022q4")] == (24139.25, 11401.0)
+    assert _quarters(OWLTECH_2022)[("0001869453", "2022q4")] == (24139.25, 11401.0)
+    # another fund's declaration, and this fund's declaration of another year, do not reach it
+    assert _quarters_declared(OWLTECH_2022, {("0001838126", "2022-12-31")})[("0001869453", "2022q4")][0] == 24139.25
+    assert _quarters_declared(OWLTECH_2022, {("0001869453", "2023-12-31")})[("0001869453", "2022q4")][0] == 24139.25
+    # a declared fund's later year with a quarter missing is not a first year: still the average
+    later = OWLTECH_2022 + [_income("1869453", "2023-06-30", 3, 65503.0), _income("1869453", "2023-09-30", 3, 78994.0),
+                            _income("1869453", "2023-12-31", 12, 74990.75)]
+    assert _quarters_declared(later, {("0001869453", "2022-12-31")})[("0001869453", "2023q4")][0] == 74990.75
+    # and a year with three filed quarters is computed as before, declared or not
+    assert _quarters_declared(HPS_2023, {("0001838126", "2023-12-31")})[("0001838126", "2023q4")][0] == pytest.approx(264.7)
+
+
 def test_a_figure_missing_in_one_quarter_keeps_its_average_while_the_others_are_computed():
     rows = [dict(r) for r in HPS_2023]
     rows[1]["total_expenses"] = None

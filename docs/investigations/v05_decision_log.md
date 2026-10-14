@@ -3843,3 +3843,37 @@ Overnight run of 2026-10-13/14. Gate PASS on the first round; five builds, about
   industry on any row of the three 2023 10-Qs (page reader).
 - Not checked by the agent: non-accrual flags, lien tier, labels, reference-rate codes, 120 rows
   with no anchored printed row. Its 43 rate corrections are pinned to quarters, not a rule.
+
+### D-160 Blue Owl Technology Income cleared through the fund-clearing skill (sandbox `otxe`)
+
+Overnight run of 2026-10-13/14. Gate PASS on round one; the orchestrator's sample found an
+inconsistency and sent it back; gate PASS on round two. Four builds plus one.
+
+- **Ledger:** 22 findings, 6 outstanding (8 in `f15a`), all with a proposal. 13 of 13 quarters tie.
+- **Compared with the page by the agent:** 3,085 funded rows in all 13 quarters (3,078 found) and
+  922 commitment-table rows (919 found, all matching on fair value). The sibling fund's two
+  patterns hold here: commitment-table rows tagged from 2024-12-31, no per-row percent from
+  2025-03-31.
+- **Fixed:** fourth quarter of 2022 income (the fund began on 2022-05-02; the year was divided by
+  four), through a new highlights-wrapper key `first_income_year_ends` in
+  `pipeline/fund_financials.py` (shared, switched on for this fund only; for every other fund the
+  expression is unchanged); unit counts the shared normaliser had replaced or the 10-K for
+  2024-12-31 tagged x1000; instrument and issuer text on 10 rows; margins on 16 preferred rows;
+  one PIK rate; one maturity.
+- **Round two (orchestrator's sample):** the agent had published no quantity on a row printed
+  '$ 3,346' but set counts on 13 LP-interest rows printed the same way. Its rule now, from the
+  10-Q for 2026-03-31, which splits the column into Par and Unit and prints these interests under
+  Par with a dash under Unit ('Chrome Investors LP ... LP Interest N/A N/A 8,754 - 8,757 8,757',
+  verified on the page): such a figure is a dollar par in thousands, not a count. 37 counts it had
+  set are withdrawn; one count of decision D-102 (Credit SLF 2026-03-31, 16,161,000 units) is
+  withdrawn in the corrections file. 24 earlier counts the filer itself tagged as shares contradict
+  the rule (226.3M); they are left published and listed as observations, so the data still holds
+  both readings for those rows. Owner question.
+- **Parked:** a 17.4M Securonix loan tagged on a second Sitecore USA member (a row correction keyed
+  by identifier would change both rows); three missing maturities for the same reason; lien tier
+  wrong on Asurion and Project Boost (not a correctable field).
+- **Observations:** 15 recorded; shared causes: the issuer-level unit normaliser replaced 15
+  filed counts; an instrument correction comes out prefixed by the member's old wording because
+  this fund's issuer split runs after row corrections.
+- Tests run by the orchestrator: test_fourth_quarter_income and test_fund_highlights_wrapper pass.
+  The agent ran `python -` with a heredoc twice in round two; both finished.

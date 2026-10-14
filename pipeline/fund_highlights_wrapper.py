@@ -53,6 +53,9 @@ class HighlightsWrapperSpec:
     # (income column, lower-case concept name): the concept fills the column in the fund-income
     # extractor only for a period that has an income statement and no fact for that column
     income_concept_fallback: tuple[tuple[str, str], ...] = ()
+    # Year-end dates of the year in which the fund began operating: the quarters before its first
+    # income statement are nil, so that year-end quarter is the year less the quarters filed
+    first_income_year_ends: tuple[str, ...] = ()
     notes: str = ""
 
 
@@ -130,6 +133,8 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
             for column, concepts in (data.get("income_concept_fallback") or {}).items()
             if str(column) in INCOME_FALLBACK_COLUMNS
             for concept in (concepts or []) if str(concept).strip()),
+        first_income_year_ends=tuple(str(day) for day in (data.get("first_income_year_ends") or [])
+                                     if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day))),
         notes=data.get("notes", ""),
     )
 
@@ -211,6 +216,17 @@ def apply_figure_corrections(balance_df):
         extra = pd.DataFrame(added).groupby(["cik", "report_date"], as_index=False).first()
         frame = pd.concat([frame, extra], ignore_index=True)
     return frame
+
+
+def first_income_year_ends() -> frozenset[tuple[str, str]]:
+    """(cik, year-end date) pairs whose wrapper declares the year the fund began operating.
+
+    Opt-in: ``first_income_year_ends``. Read by ``fund_financials.quarter_income_sql``, which for
+    these pairs alone takes the year-end quarter as the annual figure less the one or two
+    quarters filed, the quarters before the first income statement being nil.
+    """
+    _ensure_cache_loaded()
+    return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.first_income_year_ends)
 
 
 def class_nav_ciks() -> frozenset[str]:

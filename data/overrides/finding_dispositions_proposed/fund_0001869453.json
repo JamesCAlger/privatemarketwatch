@@ -1,12 +1,13 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "o1b",
+ "sandbox": "otxe",
  "dispositions": [
   {
    "disposition_id": "PD-pct_of_net_assets_identity-1869453-1",
    "class": "as_filed",
    "engine": "identity",
    "rule_name": "pct_of_net_assets_identity",
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
    "ciks": [
     "0001869453"
    ],
@@ -15,23 +16,50 @@
     "2023-09-30",
     "2023-12-31"
    ],
-   "statement": "One row of 99, 134 and 149: the percent is printed to one decimal and the tag carries that rounded figure (0.1 on a fair value of 378; -0.1 on -11 and -82). Published is the tag. The reason accepted for Blue Owl Credit Income (rounding floor).",
+   "statement": "Every row that fails (2023-06-30: Securonix revolver, Inovalon second lien; 2023-09-30: Interoperability Bidco, Ping Identity and SailPoint revolvers; 2023-12-31: Ping Identity and SailPoint revolvers) publishes the percent the page prints and the filing tags. The filer prints percent of net assets to one decimal and puts ( 0.1 )% on undrawn lines marked at -11 to -125 thousand and 0.1 % on a line of 378 thousand, where fair value over net assets (1,340,153 / 1,628,629 / 1,881,603 thousand, as printed) is 0.00 to 0.02. Inovalon prints 3.3 % for 42,475 (3.17 by the ratio). Net assets of 2023-06-30 are the page's (wrapper figure correction of D-102). No fix applies: the published percent is the filed one, and the recomputed percent is carried in its own column.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "Sandbox o1b: violation 1.01 pct of 99 rows (2023-06-30), 0.75 pct of 134 (2023-09-30), 0.67 pct of 149 (2023-12-31), after net assets for 2023-03-31 and 2023-06-30 were corrected to the page (D-102)."
+     "source": "filing",
+     "accession": "0001869453-23-000017",
+     "verbatim": "Securonix, Inc.(17)(18) First lien senior secured revolving loan S + 6.50 % 4/2028 - ( 29 ) ( 125 ) ( 0.1 )%",
+     "quote": "'Securonix, Inc.(17)(18) First lien senior secured revolving loan S + 6.50 % 4/2028 - ( 29 ) ( 125 ) ( 0.1 )%': 2023-06-30, printed ( 0.1 )% for a fair value of -125 thousand; -125 over 1,340,153 is -0.009 pct."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-23-000017",
+     "verbatim": "Inovalon Holdings, Inc.(8) Second lien senior secured loan S + 10.50 % PIK 11/2033 42,904 42,360 42,475 3.3 %",
+     "quote": "'Inovalon Holdings, Inc.(8) Second lien senior secured loan S + 10.50 % PIK 11/2033 42,904 42,360 42,475 3.3 %': 2023-06-30, printed 3.3; 42,475 over 1,340,153 is 3.17."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-23-000021",
+     "verbatim": "Interoperability Bidco, Inc. (dba Lyniate)(8)(16) First lien senior secured revolving loan S + 7.00 % 12/2024 391 388 378 0.1 %",
+     "quote": "'Interoperability Bidco, Inc. (dba Lyniate)(8)(16) First lien senior secured revolving loan S + 7.00 % 12/2024 391 388 378 0.1 %': 2023-09-30, printed 0.1 for 378 thousand (0.02 by the ratio)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-23-000021",
+     "verbatim": "Ping Identity Holding Corp.(16)(17) First lien senior secured revolving loan S + 7.00 % 10/2028 - ( 28 ) ( 11 ) ( 0.1 )%",
+     "quote": "'Ping Identity Holding Corp.(16)(17) First lien senior secured revolving loan S + 7.00 % 10/2028 - ( 28 ) ( 11 ) ( 0.1 )%': 2023-09-30, printed ( 0.1 )% for -11 thousand."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-24-000012",
+     "verbatim": "SailPoint Technologies Holdings, Inc.(17)(18) First lien senior secured revolving loan S + 6.00 % 8/2028 - ( 168 ) ( 82 ) ( 0.1 )%",
+     "quote": "'SailPoint Technologies Holdings, Inc.(17)(18) First lien senior secured revolving loan S + 6.00 % 8/2028 - ( 168 ) ( 82 ) ( 0.1 )%': 2023-12-31, printed ( 0.1 )% for -82 thousand; the Ping Identity revolver on the same page prints ( 0.1 )% for -11."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001869453.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-102); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "python scratch/fund_runs/0001869453/sql.py otxe scratch/fund_runs/0001869453/pct.sql",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); a reason already proposed for Monroe Capital Income Plus, not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-X02-1869453-2",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
    "ciks": [
     "0001869453"
    ],
@@ -39,21 +67,73 @@
     "2025-12-31",
     "2026-03-31"
    ],
-   "statement": "After the corrections of D-102 (the OEConnection loan tagged on a McQueen Bidco member; three LLC interests classed as loans) every flagged row is a line of the commitments table: no principal, no rate, fair value zero or negative. An earlier reviewer's 'real error' verdict on these two quarters referred to the rows now corrected.",
+   "statement": "Every flagged row (174 at 2025-12-31, 161 at 2026-03-31) is a line of the filer's unfunded-commitments table: no cost, no par, fair value nil or negative (sum -1,917 and -7,322 thousand). That table prints commitment type, expiration date, funded and unfunded amounts and a fair value, and no reference rate, spread or rate; the filer tags none on these contexts. Read on sandbox otxe: no X02 row in either quarter has a cost, a principal or a positive fair value. The same reason is accepted by its check for this fund's other quarters (DS-LARGE3-X02-1869453). No fix applies: there is no rate on the page to declare.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001869453-26-000033: 'Total Portfolio Company Commitments $ 145,193 $ 715,611 $ ( 7,322 )', '(23) The negative cost and fair value results from unamortized fees'."
+     "accession": "0001869453-26-000033",
+     "verbatim": "Unfunded Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Commitment Fair Value (23) Non-controlled/non-affiliated - debt commitments Aerosmith Bidco 1 Limited (dba Audiotonix) First lien senior secured delayed draw term loan 7/2027 $ - $ 19,693 $ -",
+     "quote": "'Unfunded Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Commitment Fair Value (23) Non-controlled/non-affiliated - debt commitments Aerosmith Bidco 1 Limited (dba Audiotonix) First lien senior secured delayed draw term loan 7/2027 $ - $ 19,693 $ -': 2026-03-31, the table's columns; no rate column."
     },
     {
-     "source": "query",
-     "quote": "Sandbox o1b: no X02 row at 2025-12-31 or 2026-03-31 has a principal amount or a positive fair value (scratch/2026-10-11_owltech/x02.sql)."
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "verbatim": "Unfunded Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Commitment Fair Value (23) Non-controlled/non-affiliated - debt commitments Aerosmith Bidco 1 Limited (dba Audiotonix) First lien senior secured delayed draw term loan 7/2027 $ - $ 22,237 $ -",
+     "quote": "'Unfunded Portfolio Company Commitment Type Commitment Expiration Date Funded Commitment Commitment Fair Value (23) Non-controlled/non-affiliated - debt commitments Aerosmith Bidco 1 Limited (dba Audiotonix) First lien senior secured delayed draw term loan 7/2027 $ - $ 22,237 $ -': 2025-12-31, the same table."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "verbatim": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 28,787 28,525 28,478",
+     "quote": "'AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 28,787 28,525 28,478': a row an earlier reviewer cited; sandbox otxe publishes basis_spread 4.5, reference SOFR, so it is not flagged."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "verbatim": "Acrisure, LLC(3)(4)(6)(31) Unsecured notes N/A 8.50 % 6/2029 3,000 3,000 3,131",
+     "quote": "'Acrisure, LLC(3)(4)(6)(31) Unsecured notes N/A 8.50 % 6/2029 3,000 3,000 3,131': cited by the reviewer of 2026-03-31; sandbox otxe publishes interest_rate 8.5 in both quarters."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001869453.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-102); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer (real_error, extraction_gap) cited AI Titan, AQ Carver and Accommodations Plus as funded loans with a printed 'S+ x %' and no published rate. In sandbox otxe these rows publish basis_spread 4.5, 5.5 and 5.25 with reference SOFR and are not flagged; interest_rate stays empty because the page prints a margin only, never an all-in rate. The 174 rows still flagged are commitments-table lines with no rate on the page.",
+    "2026-03-31": "The reviewer (real_error, extraction_gap) cited AI Titan (S+ 4.50 %), Accommodations Plus (S+ 5.25 %) and Acrisure (8.50 %). In sandbox otxe AI Titan publishes basis_spread 4.5, Accommodations Plus 5.25 and Acrisure interest_rate 8.5; none is flagged. The 161 rows still flagged are commitments-table lines with no rate on the page; the reviewer's own note says the aggregate 'may also include unfunded commitment or revolving rows for which no rate is printed'."
+   },
+   "rerun": "python scripts/v05_evidence/flagged.py otxe X02 0001869453 2026-03-31 200; python scratch/fund_runs/0001869453/sql.py otxd scratch/fund_runs/0001869453/x02.sql",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); a reason already proposed for North Haven, not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-field_coverage_drop-1869453-3",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "reason_key": "coverage-percent-of-net-assets-no-longer-printed",
+   "ciks": [
+    "0001869453"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "One field of eight drops at 2025-03-31: percent of net assets, from 225 of 225 funded rows at 2024-12-31 to none of 227. From the 10-Q for 2025-03-31 the filer moves the '% of Net Assets' column to the industry subtotal lines and prints no percent on position rows, and tags none (the reason proposed for the sibling Blue Owl Credit Income). The recomputed percent (pct_of_net_assets_calculated) is published for every row. No fix applies: there is no printed or tagged per-row percent to publish.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000011",
+     "verbatim": "AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 06/2029 20,052 19,867 19,851 0.7 %",
+     "quote": "'AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 06/2029 20,052 19,867 19,851 0.7 %': 10-K for 2024-12-31, a percent on the position row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000021",
+     "verbatim": "AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 6/2029 20,052 19,875 19,901 Anaplan, Inc.(8)",
+     "quote": "'AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 6/2029 20,052 19,875 19,901 Anaplan, Inc.(8)': 10-Q for 2025-03-31, the same row with no percent; the next row follows the fair value."
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001869453/sql.py otxe scratch/fund_runs/0001869453/prof.sql",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); a reason already proposed for Blue Owl Credit Income, not accepted by the owner",
+   "decided_on": "2026-10-14"
   }
  ]
 }

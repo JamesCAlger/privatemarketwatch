@@ -11,6 +11,7 @@ build_fund_financials(income_df, nport_fund_info_df, universe_df, client)
 """
 
 import logging
+import re
 import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -1009,7 +1010,7 @@ _INCOME_FLOWS = ("total_investment_income", "net_investment_income", "management
                  "incentive_fee", "interest_expense", "total_expenses")
 
 
-def quarter_income_sql(table: str, columns: set) -> str:
+def quarter_income_sql(table: str, columns: set, first_income_years=()) -> str:
     """Income rows of ``table`` as one quarter each: cik, report_quarter and the six flow figures.
 
     The income table stores a 10-K's twelve-month figure divided by four. Where the three
@@ -1021,6 +1022,13 @@ def quarter_income_sql(table: str, columns: set) -> str:
     as about zero beside quarters of 93 to 145 million). Without
     ``report_date`` and ``duration_months`` columns nothing can be told apart and the stored
     figures are used as they are.
+
+    ``first_income_years``: (cik, year-end date) pairs a fund's highlights wrapper declares
+    (``first_income_year_ends``): the fund began operating during that year, so the quarters
+    before its first income statement do not exist and are nil. For those pairs only, the
+    year-end quarter is the annual figure less the one or two quarters that were filed (Blue Owl
+    Technology Income, began 2022-05-02: 96,557 for the year, 10,176 and 35,696 in the two
+    10-Qs, published as 24,139 = 96,557 / 4). Every other fund-year needs three quarters.
     """
     flows = ",\n                ".join(f"TRY_CAST({c} AS DOUBLE) AS {c}" for c in _INCOME_FLOWS)
     if not {"report_date", "duration_months"} <= set(columns):
@@ -1031,9 +1039,15 @@ def quarter_income_sql(table: str, columns: set) -> str:
     sums = ", ".join(f"sum(q.{c}) AS {c}_three, count(q.{c}) AS {c}_n, "
                      f"count(*) FILTER (WHERE q.{c} > 0) AS {c}_up, count(*) FILTER (WHERE q.{c} < 0) AS {c}_down"
                      for c in _INCOME_FLOWS)
+    declared = sorted({(str(cik).strip().zfill(10), str(day)[:10]) for cik, day in first_income_years
+                       if str(cik).strip().isdigit() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day)[:10])})
+    first_year = ("(b.cik || '|' || CAST(b.day AS VARCHAR) IN (" + ", ".join("'%s|%s'" % pair for pair in declared) + "))"
+                  if declared else "false")
+    # three filed quarters, or every filed quarter of a declared first year (one or two)
+    complete = f"(p.quarters = 3 OR ({first_year} AND p.quarters BETWEEN 1 AND 2))"
     quarter = ",\n                ".join(
-        f"CASE WHEN b.months BETWEEN 11 AND 13 AND p.quarters = 3 AND p.{c}_n = 3 "
-        f"AND NOT (p.{c}_up = 3 AND 4.0*b.{c} < p.{c}_three) AND NOT (p.{c}_down = 3 AND 4.0*b.{c} > p.{c}_three) "
+        f"CASE WHEN b.months BETWEEN 11 AND 13 AND {complete} AND p.{c}_n = p.quarters "
+        f"AND NOT (p.{c}_up = p.quarters AND 4.0*b.{c} < p.{c}_three) AND NOT (p.{c}_down = p.quarters AND 4.0*b.{c} > p.{c}_three) "
         f"THEN 4.0*b.{c} - p.{c}_three ELSE b.{c} END AS {c}" for c in _INCOME_FLOWS)
     maxima = ", ".join(f"max({c}) AS {c}" for c in _INCOME_FLOWS)
     return f"""
@@ -1137,8 +1151,9 @@ def _prepare_bdc(
     )
 
     if has_income:
+        from pipeline.fund_highlights_wrapper import first_income_year_ends
         join_sql = f"""
-        WITH inc AS ({quarter_income_sql("income", set(income_df.columns))})
+        WITH inc AS ({quarter_income_sql("income", set(income_df.columns), first_income_year_ends())})
         SELECT
             COALESCE(cf.cik, inc.cik) AS cik,
             cf.report_date,
