@@ -40,6 +40,16 @@
    "check": {"from": "2022-01-01", "check": "no_rate_in_source", "params": {}},
    "rerun": "python scripts/v05_evidence/x02_page_read.py {label} {cik}",
    "accepted": "owner, 2026-10-06 (first five funds); by check on any fund from 2026-10-09 (D-073)"
+  },
+  {
+   "reason_id": "R-PCT-printed-percent-with-calculated",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "class": "as_filed",
+   "statement": "The percent of net assets the filer prints and tags disagrees with its own fair value over net assets (printed to one decimal, or printed on a neighbouring line). The printed figure is published as filed; the schema value, fair value over net assets, is published beside it in pct_of_net_assets_calculated.",
+   "check": {"from": "2022-01-01", "check": "pct_as_filed_with_calculated", "params": {}},
+   "rerun": "python scripts/v05_evidence/pctq.py {label} {cik}",
+   "accepted": "owner, DS-020 (BCRED, Blue Owl Credit Income); added to this list on the owner's instruction of 2026-10-14 (D-165)"
   }
  ],
  "not_by_check": [

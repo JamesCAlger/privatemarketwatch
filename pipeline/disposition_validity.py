@@ -35,6 +35,12 @@ Kinds:
                              that is not accounted for, fails. It reads the page, not the tags, so a
                              par the filer printed and tagged elsewhere does not pass.
 
+``pct_as_filed_with_calculated`` For the percent-of-net-assets identity (a fund-quarter rule): every
+                             row on which the identity fails publishes the filer's percent as
+                             tagged, uncorrected, and printed on the row's own line; and the schema
+                             value, fair value over net assets, is published beside it in
+                             pct_of_net_assets_calculated. A row not read on the page fails.
+
 Read-only on the build outputs. Results: one row per (disposition, fund, quarter).
 """
 from __future__ import annotations
@@ -46,7 +52,8 @@ from pathlib import Path
 
 import duckdb
 
-KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known", "no_principal_in_source", "par_not_printed")
+KINDS = ("values_as_filed", "no_rate_in_source", "missing_source_rows_known", "no_principal_in_source", "par_not_printed",
+         "pct_as_filed_with_calculated")
 RESULT_COLUMNS = ["disposition_id", "cik", "report_date", "check", "passed", "rows_tested", "rows_failing",
                   "failing_fair_value_m", "detail"]
 _FIELDS = ("fair_value", "cost", "principal_amount", "shares_held", "interest_rate", "basis_spread", "pik_rate")
@@ -285,9 +292,94 @@ def _par_not_printed(con, output: Path, rule: str, ciks, params) -> list[tuple]:
     return results
 
 
+# The row test of the identity rule pct_of_net_assets_identity (scripts/shadow_identity_engine.py,
+# RULES); tests/test_pct_as_filed.py keeps the two the same. The engine records the rule per
+# fund-quarter only, so the check finds the failing rows itself.
+PCT_IDENTITY_FILTER = "pct_of_net_assets > 0 AND _scalar > 0 AND fair_value <> 0"
+PCT_IDENTITY_HOLDS = ("abs(fair_value - pct_of_net_assets/100.0*_scalar) <= 0.10*abs(fair_value) "
+                      "OR abs(pct_of_net_assets - 100.0*fair_value/_scalar) <= 0.06")
+
+
+def _printed_row_shows_percent(printed_row: str | None, percent: float | None) -> bool:
+    """Does the printed row carry this percent of net assets, to the digits printed?"""
+    if percent is None or not str(printed_row or "").strip():
+        return False
+    # '0.1 | 7' (Golub prints one percent across two cells) is read as printed, cell by cell
+    joined = re.sub(r" \| (?=[%)]\s*(?: \||$))", "", str(printed_row))
+    for cell in joined.split(" | "):
+        for number in _NUMBER.findall(_CURRENCY.sub(" ", _FOOTNOTE.sub(" ", cell))):
+            try:
+                if _printed_percent_matches(number, percent):
+                    return True
+            except ValueError:
+                continue
+    return False
+
+
+def _pct_as_filed_with_calculated(con, output: Path, rule: str, ciks, params) -> list[tuple]:
+    """Every row on which the percent identity fails publishes the filer's own percent, unchanged:
+    equal to the tagged fact, not corrected, and printed on the row's own line (page artifact), so a
+    tag of the wrong scale fails. And the schema value, fair value over net assets, is published
+    beside it (pct_of_net_assets_calculated). A row not read on the page fails."""
+    artifact = output / "bdc_ixbrl_field_status.csv"
+    financials = output / "fund_financials.csv"
+    if not artifact.exists() or not financials.exists():
+        return []
+    columns = {r[0] for r in con.execute(
+        f"DESCRIBE SELECT * FROM read_csv('{artifact.as_posix()}', header=true, all_varchar=true, sample_size=-1)").fetchall()}
+    printed = "printed_row" if "printed_row" in columns else "NULL"
+    filt = PCT_IDENTITY_FILTER.replace("_scalar", "n.nav").replace("pct_of_net_assets", "h.pct").replace("fair_value", "h.fv")
+    holds = PCT_IDENTITY_HOLDS.replace("_scalar", "n.nav").replace("pct_of_net_assets", "h.pct").replace("fair_value", "h.fv")
+    rows = con.execute(f"""
+        WITH h AS (SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik, CAST(report_date AS VARCHAR)[:10] AS q,
+                          CAST(row_id AS VARCHAR) AS row_id, TRY_CAST(fair_value AS DOUBLE) AS fv,
+                          TRY_CAST(pct_of_net_assets AS DOUBLE) AS pct,
+                          TRY_CAST(pct_of_net_assets_calculated AS DOUBLE) AS calc,
+                          TRY_CAST(json_extract_string(CAST(src_facts AS VARCHAR), '$.pct_of_net_assets.r') AS DOUBLE) AS tagged,
+                          coalesce(CAST(corrected_fields AS VARCHAR), '') LIKE '%pct_of_net_assets%' AS corrected,
+                          CAST(accession_number AS VARCHAR) AS accession,
+                          lower(trim(CAST(bdc_investment_identifier AS VARCHAR))) AS raw_id,
+                          CAST(bdc_investment_identifier AS VARCHAR) AS id
+                   FROM {_holdings_sql(output)}
+                   WHERE bdc_dimensions_raw IS NOT NULL
+                     AND coalesce(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'
+                     AND lpad(CAST(cik AS VARCHAR), 10, '0') IN ({_sql_list(ciks)})),
+        n AS (SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik, CAST(report_date AS VARCHAR)[:10] AS q,
+                     max(TRY_CAST(net_assets AS DOUBLE)) AS nav
+              FROM read_csv('{financials.as_posix()}', header=true, all_varchar=true, sample_size=-1)
+              WHERE source = 'companyfacts' GROUP BY 1, 2),
+        a AS (SELECT lpad(regexp_replace(cik, '[^0-9]', '', 'g'), 10, '0') AS cik, accession_number AS accession, raw_id_lower AS raw_id,
+                     any_value({printed}) AS printed_row, count(*) AS cnt
+              FROM read_csv('{artifact.as_posix()}', header=true, all_varchar=true, sample_size=-1)
+              WHERE period_role = 'current' GROUP BY 1, 2, 3)
+        SELECT h.cik, h.q, h.id, h.fv, h.pct, h.calc, h.tagged, h.corrected, CASE WHEN a.cnt = 1 THEN a.printed_row END
+        FROM h JOIN n USING (cik, q)
+        LEFT JOIN a ON a.cik = h.cik AND a.accession = h.accession AND a.raw_id = h.raw_id
+        WHERE h.pct IS NOT NULL AND h.fv IS NOT NULL AND n.nav IS NOT NULL AND ({filt}) AND NOT ({holds})""").fetchall()
+    by_quarter: dict[tuple[str, str], list] = {}
+    for cik, quarter, name, fv, pct, calc, tagged, corrected, printed_row in rows:
+        problems = []
+        if corrected:
+            problems.append("percent corrected")
+        if tagged is None or not any(abs(pct - t) <= 1e-6 * max(1.0, abs(pct)) for t in (tagged, tagged * 100.0)):
+            problems.append("published percent is not the tagged fact")
+        if calc is None:
+            problems.append("no calculated percent")
+        if not _printed_row_shows_percent(printed_row, pct):
+            problems.append("percent not on the printed row" if printed_row else "row not read on the page")
+        by_quarter.setdefault((cik, quarter), []).append((name, abs(fv or 0.0), problems))
+    results = []
+    for (cik, quarter), tested in sorted(by_quarter.items()):
+        failing = sorted((t for t in tested if t[2]), key=lambda t: -t[1])
+        results.append((cik, quarter, len(tested), len(failing), sum(t[1] for t in failing) / 1e6,
+                        ["%s [%s]" % (str(t[0])[:60], "; ".join(t[2])[:120]) for t in failing]))
+    return results
+
+
 _RUNNERS = {"values_as_filed": _values_as_filed, "no_rate_in_source": _no_rate_in_source,
             "missing_source_rows_known": _missing_source_rows_known,
-            "no_principal_in_source": _no_principal_in_source, "par_not_printed": _par_not_printed}
+            "no_principal_in_source": _no_principal_in_source, "par_not_printed": _par_not_printed,
+            "pct_as_filed_with_calculated": _pct_as_filed_with_calculated}
 
 
 def evaluate(entries: list[dict], output_dir: Path) -> list[dict]:

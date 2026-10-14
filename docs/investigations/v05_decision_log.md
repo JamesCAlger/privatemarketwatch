@@ -3995,3 +3995,25 @@ Built in sandbox `owsp3` (both funds, with 2026-06-30), compared with `t10a`.
 - Gate not run on `owsp3` (no fund report; the change was made by the orchestrator). Tests:
   test_issuer_instrument_split, test_issuer_name_strip, test_v05_fund_gate, test_gics_classification
   (119 passed). Not run: the full suite, any cohort build.
+
+### D-165 Percent of net assets: the "as filed" findings close by a check against the page and the calculated value
+
+Owner, 2026-10-14: "do it" (to: make the as-filed percent findings schema-compatible). The schema
+value already existed: `pct_of_net_assets_calculated` = fair value / net assets x 100
+(`pipeline/financial_conventions.py`). Only the data-quality histogram reads the printed percent
+from holdings, and the frontend shows no position percent, so no consumer is switched.
+
+- **New check** `pct_as_filed_with_calculated` (`pipeline/disposition_validity.py`): for every row
+  on which `pct_of_net_assets_identity` fails (the engine's own row test, kept equal by a test),
+  the published percent is the tagged fact, uncorrected, printed on the row's own line (page
+  artifact), and the calculated value is published beside it. A row not read on the page fails.
+- **Added to the by-check list** (`data/reference/accepted_disposition_reasons.json`) on the
+  owner's instruction; the reason was accepted for BCRED and Blue Owl Credit Income as DS-020.
+- **Tried on the sandboxes of 11 funds:** 48 fund-quarters with failing rows, 43 pass. Four rows
+  fail as not read on the page (Zullas 2026-03-31, Gloves Buyer 2024-06-30, Ascent Midco 2024-09-30,
+  Rubrik 2023-06-30 has no calculated value). MSD 2025-09-30 Confluent fails correctly: the page
+  prints 0.17, the filer tagged 0.1 and 0.1 is published; the calculated 0.168 is right. The
+  proposal `pct-identity-printed-percent-split-across-cells` read the line as '0.1 7'; the page
+  reader reads 0.17, so the published figure is a wrong tag, not a printing quirk.
+- Not covered: `field_coverage_drop` for the percent column (a different rule; the calculated
+  value fills it, but whether that clears the rule is the owner's call).
