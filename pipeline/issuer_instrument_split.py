@@ -6,12 +6,11 @@ instrument and the row number, and instrument_description is blank. A per-filer 
 (dispatch.issuer_name_strip_re) did this one fund at a time; this is the shared default, run after
 those settings, so a fund whose wrapper already split its names finds nothing left to split.
 
-Two cuts, each conservative:
-  - the instrument: from the first ', ' or ' - ' that is followed by an instrument phrase
-    (lien, secured, subordinated, unsecured, term loan, revolver, delayed draw, preferred, common
-    stock or units, class/series units, LP/LLC/membership interest, warrants, notes);
-  - a row number: one or two digits at the end, directly after a legal-form suffix or a closing
-    bracket ('Inc. 2', 'LLC3', 'Ltd.,1'). A vintage ('2020-1') or a number inside the name stays.
+One cut, conservative: the instrument, from the first ', ' or ' - ' that is followed by an
+instrument phrase (lien, secured, subordinated, unsecured, term loan, revolver, delayed draw,
+preferred, common stock or units, class/series units, LP/LLC/membership interest, warrants,
+notes); not after a section heading, and not when the cut text names a company. A trailing row
+number ('Inc. 2') is left to the fund's wrapper (see split_name); ROW_NUMBER only reports it.
 
 The cut text goes to instrument_description when that is blank, or in front of it when it does
 not already hold it. A name the cuts would empty is left as filed. Switched on in
@@ -73,10 +72,11 @@ def split_name(name: str) -> tuple[str, str, str]:
         if before.strip() and re.search(r"[A-Za-z]{2}", before) and not _HEADING.search(before) \
                 and not _LEGAL_FORM.search(after):
             issuer, cut = before, after
-    n = ROW_NUMBER.search(issuer)
-    if n and issuer[:n.start()].strip():
-        number = re.sub(r"\D", "", n.group(0))
-        issuer = issuer[:n.start()].rstrip(" ,")
+    # A row number ('Sylva, Inc. 2') is NOT cut here. Cohort A/B 2026-10-14: TriplePoint numbers
+    # tranches of one company with the same instrument text and renumbers them between quarters;
+    # with the number off the name the matcher re-paired them each quarter (positions 1,311 to
+    # 1,333). Where the numbering is stable a fund's wrapper cuts it (issuer_name_strip_re); the
+    # fund gate still reports a leftover number as a shape. ``number`` is kept in the signature.
     return issuer, cut, number
 
 

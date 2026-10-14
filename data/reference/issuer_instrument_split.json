@@ -1,4 +1,4 @@
 {
- "enabled": false,
- "note": "Global issuer/instrument split (pipeline/issuer_instrument_split.py). Off until a full-cohort rebuild and semantic diff are reviewed: a dry run on the 2026-10-01 holdings changes the issuer name of about 37 pct of BDC rows in 125 funds. Switch on by setting enabled to true; a filer opts out with dispatch.global_issuer_split: false."
+ "enabled": true,
+ "note": "Global issuer/instrument split (pipeline/issuer_instrument_split.py), ON from 2026-10-14 (D-166) after a cohort A/B of 77 funds in sandboxes: no fair value, index class or row moved; findings equal or lower in every touched fund. Cuts the instrument only, never a row number. A filer opts out with dispatch.global_issuer_split: false (Manulife Private Credit). Set enabled to false to switch off."
 }

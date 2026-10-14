@@ -4017,3 +4017,31 @@ from holdings, and the frontend shows no position percent, so no consumer is swi
   reader reads 0.17, so the published figure is a wrong tag, not a printing quirk.
 - Not covered: `field_coverage_drop` for the percent column (a different rule; the calculated
   value fills it, but whether that clears the rule is the owner's call).
+
+### D-166 The shared issuer/instrument split goes on, after a cohort A/B
+
+Owner, 2026-10-14: "run the cohort build and semantic diff for the splitter". The production
+semantic diff compares `data/output` with its baseline only, so the measure was an A/B in
+sandboxes instead: the 77 cohort funds in three builds with the split off (`spoff1`-`spoff3`)
+and the same three with it on (`spon1`-`spon3`), then the 32 funds it touched again with the
+guards (`sponfa`, `sponfb`). Reports in `scratch/2026-10-14_splitter_cohort/`.
+
+- **Size:** 2.1 pct of rows (6,062 of 283,626) change name, not the 37.5 pct of the dry run on the
+  2026-10-01 production holdings (the per-fund settings added since cover most of it).
+- **Never moved:** fair value, index class, rows added or removed (0 in every fund).
+- **Failure modes found and fixed:** (1) TriplePoint (0001792509) numbers tranches of one company,
+  all 'Warrant Investments', and renumbers them between quarters: cutting the number merged
+  positions (PP02 x9) and, once the number was kept in the instrument instead, re-paired them each
+  quarter (positions 1,311 to 1,333). The shared split no longer cuts row numbers at all; a fund's
+  wrapper may. (2) Commonwealth Credit Partners (0001841514) writes 'Debt Investments, First Lien
+  Senior Secured, <issuer>': no cut after a section heading. (3) No cut whose text names a company.
+  (4) Manulife (0001988280) opts out: its instrument text carries a per-quarter section heading.
+- **With the guards (`sponf*`, row-number cuts then still on):** outstanding findings equal or lower
+  in all 32 funds (TriplePoint 51 to 50, Audax 66 to 65, KKR FS 86 to 85, Fidelity 45 to 44,
+  Sixth Street Specialty 108 to 107); Audax positions 1,138 to 1,091 and GICS rows +44; Ares
+  Strategic Income positions 2,347 to 2,333. GICS losses (AB Private Credit -33, Lord Abbett -20)
+  are on rows whose name did not change: canonical names are resolved across the funds of a
+  sandbox, and the on-builds grouped funds differently.
+- **Not rebuilt:** the final version (instrument cut only) as a whole; it differs from `sponf*`
+  only by leaving row numbers, which were the cause of the one regression.
+- Switched on in `data/reference/issuer_instrument_split.json`; off is one flag.

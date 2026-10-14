@@ -19,10 +19,10 @@ from pipeline.issuer_instrument_split import enabled, opted_out_ciks, shapes, sp
     ("Red Griffin ParentCo, LLC - Class A Common Units", "Red Griffin ParentCo, LLC", "Class A Common Units", ""),
     ("CH Buyer, LLC, Revolver", "CH Buyer, LLC", "Revolver", ""),
     ("Amalfi Midco, Warrants", "Amalfi Midco", "Warrants", ""),
-    # row numbers after a legal form: cut off the name, kept as the row's number
-    ("Plasma Buyer LLC 3", "Plasma Buyer LLC", "", "3"),
-    ("Rocket Software, Inc.2", "Rocket Software, Inc.", "", "2"),
-    ("Project Ruby Ultimate Parent Corp.,1", "Project Ruby Ultimate Parent Corp.", "", "1"),
+    # row numbers are left to the fund's wrapper: the shared split does not cut them
+    ("Plasma Buyer LLC 3", "Plasma Buyer LLC 3", "", ""),
+    ("Rocket Software, Inc.2", "Rocket Software, Inc.2", "", ""),
+    ("Midwest Veterinary Partners, LLC 2, Preferred stock", "Midwest Veterinary Partners, LLC 2", "Preferred stock", ""),
     # false positives: left as filed
     ("Senior Secured Holdings, Inc.", "Senior Secured Holdings, Inc.", "", ""),
     ("Caerus US 1, Inc.", "Caerus US 1, Inc.", "", ""),
@@ -66,15 +66,12 @@ def test_the_cut_fills_a_blank_instrument_or_goes_in_front():
                                                       "Revolver SOFR + 5.00%", "Term loan"]
 
 
-def test_a_row_number_stays_with_the_row():
-    # 0001792509 numbers two warrants of one issuer and calls both 'Warrant Investments'
-    out = split_issuer_instrument(_frame(
-        ["Appex Group, Inc. 1", "Appex Group, Inc. 2", "Delta, Inc. 2", "Echo LLC 3"],
-        ["Warrant Investments", "Warrant Investments", None, "Term loan 3"]))
-    assert out["issuer_name"].tolist() == ["Appex Group, Inc.", "Appex Group, Inc.", "Delta, Inc.", "Echo LLC"]
-    assert out["instrument_description"].tolist() == ["Warrant Investments 1", "Warrant Investments 2", "2", "Term loan 3"]
-    # the two warrants stay two positions
-    assert out[["issuer_name", "instrument_description"]].drop_duplicates().shape[0] == 4
+def test_numbered_rows_keep_their_names():
+    # 0001792509 numbers tranches of one issuer, all 'Warrant Investments', and renumbers them
+    # between quarters: the number stays in the name, where position matching relies on it
+    out = split_issuer_instrument(_frame(["Appex Group, Inc. 1", "Appex Group, Inc. 2"], ["Warrant Investments", "Warrant Investments"]))
+    assert out["issuer_name"].tolist() == ["Appex Group, Inc. 1", "Appex Group, Inc. 2"]
+    assert out["instrument_description"].tolist() == ["Warrant Investments", "Warrant Investments"]
 
 
 def test_opted_out_funds_and_other_sources_are_untouched(tmp_path):
