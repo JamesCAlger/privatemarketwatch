@@ -66,6 +66,67 @@ def test_switch_needs_the_pattern_and_a_true_value(tmp_path):
     assert issuer_name_strip_to_instrument_ciks(tmp_path) == {"0000000001"}
 
 
+def _wrapper_dispatch(cik):
+    from pipeline.staging_bdc import _WRAPPER_DEFINITIONS_DIR
+    return json.loads((_WRAPPER_DEFINITIONS_DIR / ("%s.json" % cik)).read_text(encoding="utf-8"))["dispatch"]
+
+
+def test_bcred_joint_venture_and_row_number_leave_the_issuer_name():
+    bcred = "0001803498"
+    dispatch = _wrapper_dispatch(bcred)
+    names = ["Nouryon USA, LLC, Verdelite JV LP", "Trident TPI Holdings, Inc., Emerald JV LP 2",
+             "Vision Solutions, Inc. Emerald JV LP", "Pigments Services, Inc. 2, Emerald JV LP",
+             "Mitratech Holdings, Inc. 2 Emerald JV LP", "Emerald JV LP, Albireo Energy, LLC",
+             "Rocket Software, Inc.2", "Project Ruby Ultimate Parent Corp.,1", "Caramel Bidco Limited 2",
+             # false positives: a vintage or a number inside the name stays
+             "Broad River Ltd 2020-1", "CEP V Investment 11 Sarl", "Balboa Bay Loan Funding 2021-2, Ltd."]
+    out = _strip_issuer_names(_frame(names, cik=bcred), {bcred: dispatch["issuer_name_strip_re"]})
+    assert out["issuer_name"].tolist() == [
+        "Nouryon USA, LLC", "Trident TPI Holdings, Inc.", "Vision Solutions, Inc.", "Pigments Services, Inc.",
+        "Mitratech Holdings, Inc.", "Albireo Energy, LLC", "Rocket Software, Inc.", "Project Ruby Ultimate Parent Corp.",
+        "Caramel Bidco Limited", "Broad River Ltd 2020-1", "CEP V Investment 11 Sarl", "Balboa Bay Loan Funding 2021-2, Ltd."]
+
+
+def test_bcred_joint_venture_name_is_not_an_instrument():
+    from pipeline.unified_holdings import _strip_instrument_text
+    bcred = "0001803498"
+    dispatch = _wrapper_dispatch(bcred)
+    assert dispatch["instrument_description_strip_may_empty"] is True
+    frame = _frame(["Gen Digital, Inc.", "Rad Clo 25 Ltd", "X"], ["Emerald JV LP", "Subordinated Notes", "Term Loan, Verdelite JV LP"], cik=bcred)
+    out = _strip_instrument_text(frame, {bcred: dispatch["instrument_description_strip_re"]}, {bcred})
+    assert out["instrument_description"].isna().tolist() == [True, False, False]
+    assert out["instrument_description"].tolist()[1:] == ["Subordinated Notes", "Term Loan"]
+
+
+def test_instrument_strip_empties_only_when_switched_on():
+    from pipeline.unified_holdings import _strip_instrument_text
+    frame = _frame(["A"], ["Emerald JV LP"])
+    assert _strip_instrument_text(frame.copy(), {MONROE: r"^Emerald JV LP$"})["instrument_description"].tolist() == ["Emerald JV LP"]
+    assert _strip_instrument_text(frame.copy(), {MONROE: r"^Emerald JV LP$"}, {MONROE})["instrument_description"].isna().all()
+
+
+def test_blue_owl_credit_income_instrument_leaves_the_issuer_name():
+    owl = "0001812554"
+    dispatch = _wrapper_dispatch(owl)
+    assert dispatch["issuer_name_strip_to_instrument"] is True
+    names = ["DCG ACQUISITION CORP. (dba DuBois Chemical), First lien senior secured loan",
+             "Pediatric Associates Holding Company, LLC, First lien senior secured loan 2",
+             "Peraton Corp., Second lien senior secured loan", "WMC Bidco, Inc. (dba West Monroe), Senior Preferred Stock",
+             "Metis HoldCo, Inc. (dba Mavis Tire Express Services), Series A Convertible Preferred Stock",
+             "Ineos US Finance LLC 2",
+             # false positives: a lien word or number that is part of the company name stays
+             "Senior Secured Holdings, Inc.", "Caerus US 1, Inc.", "Class Valuation, LLC"]
+    out = _strip_issuer_names(_frame(names, cik=owl), {owl: dispatch["issuer_name_strip_re"]}, {owl})
+    assert out["issuer_name"].tolist() == [
+        "DCG ACQUISITION CORP. (dba DuBois Chemical)", "Pediatric Associates Holding Company, LLC", "Peraton Corp.",
+        "WMC Bidco, Inc. (dba West Monroe)", "Metis HoldCo, Inc. (dba Mavis Tire Express Services)", "Ineos US Finance LLC",
+        "Senior Secured Holdings, Inc.", "Caerus US 1, Inc.", "Class Valuation, LLC"]
+    assert out["instrument_description"].tolist()[:5] == [
+        "First lien senior secured loan", "First lien senior secured loan 2", "Second lien senior secured loan",
+        "Senior Preferred Stock", "Series A Convertible Preferred Stock"]
+    assert pd.isna(out["instrument_description"].tolist()[5])
+
+
 def test_instrument_header_words_are_removed_for_one_fund_only():
     from pipeline.unified_holdings import _strip_instrument_text
     pattern = r"(?i)^\s*Type\s+|\s+(?:Reference\s+Rate\s+and\s+Spread|Interest\s+Rate|Maturity\s+Date)\b.*$"

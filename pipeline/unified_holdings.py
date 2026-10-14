@@ -1429,12 +1429,22 @@ def build_unified_holdings(
             combined, _promoted_corrections, _promoted_rules)
         _agent_fix_audits.extend(_plan_audits)
 
+    # The name as filed, kept for the GICS cache below: its entries were made from these names, and
+    # a name the strips shorten would otherwise lose its label (dropped after the cache is applied).
+    combined["_issuer_name_filed"] = combined["issuer_name"]
     # A filer's own trailing text on the issuer name (a row number), removed last so that the
     # duplicate filters, rules and corrections above still see the name as filed.
     from pipeline.staging_bdc import issuer_name_strip_patterns, issuer_name_strip_to_instrument_ciks
     combined = _strip_issuer_names(combined, issuer_name_strip_patterns(), issuer_name_strip_to_instrument_ciks())
-    from pipeline.staging_bdc import instrument_description_strip_patterns
-    combined = _strip_instrument_text(combined, instrument_description_strip_patterns())
+    from pipeline.staging_bdc import instrument_description_strip_may_empty_ciks, instrument_description_strip_patterns
+    combined = _strip_instrument_text(combined, instrument_description_strip_patterns(),
+                                      instrument_description_strip_may_empty_ciks())
+    # The shared default for every other filer ('Issuer, Instrument n'), after the per-fund settings
+    # above; off until data/reference/issuer_instrument_split.json switches it on.
+    from pipeline import issuer_instrument_split
+    if issuer_instrument_split.enabled():
+        combined = issuer_instrument_split.split_issuer_instrument(combined, issuer_instrument_split.opted_out_ciks())
+        logger.info("Global issuer/instrument split applied")
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
@@ -1463,6 +1473,7 @@ def build_unified_holdings(
 
     # Apply cached GICS classifications (if cache exists on disk)
     combined = _apply_gics_cache(combined)
+    combined = combined.drop(columns=["_issuer_name_filed"], errors="ignore")
     # The filer's own industry for the row, where it maps to GICS, takes the place of the
     # name-keyed label above.
     combined = _apply_printed_industry(combined)
@@ -1976,11 +1987,13 @@ def _strip_issuer_names(combined: pd.DataFrame, patterns: dict[str, str],
     return combined
 
 
-def _strip_instrument_text(combined: pd.DataFrame, patterns: dict[str, str]) -> pd.DataFrame:
+def _strip_instrument_text(combined: pd.DataFrame, patterns: dict[str, str],
+                           may_empty: set[str] | frozenset[str] = frozenset()) -> pd.DataFrame:
     """Remove a filer's own header words from instrument_description (dispatch.instrument_description_strip_re).
 
-    Every match is removed and the ends trimmed. Text the pattern would empty is left as filed.
-    One fund's rows only.
+    Every match is removed and the ends trimmed. Text the pattern would empty is left as filed,
+    unless the fund is in ``may_empty`` (dispatch.instrument_description_strip_may_empty), where
+    the text is not an instrument at all and becomes blank. One fund's rows only.
     """
     if "instrument_description" not in combined.columns:
         return combined
@@ -1990,7 +2003,10 @@ def _strip_instrument_text(combined: pd.DataFrame, patterns: dict[str, str]) -> 
             continue
         filed = combined.loc[rows, "instrument_description"].astype("string")
         stripped = filed.str.replace(pattern, "", regex=True).str.strip()
-        stripped = stripped.where(stripped.fillna("") != "", filed)
+        if cik in may_empty:
+            stripped = stripped.where(stripped.fillna("") != "", pd.NA)
+        else:
+            stripped = stripped.where(stripped.fillna("") != "", filed)
         combined.loc[rows, "instrument_description"] = stripped
     return combined
 

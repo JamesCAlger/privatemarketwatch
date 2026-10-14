@@ -452,6 +452,26 @@ class TestApplyEnrichment:
         assert result["source"].iloc[0] == "test_val"
         assert result["gics_sub_industry"].iloc[0] == "Restaurants"
 
+    def test_a_shortened_name_keeps_the_label_of_its_filed_form(self):
+        from pipeline.gics_classification import _normalize_company_name
+        from pipeline.unified_holdings import UNIFIED_COLUMNS
+
+        filed = "Zeta Quux Widgets, Inc., First lien senior secured loan"
+        df = pd.DataFrame({col: ["", ""] for col in UNIFIED_COLUMNS})
+        df["issuer_name"] = ["Zeta Quux Widgets, Inc.", "Other Quux Co"]
+        df["_issuer_name_filed"] = [filed, "Other Quux Co"]
+        cache = {_normalize_company_name(filed): ("Specialty Chemicals", "high", "llm")}
+        result = _apply_gics_to_holdings(df, cache)
+        assert result["gics_sub_industry"].tolist() == ["Specialty Chemicals", ""]
+        # where both forms have a label, the filed form's is kept: the strip does not relabel
+        cache[_normalize_company_name("Zeta Quux Widgets, Inc.")] = ("Application Software", "high", "llm")
+        assert _apply_gics_to_holdings(df, cache)["gics_sub_industry"].tolist() == ["Specialty Chemicals", ""]
+        # with no label for the filed form, the shortened name's applies
+        del cache[_normalize_company_name(filed)]
+        assert _apply_gics_to_holdings(df, cache)["gics_sub_industry"].tolist() == ["Application Software", ""]
+        # the helper column does not reach the output
+        assert "_issuer_name_filed" not in result.columns
+
     def test_empty_cache_no_change(self):
         from pipeline.unified_holdings import UNIFIED_COLUMNS
 

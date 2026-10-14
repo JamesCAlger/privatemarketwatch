@@ -723,9 +723,27 @@ def _apply_gics_to_holdings(
             if gics:
                 canon_gics_map[cn_str] = gics
 
-    # Apply: vectorized map on issuer_name, fallback to canonical_name
+    # The name as filed, before a wrapper or the shared split cut an instrument or a row number
+    # off it (column _issuer_name_filed, set by the unified build). The cache was filled from
+    # those names, so a shortened name keeps the label its filed form had.
+    filed_gics_map: dict[str, str] = {}
+    if "_issuer_name_filed" in unified_df.columns:
+        changed = unified_df["_issuer_name_filed"].astype("string") != unified_df["issuer_name"].astype("string")
+        for name in unified_df.loc[changed.fillna(False), "_issuer_name_filed"].dropna().unique():
+            norm = _normalize_company_name(str(name))
+            gics = gics_by_norm.get(norm) if norm else None
+            if not gics:
+                short = _extract_short_name(str(name))
+                gics = gics_by_norm.get(short) if short else None
+            if gics:
+                filed_gics_map[str(name)] = gics
+
+    # Apply: the name as filed first where a strip changed it (the label it had before the strip;
+    # relabelling is not the strip's job), then issuer_name, then canonical_name
     result = unified_df.copy()
     gics_series = result["issuer_name"].map(issuer_gics_map)
+    if filed_gics_map:
+        gics_series = result["_issuer_name_filed"].map(filed_gics_map).fillna(gics_series)
     if canon_gics_map and "canonical_name" in result.columns:
         canon_series = result["canonical_name"].map(canon_gics_map)
         gics_series = gics_series.fillna(canon_series)

@@ -36,7 +36,9 @@ setting, a column, a member format); work pinned to one quarter does not carry f
 ```dot
 digraph fund {
   snapshot -> dispatch -> gate;
-  gate -> record [label="PASS / INCOMPLETE"];
+  gate -> page_sample [label="PASS / INCOMPLETE"];
+  page_sample -> record [label="no published error"];
+  page_sample -> send_back [label="published errors, round < 3"];
   gate -> send_back [label="FAIL, round < 3"];
   send_back -> gate;
   gate -> park [label="FAIL, round 3"];
@@ -74,6 +76,24 @@ digraph fund {
    them and run `regression_check.py`; a fund that MOVED without an explanation in the report
    parks this fund. A NEW setting is on for one fund: nothing else is rebuilt until the end of
    the run.
+7b. **Page sample** (after a clean gate; the net for what no rule looks at). The ledger rules and
+   the gate miss whole fields: the 2026-10-14 sample found issuer names wrong on 75 pct of one
+   fund's rows with every finding cleared. With `S = docs/investigations/v05_readings/samples/<cik10>`:
+   `python scripts/v05_evidence/field_sample.py --dir <S> draw --per-fund 20 --label <label> --cik <cik>`,
+   then `... --dir <S> cards --batch 20`. Dispatch ONE reader subagent, never the fund agent (it
+   would be marking its own work), while the fund agent is idle. Its prompt: read
+   `docs/investigations/v05_field_sample/reader_brief.md`, label `<S>/cards/batch_01.md`, write
+   `<S>/labels/batch_01.json`, run `field_sample.py --dir <S> check` on it. Then
+   `field_sample.py --dir <S> score` and read the "Published errors" table in `<S>/results.md`.
+   - None: go on.
+   - Any published error with cause `tag` or `pipeline`: send the table, verbatim, to the fund
+     agent (SendMessage). It fixes the cause at fund level or lists it as an observation with a
+     reason it is left, rebuilds, and the fund is gated again. This counts as a gate round.
+   - The same field wrong on two or more cards is a fund-level cause: fixed, or the fund is
+     recorded INCOMPLETE with it named.
+   Record the sample (cards, published errors, fields) in the decision-log entry. Twenty cards
+   can miss a problem on under about 15 pct of rows; say so, never "the sample was clean, so the
+   data is correct".
 8. **Observations:** `python scripts/v05_evidence/observations.py add <REPORT>` (the gate has
    verified their printed lines). An observation whose cause is `shared` goes in the end-of-run
    report by name.
@@ -128,6 +148,7 @@ build showed; what was not run. Lead with what failed.
 | Field comparison | `python scripts/v05_evidence/holdings_field_diff.py <new> <old>` |
 | Have accepted funds moved | `python scripts/v05_evidence/regression_check.py <label>` |
 | What agents saw that no rule reported | `python scripts/v05_evidence/observations.py add <report> | show [--open]` |
+| Page sample of one fund | `python scripts/v05_evidence/field_sample.py --dir <S> draw --label <l> --cik <c> | cards | check <labels> | score` |
 | Owner decisions | `python scripts/v05_evidence/owner_queue.py build | show [key] | rule ...` |
 | Take a failed fund out | `python scripts/v05_evidence/fund_gate.py park --snapshot <file> --cik <cik>` |
 

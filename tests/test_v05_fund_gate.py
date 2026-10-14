@@ -76,6 +76,25 @@ def test_totals_need_one_basis_and_every_other_quarter_declared(sandbox):
     assert fund_gate.check_totals("s1", CIK, [{"quarter": "2025-12-31"}, {"quarter": "2026-03-31"}])["ok"]
 
 
+def test_issuer_names_holding_an_instrument_fail_unless_declared(sandbox):
+    clean = [_row("c%d" % i, 1.0, source="bdc", issuer_name="Clean Co %s, Inc." % chr(65 + i % 26)) for i in range(198)]
+    bad = [_row("b1", 1.0, source="bdc", issuer_name="Acme, Inc., First lien senior secured loan"),
+           _row("b2", 1.0, source="bdc", issuer_name="Beta Holdings, LLC 2"),
+           _row("b3", 1.0, source="bdc", issuer_name="Gamma, Inc., Emerald JV LP")]
+    _holdings(sandbox, "n1", clean + bad)
+    result = fund_gate.check_names("n1", CIK, {})
+    assert result["shapes"] == {"instrument_in_name": 1, "row_number_in_name": 1, "holder_label_in_name": 1}
+    assert result["ok"]                          # 1 row of 201 each: under 1 pct
+    _holdings(sandbox, "n2", clean[:50] + bad)
+    assert len(fund_gate.check_names("n2", CIK, {})["problems"]) == 3
+    declared = {"name_shape_exceptions": [{"shape": s, "rows": 1, "why": "the page prints the name this way on every row"}
+                                          for s in ("instrument_in_name", "row_number_in_name", "holder_label_in_name")]}
+    assert fund_gate.check_names("n2", CIK, declared)["ok"]
+    # a reason too short to say anything does not count
+    declared["name_shape_exceptions"][0]["why"] = "as filed"
+    assert not fund_gate.check_names("n2", CIK, declared)["ok"]
+
+
 def test_every_changed_field_and_row_must_be_declared(sandbox):
     _holdings(sandbox, "old", [_row("a", 1.0), _row("b", 2.0), _row("gone", 3.0)])
     _holdings(sandbox, "new", [_row("a", 1.0, principal_amount=None, entity_id="e2"), _row("b", 2.5), _row("added", 4.0)])

@@ -25,6 +25,16 @@ JSON you must write).
      the owner accepted clears by check; add `--write`, then
      `python scripts/fund_ledger_trial.py --label <label> --from ledger`)
    - `python scripts/v05_evidence/left.py <label> <rule> ...` and `flagged.py <label> <rule> <cik> <quarter>`
+   - Issuer names: the gate fails a fund where more than 1 pct of published rows have an issuer
+     name that still holds an instrument ('Acme, Inc., First lien senior secured loan'), a row
+     number ('Acme LLC 2') or a holder label ('Acme, Inc., Emerald JV LP'). Run
+     `fund_gate.py check` early to see the count. Fix with the wrapper's
+     `issuer_name_strip_re` (plus `issuer_name_strip_to_instrument: true` to keep the cut text as
+     the instrument) and `instrument_description_strip_re` (plus
+     `instrument_description_strip_may_empty: true` where the "instrument" is only a label);
+     `data/overrides/bdc_xbrl_wrappers/0001869453.json` and `0001803498.json` are worked examples.
+     Dry-run the pattern on every distinct name of the fund before building. A name printed that
+     way on the page goes under `name_shape_exceptions` with the shape, the row count and why.
    - `python scripts/v05_evidence/verdicts.py <label> 1500` for what earlier reviewers found. A finding
      in state `real_error_unremediated`, `remediation_staged` or `remediation_pulled` has a verdict
      with the rows it cites: read it and check each cited row on the page. They are sometimes
@@ -126,6 +136,8 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
  "observations": [{"observation_key": "unit-count-rescaled-by-issuer-normaliser", "what": "...", "field": "shares_held",
                    "quarters": ["2024-09-30"], "fair_value_m": 0.2, "cause": "row|fund|shared", "action": "fixed|parked|left",
                    "suggested_check": "...", "quote": {"accession": "...", "text": "..."}}],
+ "name_shape_exceptions": [{"shape": "instrument_in_name|row_number_in_name|holder_label_in_name", "rows": 0,
+                            "why": "the printed page names the issuer this way (quote it)"}],
  "tests_run": ["tests/test_x.py: 12 passed"],
  "not_done": ["what you did not check"]
 }
@@ -151,3 +163,7 @@ empty list if you truly saw nothing). For each one:
 While reading a finding's rows you see its neighbours. Look at them: compare a few published rows
 per quarter with their printed lines on fields no finding names (unit count, rate, maturity,
 industry, name).
+
+After your gate is clean, the orchestrator has 20 random rows of your final build read against the
+page by another agent. If it finds published errors, you get the table back: fix the cause at fund
+level, or list each as an observation with the reason it is left, then rebuild and report again.

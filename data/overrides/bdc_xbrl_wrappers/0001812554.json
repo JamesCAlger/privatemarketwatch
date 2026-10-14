@@ -98,7 +98,9 @@
       }
     ],
     "category_marker_re": "(?i)^(?:ABF|BF)\\s*-\\s*",
-    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|No-Affiliated Issuer)$"
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|No-Affiliated Issuer)$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*\\d?\\s*(?:Firs?t?[\\s-]lien|Second[\\s-]lien|Senior secured|Unsecured notes?|Subordinated|Perpetual Preferred|Senior (?:[A-D] )?Preferred|Series [A-Z0-9-]+ (?:Convertible )?(?:Preferred|Common)|Preferred|Class [A-Z0-9-]+|Common|LP Interest|L\\.P\\. Interest|LLC Interest|Limited Partner Interest|Specialty finance|Warrants?)|\\s+(?:Firs?t?[\\s-]lien senior secured|Second[\\s-]lien senior secured|L\\.P\\. Interest))\\b[^,]*(?:,\\s*\\d+)?\\s*$|\\s+\\d{1,2}$",
+    "issuer_name_strip_to_instrument": true
   },
   "archetypes": {
     "senior_secured_debt": {

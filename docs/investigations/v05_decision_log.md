@@ -3957,3 +3957,41 @@ Overnight run of 2026-10-13/14. Round one used 16 of its 55 minutes and parked f
   side's; the owner decides.
 - Not done: A01 2024-03-31 (a 7.2M gap on no single member), systematic neighbouring-row
   comparison, tests (no code changed). 5 observations recorded.
+
+### D-164 Issuer names: Blue Owl Credit Income and BCRED split by wrapper; a shared splitter (off); a gate check and a page sample in the skill
+
+Found by the per-field page sample of 2026-10-14 (`docs/investigations/v05_field_sample/`): issuer
+name wrong on 7.6 pct of 340 rows, instrument or class on 6.5 pct, all our member-text splitting.
+Built in sandbox `owsp3` (both funds, with 2026-06-30), compared with `t10a`.
+
+- **Blue Owl Credit Income (0001812554):** the wrapper gets the issuer split its sibling Blue Owl
+  Technology Income already had (`issuer_name_strip_re`, `issuer_name_strip_to_instrument`), plus
+  'Senior Preferred', 'Series A Convertible Preferred' and a trailing row number. Names holding an
+  instrument: 70.5 pct of rows to 0.5 pct; 7,817 rows gain the instrument text.
+- **BCRED (0001803498):** the joint-venture holder label ('Emerald JV LP', 'Verdelite JV LP') and the
+  row number leave the issuer name (23.6 pct of rows to under 0.1 pct); where the member put the
+  label after a '|' it was the instrument text, now blank (new wrapper key
+  `instrument_description_strip_may_empty`). The holding is still marked by `is_subsidiary`.
+- **Side effects, measured:** position ids change on 2,927 rows and distinct positions fall from
+  8,392 to 7,587 (names no longer change with the member format, so more rows chain across
+  quarters); TruGreen x4 UNCLASSIFIED to DIRECT_LENDING; Blue Owl Credit SLF and LSI Financing x20
+  now carry jv_subsidiary Y. GICS: the cache is keyed on names as filed, so a shortened name lost
+  or changed its label (333 changed, 10 lost in the first build); the unified build now keeps the
+  filed name for the cache lookup and prefers the filed form's label (36 changed, 10 lost, 55
+  gained in `owsp3`). Several of the kept labels look wrong (KnowBe4 'Diversified Chemicals');
+  relabelling is a separate question.
+- **Ledger:** BCRED 0 outstanding; Blue Owl Credit Income 3, two of them new: PP02 at 2024-06-30
+  and 2024-09-30, an undrawn Chrysaor (AlterDomus) delayed-draw line printed on the fund's own
+  schedule and on the ORCIC Senior Loan Fund's, both at zero. Real, immaterial, no proposal.
+- **Shared splitter** (`pipeline/issuer_instrument_split.py`): 'Issuer, Instrument n' cut for every
+  filer after the per-fund settings, a filer opting out with `global_issuer_split: false`. OFF
+  (`data/reference/issuer_instrument_split.json`): a dry run on the 2026-10-01 holdings changes
+  the issuer name of 37.5 pct of BDC rows (210,001 of 560,071) in 125 funds. Switching it on needs
+  a full-cohort rebuild and the semantic diff, which needs the owner (memory-bound build).
+- **Skill:** the gate's new `names` check fails a fund with over 1 pct of rows whose issuer name
+  holds an instrument, a row number or a holder label, unless declared; after a clean gate the
+  orchestrator has 20 random rows read against the page by a separate reader
+  (`field_sample.py --dir ... draw --label --cik`), and published errors go back to the fund agent.
+- Gate not run on `owsp3` (no fund report; the change was made by the orchestrator). Tests:
+  test_issuer_instrument_split, test_issuer_name_strip, test_v05_fund_gate, test_gics_classification
+  (119 passed). Not run: the full suite, any cohort build.

@@ -352,6 +352,27 @@ def instrument_description_strip_patterns(wrapper_dir: Path | None = None) -> di
     return result
 
 
+def instrument_description_strip_may_empty_ciks(wrapper_dir: Path | None = None) -> set[str]:
+    """CIKs whose instrument_description_strip_re may leave the text empty
+    (dispatch.instrument_description_strip_may_empty: true).
+
+    BCRED's member 'Gen Digital, Inc. 2 | Emerald JV LP' names the joint venture that holds the
+    loan after the separator, so the instrument text is the venture's name and nothing else; the
+    holding is already marked by is_subsidiary.
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: set[str] = set()
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        dispatch = raw.get("dispatch", {})
+        if dispatch.get("instrument_description_strip_may_empty") is True and dispatch.get("instrument_description_strip_re"):
+            result.add(raw["cik"])
+    return result
+
+
 def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
     """CIK -> regex whose first group is the filer's industry inside the member text
     (dispatch.industry_from_identifier_re).

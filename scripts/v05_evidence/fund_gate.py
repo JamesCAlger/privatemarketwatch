@@ -21,6 +21,9 @@ decides, without judgment, whether the agent's run can be accepted:
                why it does not stand, or was fixed>"}, 60 characters or more)
   observations the report lists what the agent saw that no rule reported (the list may be empty),
                each entry well formed and with a printed line
+  names        no more than 1 pct of the fund's published rows has an issuer name that still holds
+               an instrument, a row number or a holder label (pipeline/issuer_instrument_split.py
+               shapes); more is declared in "name_shape_exceptions" with a count and a reason
   ledger       every outstanding finding of the fund is covered by a written proposal
 
 Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
@@ -45,8 +48,10 @@ from functools import lru_cache
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(1, str(Path(__file__).resolve().parents[2]))
 
 REPO = Path(__file__).resolve().parents[2]
+NAME_SHAPE_LIMIT = 0.01
 SANDBOXES = REPO / "scratch" / "fund_sandbox"
 TOLERANCE = 5e5
 SINCE = "2022-01-01"
@@ -237,6 +242,29 @@ def check_fields(label: str, before: str, cik: str, report: dict) -> dict:
             "values_lost": lost, "new_columns": new_columns}
 
 
+def check_names(label: str, cik: str, report: dict) -> dict:
+    """Issuer names that still carry an instrument, a row number or a holder label. No ledger rule
+    looks at names; the 2026-10-14 page sample found them wrong on 75 pct of one fund's rows."""
+    from pipeline.issuer_instrument_split import shapes
+    output = (SANDBOXES / label / "output/private_markets_holdings.parquet").as_posix()
+    names = _con().execute(f"""SELECT issuer_name, count(*) FROM read_parquet('{output}')
+                               WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND source = 'bdc' GROUP BY 1""", [cik]).fetchall()
+    total = sum(n for _name, n in names)
+    counts: dict[str, int] = {}
+    examples: dict[str, list[str]] = {}
+    for name, n in names:
+        for shape in shapes(name):
+            counts[shape] = counts.get(shape, 0) + n
+            examples.setdefault(shape, []).append(str(name)[:90])
+    declared = {str(d.get("shape")): int(d.get("rows", 0)) for d in report.get("name_shape_exceptions", [])
+                if len(str(d.get("why") or "").strip()) >= 30}
+    problems = []
+    for shape, n in sorted(counts.items()):
+        if total and n / total > NAME_SHAPE_LIMIT and declared.get(shape, -1) < n:
+            problems.append("%s on %d of %d rows (%.1f pct), e.g. %s" % (shape, n, total, 100 * n / total, "; ".join(examples[shape][:3])))
+    return {"ok": not problems, "problems": problems, "rows": total, "shapes": counts}
+
+
 def _proposals(cik: str) -> list[dict]:
     path = REPO / "data/overrides/finding_dispositions_proposed" / ("fund_%s.json" % cik)
     return json.loads(path.read_text(encoding="utf-8")).get("dispositions", []) if path.exists() else []
@@ -392,7 +420,8 @@ def main(argv=None) -> int:
     checks = {"observations": {"ok": not malformed, "problems": malformed, "count": len(listed) if isinstance(listed, list) else 0},
               "stages": check_stages(args.label, cik), "corrections": check_corrections(args.label, cik),
               "totals": check_totals(args.label, cik, report.get("total_exceptions", [])),
-              "quotes": check_quotes(cik, report), "files": check_files(args.snapshot, report)}
+              "quotes": check_quotes(cik, report), "files": check_files(args.snapshot, report),
+              "names": check_names(args.label, cik, report)}
     if args.before:
         checks["fields"] = check_fields(args.label, args.before, cik, report)
     ledger = check_ledger(args.label, cik)

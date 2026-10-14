@@ -74,7 +74,9 @@
       }
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Emerald JV LP|Verdelite JV LP|Controlled Affiliated Issuer|Non-Controlled Affiliated Issuer|Non-Controlled Affiliated User)$",
-    "issuer_name_strip_re": "\\s+\\d{1,2}$"
+    "issuer_name_strip_re": "^(?:Emerald|Verdelite) JV LP\\s*,\\s*|(?:\\s*,?\\s+\\d{1,2})?\\s*,?\\s*(?:Emerald|Verdelite) JV LP\\s*,?\\s*\\d{0,2}$|\\s*,?(?:\\s+|(?<=[.,])|(?<=LLC)|(?<=LP)|(?<=Inc)|(?<=Ltd)|(?<=Corp))\\d{1,2}$",
+    "instrument_description_strip_re": "(?:^|\\s*,\\s*)(?:Emerald|Verdelite) JV LP$",
+    "instrument_description_strip_may_empty": true
   },
   "archetypes": {
     "debt": {
