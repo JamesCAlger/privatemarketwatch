@@ -3912,3 +3912,24 @@ NEEDS_ORCHESTRATOR (one request, below). Five builds.
 - **Parked:** OSP Hamilton par (two tranches on one identifier); maturity missing on 134 to 169
   older-layout rows a quarter and guessed benchmarks on 23 to 76 (shared field-status step).
 - 9 observations recorded.
+
+### D-162 TPG Twin Brook through the fund-clearing skill (sandbox `tbxd`), verdict INCOMPLETE
+
+Overnight run of 2026-10-13/14, 75-minute budget; four builds in 48 minutes, one round.
+
+- **Ledger:** 44 findings, 22 outstanding (25 in `in2a`), 19 with a proposal, 3 parked (F16 at
+  2022-12-31, 2023-06-30, 2023-09-30: the published income yield matches no ratio the page prints;
+  the agent did not choose a basis). 13 of 13 quarters tie.
+- **Fixed by row correction, 238 values on 118 rows:** 46 loans whose margin is printed
+  'S + m % PIK' and tagged as PIK only (spread set, coupon Floating); 37 fixed coupons tagged as a
+  spread (only 4 of them flagged by a rule); PIK tags filed on the neighbouring line's context in
+  the 10-Q for 2024-06-30 (6 rows); PIK printed and not tagged (6 rows); 22 names from the page;
+  two maturities printed and not published (Varsity DuvaSawko 58.8M).
+- **For the owner, semantics:** under this fund's `coupon_with_margins` reading the PIK field holds
+  the PIK margin (EMSAR: page 'S + 6.50 % PIK 10.46 %', published pik_rate 6.5), while other funds'
+  pik_rate holds a PIK coupon. Consistent within the fund, not across funds; it belongs with D-092.
+- **Left:** 23 Canadian-dollar rows print 'C +' and publish SOFR (no legend says what C means);
+  two printed margins of 'S + 0.05' that look like typos (the tag is right).
+- **Compared with the page by the agent:** 8,399 rows in 13 quarters on rate, PIK, spread,
+  benchmark, maturity and par; mismatches 172 to 67; 23 rate mismatches not read.
+- Not run: pytest (no pipeline code changed). 9 observations recorded.

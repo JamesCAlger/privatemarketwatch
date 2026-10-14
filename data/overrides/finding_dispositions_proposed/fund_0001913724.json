@@ -1,153 +1,187 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "tb1c",
+ "sandbox": "tbxd",
  "dispositions": [
   {
    "disposition_id": "PD-C04-1913724-1",
    "class": "as_filed",
+   "reason_key": "c04-membership-interest-no-unit-count",
    "engine": "oracle",
    "rule_name": "C04",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2026-03-31"
-   ],
-   "statement": "The one or two equity rows a quarter with no share count are membership interests in the fund's affiliated holding vehicles; the page prints a percentage interest and no unit count.",
+   "ciks": ["0001913724"],
+   "quarters": ["2023-03-31", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2025-03-31", "2025-06-30", "2025-09-30", "2026-03-31"],
+   "statement": "The one or two equity rows a quarter with no unit count are the fund's membership interests in its affiliated holding vehicles (Twin Brook Equity Holdings, Twin Brook Segregated Equity Holdings). The page prints a percentage interest, cost and fair value, and no unit count; the filer tags no share count. No fix: there is no count to publish.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "'Twin Brook Equity Holdings, LLC (32) (33) (34) | Equity - 16.72 % membership interest | 85,570 | 96,653'."
-    }
+    {"source": "filing", "accession": "0001913724-23-000032",
+     "verbatim": "Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 %",
+     "quote": "Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 % (2023-03-31: a percentage interest, cost, fair value; no unit count)"},
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 %",
+     "quote": "Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 % (2023-09-30: second vehicle, same layout)"},
+    {"source": "filing", "accession": "0001913724-26-000015",
+     "verbatim": "Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 %",
+     "quote": "Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 % (2026-03-31: same)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-D01-1913724-2",
    "class": "as_filed",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
    "engine": "oracle",
    "rule_name": "D01",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2023-09-30"
-   ],
-   "statement": "Row count 141 to 478 and fair value 984.3M to 1,212.4M between 2023-06-30 and 2023-09-30: the added rows are printed positions and the published total equals the printed total.",
+   "ciks": ["0001913724"],
+   "quarters": ["2023-09-30"],
+   "statement": "Rows 141 to 478 and fair value 984.3M to 1,212.4M between 2023-06-30 and 2023-09-30. The added rows are printed small positions (many acquired 7/28/2023), and the published sum, 1,212.376M, equals the printed total. No fix: the growth is in the filing.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001913724-23-000141: '50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %'; 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."
-    }
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %",
+     "quote": "50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 % (one of the added small rows)"},
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M: equal)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-D03-1913724-3",
    "class": "as_filed",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
    "engine": "oracle",
    "rule_name": "D03",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2023-09-30"
-   ],
-   "statement": "The same growth of the schedule at 2023-09-30 (many small positions acquired 7/28/2023).",
+   "ciks": ["0001913724"],
+   "quarters": ["2023-09-30"],
+   "statement": "The same growth of the schedule at 2023-09-30; the published sum equals the printed total.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 1,212.4M."
-    }
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 1,212.376M)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-CNT02-1913724-4",
    "class": "as_filed",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
    "engine": "row_validation",
    "rule_name": "CNT02",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2023-09-30"
-   ],
-   "statement": "The same growth of the schedule at 2023-09-30, reported by the row-count check.",
+   "ciks": ["0001913724"],
+   "quarters": ["2023-09-30"],
+   "statement": "The same growth of the schedule at 2023-09-30, reported by the row-count check; the published sum equals the printed total.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'; published 478 rows, 1,212.4M."
-    }
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-F24-1913724-5",
    "class": "as_filed",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
    "engine": "fund_financials",
    "rule_name": "F24",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2023-09-30"
-   ],
-   "statement": "The same growth of the schedule at 2023-09-30, reported at fund level.",
+   "ciks": ["0001913724"],
+   "quarters": ["2023-09-30"],
+   "statement": "The same growth at 2023-09-30, reported at fund level; the published investments figure is the printed total.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001913724-23-000141: 'Total investments $ 1,207,650 $ 1,212,376 171.75 %'."
-    }
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published investments 1,212.376M)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-nonaccrual_flag-1913724-6",
    "class": "as_filed",
+   "reason_key": "nonaccrual-flags-tie-to-printed-nonaccrual-cost",
    "engine": "nonaccrual",
    "rule_name": "nonaccrual_flag",
-   "ciks": [
-    "0001913724"
-   ],
-   "quarters": [
-    "2025-12-31"
-   ],
-   "statement": "The 23 rows flagged non-accrual at 2025-12-31 carry a cost of 8.60M, the figure the filing prints for non-accrual investments.",
+   "ciks": ["0001913724"],
+   "quarters": ["2025-12-31"],
+   "statement": "The 23 rows flagged non-accrual at 2025-12-31 carry footnote (8) on the page and a cost of 8.602M, the figure the filing prints for non-accrual investments; unflagged cost 4,269.04M matches 'Performing'. No fix: the flags are the filing's.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001913724-26-000007: 'Performing $ 4,269,041 99.8 % ... Non-accrual 8,602 0.2 %'; unflagged cost 4,269.04M."
-    }
+    {"source": "filing", "accession": "0001913724-26-000007",
+     "verbatim": "Performing $ 4,269,041 99.8 % $ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 %",
+     "quote": "Performing $ 4,269,041 99.8 % $ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 % (flagged rows' cost 8.602M)"}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001913724.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-104); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "addresses_verdict": {"2025-12-31": "The reviewer (RVQ_REV_345b5e2bcd14) found that the 23 rows with footnote (8) sum to the printed non-accrual cost of 8,602 thousand and called the non-accrual condition real. That confirms the published flags; it does not show an error in the published data, and nothing was routed to fix. In tbxa the nonaccrual_flag check flags 0 rows outside that set (flagged.py)."},
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F33-1913724-7",
+   "class": "as_filed",
+   "reason_key": "start-up-quarter-no-distribution-declared",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": ["0001913724"],
+   "quarters": ["2022-06-30", "2022-09-30"],
+   "statement": "Distribution rate 0 in the fund's first quarters: no distribution was declared before December 2022 (first, 0.75 a share, declared 12/19/2022). The check's lower bound (rate > 0) does not fit a fund that has not yet distributed.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001913724-23-000092",
+     "verbatim": "There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022.",
+     "quote": "There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022. (2022-06-30)"},
+    {"source": "filing", "accession": "0001913724-23-000141",
+     "verbatim": "There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022.",
+     "quote": "There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022. (2022-09-30)"}
+   ],
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1913724-9",
+   "class": "as_filed",
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": ["0001913724"],
+   "quarters": ["2024-12-31"],
+   "statement": "Four rows (Varsity DuvaSawko revolver and term loan, 59.8M; Silver Falls MSO revolver and term loan, 1.5M) are printed in the 10-K for 2024-12-31 with maturities of 11/27/2024 and 8/30/2024, before the report date: the loans were still held past their stated maturity. The build had published no maturity; this run sets the printed date by row correction, which the check then reports. No fix: the published date is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001913724-25-000015",
+     "verbatim": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %",
+     "quote": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 % (maturity 11/27/2024, before 2024-12-31)"},
+    {"source": "filing", "accession": "0001913724-25-000015",
+     "verbatim": "Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 %",
+     "quote": "Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 % (maturity 8/30/2024)"}
+   ],
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F16-1913724-8",
+   "class": "as_filed",
+   "reason_key": "start-up-quarter-net-investment-loss-no-distribution",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": ["0001913724"],
+   "quarters": ["2022-06-30"],
+   "statement": "First operating quarter: net investment loss (199 thousand) and no distribution. F16 fires because 0 exceeds 1.5 x a negative income yield; no distribution exceeds income.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001913724-23-000092",
+     "verbatim": "Net investment income (loss) before taxes $ 12,707 $ ( 199 ) $ 23,248 $ ( 519 )",
+     "quote": "Net investment income (loss) before taxes $ 12,707 $ ( 199 ) $ 23,248 $ ( 519 ) (second column: three months to 2022-06-30, a loss of 199)"},
+    {"source": "filing", "accession": "0001913724-23-000092",
+     "verbatim": "There were no dividends declared for the three months ended June 30, 2022",
+     "quote": "There were no dividends declared for the three months ended June 30, 2022 (distribution 0)"}
+   ],
+   "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
+   "decided_on": "2026-10-14"
   }
  ]
 }

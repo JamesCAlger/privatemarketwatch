@@ -665,6 +665,15 @@ if BARINGS_PC in held and BARINGS_PC_LOOP_FILE.exists():
     for spec in json.loads(BARINGS_PC_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((BARINGS_PC, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1859919-fundloop"))
         EXACT.add(spec["identifier"])
+# TPG Twin Brook, fund-clearing loop (2026-10-14): 'S + m % PIK' margins tagged as PIK only (spread set) and fixed
+# coupons tagged as a spread (spread withdrawn). One spec per row, each with its printed line, in
+# row_correction_specs/0001913724.json (exact identifiers).
+TWINBROOK_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001913724.json"
+if TWINBROOK in held and TWINBROOK_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(TWINBROOK_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((TWINBROOK, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1913724-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

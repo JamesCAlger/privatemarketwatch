@@ -1,0 +1,95 @@
+{
+ "cik": "0001913724",
+ "label": "tbxd",
+ "before": "in2a",
+ "shared_code": false,
+ "declared_changes": [
+  {"column": "basis_spread", "rows": 83, "why": "row corrections: margin set on 46 loans printed 'S + m % PIK' (tagged as PIK only, published with no spread); spread withdrawn on 37 fixed-coupon loans the filer tagged as a spread or cash margin (Kaizen, Spectrum, Load One, ERG Buyer, Empire Equipment, Innovative FlexPak, Canadian Orthodontic, Cosmetic Solutions)"},
+  {"column": "coupon_type", "rows": 83, "why": "same 83 rows: Floating where a margin is printed, Fixed where a fixed coupon is printed"},
+  {"column": "reference_rate_type", "rows": 37, "why": "withdrawn on the 37 fixed-coupon rows (no reference rate printed)"},
+  {"column": "pik_rate", "rows": 12, "why": "2024-06-30 PIK tags on the neighbouring context (removed on Apex, Golden Bear revolvers and Southeast Primary Care; set on Apex, Golden Bear, Southern Sports term loans); PIK printed and not tagged set on BBG 2024-06-30, Canadian Orthodontic 2025-06-30, EMSAR x3 and Empire Equipment 2026-03-31"},
+  {"column": "interest_rate_cash", "rows": 12, "why": "follows pik_rate on the same 12 rows (cash = all-in minus PIK; none where there is no PIK, as on every other row of the fund)"},
+  {"column": "issuer_name", "rows": 22, "why": "names from the page: Twin Brook equity vehicles (footnote markers, ', Equity interest, Affiliated' in the member) 2024-06-30 to 2025-12-31; Ascent Lifting and NEFCO doubled member names 2023-06-30; Stax 'LLC,First lien' 2023-09-30 to 2024-03-31; VersiCare and VetEvolve footnote markers 2025-03-31"},
+  {"column": "instrument_description", "rows": 22, "why": "same rows: instrument from the page (was empty or '% membership interest')"},
+  {"column": "maturity_date", "rows": 4, "why": "printed maturity before the report date, none published: Varsity DuvaSawko x2, Silver Falls x2 at 2024-12-31"},
+  {"column": "maturity_status", "rows": 4, "why": "same 4 rows: not_disclosed -> unresolved"},
+  {"column": "corrected_fields", "rows": 118, "why": "every row a row correction of this run touched"},
+  {"column": "jv_subsidiary", "rows": 8, "why": "the 8 Twin Brook equity-vehicle rows renamed to the plain vehicle name now carry the JV flag the other quarters' rows of the same vehicles already carry; accounting_record_class unchanged (parent_schedule), totals unchanged"},
+  {"column": "gics_sector", "rows": 325, "why": "4 by this run (renamed Twin Brook vehicle rows lose 'Financials', as every other quarter of those vehicles has none); 321 inherited: already different in my first build tbxa, from changes made since in2a (not mine)"},
+  {"column": "gics_sub_industry", "rows": 370, "why": "4 by this run (as gics_sector); 366 inherited from changes since in2a, present in tbxa"},
+  {"column": "position_id", "rows": 30, "why": "identity follows the renamed issuers (22 rows) and the chains they now join"},
+  {"column": "reference_rate_source", "rows": 6792, "why": "inherited: inferred_post_libor -> ixbrl_field_status already in tbxa (rule change since in2a, not mine)"}
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {"what": "Margin printed as paid in kind ('S + m % PIK'): the filer tags m with the PIK concept only, so 46 loans published no spread and coupon Fixed. Spread set to m, coupon Floating, by row correction (2023-12-31 to 2026-03-31; 3 rows printed 'S + 20.00 % PIK 20.00 %' / 'S + 15.00 % PIK 15.00 %', where the margin equals the coupon, left alone). Generated from the printed line by scratch/fund_runs/0001913724/gen_spec.py.",
+   "kind": "row_correction",
+   "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "quotes": [
+    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 7.25 % PIK 11.21 % 7/28/2023 8/12/2029 1,899 1,848 1,251 0.05 %"},
+    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 8.00 % PIK 11.93 % 7/28/2023 2/23/2027 755 744 735 0.03 %"}
+   ]},
+  {"what": "Fixed coupons tagged as a spread (or cash margin): 37 loans published a floating spread equal to the coupon over SOFR. Spread and reference withdrawn, coupon Fixed. Clears C115 and fmt_basis_spread at 2025-06-30 and 2025-09-30 (Spectrum Solutions delayed draw 4, 18.00 %).",
+   "kind": "row_correction",
+   "quarters": ["2024-03-31", "2024-06-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "quotes": [
+    {"accession": "0001913724-25-000088", "text": "First lien senior secured delayed draw term loan 18.00 % 18.00 % 4/10/2025 3/5/2026 128 127 128 0.01 %"},
+    {"accession": "0001913724-26-000015", "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,353 898 0.04 %"}
+   ]},
+  {"what": "10-Q 2024-06-30: for three issuers the filer put a PIK loan's cash and PIK tags on the context of the line printed before it (Apex Dental, Golden Bear revolvers carry the term loan's 1.00 PIK; Southeast Primary Care carries Southern Sports Medicine's 4.00/4.00). PIK removed from the three lines that print none; PIK, cash margin and Floating set on the three term loans. Also PIK printed and not tagged: BBG 2024-06-30 (tagged as cash), Canadian Orthodontic 2025-06-30, EMSAR x3 and Empire Equipment 2026-03-31.",
+   "kind": "row_correction",
+   "quarters": ["2024-06-30", "2025-06-30", "2026-03-31"],
+   "quotes": [
+    {"accession": "0001913724-24-000076", "text": "First lien senior secured term loan S + 5.50 % + 1.00 % PIK 12.09 % 11/23/2025 618 616 615 0.05 %"},
+    {"accession": "0001913724-24-000076", "text": "BBG, Inc First lien senior secured term loan S + 6.75 % PIK 12.21 % 1/8/2026 1,930 1,826 1,785 0.14 %"},
+    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 6.50 % PIK 10.46 % 7/28/2023 9/30/2027 1,117 1,115 1,023 0.04 %"}
+   ]},
+  {"what": "Issuer and instrument from the page on 22 rows whose member text the issuer split did not cut: Twin Brook equity vehicles (2024-06-30, 2024-09-30, 2024-12-31, 2025-09-30, 2025-12-31; 96.7M to 103.7M), Ascent Lifting / NEFCO doubled names 2023-06-30 (7 rows, 38M), Stax 'LLC,First lien' (3 quarters), VersiCare and VetEvolve '(32) (33)' 2025-03-31.",
+   "kind": "row_correction",
+   "quarters": ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-09-30", "2025-12-31"],
+   "quotes": [
+    {"accession": "0001913724-26-000007", "text": "Twin Brook Segregated Equity Holdings, LLC (35) (36) (37) Equity - 2.11 % membership interest 19 15 0.00 %"},
+    {"accession": "0001913724-23-000092", "text": "NEFCO Holding Company, LLC First lien senior secured term loan S + 6.50 % 11.78 % 8/5/2028 14,360 14,097 14,134 2.37 %"}
+   ]},
+  {"what": "Maturity printed before the report date and not published (the page reader leaves it out; no maturity tag): Varsity DuvaSawko revolver and term loan (59.8M) and Silver Falls MSO at 2024-12-31. Set as printed; the maturity_not_past check then fires and is proposed.",
+   "kind": "row_correction",
+   "quarters": ["2024-12-31"],
+   "quotes": [
+    {"accession": "0001913724-25-000015", "text": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %"}
+   ]}
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {"finding": "fund_financials F16 2022-12-31, 2023-06-30, 2023-09-30",
+   "hypotheses": [
+    "The published income_yield_pct (2.4, 2.1, 2.8) is not any ratio the page prints: the 10-Q for 2023-09-30 prints 'Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %' (nine months, not annualised), the 10-Q for 2023-06-30 '4.0 % ( 0.5 )%' (six months). The 2023-09-30 instance has no InvestmentCompanyInvestmentIncomeLossRatio fact, so the published figure comes from companyfacts on a context I did not trace. distribution_rate is annualised from monthly 0.18 / 0.19 distributions (8.4, 8.8 pct), so F16 compares an annualised rate with what looks like a single-quarter ratio; annualised (x4) the ratio would pass the check in all three quarters.",
+    "2022-12-31: the only distribution of the year, 0.75 declared 12/19/2022, is annualised as a quarterly figure (11.9 pct); the fund operated only from mid-2022 ('The Company did not commence operations as of December 31, 2022' refers to the Company before the merger with the Private BDC).",
+    "Fix would be highlights figure_corrections for income_yield_pct with the printed ratio (as Monroe), but the printed ratio is year-to-date and not annualised, so it is not comparable either; I did not choose a basis. Also: distribution_rate and income_yield_pct are empty from 2023-12-31 on (coverage gap, no finding)."
+   ]}
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {"observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread", "what": "46 loan rows (2023-12-31 to 2026-03-31) printed 'S + m % PIK' carried the margin in a PIK tag only and published no spread, coupon Fixed. Fixed by row correction. The wrapper's rate_tag_reading does not cover this shape on rows with a plain rate tag.", "field": "basis_spread", "quarters": ["2023-12-31", "2026-03-31"], "fair_value_m": null, "cause": "fund", "action": "fixed", "suggested_check": "A loan with a published reference rate and PIK rate and no spread.", "quote": {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 7.25 % PIK 11.21 % 7/28/2023 8/12/2029 1,899 1,848 1,251 0.05 %"}},
+  {"observation_key": "fixed-coupon-tagged-as-spread-published-floating", "what": "37 rows printed with a fixed coupon and no reference rate ('5.00 % 5.00 %', '18.00 % 18.00 %', '6.00 % Cash + 4.50 % PIK 10.50 %') published a spread over SOFR. Only 4 of them were flagged (C115, fmt_basis_spread). Fixed.", "field": "basis_spread", "quarters": ["2024-03-31", "2026-03-31"], "fair_value_m": null, "cause": "row", "action": "fixed", "suggested_check": "A published spread equal to the published rate.", "quote": {"accession": "0001913724-26-000015", "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,353 898 0.04 %"}},
+  {"observation_key": "rate-tags-on-the-neighbouring-rows-context", "what": "10-Q 2024-06-30: three PIK loans' cash and PIK tags sit on the context of the line printed before them (one across issuers: Southern Sports Medicine's PIK on Southeast Primary Care). Published PIK on lines that print none, and no PIK or spread on the PIK loans. Fixed (6 rows).", "field": "pik_rate", "quarters": ["2024-06-30"], "fair_value_m": 2.73, "cause": "row", "action": "fixed", "suggested_check": "A revolver with a PIK rate whose sibling term loan of the same issuer and same all-in rate has none.", "quote": {"accession": "0001913724-24-000076", "text": "First lien senior secured term loan S + 5.50 % + 1.00 % PIK 12.09 % 11/23/2025 618 616 615 0.05 %"}},
+  {"observation_key": "pik-printed-on-the-row-and-not-tagged", "what": "6 rows print a PIK part with no PIK fact (BBG tagged as cash 2024-06-30; Canadian Orthodontic 2025-06-30; EMSAR x3 and Empire Equipment 2026-03-31). Fixed.", "field": "pik_rate", "quarters": ["2024-06-30", "2026-03-31"], "fair_value_m": 3.1, "cause": "row", "action": "fixed", "suggested_check": "A printed 'PIK' in the rate cell with no published PIK.", "quote": {"accession": "0001913724-24-000076", "text": "BBG, Inc First lien senior secured term loan S + 6.75 % PIK 12.21 % 1/8/2026 1,930 1,826 1,785 0.14 %"}},
+  {"observation_key": "issuer-name-differs-from-page", "what": "22 rows published an issuer name carrying member noise (footnote markers, ', Equity interest, Affiliated', a doubled name with a sequence number, 'LLC,First lien') and no instrument. Fixed by row correction; the wrapper's hierarchy regexes would need '\\s*,\\s*' and the ', Affiliated' tail to do it generally.", "field": "issuer_name", "quarters": ["2023-06-30", "2025-12-31"], "fair_value_m": 141.0, "cause": "fund", "action": "fixed", "suggested_check": "An issuer name containing '(nn)' footnote markers, a trailing sequence number or an instrument word.", "quote": {"accession": "0001913724-26-000007", "text": "Twin Brook Segregated Equity Holdings, LLC (35) (36) (37) Equity - 2.11 % membership interest 19 15 0.00 %"}},
+  {"observation_key": "maturity-printed-not-published", "what": "Loans held past their printed maturity published no maturity (page reader drops it; no maturity tag): Varsity DuvaSawko 59.8M and Silver Falls 1.5M at 2024-12-31. Fixed for these 4; other quarters not searched beyond the matched rows.", "field": "maturity_date", "quarters": ["2024-12-31"], "fair_value_m": 61.3, "cause": "shared", "action": "fixed", "suggested_check": "A funded loan whose anchored printed row prints a maturity and publishes none.", "quote": {"accession": "0001913724-25-000015", "text": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %"}},
+  {"observation_key": "reference-rate-code-not-in-legend", "what": "Canadian-dollar loans printed 'C + m %' (Canadian Orthodontic, Bio Agri Mix; 23 rows 2024-03-31 to 2025-03-31) publish SOFR or CORRA. The legends list only S, T (Term CORRA) and P; 2024-09-30 mentions '3M CDOR'. CDOR ceased in June 2024, so 'C' in 2025 cannot be read with confidence; a C$ loan is not SOFR. Left: no page states what C means. Also one 'F + 6.25 %' (Empire Equipment revolver 2024-03-31).", "field": "reference_rate_type", "quarters": ["2024-03-31", "2025-03-31"], "fair_value_m": 0.5, "cause": "fund", "action": "left", "suggested_check": "A loan whose principal currency is CAD publishing a USD benchmark.", "quote": {"accession": "0001913724-25-000043", "text": "First lien senior secured delayed draw term loan - C$ C + 7.00 % 10.09 % 7/28/2023 3/19/2026 344 249 112 0.01 %"}},
+  {"observation_key": "printed-margin-typo-differs-from-tag", "what": "The page prints 'S + 0.05' (Walker Sands 2026-03-31, 8.7M) and 'S + 0.06' (American Family Care 2025-03-31, 11.6M); the tags carry 0.05 / 0.06 as decimals (5.00 / 6.00 pct), which is what is published and fits the all-in rate. Left: the page is the error.", "field": "basis_spread", "quarters": ["2025-03-31", "2026-03-31"], "fair_value_m": 20.3, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001913724-26-000015", "text": "Walker Sands, LLC First lien senior secured term loan S + 0.05 8.70 % 10/1/2025 10/1/2030 8,819 8,700 8,715 0.34 %"}},
+  {"observation_key": "fund-income-ratio-published-is-not-the-printed-ratio", "what": "income_yield_pct 2.4 / 2.1 / 2.8 at 2022-12-31, 2023-06-30, 2023-09-30 matches no printed ratio (six months 4.0 %, nine months 6.8 %); empty from 2023-12-31 on, as is distribution_rate. Parked (F16).", "field": "income_yield_pct", "quarters": ["2022-12-31", "2023-09-30"], "fair_value_m": null, "cause": "shared", "action": "parked", "suggested_check": "income_yield_pct against net investment income over average net assets from the fund's own figures.", "quote": {"accession": "0001913724-23-000141", "text": "Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %"}}
+ ],
+ "page_comparison": "scratch/fund_runs/0001913724/rates_vs_page.py (gen_spec.py adds the spec): every published row with cost and fair value, 13 quarters 2023-03-31 to 2026-03-31, matched to its printed line by 'maturity par cost fair-value pct' with the issuer within 350 to 3,000 chars: 8,399 rows tried, 7,072 matched (tbxa; same counts on tbxc). Compared rate, PIK, spread, reference code, maturity, loan par. Differences 172 (tbxa) -> 67 (tbxc): 26 rate (sampled Brightview, Qin's Buffalo, Millennia: matcher picked the comparative-period line, published is right), 23 reference code 'C' (left), 4 'margin equals coupon' rows, 4 small spread rows, 3 par (undrawn lines, matcher), 3 Empire Equipment cells with no total, 4 maturity (fixed in tbxd).",
+ "tests_run": [],
+ "not_done": [
+  "No pytest: no pipeline code changed; scripts/v05_evidence/make_row_corrections.py gained a loader block only.",
+  "The 26 remaining rate differences were not all read: three sampled were matcher errors.",
+  "Unit counts: the fund has no equity row with a count (two membership-interest vehicles only); nothing to compare.",
+  "Industry not compared with the page; GICS changes inherited since in2a (321/366 rows) not reviewed.",
+  "Non-accrual flags read only at 2025-12-31 (cost ties to the printed 8,602).",
+  "2022-12-31 schedule (printed, no tags; comparative period of the 2023-03-31 10-Q) still unpublished: no finding, left as in D-104.",
+  "Principal on revolvers and delayed draws is the commitment (as filed, D-104 B6), not re-read.",
+  "Kaizen Auto Care term loan 1 at 2023-09-30 (27K) publishes no spread for a printed 'S + 6.00 %'; not corrected."
+ ]
+}
