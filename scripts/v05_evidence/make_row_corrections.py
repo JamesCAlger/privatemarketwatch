@@ -655,6 +655,16 @@ if OWLTECH in held and OWLTECH_LOOP_FILE.exists():
     for spec in json.loads(OWLTECH_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((OWLTECH, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1869453-fundloop"))
         EXACT.add(spec["identifier"])
+# Barings Private Credit, fund-clearing loop (2026-10-14): PIK tags that differ from the printed Interest cell (cash
+# coupon tagged as PIK, PIK printed and not tagged, margin tagged as the rate). One spec per row, each with its printed
+# line, in row_correction_specs/0001859919.json (exact identifiers).
+BARINGS_PC = "0001859919"
+BARINGS_PC_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001859919.json"
+if BARINGS_PC in held and BARINGS_PC_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(BARINGS_PC_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((BARINGS_PC, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1859919-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

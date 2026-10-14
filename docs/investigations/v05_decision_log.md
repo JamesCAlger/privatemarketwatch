@@ -3877,3 +3877,38 @@ inconsistency and sent it back; gate PASS on round two. Four builds plus one.
   this fund's issuer split runs after row corrections.
 - Tests run by the orchestrator: test_fourth_quarter_income and test_fund_highlights_wrapper pass.
   The agent ran `python -` with a heredoc twice in round two; both finished.
+
+### D-161 Barings Private Credit through the fund-clearing skill (sandbox `bpxe`), verdict NEEDS_ORCHESTRATOR
+
+Overnight run of 2026-10-13/14. Round one FAILED the gate (two earlier real-error verdicts not
+answered; 30 findings with neither a fix nor a proposal); round two: every check passes, verdict
+NEEDS_ORCHESTRATOR (one request, below). Five builds.
+
+- **Ledger:** 40 findings, 24 outstanding (54 in `f15a`), 15 with a proposal, 9 without (F26 x7 and
+  X11 x2, both parked with what was read). 13 of 13 quarters tie, on the with-cash basis.
+- **Rate reading changed for the fund** (`filed_rate_reading` from all_in to cash_leg in its
+  wrapper): the page prints 'x % Cash, y % PIK' and the filer tags x as the plain rate, so the plain
+  tag is the cash leg. Published rates were wrong on 20 to 31 loans a quarter in every quarter,
+  or blank where PIK exceeded cash. Orchestrator's check on the page: Amalfi Subordinated Loan
+  Notes 2025-12-31, printed '2.0 % Cash, 9.0 % PIK', now 11.0 all-in, 2.0 cash, 9.0 PIK; the second
+  lien '15.5 % Cash' publishes 15.5. Rows with a wrong rate: 301 to 20. interest_rate differs from
+  `f15a` on 344 rows; that is this change.
+- **Fixed by row correction:** PIK printed and not tagged (25 rows), cash coupons also tagged as
+  PIK, margins tagged as the rate; pars the filer tagged as share counts (Rocade second lien,
+  Biolam, Stairway); equity lines published under loan members (Listrac, Parkview, GPZN); rates
+  and margins on all six X02 rows; 49 equity unit counts, most replaced by the shared issuer-level
+  unit normaliser with another row's count (Amalfi Class B published the warrants' 380,385).
+- **Round one's own side effect, found in round two:** its PIK corrections on 9 rows left the filed
+  rate unexplained and raised five source_unavailable findings; fixed by setting the printed cash
+  rate as well.
+- **Orchestrator's error:** I told the agent in round two that Amalfi's equity rows published no
+  unit count. My query had not selected the unit count; they did publish one (though, as the agent
+  then found, the Class B count was the warrants' figure in some quarters).
+- **Request to the orchestrator, not done tonight:** published borrowings is only the credit
+  facility (950.7M at 2025-12-31); the debt securitisation (406.4M) and notes payable (697.2M) are
+  left out, which is what F26 x7 reports. Fix: let a fund's highlights wrapper correct
+  'borrowings' from the page, or sum the filer's debt concepts. Shared code; for the owner's
+  morning list.
+- **Parked:** OSP Hamilton par (two tranches on one identifier); maturity missing on 134 to 169
+  older-layout rows a quarter and guessed benchmarks on 23 to 76 (shared field-status step).
+- 9 observations recorded.
