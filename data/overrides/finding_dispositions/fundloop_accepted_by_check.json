@@ -1,0 +1,28 @@
+{
+ "dispositions": [
+  {
+   "disposition_id": "DS-FUNDLOOP-X02-1742313",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox moxe for each quarter listed: 21 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py moxe 0001742313",
+   "decided_by": "check passed on sandbox moxe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  }
+ ]
+}

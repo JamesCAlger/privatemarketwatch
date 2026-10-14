@@ -1,0 +1,1225 @@
+[
+ {
+  "quarter": "2023-03-31",
+  "identifier": "TigerConnect, Inc, Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "pik_rate": ""
+  },
+  "reason": "The PIK tag of 3.38 on this context belongs to the delayed-draw line below it ('8.20 % Cash/ ... 3.38 % PIK'); this line prints a plain rate: 'TigerConnect, Inc. (~~) SF 6.76 % 11.58 % 2/16/2022 2/16/2028 10,000 9,831 9,888 1.2 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "TigerConnect, Inc. (Delayed Draw), Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "interest_rate": "8.2",
+   "pik_rate": "3.38",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "No rate or PIK fact on the row's context; the printed line reads: '8.20 % Cash/ TigerConnect, Inc. (Delayed Draw) (*) (**) SF 6.76 % 3.38 % PIK 2/16/2022 2/16/2028 750 186 184 0.0'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Aras Corporation, Senior Secured Loans, Due 4/13/2027",
+  "fields": {
+   "interest_rate": "8.07",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '8.07 % Cash/ Aras Corporation (~) L 7.00 % 3.75 % PIK 4/13/2021 4/13/2027 4,714 4,655 4,690 0.5 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Arcstor Midco, LLC, Senior Secured Loans, Due 3/16/2027",
+  "fields": {
+   "interest_rate": "8.66",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Caravel Autism Health, LLC (Revolver), Senior Secured Loans, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "10.6",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '10.60 % Cash/ Caravel Autism Health, LLC (Revolver) (*) SF 7.01 % 1.00 % PIK 6/30/2021 6/30/2027 2,027 1,387 1,307 0.2 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "INH Buyer, Inc, Senior Secured Loans, Due 6/28/2028",
+  "fields": {
+   "interest_rate": "8.5",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '8.50 % Cash/ INH Buyer, Inc. (~) SF 7.00 % 3.50 % PIK 6/30/2021 6/28/2028 4,947 4,910 4,742 0.5 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "NTM Acquisition Corp, Senior Secured Loans, Due 6/7/2024",
+  "fields": {
+   "interest_rate": "11.41",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '11.41 % Cash/ NTM Acquisition Corp. (~~~) L 7.25 % 1.00 % PIK 4/18/2019 6/7/2024 4,341 4,341 4,168 0.5 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Premier Roofing L.L.C., Senior Secured Loans, due 8/29/2025",
+  "fields": {
+   "interest_rate": "12.45",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '12.45 % Cash/ Premier Roofing L.L.C. (~) L 8.50 % 1.00 % PIK 8/31/2020 8/29/2025 3,450 3,415 3,398 0.4 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Caravel Autism Health, LLC, Senior Secured Loans, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "10.9",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (~) SF 6.01 % 10.90 % 6/30/2021 6/30/2027 8,059 7,946 7,692 0.8 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Caravel Autism Health, LLC (Delayed Draw), Senior Secured Loans, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "10.9",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (Delayed Draw) (*) (**) SF 6.01 % 10.90 % 6/30/2021 6/30/2027 5,998 2,239 2,137 0.2 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Caravel Autism Health, LLC (Revolver), Senior Secured Loans, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "10.9",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (Revolver) (*) SF 6.01 % 10.90 % 6/30/2021 6/30/2027 2,030 790 754 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Drawbridge Partners, LLC (Delayed Draw), Senior Secured Loans, due 9/1/2028",
+  "fields": {
+   "interest_rate": "12.24",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Drawbridge Partners, LLC (Delayed Draw) (*) (**) SF 7.00 % 12.24 % 9/1/2022 9/1/2028 1,649 1,453 1,439 0.2 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "ecMarket Inc. and Conexiom US Inc, Senior Secured Loans, One, Due 9/21/2027",
+  "fields": {
+   "interest_rate": "12.09",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'ecMarket Inc. and Conexiom US Inc. (~~) (<) (b) SF 6.85 % 12.09 % 9/21/2021 9/21/2027 16,535 16,303 16,432 1.7 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "ecMarket Inc. and Conexiom US Inc, Senior Secured Loans, Two, Due 9/21/2027",
+  "fields": {
+   "interest_rate": "12.09",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'ecMarket Inc. and Conexiom US Inc. (~~) (<) (b) SF 6.85 % 12.09 % 9/21/2021 9/21/2027 1,291 1,291 1,283 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "TigerConnect, Inc, Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "interest_rate": "11.79"
+  },
+  "reason": "No rate fact on the row's context; the printed line reads: 'TigerConnect, Inc. (~~) SF 6.75 % 11.79 % 2/16/2022 2/16/2028 10,000 9,840 9,788 1.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "TigerConnect, Inc. (Delayed Draw), Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "The rate is tagged with the paid-in-cash concept and no PIK; the page prints it as the plain coupon: 'TigerConnect, Inc. (Delayed Draw) (*) (**) SF 6.75 % 11.79 % 2/16/2022 2/16/2028 750 275 270 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Vice Group Holding Inc, Senior Secured Loans, One, Due 11/17/2023",
+  "fields": {
+   "interest_rate": "5.25",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '5.25 % Cash/ Vice Group Holding Inc. SF 12.00 % 12.00 % PIK 5/17/2023 11/17/2023 66 $ 66 $ 66 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Vice Group Holding Inc, Senior Secured Loans, Two, Due 11/17/2023",
+  "fields": {
+   "interest_rate": "5.25",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The cash part of the coupon is printed on the line above the name and is not tagged on this context (the PIK part is); the filed rate is the cash leg: '5.25 % Cash/ Vice Group Holding Inc. SF 12.00 % 12.00 % PIK 5/30/2023 11/17/2023 300 300 300 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Amelia Holding II, LLC (Delayed Draw), Senior Secured Loans, Due 12/21/2027",
+  "fields": {
+   "interest_rate": "14.65",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Amelia Holding II, LLC (Delayed Draw) (*) (**) SF 9.26 % 14.65 % 12/21/2022 12/21/2027 3,333 1,467 1,467 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Caravel Autism Health, LLC (Revolver), Senior Secured Loans, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "11.01",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (Revolver) (*) SF 5.76 % 11.01 % 6/30/2021 6/30/2027 2,030 790 774 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Caravel Autism Health, LLC, Senior Secured Loans, One, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "11.01",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (~) SF 5.76 % 11.01 % 6/30/2021 6/30/2027 8,039 7,930 7,877 0.7 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Caravel Autism Health, LLC, Senior Secured Loans, Two, Due 6/30/2027",
+  "fields": {
+   "interest_rate": "11.01",
+   "pik_rate": ""
+  },
+  "reason": "The page prints a plain rate and the filer tagged it with the paid-in-kind concept, so it was published as a PIK rate with no rate: 'Caravel Autism Health, LLC (~) SF 5.76 % 11.01 % 6/30/2021 6/30/2027 2,233 2,233 2,188 0.2 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Medallia, Inc, Senior Secured Loans, due 10/27/2028",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "11.42"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Medallia, Inc. (~~) SF 6.10 % 11.42 % PIK 8/15/2022 10/27/2028 11,770 11,582 11,823 1.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "TigerConnect, Inc, Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "interest_rate": "12.27"
+  },
+  "reason": "No rate fact on the row's context; the printed line reads: 'TigerConnect, Inc. (~~) SF 6.75 % 12.27 % 2/16/2022 2/16/2028 10,000 9,845 9,800 0.9 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "TigerConnect, Inc. (Delayed Draw), Senior Secured Loans, Due 2/16/2028",
+  "fields": {
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "The rate is tagged with the paid-in-cash concept and no PIK; the page prints it as the plain coupon: 'TigerConnect, Inc. (Delayed Draw) (*) (**) SF 6.75 % 12.27 % 2/16/2022 2/16/2028 750 364 357 0.0 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Whistler Parent Holdings III, Inc., Senior Secured Loans, Two",
+  "fields": {
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The page prints a cash part and a PIK part; the filer tagged the cash part with the plain rate concept: 'Whistler Parent Holdings III, Inc. SF 8.90 % 9.53 % Cash/ PIK 4.75 % 6/3/2022 6/2/2028 266 266 263 0.0 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Argano, LLC, Junior Secured Loans",
+  "fields": {
+   "basis_spread": "-1"
+  },
+  "reason": "The page prints the margin in parentheses (prime less the margin) and the filer tagged no spread: 'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Argano, LLC, Junior Secured Loans",
+  "fields": {
+   "basis_spread": "-1"
+  },
+  "reason": "The page prints the margin in parentheses (prime less the margin) and the filer tagged no spread: 'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Radiology Partners, Inc., Junior Secured Loans, One",
+  "fields": {
+   "interest_rate": "9.09",
+   "pik_rate": "1.5",
+   "interest_rate_kind": "cash"
+  },
+  "reason": "No rate or PIK fact on the row's context (the second line of the issuer carries both); the printed line reads: 'Radiology Partners, Inc. (a) SF 5.26 % 9.09 % Cash/ 1.50 % PIK 1/29/2024 7/9/2025 4,800 4,296 4,648 0.3 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Argano, LLC, Junior Secured Loans",
+  "fields": {
+   "basis_spread": "-1"
+  },
+  "reason": "The page prints the margin in parentheses (prime less the margin) and the filer tagged no spread: 'Argano, LLC (16) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2025 28 $ 28 $ 28 0.0 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Argano, LLC, Senior Secured Loans 7",
+  "fields": {
+   "basis_spread": "-0.7"
+  },
+  "reason": "The page prints the margin in parentheses (prime less the margin) and the filer tagged no spread: 'Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Whistler Parent Holdings III, Inc., Junior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "11.01"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 11.01 % PIK 10/25/2024 6/2/2028 27,802 27,574 15,847 0.6 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Whistler Parent Holdings III, Inc., Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "11.01"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 11.01 % PIK 5/28/2024 6/2/2028 3,111 3,110 3,110 0.1 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Whistler Parent Holdings III, Inc., Senior Secured Loans (Revolver)",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "11.01"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. (Revolver) (19) SF 6.85 % 11.01 % PIK 10/25/2024 6/2/2028 4,058 3,199 3,199 0.1 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "SingleStore, Inc., Equity Securities, (equity commitment)",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY"
+  },
+  "reason": "Printed in the Equity Securities section as an equity commitment, classed as a loan because a commitment amount is tagged as principal: 'SingleStore, Inc. ($ - of $ 9,359 equity commitment) - - - 9/26/2025 - 9,359 - - 0.0 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Whistler Parent Holdings III, Inc. (Revolver) | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.75"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. (Revolver) (19) SF 6.85 % 10.75 % PIK 10/25/2024 6/2/2028 4,150 3,487 3,487 0.1 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Whistler Parent Holdings III, Inc. | Junior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.75"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 10.75 % PIK 10/25/2024 6/2/2028 28,573 28,358 15,572 0.6 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Whistler Parent Holdings III, Inc. | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.75"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 10.75 % PIK 5/28/2024 6/2/2028 3,197 3,197 3,197 0.1 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Sundy Village West Mezz Borrower, LLC | Junior Secured Loans",
+  "fields": {
+   "pik_rate": "15.28"
+  },
+  "reason": "No rate or PIK fact on the row's context (spread only); the printed line reads: 'Sundy Village West Mezz Borrower, LLC (12) SF 11.50 % 15.28 % PIK 12/21/2023 1/15/2027 14,625 14,625 14,877 0.5 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Jumpstart Holdco, Inc. (Revolver) | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "9.33"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Jumpstart Holdco, Inc. (Revolver) (21) SF 5.60 % 9.33 % PIK 7/16/2025 4/19/2028 728 729 748 0.0 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "SingleStore, Inc. (Equity commitment) | Equity Securities",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY"
+  },
+  "reason": "Printed in the Equity Securities section as an equity commitment, classed as a loan because the commitment amount is tagged as principal: 'SingleStore, Inc. ($ 9,359 equity commitment) - - - 10/14/2025 - 9,359 9,359 9,359 0.3 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Whistler Parent Holdings III, Inc. (Revolver) | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.52"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. (Revolver) (19) SF 6.85 % 10.52 % PIK 10/25/2024 6/2/2028 4,243 3,580 3,580 0.1 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Whistler Parent Holdings III, Inc. | Junior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.52"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 10.52 % PIK 10/25/2024 6/2/2028 29,340 29,155 14,729 0.5 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Whistler Parent Holdings III, Inc. | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "10.52"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Whistler Parent Holdings III, Inc. SF 6.85 % 10.52 % PIK 5/28/2024 6/2/2028 3,283 3,283 3,283 0.1 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Sundy Village West Mezz Borrower, LLC 2 | Junior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "15.17"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Sundy Village West Mezz Borrower, LLC (12) SF 11.50 % 15.17 % PIK 12/21/2023 1/15/2027 15,188 15,188 15,435 0.6 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Jumpstart Holdco, Inc. (Revolver) | Senior Secured Loans",
+  "fields": {
+   "interest_rate": "",
+   "pik_rate": "9.27"
+  },
+  "reason": "The page prints the coupon as PIK and the filer tagged it as a cash or plain rate; published like the fund's other PIK-with-spread rows (PIK rate and spread, no rate): 'Jumpstart Holdco, Inc. (Revolver) (21) SF 5.60 % 9.27 % PIK 7/16/2025 6/30/2029 728 715 755 0.0 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Bandas Law Firm, P.C. | Senior Secured Loans",
+  "fields": {
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The page prints a cash part and a PIK part; the filer tagged the cash part with the plain rate concept: 'Bandas Law Firm, P.C. SF 13.75 % 4.00 % Cash/ 13.75 % PIK 2/17/2026 2/17/2030 4,772 4,704 4,700 0.2 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "SingleStore, Inc. (Equity commitment) | Equity Securities",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY"
+  },
+  "reason": "Printed in the Equity Securities section as an equity commitment, classed as a loan because the commitment amount is tagged as principal: 'SingleStore, Inc. ($ 9,359 equity commitment) - - - 10/14/2025 - 9,359 9,359 9,265 0.3 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "J2 BWA Funding LLC, Senior Secured Loans, Revolver",
+  "fields": {
+   "issuer_name": "Oceana Australian Fixed Income Trust",
+   "instrument_description": "Senior Secured Loans, One",
+   "basis_spread": "8.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "The context of the member 'J2 BWA Funding LLC, Senior Secured Loans, Revolver' carries the first Oceana line (principal 30,847, cost 31,770, fair value 31,001, rate 13.58) and no spread: 'Oceana Australian Fixed Income Trust (~) (<) (c) (d) SF 8.25 % 13.58 % 6/8/2023 4/1/2026 30,847 31,770 31,001 2.0 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "J2 BWA Funding III, LLC, Senior Secured Loans, Revolver",
+  "fields": {
+   "issuer_name": "J2 BWA Funding LLC",
+   "instrument_description": "Senior Secured Loans, Revolver"
+  },
+  "reason": "The context of the member 'J2 BWA Funding III, LLC, Senior Secured Loans, Revolver' carries the J2 BWA Funding LLC revolver: 'J2 BWA Funding LLC (Revolver) (<) (*) n/a n/a 10.00 % 12/14/2020 12/24/2026 2,850 1,682 1,682 0.1 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Verp Biotech Inc., Senior Secured Loans",
+  "fields": {
+   "issuer_name": "Vero Biotech Inc.",
+   "instrument_description": "Senior Secured Loans"
+  },
+  "reason": "The filer tagged this line on a member that names another issuer or misspells it; the printed line reads: 'Vero Biotech Inc. P 3.75 % 12.25 % 12/29/2023 1/2/2029 30,000 29,717 30,000 1.9 %' (member 'Verp Biotech Inc.')"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "VVice Acquisition Holdco, LLC, Junior Secured Loans, Three",
+  "fields": {
+   "issuer_name": "Vice Acquisition Holdco, LLC",
+   "instrument_description": "Junior Secured Loans, Three"
+  },
+  "reason": "The filer tagged this line on a member that names another issuer or misspells it; the printed line reads: 'Vice Acquisition Holdco, LLC n/a n/a n/a (***) 5/2/2019 n/a (g) 57 57 - 0.0 %' (member 'VVice Acquisition Holdco, LLC')"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Witkoff/Monroe 700 JV LLC, Equity Securities, Preferred units",
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "A paid-in-cash rate of 0.0 is tagged on an equity line the page prints with no rate: 'Witkoff/Monroe 700 JV LLC ( 2,992 preferred units) (<) (####) - - - (###) 7/2/2021 - - 5 3,571 0.2 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Bluesight, Inc, Equity Securities, Preferred units",
+  "fields": {
+   "pik_rate": "9"
+  },
+  "reason": "No PIK fact on the row's context; the printed line reads: 'Bluesight, Inc. (311 Class A preferred units) n/a n/a 9.00 % PIK 7/17/2023 - - 311 311 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "New Engen, Inc., Equity Securites, Class B common units",
+  "fields": {
+   "shares_held": "5067"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. ( 5,067 Class B common units) - - - (###) 12/27/2021 - - 5 - 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "New Engen, Inc., Equity Securites, Class B common units",
+  "fields": {
+   "shares_held": "5067"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. ( 5,067 Class B common units) - - - (###) 12/27/2021 - - 5 - 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "New Engen, Inc., Equity Securites, Class B common units",
+  "fields": {
+   "shares_held": "5067"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. ( 5,067 Class B common units) - - - (###) 12/27/2021 - - 5 - 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Class B common units)",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC ( 96 Class B common units) - - - (###) 11/20/2020 - - - - 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Class B common units)",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC ( 96 Class B common units) - - - (###) 11/20/2020 - - - - 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Class B common units)",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC ( 96 Class B common units) - - - (###) 11/20/2020 - - - - 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Sabrosura Foods Llc Et Al Equity Securities Class AAA Units",
+  "fields": {
+   "shares_held": "8322"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Sabrosura Foods, LLC et al ( 8,322 Class AAA units) - - - (###) 3/17/2023 - - 8 - 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Sabrosura Foods Llc Et Al Equity Securities Class AAA Units",
+  "fields": {
+   "shares_held": "8322"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Sabrosura Foods, LLC et al ( 8,322 Class AAA units) - - - (###) 3/17/2023 - - 8 - 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Bluesight, Inc, Equity Securities, Class B common units",
+  "fields": {
+   "shares_held": "166310"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Bluesight, Inc. (166,310 Class B common units) - - - (###) 7/17/2023 - - - - 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "95 Percent Buyer, LLC, Equity Securites,Class A units",
+  "fields": {
+   "shares_held": "385027"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: '95 Percent Buyer, LLC (385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 540 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Argano, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "59540"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Argano, LLC (59,540 common units) (####) - - - (###) 6/10/2021 - - 290 545 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Calienger Holdings, L.L.C., Equity Securites, Class A units)",
+  "fields": {
+   "shares_held": "568181"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Calienger Holdings, L.L.C. (568,181 Class A units) (####) - - - (###) 10/21/2022 - - 568 614 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Chess.com, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "5"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Chess.com, LLC (5 Class A units) (####) - - - (###) 12/31/2021 - - 189 107 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Drawbridge Partners, LLC, Equity Securities, Class A-1 units",
+  "fields": {
+   "shares_held": "652174"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Drawbridge Partners, LLC (652,174 Class A-1 units) - - - (###) 9/1/2022 - - 652 649 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Edustaff, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "591"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Edustaff, LLC (591 shares of common stock) (####) - - - (###) 12/8/2022 - - 591 596 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Express Wash Acquisition Company, LLC, Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "135869"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Express Wash Acquisition Company, LLC (135,869 Class A units) (####) n/a n/a 8.00 % PIK 12/28/2020 - - 140 117 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "IDIG Parent, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "192908"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IDIG Parent, LLC (192,908 shares of common stock) (####) (j) - - - (###) 1/4/2021 - - 195 235 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "IF & P Holdings Company, LLC, Equity Securities, Class A preferred units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class A preferred units) - - - (###) 10/3/2022 - - - 1,572 0.2 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "IF & P Holdings Company, LLC, equity Securities, Class B common units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class B common units) - - - (###) 10/3/2022 - - 1,500 116 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Lessen Inc., Equity Securities",
+  "fields": {
+   "shares_held": "128737"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Lessen Inc. (128,737 preferred units) - - - (###) 1/5/2023 - - 1,667 1,667 0.2 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Nastel Technologies, LLC, Equity Securities",
+  "fields": {
+   "shares_held": "3408"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Nastel Technologies, LLC (3,408 Class A units) (####) - - - (###) 9/21/2022 - - 3,408 4,115 0.5 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "New Engen, Inc., Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "417"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. (417 preferred units) n/a n/a 8.00 % PIK 12/27/2021 - - 417 388 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Optomi, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "278"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Optomi, LLC (278 Class A units) (####) - - - (###) 12/16/2021 - - 278 554 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "RS Acquisition, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "753485"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'RS Acquisition, LLC (753,485 common units) (####) - - - (###) 1/12/2022 - - 1,264 1,162 0.1 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Really Great Reading Company, Inc., Equity Securites, Series A units",
+  "fields": {
+   "shares_held": "369"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Really Great Reading Company, Inc. (369 Series A units) - - - (###) 12/9/2022 - - 369 386 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Recorded Future, Inc., Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "40243"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Recorded Future, Inc. (40,243 Class A units) (h) - - - (###) 7/3/2019 - - 40 126 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC (96 preferred units) n/a n/a 12.00 % PIK 11/20/2020 - - 96 77 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Sabrosura Foods Llc Et Al Equity Securities Class AAA Units",
+  "fields": {
+   "shares_held": "8322"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Sabrosura Foods, LLC et al (8,322 Class AAA units) - - - (###) 3/17/2023 - - 8 5 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "SheerTrans Solutions, LLC, Equity Securities",
+  "fields": {
+   "shares_held": "8642579"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'SheerTrans Solutions, LLC (8,642,579 preferred interests) (####) - - - (###) 7/29/2022 - - 8,643 8,729 1.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Skillsoft Corp., Equity Securites, Class A shares",
+  "fields": {
+   "shares_held": "26168"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Skillsoft Corp. (26,168 Class A shares) (~) (<) (i) - - - (###) 6/11/2021 - - 508 52 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Spherix Global Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "333"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Spherix Global Inc. (333 Class A units) - - - (###) 12/22/2021 - - 333 189 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "XanEdu Publishing, Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "65104"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'XanEdu Publishing, Inc. (65,104 Class A units) n/a n/a 8.00 % PIK 1/28/2020 - - 65 314 0.0 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "ecMarket Inc. and Conexiom US Inc., Equity Securites, Preferred shares)",
+  "fields": {
+   "shares_held": "96603"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'ecMarket Inc. and Conexiom US Inc. (96,603 preferred shares) (<) (b) - - - (###) 9/21/2021 - - 723 728 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "95 Percent Buyer, LLC, Equity Securites,Class A units",
+  "fields": {
+   "shares_held": "385027"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: '95 Percent Buyer, LLC (385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 469 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Argano, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "62574"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Argano, LLC (62,574 common units) (####) - - - (###) 6/10/2021 - - 317 626 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Ascent Midco, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "725806"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Ascent Midco, LLC (725,806 Class A units) (####) n/a n/a 8.00 % PIK 2/5/2020 - - 726 688 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Calienger Holdings, L.L.C., Equity Securites, Class A units)",
+  "fields": {
+   "shares_held": "568181"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Calienger Holdings, L.L.C. (568,181 Class A units) (####) - - - (###) 10/21/2022 - - 568 568 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Chess.com, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "5"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Chess.com, LLC (5 Class A units) (####) - - - (###) 12/31/2021 - - 189 107 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "ClearlyRated Capital, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "5500000"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'ClearlyRated Capital, LLC (5,500,000 Class A units) (####) - - - (###) 6/1/2023 - - 5,500 5,500 0.6 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Dorado Acquisition, Inc, Equity Securities, Class A-2 units",
+  "fields": {
+   "shares_held": "531783"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; the published count was 725806.0. Printed row: 'Dorado Acquisition, Inc. (531,783 Class A-2 units) - - - (###) 6/30/2021 - - - 853 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Dorado Acquisition, Inc., Equity Securities, Class A-1 units",
+  "fields": {
+   "shares_held": "531783"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Dorado Acquisition, Inc. (531,783 Class A-1 units) - - - (###) 6/30/2021 - - 578 584 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Drawbridge Partners, LLC, Equity Securities, Class A-1 units",
+  "fields": {
+   "shares_held": "652174"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Drawbridge Partners, LLC (652,174 Class A-1 units) - - - (###) 9/1/2022 - - 652 615 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Edustaff, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "591"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Edustaff, LLC (591 shares of common stock) (####) - - - (###) 12/8/2022 - - 591 735 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Express Wash Acquisition Company, LLC, Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "135869"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Express Wash Acquisition Company, LLC (135,869 Class A units) (####) n/a n/a 8.00 % PIK 12/28/2020 - - 140 119 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "IDIG Parent, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "192908"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IDIG Parent, LLC (192,908 shares of common stock) (####) (h) - - - (###) 1/4/2021 - - 196 230 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "IF & P Holdings Company, LLC, Equity Securities, Class A preferred units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class A preferred units) - - - (###) 10/3/2022 - - - 1,610 0.2 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "IF & P Holdings Company, LLC, equity Securities, Class B common units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class B common units) - - - (###) 10/3/2022 - - 1,500 164 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Lessen Inc., Equity Securities",
+  "fields": {
+   "shares_held": "128737"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Lessen Inc. (128,737 preferred units) - - - (###) 1/5/2023 - - 1,667 1,835 0.2 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Light Wave Dental Management, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "300218"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Light Wave Dental Management, LLC (300,218 Class A units) (####) - - - (###) 6/30/2023 - - 3,002 3,002 0.4 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Nastel Technologies, LLC (3,408 Class A units)",
+  "fields": {
+   "shares_held": "3408"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Nastel Technologies, LLC (3,408 Class A units) 3,578 - - - - - - 750 4,328'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "New Engen, Inc., Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "417"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. (417 preferred units) n/a n/a 8.00 % PIK 12/27/2021 - - 417 358 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Optomi, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "278"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Optomi, LLC (278 Class A units) (####) - - - (###) 12/16/2021 - - 278 429 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "RS Acquisition, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "838077"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'RS Acquisition, LLC (838,077 common units) (####) - - - (###) 1/12/2022 - - 1,439 1,370 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Really Great Reading Company, Inc., Equity Securites, Series A units",
+  "fields": {
+   "shares_held": "369"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Really Great Reading Company, Inc. (369 Series A units) - - - (###) 12/9/2022 - - 369 375 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Recorded Future, Inc., Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "40243"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Recorded Future, Inc. (40,243 Class A units) (f) - - - (###) 7/3/2019 - - 40 134 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC (96 preferred units) n/a n/a 12.00 % PIK 11/20/2020 - - 96 87 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Skillsoft Corp., Equity Securites, Class A shares",
+  "fields": {
+   "shares_held": "26168"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Skillsoft Corp. (26,168 Class A shares) (~) (<) (g) - - - (###) 6/11/2021 - - 508 32 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Sparq Holdings, Inc. Equity Securities Common units",
+  "fields": {
+   "shares_held": "600000"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Sparq Holdings, Inc. (600,000 common units) - - - (###) 6/15/2023 - - 600 600 0.1 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Spherix Global Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "333"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Spherix Global Inc. (333 Class A units) - - - (###) 12/22/2021 - - 333 220 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "XanEdu Publishing, Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "65104"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'XanEdu Publishing, Inc. (65,104 Class A units) n/a n/a 8.00 % PIK 1/28/2020 - - 65 284 0.0 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "ecMarket Inc. and Conexiom US Inc., Equity Securites, Preferred shares)",
+  "fields": {
+   "shares_held": "96603"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'ecMarket Inc. and Conexiom US Inc. (96,603 preferred shares) (<) (b) - - - (###) 9/21/2021 - - 723 745 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "95 Percent Buyer, LLC, Equity Securites,Class A units",
+  "fields": {
+   "shares_held": "385027"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: '95 Percent Buyer, LLC (385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 830 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Argano, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "62574"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Argano, LLC (62,574 common units) (####) - - - (###) 6/10/2021 - - 317 621 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Ascent Midco, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "725806"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Ascent Midco, LLC (725,806 Class A units) (####) n/a n/a 8.00 % PIK 2/5/2020 - - 726 684 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Bluesight, Inc, Equity Securities, Preferred units",
+  "fields": {
+   "shares_held": "311"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Bluesight, Inc. (311 Class A preferred units) n/a n/a 9.00 % PIK 7/17/2023 - - 311 311 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Calienger Holdings, L.L.C., Equity Securites, Class A units)",
+  "fields": {
+   "shares_held": "568181"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Calienger Holdings, L.L.C. (568,181 Class A units) (####) - - - (###) 10/21/2022 - - 568 568 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Chess.com, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "5"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Chess.com, LLC (5 Class A units) (####) - - - (###) 12/31/2021 - - 189 121 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Cosmos Bidco Inc Class A Membership Interest",
+  "fields": {
+   "shares_held": "2250000"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Cosmos Bidco, Inc. (2,250,000 Class A Membership Interest) - - - (###) 9/15/2023 - - 2,250 2,250 0.2 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Dorado Acquisition, Inc, Equity Securities, Class A-2 units",
+  "fields": {
+   "shares_held": "531783"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; the published count was 725806.0. Printed row: 'Dorado Acquisition, Inc. (531,783 Class A-2 units) - - - (###) 6/30/2021 - - - 580 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Dorado Acquisition, Inc., Equity Securities, Class A-1 units",
+  "fields": {
+   "shares_held": "531783"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Dorado Acquisition, Inc. (531,783 Class A-1 units) - - - (###) 6/30/2021 - - 578 584 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Drawbridge Partners, LLC, Equity Securities, Class A-1 units",
+  "fields": {
+   "shares_held": "652174"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Drawbridge Partners, LLC (652,174 Class A-1 units) - - - (###) 9/1/2022 - - 652 662 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Edustaff, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "591"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Edustaff, LLC (591 shares of common stock) (####) - - - (###) 12/8/2022 - - 591 703 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Express Wash Acquisition Company, LLC, Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "135869"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Express Wash Acquisition Company, LLC (135,869 Class A units) (####) n/a n/a 8.00 % PIK 12/28/2020 - - 140 84 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "IDIG Parent, LLC, Equity Securites, Common stock",
+  "fields": {
+   "shares_held": "192908"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IDIG Parent, LLC (192,908 shares of common stock) (####) (h) - - - (###) 1/4/2021 - - 196 225 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "IF & P Holdings Company, LLC, Equity Securities, Class A preferred units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class A preferred units) - - - (###) 10/3/2022 - - 1,500 1,632 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "IF & P Holdings Company, LLC, equity Securities, Class B common units",
+  "fields": {
+   "shares_held": "1500"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'IF & P Holdings Company, LLC (1,500 Class B common units) - - - (###) 10/3/2022 - - - 94 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Lessen Inc., Equity Securities",
+  "fields": {
+   "shares_held": "128737"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Lessen Inc. (128,737 preferred units) - - - (###) 1/5/2023 - - 1,667 1,667 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Nastel Technologies, LLC, Equity Securities",
+  "fields": {
+   "shares_held": "3408"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Nastel Technologies, LLC (3,408 Class A units) (####) - - - (###) 9/21/2022 - - 3,408 4,124 0.4 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "New Engen, Inc., Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "417"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'New Engen, Inc. (417 preferred units) n/a n/a 8.00 % PIK 12/27/2021 - - 417 316 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Optomi, LLC, Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "278"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Optomi, LLC (278 Class A units) (####) - - - (###) 12/16/2021 - - 278 408 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "RS Acquisition, LLC, Equity Securites, Common units",
+  "fields": {
+   "shares_held": "838077"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'RS Acquisition, LLC (838,077 common units) (####) - - - (###) 1/12/2022 - - 1,439 1,531 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Really Great Reading Company, Inc., Equity Securites, Series A units",
+  "fields": {
+   "shares_held": "369"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Really Great Reading Company, Inc. (369 Series A units) - - - (###) 12/9/2022 - - 369 526 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Recorded Future, Inc., Equity Securities, Class A units",
+  "fields": {
+   "shares_held": "40243"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Recorded Future, Inc. (40,243 Class A units) (f) - - - (###) 7/3/2019 - - 40 140 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Relevate Health Group, LLC, Equity Securites, Preferred units",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Relevate Health Group, LLC (96 preferred units) n/a n/a 12.00 % PIK 11/20/2020 - - 96 93 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "SheerTrans Solutions, LLC, Equity Securities",
+  "fields": {
+   "shares_held": "9191624"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'SheerTrans Solutions, LLC (9,191,624 preferred interests) (####) - - - (###) 7/29/2022 - - 9,192 9,192 0.8 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Skillsoft Corp., Equity Securites, Class A shares",
+  "fields": {
+   "shares_held": "26168"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Skillsoft Corp. (26,168 Class A shares) (~) (<) (g) - - - (###) 6/11/2021 - - 508 24 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Spherix Global Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "333"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Spherix Global Inc. (333 Class A units) - - - (###) 12/22/2021 - - 333 220 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Vice Acquisition Holdco, LLC (fka Vice Group Holding Inc.), Equity Securities, Class A Units",
+  "fields": {
+   "shares_held": "1110000"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Vice Acquisition Holdco, LLC (fka Vice Group Holding Inc.) (1,110,000 Class A units) (i) - - - (###) 7/31/2023 - - 1,110 1,008 0.1 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "XanEdu Publishing, Inc., Equity Securites, Class A units",
+  "fields": {
+   "shares_held": "65104"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'XanEdu Publishing, Inc. (65,104 Class A units) n/a n/a 8.00 % PIK 1/28/2020 - - 65 320 0.0 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "ecMarket Inc. and Conexiom US Inc., Equity Securites, Preferred shares)",
+  "fields": {
+   "shares_held": "96603"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'ecMarket Inc. and Conexiom US Inc. (96,603 preferred shares) (<) (b) - - - (###) 9/21/2021 - - 723 749 0.1 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Epic Garage partners, LLC, Equity Securities, Common Stock",
+  "fields": {
+   "shares_held": "43269"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; no unit count was published. Printed row: 'Epic Garage Partners, LLC (43,269 shares of common stock) (15)(16) - - - 2/2/2024 - - 433 418 0.0 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "IDIG Parent, LLC, Equity Securities, Class X units",
+  "fields": {
+   "shares_held": "34043"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; the published count was 34043000.0. Printed row: 'IDIG Parent, LLC (34,043 Class X units) (17) - - - 6/23/2025 - - 35 34 0.0 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "IDIG Parent, LLC, Equity Securities, Class X units",
+  "fields": {
+   "shares_held": "20049"
+  },
+  "reason": "The unit count is printed in the row's name and is not tagged on the context; the published count was 20049000.0. Printed row: 'IDIG Parent, LLC (20,049 Class X units) (17) - - - 6/23/2025 - - 20 26 0.0 %'"
+ }
+]

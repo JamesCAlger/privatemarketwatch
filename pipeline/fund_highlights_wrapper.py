@@ -47,6 +47,12 @@ class HighlightsWrapperSpec:
     source_preferences: dict[str, str] = field(default_factory=dict)
     # (report_date, field, value) the filer's page states and its undimensioned facts get wrong
     figure_corrections: tuple[tuple[str, str, float], ...] = ()
+    # Lower-case concept-name substrings the fund-income extractor must not read as an income
+    # figure for this filer (a filer's own per-share concept whose name contains an income name)
+    income_concept_suppress: tuple[str, ...] = ()
+    # (income column, lower-case concept name): the concept fills the column in the fund-income
+    # extractor only for a period that has an income statement and no fact for that column
+    income_concept_fallback: tuple[tuple[str, str], ...] = ()
     notes: str = ""
 
 
@@ -117,6 +123,13 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
         oracle_tolerances=tolerances,
         source_preferences=prefs,
         figure_corrections=tuple(corrections),
+        income_concept_suppress=tuple(str(s).strip().lower() for s in (data.get("income_concept_suppress") or [])
+                                      if str(s).strip()),
+        income_concept_fallback=tuple(
+            (str(column), str(concept).strip().lower())
+            for column, concepts in (data.get("income_concept_fallback") or {}).items()
+            if str(column) in INCOME_FALLBACK_COLUMNS
+            for concept in (concepts or []) if str(concept).strip()),
         notes=data.get("notes", ""),
     )
 
@@ -148,6 +161,9 @@ def load_highlights_wrapper(cik: Any) -> HighlightsWrapperSpec | None:
 
 
 CLASS_NAV_PREFERENCE = "share_class_consensus"
+
+# Income columns a wrapper may name a fallback concept for (income_concept_fallback).
+INCOME_FALLBACK_COLUMNS = frozenset({"total_expenses"})
 
 # Fund-level figures a wrapper may correct from the filing page.
 FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "investments_at_fair_value",

@@ -2013,7 +2013,15 @@ _CORRECTABLE_FIELDS = frozenset({
     # A maturity the page reading or the filer's member has wrong, where the other one and the
     # printed row agree (2026-10-09, Goldman Sachs 123Dentist and Sixth Street Price Fx, D-074).
     "maturity_date",
+    # What a filed rate holds, where the row's own printed line settles it and the tag does not:
+    # 'cash' (the cash leg, PIK on top) or 'all_in' (the whole coupon). The financial step reads
+    # an explicit kind before any tag or fund-level reading (2026-10-14, Monroe Bandas Law Firm:
+    # printed '4.00 % Cash/ 13.75 % PIK', tagged with the plain rate concept and a PIK rate).
+    "interest_rate_kind",
 })
+
+# The only kinds a row correction may state; anything else is skipped with a warning.
+_CORRECTABLE_RATE_KINDS = frozenset({"cash", "all_in"})
 
 # Required columns in row_corrections.csv.
 _CORRECTIONS_REQUIRED_COLS = {
@@ -2124,6 +2132,12 @@ def _apply_row_corrections(
             # text: later steps cast these columns to numbers.
             if pd.isna(value) or str(value).strip() == "":
                 value = None
+            if field == "interest_rate_kind" and value is not None and str(value).strip() not in _CORRECTABLE_RATE_KINDS:
+                logger.warning(
+                    "Row correction skipped: interest_rate_kind must be cash or all_in, got %r key=%s",
+                    value, key,
+                )
+                continue
             df.loc[mask, field] = value
             if "corrected_fields" in df.columns:
                 from pipeline.agent_promoted import append_corrected_fields

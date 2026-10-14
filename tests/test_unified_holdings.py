@@ -8820,6 +8820,44 @@ class TestApplyRowCorrections:
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert result.iloc[0]["maturity_date"] == "2029-08-08"
 
+    def test_a_rate_kind_read_from_the_printed_line_can_be_corrected(self, tmp_path):
+        """Monroe 10-Q 2026-03-31, Bandas Law Firm: printed 'SF 13.75 % 4.00 % Cash/ 13.75 % PIK', tagged with
+        the plain rate concept (4.00) and a PIK rate (13.75). The plain tag with a PIK rate beside it is left
+        unresolved; the correction states that the filed rate is the cash leg, so the coupon is 17.75. The
+        row beside it carries no correction and stays unresolved (the correction reaches one row only)."""
+        from pipeline.financial_conventions import prepare
+        key = {"cik": "0001742313", "report_date": "2026-03-31", "accession_number": "0001742313-26-000026"}
+        base = dict(key, source="bdc", interest_rate="4.0", pik_rate="13.75", basis_spread="13.75", fair_value="4700000",
+                    fair_value_currency="USD", interest_rate_kind="", src_facts='{"interest_rate":{"r":0.04}}')
+        df = self._make_holdings_df([
+            dict(base, row_id="A", bdc_investment_identifier="Bandas Law Firm, P.C. | Senior Secured Loans"),
+            dict(base, row_id="B", bdc_investment_identifier="Other Borrower, LLC | Senior Secured Loans"),
+        ])
+        corr_path = self._write_corrections(tmp_path, [dict(
+            key, bdc_investment_identifier="Bandas Law Firm, P.C. | Senior Secured Loans", field="interest_rate_kind",
+            value="cash", reason="printed 4.00 % Cash/ 13.75 % PIK", source_evidence="test", author="test",
+            date_added="2026-10-14")])
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["interest_rate_kind"] == "cash"
+        assert result.iloc[1]["interest_rate_kind"] == ""
+        final, _ = prepare(result, source_frame=True)
+        by_id = final.set_index("row_id")
+        assert by_id.loc["A", "interest_rate"] == pytest.approx(17.75)
+        assert by_id.loc["A", "interest_rate_cash"] == pytest.approx(4.0)
+        assert pd.isna(by_id.loc["B", "interest_rate"])
+        assert by_id.loc["B", "interest_rate_kind"] == "unresolved"
+
+    def test_a_rate_kind_outside_the_two_readings_is_not_applied(self, tmp_path):
+        """A misspelt or unsupported kind must not reach the financial step: the row keeps what it had."""
+        key = {"cik": "0001742313", "report_date": "2026-03-31", "accession_number": "0001742313-26-000026",
+               "bdc_investment_identifier": "Bandas Law Firm, P.C. | Senior Secured Loans"}
+        df = self._make_holdings_df([dict(key, source="bdc", interest_rate="4.0", pik_rate="13.75", interest_rate_kind="")])
+        corr_path = self._write_corrections(tmp_path, [dict(
+            key, field="interest_rate_kind", value="effective_yield", reason="not a reading a correction may state",
+            source_evidence="test", author="test", date_added="2026-10-14")])
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["interest_rate_kind"] == ""
+
     def test_class_fields_can_be_corrected_together(self, tmp_path):
         """HPS 2026-03-31: 'OneTeam Partners, LLC - Class D Units' is printed as 'Preferred Units 8.00 %'.
         A class correction has to move asset_category with index_classification (decision D-021)."""

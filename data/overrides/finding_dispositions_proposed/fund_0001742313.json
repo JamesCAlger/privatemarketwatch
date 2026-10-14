@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "mo1c",
+ "sandbox": "moxe",
  "dispositions": [
   {
    "disposition_id": "PD-pct_of_net_assets_identity-1742313-1",
@@ -22,20 +22,206 @@
     "2025-09-30",
     "2025-12-31"
    ],
-   "statement": "The filer prints percent of net assets to one decimal; the rows that differ from fair value over net assets by more than 0.1 are the filer's own printed figures. Published is the page.",
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
+   "statement": "Every row that fails (66 in 11 filings, 1 to 15 a filing) publishes the percent the page prints and the filing tags; the fair value beside it is also the page's. The filer prints percent of net assets to one decimal and its figure for these rows is not fair value over net assets rounded (for instance 0.6 printed where 12,841 over net assets of 2,830,579 is 0.45). Checked row by row: python scripts/v05_evidence/pct_rows_on_page.py <sandbox> 0001742313 reports 66 of 66 'published as printed'. No fix applies: the published percent is the filed one, and the recomputed percent is carried in its own column.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001742313-26-000013: 'PNE Interco LLC (6)(7)(8)(11) SF 5.75 % 9.74 % 2/12/2024 2/12/2030 13,790 13,585 13,790 0.6 %' (13.79M / 2,830.6M = 0.49). 0001742313-25-000012: 'Bonterra LLC SF 7.75 % 12.08 % PIK ... 3,070 3,042 3,101 0.3 %' (0.15)."
+     "accession": "0001410578-23-001083",
+     "verbatim": "API Holdings III Corp. (~) L 4.25 % 9.41 % 5/2/2019 5/8/2026 1,636 $ 1,632 $ 1,173 0.2 %",
+     "quote": "'API Holdings III Corp. (~) L 4.25 % 9.41 % 5/2/2019 5/8/2026 1,636 $ 1,632 $ 1,173 0.2 %': 2023-03-31: printed 0.2; 1,173 over net assets 858,859 is 0.14."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Recycled Plastics Industries, LLC (~~) (~~~) L 6.75 % 11.92 % 8/4/2021 8/4/2026 5,212 5,143 4,925 0.6 %",
+     "quote": "'Recycled Plastics Industries, LLC (~~) (~~~) L 6.75 % 11.92 % 8/4/2021 8/4/2026 5,212 5,143 4,925 0.6 %': 2023-06-30: printed 0.6; fair value implies 0.52."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "ClearlyRated Capital, LLC ( 5,500,000 Class A units) (####) - - - (###) 6/1/2023 - - 5,500 5,500 0.4 %",
+     "quote": "'ClearlyRated Capital, LLC ( 5,500,000 Class A units) (####) - - - (###) 6/1/2023 - - 5,500 5,500 0.4 %': 2023-09-30: printed 0.4; fair value implies 0.49."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "SheerTrans Solutions, LLC (~) SF 8.11 % 9.47 % Cash/ 4.00 % PIK 7/29/2022 7/29/2027 5,101 $ 5,020 $ 5,101 0.3",
+     "quote": "'SheerTrans Solutions, LLC (~) SF 8.11 % 9.47 % Cash/ 4.00 % PIK 7/29/2022 7/29/2027 5,101 $ 5,020 $ 5,101 0.3': 2023-12-31: printed 0.3; fair value implies 0.39."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000084",
+     "verbatim": "Avison Young (USA) Inc. ( 2,036,442 Class A preferred shares) (12)(21)(36) n/a n/a 12.50 % PIK 9/1/2022 - - 2,036 686",
+     "quote": "'Avison Young (USA) Inc. ( 2,036,442 Class A preferred shares) (12)(21)(36) n/a n/a 12.50 % PIK 9/1/2022 - - 2,036 686': 2024-09-30: printed 0.1 for a fair value of 686, which implies 0.04."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000012",
+     "verbatim": "Bonterra LLC SF 7.75 % 12.08 % PIK 9/28/2023 9/8/2027 3,070 3,042 3,101 0.3 %",
+     "quote": "'Bonterra LLC SF 7.75 % 12.08 % PIK 9/28/2023 9/8/2027 3,070 3,042 3,101 0.3 %': 2024-12-31: printed 0.3; fair value implies 0.15."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "verbatim": "Lessen LLC ( 128,737 preferred units) - - - 1/5/2023 - - 1,667 1,397 0.2 %",
+     "quote": "'Lessen LLC ( 128,737 preferred units) - - - 1/5/2023 - - 1,667 1,397 0.2 %': 2025-03-31: printed 0.2; fair value implies 0.06."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "verbatim": "Velociti, LLC ( 6,075,951 units) (17) - - - 1/13/2025 - - 6,076 6,076 0.3 %",
+     "quote": "'Velociti, LLC ( 6,075,951 units) (17) - - - 1/13/2025 - - 6,076 6,076 0.3 %': 2025-06-30: printed 0.3; fair value implies 0.24."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000080",
+     "verbatim": "New Engen, Inc. (7)(8) SF 5.11 % 9.39 % 12/3/2021 12/3/2026 7,048 7,015 7,048 0.2 %",
+     "quote": "'New Engen, Inc. (7)(8) SF 5.11 % 9.39 % 12/3/2021 12/3/2026 7,048 7,015 7,048 0.2 %': 2025-09-30: printed 0.2; fair value implies 0.26."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000013",
+     "verbatim": "Quest Resource Management Group, LLC SF 7.61 % 11.49 % 12/30/2024 6/28/2030 14,192 14,039 12,841 0.6 %",
+     "quote": "'Quest Resource Management Group, LLC SF 7.61 % 11.49 % 12/30/2024 6/28/2030 14,192 14,039 12,841 0.6 %': 2025-12-31, the first row the earlier reviewer cited: printed 0.6; 12,841 over 2,830,579 is 0.45."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000013",
+     "verbatim": "The Gersh Agency, LLC (11) SF 6.25 % 10.24 % 12/13/2024 11/20/2030 13,483 13,279 12,876 0.6 %",
+     "quote": "'The Gersh Agency, LLC (11) SF 6.25 % 10.24 % 12/13/2024 11/20/2030 13,483 13,279 12,876 0.6 %': 2025-12-31, the second: printed 0.6."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000013",
+     "verbatim": "Dorado Acquisition, Inc. (6)(7) SF 6.85 % 10.72 % 6/30/2021 6/30/2026 13,209 13,170 13,116 0.6 %",
+     "quote": "'Dorado Acquisition, Inc. (6)(7) SF 6.85 % 10.72 % 6/30/2021 6/30/2026 13,209 13,170 13,116 0.6 %': 2025-12-31, the third: printed 0.6."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001742313.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found that Quest Resource Management (12,841), The Gersh Agency (12,876) and Dorado Acquisition (13,116) print 0.6 pct where fair value over net assets of 2,830,579 gives about 0.5, and called it a value defect in the source (fix class: rule scope). That reading is right and it is not an extraction error: all three printed lines read 0.6 and the build publishes 0.6 with the printed fair value. Nothing was changed; the filer's figure stands as filed."
+   }
   },
   {
-   "disposition_id": "PD-fmt_basis_spread-1742313-2",
+   "disposition_id": "PD-C115-1742313-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "statement": "One loan, Evolve Biologics Inc. (fair value 17.5M to 20.4M), is printed with a spread of 16.00 in each of the seven filings: the reference rate plus 16.00 is the printed coupon, half paid in cash and half in kind. Published is the page. No fix applies: the figure is the filer's own and is consistent with the printed coupon.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %': 2023-03-31, spread column 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %': 2023-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %': 2023-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %': 2023-12-31; cash 10.67 plus PIK 10.67 is the reference rate plus 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %",
+     "quote": "'Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %': 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000084",
+     "verbatim": "Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %",
+     "quote": "'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %': 2024-09-30."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-C115-1742313-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "reason_key": "c115-negative-spread-is-a-printed-margin-under-prime",
+   "statement": "The spread below zero is a margin under prime, read from the page in this run: Argano, LLC prints index P and the margin in parentheses, '( 1.00 ) %' with a rate of 7.50 and '( 0.70 %)' with a rate of 7.80. The filer tagged no spread on these lines; the printed figure is now published as -1.0 and -0.7 by row correction, which is what the range check reports. Four rows in three quarters, 9 to 28 thousand of fair value each.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %",
+     "quote": "'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %': 2023-12-31: index P (prime), margin printed in parentheses, rate 7.50."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %",
+     "quote": "'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Argano, LLC (16) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2025 28 $ 28 $ 28 0.0 %",
+     "quote": "'Argano, LLC (16) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2025 28 $ 28 $ 28 0.0 %': 2024-06-30, the junior loan."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10",
+     "quote": "'Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10': 2024-06-30, a second line at prime less 0.70."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-fmt_basis_spread-1742313-4",
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "fmt_basis_spread",
@@ -51,48 +237,202 @@
     "2024-06-30",
     "2024-09-30"
    ],
-   "statement": "Spreads are printed including a credit spread adjustment, so they are not quarter-point values.",
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "statement": "The check is the same range test as C115 (spread between 0 and 15). One loan, Evolve Biologics Inc. (fair value 17.5M to 20.4M), is printed with a spread of 16.00 in each of the seven filings: the reference rate plus 16.00 is the printed coupon, half paid in cash and half in kind. Published is the page. No fix applies: the figure is the filer's own and is consistent with the printed coupon.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001742313-26-000026: 'SF 6.36 % 10.03 %', 'SF 5.11 % 10.32 %', 'BTR Opco LLC (Delayed Draw) (19)(20)(21) SF 8.76 % 12.47 % PIK'."
+     "accession": "0001410578-23-001083",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %': 2023-03-31, spread column 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %': 2023-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %': 2023-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %': 2023-12-31; cash 10.67 plus PIK 10.67 is the reference rate plus 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %",
+     "quote": "'Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %': 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000084",
+     "verbatim": "Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %",
+     "quote": "'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %': 2024-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %",
+     "quote": "'8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %': the row the 2023-03-31 reviewer cited; the cash part 8.66 is printed on the line above the name and was not tagged. Now published: rate 12.41 (8.66 cash plus 3.75 PIK), spread 7.60."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "300 N. Michigan Mezz, LLC (6)(11) SF 14.57 % 19.90 % PIK 7/15/2020 7/15/2024 1,000 1,000 1,000 0.1 %",
+     "quote": "'300 N. Michigan Mezz, LLC (6)(11) SF 14.57 % 19.90 % PIK 7/15/2020 7/15/2024 1,000 1,000 1,000 0.1 %': the row the 2024-06-30 reviewer cited: the whole coupon is printed as PIK beside a spread of 14.57, which is inside the check's range."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001742313.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14",
+   "addresses_verdict": {
+    "2023-03-31": "The reviewer cited Arcstor Midco ('SF 7.60 % 3.75 % PIK', 10,750) as a loan published with no rate. That was a real gap and is fixed in this run: the cash part, printed '8.66 % Cash/' on the line above the name and not tagged, is set by row correction and the row publishes 12.41 (8.66 cash plus 3.75 PIK). It is not what this check reports; the flagged row is Evolve Biologics, spread 16.00 as printed.",
+    "2024-06-30": "The reviewer cited 300 N. Michigan Mezz ('SF 14.57 % 19.90 % PIK', 1,000) as published with no rate. The page prints the whole coupon as PIK beside a spread; the build publishes PIK 19.90 and spread 14.57 and leaves the rate empty, which is how every PIK-with-spread loan of this fund is published pending the owner's decision D-092. It was not changed. It is not what this check reports: 14.57 is inside the range; the flagged row is Evolve Biologics, spread 16.00 as printed."
+   }
   },
   {
-   "disposition_id": "PD-C115-1742313-3",
+   "disposition_id": "PD-fmt_basis_spread-1742313-5",
    "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "C115",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
    "ciks": [
     "0001742313"
    ],
    "quarters": [
-    "2023-06-30",
-    "2023-09-30",
     "2023-12-31",
     "2024-03-31",
-    "2024-06-30",
-    "2024-09-30"
+    "2024-06-30"
    ],
-   "statement": "The spread of 16.00 on Evolve Biologics is the printed spread. (2023-03-31 is not included: the Vice Group Holding spreads of 15.0 in that quarter were not read.)",
+   "reason_key": "fmt-basis-spread-negative-is-a-printed-margin-under-prime",
+   "statement": "The check is the same range test as C115 (spread between 0 and 15). The spread below zero is a margin under prime, read from the page in this run: Argano, LLC prints index P and the margin in parentheses, '( 1.00 ) %' with a rate of 7.50 and '( 0.70 %)' with a rate of 7.80. The filer tagged no spread on these lines; the printed figure is now published as -1.0 and -0.7 by row correction, which is what the range check reports. Four rows in three quarters, 9 to 28 thousand of fair value each.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001742313-24-000084: 'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %'."
+     "accession": "0001742313-24-000006",
+     "verbatim": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %",
+     "quote": "'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %': 2023-12-31: index P (prime), margin printed in parentheses, rate 7.50."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %",
+     "quote": "'Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Argano, LLC (16) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2025 28 $ 28 $ 28 0.0 %",
+     "quote": "'Argano, LLC (16) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2025 28 $ 28 $ 28 0.0 %': 2024-06-30, the junior loan."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10",
+     "quote": "'Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10': 2024-06-30, a second line at prime less 0.70."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001742313.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-B01-1742313-4",
+   "disposition_id": "PD-X02-1742313-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "statement": "Every flagged row is a loan the schedule prints with 'n/a' in the index, spread and interest rate columns, and the filing tags no rate, spread or PIK fact for it: Light Wave Dental's junior loan (2023-03-31), five Vice Group Holding junior loans (2023-06-30), and from 2025 the same seven rows each quarter (Adept AG Holdings x2, Arcserve Cayman Opco, Vice Acquisition Holdco x4), all carried at nil. No fix applies: there is no rate on the page to publish. In this run the one other flagged row, an equity commitment classed as a loan (SingleStore, 9.3M), was reclassified.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "Light Wave Dental Management, LLC n/a n/a n/a (e) 12/6/2022 9/30/2023 2,479 2,479 2,954 0.3 %",
+     "quote": "'Light Wave Dental Management, LLC n/a n/a n/a (e) 12/6/2022 9/30/2023 2,479 2,479 2,954 0.3 %': 2023-03-31, the one flagged row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Vice Group Holding Inc. n/a n/a n/a (###) 5/2/2019 n/a (i) 1,233 1,233 854 0.1 %",
+     "quote": "'Vice Group Holding Inc. n/a n/a n/a (###) 5/2/2019 n/a (i) 1,233 1,233 854 0.1 %': 2023-06-30, the largest of the five flagged rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "verbatim": "Arcserve Cayman Opco LP (21) n/a n/a n/a 3/16/2021 3/16/2027 988 $ 968 $ - 0.0 %",
+     "quote": "'Arcserve Cayman Opco LP (21) n/a n/a n/a 3/16/2021 3/16/2027 988 $ 968 $ - 0.0 %': 2025-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "verbatim": "Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 477 477 - 0.0 %",
+     "quote": "'Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 477 477 - 0.0 %': 2025-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "verbatim": "Adept AG Holdings, LLC (12)(21)(22) n/a n/a n/a 3/31/2025 8/11/2027 83 83 - 0.0",
+     "quote": "'Adept AG Holdings, LLC (12)(21)(22) n/a n/a n/a 3/31/2025 8/11/2027 83 83 - 0.0': 2025-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "verbatim": "Thrasio, LLC (21) SF 10.26 % 14.55 % PIK 6/18/2024 6/18/2029 574 574 502 0.0 %",
+     "quote": "'Thrasio, LLC (21) SF 10.26 % 14.55 % PIK 6/18/2024 6/18/2029 574 574 502 0.0 %': 2025-03-31, a row the earlier reviewer cited: a PIK coupon beside a spread; it has a spread and is not flagged."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "verbatim": "Arcserve Cayman Opco LP (21) n/a n/a n/a 3/16/2021 3/16/2027 988 968 - 0.0 %",
+     "quote": "'Arcserve Cayman Opco LP (21) n/a n/a n/a 3/16/2021 3/16/2027 988 968 - 0.0 %': 2025-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "verbatim": "Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 477 477 - 0.0 %",
+     "quote": "'Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 477 477 - 0.0 %': 2025-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "verbatim": "Adept AG Holdings, LLC (12)(21)(22) n/a n/a n/a 3/31/2025 8/11/2027 88 83 - 0.0",
+     "quote": "'Adept AG Holdings, LLC (12)(21)(22) n/a n/a n/a 3/31/2025 8/11/2027 88 83 - 0.0': 2025-06-30."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14",
+   "addresses_verdict": {
+    "2025-03-31": "The reviewer cited three rows printed with a PIK coupon (Thrasio 14.55 % PIK, Arcserve Cayman Opco delayed draw 12.44 % PIK, Witkoff/Monroe 700 JV 13.25 % PIK) as published with no rate and no spread. None of them is among the seven rows flagged in this build: Witkoff (no index, no spread) publishes 13.25 as its rate since D-101; Thrasio and Arcserve publish their PIK rate and spread and leave the rate empty, the open owner question D-092, and have a spread. The seven flagged rows are printed n/a n/a n/a.",
+    "2025-06-30": "The reviewer found that Adept AG Holdings, Arcserve Cayman Opco and Vice Acquisition Holdco are printed 'n/a' for index, spread and interest rate, and judged the missing rate real in the source, not a parser error. That is this entry's reading: the three printed lines are quoted and nothing was extracted wrongly. There is no figure on the page to publish."
+   }
+  },
+  {
+   "disposition_id": "PD-B01-1742313-7",
    "class": "rule_problem",
    "engine": "oracle",
    "rule_name": "B01",
@@ -104,41 +444,64 @@
     "2023-06-30",
     "2023-09-30"
    ],
-   "statement": "Leaves counted without a fair value are comparative-period rows and contexts that carry no fair value fact; the published total equals the filed total.",
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "statement": "After this run no position of the quarter is left without a value: the 225 undrawn lines the three 10-Qs print as 'par - - 0.0 %' with a principal fact and no cost or fair value fact, and 30 rows written down to nil, are now published at zero from the page (255 rows). The leaves the check still counts (182, 185, 184) are in the comparative schedule of December 31, 2022 printed in the same filings (84 undrawn lines, 7 or 8 nil rows and their date-only twin contexts), plus three contexts that carry only a cash rate. The 2022-12-31 schedule is not a published quarter of this fund. The check counts every period of the filing against the report date.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "2023-03-31: 691 of 1,692 leaves have a fair value; of 200 sampled others 103 are comparative-period rows and 97 have no fair value fact, e.g. '300 N. Michigan Mezz, LLC (Delayed Draw), Senior Secured Loans, Due 7/15/2024' (reading, group 13)."
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %",
+     "quote": "'95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %': the December 31, 2022 schedule in the 10-Q for 2023-03-31: an undrawn line with a dash for cost and fair value; its context is one of the 182."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %",
+     "quote": "'95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %': the same comparative line in the 10-Q for 2023-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %",
+     "quote": "'95 Percent Buyer, LLC (Revolver) (*) L 5.50 % 9.62 % 11/24/2021 11/24/2026 963 - - 0.0 %': the same comparative line in the 10-Q for 2023-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.27 % 11/24/2021 11/24/2026 808 - - 0.0 %",
+     "quote": "'95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.27 % 11/24/2021 11/24/2026 808 - - 0.0 %': the current-period line of 2023-03-31, now published at zero with its commitment of 808."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001742313.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-PP02-1742313-5",
-   "class": "rule_problem",
-   "engine": "row_validation",
-   "rule_name": "PP02",
+   "disposition_id": "PD-merged_context_excluded-1742313-8",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
    "ciks": [
     "0001742313"
    ],
    "quarters": [
-    "2025-12-31",
-    "2026-03-31"
+    "2024-03-31"
    ],
-   "statement": "The check compares rows by issuer name and values. With the tranche words taken out of the name (D-101), two undrawn or zero-value lines of one issuer look alike; they are different members and both are printed.",
+   "reason_key": "merged-context-row-published-equals-the-printed-line",
+   "statement": "One row at 2024-03-31, Vice Acquisition Holdco senior loan 'Four' (fair value 248 thousand): the filer split its facts over two contexts of one member, so the spread and PIK rate come from the twin context and the re-verifier does not test them. Read on the page: published spread 8.26, PIK 13.57, principal 265, cost 265, fair value 248 are the printed line. No fix applies.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "Sandbox mo1c, 2025-12-31: Mooring Primary, LLC '(Delayed Draw) | Senior Secured Loans' and '(Revolver) | Senior Secured Loans', both fair value 0 and commitment 6,333,000; Arcserve Cayman GP LLC '(Class A common units)' and '(Class B common units)', both 0 (scratch/2026-10-11_monroe/dup.sql)."
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Vice Acquisition Holdco, LLC SF 8.26 % 13.57 % PIK (***) 9/8/2023 1/31/2028 265 265 248 0.0 %",
+     "quote": "'Vice Acquisition Holdco, LLC SF 8.26 % 13.57 % PIK (***) 9/8/2023 1/31/2028 265 265 248 0.0 %': the printed line; every published figure of the row equals it."
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001742313.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-101); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
+   "decided_on": "2026-10-14"
   }
  ]
 }

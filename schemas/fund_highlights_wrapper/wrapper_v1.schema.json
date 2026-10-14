@@ -98,6 +98,26 @@
       "type": "string",
       "description": "Free-text notes on why this wrapper exists"
     },
+    "income_concept_suppress": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9]{8,}$"},
+      "description": "Lower-case concept-name substrings the fund-income extractor (pipeline/bdc_fund_income.py) must not read as an income figure for this filer. For a filer whose own per-share concept contains an income concept's name and is filed ahead of the dollar fact (Monroe Capital Income Plus: mcip:NetInvestmentIncomePerShareDiluted 0.31 ahead of us-gaap:NetInvestmentIncome 27,547,000). Evidence required: the two facts of one period and the printed income statement line. Read by nothing else; the highlights extractor is not affected."
+    },
+    "income_concept_fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "total_expenses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]{8,}$"}
+        }
+      },
+      "description": "Per income column, the whole lower-case concept names the fund-income extractor (pipeline/bdc_fund_income.py) may take for it where a period has an income statement and no fact for that column. For a filer that tags the figure under a concept the extractor does not read (Monroe Capital Income Plus, first-quarter 10-Qs and most 10-Qs from 2024: expenses only as InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement). A period that already has the column is never changed. Evidence required: the fact, and the printed income statement lines showing that total investment income less it is the filed net investment income."
+    },
     "figure_corrections": {
       "type": "array",
       "description": "Fund-level figures the filing page states and the filer's undimensioned facts get wrong, miss, or file at the wrong scale. Applied to the company-facts balance frame before scale detection. Each needs the printed evidence.",

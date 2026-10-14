@@ -84,6 +84,8 @@ def _local_name(tag: str) -> str:
 # already had one is unchanged.
 _NII_AFTER_TAX_CONCEPT = "investmentincomeoperatingafterexpenseandtax"
 _NII_FALLBACK = "_net_investment_income_after_tax"
+# Private key prefix for a concept a filer's wrapper names as the fallback for an income column.
+_WRAPPER_FALLBACK_PREFIX = "_wrapper_fallback:"
 
 
 def _match_income_concept(local_lower: str) -> Optional[str]:
@@ -181,8 +183,26 @@ def _parse_income_contexts(tree: etree._ElementTree) -> dict:
 def _extract_fund_income_facts(
     tree: etree._ElementTree,
     contexts: dict,
+    suppress: tuple[str, ...] = (),
+    fallback: tuple[tuple[str, str], ...] = (),
 ) -> list[dict[str, Any]]:
     """Extract fund-level income facts from entity-level duration contexts.
+
+    ``fallback``: (income column, lower-case concept name) pairs from the filer's highlights
+    wrapper (``income_concept_fallback``). The concept, matched by its whole name, fills the
+    column only for a period that has an income statement and no fact for that column. Monroe
+    Capital Income Plus tags its expenses in first-quarter 10-Qs only as
+    us-gaap-supplement:InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement
+    (2023-03-31: 22,295,000; total investment income 45,852,000 less it is the filed net
+    investment income before taxes, 23,557,000), so the quarter had no expenses and the fourth
+    quarter could not be taken as the year less nine months. Empty for every other filer.
+
+    ``suppress``: lower-case concept-name substrings this filer's highlights wrapper lists under
+    ``income_concept_suppress``. A concept that contains one is not read. Monroe Capital Income
+    Plus files its own mcip:NetInvestmentIncomePerShareDiluted (0.31) ahead of
+    us-gaap:NetInvestmentIncome (27,547,000); the name contains 'netinvestmentincome' and the
+    first fact of a period wins, so the per-share figure was published as net investment income.
+    Empty for every filer whose wrapper does not set it.
 
     Returns one dict per unique (start_date, end_date) period.
     """
@@ -196,6 +216,7 @@ def _extract_fund_income_facts(
 
     # Accumulate facts by (start_date, end_date)
     facts_by_period: dict[tuple, dict[str, Any]] = {}
+    fallback_columns = {concept: column for column, concept in fallback}
 
     root = tree.getroot()
     for elem in root.iter():
@@ -213,7 +234,12 @@ def _extract_fund_income_facts(
         if not raw_text:
             continue
 
+        if suppress and any(part in local for part in suppress):
+            continue
         col = _match_income_concept(local)
+        if col is None and local in fallback_columns:
+            # held apart under a private key; applied below only where the period lacks the column
+            col = _WRAPPER_FALLBACK_PREFIX + fallback_columns[local]
         if col is None:
             continue
 
@@ -244,11 +270,18 @@ def _extract_fund_income_facts(
     kept = []
     for period in facts_by_period.values():
         fallback = period.pop(_NII_FALLBACK, None)
+        wrapper_fallbacks = {key[len(_WRAPPER_FALLBACK_PREFIX):]: period.pop(key)
+                             for key in [k for k in period if k.startswith(_WRAPPER_FALLBACK_PREFIX)]}
         if not set(period) - {"start_date", "end_date", "duration_months"}:
             continue
         if (fallback is not None and "net_investment_income" not in period
                 and "total_investment_income" in period):
             period["net_investment_income"] = fallback
+        # same rule for a wrapper's fallback concept: only a period that has its income statement
+        # and lacks the column takes it
+        for column, value in wrapper_fallbacks.items():
+            if column not in period and "total_investment_income" in period:
+                period[column] = value
         kept.append(period)
 
     return kept
@@ -386,7 +419,11 @@ def extract_bdc_fund_income(
         try:
             tree = etree.parse(xml_path)
             contexts = _parse_income_contexts(tree)
-            raw_facts = _extract_fund_income_facts(tree, contexts)
+            from pipeline.fund_highlights_wrapper import load_highlights_wrapper
+            wrapper = load_highlights_wrapper(filing_meta["cik"]) if filing_meta["cik"] else None
+            raw_facts = _extract_fund_income_facts(
+                tree, contexts, suppress=wrapper.income_concept_suppress if wrapper else (),
+                fallback=wrapper.income_concept_fallback if wrapper else ())
             quarterly = _derive_quarterly_income(raw_facts, filing_meta)
             all_records.extend(quarterly)
             parsed += 1

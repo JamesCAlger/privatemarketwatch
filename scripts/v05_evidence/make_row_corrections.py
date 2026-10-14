@@ -636,6 +636,14 @@ if MONROE in held:
             ORDER BY 1, 2""", [MONROE]).fetchall():
         SPECS.append((MONROE, quarter, identifier, EQUITY, MONROE_EQUITY_REASON + "'" + identifier + "'", "D-101"))
         EXACT.add(identifier)
+# Monroe, fund-clearing loop (2026-10-14): rates, PIK, spreads, classes and unit counts read on the printed row. One spec
+# per row, each with its printed line, in row_correction_specs/0001742313.json (exact identifiers).
+MONROE_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001742313.json"
+if MONROE in held and MONROE_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(MONROE_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((MONROE, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1742313-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

@@ -189,6 +189,66 @@ class TestFactExtraction:
         assert len(facts) == 1
         assert facts[0]["net_investment_income"] == 30000000.0
 
+    def test_a_per_share_concept_the_wrapper_suppresses_is_not_net_investment_income(self):
+        """Monroe Capital Income Plus 10-Q 2023-06-30: mcip:NetInvestmentIncomePerShareDiluted (0.31) is filed
+        ahead of us-gaap:NetInvestmentIncome (27,547,000); printed 'Net investment income before income
+        taxes 27,547'. With the wrapper's substring the dollar fact is read."""
+        ctx_xml = _duration_ctx("d1", "2023-04-01", "2023-06-30")
+        facts_xml = (_fact("NetInvestmentIncomePerShareDiluted", "d1", "0.31")
+                     + _fact("NetInvestmentIncome", "d1", "27547000")
+                     + _fact("GrossInvestmentIncomeOperating", "d1", "50560000"))
+        tree = _build_xbrl(ctx_xml, facts_xml)
+        contexts = _parse_income_contexts(tree)
+        facts = _extract_fund_income_facts(tree, contexts, suppress=("netinvestmentincomepershare",))
+        assert facts[0]["net_investment_income"] == 27547000.0
+        assert facts[0]["total_investment_income"] == 50560000.0
+
+    def test_without_the_wrapper_setting_the_first_matching_fact_is_read_as_before(self):
+        """The setting is per filer: a filer that does not list the substring is read exactly as before
+        (first matching fact of the period), and a listed substring never removes the plain concept."""
+        ctx_xml = _duration_ctx("d1", "2023-04-01", "2023-06-30")
+        facts_xml = (_fact("NetInvestmentIncomePerShareDiluted", "d1", "0.31")
+                     + _fact("NetInvestmentIncome", "d1", "27547000"))
+        tree = _build_xbrl(ctx_xml, facts_xml)
+        contexts = _parse_income_contexts(tree)
+        assert _extract_fund_income_facts(tree, contexts)[0]["net_investment_income"] == 0.31
+        only_plain = _build_xbrl(ctx_xml, _fact("NetInvestmentIncome", "d1", "27547000"))
+        facts = _extract_fund_income_facts(only_plain, _parse_income_contexts(only_plain),
+                                           suppress=("netinvestmentincomepershare",))
+        assert facts[0]["net_investment_income"] == 27547000.0
+
+    def test_a_wrapper_fallback_concept_fills_missing_total_expenses(self):
+        """Monroe Capital Income Plus 10-Q 2023-03-31 tags expenses only under the after-waiver concept
+        (22,295,000): total investment income 45,852,000 less it is the filed 23,557,000."""
+        ctx_xml = _duration_ctx("d1", "2023-01-01", "2023-03-31")
+        facts_xml = (_fact("GrossInvestmentIncomeOperating", "d1", "45852000")
+                     + _fact("NetInvestmentIncome", "d1", "23557000")
+                     + _fact("InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement", "d1", "22295000"))
+        tree = _build_xbrl(ctx_xml, facts_xml)
+        contexts = _parse_income_contexts(tree)
+        pair = (("total_expenses", "investmentcompanyexpenseafterreductionoffeewaiverandreimbursement"),)
+        facts = _extract_fund_income_facts(tree, contexts, fallback=pair)
+        assert facts[0]["total_expenses"] == 22295000.0
+        assert not [k for k in facts[0] if k.startswith("_")]
+
+    def test_a_wrapper_fallback_never_replaces_a_filed_figure_and_is_off_by_default(self):
+        """10-Q 2022-06-30 files both: InvestmentIncomeInvestmentExpense 8,837,000 and the after-waiver
+        5,830,000. The filed column stays. Without the wrapper pair the concept is not read at all, and
+        a period known only by the fallback fact yields no row."""
+        ctx_xml = _duration_ctx("d1", "2022-04-01", "2022-06-30")
+        both = (_fact("GrossInvestmentIncomeOperating", "d1", "17203000")
+                + _fact("InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement", "d1", "5830000")
+                + _fact("InvestmentIncomeInvestmentExpense", "d1", "8837000"))
+        tree = _build_xbrl(ctx_xml, both)
+        contexts = _parse_income_contexts(tree)
+        pair = (("total_expenses", "investmentcompanyexpenseafterreductionoffeewaiverandreimbursement"),)
+        assert _extract_fund_income_facts(tree, contexts, fallback=pair)[0]["total_expenses"] == 8837000.0
+        only = _build_xbrl(ctx_xml, _fact("GrossInvestmentIncomeOperating", "d1", "17203000")
+                           + _fact("InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement", "d1", "5830000"))
+        assert "total_expenses" not in _extract_fund_income_facts(only, _parse_income_contexts(only))[0]
+        thin = _build_xbrl(ctx_xml, _fact("InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement", "d1", "5830000"))
+        assert _extract_fund_income_facts(thin, _parse_income_contexts(thin), fallback=pair) == []
+
     def test_after_tax_concept_fills_a_missing_net_investment_income(self):
         """Ares Strategic Income 2023-03-31 tags only the after-tax supplement concept."""
         ctx_xml = _duration_ctx("d1", "2023-01-01", "2023-03-31")

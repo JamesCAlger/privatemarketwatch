@@ -1,0 +1,915 @@
+{
+ "cik": "0001742313",
+ "label": "moxe",
+ "before": "f15a",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "interest_rate",
+   "rows": 30,
+   "why": "rates read on the printed row: 27 rows gain the printed coupon (a plain rate the filer tagged as PIK, a cash part printed and not tagged, a rate with no tag, a filed rate whose kind the printed line settles), 3 rows lose a rate the page prints as PIK (Medallia 2023-09-30, Jumpstart revolver x2)"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 28,
+   "why": "11 rows lose a PIK rate the page prints as a plain rate (Caravel, Drawbridge, ecMarket, Amelia; TigerConnect term 2023-03-31); 17 rows gain the PIK rate the page prints (Whistler x9, Sundy Village x2, Jumpstart x2, Medallia, TigerConnect delayed draw, Radiology, Bluesight preferred)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 5,
+   "why": "Argano margin under prime printed in parentheses (-1.0 x3, -0.7 x1); the first Oceana line of 2024-03-31 gains its printed 8.25"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "the Oceana line of 2024-03-31 is floating once its printed spread is published (was Fixed for want of a spread)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 30,
+   "why": "follows the rate changes: unresolved or cash to all_in or cash as the printed line shows"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 36,
+   "why": "the filed-rate column follows the same corrections (the 30 rows above, the nine Whistler and one Sundy rows whose mis-tagged cash rate is withdrawn, and the Witkoff equity row's tagged 0.0 withdrawn), less rows whose filed rate is unchanged"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 25,
+   "why": "cash leg recomputed for the rows whose rate or kind changed"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 26,
+   "why": "the transform label of the rate step (cash_plus_pik, coupon_unresolved, pik_only) follows the rate changes"
+  },
+  {
+   "column": "shares_held",
+   "rows": 84,
+   "why": "unit counts printed in the row name and not tagged (80 rows of 2023-03-31, 06-30, 09-30 and 2024-06-30) and four counts that differed from the page (Dorado Class A-2 x2, IDIG Class X x2)"
+  },
+  {
+   "column": "asset_category",
+   "rows": 8,
+   "why": "SingleStore equity commitment LOAN to EQUITY_COMMON (3 quarters); Lessen (3) and SheerTrans (2) common to preferred, as the printed row names them"
+  },
+  {
+   "column": "index_classification",
+   "rows": 8,
+   "why": "moves with asset_category on the same 8 rows"
+  },
+  {
+   "column": "asset_class",
+   "rows": 3,
+   "why": "SingleStore equity commitment, PRIVATE_CREDIT to PRIVATE_EQUITY"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 4,
+   "why": "2024-03-31: the member 'J2 BWA Funding LLC ... Revolver' carries the first Oceana Australian Fixed Income Trust line; the 'J2 BWA Funding III' revolver member carries the J2 BWA Funding LLC revolver; member typos 'Verp Biotech' and 'VVice Acquisition'"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 1,
+   "why": "the Oceana line: 'Senior Secured Loans, Revolver' (the member's text) to 'Senior Secured Loans, One'"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 137,
+   "why": "marks the corrected fields on the rows above"
+  },
+  {
+   "column": "position_id",
+   "rows": 157,
+   "why": "not aimed at, explained: chain ids are renamed when a chain's members change. 141 rows belong to chains that gained one of the 229 newly published 2023 undrawn lines or whose rate fields changed; 16 to the J2 BWA revolver chain (now one id over 13 quarters), the Vero Biotech and the Vice Acquisition chains after the name corrections. No row's values changed with its id"
+  }
+ ],
+ "rows_added": 255,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Rows the page prints with a dash for fair value were not published in the three 2023 10-Qs: 225 undrawn revolver and delayed-draw lines printed 'par - - 0.0 %' (71, 76, 78 a quarter) that carry a principal fact, a rate and a maturity and no cost or fair value fact, 21 rows written down to nil (cost with a dash for value) and 9 rows with nothing but the row. From 2023-12-31 the filer tags the zero and such rows were already published (86 or more a quarter). Fair value 0, and cost 0 where the cost cell is a dash, declared from the page for 255 contexts (source_encodings.untagged_values, 489 lines). Every context was matched to the table row that holds its fact and the printed par or cost was compared with the tagged one (scratch/fund_runs/0001742313/undrawn_gen.py; all rows in undrawn_rows.txt). Totals are unchanged (zero value). B01 no longer counts any current-period position.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.27 % 11/24/2021 11/24/2026 808 - - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.76 % 11/24/2021 11/24/2026 808 - - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.93 % 11/24/2021 11/24/2026 808 - - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "TigerConnect, Inc. (Revolver) (*) SF 6.76 % 11.59 % 2/16/2022 2/16/2028 1,429 - - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "MV Receivables II, LLC ( 1,822 shares of common stock) (<) (####) - - - (###) 7/29/2021 - - 750 - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "New Engen, Inc. ( 5,067 Class B common units) - - - (###) 12/27/2021 - - 5 - 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Vice Acquisition Holdco, LLC (fka Vice Group Holding Inc.) (i) n/a n/a n/a (###) 5/2/2019 n/a (d) 477 477 - 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Coupons read on the printed row, 43 rows in eight quarters (row corrections; each with its printed line in scripts/v05_evidence/row_correction_specs/0001742313.json). (a) A plain rate the filer tagged with the paid-in-kind concept was published as a PIK rate and no rate: Caravel x6, Drawbridge delayed draw, ecMarket x2, Amelia delayed draw (2023-06-30, 2023-09-30). (b) A coupon printed as PIK and tagged as a cash or plain rate: Whistler Parent x9, Sundy Village, Jumpstart revolver x2, Medallia; published like the fund's other PIK-with-spread rows (PIK rate and spread, rate empty), so the open owner question D-092 is untouched. (c) The cash part of a split coupon printed on the line above the name and not tagged, in the old 10-Q layout: Aras, Arcstor, Caravel revolver, INH, NTM, Premier Roofing, TigerConnect delayed draw (2023-03-31), Vice Group senior x2 (2023-06-30). (d) No rate tag at all: TigerConnect term loan (2023-06-30, 2023-09-30), Radiology Partners (2024-03-31), Sundy Village junior (2025-12-31, PIK). (e) A filed rate left unresolved because the tag does not say what it holds, settled by the printed line: TigerConnect (3 rows), Whistler 2023-12-31, Bandas Law Firm 2026-03-31. Clears the eight financial_convention_unresolved findings; 15 of the 16 rows behind them now publish what the page prints, the sixteenth (a 0.0 rate tagged on an equity row printed with dashes) has the tag withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Caravel Autism Health, LLC (~) SF 6.01 % 10.90 % 6/30/2021 6/30/2027 8,059 7,946 7,692 0.8 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Drawbridge Partners, LLC (Delayed Draw) (*) (**) SF 7.00 % 12.24 % 9/1/2022 9/1/2028 1,649 1,453 1,439 0.2 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "ecMarket Inc. and Conexiom US Inc. (~~) (<) (b) SF 6.85 % 12.09 % 9/21/2021 9/21/2027 16,535 16,303 16,432 1.7 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Amelia Holding II, LLC (Delayed Draw) (*) (**) SF 9.26 % 14.65 % 12/21/2022 12/21/2027 3,333 1,467 1,467 0.1 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Caravel Autism Health, LLC (~) SF 5.76 % 11.01 % 6/30/2021 6/30/2027 8,039 7,930 7,877 0.7 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Medallia, Inc. (~~) SF 6.10 % 11.42 % PIK 8/15/2022 10/27/2028 11,770 11,582 11,823 1.0 %"
+    },
+    {
+     "accession": "0001742313-25-000080",
+     "text": "Whistler Parent Holdings III, Inc. SF 6.85 % 11.01 % PIK 10/25/2024 6/2/2028 27,802 27,574 15,847 0.6 %"
+    },
+    {
+     "accession": "0001742313-26-000013",
+     "text": "Whistler Parent Holdings III, Inc. SF 6.85 % 10.75 % PIK 10/25/2024 6/2/2028 28,573 28,358 15,572 0.6 %"
+    },
+    {
+     "accession": "0001742313-26-000026",
+     "text": "Whistler Parent Holdings III, Inc. SF 6.85 % 10.52 % PIK 10/25/2024 6/2/2028 29,340 29,155 14,729 0.5 %"
+    },
+    {
+     "accession": "0001742313-26-000013",
+     "text": "Sundy Village West Mezz Borrower, LLC (12) SF 11.50 % 15.28 % PIK 12/21/2023 1/15/2027 14,625 14,625 14,877 0.5 %"
+    },
+    {
+     "accession": "0001742313-26-000026",
+     "text": "Sundy Village West Mezz Borrower, LLC (12) SF 11.50 % 15.17 % PIK 12/21/2023 1/15/2027 15,188 15,188 15,435 0.6 %"
+    },
+    {
+     "accession": "0001742313-26-000013",
+     "text": "Jumpstart Holdco, Inc. (Revolver) (21) SF 5.60 % 9.33 % PIK 7/16/2025 4/19/2028 728 729 748 0.0 %"
+    },
+    {
+     "accession": "0001742313-26-000026",
+     "text": "Jumpstart Holdco, Inc. (Revolver) (21) SF 5.60 % 9.27 % PIK 7/16/2025 6/30/2029 728 715 755 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "8.07 % Cash/ Aras Corporation (~) L 7.00 % 3.75 % PIK 4/13/2021 4/13/2027 4,714 4,655 4,690 0.5 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "10.60 % Cash/ Caravel Autism Health, LLC (Revolver) (*) SF 7.01 % 1.00 % PIK 6/30/2021 6/30/2027 2,027 1,387 1,307 0.2 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "8.50 % Cash/ INH Buyer, Inc. (~) SF 7.00 % 3.50 % PIK 6/30/2021 6/28/2028 4,947 4,910 4,742 0.5 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "11.41 % Cash/ NTM Acquisition Corp. (~~~) L 7.25 % 1.00 % PIK 4/18/2019 6/7/2024 4,341 4,341 4,168 0.5 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "12.45 % Cash/ Premier Roofing L.L.C. (~) L 8.50 % 1.00 % PIK 8/31/2020 8/29/2025 3,450 3,415 3,398 0.4 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "8.20 % Cash/ TigerConnect, Inc. (Delayed Draw) (*) (**) SF 6.76 % 3.38 % PIK 2/16/2022 2/16/2028 750 186 184 0.0"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "TigerConnect, Inc. (~~) SF 6.76 % 11.58 % 2/16/2022 2/16/2028 10,000 9,831 9,888 1.2 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "5.25 % Cash/ Vice Group Holding Inc. SF 12.00 % 12.00 % PIK 5/17/2023 11/17/2023 66 $ 66 $ 66 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "TigerConnect, Inc. (~~) SF 6.75 % 11.79 % 2/16/2022 2/16/2028 10,000 9,840 9,788 1.0 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "TigerConnect, Inc. (Delayed Draw) (*) (**) SF 6.75 % 11.79 % 2/16/2022 2/16/2028 750 275 270 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "TigerConnect, Inc. (~~) SF 6.75 % 12.27 % 2/16/2022 2/16/2028 10,000 9,845 9,800 0.9 %"
+    },
+    {
+     "accession": "0001742313-24-000006",
+     "text": "Whistler Parent Holdings III, Inc. SF 8.90 % 9.53 % Cash/ PIK 4.75 % 6/3/2022 6/2/2028 266 266 263 0.0 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Radiology Partners, Inc. (a) SF 5.26 % 9.09 % Cash/ 1.50 % PIK 1/29/2024 7/9/2025 4,800 4,296 4,648 0.3 %"
+    },
+    {
+     "accession": "0001742313-26-000026",
+     "text": "Bandas Law Firm, P.C. SF 13.75 % 4.00 % Cash/ 13.75 % PIK 2/17/2026 2/17/2030 4,772 4,704 4,700 0.2 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Witkoff/Monroe 700 JV LLC ( 2,992 preferred units) (<) (####) - - - (###) 7/2/2021 - - 5 3,571 0.2 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Bluesight, Inc. (311 Class A preferred units) n/a n/a 9.00 % PIK 7/17/2023 - - 311 311 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Margin under prime: Argano, LLC prints index P and the margin in parentheses; no spread was tagged or published (X05, three quarters). Published -1.0 (three rows) and -0.7 (one row) by row correction. X05 cleared; the range check C115 now reports these four rows as well (proposal).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001742313-24-000006",
+     "text": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 28 0.0 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Argano, LLC (####) P ( 1.00 ) % 7.50 % 11/7/2023 6/29/2024 28 28 27 0.0 %"
+    },
+    {
+     "accession": "0001742313-24-000046",
+     "text": "Argano, LLC (16) P ( 0.70 %) 7.80 % 5/3/2024 12/5/2025 9 9 10"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts: in the three 2023 10-Qs the count is printed in the row's name and not tagged, so 80 equity rows published none (C04, three quarters; 23 of 58, 22 of 58 and 24 of 61 equity rows had one); set from the printed row for those 80 and for 9 of the newly published nil rows. Four published counts differed from the page and are corrected: Dorado Class A-2 at 2023-06-30 and 2023-09-30 (tagged 725,806, which is Ascent Midco's count on the line above; printed 531,783) and IDIG Class X at 2025-06-30 and 2025-09-30 (tagged 34,043,000 and 20,049,000; printed 34,043 and 20,049). C04 cleared.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Dorado Acquisition, Inc. ( 531,783 Class A-2 units) - - - (###) 6/30/2021 - - - 853 0.1 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Ascent Midco, LLC ( 725,806 Class A units) (####) n/a n/a 8.00 % PIK 2/5/2020 - - 726 688 0.1 %"
+    },
+    {
+     "accession": "0001742313-25-000064",
+     "text": "IDIG Parent, LLC ( 34,043 Class X units) (17) - - - 6/23/2025 - - 35 34 0.0 %"
+    },
+    {
+     "accession": "0001742313-25-000080",
+     "text": "IDIG Parent, LLC ( 20,049 Class X units) (17) - - - 6/23/2025 - - 20 26 0.0 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "Lessen Inc. ( 128,737 preferred units) - - - (###) 1/5/2023 - - 1,667 1,667 0.2 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "ClearlyRated Capital, LLC ( 5,500,000 Class A units) (####) - - - (###) 6/1/2023 - - 5,500 5,500 0.4 %"
+    }
+   ]
+  },
+  {
+   "what": "Classes: the SingleStore equity commitment (9.3M at 2025-12-31 and 2026-03-31, nil at 2025-09-30) was a loan because the commitment amount is tagged as principal; now common equity (it was the one X02 row with value). Lessen (three quarters) and SheerTrans (two) were set to common equity by an earlier correction for members that name no share class; the printed rows say preferred units and preferred interests, so those ten correction lines now say preferred. The five newly published equity-commitment rows of 2023 take the same class correction the earlier rows of their kind have.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001742313-26-000026",
+     "text": "SingleStore, Inc. ($ 9,359 equity commitment) - - - 10/14/2025 - 9,359 9,359 9,265 0.3 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "Lessen Inc. ( 128,737 preferred units) - - - (###) 1/5/2023 - - 1,667 1,667 0.2 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "SheerTrans Solutions, LLC ( 8,642,579 preferred interests) (####) - - - (###) 7/29/2022 - - 8,643 8,729 1.0"
+    }
+   ]
+  },
+  {
+   "what": "A row on another issuer's member, 2024-03-31: the context of the member 'J2 BWA Funding LLC, Senior Secured Loans, Revolver' carries the first Oceana Australian Fixed Income Trust line (31.0M), and the 'J2 BWA Funding III' revolver member carries the J2 BWA Funding LLC revolver. Names, the instrument text and the printed spread 8.25 set by row correction; two member typos published as issuer names corrected (Vero Biotech 30.0M, Vice Acquisition). Found by comparing each member's name with the name on its printed row, on no rule.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Oceana Australian Fixed Income Trust (~) (<) (c) (d) SF 8.25 % 13.58 % 6/8/2023 4/1/2026 30,847 31,770 31,001 2.0 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "J2 BWA Funding LLC (Revolver) (<) (*) n/a n/a 10.00 % 12/14/2020 12/24/2026 2,850 1,682 1,682 0.1 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Vero Biotech Inc. P 3.75 % 12.25 % 12/29/2023 1/2/2029 30,000 29,717 30,000 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "Fund level, income ratio (F27, seven quarters): through the 10-Q for 2024-09-30 the filer tagged the ratio of TOTAL investment income to average net assets with the investment income ratio concept, so 22.5 to 24.4 was published as the income ratio. The printed net investment income ratio is declared for the eleven quarters 2022-03-31 to 2024-09-30 (highlights wrapper figure_corrections; the four 2022 quarters carry no holdings and no finding, and had the same figure). F27 cleared.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "Ratio of net investment income (loss) to average net assets (6) 13.31 % 8.69 %"
+    },
+    {
+     "accession": "0001410578-23-001083",
+     "text": "Ratio of total investment income to average net assets (6) 23.05 % 15.33 %"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Ratio of net investment income (loss) to average net assets with waivers (6) 12.86 % 8.32 %"
+    },
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Ratio of net investment income (loss) to average net assets with waivers (6) 12.27 % 8.18 %"
+    },
+    {
+     "accession": "0001742313-24-000006",
+     "text": "Ratio of net investment income (loss) to average net assets with waivers and expense reimbursement (6) 11.61 % 8.74 % 7.34 % 8.84 % 7.37 %"
+    },
+    {
+     "accession": "0001742313-24-000027",
+     "text": "Ratio of net investment income (loss) to average net assets (6) 12.29 % 13.31 %"
+    },
+    {
+     "accession": "0001742313-24-000046",
+     "text": "Ratio of net investment income to average net assets (6) 12.37 % 12.86 %"
+    },
+    {
+     "accession": "0001742313-24-000084",
+     "text": "Ratio of net investment income to average net assets (6) 12.01 % 12.27 %"
+    }
+   ]
+  },
+  {
+   "what": "SHARED CODE 1, fund level, net investment income (income_identity, five quarters): the filer's own concept mcip:NetInvestmentIncomePerShareDiluted is filed ahead of us-gaap:NetInvestmentIncome and its name contains 'NetInvestmentIncome', so the fund-income extractor published the per-share figure (0.2, 0.22, 0.2, 0.31) as net investment income in four quarters and wrong year-end remainders in two. New highlights-wrapper key income_concept_suppress (pipeline/bdc_fund_income.py, pipeline/fund_highlights_wrapper.py, schemas/fund_highlights_wrapper/wrapper_v1.schema.json): concept-name substrings the income extractor skips for that filer. Set for this fund only; empty for every other fund.",
+   "kind": "shared_code",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-06-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Net investment income before income taxes 27,547 11,373 51,104 19,288"
+    },
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Net investment income per share - basic and diluted $ 0.31 $ 0.22 $ 0.62 $ 0.42"
+    }
+   ]
+  },
+  {
+   "what": "SHARED CODE 2, fund level, expenses (income_identity at 2022-12-31 and 2023-12-31): first-quarter 10-Qs, and most 10-Qs from 2024, tag expenses only as InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement, which the extractor does not read; those quarters had no total expenses and the fourth quarter was published as a quarter of the year (27,036 against 34,796 for 2023). New highlights-wrapper key income_concept_fallback: the named concept fills total_expenses only for a period that has an income statement and no expenses fact; a period that has one is never changed. Set for this fund only. Total income less net investment income now equals total expenses in every quarter but the three with a fee waiver (2022-06-30, 2022-09-30, 2026-03-31), where the filed total is before the waiver.",
+   "kind": "shared_code",
+   "quarters": [
+    "2022-03-31",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "Net investment income before income taxes 23,557 7,915"
+    }
+   ]
+  },
+  {
+   "what": "SHARED CODE 3, row corrections: 'interest_rate_kind' (cash or all_in) added to the fields a row correction may set (pipeline/unified_holdings.py). The financial step already reads an explicit kind before any tag; without it a rate corrected from the page beside a PIK rate stays unresolved and is not published. Used by 14 Monroe lines; no existing line of any fund uses the field, so no other fund's rows can change. Any other value is skipped with a warning.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001742313-26-000026",
+     "text": "Bandas Law Firm, P.C. SF 13.75 % 4.00 % Cash/ 13.75 % PIK 2/17/2026 2/17/2030 4,772 4,704 4,700 0.2 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "what": "255 rows of the three 2023 10-Qs printed with a dash for fair value (225 undrawn lines with a tagged principal, 30 nil or empty rows) were not published; the same kind of row is published from 2023-12-31, when the filer starts tagging the zero. Listed in the decision log (D-095) as a shared defect with no fix; here fixed per fund by declaring the zero from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For each filing, count schedule rows whose fair-value cell is a dash and whose context carries a principal or cost fact, against published rows of zero value: a quarter with such rows on the page and none published is a gap.",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "95 Percent Buyer, LLC (Revolver) (*) SF 5.60 % 10.27 % 11/24/2021 11/24/2026 808 - - 0.0 %"
+   }
+  },
+  {
+   "observation_key": "plain-rate-tagged-as-pik-published-as-pik-only",
+   "what": "10 loan rows at 2023-06-30 and 2023-09-30 (Caravel x6, Drawbridge delayed draw, ecMarket x2, Amelia delayed draw; 42.0M): the page prints a plain coupon and the filer tagged it with the paid-in-kind concept, so the build published a PIK rate equal to the coupon and no rate. No rule compares the kind of the tag with the printed cell.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 42.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A loan whose PIK rate is published with no rate, and whose printed rate cell does not contain the word PIK, is a mis-tagged plain rate.",
+   "quote": {
+    "accession": "0001410578-23-001769",
+    "text": "Caravel Autism Health, LLC (~) SF 6.01 % 10.90 % 6/30/2021 6/30/2027 8,059 7,946 7,692 0.8 %"
+   }
+  },
+  {
+   "observation_key": "pik-coupon-tagged-as-cash-or-plain-rate",
+   "what": "13 loan rows (Whistler Parent x9 from 2025-09-30, Sundy Village 2026-03-31, Jumpstart revolver x2, Medallia 2023-09-30; 94.8M): the page prints the coupon as PIK, the filer tagged it as a cash or plain rate and no PIK rate. Ten were published with no rate at all (the build withholds a cash-tagged rate with no PIK), three with a rate and no PIK flag. Now PIK rate and spread, rate empty, like the fund's other PIK-with-spread rows.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 94.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A loan whose printed rate cell contains PIK and whose published PIK rate is empty.",
+   "quote": {
+    "accession": "0001742313-26-000026",
+    "text": "Whistler Parent Holdings III, Inc. SF 6.85 % 10.52 % PIK 10/25/2024 6/2/2028 29,340 29,155 14,729 0.5 %"
+   }
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "what": "17 loan rows (69.3M): the page prints a rate the build did not publish. Nine are the cash part of a split coupon printed on the line above the name in the old 10-Q layout and not tagged (2023-03-31 Aras, Arcstor, Caravel revolver, INH, NTM, Premier Roofing, TigerConnect delayed draw; 2023-06-30 Vice Group senior x2); they published a PIK rate and no rate. Three carry no rate tag (TigerConnect term 2023-06-30 and 2023-09-30, Radiology Partners 2024-03-31). Five carry a rate tag the build could not read as cash or all-in and withheld (TigerConnect x3, Whistler 2023-12-31, Bandas 2026-03-31).",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 69.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the printed rate cell of every anchored loan row with the published rate: a printed figure with an empty published rate is a gap (the old-layout cash part needs the preceding line read with the row).",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "3 rows: the page prints a PIK figure and the context has no PIK fact (Sundy Village junior 2025-12-31 '15.28 % PIK', 14.9M; TigerConnect delayed draw 2023-03-31 '3.38 % PIK'; Bluesight Class A preferred 2023-09-30 '9.00 % PIK'). On the TigerConnect term loan of 2023-03-31 the reverse: a PIK tag of 3.38 that belongs to the delayed-draw line sat on the term loan, which prints a plain 11.58.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 15.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A row whose printed rate cell contains PIK and whose published PIK rate is empty; and a published PIK rate on a row whose printed cell has none.",
+   "quote": {
+    "accession": "0001742313-26-000013",
+    "text": "Sundy Village West Mezz Borrower, LLC (12) SF 11.50 % 15.28 % PIK 12/21/2023 1/15/2027 14,625 14,625 14,877 0.5 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-in-row-name-not-published",
+   "what": "80 equity rows (2023-03-31, 06-30, 09-30, one at 2024-06-30) print the unit count in the row's name ('( 385,027 Class A units)') and carry no share-count fact; no count was published. Later filings tag it.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30"
+   ],
+   "fair_value_m": 79.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "An equity row whose printed name carries '( n units | shares | interests)' and whose published unit count is empty or a different number.",
+   "quote": {
+    "accession": "0001410578-23-002414",
+    "text": "ClearlyRated Capital, LLC ( 5,500,000 Class A units) (####) - - - (###) 6/1/2023 - - 5,500 5,500 0.4 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "what": "4 rows: the tagged unit count is not the printed one. Dorado Class A-2 at 2023-06-30 and 2023-09-30 is tagged 725,806, the count of the Ascent Midco line printed above it (page: 531,783); IDIG Class X at 2025-06-30 and 2025-09-30 is tagged 34,043,000 and 20,049,000 (page: 34,043 and 20,049; at 2025-12-31 the build's own scale step already publishes 20,049).",
+   "field": "shares_held",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 1.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "The same as above: printed count in the row name against the published count.",
+   "quote": {
+    "accession": "0001742313-25-000064",
+    "text": "IDIG Parent, LLC ( 34,043 Class X units) (17) - - - 6/23/2025 - - 35 34 0.0 %"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "2024-03-31: the context of the member 'J2 BWA Funding LLC, Senior Secured Loans, Revolver' holds the first Oceana Australian Fixed Income Trust line (31.0M, published under J2 BWA with no spread), and the J2 BWA Funding LLC revolver sits on a 'J2 BWA Funding III' member. Two member typos were published as issuer names ('Verp Biotech Inc.' 30.0M, 'VVice Acquisition Holdco'). No rule compares a member's name with the name on its printed row.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 62.7,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "For every anchored row, compare the start of the member's issuer name with the start of the printed row's name; a mismatch on a row whose issuer has other rows in the quarter is a row on the wrong member or a typo.",
+   "quote": {
+    "accession": "0001742313-24-000027",
+    "text": "Oceana Australian Fixed Income Trust (~) (<) (c) (d) SF 8.25 % 13.58 % 6/8/2023 4/1/2026 30,847 31,770 31,001 2.0 %"
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "5 rows, Lessen Inc. (2023-03-31, 06-30, 09-30) and SheerTrans Solutions (2023-03-31, 09-30): the member names no share class and an earlier correction (D-101) set common equity; the printed rows read 'preferred units' and 'preferred interests'. Not looked for beyond the rows this run touched: other class-less members of 2023 may print a class too.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 23.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "An equity row published as common whose printed name contains 'preferred'.",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "SheerTrans Solutions, LLC ( 8,642,579 preferred interests) (####) - - - (###) 7/29/2022 - - 8,643 8,729 1.0"
+   }
+  },
+  {
+   "observation_key": "equity-commitment-published-as-loan",
+   "what": "SingleStore, Inc. equity commitment (9.4M at 2025-12-31, 9.3M at 2026-03-31, nil at 2025-09-30) was a first-lien loan in the loan book: the filer tags the commitment amount with the principal concept on a row of its Equity Securities section.",
+   "field": "asset_category",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 9.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A row classed as a loan whose member or printed section is 'Equity Securities'.",
+   "quote": {
+    "accession": "0001742313-26-000026",
+    "text": "SingleStore, Inc. ($ 9,359 equity commitment) - - - 10/14/2025 - 9,359 9,359 9,265 0.3 %"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "No industry is published for the three 2023 10-Qs: extracted_industry is filled on 1 of 420, 450 and 475 rows at 2023-03-31, 06-30 and 09-30 (a GICS label on about a quarter of them), against every row from 2023-12-31. The pages print the same industry headings; the page reader marks every row of these three filings 'blank' for the sector. Left: the cause is in the shared page reader's handling of this older layout, which I did not open.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 5282.8,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Share of rows with an industry by fund and quarter; a quarter under half of its neighbours' share is a dropped field (the field_coverage_drop rule looks only at a fall from the quarter before, and these are the fund's first quarters).",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "FIRE: Real Estate 300 N. Michigan Mezz, LLC (Delayed Draw) (~) (<) (*) (**) SF 14.57 % 19.35 % PIK 7/15/2020 7/15/2024 1,000 979 979 0.1 %"
+   }
+  },
+  {
+   "observation_key": "comparative-schedule-of-an-unpublished-quarter",
+   "what": "The fund's first published quarter is 2023-03-31. The 10-Q for that date carries the full December 31, 2022 schedule, tagged (423 contexts, 332 with a fair value); it is not published as a quarter, so 2022-12-31 (investments 1,469M at fund level) has no holdings. Left: publishing a quarter from a comparative schedule is a pipeline decision, not a fund fix.",
+   "field": "fair_value",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "fair_value_m": 1469.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A fund-quarter with fund-level figures and no holdings (rule F28) where a later filing of the fund carries a tagged schedule for that date.",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "TigerConnect, Inc. (~~) SF 7.25 % 3.63 % PIK 2/16/2022 2/16/2028 10,000 9,823 9,875 1.3 %"
+   }
+  },
+  {
+   "observation_key": "pik-coupon-with-spread-published-without-a-rate",
+   "what": "201 loan rows over the 13 quarters (6 to 32 a quarter, 95.7M at 2026-03-31) print the whole coupon as PIK beside a spread and publish the PIK rate and the spread with no rate. This is the open owner question D-092; left exactly as it was, and the 13 rows this run moved into that form were published with no rate or no PIK flag before.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 95.7,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "None needed beyond the decision: once D-092 is ruled, a loan with a PIK rate, a spread and no rate either has the rate filled or is counted by one rule.",
+   "quote": {
+    "accession": "0001742313-25-000039",
+    "text": "Thrasio, LLC (21) SF 10.26 % 14.55 % PIK 6/18/2024 6/18/2029 574 574 502 0.0 %"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "No row of this fund has the warrant category in any quarter; the 5 to 10 rows a quarter whose member names a warrant (0.7M to 2.2M; 9 rows, 1.1M at 2026-03-31) are published as common equity (noted as not done in D-101, still so), for example the MV Receivables II warrant. Left: a class change across all quarters that I did not read row by row.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "An equity row whose printed name or member contains 'warrant' and whose category is not WARRANT.",
+   "quote": {
+    "accession": "0001410578-23-001769",
+    "text": "MV Receivables II, LLC (warrant to purchase up to 1.0 % of the equity) (<) (####) - - - (###) 7/28/2021 7/28/2031 - 453 - 0.0 %"
+   }
+  },
+  {
+   "observation_key": "issuer-name-correction-blanks-instrument-description",
+   "what": "A row correction of issuer_name alone leaves the row's instrument_description empty (three rows in build moxc: J2 BWA revolver, Vero Biotech, Vice Acquisition). The instrument text of this fund is derived from the text stripped off the name, and a corrected name skips that step. Worked around by stating the instrument text in the same correction; the step itself (shared, pipeline/unified_holdings.py, issuer name strip) was not changed.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 31.7,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "After any build, rows whose instrument_description became empty against the build before (the field comparison shows it; no ledger rule does).",
+   "quote": {
+    "accession": "0001742313-24-000027",
+    "text": "Vero Biotech Inc. P 3.75 % 12.25 % 12/29/2023 1/2/2029 30,000 29,717 30,000 1.9 %"
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-the-total-income-ratio",
+   "what": "income_yield_pct held the ratio of TOTAL investment income to average net assets for every quarter to 2024-09-30 (15.3 to 24.4): the filer tagged that line with the investment income ratio concept. Declared from the page for 2022-03-31 to 2024-09-30. Not done before 2022: 2021-12-31 publishes 3.33, a quarter of the year's total-income ratio 13.31 (the year's net ratio with waivers is 7.34).",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2021-12-31",
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "income_yield_pct against net investment income over average net assets computed from the fund's own figures: a ratio near total income over net assets is the wrong line.",
+   "quote": {
+    "accession": "0001742313-24-000006",
+    "text": "Ratio of total investment income to average net assets (6) 22.50 % 16.08 % 13.31 % 12.86 % 12.53 %"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "what": "net_investment_income was 0.2, 0.22, 0.2 and 0.31 in four quarters and a wrong year-end remainder in two: the income extractor matches concept names by substring and takes the first fact, and the filer's mcip:NetInvestmentIncomePerShareDiluted comes first. The decision log (D-095) lists the same defect for Goldman Sachs BDC, AB and Blackstone Real Estate Credit; the new wrapper key fixes it per fund, the substring match itself is unchanged for them.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-06-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "net_investment_income below one thousandth of total investment income, or equal to the published per-share figure, is a per-share fact.",
+   "quote": {
+    "accession": "0001410578-23-001769",
+    "text": "Net investment income per share - basic and diluted $ 0.31 $ 0.22 $ 0.62 $ 0.42"
+   }
+  },
+  {
+   "observation_key": "quarter-expenses-missing-so-fourth-quarter-is-a-quarter-of-the-year",
+   "what": "total_expenses was empty in 9 of the 17 quarters from 2022-03-31 (the filer tags only the after-waiver expense concept in those 10-Qs), and where a quarter was missing the fourth quarter was published as the year's figure divided by four (2022: 11,215 against 16,745; 2023: 27,036 against 34,796). Shared: the fourth-quarter fallback in the fund-level step divides the year by four when a quarter is missing, for any fund.",
+   "field": "total_expenses",
+   "quarters": [
+    "2022-03-31",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A fourth-quarter figure equal to a quarter of the year's while another figure of the same row is year less nine months.",
+   "quote": {
+    "accession": "0001410578-23-001083",
+    "text": "Net investment income before income taxes 23,557 7,915"
+   }
+  }
+ ],
+ "earlier_verdicts": [
+  {
+   "finding": "row_validation X02 2025-03-31",
+   "reviewer_found": "Thrasio (14.55 % PIK), Arcserve delayed draw (12.44 % PIK) and Witkoff/Monroe 700 JV (13.25 % PIK) published with no rate and no spread",
+   "outcome": "does not describe the current build: Witkoff publishes 13.25 (D-101); Thrasio and Arcserve have a spread and a PIK rate and are not flagged (D-092). The seven flagged rows are printed n/a n/a n/a. Proposal carries the answer"
+  },
+  {
+   "finding": "row_validation X02 2025-06-30",
+   "reviewer_found": "Adept AG, Arcserve and Vice Acquisition printed n/a for index, spread and rate; a real absence in the source",
+   "outcome": "agrees with the page; nothing to extract. Proposal carries the answer"
+  },
+  {
+   "finding": "weak fmt_basis_spread 2023-03-31",
+   "reviewer_found": "Arcstor Midco published with no rate although the row prints SF 7.60 % and 3.75 % PIK",
+   "outcome": "a real gap, fixed in this run: the untagged cash part 8.66 is set from the page, rate 12.41. Not what the check flags (Evolve Biologics, spread 16.00 as printed)"
+  },
+  {
+   "finding": "weak fmt_basis_spread 2024-06-30",
+   "reviewer_found": "300 N. Michigan Mezz published with no rate although the row prints 19.90 % PIK",
+   "outcome": "the coupon is all PIK beside a spread: left as published under the open owner question D-092. Not what the check flags"
+  },
+  {
+   "finding": "identity pct_of_net_assets_identity 2025-12-31",
+   "reviewer_found": "Quest, Gersh and Dorado print 0.6 pct where fair value over net assets gives about 0.5",
+   "outcome": "right, and it is the filer's printed figure; published equals the page"
+  },
+  {
+   "finding": "row_validation PP03 2024-12-31 (outstanding in f15a with a real-error verdict)",
+   "reviewer_found": "nine prior-period rows retained under the 2024-12-31 report date",
+   "outcome": "no longer a finding in any of my builds: the rule was repaired after f15a was built (not my change). I did not re-read the nine rows; published equals filed at 2024-12-31"
+  }
+ ],
+ "tests_run": [
+  "tests/test_unified_holdings.py -k TestApplyRowCorrections: 17 passed (2 new: a rate kind from the printed line; a kind outside cash / all_in is not applied)",
+  "tests/test_bdc_fund_income.py tests/test_fund_highlights_wrapper.py: 61 passed (4 new: suppress on and off; fallback fills a missing column, never replaces a filed one, off by default, no thin row)",
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py: 654 passed (after the 489 untagged_values lines)",
+  "highlights wrapper validated against schemas/fund_highlights_wrapper/wrapper_v1.schema.json with jsonschema",
+  "scratch/fund_runs/0001742313/finalize.py: every quote in the proposals and in this report found in the cached filing, compared as the gate compares",
+  "build logs moxb to moxe: 0 unmatched row corrections for this fund",
+  "tests/test_audit_wrapper_cohort.py tests/test_fund_financials.py tests/test_v05_fund_gate.py tests/test_financial_conventions.py: 242 passed (after the last code change)",
+  "tests/test_unified_holdings.py as a whole: started after the last code change and stopped by me (my own process, by its id) after about 65 minutes without a result; the class that covers the changed function, TestApplyRowCorrections, passes (17)",
+  "fund_gate.py check --label moxe --before f15a with the orchestrator's snapshot: PASS (my own run; the orchestrator runs it again)",
+  "NOT run: the full pytest suite; python scripts/diff_outputs.py --semantic; any build of another fund"
+ ],
+ "not_done": [
+  "Builds: 5 of 6 (moxa to moxe). The two shared rule repairs made after f15a (PP03, field_coverage_drop) account for PP03 x2 leaving the ledger in moxa; that is not my change.",
+  "Shared code is in three places and none is switched by the BDC wrapper in the literal sense of the brief: two are keys of this fund's highlights wrapper (empty for every other fund), the third is a new correctable field that only correction lines of this fund use. Effect on other funds: none by construction, NOT measured by a cohort build (I may build this fund only).",
+  "The 43 rate corrections are quarter-pinned rows, not a rule: a later filing that tags a plain rate as PIK, or prints a cash part the tags lack, will need the same reading. The page comparison that found them is scratch/fund_runs/0001742313/page_vs_pub.py (my own script, not a pipeline check).",
+  "The old-layout cash part (printed on the line above the name) was looked for only on rows with a PIK rate and no published rate. A row of the three 2023 10-Qs whose published rate already includes a cash part was not re-read against that line.",
+  "My page comparison covers the 8,403 rows the page reader anchors; 120 published rows have no anchored printed row and were not compared (the 255 added rows were each read through their own table row).",
+  "Not checked: non-accrual flags, lien tier (the page reader gives 'First Lien' to rows of the junior secured section; I did not compare the published lien), GICS labels, maturity dates beyond the parser's comparison (no disagreement found), cost beyond the same comparison, reference-rate codes (D-101), position identity across quarters beyond the 157 renamed ids, total assets and liabilities at fund level, 2021 and earlier fund rows.",
+  "Earlier verdicts: the reviewers' table and row indices were not opened; their quoted text was matched to the printed page and to the build.",
+  "pct_of_net_assets_identity: the 66 rows were checked by the tool against the page; I read one printed line per quarter myself, not all 66.",
+  "X02 at 2026-03-31 is closed by the owner's standing check (no_rate_in_source), written by make_batch_dispositions.py to data/overrides/finding_dispositions/fundloop_accepted_by_check.json; the other four X02 quarters fail that check or carry a verdict and have a proposal.",
+  "32 outstanding findings all have a proposal; none is accepted. 'All findings covered' is not 'data correct': no rule tests the kind of a rate tag against the printed cell, a member's name against the printed name, or a missing industry in a fund's first quarters; this run found those by reading."
+ ]
+}

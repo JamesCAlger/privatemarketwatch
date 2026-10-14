@@ -3,13 +3,87 @@
  "cik": "0001742313",
  "entity_name": "Monroe Capital Income Plus Corp",
  "version": 1,
+ "income_concept_suppress": [
+  "netinvestmentincomepershare"
+ ],
+ "income_concept_fallback": {
+  "total_expenses": [
+   "investmentcompanyexpenseafterreductionoffeewaiverandreimbursement"
+  ]
+ },
  "figure_corrections": [
   {
    "report_date": "2023-03-31",
    "field": "shares_outstanding",
    "value": 83765000,
    "evidence": "0001410578-23-001083 (10-Q, 2023-03-31) balance sheet: 'Common stock, $ 0.001 par value, 100,000 shares authorized, 83,765 and 74,533 shares issued and outstanding, respectively'. The published 74,533,000 is the 2022-12-31 figure; net asset value per share 10.25 x 83,765K = net assets 858,859K."
+  },
+  {
+   "report_date": "2022-03-31",
+   "field": "income_yield_pct",
+   "value": 8.69,
+   "evidence": "0001410578-23-001083 (10-Q, 2023-03-31) financial highlights, comparative column for the three months ended March 31, 2022: 'Ratio of net investment income (loss) to average net assets (6) 13.31 % 8.69 %'. The published 15.33 is 'Ratio of total investment income to average net assets (6) 23.05 % 15.33 %'."
+  },
+  {
+   "report_date": "2022-06-30",
+   "field": "income_yield_pct",
+   "value": 8.32,
+   "evidence": "0001410578-23-001769 (10-Q, 2023-06-30) financial highlights, comparative column for the six months ended June 30, 2022: 'Ratio of net investment income (loss) to average net assets with waivers (6) 12.86 % 8.32 %'. The published 14.15 is 'Ratio of total investment income to average net assets (6) 22.80 % 14.15 %'."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "income_yield_pct",
+   "value": 8.18,
+   "evidence": "0001410578-23-002414 (10-Q, 2023-09-30) financial highlights, comparative column for the nine months ended September 30, 2022: 'Ratio of net investment income (loss) to average net assets with waivers (6) 12.27 % 8.18 %'. The published 14.40 is the ratio of total investment income to average net assets."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "income_yield_pct",
+   "value": 8.74,
+   "evidence": "0001742313-24-000006 (10-K, 2023-12-31) financial highlights, column for 2022: 'Ratio of net investment income (loss) to average net assets with waivers and expense reimbursement (6) 11.61 % 8.74 % 7.34 % 8.84 % 7.37 %'. The published 16.08 is 'Ratio of total investment income to average net assets (6) 22.50 % 16.08 % 13.31 % 12.86 % 12.53 %'."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "income_yield_pct",
+   "value": 13.31,
+   "evidence": "0001410578-23-001083 (10-Q, 2023-03-31) financial highlights: 'Ratio of net investment income (loss) to average net assets (6) 13.31 % 8.69 %'. The published 23.05 is the line above it, 'Ratio of total investment income to average net assets', which the filer tagged with the investment income ratio concept."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "income_yield_pct",
+   "value": 12.86,
+   "evidence": "0001410578-23-001769 (10-Q, 2023-06-30) financial highlights: 'Ratio of net investment income (loss) to average net assets with waivers (6) 12.86 % 8.32 %'. The published 22.80 is 'Ratio of total investment income to average net assets (6) 22.80 % 14.15 %'."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "income_yield_pct",
+   "value": 12.27,
+   "evidence": "0001410578-23-002414 (10-Q, 2023-09-30) financial highlights: 'Ratio of net investment income (loss) to average net assets with waivers (6) 12.27 % 8.18 %'. The published 22.56 is the ratio of total investment income to average net assets."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "income_yield_pct",
+   "value": 11.61,
+   "evidence": "0001742313-24-000006 (10-K, 2023-12-31) financial highlights: 'Ratio of net investment income (loss) to average net assets with waivers and expense reimbursement (6) 11.61 %'. The published 22.50 is the ratio of total investment income to average net assets."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "income_yield_pct",
+   "value": 12.29,
+   "evidence": "0001742313-24-000027 (10-Q, 2024-03-31) financial highlights: 'Ratio of net investment income (loss) to average net assets (6) 12.29 % 13.31 %'. The published 23.46 is the ratio of total investment income to average net assets."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "income_yield_pct",
+   "value": 12.37,
+   "evidence": "0001742313-24-000046 (10-Q, 2024-06-30) financial highlights: 'Ratio of net investment income to average net assets (6) 12.37 % 12.86 %'. The published 23.92 is the ratio of total investment income to average net assets."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "income_yield_pct",
+   "value": 12.01,
+   "evidence": "0001742313-24-000084 (10-Q, 2024-09-30) financial highlights: 'Ratio of net investment income to average net assets (6) 12.01 % 12.27 %'. The published 24.39 is the ratio of total investment income to average net assets."
   }
  ],
- "notes": "One quarter only: the prior year-end share count was taken for 2023-03-31."
+ "notes": "Shares: the prior year-end share count was taken for 2023-03-31. Income ratio: through the 10-Q for 2024-09-30 the filer tagged the ratio of TOTAL investment income to average net assets with the investment income ratio concept, so that figure was published as the income ratio; the printed net investment income ratio is declared for the eleven quarters 2022-03-31 to 2024-09-30 (from the 10-K for 2024 the tagged figure is the net ratio). Net investment income: the filer's own per-share concept is filed ahead of the dollar fact and its name contains 'NetInvestmentIncome' (income_concept_suppress). Expenses: first-quarter 10-Qs and most 10-Qs from 2024 tag expenses only as InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement (10-Q 2023-03-31: 22,295,000; printed 'Net investment income before income taxes 23,557', and total investment income 45,852 less 22,295 is 23,557), so those quarters had no expenses and the fourth quarter was published as a quarter of the year's figure (income_concept_fallback)."
 }

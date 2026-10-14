@@ -3810,3 +3810,36 @@ Gate PASS on the first round; two builds.
 - A stale test of mine from D-146 (two Sixth Street corrections expected, three exist) is fixed.
 - Rows from 2025-09-30 on were not read against the page by the agent (the page-reader join it
   used ends at 2025-06-30).
+
+### D-159 Monroe Capital Income Plus cleared through the fund-clearing skill (sandbox `moxe`)
+
+Overnight run of 2026-10-13/14. Gate PASS on the first round; five builds, about 2 hours 15.
+
+- **Ledger:** 56 findings, 32 outstanding (61 in `f15a`), all 32 with a proposal (8 entries).
+  Totals tie in 13 of 13 quarters.
+- **Fixed:** 255 rows of the three 2023 10-Qs printed with a dash for fair value were not published
+  (225 undrawn lines, 30 nil rows): published at zero, declared from the page; 43 coupons read
+  from the printed row (plain rate tagged as PIK, PIK tagged as cash, cash part printed above the
+  name, no tag); 89 unit counts from the row name and 4 wrong counts; an equity commitment
+  published as a loan (9.3M); two preferreds published as common; a 31.0M line on another
+  issuer's member; fund-level income ratio, net investment income (a per-share figure was
+  published) and fourth-quarter expenses.
+- **Shared code, three changes with tests:** `interest_rate_kind` correctable by row
+  (`pipeline/unified_holdings.py`); highlights-wrapper keys `income_concept_suppress` and
+  `income_concept_fallback` (`pipeline/bdc_fund_income.py`, `pipeline/fund_highlights_wrapper.py`,
+  schema). Used by this fund only. Tests run by the orchestrator: test_bdc_fund_income and
+  test_fund_highlights_wrapper (61 passed), the correction tests of test_unified_holdings (19
+  passed). Not run: the whole of test_unified_holdings, the full suite.
+- **Orchestrator's sample:** seven changed rows read on the page (TigerConnect 2023-03-31, Caravel
+  2023-06-30, Medallia 2023-09-30, Whistler 2025-12-31, the Securly and Edustaff revolvers printed
+  with a dash for value, NationsBenefits common units): all seven match. Proposals not sampled.
+- **For the owner:** D-092 (PIK with a spread) is untouched, but 13 rows whose coupon the page
+  prints as PIK and the filer tagged as cash were moved into that same form, so they now publish
+  a PIK rate and a spread and no rate. That follows the present convention; it is also 13 more
+  rows that depend on the D-092 ruling.
+- **Observations:** 18 recorded. Shared causes: rows printed with a dash for value are not
+  published; a per-share figure read as net investment income (the agent notes the same defect on
+  three other funds); correcting an issuer name alone blanks the instrument description; no
+  industry on any row of the three 2023 10-Qs (page reader).
+- Not checked by the agent: non-accrual flags, lien tier, labels, reference-rate codes, 120 rows
+  with no anchored printed row. Its 43 rate corrections are pinned to quarters, not a rule.
