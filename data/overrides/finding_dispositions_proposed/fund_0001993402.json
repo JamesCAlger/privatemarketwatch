@@ -1,200 +1,127 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "as1d",
+ "sandbox": "asxc",
  "dispositions": [
   {
    "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1993402-1",
-   "class": "as_filed",
-   "engine": "source_recon",
-   "rule_name": "blocking_source_position_like_parser_mismatch",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "statement": "The rows reported as missing are the filer's separate unfunded-commitments table, removed on purpose (rule exclude_commitment_table_rows). They are outside 'Total Investments' and repeat value already in the schedule.",
+   "class": "as_filed", "engine": "source_recon", "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "ciks": ["0001993402"],
+   "quarters": ["2024-03-31","2024-06-30","2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31"],
+   "statement": "The source facts reported as unpublished are the rows of the filer's separate unfunded-commitments table (identifier 'Commitment Type ... Commitment Expiration Date'), excluded on purpose by rule exclude_commitment_table_rows. The table sits outside 'Total Investments' and repeats loans already in the schedule. No fix applies: publishing them would double count and break the tie to the filed total, which holds in all nine quarters in asxb.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001193125-26-221769: 'AAH Topco., LLC Delayed Draw Term Loan 4/1/2027 $ 3,179 $ ( 8 )' ... 'Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )'; schedule 'Total Investments at fair value $ 4,537,269 $ 4,493,774 208.26 %'."
-    },
-    {
-     "source": "query",
-     "quote": "Sandbox as1d: published rows equal the filed investments figure in all nine quarters once the commitment-table rows are out (2025-03-31 differs by 0.294M, two subtotal rows)."
-    }
+    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )", "quote": "The commitment table ends with its own total, separate from 'Total Investments at fair value'."},
+    {"source": "filing", "accession": "0001193125-26-115988", "verbatim": "Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )", "quote": "Same table at 2025-12-31."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb; docs/investigations/v05_readings/0001993402.md section A",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-SRC_BDC01-1993402-2",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "SRC_BDC01",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "statement": "The same commitment-table rows, reported by the row check.",
+   "class": "as_filed", "engine": "row_validation", "rule_name": "SRC_BDC01",
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "ciks": ["0001993402"],
+   "quarters": ["2024-03-31","2024-06-30","2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31"],
+   "statement": "The same commitment-table rows, reported by the row check. Excluded on purpose; they repeat value already in the schedule.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001193125-26-221769: 'Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )'; Movati Athletic delayed draw prints in the schedule 'CAD 3,500 ( 27 ) 25' and its commitment-table context C_fc7bf067 carries commitment 2,515,000 and fair value 25,000."
-    }
+    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )", "quote": "Commitment table total, outside the investments total."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-fv_conservation-1993402-3",
-   "class": "rule_problem",
-   "engine": "conservation",
-   "rule_name": "fv_conservation",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31"
-   ],
-   "statement": "Published equals the printed 'Total Investments at fair value' exactly in the three quarters. The check adds a cash-equivalents figure to the filed investments line, but from 2025-06-30 that line already includes the money market fund, and the fund-level cash-equivalents figure it adds (62,915,000) is the 2024-12-31 balance carried forward.",
+   "class": "rule_problem", "engine": "conservation", "rule_name": "fv_conservation",
+   "reason_key": "conservation-anchor-adds-stale-cash-equivalents-already-in-investments",
+   "ciks": ["0001993402"],
+   "quarters": ["2025-06-30","2025-09-30","2025-12-31"],
+   "statement": "Published (including the money-market row published as cash via cash_identifiers) equals the printed 'Total investments at fair value' exactly in these quarters. The check's anchor adds a fund-level cash-equivalents figure of 62,915,000 (the 2024-12-31 value, carried forward) to an investments line that already includes the money-market fund. The anchor store belongs to the validation side; see orchestrator_requests in the report.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "query",
-     "quote": "Sandbox as1d: published 3,160.570 / 3,582.748 / 4,246.035 = filed investments 3,160.570 / 3,582.748 / 4,246.035 (2025-06-30, 2025-09-30, 2025-12-31); residual -1.95 / -1.73 / -1.46 pct is 62.915 / anchor."
-    },
-    {
-     "source": "filing",
-     "quote": "0001193125-26-115988: 'BlackRock Liquidity T-Fund - Institutional Shares (14) ... 71,644 71,644 3.55'; 0000950170-25-040578: 'Cash Equivalents BlackRock Liquidity T-Fund ... 62,915 62,915 5.05' (2024-12-31)."
-    }
+    {"source": "filing", "accession": "0000950170-25-108177", "verbatim": "58,644 - Total investments at fair value 3,160,570 2,131,829", "quote": "2025-06-30: total investments 3,160,570 includes the 58,644 short-term investment."},
+    {"source": "filing", "accession": "0001193125-25-280638", "verbatim": "42,836 - Total investments at fair value 3,582,748 2,131,829", "quote": "2025-09-30: 3,582,748 includes 42,836."},
+    {"source": "filing", "accession": "0001193125-26-115988", "verbatim": "Total Short-Term Investments 71,644 71,644 3.55 Total Investments at fair value $ 4,241,699 $ 4,246,035", "quote": "2025-12-31: 4,246,035 includes 71,644."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-C04-1993402-4",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "C04",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "statement": "To 2025-06-30 the filer tags the printed unit count of equity rows as a principal amount, so no share fact exists (36 to 65 rows a quarter); from 2025-09-30 it files share counts.",
+   "disposition_id": "PD-F27-1993402-4",
+   "class": "false_alarm", "engine": "fund_financials", "rule_name": "F27",
+   "reason_key": "income-yield-high-while-fund-ramps",
+   "ciks": ["0001993402"],
+   "quarters": ["2024-06-30","2024-09-30","2024-12-31"],
+   "statement": "Income yield above the weighted coupon while the fund ramps: investments grew from 479.9M at 2024-03-31 to 1,565.6M at 2024-09-30 and 2,131.8M at 2024-12-31, so a period's income sits over a fast-growing base. No value is wrong.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0000950170-24-095485: 'Holocene Topco LP (5)(10)(11) Preferred 136 322 420 0.08'; context C_bfbd703f carries InvestmentOwnedBalancePrincipalAmount 136000 and no share fact."
-    }
+    {"source": "filing", "accession": "0000950170-24-057976", "verbatim": "Total Investments - non-controlled/non-affiliated 479,312 479,854 159.13 %", "quote": "2024-03-31 investments 479.9M."},
+    {"source": "filing", "accession": "0000950170-24-126519", "verbatim": "Total Investments - non-controlled/non-affiliated 1,564,669 1,565,598 151.64 %", "quote": "2024-09-30 investments 1,565.6M."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-F27-1993402-5",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F27",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31"
-   ],
-   "statement": "Income yield above the weighted coupon while the fund ramps: investments grew from 480M to 2,132M during 2024, so a quarter's income sits over a fast-growing base.",
+   "disposition_id": "PD-F33-1993402-5",
+   "class": "as_filed", "engine": "fund_financials", "rule_name": "F33",
+   "reason_key": "fund-row-before-operations-began",
+   "ciks": ["0001993402"],
+   "quarters": ["2023-12-31"],
+   "statement": "A fund-level row before operations began (net assets 25,000 seed capital). Nothing to publish or fix.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "query",
-     "quote": "fund_financials: investments at fair value 479.9M (2024-03-31), 1,031.9M, 1,565.6M, 2,131.8M (2024-12-31)."
-    }
+    {"source": "filing", "accession": "0000950170-24-126519", "verbatim": "commenced investment operations on January 19, 2024", "quote": "No investment operations at 2023-12-31."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-F33-1993402-6",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F33",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2023-12-31"
-   ],
-   "statement": "A fund-level row before operations began; net assets 25,000.",
+   "disposition_id": "PD-X01-1993402-6",
+   "class": "as_filed", "engine": "row_validation", "rule_name": "X01",
+   "reason_key": "equity-row-with-printed-pik-dividend-rate",
+   "ciks": ["0001993402"],
+   "quarters": ["2025-06-30", "2025-09-30"],
+   "statement": "Concord Global Acquisition prints a PIK rate of 8.00 % on its equity line in both quarters (2025-06-30 as Common, 2025-09-30 as Preferred, the latter now corrected to preferred); the published rate 8.0 is the printed one. The other 2025-06-30 row (Accelerate Topco, carrying the next line's 10.50 % PIK) is fixed by row correction.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "The fund 'commenced investment operations on January 19, 2024'."
-    }
+    {"source": "filing", "accession": "0000950170-25-108177", "verbatim": "Concord Global Acquisition, LLC, (12)(13)(15) Common N/A 8.00 % PIK - 3 2,874 2,874 0.17", "quote": "2025-06-30: printed 8.00 % PIK on a common line."},
+    {"source": "filing", "accession": "0001193125-25-280638", "verbatim": "Concord Global Acquisition, LLC (12)(13)(15) Preferred N/A 8.00 % PIK - 2,670 2,930 2,930 0.15", "quote": "Printed 8.00 % PIK on the equity line, fair value 2,930."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   },
   {
-   "disposition_id": "PD-X01-1993402-7",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "X01",
-   "ciks": [
-    "0001993402"
-   ],
-   "quarters": [
-    "2025-09-30"
-   ],
-   "statement": "An equity row with a PIK rate, as printed and tagged.",
+   "disposition_id": "PD-A01-1993402-8",
+   "class": "as_filed", "engine": "oracle", "rule_name": "A01",
+   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
+   "ciks": ["0001993402"],
+   "quarters": ["2024-06-30", "2024-12-31", "2025-03-31"],
+   "statement": "The rollup and its rows sit on members that spell the heading differently, so the check cannot pair them; published equals filed in all three quarters. Members found with fact_members.py: 2024-06-30, the 263,000 gap under 'Equity Investments Diversified Consumer Services' is VPP Group Holdings tagged on '...Equity Diversified Consumer Services VPP Group Holdings, L.P.' (the word 'Investments' missing), and the 549,000 gap under 'Secured Debt Diversified Financial Services' is Wealth Enhancement Group tagged under '...Secured Debt Healthcare Providers and Services Wealth Enhancement Group'. 2024-12-31: the 910,000 gap under 'Secured Debt Building Products' is WST USA Holdco's delayed draw, whose member carries no heading or issuer (issuer set by row correction, D-105). 2025-03-31: the unsecured-debt industry subtotals are tagged on 'Secured Debt <industry>' members (652,000 KWOR on 'Secured Debt Insurance' C_139c87ab; 1,021,000 on 'Secured Debt Diversified Consumer Services' C_711895d1), and the PointClickCare rollup 107,635,000 is the 2024-12-31 comparative fact. No published value is wrong; a fix would mean renaming filer members, which changes nothing published.",
    "basis": "read",
    "evidence": [
-    {
-     "source": "filing",
-     "quote": "0001193125-25-280638: 'Concord Global Acquisition, LLC ... Preferred N/A 8.00 % PIK -- 2,670 2,930 2,930'."
-    }
+    {"source": "filing", "accession": "0000950170-24-095485", "verbatim": "VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05", "quote": "2024-06-30: the 263 row, tagged on a member spelled 'Equity Diversified Consumer Services'."},
+    {"source": "filing", "accession": "0000950170-24-095485", "verbatim": "Wealth Enhancement Group, LLC (5)(8) First Lien Delayed Draw Term Loan S + 5.50 % 1.00 % 10.82 % 10/4/2027 553 537 549 0.10", "quote": "2024-06-30: the 549 row, printed under Diversified Financial Services, tagged under Healthcare Providers and Services."},
+    {"source": "filing", "accession": "0000950170-25-040578", "verbatim": "WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07", "quote": "2024-12-31: the 910 row, member without heading."},
+    {"source": "filing", "accession": "0000950170-25-071531", "verbatim": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured HoldCo Debt S + 3.25 % 7.54 % 2/28/2030 652 652 652 0.04 652 652 0.04", "quote": "2025-03-31: the second 652 is the unsecured Insurance subtotal, tagged on 'Secured Debt Insurance'."}
    ],
-   "rerun": "see docs/investigations/v05_readings/0001993402.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-105); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "sandbox asxc; python scripts/v05_evidence/fact_members.py 1993402 <accession> <value>",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-C107-1993402-7",
+   "class": "as_filed", "engine": "row_validation", "rule_name": "C107",
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "ciks": ["0001993402"],
+   "quarters": ["2026-03-31"],
+   "statement": "The negative costs are printed on undrawn revolver and delayed-draw lines of the main schedule (footnote 7: negative cost and fair value result from unamortized fees). Eagan Parent's delayed draw publishes cost -6,000 and fair value -72,000 exactly as printed.",
+   "basis": "read",
+   "addresses_verdict": {"2026-03-31": "The reviewer found Eagan Parent's fair value of (72) stored as cost -72,000, read from the separate commitment table. Those commitment-table rows are now excluded (rule exclude_commitment_table_rows); the published Eagan row comes from the schedule with cost -6,000 and fair value -72,000, as printed. The error no longer stands."},
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Eagan Parent, Inc. (7)(13)(15)(18) First Lien Delayed Draw Term Loan S + 4.50 % 8.17 % 9/8/2032 4,804 ( 6 ) ( 72 )", "quote": "Printed cost (6), fair value (72) on the undrawn line."}
+   ],
+   "rerun": "sandbox asxb",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
   }
  ]
 }

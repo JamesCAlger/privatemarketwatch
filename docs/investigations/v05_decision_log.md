@@ -3933,3 +3933,27 @@ Overnight run of 2026-10-13/14, 75-minute budget; four builds in 48 minutes, one
 - **Compared with the page by the agent:** 8,399 rows in 13 quarters on rate, PIK, spread,
   benchmark, maturity and par; mismatches 172 to 67; 23 rate mismatches not read.
 - Not run: pytest (no pipeline code changed). 9 observations recorded.
+
+### D-163 Antares Strategic Credit through the fund-clearing skill (sandbox `asxc`), verdict NEEDS_ORCHESTRATOR
+
+Overnight run of 2026-10-13/14. Round one used 16 of its 55 minutes and parked fixable findings
+'for lack of time'; sent back for 35 minutes; round two: every check passes.
+
+- **Ledger:** 61 findings, 37 outstanding (45 in `in2a`), 30 with a proposal, 7 parked. Totals tie
+  in 8 of 9 quarters on the with-cash basis; 2025-03-31 is declared: that quarter the fund prints
+  the money-market fund outside its investments total, and published equals the printed 'Total
+  Investments and Cash Equivalents'.
+- **Fixed:** an exclusion rule for two industry subtotals tagged on a heading-only identifier at
+  2025-03-31 (0.294M); pars printed and not tagged on three rows (`untagged_values`); the wrapper's
+  issuer split now accepts 'Asset Type' with no space before it (4 rows); 16 row corrections from
+  the page (Apex spread printed 'S + 5 .00 %', published 0.0; Accelerate Topco carried the next
+  line's PIK; five rows whose whole label was the issuer; Concord preferred published as common).
+- **For the owner:** equity unit counts are tagged as principal x1000 to 2025-06-30 and as
+  unscaled shares from 2025-09-30, under a header '(in thousands)'; which scale is right decides
+  C04 x6 (parked).
+- **Request, not acted on:** the fv_conservation anchor for this fund adds a stale fund-level
+  cash-equivalents figure (62.9M, the 2024-12-31 value) to an investments total that already
+  includes the money-market fund (2025-06-30 to 2025-12-31). The anchor store is the validation
+  side's; the owner decides.
+- Not done: A01 2024-03-31 (a 7.2M gap on no single member), systematic neighbouring-row
+  comparison, tests (no code changed). 5 observations recorded.

@@ -1,0 +1,50 @@
+[
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Diversified Consumer Services Apex Service Partners, LLC Asset Type First Lien Revolver Reference Rate and Spread S + 5.00% 9.32% Maturity Date 10/24/2029",
+  "fields": {"basis_spread": "5.0"},
+  "reason": "The member omits the words 'Interest Rate' and no spread fact is read; the row published a spread of 0.0. Printed: 'Apex Service Partners, LLC (7)(15)(19) First Lien Revolver S + 5 .00 % 9.32 % 10/24/2029 378 320 318 0.02'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Insurance Accelerate Topco Holdings LLC Asset Type Common Interest Rate 10.50% PIK",
+  "fields": {"interest_rate": "", "pik_rate": ""},
+  "reason": "The page prints no rate on this common line; the 10.50 % PIK belongs to the next printed line (IMG Blocker Buyer Parent preferred). Printed: 'Accelerate Topco Holdings LLC (11)(15) Common - - - 6 222 418 0.02 IMG Blocker Buyer Parent, LLC (11)(15) Preferred N/A 10.50 % PIK - 48 571 476 0.03'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Secured Debt Software Montana Buyer Inc. Type First Lien Term Loan Reference Rate and Spread S + 5.75% Interest Rate Floor 0.75% Interest Rate 11.08% Maturity Date 7/22/2029",
+  "fields": {"issuer_name": "Montana Buyer Inc.", "instrument_description": "First Lien Term Loan"},
+  "reason": "The member says 'Type' not 'Asset Type', so the whole label became the issuer. Printed: 'Montana Buyer Inc. (5)(8) First Lien Term Loan S + 5.75 % 0.75 % 11.08 % 7/22/2029 4,987 4,987 4,938 1.64'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Secured Debt Software MercuryGate International, Inc. Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate Floor 1.00% Interest Rate 10.40% Maturity Date 8/21/2026",
+  "fields": {"issuer_name": "MercuryGate International, Inc.", "instrument_description": "First Lien Term Loan"},
+  "reason": "The member says 'Type' not 'Asset Type'. Printed: 'MercuryGate International, Inc. (5)(8) First Lien Term Loan S + 5.00 % 1.00 % 10.40 % 8/21/2026 4,452 4,402 4,441 1.47'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Secured Debt Software MercuryGate International, Inc. Type First Lien Revolver Reference Rate and Spread S + 4.75% Interest Rate Floor 0.00% Interest Rate 10.08% Maturity Date 8/21/2026",
+  "fields": {"issuer_name": "MercuryGate International, Inc.", "instrument_description": "First Lien Revolver"},
+  "reason": "The member says 'Type' not 'Asset Type'. Printed: 'MercuryGate International, Inc. (5)(7) First Lien Revolver S + 4.75 % 0.00 % 10.08 % 8/21/2026 537 ( 6 ) ( 5 ) -'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Secured Debt Electronic Equipment, Instruments and Components Dwyer Instruments, LLC First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.75% Interest Rate Floor 0.75% Interest Rate 11.17% Maturity Date 7/21/2027",
+  "fields": {"issuer_name": "Dwyer Instruments, LLC", "instrument_description": "First Lien Delayed Draw Term Loan"},
+  "reason": "The member has no 'Asset Type' marker, so the whole label became the issuer. Printed: 'Dwyer Instruments, LLC (5)(8) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 11.17 % 7/21/2027 16 16 16 -'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Secured Debt Electronic Equipment, Instruments and Components Excelitas Technologies Corp. First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 0.75% Interest Rate 10.57% Maturity Date 8/12/2029",
+  "fields": {"issuer_name": "Excelitas Technologies Corp.", "instrument_description": "First Lien Term Loan"},
+  "reason": "The member has no 'Asset Type' marker. Printed: 'Excelitas Technologies Corp. (5)(8) First Lien Term Loan S + 5.25 % 0.75 % 10.57 % 8/12/2029 193 191 192 0.04'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Software Concord Global Acquisition, LLC, Asset Type Common Interest Rate 8.00% PIK",
+  "fields": {"asset_category": "EQUITY_PREFERRED", "index_classification": "PREFERRED_EQUITY", "instrument_description": "Preferred"},
+  "reason": "The member says 'Asset Type Common'; the page prints the line as Preferred with an 8.00 % PIK dividend. Printed: 'Concord Global Acquisition, LLC (12)(13)(15) Preferred N/A 8.00 % PIK - 2,670 2,930 2,930 0.15'"
+ }
+]

@@ -1,0 +1,25 @@
+{
+ "cik": "1993402",
+ "rule_id": "exclude_unsecured_industry_subtotals_2025q1",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2025-03-31"
+  ]
+ },
+ "predicate_sql": "report_date = '2025-03-31' AND regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), '^\\s*\"Investments - non-controlled/non-affiliated Secured Debt (Health Care Technology|Healthcare Providers and Services)\\s*$')",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-25-071531: 'Health Care Technology Employee Health Co. (15)(17) Unsecured Term Loan N/A 13.75 % PIK 11/10/2031 275 270 272 0.02 270 272 0.02' and 'Healthcare Providers and Services OB Hospitalist Group, Inc. (15)(17) Subordinated Unsecured Term Loan S + 9.75 % 14.18 % (Incl. 9.75 % PIK) 9/27/2028 22 22 22 - 22 22 -': the second figures on each line are the industry subtotals."
+  },
+  {
+   "source": "query",
+   "quote": "Contexts C_8b505a71 (cost 270,000, fair value 272,000) and C_7cb950ab (cost 22,000, fair value 22,000) carry an identifier that is only the industry heading, starting with a quote mark; no rate, maturity or par. The positions themselves are published from their own contexts. Sandbox asxa: published 0.294M above filed at 2025-03-31, the sum of these two rows."
+  }
+ ],
+ "rationale": "Industry subtotals of the unsecured-debt section, tagged on a member that is only the heading. Not positions.",
+ "confidence": 0.95,
+ "measured_impact": {}
+}

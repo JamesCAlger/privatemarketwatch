@@ -124,8 +124,8 @@
       "Diversified Consumer Service",
       "Speciality Retail"
     ],
-    "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$)",
-    "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s+((?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$).*)$",
+    "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s*(?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$)",
+    "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s*((?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$).*)$",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Asset\\s+Type|Commitment\\s+Type)(?:\\s|$)')"
   },
   "archetypes": {
@@ -187,6 +187,12 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "untagged_values": [
+      "0000950170-24-126519 C_c440154a-a859-4338-bcb5-bf71ca2e9b4f principal_amount 194000",
+      "0000950170-25-040578 C_2b574f0b-3b2e-4503-9086-f0b5b5f26796 principal_amount 1533000",
+      "0000950170-25-040578 C_2b574f0b-3b2e-4503-9086-f0b5b5f26796 cost 1529000",
+      "0001193125-25-280638 C_be972509-16a9-47c6-b915-b1a4bea07e23 principal_amount 246000"
     ],
     "cash_identifiers": [
       "BlackRock Liquidity T-Fund - Institutional Shares",

@@ -674,6 +674,16 @@ if TWINBROOK in held and TWINBROOK_LOOP_FILE.exists():
     for spec in json.loads(TWINBROOK_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((TWINBROOK, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1913724-fundloop"))
         EXACT.add(spec["identifier"])
+# Antares Strategic Credit, fund-clearing loop (2026-10-14): issuer/instrument split where the member lacks 'Asset Type',
+# a spread the member left unreadable, a neighbour's PIK rate, a preferred line under a Common member. One spec per row,
+# each with its printed line, in row_correction_specs/0001993402.json (exact identifiers).
+ANTARES_SC = "0001993402"
+ANTARES_SC_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001993402.json"
+if ANTARES_SC in held and ANTARES_SC_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(ANTARES_SC_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((ANTARES_SC, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1993402-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).
