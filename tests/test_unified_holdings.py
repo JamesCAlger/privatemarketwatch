@@ -2131,6 +2131,28 @@ class TestPrepareBdc:
         ])
         assert float(_prepare_bdc(df).iloc[0]["pct_of_net_assets"]) == pytest.approx(1.75)
 
+    def test_percent_of_net_assets_ratio_above_one_in_a_listed_filing_is_scaled(self):
+        """Ares Core Infrastructure Fund (0002031750), 10-Q 2024-09-30: one levered position printed
+        '224.22 %' and tagged 2.2422. The row rule scales only values up to 0.50, so 2.2422 was
+        published as 2.24 pct. The wrapper lists the filing (source_encodings.pct_tagged_as_ratio)."""
+        row = {"cik": "0002031750", "entity_name": "Ares Core Infrastructure Fund", "report_date": "2024-09-30",
+               "investment_identifier": "Denali Equity Holdings LLC", "fair_value": 347_854_000, "cost": 347_854_000,
+               "shares_held": 3749, "pct_of_net_assets": 2.2422}
+        result = _prepare_bdc(self._make_bdc_df([dict(row, accession_number="0001628280-25-001722")]))
+        assert float(result.iloc[0]["pct_of_net_assets"]) == pytest.approx(224.22)
+        assert "pct_of_net_assets:rate_x100" in str(result.iloc[0]["src_transforms"])
+
+    def test_percent_of_net_assets_ratio_rule_leaves_unlisted_filings_alone(self):
+        """False positive guard: the same value in a filing the wrapper does not list, and in another
+        fund, keeps the shared row rule (no scaling between 0.50 and 50)."""
+        row = {"entity_name": "Fund", "report_date": "2026-03-31", "investment_identifier": "Borrower, Inc., Common equity",
+               "fair_value": 1_000_000, "cost": 1_000_000, "shares_held": 10, "pct_of_net_assets": 2.2422}
+        result = _prepare_bdc(self._make_bdc_df([
+            dict(row, cik="0002031750", accession_number="0002031750-26-000032"),
+            dict(row, cik="0009990004", accession_number="0001628280-25-001722"),
+        ]))
+        assert sorted(float(v) for v in result["pct_of_net_assets"]) == pytest.approx([2.2422, 2.2422])
+
     def test_equity_investment_with_a_tagged_principal_is_equity_not_a_loan(self):
         """Blue Owl Credit Income (0001812554), 2025-12-31 and 2026-03-31: 'LSI Financing LLC |
         Specialty finance equity investment' is tagged with a principal amount (535.2M) and no

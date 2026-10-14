@@ -4060,3 +4060,31 @@ not fetched under D-043:
   `quarter_downloads/companyfacts_2026-06-30/before`. Every later build reads them.
 - The published filings index and outputs are unchanged; a sandbox adds the quarter with
   `build_fund.sh --add-quarter 2026-06-30`. Log: `scratch/2026-10-14_q2_download/`.
+
+### D-168 Ares Core Infrastructure Fund through the fund-clearing skill (sandbox `acxb`, with 2026-06-30), verdict INCOMPLETE
+
+First fund of the 2026-10-15 run; splitter on (D-166), Q2 2026 added (D-167), compared with `spoff3`.
+
+- **Ledger:** 38 findings, 36 outstanding, 35 with a proposal; totals tie in 8 of 8 quarters.
+- **Fixed:** unit counts tagged with scale 3 from the 2025 10-K on (26 rows published 1,000 times
+  too big; ET Rover 1.625 trillion units) set to the printed count by row correction; Sophos loan
+  2025-03-31 carried Denali's units (shifted context), removed; Commonwealth LNG preferred
+  2026-06-30 (1,014.6M, member spelled 'Preffered') named and classed; percent of net assets at
+  2024-09-30 and 2024-12-31 published 2.24 and 2.17 for the printed 224.22 and 216.77 (new wrapper
+  setting `source_encodings.pct_tagged_as_ratio`, shared code switched on for this fund only, with
+  tests); the six findings the correct values raise (one position above 100 pct) are proposed.
+- **Proposed:** 16 entries; both earlier real-error verdicts at 2026-03-31 answered (B01 rows are
+  the unfunded-commitments table; SRC_BDC01 is a footnote total tagged on Denali's name). Fund
+  strategy: an infrastructure equity fund filing as a BDC (private-credit share 0.165).
+- **Parked:** income_identity 2024-12-31. The shared quarterly-income step scales the fund's first
+  10-K (eight months) by 3/8: published Q4 income 4.65M against 12.31M (year less nine months).
+- **Orchestrator fix (shared):** `pipeline/fund_strategy_validation.py` raised TypeError on a
+  nullable integer column and logged a traceback (also in `spoff3`); missing values are now blanked
+  without fillna (test added). With the step running, it added one finding (fund strategy
+  2026-06-30), proposed with the earlier quarters.
+- **Page sample:** 20 rows, 0 published errors. Filer tag gaps only (benchmark and maturity untagged
+  on loans; one unit count tagged x1000, corrected). Twenty rows can miss a problem on under about
+  15 pct of rows.
+- Observations: 9 recorded. Tests: fund strategy 34, source encodings and splitter 126 passed;
+  the whole test_unified_holdings.py crashes in DuckDB at about 29 pct on an unchanged checkout too
+  (not completed). Not run: the full suite.

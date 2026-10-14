@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "ac1b",
+ "sandbox": "acxb",
  "dispositions": [
   {
    "disposition_id": "PD-fund_strategy_validation-2031750-1",
@@ -16,19 +16,41 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "The fund is an infrastructure fund that files as a BDC: about three quarters of net assets is equity in holding vehicles for infrastructure assets, as the schedule prints.",
+   "reason_key": "fund-strategy-infrastructure-equity-fund-filing-as-bdc",
+   "statement": "The fund is an infrastructure fund that files as a BDC: most of its net assets is equity in holding vehicles for infrastructure assets, as the schedule prints. The holdings mix is the filer's; the fund's strategy label, not the holdings, is what does not fit.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0002031750-26-000032: 'Total equity investments 2,161,404 2,318,602 74.08 %' plus controlled '338,429 10.81 %'; 'Total investments $ 3,293,622 $ 3,466,654 110.76 %'."
+     "accession": "0002031750-26-000032",
+     "verbatim": "Total equity investments 2,161,404 2,318,602 74.08 %",
+     "quote": "Total equity investments 2,161,404 2,318,602 74.08 % -- equity is 74 pct of net assets before the controlled block"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Total equity investments 5,241,529 5,487,520 109.10 %",
+     "quote": "Total equity investments 5,241,529 5,487,520 109.10 % -- 2026-06-30: equity is 109 pct of net assets before the controlled block (631,392 more); loans are 1,211,184 of 7,330,096"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Total debt investments $ 1,207,608 $ 1,211,184 24.07 %",
+     "quote": "Total debt investments $ 1,207,608 $ 1,211,184 24.07 % -- debt is 16.5 pct of investments, the private_credit_share the check reports"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-012670",
+     "verbatim": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %",
+     "quote": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % -- the only holding at 2024-12-31 is an equity stake"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-blocking_source_position_like_parser_mismatch-2031750-2",
@@ -43,19 +65,41 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "The row reported as missing is a footnote aggregate tagged on the Denali member, in millions; rule exclude_denali_bare_duplicate_rows removes it. It equals the sum of the eight equity rows, which are published.",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "statement": "The row reported as missing is footnote (1)'s aggregate fair value of the restricted securities, which the filer tags in millions on the bare 'Denali Equity Holdings LLC' member (2026-03-31 context c-121: 2,657,000; 2026-06-30 context c-139: 6,118,900). It equals the sum of the published equity rows marked (1) (6,118,912 thousand at 2026-06-30). Rule exclude_denali_bare_duplicate_rows keeps it out; the Denali position itself is published (352.185M at 2026-03-31, 355.674M at 2026-06-30). No fix: it is not a position.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0002031750-26-000032, footnote (1): 'the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Fund's net assets'; context c-121 carries 2,657,000 on the bare member 'Denali Equity Holdings LLC'."
+     "accession": "0002031750-26-000064",
+     "verbatim": "the aggregate fair value of these securities is $ 6,118.9 million, which represents 121.65 % of the Funds",
+     "quote": "the aggregate fair value of these securities is $ 6,118.9 million, which represents 121.65 % of the Funds -- footnote figure in millions; the tagged 'row' is this aggregate"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Funds",
+     "quote": "the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Funds -- same footnote at 2026-03-31; 2,657,000 tagged on the bare Denali member"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025587",
+     "verbatim": "the aggregate fair value of these securities is $ 760.4 million, or 133.73 % of the Fund's net assets",
+     "quote": "the aggregate fair value of these securities is $ 760.4 million, or 133.73 % of the Fund's net assets -- same footnote at 2025-03-31 (760,400 tagged)"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 330,908 352,185 (2)",
+     "quote": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 330,908 352,185 (2) -- the Denali position, published at 352.185M"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-SRC_BDC01-2031750-3",
@@ -69,19 +113,44 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "The same footnote aggregate on the bare Denali member (760,400 / 782,500 / 1,544,900 / 2,522,500 / 2,657,000 by quarter), reported by the row check.",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "statement": "The row reported as missing is footnote (1)'s aggregate fair value of the restricted securities, which the filer tags in millions on the bare 'Denali Equity Holdings LLC' member (2026-03-31 context c-121: 2,657,000; 2026-06-30 context c-139: 6,118,900). It equals the sum of the published equity rows marked (1) (6,118,912 thousand at 2026-06-30). Rule exclude_denali_bare_duplicate_rows keeps it out; the Denali position itself is published (352.185M at 2026-03-31, 355.674M at 2026-06-30). No fix: it is not a position.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0002031750-26-000032, footnote (1): 'the aggregate fair value of these securities is $ 2,657.0 million'; the eight published equity rows sum to 2,657.03M."
+     "accession": "0002031750-26-000064",
+     "verbatim": "the aggregate fair value of these securities is $ 6,118.9 million, which represents 121.65 % of the Funds",
+     "quote": "the aggregate fair value of these securities is $ 6,118.9 million, which represents 121.65 % of the Funds -- footnote figure in millions; the tagged 'row' is this aggregate"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Funds",
+     "quote": "the aggregate fair value of these securities is $ 2,657.0 million, which represents 84.89 % of the Funds -- same footnote at 2026-03-31; 2,657,000 tagged on the bare Denali member"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025587",
+     "verbatim": "the aggregate fair value of these securities is $ 760.4 million, or 133.73 % of the Fund's net assets",
+     "quote": "the aggregate fair value of these securities is $ 760.4 million, or 133.73 % of the Fund's net assets -- same footnote at 2025-03-31 (760,400 tagged)"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 330,908 352,185 (2)",
+     "quote": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 330,908 352,185 (2) -- the Denali position, published at 352.185M"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer read the Denali 'Other equity' line (352,185) as absent from output. It is published in this build (identifier 'Denali Equity Holdings LLC, Other equity', fair value 352.185M, 2026-03-31). The source row reported as missing is the 2,657,000 footnote aggregate on the bare member, not the position."
+   }
   },
   {
    "disposition_id": "PD-B01-2031750-4",
@@ -92,19 +161,38 @@
     "0002031750"
    ],
    "quarters": [
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "Tagged rows with a principal and no fair value are the commitments note, not positions.",
+   "reason_key": "b01-unfunded-commitment-table-rows-not-positions",
+   "statement": "The leaves with a principal and no fair value are the rows of the Note 7 unfunded-commitments table (Total Commitment tagged as principal on the position's member: CMH01 Delayed Draw Term Loan 165,000; Pioneer JV Holdings LLC Equity 770,725), not positions. The funded loans and equity are published with values. No fix: these are not positions.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Footnote 6: 'the Fund had commitments to fund various delayed draw term loans and equity investments ... Principal reflects the funded principal'; e.g. 'CMH01 Holdings LP, Delayed Draw Term Loan' 125,000,000 (c-412), 'Pioneer JV Holdings LLC, Equity' 770,725,000 (c-422)."
+     "accession": "0002031750-26-000064",
+     "verbatim": "CMH01 Holdings LP Delayed Draw Term Loan 165,000 14,721 125,000 44,071",
+     "quote": "CMH01 Holdings LP Delayed Draw Term Loan 165,000 14,721 125,000 44,071 -- Note 7 commitments table: total commitment and unfunded amount, no value"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "CMH01 Holdings LP Delayed Draw Term Loan 125,000 11,152 125,000 44,071",
+     "quote": "CMH01 Holdings LP Delayed Draw Term Loan 125,000 11,152 125,000 44,071 -- same table at 2026-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Principal reflects the funded principal as of June 30, 2026",
+     "quote": "Principal reflects the funded principal as of June 30, 2026 -- footnote (6): the schedule's principal is funded"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer tied the gap to interest-rate swap rows of the derivative schedule. The B01 leaves in this build (b01.py acxb: 9 at 2026-03-31, 11 at 2026-06-30) are all commitment-table rows ('<company>, Delayed Draw Term Loan' or '<company>, Equity', principal only, no cost); no swap row is among them. Swaps are derivatives, published in bdc_derivatives, not holdings. The verdict does not stand."
+   }
   },
   {
    "disposition_id": "PD-D01-2031750-5",
@@ -117,17 +205,26 @@
    "quarters": [
     "2025-03-31"
    ],
-   "statement": "The schedule grew from one holding to 27 rows in the first quarter of 2025; published equals the filed total in both quarters.",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Rows 1 to 27 and fair value 339.1M to 783.8M between 2024-12-31 and 2025-03-31: the fund began with one holding and bought its first loans in the quarter. The published sum equals the printed total in both quarters.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001628280-25-001722: 'Total Investments $ 347,854 $ 347,854 224.22 %' (one row, Denali) at 2024-09-30; filed 783.786M at 2025-03-31 = published."
+     "accession": "0001628280-25-025587",
+     "verbatim": "Total Investments $ 772,063 $ 783,786 137.85 %",
+     "quote": "Total Investments $ 772,063 $ 783,786 137.85 % -- published 783.786M"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-012670",
+     "verbatim": "Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % Total Investment $ 347,531 $ 339,136 216.77 %",
+     "quote": "Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % Total Investment $ 347,531 $ 339,136 216.77 % -- one holding at 2024-12-31"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-CNT01-2031750-6",
@@ -140,17 +237,20 @@
    "quarters": [
     "2025-03-31"
    ],
-   "statement": "The same growth from one holding to 27 rows at 2025-03-31.",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Row count 1 to 27 between 2024-12-31 and 2025-03-31: the fund's first loans were bought in the quarter; the published sum equals the printed total in both quarters.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001628280-25-001722: 'Total Investments $ 347,854 $ 347,854 224.22 %'; filed 783.786M at 2025-03-31 = published."
+     "accession": "0001628280-25-025587",
+     "verbatim": "Total Investments $ 772,063 $ 783,786 137.85 %",
+     "quote": "Total Investments $ 772,063 $ 783,786 137.85 % -- published 783.786M"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
   },
   {
    "disposition_id": "PD-F24-2031750-7",
@@ -163,17 +263,317 @@
    "quarters": [
     "2025-03-31"
    ],
-   "statement": "The same growth at 2025-03-31, reported at fund level.",
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Position count 1 to 27 between 2024-12-31 and 2025-03-31: the fund's first loans were bought in the quarter; the published sum equals the printed total in both quarters.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Filed investments 339.136M (2024-12-31) and 783.786M (2025-03-31), both equal to published."
+     "accession": "0001628280-25-025587",
+     "verbatim": "Total Investments $ 772,063 $ 783,786 137.85 %",
+     "quote": "Total Investments $ 772,063 $ 783,786 137.85 % -- published 783.786M"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0002031750.md",
-   "decided_by": "PROPOSED by agent 2026-10-11 (D-107); not accepted by the owner",
-   "decided_on": "2026-10-11"
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F16-2031750-8",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "start-up-quarter-net-investment-loss-no-distribution",
+   "statement": "First operating quarter (operations began August 28, 2024): a net investment loss of 679 thousand and no distribution per share. The check fires because the income yield is negative; no distribution exceeds income.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "Net expenses 758 758 Net investment loss before income taxes ( 679 ) ( 679 )",
+     "quote": "Net expenses 758 758 Net investment loss before income taxes ( 679 ) ( 679 ) -- loss in the quarter"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "The Fund commenced operations on August 28, 2024",
+     "quote": "The Fund commenced operations on August 28, 2024 -- start-up quarter"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F16-2031750-9",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "start-up-quarter-distribution-as-return-of-capital",
+   "statement": "Ramp-up quarter: net investment loss of 7,991 thousand while the fund declared 0.6750 a share, all as return of capital. Distribution above income is what the filer reports, not an extraction error.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025587",
+     "verbatim": "Net investment loss before income taxes ( 5,637 ) Income tax expense ( 2,354 ) Net investment loss $ ( 7,991 )",
+     "quote": "Net investment loss before income taxes ( 5,637 ) Income tax expense ( 2,354 ) Net investment loss $ ( 7,991 ) -- loss in the quarter"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025587",
+     "verbatim": "Distributions declared and payable ($ 0.6750 per share) as return of capital",
+     "quote": "Distributions declared and payable ($ 0.6750 per share) as return of capital -- distribution paid from capital"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F30-2031750-10",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F30",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "fund-row-before-operations-began",
+   "statement": "A fund-level row before operations began (inception May 7, 2024; operations from August 28, 2024): no shares were sold, so net asset value per share is zero. Nothing to publish or fix.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "The Fund commenced operations on August 28, 2024",
+     "quote": "The Fund commenced operations on August 28, 2024 -- no NAV per share before this date"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F33-2031750-11",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "start-up-quarter-no-distribution-declared",
+   "statement": "Distribution rate 0 in the first operating quarter: the fund said it would distribute monthly only after its BDC election, and reported a net investment loss. The check's lower bound (rate > 0) does not fit a start-up quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "The Fund intends to make monthly distributions to its shareholders subsequent to the BDC Election",
+     "quote": "The Fund intends to make monthly distributions to its shareholders subsequent to the BDC Election -- no distribution before the BDC election"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "Net expenses 758 758 Net investment loss before income taxes ( 679 ) ( 679 )",
+     "quote": "Net expenses 758 758 Net investment loss before income taxes ( 679 ) ( 679 ) -- loss, nothing to distribute"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-F25-2031750-12",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F25",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "f25-cash-deployed-into-investments",
+   "statement": "Investments grew 111 pct (3,466,654 to 7,330,096 thousand) and total assets 76 pct (4,365,604 to 7,689,033): cash fell from 865,013 to 333,904 as it was invested. Both figures are the filer's balance sheet; published investments equal the printed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Total investments at fair value (cost of $ 7,067,157 and $ 2,988,655 , respectively) 7,330,096 3,120,386 Cash and cash equivalents 333,904",
+     "quote": "Total investments at fair value (cost of $ 7,067,157 and $ 2,988,655 , respectively) 7,330,096 3,120,386 Cash and cash equivalents 333,904 -- 2026-06-30 investments and cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Other assets 5,242 4,349 Total assets $ 7,689,033",
+     "quote": "Other assets 5,242 4,349 Total assets $ 7,689,033 -- 2026-06-30 total assets"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "Cash and cash equivalents 865,013 296,512",
+     "quote": "Cash and cash equivalents 865,013 296,512 -- 2026-03-31 cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000032",
+     "verbatim": "Other assets 6,319 4,349 Total assets $ 4,365,604",
+     "quote": "Other assets 6,319 4,349 Total assets $ 4,365,604 -- 2026-03-31 total assets"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-income_identity-2031750-13",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "income-identity-expense-recoupment-net-above-gross",
+   "statement": "Net expenses (78,194) exceed total expenses (70,496) because the adviser recouped 11,946 of earlier expense support. Net investment income before taxes, 40,050, is total income 118,244 less net expenses 78,194 to the dollar; the check switches to gross expenses whenever net is above gross, which does not fit a recoupment quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Add: Expense support recoupment (Note 3) 11,946 - 11,946 - Less: Management fee waiver (Note 3) - - - ( 163 ) Net expenses 78,194",
+     "quote": "Add: Expense support recoupment (Note 3) 11,946 - 11,946 - Less: Management fee waiver (Note 3) - - - ( 163 ) Net expenses 78,194 -- net above gross because of recoupment"
+    },
+    {
+     "source": "filing",
+     "accession": "0002031750-26-000064",
+     "verbatim": "Net investment income/(loss) before income taxes 40,050",
+     "quote": "Net investment income/(loss) before income taxes 40,050 -- = 118,244 - 78,194"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-X09-2031750-14",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X09",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "single-levered-position-percent-above-100-as-printed",
+   "statement": "The fund's only holding in its first two filings is a levered equity stake printed at 224.22 % and 216.77 % of net assets (investments 347.9M against net assets 155.1M, funded by a term loan). The published percent is now the printed one (source_encodings.pct_tagged_as_ratio); a single position above 100 pct is what the page shows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %",
+     "quote": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 % -- printed percent of net assets, now published as 224.22"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-012670",
+     "verbatim": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %",
+     "quote": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % -- printed, now published as 216.77"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-fmt_pct_of_net_assets-2031750-15",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pct_of_net_assets",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "single-levered-position-percent-above-100-as-printed",
+   "statement": "The fund's only holding in its first two filings is a levered equity stake printed at 224.22 % and 216.77 % of net assets (investments 347.9M against net assets 155.1M, funded by a term loan). The published percent is now the printed one (source_encodings.pct_tagged_as_ratio); a single position above 100 pct is what the page shows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %",
+     "quote": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 % -- printed percent of net assets, now published as 224.22"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-012670",
+     "verbatim": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %",
+     "quote": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % -- printed, now published as 216.77"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-pct_position_concentration-2031750-16",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "ciks": [
+    "0002031750"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "single-levered-position-percent-above-100-as-printed",
+   "statement": "The fund's only holding in its first two filings is a levered equity stake printed at 224.22 % and 216.77 % of net assets (investments 347.9M against net assets 155.1M, funded by a term loan). The published percent is now the printed one (source_encodings.pct_tagged_as_ratio); a single position above 100 pct is what the page shows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-001722",
+     "verbatim": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %",
+     "quote": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 % -- printed percent of net assets, now published as 224.22"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-012670",
+     "verbatim": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %",
+     "quote": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 % -- printed, now published as 216.77"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0002031750/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-14 (fund loop acx); not accepted by the owner",
+   "decided_on": "2026-10-14"
   }
  ]
 }

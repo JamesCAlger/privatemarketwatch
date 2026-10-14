@@ -761,7 +761,15 @@ def build_fund_strategy_correction_candidates(
         """
     ).fetchdf()
     con.close()
-    return result.reindex(columns=CORRECTION_CANDIDATE_COLUMNS).fillna("")
+    return _blank_missing(result.reindex(columns=CORRECTION_CANDIDATE_COLUMNS))
+
+
+def _blank_missing(frame: pd.DataFrame) -> pd.DataFrame:
+    """Missing values as '' in every column. A nullable integer column (Int32, from DuckDB) cannot
+    take '' through fillna, which raised TypeError and stopped this step for some funds' builds
+    (Ares Core Infrastructure, 2026-10-15); values are kept, as objects."""
+    out = frame.astype(object)
+    return out.where(frame.notna(), "")
 
 
 # Transitions excluded from automatic application.  Spot-check found that

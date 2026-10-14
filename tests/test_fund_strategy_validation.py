@@ -893,3 +893,14 @@ def test_re_gics_override_preserves_other_columns(tmp_path):
     assert row["index_classification"] == "DIRECT_LENDING"
     assert row["asset_class"] == "REAL_ESTATE"
     assert row["issuer_name"] == "Industrial - Lambert Farms"
+
+
+def test_missing_values_blank_in_a_nullable_integer_column():
+    # DuckDB hands back Int32 for some funds; fillna('') on it raised TypeError (2026-10-15)
+    import pandas as pd
+    from pipeline.fund_strategy_validation import _blank_missing
+    frame = pd.DataFrame({"n": pd.array([3, None], dtype="Int32"), "s": ["a", None], "x": [1.5, float("nan")]})
+    out = _blank_missing(frame)
+    assert out["n"].tolist() == [3, ""]
+    assert out["s"].tolist() == ["a", ""]
+    assert out["x"].tolist() == [1.5, ""]

@@ -1,87 +1,92 @@
-{
- "0001803498": {
-  "label": "owsp3",
-  "accepted_on": "2026-10-14",
-  "basis": "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
- },
- "0001812554": {
-  "label": "owsp3",
-  "accepted_on": "2026-10-14",
-  "basis": "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
- },
- "0001287750": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001838126": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001837532": {
-  "label": "ap2",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001918712": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001920145": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001930087": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001925309": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001872371": {
-  "label": "t10a",
-  "accepted_on": "2026-10-13",
-  "basis": "D-153, built before the fund gate existed"
- },
- "0001849894": {
-  "label": "msdxc",
-  "accepted_on": "2026-10-13",
-  "basis": "D-157, gate PASS on the second round"
- },
- "0001851322": {
-  "label": "nhxb",
-  "accepted_on": "2026-10-14",
-  "basis": "D-158, gate PASS"
- },
- "0001742313": {
-  "label": "moxe",
-  "accepted_on": "2026-10-14",
-  "basis": "D-159, gate PASS"
- },
- "0001869453": {
-  "label": "otxe",
-  "accepted_on": "2026-10-14",
-  "basis": "D-160, gate PASS on the second round"
- },
- "0001859919": {
-  "label": "bpxe",
-  "accepted_on": "2026-10-14",
-  "basis": "D-161, gate NEEDS_ORCHESTRATOR (borrowings request open)"
- },
- "0001913724": {
-  "label": "tbxd",
-  "accepted_on": "2026-10-14",
-  "basis": "D-162, gate INCOMPLETE (3 parked)"
- },
- "0001993402": {
-  "label": "asxc",
-  "accepted_on": "2026-10-14",
-  "basis": "D-163, gate NEEDS_ORCHESTRATOR (anchor request open)"
- }
+﻿{
+    "0001803498":  {
+                       "label":  "owsp3",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
+                   },
+    "0001812554":  {
+                       "label":  "owsp3",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
+                   },
+    "0001287750":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001838126":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001837532":  {
+                       "label":  "ap2",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001918712":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001920145":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001930087":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001925309":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001872371":  {
+                       "label":  "t10a",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-153, built before the fund gate existed"
+                   },
+    "0001849894":  {
+                       "label":  "msdxc",
+                       "accepted_on":  "2026-10-13",
+                       "basis":  "D-157, gate PASS on the second round"
+                   },
+    "0001851322":  {
+                       "label":  "nhxb",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-158, gate PASS"
+                   },
+    "0001742313":  {
+                       "label":  "moxe",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-159, gate PASS"
+                   },
+    "0001869453":  {
+                       "label":  "otxe",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-160, gate PASS on the second round"
+                   },
+    "0001859919":  {
+                       "label":  "bpxe",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-161, gate NEEDS_ORCHESTRATOR (borrowings request open)"
+                   },
+    "0001913724":  {
+                       "label":  "tbxd",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-162, gate INCOMPLETE (3 parked)"
+                   },
+    "0001993402":  {
+                       "label":  "asxc",
+                       "accepted_on":  "2026-10-14",
+                       "basis":  "D-163, gate NEEDS_ORCHESTRATOR (anchor request open)"
+                   },
+    "0002031750":  {
+                       "label":  "acxb",
+                       "accepted_on":  "2026-10-15",
+                       "basis":  "D-168, gate INCOMPLETE (one parked shared finding), page sample 0 published errors of 20"
+                   }
 }

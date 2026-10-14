@@ -684,6 +684,15 @@ if ANTARES_SC in held and ANTARES_SC_LOOP_FILE.exists():
     for spec in json.loads(ANTARES_SC_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((ANTARES_SC, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1993402-fundloop"))
         EXACT.add(spec["identifier"])
+# Ares Core Infrastructure, fund-clearing loop (2026-10-14): unit counts tagged with scale="3" from the 10-K for 2025-12-31
+# on (printed 3,749, filed 3,749,000), a unit count on a neighbour's context, and a preferred line under a common class.
+# One spec per row, each with its printed line, in row_correction_specs/0002031750.json (exact identifiers).
+ARES_CORE_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0002031750.json"
+if ARES_CORE in held and ARES_CORE_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(ARES_CORE_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((ARES_CORE, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2031750-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

@@ -723,6 +723,11 @@ def _prepare_bdc(
     # principal, so without this the count is lost. Declared as shares_held:from_principal_tag.
     # ... or, for a filing a wrapper lists (source_encodings.units_tagged_as_par), on every equity row.
     from pipeline.source_encodings import units_tagged_as_par_expression
+    # A filing a wrapper lists (source_encodings.pct_tagged_as_ratio) tags percent of net assets as a
+    # ratio above the row rule's 0.50 bound (Ares Core Infrastructure: printed 224.22 %, tagged 2.2422).
+    # Every tagged percent of such a filing is multiplied by 100 (pct_of_net_assets:rate_x100).
+    from pipeline.source_encodings import pct_tagged_as_ratio_expression
+    pct_ratio = pct_tagged_as_ratio_expression('cik', 'accession_number')
     units_from_principal = ("((" + equity_instrument_expression('cik', 'instrument_description')
                             + " AND asset_category_final = 'EQUITY_COMMON' AND _sh IS NULL AND _pa IS NOT NULL AND _pa > 0)"
                             + " OR (" + units_tagged_as_par_expression('cik', 'accession_number')
@@ -2726,7 +2731,8 @@ def _prepare_bdc(
             _cost AS cost,
             _resolved_fv_currency AS fair_value_currency,
             _resolved_cost_currency AS cost_currency,
-            CASE WHEN COALESCE(_pct_in_percent, false) THEN _pct
+            CASE WHEN _pct IS NOT NULL AND {pct_ratio} THEN _pct * 100
+                 WHEN COALESCE(_pct_in_percent, false) THEN _pct
                  WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN _pct * 100
                  WHEN _pct IS NOT NULL AND _pct > 50 THEN _pct / 100
                  ELSE _pct END AS pct_of_net_assets,
@@ -2896,7 +2902,8 @@ def _prepare_bdc(
                      WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN 'pik_rate:rate_x100'
                      WHEN _pik IS NOT NULL AND _pik >= 50 THEN 'pik_rate:rate_div100'
                      ELSE NULL END,
-                CASE WHEN COALESCE(_pct_in_percent, false) THEN NULL
+                CASE WHEN _pct IS NOT NULL AND {pct_ratio} THEN 'pct_of_net_assets:rate_x100'
+                     WHEN COALESCE(_pct_in_percent, false) THEN NULL
                      WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
                      ELSE NULL END,

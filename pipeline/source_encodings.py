@@ -31,7 +31,8 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns'}:
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
+                'pct_tagged_as_ratio'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -51,6 +52,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
             if key=='units_tagged_as_par' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('units_tagged_as_par lists accession numbers: '+str(path))
+            if key=='pct_tagged_as_ratio' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('pct_tagged_as_ratio lists accession numbers: '+str(path))
             if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost') and not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('par_tagged_as_units lists accession numbers or a row mode: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
@@ -218,6 +221,23 @@ def units_tagged_as_par_expression(cik,accession,encodings=None):
     parts=[]
     for key,encoding in sorted(configured.items()):
         filings=encoding.get('units_tagged_as_par',[])
+        if filings:
+            values=','.join(_literal(v) for v in filings)
+            parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def pct_tagged_as_ratio_expression(cik,accession,encodings=None):
+    """True for a row of a filing whose wrapper says percent of net assets is tagged as a ratio above 1.
+
+    The shared row rule multiplies a tagged percent by 100 only up to 0.50, so a ratio between 0.5 and 50
+    is published as if it were already in percent. Ares Core Infrastructure Fund's first two filings hold
+    one levered position each: printed '224.22 %', tagged 2.2422 (10-Q 2024-09-30); printed '216.77 %',
+    tagged 2.1677 (10-K 2024-12-31). Listed per filing."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        filings=encoding.get('pct_tagged_as_ratio',[])
         if filings:
             values=','.join(_literal(v) for v in filings)
             parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')

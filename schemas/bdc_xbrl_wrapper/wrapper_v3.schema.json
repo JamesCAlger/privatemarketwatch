@@ -688,6 +688,13 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
           "description": "Accession numbers of filings in which the filer tagged the unit count of its equity rows with the principal concept (Blue Owl Credit Income, 10-Q for 2023-09-30: 33 of 44 equity rows; the filings before and after use the share-count concept). In a listed filing an equity row with a principal tag and no share count publishes the tagged number as its unit count (transform shares_held:from_principal_tag). Evidence required: the concept counts of the filing against its neighbours, and a printed line whose unit count equals the tagged number."
         },
+        "pct_tagged_as_ratio": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
+          "description": "Accession numbers of filings in which the filer tags percent of net assets as a ratio above 0.50, which the shared row rule (multiply by 100 only up to 0.50) publishes unscaled (Ares Core Infrastructure Fund, 10-Q 2024-09-30: printed 224.22 %, tagged 2.2422). In a listed filing every tagged percent is multiplied by 100 (transform pct_of_net_assets:rate_x100). Evidence required: the printed percent and the tagged fact of a row, and fair value over net assets equal to the tagged ratio."
+        },
         "par_tagged_as_units": {
           "type": "array",
           "minItems": 1,
