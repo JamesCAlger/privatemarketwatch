@@ -4045,3 +4045,18 @@ guards (`sponfa`, `sponfb`). Reports in `scratch/2026-10-14_splitter_cohort/`.
 - **Not rebuilt:** the final version (instrument cut only) as a whole; it differs from `sponf*`
   only by leaving row numbers, which were the cause of the one regression.
 - Switched on in `data/reference/issuer_instrument_split.json`; off is one flag.
+
+### D-167 Q2 2026 filings and company facts for the rest of the cohort
+
+Owner, 2026-10-14: "you may download documents/data for Q2 2026". Through the rate-limited client
+(`scripts/download_quarter_filings.py`, `scripts/download_companyfacts.py`), for the 67 cohort funds
+not fetched under D-043:
+
+- **10-Qs:** 65 downloaded (XBRL instance and primary HTML), added to
+  `data/raw/filings/quarter_downloads/2026-06-30.csv` (now 75 funds). None for Saratoga (fiscal
+  year ends in February: no June quarter) or Fidelity Private Credit Co (latest report 2026-03-31).
+- **Company facts:** 65 files, each with facts ending 2026-06-30 and a superset of the live copy;
+  installed in `data/raw/companyfacts_cache` as under D-043, the live copies kept in
+  `quarter_downloads/companyfacts_2026-06-30/before`. Every later build reads them.
+- The published filings index and outputs are unchanged; a sandbox adds the quarter with
+  `build_fund.sh --add-quarter 2026-06-30`. Log: `scratch/2026-10-14_q2_download/`.
