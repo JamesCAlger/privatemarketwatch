@@ -95,7 +95,10 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
 - Edit a file that another session has modified (`git status` shows it before you start).
 - Change something the gate forbids even if the fix needs it (a check, the provenance
   re-verifier, a rule, the ledger). Describe the change under `orchestrator_requests` in your
-  report, with the evidence; the orchestrator makes it and re-runs your gate.
+  report, with the evidence; the orchestrator makes it and re-runs your gate. A request that
+  would have a check accept a value the pipeline itself derived (from member text, for example)
+  is declined: declare the printed value in the wrapper (`source_encodings.untagged_values`,
+  with the printed line) instead, which the re-verifier already checks against.
 - Kill a process by image name (`taskkill /IM python.exe` kills another session's build). Kill
   only a process you started, by its id.
 - Start a command with a bare `python -` or an empty heredoc. Write scripts with the Write tool
