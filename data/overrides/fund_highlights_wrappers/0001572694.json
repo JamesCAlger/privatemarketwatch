@@ -1,0 +1,32 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001572694",
+ "entity_name": "Goldman Sachs BDC, Inc.",
+ "version": 1,
+ "concept_overrides": [
+  {
+   "xbrl_concept_substring": "investmentincomenet",
+   "target_field": "total_investment_income",
+   "action": "map",
+   "evidence": "0001193125-26-212431 (10-Q 2026-03-31): us-gaap:InvestmentIncomeNet 78,793,000 is the printed 'Total investment income $ 78,793'; us-gaap:NetInvestmentIncome 25,767,000 is 'Net investment income before taxes'. The global map reads InvestmentIncomeNet as net investment income."
+  },
+  {
+   "xbrl_concept_substring": "noninterestexpense",
+   "target_field": "interest_expense",
+   "action": "suppress",
+   "evidence": "us-gaap:NoninterestExpenseDirectorsFees (152,000 at 2026-03-31, printed 'Directors fees') was read as interest expense through the substring 'interestexpense'; printed 'Interest and other debt expenses $ 30,041'."
+  },
+  {
+   "xbrl_concept_substring": "interestexpensesonborrowingspercent",
+   "target_field": "interest_expense",
+   "action": "suppress",
+   "evidence": "0001193125-26-077458 (10-K 2025-12-31): InterestExpensesOnBorrowingsPercent 0.0677 is the weighted average interest rate on borrowings, not an expense."
+  }
+ ],
+ "income_concept_suppress": [
+  "investmentincomenet",
+  "noninterestexpense",
+  "interestexpensesonborrowingspercent"
+ ],
+ "notes": "Goldman Sachs BDC tags total investment income as us-gaap:InvestmentIncomeNet and net investment income before taxes as us-gaap:NetInvestmentIncome (2026-03-31: 78,793,000 and 25,767,000; printed 'Total investment income $ 78,793' and 'Net investment income before taxes 25.77'). Published net investment income was total investment income in every quarter. Fund loop 2026-10-15."
+}

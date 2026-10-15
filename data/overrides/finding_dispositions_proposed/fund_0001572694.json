@@ -1,0 +1,609 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "gsxf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F16-1572694-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-distribution-above-quarter-income-as-printed",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "2026-03-31: distributions of 0.35 a share against net investment income of 0.22 a share in the quarter, both as printed in the financial highlights; the income ratio fell to 7.2 pct (published as printed). A real under-earned distribution, not a data defect.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "Net investment income 0.22 0.42 Net realized and unrealized gains (losses) (2) ( 0.34 ) ( 0.15 )",
+     "quote": "'Net investment income 0.22 0.42 Net realized and unrealized gains (losses) (2) ( 0.34 ) ( 0.15 )': income per share 0.22 for the quarter."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "Distributions to common stockholders ( 0.35 ) ( 0.48 )",
+     "quote": "'Distributions to common stockholders ( 0.35 ) ( 0.48 )': distributions 0.35 a share."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1572694-2",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The yield the check compares is the filer's own ratio of net investment income to average net assets (us-gaap InvestmentCompanyInvestmentIncomeLossRatio), published as printed. The fund is levered: investments are 210 to 235 pct of net assets in every quarter, so income over net assets exceeds the weighted coupon of the holdings by 2 to 5 points. No value is wrong; the heuristic does not allow for leverage.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-123412",
+     "verbatim": "Ratio of net investment income to average net assets 16.34 % 15.80 %",
+     "quote": "'Ratio of net investment income to average net assets 16.34 % 15.80 %': 2024-09-30: the published income yield 16.34 is the printed ratio."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-123412",
+     "verbatim": "Total Investments - 217.02 % $ 3,640,329 $ 3,442,129",
+     "quote": "'Total Investments - 217.02 % $ 3,640,329 $ 3,442,129': investments are 217 pct of net assets at 2024-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "verbatim": "Ratio of net investment income to average net assets 12.09 % 15.82 % 15.68 % 14.52 % 14.62 %",
+     "quote": "'Ratio of net investment income to average net assets 12.09 % 15.82 % 15.68 % 14.52 % 14.62 %': 2025-12-31 10-K: 12.09 for 2025, as published."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B01-1572694-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-leaves-without-value-are-section-headings",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "After this run no position of the quarter is left without a value: 354 contexts printed with a dash for fair value (undrawn lines, loans and equity written down to nil) are published at 0 from the page. The current-period leaves still without a value are section and country headings tagged with no fact ('Equity Securities - 4.18 %', 'Canada - 0.01 %', 'Common Stock - 0.01 %') and section totals tagged with cost only; the rest are rows of the comparative schedule. No fix: they are not positions.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-123412",
+     "verbatim": "Equity Securities - 4.18 % Canada - 0.01 % Common Stock - 0.01 % Prairie Provident Resources, Inc.",
+     "quote": "'Equity Securities - 4.18 % Canada - 0.01 % Common Stock - 0.01 % Prairie Provident Resources, Inc.': 2024-09-30: three heading lines before the first equity row; each heading has a member and no value."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-022198",
+     "verbatim": "Equity Securities - 4.27 % Canada - 0.01 % Common Stock - 0.01 % Prairie Provident Resources, Inc.",
+     "quote": "'Equity Securities - 4.27 % Canada - 0.01 % Common Stock - 0.01 % Prairie Provident Resources, Inc.': 2023-12-31: the same headings."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-anchor_missing-1572694-4",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "anchor_missing",
+   "reason_key": "anchor-missing-pik-only-coupon-read-from-member-text",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "statement": "The published rate is the fixed PIK coupon the page prints ('12.00 % PIK', '10.00 % PIK', '7.00 % PIK'); in the 10-Qs for 2023-03-31 and 2023-06-30 the filer tags no PIK rate on these contexts, so the PIK figure was read from the member text and the re-verifier finds no tagged fact to anchor the rate. Published equals printed. The re-verifier change is requested from the orchestrator.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054",
+     "quote": "'MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054': 2023-03-31: published interest_rate 12.0 and pik_rate 12.0."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-037958",
+     "verbatim": "Animal Supply Intermediate, LLC Distributors 7.00 % PIK 11/14/25 $ 10,107 $ 9,031 $ -",
+     "quote": "'Animal Supply Intermediate, LLC Distributors 7.00 % PIK 11/14/25 $ 10,107 $ 9,031 $ -': 2023-06-30: published 7.0."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-financial_convention_unresolved-1572694-5",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "2025-09-30: Streamland Media Midco's line prints an interest rate of 9.76 and a PIK part of 10.06 inside it ('S + 6.50 % (Incl. 10.06 % PIK)'). A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the filed rate is withheld. The figures are the filer's; no reading makes them consistent.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-269840",
+     "verbatim": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 17,327 17,040 16,634",
+     "quote": "'Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 17,327 17,040 16,634': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1572694-6",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "Each flagged field is the unit count (and at 2025-03-31 the Engage2Excel fair value of 903, re-dated under misdated_contexts) of a row whose facts the filer split over two contexts of one member; the value was taken from the sibling context, so the re-verifier cannot replay it from the row's own context. The published value equals the printed line in each case read (Kawa Solar 1,399,556 units, KDOR 294 / 2,812 / 59, LCG Vardiman 731,038, MedeAnalytics 9). Most of these rows are printed with a dash for fair value and are published from this run (fair value 0 declared from the page). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060336",
+     "verbatim": "Kawa Solar Holdings Limited Construction & Engineering 08/17/16 1,399,556 - -",
+     "quote": "'Kawa Solar Holdings Limited Construction & Engineering 08/17/16 1,399,556 - -': 2023-09-30: published units 1,399,556, value 0."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-094144",
+     "verbatim": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -",
+     "quote": "'KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -': 2024-06-30: published units 294."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-067098",
+     "verbatim": "Engage2Excel, Inc. Professional Services 10.72 % S + 6.50 % 07/01/29 917 905 903",
+     "quote": "'Engage2Excel, Inc. Professional Services 10.72 % S + 6.50 % 07/01/29 917 905 903': 2025-03-31: the published fair value 903, from the context tagged on the prior balance date and re-dated by misdated_contexts in the wrapper."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C103-1572694-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "2025-06-30: the negative fair values still flagged are undrawn lines printed with a dash or a bracketed cost and a bracketed value, published as tagged. The 30 undrawn lines whose cost the filer tagged positive while the page prints it in brackets (Everest, Jupiter Refuel, Ideal Components ...) are corrected to the printed negative cost.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-105134",
+     "verbatim": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )",
+     "quote": "'Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )': a corrected line: cost printed (13), tagged +13."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2025-06-30": "The reviewer found Everest Clinical Research's cost published +3,000 where the page prints ( 3 ). Fixed: cost -3,000 by row correction, with 29 other undrawn lines of the 10-Q whose cost tag has the wrong sign."
+   }
+  },
+  {
+   "disposition_id": "PD-C115-1572694-8",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "2026-06-30: MPI Engineered Technologies prints 'S + 17.00 % PIK'; the published spread 17.00 is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355",
+     "quote": "'MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-PP02-1572694-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The duplicate-dimension candidates are pairs of lines of one borrower with the same par, cost and value (PlanSource Holdings 905 / 896 to 901 / 893 to 900 in every quarter, Airwavz Solutions 3,912 / 3,873 from 2025-03-31). The page prints each line separately and the filer tags each on its own member ('... One', '... Two'); both are positions and both are in the printed total. No fix: merging them would drop a printed line.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "PlanSource Holdings, Inc. Health Care Technology 11.36 % L + 6.25 % 04/22/25 905 896 893 (6) (7) PlanSource Holdings, Inc. Health Care Technology 11.36 % L + 6.25 % 04/22/25 905 896 893",
+     "quote": "'PlanSource Holdings, Inc. Health Care Technology 11.36 % L + 6.25 % 04/22/25 905 896 893 (6) (7) PlanSource Holdings, Inc. Health Care Technology 11.36 % L + 6.25 % 04/22/25 905 896 893': 2023-03-31: the twin PlanSource lines, printed one after the other."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-067098",
+     "verbatim": "PlanSource Holdings, Inc. Health Care Technology 9.83 % S + 5.50 % 12/30/26 905 901 900 (6) (8) PlanSource Holdings, Inc. Health Care Technology 9.83 % S + 5.50 % 12/30/26 905 901 900",
+     "quote": "'PlanSource Holdings, Inc. Health Care Technology 9.83 % S + 5.50 % 12/30/26 905 901 900 (6) (8) PlanSource Holdings, Inc. Health Care Technology 9.83 % S + 5.50 % 12/30/26 905 901 900': 2025-03-31: the same pair."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "Airwavz Solutions, Inc. Wireless Telecommunication Services 9.07 % S + 5.25 % 03/31/27 3,912 3,895 3,873 (6) (7) Airwavz Solutions, Inc. Wireless Telecommunication Services 9.07 % S + 5.25 % 03/31/27 3,912 3,895 3,873",
+     "quote": "'Airwavz Solutions, Inc. Wireless Telecommunication Services 9.07 % S + 5.25 % 03/31/27 3,912 3,895 3,873 (6) (7) Airwavz Solutions, Inc. Wireless Telecommunication Services 9.07 % S + 5.25 % 03/31/27 3,912 3,895 3,873': 2026-06-30: the Airwavz pair."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1572694-10",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The source rows reported as missing are the affiliate roll-forward lines in the notes, tagged on members 'Non-Controlled Affiliates <issuer>' with a fair value only (the closing value of all the fund's positions in that issuer), and at 2024-06-30 the printed '1st Lien/Last-Out Unitranche' section subtotal. None is a schedule position; the schedule rows they total are published and published fair value (without the money-market fund) equals the filed investments total in all 14 quarters. No fix: publishing them would count each issuer twice. A schedule_row_tags test was tried on paper and would also drop real undrawn and equity rows with no cost tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "Southeast Mechanical, LLC (dba. SEM Holdings, LLC) 11,692 14 ( 27 ) - 36 11,715 312",
+     "quote": "'Southeast Mechanical, LLC (dba. SEM Holdings, LLC) 11,692 14 ( 27 ) - 36 11,715 312': 2023-03-31, the affiliated-investments roll-forward in the notes: 11,715 is the year-to-date closing fair value of all the fund's SEM positions together, the figure reported as an unpublished source row ('Non-Controlled Affiliates Southeast Mechanical LLC Dba SEM Holdings LLC', 11,715,000). The schedule lines it sums are published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "SEM Holdings, LLC (dba Southeast Mechanical, LLC) 23,184 42 ( 46 ) - ( 543 ) 22,637 596",
+     "quote": "'SEM Holdings, LLC (dba Southeast Mechanical, LLC) 23,184 42 ( 46 ) - ( 543 ) 22,637 596': 2026-03-31, the same roll-forward: one line per affiliate issuer with opening value, purchases, sales, gains and closing value; not a schedule position."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-094144",
+     "verbatim": "Total 1st Lien/Last-Out Unitranche 124,002 122,206",
+     "quote": "'Total 1st Lien/Last-Out Unitranche 124,002 122,206': 2024-06-30: the one other unpublished source row, '1st Lien/Last-Out Unitranche' 122,206, is this printed section subtotal; its rows are published."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer listed Thrasio Holdings, RPC ABC 1,228, SEM Holdings 1,579, SDB HOLDCO and Pluralsight common stock as schedule rows with no published output. In this build all five are published (RPC ABC 2,116,564 units, cost 2,117, value 1,228; SEM 1,100 units, 1,579; Thrasio 252,754; SDB 731,038; Pluralsight 4,836,698 units at 0); what is unpublished at 2025-12-31 is the roll-forward line of the same issuers ('Non-Controlled Affiliates ...').",
+    "2026-03-31": "The reviewer listed Thrasio (252,754 shares), SEM Holdings (1,100 shares, 1,078), SDB HOLDCO (731,038) and Pluralsight (4,836,698, cost 13,167) as missing. All four are published at 2026-03-31 with those unit counts and values; the unpublished source rows named after them are the roll-forward lines, not the schedule rows."
+   }
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1572694-11",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "reason_key": "fv-corrected-from-page-where-tags-are-cross-tagged",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The value mismatch is the AI Titan Parent row of 2026-03-31 whose fair value was corrected from the printed line (the filer cross-tagged the two AI Titan values). Published 294 on the 1,433 par line and 7,024 on the 7,167 par line, as printed; the tagged facts are the other way round.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294",
+     "quote": "'AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294': the printed pairing."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1572694-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Every row still flagged is printed with no interest rate, reference rate or spread, and the filing tags none: Sweep Midco's two second-lien lines, mPulse Mobile's unsecured note, Chase Industries' second line, MPI Products, Kawa Solar and Conergy loans (non-income producing or written down), and two undrawn lines of 2023-03-31. The fixed PIK coupons ('10.00 % PIK', '12.00 % PIK', '3.00 % PIK') now publish their rate (pik_only_tag_reading). No fix: there is no rate on the page.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "Sweep Midco LLC Commercial Services & Supplies 03/12/34 5,621 4,216 2,122 (7) (8",
+     "quote": "'Sweep Midco LLC Commercial Services & Supplies 03/12/34 5,621 4,216 2,122 (7) (8': 2026-03-31: no rate, reference rate or spread printed between the industry and the maturity."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 8,247 7,072 7,175",
+     "quote": "'mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 8,247 7,072 7,175': 2026-03-31: the unsecured note prints no rate."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "Kawa Solar Holdings Limited Construction & Engineering 12/31/23 3,917 3,603 1,283",
+     "quote": "'Kawa Solar Holdings Limited Construction & Engineering 12/31/23 3,917 3,603 1,283': 2023-03-31: no rate printed on the Kawa Solar loan."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found six undrawn lines (AAG KP / KUIU x2, AI Titan 896, Abacus, Accommodations Plus, Artifact Bidco) printed 'S + x %' with no published spread. Fixed in this build: each now publishes its printed spread (KUIU 5.00, AI Titan 4.50, Abacus 6.00, Accommodations 5.25, Artifact 4.15) and SOFR; the rows still flagged at 2025-12-31 print no rate at all."
+   }
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_scale_or_unit_candidate-1572694-13",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "reason_key": "fv-corrected-from-page-where-tags-are-cross-tagged",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "2026-03-31: the filer cross-tagged the fair values of the two AI Titan Parent lines (the 1,433 par line's context carries 7,024, the 7,167 par line's carries 294). Both are corrected from the printed line by row correction, so the published value differs from the tagged fact on that context by 6.73M. The 10-Q for 2026-06-30 tags them the right way round. The quarter total is unchanged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294",
+     "quote": "'AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294': the printed pairing of par, cost and value."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1572694-14",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The position-like source rows with no published row are the affiliate roll-forward lines ('Non-Controlled Affiliates <issuer>', fair value only), the same population as SRC_BDC01. They total the issuer's schedule rows, which are published; totals tie in all 14 quarters. No fix: they are not positions.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "Southeast Mechanical, LLC (dba. SEM Holdings, LLC) 11,692 14 ( 27 ) - 36 11,715 312",
+     "quote": "'Southeast Mechanical, LLC (dba. SEM Holdings, LLC) 11,692 14 ( 27 ) - 36 11,715 312': 2023-03-31, the affiliated-investments roll-forward in the notes: 11,715 is the year-to-date closing fair value of all the fund's SEM positions together, the figure reported as an unpublished source row ('Non-Controlled Affiliates Southeast Mechanical LLC Dba SEM Holdings LLC', 11,715,000). The schedule lines it sums are published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "SEM Holdings, LLC (dba Southeast Mechanical, LLC) 23,184 42 ( 46 ) - ( 543 ) 22,637 596",
+     "quote": "'SEM Holdings, LLC (dba Southeast Mechanical, LLC) 23,184 42 ( 46 ) - ( 543 ) 22,637 596': 2026-03-31, the same roll-forward: one line per affiliate issuer with opening value, purchases, sales, gains and closing value; not a schedule position."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-fmt_basis_spread-1572694-15",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "2026-06-30: MPI Engineered Technologies prints 'S + 17.00 % PIK'; the published spread 17.00 is the printed one (fully PIK margin after a restructuring; the loan is on non-accrual).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355",
+     "quote": "'MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1572694-16",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Every flagged row is a loan printed with a maturity before the report date and still held (matured or written down and awaiting resolution): IHS Intermediate 07/20/22 (2023-03-31, 2023-06-30), CFS Management 07/15/24 and Conergy 06/30/24 (2024-09-30), Conergy (2024-12-31), Lithium Technologies 01/03/25 (2025-03-31), One GI 12/22/25 and MPI 11/17/25 (2026-06-30). Published is the page. No equity row carries a maturity.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-123412",
+     "verbatim": "Health Care Providers & Services 13.87 % S + 9.00 % (Incl. 2.75 % PIK) 07/15/24 19,529 19,529 17,576",
+     "quote": "'Health Care Providers & Services 13.87 % S + 9.00 % (Incl. 2.75 % PIK) 07/15/24 19,529 19,529 17,576': 2024-09-30: CFS Management printed with maturity 07/15/24."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-067098",
+     "verbatim": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967",
+     "quote": "'Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967': 2025-03-31: maturity 01/03/25 printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "One GI LLC Health Care Providers & Services S + 6.75 % 12/22/25 21,894 21,700 16,749",
+     "quote": "'One GI LLC Health Care Providers & Services S + 6.75 % 12/22/25 21,894 21,700 16,749': 2026-06-30: maturity 12/22/25 printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-017863",
+     "verbatim": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -",
+     "quote": "'IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -': 2023-03-31: maturity 07/20/22 printed, value nil."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox gsxf); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2024-09-30": "The reviewer found equity acquisition dates (Kawa Solar, Conergy common) read as maturities. In this build no equity row carries a maturity (0 rows); the rows flagged at 2024-09-30 are loans printed with a past maturity (CFS Management 07/15/24, Conergy unsecured 06/30/24)."
+   }
+  }
+ ]
+}

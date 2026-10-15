@@ -4181,3 +4181,35 @@ Compared with `spoff3`. Three rounds: an orchestrator fix, then the page sample.
 - The agent used eight builds against the six of the brief (the eighth allowed for round 3) and
   once ran a bare `python -`, killed by its own id.
 - Observations: 15. Tests: 687 passed in the agent's files; bridge fields 74 (mine).
+
+### D-172 Goldman Sachs BDC through the fund-clearing skill (sandbox `gsxf`, with 2026-06-30), verdict NEEDS_ORCHESTRATOR (request declined)
+
+Compared with `spoff2`. One round; six builds.
+
+- **Ledger:** 154 findings, 88 outstanding (102 in the first build), all with a proposal (16
+  entries); 3 accepted by existing checks (C103, C107, X06); totals tie in 14 of 14 quarters.
+- **Fixed:** the issuer pattern rewritten (missing names went from 15 to 209 a quarter to none;
+  industry labels glued onto names cut on about 315 rows); instrument now the deepest printed section
+  heading on about 4,900 rows; industry read where the member prints it without the word 'Industry'
+  (274 rows); about 50 equity rows had carried another row's unit count, because the shared
+  share-count step keys on issuer name and every equity name was blank; 354 positions printed with a
+  dash for fair value (2023-03-31 to 2025-06-30) now published at 0, each declared from its printed
+  line; fixed PIK-only coupons (41 rows); 181 rows of the first two 2023 quarters had the tagged
+  spread as the reference rate and about 100 rates were date guesses, both now the printed code
+  (CDOR to 2024-09-30, CORRA after, by each filing's legend); 526 row-correction lines (undrawn-line
+  costs tagged positive, cross-tagged AI Titan values, a subtotal row relabelled as the CloudBees
+  warrant, pars tagged as share counts). New highlights wrapper: net investment income had held total
+  investment income in every quarter, interest expense held directors' fees.
+- **Earlier real-error verdicts:** C103 2025-06-30 and X02 2025-12-31 fixed; SRC_BDC01 2025-12-31 and
+  2026-03-31 and maturity_not_past 2024-09-30 do not stand (reasons in the proposals).
+- **Request declined:** the agent asked that the provenance re-verifier accept a PIK-only rate whose
+  PIK figure was read from the member text where no PIK fact is tagged (MPI, Chase, Animal Supply,
+  2023-03-31 and 2023-06-30; 2 anchor_missing findings). That would have the re-verifier pass a
+  value the pipeline itself parsed, a circular check. The route that exists is to declare the printed
+  value in the wrapper (`source_encodings.untagged_values`, with the printed line), which the
+  re-verifier already checks against; the agent had used its six builds. The two findings stay
+  outstanding with their proposal.
+- **Page sample:** 20 rows, 0 published errors (benchmark untagged on 9 older-filing cards).
+- **Shared causes seen (fixed here for this fund only):** the share-count step keying on blank
+  names; the 'interestexpense' substring match taking directors' fees; dash-valued rows dropped.
+- The agent twice started a bare heredoc and killed each by its own id. No tests run (no shared code).

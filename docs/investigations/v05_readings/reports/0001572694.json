@@ -1,0 +1,472 @@
+{
+ "cik": "0001572694",
+ "label": "gsxf",
+ "before": "spoff2",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "basis_spread",
+   "rows": 8,
+   "why": "printed spread on 8 rows of 2023-03-31 whose spread was tagged with the rate-type concept and HOPCo 2023-12-31 'P + 5.00 %'"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 277,
+   "why": "lists the row-corrected fields"
+  },
+  {
+   "column": "cost",
+   "rows": 33,
+   "why": "30 undrawn lines whose cost the filer tagged positive where the page prints it in brackets (row corrections); 0.0 -> -0.0 on 3 rows"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 33,
+   "why": "follows cost (same 33 rows)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 8,
+   "why": "Fixed -> Floating on the rows given their printed spread (9)"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 274,
+   "why": "filer's industry read where the member prints it with no 'Industry' word (extended industry_from_identifier_re)"
+  },
+  {
+   "column": "fair_value",
+   "rows": 5,
+   "why": "AI Titan Parent 2026-03-31 cross-tagged values corrected from the page (2); 0.0 -> -0.0 sign of zero on 3 undrawn rows"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 125,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 169,
+   "why": "from the filer's industry on those rows: 0 lost, about 94 gained, about 76 moved from the name-keyed guess"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 4902,
+   "why": "the deepest printed section heading ('1st Lien/Senior Secured Debt', 'Common Stock', 'Warrants' ...) instead of the top heading 'Debt Investments' or a heading with a stray en dash; class text cut from the issuer name goes in front"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 32,
+   "why": "fixed PIK coupons with only a PIK tag ('10.00 % PIK' Chase/KDOR, '12.00 % PIK' MPI, '3.00 % PIK' MedeAnalytics, '7.00 % PIK' Animal Supply, Wine.com 12 %) now publish the rate (pik_only_tag_reading coupon)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 32,
+   "why": "follows interest_rate (unresolved -> all_in)"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 1122,
+   "why": "null issuer filled on 15 to 209 rows a quarter (new hierarchy_issuer_re: en dash, '%%', '4.5 %', 'Last-Out' and the equity sections); an industry label printed with no 'Industry' word cut from the end (about 315 rows); a stray 'I ' cut (10 rows, 2025-03-31); equity class cut to the instrument ('- Class A Units'); AQ Helios named on its stale AI Titan member (2); the bare 'Warrants' member of 2023-09-30 named CloudBees; plus the 333 rows newly published"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 5,
+   "why": "follows fair value (AI Titan 2, sign of zero 3)"
+  },
+  {
+   "column": "position_id",
+   "rows": 1866,
+   "why": "2026-06-30 added; names filled; dash rows added: chains re-paired"
+  },
+  {
+   "column": "position_key",
+   "rows": 2,
+   "why": "AQ Helios rows renamed from the AI Titan member (2)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 12,
+   "why": "12 loans with no principal tag (Bullhorn 2024-03-31; FS WhiteWater, Heartland 2025-06-30): printed par declared"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 12,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 12,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 12,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 12,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 253,
+   "why": "follows reference_rate_type"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 253,
+   "why": "181 rows of 2023-03-31/06-30 published the tagged spread ('0.0600') as the reference rate: set from the printed code; 31 date guesses of 2023 Q1/Q2 and 2024-03-31 set from the printed code (SONIA, Prime, CDOR, NIBOR); 'C' rows from 2023-09-30 read with the dated wrapper codes (CDOR to 2024-09-30, CORRA from 2024-12-31, each filing's legend) instead of a SOFR guess"
+  },
+  {
+   "column": "shares_held",
+   "rows": 96,
+   "why": "23 + 11 equity unit counts of 2023-03-31 tagged as principal x1000, set from the page; 2023-09-30 CloudBees warrant 333,980; about 50 rows where the build before published another row's count through the shared pow10_shares proxy because the issuer names were null (now the tagged count); 11 loans of 2025-06-30 whose par was tagged as a share count lose the count"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 65,
+   "why": "derived_proxy withdrawn on the rows whose count is now the tag (66 -> 4 proxy rows)"
+  },
+  {
+   "column": "src_facts",
+   "rows": 8,
+   "why": "the fact record of the rows whose value was declared from the page or re-signed"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 97,
+   "why": "interest_rate:pik_only on the same rows; shares proxy transforms withdrawn"
+  }
+ ],
+ "rows_added": 881,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Issuer names: hierarchy_issuer_re rewritten (any dash, '%%', a space before %, 'Last-Out', equity sections, glued industry labels, stray 'I '). Null issuers 15 to 209 a quarter -> 0 (cash rows aside). Dry run on every identifier of the fund (dry3.py): no name with an 'Industry' word changed except the intended cuts.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "what": "Rows printed with a dash for fair value (undrawn lines, loans and equity written to nil) were not published 2023-03-31 to 2025-06-30: 354 contexts declared at 0 (fair value, and cost where printed '-'), each matched to its printed row (dash_gen.py).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
+    }
+   ]
+  },
+  {
+   "what": "Undrawn-line cost tagged positive where the page prints it in brackets: 30 row corrections (2023-09-30 2, 2025-06-30 28).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "what": "AI Titan Parent 2026-03-31 fair values cross-tagged between its two lines: corrected (2). AQ Helios 6,600 line tagged on a stale AI Titan member at 2025-12-31 and 2026-03-31: named AQ Helios (2).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts of 2023-03-31 equity rows tagged with the principal concept (x1000): 34 set from the page; the bare 'Warrants' member of 2023-09-30 relabelled as the CloudBees warrant (333,980 units).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060336",
+     "text": "Kawa Solar Holdings Limited Construction & Engineering 08/17/16 1,399,556 - -"
+    }
+   ]
+  },
+  {
+   "what": "Fixed PIK coupons with only a PIK tag published no rate: pik_only_tag_reading ['coupon'] (41 rows).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054"
+    }
+   ]
+  },
+  {
+   "what": "Printed par declared for 12 loans with no principal tag; the 11 of 2025-06-30 had the par tagged as a share count, which is withdrawn.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "what": "Reference rate: 181 rows published the spread as the rate type ('0.0600'); 31 date guesses in 2023 Q1/Q2 and 2024-03-31; 'C' rows read as CDOR to 2024-09-30 and CORRA from 2024-12-31 (dated wrapper codes, each filing's legend); 9 coupon types and 9 spreads set from the page.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+    }
+   ]
+  },
+  {
+   "what": "Fund income: net_investment_income held TOTAL investment income in every quarter (InvestmentIncomeNet read as NII); interest_expense held directors fees (NoninterestExpenseDirectorsFees) and, in 10-Ks, the borrowing-rate percent. New highlights wrapper (concept_overrides, income_concept_suppress): NII is now NetInvestmentIncome (2026-03-31 25,767).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [
+  {
+   "file": "pipeline/provenance_reverify.py",
+   "what": "Accept interest_rate:pik_only where the row's PIK rate itself came from the member text (identifier_text) and no PIK fact is tagged: compare the published rate with the PIK figure the member prints.",
+   "why": "anchor_missing x2 (2023-03-31, 2023-06-30): MPI 12.00 % PIK, Chase 10.00 % PIK, Animal Supply 7.00 % PIK publish the printed coupon but the 10-Qs of those quarters tag no PIK rate, so the re-verifier has no fact to anchor.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054"
+    }
+   ]
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "In the builds before this run (spoff2, gsxa) about 50 equity rows published another row's unit count (ATX 29,326 = Abacus's count, Prairie Provident 28,898 = Iracore's) through the shared pow10_shares share-count proxy, which keys on the issuer name: every equity row of this fund had a null name. Fixed here by the names; any fund with null names has the same exposure.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A unit count taken from the proxy must equal the tagged count of the row where one is tagged.",
+   "quote": {
+    "accession": "0000950170-24-094144",
+    "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+   }
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "what": "The fund-income and highlights concept maps take any concept containing 'interestexpense', so NoninterestExpenseDirectorsFees (152,000) was published as interest expense, and InterestExpensesOnBorrowingsPercent (a rate, 0.0677) became 0.016925 in the 10-K quarters. Suppressed for this fund; the substring match is shared.",
+   "field": "interest_expense",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Interest expense below 1 pct of the debt balance, or a figure below 1, is not interest expense.",
+   "quote": {
+    "accession": "0001193125-26-212431",
+    "text": "Net investment income after taxes $ 24,785 $ 49,614"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "net_investment_income held total investment income in every quarter (us-gaap InvestmentIncomeNet mapped to NII beside NetInvestmentIncome). Fixed for this fund by its highlights wrapper; other filers using InvestmentIncomeNet for total income would show the same.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Net investment income above total expenses plus itself, or equal to a printed total investment income, is not NII.",
+   "quote": {
+    "accession": "0001193125-26-212431",
+    "text": "Net investment income after taxes $ 24,785 $ 49,614"
+   }
+  },
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "what": "354 positions printed with a dash for fair value (2023-03-31 to 2025-06-30, a few after) were not published; the filer tags the zero from 2025-09-30. Fixed per fund by declaring the zero from the page; the shared drop remains.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Schedule rows with a dash fair value and a cost or par fact against published zero-value rows, per filing.",
+   "quote": {
+    "accession": "0000950170-23-017863",
+    "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
+   }
+  },
+  {
+   "observation_key": "reference-rate-type-tag-holds-the-spread",
+   "what": "10-Qs 2023-03-31 and 2023-06-30 tag the spread with the reference-rate-type concept; 181 rows published '0.0600' etc. as the reference rate (and 8 had no spread). No rule flags a numeric reference rate. Fixed by row corrections.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 1500.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "reference_rate_type must be a benchmark name, never a number.",
+   "quote": {
+    "accession": "0000950170-24-022198",
+    "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "what": "'C' (CDOR, then CORRA), 'SN', 'P', 'N' rows were published with a date-guessed SOFR or LIBOR (about 100 rows). Fixed by dated wrapper codes and row corrections. Left: 2 'CDN P' (Canadian prime) rows of 2023 and 6 rows of 2023-09-30 whose member prints no code (SOFR guess).",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 300.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A guessed benchmark on a row whose printed line names a code.",
+   "quote": {
+    "accession": "0000950170-24-022198",
+    "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "AQ Helios's 6,600 line was tagged on a stale AI Titan member (2025-09-30 section percents) at 2025-12-31 and 2026-03-31 and published as AI Titan; renamed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 6.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A member whose section percents differ from the filing's own headings is stale.",
+   "quote": {
+    "accession": "0001193125-26-212431",
+    "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
+   }
+  },
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "what": "10-Q 2025-06-30: the par of 11 FS WhiteWater / Heartland loans is tagged with the share-count concept, unscaled; the loans published a unit count and no principal (X11 caught the principal). Par declared, count withdrawn.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 69.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A loan with a unit count and no principal.",
+   "quote": {
+    "accession": "0000950170-25-105134",
+    "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "what": "The money-market row's issuer is published as 'Investment Goldman Sachs Financial Square Government Fund' (member prefix kept) in 7 quarters. Left: cash rows are outside the published basis checked here.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 2.5,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "An issuer name that starts with the axis word 'Investment'.",
+   "quote": {
+    "accession": "0001193125-26-212431",
+    "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 2,475,640 $ 2,476 $ 2,476"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "none: no shared code changed (wrapper, highlights wrapper, row corrections, one data block in scripts/v05_evidence/make_row_corrections.py)"
+ ],
+ "not_done": [
+  "Interval of the C-code switch is taken from each filing's legend (CDOR to 2024-09-30, CORRA from 2024-12-31), not from the loan agreements.",
+  "Cost row by row beyond the sign check; the 2 'CDN P' rows and 6 code-less 2023-09-30 rows keep a guessed benchmark.",
+  "Quarters before 2023-03-31 are not in the build (no holdings published for 2022).",
+  "Page sample beyond 16 random rows (spot.py) not done; 'all findings cleared' is not 'data correct'.",
+  "The en-dash/glued-name regex was dry-run on this fund's identifiers only; no other fund uses it."
+ ]
+}

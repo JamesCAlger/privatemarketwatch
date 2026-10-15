@@ -103,5 +103,10 @@
                        "label":  "kfxh",
                        "accepted_on":  "2026-10-15",
                        "basis":  "D-171, gate PASS in round 3; page sample 4 errors on 3 rows of 20, two causes fixed, PIK range left"
+                   },
+    "0001572694":  {
+                       "label":  "gsxf",
+                       "accepted_on":  "2026-10-15",
+                       "basis":  "D-172, gate NEEDS_ORCHESTRATOR (re-verifier request declined), every other check clean; page sample 0 published errors of 20"
                    }
 }
