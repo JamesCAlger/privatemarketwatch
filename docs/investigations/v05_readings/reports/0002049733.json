@@ -1,0 +1,63 @@
+{
+ "cik": "0002049733",
+ "label": "brxb",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {"column": "position_id", "rows": 41, "why": "Adding 2026-06-30 re-forms the chains that continue into the new quarter: 41 rows of 2025-06-30 to 2026-03-31 (19 chains) get a new id, one old id to one new id, no split or merge (scratch/fund_runs/0002049733/pid.sql). No edit of mine touches holdings: brxb equals brxa (built without any edit) on all 100 columns."}
+ ],
+ "rows_added": 121,
+ "rows_removed": 0,
+ "fixes": [
+  {"what": "shares_outstanding 2025-06-30 was 8,795,536,000: the 10-Q for 2026-06-30 files the comparative share count x1,000 and company facts keep the last filed value. Declared 8,795,536 from the 2025-06-30 balance sheet (highlights wrapper figure_corrections). Clears E04, nav_identity and F11 at 2025-06-30.",
+   "kind": "wrapper",
+   "quarters": ["2025-06-30"],
+   "quotes": [
+    {"accession": "0002049733-25-000026", "text": "Common Shares outstanding ($ 0.01 par value, unlimited shares authorized) 8,795,536 Net asset value per share $ 25.22"},
+    {"accession": "0002049733-26-000037", "text": "For the Three Months Ended June 30, 2025 Shares Amount Subscriptions 8,795,536 $ 220,503"}
+   ]},
+  {"what": "net_investment_income 2025-06-30 was 0.27, the per-share figure of the distribution-source table tagged on an April-June context, which outranked the two-month (May 1 to June 30) income statement. Both distribution concepts suppressed for this filer (highlights wrapper income_concept_suppress, the setting 0001930679 and 0001742313 use). Now total investment income 2,152 and net investment income 1,576 (total was blank).",
+   "kind": "wrapper",
+   "quarters": ["2025-06-30"],
+   "quotes": [
+    {"accession": "0002049733-25-000026", "text": "Source of Distribution Per Share Amount Net investment income $ 0.27 $ 1,456"},
+    {"accession": "0002049733-25-000026", "text": "Total investment income 2,152 Expenses: Interest expense 508"},
+    {"accession": "0002049733-25-000026", "text": "Net expenses 576 Net investment income 1,576"}
+   ]},
+  {"what": "Fourth-quarter 2025 income was the eight-month first 10-K period x 3/8 (total investment income 15,995, net investment income 9,945). Declared first_income_year_ends 2025-12-31 (highlights wrapper): the quarter is now the period less the two 10-Q periods, 42,654 - 2,152 - 14,196 = 26,306 and 26,519 - 1,576 - 8,826 = 16,117 (before-tax net investment income, the basis of the 8,826 published for 2025-09-30). Interest expense and total expenses of that quarter follow the same arithmetic.",
+   "kind": "wrapper",
+   "quarters": ["2025-12-31"],
+   "quotes": [
+    {"accession": "0002049733-26-000008", "text": "Interest income $ 42,654 Total investment income 42,654"},
+    {"accession": "0002049733-26-000008", "text": "Net investment income before tax expense 26,519 Excise tax expense 200 Net investment income after tax expense 26,319"},
+    {"accession": "0002049733-25-000049", "text": "Interest income $ 14,196 $ 16,348 Total investment income 14,196 16,348"}
+   ]}
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {"finding": "class of every row (not a ledger finding): all 500 rows are DIRECT_LENDING / LOAN with no instrument description",
+   "hypotheses": ["The filing carries no class, industry or instrument on the row: only the printed section heading (Senior loans, Mezzanine loans and B-notes, Credit-linked notes, CMBS, RMBS, Interest-only securities, CLOs, Term Loans, Corporate debt) says what a row is.",
+                  "No wrapper setting maps a printed heading to a class; the owner question (item 13 of v05_owner_decisions_2026-10-12: a real-estate credit class and class-from-section) is still open, so no shared code was written."]}
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {"observation_key": "structured-credit-classed-as-direct-lending", "what": "Every row is published DIRECT_LENDING. At 2026-06-30 the page prints CMBS, RMBS, interest-only securities, CLOs and corporate bonds in their own sections (about 250M of 2,020.7M) beside first-mortgage and mezzanine real-estate loans; the rows carry no class, so only the printed heading tells them apart. Owner question 13 of 2026-10-12.", "field": "index_classification", "quarters": ["2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 2020.7, "cause": "fund", "action": "left", "suggested_check": "A fund whose printed section headings name securities (CMBS, RMBS, CLOs) but whose rows are all one class is flagged.", "quote": {"accession": "0002049733-26-000037", "text": "CLOs KREF 2022-FL3 D (5)(6) SOFR 2.80 % 2.80 % 6.44 % 1/23/2026 2/17/2039 $ 3,300 $ 3,310 $ - $ 3,297 0.3 %"}},
+  {"observation_key": "unfunded-commitment-column-not-published", "what": "The schedule prints an 'Unfunded Commitment' column per loan (74,457 in all at 2026-06-30; Ardan 8,870). It is not published on the row; the published row carries the funded par, cost and value only. Left: no field for it on a funded row.", "field": "unfunded_commitment", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "left", "suggested_check": "Where the printed header names an unfunded-commitment column, its total is compared with what the build publishes.", "quote": {"accession": "0002049733-26-000037", "text": "Ardan (5) SOFR 2.05 % 2.50 % 5.66 % 3/27/2026 4/9/2031 103,130 102,292 8,870 102,234 10.3"}},
+  {"observation_key": "principal-is-notional-on-interest-only-tranches", "what": "Interest-only tranches publish the notional as principal_amount, as printed (legend 7): JPMF1 2026-FX1 XD 3,910 against a value of 274. Correct as printed, but any principal-weighted figure is wrong for these rows.", "field": "principal_amount", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 10.9, "cause": "fund", "action": "left", "suggested_check": "", "quote": {"accession": "0002049733-26-000037", "text": "JPMF1 2026-FX1 XD (5) 1.62 % 5/26/2026 5/15/2059 3,910 278 - 274 -"}},
+  {"observation_key": "share-count-refiled-at-1000x-by-later-filing", "what": "The 10-Q for 2026-06-30 files CommonStockSharesOutstanding 8,795,536,000 for 2025-06-30 while printing 8,795,536; company facts keep the last filed value, so the 2025-06-30 share count became 1,000 times too large when the new quarter was added. Fixed for this fund by a figure correction.", "field": "shares_outstanding", "quarters": ["2025-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "A share count that a later filing changes by a power of ten for an already-published date is held for review instead of replacing the earlier value.", "quote": {"accession": "0002049733-26-000037", "text": "For the Three Months Ended June 30, 2025 Shares Amount Subscriptions 8,795,536 $ 220,503"}},
+  {"observation_key": "net-investment-income-holds-a-per-share-figure", "what": "net_investment_income 2025-06-30 was 0.27, the distribution-source per-share figure. Fixed by income_concept_suppress.", "field": "net_investment_income", "quarters": ["2025-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "A net investment income below 1,000 dollars on a fund with net assets above 1M is rejected.", "quote": {"accession": "0002049733-25-000026", "text": "Source of Distribution Per Share Amount Net investment income $ 0.27 $ 1,456"}},
+  {"observation_key": "inception-period-annual-figures-prorated-into-a-quarter", "what": "The first 10-K covers 2025-05-01 to 2025-12-31 (eight months); the fourth quarter was published as 3/8 of it (15,995) instead of the period less the filed quarters (26,306). Fixed by first_income_year_ends.", "field": "total_investment_income", "quarters": ["2025-12-31"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "", "quote": {"accession": "0002049733-26-000008", "text": "Interest income $ 42,654 Total investment income 42,654"}},
+  {"observation_key": "issuer-respelled-between-quarters-splits-names", "what": "The filer respells property names between quarters ('6420 Coventary Way' to '6420 Coventry Way', 'The Journal Phase 1' to 'Phase I'). Published names follow each page; canonical_name now takes the later spelling. Left: as printed.", "field": "issuer_name", "quarters": ["2025-06-30", "2025-09-30"], "fair_value_m": 6.5, "cause": "fund", "action": "left", "suggested_check": "", "quote": {"accession": "0002049733-25-000026", "text": "6420 Coventary Way (5) 3.55 % 6/18/2025 10/5/2030 7,212 6,454 - 6,504 2.9"}}
+ ],
+ "name_shape_exceptions": [
+  {"shape": "row_number_in_name", "rows": 5, "why": "The page prints a second loan on the same property with the number in its name: '6420 Coventary Way 2 (5) 4.40 % 6/18/2025 10/5' (10-Q 2025-06-30) and '6420 Coventry Way 2 (5) 4.40 %' (10-K 2025-12-31). It is a distinct loan, not a row ordinal; 5 of 500 rows."}
+ ],
+ "tests_run": ["tests/test_fund_highlights_wrapper.py tests/test_bdc_fund_income.py tests/test_fourth_quarter_income.py: 78 passed"],
+ "not_done": [
+  "Did not read every 2026-06-30 row on the page: 8 rows sampled (rate, spread, reference, maturity, par, cost, value, percent all equal the page).",
+  "2025-03-31 is unchecked for totals: it has no schedule (operations began 2025-05-01); totals tie in the other 5 quarters.",
+  "Floor column and acquisition dates not compared.",
+  "Did not check why only 19 of the continuing chains got new position_ids.",
+  "Fund-level fields other than income, shares and NAV for 2026-06-30 not compared with the page."
+ ]
+}

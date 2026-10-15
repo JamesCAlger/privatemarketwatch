@@ -944,6 +944,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-X06-2049733",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0002049733"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox brxa for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py brxa X06 3",
+   "decided_by": "check passed on sandbox brxa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1508655",
    "class": "as_filed",
    "engine": "identity",

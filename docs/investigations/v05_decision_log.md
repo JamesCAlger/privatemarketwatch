@@ -4681,3 +4681,32 @@ Compared with `spoff3`. Two rounds; four builds.
   read; JV listing fields not read.
 - The agent ran an empty heredoc into `python -` twice (killed by PIDs 21152, 22292) and used `sed`
   on scratch files, the proposals file and the report. Wrapper tests 681 passed.
+
+### D-188 Blackstone Private Real Estate Credit & Income Fund through the fund-clearing skill (sandbox `brxb`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; two builds.
+
+- **Ledger:** 4 findings, 1 outstanding (5 in the first build), proposed; totals tie in 5 of 5
+  quarters. 2025-03-31 has no schedule (operations began 2025-05-01): unchecked, not passing.
+- **Fixed (new highlights wrapper):** share count at 2025-06-30 published as 8,795,536,000 (the
+  2026-06-30 10-Q re-files that date's count x1,000 and company facts keep the last filing), now the
+  printed 8,795,536 (E04, nav_identity, F11); Q2 2025 net investment income held a per-share 0.27
+  from the distribution-source table (`income_concept_suppress`), now 1,576 (total income 2,152);
+  Q4 2025 was 3/8 of the eight-month first 10-K, now the period less the two 10-Q quarters by
+  declaring `first_income_year_ends` 2025-12-31 (uses the D-186 change): total income 26,306, NII
+  16,117. Holdings unchanged by the edits (`brxb` = `brxa` on all columns); 41 rows in 19 chains got
+  a new position_id against `spoff3` (declared, not traced).
+- **Proposed:** pct_position_concentration 2025-12-31 (KKR AIP V printed at 26.9 pct of net assets;
+  new key `concentration-large-loan-of-a-young-levered-fund-as-printed`). The earlier real-error
+  verdict (Dreyfus cash row leaking) does not stand: no Dreyfus row is published.
+- **Parked, owner question 13 (2026-10-12, open):** all 500 rows are published as direct lending;
+  the page prints CMBS, RMBS, CLOs, interest-only securities and bonds in their own sections (about
+  250M of 2,020.7M at 2026-06-30). Class-from-section is not built. The page reader marked the class
+  ok under the brief's rule (wrong only against the page's loan/equity split).
+- **Page sample:** 20 cards, 0 published errors. Notes: no instrument description on any row; UK
+  Mortgage Portfolio (SONIA) published with USD par, unconfirmed. Twenty cards can miss a problem on
+  under about 15 pct of rows.
+- **Left:** printed unfunded commitments (74,457) not published; interest-only tranches carry the
+  notional as principal, as printed; property names respelled between quarters.
+- The agent ran an empty heredoc into `python -` once (stopped by its id) and used `sed -i` on a
+  scratch SQL file. Wrapper tests 681 passed.

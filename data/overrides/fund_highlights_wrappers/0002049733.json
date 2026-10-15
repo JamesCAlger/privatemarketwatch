@@ -1,0 +1,22 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002049733",
+ "entity_name": "Blackstone Private Real Estate Credit and Income Fund",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2025-06-30",
+   "field": "shares_outstanding",
+   "value": 8795536,
+   "evidence": "0002049733-25-000026 (10-Q, 2025-06-30) balance sheet: 'NET ASSET VALUE PER SHARE June 30, 2025 Net assets $ 221,821 Common Shares outstanding ($ 0.01 par value, unlimited shares authorized) 8,795,536 Net asset value per share $ 25.22'. The 10-Q for 2026-06-30 (0002049733-26-000037) files CommonStockSharesOutstanding 8,795,536,000 for 2025-06-30 (it prints 8,795,536 in its net-assets note), and company facts keep the last filed value, so 8,795,536,000 was published (E04, F11, nav_identity)."
+  }
+ ],
+ "income_concept_suppress": [
+  "investmentcompanydistributiontoshareholdersnetinvestmentincomepershare",
+  "investmentcompanydividenddistributionnetinvestmentincome"
+ ],
+ "first_income_year_ends": [
+  "2025-12-31"
+ ],
+ "notes": "Fund commenced operations 2025-05-01. Net investment income: in the 10-Q for 2025-06-30 the filer tags its distribution-source table ('Source of Distribution Per Share Amount Net investment income $ 0.27 $ 1,456') on an April-June context, so the per-share 0.27 was read as the quarter's net investment income and the two-month income statement (May 1 to June 30: total investment income 2,152, net investment income 1,576) lost to it; both distribution concepts are suppressed (income_concept_suppress). First income year 2025: 0002049733-26-000008 (10-K, 2025-12-31) prints 'For the period from May 1, 2025 (Commencement of operations) to December 31, 2025 ... Total investment income 42,654 ... Net investment income before tax expense 26,519', eight months; the fourth quarter is the period less the two 10-Q periods (2,152 and 14,196), not 3/8 of it (first_income_year_ends)."
+}

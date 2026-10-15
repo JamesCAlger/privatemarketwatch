@@ -1,0 +1,41 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "brxb",
+ "dispositions": [
+  {
+   "disposition_id": "PD-pct_position_concentration-2049733-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "ciks": [
+    "0002049733"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "reason_key": "concentration-large-loan-of-a-young-levered-fund-as-printed",
+   "statement": "Two loans are each above a quarter of net assets at 2025-12-31: KKR AIP V 201,000 (26.9 %) and Karlin Multifamily Portfolio 195,556 (26.2 %), both printed so. The fund began operating on 2025-05-01 and is levered (investments 1,528,317 against net assets 746,365), so a single first-mortgage loan is a large share of net assets; the published percent is the printed one. The share falls to 21.9 % and 20.2 % in the next two quarters as the fund grows. No fix applies: nothing published differs from the page.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found a subtotal leak: the Dreyfus Government Cash Management cash row counted as a position (113 rows against a printed 'Total investments' of 112 positions). It does not stand in build brxb: no Dreyfus row is published in any quarter (it is a cash equivalent printed below 'Total investments'), the 113 published rows (no issuer name repeated) sum to 1,528,317, the printed total. The '112' the reviewer cites sits in a cell sequence ('Total investments | 112 | 6.8 | % | 4/20/2034') that mixes a total label with a rate and a date; it was not checked which table it comes from, but every one of the 113 published rows carries a positive fair value (smallest INV 2024-IND E, 178) and together they equal the printed total, so no published row is surplus. The flag itself is the concentration of KKR AIP V, printed at 26.9 %."
+   },
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0002049733-26-000008",
+     "verbatim": "KKR AIP V (5) SOFR 2.65 % 2.75 % 6.43 % 10/28/2025 11/9/2030 $ 201,000 $ 199,146 $ - $ 201,000 26.9 %",
+     "quote": "KKR AIP V (5) SOFR 2.65 % 2.75 % 6.43 % 10/28/2025 11/9/2030 $ 201,000 $ 199,146 $ - $ 201,000 26.9 % -- printed percent of net assets 26.9, published 26.9"
+    },
+    {
+     "source": "filing",
+     "accession": "0002049733-26-000008",
+     "verbatim": "Total investments $ 1,628,275 $ 1,516,173 $ 55,918 $ 1,528,317 205.2 %",
+     "quote": "Total investments $ 1,628,275 $ 1,516,173 $ 55,918 $ 1,528,317 205.2 % -- the printed total, equal to the sum of the 113 published rows; the Dreyfus cash row is printed after it and is not published"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py brxb scratch/fund_runs/0002049733/dups.sql; see scratch/fund_runs/0002049733/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop brx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}
