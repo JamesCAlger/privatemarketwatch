@@ -1,0 +1,122 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "stxf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-X11-1825384-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": ["0001825384"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31"],
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "statement": "Every flagged row (15 rows in eight quarters, fair value 2 to 81,900 dollars each) is an undrawn revolver or delayed-draw line: Project K BuyerCo revolver in all eight quarters, Galway and Giving Home (2024-03-31), MB2 Dental (two lines) and Belmont Buyer (2024-06-30, 2024-09-30). The schedule prints a dash in the Par Amount column, a negative or small cost and a small positive fair value, the mark on the unfunded commitment; the filing tags no principal. There is no par to publish. The one drawn loan X11 reported at 2024-12-31 (TA/WEG delayed draw 'Five', 14.0M, par and cost tagged on another member) is fixed by row correction.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001410578-23-001135", "verbatim": "Project K BuyerCo, Inc. First Lien Revolving Loan LIBOR + 6.00 %, 0.75 % Floor 8 10.99 % 12/10/2027 - ( 120,900 ) 2,318 0.0 %", "quote": "Project K BuyerCo, Inc. First Lien Revolving Loan LIBOR + 6.00 %, 0.75 % Floor 8 10.99 % 12/10/2027 - ( 120,900 ) 2,318 0.0 % -- par printed as a dash, fair value 2,318 dollars (2023-03-31)"},
+    {"source": "filing", "accession": "0001410578-23-001766", "verbatim": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 8 11.36 % 12/10/2027 - ( 114,481 ) 2,318 0.0 %", "quote": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 8 11.36 % 12/10/2027 - ( 114,481 ) 2,318 0.0 % -- 2023-06-30"},
+    {"source": "filing", "accession": "0001410578-23-002425", "verbatim": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 8 11.52 % 12/10/2027 - ( 107,991 ) 2,318 0.0 %", "quote": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 8 11.52 % 12/10/2027 - ( 107,991 ) 2,318 0.0 % -- 2023-09-30"},
+    {"source": "filing", "accession": "0001410578-24-000282", "verbatim": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 9 11.46 % 12/10/2027 - ( 101,502 ) 13,909 0.0 %", "quote": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 9 11.46 % 12/10/2027 - ( 101,502 ) 13,909 0.0 % -- 2023-12-31"},
+    {"source": "filing", "accession": "0001410578-24-000757", "verbatim": "Galway Borrower, LLC First Lien Delayed Draw Term Loan SOFR + 5.75 %, 0.75 % Floor 9 10.65 % 4/26/2024 - ( 277,727 ) 81,900 0.0 %", "quote": "Galway Borrower, LLC First Lien Delayed Draw Term Loan SOFR + 5.75 %, 0.75 % Floor 9 10.65 % 4/26/2024 - ( 277,727 ) 81,900 0.0 % -- 2024-03-31; Project K and Giving Home revolvers on the same page print a dash par too"},
+    {"source": "filing", "accession": "0001410578-24-000757", "verbatim": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 9 11.18 % 12/10/2027 - ( 95,083 ) 13,909 0.0 %", "quote": "Project K BuyerCo, Inc. First Lien Revolving Loan SOFR + 6.00 %, 0.75 % Floor 9 11.18 % 12/10/2027 - ( 95,083 ) 13,909 0.0 % -- 2024-03-31"},
+    {"source": "filing", "accession": "0001410578-24-001310", "verbatim": "MB2 Dental Solutions, LLC First Lien Delayed Draw Term Loan (9) SOFR + 6.00 %, 0.75 % Floor 11.33 % 2/13/2026 - - 59,665 0.0 %", "quote": "MB2 Dental Solutions, LLC First Lien Delayed Draw Term Loan (9) SOFR + 6.00 %, 0.75 % Floor 11.33 % 2/13/2026 - - 59,665 0.0 % -- 2024-06-30; footnote (9) marks unfunded commitments"},
+    {"source": "filing", "accession": "0001410578-24-001310", "verbatim": "Belmont Buyer, Inc. First Lien Revolving Loan (9) SOFR + 6.50 %, 1.00 % Floor 11.78 % 6/21/2029 - ( 54,188 ) 9,375 0.0 %", "quote": "Belmont Buyer, Inc. First Lien Revolving Loan (9) SOFR + 6.50 %, 1.00 % Floor 11.78 % 6/21/2029 - ( 54,188 ) 9,375 0.0 % -- 2024-06-30"},
+    {"source": "filing", "accession": "0001410578-24-001886", "verbatim": "Project K Buyerco, INC. First Lien Revolving Loan (9) SOFR + 5.00 %, 0.75 % Floor 9.70 % 12/10/2027 - ( 82,175 ) 50,227 0.0 %", "quote": "Project K Buyerco, INC. First Lien Revolving Loan (9) SOFR + 5.00 %, 0.75 % Floor 9.70 % 12/10/2027 - ( 82,175 ) 50,227 0.0 % -- 2024-09-30; MB2 and Belmont as at 2024-06-30"},
+    {"source": "filing", "accession": "0001410578-25-000437", "verbatim": "Project K Buyerco, INC. First Lien Revolving Loan (9) SOFR + 5.00 %, 0.75 % Floor 9.43 % 12/10/2027 - ( 76 ) 71 0.0 %", "quote": "Project K Buyerco, INC. First Lien Revolving Loan (9) SOFR + 5.00 %, 0.75 % Floor 9.43 % 12/10/2027 - ( 76 ) 71 0.0 % -- 2024-12-31 (thousands)"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py stxf X11 0001825384 <quarter>; see scratch/fund_runs/0001825384/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1825384-2",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": ["0001825384"],
+   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31"],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "The yield the check compares is the filer's printed ratio of net investment income to average net assets (13.37, 12.71, 12.51), published as printed. The fund is levered: investments are 189, 198 and 200 pct of net assets in these quarters (2,303.8M on 1,219.3M; 2,457.5M on 1,239.6M; 2,504.2M on 1,251.5M), so income over net assets runs above the holdings' weighted coupon by design. The excess is 2.08 to 2.45 points against the check's 2.00. No published value is wrong.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001410578-24-001310", "verbatim": "Ratio of net investment income (loss) to average net assets 4 13.37 % 12.92 %", "quote": "Ratio of net investment income (loss) to average net assets 4 13.37 % 12.92 % -- 10-Q 2024-06-30 financial highlights; published income_yield_pct 13.37"},
+    {"source": "filing", "accession": "0001410578-24-001886", "verbatim": "Ratio of net investment income (loss) to average net assets 4 12.71 % 13.16 %", "quote": "Ratio of net investment income (loss) to average net assets 4 12.71 % 13.16 % -- 10-Q 2024-09-30; published 12.71"},
+    {"source": "filing", "accession": "0001410578-25-000437", "verbatim": "Ratio of net investment income (loss) to average net assets 6 12.51 % 13.14 % 9.36 % 6.34 % ( 15.01 ) %", "quote": "Ratio of net investment income (loss) to average net assets 6 12.51 % 13.14 % 9.36 % 6.34 % ( 15.01 ) % -- 10-K 2024-12-31; published 12.51"}
+   ],
+   "rerun": "grep 0001825384 scratch/fund_sandbox/stxf/output/fund_financials_validation_current.csv | grep F27",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC-1825384-3",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": ["0001825384"],
+   "quarters": ["2025-12-31"],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "Three rows of the 10-K for 2025-12-31 (Helpsystems second lien, MRI Software delayed draw and revolver) are tagged with the printed thousands figure at decimals 0 and no scale, in a schedule whose other facts are scaled: fair value 8,182 for a printed 8,182 thousand. The published values are the printed ones (row corrections of D-117, each with its printed line); the source check compares with the tag and keeps the 10.56M difference. The quarter ties to the filed total 2,882,954.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-096955", "verbatim": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 %", "quote": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 % -- printed in thousands; tagged 8182 at decimals 0, published 8,182,000 (D-117)"},
+    {"source": "filing", "accession": "0001193125-26-096955", "verbatim": "MRI Software LLC First Lien Delayed Draw Term Loan (10) SOFR + 4.75 %, 1.00 % Floor 8.42 % 2/10/2028 1,971 1,929 1,888 0.1 %", "quote": "MRI Software LLC First Lien Delayed Draw Term Loan (10) SOFR + 4.75 %, 1.00 % Floor 8.42 % 2/10/2028 1,971 1,929 1,888 0.1 % -- same; the revolver (506 / 495 / 494) likewise"}
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001825384.md section 1",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1825384-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": ["0001825384"],
+   "quarters": ["2025-12-31"],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "The three value mismatches are the same three rows as the source-reconciliation finding of this quarter: the tag holds the printed thousands figure unscaled, the published row holds the printed value (D-117 row corrections). The source fact is the one that is wrong; publishing it would put the quarter 10.55M under the filed total.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-096955", "verbatim": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 %", "quote": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 % -- one of the three rows; 0.6 pct of 1,369,382 net assets is about 8.2M, not 8 thousand"}
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001825384.md section 1",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F16-1825384-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": ["0001825384"],
+   "quarters": ["2022-09-30"],
+   "reason_key": "f16-quarter-distribution-against-year-to-date-income-ratio",
+   "statement": "The income yield published for 2022-09-30 is the filer's printed nine-month ratio of net investment income to average net assets, 6.39 pct (annualized), low because the fund was still ramping early in 2022. The distribution rate is the third quarter's 0.52 a share annualized over a 19.61 NAV (10.6 pct). Over the same nine months the fund distributed exactly its net investment income: 1.34 a share each. The check sets a quarter's distribution against a year-to-date ratio; distributions did not exceed income. The 10-Q for 2022-09-30 is not in the cache; the figures are the 2022 comparative column of the 10-Q for 2023-09-30. The 2022-12-31 finding of the same rule is fixed (the build had published 2.97 for the printed annual ratio 9.36; highlights wrapper).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001410578-23-002425", "verbatim": "Ratio of net investment income (loss) to average net assets 5 13.16 % 6.39 %", "quote": "Ratio of net investment income (loss) to average net assets 5 13.16 % 6.39 % -- nine months to 2023-09-30 and 2022-09-30; published income_yield_pct 6.39 for 2022-09-30"},
+    {"source": "filing", "accession": "0001410578-23-002425", "verbatim": "Distributions from net income 3 ( 1.90 ) ( 1.34 )", "quote": "Distributions from net income 3 ( 1.90 ) ( 1.34 ) -- 2022 nine months: 1.34 a share distributed, against 'Net investment income 1 1.95 1.34' on the same table"},
+    {"source": "filing", "accession": "0001410578-23-002425", "verbatim": "5 The ratios reflect an annualized amount.", "quote": "5 The ratios reflect an annualized amount. -- the 6.39 is a nine-month annualized ratio"}
+   ],
+   "rerun": "grep 0001825384 scratch/fund_sandbox/stxf/output/fund_financials_validation_current.csv | grep F16",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1825384-5",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": ["0001825384"],
+   "quarters": ["2026-06-30"],
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "statement": "One row: the SpecialtyCare revolver (undrawn, fair value -6 thousand) is printed in the 10-Q for 2026-06-30 with a maturity of 6/18/2026, before the report date; published is the page. The other row this check saw in the first build (Ares Global Structured Solutions preferred, 'Due 5/22/2026' in the member) was a misread acquisition date and its maturity is withdrawn by row correction.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-352549", "verbatim": "SpecialtyCare, Inc. First Lien Revolving Loan (10) SOFR + 4.75 % 8.44 % 6/18/2026 - ( 4 ) ( 6 ) 0.0 %", "quote": "SpecialtyCare, Inc. First Lien Revolving Loan (10) SOFR + 4.75 % 8.44 % 6/18/2026 - ( 4 ) ( 6 ) 0.0 % -- maturity printed before the 2026-06-30 report date"}
+   ],
+   "rerun": "python scratch/fund_runs/0001825384/q.py stxf scratch/fund_runs/0001825384/m1.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop stx, sandbox stxf); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

@@ -4274,3 +4274,32 @@ sample's findings). This is the fund where the page sample mattered most.
   156 rows in two unmapped headings; fund-level net assets unmapped, borrowings at 2023-12-31 a year
   late, interest expense a ratio in two quarters; the Merx 2023-03-31 printed par (a typo).
 - The agent ran a bare `python -` four times, each killed by its own id. No shared code; no tests.
+
+### D-175 Stone Point Credit through the fund-clearing skill (sandbox `stxf`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. Two rounds; six builds.
+
+- **Ledger:** 31 findings, 15 outstanding (50 in the first build), all proposed (6 entries); totals
+  tie in 13 of 14 quarters; 2026-06-30 declared: the filed total includes the fund's two interest
+  rate swaps (-2,124 thousand).
+- **Fixed:** names '<issuer>, Equity, Acquisition Date ...' cut into the instrument (C206);
+  `units_tagged_as_par` for all 14 filings (C04); `pik_only_tag_reading` for PIK-only notes; new
+  highlights wrapper (income yield 2022-12-31 2.97 to the printed 9.36); 89 row-correction specs
+  (26 common-equity rows published as loans; preferred published as common to 2024-12-31; preferred
+  rates and PIK coupons; Spirit RR and Giving Home values filed on each other's names; TA/WEG par and
+  cost on another line; a plain rate filed as PIK; Winterfell under its old name; an acquisition date
+  published as maturity). Earlier real-error verdicts (C04 x2, C206 x3, X02 x2) fixed.
+- **Page sample (`stxd`):** 2 errors. Round 2: the MC CIF preferred rates 12.00 and 13.50 at
+  2025-09-30 are tagged on each line's year-to-date context (published now); 15 fund-interest rows
+  whose unit count is tagged as principal published no count (THL Fund IX, Winterfell; the setting
+  converts equity classes only). Fixed by row correction.
+- **Unit scale (owner question):** schedules to 2024-09-30 print units in dollars and the tag equals
+  the figure; from the 10-K for 2024-12-31 the schedule is '(in thousands)' and units are tagged at
+  the figure x 1,000, which equals the earlier dollar counts (3,585,975 against 3,586). So x 1,000 is
+  right here; Ares Core (D-168) printed whole units, so both funds follow their own pages. The MC CIF
+  '2,500' is a face amount (cost 2,475), published as a unit count as at T. Rowe (D-173); where a
+  preferred face amount belongs is open.
+- **Tool defect found:** `scripts/v05_evidence/filing_grep.py` read only facts written on one line,
+  so an agent parked tagged rates as untagged (corrected here; tool fixed separately).
+- **Left:** industry not read in the 2023-2024 filings (60-65 pct GICS); 2022 has no tagged schedule.
+- The agent ran a bare heredoc twice, each stopped by its own id. Observations 20. No shared code.

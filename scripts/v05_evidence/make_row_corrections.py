@@ -755,6 +755,17 @@ if MIDCAP_LOOP in held and MIDCAP_LOOP_FILE.exists():
     for spec in json.loads(MIDCAP_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((MIDCAP_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1278752-fundloop"))
         EXACT.add(spec["identifier"])
+# Stone Point Credit Corp, fund-clearing loop (2026-10-15): '<issuer>, Equity, Acquisition Date' members published as loans,
+# preferred interests filed as 'Equity Investment' or a bare name, preferred rates printed and not tagged or tagged as PIK only,
+# two members whose values are swapped (2024-06-30), a line split over two members (TA/WEG 2024-12-31), a plain rate tagged as
+# PIK (AP Highlands 2025-12-31). One spec per row, each with its printed line, in row_correction_specs/0001825384.json.
+STONEPOINT_LOOP = "0001825384"
+STONEPOINT_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001825384.json"
+if STONEPOINT_LOOP in held and STONEPOINT_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(STONEPOINT_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((STONEPOINT_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1825384-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

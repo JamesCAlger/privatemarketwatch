@@ -66,7 +66,7 @@
         "family": "warrant"
       }
     ],
-    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:(?:First|Second)[\\s-]+Lien|Unsecured|Subordinated|Senior\\s+(?:Secured|Unsecured|Subordinated)|Equity\\s+Investment|Preferred\\s+(?:Equity|Stock|Units)|Common\\s+(?:Equity|Stock|Units)|Class\\s+[A-Z0-9-]+\\s+(?:Units|Shares|Common|Preferred)|Warrants?|Term\\s+Loan|Revolving\\s+Loan|Delayed\\s+Draw)\\b.*$",
+    "issuer_name_strip_re": "(?i)(?:(?:\\s*,\\s*|\\s+)(?:(?:First|Second)[\\s-]+Lien|Unsecured|Subordinated|Senior\\s+(?:Secured|Unsecured|Subordinated)|Equity\\s+Investment|Preferred\\s+(?:Equity|Stock|Units)|Common\\s+(?:Equity|Stock|Units)|Class\\s+[A-Z0-9-]+\\s+(?:Units|Shares|Common|Preferred)|Warrants?|Term\\s+Loan|Revolving\\s+Loan|Delayed\\s+Draw)|\\s*,\\s*Equity,\\s*Acquisition\\s+Date)\\b.*$",
     "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
@@ -169,6 +169,26 @@
     ],
     "reference_rate_columns": [
       "Reference Rate and Spread"
+    ],
+    "pik_only_tag_reading": [
+      "coupon",
+      "margin"
+    ],
+    "units_tagged_as_par": [
+      "0001410578-23-001135",
+      "0001410578-23-001766",
+      "0001410578-23-002425",
+      "0001410578-24-000282",
+      "0001410578-24-000757",
+      "0001410578-24-001310",
+      "0001410578-24-001886",
+      "0001410578-25-000437",
+      "0000950170-25-071476",
+      "0000950170-25-108056",
+      "0001193125-25-277785",
+      "0001193125-26-096955",
+      "0001193125-26-224294",
+      "0001193125-26-352549"
     ]
   }
 }

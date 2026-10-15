@@ -1,0 +1,15 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001825384",
+ "entity_name": "Stone Point Credit Corp",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2022-12-31",
+   "field": "income_yield_pct",
+   "value": 9.36,
+   "evidence": "0001104659-23-039118 (10-K, 2022-12-31) financial highlights: 'Ratio of net investment income (loss) to average net assets 9.36 % 6.34 % (15.01 )%' (2022, 2021, 2020). The build published 2.97, a year-to-date split of the annual ratio; at the later 10-K dates it publishes the printed annual ratio (2024-12-31: 12.51)."
+  }
+ ],
+ "notes": "One figure corrected from the printed financial highlights of the 10-K for 2022-12-31."
+}

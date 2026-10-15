@@ -1,0 +1,802 @@
+{
+ "cik": "0001825384",
+ "label": "stxf",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 40,
+   "why": "34 rows: '<issuer>, Equity, Acquisition Date ...' members (2025-03-31 on) now cut at ', Equity, Acquisition Date' by the wrapper's issuer_name_strip_re (26 rows plus the THL and Winterfell fund rows); 2024-06-30 Spirit RR / Giving Home names swapped back by row correction (values were tagged on each other's member); 2026-03-31 Winterfell named from the page (tagged on the stale Spirit RR member); 4 rows from the shared splitter (D-166: 'Ivy Hill ... LTD' to 'Ltd')."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 50,
+   "why": "the text cut from the issuer goes to the instrument ('Equity, Acquisition Date 5/8/2024'); 'Preferred Equity' set on the bare RSC Topco rows; 'Equity Investment' / 'Equity' on the 2024-06-30 swapped rows; 11 rows from the shared splitter (D-166: 'First Lien term Loan' to 'First Lien Term Loan', ALKU)."
+  },
+  {
+   "column": "cost",
+   "rows": 1,
+   "why": "TA/WEG delayed draw 'Five' 2024-12-31: printed cost 14,006 was tagged on another member; set by row correction from the printed line."
+  },
+  {
+   "column": "shares_held",
+   "rows": 125,
+   "why": "equity unit counts the filer tags with the principal concept (Par Amount / Units column) published as the unit count: wrapper units_tagged_as_par for the 14 filings (equity and preferred rows already classed equity), and row corrections for the 26 '<issuer>, Equity, Acquisition Date' rows, the bare RSC Topco rows, the 2024-06-30 swap (Giving Home 1,667) and the Giving Home warrants 2023-03-31 to 2024-03-31 (printed 2,917; the shared share-count step had given them Spirit RR's 3,585,975). Units at the filer's tagged scale (thousands schedule from 2024-12-31; the dollar schedules of 2024 print the same holdings as 3,585,975 and 48,483 units). Round 2: 15 fund-interest rows (THL Fund IX 2023-09-30 to 2026-06-30, Winterfell 2025-12-31 to 2026-06-30) given the tagged Par Amount / Units figure by row correction; the FUND class had withdrawn it and units_tagged_as_par covers equity classes only."
+  },
+  {
+   "column": "principal_amount",
+   "rows": 30,
+   "why": "unit counts withdrawn from par on the 26 equity rows previously published as loans and on the bare RSC Topco preferred rows (equity publishes no par); TA/WEG 'Five' 2024-12-31 par 14,255,000 set from the printed line."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 30,
+   "why": "follows principal_amount on the same rows."
+  },
+  {
+   "column": "asset_category",
+   "rows": 50,
+   "why": "26 '<issuer>, Equity, Acquisition Date' rows LOAN to EQUITY_COMMON; preferred interests filed as 'Equity Investment' or a bare name (GT Polaris, Galway, Imagine, RSC Topco; 2023-03-31 to 2024-12-31) to EQUITY_PREFERRED; Winterfell 2026-03-31 to FUND."
+  },
+  {
+   "column": "index_classification",
+   "rows": 50,
+   "why": "follows asset_category on the same rows (DIRECT_LENDING / COMMON_EQUITY to COMMON_EQUITY / PREFERRED_EQUITY / PRIVATE_EQUITY_FUND)."
+  },
+  {
+   "column": "asset_class",
+   "rows": 30,
+   "why": "PRIVATE_CREDIT to PRIVATE_EQUITY on the rows reclassed from LOAN."
+  },
+  {
+   "column": "issuer_category",
+   "rows": 2,
+   "why": "Winterfell 2026-03-31 set to FUND, as its other quarters."
+  },
+  {
+   "column": "exposure_type",
+   "rows": 2,
+   "why": "Winterfell 2026-03-31 set to FUND, as its other quarters."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 45,
+   "why": "PIK-only fixed notes ('N/A 13.00 % PIK') publish the PIK coupon as the rate (wrapper pik_only_tag_reading); preferred fixed rates printed and not tagged (2024-12-31 to 2025-09-30) and preferred 'x % PIK' coupons (2025-12-31 on) set by row correction; AP Highlands 2025-12-31 9.75 (plain rate the filing tags as PIK). Round 2: MC CIF 2025-09-30 12.0 and 13.5 from each member's own PreferredStockDividendRatePercentage fact. The preferred rates of 2024-12-31 to 2025-09-30 are tagged with that concept on the member's year-to-date period context (not untagged, as round 1 said); the position reader does not join it to the value context."
+  },
+  {
+   "column": "coupon_type",
+   "rows": 30,
+   "why": "Fixed on the preferred and AP Highlands rows given a rate."
+  },
+  {
+   "column": "pik_rate",
+   "rows": 10,
+   "why": "AP Highlands 2025-12-31 PIK withdrawn (printed 'N/A 9.75 %' with no PIK); preferred PIK rates re-set to the rounded tagged figure (14.000000000000002 to 14.0)."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 100,
+   "why": "records the pik_only, units-from-principal and row-correction transforms on the rows above."
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 8,
+   "why": "the shared share-count step marks the six Giving Home / Spirit RR rows derived_proxy (its donor was the 2024-06-30 swapped row); the unit counts on those rows are then set from the page by row correction, but the source label is not a correctable field and stays derived_proxy."
+  },
+  {
+   "column": "src_facts",
+   "rows": 3,
+   "why": "the three D-117 rows of 2025-12-31: the raw fair-value string is now '8182000' for '8182000.0' (no value change; shared formatting)."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 95,
+   "why": "lists the fields set by this run's row corrections."
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 25,
+   "why": "17 rows lose a label because canonical_name is resolved within this one-fund sandbox (spoff3 resolved 'Assured Partners, Inc' and 'Resolute Investment Managers' to other funds' spellings with cache hits); the 2024-06-30 swap moves Health Care Services from the Spirit RR row to the Giving Home row; renamed rows re-keyed."
+  },
+  {
+   "column": "gics_sector",
+   "rows": 25,
+   "why": "follows gics_sub_industry."
+  },
+  {
+   "column": "position_id",
+   "rows": 330,
+   "why": "positions re-paired after the issuer names changed (cut equity names, swap fixed) and the 2026-06-30 quarter was added."
+  },
+  {
+   "column": "cost_reported",
+   "rows": 1,
+   "why": "follows cost (TA/WEG 2024-12-31)."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 35,
+   "why": "follows interest_rate."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 45,
+   "why": "all_in on the rows given a rate (wrapper filed_rate_reading all_in)."
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 15,
+   "why": "cash leg of the PIK preferred coupons: 0 for all-PIK, 6.0 for MC CIF '12.00 % (incl 6.00 % PIK)'."
+  }
+ ],
+ "rows_added": 359,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Issuer names of the '<issuer>, Equity, Acquisition Date ...' members (2025-03-31 on) cut at ', Equity, Acquisition Date', the cut text kept as the instrument (issuer_name_strip_re). Clears C206 x6 and the earlier real-error verdicts of C206 2025-03-31 and 2026-03-31 and the pulled one of 2025-12-31.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352549",
+     "text": "SPV CA IX, LLC Equity (10)(12)(14)(15) N/A 7/18/2025 10,882 10,590 11,394 0.8 %"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged with the principal concept published as unit counts (units_tagged_as_par, 14 filings). Clears C04 x14 and answers the C04 real-error verdicts of 2025-12-31 and 2026-03-31 (units in the Par Amount / Units column were not mapped).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001310",
+     "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,585,975 3,635,318 4,745,751 0.4 %"
+    },
+    {
+     "accession": "0000950170-25-071476",
+     "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,586 3,635 5,672 0.5 %"
+    }
+   ]
+  },
+  {
+   "what": "PIK-only fixed notes publish the PIK coupon as the rate (pik_only_tag_reading coupon, margin): Fullsteam, Accordion Partners Holdings, WEG Sub, Evergreen Services PIK Holdco, People Corp, Mandolin 2026-06-30. Answers the X02 real-error verdict of 2026-03-31 (Accordion 12.75 % PIK).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352549",
+     "text": "Accordion Partners Holdings LLC Unsecured Note N/A 12.75 % PIK 11/15/2034 18,547 18,299 18,285 1.3 %"
+    }
+   ]
+  },
+  {
+   "what": "26 rows printed under 'Common Equity and Warrants' as 'Equity' and published as loans (no class keyword in the member; tagged unit count read as par): class common, unit count from the principal tag, par withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071476",
+     "text": "ACC Ultimate Holdings, L.P. Equity N/A 5/8/2024 375 3,750 3,750 0.3 %"
+    },
+    {
+     "accession": "0001193125-26-352549",
+     "text": "Resolute Investment Managers, Inc. Equity (14) N/A 12/29/2023 58 1,249 1,582 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "Preferred interests filed as 'Equity Investment' or a bare company name and printed under 'Preferred Equity' (2023-12-31 to 2024-12-31; the 2023 10-Qs print the same holdings with a fixed rate under 'Equity and Warrants') classed preferred. Clears X01 x6 and the X02 rows of RSC Topco.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001310",
+     "text": "GT Polaris Holdings, Inc Equity 12.50 % 6/6/2022 10,618,747 10,474,768 10,219,483 0.8 %"
+    },
+    {
+     "accession": "0001410578-25-000437",
+     "text": "RSC Topco, Inc. Preferred Equity 13.25 % 8/14/2023 6,004 5,873 5,968 0.5 %"
+    }
+   ]
+  },
+  {
+   "what": "Preferred fixed rates printed and tagged with PreferredStockDividendRatePercentage on the member's year-to-date period context, which the position reader does not join (10-K 2024-12-31 to 10-Q 2025-09-30, including both MC CIF lines of 2025-09-30: 0.12 on '... 8/12/2025', 0.135 on '... 8/12/2025 One', the printed order), and preferred 'x % PIK' coupons tagged only with the preferred PIK concept (2025-12-31 on), published as the rate.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071476",
+     "text": "GT Polaris Holdings, Inc Preferred Equity 12.50 % 6/6/2022 11,657 11,527 11,373 0.9 %"
+    },
+    {
+     "accession": "0001193125-26-096955",
+     "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 12.00 % (incl 6.00 % PIK) 8/12/2025 2,558 2,533 2,530 0.2 %"
+    },
+    {
+     "accession": "0001193125-25-277785",
+     "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 13.50 % 8/12/2025 2,500 2,475 2,475 0.2 %"
+    }
+   ]
+  },
+  {
+   "what": "2024-06-30: Spirit RR's and Giving Home's equity values (and industry tags) tagged on each other's member; names swapped back; Giving Home warrants 2023-03-31 to 2024-03-31 given the printed 2,917 units.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001310",
+     "text": "Giving Home Health Care Equity N/A 8/19/2022 1,667 17 954,658 0.1 %"
+    },
+    {
+     "accession": "0001410578-24-000282",
+     "text": "Giving Home Health Care Warrants N/A 8/19/2022 2,917 29 1,069,999 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "TA/WEG delayed draw 'Five' 2024-12-31 (14.0M): par and cost tagged on another member; set from the printed line. Clears its X11 row.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-25-000437",
+     "text": "TA/WEG Intermediate Holdings, LLC First Lien Delayed Draw Term Loan (9)(10) SOFR + 5.00 %, 1.00 % Floor 9.50 % 10/4/2027 14,255 14,006 14,025 1.1 %"
+    }
+   ]
+  },
+  {
+   "what": "AP Highlands notes 2025-12-31: plain fixed 9.75 % tagged as PIK; rate kept, PIK withdrawn. Answers the pulled X02 verdict of 2025-12-31 (AP Highlands and Accordion without a rate; ACC Ultimate equity classed as a loan): all three fixed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-096955",
+     "text": "AP Highlands Holdings, L.P. Unsecured Note N/A 9.75 % 10/16/2028 5,207 5,172 5,207 0.4 %"
+    }
+   ]
+  },
+  {
+   "what": "Winterfell Co-Invest SCSP 2026-03-31 tagged on the stale Spirit RR member: named and classed as in its other quarters.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-224294",
+     "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 7,208 0.5 %"
+    }
+   ]
+  },
+  {
+   "what": "Ares Global Structured Solutions preferred 2026-06-30: the member's 'Due 5/22/2026' is the printed acquisition date; maturity withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352549",
+     "text": "Ares Global Structured Solutions Rated Notes Feeder LLC Preferred Equity (10)(13) N/A 5/22/2026 610 610 610 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Highlights wrapper (new): income_yield_pct 2022-12-31 published 2.97 for the printed annual ratio 9.36. Clears F16 2022-12-31.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001104659-23-039118",
+     "text": "Ratio of net investment income (loss) to average net assets 9.36 % 6.34 %"
+    }
+   ]
+  },
+  {
+   "what": "Fund-interest rows (THL Fund IX, Winterfell) publish the Par Amount / Units figure the filer tags as principal as their unit count: 15 rows that published none. After the fix no equity, preferred or fund row of the fund lacks a unit count where one is tagged (checked on stxf).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001310",
+     "text": "THL Fund IX Investors (Plymouth), L.P. Equity N/A 9/1/2023 3,731,779 3,731,779 3,747,766 0.3 %"
+    },
+    {
+     "accession": "0001193125-26-352549",
+     "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 8,068 0.6 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2026-06-30",
+   "why": "The filed 'Total Investments, at fair value' 2,960,692 includes the fund's two interest rate swaps on its own notes at -2,124; published rows sum to 2,951,422 + 11,394 = 2,962,816 exactly (published minus filed +2.1M). The swaps are hedges of the fund's liabilities, not positions (same at 2026-03-31, +112 thousand, inside tolerance).",
+   "quote": {
+    "accession": "0001193125-26-352549",
+    "text": "Derivative Instruments ( 2,124 ) - Total Investments, at fair value"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "Industry for the 2023-03-31 to 2024-12-31 filings (no rule)",
+   "hypotheses": [
+    "The inline field-status reader returns sector 'blank' on every row of these Toppan Merrill filings although the page prints lone industry headings ('Capital Markets'); GICS comes only from the name cache (60 to 65 pct of rows). Shared reader; not changed in a fund run."
+   ]
+  },
+  {
+   "finding": "2022 quarters (no rule; filed total 1,688.5M at 2022-12-31)",
+   "hypotheses": [
+    "The 10-K for 2022-12-31 tags no schedule (no InvestmentIdentifierAxis, no InvestmentOwnedAtFairValue facts); the 2022 10-Qs are not in the cache. Needs HTML template work."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "member-holds-another-rows-values",
+   "what": "2024-06-30: the 'Giving Home Health Care, Warrants' member carries Spirit RR's values and industry tag, and the Spirit RR member carries Giving Home's. Names swapped back by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 5.7,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose per-unit price moves more than 100x against the same position's neighbouring quarters.",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,585,975 3,635,318 4,745,751 0.4 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The shared share-count step (partition cik, issuer_name) replaced the Giving Home warrants' 2,917 units with 3,585,975 in five quarters, its donor being the swapped 2024-06-30 row; values set from the page by row correction, but shares_held_source stays derived_proxy on 6 rows (not correctable).",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 2.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A derived_proxy unit count whose donor row is on another member should be reported, not published.",
+   "quote": {
+    "accession": "0001410578-24-000282",
+    "text": "Giving Home Health Care Warrants N/A 8/19/2022 2,917 29 1,069,999 0.1 %"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "2023-03-31 to 2024-12-31: extracted_industry is empty on every row; the inline reader marks sector 'blank' though the page prints lone industry headings. GICS from the name cache on 60 to 65 pct of rows in these quarters, 100 pct from 2025-03-31.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Fail a quarter where the page prints industry headings and extracted_industry is empty on more than half the rows.",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "Debt Investments - 185.3 % Capital Markets Cliffwater, LLC First Lien Term Loan (10) SOFR + 4.50 %"
+   }
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "what": "Against spoff3, 17 rows lose GICS: canonical_name is resolved across the funds of a sandbox, so a one-fund sandbox gives 'Resolute Investment Managers, Inc' (no cache hit) where the cohort sandbox gave 'Resolute Investment Managers (American Beacon), Inc.'. A sandbox artefact; a cohort build should restore them. Not verified.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 60,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Compare GICS coverage of a fund between its own sandbox and the cohort build.",
+   "quote": {
+    "accession": "0000950170-25-071476",
+    "text": "Resolute Investment Managers, Inc. Equity N/A 12/29/2023 58 1,249 1,353 0.1 %"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "26 rows printed as 'Equity' in the Common Equity section published as direct-lending loans with the unit count as par (no class keyword in '<issuer>, Equity, Acquisition Date' members; the classifier's equity keywords lack bare 'equity').",
+   "field": "asset_category",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 21.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Section totals by class against the printed 'Total Common Equity' lines.",
+   "quote": {
+    "accession": "0001193125-26-352549",
+    "text": "SPV CA IX, LLC Equity (10)(12)(14)(15) N/A 7/18/2025 10,882 10,590 11,394 0.8 %"
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "Preferred interests with fixed rates published as common equity (members 'Equity Investment' or bare names) through 2024-12-31. The filer's InvestmentTypeExtensibleEnumeration is not usable instead: it says PreferredEquityMember on common rows too (Spirit RR, Giving Home 2024-06-30).",
+   "field": "index_classification",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "An equity row with a fixed rate printed under a 'Preferred Equity' heading.",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "GT Polaris Holdings, Inc Equity 12.50 % 6/6/2022 10,618,747 10,474,768 10,219,483 0.8 %"
+   }
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-joined",
+   "what": "Preferred fixed rates are tagged with PreferredStockDividendRatePercentage on a year-to-date period context of the same member (2024-12-31 to 2025-09-30, 5 to 9 facts a filing); the position reader takes only the instant value context, so no rate was published. Set by row correction, including both MC CIF lines of 2025-09-30 (12.00 and 13.50), which round 1 wrongly parked as untagged: scripts/v05_evidence/filing_grep.py reads only single-line facts and this filer writes each fact over several lines.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 5.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A preferred row with no rate whose member carries a dividend-rate fact on any context of the filing.",
+   "quote": {
+    "accession": "0001193125-25-277785",
+    "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 13.50 % 8/12/2025 2,500 2,475 2,475 0.2 %"
+   }
+  },
+  {
+   "observation_key": "plain-rate-tagged-as-pik-published-as-pik-only",
+   "what": "AP Highlands notes 2025-12-31 print 'N/A 9.75 %' (no PIK) and are tagged with the PIK concept; published as PIK 9.75 before. Fixed.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 8.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A PIK rate published on a row whose printed rate cell carries no 'PIK'.",
+   "quote": {
+    "accession": "0001193125-26-096955",
+    "text": "AP Highlands Holdings, L.P. Unsecured Note N/A 9.75 % 10/16/2028 5,207 5,172 5,207 0.4 %"
+   }
+  },
+  {
+   "observation_key": "pik-coupon-with-spread-published-without-a-rate",
+   "what": "Preferred 'x % PIK' coupons tagged only with PreferredEquityInvestmentInterestRatePaidInKind publish no rate; pik_only_tag_reading converts loans only, so the preferred rows needed row corrections.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 34.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "pik_only_tag_reading could apply to preferred rows with the preferred PIK concept.",
+   "quote": {
+    "accession": "0001193125-26-096955",
+    "text": "GT Polaris Holdings, Inc Preferred Equity 12.5 % PIK 6/6/2022 12,802 12,682 12,619 0.9 %"
+   }
+  },
+  {
+   "observation_key": "one-position-tagged-across-two-members",
+   "what": "TA/WEG delayed draw 'Five' 2024-12-31: fair value on its member, par and cost on 'none_cnst_string_TaWegIntermediateHoldingsLlcUnsecuredNoteDue5262033' (no fair value, not published).",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 14.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "X11 caught it; a context with par and cost and no fair value next to a fair-value-only context of the same issuer.",
+   "quote": {
+    "accession": "0001410578-25-000437",
+    "text": "TA/WEG Intermediate Holdings, LLC First Lien Delayed Draw Term Loan (9)(10) SOFR + 5.00 %, 1.00 % Floor 9.50 % 10/4/2027 14,255 14,006 14,025 1.1 %"
+   }
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "what": "The member 'Ares Global ... Preferred Equity, Due 5/22/2026' gave a maturity; the page prints 5/22/2026 in the preferred section's Acquisition Date column. Withdrawn.",
+   "field": "maturity_date",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A maturity on an equity row whose section prints no maturity column.",
+   "quote": {
+    "accession": "0001193125-26-352549",
+    "text": "Ares Global Structured Solutions Rated Notes Feeder LLC Preferred Equity (10)(13) N/A 5/22/2026 610 610 610 0.0 %"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "2026-03-31: the line printed as Winterfell Co-Invest SCSP (Spirit RR's successor) is tagged on the stale 'Spirit RR Holdings, Inc., Equity' member. Fixed.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 7.2,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A position whose name changes back and forth between quarters.",
+   "quote": {
+    "accession": "0001193125-26-224294",
+    "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 7,208 0.5 %"
+   }
+  },
+  {
+   "observation_key": "equity-holding-printed-under-another-section-in-one-quarter",
+   "what": "ACC Ultimate 2024-06-30 is printed under the 'Preferred Equity' heading with 3,750,000 units (= its cost); every later filing prints it under Common Equity with 375 thousand units. Left as common with the tagged 3,750,000; the page is ambiguous.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 3.75,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A position whose class or unit count changes for one quarter only.",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "ACC Ultimate Holdings, L.P. Equity N/A 5/8/2024 3,750,000 3,750,000 3,750,000 0.3 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Units are tagged with the principal concept; from the 10-K 2024-12-31 the schedule is in thousands and the tag is x1000 of the printed figure (375 printed, 375,000 tagged). Published at the tagged scale, which matches the dollar-schedule counts of 2024 (3,585,975 and 48,483); D-168 (Ares Core) chose the printed figure instead, so the two funds differ in convention. Owner may want one rule.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Unit count against the same position's count in a dollar-printed schedule.",
+   "quote": {
+    "accession": "0000950170-25-071476",
+    "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,586 3,635 5,672 0.5 %"
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed",
+   "what": "income_yield_pct 2022-12-31 published 2.97 for the printed annual 9.36; fixed by a highlights wrapper.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "At a 10-K date the income ratio equals the printed annual ratio.",
+   "quote": {
+    "accession": "0001104659-23-039118",
+    "text": "Ratio of net investment income (loss) to average net assets 9.36 % 6.34 %"
+   }
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "what": "instrument_description keeps the member's tail ('First Lien Delayed Draw Term Loan, Two Due 10/29/2030'): maturity and tranche ordinal repeated in the instrument text on most loan rows. Cosmetic; maturity is published separately and correct in the sample.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Instrument text containing a date.",
+   "quote": {
+    "accession": "0001410578-25-000437",
+    "text": "Foundation Risk Partners, Corp. First Lien Term Loan (10) SOFR + 5.25 %, 0.75 % Floor 9.58 % 10/29/2030 4,569 4,569 4,526 0.4 %"
+   }
+  },
+  {
+   "observation_key": "schedule-not-tagged-quarter-not-published",
+   "what": "2022-12-31 has a filed investments total (1,688.5M) and no published rows: the 10-K for 2022 tags no schedule facts; 2022 10-Qs not cached. The gate's totals check does not see a quarter with no rows.",
+   "field": "fair_value",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "fair_value_m": 1688.5,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Totals check should list quarters with a filed total and no published rows.",
+   "quote": {
+    "accession": "0001104659-23-039118",
+    "text": "Total Investments $ 1,717,895,936 $ 1,688,521,222 100.0 %"
+   }
+  },
+  {
+   "observation_key": "preferred-units-column-is-a-face-amount",
+   "what": "For preferred rows the Par Amount / Units figure is a dollar face amount, not a count: GT Polaris grows every quarter with its PIK accrual (9,079,962; 9,370,016; 9,669,336 ... 12,802 thousand) and falls to 1,749 thousand after a paydown; MC CIF prints 2,500 against a cost of 2,475 (bought at 99). The build publishes it in shares_held (units_tagged_as_par, as T. Rowe D-173 did for Eclipse Buyer), because equity rows publish no principal. Whether a preferred face belongs in shares_held or principal_amount is an owner convention; left as is, about 6 to 11 rows a quarter.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 31.5,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A unit count that changes every quarter in step with cost on a PIK preferred row is a face amount.",
+   "quote": {
+    "accession": "0001193125-25-277785",
+    "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 12.00 % 8/12/2025 2,500 2,475 2,475 0.2 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-rounded-by-thousands-schedule",
+   "what": "New Giving Acquisition (Giving Home's successor, acquired 8/19/2022) prints '2' units in the thousands schedules from 2024-12-31 and publishes 2,000; the last dollar schedule (2024-09-30) prints 1,667 units. The tag is 2000 at decimals -3, so the published count is the filer's rounding. Not changed: the true count is not printed in those filings.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.3,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A unit count below 10 printed in a thousands schedule.",
+   "quote": {
+    "accession": "0001410578-24-001886",
+    "text": "Giving Home Health Care Equity N/A 8/19/2022 1,667 17 976,21"
+   }
+  },
+  {
+   "observation_key": "fund-interest-units-equal-contributed-capital",
+   "what": "THL Fund IX's Par Amount / Units figure equals its cost in every quarter (4,000,000; 3,731,779; 3,182 against 3,181 thousand after a distribution), so it is the contributed capital in dollars rather than a count of interests; published as the unit count at the orchestrator's request (sample C007), consistent with the other equity rows. Winterfell's 3,586 thousand (cost 3,635) is Spirit RR's former share count, a real count.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 6.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A fund-interest unit count equal to cost to the dollar.",
+   "quote": {
+    "accession": "0001410578-23-002425",
+    "text": "THL Fund IX Investors (Plymouth), L.P. (14) Equity N/A N/A 9/1/2023 4,000,000 4,000,000 4,000,000 0.4 %"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [],
+ "not_done": [
+  "No tests run (no shared code changed).",
+  "Page sample of 12 random rows of stxd read against the printed lines (rates, spreads, maturities, par, cost, value): no published error seen; not the orchestrator's 20-row sample.",
+  "Floors, non-accrual flags, percent of net assets and acquisition dates not compared beyond the sample.",
+  "GICS for the 2023-2024 rows not restored (shared reader).",
+  "The 2023-06-30 footing gap (-115.9 thousand, inside tolerance) not re-read.",
+  "Round 2: the preferred face-amount convention (shares_held vs principal) not changed; owner decision."
+ ],
+ "unit_scale_evidence": {
+  "dollar_schedules": "10-Qs and 10-K from 2023-03-31 to 2024-09-30 (0001410578-23-001135 to 0001410578-24-001886) print values and units in whole dollars; unit tags are decimals 0 and equal the printed figure (Spirit RR '3,585,975 3,635,318 4,745,751', Resolute 48,483, Giving Home 1,667).",
+  "thousands_schedules": "From the 10-K for 2024-12-31 (0001410578-25-000437) on, the schedule is '(in thousands)' and units are tagged at decimals -3 as printed x 1,000 (Spirit RR '3,586 3,635 5,672', tagged 3,586,000). The same holdings' dollar-schedule counts (3,585,975; 48,483 then 55 and 58 thousand) confirm x 1,000 is the count's scale.",
+  "C017_MC_CIF": "2,500 printed (thousands) against cost 2,475: a face amount of 2.5M dollars, not 2.5M units; observation preferred-units-column-is-a-face-amount. Left in shares_held, owner convention.",
+  "C020_New_Giving": "2 printed (thousands), 2,000 published: the scale is right; the filer rounded 1,667 units to 2 thousand; observation unit-count-rounded-by-thousands-schedule."
+ }
+}

@@ -118,5 +118,10 @@
                        "label":  "mfxi",
                        "accepted_on":  "2026-10-15",
                        "basis":  "D-174, gate PASS in round 3; first sample 21 errors (issuer name on every row), fixed; second sample 1 error, fixed"
+                   },
+    "0001825384":  {
+                       "label":  "stxf",
+                       "accepted_on":  "2026-10-15",
+                       "basis":  "D-175, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (17 rows)"
                    }
 }
