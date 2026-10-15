@@ -194,6 +194,11 @@ def main(argv: list[str] | None = None) -> int:
         last = STAGE_NAMES.index(args.until) if args.until else len(STAGES) - 1
         failed = None
         for name, command in STAGES[first:last + 1]:
+            if name == "provenance":
+                # The sandbox's own funds, not the public cohort list: a fund held out of the public
+                # 70 (MidCap Financial, 2026-10-15) had an empty provenance ledger, so the owner's
+                # checks that read it (C107, C103, X06) could not pass. Same rows for a cohort fund.
+                command = [PY, "-m", "pipeline.provenance_reverify", "--ciks", *ciks]
             result = run_stage(name, command, sandbox, args.quarter)
             meta["stages"].append(result)
             meta_file.write_text(json.dumps(meta, indent=2), encoding="utf-8")
