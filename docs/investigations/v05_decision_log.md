@@ -4406,3 +4406,32 @@ Compared with `spoff3`. Two rounds; seven builds (one allowed beyond six for the
 - **Left:** lien blank on every loan before 2025-09-30 (the shared prefix strip removes 'First Lien
   Debt'); the casing vote respells 54 earlier rows when a quarter is added.
 - Tests: wrapper, highlights and encodings 681 passed. The agent wrote one helper with a heredoc.
+
+### D-180 Trinity Capital through the fund-clearing skill (sandbox `tcxe`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff2`. Two rounds; five builds.
+
+- **Ledger:** 109 findings, 74 outstanding (105 in the first build), 61 proposed (15 entries); totals
+  tie in 13 of 14 quarters; 2023-12-31 declared (one NextCar loan printed twice and tagged once; no
+  allowed mechanism adds the second row).
+- **Fixed:** ten warrants valued on a 2024-06-30 context at 2024-09-30 (declared on the current one);
+  two identical NextCar loans merged by the duplicate step (`distinct_member_suffix_re`); a preferred
+  counted twice at 2024-03-31 (exclusion of the old-name context, that quarter only); 704 lines
+  printed with a dash for fair value published at 0 and 185 dash costs set to 0 (they had taken the
+  fair value); issuer pattern for the new AI headings; 246 row corrections (end-of-term fee tagged as
+  the rate on 17 rows, CORRA loans published as a guessed SOFR, Base Rate guesses withdrawn,
+  convertible notes' face as par, 95 unit counts swapped by the shared share-count step).
+- **Page sample (`tcxd`):** 2 errors. Round 2: 53 rows whose member misspells the printed issuer
+  (NextCar x40, Miyoko's, Busbot, Freedom ...) by row correction; 95 rows ending in a spelled-out
+  row number ('Madison Reed, Inc. One') cut by `issuer_name_strip_re`; 19 unit counts tagged on
+  another context of the investment or on another member of the printed line, by row correction.
+- **For the owner (F27 x13, parked):** on about 100 floating loans a quarter (about 1,450 rows) the
+  published interest rate is the printed floor ('Prime + 4.00 %, Floor 8.25 %'), not the rate paid,
+  which is the higher of Prime plus the spread and the floor. Either withdraw the floor and leave the
+  rate empty, or compute a labelled rate from the reference rate at the date. The page sample marked
+  8 of 20 cards unclear on this.
+- **Shared causes seen:** dash-valued rows not published and dash costs replaced by fair value; the
+  share-count step; the floor published as the rate; CORRA and Base Rate not read from the text; twin
+  lines merged by the duplicate step; warrants published as common or preferred equity.
+- The agent ran a bare heredoc once (stopped by its task id) and wrote `untagged_values` into the
+  wrapper with a JSON script (patterns untouched, checked by an assertion). Wrapper tests 681 passed.

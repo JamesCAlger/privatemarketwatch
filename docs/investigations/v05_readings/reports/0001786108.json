@@ -1,0 +1,764 @@
+{
+ "cik": "0001786108",
+ "label": "tcxe",
+ "before": "spoff2",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 158,
+   "why": "Wrapper issuer pattern: section, region and industry made optional, the filer's new industries ('Artificial Intelligence (\"AI\") Automation & Infrastructure', 'AI Automation & Infrastructure', 'Green Technologies', 'Information', bare 'Multi-Sector', 'Digital Assets Technology'), cut prefixes ('rtfolio', 'PortfolioPortfolio', 'Securities-'): 53 identifiers that published no name (or the raw member) now publish the company; name_dry.py on all 1,924 distinct identifiers: no existing name changed. Row corrections for members that name no company or two (Applied Digital x4, NextCar, Nucleus RadioPharma x2, Commonwealth Fusion x2). Not aimed at by me but by D-166: none of the 46 is a splitter change (the splitter changes no Trinity name in this build). Round 2 (page sample C008): 53 rows whose member misspells the printed issuer set to the printed name by row correction (Next Car -> NextCar x40, Miyokos -> Miyoko's x5, Busboot -> Busbot x2, Freddin -> Freedom, 'Knockaway Trinity Holdings, LLC, Inc.', 'EPT 16, LLC', 'Tilt Finance, Inc.(dba' spacing x2, 'Trinity Investor JV I LLC (FKA i40,LLC)'); 95 rows whose name ends in a spelled-out row ordinal ('Madison Reed, Inc. One', 'Pendulum Therapeutics, Inc. Three') cut by the wrapper's issuer_name_strip_re (applied after dedup and corrections; rows 6,248 before and after)."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 3,
+   "why": "Rows whose member the old condition skipped ('Securities- ...' Greenlight 2024-03-31, 'rtfolio ...' Senior Credit Corp 2024-12-31, 'PortfolioPortfolio ...' 2025-03-31) now get the instrument from the member like every other row"
+  },
+  {
+   "column": "cost",
+   "rows": 107,
+   "why": "Cost printed '-' declared 0 from the page (untagged_values; before: no cost, a fair-value proxy downstream) on about 104 rows; Empower Financial 2024-06-30 4,511,000 -> 14,511,000 (page prints '1 4,511'); 2023-03-31 split-fact rows Hadrian (3,893,000) and NextCar 'Secured Loan Three' (3,223,000)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 107,
+   "why": "follows cost"
+  },
+  {
+   "column": "src_facts",
+   "rows": 104,
+   "why": "records the declared page values (untagged_values) on the rows above"
+  },
+  {
+   "column": "shares_held",
+   "rows": 64,
+   "why": "95 unit counts the shared D-111 step had replaced with another line's count are set back to the row's own tagged count, each printed on its line (proxy_units.py; row corrections); convertible notes' face amount withdrawn from units (published as par). Rows where the proxy value happened to equal the tag do not show here. Rows whose counts moved because named issuers regroup the D-111 window are corrected to their own tag in the same step. Round 2 (page sample C010): 19 equity/warrant rows whose printed unit count is tagged only on another context of the same member (15, e.g. Boosted eCommerce 2026-03-31 763,480) or on another member of the same printed line (Orchard 2024-09-30, Medical Sales Training x2, All.Space 2025-09-30) now carry it (row corrections)."
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 62,
+   "why": "D-111 relabels rows as derived_proxy or not as its issuer groups change (names filled, dash rows added); the corrected rows keep the label derived_proxy although they now carry their own tag (observation)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 64,
+   "why": "follows shares_held_source (shares_held:pow10_shares)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 14,
+   "why": "Empower 2024-06-30 4,495,000 -> 14,495,000; convertible notes Vertical Communications ($5,500 face) and WorkWell ($3,170 face) published as par (were units); 2023-03-31 split-fact rows Hadrian 3,908,000, NextCar 'Three' 3,065,000 and 'Five' 2,555,000, Rigetti 7,326,000"
+  },
+  {
+   "column": "asset_category",
+   "rows": 2,
+   "why": "2023-03-31 NextCar 'Secured Loan Three' and Rigetti May 18, 2021 loan published OTHER / UNCLASSIFIED -> LOAN (row corrections)"
+  },
+  {
+   "column": "index_classification",
+   "rows": 2,
+   "why": "same two rows -> DIRECT_LENDING"
+  },
+  {
+   "column": "asset_class",
+   "rows": 2,
+   "why": "same two rows -> PRIVATE_CREDIT"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 23,
+   "why": "End-of-term fee tagged or merged as the rate withdrawn on 15 floating rows (Zuum, VitaCup, Lark, Get Spiffy, Ambient, Pendulum, Eqis, Elucent, Lightforce, ServiceTrade 2026-06-30, Stratifyd 2023 x3); printed fixed rates set where another figure was published (Hadrian 16.1, 14.3 x3; Electric Hydrogen 11.9; Pendulum 9.8); Knockaway 2026-03-31 now 10.0 all-in from the cash leg 5.0 (row correction interest_rate_kind cash)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 21,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 17,
+   "why": "rows whose rate is withdrawn become 'unresolved'; Knockaway 'cash'"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 1,
+   "why": "Knockaway 2026-03-31 cash leg 5.0"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 6,
+   "why": "From the printed formula: Slope Tech 3.0 (2023-06-30) and 11.8 (2025-06-30), Sun Basket 9.5, Rigetti 7.5 (2024-06-30, was the floor 11.0), Under Technologies 3.8 (was 0.8); Astranis 2024-03-31 spread 5.0 (the EOT fee) withdrawn"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 10,
+   "why": "Maple Raptor 'CORRA 3 Month Term' published as date-guessed SOFR -> CORRA; Motorway Online and Prospire 'Base Rate' (Bank of England) guessed SOFR withdrawn; Astranis withdrawn (fixed loan)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 10,
+   "why": "follows reference_rate_type"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "Astranis 2024-03-31 equipment financing Floating -> Fixed (printed 'Fixed interest rate 12.1 %')"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 3,
+   "why": "Centivo 2024-12-31 1.0 from the printed formula (tag held it as the plain rate); Bestow 2025-03-31 PIK withdrawn (Beam's PIK cell tagged with Bestow's context); Cherry 2025-03-31 PIK withdrawn (stale member text; printed formula has none)"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 3,
+   "why": "2023-03-31 members with an empty or unparsed maturity: Rigetti 2025-06-01, Hadrian 2026-03-01 and 2026-01-01, from the printed rows"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 3,
+   "why": "follows maturity_date"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 205,
+   "why": "marks the row-corrected fields"
+  },
+  {
+   "column": "jv_subsidiary",
+   "rows": 2,
+   "why": "Not aimed at, explained: two Senior Credit Corp 2022 LLC rows (2024-03-31 preferred, 2024-12-31 loan) had no issuer name before; named now, they take the same subsidiary flag as every other Senior Credit Corp row. Both stay parent_schedule (published); totals tie in both quarters"
+  },
+  {
+   "column": "position_key",
+   "rows": 4,
+   "why": "follows the names now read for rows that had none"
+  },
+  {
+   "column": "position_id",
+   "rows": 420,
+   "why": "Not aimed at, explained: chain ids are renamed when a chain's members change: named rows, about 750 dash-valued rows and the ten 2024-09-30 warrants now published, the 2026-06-30 quarter added, the NextCar twins kept. No value changed with an id"
+  }
+ ],
+ "rows_added": 1184,
+ "rows_removed": 1,
+ "fixes": [
+  {
+   "what": "Totals 2024-09-30 (-3.5M): ten warrants carry their fair value on a 2024-06-30 context of the 2024-09-30 filing and their cost on the 2024-09-30 one; dropped as having no value. Fair value declared from the printed line on the current context (untagged_values, 10 lines). Ties.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-118600",
+     "text": "Warrant January 16, 2020 December 6, 2026 Preferred Series D-2 750,000 $ 5.89 391 2,499 (17)"
+    }
+   ]
+  },
+  {
+   "what": "Totals 2025-03-31, 2025-06-30, 2025-09-30 (-0.7M to -0.8M): NextCar's two 'April 18, 2022' loans, printed twice, are tagged on members that differ only by a non-breaking space or a trailing ' One'; the dimension-path dedup folded them. Wrapper staging.distinct_member_suffix_re keeps them apart (4 contexts match; checked). Ties.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-103547",
+     "text": "Secured Loan April 18, 2022 September 30, 2025 Variable interest rate Prime + 5.8 % or Floor rate 9.0 %; EOT 2.0 % 2,843 2,974 719 (8)(18)"
+    },
+    {
+     "accession": "0000950170-25-065028",
+     "text": "Total NextCar Holding Company, Inc. 25,470 26,780 7,064"
+    }
+   ]
+  },
+  {
+   "what": "Totals 2024-03-31 (+4.6M): the Senior Credit Corp 2022 preferred is tagged twice, once on the entity's old name 'i40, LLC' with the sub-total's percent. Exclusion rule exclude_i40_subtotal_context_2024q1 (this member, this quarter only; at 2023-03-31 the i40 member is the position's only tag and is kept). Ties.",
+   "kind": "exclusion",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-050904",
+     "text": "Multi-Sector Holdings Senior Credit Corp 2022 LLC (10)(20) Equity (7) January 30, 2023 - Preferred (17) $ 4,026 $ 4,609 Sub-Total: Multi-Sector Holdings ( 0.3 %)* $ 4,026 $ 4,609"
+    }
+   ]
+  },
+  {
+   "what": "B01 / unpublished positions: 704 lines printed with a dash for fair value (warrants and equity written down to nil, matured loans) declared at 0, and 185 lines printed with a dash for cost declared at cost 0 instead of a fair-value proxy, only where the printed units/par and cost equal the tags (nulls.py; counts per quarter equal the reading's census: 45, 28, 39, 47, 47, 51, 51, 52, 59, 53, 46, 77, 51 + 58 at 2026-06-30).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-207620",
+     "text": "Everalbum, Inc. Warrant January 16, 2020 July 29, 2026 Class A Common Stock 851,063 $ 0.10 $ 25 $ -"
+    },
+    {
+     "accession": "0001193125-26-207620",
+     "text": "Edeniq, Inc. Equity January 16, 2020 1,561 Preferred Series B $ - $ 3,034"
+    }
+   ]
+  },
+  {
+   "what": "C201 x13, C206 x3, C203, fmt_issuer_name (earlier verdicts real_error 2024-12-31 and 2025-03-31): issuer pattern rewritten in the wrapper (see issuer_name); members naming no company or two set by row correction from the printed rows. Gate names check: 0 shapes.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-065028",
+     "text": "Applied Digital Corporation Equipment Financing March 13, 2024 October 1, 2025 Fixed interest rate 19.0 %; EOT 0.0 % $ 4,190 $ 4,191 $ 4,270"
+    }
+   ]
+  },
+  {
+   "what": "Empower Financial 2024-06-30 cost and par: the page prints the leading digit in its own cell; the promoted rule already sets fair value to 14,511; cost 14,511 and par 14,495 set by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-092284",
+     "text": "Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)"
+    },
+    {
+     "accession": "0000950170-24-092284",
+     "text": "Total Empower Financial, Inc. 37,720 36,860 37,449"
+    }
+   ]
+  },
+  {
+   "what": "X11 x10 (2023-03-31 to 2025-06-30) and rows the census found: 2023-03-31 positions whose facts the filer split over two contexts (Hadrian May 6, 2022: par and cost; NextCar 'Five': par; NextCar 'Three' and Rigetti published unclassified with no par or maturity); convertible notes printed in the equity section with their dollar face in the units column (Vertical $5,500, WorkWell $3,170, 28 rows) now carry the face as par.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-017817",
+     "text": "Secured Loan March 16, 2022 September 30, 2023 Variable interest rate Prime + 5.8 % or Floor rate 9.0 %; EOT 5.3 % (8) 3,065 3,223"
+    },
+    {
+     "accession": "0000950170-23-017817",
+     "text": "Secured Loan May 18, 2021 June 1, 2025 Variable interest rate Prime + 7.5 % or Floor rate 11.0 %; EOT 2.8 % (8) 7,326 7,399 7,351"
+    },
+    {
+     "accession": "0001193125-26-068600",
+     "text": "Equity January 16, 2020 $ 5,500 Convertible Note 3,966 -"
+    }
+   ]
+  },
+  {
+   "what": "Rates against the printed formula (rate_census.py over all 2,910 loan rows): end-of-term fee tagged as the interest rate on 15 rows withdrawn; fixed rates where another loan's rate or the fee was published (6); spreads the text reader misses or misreads (Slope 'SOFR 30 Day Forward + 3.0', Sun Basket, Rigetti, Under, Astranis); PIK wrong on 3 rows; Knockaway 'Fixed 5.0 % + PIK 5.0 %' cash leg (X02 2026-03-31, 2026-06-30); X05 2023-06-30 and 2025-06-30 (Slope spreads) cleared.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-017817",
+     "text": "Equipment Financing (9)(14) December 22, 2022 June 1, 2026 Fixed interest rate 16.1 %; EOT 0.0 % 1,162 1,145"
+    },
+    {
+     "accession": "0000950170-23-036783",
+     "text": "Slope Tech, Inc. Secured Loan (12)(14) October 5, 2022 March 14, 2025 Variable interest rate SOFR 30 Day Forward + 3.0 % or Floor rate 11.8 %; EOT 0.0 % (8) 3,998 4,078 4,104"
+    }
+   ]
+  },
+  {
+   "what": "Reference rates: Maple Raptor's CORRA loans (8 rows) published a date-guessed SOFR -> CORRA; Motorway Online and Prospire 'Base Rate' (the legend: Bank of England Base Rate; no shared code) guess withdrawn (5 rows).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-068600",
+     "text": "Maple Raptor Acquisition Inc. (dba Rentsync) Secured Loan April 28, 2025 April 28, 2030 Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % $ 19,757 $ 19,373 $ 19,897"
+    },
+    {
+     "accession": "0001193125-26-207620",
+     "text": "Variable interest rate Base Rate + 8.5 % or Floor rate 12.2 %; EOT 2.0 % $ 13,797 $ 13,624 $ 13,624 (8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts: the shared D-111 step had replaced 95 tagged counts with another line's (e.g. Project Frog, Emergy); each set back to the row's own tagged count, which is printed on its line (proxy_units.py).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-207620",
+     "text": "Edeniq, Inc. Equity January 16, 2020 1,561 Preferred Series B $ - $ 3,034"
+    }
+   ]
+  },
+  {
+   "what": "Round 2, page sample C008: issuer names the filer's member misspells (53 rows, 8 names) set to the printed name by row correction; names ending in a spelled-out row ordinal (95 rows) cut by the wrapper's issuer_name_strip_re. names_visible.py (every published name against the visible page of its filing): 98 (quarter, name) pairs not on the page before, 1 after (Upgrade Master Pass: the page prints '15.08 %' with a space).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-068600",
+     "text": "Freedom Advisors Group LLC Warrant June 15, 2022 June 15, 2032 Class B Units 904,000 $ 0.01 $ 10 $ 73 (17)"
+    },
+    {
+     "accession": "0000950170-23-017817",
+     "text": "Miyoko's Kitchen Equipment Financing February 5, 2021 September 1, 2023 Fixed interest rate 8.5 %; EOT 9.0 % $ 118 $ 176 $ 173"
+    },
+    {
+     "accession": "0001193125-25-265807",
+     "text": "Madison Reed, Inc. Warrant January 16, 2020 March 23, 2027 Preferred Series C 194,553 $ 2.57 $ 185 $ 326 (17)"
+    }
+   ]
+  },
+  {
+   "what": "Round 2, page sample C010: equity and warrant rows publishing no unit count while the printed count is tagged on another context of the same member (15 rows, all 2026-03-31 but one) or on another member of the same printed line (4 rows). round2.py: 78 equity rows without units before, 59 after; the 59 print no count ('-' or a member interest). No wrapper setting joins a share fact from another context, so row corrections with the printed lines.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-207620",
+     "text": "Boosted eCommerce, Inc. Warrant December 14, 2020 December 14, 2030 Common Stock 763,480 $ 0.84 $ 259 $ -"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2023-12-31",
+   "why": "Published 2.5M under the filed total: NextCar's 'April 18, 2022' loan is printed on two identical lines (3,006 / 3,006 / 2,528 each; the issuer total 25,275 needs both) but the filing has one context for them. Not fixable with an allowed mechanism: untagged_values and row corrections act on an existing context, and a row_add with the same identifier is skipped by the promoted-rule duplicate guard (pipeline/agent_promoted.py). Parked.",
+   "quote": {
+    "accession": "0000950170-24-026865",
+    "text": "Total NextCar Holding Company, Inc. 30,060 30,062 25,275"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+   "hypotheses": [
+    "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula ('Prime + 4.0 % or Floor rate 11.5 %' publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads 'Floor rate' as the rate on purpose.",
+    "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+    "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+   ]
+  },
+  {
+   "finding": "conservation 2023-12-31 (total exception above)",
+   "hypotheses": [
+    "One context for two printed lines; would need a row-add path that accepts a second row with the same identifier, or a context_identifiers-style setting that clones a context."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "Lines printed with a dash for fair value (warrants, equity and loans written down to nil) have no fair-value fact and were not published: 28 to 77 per quarter. Declared at 0 from the page (704 lines).",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "B01 reports it; a default reading of a printed dash as 0 would replace the per-fund declarations.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Everalbum, Inc. Warrant January 16, 2020 July 29, 2026 Class A Common Stock 851,063 $ 0.10 $ 25 $ -"
+   }
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "what": "Lines printed with a dash for cost (restructured equity, warrants received for nil) published no cost, which a later step fills from fair value (first_observed_fv_proxy): 6 to 12 rows a quarter, cost overstated by 4 to 15M. Declared at 0.",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 15.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a cost equal to fair value on a row whose cost has no tag.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Edeniq, Inc. Equity January 16, 2020 1,561 Preferred Series B $ - $ 3,034"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The D-111 share-count step replaced 95 tagged, printed unit counts with another line's of the same issuer (Project Frog equity 3,129,887 -> 6,633,486; Emergy 75,958 -> 40,516). Its donors include rows at fair value 0, so publishing the dash rows moved which wrong count each row got. Fixed by row correction; the step is shared and still fires elsewhere. The corrected rows keep shares_held_source 'derived_proxy'.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a derived_proxy unit count where the row's own context carries a different count that is printed on its line.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Edeniq, Inc. Equity January 16, 2020 1,561 Preferred Series B $ - $ 3,034"
+   }
+  },
+  {
+   "observation_key": "floor-rate-published-as-interest-rate",
+   "what": "On floating loans the page prints only the formula ('Prime + s % or Floor rate f %'); the shared text reader publishes f as interest_rate on about 100 loans a quarter (1,450 rows). The loan pays max(Prime + s, f), usually several points above f. Parked (F27).",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1200.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Flag rows whose published rate equals the 'Floor rate' figure of their own member text.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Variable interest rate Base Rate + 8.5 % or Floor rate 12.2 %; EOT 2.0 % $ 13,797 $ 13,624 $ 13,624 (8)(10)"
+   }
+  },
+  {
+   "observation_key": "end-of-term-fee-tagged-as-interest-rate",
+   "what": "The filer tagged the end-of-term fee percentage with the interest-rate concept on 15 floating and 2 fixed loans (Hadrian 2023-03-31 published 0.0 for a printed 16.1 %; Electric Hydrogen 15.0 for 11.9 %; Zuum 2.5, VitaCup 5.0, Stratifyd 3.5 as rates). No rule flagged them. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 90.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published rate equal to the 'EOT x %' figure of the row's member text.",
+   "quote": {
+    "accession": "0000950170-23-017817",
+    "text": "Equipment Financing (9)(14) December 22, 2022 June 1, 2026 Fixed interest rate 16.1 %; EOT 0.0 % 1,162 1,145"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
+   "what": "Members print 'CORRA 3 Month Term' and 'Base Rate' (Bank of England, per the legend); the shared reader knows neither in this form and the report-date guess published SOFR (13 rows, 2025-06-30 on). Fixed by row correction.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a reference rate with source inferred_* on a row whose member names a benchmark.",
+   "quote": {
+    "accession": "0001193125-26-068600",
+    "text": "Maple Raptor Acquisition Inc. (dba Rentsync) Secured Loan April 28, 2025 April 28, 2030 Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % $ 19,757 $ 19,373 $ 19,897"
+   }
+  },
+  {
+   "observation_key": "one-position-tagged-across-two-members",
+   "what": "In the 10-Q for 2023-03-31 several lines have their facts split over two contexts with different members (Hadrian May 6, 2022: value on one, par and cost on the other); the published row lacked par or cost, and two such rows were published unclassified. Fixed by row correction.",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 21.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan with a value and no par where another context of the same filing prints on the same line.",
+   "quote": {
+    "accession": "0000950170-23-017817",
+    "text": "Secured Loan May 18, 2021 June 1, 2025 Variable interest rate Prime + 7.5 % or Floor rate 11.0 %; EOT 2.8 % (8) 7,326 7,399 7,351"
+   }
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "what": "Two equal NextCar loans printed on two lines, on members that differ only by a non-breaking space or a trailing ' One', were folded into one by the dimension-path dedup (0.7M to 0.8M missing in three quarters). Fixed with the wrapper's distinct_member_suffix_re.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report a dedup drop whose member text differs from the kept row's.",
+   "quote": {
+    "accession": "0000950170-25-103547",
+    "text": "Secured Loan April 18, 2022 September 30, 2025 Variable interest rate Prime + 5.8 % or Floor rate 9.0 %; EOT 2.0 % 2,843 2,974 719 (8)(18)"
+   }
+  },
+  {
+   "observation_key": "cost-or-par-tagged-on-misdated-context",
+   "what": "In the 10-Q for 2024-09-30 ten warrants carry their fair value on contexts dated 2024-06-30 and their cost on 2024-09-30 contexts: the rows were dropped (3.5M). Declared from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 3.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a current-period position context with cost and no value where the same member has a value on a prior instant of the same filing.",
+   "quote": {
+    "accession": "0000950170-24-118600",
+    "text": "Warrant January 16, 2020 December 6, 2026 Preferred Series D-2 750,000 $ 5.89 391 2,499 (17)"
+   }
+  },
+  {
+   "observation_key": "rate-tags-on-the-neighbouring-rows-context",
+   "what": "Bestow's 2025-03-31 context carries a PIK fact 0.015 that sits in Beam Technologies' printed line; Bestow published PIK 1.5 though its line prints none. Fixed by row correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 38.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a PIK rate on a row whose member text has no 'PIK'.",
+   "quote": {
+    "accession": "0000950170-25-065028",
+    "text": "Bestow, Inc. Secured Loan August 1, 2024 December 1, 2027 Variable interest rate Prime + 6.0 % or Floor rate 13.0 %; EOT 1.5 % $ 40,000 $ 38,639 $ 38,472"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Cherry Technologies 2025-03-31: the member still carries the earlier '+PIK Fixed Interest Rate 1.0 %' terms; the printed line has none, PIK 1.0 was published. RTS Holding's second loan (2023-06-30 to 2024-03-31) publishes PIK 1.25 from the member while its printed formula has no PIK, but footnote (15) says the loan has a PIK provision: left.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-06-30",
+    "2025-03-31"
+   ],
+   "fair_value_m": 7.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report rows whose PIK comes only from member text that differs from the printed line.",
+   "quote": {
+    "accession": "0000950170-25-065028",
+    "text": "Cherry Technologies, Inc. Secured Loan March 29, 2024 April 1, 2029 Variable interest rate PRIME + 2.5 % or Floor rate 9.5 %; EOT 2.0 % $ 7,235 $ 7,506 $ 7,469"
+   }
+  },
+  {
+   "observation_key": "preferred-units-column-is-a-face-amount",
+   "what": "Two convertible notes printed in the equity section show their dollar face in the units column ('$ 5,500 Convertible Note'); tagged as a share count and published as 5,500 units with no par (X11). Face now published as par; X02 left (no rate printed).",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a share count printed with a dollar sign.",
+   "quote": {
+    "accession": "0001193125-26-068600",
+    "text": "Equity January 16, 2020 $ 5,500 Convertible Note 3,966 -"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "Warrants (about 155 rows a quarter, 71M at 2026-03-31) publish EQUITY_COMMON or EQUITY_PREFERRED by the series named, with maturity_date = the expiration date. The holdings schema has no warrant class. Left.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 71.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report equity rows whose member says 'Warrant' and that carry a maturity date.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Everalbum, Inc. Warrant January 16, 2020 July 29, 2026 Class A Common Stock 851,063 $ 0.10 $ 25 $ -"
+   }
+  },
+  {
+   "observation_key": "amount-printed-with-leading-digit-in-own-cell",
+   "what": "Empower 2024-06-30: '1 4,495 1 4,511 1 4,511'; the filer tagged only the second cell (10M short on each of par, cost, value). The promoted rule fixed fair value as an arithmetic plug; cost and par were still short. Fixed by row correction.",
+   "field": "cost",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 14.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer whose printed total exceeds the sum of its tagged lines by a round power of ten.",
+   "quote": {
+    "accession": "0000950170-24-092284",
+    "text": "Total Empower Financial, Inc. 37,720 36,860 37,449"
+   }
+  },
+  {
+   "observation_key": "one-context-for-two-printed-lines",
+   "what": "2023-12-31: NextCar's 'April 18, 2022' loan is printed twice and tagged once; 2.5M short. Parked (no allowed mechanism adds a second row on one context).",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 2.5,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Conservation already reports it.",
+   "quote": {
+    "accession": "0000950170-24-026865",
+    "text": "Total NextCar Holding Company, Inc. 30,060 30,062 25,275"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "The filer's member misspells eight printed issuer names (Next Car for NextCar on 40 rows, Miyokos, Busboot, Freddin, 'Knockaway Trinity Holdings, LLC, Inc.'); the build publishes the member's spelling. Found by the page sample (C008); fixed by row correction. No rule compares published names with the visible page.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 40.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Report published issuer names that do not occur in the visible schedule of their filing.",
+   "quote": {
+    "accession": "0001193125-26-068600",
+    "text": "Freedom Advisors Group LLC Warrant June 15, 2022 June 15, 2032 Class B Units 904,000 $ 0.01 $ 10 $ 73 (17)"
+   }
+  },
+  {
+   "observation_key": "row-number-in-name-spelled-out",
+   "what": "From 2025-03-31 the filer numbers repeat lines of one issuer in words at the end of the member name ('Madison Reed, Inc. One', '... Two'); 95 rows published the ordinal in the issuer name. The gate's row-number shape test looks for digits only. Fixed with the wrapper's issuer_name_strip_re.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Extend the row-number name shape to spelled-out ordinals One to Ten.",
+   "quote": {
+    "accession": "0001193125-25-265807",
+    "text": "Madison Reed, Inc. Warrant January 16, 2020 March 23, 2027 Preferred Series C 194,553 $ 2.57 $ 185 $ 326 (17)"
+   }
+  },
+  {
+   "observation_key": "unit-count-on-a-second-context-of-the-member",
+   "what": "Unit counts tagged on another context of the same member (15 rows, mostly 2026-03-31) or another member of the same printed line (4 rows) were not published (page sample C010: Boosted eCommerce 763,480). Fixed by row correction; the extractor does not join a share fact across contexts.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 2.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag an equity row without units where another context of its member in the same filing carries a share count.",
+   "quote": {
+    "accession": "0001193125-26-207620",
+    "text": "Boosted eCommerce, Inc. Warrant December 14, 2020 December 14, 2030 Common Stock 763,480 $ 0.84 $ 259 $ -"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 681 passed (round 1 final wrapper; rerun after the round-2 issuer_name_strip_re: 681 passed)"
+ ],
+ "not_done": [
+  "F27 parked: the floor-as-rate question needs an owner decision (see parked).",
+  "The rate census (rate_census.py) compares spread, PIK, fixed rate and reference of every loan row with its printed formula; units are checked only on derived_proxy rows; maturity, industry and non-accrual flags were not compared row by row.",
+  "'Upgrade Master Pass-Thru Trust' certificates (printed in the equity section, about 25.6M at 2026-03-31) stay EQUITY_COMMON; arguably structured credit. Not changed.",
+  "The ~43 loan rows whose printed row the census could not locate by context (rate-only or split contexts) were not read.",
+  "No regression build of other funds (no shared code changed).",
+  "Findings cleared is not data correct: no rule flagged the EOT-as-rate tags, the proxy unit counts, the CORRA guesses or the floor published as the rate found here."
+ ],
+ "round2": "Page sample (20 rows of tcxd): C008 issuer misspelled from the member (Freddin), C010 unit count on the investment's other context (Boosted). Counted across all quarters (names_visible.py, round2.py) and fixed: 53 typo rows and 95 ordinal-suffix rows (names), 19 unit counts. Rebuilt as tcxe (5th build): rows 6,248 unchanged; only issuer_name, shares_held and their follow-on columns moved vs tcxd; ledger unchanged (74 outstanding). The 8 floor-as-rate cards left as instructed (F27 parked)."
+}

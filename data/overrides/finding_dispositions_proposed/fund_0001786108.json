@@ -1,0 +1,234 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "tcxe",
+ "dispositions": [
+  {
+   "disposition_id": "PD-X02-1786108-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "After this run the only loan rows without a rate or spread are two convertible notes the filer prints in its Equity Investments section, Vertical Communications ($5,500 face) and WorkWell Prevention & Care ($3,170 face), one row each per quarter. The line prints the face amount, 'Convertible Note', cost and value, and no interest rate column; footnote 16 says the notes convert into future equity rounds. No rate is tagged. Their face amount is now published as par (row corrections); the rate stays empty as printed.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "Equity January 16, 2020 $ 5,500 Convertible Note 3,966 2,196 (16)(20)", "quote": "2024-06-30: Vertical Communications convertible note, no rate printed"},
+    {"source": "filing", "accession": "0001193125-26-068600", "verbatim": "Equity January 16, 2020 $ 3,170 Convertible Note 3,219 - (16)(23)", "quote": "2025-12-31: WorkWell convertible note, no rate printed, value nil"},
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "Convertible notes represent investments through which the Company will participate in future equity rounds", "quote": "footnote 16"}
+   ],
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found Augmented Reality Concepts' SOFR loan published with no rate and no spread. In this fund's first build of this run (tcxa) and since, the row publishes spread 7.3 over SOFR, as printed ('SOFR 3 Month Term + 7.3 %'); the page prints no current rate. X02 no longer flags it; the finding now covers only the two convertible notes.",
+    "2026-03-31": "The review could not open the source. The flagged rows were Knockaway's 'Fixed interest rate 5.0 % + PIK Fixed Interest Rate 5.0 %' loan (fixed by row correction: cash 5.0, all-in 10.0 published) and the two convertible notes, which print no rate."
+   }
+  },
+  {
+   "disposition_id": "PD-X05-1786108-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X05",
+   "ciks": ["0001786108"],
+   "quarters": ["2024-03-31", "2026-03-31", "2026-06-30"],
+   "reason_key": "x05-zero-spread-printed-on-the-row",
+   "statement": "The floating rows left with a zero spread print it: Applied Digital's March 13, 2024 equipment financing at 2024-03-31 ('Variable interest rate 0 + 0.0 % or Floor rate 0.0 %') and Orchard Technologies' January 27, 2026 loan at 2026-03-31 and 2026-06-30 ('Prime + 0.0 % or Floor rate 0.0 %'). The published zeros are the printed figures.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-050904", "verbatim": "Equipment Financing(14) March 13, 2024 October 1, 2025 Variable interest rate 0 + 0.0 % or Floor rate 0.0 %; EOT 0.0 % - $ 12,467 $ 12,465 $ 12,465", "quote": "2024-03-31 Applied Digital"},
+    {"source": "filing", "accession": "0001193125-26-207620", "verbatim": "Variable interest rate Prime + 0.0 % or Floor rate 0.0 %; EOT 0.0 % 8,300 8,300 5,862 (8)(16)(24)", "quote": "2026-03-31 Orchard Technologies"},
+    {"source": "filing", "accession": "0001193125-26-333907", "verbatim": "Variable interest rate Prime + 0.0 % or Floor rate 0.0 %; EOT 0.0 % 8,300 8,300 6,115 (8)(16)(25)", "quote": "2026-06-30 Orchard Technologies"}
+   ],
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer found Maple Raptor's two CORRA loans published with spread 0.0 against the printed 9.4. In this build both publish spread 9.4, and reference CORRA (row corrections; it was a date-guessed SOFR). The finding now covers only Orchard's loan, which prints 'Prime + 0.0 %'."
+   }
+  },
+  {
+   "disposition_id": "PD-PP02-1786108-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": ["0001786108"],
+   "quarters": ["2025-03-31", "2025-06-30", "2025-09-30"],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "The two NextCar Holding 'April 18, 2022' secured loans: equal terms and figures, printed as two lines, tagged on two contexts whose members differ only by a non-breaking space (2025-03-31) or a trailing 'One' (2025-06-30, 2025-09-30). The issuer total needs both (2025-06-30: four 719 lines and 1,439 make 6,316 less the other loans). This run keeps both (wrapper distinct_member_suffix_re); before, one was dropped and the quarter was 0.7M to 0.8M under the filed total.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-103547", "verbatim": "Secured Loan April 18, 2022 September 30, 2025 Variable interest rate Prime + 5.8 % or Floor rate 9.0 %; EOT 2.0 % 2,843 2,974 719 (8)(18)", "quote": "2025-06-30: this line is printed twice"},
+    {"source": "filing", "accession": "0000950170-25-065028", "verbatim": "Total NextCar Holding Company, Inc. 25,470 26,780 7,064", "quote": "2025-03-31 issuer total, which ties only with both lines"}
+   ]
+  },
+  {
+   "disposition_id": "PD-B02-1786108-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "ciks": ["0001786108"],
+   "quarters": ["2025-03-31"],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "The repeated position key at 2025-03-31 is the pair of NextCar 'April 18, 2022' loans (same terms and figures, two printed lines, two contexts). Both are real; the issuer total needs both.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-065028", "verbatim": "Total NextCar Holding Company, Inc. 25,470 26,780 7,064", "quote": "issuer total, which ties only with both lines"}
+   ]
+  },
+  {
+   "disposition_id": "PD-MAT-1786108-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31"],
+   "reason_key": "maturity-not-past-defaulted-loan-printed-with-original-maturity",
+   "statement": "FemTec Health's July 23, 2021 loan is printed at 2023-03-31 with its original maturity, September 1, 2022, and a nil value; it is now published (value 0 declared from the page), so the past maturity shows.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Secured Loan (18) July 23, 2021 September 1, 2022 (20) Fixed interest rate 11 .0% 2,092 2,091 -", "quote": "maturity September 1, 2022, fair value '-'"}
+   ]
+  },
+  {
+   "disposition_id": "PD-B01-1786108-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2026-06-30"],
+   "reason_key": "b01-contexts-without-value-are-category-rows-rollforward-or-split-twins",
+   "statement": "After this run no printed position is left unpublished: 704 contexts printed with a dash for fair value (and 185 with a dash for cost) are published at 0 from the page, and the ten 2024-09-30 warrants whose values the filer tagged on a 2024-06-30 context are published at their printed values. The contexts B01 still counts carry no position value of their own: second contexts of one printed line that hold only a rate, a date or a single figure (the filer splits a line's facts over two members, for example Hadrian's May 6, 2022 loan at 2023-03-31, whose par and cost sit on one context and its value on another; the published row carries all three from the page), and members of lines whose value is tagged elsewhere.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-207620", "verbatim": "Everalbum, Inc. Warrant January 16, 2020 July 29, 2026 Class A Common Stock 851,063 $ 0.10 $ 25 $ -", "quote": "a dash-valued line, now published at 0"},
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Equipment Financing(14) May 6, 2022 November 1, 2025 Fixed interest rate 12.9 %; EOT 0.0 % 3,908 3,893 3,816", "quote": "a line whose facts are split over two contexts; the published row carries par 3,908, cost 3,893, value 3,816"}
+   ]
+  },
+  {
+   "disposition_id": "PD-A01-1786108-1",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31"],
+   "reason_key": "a01-children-counted-on-two-paths",
+   "statement": "In every failing parent the child sum is exactly twice the rollup (2023-03-31: 'portfolio company debt securities' 1,048,829 thousand against children 2,097,658; Nexii Building Solutions 14,802 against 29,604; Aledia 17,122 against 34,244). The rollups equal the printed issuer totals, and the published rows equal the printed rows. The check counts each child twice (the filer tags each line on an instant and a duration context of one member, both read as leaves). Not a data error; the check needs to count one context per member and period.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Total Nexii Building Solutions, Inc. 15,000 14,732 14,802", "quote": "rollup 14,802 equals the printed total; the check's child sum is 29,604"},
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Total Aledia, Inc. 16,812 17,556 17,122", "quote": "rollup 17,122 equals the printed total; child sum 34,244"}
+   ]
+  },
+  {
+   "disposition_id": "PD-MCE-1786108-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-06-30"],
+   "reason_key": "merged-context-value-equals-printed-row",
+   "statement": "The re-verifier skips fields filled from a second context of the same printed line. Read on the page, the filled values are the printed ones: Nexii's 2023 common stock cost 500 (value on one context, cost on the other); Vertical Communications' preferred 3,892,485 units (printed '$ - $ -'); spreads and the absent rate of floating loans whose rate cell is a formula (Maple Raptor 'CORRA 3 Month Term + 9.4 %': spread 9.4, no rate printed). Affected fair value 0.0 in every quarter. The end-of-term fee merged in as Stratifyd's rate in 2023 is withdrawn in this run.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Nexii Building Solutions, Inc. (10) Equity(14) February 28, 2022 24,418 Common Stock $ 500", "quote": "cost 500 published"},
+    {"source": "filing", "accession": "0001193125-26-068600", "verbatim": "Vertical Communications, Inc. Equity January 16, 2020 3,892,485 Preferred Series 1 $ - $ -", "quote": "units 3,892,485 published"},
+    {"source": "filing", "accession": "0001193125-26-068600", "verbatim": "Maple Raptor Acquisition Inc. (dba Rentsync) Secured Loan April 28, 2025 April 28, 2030 Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % $ 19,757 $ 19,373 $ 19,897", "quote": "spread 9.4, no rate printed"}
+   ]
+  },
+  {
+   "disposition_id": "PD-FCU-1786108-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": ["0001786108"],
+   "quarters": ["2024-06-30", "2024-12-31"],
+   "reason_key": "pik-leg-tagged-with-plain-rate-concept",
+   "statement": "On RTS Holding (2024-06-30) and Centivo (2024-12-31) the filer tagged the PIK leg of a 'Prime + x % or Floor rate y % + PIK Interest Rate z %' formula with the plain interest-rate concept and no PIK concept. The page prints the formula, not a current coupon, so no cash rate can be published; the PIK rate is published as printed (4.3 and 1.0) and the spread from its tag. Affected fair value 0.0.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "RTS Holding, Inc. Secured Loan December 31, 2021 January 1, 2027 Variable interest rate Prime + 7.3 % or Floor rate 10.5 %+PIK Interest Rate 4.3 %; EOT 3.0 % $ 13,800 $ 15,212 $ 15,006", "quote": "2024-06-30: tagged rate 0.043 is the PIK leg"},
+    {"source": "filing", "accession": "0000950170-25-027341", "verbatim": "Centivo Corporation Secured Loan July 31, 2024 August 1, 2029 Variable interest rate PRIME + 4.5 % or Floor rate 11.3 %+PIK Fixed Interest Rate 1.0 %; EOT 2.0 % $ 3,765 $ 3,677", "quote": "2024-12-31: tagged rate 0.01 is the PIK leg"}
+   ]
+  },
+  {
+   "disposition_id": "PD-PCT-1786108-1",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31"],
+   "reason_key": "pct-only-tag-is-a-one-row-subtotal-percent",
+   "statement": "This filer prints no percent of net assets on position lines, only on sub-total lines. At 2023-03-31 the i40, LLC preferred is the only line under 'Multi-Sector Holdings' in the equity section, and the filer tagged the sub-total's '( 0.1 %)' on the position's own context: the one percent fact of the quarter. The published 0.1 is that printed figure; the calculated value is published beside it.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Multi-Sector Holdings i40, LLC (10)(21) Equity(14) January 30, 2023 - Preferred (17) $ 1,555 $ 1,555 Sub-Total: Multi-Sector Holdings ( 0.1 %)* $ 1,555 $ 1,555", "quote": "the sub-total percent tagged on the single position"}
+   ]
+  },
+  {
+   "disposition_id": "PD-A07-1786108-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31"],
+   "reason_key": "pct-only-tag-is-a-one-row-subtotal-percent",
+   "statement": "The percent check at 2023-03-31 rests on the fund's only percent fact, the 'Multi-Sector Holdings ( 0.1 %)' sub-total tagged on the i40, LLC preferred. Position lines print no percent, so the published percents sum to 0.1, not to the printed investments-to-net-assets figure.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Multi-Sector Holdings i40, LLC (10)(21) Equity(14) January 30, 2023 - Preferred (17) $ 1,555 $ 1,555 Sub-Total: Multi-Sector Holdings ( 0.1 %)* $ 1,555 $ 1,555", "quote": "the only percent fact of the quarter"}
+   ]
+  },
+  {
+   "disposition_id": "PD-F22-1786108-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F22",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31"],
+   "reason_key": "pct-only-tag-is-a-one-row-subtotal-percent",
+   "statement": "As for A07: the fund-level percent check at 2023-03-31 reads one percent fact, the sub-total '( 0.1 %)' tagged on the i40, LLC preferred; position lines print no percent.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Multi-Sector Holdings i40, LLC (10)(21) Equity(14) January 30, 2023 - Preferred (17) $ 1,555 $ 1,555 Sub-Total: Multi-Sector Holdings ( 0.1 %)* $ 1,555 $ 1,555", "quote": "the only percent fact of the quarter"}
+   ]
+  },
+  {
+   "disposition_id": "PD-F23-1786108-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F23",
+   "ciks": ["0001786108"],
+   "quarters": ["2023-03-31"],
+   "reason_key": "pct-only-tag-is-a-one-row-subtotal-percent",
+   "statement": "As for A07: the fund-level percent check at 2023-03-31 reads one percent fact, the sub-total '( 0.1 %)' tagged on the i40, LLC preferred; position lines print no percent.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-23-017817", "verbatim": "Multi-Sector Holdings i40, LLC (10)(21) Equity(14) January 30, 2023 - Preferred (17) $ 1,555 $ 1,555 Sub-Total: Multi-Sector Holdings ( 0.1 %)* $ 1,555 $ 1,555", "quote": "the only percent fact of the quarter"}
+   ]
+  },
+  {
+   "disposition_id": "PD-SRC-1786108-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": ["0001786108"],
+   "quarters": ["2024-06-30"],
+   "reason_key": "src-tag-drops-leading-digit-printed-in-own-cell",
+   "statement": "Empower Financial's May 15, 2024 loan: the page prints each amount with its leading digit in a cell of its own ('1 4,495 1 4,511 1 4,511'), and the filer tagged only the second cell (4,495 / 4,511 / 4,511 thousand). The issuer total needs 14,495 / 14,511 / 14,511. Published fair value 14,511 (the promoted rule) and, from this run, cost 14,511 and par 14,495 (row corrections) equal the page; the source check compares with the tag.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)", "quote": "leading digit printed in its own cell"},
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "Total Empower Financial, Inc. 37,720 36,860 37,449", "quote": "issuer total requires 14,495 / 14,511 / 14,511"}
+   ]
+  },
+  {
+   "disposition_id": "PD-SRC03-1786108-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": ["0001786108"],
+   "quarters": ["2024-06-30"],
+   "reason_key": "src-tag-drops-leading-digit-printed-in-own-cell",
+   "statement": "The same Empower Financial row: published 14,511 (page) against the tagged 4,511 (the filer tagged only the second of two cells).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-092284", "verbatim": "Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)", "quote": "leading digit printed in its own cell"}
+   ]
+  }
+ ]
+}

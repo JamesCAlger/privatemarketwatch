@@ -1,0 +1,29 @@
+{
+ "cik": "1786108",
+ "rule_id": "exclude_i40_subtotal_context_2024q1",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2024-03-31"
+  ]
+ },
+ "predicate_sql": "report_date = '2024-03-31' AND CAST(bdc_dimensions_raw AS VARCHAR) LIKE '%Multi-Sector Holdings i40, LLC Type of Investment Equity Investment Date January 30, 2023 Series Preferred%'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-24-050904 (10-Q 2024-03-31), schedule, equity section: 'Multi-Sector Holdings Senior Credit Corp 2022 LLC (10)(20) Equity (7) January 30, 2023 - Preferred (17) $ 4,026 $ 4,609 Sub-Total: Multi-Sector Holdings ( 0.3 %)* $ 4,026 $ 4,609'. One position is printed, followed by its industry sub-total."
+  },
+  {
+   "source": "filing",
+   "quote": "The position is tagged twice: on 'Portfolio Company Equity Investments- United States Multi-Sector Senior Credit Corp 2022 LLC Type of Investment Equity Investment Date January 30, 2023 Series Preferred 0' (C_b1da62d9-d3b7-4a4a-a2fc-363464e6f65e: cost 4,026,000, fair value 4,609,000) and on the entity's former name 'Portfolio Company Equity Investments- United States Multi-Sector Holdings i40, LLC Type of Investment Equity Investment Date January 30, 2023 Series Preferred' (C_7c99870c-eaf1-437b-acf4-7a5a4cdcdb8f: cost 4,026,000, fair value 4,609,000 and InvestmentOwnedPercentOfNetAssets 0.003, the sub-total line's '0.3 %'). No position row of this filer carries a percent tag in that filing."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox tcxa 2024-03-31: published fair value is 4.6M above the filed investments total; both contexts are published."
+  }
+ ],
+ "rationale": "The i40 context carries the industry sub-total line (its percent fact is the sub-total's percent), so publishing it counts the Senior Credit Corp 2022 preferred twice. It is not a position. Pinned to 2024-03-31 and this member: at 2023-03-31 the i40 member is the only tag of the position and is kept.",
+ "confidence": 0.95,
+ "measured_impact": {}
+}
