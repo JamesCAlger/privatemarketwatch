@@ -184,7 +184,12 @@ FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "i
                            # Haven: the year's distribution per unit filed again on a three-month context; an
                            # annualised income ratio that the year-to-date split reads as a running total; net
                            # expenses printed for a quarter and not tagged).
-                           "distribution_per_share", "income_yield_pct", "net_expenses"})
+                           "distribution_per_share", "income_yield_pct", "net_expenses",
+                           # Balance-sheet totals whose undimensioned fact is a part, not the total (Fidelity
+                           # Private Credit Fund: LongTermDebt holds the 210,000,000 of notes while the balance
+                           # sheet prints 'Debt ... 1,152,791,515'; InvestmentOwnedAtCost 300,000 is the
+                           # asset-backed subtotal, the printed total cost is 1,753,090,392).
+                           "borrowings", "investments_at_cost"})
 
 
 def apply_figure_corrections(balance_df):

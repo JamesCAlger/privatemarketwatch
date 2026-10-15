@@ -133,5 +133,10 @@
   "label": "ccxd",
   "accepted_on": "2026-10-15",
   "basis": "D-177, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (32 rows)"
+ },
+ "0001920453": {
+  "label": "fpxg",
+  "accepted_on": "2026-10-15",
+  "basis": "D-179, gate INCOMPLETE (shared income fallback parked); page sample 1 error (CLO class), 6 rows fixed in round 2"
  }
 }

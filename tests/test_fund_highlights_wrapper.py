@@ -444,6 +444,31 @@ class TestFigureCorrections:
         assert out.loc[("0001803498", "2023-12-31"), "distribution_per_share"] == 2.53
         assert pd.isna(out.loc[("0001803498", "2023-12-31"), "net_expenses"])
 
+    def test_borrowings_and_total_cost_are_corrected_only_for_the_fund_that_lists_them(self, tmp_path, monkeypatch):
+        """Fidelity Private Credit Fund: LongTermDebt is the notes only (210,000,000) beside a printed debt of
+        1,152,791,515; InvestmentOwnedAtCost 300,000 is a section subtotal."""
+        import pandas as pd
+        from pipeline import fund_highlights_wrapper as fhw
+        spec = self._spec(tmp_path, [
+            {"report_date": "2026-03-31", "field": "borrowings", "value": 1152791515,
+             "evidence": "10-Q balance sheet: 'Debt (net of unamortized debt issuance costs ...) 1,152,791,515'"},
+            {"report_date": "2025-03-31", "field": "investments_at_cost", "value": 1753090392,
+             "evidence": "10-Q schedule: 'Total Investment Portfolio $ 1,753,090,392 $ 1,750,876,439'"}])
+        assert len(spec.figure_corrections) == 2
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        frame = pd.DataFrame([
+            {"cik": "0001930087", "report_date": "2026-03-31", "borrowings": 210000000.0, "investments_at_cost": 2513533478.0},
+            {"cik": "0001930087", "report_date": "2025-03-31", "borrowings": None, "investments_at_cost": 300000.0},
+            # another fund with the same shape and no wrapper entry keeps its filed figures
+            {"cik": "0001803498", "report_date": "2026-03-31", "borrowings": 210000000.0, "investments_at_cost": 300000.0}])
+        out = fhw.apply_figure_corrections(frame).set_index(["cik", "report_date"])
+        assert out.loc[("0001930087", "2026-03-31"), "borrowings"] == 1152791515.0
+        assert out.loc[("0001930087", "2026-03-31"), "investments_at_cost"] == 2513533478.0
+        assert out.loc[("0001930087", "2025-03-31"), "investments_at_cost"] == 1753090392.0
+        assert out.loc[("0001803498", "2026-03-31"), "borrowings"] == 210000000.0
+        assert out.loc[("0001803498", "2026-03-31"), "investments_at_cost"] == 300000.0
+
     def test_an_income_statement_total_is_still_not_a_correctable_figure(self, tmp_path):
         spec = self._spec(tmp_path, [
             {"report_date": "2023-12-31", "field": "total_investment_income", "value": 1.0, "evidence": "not a field a wrapper may set"},

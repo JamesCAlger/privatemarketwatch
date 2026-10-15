@@ -1,0 +1,29 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001920453",
+ "entity_name": "Fidelity Private Credit Fund",
+ "version": 1,
+ "notes": "Fund-clearing loop 2026-10-15 (fpx sandboxes). From 2025-06-30 the undimensioned LongTermDebt fact is the unsecured notes only (210,000,000; 'For the year ending: ... 2031 and thereafter - $ 210,000,000'), while the balance sheet's 'Debt' line includes the credit facilities; from 2024-06-30 to 2025-03-31 no undimensioned debt fact is filed. borrowings below is the printed balance-sheet Debt line of each quarter. At 2025-03-31 the undimensioned InvestmentOwnedAtCost is 300,000, the 'Total Asset-Backed Securities' subtotal; the printed total cost is 1,753,090,392.",
+ "figure_corrections": [
+  {"report_date": "2024-06-30", "field": "borrowings", "value": 365000000,
+   "evidence": "0000950170-24-097000 (10-Q 2024-06-30) balance sheet: 'Liabilities Debt 365,000,000 105,848,459'."},
+  {"report_date": "2024-09-30", "field": "borrowings", "value": 472500000,
+   "evidence": "0000950170-24-125469 (10-Q 2024-09-30) balance sheet: 'Liabilities Debt 472,500,000 105,848,459'."},
+  {"report_date": "2024-12-31", "field": "borrowings", "value": 611070855,
+   "evidence": "0000950170-25-041963 (10-K 2024) balance sheet: 'Liabilities Debt 611,070,855 105,848,459'."},
+  {"report_date": "2025-03-31", "field": "borrowings", "value": 838062993,
+   "evidence": "0000950170-25-070240 (10-Q 2025-03-31) balance sheet: 'Liabilities Debt 838,062,993 611,070,855'."},
+  {"report_date": "2025-06-30", "field": "borrowings", "value": 878892481,
+   "evidence": "0000950170-25-108923 (10-Q 2025-06-30) balance sheet: 'Debt (net of unamortized debt issuance costs $ 2,541,336 and $ 0 as of June 30, 2025 and December 31, 2024, respectively) 878,892,481 611,070,855'."},
+  {"report_date": "2025-09-30", "field": "borrowings", "value": 914726907,
+   "evidence": "0001193125-25-277125 (10-Q 2025-09-30) balance sheet: 'Debt (net of unamortized debt issuance costs $ 2,386,695 ...) 914,726,907 611,070,855'."},
+  {"report_date": "2025-12-31", "field": "borrowings", "value": 1039821825,
+   "evidence": "0001193125-26-119488 (10-K 2025) balance sheet: 'Debt (net of unamortized debt issuance costs $ 2,230,742 ...) 1,039,821,825 611,070,855'."},
+  {"report_date": "2026-03-31", "field": "borrowings", "value": 1152791515,
+   "evidence": "0001193125-26-214226 (10-Q 2026-03-31) balance sheet: 'Debt (net of unamortized debt issuance costs $ 2,073,556 ...) 1,152,791,515 1,039,821,825'."},
+  {"report_date": "2026-06-30", "field": "borrowings", "value": 1178725464,
+   "evidence": "0001193125-26-346851 (10-Q 2026-06-30) balance sheet: 'Debt (net of unamortized debt issuance costs $ 1,913,703 ...) 1,178,725,464 1,039,821,825'."},
+  {"report_date": "2025-03-31", "field": "investments_at_cost", "value": 1753090392,
+   "evidence": "0000950170-25-070240 (10-Q 2025-03-31) schedule: 'Total Investment Portfolio $ 1,753,090,392 $ 1,750,876,439 191.81 %'; the undimensioned InvestmentOwnedAtCost 300,000 is 'Total Asset-Backed Securities 300,000 299,985'."}
+ ]
+}

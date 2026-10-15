@@ -4377,3 +4377,32 @@ ten, with 2026-06-30) and `rg2` (the seven of the overnight run, without it).
   all its forms agree. `rg1b`: HPS gains 483 labels and changes none; BCRED (46) and Blue Owl Credit
   Income (343) move back to the shortened names' own labels, the order before D-164.
 - The 17 funds' accepted sandboxes are now `rg1b` and `rg2`.
+
+### D-179 Fidelity Private Credit Fund through the fund-clearing skill (sandbox `fpxg`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff3`. Two rounds; seven builds (one allowed beyond six for the sample's finding).
+
+- **Ledger:** 41 findings, 11 outstanding (49 in the first build), 10 proposed; totals tie in 14 of
+  14 quarters (with cash).
+- **Fixed:** 2023-09-30 26.7M under: the State Street money-market position dropped as non-private
+  ('Investor Class' added to the leaf markers); 2023-06-30 1.6M over: the affiliate roll-forward
+  note tagged on the cash axis (exclusion rule pinned to two 2023 quarters, does not carry forward);
+  208 rows printed with a dash for fair value declared at 0 (B01 verdicts answered); issuer names
+  (about 77 rows); equity unit counts tagged as principal in seven filings; 'Class A Interest' rows
+  classed as loans; Canadian-dollar pars tagged as USD; CDOR/CORRA from the printed column; about 60
+  row corrections (stale member rates, PRIME read from the issuer name 'CCI Prime, LLC' on 10 rows,
+  unit counts from another line of the issuer, a spread printed as 0.0575). Fund level: borrowings
+  held the notes only (210M of 1.15B) and the 2025-03-31 cost the asset-backed subtotal: new
+  highlights wrapper; `pipeline/fund_highlights_wrapper.py` may now correct borrowings and
+  investments_at_cost where a wrapper lists them (shared code, this fund only, test).
+- **Promoted correction deleted:** `agent_b2_corrections/0001920453/unit_rescale.json` multiplied
+  both Dynamic Connections pars at 2025-12-31 by 1,000 (copy in scratch/fund_runs/0001920453/).
+- **Page sample (`fpxf`):** 1 error, a CLO published as a loan. Round 2: 6 CLO rows under
+  Asset-Backed Securities published DIRECT_LENDING (CIFC's name has no 'CLO'; one Flatiron member
+  cut to 'nvestments'); now STRUCTURED_CREDIT. asset_category stays LOAN on all 17 CLO rows: the
+  schema has no structured-credit asset category and the class map pairs LOAN with STRUCTURED_CREDIT.
+- **Parked:** income_identity 2024-12-31: the 10-K quarter's income is the year divided by four
+  (28.3M; true 35.9M), the shared fallback (also Ares Core, D-168; Monroe).
+- **Left:** lien blank on every loan before 2025-09-30 (the shared prefix strip removes 'First Lien
+  Debt'); the casing vote respells 54 earlier rows when a quarter is added.
+- Tests: wrapper, highlights and encodings 681 passed. The agent wrote one helper with a heredoc.

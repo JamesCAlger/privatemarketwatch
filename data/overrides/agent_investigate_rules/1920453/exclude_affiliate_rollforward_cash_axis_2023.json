@@ -1,0 +1,26 @@
+{
+ "cik": "1920453",
+ "rule_id": "exclude_affiliate_rollforward_cash_axis_2023",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2023-06-30",
+   "2023-09-30"
+  ]
+ },
+ "predicate_sql": "report_date IN ('2023-06-30', '2023-09-30') AND CAST(bdc_dimensions_raw AS VARCHAR) = 'cashandcashequivalentsaxis=FidelityInvestmentsMoneyMarketGovernmentPortfolioClassIMember'",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0000950170-23-041848 (10-Q 2023-06-30), affiliated investments roll-forward note: 'Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927'. The context on the cash axis (C_6545ff1e-1757-4d3b-8f25-f22f08a7d5ab) carries only the ending fair value 1,638,582, with the period's purchases, sales and income on its duration twin. The schedule row is the investment-axis member '... Money Market Mutual Funds, Fidelity Investments Money Market Government Portfolio Class I 4.99%' (C_555fe833-dc86-4287-af75-3691c8287b28, cost and fair value 1,638,582), which is published."
+  },
+  {
+   "source": "filing",
+   "quote": "0000950170-23-063077 (10-Q 2023-09-30), the same note: 'Fidelity Investments Money Market Government Portfolio Class I - 124,323,429 ( 124,323,429 ) - - - 179,725': ending value nil; the cash-axis context C_b718c04f-4e27-4079-a9db-11867689f514 carries fair value 0 only."
+  }
+ ],
+ "rationale": "In 2023 the filer tags its affiliated-investments roll-forward note on the cash-and-cash-equivalents axis. Those contexts are a note figure that repeats the schedule row (2023-06-30: published 1.64M twice, so published sat 1.6M above the filed total) or a holding sold out in the quarter (2023-09-30, value 0). From 2025-09-30 the same axis carries the schedule's own fund rows with cost and units, so the rule is pinned to these two quarters and this one member.",
+ "confidence": 0.95,
+ "measured_impact": {}
+}

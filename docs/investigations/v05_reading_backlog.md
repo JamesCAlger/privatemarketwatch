@@ -159,3 +159,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001825384 Stone Point Credit | stxf | PASS | 31 findings, 15 outstanding, 15 proposed | D-175 |
 | 2026-10-15 | 0001916099 Diameter Credit Co | dixc | PASS | 49 findings, 32 outstanding, 32 proposed | D-176 |
 | 2026-10-15 | 0001702510 Carlyle Credit Solutions | ccxd | PASS | 55 findings, 26 outstanding, 26 proposed | D-177 |
+| 2026-10-15 | 0001920453 Fidelity Private Credit Fund | fpxg | INCOMPLETE | 41 findings, 11 outstanding, 10 proposed, 1 parked | D-179 |

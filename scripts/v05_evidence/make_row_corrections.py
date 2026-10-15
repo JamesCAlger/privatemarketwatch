@@ -789,6 +789,16 @@ if CARLYLE_CS_LOOP in held and CARLYLE_CS_LOOP_FILE.exists():
     for spec in json.loads(CARLYLE_CS_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((CARLYLE_CS_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1702510-fundloop"))
         EXACT.add(spec["identifier"])
+# Fidelity Private Credit Fund, fund-clearing loop (2026-10-15): Canadian-dollar pars (Senske CDOR, Dynamic Connections
+# CORRA) tagged with unit USD; unit counts the share-count proxy (D-111) took from another line of the issuer; one member
+# with no issuer (Conair). One spec per row, each with its printed line, in row_correction_specs/0001920453.json.
+FIDELITY_PCF_LOOP = "0001920453"
+FIDELITY_PCF_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001920453.json"
+if FIDELITY_PCF_LOOP in held and FIDELITY_PCF_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(FIDELITY_PCF_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((FIDELITY_PCF_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1920453-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).
