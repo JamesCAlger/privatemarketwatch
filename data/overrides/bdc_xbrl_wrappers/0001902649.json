@@ -102,12 +102,13 @@
         "family": "warrant"
       }
     ],
-    "canonical_strip_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s+|\\s+Ref\\s+.*$|\\s+Reference\\s+Rate\\s+.*$|\\s+Interest\\s+Rate\\s+\\d+\\.?\\d*%|\\s+Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b"
+    "canonical_strip_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s+|\\s+Ref\\s+.*$|\\s+Reference\\s+Rate\\s+.*$|\\s+Interest\\s+Rate\\s+\\d+\\.?\\d*%|\\s+Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b",
+    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$"
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s*(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Instrument|Investment|Instument)\\s+)?(?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref)\\b",
-    "hierarchy_instrument_re": "(?i)\\s+(?:(?:Instrument|Investment|Instument)\\s+)?((?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref)\\b.+?)(?:\\s+(?:Ref|Reference\\s+Rate|Interest\\s+Rate|SOFR|LIBOR|EURIBOR|Prime|Floor|Spread|Total\\s+Coupon|Maturity(?:\\s+Date)?)\\b|$)",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s*(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?(?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b",
+    "hierarchy_instrument_re": "(?i)(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?((?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b.+?)(?:\\s+(?:Ref|Reference\\s+Rate|Interest\\s+Rate|SOFR|LIBOR|EURIBOR|Prime|Floor|Spread|Total\\s+Coupon|Maturity(?:\\s+Date)?)\\b|$)",
     "hierarchy_trailing_re": "(?i)\\s+(Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b(?:\\s+(?:One|Two|Three|Four))?)",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments\\b|Equity\\s+Securities\\s*|Equity\\s+Investments\\b)') AND (regexp_matches(_clean, '(?i)\\b(?:Instrument|Investment|Instument)\\b') OR (regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\d?|Corp\\.?|Corporation|L\\.L\\.C\\.|L\\.P\\.|Ltd\\.?|Limited|Holdings?|Group|Bidco|Buyer|Parent|Borrower|SAS|B\\.V\\.|SE\\b|LP\\b)') AND regexp_matches(_clean, '(?i)\\b(?:First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|[A-Z]\\s+Ref)\\b')))",
     "extra_industry_labels": [
@@ -243,6 +244,18 @@
     ],
     "filed_rate_reading": [
       "all_in"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "units_tagged_as_par": [
+      "0000950170-24-122470",
+      "0000950170-25-030170",
+      "0000950170-25-067060",
+      "0000950170-25-106036"
+    ],
+    "reference_rate_columns": [
+      "Ref"
     ]
   }
 }

@@ -4499,3 +4499,35 @@ Compared with `spoff2`. One round; six builds (two stopped at the rebuild stage)
 - The agent ran an empty heredoc into `python -` once (stopped by its id), re-ran the unified stage
   by hand inside a failed sandbox, staged then unstaged the rule deletion with git, and used `sed -i`
   on `row_corrections.csv`. Wrapper tests 681 passed (agent: 863 over 7 files).
+
+### D-183 BlackRock Private Credit Fund through the fund-clearing skill (sandbox `bpxh`, with 2026-06-30), verdict PASS
+
+Compared with `spoff2`. One round; three builds (`bpxf` to `bpxh`; `bpxa` to `bpxe` belong to Barings
+Private Credit, D-161).
+
+- **Ledger:** 40 findings, 22 outstanding (31 in the first build), all 22 proposed; totals tie in 14
+  of 14 quarters (without cash rows).
+- **Fixed (wrapper):** 2026-06-30 was 5.6M high: three As1 Sports rows tagged in EUR but printed in
+  dollars (`foreign_unit_values`); equity unit counts tagged as principal in the four filings
+  2024-09-30 to 2025-06-30 (`units_tagged_as_par`, clears C04 x4); reference rate read from the
+  printed 'Ref' column (CORRA and EURIBOR rows had a guessed SOFR or none); issuer pattern for
+  'Inc.First Lien' style names and trailing 'One'/'Two' (16 names).
+- **Fixed (122 row corrections):** 44 undrawn-line costs tagged positive and printed in brackets;
+  Sumo Logic 2023-06-30 sign; Zelis 2025-09-30 split over two contexts (clears X02, X11); rows on the
+  wrong or an empty member (Sotheby's, Bad Boy Mowers 7.2M, MRO delayed draw); Anthracite cash margin
+  tagged as PIK; CrewLine untagged rate; 16 Streamland all-PIK loans published Fixed; 6 Magenta fixed
+  rows published floating.
+- **Proposed:** A01 x9, X11 x3, C110 x2, fmt_principal_amount x2, fmt_principal_amount_usd x2, B02,
+  F33, SRC_BDC03 and a source-reconciliation finding (Sumo Logic sign). Two earlier real-error
+  verdicts do not stand: C110 2025-12-31 (Skydio published as printed) and fmt_principal_amount
+  2025-12-31 (Kaman principal 5,772,929 as printed).
+- **Parked (inside tolerance):** MRO Parent revolver 2025-12-31 dropped by staging dedup as a twin
+  of the delayed draw (members differ only in coupon text): 18,136 fair value, 41,687 cost.
+- **Page sample:** 20 cards, 0 published errors. Notes: the trailing 'One' of a member reaches an
+  instrument description (C015); the member text's industry differs from the printed heading on 3
+  cards (industry not sampled). Twenty cards can miss a problem on under about 15 pct of rows.
+- **Not done:** A01 Software gaps (5.3M 2023-03-31, 0.74M 2024-03-31) not traced; 2026-06-30
+  fund-level figures not read; 156 debt rows unchecked (member spelling differs from the page).
+  Sotheby's keeps the wrong industry (not settable by row correction).
+- The agent ran a bare heredoc into `python -` once (stopped by its id) and wrote one helper with a
+  bash heredoc. Wrapper tests 681 passed.
