@@ -48,6 +48,9 @@ def test_split_name(name, issuer, cut, number):
 def test_shapes_name_what_is_left():
     assert shapes("Acme, Inc., First lien senior secured loan") == ["instrument_in_name"]
     assert shapes("Beta Holdings, LLC 2") == ["row_number_in_name"]
+    assert shapes("Madison Reed, Inc. One") == ["row_number_in_name"]     # spelled out (Trinity Capital)
+    assert shapes("Three Rivers Holdings, Inc.") == []                    # a number word inside the name
+    assert split_name("Madison Reed, Inc. One") == ("Madison Reed, Inc. One", "", "")   # reported, not cut
     assert shapes("Nouryon USA, LLC, Verdelite JV LP") == ["holder_label_in_name"]
     assert shapes("Blue Owl Credit SLF JV LLC") == []          # the joint venture is the issuer
     assert shapes("Acme, Inc.") == []

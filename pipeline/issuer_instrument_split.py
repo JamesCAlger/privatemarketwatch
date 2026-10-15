@@ -46,6 +46,10 @@ INSTRUMENT_CUT = re.compile(r"(?:\s*,\s*|\s+-\s+)(?=" + INSTRUMENT_PHRASE + r")(
 _SUFFIXES = ("Inc.", "Inc", "LLC", "L.L.C.", "Ltd.", "Ltd", "LP", "L.P.", "Corp.", "Corp", "Co.", "Limited", "GmbH",
              "plc", "PLC", "S.A.", "B.V.", "N.V.", "AB", "AS", "Company", "Holdings", "Sarl", "S.a r.l.", ")")
 ROW_NUMBER = re.compile(r"(?:" + "|".join("(?<=%s)" % re.escape(s) for s in _SUFFIXES) + r")\s*,?\s*\d{1,2}$")
+# The same, spelled out ('Madison Reed, Inc. One', Trinity Capital from 2025-03-31). Reported by
+# shapes() for the fund gate; not cut by the split (a fund's wrapper may).
+ROW_NUMBER_WORD = re.compile(r"(?:" + "|".join("(?<=%s)" % re.escape(s) for s in _SUFFIXES)
+                             + r")\s*,?\s+(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Eleven|Twelve)$")
 
 
 def enabled(reference: Path = REFERENCE) -> bool:
@@ -87,7 +91,7 @@ def shapes(name: str) -> list[str]:
     found = []
     if INSTRUMENT_CUT.search(name):
         found.append("instrument_in_name")
-    if ROW_NUMBER.search(name):
+    if ROW_NUMBER.search(name) or ROW_NUMBER_WORD.search(name):
         found.append("row_number_in_name")
     if re.search(r"(?i)\bJV\s+(?:LP|LLC)\b|\bjoint venture\b", name) and not re.match(r"(?i)^[^,]*\bJV\b[^,]*$", name):
         found.append("holder_label_in_name")
