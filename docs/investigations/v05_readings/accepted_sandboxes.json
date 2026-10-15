@@ -168,5 +168,10 @@
   "label": "tsxd",
   "accepted_on": "2026-10-15",
   "basis": "D-185, gate PASS in round 2; page sample 2 errors of 20 (rate tagged x0.01, stale issuer name), both fixed"
+ },
+ "0001925531": {
+  "label": "ngxd",
+  "accepted_on": "2026-10-15",
+  "basis": "D-186, gate PASS; page sample 0 published errors of 20; shared income change regression-checked on 0001869453 (rgng)"
  }
 }

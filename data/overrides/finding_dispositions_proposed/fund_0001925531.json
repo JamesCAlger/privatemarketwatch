@@ -1,0 +1,160 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "ngxd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-X02-1925531-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": ["0001925531"],
+   "quarters": ["2023-12-31", "2024-03-31", "2024-09-30", "2025-03-31", "2025-09-30"],
+   "statement": "The rows still flagged are undrawn commitment lines ('First Lien - Undrawn') that the page prints with a dash in the reference, spread and rate cells and that carry no rate tag. The check accepted for this reason (R-X02-no-rate-in-source) fails only on one line a quarter, because these lines print a small positive fair value ('$ 1,757 $ - $ 18') and the check's name-and-value search does not find the line: Coupa 2023-12-31 and 2024-03-31, PDQ.com 2024-03-31, GC Waves 2024-09-30, Associations 2025-03-31, OEConnection 2025-09-30, PetVet 2023-12-31. The one funded loan without a rate (Radwell 2023-09-30, no rate tag; printed 'SOFR(Q) + 6.75 % 12.14 %') is fixed by row correction and its quarter cleared by the check. No fix applies: there is no rate on the page.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-24-000004", "verbatim": "Coupa Holdings, LLC Software First Lien(4)(5) - Undrawn - - - 02/2023 08/2024 $ 1,757 $ - $ 18", "quote": "'Coupa Holdings, LLC Software First Lien(4)(5) - Undrawn - - - 02/2023 08/2024 $ 1,757 $ - $ 18': 2023-12-31, no rate, spread or reference printed; commitment 1,757, fair value 18."},
+    {"source": "filing", "accession": "0001925531-24-000008", "verbatim": "PDQ.com Corporation Software First Lien(4)(5) - Undrawn - - - 10/2023 10/2025 2,585 - 25", "quote": "'PDQ.com Corporation Software First Lien(4)(5) - Undrawn - - - 10/2023 10/2025 2,585 - 25': 2024-03-31, undrawn line, no rate printed."},
+    {"source": "filing", "accession": "0001925531-24-000020", "verbatim": "GC Waves Holdings, Inc. Financial Services First Lien(9) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34", "quote": "'GC Waves Holdings, Inc. Financial Services First Lien(9) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34': 2024-09-30, undrawn line, no rate printed."},
+    {"source": "filing", "accession": "0001925531-25-000008", "verbatim": "Associations, Inc. Business Services First Lien(8)(9) - Undrawn - - - 05/2024 07/2028 $ 1,597 $ - $ 16", "quote": "'Associations, Inc. Business Services First Lien(8)(9) - Undrawn - - - 05/2024 07/2028 $ 1,597 $ - $ 16': 2025-03-31, undrawn line, no rate printed."},
+    {"source": "filing", "accession": "0001925531-25-000018", "verbatim": "OEConnection LLC Software First Lien(9) - Undrawn - - - 12/2024 12/2026 $ 4,910 $ - $ 16", "quote": "'OEConnection LLC Software First Lien(9) - Undrawn - - - 12/2024 12/2026 $ 4,910 $ - $ 16': 2025-09-30, undrawn line, no rate printed."}
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py <label> 0001925531",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C107-1925531-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "reason_key": "c107-negative-cost-undrawn",
+   "ciks": ["0001925531"],
+   "quarters": ["2025-12-31"],
+   "statement": "The 83 flagged rows are undrawn commitment lines whose cost the 10-K prints in brackets (PetVet '$ 2,198 $ ( 22 ) $ ( 96 )', Einstein '3,560 ( 30 ) ( 36 )'); published cost -22,000 and -30,000 as printed. It is the reason already accepted by check (R-C107-negative-cost-undrawn); the check does not clear this quarter only because an earlier reviewer's real-error verdict is on record. That verdict's two rows are now published as printed (see addresses_verdict).",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found Acumatica (-8,000) and Anaplan (-48,000) undrawn lines published with a negative cost while the page prints a dash. In this build both are published with cost 0 and fair value 0 (Acumatica 'First Lien(8)(9) - Undrawn - - - 07/2025 07/2032 3,148 - - - %', Anaplan '07/2025 06/2028 2,460 - - - %'), so the error was fixed upstream; the remaining negative costs are printed in brackets."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-26-000003", "verbatim": "PetVet Care Centers, LLC Consumer Services First Lien(8)(9) - Undrawn - - - 10/2023 11/2029 $ 2,198 $ ( 22 ) $ ( 96 ) ( 0.01 ) %", "quote": "'PetVet Care Centers, LLC Consumer Services First Lien(8)(9) - Undrawn - - - 10/2023 11/2029 $ 2,198 $ ( 22 ) $ ( 96 ) ( 0.01 ) %': cost printed (22), published -22,000."},
+    {"source": "filing", "accession": "0001925531-26-000003", "verbatim": "Acumatica Holdings, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 07/2032 3,148 - - - %", "quote": "'Acumatica Holdings, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 07/2032 3,148 - - - %': the verdict's row, now published with cost 0."},
+    {"source": "filing", "accession": "0001925531-26-000003", "verbatim": "Anaplan, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 06/2028 2,460 - - - %", "quote": "'Anaplan, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 06/2028 2,460 - - - %': the verdict's second row, now published with cost 0."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> C107 0001925531 2025-12-31",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1925531-3",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": ["0001925531"],
+   "quarters": ["2023-09-30", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "statement": "Each flagged row has a second context on its member whose figure is not a schedule value, and every published value equals the row's printed line. Eclipse Topco preferred (2025-06-30 to 2026-03-31): the second context carries the stated value plus unpaid dividends from a footnote ($ 5,086 at 2025-06-30), not published (principal blank; units 461, cost and fair value from the row's own context, as printed). Packaging Coordinators SONIA loan (2025-12-31, 2026-03-31): the second context carries the filer's dollar equivalent of the sterling par (871,000; 850,000), unprinted; the published par is the printed 646 / 643. Higginbotham undrawn line (2023-09-30): a percent of 0.00 from the second context, printed '- %'. Fair value at risk 0.0 in every quarter. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-25-000014", "verbatim": "As of June 30, 2025, the Company's stated value of it's equity investment plus unpaid compounded dividends was $ 5,086", "quote": "'As of June 30, 2025, the Company's stated value of it's equity investment plus unpaid compounded dividends was $ 5,086': the footnote figure on Eclipse's second context (c-530)."},
+    {"source": "filing", "accession": "0001925531-25-000014", "verbatim": "Eclipse Topco, Inc. (12) Software Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,040 5,036", "quote": "'Eclipse Topco, Inc. (12) Software Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,040 5,036': published units 461, cost 5,040, fair value 5,036, rate 12.5."},
+    {"source": "filing", "accession": "0001925531-26-000003", "verbatim": "First Lien (4)(7)(8)(17) SONIA(D) + 4.50 % 8.22 % 10/2025 10/2032 GBP 646 866 866", "quote": "'First Lien (4)(7)(8)(17) SONIA(D) + 4.50 % 8.22 % 10/2025 10/2032 GBP 646 866 866': published par 646,000 GBP; the second context's 871,000 USD is not printed."},
+    {"source": "filing", "accession": "0001925531-23-000014", "verbatim": "Higginbotham Insurance Agency, Inc. Business Services First lien (4)(5) - Undrawn - - - 08/2023 08/2025 20,500 - - - %", "quote": "'Higginbotham Insurance Agency, Inc. Business Services First lien (4)(5) - Undrawn - - - 08/2023 08/2025 20,500 - - - %': published commitment 20,500, cost 0, fair value 0, percent 0.0."}
+   ],
+   "rerun": "python scripts/v05_evidence/merged.py <label> 0001925531",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1925531-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": ["0001925531"],
+   "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31"],
+   "statement": "income_yield_pct is the filer's printed 'Ratio to average members' capital: Net investment income' (annualised), a return on members' capital. The fund holds about 1.8 to 2.1 times its members' capital in investments (Total Investments 184.25 pct of members' capital at 2024-03-31), so net income over capital sits above the holdings' coupon plus 200bp. Published equals printed: 13.72, 13.99, 13.20, 12.29. No value is wrong; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-24-000008", "verbatim": "Ratio to average members' capital: Net investment income(4) 13.72 % 11.97 %", "quote": "'Ratio to average members' capital: Net investment income(4) 13.72 % 11.97 %': 2024-03-31 printed 13.72, published 13.72."},
+    {"source": "filing", "accession": "0001925531-24-000016", "verbatim": "Ratio to average members' capital: Net investment income(4) 13.99 % 11.66 %", "quote": "'Ratio to average members' capital: Net investment income(4) 13.99 % 11.66 %': 2024-06-30 printed 13.99, published 13.99."},
+    {"source": "filing", "accession": "0001925531-24-000020", "verbatim": "Ratio to average members' capital: Net investment income(4) 13.20 % 11.48 %", "quote": "'Ratio to average members' capital: Net investment income(4) 13.20 % 11.48 %': 2024-09-30 printed 13.20, published 13.20."},
+    {"source": "filing", "accession": "0001925531-25-000004", "verbatim": "Ratio to average members' capital: Net investment income (4) 12.29 % 11.37 % 9.88 %", "quote": "'Ratio to average members' capital: Net investment income (4) 12.29 % 11.37 % 9.88 %': 2024-12-31 printed 12.29, published 12.29."},
+    {"source": "filing", "accession": "0001925531-24-000008", "verbatim": "Total Investments $ 680,990 $ 695,570 184.25 %", "quote": "'Total Investments $ 680,990 $ 695,570 184.25 %': investments are 1.84 times members' capital."}
+   ],
+   "rerun": "grep F27 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F23-1925531-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F23",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": ["0001925531"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "statement": "F23 compares the sum of published percent of net assets with fair value over net assets. The schedule prints one percent per issuer, on the issuer's total line after its tranches ('5,589 5,515 5,589 2.32 %' for Radwell's two loans), and tags it on an issuer-level context that is not a position; a position row carries a percent only where the issuer has one line. So published percents cover about a third of the fair value (sum 71.23 against 171.23 at 2026-03-31), and every published percent equals the row's fair value over net assets (0 of 118 off at 2026-03-31). These findings appear because net assets are now published (declared from the printed balance sheet in this run; they were blank in every quarter, so F23 was skipped). No fix applies: no per-row percent is printed for the other rows.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-23-000014", "verbatim": "Radwell Parent, LLC Distribution & Logistics First lien (2)(4) SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2029 5,506 5,432 5,506 First lien (4)(5) - Drawn SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2028 83 83 83 5,589 5,515 5,589 2.32 %", "quote": "'... 5,506 5,432 5,506 First lien (4)(5) - Drawn ... 83 83 83 5,589 5,515 5,589 2.32 %': one percent for the issuer's two lines, printed on the issuer total."},
+    {"source": "filing", "accession": "0001925531-26-000010", "verbatim": "Total members' capital $ 1,180,992 $ 1,206,808", "quote": "'Total members' capital $ 1,180,992 $ 1,206,808': the net assets now published for 2026-03-31."}
+   ],
+   "rerun": "psql-free: python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001925531/pct.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F21-1925531-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F21",
+   "reason_key": "f21-holdings-over-net-assets-of-a-levered-fund",
+   "ciks": ["0001925531"],
+   "quarters": ["2023-06-30"],
+   "statement": "Holdings over net assets 2.79 at 2023-06-30, as printed: Total Investments 240,737 is 278.91 pct of members' capital 86,315. The fund was drawing debt ahead of capital calls in its first year (members' capital rose to 240,613 at 2023-09-30). Both figures are printed; no fix applies. The finding appears because net assets are now published.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-23-000011", "verbatim": "Total Investments $ 237,519 $ 240,737 278.91 %", "quote": "'Total Investments $ 237,519 $ 240,737 278.91 %': fair value 240,737 is 2.79 times members' capital."},
+    {"source": "filing", "accession": "0001925531-23-000011", "verbatim": "Total members' capital $ 86,315", "quote": "'Total members' capital $ 86,315': members' capital at 2023-06-30, now published as net assets."}
+   ],
+   "rerun": "grep F21 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-income_identity-1925531-7",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "reason_key": "income-identity-expense-support-net-below-gross",
+   "ciks": ["0001925531"],
+   "quarters": ["2022-12-31"],
+   "statement": "The identity takes total investment income less total expenses as net investment income. For the period from 2022-05-09 to 2022-12-31 the filer's total expenses (4,751) were reduced by waived management fees (508) to net expenses of 4,243, so net investment income (1,634) is income 5,877 less net expenses, not less gross expenses. The three figures are stored scaled by the same 3/8 (eight-month period), so the 31 pct gap is the waiver, not the scale. The quarter figures published in fund_financials are now the year less the two 10-Q quarters (first_income_year_ends, extended in this run to a first year shorter than twelve months): income 3,164. No fix applies to the identity.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-23-000003", "verbatim": "Total expenses 4,751 Less: management fees waived (See Note 5) (508) Net expenses 4,243 Net investment income 1,634", "quote": "'Total expenses 4,751 Less: management fees waived (See Note 5) (508) Net expenses 4,243 Net investment income 1,634': 5,877 - 4,243 = 1,634."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001925531/hl.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F28-1925531-8",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "ciks": ["0001925531"],
+   "quarters": ["2026-08-11"],
+   "statement": "The fund-level row dated 2026-08-11 holds only the unit count from the cover page of the 10-Q for 2026-06-30 ('units outstanding as of August 11, 2026 was 120,834,931'). It is not a reporting period, so no schedule exists for it; the check expects holdings for every fund-level date. The same row type at 2022 dates was dispositioned not applicable. No fix applies in the fund's settings.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001925531-26-000014", "verbatim": "The number of the registrant's limited liability company units outstanding as of August 11, 2026 was 120,834,931", "quote": "'The number of the registrant's limited liability company units outstanding as of August 11, 2026 was 120,834,931': the cover-page date that creates the row."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001925531/ff.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox ngxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

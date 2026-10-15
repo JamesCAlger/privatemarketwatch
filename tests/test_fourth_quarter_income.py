@@ -83,6 +83,27 @@ def test_a_year_with_two_quarters_keeps_the_average_unless_its_fund_and_year_are
     assert _quarters_declared(HPS_2023, {("0001838126", "2023-12-31")})[("0001838126", "2023q4")][0] == pytest.approx(264.7)
 
 
+# New Mountain Guardian IV began on 2022-05-09: 10-Qs of 709 (two months) and 2,004, and a 10-K of 5,877 for eight
+# months, stored as 5,877 x 3 / 8 = 2,203.875
+GUARDIAN4_2022 = [_income("1925531", "2022-06-30", 2, 709.0, 1096.0), _income("1925531", "2022-09-30", 3, 2004.0, 1414.0),
+                  _income("1925531", "2022-12-31", 8, 2203.875, 1781.625)]
+
+
+def test_a_declared_first_year_shorter_than_twelve_months_is_the_period_figure_less_the_quarters_filed():
+    out = _quarters_declared(GUARDIAN4_2022, {("0001925531", "2022-12-31")})
+    assert out[("0001925531", "2022q4")][0] == pytest.approx(5877.0 - 709.0 - 2004.0)          # 3,164
+    assert out[("0001925531", "2022q4")][1] == pytest.approx(1781.625 * 8 / 3 - 1096.0 - 1414.0)
+    assert out[("0001925531", "2022q3")] == (2004.0, 1414.0)
+    # a full-year declared first year is unchanged (x 4)
+    assert _quarters_declared(OWLTECH_2022, {("0001869453", "2022-12-31")})[("0001869453", "2022q4")][0] == pytest.approx(50685.0)
+
+
+def test_a_short_annual_period_keeps_the_stored_figure_unless_its_fund_and_year_are_declared():
+    assert _quarters(GUARDIAN4_2022)[("0001925531", "2022q4")] == (2203.875, 1781.625)
+    assert _quarters_declared(GUARDIAN4_2022, {("0001869453", "2022-12-31")})[("0001925531", "2022q4")][0] == 2203.875
+    assert _quarters_declared(GUARDIAN4_2022, {("0001925531", "2023-12-31")})[("0001925531", "2022q4")][0] == 2203.875
+
+
 def test_a_figure_missing_in_one_quarter_keeps_its_average_while_the_others_are_computed():
     rows = [dict(r) for r in HPS_2023]
     rows[1]["total_expenses"] = None

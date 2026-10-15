@@ -120,7 +120,7 @@
       }
     ],
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Cash\\s+and\\s+Investments|Subtotal|Sub-Total)\\s*$",
-    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:First\\s+lien|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock))(?:\\s*-\\s*[A-Za-z ]+)?(?:\\s+\\d{1,2})?\\s*$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:(?:First\\s+(?:lien|ien|line|drawn)|Frst\\s+lien|Fist\\s+lien|Second\\s+lien|Subordinated|Structured\\s+Finance\\s+Obligations|(?:(?:Series|Class)\\s+[A-Z](?:-\\d)?\\s+)?(?:Preferred\\s+(?:shares|units)|Ordinary\\s+shares|Common\\s+(?:shares|units|stock)))(?:\\s*-\\s*[A-Za-z ]+|\\s+(?:Drawn|Undrawn))?(?:\\s+\\d{1,2})?|(?<=,\\s)(?:Series|Class)\\s+[A-Z](?:-\\d)?)\\s*$",
     "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
@@ -233,6 +233,10 @@
     ],
     "reference_rate_columns": [
       "Reference"
+    ],
+    "reference_rate_codes": [
+      "P=PRIME",
+      "L=LIBOR"
     ],
     "schedule_row_tags": [
       "quantity_or_percent"

@@ -4599,3 +4599,42 @@ Compared with `spoff2`. Two rounds; four builds.
   Surewerx CAD tranche 2026-03-31 (0.2M); 'ManTech' respelled by a shared naming step; Sweep Midco
   2026-03-31 rate 0.0 from stale member text.
 - The agent wrote the proposals file and ran one read-only `python -c` while builds ran.
+
+### D-186 New Mountain Guardian IV through the fund-clearing skill (sandbox `ngxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; four builds.
+
+- **Ledger:** 57 findings, 32 outstanding (23 in the first build), all 32 proposed; totals tie in 14
+  of 14 quarters. The rise is from publishing net assets, which lets F23 (14 quarters) and F21
+  (2023-06-30) run; both proposed.
+- **Shared code:** `pipeline/fund_financials.py` `quarter_income_sql`: a declared first income year
+  (`first_income_year_ends`) may have an annual statement shorter than twelve months; the period
+  figure is scaled by months / 3 instead of 4. Guardian IV's first 10-K covers eight months from
+  2022-05-09: Q4 2022 income was 2,204, now 3,164. 2 new tests in `tests/test_fourth_quarter_income.py`
+  (with `test_fund_financials` 141 passed). Regression: the only other fund declaring the setting,
+  0001869453, rebuilt alone as `rgng` against `rg2`: fund_financials identical; holdings moved only
+  in gics_sub_industry (73 rows, 4 labels lost) and gics_sector (43), the build-composition GICS
+  defect below, not this change.
+- **Fixed (wrapper):** reference codes P=PRIME, L=LIBOR (about 44 rows had a date-guessed rate);
+  `issuer_name_strip_re` for the filer's misspellings ('Frst lien', 'Fist lien', 'First ien') and
+  'Structured Finance Obligations', class prefixes and 'Undrawn' (15 names, 22 rows).
+- **Fixed (new highlights wrapper):** net assets and units outstanding blank in every quarter (members'
+  capital tagged `MembersEquity`), declared from the printed balance sheet for 17 quarters; the
+  2022-09-30 distribution per unit was the since-inception 0.48, now 0.37 (F16).
+- **Fixed (37 specs, 137 lines):** 31 fixed coupons published floating with the coupon as spread
+  (Panzura, Virtusa, Capstone, HIG and Portage preferred); Radwell 2023-09-30 rate (X02); Panzura and
+  Knockout unit counts (C04 2023-12-31); Packaging Coordinators 2026-03-31 printed 'EUR' on a
+  sterling loan, set to GBP.
+- **Proposed:** X02 x5, C107 2025-12-31 (answers the earlier verdict: Acumatica, Anaplan now cost 0
+  as printed), merged_context_excluded x5, F27 x4, F23 x14 (new key
+  `f23-percent-printed-once-per-issuer-group`), F21 2023-06-30, income_identity 2022-12-31 (a 508
+  fee waiver), F28 2026-08-11 (new key `f28-cover-page-unit-count-date-not-a-quarter`).
+- **Page sample:** 20 cards, 0 published errors. Twenty cards can miss a problem on under about 15
+  pct of rows.
+- **Shared causes seen:** GICS labels depend on which funds are built together (351 rows differ
+  from `spoff3` with no edit; 26 KWOR rows lose their label; also 30 rows in D-184); a reference
+  column printing 'Fixed' is not read as no benchmark; `MembersEquity` not mapped to net assets; an
+  industry printed after the company name is not read. Candidate: the D-168, D-179, D-181 halved
+  first-period income may be fixable by declaring `first_income_year_ends` (not tried).
+- The agent ran one short `python -c`, used `sed -i` on scratch files and a spec script, and ran
+  read-only lookups during builds.

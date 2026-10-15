@@ -1,0 +1,398 @@
+[
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Panzura, LLC, First lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-23-000014, context c-72): 'Panzura, LLC Software First lien (4) Fixed(Q)* + 2.00 % + 13.00 %/PIK 15.00 % 08/2023 08/2027 6,000 5,411 5,400'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000004, context c-96): 'Panzura, LLC Software First Lien(4) Fixed(Q)* + 2.00 %+ 15.00 %/PIK 17.00 % 08/2023 08/2027 6,292 5,731 5,671'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000008, context c-114): 'Panzura, LLC Software First Lien(4) Fixed(Q)* + 4.00 % + 15.00 %/PIK 19.00 % 08/2023 08/2027 $ 6,531 $ 5,998 $ 5,878'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000016, context c-165): 'Panzura, LLC Software First Lien(5) Fixed(Q)* + 4.00 % + 15.00 %/PIK 19.00 % 08/2023 08/2027 6,779 6,272 6,101'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000020, context c-192): 'Panzura, LLC Software First Lien(8) FIXED(Q)* + 4.00 % + 15.00 %/PIK 19.00 % 08/2023 08/2027 $ 7,044 $ 6,567 $ 6,340'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000004, context c-226): 'Panzura, LLC Software First Lien(8) Fixed(Q)* + 4.00 % + 13.00 %/PIK 17.00 % 08/2023 08/2027 7,308 6,861 6,935'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Panzura, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000008, context c-214): 'Panzura, LLC Software First Lien(8) Fixed(Q)* + 4.00 % + 11.00 %/PIK 15.00 % 08/2023 08/2027 7,509 7,096 7,084'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Panzura, LLC First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000014, context c-237): 'Panzura, LLC Software First Lien(8) Fixed(Q)* + 4.00 % + 11.00 %/PIK 15.00 % 08/2023 08/2027 7,718 7,343 7,325'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Panzura Holdings, LLC, First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "issuer_name": "Panzura, LLC",
+   "instrument_description": "First Lien"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000018, context c-229): 'Panzura, LLC Software First Lien(8) Fixed(Q)* 4.00 %+ 11.00 %/PIK 15.00 % 08/2023 08/2027 7,935 7,600 7,506'. The member names the holding company; the page prints the loan under the borrower Panzura, LLC"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Panzura, LLC | First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000003, context c-265): 'Panzura, LLC Software First Lien(8) Fixed(Q)* 7.00 %+ 8.00 %/PIK 15.00 % 08/2023 08/2027 8,098 7,804 7,651'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Panzura, LLC | First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000010, context c-261): 'Panzura, LLC Software First Lien(8) Fixed(Q)* 9.00 % + 8.00 %/PIK 17.00 % 08/2023 08/2027 8,260 8,007 7,508'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-23-000007, context if7027c6ac9c34034a4b3604878ae801e_I20230331): 'Virtusa Corporation Business Services Subordinated Fixed(S) + 7.13 % 7.13 % 07/2022 12/2028 10,023 7,761 7,889'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-23-000011, context c-40): 'Virtusa Corporation Business Services Subordinated Fixed(S) 7.13 % 7.13 % 07/2022 12/2028 10,023 7,829 8,196'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-23-000014, context c-41): 'Virtusa Corporation Business Services Subordinated Fixed(S) + 7.13 % 7.13 % 07/2022 12/2028 16,420 13,177 13,280'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000004, context c-58): 'Virtusa Corporation Business Services Subordinated FIXED(S) + 7.13 % 7.13 % 07/2022 12/2028 17,695 14,314 15,202'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000008, context c-70): 'Virtusa Corporation Business Services Subordinated Fixed(S) + 7.13 % 7.13 % 07/2022 12/2028 19,295 15,867 17,342'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000016, context c-114): 'Virtusa Corporation Business Services Subordinated Fixed(S) + 7.13 % 7.13 % 07/2022 12/2028 19,295 16,000 17,775'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Virtusa Corporation, Subordinated",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-24-000020, context c-122): 'Virtusa Corporation Business Services Subordinated FIXED(S) + 7.13 % 7.13 % 07/2022 12/2028 19,295 16,147 18,285'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Capstone Borrower, Inc. | First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000010, context c-335): 'Capstone Borrower, Inc. Business Services First Lien Fixed(S) 8.00 % 8.00 % 03/2026 06/2030 2,649 2,277 2,534'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Capstone Borrower, Inc. | First Lien",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000014, context c-249): 'Capstone Borrower, Inc. Business Services First Lien Fixed(S) 8.00 % 8.00 % 03/2026 06/2030 11,479 10,873 10,922'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "HIG Intermediate, Inc. Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000008, context c-298): 'HIG Intermediate, Inc. (14) Business Services Preferred shares Fixed(Q) 10.50 % 10.50 % 12/2024 - 14,557 $ 14,448'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "HIG Intermediate, Inc., Series A preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000014, context c-332): 'HIG Intermediate, Inc. (14) Business Services Series A preferred shares (8) Fixed(Q) 10.50 % 10.50 % 12/2024 - 14,557 $ 14,448'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "HIG Intermediate, Inc., Series A preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000018, context c-335): 'HIG Intermediate, Inc. (14) Business Services Series A preferred shares (8) Fixed(Q) 10.50 % 10.50 % 12/2024 - 14,558 $ 14,448 $ 14,449'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "HIG Intermediate, Inc. | Series A preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000010, context c-376): 'HIG Intermediate, Inc. (14) Business Services Series A preferred shares (8) Fixed(Q) 10.50 % 10.50 % 12/2024 - 14,558'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "HIG Intermediate, Inc. | Series A preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000014, context c-403): 'HIG Intermediate, Inc. (14) Business Services Series A preferred shares (8) Fixed(Q) 10.50 % 10.50 % 12/2024 - 14,558'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Portage Point Partners, LP, Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000008, context c-299): 'Portage Point Partners, LP Business Services Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 77,399 7,910 7,907'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Portage Point Partners, LP, Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000014, context c-333): 'Portage Point Partners, LP Business Services Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 77,399 7,663'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Portage Point Partners, LP, Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-25-000018, context c-336): 'Portage Point Partners, LP Business Services Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 77,399 7,663 7,740'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Portage Point Partners, LP | Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000003, context c-377): 'Portage Point Partners, LP Financial Services & Technology Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 77,399 $ 7,663 $ 7,740'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Portage Point Partners, LP | Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000010, context c-377): 'Portage Point Partners, LP Financial Services & Technology Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 77,399 7,663 7,740'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Portage Point Partners, LP | Preferred shares",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon published as floating: the Reference column prints 'Fixed', the filer tags the coupon (or its cash part) as a spread, and the build guessed SOFR/LIBOR from the date. No benchmark, no spread; the rate and any PIK rate are left as tagged. Printed (0001925531-26-000014, context c-404): 'Portage Point Partners, LP Financial Services & Technology Preferred shares (5)(8) Fixed(S) 14.00 % 14.00 % 09/2024 - 33,746 3,341 3,375'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Radwell Parent, LLC, First lien",
+  "fields": {
+   "interest_rate": "12.14",
+   "basis_spread": "6.75",
+   "reference_rate_type": "SOFR",
+   "coupon_type": "Floating"
+  },
+  "reason": "No rate or spread fact on the row's context (principal, cost and fair value only); the printed line reads (0001925531-23-000014, context c-69): 'Radwell Parent, LLC Distribution & Logistics First lien (2)(4) SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2029 5,506 5,432 5,506'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Panzura Holdings, LLC Ordinary shares",
+  "fields": {
+   "shares_held": "88767"
+  },
+  "reason": "Unit count as printed (published 88,767,000: the filer tagged the count with scale 3). Printed (0001925531-23-000014, context c-124): 'Panzura Holdings, LLC (8) Software Ordinary Shares (3) - - - 09/2023 - 88,767'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Panzura Holdings, LLC , Ordinary Shares",
+  "fields": {
+   "shares_held": "88767"
+  },
+  "reason": "Unit count as printed (published 88,767,000: the filer tagged the count with scale 3). Printed (0001925531-24-000008, context c-191): 'Panzura Holdings, LLC (8) Software Ordinary Shares (3)(4) - - - 09/2023 - 88,767'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Panzura Holdings, LLC, Ordinary Shares",
+  "fields": {
+   "shares_held": "88767"
+  },
+  "reason": "Unit count as printed (published blank: no unit fact on the context). Printed (0001925531-24-000004, context c-166): 'Panzura Holdings, LLC (8) Software Ordinary Shares (3)(4) - - - 09/2023 - 88,767'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Knockout Intermediate Holdings I Inc., Preferred shares",
+  "fields": {
+   "shares_held": "789"
+  },
+  "reason": "Unit count as printed (published blank: no unit fact on the context). Printed (0001925531-24-000004, context c-165): 'Knockout Intermediate Holdings I Inc. (7) Software Preferred shares (4) Fixed(S)* 11.75 %/PIK 11.75 % 06/2022 - 789'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Packaging Coordinators Midco, Inc. | First Lien 3",
+  "fields": {
+   "principal_amount_currency": "GBP",
+   "principal_fx_rate_to_usd": "1.3184",
+   "principal_amount_usd": "847731.2"
+  },
+  "reason": "Par 643 printed and tagged in EUR on a SONIA loan; the same loan is printed 'GBP 646' at 2025-12-31 and 'GBP 641' at 2026-06-30, and the filer's own dollar fact on a second context of this member is 850,000 (643 x 1.3184 = 848 at the build's sterling rate for the date; 643 euros would be 741). Sterling at 1.3184 (FRED DEXUSUK 2026-03-31). Printed (0001925531-26-000010, context c-276): 'First Lien(4)(7)(8)(18) SONIA(D) + 5.00 % 8.73 % 10/2025 10/2032 EUR 643 842 846'"
+ }
+]

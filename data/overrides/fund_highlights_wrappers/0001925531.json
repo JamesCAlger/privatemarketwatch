@@ -1,0 +1,222 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001925531",
+ "entity_name": "New Mountain Guardian IV BDC, L.L.C.",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2022-06-30",
+   "field": "net_assets",
+   "value": 23847000,
+   "evidence": "0001925531-22-000006 (10-Q, 2022-06-30) balance sheet: 'Members' Capital Common units, 2,458,000 units issued and outstanding 24,580 Accumulated overdistributed earnings (733) Total members' capital $ 23,847' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2022-06-30",
+   "field": "shares_outstanding",
+   "value": 2458000,
+   "evidence": "0001925531-22-000006 (10-Q, 2022-06-30) balance sheet: 'Members' Capital Common units, 2,458,000 units issued and outstanding 24,580 Accumulated overdistributed earnings (733) Total members' capital $ 23,847'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "net_assets",
+   "value": 38055000,
+   "evidence": "0001925531-22-000009 (10-Q, 2022-09-30) balance sheet: 'Members' Capital Common units, 3,978,000 units issued and outstanding 39,780 Accumulated overdistributed earnings (1,725) Total members' capital $ 38,055' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "shares_outstanding",
+   "value": 3978000,
+   "evidence": "0001925531-22-000009 (10-Q, 2022-09-30) balance sheet: 'Members' Capital Common units, 3,978,000 units issued and outstanding 39,780 Accumulated overdistributed earnings (1,725) Total members' capital $ 38,055'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "net_assets",
+   "value": 73517000,
+   "evidence": "0001925531-23-000003 (10-K, 2022-12-31) balance sheet: 'Members' Capital Common units, 7,525,831 units issued and outstanding 74,684 Accumulated overdistributed earnings (1,167) Total members' capital $ 73,517' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "shares_outstanding",
+   "value": 7525831,
+   "evidence": "0001925531-23-000003 (10-K, 2022-12-31) balance sheet: 'Members' Capital Common units, 7,525,831 units issued and outstanding 74,684 Accumulated overdistributed earnings (1,167) Total members' capital $ 73,517'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "net_assets",
+   "value": 84131000,
+   "evidence": "0001925531-23-000007 (10-Q, 2023-03-31) balance sheet: 'Members' Capital Common units, 8,508,331 and 7,525,831 units issued and outstanding, respectively 84,509 74,684 Accumulated overdistributed earnings ( 378 ) ( 1,167 ) Total members' capital $ 84,131' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "shares_outstanding",
+   "value": 8508331,
+   "evidence": "0001925531-23-000007 (10-Q, 2023-03-31) balance sheet: 'Members' Capital Common units, 8,508,331 and 7,525,831 units issued and outstanding, respectively 84,509 74,684 Accumulated overdistributed earnings ( 378 ) ( 1,167 ) Total members' capital $ 84,131'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "net_assets",
+   "value": 86315000,
+   "evidence": "0001925531-23-000011 (10-Q, 2023-06-30) balance sheet: 'Members' Capital Common units, 8,508,331 and 7,525,831 units issued and outstanding, respectively 84,509 74,684 Accumulated underdistributed (overdistributed) earnings 1,806 ( 1,167 ) Total members' capital $ 86,315' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "shares_outstanding",
+   "value": 8508331,
+   "evidence": "0001925531-23-000011 (10-Q, 2023-06-30) balance sheet: 'Members' Capital Common units, 8,508,331 and 7,525,831 units issued and outstanding, respectively 84,509 74,684 Accumulated underdistributed (overdistributed) earnings 1,806 ( 1,167 ) Total members' capital $ 86,315'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "net_assets",
+   "value": 240613000,
+   "evidence": "0001925531-23-000014 (10-Q, 2023-09-30) balance sheet: 'Members' Capital Common units, 23,525,081 and 7,525,831 units issued and outstanding, respectively 234,676 74,684 Accumulated underdistributed (overdistributed) earnings 5,937 ( 1,167 ) Total members' capital $ 240,613' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "shares_outstanding",
+   "value": 23525081,
+   "evidence": "0001925531-23-000014 (10-Q, 2023-09-30) balance sheet: 'Members' Capital Common units, 23,525,081 and 7,525,831 units issued and outstanding, respectively 234,676 74,684 Accumulated underdistributed (overdistributed) earnings 5,937 ( 1,167 ) Total members' capital $ 240,613'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "net_assets",
+   "value": 276573000,
+   "evidence": "0001925531-24-000004 (10-K, 2023-12-31) balance sheet: 'Members' Capital Common units, 26,941,956 and 7,525,831 units issued and outstanding, respectively 266,112 74,684 Accumulated underdistributed (overdistributed) earnings 10,461 ( 1,167 ) Total members' capital $ 276,573' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "shares_outstanding",
+   "value": 26941956,
+   "evidence": "0001925531-24-000004 (10-K, 2023-12-31) balance sheet: 'Members' Capital Common units, 26,941,956 and 7,525,831 units issued and outstanding, respectively 266,112 74,684 Accumulated underdistributed (overdistributed) earnings 10,461 ( 1,167 ) Total members' capital $ 276,573'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "net_assets",
+   "value": 377512000,
+   "evidence": "0001925531-24-000008 (10-Q, 2024-03-31) balance sheet: 'Members' Capital Common units, 36,730,456 and 26,941,956 units issued and outstanding, respectively 363,997 266,112 Accumulated underdistributed (overdistributed) earnings 13,515 10,461 Total members' capital $ 377,512' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "shares_outstanding",
+   "value": 36730456,
+   "evidence": "0001925531-24-000008 (10-Q, 2024-03-31) balance sheet: 'Members' Capital Common units, 36,730,456 and 26,941,956 units issued and outstanding, respectively 363,997 266,112 Accumulated underdistributed (overdistributed) earnings 13,515 10,461 Total members' capital $ 377,512'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "net_assets",
+   "value": 457815000,
+   "evidence": "0001925531-24-000016 (10-Q, 2024-06-30) balance sheet: 'Members' Capital Common units, 44,882,706 and 26,941,956 units issued and outstanding, respectively 445,519 266,112 Accumulated underdistributed (overdistributed) earnings 12,296 10,461 Total members' capital $ 457,815' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "shares_outstanding",
+   "value": 44882706,
+   "evidence": "0001925531-24-000016 (10-Q, 2024-06-30) balance sheet: 'Members' Capital Common units, 44,882,706 and 26,941,956 units issued and outstanding, respectively 445,519 266,112 Accumulated underdistributed (overdistributed) earnings 12,296 10,461 Total members' capital $ 457,815'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "net_assets",
+   "value": 673397000,
+   "evidence": "0001925531-24-000020 (10-Q, 2024-09-30) balance sheet: 'Members' Capital Common units, 66,479,611 and 26,941,956 units issued and outstanding, respectively 661,488 266,112 Accumulated underdistributed (overdistributed) earnings 11,909 10,461 Total members' capital $ 673,397' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "shares_outstanding",
+   "value": 66479611,
+   "evidence": "0001925531-24-000020 (10-Q, 2024-09-30) balance sheet: 'Members' Capital Common units, 66,479,611 and 26,941,956 units issued and outstanding, respectively 661,488 266,112 Accumulated underdistributed (overdistributed) earnings 11,909 10,461 Total members' capital $ 673,397'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "net_assets",
+   "value": 820098000,
+   "evidence": "0001925531-25-000004 (10-K, 2024-12-31) balance sheet: 'Members' Capital Common units, 80,974,363 and 26,941,956 units issued and outstanding, respectively 806,386 266,112 Accumulated underdistributed (overdistributed) earnings 13,712 10,461 Total members' capital $ 820,098' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "shares_outstanding",
+   "value": 80974363,
+   "evidence": "0001925531-25-000004 (10-K, 2024-12-31) balance sheet: 'Members' Capital Common units, 80,974,363 and 26,941,956 units issued and outstanding, respectively 806,386 266,112 Accumulated underdistributed (overdistributed) earnings 13,712 10,461 Total members' capital $ 820,098'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "net_assets",
+   "value": 817932000,
+   "evidence": "0001925531-25-000008 (10-Q, 2025-03-31) balance sheet: 'Members' Capital Common units, 80,974,363 and 80,974,363 units issued and outstanding, respectively 806,386 806,386 Accumulated underdistributed (overdistributed) earnings 11,546 13,712 Total members' capital $ 817,932' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "shares_outstanding",
+   "value": 80974363,
+   "evidence": "0001925531-25-000008 (10-Q, 2025-03-31) balance sheet: 'Members' Capital Common units, 80,974,363 and 80,974,363 units issued and outstanding, respectively 806,386 806,386 Accumulated underdistributed (overdistributed) earnings 11,546 13,712 Total members' capital $ 817,932'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "net_assets",
+   "value": 812742000,
+   "evidence": "0001925531-25-000014 (10-Q, 2025-06-30) balance sheet: 'Members' Capital Common units, 80,974,363 and 80,974,363 units issued and outstanding, respectively 806,386 806,386 Accumulated underdistributed (overdistributed) earnings 6,356 13,712 Total members' capital $ 812,742' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "shares_outstanding",
+   "value": 80974363,
+   "evidence": "0001925531-25-000014 (10-Q, 2025-06-30) balance sheet: 'Members' Capital Common units, 80,974,363 and 80,974,363 units issued and outstanding, respectively 806,386 806,386 Accumulated underdistributed (overdistributed) earnings 6,356 13,712 Total members' capital $ 812,742'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "net_assets",
+   "value": 871023000,
+   "evidence": "0001925531-25-000018 (10-Q, 2025-09-30) balance sheet: 'Members' Capital Common units, 87,013,843 and 80,974,363 units issued and outstanding, respectively 866,781 806,386 Accumulated underdistributed (overdistributed) earnings 4,242 13,712 Total members' capital $ 871,023' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "shares_outstanding",
+   "value": 87013843,
+   "evidence": "0001925531-25-000018 (10-Q, 2025-09-30) balance sheet: 'Members' Capital Common units, 87,013,843 and 80,974,363 units issued and outstanding, respectively 866,781 806,386 Accumulated underdistributed (overdistributed) earnings 4,242 13,712 Total members' capital $ 871,023'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "net_assets",
+   "value": 1206808000,
+   "evidence": "0001925531-26-000003 (10-K, 2025-12-31) balance sheet: 'Members' Capital Common units, 120,834,931 and 80,974,363 units issued and outstanding, respectively 1,204,992 806,386 Accumulated underdistributed (overdistributed) earnings 1,816 13,712 Total members' capital $ 1,206,808' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "shares_outstanding",
+   "value": 120834931,
+   "evidence": "0001925531-26-000003 (10-K, 2025-12-31) balance sheet: 'Members' Capital Common units, 120,834,931 and 80,974,363 units issued and outstanding, respectively 1,204,992 806,386 Accumulated underdistributed (overdistributed) earnings 1,816 13,712 Total members' capital $ 1,206,808'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "net_assets",
+   "value": 1180992000,
+   "evidence": "0001925531-26-000010 (10-Q, 2026-03-31) balance sheet: 'Members' Capital Common units, 120,834,931 and 120,834,931 units issued and outstanding, respectively 1,204,992 1,204,992 Accumulated underdistributed (overdistributed) earnings ( 24,000 ) 1,816 Total members' capital $ 1,180,992' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "shares_outstanding",
+   "value": 120834931,
+   "evidence": "0001925531-26-000010 (10-Q, 2026-03-31) balance sheet: 'Members' Capital Common units, 120,834,931 and 120,834,931 units issued and outstanding, respectively 1,204,992 1,204,992 Accumulated underdistributed (overdistributed) earnings ( 24,000 ) 1,816 Total members' capital $ 1,180,992'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "net_assets",
+   "value": 1181973000,
+   "evidence": "0001925531-26-000014 (10-Q, 2026-06-30) balance sheet: 'Members' Capital Common units, 120,834,931 and 120,834,931 units issued and outstanding, respectively 1,204,992 1,204,992 Accumulated underdistributed (overdistributed) earnings ( 23,019 ) 1,816 Total members' capital $ 1,181,973' (in thousands). The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank in every quarter."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "shares_outstanding",
+   "value": 120834931,
+   "evidence": "0001925531-26-000014 (10-Q, 2026-06-30) balance sheet: 'Members' Capital Common units, 120,834,931 and 120,834,931 units issued and outstanding, respectively 1,204,992 1,204,992 Accumulated underdistributed (overdistributed) earnings ( 23,019 ) 1,816 Total members' capital $ 1,181,973'. Units outstanding were blank in every quarter."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "distribution_per_share",
+   "value": 0.37,
+   "evidence": "0001925531-22-000009 (10-Q, 2022-09-30) note 9: 'Per Unit Amount June 27, 2022 June 28, 2022 July 20, 2022 $ 0.11 September 1, 2022 September 5, 2022 October 20, 2022 0.25 September 28, 2022 September 29, 2022 October 20, 2022 0.12 $ 0.48'. The quarter's distributions are 0.25 + 0.12 = 0.37; 0.48 is the period from 2022-05-09 and repeats the 0.11 of the second quarter."
+  }
+ ],
+ "first_income_year_ends": [
+  "2022-12-31"
+ ],
+ "notes": "Net assets: the filer prints 'Total members' capital' and tags it us-gaap:MembersEquity; the shared reader takes StockholdersEquity / NetAssetsOrNetAssets / MembersCapital / PartnersCapital only (owner question 8 of 2026-10-12 is the cohort-wide concept order), so the printed figure is declared per quarter. First income year 2022: 0001925531-23-000003 (10-K, 2022-12-31) 'Since the Company commenced operations on May 9, 2022' and 'Total investment income 5,877'; the 10-Qs print 709 (quarter to 2022-06-30) and 2,004 (quarter to 2022-09-30), so the fourth quarter is 5,877 less 2,713 = 3,164; it had been published as 5,877 x 3/8 = 2,204."
+}

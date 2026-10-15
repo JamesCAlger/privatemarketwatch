@@ -1041,14 +1041,21 @@ def quarter_income_sql(table: str, columns: set, first_income_years=()) -> str:
                      for c in _INCOME_FLOWS)
     declared = sorted({(str(cik).strip().zfill(10), str(day)[:10]) for cik, day in first_income_years
                        if str(cik).strip().isdigit() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day)[:10])})
-    first_year = ("(b.cik || '|' || CAST(b.day AS VARCHAR) IN (" + ", ".join("'%s|%s'" % pair for pair in declared) + "))"
-                  if declared else "false")
+    pairs = ", ".join("'%s|%s'" % pair for pair in declared)
+    first_year = ("(b.cik || '|' || CAST(b.day AS VARCHAR) IN (" + pairs + "))") if declared else "false"
+    first_year_raw = ("(LPAD(CAST(cik AS VARCHAR), 10, '0') || '|' || CAST(report_date AS VARCHAR)[:10] IN (" + pairs + "))"
+                      if declared else "false")
+    # A declared first year's annual statement may cover less than twelve months (New Mountain Guardian IV: 10-K for
+    # 2022 from 2022-05-09, eight months). The table stores a period figure as figure x 3 / months, so the period
+    # figure is the stored one x months / 3 (x 4 for a full year, as before).
+    year_end = f"(b.months BETWEEN 11 AND 13 OR ({first_year} AND b.months BETWEEN 4 AND 13))"
+    scale = f"(CASE WHEN b.months BETWEEN 11 AND 13 THEN 4.0 ELSE b.months / 3.0 END)"
     # three filed quarters, or every filed quarter of a declared first year (one or two)
     complete = f"(p.quarters = 3 OR ({first_year} AND p.quarters BETWEEN 1 AND 2))"
     quarter = ",\n                ".join(
-        f"CASE WHEN b.months BETWEEN 11 AND 13 AND {complete} AND p.{c}_n = p.quarters "
-        f"AND NOT (p.{c}_up = p.quarters AND 4.0*b.{c} < p.{c}_three) AND NOT (p.{c}_down = p.quarters AND 4.0*b.{c} > p.{c}_three) "
-        f"THEN 4.0*b.{c} - p.{c}_three ELSE b.{c} END AS {c}" for c in _INCOME_FLOWS)
+        f"CASE WHEN {year_end} AND {complete} AND p.{c}_n = p.quarters "
+        f"AND NOT (p.{c}_up = p.quarters AND {scale}*b.{c} < p.{c}_three) AND NOT (p.{c}_down = p.quarters AND {scale}*b.{c} > p.{c}_three) "
+        f"THEN {scale}*b.{c} - p.{c}_three ELSE b.{c} END AS {c}" for c in _INCOME_FLOWS)
     maxima = ", ".join(f"max({c}) AS {c}" for c in _INCOME_FLOWS)
     return f"""
             SELECT b.cik, b.report_quarter,
@@ -1063,7 +1070,8 @@ def quarter_income_sql(table: str, columns: set, first_income_years=()) -> str:
                 SELECT a.cik, a.day, count(*) AS quarters, {sums}
                 FROM (SELECT DISTINCT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
                              TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day
-                      FROM {table} WHERE TRY_CAST(duration_months AS INTEGER) BETWEEN 11 AND 13) a
+                      FROM {table} WHERE TRY_CAST(duration_months AS INTEGER) BETWEEN 11 AND 13
+                         OR ({first_year_raw} AND TRY_CAST(duration_months AS INTEGER) BETWEEN 4 AND 13)) a
                 JOIN (SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
                              TRY_CAST(CAST(report_date AS VARCHAR)[:10] AS DATE) AS day, {maxima}
                       FROM (SELECT cik, report_date, {flows} FROM {table}
