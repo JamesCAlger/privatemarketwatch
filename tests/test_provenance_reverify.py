@@ -967,3 +967,24 @@ def test_a_spread_taken_from_the_pik_tag_is_verified_against_the_pik_fact():
         return etree.ElementTree(etree.fromstring(xml.encode()))
     assert full_tier(replay,xml_loader=loader).iloc[0].full_status=='raw_match'
     assert full_tier(replay,xml_loader=lambda c,a:loader(c,a,value='.05')).iloc[0].full_status=='published_mismatch'
+
+
+def test_a_spread_from_the_plain_rate_tag_replays_for_a_cash_rate_filer(monkeypatch):
+    # Stepstone 10-K 2024-12-31, Creek Parent: InvestmentInterestRate 0.0525 (the spread),
+    # InvestmentInterestRatePaidInCash 0.1275 (the rate); printed '1M SOFR + 5.25 % ... 12.75 %'
+    from lxml import etree
+    import pipeline.rate_tag_reading as rtr
+    monkeypatch.setattr(rtr, 'reading', lambda cik: 'cash_rate_with_plain_spread' if str(cik).endswith('1950803') else '')
+    def loader(cik, accession):
+        xml = ('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+               '<g:InvestmentInterestRate contextRef="ctx1">.0525</g:InvestmentInterestRate>'
+               '<g:InvestmentInterestRatePaidInCash contextRef="ctx1">.1275</g:InvestmentInterestRatePaidInCash></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    def spread_row(cik):
+        frame = pd.DataFrame([_row(cik=cik, interest_rate=12.75, basis_spread=5.25, src_facts=json.dumps({'basis_spread': {'r': .0525}}),
+                                   src_transforms='basis_spread:rate_x100;interest_rate:rate_x100')])
+        replay = cheap_tier(holdings_df=frame)
+        return full_tier(replay[replay.field == 'basis_spread'], xml_loader=loader).iloc[0].full_status
+    assert spread_row('0001950803') == 'raw_match'
+    # another fund keeps reporting the missing spread fact
+    assert spread_row('0001287750') == 'anchor_missing'

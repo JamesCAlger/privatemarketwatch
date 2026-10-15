@@ -494,6 +494,14 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                         from pipeline.rate_tag_reading import reads_margins
                         if reads_margins(r.get('cik')):
                             hit = ctx_facts.get('__local__investmentinterestrate') or hit
+                    elif anchor_field == 'basis_spread' and hit is None:
+                        # The opposite filer (rate_tag_reading ['cash_rate_with_plain_spread']): the
+                        # paid-in-cash tag is the rate and the plain tag, with no spread tag beside it,
+                        # is published as the spread (Stepstone, 10-K 2024-12-31, Creek Parent:
+                        # InvestmentInterestRate 0.0525, paid-in-cash 0.1275, printed 'SOFR + 5.25 %').
+                        from pipeline.rate_tag_reading import reading
+                        if reading(r.get('cik')) == 'cash_rate_with_plain_spread':
+                            hit = ctx_facts.get('__local__investmentinterestrate')
 
                 # A cost tagged in dollars and again in a foreign unit (source_encodings.cost_in_two_units):
                 # the published cost is the dollar fact, the published par the foreign one. The event
