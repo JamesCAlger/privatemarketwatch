@@ -975,6 +975,9 @@ def test_printed_margin_reads_the_forms_the_other_four_funds_print():
     assert float(printed_margin(["MRO", "First Lien", "L+625, 0.50% Floor", "12/18/2028"], cell, apollo)) == 6.25
     assert float(printed_margin(["Bellis", "First Lien", "SONIA+603, 0.00% Floor", "10/22/2029"], cell, apollo)) == 6.03
     assert float(printed_margin(["Acme", "First Lien", "S+325 Cash plus 3.00% PIK, 0.75% Floor", "1/1/2030"], cell, apollo)) == 6.25
+    # a thousands separator is part of the figure (KKR FS Income Trust, Altitude II 'SF+ 1,000')
+    assert float(printed_margin(["Altitude II", "Revolver", "SF+ 1,000", "1/12/30"], cell, apollo)) == 10.0
+    assert float(printed_margin(["Acme", "First Lien", "SF+ 1,000, 1.00% Floor", "1/1/2030"], cell, apollo)) == 10.0
 
 
 def test_printed_margin_still_refuses_what_it_does_not_understand():

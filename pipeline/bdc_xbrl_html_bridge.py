@@ -416,9 +416,12 @@ _FIELD_COLUMN_RULES: dict[str, dict[str, str]] = {
 }
 _PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
 _PIK_INCLUDED_RE = re.compile(r"(?i)^\s*(\d+(?:\.\d+)?)\s*%\s*\(\s*(?:incl\.?\s*)?\d+(?:\.\d+)?\s*%\s*PIK\s*\)\s*$")
-# The margin in basis points after the code, in the reference-rate cell itself.
+# The margin in basis points after the code, in the reference-rate cell itself. A thousands
+# separator is part of the figure: 'SF+ 1,000' is 1,000 bp (KKR FS Income Trust, Altitude II),
+# not 1 bp followed by text.
 _BPS_MARGIN_RE = re.compile(
-    r"(?i)^\s*[A-Za-z]{1,8}\s*\+\s*(\d{1,4})(?:\s+cash\s+plus\s+(\d+(?:\.\d+)?)\s*%\s*PIK)?\s*(?:,.*)?$")
+    r"(?i)^\s*[A-Za-z]{1,8}\s*\+\s*(\d{1,2},\d{3}|\d{1,4})(?!\d)"
+    r"(?:\s+cash\s+plus\s+(\d+(?:\.\d+)?)\s*%\s*PIK)?\s*(?:,.*)?$")
 
 
 def _named_header(text: str) -> str:
@@ -448,7 +451,7 @@ def printed_margin(grid: list[str], header_map: dict[int, str], filer_reading: d
         return ""
     own = _BPS_MARGIN_RE.match(grid[named[0]])
     if own:
-        return repr(round(int(own.group(1)) / 100 + float(own.group(2) or 0), 6))
+        return repr(round(int(own.group(1).replace(",", "")) / 100 + float(own.group(2) or 0), 6))
     later = [i for i in sorted(header_map) if i > named[0]
              and " ".join(header_map[i].lower().split()) not in ("cash", "pik", "spread")]
     cells = [c for c in grid[named[0] + 1:min(later[0] if later else len(grid), len(grid))] if c.strip()]
