@@ -1,0 +1,29 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001916099",
+ "entity_name": "Diameter Credit Co",
+ "version": 1,
+ "notes": "Fund-clearing loop 2026-10-15 (dix sandboxes). The filer tags us-gaap:InvestmentCompanyDistributionToShareholdersPerShare on the financial highlights' preferred-dividend line ('Dividends to preferred shareholders (5) - -'), so distribution_per_share was published 0.0 or 0.01 in every quarter; the common distribution is printed in the notes' distribution table (and filed under the filer's own ck0001916099:InvestmentCompanyDistributionsDeclaredPerShare). Each quarter's figure below is the per-share amount of the declaration dated in that quarter.",
+ "figure_corrections": [
+  {"report_date": "2024-03-31", "field": "distribution_per_share", "value": 0.45,
+   "evidence": "0000950170-24-058570 (10-Q 2024-03-31): 'Date Declared Record Date Payment Date Per Share Amount Total Amount March 26, 2024 March 29, 2024 May 15, 2024 $ 0.45 $ 2,178 Total distributions $ 0.45 $ 2,178'."},
+  {"report_date": "2024-06-30", "field": "distribution_per_share", "value": 0.45,
+   "evidence": "0000950170-24-123107 (10-Q 2024-09-30) table for the nine months: 'June 30, 2024 June 30, 2024 August 14, 2024 0.45 4,764'."},
+  {"report_date": "2024-09-30", "field": "distribution_per_share", "value": 0.5,
+   "evidence": "0000950170-24-123107 (10-Q 2024-09-30): 'September 30, 2024 September 30, 2024 November 14, 2024 0.50 8,083 Total distributions $ 1.40 $ 15,025'."},
+  {"report_date": "2024-12-31", "field": "distribution_per_share", "value": 0.825,
+   "evidence": "0000950170-25-038029 (10-K 2024): 'December 30, 2024 December 31, 2024 January 31, 2025 0.825 18,885 Total distributions $ 2.225 $ 33,910'."},
+  {"report_date": "2025-03-31", "field": "distribution_per_share", "value": 0.625,
+   "evidence": "0000950170-25-067944 (10-Q 2025-03-31): 'March 31, 2025 March 31, 2025 May 14, 2025 $ 0.625 $ 15,960'."},
+  {"report_date": "2025-06-30", "field": "distribution_per_share", "value": 0.625,
+   "evidence": "0000950170-25-107866 (10-Q 2025-06-30): 'June 30, 2025 June 30, 2025 August 13, 2025 0.625 20,442 Total distributions $ 1.250 $ 36,402'."},
+  {"report_date": "2025-09-30", "field": "distribution_per_share", "value": 0.625,
+   "evidence": "0001193125-25-279909 (10-Q 2025-09-30): 'September 30, 2025 September 30, 2025 November 17, 2025 0.625 26,197 Total distributions $ 1.875 $ 62,599'."},
+  {"report_date": "2025-12-31", "field": "distribution_per_share", "value": 0.675,
+   "evidence": "0001193125-26-104439 (10-K 2025): 'December 31, 2025 December 31, 2025 January 30, 2026 0.675 34,674 Total distributions $ 2.550 $ 97,273'."},
+  {"report_date": "2026-03-31", "field": "distribution_per_share", "value": 0.625,
+   "evidence": "0001193125-26-216630 (10-Q 2026-03-31): 'March 31, 2026 March 31, 2026 May 8, 2026 $ 0.625 $ 34,143 Total distributions $ 0.625 $ 34,143'."},
+  {"report_date": "2026-06-30", "field": "distribution_per_share", "value": 0.625,
+   "evidence": "0001193125-26-342470 (10-Q 2026-06-30): 'June 30, 2026 June 30, 2026 August 14, 2026 0.625 34,237 Total distributions $ 1.250 $ 68,380'."}
+ ]
+}

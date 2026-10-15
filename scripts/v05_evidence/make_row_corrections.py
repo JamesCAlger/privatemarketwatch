@@ -766,6 +766,17 @@ if STONEPOINT_LOOP in held and STONEPOINT_LOOP_FILE.exists():
     for spec in json.loads(STONEPOINT_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((STONEPOINT_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1825384-fundloop"))
         EXACT.add(spec["identifier"])
+# Diameter Credit Co, fund-clearing loop (2026-10-15): equity rows whose member names no issuer, carries the acquisition
+# date as 'Maturity Date' or omits the printed unit count; preferred rates printed and not read; one cost sign error; two
+# 10-Q 2026-06-30 rows tagged decimals=0 (L2 Brands, CWC Fund II); undrawn lines publishing an unused-fee rate. One spec
+# per row, each with its printed line, in row_correction_specs/0001916099.json (exact identifiers).
+DIAMETER_LOOP = "0001916099"
+DIAMETER_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001916099.json"
+if DIAMETER_LOOP in held and DIAMETER_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(DIAMETER_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((DIAMETER_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1916099-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

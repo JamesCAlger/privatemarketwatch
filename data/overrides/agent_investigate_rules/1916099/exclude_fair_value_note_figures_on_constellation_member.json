@@ -1,0 +1,30 @@
+{
+ "cik": "1916099",
+ "rule_id": "exclude_fair_value_note_figures_on_constellation_member",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "2026-03-31",
+   "2026-06-30"
+  ]
+ },
+ "predicate_sql": "report_date IN ('2026-03-31', '2026-06-30') AND regexp_matches(CAST(bdc_investment_identifier AS VARCHAR), 'Other Equity Financial Services Constellation Wealth Capital Fund II LP\\s*$') AND TRY_CAST(cost AS DOUBLE) IS NULL AND abs(TRY_CAST(fair_value AS DOUBLE)) < 100000",
+ "evidence": [
+  {
+   "source": "filing",
+   "quote": "0001193125-26-216630 (10-Q 2026-03-31), fair value note: 'The Company's $ 1,249 fair-value interest in Constellation Wealth Capital Fund II, L.P. (\"CWC\"), a private partnership making minority investments in wealth-management businesses, has $ 18,751 of unfunded commitments'. The position is printed once in the schedule: 'Constellation Wealth Capital Fund II LP (14) Limited Partner Interest N/A 10/10/2025 1,249 1,249 1,249' and published from its own context (C_fef15d72, 1,249,000)."
+  },
+  {
+   "source": "filing",
+   "quote": "0001193125-26-342470 (10-Q 2026-06-30), fair value note: 'The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc., and its $ 1,400 fair-value interest in VCI Intermediate Topco 1 LLC (VCI) ... have no unfunded commitments'. The 10,468 is published as the NEP Group Holdings preferred row ('NEP Group Holdings, Inc. (7)(14) Series B Preferred Shares 18.68 % PIK SOFR 15.00 % 10/16/2025 10,000 10,400 10,468'); the Constellation position is printed 'Constellation Wealth Capital Fund II, L.P. (14) Limited Partner Interest N/A 10/10/2025 4,623 4,623 4,623' and published from its own context (C_c4e43768, 4,623,000)."
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox dixa: the second context of the Constellation member carries only the note figure, unscaled (decimals 0) and with no cost: 2026-03-31 C_04ce80f8 fair value 1,249 dollars; 2026-06-30 C_86722bfa fair value 10,468 dollars and InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount 1,400. Each was published as an extra FUND row of 0.001M and 0.010M."
+  }
+ ],
+ "rationale": "Figures of the fair-value-hierarchy note (investments measured at net asset value) tagged on a second context of the Constellation member, in dollars rather than thousands. Not positions: each position named is published from its own schedule context.",
+ "confidence": 0.95,
+ "measured_impact": {}
+}

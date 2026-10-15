@@ -1,0 +1,307 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "dixc",
+ "dispositions": [
+  {
+   "disposition_id": "PD-X11-1916099-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": ["0001916099"],
+   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "statement": "Every flagged row (1 to 7 a quarter, fair value 1 to 194 thousand each) is an undrawn delayed-draw or revolving line (footnotes (4)(5)(6): unfunded, subject to unused fees). The schedule prints a dash in the principal column, a negative or dash cost and a small positive fair value, the mark on the commitment; the filing tags no principal. There is no par to publish.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-093799", "verbatim": "Amspec Parent LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.50 % 12/5/2030 - ( 7 ) 35", "quote": "Amspec Parent LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.50 % 12/5/2030 - ( 7 ) 35 -- principal printed as a dash, fair value 35 thousand (2024-06-30)"},
+    {"source": "filing", "accession": "0000950170-24-123107", "verbatim": "Next Holdco, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 6.00 % 11/11/2030 $ - $ ( 7 ) $ 38", "quote": "Next Holdco, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 6.00 % 11/11/2030 $ - $ ( 7 ) $ 38 -- 2024-09-30"},
+    {"source": "filing", "accession": "0000950170-25-038029", "verbatim": "Riskonnect Parent, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.50 % 03/01/2024 2/28/2031 - ( 330 ) 160", "quote": "Riskonnect Parent, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.50 % 03/01/2024 2/28/2031 - ( 330 ) 160 -- 2024-12-31"},
+    {"source": "filing", "accession": "0000950170-25-067944", "verbatim": "Blitz 24-34 GmbH (4)(5)(6)(7)(8) Delayed Draw Term Loan SOFR 5.50 % 5/03/2024 5/2/2030 - ( 56 ) 194", "quote": "Blitz 24-34 GmbH (4)(5)(6)(7)(8) Delayed Draw Term Loan SOFR 5.50 % 5/03/2024 5/2/2030 - ( 56 ) 194 -- 2025-03-31"},
+    {"source": "filing", "accession": "0000950170-25-107866", "verbatim": "Kelso Industries, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.75 % 12/26/2024 12/30/2029 - - 7", "quote": "Kelso Industries, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.75 % 12/26/2024 12/30/2029 - - 7 -- 2025-06-30"},
+    {"source": "filing", "accession": "0001193125-25-279909", "verbatim": "Blitz 24-34 GmbH (4)(5)(6)(7)(9) Delayed Draw Term Loan SOFR 5.50 % 5/03/2024 5/3/2030 $ - $ ( 51 ) $ 194", "quote": "Blitz 24-34 GmbH (4)(5)(6)(7)(9) Delayed Draw Term Loan SOFR 5.50 % 5/03/2024 5/3/2030 $ - $ ( 51 ) $ 194 -- 2025-09-30"},
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50", "quote": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50 -- 2025-12-31"},
+    {"source": "filing", "accession": "0001193125-26-216630", "verbatim": "Blitz 24-34 GmbH (4)(5)(6)(7)(9) Delayed Draw Term Loan SOFR 5.25 % 5/3/2024 5/3/2030 $ - $ ( 47 ) $ 65", "quote": "Blitz 24-34 GmbH (4)(5)(6)(7)(9) Delayed Draw Term Loan SOFR 5.25 % 5/3/2024 5/3/2030 $ - $ ( 47 ) $ 65 -- 2026-03-31"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5", "quote": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5 -- 2026-06-30 (fair value corrected from -5 to the printed 5 in this run)"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py dixc X11 0001916099 <quarter>; see scratch/fund_runs/0001916099/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": ["0001916099"],
+   "quarters": ["2024-03-31", "2024-09-30", "2024-12-31", "2025-12-31", "2026-06-30"],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "The yield the check compares with the holdings coupon is the filer's printed ratio of net investment income to average net assets (17.88, 12.46, 13.35, 11.17, 11.46). The fund is levered: investments are 136 pct of net assets at 2024-03-31 (ramp-up, 111.0M drawn on the credit facility) and 187 to 200 pct from 2024-09-30. Income on a portfolio about twice the size of the equity, over the equity, exceeds the portfolio coupon. The published yield is the printed one; no value differs from the page.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "atio of net investment income to average net assets applicable to common shares (4) 17.88 %", "quote": "atio of net investment income to average net assets applicable to common shares (4) 17.88 % -- 2024-03-31; investments 167,278 against net assets 122,621"},
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total Net Assets Applicable to Common Shares 122,621 654", "quote": "Total Net Assets Applicable to Common Shares 122,621 654"},
+    {"source": "filing", "accession": "0000950170-24-123107", "verbatim": "atio of net investment income to average net assets applicable to Common Shares (4) 12.46 %", "quote": "atio of net investment income to average net assets applicable to Common Shares (4) 12.46 % -- 2024-09-30; investments 797,208 against net assets 424,624"},
+    {"source": "filing", "accession": "0000950170-25-038029", "verbatim": "atio of net investment income (loss) to average net assets applicable to Common Shares (4) 13.35 %", "quote": "atio of net investment income (loss) to average net assets applicable to Common Shares (4) 13.35 % -- 2024-12-31; investments 1,216,443 against net assets 607,758"},
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Total investments, at fair value 2,783,476 1,216,443", "quote": "Total investments, at fair value 2,783,476 1,216,443 -- 2025-12-31 against 'Total Net Assets Applicable to Common Shares 1,398,324'; printed ratio 11.17 %"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "atio of net investment income (loss) to average net assets applicable to Common Shares (4) 11.46 % 10.92 %", "quote": "atio of net investment income (loss) to average net assets applicable to Common Shares (4) 11.46 % 10.92 % -- 2026-06-30; investments 2,807,208 against net assets 1,501,369"}
+   ],
+   "rerun": "grep F27 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B01-1916099-1",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": ["0001916099"],
+   "quarters": ["2025-03-31", "2025-06-30", "2026-06-30"],
+   "reason_key": "b01-contexts-without-value-carry-no-position-value",
+   "statement": "After this run every position printed in the schedule is published, including the 79 undrawn lines printed with a dash for fair value (declared at 0 in source_encodings.untagged_values) and three lines printed with dashes throughout. Census of printed rows against published rows (scratch/fund_runs/0001916099/census.py): every printed row matched in 2025-03-31, 2025-06-30 and 2026-06-30. The contexts B01 still counts carry no position value of the quarter: twin contexts of the same member that hold only a rate, spread or acquisition date; contexts holding only the unit count of a preferred or common line (the count is now published on the value row, by row correction); and contexts of the prior-period comparative schedule (period 2024-12-31 inside the 2025 10-Qs, 2025-12-31 inside the 2026-06-30 10-Q).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-067944", "verbatim": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412", "quote": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412 -- the count 25,707 is tagged on a count-only context (C_e6dbd77d); now published on the value row"},
+    {"source": "filing", "accession": "0000950170-25-107866", "verbatim": "AP Edison Co-Invest (UB), L.P. ( 8,487 units) N/A 6/30/2025 8,487 8,487", "quote": "AP Edison Co-Invest (UB), L.P. ( 8,487 units) N/A 6/30/2025 8,487 8,487 -- count-only context C_d75d2175; the value row now publishes 8,487 units and the printed name"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 12/13/2024 12/13/2030 - ( 37 ) -", "quote": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 12/13/2024 12/13/2030 - ( 37 ) - -- a dash-fair-value line, now published at 0; the 33 B01 contexts left at 2026-06-30 are all dated 2025-12-31 (comparative schedule)"}
+   ],
+   "rerun": "python scripts/v05_evidence/b01.py dixc 0001916099; python scratch/fund_runs/0001916099/census.py dixc <accession> <quarter>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC01-1916099-1",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "ciks": ["0001916099"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "statement": "The source row reported as missing is a figure of the fair-value note (investments measured at net asset value) that the filer tags, unscaled, on a second context of the Constellation Wealth Capital Fund II member: 1,249 dollars at 2026-03-31 (the note's '$ 1,249 fair-value interest in Constellation'), and 10,468 dollars with a 1,400 commitment fact at 2026-06-30 (the note's 26N Nova and VCI figures). Rule exclude_fair_value_note_figures_on_constellation_member removes them; the Constellation position is published from its own schedule context (1,249,000 and 4,623,000), NEP Group (the 26N Nova holding) from its own.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-216630", "verbatim": "The Company's $ 1,249 fair-value interest in Constellation Wealth Capital Fund II, L.P. (\"CWC\"), a private partnership making minority investments in wealth-management businesses, has $ 18,751 of unfunded commitments", "quote": "The Company's $ 1,249 fair-value interest in Constellation Wealth Capital Fund II, L.P. (\"CWC\"), a private partnership making minority investments in wealth-management businesses, has $ 18,751 of unfunded commitments -- the note figure; schedule line 'Constellation Wealth Capital Fund II LP (14) Limited Partner Interest N/A 10/10/2025 1,249 1,249 1,249'"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc., and its $ 1,400 fair-value interest in VCI Intermediate Topco 1 LLC (VCI)", "quote": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc., and its $ 1,400 fair-value interest in VCI Intermediate Topco 1 LLC (VCI) -- tagged on the Constellation member's second context"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "Constellation Wealth Capital Fund II, L.P. (14) Limited Partner Interest N/A 10/10/2025 4,623 4,623 4,623", "quote": "Constellation Wealth Capital Fund II, L.P. (14) Limited Partner Interest N/A 10/10/2025 4,623 4,623 4,623 -- the position, published"}
+   ],
+   "rerun": "cat data/overrides/agent_investigate_rules/1916099/exclude_fair_value_note_figures_on_constellation_member.json",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRCPM-1916099-1",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "ciks": ["0001916099"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "statement": "The same fair-value-note figures as the SRC_BDC01 entry (1,249 dollars at 2026-03-31; 10,468 dollars at 2026-06-30), tagged on a second context of the Constellation member and excluded by rule; reported by the reconciliation's second engine.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc.", "quote": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc. -- note figure, not a schedule row"}
+   ],
+   "rerun": "see PD-SRC01-1916099-1",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SCALE-1916099-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": ["0001916099"],
+   "quarters": ["2026-06-30"],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "Two rows of the 10-Q for 2026-06-30, L2 Brands Holdings term loan and CWC Fund II (Cresset) preferred, are tagged with the printed thousands figure at decimals 0 (13,835 and 9,949), in a schedule whose other facts are decimals -3. The published values are the printed ones (row corrections, each with its printed line); with them published equals the filed total 2,807,208 (23.8M short before).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835", "quote": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835 -- tagged InvestmentOwnedAtFairValue 13835 decimals 0 (context C_9bc50948)"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949", "quote": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949 -- tagged 9949 decimals 0 (context C_9b2f1289)"}
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 0001916099 000119312526342470 xml C_9bc50948-995f-400f-ab0a-bcddf6e211f8",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC03-1916099-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": ["0001916099"],
+   "quarters": ["2026-06-30"],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "The same two rows (L2 Brands, CWC Fund II): the published value differs from the tagged fact because the tag lacks the thousands scale.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835", "quote": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835 -- in thousands"}
+   ],
+   "rerun": "see PD-SCALE-1916099-1",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1916099-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": ["0001916099"],
+   "quarters": ["2025-09-30", "2025-12-31"],
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "statement": "The rows flagged are undrawn delayed-draw lines the schedule prints with 'N/A' in the reference-rate column and no rate and no spread: Emerald Wave 3 delayed draw (2025-09-30, printed with dashes throughout and published at 0 in this run; 2025-12-31) and the Legacy Service Partners second-lien delayed draw (2025-12-31). The filing tags no rate or spread for them.",
+   "basis": "read",
+   "addresses_verdict": {"2025-12-31": "The reviewer found the two Quantum Leap Buyer undrawn lines published with no rate and no spread while the page prints 'SOFR 4.50 %'. Both now publish spread 4.5 and reference SOFR (no rate is printed on them), so they are no longer flagged; the rows still flagged are Emerald Wave and Legacy Service Partners, which print N/A and no spread."},
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-279909", "verbatim": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - -", "quote": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - - -- 2025-09-30"},
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )", "quote": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 ) -- 2025-12-31"},
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Quantum Leap Buyer LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/05/2025 9/6/2032 $ - $ ( 60 ) $ ( 63 )", "quote": "Quantum Leap Buyer LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/05/2025 9/6/2032 $ - $ ( 60 ) $ ( 63 ) -- the reviewer's row; spread 4.50 published"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py dixc X02 0001916099 <quarter>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C107-1916099-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": ["0001916099"],
+   "quarters": ["2025-12-31", "2026-06-30"],
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "statement": "The negative costs still flagged are printed in brackets on undrawn revolver and delayed-draw lines; footnote (5): 'Negative cost and fair value results from unamortized fees'. The published figures are the printed ones.",
+   "basis": "read",
+   "addresses_verdict": {"2025-12-31": "The reviewer found Action Elevator Intermediate Holdings' delayed-draw loan published with cost -26,471,000 against a printed positive 26,471. Fixed in this run by row correction (cost 26,471,000, printed line quoted); the rows still flagged are undrawn lines printed with bracketed costs."},
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Negative cost and fair value results from unamortized fees, which are capitalized to the", "quote": "Negative cost and fair value results from unamortized fees, which are capitalized to the -- footnote (5), 10-K 2025"},
+    {"source": "filing", "accession": "0001193125-26-104439", "verbatim": "Action Elevator Intermediate Holdings, LLC (4)(5)(6) Delayed Draw Term Loan 8.53 % SOFR 4.75 % 10/31/2024 10/31/2030 26,932 26,471 25,957", "quote": "Action Elevator Intermediate Holdings, LLC (4)(5)(6) Delayed Draw Term Loan 8.53 % SOFR 4.75 % 10/31/2024 10/31/2030 26,932 26,471 25,957 -- the verdict's row, cost now positive"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "Quantum Leap Buyer, LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 9/5/2025 9/6/2032 - ( 33 ) -", "quote": "Quantum Leap Buyer, LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 9/5/2025 9/6/2032 - ( 33 ) - -- 2026-06-30, bracketed cost on an undrawn line"},
+    {"source": "filing", "accession": "0001193125-26-342470", "verbatim": "Negative cost and fair value results from unamortized fees, which are capitalized to the", "quote": "Negative cost and fair value results from unamortized fees, which are capitalized to the -- footnote (5), 10-Q 2026-06-30"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py dixc C107 0001916099 <quarter>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-A01-1916099-1",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": ["0001916099"],
+   "quarters": ["2024-09-30"],
+   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
+   "statement": "The rollup 'investments non controlled non affiliated' (797,208) is compared with its two preferred-equity children only (30,565). The 58 first-lien rows sit under a parent key spelled differently, so the check cannot pair them. The page: first lien 766,643 plus preferred 30,565 equals 797,208, and published equals the filed total at 2024-09-30.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-123107", "verbatim": "Total First Lien Debt $ 773,819 $ 761,163 $ 766,643 180.55 %", "quote": "Total First Lien Debt $ 773,819 $ 761,163 $ 766,643 180.55 %"},
+    {"source": "filing", "accession": "0000950170-24-123107", "verbatim": "Total Preferred Equity $ 30,565 $ 30,565 7.20 % Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208", "quote": "Total Preferred Equity $ 30,565 $ 30,565 7.20 % Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208 -- 766,643 + 30,565 = 797,208"}
+   ],
+   "rerun": "grep A01 scratch/fund_sandbox/dixc/output/oracle/check_failures.csv | grep 1916099",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F10-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F10",
+   "ciks": ["0001916099"],
+   "quarters": ["2023-12-31"],
+   "reason_key": "balance-identity-preferred-shares-between-liabilities-and-net-assets",
+   "statement": "Total assets 3,465 less liabilities 1,311 less common net assets 654 leaves 1,500: the Series A preferred shares (500 shares, liquidation preference 3,000 each) printed between liabilities and net assets. The identity has no term for them; the same 1,500 is the residual in every later quarter, where the check passes only because 1,500 is under its 1 pct tolerance.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "500 shares issued and outstanding; liquidation preference of $ 3,000 per share 1,500 1,500", "quote": "500 shares issued and outstanding; liquidation preference of $ 3,000 per share 1,500 1,500 -- the 2023-12-31 comparative column"},
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total Assets $ 258,656 $ 3,465", "quote": "Total Assets $ 258,656 $ 3,465 -- 2023-12-31 column 3,465; liabilities 1,311; net assets 654"}
+   ],
+   "rerun": "grep F10 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-BSI-1916099-1",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "balance_sheet_identity",
+   "ciks": ["0001916099"],
+   "quarters": ["2023-12-31"],
+   "reason_key": "balance-identity-preferred-shares-between-liabilities-and-net-assets",
+   "statement": "The same 1,500 of Series A preferred shares printed between liabilities and net assets, reported by the identity engine.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "500 shares issued and outstanding; liquidation preference of $ 3,000 per share 1,500 1,500", "quote": "500 shares issued and outstanding; liquidation preference of $ 3,000 per share 1,500 1,500"}
+   ],
+   "rerun": "see PD-F10-1916099-1",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F16-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": ["0001916099"],
+   "quarters": ["2023-12-31"],
+   "reason_key": "fund-row-before-operations-began",
+   "statement": "A fund-level row before operations began: no investments ('Total investments, at fair value 167,278 -', the dash being 2023-12-31) and net assets of 654 thousand of seed capital; income yield is negative. The first common distribution was declared March 26, 2024. Not a data defect in a quarter with nothing invested; the published distribution of 0.09 for this quarter has no printed source found (see not_done).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880", "quote": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880 -- 2023-12-31 column: no investments"}
+   ],
+   "rerun": "grep F16 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F31-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F31",
+   "ciks": ["0001916099"],
+   "quarters": ["2023-12-31"],
+   "reason_key": "fund-row-before-operations-began",
+   "statement": "The quarterly return of -56.4 pct is the move from the 25.00 seed price to the printed net asset value per common share of 10.90 at 2023-12-31, before operations began (no investments, net assets 654 thousand). From 2024-03-31 the printed NAV per share is 25.33 and the check passes.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Net Asset Value Per Common Share $ 25.33 $ 10.90", "quote": "Net Asset Value Per Common Share $ 25.33 $ 10.90 -- 2023-12-31 column 10.90"}
+   ],
+   "rerun": "grep F31 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F25-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F25",
+   "ciks": ["0001916099"],
+   "quarters": ["2024-06-30"],
+   "reason_key": "growth-heuristics-while-fund-ramps",
+   "statement": "Second quarter of operations: investments grew from 167,278 to 436,224 (161 pct) while total assets grew from 258,656 to 521,969 (102 pct), because the cash raised at 2024-03-31 (89,656) was invested. Published investments equal the printed total in both quarters.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-093799", "verbatim": "Total investments, at fair value 436,224 -", "quote": "Total investments, at fair value 436,224 - -- 2024-06-30"},
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880", "quote": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880 -- 2024-03-31"}
+   ],
+   "rerun": "grep F25 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F26-1916099-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F26",
+   "ciks": ["0001916099"],
+   "quarters": ["2024-03-31"],
+   "reason_key": "growth-heuristics-while-fund-ramps",
+   "statement": "First quarter of operations: total assets 258,656 include 89,656 of cash not yet invested, so a leverage view built on total assets and one built on holdings (167,278) diverge by 24 points. Both figures are the printed ones.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880", "quote": "Total investments, at fair value 167,278 - Cash and cash equivalents 89,656 2,880"},
+    {"source": "filing", "accession": "0000950170-24-058570", "verbatim": "Total Assets $ 258,656 $ 3,465", "quote": "Total Assets $ 258,656 $ 3,465 -- 2024-03-31 column 258,656"}
+   ],
+   "rerun": "grep F26 scratch/fund_sandbox/dixc/output/fund_financials_validation_current.csv (0001916099)",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop dix, sandbox dixc); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

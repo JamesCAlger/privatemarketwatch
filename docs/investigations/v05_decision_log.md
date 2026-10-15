@@ -4303,3 +4303,28 @@ Compared with `spoff3`. Two rounds; six builds.
   so an agent parked tagged rates as untagged (corrected here; tool fixed separately).
 - **Left:** industry not read in the 2023-2024 filings (60-65 pct GICS); 2022 has no tagged schedule.
 - The agent ran a bare heredoc twice, each stopped by its own id. Observations 20. No shared code.
+
+### D-176 Diameter Credit Co through the fund-clearing skill (sandbox `dixc`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; three builds.
+
+- **Ledger:** 49 findings, 32 outstanding (50 in the first build), all proposed (16 entries); C107
+  and X02 accepted by check; totals tie in 10 of 10 quarters (2026-06-30 was 23.8M short).
+- **Fixed:** two rows of 2026-06-30 tagged with the printed thousands figure at decimals 0
+  (published 1,000 times too small: L2 Brands 13.8M, CWC Fund II 9.9M, the latter reclassed to
+  preferred as printed); 79 undrawn lines printed with a dash for fair value were dropped (82
+  `untagged_values` lines); issuer names (`hierarchy_prefix_re`, `issuer_name_strip_re`, dry run on
+  every name); unit counts on 23 equity rows (tagged on a count-only context); 38 equity rows whose
+  member 'Maturity Date' is the acquisition date; preferred rates, spreads and PIK against the page;
+  rates read from member text the page does not print withdrawn; reference rate from the printed
+  column (P, STIBOR); an exclusion for note figures tagged on a second Constellation context; new
+  highlights wrapper (distribution per share was the preferred-dividend line, 0.0 or 0.01).
+  57 row-correction specs. Earlier verdicts C107 and X02 2025-12-31 answered.
+- **Page sample:** 20 rows, 0 published errors.
+- **Shared causes seen:** dash-valued rows dropped; preferred rates tagged on the year-to-date
+  context not read; rates read from member text the page does not print.
+- **Orchestrator:** the agent's test run found `test_printed_margin_reading_is_set_...` failing on
+  MidCap's wrapper (D-174 set the reading and the pinned list was not updated): fixed (484ddf3). From
+  now on the wrapper tests run before each fund is committed.
+- The agent ran a bare `python -` twice and once wrote a regex with `python -c` (reverted, redone
+  with the editor). No shared code. Wrapper, highlights and encodings tests passed.

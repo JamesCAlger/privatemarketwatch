@@ -157,3 +157,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001901164 T. Rowe Price OHA Select | trxd | PASS | 41 findings, 6 outstanding, 6 proposed | D-173 |
 | 2026-10-15 | 0001278752 MidCap Financial Investment Corp | mfxi | PASS | 145 findings, 84 outstanding, 84 proposed | D-174 |
 | 2026-10-15 | 0001825384 Stone Point Credit | stxf | PASS | 31 findings, 15 outstanding, 15 proposed | D-175 |
+| 2026-10-15 | 0001916099 Diameter Credit Co | dixc | PASS | 49 findings, 32 outstanding, 32 proposed | D-176 |
