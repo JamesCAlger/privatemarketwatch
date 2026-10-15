@@ -4328,3 +4328,30 @@ Compared with `spoff3`. One round; three builds.
   now on the wrapper tests run before each fund is committed.
 - The agent ran a bare `python -` twice and once wrote a regex with `python -c` (reverted, redone
   with the editor). No shared code. Wrapper, highlights and encodings tests passed.
+
+### D-177 Carlyle Credit Solutions through the fund-clearing skill (sandbox `ccxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. Two rounds; four builds.
+
+- **Ledger:** 55 findings, 26 outstanding (36 in the first build), all proposed; totals tie in 14
+  of 14 quarters (2026-06-30 was 37.9M over).
+- **Fixed:** the affiliate roll-forward note's rows published as positions (fair value, no cost,
+  principal or percent): `schedule_row_tags: cost_or_percent_unrounded`, which drops them in every
+  quarter, so the two exclusion rules pinned to 2025-12-31 and 2026-03-31 are deleted (copies kept);
+  two dollar costs tagged in EUR (`foreign_unit_values`); 'Structured Credit Investments,' cut from
+  60 CLO names; 237 row-correction specs (938 field rows): a '( 100 % PIK)' tagged as 1 and
+  published as a 1.0 PIK rate on 109 rows, fixed coupons tagged as spreads (30), the equity table's
+  'All-In Rate' tagged as a spread with no rate (52), CLO notes classed as direct lending or a fund
+  (58), reference codes CDOR, EURIBOR, STIBOR, NIBOR (31). Earlier C115 verdicts fixed; the C107
+  2026-03-31 verdict cited another row and does not stand.
+- **Page sample (`ccxc`):** 2 errors. Round 2: 30 rows printed a maturity and published none (7
+  American Physician rows with past-due maturities; 23 CLO rows on misdated contexts at 2024-12-31),
+  set from the page; their past dates raise 4 maturity_not_past findings, proposed under an
+  existing key; 2 '(100 % PIK)' coupons whose PIK fact sits on another line, set from the page.
+- **Proposed:** F16 x17 as a rule problem: the filer prints its income ratio unannualised (footnote
+  says so) and the check compares it with an annualised distribution rate.
+- **Shared causes seen:** a PIK fact of 1 (the 100 pct share) published as a 1.0 rate, no rule
+  catches it; structured credit classed by name as direct lending; the printed-column reader misses
+  misdated contexts and the codes NIBOR and STIBOR; income_yield_pct on different bases across funds;
+  equity class read from a combined 'Common and Preferred' heading.
+- The agent ran a bare heredoc once, stopped by its own id. Wrapper tests 654 passed.

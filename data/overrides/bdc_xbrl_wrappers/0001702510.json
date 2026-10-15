@@ -47,7 +47,7 @@
       }
     ],
     "category_marker_re": "(?i)^\\s*Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)\\s*$",
-    "issuer_name_strip_re": "(?i)^(?:Investments,\\s*Affiliated\\s+Issuer,\\s*)?(?:First\\s+Lien(?:\\s+Debt)?|Second\\s+Lien(?:\\s+Debt)?|Equity\\s+Investments?|Investment\\s+Funds?|Structured\\s+Credit)\\s*,\\s*(?:SPF\\s+Borrower,\\s+LLC,\\s+Healthcare\\s+&\\s+Pharmaceuticals\\s+2(?=[A-Z]))?|(?:\\s+\\d{1,2})?\\s*,\\s*(?:Media:\\s+Advertising,\\s+Printing\\s+\\&\\s+Publishing|Media:\\s+Broadcasting\\s+\\&\\s+Subscription|Media:\\s+Diversified\\s+\\&\\s+Production|Diversified\\s+Financial\\s+Services|Containers,\\s+Packaging\\s+\\&\\s+Glass|Healthcare\\s+\\&\\s+Pharmaceuticals|Chemicals,\\s+Plastics\\s+\\&\\s+Rubber|Leisure\\s+Products\\s+\\&\\s+Services|Auto\\s+Aftermarket\\s+\\&\\s+Services|Consumer\\s+Goods:\\s+Non\\-Durable|Sovereign\\s+\\&\\s+Public\\s+Finance|Transportation:\\s+Consumer|Environmental\\s+Industries|Consumer\\s+Goods:\\s+Durable|Construction\\s+\\&\\s+Building|Transportation:\\s+Cargo|High\\s+Tech\\s+Industries|Utilities:\\s+Oil\\s+\\&\\s+Gas|Aerospace\\s+\\&\\s+Defense|Utilities:\\s+Electric|Energy:\\s+Electricity|Telecommunications|Capital\\s+Equipment1|Packaging\\s+\\&\\s+Glass|Consumer\\s+Services|Energy:\\s+Oil\\s+\\&\\s+Gas|Business\\s+Services|Capital\\s+Equipment|Structured\\s+Credit|Utilities:\\s+Water|Beverage\\s+\\&\\s+Food|Consumer\\s+Goods|Transportation|Automotive|Wholesale|Software|Energy|Retail)(?:\\s*\\d{1,2})?\\s*$"
+    "issuer_name_strip_re": "(?i)^(?:Investments,\\s*Affiliated\\s+Issuer,\\s*)?(?:First\\s+Lien(?:\\s+Debt)?|Second\\s+Lien(?:\\s+Debt)?|Equity\\s+Investments?|Investment\\s+Funds?|Structured\\s+Credit(?:\\s+Investments?)?)\\s*,\\s*(?:SPF\\s+Borrower,\\s+LLC,\\s+Healthcare\\s+&\\s+Pharmaceuticals\\s+2(?=[A-Z]))?|(?:\\s+\\d{1,2})?\\s*,\\s*(?:Media:\\s+Advertising,\\s+Printing\\s+\\&\\s+Publishing|Media:\\s+Broadcasting\\s+\\&\\s+Subscription|Media:\\s+Diversified\\s+\\&\\s+Production|Diversified\\s+Financial\\s+Services|Containers,\\s+Packaging\\s+\\&\\s+Glass|Healthcare\\s+\\&\\s+Pharmaceuticals|Chemicals,\\s+Plastics\\s+\\&\\s+Rubber|Leisure\\s+Products\\s+\\&\\s+Services|Auto\\s+Aftermarket\\s+\\&\\s+Services|Consumer\\s+Goods:\\s+Non\\-Durable|Sovereign\\s+\\&\\s+Public\\s+Finance|Transportation:\\s+Consumer|Environmental\\s+Industries|Consumer\\s+Goods:\\s+Durable|Construction\\s+\\&\\s+Building|Transportation:\\s+Cargo|High\\s+Tech\\s+Industries|Utilities:\\s+Oil\\s+\\&\\s+Gas|Aerospace\\s+\\&\\s+Defense|Utilities:\\s+Electric|Energy:\\s+Electricity|Telecommunications|Capital\\s+Equipment1|Packaging\\s+\\&\\s+Glass|Consumer\\s+Services|Energy:\\s+Oil\\s+\\&\\s+Gas|Business\\s+Services|Capital\\s+Equipment|Structured\\s+Credit|Utilities:\\s+Water|Beverage\\s+\\&\\s+Food|Consumer\\s+Goods|Transportation|Automotive|Wholesale|Software|Energy|Retail)(?:\\s*\\d{1,2})?\\s*$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -190,6 +190,12 @@
     ],
     "reference_rate_columns": [
       "Reference Rate"
+    ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
     ]
   }
 }
