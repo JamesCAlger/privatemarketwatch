@@ -79,8 +79,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A context identifier reads "ACCESSION CONTEXT => IDENTIFIER": '+str(path))
             if key=='untagged_values' and any(not _UNTAGGED_VALUE_RE.fullmatch(v) for v in values):
                 raise ValueError('An untagged value reads "ACCESSION CONTEXT fair_value|cost|principal_amount NUMBER": '+str(path))
-            if key=='schedule_row_tags' and set(values)-{'cost_or_percent_unrounded','quantity_or_percent','not_commitment_only'}:
-                raise ValueError('A schedule row test is cost_or_percent_unrounded, quantity_or_percent or not_commitment_only: '+str(path))
+            if key=='schedule_row_tags' and set(values)-{'cost_or_percent_unrounded','cost_or_percent','quantity_or_percent','not_commitment_only'}:
+                raise ValueError('A schedule row test is cost_or_percent_unrounded, cost_or_percent, quantity_or_percent or not_commitment_only: '+str(path))
             if key=='rate_tag_reading' and values not in (['coupon_with_margins'],['cash_rate_with_plain_spread']):
                 raise ValueError('A rate tag reading is coupon_with_margins or cash_rate_with_plain_spread: '+str(path))
             if key=='untagged_pik' and values!=['none']:

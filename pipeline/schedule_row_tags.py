@@ -13,6 +13,10 @@ A filer's wrapper names the test that fits its filings in ``source_encodings.sch
 - ``cost_or_percent_unrounded``: a position carries a cost tag or a percent-of-net-assets tag, and
   none of its value columns (fair value, cost, principal) is filed only in a form rounded more
   coarsely than the thousand (decimals below -3).
+- ``cost_or_percent``: the same without the rounding clause, for a filer whose schedule rows can
+  carry a fair value tagged at decimals below -3 (T Series 10-K for 2024-12-31, c-277: 'Fetch
+  Insurance Services, LLC ... 1,707 1,677 1,690 0.16', fair value 1,690,000 tagged at decimals -4
+  beside an exact cost and a percent) and whose note rows carry neither cost nor percent.
 - ``quantity_or_percent``: a position carries a principal, a share count or a percent tag (New
   Mountain: the non-accrual paragraph's 'aggregate cost basis of $45.3 million, an aggregate fair
   value of $36.9 million' is tagged with cost and fair value on the issuer's member, c-708).
@@ -36,7 +40,7 @@ def _tagged_ciks() -> dict[str, frozenset[str]]:
             if encoding.get("schedule_row_tags")}
 
 
-TESTS = ("cost_or_percent_unrounded", "quantity_or_percent", "not_commitment_only")
+TESTS = ("cost_or_percent_unrounded", "cost_or_percent", "quantity_or_percent", "not_commitment_only")
 _COMMITMENT = "investmentcompanyfinancialcommitmenttoinvesteefutureamount"
 
 
@@ -81,6 +85,8 @@ def non_schedule_contexts(tree: Any, contexts: dict[str, dict[str, Any]], filing
         if not columns & set(_VALUE_COLUMNS):
             continue
         if "cost_or_percent_unrounded" in tests and (not columns & {"cost", "pct_of_net_assets"} or context in rounded):
+            dropped.add(context)
+        if "cost_or_percent" in tests and not columns & {"cost", "pct_of_net_assets"}:
             dropped.add(context)
         if "quantity_or_percent" in tests and not columns & {"principal_amount", "shares_held", "pct_of_net_assets"}:
             dropped.add(context)

@@ -4563,3 +4563,39 @@ Compared with `spoff3`. One round; five builds.
   2025-12-31 zero row not on the page; AP Himalaya class flips; Constellation blocker UNCLASSIFIED.
 - The agent wrote scratch SQL while a build ran, reset its own row-correction lines with
   `git checkout --` three times, and ran two short `python -c` lines. Wrapper tests 681 passed.
+
+### D-185 T Series BDC through the fund-clearing skill (sandbox `tsxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff2`. Two rounds; four builds.
+
+- **Ledger:** 54 findings, 17 outstanding (38 in the first build), all 17 proposed; totals tie in 14
+  of 14 quarters (without cash rows), 2024-12-31 included (was 1.7M short).
+- **Shared code (opt-in):** new schedule-row test `cost_or_percent` in `pipeline/schedule_row_tags.py`
+  (the existing `cost_or_percent_unrounded` without its rounding clause), accepted by
+  `source_encodings.py` and the wrapper schema, on for this fund only. Fetch Insurance (1,690 at
+  2024-12-31) was dropped because its fair value is tagged at decimals -4. Tests: 2 new in
+  `tests/test_schedule_row_tags.py`; with encodings, wrapper and highlights 690 passed. A new
+  setting: no other fund rebuilt. Barings, Carlyle and KKR FS use the rounding-clause test, which can
+  drop a real row the same way (not measured).
+- **Fixed (wrapper):** `investments_total_excludes: cash_rows` (fv_conservation x4); money-market row
+  from 2025-09-30 (cost context named, printed fair value declared, 4 filings); BP Purchaser cost on
+  a context dated a quarter early (`misdated_contexts`); name pattern for member typos (C201 x2,
+  C206); CORRA, SONIA and FEDFUNDS codes from the printed legend.
+- **Fixed (391 row corrections):** 66 equity rows in the old-format filings published as loans (X11,
+  X02 2023-09-30); 30 unit counts tagged as principal x1,000 at 2025-09-30 (C04); 3 loan pars tagged
+  as share counts; 46 rates ('S + m % PIK' published Fixed, fixed coupons tagged as spreads,
+  Continental Battery spread, Knockout benchmark); printed names for KWOR, Vardiman, TS Imagine, Two
+  Six Labs.
+- **Proposed:** F27 x9 (printed income-to-capital ratio, fund about 1.9x invested), X02 x7 (Sweep
+  Midco prints no rate), merged_context_excluded 2025-12-31 (BP Purchaser units from a sibling
+  context).
+- **Page sample (`tsxc`):** 2 errors of 20, both cause `tag`: BCTO Bluebill 2025-09-30 printed
+  '8 .81 %', tagged 0.0081, published 0.81; 48Forty 2026-03-31 published under the member's old name
+  'Solutions' where the page prints 'TopCo'. Round 2 (`tsxd`): both fixed by row correction (the
+  only loan under 3 pct in any quarter; 4 48Forty rows over two quarters). Not re-sampled. Twenty
+  cards can miss a problem on under about 15 pct of rows.
+- **Left:** instrument text from 2025-09-30 carries the member's rate, maturity and ordinal (cutting
+  it would re-pair twins); money-market yield published as basis_spread on 5 cash rows; untagged
+  Surewerx CAD tranche 2026-03-31 (0.2M); 'ManTech' respelled by a shared naming step; Sweep Midco
+  2026-03-31 rate 0.0 from stale member text.
+- The agent wrote the proposals file and ran one read-only `python -c` while builds ran.

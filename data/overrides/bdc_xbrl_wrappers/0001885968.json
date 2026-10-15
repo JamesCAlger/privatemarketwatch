@@ -88,9 +88,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Investment\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b",
-    "hierarchy_instrument_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)\\s+.+?\\s+(?:Investment\\s+)?((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b.*)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+')",
+    "hierarchy_issuer_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?af+iliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)[\\s,]+(.+?)(?:\\s+|\\b)(?:Investment\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrants?|Equity)\\b",
+    "hierarchy_instrument_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?af+iliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)[\\s,]+.+?(?:\\s+|\\b)(?:Investment\\s+)?((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrants?|Equity)\\b.*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?af+iliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+')",
     "extra_industry_labels": [
       "Air Freight & Logistics",
       "Automobile Components",
@@ -208,7 +208,7 @@
       "reported_in_usd"
     ],
     "schedule_row_tags": [
-      "cost_or_percent_unrounded"
+      "cost_or_percent"
     ],
     "reference_rate_columns": [
       "Reference Rate and Spread"
@@ -217,7 +217,28 @@
       "S=SOFR",
       "L=LIBOR",
       "P=PRIME",
-      "E=EURIBOR"
+      "E=EURIBOR",
+      "C=CORRA",
+      "SA=SONIA",
+      "F=FEDFUNDS"
+    ],
+    "misdated_contexts": [
+      "0001193125-26-085572 C_9efc79bf-b7b3-4191-9a68-a432656ed2c5 2025-09-30 -> 2025-12-31"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "context_identifiers": [
+      "0001193125-25-277734 C_184cc6b5-3025-4ab2-a8a8-53afc9a678d7 => J.P. Morgan US Government Money Market Fund - Institutional Shares",
+      "0001193125-26-085572 C_9b3b22dc-1630-440b-a75b-801fd62e7b69 => J.P. Morgan US Government Money Market Fund - Institutional Shares",
+      "0001193125-26-219405 C_986b86e4-c337-4b29-b1c3-30c41145b921 => J.P. Morgan US Government Money Market Fund - Institutional Shares",
+      "0001193125-26-344703 C_e9a62cc6-1d15-42c2-8c2a-81d09619bde6 => J.P. Morgan US Government Money Market Fund - Institutional Shares"
+    ],
+    "untagged_values": [
+      "0001193125-25-277734 C_184cc6b5-3025-4ab2-a8a8-53afc9a678d7 fair_value 11105000",
+      "0001193125-26-085572 C_9b3b22dc-1630-440b-a75b-801fd62e7b69 fair_value 23676000",
+      "0001193125-26-219405 C_986b86e4-c337-4b29-b1c3-30c41145b921 fair_value 11648000",
+      "0001193125-26-344703 C_e9a62cc6-1d15-42c2-8c2a-81d09619bde6 fair_value 13900000"
     ]
   }
 }

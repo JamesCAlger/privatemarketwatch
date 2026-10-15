@@ -1,0 +1,64 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "tsxd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F27-1885968-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": ["0001885968"],
+   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2026-06-30"],
+   "statement": "income_yield_pct is the filer's printed 'Ratio of net investment income to average Members Capital' (annualised), a return on members' capital. The fund holds about 1.9 times its members' capital in investments (Total Portfolio Investments printed at 188.79 pct of net assets at 2026-06-30; asset coverage 194 to 210 pct), so net income over capital sits above the holdings' weighted coupon plus 200bp in a levered fund. The published ratio equals the printed one in the quarters read (14.88 at 2023-03-31, 12.83 at 2024-12-31, 11.09 at 2026-06-30). No value is wrong; the check compares a levered return on equity with an unlevered coupon. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001885968-23-000017", "verbatim": "Ratio of net investment income to average Members Capital (4) 14.88 % 9.03 %", "quote": "'Ratio of net investment income to average Members Capital (4) 14.88 % 9.03 %': 2023-03-31 printed 14.88, published income_yield_pct 14.88."},
+    {"source": "filing", "accession": "0001885968-25-000005", "verbatim": "Ratio of net investment income to average Members Capital (4) 12.83 % 13.33 % 11.19 % 0.71 %", "quote": "'Ratio of net investment income to average Members Capital (4) 12.83 % 13.33 % 11.19 % 0.71 %': 2024-12-31 printed 12.83, published 12.83."},
+    {"source": "filing", "accession": "0001193125-26-344703", "verbatim": "Ratio of net investment income to average Members Capital (4) 11.09 % 11.54 %", "quote": "'Ratio of net investment income to average Members Capital (4) 11.09 % 11.54 %': 2026-06-30 printed 11.09, published 11.09."},
+    {"source": "filing", "accession": "0001193125-26-344703", "verbatim": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %", "quote": "'Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %': investments are 1.89 times members' capital."},
+    {"source": "filing", "accession": "0001885968-25-000005", "verbatim": "As of December 31, 2024 and December 31, 2023, our asset coverage ratio was 203.00 % and 194.00 %", "quote": "'As of December 31, 2024 and December 31, 2023, our asset coverage ratio was 203.00 % and 194.00 %': the fund borrows about as much as its capital."}
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001885968.json",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop tsx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1885968-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": ["0001885968"],
+   "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"],
+   "statement": "The flagged rows are the two Sweep Midco, LLC second-lien lines (par 580 at cost 290, and an undrawn 1,686 at zero). The page prints no reference rate, spread or interest rate on either line, in every quarter, and the filing tags none: the reference-rate and rate columns are blank between the instrument and the maturity. Published as printed (no rate). No fix applies: there is no rate to publish.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001885968-24-000022", "verbatim": "Sweep Midco LLC (4) (5) (9) (15) 3/12/2034 580 290 290 0.03", "quote": "'Sweep Midco LLC (4) (5) (9) (15) 3/12/2034 580 290 290 0.03': 2024-03-31, no rate printed between the footnotes and the maturity."},
+    {"source": "filing", "accession": "0001885968-24-000037", "verbatim": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2036 1,686 - - -", "quote": "'Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2036 1,686 - - -': 2024-06-30, the undrawn line, no rate printed."},
+    {"source": "filing", "accession": "0001885968-25-000005", "verbatim": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2034 580 290 376 0.04", "quote": "'Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2034 580 290 376 0.04': 2024-12-31, no rate printed."},
+    {"source": "filing", "accession": "0001193125-25-277734", "verbatim": "Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2034 580 290 363 0.03", "quote": "'Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2034 580 290 363 0.03': 2025-09-30, no rate printed."}
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001885968.json",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop tsx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1885968-3",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": ["0001885968"],
+   "quarters": ["2025-12-31"],
+   "statement": "BP Purchaser, LLC common equity at 2025-12-31: the 10-K files the row's cost (1,379,000), fair value (0) and percent on a context dated 2025-09-30 (C_9efc79bf), and its unit count on the 2025-12-31 context of the same member (C_c7f5af10). The wrapper re-dates the first context (misdated_contexts), so the two merge into one row and the unit count is filled from the sibling context, which the re-verifier cannot replay from the row's own context. The published 1,383,156 units, cost 1,379 and fair value 0 are the printed figures. No fix applies short of dropping the units.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-085572", "verbatim": "BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -", "quote": "'BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -': 1,383,156 units, cost 1,379, fair value dash, as published."}
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001885968.json",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop tsx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

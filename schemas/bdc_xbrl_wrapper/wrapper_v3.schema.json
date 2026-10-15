@@ -748,8 +748,8 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"enum": ["cost_or_percent_unrounded", "quantity_or_percent", "not_commitment_only"]},
-          "description": "The filer reuses its schedule members in other notes (an affiliate roll-forward with fair value only; joint-venture or facility amounts rounded to the hundred thousand), so those contexts read as positions (Barings Private Credit, 10-Q for 2023-06-30: seven roll-forward contexts, 203.2M, beside their schedule rows). With this setting a context is a position only if it carries a cost tag or a percent-of-net-assets tag and none of its value facts has decimals below -3. Evidence required: a note context beside its schedule row, and the quarter totals with the test applied."
+          "items": {"enum": ["cost_or_percent_unrounded", "cost_or_percent", "quantity_or_percent", "not_commitment_only"]},
+          "description": "The filer reuses its schedule members in other notes (an affiliate roll-forward with fair value only; joint-venture or facility amounts rounded to the hundred thousand), so those contexts read as positions (Barings Private Credit, 10-Q for 2023-06-30: seven roll-forward contexts, 203.2M, beside their schedule rows). With this setting a context is a position only if it carries a cost tag or a percent-of-net-assets tag and none of its value facts has decimals below -3 (cost_or_percent_unrounded); cost_or_percent drops the rounding clause, for a filer that tags some schedule fair values at decimals -4 and whose note rows carry neither cost nor percent (T Series 10-K for 2024-12-31, c-277, Fetch Insurance 1,690 at decimals -4). Evidence required: a note context beside its schedule row, and the quarter totals with the test applied."
         },
         "unfunded_rows": {
           "type": "array",

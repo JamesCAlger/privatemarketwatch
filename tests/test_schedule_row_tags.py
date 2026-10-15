@@ -82,3 +82,27 @@ def test_a_schedule_row_repeated_in_rounded_form_on_its_own_context_is_kept(monk
     monkeypatch.setattr(srt, "_tagged_ciks", lambda: {"0001859919": frozenset({"cost_or_percent_unrounded"})})
     contexts = {"both": {"is_investment": True}, "note": {"is_investment": True}}
     assert srt.non_schedule_contexts(etree.ElementTree(etree.fromstring(xml)), contexts, META) == {"note"}
+
+
+def test_cost_or_percent_keeps_a_row_whose_fair_value_is_tagged_at_decimals_minus_4(monkeypatch):
+    # T Series 10-K for 2024-12-31, c-277: 'Fetch Insurance Services, LLC ... 1,707 1,677 1,690 0.16',
+    # fair value 1,690,000 at decimals -4 beside an exact cost and a percent: a schedule row.
+    xml = """<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2025">
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="fetch" decimals="-4">1690000</us-gaap:InvestmentOwnedAtFairValue>
+      <us-gaap:InvestmentOwnedAtCost contextRef="fetch" decimals="-3">1677000</us-gaap:InvestmentOwnedAtCost>
+      <us-gaap:InvestmentOwnedPercentOfNetAssets contextRef="fetch" decimals="4">0.0016</us-gaap:InvestmentOwnedPercentOfNetAssets>
+      <us-gaap:InvestmentOwnedAtFairValue contextRef="rollforward" decimals="-3">14252000</us-gaap:InvestmentOwnedAtFairValue>
+    </xbrl>"""
+    contexts = {"fetch": {"is_investment": True}, "rollforward": {"is_investment": True}}
+    tree = etree.ElementTree(etree.fromstring(xml))
+    monkeypatch.setattr(srt, "_tagged_ciks", lambda: {"0001859919": frozenset({"cost_or_percent"})})
+    assert srt.non_schedule_contexts(tree, contexts, META) == {"rollforward"}
+    # the rounded variant drops the schedule row: the reason the plain test exists
+    monkeypatch.setattr(srt, "_tagged_ciks", lambda: {"0001859919": frozenset({"cost_or_percent_unrounded"})})
+    assert srt.non_schedule_contexts(tree, contexts, META) == {"fetch", "rollforward"}
+
+
+def test_cost_or_percent_still_drops_note_rows_without_cost_or_percent(monkeypatch):
+    # false positive guard: a fair-value-only note context and a rate-only context
+    monkeypatch.setattr(srt, "_tagged_ciks", lambda: {"0001859919": frozenset({"cost_or_percent"})})
+    assert srt.non_schedule_contexts(_tree(), CONTEXTS, META) == {"rollforward"}

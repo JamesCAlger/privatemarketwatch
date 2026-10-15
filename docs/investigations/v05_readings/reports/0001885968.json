@@ -1,0 +1,610 @@
+{
+ "cik": "0001885968",
+ "label": "tsxd",
+ "before": "spoff2",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 15,
+   "why": "printed names set where the member glues the issuer to the next segment (KWOR Acquisition 2025-09-30, Vardiman preferred 2025-09-30; TS Imagine and Two Six Labs are new 2026-06-30 rows); 9 Mantech -> ManTech rows come from the shared name step since spoff2 (already in tsxa, before any change of this run); round 2: 4 rows 2026-03-31/2026-06-30 '48Forty Solutions, LLC' -> printed '48Forty TopCo, LLC' (page sample C015)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 2,
+   "why": "KWOR Acquisition Other Debt 2025-09-30 (was empty) and Vardiman preferred 2025-09-30 ('Equity ...' -> 'Preferred Equity ...'), from the wrapper's hierarchy regex fix"
+  },
+  {
+   "column": "shares_held",
+   "rows": 46,
+   "why": "2025-09-30 printed unit counts (the 10-Q tags every count as principal x 1,000; 30 rows); 2023-09-30 unit counts tagged as principal moved to units (13 rows); 3 loan pars tagged as share counts at 2024-12-31 moved out of units"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 16,
+   "why": "2023-09-30 equity unit counts cleared from par (13 rows); 2024-12-31 Securonix x2 and Mobileum par from the share-count tag (3 rows)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 16,
+   "why": "moves with principal_amount (same rows)"
+  },
+  {
+   "column": "asset_category",
+   "rows": 66,
+   "why": "old-format filings (to 2025-06-30): preferred rows published as loans, preferred published as common (Vardiman), and every 2023-09-30 equity row published as a loan; class from the printed section or instrument column"
+  },
+  {
+   "column": "index_classification",
+   "rows": 66,
+   "why": "moves with asset_category (same rows)"
+  },
+  {
+   "column": "asset_class",
+   "rows": 54,
+   "why": "loan rows reclassed to equity: PRIVATE_CREDIT -> PRIVATE_EQUITY (preferred-as-common rows keep PRIVATE_EQUITY)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 9,
+   "why": "fixed preferred dividends printed 'r %' and tagged only as a spread (Integrity, Knockout, Verdantas 2023-12-31, 2025-09-30, 2025-12-31; Knockout 2026-03-31); round 2: BCTO Bluebill revolver 2025-09-30 0.81 -> printed 8.81 (page sample C005)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 9,
+   "why": "moves with interest_rate (same rows); round 2: BCTO Bluebill revolver 2025-09-30 0.81 -> printed 8.81 (page sample C005)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 9,
+   "why": "rows that gained a rate"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 2,
+   "why": "derived by the finalizer from the corrected spread/PIK: Continental Battery 2024-12-31 (11.48 less 4.08 PIK = 7.40) and Knockout 2026-03-31 (all PIK, 0.0)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 37,
+   "why": "printed margins: 'S + m % PIK' loans with the margin tagged only as PIK (Applitools, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery); preferred 'S + 10.00 %' rows with the margin tagged as rate; fixed coupons tagged as spread withdrawn (Heartland 2026, preferred); Continental Battery 2024-12-31 7.00 not 4.08"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 20,
+   "why": "codes C=CORRA, SA=SONIA added from the filer's legend (Surewerx, Victors, Hercules, Optimizely); benchmark withdrawn on fixed coupons tagged as spreads (Heartland 2026, Integrity/Knockout 2023-12-31, Knockout 2026-03-31)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 15,
+   "why": "moves with reference_rate_type (inferred_post_libor -> printed column)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 36,
+   "why": "Floating for printed 'CODE + m %' rows published Fixed; Fixed for printed fixed coupons published Floating"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Continental Battery 2024-12-31: printed '(incl. 4.08 % PIK)', no PIK fact tagged"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 139,
+   "why": "audit column listing the row corrections above"
+  },
+  {
+   "column": "position_id",
+   "rows": 368,
+   "why": "position chains re-paired after the name, class and rate changes; 332 of these already differ in tsxa (shared steps since spoff2: issuer/instrument split D-166, ManTech casing), before any change of this run; round 2: 2 more (48Forty TopCo rows re-chained under the printed name)"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 4,
+   "why": "follows the 48Forty TopCo issuer name"
+  }
+ ],
+ "rows_added": 563,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Fetch Insurance 2024-12-31 (1.69M) dropped because its fair value is tagged at decimals -4: the wrapper's schedule-row test changed from cost_or_percent_unrounded to the new cost_or_percent (no rounding clause; note rows of this filer carry neither cost nor percent). 2024-12-31 now ties (was -1.7M).",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Fetch Insurance Services, LLC (5) Other Debt 12.75 % (incl. 3.75 % PIK) 12.75 % 10/31/2027 1,707 1,677 1,690 0.16"
+    }
+   ]
+  },
+  {
+   "what": "fv_conservation x4: the filed investments total leaves the money-market row out (printed below 'Total Portfolio Investments'); wrapper investments_total_excludes cash_rows compares like with like.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Government Money Market Fund - Institutional Shares 4.18 % $ 11,703 $ 11,703 1.08 % Cash 54,489 54,489 5.01 %"
+    }
+   ]
+  },
+  {
+   "what": "Money-market row missing from 2025-09-30 on (new filing agent tags it on CashAndCashEquivalentsAxis, cost and fair value on two contexts): cost context named (context_identifiers) and the printed fair value declared (untagged_values), four filings.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Money Market Fund - Institutional Shares 3.99 % $ 11,105 $ 11,105 1.00 % Cash 40,741 40,741 3.68 %"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Money Market Fund - Institutional Shares 3.62 % $ 23,676 $ 23,676 2.11 % Cash 47,217 47,217 4.20 %"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Money Market Fund - Institutional Shares 3.50 % $ 11,648 $ 11,648 1.01 % Cash and Cash Equivalents 64,929 64,929 5.61 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "J.P. Morgan US Government Money Market Fund - Institutional Shares 3.50 % $ 13,900 $ 13,900 1.18 % Cash and Cash Equivalents 33,012 33,012 2.81 %"
+    }
+   ]
+  },
+  {
+   "what": "BP Purchaser common 2025-12-31: cost 1,379 filed on a context dated 2025-09-30 (misdated_contexts); cost now ties.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-085572",
+     "text": "BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -"
+    }
+   ]
+  },
+  {
+   "what": "Equity rows of the old-format filings classed as loans (preferred every quarter to 2025-06-30, all equity at 2023-09-30 with unit counts tagged as par), Vardiman preferred published as common: 66 row corrections from the printed section or instrument column (X11 x9, X02 2023-09-30).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Integrity Marketing Acquisition, LLC (4) (9) 10.50 % 12/21/2021 1,000,000 $ 1,123 $ 1,120 0.19 % Knockout Intermediate Holdings I, Inc. (4) (9) 11.75 % 06/25/2022 2,040 2,117 2,143 0.36"
+    },
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Amerilife Holdings, LLC (4) (13) 9/1/2022 14,856 410 533 0.07 %"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Revalize, Inc. (5) (16) Preferred Equity S + 10.00 % 12/14/2021 2,154 3,376 3,183 0.29"
+    }
+   ]
+  },
+  {
+   "what": "2025-09-30 equity unit counts tagged as principal at the printed count x 1,000, none published (C04): 30 printed counts set by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Continental Battery Company (5) (15) (16) Common Equity 07/16/2025 7,758 $ - $ -"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "FPG Intermediate Holdco, LLC (5) (15) (16) Common Equity 07/18/2025 8,121 - - -"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: member typos ('non-afiliated', 'Warrants', a missing space before the instrument or after the industry comma) gave empty or whole-member issuers (C201 x2, C206): wrapper hierarchy regex widened (dry run on all 2,653 identifiers: 7 change, all intended); printed names set by row correction where the member glues words (KWOR, Vardiman, TS Imagine) or omits the industry (Two Six Labs).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "TS Imagine, Inc. (5) (7) (9) First Lien Debt S + 6.25 % 9.91 % 06/12/2031 8,136 8,015 8,015 0.68"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Two Six Labs, LLC (5) (7) (9) (11) First Lien Debt S + 5.00 % 8.73 % 08/20/2030 16,662 16,560 16,560 1.41"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Leaf Home, LLC (5) (15) (16) Warrants 09/05/2025 1 - - -"
+    }
+   ]
+  },
+  {
+   "what": "Rates against the printed line (46 specs): 'S + m % PIK' margins tagged only as PIK published Fixed without spread; fixed coupons tagged as spreads published floating (Heartland 2026, fixed preferred dividends); Continental Battery 2024-12-31 spread fact held the PIK part (spread_printed); Knockout preferred 2026-03-31 printed fixed '10.75 % PIK' with no benchmark (reference_rate_printed).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Applitools, Inc. (5) (7) (11) (13) First Lien Debt S + 6.25 % PIK 10.58 % 05/25/2029 8,356 8,277 8,284"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Continental Battery Company (5) (6) (11) (12) First Lien Debt S + 7.00 % (incl. 4.08 % PIK) 11.48 % 01/20/2027 6,473 6,415 4,571 0.44"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Knockout Intermediate Holdings I, Inc. (5) (7) (15) Preferred Equity 10.75 % PIK 06/25/2022 1,119 1,720 1,560 0.13"
+    }
+   ]
+  },
+  {
+   "what": "Reference-rate codes C=CORRA, SA=SONIA, F=FEDFUNDS added from the legend printed from the 10-K for 2024-12-31 on; 13 rows had an inferred SOFR.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Surewerx Purchaser III, Inc. (5) (7) (13) First Lien Debt C + 5.25 % 8.42 % 12/28/2029 C$ 319 230 222 0.02"
+    }
+   ]
+  },
+  {
+   "what": "2024-12-31 loan pars tagged with the share-count concept (Securonix x2, Mobileum; X11): par set, units cleared.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Securonix, Inc. (5) (7) (11) First Lien Debt S + 7.00 % (incl. 3.75 % PIK) 12.34 % 04/05/2028 21,010 20,782 19,151 1.84"
+    }
+   ]
+  },
+  {
+   "what": "Page sample C015: from 2026-03-31 the page prints the restructured holding company '48Forty TopCo, LLC' for the common and preferred lines; the members still name the borrower '48Forty Solutions, LLC'. 4 row corrections (2026-03-31, 2026-06-30), the only quarters with these lines. GICS label unchanged (Distributors).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219405",
+     "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,300 6,300 0.54"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,299 6,118 0.52"
+    }
+   ]
+  },
+  {
+   "what": "Page sample C005: BCTO Bluebill undrawn line 2025-09-30 tagged 0.0081 for the printed 8.81 % (printed '8 .81 %'), published 0.81. Set to 8.81. Whole fund checked: it is the only loan with a rate below 3 pct in any quarter.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "BCTO Bluebill Midco, Inc. (5) (7) (17) First Lien Debt S + 4.50 % 8 .81 % 07/30/2032 - ( 9 ) ( 9 ) -"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "schedule-row-dropped-by-rounding-clause",
+   "what": "The shared schedule-row test cost_or_percent_unrounded drops a context whose only fair-value fact has decimals below -3 even when it carries an exact cost and a percent: Fetch Insurance 1,690 (filed 1,690,000 at decimals -4) was lost at 2024-12-31. Fixed here by the new opt-in test cost_or_percent; other funds on cost_or_percent_unrounded (Barings, Carlyle, KKR FS) can lose a schedule row whose fair value happens to end in two zeros.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 1.7,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a context dropped by the rounding clause that also carries an exact cost and a percent tag",
+   "quote": {
+    "accession": "0001885968-25-000005",
+    "text": "Fetch Insurance Services, LLC (5) Other Debt 12.75 % (incl. 3.75 % PIK) 12.75 % 10/31/2027 1,707 1,677 1,690 0.16"
+   }
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "what": "From 2025-09-30 the new filing agent tags the J.P. Morgan money-market row on CashAndCashEquivalentsAxis with no identifier member, cost and fair value on two contexts; the row was not published (11.1M to 23.7M). Fixed by naming the cost context and declaring the printed fair value.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 23.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a printed money-market line with no published cash row while earlier quarters have one",
+   "quote": {
+    "accession": "0001193125-26-085572",
+    "text": "Money Market Fund - Institutional Shares 3.62 % $ 23,676 $ 23,676 2.11 % Cash 47,217 47,217 4.20 %"
+   }
+  },
+  {
+   "observation_key": "money-market-yield-published-as-spread",
+   "what": "The money-market cash rows of 2024-06-30 to 2025-06-30 publish the fund's printed yield (for example 4.18) as basis_spread with coupon Floating; the filer tags the yield with the spread concept. Left: cash rows only (5 rows), no loan analytics affected; the four new cash rows carry no rate.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 23.8,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "a basis_spread on a CASH row",
+   "quote": {
+    "accession": "0001885968-25-000018",
+    "text": "Government Money Market Fund - Institutional Shares 4.18 % $ 11,703 $ 11,703 1.08 % Cash 54,489 54,489 5.01 %"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Old-format members name the issuer only, so preferred rows (rate, units, no maturity) were classed as loans in every quarter to 2025-06-30 and every equity row at 2023-09-30 (units tagged as par). Fixed by 66 row corrections; a wrapper-level reading of the printed section would carry forward, none exists for this member format.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2025-06-30"
+   ],
+   "fair_value_m": 10.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "printed 'Total Preferred Equity' against the published preferred class total per quarter",
+   "quote": {
+    "accession": "0001885968-23-000017",
+    "text": "Integrity Marketing Acquisition, LLC (4) (9) 10.50 % 12/21/2021 1,000,000 $ 1,123 $ 1,120 0.19 % Knockout Intermediate Holdings I, Inc. (4) (9) 11.75 % 06/25/2022 2,040 2,117 2,143 0.36"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "The 10-Q for 2025-09-30 tags every equity unit count with the principal concept at the printed count x 1,000 (Amerilife 14,856,000 for 14,856); the filings before and after tag the count itself with the share concept. 30 rows had no count; set from the page.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 19.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "equity unit coverage that drops to zero in one quarter",
+   "quote": {
+    "accession": "0001193125-25-277734",
+    "text": "Amerilife Holdings, LLC (5) (15) (16) Common Equity 09/01/2022 14,856 410 1,041"
+   }
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "what": "'S + m % PIK' loans whose margin is tagged only as the PIK rate beside a plain rate were published Fixed with no spread (Applitools 2023-06-30 to 2025-06-30, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery). Fixed by row corrections; pik_only_tag_reading does not apply because a plain rate is tagged.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-06-30",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 8.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a loan with a SOFR reference rate, a PIK rate and no spread",
+   "quote": {
+    "accession": "0001885968-25-000018",
+    "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,805 $ 8,734 $ 8,717"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "what": "Heartland Veterinary second lien prints a fixed '14.50 % (incl. 7.00 % PIK)'; from 2026-03-31 it was published SOFR floating with spread 14.5 (the earlier quarters were Fixed). Fixed preferred dividends tagged as spreads likewise (Integrity, Knockout, Verdantas). Fixed by row corrections.",
+   "field": "coupon_type",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a floating row whose printed rate cell has no benchmark code",
+   "quote": {
+    "accession": "0001193125-26-344703",
+    "text": "Heartland Veterinary Partners, LLC (5) (6) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 2,947"
+   }
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "what": "From 2025-09-30 instrument_description is the member tail: 'First Lien Debt Reference Rate and Spread S + 5.50% Interest Rate 9.50% Maturity Date 03/28/2030 One' (rate text, maturity and the twin ordinal). Left: stripping it makes twin lines' instrument text identical and re-pairs position chains (the TriplePoint failure of D-166); a strip that keeps the ordinal needs a measured A/B.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "instrument text containing 'Interest Rate' or 'Maturity Date'",
+   "quote": {
+    "accession": "0001193125-25-277734",
+    "text": "Formstack Acquisition, Co. (5) (6) (10) First Lien Debt S + 5.50 % 9.50 % 03/28/2030 9,287 9,176 9,264 0.84"
+   }
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "what": "2026-03-31: the Surewerx CAD tranche (C$315, cost 228, fair value 226) is printed but has no context; the CORRA-labelled member carries the dollar tranche's values. 0.23M short, within the 0.5M tolerance. Left: no context to name and no value-declaration route that adds a row.",
+   "field": "fair_value",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.2,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "printed rows per issuer against published rows per issuer",
+   "quote": {
+    "accession": "0001193125-26-219405",
+    "text": "Surewerx Purchaser III, Inc. (5) (7) (14) First Lien Debt C + 5.25% 7.51% 12/28/2029 C$315 228 226 0.02"
+   }
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "what": "The page prints 'Mantech International CP' at 2025-09-30; the shared name step publishes 'ManTech International CP' (9 rows, 2025-09-30 to 2026-03-31; present in tsxa before any change of this run). Left: shared step, harmless casing.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 18.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001193125-25-277734",
+    "text": "Mantech International CP (5) (7) (9) First Lien Debt S + 5.00 % 9.31 % 09/14/2029 18,012 17,795 18,012 1.62"
+   }
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "what": "Knockout preferred 2026-03-31: the member reads 'S+ 10.75% PIK', the page prints a fixed '10.75 % PIK' (and 'S + 10.75 % PIK' at 2026-06-30). The page was followed (benchmark withdrawn); the filer is inconsistent between quarters.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 1.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001193125-26-219405",
+    "text": "Knockout Intermediate Holdings I, Inc. (5) (7) (15) Preferred Equity 10.75 % PIK 06/25/2022 1,119 1,720 1,560 0.13"
+   }
+  },
+  {
+   "observation_key": "rate-tag-drops-digit-where-page-splits-the-number",
+   "what": "BCTO Bluebill undrawn line 2025-09-30: printed '8 .81 %', tagged 0.0081 (the tag lost the leading digit split by a stray space). Fixed by row correction; one row in the fund.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "a loan whose rate is below its own spread",
+   "quote": {
+    "accession": "0001193125-25-277734",
+    "text": "BCTO Bluebill Midco, Inc. (5) (7) (17) First Lien Debt S + 4.50 % 8 .81 % 07/30/2032 - ( 9 ) ( 9 ) -"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "48Forty: after the January 2026 restructuring the page prints '48Forty TopCo, LLC' (acquired 01/14/2026) for the equity lines; the members keep '48Forty Solutions, LLC' and date 01/04/2026. Name fixed by row correction; the acquisition date is not published.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 6.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001193125-26-219405",
+    "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,300 6,300 0.54"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Sweep Midco second lien 2026-03-31: the page prints no rate, the member reads 'Interest Rate 0.00%', and 0.0 Fixed is published from the member text. Left: the next 10-Q prints '0.00 %' on the same lines, so 0.0 is the filer's rate; withdrawing it would only raise X02.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.4,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "a rate published from identifier text where the printed rate cell is empty",
+   "quote": {
+    "accession": "0001193125-26-219405",
+    "text": "Sweep Midco, LLC (5) (11) (16) Second Lien Debt 03/12/2034 580 290 372 0.03"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_schedule_row_tags.py: 9 passed (2 new)",
+  "tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py + tests/test_schedule_row_tags.py: 663 passed"
+ ],
+ "not_done": [
+  "Full test suite not run.",
+  "Effect of the new cost_or_percent value on other funds not measured: it is opt-in and only this wrapper uses it.",
+  "Industry labels, maturities and non-accrual flags read on a sample of 6 rows only.",
+  "Interest rates of the 2023 preferred 'S + 10.00 %' rows: the filer tags 10.00 as the rate in some quarters; spread set, the tagged rate left.",
+  "Reader notes checked: Vardiman 2026-03-31 'S + 7.00 % PIK' publishes spread 7.0, SOFR, floating (already right in tsxc); Sonny's maturity published 08/05/2028 as printed."
+ ]
+}

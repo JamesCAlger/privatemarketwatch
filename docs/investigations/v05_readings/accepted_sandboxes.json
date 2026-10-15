@@ -163,5 +163,10 @@
   "label": "hcxe",
   "accepted_on": "2026-10-15",
   "basis": "D-184, gate INCOMPLETE (X02 2025-09-30 parked: duplicate identifier blocks the row correction); page sample 0 published errors of 20"
+ },
+ "0001885968": {
+  "label": "tsxd",
+  "accepted_on": "2026-10-15",
+  "basis": "D-185, gate PASS in round 2; page sample 2 errors of 20 (rate tagged x0.01, stale issuer name), both fixed"
  }
 }
