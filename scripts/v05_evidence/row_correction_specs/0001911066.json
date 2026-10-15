@@ -1,0 +1,2906 @@
+[
+ {
+  "quarter": "2023-03-31",
+  "identifier": "BroadcastMed Holdco, LLC 1",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-016990): 'BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-016990): 'EFC Holdings, LLC (4) (8) (9) Series A Preferred Units 3/1/2023 114 114 114 0.04 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-23-016990): 'EFC Holdings, LLC (4) (8) (9) Class A Common Units 3/1/2023 114 46 46 0.02 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Fresh Edge 1",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-016990): 'Fresh Edge (4) (8) (9) Class A Preferred Units 10/3/2022 454 454 477 0.18 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "84949"
+  },
+  "reason": "unit count published 84949000, printed 84949. Printed (0001628280-23-016990): 'Gannett Fleming (4) (8) (9) Limited Partnership Interests 12/20/2022 84,949 85 99 0.04 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "ITSavvy LLC 1",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-23-016990): 'ITSavvy LLC (4) (8) (9) Class A Common Units 8/8/2022 119 119 159 0.06 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-016990): 'Kofile, Inc. (4) (8) (9) Class A-2 Common Units 3/31/2022 100 108 84 0.03 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 1",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-23-016990): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) (9) Class B Units 1/9/2023 1,963 196 196 0.07 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Marco APE Opco Holdings, LLC",
+  "fields": {
+   "interest_rate": "14.75",
+   "pik_rate": "14.75",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "no rate fact on the context; the page prints the whole coupon paid in kind. Printed (0001628280-23-016990): 'Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Oliver Packaging 1",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-23-016990): 'Oliver Packaging (4) (8) (9) Class A Common Units 7/6/2022 6,710 671 671 0.26 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-016990): 'PG Aggregator, LLC (4) (8) (9) LLC Units 3/31/2022 100 109 148 0.06 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-23-016990): 'Trench Plate Rental Co. (4) (8) (9) Common Equity 3/31/2022 1,000 127 104 0.04 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Ultima Health Holdings, LLC 1",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-016990): 'Ultima Health Holdings, LLC (4) (8) (9) Preferred Units 9/12/2022 11 130 124 0.05 %'"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-23-016990): 'WCI Holdings LLC (4) (8) (9) Class A1 Units 2/6/2023 534,934 535 535 0.21 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "BroadcastMed Holdco, LLC 1",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-027564): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 623 0.23 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-027564): 'EFC Holdings, LLC (4) (8) (9) (13) Series A Preferred Units 3/1/2023 114 114 117 0.04 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-23-027564): 'EFC Holdings, LLC (4) (8) (9) (13) Class A Common Units 3/1/2023 114 46 50 0.02 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "84949"
+  },
+  "reason": "unit count published 84949000, printed 84949. Printed (0001628280-23-027564): 'Gannett Fleming (4) (8) (9) Limited Partnership Interests 12/20/2022 84,949 85 85 0.03 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Gannett Fleming 2",
+  "fields": {
+   "shares_held": "113901"
+  },
+  "reason": "unit count published 113901000, printed 113901. Printed (0001628280-23-027564): 'Gannett Fleming (4) (8) (9) Series F Units 5/27/2023 113,901 118 113 0.04 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "ITSavvy LLC 1",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-23-027564): 'ITSavvy LLC (4) (8) (9) Class A Common Units 8/8/2022 119 119 181 0.07 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-027564): 'Kofile, Inc. (4) (8) (9) Class A-2 Common Units 3/31/2022 100 108 57 0.02 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 1",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-23-027564): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) (9) Class B Units 1/9/2023 1,963 196 199 0.07 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Marlin Coinvest LP",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-23-027564): 'Marlin Coinvest LP (4) (8) (9) (13) Limited Partnership Interests 5/8/2023 200,000 200 200 0.08 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Oliver Packaging 1",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-23-027564): 'Oliver Packaging (4) (8) (9) Class A Common Units 7/12/2022 6,710 671 626 0.23 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-027564): 'PG Aggregator, LLC (4) (8) (9) LLC Units 3/31/2022 100 109 153 0.06 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Pinnacle Supply Partners, LLC 2",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-23-027564): 'Pinnacle Supply Partners, LLC (4) (8) (9) Subject Partnership Units 4/3/2023 111,875 112 112 0.04 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-23-027564): 'Trench Plate Rental Co. (4) (8) (9) Common Equity 3/31/2022 1,000 127 104 0.04 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Ultima Health Holdings, LLC 1",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-027564): 'Ultima Health Holdings, LLC (4) (8) (9) Preferred Units 9/12/2022 11 130 118 0.05 %'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-23-027564): 'WCI Holdings LLC (4) (8) (9) (13) Class A1 Units 2/6/2023 534,934 535 543 0.20 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "ADPD Holdings, LLC (a/k/a NearU) 1",
+  "fields": {
+   "shares_held": "1419"
+  },
+  "reason": "unit count published 1419000, printed 1419. Printed (0001628280-23-035967): 'ADPD Holdings, LLC (a/k/a NearU) (4) (8) (9) Limited Partnership Interests 8/11/2022 1,419 142 91 0.03 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "ASTP Holdings Co-Investment LP",
+  "fields": {
+   "shares_held": "160609"
+  },
+  "reason": "unit count published 160609000, printed 160609. Printed (0001628280-23-035967): 'ASTP Holdings Co-Investment LP (4) (8) (9) Limited Partnership Interest 9/11/2023 160,609 137 161 0.05 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "BPC Kodiak LLC (Turbine Engine Specialist, Inc) LLC Intrest",
+  "fields": {
+   "shares_held": "1180000"
+  },
+  "reason": "unit count published 1180000000, printed 1180000. Printed (0001628280-23-035967): 'BPC Kodiak LLC (Turbine Engine Specialist, Inc) (4) (8) (9) (15) LLC Interest 9/1/2023 1,180,000 1,180 1,180 0.39 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "BroadcastMed Holdco, LLC",
+  "fields": {
+   "interest_rate": "13.75",
+   "pik_rate": "3.75",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "no rate fact on the context; printed 10% cash and 3.75% PIK. Printed (0001628280-23-035967): 'BroadcastMed Holdco, LLC (4) Subordinated Debt N/A 10% (Cash) 3.75% (PIK) 11/12/2027 2,673 2,627 2,580 0.85 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "BroadcastMed Holdco, LLC 1",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-035967): 'BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 600 0.20 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "COP Exterminators Investment, LLC",
+  "fields": {
+   "shares_held": "770000"
+  },
+  "reason": "unit count published 770000000, printed 770000. Printed (0001628280-23-035967): 'COP Exterminators Investment, LLC (4) (8) (9) Class A Units 7/31/2023 770,000 862 862 0.29 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Class Valuation 1",
+  "fields": {
+   "shares_held": "1038"
+  },
+  "reason": "unit count published 1038000, printed 1038. Printed (0001628280-23-035967): 'Class Valuation (4) (8) (9) Class A Common Units 12/7/2022 1,038 105 28 0.01 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-035967): 'EFC Holdings, LLC (4) (8) (9) (13) Series A Preferred Units 3/1/2023 114 114 119 0.04 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-23-035967): 'EFC Holdings, LLC (4) (8) (9) (13) Class A Common Units 3/1/2023 114 46 62 0.02 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "FCP-Cranium Holdings P/S A",
+  "fields": {
+   "shares_held": "375"
+  },
+  "reason": "unit count published 375000, printed 375. Printed (0001628280-23-035967): 'FCP-Cranium Holdings P/S A (4) (8) (9)(10)(13) Class A Common Shares 9/11/2023 375 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs)",
+  "fields": {
+   "shares_held": "1026",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 1026000, printed 1026; printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-23-035967): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (9)(10)(13) Series A Preferred Shares 9/11/2023 1,026 389 400 0.13 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 1",
+  "fields": {
+   "shares_held": "375",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 375000, printed 375; printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-23-035967): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (9)(10)(13) Series B Preferred Shares 9/11/2023 375 600 600 0.20 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Fresh Edge",
+  "fields": {
+   "interest_rate": "15.09",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the plain rate tag holds the printed all-in 15.09, and the fund's cash-leg reading added the 5.125 PIK on top. Printed (0001628280-23-035967): 'Fresh Edge (4) (6) Subordinated Debt S + 4.50 % (Cash) + 5.125 % (PIK) 15.09 % 4/3/2029 2,916 2,848 2,833 0.94 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Fresh Edge - Common",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-23-035967): 'Fresh Edge - Common (4) (8) (9) Class B Common Units 10/3/2022 454 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Fresh Edge - Preferred",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-23-035967): 'Fresh Edge - Preferred (4) (8) (9) Class A Preferred Units 10/3/2022 454 454 413 0.14 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "84949"
+  },
+  "reason": "unit count published 84949000, printed 84949. Printed (0001628280-23-035967): 'Gannett Fleming (4) (8) (9) (15) Limited Partnership Interests 12/20/2022 84,949 85 99 0.04 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Gannett Fleming 2",
+  "fields": {
+   "shares_held": "113901"
+  },
+  "reason": "unit count published 113901000, printed 113901. Printed (0001628280-23-035967): 'Gannett Fleming (4) (8) (9) Series F Units 5/27/2023 113,901 118 133 0.04 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "ITSavvy LLC 1",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-23-035967): 'ITSavvy LLC (4) (8) (9) Class A Common Units 8/8/2022 119 119 237 0.08 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "KRIV Acquisition, Inc 1",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-23-035967): 'KRIV Acquisition, Inc (4) (8) (9) Class A Units 7/17/2023 200 200 200 0.07 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-035967): 'Kofile, Inc. (4) (8) (9) Class A-2 Common Units 3/31/2022 100 108 61 0.02 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 1",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-23-035967): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) (9) Class B Units 1/9/2023 1,963 196 203 0.07 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Marlin Coinvest LP",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-23-035967): 'Marlin Coinvest LP (4) (8) (9) Limited Partnership Interests 5/9/2023 200,000 200 456 0.15 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Oliver Packaging 1",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-23-035967): 'Oliver Packaging (4) (8) (9) Class A Common Units 7/12/2022 6,710 671 523 0.17 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-23-035967): 'PG Aggregator, LLC (4) (8) (9) LLC Units 3/31/2022 100 109 140 0.05 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Perennial Services Investors LLC",
+  "fields": {
+   "shares_held": "1957"
+  },
+  "reason": "unit count published 1957000, printed 1957. Printed (0001628280-23-035967): 'Perennial Services Investors LLC (4) (8) (9) (13) Class A Units 9/8/2023 1,957 196 196 0.06 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Pinnacle Supply Partners, LLC 2",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-23-035967): 'Pinnacle Supply Partners, LLC (4) (8) (9) Subject Partnership Units 4/3/2023 111,875 112 103 0.03 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Solaray, LLC",
+  "fields": {
+   "maturity_date": "2023-09-09"
+  },
+  "reason": "printed maturity (past the report date) not published. Printed (0001628280-23-035967): 'Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Sugar PPC Holdings LLC",
+  "fields": {
+   "shares_held": "2000"
+  },
+  "reason": "unit count published 2000000, printed 2000. Printed (0001628280-23-035967): 'Sugar PPC Holdings LLC (4) (8) (9) (13) Parent Units 9/29/2023 2,000 200 200 0.07 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-23-035967): 'Trench Plate Rental Co. (4) (8) (9) Common Equity 3/31/2022 1,000 127 105 0.03 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Ultima Health Holdings, LLC 1",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-23-035967): 'Ultima Health Holdings, LLC (4) (8) (9) Preferred Units 9/12/2022 11 130 126 0.04 %'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-23-035967): 'WCI Holdings LLC (4) (8) (9) (13) Class A1 Units 2/6/2023 534,934 535 589 0.19 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "ADPD Holdings, LLC (a/k/a NearU) 1",
+  "fields": {
+   "shares_held": "1419"
+  },
+  "reason": "unit count published 1419000, printed 1419. Printed (0001628280-24-008070): 'ADPD Holdings, LLC (a/k/a NearU) (4) (7) (8) (9) Limited Partnership Interests 8/11/2022 1,419 142 91 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "ASTP Holdings Co-Investment LP",
+  "fields": {
+   "shares_held": "160609"
+  },
+  "reason": "unit count published 160609000, printed 160609. Printed (0001628280-24-008070): 'ASTP Holdings Co-Investment LP (4) (8) (9) Limited Partnership Interest 6/30/2022 160,609 137 175 0.05 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "AirX Climate Solutions Company",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "unit count published 96000, printed 96. Printed (0001628280-24-008070): 'AirX Climate Solutions Company (4) (8) (9) Partnership Interests 11/7/2023 96 77 96 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "BPC Kodiak LLC (Turbine Engine Specialist, Inc)",
+  "fields": {
+   "shares_held": "1180000"
+  },
+  "reason": "unit count published 1180000000, printed 1180000. Printed (0001628280-24-008070): 'BPC Kodiak LLC (Turbine Engine Specialist, Inc) (4) (8) (9) (14) Class A-1 Units 9/1/2023 1,180,000 1,180 1,245 0.35 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "BroadcastMed Holdco, LLC 1",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-008070): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 682 0.19 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "COP Exterminators Investment, LLC",
+  "fields": {
+   "shares_held": "770000"
+  },
+  "reason": "unit count published 770000000, printed 770000. Printed (0001628280-24-008070): 'COP Exterminators Investment, LLC (4) (8) (9) Class A Units 7/31/2023 770,000 862 898 0.25 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Clarity Innovations, Inc.",
+  "fields": {
+   "shares_held": "77000"
+  },
+  "reason": "unit count published 77000000, printed 77000. Printed (0001628280-24-008070): 'Clarity Innovations, Inc. (4) (8) (9) Partnership Interests 12/7/2023 77,000 76 77 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Class Valuation 1",
+  "fields": {
+   "shares_held": "1038"
+  },
+  "reason": "unit count published 1038000, printed 1038. Printed (0001628280-24-008070): 'Class Valuation (4) (8) (9) Class A Common Units 12/8/2023 1,038 105 34 0.01 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-008070): 'EFC Holdings, LLC (4) (8) (9)(13) Series A Preferred Units 3/1/2023 114 114 121 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-24-008070): 'EFC Holdings, LLC (4) (8) (9)(13) Class A Common Units 3/1/2023 114 46 87 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "FCP-Cranium Holdings P/S A",
+  "fields": {
+   "shares_held": "375"
+  },
+  "reason": "unit count published 375000, printed 375. Printed (0001628280-24-008070): 'FCP-Cranium Holdings P/S A (4) (8) (9)(10)(13) Class A Common Shares 9/11/2023 375 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 1",
+  "fields": {
+   "shares_held": "1026",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 1026000, printed 1026; printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-008070): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (9)(10)(13) Series A Preferred Shares 9/11/2023 1,026 389 407 0.11 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 2",
+  "fields": {
+   "shares_held": "375",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 3753613000, printed 375; printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-008070): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (9)(10)(13) Series B Preferred Shares 9/11/2023 375 600 600 0.17 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Fresh Edge",
+  "fields": {
+   "interest_rate": "15.2",
+   "basis_spread": "4.5",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Floating"
+  },
+  "reason": "printed all-in 15.20 on a 4.50 cash margin and 5.13 PIK; published 9.63 with no spread; printed all-in 15.20 on a 4.50 cash margin and 5.13 PIK; published 9.63 with no spread (and so typed fixed). Printed (0001628280-24-008070): 'Fresh Edge (4) (6) Subordinated Debt S+ 4.50 % (Cash) 5.13 % (PIK) 15.20 % 4/3/2029 2,954 2,888 2,886 0.81 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Fresh Edge - Common",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-008070): 'Fresh Edge - Common (4) (8) (9) Class B Common Units 10/3/2022 454 \u2014 67 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Fresh Edge - Preferred",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-008070): 'Fresh Edge - Preferred (4) (8) (9) Class A Preferred Units 10/3/2022 454 454 507 0.14 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "84949"
+  },
+  "reason": "unit count published 84949000, printed 84949. Printed (0001628280-24-008070): 'Gannett Fleming (4) (8) (9) (14) Limited Partnership Interests 12/20/2022 84,949 85 124 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Gannett Fleming 2",
+  "fields": {
+   "shares_held": "113901"
+  },
+  "reason": "unit count published 113901000, printed 113901. Printed (0001628280-24-008070): 'Gannett Fleming (4) (8) (9) Series F Units 5/27/2023 113,901 118 166 0.05 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Health Management Associates 3",
+  "fields": {
+   "shares_held": "161953"
+  },
+  "reason": "unit count published 161953000, printed 161953. Printed (0001628280-24-008070): 'Health Management Associates (4) (8) (9) Class A Common Units 3/31/2023 161,953 162 173 0.05 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "ICON Publishing Ltd 1",
+  "fields": {
+   "interest_rate": "7.86",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "rate printed, not tagged on this context. Printed (0001628280-24-008070): 'ICON Publishing Ltd (6) (10)(12)(13) First Lien Term Loan S + 2.25 % 7.86 % 7/3/2028 342 343 344 0.10 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "ITSavvy LLC 1",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-24-008070): 'ITSavvy LLC (4) (8) (9) Class A Common Units 8/8/2022 119 119 285 0.08 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Inszone",
+  "fields": {
+   "shares_held": "80208"
+  },
+  "reason": "unit count published 80208000, printed 80208. Printed (0001628280-24-008070): 'Inszone (4) (8) (9)(13) Partnership Interests 11/30/2023 80,208 77 80 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "KRIV Acquisition, Inc 1",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-008070): 'KRIV Acquisition, Inc (4) (8) (9) Class A Units 7/17/2023 200 200 236 0.07 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Kofile, Inc.1",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-008070): 'Kofile, Inc. (4) (8) (9) Class A-2 Common Units 3/31/2022 100 108 57 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "LMI Renaissance",
+  "fields": {
+   "shares_held": "109456"
+  },
+  "reason": "unit count published 106984, printed 109456. Printed (0001628280-24-008070): 'LMI Renaissance (4) (8) (9) Limited Partnership Interests 6/30/2022 109,456 107 237 0.07 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 1",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-24-008070): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) (9) Class B Units 1/9/2023 1,963 196 217 0.06 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Marlin Coinvest LP",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-24-008070): 'Marlin Coinvest LP (4) (8) (9)(13) Limited Partnership Interests 5/9/2023 200,000 200 236 0.07 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Oliver Packaging 1",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-24-008070): 'Oliver Packaging (4) (8) (9) Class A Common Units 7/12/2022 6,710 671 420 0.12 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-008070): 'PG Aggregator, LLC (4) (8) (9)(13) LLC Units 3/31/2022 100 109 135 0.04 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Perennial Services Investors LLC",
+  "fields": {
+   "shares_held": "1957"
+  },
+  "reason": "unit count published 1957000, printed 1957. Printed (0001628280-24-008070): 'Perennial Services Investors LLC (4) (8) (9)(13) Class A Units 9/8/2023 1,957 196 271 0.08 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Pinnacle Supply Partners, LLC 1",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-24-008070): 'Pinnacle Supply Partners, LLC (4) (8) (9) Subject Partnership Units 4/3/2023 111,875 112 112 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Smith System",
+  "fields": {
+   "shares_held": "84000"
+  },
+  "reason": "unit count published 84000000, printed 84000. Printed (0001628280-24-008070): 'Smith System (4) (8) (9) Common Units 12/13/2023 84,000 84 84 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Sugar PPC Holdings LLC",
+  "fields": {
+   "shares_held": "2000"
+  },
+  "reason": "unit count published 2000000, printed 2000. Printed (0001628280-24-008070): 'Sugar PPC Holdings LLC (4) (8) (9)(13) Parent Units 9/29/2023 2,000 200 200 0.06 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Tech24",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-008070): 'Tech24 (4) (8) (9) Company Unit 10/5/2023 200 200 200 0.06 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-24-008070): 'Trench Plate Rental Co. (4) (8) (9) Common Equity 3/31/2022 1,000 127 97 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Ultima Health Holdings, LLC 1",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-008070): 'Ultima Health Holdings, LLC (4) (8) (9) Preferred Units 9/12/2022 11 130 121 0.03 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-24-008070): 'WCI Holdings LLC (4) (8) (9)(13) Class A1 Units 2/6/2023 534,934 535 581 0.16 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Worldwide Clinical Trials 1",
+  "fields": {
+   "shares_held": "7"
+  },
+  "reason": "unit count published 7000, printed 7. Printed (0001628280-24-008070): 'Worldwide Clinical Trials (4) (8) (9) Class A Interests 12/12/2023 7 74 74 0.02 %'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Worldwide Clinical Trials 2",
+  "fields": {
+   "shares_held": "49",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 49000, printed 49; printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-24-008070): 'Worldwide Clinical Trials (4) (8) (9) Series A Preferred 12/12/2023 49 47 49 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "ASTP Holdings Co-Investment LP",
+  "fields": {
+   "shares_held": "77974"
+  },
+  "reason": "unit count published 77974000, printed 77974. Printed (0001628280-24-022649): 'ASTP Holdings Co-Investment LP (4) (8) Limited Partnership Interest 9/11/2023 77,974 80 63 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "AirX Climate Solutions Company",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "unit count published 96000, printed 96. Printed (0001628280-24-022649): 'AirX Climate Solutions Company (4) (8) Partnership Interests 11/7/2023 96 77 98 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Arax Investment Partners",
+  "fields": {
+   "shares_held": "1117012"
+  },
+  "reason": "unit count published 1117012000, printed 1117012. Printed (0001628280-24-022649): 'Arax Investment Partners (4) (8) (13) Limited Partnership Interest 2/28/2024 1,117,012 1,121 1,117 0.23 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "BPC Kodiak LLC (Turbine Engine Specialist, Inc)",
+  "fields": {
+   "shares_held": "1180000"
+  },
+  "reason": "unit count published 1180000000, printed 1180000. Printed (0001628280-24-022649): 'BPC Kodiak LLC (Turbine Engine Specialist, Inc) (4) (8) (9) Class A-1 Units 9/1/2023 1,180,000 1,180 1,434 0.30 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "BroadcastMed Holdco, LLC 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-022649): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 606 0.13 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "COP Exterminators Investment, LLC",
+  "fields": {
+   "shares_held": "770000"
+  },
+  "reason": "unit count published 770000000, printed 770000. Printed (0001628280-24-022649): 'COP Exterminators Investment, LLC (4) (8) Class A Units 7/31/2023 770,000 862 928 0.18 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Clarity Innovations, Inc.",
+  "fields": {
+   "shares_held": "77000"
+  },
+  "reason": "unit count published 77000000, printed 77000. Printed (0001628280-24-022649): 'Clarity Innovations, Inc. (4) (8) Partnership Interests 12/8/2023 77,000 76 79 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Class Valuation 2",
+  "fields": {
+   "shares_held": "1038"
+  },
+  "reason": "unit count published 1038000, printed 1038. Printed (0001628280-24-022649): 'Class Valuation (4) (8) Class A Common Units 3/31/2022 1,038 105 25 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-24-022649): 'EFC Holdings, LLC (4) (8) (13) Class A Common Units 3/1/2023 114 46 92 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-022649): 'EFC Holdings, LLC (4) (8) (13) Series A Preferred Units 3/1/2023 114 114 124 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "FCP-Cranium Holdings P/S A",
+  "fields": {
+   "shares_held": "3753613"
+  },
+  "reason": "unit count published 3753613000, printed 3753613. Printed (0001628280-24-022649): 'FCP-Cranium Holdings P/S A (4) (8) (10) (13) Class A Common Shares 9/11/2023 3,753,613 \u2014 8 \u2014 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 1",
+  "fields": {
+   "shares_held": "10256410",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 1026000, printed 10256410; printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-022649): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 430 0.08 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 2",
+  "fields": {
+   "shares_held": "3753613",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 3753613000, printed 3753613; printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-022649): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 627 0.13 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Fresh Edge - Common",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-022649): 'Fresh Edge - Common (4) (8) Class B Common Units 10/3/2022 454 \u2014 31 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Fresh Edge - Preferred",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-022649): 'Fresh Edge - Preferred (4) (8) Class A Preferred Units 10/3/2022 454 454 526 0.11 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "113901"
+  },
+  "reason": "unit count published 113901000, printed 113901. Printed (0001628280-24-022649): 'Gannett Fleming (4) (8) Series F Units 5/26/2023 113,901 118 166 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Gannett Fleming 2",
+  "fields": {
+   "shares_held": "84949"
+  },
+  "reason": "unit count published 84949000, printed 84949. Printed (0001628280-24-022649): 'Gannett Fleming (4) (8) (9) Limited Partnership Interests 12/20/2022 84,949 85 124 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Health Management Associates 2",
+  "fields": {
+   "shares_held": "161953"
+  },
+  "reason": "unit count published 161953000, printed 161953. Printed (0001628280-24-022649): 'Health Management Associates (4) (8) Class A Common Units 3/30/2023 161,953 162 198 0.04 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "ITSavvy LLC 2",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-24-022649): 'ITSavvy LLC (4) (8) Class A Common Units 8/8/2022 119 119 314 0.07 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Inszone",
+  "fields": {
+   "shares_held": "80208"
+  },
+  "reason": "unit count published 80208000, printed 80208. Printed (0001628280-24-022649): 'Inszone (4) (8) (13) Partnership Interests 11/30/2023 80,208 77 86 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "KRIV Acquisition, Inc 2",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-022649): 'KRIV Acquisition, Inc (4) (8) Class A Units 7/17/2023 200 200 186 0.04 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-022649): 'Kofile, Inc. (4) (8) Class A-2 Common Units 3/31/2022 100 108 43 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "LMI Renaissance 2",
+  "fields": {
+   "shares_held": "106984"
+  },
+  "reason": "unit count published 106984000, printed 106984. Printed (0001628280-24-022649): 'LMI Renaissance (4) (8) Limited Partnership Interests 6/30/2022 106,984 107 240 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 2",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-24-022649): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) Class B Units 1/9/2023 1,963 196 239 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Marlin Coinvest LP",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-24-022649): 'Marlin Coinvest LP (4) (8) (13) Limited Partnership Interests 5/9/2023 200,000 200 240 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Meyer Lab",
+  "fields": {
+   "shares_held": "849000"
+  },
+  "reason": "unit count published 849000000, printed 849000. Printed (0001628280-24-022649): 'Meyer Lab (4) (8) (13) Units 2/27/2024 849,000 849 849 0.18 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "NearU 2",
+  "fields": {
+   "shares_held": "1419"
+  },
+  "reason": "unit count published 1419000, printed 1419. Printed (0001628280-24-022649): 'NearU (4) (7) (8) Limited Partnership Interests 8/11/2022 1,419 142 93 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Netchex",
+  "fields": {
+   "shares_held": "480000"
+  },
+  "reason": "unit count published 480000000, printed 480000. Printed (0001628280-24-022649): 'Netchex (4) (8) Limited Partnership Interest 3/28/2024 480,000 513 480 0.10 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "New You Bariatric Group, LLC",
+  "fields": {
+   "interest_rate": "10.75",
+   "pik_rate": "10.75",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.75 % (PIK)'). Printed (0001628280-24-022649): 'New You Bariatric Group, LLC (4) (6) First Lien Term Loan S + 5.25 % 10.75 % (PIK) 8/26/2024 7,059 7,059 3,458 0.73 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Oliver Packaging 2",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-24-022649): 'Oliver Packaging (4) (8) Class A Common Units 7/6/2022 6,710 671 398 0.08 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-022649): 'PG Aggregator, LLC (4) (8) (13) LLC Units 3/31/2022 100 109 124 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Perennial Services Investors LLC",
+  "fields": {
+   "shares_held": "1957"
+  },
+  "reason": "unit count published 1957000, printed 1957. Printed (0001628280-24-022649): 'Perennial Services Investors LLC (4) (8) (13) Class A Units 9/8/2023 1,957 196 275 0.06 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Pinnacle Supply Partners, LLC 2",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-24-022649): 'Pinnacle Supply Partners, LLC (4) (8) Limited Partnership Units 4/3/2023 111,875 112 106 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Smith System",
+  "fields": {
+   "shares_held": "84000"
+  },
+  "reason": "unit count published 84000000, printed 84000. Printed (0001628280-24-022649): 'Smith System (4) (8) Common Units 12/13/2023 84,000 84 85 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Spectrum Science",
+  "fields": {
+   "shares_held": "235000"
+  },
+  "reason": "unit count published 235000000, printed 235000. Printed (0001628280-24-022649): 'Spectrum Science (4) (8) Limited Partner Interests 1/5/2024 235,000 252 235 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Sugar PPC Holdings LLC",
+  "fields": {
+   "shares_held": "2000"
+  },
+  "reason": "unit count published 2000000, printed 2000. Printed (0001628280-24-022649): 'Sugar PPC Holdings LLC (4) (8) (13) Parent Units 9/29/2023 2,000 200 242 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "SupplyOne, Inc. 2",
+  "fields": {
+   "shares_held": "289"
+  },
+  "reason": "unit count published 289000, printed 289. Printed (0001628280-24-022649): 'SupplyOne, Inc. (4) (8) LLC Common Units 3/31/2022 289 145 145 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Tech24",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-022649): 'Tech24 (4) (8) Company Unit 10/5/2023 200 200 206 0.04 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-24-022649): 'Trench Plate Rental Co. (4) (8) Common Equity 3/31/2022 1,000 127 78 0.02 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "USA Water 2",
+  "fields": {
+   "shares_held": "4226"
+  },
+  "reason": "unit count published 4226000, printed 4226. Printed (0001628280-24-022649): 'USA Water (4) (8) (13) Common Units 2/21/2024 4,226 422 423 0.09 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Ultima Health Holdings, LLC 2",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-022649): 'Ultima Health Holdings, LLC (4) (8) Preferred Units 9/12/2022 11 130 139 0.03 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-24-022649): 'WCI Holdings LLC (4) (8) (13) Class A1 Units 2/6/2023 534,934 535 599 0.13 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Worldwide Clinical Trials 1",
+  "fields": {
+   "shares_held": "49",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 49000, printed 49; printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-24-022649): 'Worldwide Clinical Trials (4) (8) Series A Preferred 12/12/2023 49 47 48 0.01 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Worldwide Clinical Trials 2",
+  "fields": {
+   "shares_held": "7"
+  },
+  "reason": "unit count published 7000, printed 7. Printed (0001628280-24-022649): 'Worldwide Clinical Trials (4) (8) Class A Interests 12/12/2023 7 74 75 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "ASTP Holdings Co-Investment LP",
+  "fields": {
+   "shares_held": "77974"
+  },
+  "reason": "unit count published 77974000, printed 77974. Printed (0001628280-24-036317): 'ASTP Holdings Co-Investment LP (4) (8) (10) Limited Partnership Interest 9/11/2023 77,974 80 68 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "AirX Climate Solutions Company",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "unit count published 96000, printed 96. Printed (0001628280-24-036317): 'AirX Climate Solutions Company (4) (8) (10) Partnership Interests 11/7/2023 96 77 121 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Arax Investment Partners",
+  "fields": {
+   "shares_held": "820313"
+  },
+  "reason": "unit count published 820313000, printed 820313. Printed (0001628280-24-036317): 'Arax Investment Partners (4) (8) (10) (13) Limited Partnership Interest 3/28/2024 820,313 818 1,191 0.16 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Armstrong Transport Group 1",
+  "fields": {
+   "interest_rate": "17",
+   "pik_rate": "17",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('17.00 % (PIK)'). Printed (0001628280-24-036317): 'Armstrong Transport Group (4) (10) Subordinated Debt N/A 17.00 % (PIK) 6/30/2027 1,017 997 997 0.14 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "BPC Kodiak LLC (Turbine Engine Specialist, Inc)",
+  "fields": {
+   "shares_held": "1180000"
+  },
+  "reason": "unit count published 1180000000, printed 1180000. Printed (0001628280-24-036317): 'BPC Kodiak LLC (Turbine Engine Specialist, Inc) (4) (8) (9) (10) Class A-1 Units 9/1/2023 1,180,000 1,180 1,523 0.21 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "BroadcastMed Holdco, LLC 1",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-036317): 'BroadcastMed Holdco, LLC (4) (8) (10) Series A-3 Preferred Units 10/4/2022 43,679 655 528 0.07 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "COP Exterminators Investment, LLC",
+  "fields": {
+   "shares_held": "770000"
+  },
+  "reason": "unit count published 770000000, printed 770000. Printed (0001628280-24-036317): 'COP Exterminators Investment, LLC (4) (8) (10) Class A Units 7/31/2023 770,000 862 938 0.13 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Churchill NYBG Blocker, LLC",
+  "fields": {
+   "shares_held": "442712"
+  },
+  "reason": "unit count published 442712000, printed 442712. Printed (0001628280-24-036317): 'Churchill NYBG Blocker, LLC (4) (7) (8) (10) LLC Interest 4/10/2024 442,712 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Clarity Innovations, Inc. 1",
+  "fields": {
+   "shares_held": "77000"
+  },
+  "reason": "unit count published 77000000, printed 77000. Printed (0001628280-24-036317): 'Clarity Innovations, Inc. (4) (8) (10) Partnership Interests 12/7/2023 77,000 76 83 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Clarity Innovations, Inc. 2",
+  "fields": {
+   "shares_held": "389000"
+  },
+  "reason": "unit count published 389000000, printed 389000. Printed (0001628280-24-036317): 'Clarity Innovations, Inc. (4) (8) (10) Partnership Interests 6/21/2024 389,000 389 418 0.06 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Class Valuation 1",
+  "fields": {
+   "shares_held": "1038"
+  },
+  "reason": "unit count published 1038000, printed 1038. Printed (0001628280-24-036317): 'Class Valuation (4) (8) (10) Class A Common Units 12/8/2023 1,038 105 41 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "E-Technologies 1",
+  "fields": {
+   "shares_held": "1000000"
+  },
+  "reason": "unit count published 1000000000, printed 1000000. Printed (0001628280-24-036317): 'E-Technologies (4) (8) (10) Partnership Interests 5/22/2024 1,000,000 1,010 1,000 0.13 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "EFC Holdings, LLC 1",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-24-036317): 'EFC Holdings, LLC (4) (8) (10) (13) Class A Common Units 3/1/2023 114 46 118 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "EFC Holdings, LLC 2",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-036317): 'EFC Holdings, LLC (4) (8) (10) (13) Series A Preferred Units 3/1/2023 114 114 126 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "FCP-Cranium Holdings P/S A",
+  "fields": {
+   "shares_held": "3753613"
+  },
+  "reason": "unit count published 3753613000, printed 3753613. Printed (0001628280-24-036317): 'FCP-Cranium Holdings P/S A (4) (8) (10) (13) Class A Common Shares 9/11/2023 3,753,613 \u2014 55 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 1",
+  "fields": {
+   "shares_held": "10256410",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 1026000, printed 10256410; printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-036317): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 450 0.06 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brain labs) 2",
+  "fields": {
+   "shares_held": "3753613",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 3753613000, printed 3753613; printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-036317): 'FCP-Cranium Holdings, LLC (Brain labs) (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 639 0.09 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Fresh Edge - Common",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-036317): 'Fresh Edge - Common (4) (8) (10) Class B Common Units 10/3/2022 454 \u2014 26 \u2014 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Fresh Edge - Preferred",
+  "fields": {
+   "shares_held": "454"
+  },
+  "reason": "unit count published 454000, printed 454. Printed (0001628280-24-036317): 'Fresh Edge - Preferred (4) (8) (10) Class A Preferred Units 10/3/2022 454 454 462 0.07 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Gannett Fleming 1",
+  "fields": {
+   "shares_held": "142296"
+  },
+  "reason": "unit count published 142296000, printed 142296. Printed (0001628280-24-036317): 'Gannett Fleming (4) (8) (10) Series F Units 5/26/2023 142,296 147 246 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Gannett Fleming 2",
+  "fields": {
+   "shares_held": "106126"
+  },
+  "reason": "unit count published 106126000, printed 106126. Printed (0001628280-24-036317): 'Gannett Fleming (4) (8) (9) (10) Limited Partnership Interests 12/20/2022 106,126 106 183 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "INEOS US Finance LLC",
+  "fields": {
+   "maturity_date": "2031-02-07"
+  },
+  "reason": "printed maturity not published. Printed (0001628280-24-036317): 'INEOS US Finance LLC (6) (10) (12) (13) First Lien Term Loan S + 3.75 % 9.09 % 2/7/2031 2,035 2,030 2,042 0.28 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "ITSavvy LLC 1",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-24-036317): 'ITSavvy LLC (4) (8) (10) Class A Common Units 8/8/2022 119 119 336 0.04 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Ineos US Finance LLC",
+  "fields": {
+   "maturity_date": "2031-01-31"
+  },
+  "reason": "printed maturity not published. Printed (0001628280-24-036317): 'Ineos US Finance LLC (6) (10) (12) (13) First Lien Term Loan S + 3.75 % 8.93 % 1/31/2031 1,970 1,980 1,970 0.27 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Inszone",
+  "fields": {
+   "shares_held": "80208"
+  },
+  "reason": "unit count published 80208000, printed 80208. Printed (0001628280-24-036317): 'Inszone (4) (8) (10) (13) Partnership Interests 11/30/2023 80,208 77 82 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "KRIV Acquisition, Inc 1",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-036317): 'KRIV Acquisition, Inc (4) (8) (10) Class A Units 7/17/2023 200 200 177 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Kofile, Inc. 1",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-036317): 'Kofile, Inc. (4) (8) (10) Class A-2 Common Units 3/31/2022 100 108 107 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "LMI Renaissance 1",
+  "fields": {
+   "shares_held": "106984"
+  },
+  "reason": "unit count published 106984000, printed 106984. Printed (0001628280-24-036317): 'LMI Renaissance (4) (8) (10) Limited Partnership Interests 7/18/2022 106,984 107 206 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Legacy Service Partners, LLC (\u201cLSP\u201d) 1",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-24-036317): 'Legacy Service Partners, LLC (\u201cLSP\u201d) (4) (8) (10) Class B Units 1/9/2023 1,963 196 228 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Marlin Coinvest LP",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-24-036317): 'Marlin Coinvest LP (4) (8) (10) (13) Limited Partnership Interests 5/8/2023 200,000 200 234 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Meyer Lab",
+  "fields": {
+   "shares_held": "849000"
+  },
+  "reason": "unit count published 849000000, printed 849000. Printed (0001628280-24-036317): 'Meyer Lab (4) (8) (10) (13) Units 2/27/2024 849,000 849 849 0.12 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "NearU 1",
+  "fields": {
+   "shares_held": "1419"
+  },
+  "reason": "unit count published 1419000, printed 1419. Printed (0001628280-24-036317): 'NearU (4) (7) (8) (10) Limited Partnership Interests 8/8/2022 1,419 142 89 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Netchex",
+  "fields": {
+   "shares_held": "480000"
+  },
+  "reason": "unit count published 480000000, printed 480000. Printed (0001628280-24-036317): 'Netchex (4) (8) (10) Limited Partnership Interest 3/28/2024 480,000 513 552 0.08 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "New You Bariatric Group, LLC",
+  "fields": {
+   "interest_rate": "10.73",
+   "pik_rate": "10.73",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.73 % (PIK)'). Printed (0001628280-24-036317): 'New You Bariatric Group, LLC (4) (6) (10) First Lien Term Loan S + 5.25 % 10.73 % (PIK) 4/30/2025 7,252 7,252 3,643 0.50 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Oliver Packaging 1",
+  "fields": {
+   "shares_held": "6710"
+  },
+  "reason": "unit count published 6710000, printed 6710. Printed (0001628280-24-036317): 'Oliver Packaging (4) (8) (10) Class A Common Units 7/6/2022 6,710 671 287 0.04 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "PG Aggregator, LLC",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-036317): 'PG Aggregator, LLC (4) (8) (10) (13) LLC Units 3/31/2022 100 109 113 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Perennial Services Investors LLC",
+  "fields": {
+   "shares_held": "1957"
+  },
+  "reason": "unit count published 1957000, printed 1957. Printed (0001628280-24-036317): 'Perennial Services Investors LLC (4) (8) (10) (13) Class A Units 9/8/2023 1,957 196 271 0.04 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Pinnacle Supply Partners, LLC 1",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-24-036317): 'Pinnacle Supply Partners, LLC (4) (8) (10) Subject Partnership Units 4/3/2023 111,875 112 121 0.02 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Smith System",
+  "fields": {
+   "shares_held": "84000"
+  },
+  "reason": "unit count published 84000000, printed 84000. Printed (0001628280-24-036317): 'Smith System (4) (8) (10) Common Units 12/13/2023 84,000 84 98 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Spectrum Science",
+  "fields": {
+   "shares_held": "235000"
+  },
+  "reason": "unit count published 235000000, printed 235000. Printed (0001628280-24-036317): 'Spectrum Science (4) (8) (10) Limited Partner Interests 10/2/2023 235,000 252 209 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Sugar PPC Holdings LLC",
+  "fields": {
+   "shares_held": "2000"
+  },
+  "reason": "unit count published 2000000, printed 2000. Printed (0001628280-24-036317): 'Sugar PPC Holdings LLC (4) (8) (10) (13) Parent Units 9/29/2023 2,000 200 230 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Tech24",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-036317): 'Tech24 (4) (8) (10) Company Unit 10/5/2023 200 200 216 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-24-036317): 'Trench Plate Rental Co. (4) (8) (10) Common Equity 3/28/2022 1,000 127 57 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "USA Water 1",
+  "fields": {
+   "shares_held": "4226"
+  },
+  "reason": "unit count published 4226000, printed 4226. Printed (0001628280-24-036317): 'USA Water (4) (8) (10) (13) Common Units 2/21/2024 4,226 423 453 0.06 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Ultima Health Holdings, LLC 1",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-036317): 'Ultima Health Holdings, LLC (4) (8) (10) Preferred Units 9/12/2022 11 130 184 0.03 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "WCI Holdings LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-24-036317): 'WCI Holdings LLC (4) (8) (10) (13) Class A1 Units 2/6/2023 534,934 535 561 0.08 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Worldwide Clinical Trials 1",
+  "fields": {
+   "shares_held": "49",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 49000, printed 49; printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-24-036317): 'Worldwide Clinical Trials (4) (8) (10) Series A Preferred 12/12/2023 49 47 47 0.01 %'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Worldwide Clinical Trials 2",
+  "fields": {
+   "shares_held": "7"
+  },
+  "reason": "unit count published 7000, printed 7. Printed (0001628280-24-036317): 'Worldwide Clinical Trials (4) (8) (10) Class A Interests 12/12/2023 7 74 75 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "AirX Climate Solutions Company",
+  "fields": {
+   "shares_held": "96"
+  },
+  "reason": "unit count published 96000, printed 96. Printed (0001628280-24-046755): 'AirX Climate Solutions Company (4) (8) Partnership Interests 11/7/2023 96 77 142 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "American Student Transportation Partners",
+  "fields": {
+   "shares_held": "79081"
+  },
+  "reason": "unit count published 79081000, printed 79081. Printed (0001628280-24-046755): 'American Student Transportation Partners (4) (8) Limited Partnership Interest 9/11/2023 79,081 81 72 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Arax Investment Partners",
+  "fields": {
+   "shares_held": "820313"
+  },
+  "reason": "unit count published 820313000, printed 820313. Printed (0001628280-24-046755): 'Arax Investment Partners (4) (8) (13) Limited Partnership Interests 3/28/2024 820,313 818 1,191 0.15 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "26526567"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-24-046755): 'BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 26,527 26,527 3.42 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Brainlabs 1",
+  "fields": {
+   "shares_held": "3753613"
+  },
+  "reason": "unit count published 3753613000, printed 3753613. Printed (0001628280-24-046755): 'Brainlabs (4) (8) (10) (13) Class A Common Shares 9/11/2023 3,753,613 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Brainlabs 2",
+  "fields": {
+   "shares_held": "10256410",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 10256410000, printed 10256410; printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-046755): 'Brainlabs (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 470 0.06 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Brainlabs 3",
+  "fields": {
+   "shares_held": "3753613",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 3753613000, printed 3753613; printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-24-046755): 'Brainlabs (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 575 0.07 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "BroadcastMed 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-046755): 'BroadcastMed (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 569 0.07 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Caldwell & Gregory",
+  "fields": {
+   "interest_rate": "13.85",
+   "pik_rate": "13.85",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('13.85 % (PIK)'). Printed (0001628280-24-046755): 'Caldwell & Gregory (4) Subordinated Debt S + 9.25 % 13.85 % (PIK) 3/29/2030 5,000 4,900 4,900 0.63 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Clarity Innovations, Inc. 1",
+  "fields": {
+   "shares_held": "77000"
+  },
+  "reason": "unit count published 77000000, printed 77000. Printed (0001628280-24-046755): 'Clarity Innovations, Inc. (4) (8) Partnership Interests 12/7/2023 77,000 76 87 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Clarity Innovations, Inc. 2",
+  "fields": {
+   "shares_held": "389000"
+  },
+  "reason": "unit count published 389000000, printed 389000. Printed (0001628280-24-046755): 'Clarity Innovations, Inc. (4) (8) Partnership Interests 6/21/2024 389,000 389 438 0.06 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Class Valuation",
+  "fields": {
+   "shares_held": "1145"
+  },
+  "reason": "unit count published 1145000, printed 1145. Printed (0001628280-24-046755): 'Class Valuation (4) (8) Class A Common Units 12/8/2023 1,145 116 120 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "E-Technologies / Superior 2",
+  "fields": {
+   "shares_held": "1000000"
+  },
+  "reason": "unit count published 1000000000, printed 1000000. Printed (0001628280-24-046755): 'E-Technologies / Superior (4) (8) Partnership Interests 5/22/2024 1,000,000 1,010 806 0.10 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "EFC International 1",
+  "fields": {
+   "shares_held": "114"
+  },
+  "reason": "unit count published 114000, printed 114. Printed (0001628280-24-046755): 'EFC International (4) (8) (13) Class A Common Units 2/28/2023 114 46 112 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "EFC International 2",
+  "fields": {
+   "shares_held": "114",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 114000, printed 114; printed 'Series A Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-046755): 'EFC International (4) (8) (13) Series A Preferred Units 2/28/2023 114 114 129 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Esquire Deposition Services 2",
+  "fields": {
+   "shares_held": "2424"
+  },
+  "reason": "unit count published 2424000, printed 2424. Printed (0001628280-24-046755): 'Esquire Deposition Services (4) (8) Class A Limited Partnership Units 7/1/2024 2,424 320 242 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "10821"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-24-046755): 'First American Government Obligations Fund - Class Z 4.78 % 10,821 11 11 \u2014 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Fortune International LLC 2",
+  "fields": {
+   "shares_held": "200000"
+  },
+  "reason": "unit count published 200000000, printed 200000. Printed (0001628280-24-046755): 'Fortune International LLC (4) (8) (13) Limited Partnership Interests 5/8/2023 200,000 200 242 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Fresh Edge 1",
+  "fields": {
+   "shares_held": "464"
+  },
+  "reason": "unit count published 454, printed 464. Printed (0001628280-24-046755): 'Fresh Edge (4) (8) Class B Common Units 10/3/2022 464 1 47 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Fresh Edge 2",
+  "fields": {
+   "shares_held": "464",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 454, printed 464; printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-046755): 'Fresh Edge (4) (8) Class A Preferred Units 10/3/2022 464 464 533 0.07 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Gannett Fleming 3",
+  "fields": {
+   "shares_held": "254428"
+  },
+  "reason": "unit count published 254428000, printed 254428. Printed (0001628280-24-046755): 'Gannett Fleming (4) (8) Series F Units 5/26/2023 254,428 260 324 0.04 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Gannett Fleming 4",
+  "fields": {
+   "shares_held": "178922"
+  },
+  "reason": "unit count published 178922000, printed 178922. Printed (0001628280-24-046755): 'Gannett Fleming (4) (8) (9) Limited Partnership Interests 12/20/2022 178,922 179 228 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Health Management Associates 2",
+  "fields": {
+   "shares_held": "161953"
+  },
+  "reason": "unit count published 161953000, printed 161953. Printed (0001628280-24-046755): 'Health Management Associates (4) (8) Class A Common Units 3/31/2023 161,953 162 197 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "ITSavvy 2",
+  "fields": {
+   "shares_held": "119"
+  },
+  "reason": "unit count published 119000, printed 119. Printed (0001628280-24-046755): 'ITSavvy (4) (8) Class A Common Units 8/8/2022 119 119 408 0.05 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Inszone",
+  "fields": {
+   "shares_held": "80208"
+  },
+  "reason": "unit count published 80208000, printed 80208. Printed (0001628280-24-046755): 'Inszone (4) (8) (13) Partnership Interests 11/30/2023 80,208 77 97 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Kofile 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-046755): 'Kofile (4) (8) Class A-2 Common Units 3/31/2022 100 108 187 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "LMI 2",
+  "fields": {
+   "shares_held": "106984"
+  },
+  "reason": "unit count published 106984000, printed 106984. Printed (0001628280-24-046755): 'LMI (4) (8) Limited Partnership Interests 7/18/2022 106,984 107 218 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Legacy Service Partners 2",
+  "fields": {
+   "shares_held": "1963"
+  },
+  "reason": "unit count published 1963000, printed 1963. Printed (0001628280-24-046755): 'Legacy Service Partners (4) (8) Class B Units 1/9/2023 1,963 196 242 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Meyer Lab",
+  "fields": {
+   "shares_held": "849000"
+  },
+  "reason": "unit count published 849000000, printed 849000. Printed (0001628280-24-046755): 'Meyer Lab (4) (8) (13) Units 2/27/2024 849,000 849 978 0.13 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "NearU 2",
+  "fields": {
+   "shares_held": "1419"
+  },
+  "reason": "unit count published 1419000, printed 1419. Printed (0001628280-24-046755): 'NearU (4) (8) Limited Partnership Interests 8/8/2022 1,419 142 109 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Netchex",
+  "fields": {
+   "shares_held": "480000"
+  },
+  "reason": "unit count published 480000000, printed 480000. Printed (0001628280-24-046755): 'Netchex (4) (8) Limited Partnership Interest 3/28/2024 480,000 513 568 0.07 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Oliver Inc",
+  "fields": {
+   "shares_held": "7816"
+  },
+  "reason": "unit count published 7816000, printed 7816. Printed (0001628280-24-046755): 'Oliver Inc (4) (8) Class A Common Units 7/6/2022 7,816 742 487 0.06 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Pacur 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-046755): 'Pacur (4) (8) (13) LLC Units 3/31/2022 100 109 118 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Palmetto Exterminators 2",
+  "fields": {
+   "shares_held": "770000"
+  },
+  "reason": "unit count published 770000000, printed 770000. Printed (0001628280-24-046755): 'Palmetto Exterminators (4) (8) Class A Units 7/31/2023 770,000 862 929 0.12 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Perennial Services Group 2",
+  "fields": {
+   "shares_held": "1957"
+  },
+  "reason": "unit count published 1957000, printed 1957. Printed (0001628280-24-046755): 'Perennial Services Group (4) (8) (13) Class A Units 9/8/2023 1,957 196 283 0.04 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Pinnacle Supply Partners, LLC 2",
+  "fields": {
+   "shares_held": "111875"
+  },
+  "reason": "unit count published 111875000, printed 111875. Printed (0001628280-24-046755): 'Pinnacle Supply Partners, LLC (4) (8) Subject Partnership Units 4/3/2023 111,875 112 101 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "QualiTech",
+  "fields": {
+   "shares_held": "972"
+  },
+  "reason": "unit count published 972000, printed 972. Printed (0001628280-24-046755): 'QualiTech (4) (8) Class A Units 8/20/2024 972 976 972 0.13 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Revision Skincare 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-24-046755): 'Revision Skincare (4) (8) Limited Partnership Interests 3/31/2022 100 98 108 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Riveron 2",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-046755): 'Riveron (4) (8) Class A Units 7/17/2023 200 200 196 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "SSJA Bariatric Management LLC 2",
+  "fields": {
+   "shares_held": "442712"
+  },
+  "reason": "unit count published 442712000, printed 442712. Printed (0001628280-24-046755): 'SSJA Bariatric Management LLC (4) (8) Class F Units 4/10/2024 442,712 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Smith System",
+  "fields": {
+   "shares_held": "84000"
+  },
+  "reason": "unit count published 84000000, printed 84000. Printed (0001628280-24-046755): 'Smith System (4) (8) Common Units 12/13/2023 84,000 84 93 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Spectrum Science",
+  "fields": {
+   "shares_held": "241975"
+  },
+  "reason": "unit count published 241975000, printed 241975. Printed (0001628280-24-046755): 'Spectrum Science (4) (8) Limited Partner Interests 10/2/2023 241,975 259 179 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Spice World 2",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-24-046755): 'Spice World (4) (8) LLC Common Units 3/31/2022 1,000 126 137 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Sugar Foods 2",
+  "fields": {
+   "shares_held": "2000"
+  },
+  "reason": "unit count published 2000000, printed 2000. Printed (0001628280-24-046755): 'Sugar Foods (4) (8) (13) Parent Units 9/29/2023 2,000 200 232 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Tech24 2",
+  "fields": {
+   "shares_held": "200"
+  },
+  "reason": "unit count published 200000, printed 200. Printed (0001628280-24-046755): 'Tech24 (4) (8) Company Unit 10/5/2023 200 200 211 0.03 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Trench Plate Rental",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-24-046755): 'Trench Plate Rental (4) (8) Common Equity 3/31/2022 1,000 127 42 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Turbine Engine Specialists 2",
+  "fields": {
+   "shares_held": "1180000"
+  },
+  "reason": "unit count published 1180000000, printed 1180000. Printed (0001628280-24-046755): 'Turbine Engine Specialists (4) (8) (9) Class A-1 Units 9/1/2023 1,180,000 1,180 1,332 0.17 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "USA Water 2",
+  "fields": {
+   "shares_held": "4226"
+  },
+  "reason": "unit count published 4226000, printed 4226. Printed (0001628280-24-046755): 'USA Water (4) (8) (13) Common Units 2/21/2024 4,226 423 491 0.06 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Ultima 2",
+  "fields": {
+   "shares_held": "11",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 11000, printed 11; printed 'Preferred Units', published COMMON_EQUITY. Printed (0001628280-24-046755): 'Ultima (4) (8) Preferred Units 9/12/2022 11 130 173 0.02 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Village Green Holding 2",
+  "fields": {
+   "shares_held": "954000"
+  },
+  "reason": "unit count published 954000000, printed 954000. Printed (0001628280-24-046755): 'Village Green Holding (4) (8) Class A Units 9/26/2024 954,000 954 954 0.12 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "WCI Holdings, LLC",
+  "fields": {
+   "shares_held": "534934"
+  },
+  "reason": "unit count published 534934000, printed 534934. Printed (0001628280-24-046755): 'WCI Holdings, LLC (4) (8) (13) Class A1 Units 2/6/2023 534,934 535 515 0.07 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Worldwide Clinical Trials 1",
+  "fields": {
+   "shares_held": "49",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 49000, printed 49; printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-24-046755): 'Worldwide Clinical Trials (4) (8) Series A Preferred 12/12/2023 49 47 48 0.01 %'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Worldwide Clinical Trials 2",
+  "fields": {
+   "shares_held": "7"
+  },
+  "reason": "unit count published 7000, printed 7. Printed (0001628280-24-046755): 'Worldwide Clinical Trials (4) (8) Class A Interests 12/12/2023 7 74 73 0.01 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "ASTP Holdings Co-Investment LP (American Student Transportation Partners)",
+  "fields": {
+   "shares_held": "79081"
+  },
+  "reason": "unit count published 79081000, printed 79081. Printed (0001628280-25-010237): 'ASTP Holdings Co-Investment LP (American Student Transportation Partners) (4) (8) Class A Units 9/11/2023 79,081 81 125 0.02 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "63216007"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-25-010237): 'BlackRock Liquidity Funds T-Fund Institutional Class 4.34 % 63,216,007 63,216 63,216 7.65 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "BroadcastMed Holdco, LLC 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-010237): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 511 0.06 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "CMP Terrapin Partners I LP (Clarity Innovations, Inc.)",
+  "fields": {
+   "shares_held": "76054"
+  },
+  "reason": "unit count published 76054000, printed 76054. Printed (0001628280-25-010237): 'CMP Terrapin Partners I LP (Clarity Innovations, Inc.) (4) (8) Partnership Interests 12/8/2023 76,054 76 82 0.01 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "CV Holdco, LLC (Class Valuation)",
+  "fields": {
+   "shares_held": "1145"
+  },
+  "reason": "unit count published 1208, printed 1145. Printed (0001628280-25-010237): 'CV Holdco, LLC (Class Valuation) (4) (8) Class A Common Units 3/31/2022 1,145 116 121 0.01 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Caldwell & Gregory LLC",
+  "fields": {
+   "interest_rate": "13.86",
+   "pik_rate": "13.86",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('13.86 % (PIK)'). Printed (0001628280-25-010237): 'Caldwell & Gregory LLC (4) Subordinated Debt S + 9.25 % 13.86 % (PIK) 3/31/2031 5,177 5,079 5,168 0.63 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "EFC Holdings, LLC (EFC International) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-010237): 'EFC Holdings, LLC (EFC International) (4) (8) (13) Class A Preferred Units 3/1/2023 114 114 132 0.02 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 1",
+  "fields": {
+   "shares_held": "3753613"
+  },
+  "reason": "unit count published 3753613000, printed 3753613. Printed (0001628280-25-010237): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Class A Common Shares 9/11/2023 3,753,613 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-010237): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 474 0.06 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 3",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-010237): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 626 0.08 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "7226"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-25-010237): 'First American Government Obligations Fund - Class Z 4.35 % 7,226 7 7 \u2014 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "GrowthCurve Capital Nexus Co-Invest LP (Netchex)",
+  "fields": {
+   "shares_held": "480000"
+  },
+  "reason": "unit count published 538708, printed 480000. Printed (0001628280-25-010237): 'GrowthCurve Capital Nexus Co-Invest LP (Netchex) (4) (8) Limited Partner Interest 3/28/2024 480,000 513 532 0.06 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "INEOS US Petrochem LLC",
+  "fields": {
+   "maturity_date": "2029-04-02"
+  },
+  "reason": "printed maturity not published. Printed (0001628280-25-010237): 'INEOS US Petrochem LLC (12) First Lien Term Loan S + 4.00 % 8.71 % 4/2/2029 867 867 875 0.11 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Ineos US Petrochem LLC",
+  "fields": {
+   "maturity_date": "2031-10-01"
+  },
+  "reason": "printed maturity not published. Printed (0001628280-25-010237): 'Ineos US Petrochem LLC (12) (13) First Lien Term Loan S + 4.00 % 8.61 % 10/1/2031 915 906 925 0.11 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "KWOL Intermediate, Inc (Worldwide Clinical Trials)",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-010237): 'KWOL Intermediate, Inc (Worldwide Clinical Trials) (4) (8) Series A Preferred Shares 12/12/2023 49 47 51 0.01 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-25-010237): 'Kofile, Inc. (4) (8) Common Equity 3/31/2022 100 108 166 0.02 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "R Chapel Avenue Holdings Co-Invest UB, LP",
+  "fields": {
+   "shares_held": "534752"
+  },
+  "reason": "unit count published 590369, printed 534752. Printed (0001628280-25-010237): 'R Chapel Avenue Holdings Co-Invest UB, LP (4) (8) (13) Partnership Interests 12/24/2024 534,752 547 535 0.06 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "SSJA Bariatric Management LLC",
+  "fields": {
+   "shares_held": "442712"
+  },
+  "reason": "unit count published 442712000, printed 442712. Printed (0001628280-25-010237): 'SSJA Bariatric Management LLC (4) (8) Class F Units 4/10/2024 442,712 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "SkyKnight Financial Holdings LP",
+  "fields": {
+   "shares_held": "432231"
+  },
+  "reason": "unit count published 408454, printed 432231. Printed (0001628280-25-010237): 'SkyKnight Financial Holdings LP (4) (8) Partnership Interests 12/24/2024 432,231 434 432 0.04 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-25-010237): 'Trench Plate Rental Co. (4) (8) Common Equity 3/31/2022 1,000 127 45 0.01 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Ultima Health Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001628280-25-010237): 'Ultima Health Holdings, LLC (4) (8) Preferred units 9/12/2022 11 130 162 0.02 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 1",
+  "fields": {
+   "shares_held": "464"
+  },
+  "reason": "unit count published 464000, printed 464. Printed (0001628280-25-010237): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (8) Class B Common Units 10/3/2022 464 1 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-010237): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (8) Class A Preferred Units 10/3/2022 464 464 386 0.05 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "ASTP Holdings CO-Investment LP (American Student Transportation Partners)",
+  "fields": {
+   "shares_held": "79081"
+  },
+  "reason": "unit count published 79081000, printed 79081. Printed (0001628280-25-024375): 'ASTP Holdings CO-Investment LP (American Student Transportation Partners) (4) (8) Class A Units 9/11/2023 79,081 82 110 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "67269346"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-25-024375): 'BlackRock Liquidity Funds T-Fund Institutional Class 4.22 % 67,269,346 67,269 67,269 7.39 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "BroadcastMed Holdco, LLC 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-024375): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 489 0.05 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "CMP Terrapin Partners I LP (Clarity Innovations, Inc.) 1",
+  "fields": {
+   "shares_held": "383427"
+  },
+  "reason": "unit count published 383427000, printed 383427. Printed (0001628280-25-024375): 'CMP Terrapin Partners I LP (Clarity Innovations, Inc.) (4) (8) Partnership Interests 6/21/2024 383,427 383 433 0.05 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "CMP Terrapin Partners I LP (Clarity Innovations, Inc.) 2",
+  "fields": {
+   "shares_held": "76054"
+  },
+  "reason": "unit count published 76054000, printed 76054. Printed (0001628280-25-024375): 'CMP Terrapin Partners I LP (Clarity Innovations, Inc.) (4) (8) Partnership Interests 12/8/2023 76,054 76 86 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "CV Holdco, LLC (Class Valuation)",
+  "fields": {
+   "shares_held": "1145"
+  },
+  "reason": "unit count published 1208, printed 1145. Printed (0001628280-25-024375): 'CV Holdco, LLC (Class Valuation) (4) (8) Class A Common Units 3/31/2022 1,145 116 88 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Caldwell & Gregory LLC",
+  "fields": {
+   "interest_rate": "13.55",
+   "pik_rate": "13.55",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('13.55 % (PIK)'). Printed (0001628280-25-024375): 'Caldwell & Gregory LLC (4) Subordinated Debt S + 9.25 % 13.55 % (PIK) 3/31/2031 5,353 5,260 5,409 0.59 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "EFC Holdings, LLC (EFC International) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-024375): 'EFC Holdings, LLC (EFC International) (4) (8) (13) Class A Preferred Units 3/1/2023 114 114 135 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 1",
+  "fields": {
+   "shares_held": "3753613"
+  },
+  "reason": "unit count published 3753613000, printed 3753613. Printed (0001628280-25-024375): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Class A Common Shares 9/11/2023 3,753,613 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-024375): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 493 0.05 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 3",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-024375): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 648 0.07 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "4214"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-25-024375): 'First American Government Obligations Fund - Class Z 4.23 % 4,214 4 4 \u2014 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "KWOL Intermediate, Inc (Worldwide Clinical Trials)",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-25-024375): 'KWOL Intermediate, Inc (Worldwide Clinical Trials) (4) (8) Series A Preferred 12/12/2023 49 47 55 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001628280-25-024375): 'Kofile, Inc. (4) (8) Common Equity 3/31/2022 100 108 148 0.02 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "R Chapel Avenue Holdings Co-Invest UB, LP",
+  "fields": {
+   "shares_held": "534752"
+  },
+  "reason": "unit count published 590369, printed 534752. Printed (0001628280-25-024375): 'R Chapel Avenue Holdings Co-Invest UB, LP (4) (8) (13) Partnership Interests 12/24/2024 534,752 540 541 0.06 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "SSJA Bariatric Management LLC",
+  "fields": {
+   "shares_held": "442712"
+  },
+  "reason": "unit count published 442712000, printed 442712. Printed (0001628280-25-024375): 'SSJA Bariatric Management LLC (4) (8) Class F Units 4/10/2024 442,712 \u2014 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "SkyKnight Financial Holdings LP",
+  "fields": {
+   "shares_held": "432231"
+  },
+  "reason": "unit count published 408454, printed 432231. Printed (0001628280-25-024375): 'SkyKnight Financial Holdings LP (4) (8) Partnership Interests 12/24/2024 432,231 434 437 0.05 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Trench Plate Rental Co.",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "unit count published 1000000, printed 1000. Printed (0001628280-25-024375): 'Trench Plate Rental Co. (4) (8) Common Equity 3/31/2022 1,000 127 61 0.01 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Ultima Health Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001628280-25-024375): 'Ultima Health Holdings, LLC (4) (8) Preferred units 9/12/2022 11 130 189 0.02 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 1",
+  "fields": {
+   "shares_held": "464"
+  },
+  "reason": "unit count published 464000, printed 464. Printed (0001628280-25-024375): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (8) Class B Common Units 10/3/2022 464 1 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-024375): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (8) Class A Preferred Units 10/3/2022 464 464 378 0.04 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "ASTP Holdings CO-Investment LP (American Student Transportation Partners)",
+  "fields": {
+   "shares_held": "79081"
+  },
+  "reason": "unit count published 79081000, printed 79081. Printed (0001628280-25-039316): 'ASTP Holdings CO-Investment LP (American Student Transportation Partners) (4) (8) (11) Class A Units 9/11/2023 79,081 82 99 0.01 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "115767950"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-25-039316): 'BlackRock Liquidity Funds T-Fund Institutional Class 4.21 % 115,767,950 115,768 115,768 10.65 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "BroadcastMed Holdco, LLC 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-039316): 'BroadcastMed Holdco, LLC (4) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 434 0.04 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "CMP Terrapin Partners II LP (Clarity Innovations, Inc.) 2",
+  "fields": {
+   "issuer_name": "CMP Terrapin Partners I LP (Clarity Innovations, Inc.)"
+  },
+  "reason": "the member names Partners II; the line is printed as Partners I (76,054 units, as Partners I in the quarters around it). Printed (0001628280-25-039316): 'CMP Terrapin Partners I LP (Clarity Innovations, Inc.) (8) (11) (14) Partnership Interests 12/8/2023 76,054 76 83 0.01 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Caldwell & Gregory LLC",
+  "fields": {
+   "interest_rate": "13.55",
+   "pik_rate": "13.55",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('13.55 % (PIK)'). Printed (0001628280-25-039316): 'Caldwell & Gregory LLC (4) Subordinated Debt S + 9.25 % 13.55 % (PIK) 3/31/2031 5,536 5,446 5,612 0.52 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "EFC Holdings, LLC (EFC International) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-039316): 'EFC Holdings, LLC (EFC International) (4) (8) (13) Class A Preferred Units 3/1/2023 114 114 138 0.01 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-039316): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series A Preferred Shares 9/11/2023 10,256,410 389 496 0.05 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 3",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001628280-25-039316): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (8) (10) (13) Series B Preferred Shares 9/11/2023 3,753,613 600 591 0.05 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "KWOL Intermediate, Inc (Worldwide Clinical Trials)",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001628280-25-039316): 'KWOL Intermediate, Inc (Worldwide Clinical Trials) (4) (8) Series A Preferred 12/12/2023 49 47 66 0.01 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Micronics Filtration Holdings, Inc.",
+  "fields": {
+   "issuer_name": "New Era Technology, Inc.",
+   "instrument_description": "First Lien Debt (Delayed Draw)"
+  },
+  "reason": "the member names another company ('Micronics Filtration Holdings, Inc.'); the values are this printed line's. Printed (0001628280-25-039316): 'New Era Technology, Inc. (4) (6) (7) (15) First Lien Debt (Delayed Draw) S + 6.25 % 10.69 % 10/31/2026 6,349 6,163 4,238 0.39 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "New Era Technology, Inc. 2",
+  "fields": {
+   "issuer_name": "Solaray, LLC",
+   "instrument_description": "First Lien Debt"
+  },
+  "reason": "the member names another company ('New Era Technology, Inc. 2'); the values are this printed line's. Printed (0001628280-25-039316): 'Solaray, LLC (4) (6) (7) First Lien Debt S + 6.75 % 10.98 % 12/15/2025 6,420 6,420 5,678 0.52 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Trench Safety Solutions Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001628280-25-039316): 'Trench Safety Solutions Holdings, LLC (4) (8) Preferred units 4/3/2025 121 13 23 \u2014 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Ultima Health Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001628280-25-039316): 'Ultima Health Holdings, LLC (4) (8) Preferred units 9/12/2022 11 130 194 0.02 %'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001628280-25-039316): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (8) Class A Preferred Units 10/3/2022 464 464 316 0.03 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "61066744",
+   "cost": "61067000",
+   "interest_rate": "4",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-25-000038): 'BlackRock Liquidity Funds T-Fund Institutional Class 4.00 % 61,066,744 61,067 61,067 4.85 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "BroadcastMed Holdco, LLC 2",
+  "fields": {
+   "shares_held": "43679",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "unit count published 43679000, printed 43679; printed 'Series A-3 Preferred Units', published COMMON_EQUITY. Printed (0001911066-25-000038): 'BroadcastMed Holdco, LLC (4) (6) (8) Series A-3 Preferred Units 10/4/2022 43,679 655 458 0.04 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "CMP Terrapin Partners I LP (Clarity Innovations, Inc.)",
+  "fields": {
+   "shares_held": "76054"
+  },
+  "reason": "unit count published 76054000, printed 76054. Printed (0001911066-25-000038): 'CMP Terrapin Partners I LP (Clarity Innovations, Inc.) (6) (8) (10) (13) Partnership Interests 12/8/2023 76,054 76 86 0.01 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "EFC Holdings, LLC (EFC International) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001911066-25-000038): 'EFC Holdings, LLC (EFC International) (4) (8) Class A Preferred Units 3/1/2023 114 114 140 0.01 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred Shares', published COMMON_EQUITY. Printed (0001911066-25-000038): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (6) (8) (12) Series A Preferred Shares 9/11/2023 10,256,410 389 515 0.04 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "FCP-Cranium Holdings, LLC (Brainlabs) 3",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series B Preferred Shares', published COMMON_EQUITY. Printed (0001911066-25-000038): 'FCP-Cranium Holdings, LLC (Brainlabs) (4) (6) (8) (12) Series B Preferred Shares 9/11/2023 3,753,613 600 565 0.04 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "164240",
+   "cost": "164000",
+   "interest_rate": "4",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-25-000038): 'First American Government Obligations Fund - Class Z 4.00 % 164,240 164 164 0.01 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "KWOL Intermediate, Inc (Worldwide Clinical Trials)",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Series A Preferred', published COMMON_EQUITY. Printed (0001911066-25-000038): 'KWOL Intermediate, Inc (Worldwide Clinical Trials) (4) (6) (8) Series A Preferred 12/12/2023 49 47 66 0.01 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Kofile, Inc. 2",
+  "fields": {
+   "shares_held": "100"
+  },
+  "reason": "unit count published 100000, printed 100. Printed (0001911066-25-000038): 'Kofile, Inc. (4) (6) (8) Common Equity 3/31/2022 100 108 102 0.01 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "New Era Technology, LLC",
+  "fields": {
+   "interest_rate": "10.4",
+   "pik_rate": "10.4",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.40 % (PIK)'). Printed (0001911066-25-000038): 'New Era Technology, LLC (4) (6) (7) First Lien Debt S + 6.25 % 10.40 % (PIK) 6/30/2030 5,183 5,183 5,183 0.41 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "New Era Technology, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred Equity', published COMMON_EQUITY. Printed (0001911066-25-000038): 'New Era Technology, LLC (4) (6) (7) (8) Preferred Equity 8/21/2025 4,915 4,112 3,454 0.27 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Trench Safety Solutions Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001911066-25-000038): 'Trench Safety Solutions Holdings, LLC (4) (6) (8) Preferred units 4/3/2025 121 13 23 \u2014 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Ultima Health Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Preferred units', published COMMON_EQUITY. Printed (0001911066-25-000038): 'Ultima Health Holdings, LLC (4) (6) (8) Preferred units 9/12/2022 11 130 239 0.02 %'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "WPP Fairway Aggregator B, L.P (Fresh Edge) 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "printed 'Class A Preferred Units', published COMMON_EQUITY. Printed (0001911066-25-000038): 'WPP Fairway Aggregator B, L.P (Fresh Edge) (4) (6) (8) Class A Preferred Units 10/3/2022 464 465 233 0.02 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Arise Holdings, Inc. | First Lien Debt 1",
+  "fields": {
+   "interest_rate": "8.24",
+   "pik_rate": "8.24",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('8.24 % (PIK)'). Printed (0001911066-26-000012): 'Arise Holdings, Inc. (6) First Lien Debt S + 4.50 % 8.24 % (PIK) 12/9/2027 4,676 3,957 3,795 0.27 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Arise Holdings, Inc. | First Lien Debt 2",
+  "fields": {
+   "interest_rate": "8.24",
+   "pik_rate": "8.24",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('8.24 % (PIK)'). Printed (0001911066-26-000012): 'Arise Holdings, Inc. (6) (14) First Lien Debt S + 4.50 % 8.24 % (PIK) 12/9/2027 2,415 153 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "45985187",
+   "cost": "45985000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-26-000012): 'BlackRock Liquidity Funds T-Fund Institutional Class 3.64 % 45,985,187 45,985 45,985 3.31 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "575225",
+   "cost": "575000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-26-000012): 'First American Government Obligations Fund - Class Z 3.64 % 575,225 575 575 0.04 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "New Era Technology, LLC | First Lien Debt (Delayed Draw)",
+  "fields": {
+   "interest_rate": "10.07",
+   "pik_rate": "10.07",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.07 % (PIK)'). Printed (0001911066-26-000012): 'New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.07 % (PIK) 6/30/2030 5,320 5,320 5,320 0.38 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "New You Bariatric Group, LLC | First Lien Debt",
+  "fields": {
+   "interest_rate": "9.24",
+   "pik_rate": "9.24",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('9.24 % (PIK)'). Printed (0001911066-26-000012): 'New You Bariatric Group, LLC (6) First Lien Debt S + 5.25 % 9.24 % (PIK) 10/31/2028 1,939 1,939 1,939 0.14 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Smith & Howard Advisory LLC | First Lien Debt",
+  "fields": {
+   "issuer_name": "Trucordia (PCF Insurance Services of the West)",
+   "instrument_description": "First Lien Debt",
+   "interest_rate": "6.97",
+   "basis_spread": "3.25",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the member names another line of the schedule; the fair value, cost and par are this printed line's. Printed (0001911066-26-000012): 'Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Solaray, LLC | First Lien Debt",
+  "fields": {
+   "maturity_date": "2025-12-15"
+  },
+  "reason": "printed maturity not published. Printed (0001911066-26-000012): 'Solaray, LLC (6) (7) First Lien Debt S + 6.75 % 10.69 % 12/15/2025 6,402 6,402 5,711 0.41 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Trucordia (PCF Insurance Services of the West) | First Lien Debt",
+  "fields": {
+   "issuer_name": "Truist Insurance Holdings LLC",
+   "instrument_description": "First Lien Debt",
+   "interest_rate": "6.42",
+   "basis_spread": "2.75",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the member names another line of the schedule; the fair value, cost and par are this printed line's. Printed (0001911066-26-000012): 'Truist Insurance Holdings LLC (6) (11) First Lien Debt S + 2.75 % 6.42 % 5/6/2031 2,019 2,022 2,025 0.15 %'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Truist Insurance Holdings LLC | First Lien Debt",
+  "fields": {
+   "issuer_name": "Smith & Howard Advisory LLC",
+   "instrument_description": "First Lien Debt",
+   "interest_rate": "8.59",
+   "basis_spread": "4.75",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the member names another line of the schedule; the fair value, cost and par are this printed line's. Printed (0001911066-26-000012): 'Smith & Howard Advisory LLC (15) First Lien Debt S + 4.75 % 8.59 % 11/26/2030 2,557 2,533 2,510 0.18 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "76452372",
+   "cost": "76452000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-26-000066): 'BlackRock Liquidity Funds T-Fund Institutional Class 3.55 % 76,452,372 76,452 76,452 5.28 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Env Automation Acquisition,LLC | First Lien Debt",
+  "fields": {
+   "interest_rate": "8.17",
+   "pik_rate": "",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the printed rate carries no PIK label; the filer tagged it only as a PIK rate. Printed (0001911066-26-000066): 'Env Automation Acquisition,LLC (6) (7) First Lien Debt S + 4.50 % 8.17 % 12/8/2031 10,600 10,552 10,574 0.73 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "552101",
+   "cost": "552000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001911066-26-000066): 'First American Government Obligations Fund - Class Z 3.55 % 552,101 552 552 0.04 %'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "New Era Technology, LLC | First Lien Debt (Delayed Draw)",
+  "fields": {
+   "interest_rate": "10.1",
+   "pik_rate": "10.1",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.10 % (PIK)'). Printed (0001911066-26-000066): 'New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Arise Holdings, Inc. | First Lien Debt 1",
+  "fields": {
+   "interest_rate": "8.17",
+   "pik_rate": "8.17",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('8.17 % (PIK)'). Printed (0001628280-26-055912): 'Arise Holdings, Inc. (6) (14) First Lien Debt S + 4.50 % 8.17 % (PIK) 12/9/2027 4,676 3,957 3,666 0.26 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Arise Holdings, Inc. | First Lien Debt 2",
+  "fields": {
+   "interest_rate": "8.17",
+   "pik_rate": "8.17",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('8.17 % (PIK)'). Printed (0001628280-26-055912): 'Arise Holdings, Inc. (6) (14) First Lien Debt S + 4.50 % 8.17 % (PIK) 12/9/2027 2,415 153 \u2014 \u2014 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "BlackRock Liquidity Funds T-Fund Institutional Class",
+  "fields": {
+   "shares_held": "57568866",
+   "cost": "57569000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-26-055912): 'BlackRock Liquidity Funds T-Fund Institutional Class 3.55 % 57,568,866 57,569 57,569 3.90 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Esquire Deposition Solutions, LLC| Subordinated Debt",
+  "fields": {
+   "interest_rate": "14",
+   "pik_rate": "14",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('14.00 % (PIK)'). Printed (0001628280-26-055912): 'Esquire Deposition Solutions, LLC (6) Subordinated Debt N/A 14.00 % (PIK) 6/30/2029 2,211 2,183 2,190 0.15 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "First American Government Obligations Fund - Class Z",
+  "fields": {
+   "shares_held": "553121",
+   "cost": "553000"
+  },
+  "reason": "money-market line: printed unit count and cost. Printed (0001628280-26-055912): 'First American Government Obligations Fund - Class Z 3.55 % 553,121 553 553 0.04 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "LH Equity Investors, L.P. | Limited Partnership Interests",
+  "fields": {
+   "shares_held": "2888"
+  },
+  "reason": "unit count published 1443750, printed 2888. Printed (0001628280-26-055912): 'LH Equity Investors, L.P. (6) (8) (13) Limited Partnership Interests 9/3/2025 2,888 3,487 4,078 0.28 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Lavie Group, Inc. | First Lien Debt 3",
+  "fields": {
+   "interest_rate": "8.62",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "rate printed, not tagged on this context. Printed (0001628280-26-055912): 'Lavie Group, Inc. (6) (7) (15) First Lien Debt S + 5.00 % 8.62 % 10/12/2029 4,339 4,306 4,305 0.29 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New Era Technology, LLC | First Lien Debt (Delayed Draw)",
+  "fields": {
+   "interest_rate": "10.13",
+   "pik_rate": "10.13",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('10.13 % (PIK)'). Printed (0001628280-26-055912): 'New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.13 % (PIK) 6/30/2030 5,592 5,592 5,592 0.38 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New You Bariatric Group, LLC | First Lien Debt",
+  "fields": {
+   "interest_rate": "9.06",
+   "pik_rate": "9.06",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('9.06 % (PIK)'). Printed (0001628280-26-055912): 'New You Bariatric Group, LLC (6) First Lien Debt S + 5.25 % 9.06 % (PIK) 10/31/2028 2,030 2,030 2,030 0.14 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New You Bariatric Group, LLC | First Lien Debt (Delayed Draw)",
+  "fields": {
+   "interest_rate": "9.06",
+   "pik_rate": "9.06",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "the whole coupon is printed as PIK ('9.06 % (PIK)'). Printed (0001628280-26-055912): 'New You Bariatric Group, LLC (6) (10) First Lien Debt (Delayed Draw) S + 5.25 % 9.06 % (PIK) 10/31/2028 199 119 119 0.01 %'"
+ }
+]

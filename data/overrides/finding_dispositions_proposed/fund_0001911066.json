@@ -1,0 +1,102 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "ncxf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-C103-1911066-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": ["0001911066"],
+   "quarters": ["2025-06-30"],
+   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
+   "statement": "The 11 negative fair values still flagged at 2025-06-30 are undrawn delayed-draw and revolving lines printed with a dash or a bracketed cost and a bracketed fair value (AmerCareRoyal (96), Thompson Safety (68), NearU, RailPros, Mobile Communications, Secretariat, Thermostat, Low Voltage, PT Intermediate): the published values are the printed ones (cost 0 where the page prints a dash). No fix applies: the page prints these marks below zero. The row the earlier reviewer cited (Cohnreznick, published fair value -11,000) is fixed: it is now published at fair value 0 and cost -11,000, as printed.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-06-30": "The reviewer found Cohnreznick Advisory's delayed-draw line published with fair value -11,000 where the page prints a dash for fair value and (11) for cost. In ncxf the row publishes fair value 0 and cost -11,000, as printed, so that error is fixed upstream; the other flagged rows are undrawn lines whose negative marks are printed."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Cohnreznick Advisory LLC (4) (6) (11) First Lien Debt (Delayed Draw) S + 4.00 % 8.30 % 3/31/2032 3,477 ( 11 ) - - %", "quote": "Cohnreznick undrawn line: cost (11), fair value a dash; published cost -11,000 and fair value 0"},
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "AmerCareRoyal, LLC (4) (11) First Lien Debt (Delayed Draw) S + 5.00 % 9.33 % 9/10/2030 3,307 - ( 96 ) ( 0.01 ) %", "quote": "AmerCareRoyal undrawn line: cost a dash, fair value (96); published cost 0 and fair value -96,000"},
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Thompson Safety LLC (4) (11) First Lien Debt (Delayed Draw) S + 5.00 % 9.30 % 6/25/2032 13,636 - ( 68 ) ( 0.01 ) %", "quote": "Thompson Safety undrawn line: cost a dash, fair value (68); published cost 0 and fair value -68,000"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py ncxf C103 1911066 2025-06-30 14",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop ncx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1911066-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": ["0001911066"],
+   "quarters": ["2023-09-30", "2025-12-31"],
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "statement": "The one flagged row each quarter is the Solaray, LLC first-lien loan, printed with a maturity before the report date: 9/9/2023 at 2023-09-30 (the next 10-K prints it extended to 12/15/2025) and 12/15/2025 at 2025-12-31 (the next 10-Q prints it restructured to 3/27/2029, part PIK). The maturity had not been published (the build drops a printed maturity earlier than the report date); this run publishes the printed date by row correction, which raises this check. No fix applies: the loan was held past its printed maturity.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001628280-23-035967", "verbatim": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %", "quote": "2023-09-30: printed maturity 9/9/2023, before the report date"},
+    {"source": "filing", "accession": "0001628280-24-008070", "verbatim": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.97 % 12/15/2025 6,889 6,886 6,399 1.80 %", "quote": "2023-12-31: the same loan printed with maturity extended to 12/15/2025"},
+    {"source": "filing", "accession": "0001911066-26-000012", "verbatim": "Solaray, LLC (6) (7) First Lien Debt S + 6.75 % 10.69 % 12/15/2025 6,402 6,402 5,711 0.41 %", "quote": "2025-12-31: printed maturity 12/15/2025, before the report date"},
+    {"source": "filing", "accession": "0001911066-26-000066", "verbatim": "Solaray, LLC (6) (7) First Lien Debt S + 2.50 % 6.27 % (Cash), 4.25 % (PIK) 3/27/2029 6,575 5,669 5,718 0.40 %", "quote": "2026-03-31: restructured, maturity 3/27/2029"}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py ncxf maturity_not_past 1911066 2025-12-31",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop ncx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-A04-1911066-3",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "ciks": ["0001911066"],
+   "quarters": ["2025-06-30"],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "A04 compares the sum of all published rows, including the two money-market rows (115,770 thousand at 2025-06-30), with the filed investments figure, which for this filer is on the balance-sheet basis that leaves cash equivalents out (wrapper: investments_total_excludes = cash_rows; fund figure set from the balance sheet by the fund's highlights wrapper). Published non-cash rows equal the filed 1,864,305 exactly; the 6.2 pct gap is the money-market rows (10.65 pct of net assets), above the check's 5 pct tolerance in this quarter only. The fund-level conservation rule already compares like with like for such filers; this check does not. No fix applies: both figures are as printed.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 1,881,881 and $ 1,687,681 , respectively) $ 1,864,305 $ 1,681,609", "quote": "investments excluding cash equivalents 1,864,305 = published non-cash rows"},
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Total Cash Equivalents $ 115,770 $ 115,770 10.65 % Total Investments and Cash Equivalents $ 1,997,651 $ 1,980,075 182.24 %", "quote": "money-market rows 115,770 printed after the investments; with them the total is 1,980,075 = all published rows"}
+   ],
+   "rerun": "grep 1911066 scratch/fund_sandbox/ncxf/logs/oracle.log",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop ncx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-E01-1911066-4",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "ciks": ["0001911066"],
+   "quarters": ["2025-06-30"],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "E01 makes the same comparison as A04 (holdings 1,980,075,000 against 1,864,305,000, 6.2 pct): the published sum includes the 115,770 thousand of money-market rows and the filed figure is the balance-sheet investments line without cash equivalents. Published non-cash rows equal the filed figure exactly. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 1,881,881 and $ 1,687,681 , respectively) $ 1,864,305 $ 1,681,609", "quote": "investments excluding cash equivalents 1,864,305 = published non-cash rows"},
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Total Cash Equivalents $ 115,770 $ 115,770 10.65 % Total Investments and Cash Equivalents $ 1,997,651 $ 1,980,075 182.24 %", "quote": "money-market rows 115,770; all published rows 1,980,075"}
+   ],
+   "rerun": "grep 1911066 scratch/fund_sandbox/ncxf/logs/oracle.log",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop ncx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-cost_conservation-1911066-5",
+   "class": "rule_problem",
+   "engine": "conservation",
+   "rule_name": "cost_conservation",
+   "ciks": ["0001911066"],
+   "quarters": ["2025-06-30"],
+   "reason_key": "cost-conservation-cash-rows-against-ex-cash-cost-total",
+   "statement": "Published cost (all rows) is 1,997,651 thousand against the filed investments cost 1,881,881 (6.15 pct over, tolerance 5 pct). The difference is exactly the cost of the money-market rows, 115,770, which the page prints after the investments. The filed cost is on the balance-sheet basis without cash equivalents (the fund's highlights wrapper puts every quarter on that basis); the fair-value conservation rule splits cash rows out for such filers (investments_total_excludes = cash_rows), the cost rule does not. Published non-cash cost equals the filed 1,881,881. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 1,881,881 and $ 1,687,681 , respectively) $ 1,864,305 $ 1,681,609", "quote": "investments cost excluding cash equivalents 1,881,881"},
+    {"source": "filing", "accession": "0001628280-25-039316", "verbatim": "Total Cash Equivalents $ 115,770 $ 115,770 10.65 % Total Investments and Cash Equivalents $ 1,997,651 $ 1,980,075 182.24 %", "quote": "cost with cash equivalents 1,997,651 = published cost of all rows"}
+   ],
+   "rerun": "grep 1911066 scratch/fund_sandbox/ncxf/output/shadow/validation_results_ledger.csv | grep cost_conservation",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop ncx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

@@ -4464,3 +4464,38 @@ Compared with `spoff2`. One round; three builds.
   Owner question: is a money-market fund (46.0M at 2025-09-30) a holding?
 - The agent ran an empty heredoc into `python -` once (stopped by its PID) and used `sed` on a
   script and two scratch SQL files. Wrapper tests 681 passed.
+
+### D-182 Nuveen Churchill PCIF through the fund-clearing skill (sandbox `ncxf`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff2`. One round; six builds (two stopped at the rebuild stage).
+
+- **Ledger:** 34 findings, 7 outstanding (28 in the first build), 6 proposed; totals tie in 14 of 14
+  quarters (without cash rows).
+- **Fixed:** a new highlights wrapper puts fund-level investments on one basis (the undimensioned
+  fact includes cash equivalents in 10 quarters): clears 9 fv_conservation, 5 gav_reconciliation,
+  5 F20, 4 GAV_BDC02, 1 GAV_BDC03. Issuer names: the wrapper split at every comma ('ADPD Holdings' /
+  'LLC (a/k/a NearU)'); now only before an instrument word, with draw labels and row numbers moved to
+  the instrument (1,476 names to 813, 1,987 rows). 524 row corrections, every published row mapped
+  to its printed line (5,828 of 5,828): 274 unit counts (tagged x1,000, or overwritten by the shared
+  share-count step), 68 preferred published as common, 31 rates (all-PIK coupons, X02 x2, Fresh
+  Edge's all-in rate counted twice, untagged), 6 maturities, 6 rows naming the neighbouring line,
+  money-market units and costs. C103 2025-06-30 (earlier real-error verdict) fixed.
+- **Deleted** the promoted rule `1911066_2025q3_add_cash_equivalents.json`: the cash rows are now
+  read from the filer's `CashEquivalentsFairValueDisclosure` tag, and the rule added nothing.
+- **Proposed:** C103 2025-06-30 (undrawn lines with negative marks); maturity_not_past 2023-09-30 and
+  2025-12-31 (Solaray held past maturity); A04, E01, cost_conservation 2025-06-30 under two new
+  keys (the checks include 115.8M of money-market rows against the investments figure without cash).
+- **Parked:** fv_conservation 2024-03-31: 'Blackrock T-Fund Inst' is published as category FUND, so
+  the cash split misses it; a row correction is undone by a later step (failed the schema check) and
+  a wrapper cash pattern dropped the row. The un-itemised 2023 'Cash Equivalents (14)' line (16.0M,
+  6.6M, 5.4M) is dropped by staging; totals unaffected.
+- **Page sample:** 20 cards, 0 published errors; two unit counts tagged x1,000 are published
+  correctly. Twenty cards can miss a problem on under about 15 pct of rows.
+- **Left / owner questions:** NAV per share and shares outstanding blank since 2023-12-31 (printed
+  per class only); single-company co-investment LPs published as private-equity funds (52.7M);
+  'Dragon - NCR Voyix' cut by the shared splitter into issuer 'Dragon'.
+- **Shared causes seen:** the share-count step; the all-PIK rate gap (second fund); printed
+  maturities dropped; a corrected rate gets PIK added again unless marked all-in.
+- The agent ran an empty heredoc into `python -` once (stopped by its id), re-ran the unified stage
+  by hand inside a failed sandbox, staged then unstaged the rule deletion with git, and used `sed -i`
+  on `row_corrections.csv`. Wrapper tests 681 passed (agent: 863 over 7 files).

@@ -79,7 +79,8 @@
     ],
     "canonical_strip_re": "(?i)\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+(?:Debt|Term\\s+Loan)|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Revolving\\s+Loan|Preferred\\s+Equity|Common\\s+Equity|Class\\s+A(?:\\s+Common)?\\s+Units?|Common\\s+Units?|Limited\\s+Partnership\\s+Interests?|Partnership\\s+Interests?)",
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents)\\s*$",
-    "issuer_name_strip_re": "\\s+\\d{1,2}$"
+    "issuer_name_strip_re": "(?i)(?:\\s*\\((?:(?:Second\\s+Amendment\\s+)?Delayed\\s+Draw|Incremental|Revolver)\\)?|\\s+LLC\\s+Intrest)*(?:(?<!\\bDelta)\\s+\\d{1,2}|(?<=\\.)\\d{1,2})?$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -95,7 +96,7 @@
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "^(.+?),\\s+.+$",
     "hierarchy_instrument_re": "^.+?,\\s+(.+)$",
-    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',') AND NOT regexp_matches(_clean, '(?i),\\s+(?:Inc\\.?|LLC|L\\.?L\\.?C\\.?|L\\.?P\\.?|LLP|Corp\\.?|Corporation|Ltd\\.?|Limited|Co\\.?|P\\.?C\\.?|PLLC)(?:\\s+\\([^)]*\\))?(?:\\s+\\d{1,2})?\\s*$')"
+    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, '(?i),\\s+(?:First Lien|Second Lien|Subordinated|Revolving|Class [A-Z]|Common|Preferred|Limited Partnership|Partnership Interest)')"
   },
   "archetypes": {
     "debt": {
@@ -174,7 +175,7 @@
     },
     {
       "id": "nuveen_churchill_comma_format",
-      "description": "Older rows generally use comma-delimited issuer and instrument text. The CIK-scoped staging rule extracts issuer from text before the last comma and instrument from text after it.",
+      "description": "Older members (to 2025-09-30) name the issuer only, with optional '(Delayed Draw)', '(Incremental)' and a row number; the instrument is printed in its own column. A comma in them is part of the name ('Kenco Group, Inc.', 'CMP Ren Partners I-A LP (LMI Consulting, LLC)'), so the staging split applies only where an instrument word follows the comma (none seen); the tranche words and row number are cut by issuer_name_strip_re and kept as the instrument text (fund-clearing loop 2026-10-15).",
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": ",\\s*(?:First Lien|Subordinated|Revolving|Class A|Partnership)",
       "disposition": "expected"
