@@ -4355,3 +4355,25 @@ Compared with `spoff3`. Two rounds; four builds.
   misdated contexts and the codes NIBOR and STIBOR; income_yield_pct on different bases across funds;
   equity class read from a combined 'Common and Preferred' heading.
 - The agent ran a bare heredoc once, stopped by its own id. Wrapper tests 654 passed.
+
+### D-178 Regression rebuild after the 2026-10-15 run: every move explained; one defect found and fixed
+
+Shared code changed during the run (the splitter switched on, D-166; verification fixes to the fund
+strategy step, the re-verifier and the printed-margin reader; the sandbox provenance scope; wrapper-
+gated settings from the fund agents). The 17 funds accepted before the run were rebuilt: `rg1` (the
+ten, with 2026-06-30) and `rg2` (the seven of the overnight run, without it).
+
+- **Explained moves:** issuer name and instrument on the splitter's rows (Ares 77, BCRED 53, Blue Owl
+  51, Ares Strategic Income 62, Goldman Sachs Private Credit 15, HPS 5, Monroe 19) and position ids
+  re-chained with them; X11 x6 at Ares and x3 at Sixth Street Lending Partners, from the dispositions
+  withdrawn on 2026-10-14 (seen in the overnight regression); F28 at 2026-06-30 on the seven `rg2`
+  funds (Q2 fund-level facts now installed, D-167, but those builds have no Q2 holdings; clears with
+  each fund's Q2 build); fair value '-0.0' read as '0.0' on 18 rows of North Haven and Antares (same
+  value).
+- **Defect found:** HPS industry labels changed on 1,029 rows in `rg1`. D-164 had the label of the
+  name as filed win over the shortened name's; HPS numbers its rows and the cache holds one guess per
+  number, so one company took two industries (Oil Changer: Oil & Gas Equipment and Automobile
+  Parts). Fixed (c8cf047): the shortened name's label first, the filed form a fallback only where
+  all its forms agree. `rg1b`: HPS gains 483 labels and changes none; BCRED (46) and Blue Owl Credit
+  Income (343) move back to the shortened names' own labels, the order before D-164.
+- The 17 funds' accepted sandboxes are now `rg1b` and `rg2`.

@@ -1,137 +1,137 @@
 {
-    "0001803498":  {
-                       "label":  "owsp3",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
-                   },
-    "0001812554":  {
-                       "label":  "owsp3",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-164, issuer-name fix by the orchestrator; every change against t10a explained; fund gate not run (no fund report)"
-                   },
-    "0001287750":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001838126":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001837532":  {
-                       "label":  "ap2",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001918712":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001920145":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001930087":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001925309":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001872371":  {
-                       "label":  "t10a",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-153, built before the fund gate existed"
-                   },
-    "0001849894":  {
-                       "label":  "msdxc",
-                       "accepted_on":  "2026-10-13",
-                       "basis":  "D-157, gate PASS on the second round"
-                   },
-    "0001851322":  {
-                       "label":  "nhxb",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-158, gate PASS"
-                   },
-    "0001742313":  {
-                       "label":  "moxe",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-159, gate PASS"
-                   },
-    "0001869453":  {
-                       "label":  "otxe",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-160, gate PASS on the second round"
-                   },
-    "0001859919":  {
-                       "label":  "bpxe",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-161, gate NEEDS_ORCHESTRATOR (borrowings request open)"
-                   },
-    "0001913724":  {
-                       "label":  "tbxd",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-162, gate INCOMPLETE (3 parked)"
-                   },
-    "0001993402":  {
-                       "label":  "asxc",
-                       "accepted_on":  "2026-10-14",
-                       "basis":  "D-163, gate NEEDS_ORCHESTRATOR (anchor request open)"
-                   },
-    "0002031750":  {
-                       "label":  "acxb",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-168, gate INCOMPLETE (one parked shared finding), page sample 0 published errors of 20"
-                   },
-    "0001508655":  {
-                       "label":  "ssxf",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-169, gate INCOMPLETE (3 parked), page sample 2 errors of 20 fixed at fund level in round 2"
-                   },
-    "0001950803":  {
-                       "label":  "spxf",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-170, gate INCOMPLETE (2 parked, 2 declared total exceptions), page sample 0 published errors of 20"
-                   },
-    "0001930679":  {
-                       "label":  "kfxh",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-171, gate PASS in round 3; page sample 4 errors on 3 rows of 20, two causes fixed, PIK range left"
-                   },
-    "0001572694":  {
-                       "label":  "gsxf",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-172, gate NEEDS_ORCHESTRATOR (re-verifier request declined), every other check clean; page sample 0 published errors of 20"
-                   },
-    "0001901164":  {
-                       "label":  "trxd",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-173, gate PASS; page sample 1 error of 20 (par currency from the unit tag), 16 rows fixed in round 2"
-                   },
-    "0001278752":  {
-                       "label":  "mfxi",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-174, gate PASS in round 3; first sample 21 errors (issuer name on every row), fixed; second sample 1 error, fixed"
-                   },
-    "0001825384":  {
-                       "label":  "stxf",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-175, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (17 rows)"
-                   },
-    "0001916099":  {
-                       "label":  "dixc",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-176, gate PASS; page sample 0 published errors of 20"
-                   },
-    "0001702510":  {
-                       "label":  "ccxd",
-                       "accepted_on":  "2026-10-15",
-                       "basis":  "D-177, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (32 rows)"
-                   }
+ "0001803498": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001812554": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001287750": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001838126": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001837532": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001918712": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001920145": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001930087": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001925309": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001872371": {
+  "label": "rg1b",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run; every move explained"
+ },
+ "0001849894": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001851322": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001742313": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001869453": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001859919": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001913724": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0001993402": {
+  "label": "rg2",
+  "accepted_on": "2026-10-15",
+  "basis": "D-178, regression rebuild after the 2026-10-15 run (no 2026-06-30); every move explained"
+ },
+ "0002031750": {
+  "label": "acxb",
+  "accepted_on": "2026-10-15",
+  "basis": "D-168, gate INCOMPLETE (one parked shared finding), page sample 0 published errors of 20"
+ },
+ "0001508655": {
+  "label": "ssxf",
+  "accepted_on": "2026-10-15",
+  "basis": "D-169, gate INCOMPLETE (3 parked), page sample 2 errors of 20 fixed at fund level in round 2"
+ },
+ "0001950803": {
+  "label": "spxf",
+  "accepted_on": "2026-10-15",
+  "basis": "D-170, gate INCOMPLETE (2 parked, 2 declared total exceptions), page sample 0 published errors of 20"
+ },
+ "0001930679": {
+  "label": "kfxh",
+  "accepted_on": "2026-10-15",
+  "basis": "D-171, gate PASS in round 3; page sample 4 errors on 3 rows of 20, two causes fixed, PIK range left"
+ },
+ "0001572694": {
+  "label": "gsxf",
+  "accepted_on": "2026-10-15",
+  "basis": "D-172, gate NEEDS_ORCHESTRATOR (re-verifier request declined), every other check clean; page sample 0 published errors of 20"
+ },
+ "0001901164": {
+  "label": "trxd",
+  "accepted_on": "2026-10-15",
+  "basis": "D-173, gate PASS; page sample 1 error of 20 (par currency from the unit tag), 16 rows fixed in round 2"
+ },
+ "0001278752": {
+  "label": "mfxi",
+  "accepted_on": "2026-10-15",
+  "basis": "D-174, gate PASS in round 3; first sample 21 errors (issuer name on every row), fixed; second sample 1 error, fixed"
+ },
+ "0001825384": {
+  "label": "stxf",
+  "accepted_on": "2026-10-15",
+  "basis": "D-175, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (17 rows)"
+ },
+ "0001916099": {
+  "label": "dixc",
+  "accepted_on": "2026-10-15",
+  "basis": "D-176, gate PASS; page sample 0 published errors of 20"
+ },
+ "0001702510": {
+  "label": "ccxd",
+  "accepted_on": "2026-10-15",
+  "basis": "D-177, gate PASS; page sample 2 errors of 20, both causes fixed in round 2 (32 rows)"
+ }
 }
