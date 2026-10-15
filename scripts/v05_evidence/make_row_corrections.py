@@ -744,6 +744,17 @@ if TROWE_LOOP in held and TROWE_LOOP_FILE.exists():
     for spec in json.loads(TROWE_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((TROWE_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1901164-fundloop"))
         EXACT.add(spec["identifier"])
+# MidCap Financial Investment Corp, fund-clearing loop (2026-10-15): rates the filer tagged with the wrong concept or scale
+# (a floating loan's margin, floor or PIK margin tagged as its interest rate; fixed coupons tagged as spreads, or read as
+# 0.0695 for 6.95 %), and which leg of a printed 'x % cash plus y % PIK' coupon the tag holds. One spec per row, each with
+# its printed line, in row_correction_specs/0001278752.json (exact identifiers).
+MIDCAP_LOOP = "0001278752"
+MIDCAP_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001278752.json"
+if MIDCAP_LOOP in held and MIDCAP_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(MIDCAP_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((MIDCAP_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1278752-fundloop"))
+        EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

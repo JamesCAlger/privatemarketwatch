@@ -1,0 +1,813 @@
+{
+ "cik": "0001278752",
+ "label": "mfxi",
+ "before": "spoff2",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 6058,
+   "why": "as round 2, plus Acosta Holdings Corp. 2024-12-31 ('Preferred' from the member cut, row correction)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 5897,
+   "why": "as round 2, plus the Acosta common stock row"
+  },
+  {
+   "column": "cost",
+   "rows": 1,
+   "why": "Akoya undrawn line 2023-06-30 cost printed (10), tagged +10 (row correction); Cave 2023-09-30 cost 8,501 declared from the page (untagged_values)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 8,
+   "why": "equity unit counts tagged with the principal concept (Partner Therapeutics warrants 73,000 x4, Ambrosia warrants, Third Lane warrants, Maxor Topco 50,000, Partner preferred 55,556, Ambrosia 58,773): row corrections"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 6,
+   "why": "par printed and untagged on drawn loans (Truck-Lite, PrimeFlight, Cave, Accelerate360 x2, Celerion; and 2026-06-30 Eagle, Sperry x3 which are new rows): untagged_values"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 6,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 6,
+   "why": "follows principal_amount (1.0, dollar par)"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 6,
+   "why": "follows principal_amount (source_usd)"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 6,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 33,
+   "why": "as round 1, plus Kauffman 2024-09-30 x2: the 1.00 % cash part of 'SOFR+ 550 PIK plus 1.00 % Cash' withdrawn"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 281,
+   "why": "as round 1, plus Jacent 2024-09-30 6.6 and LashCo 2026-06-30 x2 7.1 set from the printed total margin (PIK tagged with the paid-in-cash concept)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 175,
+   "why": "reference_rate_columns ['Interest Rate'] + SON=SONIA: the benchmark is read from the printed column (CORRA, PRIME, SONIA) instead of a date guess; 2 Brush Group rows by row correction; fixed coupons tagged as spreads withdrawn"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 176,
+   "why": "follows reference_rate_type (ixbrl_field_status)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 11,
+   "why": "fixed coupons previously read as floating (Vari-Form, HSI convertible, GoHealth revolver) or unset (Merx 2024, Guernsey, CommScope)"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Jacent 2024-06-30: PIK tagged 0.01 (the floor), printed 0.75 % PIK"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 286,
+   "why": "transform events of the rate changes (cash_plus_pik_margin, pik_margin, cash_plus_pik) and the round-2 rate corrections"
+  },
+  {
+   "column": "src_facts",
+   "rows": 1,
+   "why": "Cave 2023-09-30 declared cost/principal recorded"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 91,
+   "why": "rows touched by this fund's row corrections (rates, unit counts, names, instruments)"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 4637,
+   "why": "now from the filer's printed industry where the heading maps (_apply_printed_industry): 6,771 rows labelled (spoff2 5,472; mfxh 1,692). Against spoff2: 3,825 equal, 1,526 different (the filer's heading, not the name-keyed guess), 121 lost (headings that do not map), plus new rows"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 4133,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "position_id",
+   "rows": 1922,
+   "why": "position chains re-paired on the cleaned names and the new 2026-06-30 quarter"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 1,
+   "why": "follows cost"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 29,
+   "why": "follows the interest_rate corrections (incl. Kauffman 2024-09-30 x2 withdrawn)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 29,
+   "why": "cash / all_in set from the printed coupon (row corrections) and resolved by them"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 18,
+   "why": "follows interest_rate_kind and the Kauffman withdrawals"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 604,
+   "why": "2025-06-30 only: net assets for that date now come from the company-facts files installed under D-167 (not a change of this run; present already in the first build mfxa)"
+  },
+  {
+   "column": "asset_category",
+   "rows": 13,
+   "why": "JSM Equity Investors, L.P. Class P Partnership Units, printed under Preferred Equity, were classed common equity: EQUITY_PREFERRED by row correction (14 rows, 13 present in BEFORE)"
+  },
+  {
+   "column": "index_classification",
+   "rows": 13,
+   "why": "follows asset_category (PREFERRED_EQUITY)"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 5970,
+   "why": "dispatch.industry_from_identifier_re reads the filer's industry heading from the start of the member (95 headings, with the ' - ' sub-industry where printed): 6,932 of 6,977 rows carry one (spoff2: 72)"
+  }
+ ],
+ "rows_added": 901,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Positions printed with a dash for fair value (written down to nil, or undrawn with a dash for cost) published at 0: 448 untagged_values lines over about 330 rows, each matched to its printed line by context (par/units and cost equal the tags)",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-208941",
+     "text": "First Lien Secured Debt - Revolver SON + 500 , 0.00 % Floor 07/30/31 GBP - ( 27 ) - (9)(15)(17)(18)"
+    },
+    {
+     "accession": "0000950170-23-037117",
+     "text": "First Lien Secured Debt SOFR+ 691 , 2.50 % Floor 11/01/27 3,375 ( 10 ) - (9)(23)"
+    }
+   ]
+  },
+  {
+   "what": "Money-market rows from 2025-06-30 restored (fair value tagged CashAndCashEquivalentsFairValueDisclosure): fair_value_concepts",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-335848",
+     "text": "J.P. Morgan U.S. Government Money Market Fund N/A N/A $ 185 $ 185 $ 185 (11) Total Investment after Cash Equivalents"
+    }
+   ]
+  },
+  {
+   "what": "Kauffman Holdco equity row (member without an instrument word) published at 2025-03-31: fallback_family_patterns + leaf_marker_re for that exact member",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-069131",
+     "text": "Kauffman Holdco, LLC Common Equity - Common Stock N/A N/A 250,000 Shares 250 35 (9)(13)"
+    }
+   ]
+  },
+  {
+   "what": "Reference rate read from the printed 'Interest Rate' column (reference_rate_columns, SON=SONIA): about 170 rows had a date-guessed SOFR/LIBOR where the page prints CORRA, P or SON; printed_margin_reading cash_plus_pik and pik_only_tag_reading coupon+margin as on the other Apollo-layout funds",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-208941",
+     "text": "Generator Buyer, Inc. Total Power Limited First Lien Secured Debt - Term Loan CORRA + 450 , 0.75 % Floor 07/22/30 C$ 12,066 8,653 8,497 (9)(15)(26)"
+    },
+    {
+     "accession": "0001193125-26-208941",
+     "text": "(21) The interest rate on these loans is subject to SONIA, which as of March 31, 2026 was 3.73 %."
+    }
+   ]
+  },
+  {
+   "what": "Rates tagged with the wrong concept or scale: margin, floor or PIK margin tagged as the interest rate on floating loans (18 rows withdrawn), fixed coupons tagged as spreads (HSI convertible, GoHealth revolver), scale errors (Guernsey, Merx, Beacon, Azurity), floor tagged as spread (Activ), PIK tagged as the floor (Jacent), negative spread (UpStack), untagged fixed coupons (Merx 2024, Guernsey 2023-03-31, CommScope bond), cash-plus-PIK coupons resolved (Vari-Form, Bird, Wolfspeed, Swisstech), 2 SONIA revolvers: 57 specs in scripts/v05_evidence/row_correction_specs/0001278752.json",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-016653",
+     "text": "Medical Guardian, LLC First Lien Secured Debt L+ 650 , 1.00 % Floor 10/26/26 35,798 30,672 30,742 (9)(21)(23)(26)"
+    },
+    {
+     "accession": "0000950170-24-020118",
+     "text": "Merx Aviation Finance, LLC (5) First Lien Secured Debt - Revolver 10.00 % 10/31/25 $ 106,177 $ 74,075 $ 74,076 (20)(23)"
+    },
+    {
+     "accession": "0000950170-23-016653",
+     "text": "Vari-Form Group, LLC First Lien Secured Debt 11.00 % ( 7.00 % Cash plus 4.00 % PIK) 02/02/23 5,860 893 264 (9)(11)(14)"
+    },
+    {
+     "accession": "0001193125-26-335848",
+     "text": "First Lien Secured Debt - Revolver 15.00 % 08/06/29 1,085 997 ( 506 ) (8)(9)(14)(18)"
+    }
+   ]
+  },
+  {
+   "what": "Par printed and untagged on 10 drawn loans (X11 7 -> 3): untagged_values principal_amount; Cave 2023-09-30 also its cost (values split over two members)",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-016653",
+     "text": "Truck-Lite Co., LLC First Lien Secured Debt SOFR+ 625 , 1.00 % Floor 12/14/26 31,653 31,224 31,034 (9)(33)"
+    },
+    {
+     "accession": "0000950170-23-060325",
+     "text": "Cave Enterprises Operations, LLC First Lien Secured Debt SOFR+ 660 , 1.50 % Floor 08/09/28 $ 9,993 $ 8,501 $ 8,656 (9)(23)(30)"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged with the principal concept (9 rows, some at 1,000 times the printed share count) published as unit counts",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060325",
+     "text": "Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24)"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names (page sample C001-C020): the issuer is read off the member past the industry heading and the company-group name (issuer_from_identifier, 115 industry labels and 374 group names taken from the page); groups that begin their own legal name are cut only where the legal name follows in full. 6,510 of 6,537 comparable rows equal the printed company name.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-016653",
+     "text": "Paragon 28 Paragon 28, Inc. First Lien Secured Debt SOFR+ 600 , 1.00 % Floor 05/01/26 10,000 7,481 7,450 (9)(23)(31)"
+    },
+    {
+     "accession": "0001193125-26-208941",
+     "text": "Generator Buyer, Inc. Total Power Limited First Lien Secured Debt - Term Loan CORRA + 450 , 0.75 % Floor 07/22/30 C$ 12,066 8,653 8,497 (9)(15)(26)"
+    }
+   ]
+  },
+  {
+   "what": "Instrument text after an en dash ('First Lien Secured Debt - Revolver') kept: staging drops it, so the issuer is read from the full member on those rows (299 of 302 rows)",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-054445",
+     "text": "First Lien Secured Debt - Revolver SOFR+ 625 , 1.00 % Floor 12/02/25 923 270 256 (9)(21)(23)(31)"
+    }
+   ]
+  },
+  {
+   "what": "Member names another tranche than the printed line (C006 New Era revolver 2026-03-31 published as Term Loan, and 9 other rows): instrument and issuer from the printed cells by row correction",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-208941",
+     "text": "First Lien Secured Debt - Revolver SOFR + 625 , 0.00 % Floor 06/30/30 485 485 424 (9)(17)(18)(23)"
+    }
+   ]
+  },
+  {
+   "what": "Member names the company group only (C017 'Midwest Vision', Springbrook, ViewRay, Simeio and others, 22 rows, 2023-2024): issuer set to the company the page prints for that group by row correction",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-016653",
+     "text": "Medical Guardian, LLC First Lien Secured Debt L+ 650 , 1.00 % Floor 10/26/26 35,798 30,672 30,742 (9)(21)(23)(26)"
+    }
+   ]
+  },
+  {
+   "what": "Provenance source_unavailable (Jacent 2024-09-30, LashCo 2026-06-30 x2): the PIK part is tagged with the paid-in-cash concept, so the re-verifier finds no PIK fact for the cash-plus-PIK spread; spread set to the printed total margin by row correction. financial_convention_unresolved (Kauffman 2024-09-30 x2): the tagged 1.00 % is the cash part of a PIK-margin loan, withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-335848",
+     "text": "Lash OpCo, LLC First Lien Secured Debt - Term Loan SOFR + 510 Cash plus 2.00 % PIK, 1.00 % Floor 09/18/27 47,749 47,589 43,625 (9)(22)(23)"
+    },
+    {
+     "accession": "0000950170-24-122744",
+     "text": "Kauffman Intermediate, LLC First Lien Secured Debt - Term Loan SOFR+ 550 PIK plus 1.00 % Cash, 1.00 % Floor 05/08/25 16,353 16,301 15,435 (9)(31)(32)"
+    }
+   ]
+  },
+  {
+   "what": "JSM Equity Investors preferred units (Class P Partnership Units, printed under Preferred Equity) published as common equity in all 14 quarters: EQUITY_PREFERRED / PREFERRED_EQUITY by row correction. Only these rows say preferred and publish another class; the one other match (Acosta 2024-12-31) is a common stock whose member carries 'Preferred' into the issuer name, corrected too.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-016653",
+     "text": "JSM Equity Investors, L.P. Preferred Equity - Class P Partnership Units N/A N/A 114 Shares 11 11 (9)(13)"
+    },
+    {
+     "accession": "0000950170-25-026688",
+     "text": "Acosta Acosta Holdings Corp. Preferred Equity - Preferred Equity N/A N/A 10,213 Shares 473 491 (13)(24) Common Equity - Common Stock N/A N/A 6,266 Shares 77 80 (13)(24)"
+    }
+   ]
+  },
+  {
+   "what": "Filer industry read from the member (dispatch.industry_from_identifier_re, 95 headings from the printed 'Total <industry>' lines and the member's spellings): GICS from the printed heading on 6,758 rows; 6,771 rows labelled against 5,472 in spoff2 and 1,692 in mfxh. Non-industry 'Total' lines (commitments table, share repurchases, Level 3, a CLO, a company) removed from the heading list (no row changed).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-269512",
+     "text": "Total Health Care Providers & Services"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "row_validation X11 2023-03-31 (Merx Aviation revolver par)",
+   "hypotheses": [
+    "the printed par 2,004,677 thousand is a filer typo (cost and value 84,575; the next quarter prints par 81,075 = cost): not declared, owner to decide",
+    "no principal fact is tagged on the context"
+   ]
+  },
+  {
+   "finding": "fund-level: net_assets null in most quarters to 2025-09-30, borrowings 2023-12-31 = the 2024-12-31 figure, interest_expense holds a ratio at 2023-12-31 and 2025-12-31, F16 2022-09-30 income yield",
+   "hypotheses": [
+    "us-gaap:AssetsNet (the concept this filer uses) is not in extract_companyfacts net_assets concept list: shared code",
+    "borrowings frame pick takes the next year's 10-K value",
+    "no fund-highlights wrapper exists for this fund; not built in this run (no builds left)"
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "what": "Positions printed with a dash for fair value (written-down loans and equity, undrawn lines with a dash for cost) were dropped: 9 to 37 rows a quarter. Published at 0 from their printed lines.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a current-period position context with par or units and cost but no fair-value fact, whose printed fair-value cell is a dash",
+   "quote": {
+    "accession": "0000950170-23-037117",
+    "text": "First Lien Secured Debt SOFR+ 691 , 2.50 % Floor 11/01/27 3,375 ( 10 ) - (9)(23)"
+   }
+  },
+  {
+   "observation_key": "margin-tagged-as-plain-rate-published-as-coupon",
+   "what": "On floating loans the filer tagged the margin (Medical Guardian 6.50, Acronis 5.85, Maxor 6.25), the floor (Maxor 1.00, Boasso 0.75) or the PIK margin (Jacent, LashCo) with the plain interest-rate concept; 18 rows published that as the coupon. Withdrawn.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 150.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a floating loan whose published interest_rate equals its spread, its floor or its PIK rate",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "Medical Guardian, LLC First Lien Secured Debt L+ 650 , 1.00 % Floor 10/26/26 35,798 30,672 30,742 (9)(21)(23)(26)"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "what": "About 170 loan rows published a date-guessed SOFR or LIBOR where the page prints CORRA, P (Prime) or SON (SONIA). Fixed by naming the printed column.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 300.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "reference_rate_printed on every fund (needs the fund's column named)",
+   "quote": {
+    "accession": "0001193125-26-208941",
+    "text": "Generator Buyer, Inc. Total Power Limited First Lien Secured Debt - Term Loan CORRA + 450 , 0.75 % Floor 07/22/30 C$ 12,066 8,653 8,497 (9)(15)(26)"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Equity unit counts tagged with the principal concept, sometimes at 1,000 times the printed share count (Maxor Topco 50,000 shares tagged 50,000,000); published with no unit count. 9 rows corrected.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 1.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "an equity row with a principal fact and no unit count",
+   "quote": {
+    "accession": "0000950170-23-060325",
+    "text": "Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24)"
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "what": "From 2025-06-30 the money-market rows are tagged CashAndCashEquivalentsFairValueDisclosure, not as investment fair value, and were dropped. Restored (fair_value_concepts).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "printed cash-equivalent rows equal the fund-level cash equivalents",
+   "quote": {
+    "accession": "0001193125-26-335848",
+    "text": "J.P. Morgan U.S. Government Money Market Fund N/A N/A $ 185 $ 185 $ 185 (11) Total Investment after Cash Equivalents"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Every published issuer name started with the filer's industry heading and usually the company-group name from the member ('Software Zendesk Zendesk, Inc.'); 111 rows had the industry alone. Fixed: the issuer is read off the member past both (6,510 of 6,537 comparable rows equal the printed company). 27 rows still differ (group names that are a word of the legal name, e.g. 'Global Solutions, LLC' for Continuum Global Solutions, LLC; 'Rides Third Lane Mobility Inc.').",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 400.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "an issuer name that equals an industry label",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "Beacon Mobility Beacon Mobility Corp. First Lien Secured Debt SOFR+ 600 , 1.00 % Floor 05/22/24 $ 29,223 $ 29,023 $ 28,854 (9)(31)(32)"
+   }
+  },
+  {
+   "observation_key": "member-holds-another-rows-values",
+   "what": "2023-03-31: the 'Electro Rent ... Second Lien' member carries the TGG TS Acquisition revolver's values (par 1,750, value (17)); published under Electro Rent. Left: no build left to correct the name.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "a context whose printed row names a different issuer than its member",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "TGG TS Acquisition Company First Lien Secured Debt - Revolver L+ 650 , 0.00 % Floor 12/14/23 1,750 - ( 17 ) (8)(21)(23)"
+   }
+  },
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "what": "net_assets is null in most quarters to 2025-09-30: the filer tags us-gaap:AssetsNet, which extract_companyfacts does not list for net_assets (only StockholdersEquity and others). F21 and every per-net-asset figure skip those quarters.",
+   "field": "net_assets",
+   "quarters": [
+    "2023-03-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "net_assets missing where the filing tags AssetsNet for the date",
+   "quote": {
+    "accession": "0000950170-25-069131",
+    "text": "(Note 9) Net Assets $ 1,393,260 $ 1,404,646"
+   }
+  },
+  {
+   "observation_key": "borrowings-from-wrong-period",
+   "what": "fund_financials borrowings at 2023-12-31 is 1,751,621, the 2024-12-31 figure; the 2023 10-K prints 1,462,267. Borrowings then exceed total liabilities.",
+   "field": "borrowings",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "borrowings above total liabilities",
+   "quote": {
+    "accession": "0000950170-24-020118",
+    "text": "Debt $ 1,462,267 $ 1,483,394"
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+   "what": "2022-09-30 income_yield_pct 4.6 is about half the quarter's annualised income (printed NII 22,637); the fiscal year changed from March to December, and the yield is taken on a period that does not match. F16 fires on it.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "income yield against printed quarter NII over net assets",
+   "quote": {
+    "accession": "0000950170-22-021830",
+    "text": "Net investment income $ 22,637 $ 21,231 $ 46,132 $ 46,574"
+   }
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "what": "GICS labels came from a cache keyed on the issuer name as built from the member; cleaning the names dropped them (mfxh: 1,692 rows labelled). Fixed for this fund by reading the filer's own industry from the member: 6,771 of 6,977 rows labelled (spoff2 5,472). 156 rows in 2 headings stay without a label: 'Diversified Investment Vehicles, Banking, Finance, Real Estate' (126 rows here, 134 read) and smaller headings filtered as rare ('Energy - Oil & Gas', 'Telecommunication', 'Consumer Good - Non-durable'). Of the 95 headings in the list, 9 do not map (5 are sub-industry fragments that never stand alone).",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2024-09-30"
+   ],
+   "fair_value_m": 2000.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "rows losing a GICS label between two builds of a fund, as a gate count",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "Beacon Mobility Beacon Mobility Corp. First Lien Secured Debt SOFR+ 600 , 1.00 % Floor 05/22/24 $ 29,223 $ 29,023 $ 28,854 (9)(31)(32)"
+   }
+  },
+  {
+   "observation_key": "printed-par-implausible",
+   "what": "Merx Aviation revolver 2023-03-31 prints par 2,004,677 against cost and value 84,575; no principal tagged; not published (parked).",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 84.6,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "printed par above 10x cost on a performing loan",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "Merx Aviation Finance, LLC (5) First Lien Secured Debt - Revolver 10.00 % 10/31/23 $ 2,004,677 $ 84,575 $ 84,575 (20)(23)"
+   }
+  },
+  {
+   "observation_key": "canonical-name-picks-member-dump-variant",
+   "what": "After the issuer names were cleaned, canonical_name is the longer member form on 1,017 rows ('Paladone Paladone Group Bidco Limited', 'Business Services AML Rightsource Gabriel Partners, LLC') where issuer_name is the printed company; before, 4 rows. Entity resolution clusters the clean name with the staging variants and picks the most frequent one with a legal suffix.",
+   "field": "canonical_name",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1000.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "canonical_name longer than and ending with issuer_name",
+   "quote": {
+    "accession": "0000950170-24-092876",
+    "text": "First Lien Secured Debt - Revolver SOFR+ 640 , 1.00 % Floor 09/21/26 488 481 478 (9)(21)(23)(31) 30,779 30,588"
+   }
+  },
+  {
+   "observation_key": "instrument-text-after-en-dash-dropped-by-staging",
+   "what": "Staging cuts the member at an en dash and drops the rest, so 414 rows lost '- Revolver' / '- Term Loan' and the rate text from the instrument. Fixed for this fund by reading the issuer from the full member; the staging cut is shared.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 500.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "instrument_description shorter than the member text after the issuer where the member holds an en dash",
+   "quote": {
+    "accession": "0000950170-24-054445",
+    "text": "First Lien Secured Debt - Revolver SOFR+ 625 , 1.00 % Floor 12/02/25 923 270 256 (9)(21)(23)(31)"
+   }
+  },
+  {
+   "observation_key": "member-names-another-tranche",
+   "what": "10 rows whose member names a term loan / delayed draw / revolver while the printed line is another tranche (C006 New Era 2026-03-31, Cerus, Acentra, August Bio x2, Athlete Buyer, Truck-Lite, HEF Safety, Berner, Renovo). Fixed by row correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "tranche word in the member differs from the printed instrument cell",
+   "quote": {
+    "accession": "0001193125-26-208941",
+    "text": "First Lien Secured Debt - Revolver SOFR + 625 , 0.00 % Floor 06/30/30 485 485 424 (9)(17)(18)(23)"
+   }
+  },
+  {
+   "observation_key": "pik-tagged-with-paid-in-cash-concept",
+   "what": "Jacent (2024-09-30) and LashCo (2026-06-30) tag the PIK part of 'SOFR + m Cash plus p % PIK' with InvestmentInterestRatePaidInCash; Kauffman (2024-09-30) tags the 1.00 % cash part of a PIK-margin loan the same way. Spread set to the printed total, cash part withdrawn.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 81.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "a paid-in-cash rate below the printed margin on a cash-plus-PIK row",
+   "quote": {
+    "accession": "0001193125-26-335848",
+    "text": "Lash OpCo, LLC First Lien Secured Debt - Term Loan SOFR + 510 Cash plus 2.00 % PIK, 1.00 % Floor 09/18/27 47,749 47,589 43,625 (9)(22)(23)"
+   }
+  },
+  {
+   "observation_key": "preferred-units-classed-common",
+   "what": "JSM Equity Investors, L.P. 'Class P Partnership Units' printed under Preferred Equity, with 'Preferred Equity' in the member's type text, were classed EQUITY_COMMON in every quarter (14 rows, 11 thousand or less each). The classifier checks the type axis for 'equity' before it reads 'preferred' in the instrument. Fixed by row correction.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.01,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "an equity row whose member or printed line says preferred and is published EQUITY_COMMON",
+   "quote": {
+    "accession": "0000950170-23-016653",
+    "text": "JSM Equity Investors, L.P. Preferred Equity - Class P Partnership Units N/A N/A 114 Shares 11 11 (9)(13)"
+   }
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "what": "The filer's 2023-2024 headings are broad (Moody's-style 'Consumer Goods - Non-durable', 'Healthcare & Pharmaceuticals', 'High Tech Industries'); mapped to one GICS sub-industry each, e.g. every 'Consumer Goods - Non-durable' row is Packaged Foods & Meats, including LashCo (lashes) and Paladone (gifts). From 2025-03-31 the headings are GICS-style and finer.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 300.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "a broad filer heading mapped to a single GICS sub-industry",
+   "quote": {
+    "accession": "0001193125-25-269512",
+    "text": "Total Health Care Providers & Services"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [],
+ "not_done": [
+  "No shared code changed, so no pytest run.",
+  "canonical_name regressed to the member form on 1,017 rows (shared entity resolution).",
+  "27 issuer names still differ from the printed company (group words inside the legal name); about 100 rows have no printed company cell to compare (KLO Holdings / 1244311 B.C. Ltd. rows and continuation rows).",
+  "Instrument text joins the lien words and the tranche without the printed ' - ' ('First Lien Secured Debt Revolver ...').",
+  "Fund-level figures (net assets, borrowings 2023-12-31, interest expense ratio, F16 yield) not fixed.",
+  "Pre-2023 quarters (html_agg 2022-03-31, 10-K not cached) not read.",
+  "156 rows in 2 filer headings carry no GICS label (headings not in the shared mapping table; not edited)."
+ ]
+}

@@ -113,5 +113,10 @@
                        "label":  "trxd",
                        "accepted_on":  "2026-10-15",
                        "basis":  "D-173, gate PASS; page sample 1 error of 20 (par currency from the unit tag), 16 rows fixed in round 2"
+                   },
+    "0001278752":  {
+                       "label":  "mfxi",
+                       "accepted_on":  "2026-10-15",
+                       "basis":  "D-174, gate PASS in round 3; first sample 21 errors (issuer name on every row), fixed; second sample 1 error, fixed"
                    }
 }

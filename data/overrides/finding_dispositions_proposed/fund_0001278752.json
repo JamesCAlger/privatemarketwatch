@@ -1,0 +1,674 @@
+{
+ "status": "proposed",
+ "sandbox": "mfxh",
+ "dispositions": [
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1278752-1",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-a-printed-group-subtotal",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "statement": "The source rows reported as unpublished in these quarters include members made of the industry and the company-group name (or a group subtotal tagged on a position member) that carry the group's printed subtotal, not a position. Every position of each group is published; published fair value before cash equivalents equals the filed total in all 14 quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 375 , 1.00 % Floor 05/01/26 2,000 ( 9 ) ( 10 ) (8)(9)(21)(23) 7,472 7,440",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 375 , 1.00 % Floor 05/01/26 2,000 ( 9 ) ( 10 ) (8)(9)(21)(23) 7,472 7,440': the Paragon 28 group prints its two rows and then the group subtotal 7,472 / 7,440; the 7,440 reported missing is that subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092876",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 640 , 1.00 % Floor 09/21/26 488 481 478 (9)(21)(23)(31) 30,779 30,588",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 640 , 1.00 % Floor 09/21/26 488 481 478 (9)(21)(23)(31) 30,779 30,588': AML Rightsource: 28,853 + 1,257 + 478 = 30,588, the group subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-122744",
+     "verbatim": "HSI HALO Acquisition, Inc. Common Equity - Common Stock N/A N/A 500 Shares 31 2,026 (9)(13) 47 2,047",
+     "quote": "'HSI HALO Acquisition, Inc. Common Equity - Common Stock N/A N/A 500 Shares 31 2,026 (9)(13) 47 2,047': Health & Safety Institute equity group: 21 + 2,026 = 2,047, the subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-069131",
+     "verbatim": "Trench Safety Solutions Holdings, LLC Common Equity - Common Stock N/A N/A 331 Shares 50 43 (9)(13) 19,219 19,175",
+     "quote": "'Trench Safety Solutions Holdings, LLC Common Equity - Common Stock N/A N/A 331 Shares 50 43 (9)(13) 19,219 19,175': Trench Plate group subtotal 19,175."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060325",
+     "verbatim": "Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24) 12,983 12,964",
+     "quote": "'Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24) 12,983 12,964': Maxor group subtotal 12,964."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1278752-2",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-rows-are-affiliate-rollforward-note",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The other source rows reported as unpublished ('Affiliated Investments <company>, <instrument>' and 'Controlled Investments ...') are the rows of the affiliated and controlled investments roll-forward note, removed by the promoted rule 1278752_exclude_relationship_axis_duplicates. Each position is published from the schedule.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-020118",
+     "verbatim": "1244311 B.C. Ltd., Term Loan 3,830 115 ( 378 ) 173 3,740 - 421",
+     "quote": "'1244311 B.C. Ltd., Term Loan 3,830 115 ( 378 ) 173 3,740 - 421': a row of the affiliated-investments roll-forward note (opening value, purchases, sales, change, closing value, realised, income), not a schedule row; the loan is published from the schedule."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Blue Jay Transit Inc.,Term Loan 19,940 4,580 ( 868 ) ( 4,308 ) 19,344 - -",
+     "quote": "'Blue Jay Transit Inc.,Term Loan 19,940 4,580 ( 868 ) ( 4,308 ) 19,344 - -': the same note for Blue Jay Transit; the schedule rows of the loan are published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487",
+     "quote": "'Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487': published fair value before cash equivalents equals 2,971,487 at 2026-03-31 (and the filed total in all 14 quarters) without these rows."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1278752-1",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-row-is-a-printed-group-subtotal",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "statement": "Same rows as blocking_source_position_like_parser_mismatch: group subtotals carried on industry-plus-group members, and at 2024-09-30 the ExactCare subtotal tagged on a second GrayMatter member (rule exclude_graymatter_group_subtotal_2024q3). Totals tie in all 14 quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 375 , 1.00 % Floor 05/01/26 2,000 ( 9 ) ( 10 ) (8)(9)(21)(23) 7,472 7,440",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 375 , 1.00 % Floor 05/01/26 2,000 ( 9 ) ( 10 ) (8)(9)(21)(23) 7,472 7,440': the Paragon 28 group prints its two rows and then the group subtotal 7,472 / 7,440; the 7,440 reported missing is that subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092876",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 640 , 1.00 % Floor 09/21/26 488 481 478 (9)(21)(23)(31) 30,779 30,588",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 640 , 1.00 % Floor 09/21/26 488 481 478 (9)(21)(23)(31) 30,779 30,588': AML Rightsource: 28,853 + 1,257 + 478 = 30,588, the group subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-122744",
+     "verbatim": "HSI HALO Acquisition, Inc. Common Equity - Common Stock N/A N/A 500 Shares 31 2,026 (9)(13) 47 2,047",
+     "quote": "'HSI HALO Acquisition, Inc. Common Equity - Common Stock N/A N/A 500 Shares 31 2,026 (9)(13) 47 2,047': Health & Safety Institute equity group: 21 + 2,026 = 2,047, the subtotal."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-069131",
+     "verbatim": "Trench Safety Solutions Holdings, LLC Common Equity - Common Stock N/A N/A 331 Shares 50 43 (9)(13) 19,219 19,175",
+     "quote": "'Trench Safety Solutions Holdings, LLC Common Equity - Common Stock N/A N/A 331 Shares 50 43 (9)(13) 19,219 19,175': Trench Plate group subtotal 19,175."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060325",
+     "verbatim": "Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24) 12,983 12,964",
+     "quote": "'Maxor Topco, L.P. Preferred Equity - Preferred Equity N/A N/A 50,000 Shares 50 58 (9)(13)(24) 12,983 12,964': Maxor group subtotal 12,964."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-122744",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 650 , 1.00 % Floor 11/05/29 - ( 46 ) ( 10 ) (8)(9)(21)(23) 17,450 17,843",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 650 , 1.00 % Floor 11/05/29 - ( 46 ) ( 10 ) (8)(9)(21)(23) 17,450 17,843': ExactCare group subtotal 17,450 / 17,843, the two figures tagged on the GrayMatter member."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1278752-2",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-rows-are-affiliate-rollforward-note",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Same rows as the source-recon finding: rows of the affiliated and controlled investments roll-forward note, not schedule rows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-020118",
+     "verbatim": "1244311 B.C. Ltd., Term Loan 3,830 115 ( 378 ) 173 3,740 - 421",
+     "quote": "'1244311 B.C. Ltd., Term Loan 3,830 115 ( 378 ) 173 3,740 - 421': a row of the affiliated-investments roll-forward note (opening value, purchases, sales, change, closing value, realised, income), not a schedule row; the loan is published from the schedule."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Blue Jay Transit Inc.,Term Loan 19,940 4,580 ( 868 ) ( 4,308 ) 19,344 - -",
+     "quote": "'Blue Jay Transit Inc.,Term Loan 19,940 4,580 ( 868 ) ( 4,308 ) 19,344 - -': the same note for Blue Jay Transit; the schedule rows of the loan are published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487",
+     "quote": "'Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487': published fair value before cash equivalents equals 2,971,487 at 2026-03-31 (and the filed total in all 14 quarters) without these rows."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_source_pct_leaf_parser_mismatch-1278752-1",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_pct_leaf_parser_mismatch",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "The source row reported as missing (17,843 on a GrayMatter revolver member) is the printed ExactCare group subtotal, which the filer tagged on a member spelled like a position. Rule exclude_graymatter_group_subtotal_2024q3 removes it; the real GrayMatter revolver (fair value -17) is published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-122744",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR+ 650 , 1.00 % Floor 11/05/29 - ( 46 ) ( 10 ) (8)(9)(21)(23) 17,450 17,843",
+     "quote": "'First Lien Secured Debt - Revolver SOFR+ 650 , 1.00 % Floor 11/05/29 - ( 46 ) ( 10 ) (8)(9)(21)(23) 17,450 17,843': the ExactCare subtotal is 17,450 cost / 17,843 fair value."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_source_short_plain_unresolved-1278752-1",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_short_plain_unresolved",
+   "reason_key": "src-missing-row-is-a-printed-group-subtotal",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "The 12,449 tagged on the 'Professional Services BDO USA' member is the DCM Services group subtotal printed next to it; the BDO position (11,820) and both DCM rows are published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-069131",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR + 500 , 1.00 % Floor 03/12/31 - ( 35 ) ( 35 ) (8)(9)(21)(23) 12,451 12,449",
+     "quote": "'First Lien Secured Debt - Revolver SOFR + 500 , 1.00 % Floor 03/12/31 - ( 35 ) ( 35 ) (8)(9)(21)(23) 12,451 12,449': DCM: 12,484 - 35 = 12,449, the group subtotal."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B01-1278752-1",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-contexts-without-value-are-category-rows-rollforward-or-split-twins",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "After this run every schedule row printed with a dash for fair value is published at 0 (about 330 rows declared from their printed lines). The contexts B01 still counts carry no position: the cost-by-industry-and-class table rows, the affiliate roll-forward rows and their empty instrument members, and twin contexts whose values the filer split over two members (Litify 2023-09-30, SPS Commerce 2025-06-30, Cave 2023-09-30), published once from the twin that carries the fair value.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Energy - Electricity 7,231 - - - 5,623 4 - 12,858",
+     "quote": "'Energy - Electricity 7,231 - - - 5,623 4 - 12,858': a row of the cost-by-industry-and-class table, tagged on 'Non-Controlled/Non-Affiliated Investments, Energy - Electricity' contexts with cost only."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060325",
+     "verbatim": "Litify Holdings Inc. Common Equity - Common Stock N/A N/A 20,173 Shares 83 137 (9)(13)(24)",
+     "quote": "'Litify Holdings Inc. Common Equity - Common Stock N/A N/A 20,173 Shares 83 137 (9)(13)(24)': one printed row; units and cost sit on one member and the fair value 137 on another; the row is published once with 137."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1278752-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Two rows remain: the KCF Puerto Rico promissory note and the LendingPoint unsecured term loan. The schedule prints 'N/A' in the interest-rate column and the filing tags no rate, spread or PIK on them. The earlier quarters pass the owner's check (no_rate_in_source) and are accepted by it in this run.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "KCF Puerto Rico, LLC Secured Debt - Promissory Note N/A 06/28/28 1,697 962 675 (13)(15)",
+     "quote": "'KCF Puerto Rico, LLC Secured Debt - Promissory Note N/A 06/28/28 1,697 962 675 (13)(15)': rate column N/A."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Unsecured Debt - Term Loan N/A 12/31/30 1,842 1,842 1,842 (9)(13)",
+     "quote": "'Unsecured Debt - Term Loan N/A 12/31/30 1,842 1,842 1,842 (9)(13)': LendingPoint unsecured: rate column N/A."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X07-1278752-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X07",
+   "reason_key": "x07-value-above-cost-as-printed",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Fair value above ten times cost on two tiny lines, as printed: the Swisstech IP 6 % PIK note (cost 26, value 276) and an Atlas Technical revolver (cost 1, value 12).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Swisstech IP CO, LLC First Lien Secured Debt 6 % PIK 11/29/24 281 26 276 (17)",
+     "quote": "'Swisstech IP CO, LLC First Lien Secured Debt 6 % PIK 11/29/24 281 26 276 (17)': par 281, cost 26, value 276."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-106526",
+     "verbatim": "First Lien Secured Debt - Revolver SOFR + 675 , 1.00 % Floor 04/19/29 12 1 12 (9)(20)(21)(23) (30)",
+     "quote": "'First Lien Secured Debt - Revolver SOFR + 675 , 1.00 % Floor 04/19/29 12 1 12 (9)(20)(21)(23) (30)': par 12, cost 1, value 12."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X11-1278752-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "Undrawn delayed-draw lines (GoHealth, Amylu Foods) printed with a dash for par, a bracketed cost and a small positive mark; no principal is printed or tagged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-269512",
+     "verbatim": "First Lien Secured Debt - Delayed Draw SOFR + 550 , 3.00 % Floor 08/05/29 - ( 6 ) 4 (9)(22)",
+     "quote": "'First Lien Secured Debt - Delayed Draw SOFR + 550 , 3.00 % Floor 08/05/29 - ( 6 ) 4 (9)(22)': par dash."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-076499",
+     "verbatim": "First Lien Secured Debt - Delayed Draw SOFR + 500 , 0.75 % Floor 06/10/31 - ( 9 ) 5 (9)(17)(18)",
+     "quote": "'First Lien Secured Debt - Delayed Draw SOFR + 500 , 0.75 % Floor 06/10/31 - ( 9 ) 5 (9)(17)(18)': par dash."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X11-1278752-2",
+   "class": "informational",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "reason_key": "x11-printed-par-implausible-not-published",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "The Merx Aviation revolver at 2023-03-31 prints a par of 2,004,677 thousand against cost and value of 84,575, and no principal is tagged. The figure cannot be the loan's par (the next quarters print par equal to cost, 81,075), so it was not declared; the row stays without principal. Parked for the owner: publish the printed figure, or leave it blank.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Merx Aviation Finance, LLC (5) First Lien Secured Debt - Revolver 10.00 % 10/31/23 $ 2,004,677 $ 84,575 $ 84,575 (20)(23)",
+     "quote": "'Merx Aviation Finance, LLC (5) First Lien Secured Debt - Revolver 10.00 % 10/31/23 $ 2,004,677 $ 84,575 $ 84,575 (20)(23)': par cell 2,004,677 against cost 84,575."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1278752-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "1 to 5 loans a quarter are printed and tagged with a maturity before the report date, all on non-accrual or in workout (Vari-Form 02/02/23, Solarplicity 03/08/23, Sonar 11/15/21, Naviga/Colonnade 04/27/24, Heubach 04/30/24, Roscoe Medical 04/11/25, Simeio 02/02/26). Published is the page.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092876",
+     "verbatim": "Colonnade Parent Inc (fka Naviga Inc.) First Lien Secured Debt - Term Loan 7.10 % 04/27/24 11,200 11,178 8,735 (9)(14)(18)",
+     "quote": "'Colonnade Parent Inc (fka Naviga Inc.) First Lien Secured Debt - Term Loan 7.10 % 04/27/24 11,200 11,178 8,735 (9)(14)(18)': maturity 04/27/24 printed in the 2024-06-30 schedule."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Vari-Form Group, LLC First Lien Secured Debt 11.00 % ( 7.00 % Cash plus 4.00 % PIK) 02/02/23 5,860 893 264 (9)(11)(14)",
+     "quote": "'Vari-Form Group, LLC First Lien Secured Debt 11.00 % ( 7.00 % Cash plus 4.00 % PIK) 02/02/23 5,860 893 264 (9)(11)(14)': maturity 02/02/23 printed at 2023-03-31."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1278752-1",
+   "class": "informational",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "statement": "The check compares the fund's income yield with a weighted coupon taken from published interest rates. This filer prints the margin and floor only on floating loans (about 95 pct of loans), so a coupon is published only on the few fixed-rate rows, and the weighted coupon is not the portfolio's. The income figures are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Medical Guardian, LLC First Lien Secured Debt L+ 650 , 1.00 % Floor 10/26/26 35,798 30,672 30,742 (9)(21)(23)(26)",
+     "quote": "'Medical Guardian, LLC First Lien Secured Debt L+ 650 , 1.00 % Floor 10/26/26 35,798 30,672 30,742 (9)(21)(23)(26)': a floating loan: reference, margin and floor printed, no coupon."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F21-1278752-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F21",
+   "reason_key": "f21-holdings-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Holdings over net assets 2.53 and 2.52: the fund borrows (debt 1,870,388 at 2026-03-31). Both figures are printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-208941",
+     "verbatim": "Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487",
+     "quote": "'Total Investments before Cash Equivalents $ 3,213,207 $ 2,971,487': fair value 2,971,487."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-335848",
+     "verbatim": "(Note 8) Net Assets $ 1,101,320 $ 1,307,261",
+     "quote": "'(Note 8) Net Assets $ 1,101,320 $ 1,307,261': net assets 1,101,320 at 2026-06-30."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F16-1278752-1",
+   "class": "informational",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-derived-income-yield-wrong-after-fiscal-year-change",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2022-09-30"
+   ],
+   "statement": "2022-09-30: the quarter's printed net investment income (22,637) exceeds its distributions (20,944). The check fires on a derived income yield of 4.6 pct, about half the quarter's annualised income: the fund changed its fiscal year end from March to December in 2022, and the yield appears to be computed on a period that does not match the quarter. Left as an observation (fund-level derivation, no build left).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-22-021830",
+     "verbatim": "Net investment income $ 22,637 $ 21,231 $ 46,132 $ 46,574",
+     "quote": "'Net investment income $ 22,637 $ 21,231 $ 46,132 $ 46,574': quarter income 22,637."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-22-021830",
+     "verbatim": "Distribution of net investment income $ ( 20,944 ) $ ( 23,408 ) $ ( 43,811 ) $ ( 46,850 )",
+     "quote": "'Distribution of net investment income $ ( 20,944 ) $ ( 23,408 ) $ ( 43,811 ) $ ( 46,850 )': quarter distributions 20,944."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-22-021830",
+     "verbatim": "On November 3, 2022, the Company's Board changed the Companys fiscal year end from March 31 to December 31",
+     "quote": "'On November 3, 2022, the Company's Board changed the Companys fiscal year end from March 31 to December 31': the fiscal-year change."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1278752-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "ChyronHego Corporation preferred equity at 2023-03-31: the unit count 7,800 sits on a sibling context of the same position (this context carries cost and fair value only), so the re-verifier cannot replay it from the row's own context. The published 7,800 is the printed share count.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-016653",
+     "verbatim": "Preferred Equity - Preferred Equity N/A N/A 7,800 Shares 6,000 23,390 (13)(24)",
+     "quote": "'Preferred Equity - Preferred Equity N/A N/A 7,800 Shares 6,000 23,390 (13)(24)': 7,800 shares, cost 6,000, fair value 23,390 printed on the row."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C107-1278752-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "One row is left at 2023-06-30: the Akoya Biosciences undrawn line, whose cost the filer tagged as +10 while the page prints (10); this run corrects it to -10 from the printed line (row correction), so the owner's check, which needs the tagged value, does not pass on it. The negative cost is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-037117",
+     "verbatim": "First Lien Secured Debt SOFR+ 691 , 2.50 % Floor 11/01/27 3,375 ( 10 ) - (9)(23)",
+     "quote": "'First Lien Secured Debt SOFR+ 691 , 2.50 % Floor 11/01/27 3,375 ( 10 ) - (9)(23)': par 3,375, cost (10), fair value dash."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-html_agg-1278752-1",
+   "class": "not_applicable",
+   "engine": "html_extract",
+   "rule_name": "html_agg",
+   "reason_key": "html-agg-quarter-before-tagged-schedule-not-cached",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2022-03-31"
+   ],
+   "statement": "2022-03-31 was the fund's fiscal year end (10-K 0001278752-22-000013); that filing is not in the cache (filings index status not_found) and the published holdings start at 2023-03-31. Nothing is published for the quarter. Not read.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-22-021830",
+     "verbatim": "did no t conduct any equity offerings during the fiscal year ended March 31, 2022",
+     "quote": "'did no t conduct any equity offerings during the fiscal year ended March 31, 2022': the fiscal year then ended on March 31."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001278752/notes.md",
+   "decided_by": "PROPOSED by fund agent 2026-10-15 (fund loop, sandbox mfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

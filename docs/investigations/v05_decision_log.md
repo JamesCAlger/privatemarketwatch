@@ -4240,3 +4240,37 @@ Compared with `spoff3`. Two rounds; the second from the page sample. Four builds
   5/15/2024 (a typo for 2054, not substituted); fund-level figures by share class (which class to
   publish is an owner question).
 - Observations: 8. No shared code; no tests run.
+
+### D-174 MidCap Financial Investment Corp through the fund-clearing skill (sandbox `mfxi`, with 2026-06-30), verdict PASS
+
+Compared with `spoff2`. Three rounds, nine builds (the brief's six plus three allowed for the page
+sample's findings). This is the fund where the page sample mattered most.
+
+- **Ledger:** 145 findings, 84 outstanding (134 in the first build), all proposed (18 entries);
+  totals tie in 14 of 14 quarters.
+- **Round 1 fixed:** about 330 positions printed with a dash for fair value were dropped (448
+  `untagged_values` lines); money-market rows missing from 2025-06-30 (cash concept,
+  `fair_value_concepts`); 111 rows whose issuer was the industry; reference rates from the printed
+  column (about 170 rows had a date-guessed SOFR or LIBOR for CORRA, P or SON); 57 row-correction
+  specs for rate tagging errors and unit counts tagged as principal; 10 untagged pars.
+- **Orchestrator fix:** the sandbox provenance stage ran for the public cohort list only, and MidCap
+  is held out of the public 70, so its provenance ledger was empty and the owner's checks that read
+  it could not pass (2bdab56). With it, 25 more findings accepted by check (C107, C103, X06) and four
+  new verification findings, fixed or proposed in round 2.
+- **First page sample (`mfxf`): 21 published errors.** The issuer name was wrong on all 20 cards:
+  it began with the industry label and the company-group name from the member text ('Software
+  Zendesk Zendesk, Inc.'); the gate's names check does not test for a prefix. Round 2: the issuer is
+  read off the member with page-derived lists of 95 industry headings and 374 group names (6,510 of
+  6,537 comparable names now equal the printed company); 22 group-only members given the printed
+  company; instrument text after an en dash kept (299 of 302 rows); 10 rows naming another tranche.
+- **Second sample (`mfxh`, fresh seed):** names right; 1 error, a preferred partnership unit
+  published as common (14 rows, fixed by row correction; the shared classifier reads 'equity' as
+  common before 'preferred': observation). The name fix had cost 3,813 GICS labels (the cache is
+  keyed on the old names); round 3 reads the filer's own industry from the member
+  (`industry_from_identifier_re`): 6,771 of 6,977 rows labelled, against 5,472 in `spoff2`; 1,526
+  differ from the old name-based guesses; the filer's headings are coarse (every 'Consumer Goods -
+  Non-durable' row maps to Packaged Foods & Meats).
+- **Left:** canonical_name holds the longer member form on 1,017 rows (shared entity resolution);
+  156 rows in two unmapped headings; fund-level net assets unmapped, borrowings at 2023-12-31 a year
+  late, interest expense a ratio in two quarters; the Merx 2023-03-31 printed par (a typo).
+- The agent ran a bare `python -` four times, each killed by its own id. No shared code; no tests.

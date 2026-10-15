@@ -1,6 +1,31 @@
 {
  "dispositions": [
   {
+   "disposition_id": "DS-FUNDLOOP-C103-1278752",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox mfxf for each quarter listed: 10 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py mfxf C103 3",
+   "decided_by": "check passed on sandbox mfxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-C103-1572694",
    "class": "as_filed",
    "engine": "row_validation",
@@ -65,6 +90,40 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py spxf C103 3",
    "decided_by": "check passed on sandbox spxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-C107-1278752",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox mfxf for each quarter listed: 1134 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py mfxf C107 3",
+   "decided_by": "check passed on sandbox mfxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -135,6 +194,32 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-X02-1278752",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox mfxe for each quarter listed: 13 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py mfxe 0001278752",
+   "decided_by": "check passed on sandbox mfxe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-X02-1742313",
    "class": "as_filed",
    "engine": "row_validation",
@@ -183,6 +268,35 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py kfxc 0001930679",
    "decided_by": "check passed on sandbox kfxc; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X06-1278752",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001278752"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox mfxf for each quarter listed: 19 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py mfxf X06 3",
+   "decided_by": "check passed on sandbox mfxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
