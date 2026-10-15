@@ -4435,3 +4435,32 @@ Compared with `spoff2`. Two rounds; five builds.
   lines merged by the duplicate step; warrants published as common or preferred equity.
 - The agent ran a bare heredoc once (stopped by its task id) and wrote `untagged_values` into the
   wrapper with a JSON script (patterns untouched, checked by an assertion). Wrapper tests 681 passed.
+
+### D-181 Golub Capital BDC 4 through the fund-clearing skill (sandbox `g4xc`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff2`. One round; three builds.
+
+- **Ledger:** 57 findings, 17 outstanding (32 in the first build; 13 cleared by accepted checks), 16
+  proposed; totals tie in 14 of 14 quarters (without cash rows).
+- **Fixed:** loans paying the whole coupon in kind ('SF + 6.50 % (j) 10.15 % PIK') had no published
+  rate: the filer tags the spread and the PIK rate only, and the shared rate step will not take a
+  PIK tag as the coupon when a spread is filed (128 rows, 13 quarters, plus 2 Consilio rows);
+  five printed but untagged rates; Eclipse Buyer preferred published as common with no dividend
+  rate; 17 operating-company stakes classed as private-equity funds, and 2 Metal Supermarkets rows
+  with no class, now common equity; "Other short-term borrowings" (149.8M, 28.1M) added to fund
+  borrowings at 2023-12-31 and 2024-03-31 by a new highlights wrapper (clears F26). 155 specs, 384
+  row-correction lines, each matched to its printed line.
+- **Proposed:** F27 x6, C115 x2, fmt_basis_spread x2, X02 x2, B01 x2 (new key
+  `b01-pik-rate-on-a-second-context-of-a-published-row`), pct identity 2025-12-31, B07 2025-09-30.
+- **Parked:** income identity 2022-09-30. The shared quarterly-income step halves the first
+  six-month 10-K (published 1.08M, true 1.97M); same shared fault as D-168 and D-179.
+- **Page sample:** 20 cards, 0 published errors. Reader notes, not errors: maturity and reference
+  rate printed but untagged on every debt row; Armstrong Bidco (SONIA) 676 under "Principal ($)"
+  published as 676,000 USD, accepted on the column header, currency footnote not checked. Twenty
+  cards can miss a problem on under about 15 pct of rows.
+- **Shared causes seen:** the all-PIK rate gap (sister fund 0001930087 likely has it; a wrapper
+  setting would carry forward, row corrections do not); rows from industry-subtotal contexts carry
+  no industry (16 a quarter); operating companies classed as funds; the halved first-period income.
+  Owner question: is a money-market fund (46.0M at 2025-09-30) a holding?
+- The agent ran an empty heredoc into `python -` once (stopped by its PID) and used `sed` on a
+  script and two scratch SQL files. Wrapper tests 681 passed.

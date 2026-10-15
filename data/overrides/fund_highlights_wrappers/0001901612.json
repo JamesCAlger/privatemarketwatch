@@ -1,0 +1,21 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001901612",
+ "entity_name": "Golub Capital BDC 4, Inc.",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-12-31",
+   "field": "borrowings",
+   "value": 328439000,
+   "evidence": "0001901612-24-000027 (10-Q 2023-12-31) balance sheet, in thousands: 'Debt less unamortized debt issuance costs 178,627 175,924 Other short-term borrowings 149,812 -'. Published borrowings held the first line only (178,627,000); the sum is 328,439."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "borrowings",
+   "value": 416377000,
+   "evidence": "0001901612-24-000038 (10-Q 2024-03-31) balance sheet, in thousands: 'Debt less unamortized debt issuance costs 388,273 175,924 Other short-term borrowings 28,104 -'. Published borrowings held the first line only (388,273,000); the sum is 416,377."
+  }
+ ],
+ "notes": "Fund-clearing loop 2026-10-15 (g4x sandboxes). In two quarters the balance sheet carries 'Other short-term borrowings' beside the debt line; the undimensioned debt fact holds the debt line only, so borrowings and the leverage ratio left the short-term borrowings out (F26 2023-12-31). Every other quarter prints no such line."
+}

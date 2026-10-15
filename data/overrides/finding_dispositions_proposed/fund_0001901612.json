@@ -1,0 +1,135 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "g4xc",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F27-1901612-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": ["0001901612"],
+   "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2025-12-31", "2026-03-31"],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "income_yield_pct is the printed ratio of net investment income to average net assets (14.41, 15.05, 13.82, 13.46, 11.02, 10.74). The fund holds about twice its net assets in investments (2,382.2M of investments on 1,169.4M of net assets at 2025-12-31), so income over net assets sits above the holdings' weighted coupon (11.5 to 8.7) plus 200bp. Both figures are as printed; the check compares income on a levered equity base with a coupon on gross assets. The 128 all-PIK loans that published no rate now carry their printed coupon (row corrections), which moved the weighted coupon by less than 0.1 point. No fix applies: no published value is wrong.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-24-000027", "verbatim": "Ratio of net investment income - after tax to average net assets * 14.41 % 11.43 %", "quote": "2023-12-31: printed ratio 14.41 %, published income_yield_pct 14.41"},
+    {"source": "filing", "accession": "0001901612-24-000038", "verbatim": "Ratio of net investment income - after tax to average net assets * 15.05 % 12.49 %", "quote": "2024-03-31: printed ratio 15.05 %"},
+    {"source": "filing", "accession": "0001901612-24-000065", "verbatim": "Ratio of net investment income - after tax to average net assets * 13.82 % 13.28 %", "quote": "2024-06-30: printed ratio 13.82 %"},
+    {"source": "filing", "accession": "0001901612-24-000078", "verbatim": "Ratio of net investment income - after tax to average net assets * 13.46 % 13.73 %", "quote": "2024-09-30: printed ratio 13.46 %"},
+    {"source": "filing", "accession": "0001901612-26-000009", "verbatim": "Ratio of net investment income - after tax to average net assets * 11.02 % 10.96 %", "quote": "2025-12-31: printed ratio 11.02 %"},
+    {"source": "filing", "accession": "0001901612-26-000009", "verbatim": "Total Net Assets 1,169,389 1,068,555 Total Liabilities and Total Net Assets $ 2,545,329 $ 2,297,415", "quote": "2025-12-31: net assets 1,169,389 thousand against total assets 2,545,329 thousand (investments 2,382,163): about 2x levered"},
+    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Ratio of net investment income to average net assets * 10.74 % 11.05 %", "quote": "2026-03-31: printed ratio 10.74 %"}
+   ],
+   "addresses_verdict": {"2025-12-31": "The earlier reviewer found the source checked but undecided (needs_human): the 9.7 % weighted-average yield it cited is on total investments; the published income_yield_pct is the printed NII ratio on average net assets (11.02 %), which on a fund levered about 2x sits above the coupon by construction."},
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C115-1901612-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": ["0001901612"],
+   "quarters": ["2023-06-30", "2023-12-31"],
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "statement": "The one row flagged each quarter prints a spread above 15: Goldcup 31018 AB 'E + 16.46 %' at 2023-06-30 (the cash and PIK margins together; rate 9.71 % cash plus 9.96 % PIK, published 19.67 all-in) and the undrawn Salon Lofts second-lien line 'SF + 17.00 %' at 2023-12-31. Published as printed; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-23-000051", "verbatim": "Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059", "quote": "2023-06-30: spread printed 16.46 %"},
+    {"source": "filing", "accession": "0001901612-24-000027", "verbatim": "Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )", "quote": "2023-12-31: spread printed 17.00 % on an unfunded line"}
+   ],
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-fmt_basis_spread-1901612-3",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": ["0001901612"],
+   "quarters": ["2023-06-30", "2023-12-31"],
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "statement": "The weak range test flags one row per quarter, the same rows as C115: Goldcup 31018 AB 'E + 16.46 %' (2023-06-30) and Salon Lofts second lien 'SF + 17.00 %' (2023-12-31). Published as printed; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-23-000051", "verbatim": "Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059", "quote": "2023-06-30: spread printed 16.46 %"},
+    {"source": "filing", "accession": "0001901612-24-000027", "verbatim": "Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )", "quote": "2023-12-31: spread printed 17.00 %"}
+   ],
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1901612-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": ["0001901612"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "statement": "Every row still flagged is an unfunded commitment printed 'One stop N/A(6)' with a dash for par (footnote 6: 'The entire commitment was unfunded ... no interest is being earned on this investment'); the filing tags no rate or spread. 251 rows at 2026-03-31, 233 at 2026-06-30; a few carry a small positive mark (OEConnection, People Corporation, Signature MD, 0.01M each). The loans that printed a rate and published none are fixed by row correction: Higginbotham's two lines at 2026-06-30 ('SF + 4.50 % (i) 8.14 %') and the all-PIK loans in every quarter.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "People Corporation(5)(8)(9)(12) One stop N/A(6) 02/2031 - ( 13 ) - 9", "quote": "2026-03-31: rate printed N/A(6), par '-', mark 9"},
+    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )", "quote": "2026-03-31: a typical unfunded line"},
+    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Any Hour, LLC(25) One stop N/A 13.00 % PIK 05/2031 3,146 3,110 0.2 2,391", "quote": "2026-03-31: the row of the earlier verdict; published interest_rate 13.0, pik_rate 13.0"},
+    {"source": "filing", "accession": "0001901612-26-000031", "verbatim": "OEConnection, LLC(5) One stop N/A(6) 12/2032 - ( 14 ) - 8", "quote": "2026-06-30: rate printed N/A(6), par '-', mark 8"}
+   ],
+   "addresses_verdict": {"2026-03-31": "The reviewer found Any Hour, LLC's all-PIK line ('N/A 13.00 % PIK') published with no rate. It is fixed: the row publishes interest_rate 13.0 and pik_rate 13.0 (fixed coupon read from the PIK tag); the other rows the reviewer saw are the unfunded N/A(6) lines, as printed."},
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B01-1901612-5",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": ["0001901612"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "reason_key": "b01-pik-rate-on-a-second-context-of-a-published-row",
+   "statement": "The one leaf B01 counts without a fair value is a second context of the Eclipse Buyer preferred stock that carries only its dividend rate (us-gaap:InvestmentInterestRatePaidInKind 0.1250; c-1799 at 2026-03-31, c-1830 at 2026-06-30). The row's values are tagged on its industry-subtotal context and published (fair value 1,733 and 1,266 thousand). From 2025-12-31 the published row had lost the 12.50 % and was classed common; both are now set from the printed line by row correction (preferred, pik_rate 12.5). No position is missing.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 1,752 0.2 1,733", "quote": "2026-03-31: one printed line, 12.50 % non-cash dividend"},
+    {"source": "filing", "accession": "0001901612-26-000031", "verbatim": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 1,255 0.1 1,266", "quote": "2026-06-30: one printed line"}
+   ],
+   "addresses_verdict": {"2026-03-31": "The earlier reviewer could not read the source (ambiguous, source_unavailable). Read here: the counted leaf is the rate-only context of the Eclipse Buyer preferred stock, whose row is published with its values and now its 12.50 % rate."},
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1901612-6",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": ["0001901612"],
+   "quarters": ["2025-12-31"],
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
+   "statement": "7 of 385 rows print a percent of net assets that differs from fair value over net assets by 0.05 to 0.07 points (Consilio Midco senior secured 0.4 for 0.34, Anaplan LP interest 0.2 for 0.14, Empyrean 0.2 for 0.13, Quick Quack, CHVAC, Vessco 0.1 for 0.03 to 0.04). The published percent is the printed one in each case; the check's tolerance is tighter than the filer's one-decimal printing. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-26-000009", "verbatim": "Consilio Midco Limited#(8)(10) Senior secured SF + 4.75 % (j) 8.42 % 04/2032 3,938 3,920 0.4 3,938", "quote": "2025-12-31: printed 0.4 for 3,938 on net assets 1,169,389 (0.34)"},
+    {"source": "filing", "accession": "0001901612-26-000009", "verbatim": "Total Net Assets 1,169,389 1,068,555", "quote": "2025-12-31: net assets"}
+   ],
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B07-1901612-7",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "B07",
+   "ciks": ["0001901612"],
+   "quarters": ["2025-09-30"],
+   "reason_key": "b07-original-and-amendment-filed-for-one-period",
+   "statement": "Two filings exist for 2025-09-30: the 10-K 0001901612-25-000053 and the 10-K/A 0001901612-26-000024, which repeats the report to restore a subsection of the auditor's report. The amendment is the one published; both print the same schedule total (2,209,174 thousand). No duplicate rows.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001901612-26-000024", "verbatim": "is filing this Amendment No. 1 on Form 10-K/A (the Form 10-K/A) to its Annual Report on Form 10-K filed with the Securities and Exchange Commission (the SEC) on November 21, 2025 (the Original Filing) for the purpose of correcting the inadvertent omission of a subsection", "quote": "the amendment's purpose: the auditor's report only"},
+    {"source": "filing", "accession": "0001901612-26-000024", "verbatim": "Total equity investments 29,539 3.1 35,130 Total investments 2,176,447 206.7 2,209,174", "quote": "schedule total in the amendment, equal to the original's and to the published total"}
+   ],
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

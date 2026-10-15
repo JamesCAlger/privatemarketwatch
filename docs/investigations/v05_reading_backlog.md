@@ -161,3 +161,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001702510 Carlyle Credit Solutions | ccxd | PASS | 55 findings, 26 outstanding, 26 proposed | D-177 |
 | 2026-10-15 | 0001920453 Fidelity Private Credit Fund | fpxg | INCOMPLETE | 41 findings, 11 outstanding, 10 proposed, 1 parked | D-179 |
 | 2026-10-15 | 0001786108 Trinity Capital | tcxe | INCOMPLETE | 109 findings, 74 outstanding, 61 proposed, F27 x13 parked (floor as rate) | D-180 |
+| 2026-10-15 | 0001901612 Golub Capital BDC 4 | g4xc | INCOMPLETE | 57 findings, 17 outstanding, 16 proposed, 1 parked (shared income fallback) | D-181 |
