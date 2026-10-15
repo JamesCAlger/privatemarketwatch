@@ -4531,3 +4531,35 @@ Private Credit, D-161).
   Sotheby's keeps the wrong industry (not settable by row correction).
 - The agent ran a bare heredoc into `python -` once (stopped by its id) and wrote one helper with a
   bash heredoc. Wrapper tests 681 passed.
+
+### D-184 HPS Corporate Capital Solutions Fund through the fund-clearing skill (sandbox `hcxe`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff3`. One round; five builds.
+
+- **Ledger:** 37 findings, 9 outstanding (19 in the first build, 15 after accepted checks), 8
+  proposed; totals tie in 9 of 9 quarters (without cash rows).
+- **Fixed (185 specs, 680 values, from the printed page):** equity printed under 'Preferred Equity'
+  or 'Other Equity Investments' published as loans, up to 145M a quarter (CC Investor Aggregator,
+  CCI Topco, Kendra Scott, Racing Point, Creek Feeder ...); about 10 preferred issuers published as
+  common; 'SF + m % PIK' loans published Fixed with no spread; three untagged rates; NE SPV units on
+  a New Era member. Wrapper: `pik_only_tag_reading: [coupon, margin]` and `par_tagged_as_units`
+  (New Era par, clears X11 x2). Earlier verdicts: C107 American Academy already fixed; X02
+  2026-03-31 AVSC fixed.
+- **Proposed:** F27 x3, C107 x2, X02 2026-03-31 (no rate printed), PP02 2026-06-30 (two identical
+  Behavox lines printed), income_identity 2024-12-31 under the new key
+  `income-identity-expense-support-net-below-gross`.
+- **Parked:** X02 2025-09-30: IDF 9 Financeco Series B Units published as a loan share an identifier
+  with the IDF 9 loan, so a row correction keyed on the identifier cannot reach one alone. Same
+  cause leaves ONE Group A-2 warrant units (2025-12-31, 2026-03-31) and Equinox 2024-12-31's 16 pct
+  PIK wrong. Suggested: key row corrections on the context id where the identifier repeats.
+- **Page sample:** 20 cards, 0 published errors (EUR principals, PIK splits and negative unfunded
+  marks included). Maturity untagged on every row. Twenty cards can miss a problem on under about
+  15 pct of rows.
+- **Shared causes seen:** `gics-label-depends-on-build-composition`: with no edits, 30 rows get
+  different GICS labels than in `spoff3` (declared in the field changes). The GICS label should not
+  depend on which funds are built together; for the end-of-run report. Also: on 'SF + m % PIK' rows
+  pik_rate is the margin, not the whole PIK coupon (convention question).
+- **Left:** IDF 8 Topco 230 of cost missing in two quarters (two lines on one context); Corza
+  2025-12-31 zero row not on the page; AP Himalaya class flips; Constellation blocker UNCLASSIFIED.
+- The agent wrote scratch SQL while a build ran, reset its own row-correction lines with
+  `git checkout --` three times, and ran two short `python -c` lines. Wrapper tests 681 passed.

@@ -1,0 +1,1977 @@
+[
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Knitwell Borrower LLC, 2",
+  "fields": {
+   "interest_rate": "13.48"
+  },
+  "reason": "The page prints a rate and a margin; the context carries no rate or spread tag. Printed (0001989817-24-000032, context c-101): 'Knitwell Borrower LLC (4)(10) SF+ 8.00 % 13.48 % 7/28/2027 16,981 16,410 16,419'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 1'). Printed (0001989817-24-000032, context c-141): 'The ONE Group Hospitality, Inc. - Warrants (4) 7 - -'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 2'). Printed (0001989817-24-000032, context c-142): 'The ONE Group Hospitality, Inc. - Warrants (4) 12 - -'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "AP Himalaya Co-Invest, L.P",
+  "fields": {
+   "shares_held": "25000"
+  },
+  "reason": "Equity line (unit count printed 25,000, published None). Printed (0001989817-24-000055, context c-174): 'AP Himalaya Co-Invest, L.P.(4) 25,000 25,082 25,000'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Kendra Scott Design, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "23997"
+  },
+  "reason": "Equity line (printed under Preferred Equity as '', published LOAN; unit count printed 23,997, tagged as principal 23997000.0). Printed (0001989817-24-000055, context c-167): 'Kendra Scott Design, Inc.(4) 23,997 24,270 24,342'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Racing Point UK Holdings Limited",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1675"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as '', published LOAN; unit count printed 1,675, tagged as principal 1675000.0). Printed (0001989817-24-000055, context c-172): 'Racing Point UK Holdings Limited (4)(5) 1,675 $ 10,047 $ 10,390'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1000"
+  },
+  "reason": "Equity line (printed under Preferred Equity as '', published LOAN; unit count printed 1,000, tagged as principal 1000000.0). Printed (0001989817-24-000055, context c-169): 'The ONE Group Hospitality, Inc. (4) 8/2/2029 1,000 950 1,017'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 1'). Printed (0001989817-24-000055, context c-176): 'The ONE Group Hospitality, Inc. - Warrants (4) 6,667 - -'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 2'). Printed (0001989817-24-000055, context c-177): 'The ONE Group Hospitality, Inc. - Warrants (4) 11,911 - -'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "AP Himalaya Co-Invest, L.P",
+  "fields": {
+   "instrument_description": "LP Interest",
+   "shares_held": "25000"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none; unit count printed 25,000, published None). Printed (0001989817-25-000023, context c-219): 'AP Himalaya Co-Invest, L.P.(4)(19) 25,000 25,082 25,000'; restricted securities table: 'AP Himalaya Co-Invest, L.P. LP Interest September 18, 2024'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "10000",
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'LP Interest', published LOAN; unit count printed 10,000, tagged as principal 10000000.0; instrument printed 'LP Interest', published none). Printed (0001989817-25-000023, context c-221): 'Creek Feeder, L.P. (4)(19) 10,000 10,000 10,000'; restricted securities table: 'Creek Feeder, L.P. LP Interest December 26, 2024'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Flatiron Energy Holdco LLC 2",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000023, context c-59): 'Flatiron Energy Holdco LLC (4)(14) SF + 7.50 % PIK 11.83 % 10/1/2029 4,950 4,836 4,832'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "IDF 8 Topco, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as '', published LOAN; unit count printed 230,248, tagged as principal 230248.0). Printed (0001989817-25-000023, context c-214): 'IDF 8 Topco, LLC (4)(18)(19) 230,248 $ 230 $ 230'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "IDF 8 Topco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as '', published LOAN; unit count printed 230,248, tagged as principal 230248.0). Printed (0001989817-25-000023, context c-215): 'IDF 8 Topco, LLC (4)(18)(19) 230,248 230 230'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Kendra Scott Design, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "23997",
+   "instrument_description": "Senior Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Senior Preferred Stock', published LOAN; unit count printed 23,997, tagged as principal 23997000.0; instrument printed 'Senior Preferred Stock', published none). Printed (0001989817-25-000023, context c-209): 'Kendra Scott Design, Inc.(4)(19) 23,997 24,270 26,110'; restricted securities table: 'Kendra Scott Design, Inc. Senior Preferred Stock September 12, 2024'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1532",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 1,532, tagged as principal 1532000.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000023, context c-207): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.32 % 2/8/2029 1,532 $ 1,503 $ 1,508'; restricted securities table: 'LC8 Cirrostratus L.P. Class A Units August 8, 2024'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "basis_spread": "7",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000023, context c-207): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.32 % 2/8/2029 1,532 $ 1,503 $ 1,508'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Racing Point UK Holdings Limited",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1675",
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Ordinary Shares', published LOAN; unit count printed 1,675, tagged as principal 1675000.0; instrument printed 'Ordinary Shares', published none). Printed (0001989817-25-000023, context c-217): 'Racing Point UK Holdings Limited (4)(5)(19) 1,675 10,047 9,727'; restricted securities table: 'Racing Point UK Holdings Limited Ordinary Shares July 9, 2024'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Sunraycer HPS Borrower LLC 2",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000023, context c-53): 'Sunraycer HPS Borrower LLC (4)(14) SF + 8.50 % PIK 12.83 % 10/28/2029 10,709 10,508 10,503'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1000"
+  },
+  "reason": "Equity line (printed under Preferred Equity as '', published LOAN; unit count printed 1,000, tagged as principal 1000000.0). Printed (0001989817-25-000023, context c-211): 'The ONE Group Hospitality, Inc. (4)(19) 1,000 877 970'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 1'). Printed (0001989817-25-000023, context c-223): 'The ONE Group Hospitality, Inc. - Warrants (4)(19) 6,667 12 3'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published 'Warrants 2'). Printed (0001989817-25-000023, context c-224): 'The ONE Group Hospitality, Inc. - Warrants (4)(19) 11,911 61 35'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "AP Himalaya Co-Invest, L.P",
+  "fields": {
+   "instrument_description": "LP Interest",
+   "shares_held": "25000"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none; unit count printed 25,000, published None). Printed (0001989817-25-000043, context c-284): 'AP Himalaya Co-Invest, L.P. (4)(19) - LP Interest 25,000 25,082 26,292'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "10000",
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'LP Interest', published LOAN; unit count printed 10,000, tagged as principal 10000000.0; instrument printed 'LP Interest', published none). Printed (0001989817-25-000043, context c-286): 'Creek Feeder, L.P. (4)(19) - LP Interest 10,000 10,000 10,000'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "IDF 8 Topco, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248",
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Series B-1 Units', published LOAN; unit count printed 230,248, tagged as principal 230248.0; instrument printed 'Series B-1 Units', published none). Printed (0001989817-25-000043, context c-279): 'IDF 8 Topco, LLC (4)(18)(19) - Series B-1 Units 230,248 $ 230 $ 230'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "IDF 8 Topco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248",
+   "instrument_description": "Series B-2 Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Series B-2 Units', published LOAN; unit count printed 230,248, tagged as principal 230248.0; instrument printed 'Series B-2 Units', published none). Printed (0001989817-25-000043, context c-280): 'IDF 8 Topco, LLC (4)(18)(19) - Series B-2 Units 230,248 230 230'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "IDF 9 Financeco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1055302",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series B Units', published LOAN; unit count printed 1,055,302, tagged as principal 1055302000.0; instrument printed 'Series B Units', published none). Printed (0001989817-25-000043, context c-272): 'IDF 9 Financeco, LLC (4)(6)(18)(19) 1,055,302 774 774'; restricted securities table: 'IDF 9 Financeco, LLC Series B Units March 28, 2025'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Kendra Scott Design, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "23997",
+   "instrument_description": "Senior Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Senior Preferred Stock', published LOAN; unit count printed 23,997, tagged as principal 23997000.0; instrument printed 'Senior Preferred Stock', published none). Printed (0001989817-25-000043, context c-274): 'Kendra Scott Design, Inc. (4)(19) 23,997 24,270 27,830'; restricted securities table: 'Kendra Scott Design, Inc. Senior Preferred Stock September 12, 2024'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1575",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 1,575, tagged as principal 1575000.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000043, context c-270): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556'; restricted securities table: 'LC8 Cirrostratus L.P. Class A Units August 8, 2024'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Racing Point UK Holdings Limited",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1675",
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Ordinary Shares', published LOAN; unit count printed 1,675, tagged as principal 1675000.0; instrument printed 'Ordinary Shares', published none). Printed (0001989817-25-000043, context c-282): 'Racing Point UK Holdings Limited (4)(5)(19) - Ordinary Shares 1,675 10,047 10,362'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1000"
+  },
+  "reason": "Equity line (printed under Preferred Equity as '', published LOAN; unit count printed 1,000, tagged as principal 1000000.0). Printed (0001989817-25-000043, context c-276): 'The ONE Group Hospitality, Inc. (4)(19) 1,000 877 1,027'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'B-2 Warrants', published 'Warrants 1'). Printed (0001989817-25-000043, context c-288): 'The ONE Group Hospitality, Inc. - B-2 Warrants (4)(19) 6,667 12 3'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "instrument_description": "A-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'A-2 Warrants', published 'Warrants 2'). Printed (0001989817-25-000043, context c-289): 'The ONE Group Hospitality, Inc. - A-2 Warrants (4)(19) 11,911 61 36'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "AP Himalaya Co-Invest, L.P",
+  "fields": {
+   "instrument_description": "LP Interest",
+   "shares_held": "20006"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none; unit count printed 20,006, published None). Printed (0001989817-25-000065, context c-352): 'AP Himalaya Co-Invest, L.P. (4)(20) - LP Interest 20,006 20,087 20,724'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "CC Investor Aggregator, L.P",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "40582",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 40,582, tagged as principal 40582.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000065, context c-334): 'CC Investor Aggregator, L.P. (4)(20) - Class A Units 40,582 $ 40,582 $ 41,197'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "CCI Topco, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "500",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published LOAN; unit count printed 500, tagged as principal 500.0; instrument printed 'Preferred Stock', published none). Printed (0001989817-25-000065, context c-342): 'CCI Topco, Inc. (4)(20) - Preferred Stock 500 49,005 49,791'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "10000",
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'LP Interest', published LOAN; unit count printed 10,000, tagged as principal 10000000.0; instrument printed 'LP Interest', published none). Printed (0001989817-25-000065, context c-354): 'Creek Feeder, L.P. (4)(20) - LP Interest 10,000 10,000 10,000'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Flatiron Energy Holdco LLC 1",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-97): 'Flatiron Energy Holdco LLC (4)(6)(13) SF + 7.50 % PIK 11.80 % 10/1/2029 3,831 2,309 2,308'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Flatiron Energy Holdco LLC 2",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-98): 'Flatiron Energy Holdco LLC (4)(13) SF + 7.50 % PIK 11.80 % 10/1/2029 5,244 5,142 5,132'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "IDF 8 Topco, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248",
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Series B-1 Units', published LOAN; unit count printed 230,248, tagged as principal 230248.0; instrument printed 'Series B-1 Units', published none). Printed (0001989817-25-000065, context c-347): 'IDF 8 Topco, LLC (4)(19)(20) - Series B-1 Units 230,248 $ 230 $ 230'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "IDF 8 Topco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "230248",
+   "instrument_description": "Series B-2 Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Series B-2 Units', published LOAN; unit count printed 230,248, tagged as principal 230248.0; instrument printed 'Series B-2 Units', published none). Printed (0001989817-25-000065, context c-348): 'IDF 8 Topco, LLC (4)(19)(20) - Series B-2 Units 230,248 230 230'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "IDF 9 Financeco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1055303",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series B Units', published LOAN; unit count printed 1,055,303, tagged as principal 1055303.0; instrument printed 'Series B Units', published none). Printed (0001989817-25-000065, context c-338): 'IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 774 800'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Kendra Scott Design, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "2316836",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published LOAN; unit count printed 2,316,836, tagged as principal 2316836.0; instrument printed 'Preferred Stock', published none). Printed (0001989817-25-000065, context c-340): 'Kendra Scott Design, Inc. (4)(20) - Preferred Stock 2,316,836 24,270 29,575'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1620",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 1,620, tagged as principal 1620.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000065, context c-336): 'LC8 Cirrostratus L.P. (4)(5)(10)(20) - Class A Units SF + 7.00 % PIK 11.30 % 2/8/2029 1,620 1,595 1,597'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "basis_spread": "7",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-336): 'LC8 Cirrostratus L.P. (4)(5)(10)(20) - Class A Units SF + 7.00 % PIK 11.30 % 2/8/2029 1,620 1,595 1,597'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Lasko Operation Holdings, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "891",
+   "instrument_description": "Common Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Shares', published LOAN; unit count printed 891, tagged as principal 891.0; instrument printed 'Common Shares', published none). Printed (0001989817-25-000065, context c-364): 'Lasko Operation Holdings, LLC (4)(18)(20) - Common Shares 891 $ 287 $ 287'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "NRD Construction, LLC",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-84): 'NRD Construction, LLC (4)(6)(13) SF + 8.50 % PIK 12.80 % 11/6/2029 35,905 28,455 28,451'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Racing Point UK Holdings Limited",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1675",
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Ordinary Shares', published LOAN; unit count printed 1,675, tagged as principal 1675.0; instrument printed 'Ordinary Shares', published none). Printed (0001989817-25-000065, context c-350): 'Racing Point UK Holdings Limited (4)(5)(20) - Ordinary Shares 1,675 10,047 11,483'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Sunraycer HPS Borrower LLC 1",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-89): 'Sunraycer HPS Borrower LLC (4)(6)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 6,328 3,289 3,289'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Sunraycer HPS Borrower LLC 2",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000065, context c-90): 'Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10,871 10,862'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1000",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published LOAN; unit count printed 1,000, tagged as principal 1000.0; instrument printed 'Preferred Stock', published none). Printed (0001989817-25-000065, context c-344): 'The ONE Group Hospitality, Inc. (4)(20) - Preferred Stock 1,000 877 1,066'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "The ONE Group Hospitality, Inc 1",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'B-2 Warrants', published none). Printed (0001989817-25-000065, context c-356): 'The ONE Group Hospitality, Inc. - B-2 Warrants (4)(20) 6,667 12 6'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "The ONE Group Hospitality, Inc 2",
+  "fields": {
+   "instrument_description": "A-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'A-2 Warrants', published none). Printed (0001989817-25-000065, context c-357): 'The ONE Group Hospitality, Inc. - A-2 Warrants (20) 11,911 61 48'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "AMR GP Holdings Ltd",
+  "fields": {
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (instrument printed 'Ordinary Shares', published none). Printed (0001989817-25-000085, context c-411): 'AMR GP Holdings Ltd (4)(5)(20) - Ordinary Shares 1,675 10,047 12,454'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "AP Himalaya Co-Invest, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest",
+   "shares_held": "20006"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none; unit count printed 20,006, published None). Printed (0001989817-25-000085, context c-413): 'AP Himalaya Co-Invest, L.P. (4)(20) - LP Interest 20,006 20,087 21,223'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "CB Lido Offshore Blocker X, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001989817-25-000085, context c-397): 'CB Lido Offshore Blocker X, LLC (4)(20) - Class Z Units 2,947,104 2,947 2,979'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "CC Investor Aggregator, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "40582",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 40,582, tagged as principal 40582.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000085, context c-391): 'CC Investor Aggregator, L.P. (4)(20) - Class A Units 40,582 $ 40,582 $ 42,516'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "CCI Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001989817-25-000085, context c-403): 'CCI Topco, Inc. (4)(20) - Preferred Stock 500 49,005 52,605'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "10000",
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'LP Interest', published LOAN; unit count printed 10,000, tagged as principal 10000000.0; instrument printed 'LP Interest', published none). Printed (0001989817-25-000085, context c-415): 'Creek Feeder, L.P. (4)(20) - LP Interest 10,000 10,000 10,000'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Distributed Solar Development LLC",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-99): 'Distributed Solar Development LLC (4)(12) SF + 8.50 % PIK 12.52 % 9/19/2028 10,000 9,802 9,802'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Flatiron Energy Holdco LLC 1",
+  "fields": {
+   "basis_spread": "7.38",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-363): 'Flatiron Energy Holdco LLC (4)(13) SF + 7.38 % PIK 11.38 % 10/1/2029 5,399 5,303 5,306'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Flatiron Energy Holdco LLC 2",
+  "fields": {
+   "basis_spread": "7.38",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-364): 'Flatiron Energy Holdco LLC (4)(6)(13) SF + 7.38 % PIK 11.38 % 10/1/2029 3,905 3,761 3,769'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "IDF 8 Topco, LLC 1",
+  "fields": {
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "Equity line (instrument printed 'Series B-1 Units', published none). Printed (0001989817-25-000085, context c-408): 'IDF 8 Topco, LLC (4)(19)(20) - Series B-1 Units 230,248 $ 230 $ -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "IDF 8 Topco, LLC 2",
+  "fields": {
+   "instrument_description": "Series B-2 Units"
+  },
+  "reason": "Equity line (instrument printed 'Series B-2 Units', published none). Printed (0001989817-25-000085, context c-409): 'IDF 8 Topco, LLC (4)(19)(20) - Series B-2 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Kendra Scott Design Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001989817-25-000085, context c-401): 'Kendra Scott Design Inc (4)(20) - Preferred Stock 2,316,836 24,270 31,338'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "LAL Group Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001989817-25-000085, context c-399): 'LAL Group Holdings, LLC (4)(19)(20) - Class Z Units 21,932,329 21,932 22,167'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1667",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 1,667, tagged as principal 1667.0; instrument printed 'Class A Units', published none). Printed (0001989817-25-000085, context c-393): 'LC8 Cirrostratus L.P. (4)(5)(10)(20) - Class A Units SF + 7.00 % PIK 10.99 % 2/8/2029 1,667 1,643 1,653'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "basis_spread": "7",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-393): 'LC8 Cirrostratus L.P. (4)(5)(10)(20) - Class A Units SF + 7.00 % PIK 10.99 % 2/8/2029 1,667 1,643 1,653'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Lasko Operation Holdings, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "891",
+   "instrument_description": "Common Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Shares', published LOAN; unit count printed 891, tagged as principal 891000.0; instrument printed 'Common Shares', published none). Printed (0001989817-25-000085, context c-429): 'Lasko Operation Holdings, LLC (4)(18)(20) - Common Shares 891 $ 287 $ 287'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "MBS Services Holdings, LLC 1",
+  "fields": {
+   "basis_spread": "9.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-221): 'MBS Services Holdings, LLC (4)(10) SF + 9.50 % PIK 13.65 % 12/31/2025 3,958 3,951 3,556'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "MBS Services Holdings, LLC 2",
+  "fields": {
+   "basis_spread": "9.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-222): 'MBS Services Holdings, LLC (4)(10) SF + 9.50 % PIK 13.89 % 12/31/2025 111 111 100'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "MBS Services Holdings, LLC 3",
+  "fields": {
+   "basis_spread": "9.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-223): 'MBS Services Holdings, LLC (4)(10) SF + 9.50 % PIK 13.65 % 12/31/2025 1,037 1,036 932'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "MBS Services Holdings, LLC 4",
+  "fields": {
+   "basis_spread": "9.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-224): 'MBS Services Holdings, LLC (4)(10) SF + 9.50 % PIK 13.88 % 12/31/2025 1,536 1,533 1,379'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "NE SPV Holdco, LLC 1",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Units', published EQUITY_COMMON; instrument printed 'Preferred Units', published none). Printed (0001989817-25-000085, context c-426): 'NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "NE SPV Holdco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "4139",
+   "instrument_description": "Common Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Units', published LOAN; unit count printed 4,139, tagged as principal 4139000.0; instrument printed 'Common Units', published none). Printed (0001989817-25-000085, context c-431): 'NE SPV Holdco, LLC (4)(18)(20) - Common Units 4,139 - -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "NRD Construction, LLC",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-106): 'NRD Construction, LLC (4)(6)(13) SF + 8.50 % PIK 12.50 % 11/6/2029 36,947 34,720 34,882'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "PBN II-A Equity Holdings L.P.",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "10000",
+   "instrument_description": "Limited Partnership Interest"
+  },
+  "reason": "Equity line (printed under Structured Finance Investments as 'Limited Partnership Interest', published LOAN; unit count printed 10,000, tagged as principal 10000000.0; instrument printed 'Limited Partnership Interest', published none). Printed (0001989817-25-000085, context c-388): 'PBN II-A Equity Holdings L.P. (4)(5)(6)(19) - Limited Partnership Interest 10,000 3,390 3,339'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Stanford Midco Limited",
+  "fields": {
+   "basis_spread": "10",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-367): 'Stanford Midco Limited (4)(5)(7) SN + 10.00 % PIK 13.99 % 8/5/2026 GBP 1,880 2,457 2,484'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Sunraycer HPS Borrower LLC 1",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-111): 'Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.50 % 10/28/2029 11,409 11,239 11,281'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Sunraycer HPS Borrower LLC 2",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001989817-25-000085, context c-112): 'Sunraycer HPS Borrower LLC (4)(6)(13) SF + 8.50 % PIK 12.50 % 10/28/2029 6,438 5,080 5,110'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "The ONE Group Hospitality, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock",
+   "shares_held": "1000"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none; unit count printed 1,000, published 11911000.0). Printed (0001989817-25-000085, context c-405): 'The ONE Group Hospitality, Inc. (4)(20) - Preferred Stock 1,000 877 1,102'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. 1",
+  "fields": {
+   "instrument_description": "A-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'A-2 Warrants', published none). Printed (0001989817-25-000085, context c-417): 'The ONE Group Hospitality, Inc. (20) - A-2 Warrants 11,911 61 35'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. 2",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'B-2 Warrants', published none). Printed (0001989817-25-000085, context c-418): 'The ONE Group Hospitality, Inc. (4)(20) - B-2 Warrants 6,667 12 2'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "AMR GP Holdings Ltd",
+  "fields": {
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (instrument printed 'Ordinary Shares', published none). Printed (0001628280-26-020820, context c-436): 'AMR GP Holdings Ltd (4)(5)(21) - Ordinary Shares 1,675 10,047 15,634'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "AP Himalaya Co-Invest, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-020820, context c-432): 'AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 21,745'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Albers Aerospace Holdings LLC (4)(20)(21) - Preferred Units",
+  "fields": {
+   "shares_held": "5000"
+  },
+  "reason": "Equity line (unit count printed 5,000, published None). Printed (0001628280-26-020820, context c-407): 'Albers Aerospace Holdings LLC (4)(20)(21) - Preferred Units 5,000 $ 4,292 $ 4,306'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Albers Aerospace Holdings LLC.",
+  "fields": {
+   "instrument_description": "Class D Units"
+  },
+  "reason": "Equity line (instrument printed 'Class D Units', published none). Printed (0001628280-26-020820, context c-430): 'Albers Aerospace Holdings LLC (4)(20)(21) - Class D Units 24 $ 633 $ 633'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "CB Lido Offshore Blocker X, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-020820, context c-413): 'CB Lido Offshore Blocker X, LLC (4)(21) - Class Z Units 2,947,104 2,947 3,031'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "CC Investor Aggregator, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "40582",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 40,582, tagged as principal 40582.0; instrument printed 'Class A Units', published none). Printed (0001628280-26-020820, context c-411): 'CC Investor Aggregator, L.P. (4)(21) - Class A Units 40,582 40,582 43,835'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "CCI Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-020820, context c-427): 'CCI Topco, Inc. (4)(21) - Preferred Stock 500 49,005 54,604'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Chord Searchlight, L.P",
+  "fields": {
+   "basis_spread": "6.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-374): 'Chord Searchlight, L.P (4)(5)(6)(10)(24) SF + 6.75 % PIK 10.59 % 7/16/2030 22,299 16,756 16,922'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-020820, context c-441): 'Creek Feeder, L.P. (4)(21) - LP Interest 10,000 10,000 10,835'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Distributed Solar Development LLC",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-235): 'Distributed Solar Development LLC (4)(13)(24) SF + 8.50 % PIK 12.44 % 9/19/2028 10,063 9,882 9,887'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Femur Buyer Inc 1",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-169): 'Femur Buyer Inc (4)(10)(24) SF + 7.50 % PIK 11.36 % 10/23/2030 15,317 15,039 14,754'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Femur Holdings LP",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-020820, context c-419): 'Femur Holdings LP (4)(21) - Preferred Stock 5,161,701 5,064 3,468'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Flatiron Energy Holdco LLC 1",
+  "fields": {
+   "basis_spread": "7.38",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-379): 'Flatiron Energy Holdco LLC (4)(14)(24) SF + 7.38 % PIK 11.05 % 10/1/2029 4,027 3,957 3,966'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Flatiron Energy Holdco LLC 2",
+  "fields": {
+   "basis_spread": "7.38",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-380): 'Flatiron Energy Holdco LLC (4)(14)(24) SF + 7.38 % PIK 11.05 % 10/1/2029 5,554 5,464 5,469'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Flatiron Energy Holdco LLC 3",
+  "fields": {
+   "basis_spread": "7.38",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-381): 'Flatiron Energy Holdco LLC (4)(6)(14)(25) SF + 7.38 % PIK 11.22 % 10/1/2029 41,156 4,935 4,970'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "IDF 9 Financeco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series B Units', published EQUITY_COMMON; instrument printed 'Series B Units', published none). Printed (0001628280-26-020820, context c-417): 'IDF 9 Financeco, LLC (4)(20)(21) - Series B Units 1,055,303 1,045 1,150'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Kendra Scott Design In.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-020820, context c-425): 'Kendra Scott Design Inc (4)(21) - Preferred Stock 2,316,836 24,270 33,117'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "LAL Group Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-020820, context c-415): 'LAL Group Holdings, LLC (4)(20)(21) - Class Z Units 21,932,329 21,932 22,559'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "1714",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 1,714, tagged as principal 1714.0; instrument printed 'Class A Units', published none). Printed (0001628280-26-020820, context c-409): 'LC8 Cirrostratus L.P. (4)(5)(10)(21)(24) - Class A Units SF + 7.00 % PIK 10.69 % 2/8/2029 1,714 1,692 1,702'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "LC8 Cirrostratus L.P.",
+  "fields": {
+   "basis_spread": "7",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-409): 'LC8 Cirrostratus L.P. (4)(5)(10)(21)(24) - Class A Units SF + 7.00 % PIK 10.69 % 2/8/2029 1,714 1,692 1,702'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Lasko Operation Holdings, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "891",
+   "instrument_description": "Common Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Shares', published LOAN; unit count printed 891, tagged as principal 891.0; instrument printed 'Common Shares', published none). Printed (0001628280-26-020820, context c-452): 'Lasko Operation Holdings, LLC (4)(19)(21) - Common Shares 891 $ 287 $ 287'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Lava Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-020820, context c-423): 'Lava Topco, Inc. (4)(21) - Preferred Stock 25,000 25,000 25,000'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Matrix Renewables USA LLC",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-238): 'Matrix Renewables USA LLC (4)(5)(11)(27) E + 7.50 % PIK 9.51 % 9/30/2030 EUR 10,647 12,113 12,269'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "NE SPV Holdco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Units', published EQUITY_COMMON; instrument printed 'Preferred Units', published none). Printed (0001628280-26-020820, context c-449): 'NE SPV Holdco, LLC (4)(19)(21) - Preferred Units 4,139 $ 3,018 $ 1,980'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "New Era Technology Inc",
+  "fields": {
+   "basis_spread": "6.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-446): 'New Era Technology Inc (4)(10)(19)(24) SF + 6.25 % PIK 10.07 % 6/30/2030 4,481 4,430 4,481'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "instrument_description": "Limited Partnership Interest",
+   "shares_held": "10000",
+   "issuer_name": "PBN II-A Equity Holdings L.P."
+  },
+  "reason": "Equity line (instrument printed 'Limited Partnership Interest', published none; unit count printed 10,000, published None; issuer published 'PBN II-A Equity Holdings L.P. Limited Partnership Interest'). Printed (0001628280-26-020820, context c-404): 'PBN II-A Equity Holdings L.P. (4)(5)(6)(20) - Limited Partnership Interest 10,000 4,631 4,580'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "RGP Holdings 2, LLC",
+  "fields": {
+   "basis_spread": "6.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-370): 'RGP Holdings 2, LLC (4)(5)(10)(24) SF + 6.50 % PIK 10.17 % 10/11/2032 3,583 3,515 3,514'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Stanford Midco Limited",
+  "fields": {
+   "basis_spread": "10",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-020820, context c-377): 'Stanford Midco Limited (4)(5)(7)(29) SN + 10.00 % PIK 13.79 % 8/5/2026 GBP 1,880 2,469 2,506'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-020820, context c-421): 'The ONE Group Hospitality, Inc. (4)(21) - Preferred Stock 1,000 877 1,134'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "AMR GP Holdings Ltd",
+  "fields": {
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (instrument printed 'Ordinary Shares', published none). Printed (0001628280-26-035294, context c-422): 'AMR GP Holdings Ltd (4)(5)(20) - Ordinary Shares 1,675 10,047 15,350'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "AP Himalaya Co-Invest, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-035294, context c-418): 'AP Himalaya Co-Invest, L.P. (4)(20) - LP Interest 20,006 20,087 22,262'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "AVSC Holding Corp.2",
+  "fields": {
+   "interest_rate": "8.67",
+   "basis_spread": "5",
+   "coupon_type": "Floating",
+   "reference_rate_type": "SOFR",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The page prints a rate and a margin; the context carries no rate or spread tag. Printed (0001628280-26-035294, context c-75): 'AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Albers Aerospace Holdings LLC  - Preferred Units",
+  "fields": {
+   "shares_held": "5000"
+  },
+  "reason": "Equity line (unit count printed 5,000, published None). Printed (0001628280-26-035294, context c-389): 'Albers Aerospace Holdings LLC (4)(19)(20)(34) - Preferred Units 5,000 $ 4,292 $ 4,426'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Albers Aerospace Holdings LLC.",
+  "fields": {
+   "instrument_description": "Class D Units"
+  },
+  "reason": "Equity line (instrument printed 'Class D Units', published none). Printed (0001628280-26-035294, context c-416): 'Albers Aerospace Holdings LLC (4)(19)(20) - Class D Units 24 $ 633 $ 633'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "CB Lido Offshore Blocker X, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-035294, context c-393): 'CB Lido Offshore Blocker X, LLC (4)(20)(34) - Class Z Units 2,947,104 2,947 3,084'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "CC Investor Aggregator, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "40582",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published LOAN; unit count printed 40,582, tagged as principal 40582.0; instrument printed 'Class A Units', published none). Printed (0001628280-26-035294, context c-391): 'CC Investor Aggregator, L.P. (4)(20)(34) - Class A Units 40,582 40,582 45,140'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "CCI Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-413): 'CCI Topco, Inc. (4)(20)(34) - Preferred Stock 500 49,005 55,800'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Chord Searchlight, L.P",
+  "fields": {
+   "basis_spread": "6.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-359): 'Chord Searchlight, L.P (4)(5)(6)(10)(23) SF + 6.75 % PIK 10.39 % 7/16/2030 22,656 17,127 17,196'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Claros Mortgage Trust, Inc. 2",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published none). Printed (0001628280-26-035294, context c-427): 'Claros Mortgage Trust, Inc. (4)(5)(20) - Warrants 188,556 267 268'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-035294, context c-429): 'Creek Feeder, L.P. (4)(20) - LP Interest 10,000 10,000 11,045'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Distributed Solar Development LLC 1",
+  "fields": {
+   "basis_spread": "9.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-232): 'Distributed Solar Development LLC (4)(12)(23) SF + 9.50 % PIK 13.15 % 9/19/2028 10,542 10,377 10,022'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Femur Buyer Inc 1",
+  "fields": {
+   "basis_spread": "7.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-159): 'Femur Buyer Inc (4)(10)(23) SF + 7.50 % PIK 11.17 % 10/23/2030 15,762 15,497 15,440'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Femur Holdings LP",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-401): 'Femur Holdings LP (4)(20) - Preferred Stock 5,161,701 5,064 4,066'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "GAPCO AIV Interholdco (CP), L.P.",
+  "fields": {
+   "basis_spread": "6.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-361): 'GAPCO AIV Interholdco (CP), L.P. (4)(5)(10)(23) SF + 6.75 % PIK 10.45 % 3/31/2033 12,818 12,335 12,427'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Holdings 2, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "25000",
+   "instrument_description": "L.P. Interest"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'L.P. Interest', published LOAN; unit count printed 25,000, tagged as principal None; instrument printed 'L.P. Interest', published none). Printed (0001628280-26-035294, context c-399): 'Holdings 2, L.P. (4)(5)(7)(19)(20) - L.P. Interest 11.50 % 11.50 % 25,000 24,563 24,571'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "IDF 9 Financeco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series B Units', published EQUITY_COMMON; instrument printed 'Series B Units', published none). Printed (0001628280-26-035294, context c-397): 'IDF 9 Financeco, LLC (4)(19)(20)(34) - Series B Units 1,055,303 1,045 1,185'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Kendra Scott Design In.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-411): 'Kendra Scott Design Inc (4)(20)(34) - Preferred Stock 2,316,836 24,270 34,836'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "LAL Group Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-035294, context c-395): 'LAL Group Holdings, LLC (4)(19)(20)(34) - Class Z Units 21,932,329 21,932 22,954'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Lasko Operation Holdings, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "891",
+   "instrument_description": "Common Shares"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Shares', published LOAN; unit count printed 891, tagged as principal 891.0; instrument printed 'Common Shares', published none). Printed (0001628280-26-035294, context c-440): 'Lasko Operation Holdings, LLC (4)(18)(20) - Common Shares 891 $ 287 $ 78'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Lava Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-409): 'Lava Topco, Inc. (4)(20) - Preferred Stock 25,000 25,000 25,000'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "NE SPV Holdco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Units', published EQUITY_COMMON; instrument printed 'Preferred Units', published none). Printed (0001628280-26-035294, context c-437): 'NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 1,849'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "NE SPV Holdco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "4139",
+   "instrument_description": "Common Units"
+  },
+  "reason": "Equity line (printed under Other Equity Investments as 'Common Units', published LOAN; unit count printed 4,139, tagged as principal 4139.0; instrument printed 'Common Units', published none). Printed (0001628280-26-035294, context c-442): 'NE SPV Holdco, LLC (4)(18)(20) - Common Units 4,139 - -'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Navacord Intermediate Holdings Inc 1",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-406): 'Navacord Intermediate Holdings Inc (4)(5)(6)(20) - Preferred Stock 3,424 ( 43 ) 1'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Navacord Intermediate Holdings Inc 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-407): 'Navacord Intermediate Holdings Inc (4)(5)(20)(34) - Preferred Stock 13,696 9,844 9,854'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "New Era Technology Inc",
+  "fields": {
+   "basis_spread": "6.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-434): 'New Era Technology Inc (4)(10)(18)(23) SF + 6.25 % PIK 10.10 % 6/30/2030 4,594 4,546 4,593'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "instrument_description": "Limited Partnership Interest",
+   "shares_held": "10000",
+   "issuer_name": "PBN II-A Equity Holdings L.P."
+  },
+  "reason": "Equity line (instrument printed 'Limited Partnership Interest', published none; unit count printed 10,000, published None; issuer published 'PBN II-A Equity Holdings L.P. Limited Partnership Interest'). Printed (0001628280-26-035294, context c-386): 'PBN II-A Equity Holdings L.P. (4)(5)(6)(19) - Limited Partnership Interest 10,000 5,310 5,259'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "RGP Holdings 2, LLC",
+  "fields": {
+   "basis_spread": "6.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-035294, context c-352): 'RGP Holdings 2, LLC (4)(5)(10)(23) SF + 6.50 % PIK 10.20 % 10/11/2032 $ 6,947 $ 6,818 $ 6,810'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Sparkle Aggregator, LP",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Units', published EQUITY_COMMON; instrument printed 'Preferred Units', published none). Printed (0001628280-26-035294, context c-403): 'Sparkle Aggregator, LP (4)(20)(34) - Preferred Units 12,500 12,500 12,942'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-035294, context c-404): 'The ONE Group Hospitality, Inc. (4)(20)(34) - Preferred Stock 1,000 877 1,075'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "AMR GP Holdings Ltd",
+  "fields": {
+   "instrument_description": "Ordinary Shares"
+  },
+  "reason": "Equity line (instrument printed 'Ordinary Shares', published none). Printed (0001628280-26-056793, context c-438): 'AMR GP Holdings Ltd (4)(5)(21) - Ordinary Shares 1,656 9,935 15,203'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "AP Himalaya Co-Invest, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-056793, context c-433): 'AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 22,797'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Albers Aerospace Holdings LLC.",
+  "fields": {
+   "instrument_description": "Class D Units"
+  },
+  "reason": "Equity line (instrument printed 'Class D Units', published none). Printed (0001628280-26-056793, context c-431): 'Albers Aerospace Holdings LLC (4)(20)(21) - Class D Units 24 $ 633 $ 633'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "BW NHHC Holdco Inc.",
+  "fields": {
+   "basis_spread": "7.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-192): 'BW NHHC Holdco Inc. (4)(13)(23) SF + 7.75 % PIK 11.39 % 10/30/2026 26,442 26,331 26,641'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Behavox Ltd 1",
+  "fields": {
+   "instrument_description": "Class V Shares"
+  },
+  "reason": "Equity line (instrument printed 'Class V Shares', published none). Printed (0001628280-26-056793, context c-447): 'Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Behavox Ltd 2",
+  "fields": {
+   "instrument_description": "Class V Shares"
+  },
+  "reason": "Equity line (instrument printed 'Class V Shares', published none). Printed (0001628280-26-056793, context c-448): 'Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Behavox Ltd.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Series C Shares"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series C Shares', published EQUITY_COMMON; instrument printed 'Series C Shares', published none). Printed (0001628280-26-056793, context c-423): 'Behavox Ltd (4)(5)(21)(36) - Series C Shares 50,000 4,489 4,530'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "CB Lido Offshore Blocker X, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-056793, context c-407): 'CB Lido Offshore Blocker X, LLC (4)(21)(36) - Class Z Units 2,947,104 2,947 3,120'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "CC Investor Aggregator, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class A Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class A Units', published EQUITY_COMMON; instrument printed 'Class A Units', published none). Printed (0001628280-26-056793, context c-405): 'CC Investor Aggregator, L.P. (4)(21)(36) - Class A Units 40,582 40,582 46,474'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "CCI Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-428): 'CCI Topco, Inc. (4)(21)(36) - Preferred Stock 500 49,005 57,599'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Claros Mortgage Trust, Inc. 2",
+  "fields": {
+   "instrument_description": "Warrants"
+  },
+  "reason": "Equity line (instrument printed 'Warrants', published none). Printed (0001628280-26-056793, context c-443): 'Claros Mortgage Trust, Inc. (4)(5)(21) - Warrants 188,556 267 219'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Creek Feeder, L.P.",
+  "fields": {
+   "instrument_description": "LP Interest"
+  },
+  "reason": "Equity line (instrument printed 'LP Interest', published none). Printed (0001628280-26-056793, context c-445): 'Creek Feeder, L.P. (4)(21) - LP Interest 10,000 10,000 11,257'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Distributed Solar Development LLC 1",
+  "fields": {
+   "basis_spread": "12.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-251): 'Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.15 % 9/19/2027 10,932 10,784 9,491'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Distributed Solar Development LLC 2",
+  "fields": {
+   "basis_spread": "12.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-252): 'Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "GAPCO AIV Interholdco (CP), L.P.",
+  "fields": {
+   "basis_spread": "6.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-372): 'GAPCO AIV Interholdco (CP), L.P. (4)(5)(10)(24) SF + 6.75 % PIK 10.48 % 3/31/2033 13,157 12,691 12,697'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Herb Partnership, LP",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-415): 'Herb Partnership, LP (4)(21) - Preferred Stock 7,741,150 7,286 7,272'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Holdings 2, L.P.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "25000",
+   "instrument_description": "L.P. Interest"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'L.P. Interest', published LOAN; unit count printed 25,000, tagged as principal None; instrument printed 'L.P. Interest', published none). Printed (0001628280-26-056793, context c-413): 'Holdings 2, L.P. (4)(5)(7)(21) - L.P. Interest 11.50 % 11.50 % 25,000 24,563 24,643'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "IDF 8 Topco, LLC 1",
+  "fields": {
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "Equity line (instrument printed 'Series B-1 Units', published none). Printed (0001628280-26-056793, context c-435): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "IDF 8 Topco, LLC 2",
+  "fields": {
+   "instrument_description": "Series B-2 Units"
+  },
+  "reason": "Equity line (instrument printed 'Series B-2 Units', published none). Printed (0001628280-26-056793, context c-436): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "IDF 9 Financeco, LLC 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Series B Units', published EQUITY_COMMON; instrument printed 'Series B Units', published none). Printed (0001628280-26-056793, context c-411): 'IDF 9 Financeco, LLC (4)(20)(21)(36) - Series B Units 1,055,303 1,045 1,221'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Kendra Scott Design Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-426): 'Kendra Scott Design Inc (4)(21)(36) - Preferred Stock 2,316,836 24,270 36,570'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "LAL Group Holdings, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Class Z Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Class Z Units', published EQUITY_COMMON; instrument printed 'Class Z Units', published none). Printed (0001628280-26-056793, context c-409): 'LAL Group Holdings, LLC (4)(21)(36) - Class Z Units 21,932,329 21,772 23,353'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Lakeland Tours LLC 1",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-236): 'Lakeland Tours LLC (4)(9)(24) SF + 8.50 % PIK 12.32 % 3/31/2028 2,803 2,748 2,701'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Lakeland Tours LLC 2",
+  "fields": {
+   "basis_spread": "8.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-237): 'Lakeland Tours LLC (4)(9)(24) SF + 8.50 % PIK 12.38 % 3/31/2028 1,142 1,139 1,100'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Lasko Operation Holdings, LLC 2",
+  "fields": {
+   "instrument_description": "Common Shares"
+  },
+  "reason": "Equity line (instrument printed 'Common Shares', published none). Printed (0001628280-26-056793, context c-459): 'Lasko Operation Holdings, LLC (4)(19)(21) - Common Shares 891 $ 287 $ 23'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Lava Topco, Inc.",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-424): 'Lava Topco, Inc. (4)(21)(36) - Preferred Stock 25,000 25,000 28,973'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Link Apartments Opportunity Zone REIT, LLC 1",
+  "fields": {
+   "basis_spread": "8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-378): 'Link Apartments Opportunity Zone REIT, LLC (4)(16)(24) SF + 8.00 % PIK 11.73 % 12/27/2029 1,856 1,831 2,069'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Link Apartments Opportunity Zone REIT, LLC 2",
+  "fields": {
+   "basis_spread": "8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-379): 'Link Apartments Opportunity Zone REIT, LLC (4)(16)(24) SF + 8.00 % PIK 11.73 % 12/27/2029 1,070 1,056 1,192'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Matrix Renewables USA LLC",
+  "fields": {
+   "basis_spread": "6",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-254): 'Matrix Renewables USA LLC (4)(5)(11)(28) E + 6.00 % PIK 8.20 % 9/30/2030 EUR 10,647 12,137 11,855'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "NE SPV Holdco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Units"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Units', published EQUITY_COMMON; instrument printed 'Preferred Units', published none). Printed (0001628280-26-056793, context c-456): 'NE SPV Holdco, LLC (4)(19)(21) - Preferred Units 4,139 $ 3,018 $ 187'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "NE SPV Holdco, LLC 2",
+  "fields": {
+   "instrument_description": "Common Units"
+  },
+  "reason": "Equity line (instrument printed 'Common Units', published none). Printed (0001628280-26-056793, context c-461): 'NE SPV Holdco, LLC (4)(19)(21) - Common Units 4,139 - -'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Navacord Intermediate Holdings Inc 1",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-420): 'Navacord Intermediate Holdings Inc (4)(5)(6)(21) - Preferred Stock 3,424 ( 43 ) ( 88 )'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Navacord Intermediate Holdings Inc 2",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-421): 'Navacord Intermediate Holdings Inc (4)(5)(21)(36) - Preferred Stock 13,696 9,844 9,720'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New Era Technology Inc",
+  "fields": {
+   "basis_spread": "6.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-453): 'New Era Technology Inc (4)(10)(19)(24) SF + 6.25 % PIK 10.13 % 6/30/2030 4,710 4,665 4,710'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "instrument_description": "Limited Partnership Interest",
+   "shares_held": "10000",
+   "issuer_name": "PBN II-A Equity Holdings L.P."
+  },
+  "reason": "Equity line (instrument printed 'Limited Partnership Interest', published none; unit count printed 10,000, published None; issuer published 'PBN II-A Equity Holdings L.P. Limited Partnership Interest'). Printed (0001628280-26-056793, context c-400): 'PBN II-A Equity Holdings L.P. (4)(5)(6)(20) - Limited Partnership Interest 10,000 6,358 6,307'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "RGP Holdings 2, LLC",
+  "fields": {
+   "basis_spread": "6.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-363): 'RGP Holdings 2, LLC (4)(5)(10)(24) SF + 6.50 % PIK 10.23 % 10/11/2032 $ 7,126 $ 7,002 $ 6,937'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Sparkle Aggregator, LP",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-417): 'Sparkle Aggregator, LP (4)(21)(36) - Preferred Stock 12,500 12,500 13,427'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "TecoStar Holdings Inc",
+  "fields": {
+   "basis_spread": "6.75",
+   "coupon_type": "Floating"
+  },
+  "reason": "The page prints the margin over the reference rate as paid in kind; the filer tags it with the PIK concept only, so the row was published with no spread. Printed (0001628280-26-056793, context c-188): 'TecoStar Holdings Inc (4)(10)(24) SF + 6.75 % PIK 10.39 % 5/12/2032 13,615 13,414 13,615'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "The ONE Group Hospitality, Inc",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "instrument_description": "Preferred Stock"
+  },
+  "reason": "Equity line (printed under Preferred Equity as 'Preferred Stock', published EQUITY_COMMON; instrument printed 'Preferred Stock', published none). Printed (0001628280-26-056793, context c-418): 'The ONE Group Hospitality, Inc. (4)(21)(36) - Preferred Stock 1,000 877 1,128'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "The ONE Group Hospitality, Inc.  | Non-Affiliated Issuer 1",
+  "fields": {
+   "instrument_description": "A-2 Warrants",
+   "shares_held": "11911"
+  },
+  "reason": "Equity line (instrument printed 'A-2 Warrants', published 'Non-Affiliated Issuer 1'; unit count printed 11,911, published 6667.0). Printed (0001628280-26-056793, context c-440): 'The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 24'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "The ONE Group Hospitality, Inc. | Non-Affiliated Issuer 2",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Equity line (instrument printed 'B-2 Warrants', published 'Non-Affiliated Issuer 2'). Printed (0001628280-26-056793, context c-441): 'The ONE Group Hospitality, Inc. (4)(21) - B-2 Warrants 6,667 12 -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "New Era Technology Inc 1",
+  "fields": {
+   "issuer_name": "NE SPV Holdco, LLC",
+   "instrument_description": "Common Units",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "shares_held": "4139"
+  },
+  "reason": "The context (c-454) carries principal 4,139 (decimals 0), cost 0 and value 0 on a New Era Technology member; the page prints no such New Era line, and prints the NE SPV common units with those figures. Printed (0001628280-26-020820): 'NE SPV Holdco, LLC (4)(19)(21) - Common Units 4,139 - - - - - %'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "interest_rate": "11.3",
+   "basis_spread": "7",
+   "coupon_type": "Floating",
+   "reference_rate_type": "SOFR",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filer tagged the rate and PIK facts on a separate context (c-269) with no value; the row's own context carries none. Printed (0001989817-25-000043): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556'"
+ }
+]

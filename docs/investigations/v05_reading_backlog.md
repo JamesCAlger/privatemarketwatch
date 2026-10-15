@@ -164,3 +164,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001901612 Golub Capital BDC 4 | g4xc | INCOMPLETE | 57 findings, 17 outstanding, 16 proposed, 1 parked (shared income fallback) | D-181 |
 | 2026-10-15 | 0001911066 Nuveen Churchill PCIF | ncxf | INCOMPLETE | 34 findings, 7 outstanding, 6 proposed, 1 parked (money-market row classed FUND) | D-182 |
 | 2026-10-15 | 0001902649 BlackRock Private Credit Fund | bpxh | PASS | 40 findings, 22 outstanding, 22 proposed | D-183 |
+| 2026-10-15 | 0001989817 HPS Corporate Capital Solutions | hcxe | INCOMPLETE | 37 findings, 9 outstanding, 8 proposed, 1 parked (duplicate identifier) | D-184 |
