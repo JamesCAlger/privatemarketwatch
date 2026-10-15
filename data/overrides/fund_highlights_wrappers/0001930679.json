@@ -1,0 +1,30 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001930679",
+ "entity_name": "KKR FS Income Trust",
+ "version": 1,
+ "notes": "Fund-clearing loop 2026-10-15 (kfx sandboxes). The 10-Q for 2026-03-31 files its own per-share concept kfit:InvestmentCompanyDistributionToShareholderFromNetInvestmentIncome (0.67) ahead of the dollar net investment income (us-gaap:InvestmentIncomeOperatingAfterExpenseAndTax 37,079,000); the income extractor read 0.67 as the quarter's net investment income. The 2023 income ratios were published as fractions of the printed annualised ratios.",
+ "income_concept_suppress": [
+  "investmentcompanydistributiontoshareholderfromnetinvestmentincome"
+ ],
+ "figure_corrections": [
+  {
+   "report_date": "2023-06-30",
+   "field": "income_yield_pct",
+   "value": 4.6,
+   "evidence": "0001930679-23-000006 (10-Q, 2023-06-30) financial highlights: 'Ratio of net investment income to average net assets (6) 4.60 %'. The published 2.3 is half of it; from 2024-03-31 the published figure is the printed ratio (11.39 at 2024-03-31)."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "income_yield_pct",
+   "value": 8.05,
+   "evidence": "0001930679-23-000010 (10-Q, 2023-09-30) financial highlights: 'Ratio of net investment income to average net assets (6) 8.05 %'. The published 3.45 is not a printed ratio."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "income_yield_pct",
+   "value": 9.59,
+   "evidence": "0001930679-24-000002 (10-K, 2023) financial highlights: 'Ratio of net investment income to average net assets (6) 9.59 %', repeated as the comparative column of the 10-Q for 2024-03-31 ('11.39 % 9.59 %'). The published 1.54 is not a printed ratio."
+  }
+ ]
+}

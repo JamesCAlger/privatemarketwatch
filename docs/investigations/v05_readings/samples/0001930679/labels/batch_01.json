@@ -1,0 +1,1662 @@
+[
+ {
+  "card": "C001",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 906 (tagged 906000); published -7000 (FV less par) (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 913 (tagged 913000); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 10/29; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C002",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 1,387 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 1,387 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.3 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "this line prints no PIK (the lines above do)"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 06/32; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C003",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 4.8 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 01/29; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C004",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF+ 525 printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 5/25/28; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C005",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 5,291 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 5,291 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF+ 500 printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 8/28/28; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C006",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity line prints a share count, no par"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity, no coupon printed"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity, no spread printed"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity, no reference rate printed"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity, no maturity printed"
+   }
+  }
+ },
+ {
+  "card": "C007",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "extra",
+    "tag": "wrong_label",
+    "cause": "tag",
+    "note": "prints SF + 6.3 % (a margin, no coupon); filer tagged 6.3 % as InvestmentInterestRate and we publish it as the rate"
+   },
+   "basis_spread": {
+    "published": "missing",
+    "tag": "wrong_label",
+    "cause": "tag",
+    "note": "prints margin 6.3 % over SF; tagged as InvestmentInterestRate, no spread published"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 01/29; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C008",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "wrong_label",
+    "cause": "",
+    "note": "prints fixed 7.3 % with no reference rate; tagged InvestmentBasisSpreadVariableRate"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no spread printed; the 7.3 % is a fixed coupon"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no reference rate printed"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 7/25/30; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C009",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.8 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 12/26; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C010",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 411 (tagged); published -4000 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 415 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "missing",
+    "tag": "wrong_row",
+    "cause": "tag",
+    "note": "prints ( 0.0 % PIK / 3.0 % PIK); facts sit on min/max-axis contexts, not this row's context; none published"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 06/30; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C011",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 3,086 (tagged); published -93000 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 3,179 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SA+ 700 printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SA (legend: SONIA or SA); no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 9/5/26; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C012",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "wrong",
+    "tag": "wrong_label",
+    "cause": "tag",
+    "note": "prints $ 1,102 par; tagged InvestmentOwnedBalanceShares, we publish 1102000 with no currency"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed; the 1,102 is a dollar par"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "wrong_label",
+    "cause": "",
+    "note": "prints fixed 5.0 % with no reference rate; tagged InvestmentBasisSpreadVariableRate"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no spread printed; the 5.0 % is a fixed coupon"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no reference rate printed"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 8/15/54; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C013",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "fixed 4.0 % coupon, no spread printed"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no reference rate printed"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 07/54; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C014",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.3 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 04/30; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C015",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 317 (tagged); published -9000 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 326 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "this line prints no PIK (neighbouring 10/32 lines do)"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 10/31; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C016",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 4,702 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 4,702 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 4.5 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 06/32; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C017",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 4.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 07/31; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C018",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 4.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 03/29; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C019",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints FV 518 (tagged); published 4000 (orchestrator: owner convention D-091, not an error)"
+   },
+   "cost": {
+    "published": "convention",
+    "tag": "right",
+    "cause": "",
+    "note": "prints cost 514 (tagged); published 0 (orchestrator: owner convention D-091, not an error)"
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 5.0 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 10/29; no maturity fact on the context"
+   }
+  }
+ },
+ {
+  "card": "C020",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no share count printed"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no pct of net assets column"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "only SF + 4.8 % printed, no all-in coupon"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints SF; no reference-rate fact on the context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints 01/32; no maturity fact on the context"
+   }
+  }
+ }
+]

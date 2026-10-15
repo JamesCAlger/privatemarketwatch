@@ -47,7 +47,9 @@ Do not write any file except your labels file. Never run `python -` or `python -
 - `missing`: the page prints a value; we publish none.
 - `extra`: we publish a value; the page prints none (a dash or no such column).
 - `wrong`: both present and they differ.
-- `convention`: differs only by the open convention D-092: the whole coupon is printed as PIK beside a spread, and we publish the PIK rate and spread with no interest rate. Use only for interest_rate in that shape.
+- `convention`: differs only by an owner convention:
+  - D-092 (open): the whole coupon is printed as PIK beside a spread, and we publish the PIK rate and spread with no interest rate. Use only for interest_rate in that shape.
+  - D-091 (KKR FS Income Trust 0001930679 and KKR FS Income Trust Select 0001975736): an undrawn-commitment row (footnote "unfunded commitment") is published net of the commitment: cost 0, fair value equal to the printed fair value less the printed cost (the mark), principal the committed amount. Use for fair_value and cost on those rows.
 - `unclear`: you cannot tell from the card (say why in `note`).
 
 **tag** (the filer's XBRL against its own printed line, regardless of what we published), one of:

@@ -1,0 +1,1213 @@
+[
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Florida Food Products LLC, Revolver 2",
+  "fields": {
+   "cost": "0",
+   "fair_value": "0"
+  },
+  "reason": "Undrawn commitment row (footnote (i)), netted as the owner ruled (D-091): the filer tagged its 923 commitment on a Discover Financial Services member, so the netting did not match it. Printed: 'Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923'; the section offset 'Unfunded Loan Commitments ( 219,821 )' includes it"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Opendoor Labs Inc, Structured Mezzanine 2",
+  "fields": {
+   "cost": "0",
+   "fair_value": "0"
+  },
+  "reason": "Undrawn commitment row (footnote (i)), netted as the owner ruled (D-091): the filer tagged its 4,130 commitment on a Lennar Corp member, so the netting did not match it. Printed: 'Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130'; the section offset 'Unfunded Commitments ( 72,079 )' includes it"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver | Pharmaceuticals, Biotechnology & Life Sciences 2",
+  "fields": {
+   "cost": "0",
+   "fair_value": "104000",
+   "interest_rate": "",
+   "basis_spread": "6.3",
+   "coupon_type": "Floating"
+  },
+  "reason": "Undrawn commitment row (footnote (i)), netted as the owner ruled (D-091): the commitments note lists it under the former name 'Curia Global Inc, Revolver 10,333', so the name-prefix netting did not match it. Printed: 'Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437'; net fair value 10,437 - 10,333 = 104 | The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.063) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Australis Maritime II, Private Equity, Transportation",
+  "fields": {
+   "shares_held": "333021",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 333,021,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Australis Maritime II, Private Equity (h)(i) Transportation 333,021 333 333 '"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "KKR Altitude II Offshore Aggregator LP, Partnership Interest, Capital Goods",
+  "fields": {
+   "shares_held": "706308",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 706,308,000); the page prints the count in the Principal Amount/Shares column. Printed: 'KKR Altitude II Offshore Aggregator LP, Partnership Interest (h)(i) Capital Goods 706,308 706 719 '"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "SunPower Financial, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "53455",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 53,455,000); the page prints the count in the Principal Amount/Shares column. Printed: 'SunPower Financial, Private Equity (h)(i) Financial Services 53,455 53 53 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Australis Maritime II, Private Equity, Transportation",
+  "fields": {
+   "shares_held": "420050"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (380,719). Printed: 'Australis Maritime II, Private Equity (f)(j)(k)(l) Transportation 420,050 420 468 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Drive Revel, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "113182"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (81,101). Printed: 'Drive Revel, Private Equity (f)(j) Financial Services 113,182 123 124 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "KKR Altitude II Offshore Aggregator LP, Partnership Interest, Capital Goods",
+  "fields": {
+   "shares_held": "1218441"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (922,641). Printed: 'KKR Altitude II Offshore Aggregator LP, Partnership Interest (f)(j)(l) Capital Goods 1,218,441 1,218 1,274 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Optio Invest, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "363930"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (101,365). Printed: 'Optio Invest, Private Equity (f)(j) Financial Services 363,930 461 471 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "PayPal Europe Sarl et Cie SCA, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "2174552"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (2,498,362). Printed: 'PayPal Europe Sarl et Cie SCA, Private Equity (f)(j) Financial Services 2,174,552 2,354 2,432 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Synovus Financial Corp, Private Equity, Banks",
+  "fields": {
+   "shares_held": "1790217"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (2,086,357). Printed: 'Synovus Financial Corp, Private Equity (f)(j) Banks 1,790,217 1,790 1,798 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "TDC LLP, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "68953"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (1,319,000). Printed: 'TDC LLP, Private Equity (f)(j)(l) Financial Services 68,953 $ 87 $ 86 '"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Vehicle Secured Funding Trust, Private Equity, Financial Services",
+  "fields": {
+   "shares_held": "10827494"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (11,865,999). Printed: 'Vehicle Secured Funding Trust, Private Equity (f)(j) Financial Services 10,827,494 10,827 10,931 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Australis Maritime II, ABF Equity, Transportation",
+  "fields": {
+   "shares_held": "605526"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (380,719). Printed: 'Australis Maritime II, ABF Equity (f)(j)(k)(m) Transportation 605,526 606 658 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Drive Revel, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "222616"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (81,101). Printed: 'Drive Revel, ABF Equity (f)(j) Financial Services 222,616 241 240 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "GreenSky Holdings LLC, ABF Equity, Financial Services 2",
+  "fields": {
+   "shares_held": "1731005"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (1,332,761). Printed: 'GreenSky Holdings LLC, ABF Equity (f)(j)(k)(l) Financial Services 1,731,005 1,731 1,840 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "KKR Altitude II Offshore Aggregator LP, Partnership Interest, Capital Goods",
+  "fields": {
+   "shares_held": "1218441"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (922,641). Printed: 'KKR Altitude II Offshore Aggregator LP, Partnership Interest (f)(j)(m) Capital Goods 1,218,441 1,218 1,315 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Optio Invest, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "413079"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (101,365). Printed: 'Optio Invest, ABF Equity (f)(j) Financial Services 413,079 523 523 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "PayPal Europe Sarl et Cie SCA, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2739796"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (2,498,362). Printed: 'PayPal Europe Sarl et Cie SCA, ABF Equity (f)(j) Financial Services 2,739,796 2,963 3,125 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Synovus Financial Corp, ABF Equity, Banks",
+  "fields": {
+   "shares_held": "1545256"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (2,086,357). Printed: 'Synovus Financial Corp, ABF Equity (f)(j) Banks 1,545,256 1,545 1,547 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "TDC LLP, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "68953"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (1,319,000). Printed: 'TDC LLP, ABF Equity (f)(j) Financial Services 68,953 87 85 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Vehicle Secured Funding Trust, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2638928"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (11,865,999). Printed: 'Vehicle Secured Funding Trust, ABF Equity (f)(j)(k) Financial Services 2,638,928 2,639 2,659 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Australis Maritime II, ABF Equity, Transportation",
+  "fields": {
+   "shares_held": "733056"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (380,719). Printed: 'Australis Maritime II, ABF Equity (f)(j)(m) Transportation 733,056 733 755 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Discover Financial Services, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "646956"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (1,201,000). Printed: 'Discover Financial Services, ABF Equity (f)(j)(k)(m) Financial Services 646,956 647 647 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Drive Revel, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "267636"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (81,101). Printed: 'Drive Revel, ABF Equity (f)(j) Financial Services 267,636 290 364 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Global Lending Services LLC, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2941919",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 2,941,919,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Global Lending Services LLC, ABF Equity (f)(j)(k) Financial Services 2,941,919 $ 2,942 $ 3,140 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "GreenSky Holdings LLC, ABF Equity, Financial Services 1",
+  "fields": {
+   "shares_held": "1332761",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 1,332,761,000); the page prints the count in the Principal Amount/Shares column. Printed: 'GreenSky Holdings LLC, ABF Equity (f)(k)(l) Financial Services 1,332,761 1,333 1,682 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "GreenSky Holdings LLC, ABF Equity, Financial Services 2",
+  "fields": {
+   "shares_held": "2158225",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 2,158,225,000); the page prints the count in the Principal Amount/Shares column. Printed: 'GreenSky Holdings LLC, ABF Equity (f)(j)(k)(l) Financial Services 2,158,225 2,158 2,115 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "KKR Altitude II Offshore Aggregator LP, Partnership Interest, Capital Goods",
+  "fields": {
+   "shares_held": "1218441"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (922,641). Printed: 'KKR Altitude II Offshore Aggregator LP, Partnership Interest (f)(j)(m) Capital Goods 1,218,441 1,218 1,316 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Lennar Corp, ABF Equity, Consumer Durables & Apparel",
+  "fields": {
+   "shares_held": "3621836",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 3,621,836,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Lennar Corp, ABF Equity (f)(j) Consumer Durables & Apparel 3,621,836 3,622 3,612 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Norway_France, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2679228",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 2,679,228,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Norway_France, ABF Equity (f)(j)(k) Financial Services 2,679,228 2,981 2,986 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Optio Invest, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "459091",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 459,091,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Optio Invest, ABF Equity (f)(j) Financial Services 459,091 583 595 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "PayPal Europe Sarl et Cie SCA, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2651412",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 2,651,412,000); the page prints the count in the Principal Amount/Shares column. Printed: 'PayPal Europe Sarl et Cie SCA, ABF Equity (f)(j) Financial Services 2,651,412 2,871 3,179 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "SunPower Financial, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "161479",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 161,479,000); the page prints the count in the Principal Amount/Shares column. Printed: 'SunPower Financial, ABF Equity (f)(j)(k) Financial Services 161,479 161 173 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Synovus Financial Corp, ABF Equity, Banks",
+  "fields": {
+   "shares_held": "1291023",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 1,291,023,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Synovus Financial Corp, ABF Equity (f)(j) Banks 1,291,023 1,291 1,380 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "TDC LLP, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "68953"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (1,319,000). Printed: 'TDC LLP, ABF Equity (f)(j) Financial Services 68,953 87 88 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Vehicle Secured Funding Trust, ABF Equity, Financial Services",
+  "fields": {
+   "shares_held": "2638928"
+  },
+  "reason": "Unit count tagged in thousands (shares concept x1000); the shared power-of-ten step replaced it with another quarter's count (11,865,999). Printed: 'Vehicle Secured Funding Trust, ABF Equity (f)(j)(k) Financial Services 2,638,928 2,639 2,739 '"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Santander Consumer Bank AS, ABF Equity, Banks",
+  "fields": {
+   "shares_held": "210223000",
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Equity unit count tagged with the principal concept (published as a loan with principal 210,223,000); the page prints the count in the Principal Amount/Shares column. Printed: 'Santander Consumer Bank AS, ABF Equity (f)(k)(l) Banks 210,223,000 21,078 21,062 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Bankers Healthcare Group LLC, Term Loan, Financial Services",
+  "fields": {
+   "interest_rate": "22",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.22); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Bankers Healthcare Group LLC, Term Loan (f)(j) Financial Services 22.0 % 11/8/27 $ 771 771 759 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Progress Residential 2024-SFR4 Trust, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "3.4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.034); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Progress Residential 2024-SFR4 Trust, Structured Mezzanine (e)(f)(j) Real Estate Management & Development 3.4 % 7/9/29 $ 6,250 4,821 4,821 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 1",
+  "fields": {
+   "interest_rate": "8",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.08); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 8.0 % 7/25/30 $ 227 227 226 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 2",
+  "fields": {
+   "interest_rate": "18",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.18); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 18.0 % 7/25/30 $ 147 105 124 '"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.073); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan (f)(j) Real Estate Management & Development 7.3 % 7/25/30 $ 1,364 1,364 1,360 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Bankers Healthcare Group LLC, Term Loan, Financial Services",
+  "fields": {
+   "interest_rate": "22",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.22); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Bankers Healthcare Group LLC, Term Loan (f)(j) Financial Services 22.0 % 11/8/27 $ 771 771 758 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Discover Financial Services, Subordinated Loan, Financial Services 1",
+  "fields": {
+   "interest_rate": "15",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.15); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Discover Financial Services, Subordinated Loan (f)(j)(m) Financial Services 15.0 % 9/6/34 $ 1,201 1,201 1,201 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "EFMT 2024-INV1, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.6",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.076); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'EFMT 2024-INV1, Term Loan (e)(f)(j) Real Estate Management & Development 7.6 % 3/25/69 $ 6,380 6,083 6,233 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "FIGRE Trust 2024-HE3, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "9.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.09300000000000001); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'FIGRE Trust 2024-HE3, Term Loan (e)(f)(j) Real Estate Management & Development 9.3 % 7/25/54 $ 1,913 1,921 1,972 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "HOMES 2024-AFC1 Trust, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.6",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.076); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'HOMES 2024-AFC1 Trust, Structured Mezzanine (e)(f)(j) Real Estate Management & Development 7.6 % 8/25/59 $ 1,944 1,848 1,848 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Lennar Corp, Term Loan, Consumer Durables & Apparel 1",
+  "fields": {
+   "interest_rate": "10.8",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.10800000000000001); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Lennar Corp, Term Loan (f)(j) Consumer Durables & Apparel 10.8 % 8/30/29 $ 3,119 3,119 3,119 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "PRPM 2024-RCF4 LLC, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.04); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'PRPM 2024-RCF4 LLC, Term Loan (e)(f)(j) Real Estate Management & Development 4.0 % 7/25/54 $ 2,813 2,298 2,367 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "PRPM 2024-RCF5 LLC, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.04); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'PRPM 2024-RCF5 LLC, Term Loan (e)(f)(j) Real Estate Management & Development 4.0 % 8/25/54 $ 3,750 3,146 3,177 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Progress Residential 2024-SFR4 Trust, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "3.4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.034); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Progress Residential 2024-SFR4 Trust, Structured Mezzanine (e)(f)(j) Real Estate Management & Development 3.4 % 7/17/41 $ 6,250 4,872 5,063 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Rosemawr Management LLC, Structured Mezzanine, Utilities",
+  "fields": {
+   "interest_rate": "7.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.073); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Rosemawr Management LLC, Structured Mezzanine (f) Utilities 7.3 % 8/15/54 $ 653 588 595 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Rosemawr Management LLC, Term Loan, Utilities",
+  "fields": {
+   "interest_rate": "5",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.05); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Rosemawr Management LLC, Term Loan (f) Utilities 5.0 % 8/15/54 $ 1,102 990 1,007 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 1",
+  "fields": {
+   "interest_rate": "8",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.08); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 8.0 % 7/25/30 $ 219 219 219 ' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 2",
+  "fields": {
+   "interest_rate": "18",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed",
+   "principal_amount": "147000",
+   "principal_amount_usd": "147000",
+   "shares_held": "",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.18); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 18.0 % 7/25/30 $ 147 106 128 ' | Par tagged with the share-count concept (InvestmentOwnedBalanceShares 147,000), outside the near-cost band the fund setting reads (cost 106,000: a note bought at a discount). Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 18.0 % 7/25/30 $ 147 106 128' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.073); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan (f)(j) Real Estate Management & Development 7.3 % 7/25/30 $ 1,313 1,313 1,318 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Bankers Healthcare Group LLC, Term Loan, Financial Services",
+  "fields": {
+   "interest_rate": "22",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.22); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Bankers Healthcare Group LLC, Term Loan (f)(j) Financial Services 22.0 % 11/8/27 $ 771 771 757 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "CAFL 2024-RTL1 Issuer LLC, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "10.2",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.102); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'CAFL 2024-RTL1 Issuer LLC, ABS (e)(f)(j) Real Estate Management & Development 10.2 % 11/28/31 $ 2,500 2,500 2,505 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "EFMT 2024-INV1, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.6",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.076); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'EFMT 2024-INV1, ABS (e)(f)(j) Real Estate Management & Development 7.6 % 3/25/69 $ 6,380 6,083 6,223 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "FIGRE Trust 2024-HE3, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "9.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.09300000000000001); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'FIGRE Trust 2024-HE3, ABS (e)(f)(j) Real Estate Management & Development 9.3 % 7/25/54 $ 1,913 1,921 1,927 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "LHOME Mortgage Trust 2024-RTL4, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "9.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.09300000000000001); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'LHOME Mortgage Trust 2024-RTL4, ABS (e)(f)(j) Real Estate Management & Development 9.3 % 7/25/39 $ 7,513 7,513 7,532 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "PRPM 2024-RCF4 LLC, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.04); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'PRPM 2024-RCF4 LLC, ABS (e)(f)(j) Real Estate Management & Development 4.0 % 7/25/54 $ 2,813 2,300 2,350 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "PRPM 2024-RCF5 LLC, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.04); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'PRPM 2024-RCF5 LLC, ABS (e)(f)(j) Real Estate Management & Development 4.0 % 8/25/54 $ 3,750 3,146 3,152 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Progress Residential 2024-SFR4 Trust, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "3.4",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.034); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Progress Residential 2024-SFR4 Trust, Structured Mezzanine (e)(f)(j) Real Estate Management & Development 3.4 % 7/17/41 $ 6,250 4,929 5,001 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Rain City Mortgage Trust 2024-RTL1, ABS, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "10.2",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.102); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Rain City Mortgage Trust 2024-RTL1, ABS (e)(f)(j) Real Estate Management & Development 10.2 % 11/25/29 $ 3,290 3,290 3,285 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Rosemawr Management LLC, ABS, Utilities",
+  "fields": {
+   "interest_rate": "5",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.05); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Rosemawr Management LLC, ABS (f) Utilities 5.0 % 8/15/54 $ 1,102 990 991 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Rosemawr Management LLC, Structured Mezzanine, Utilities",
+  "fields": {
+   "interest_rate": "7.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.073); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Rosemawr Management LLC, Structured Mezzanine (f) Utilities 7.3 % 8/15/54 $ 653 588 587 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 1",
+  "fields": {
+   "interest_rate": "8",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.08); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 8.0 % 7/25/30 $ 219 219 218 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine, Real Estate Management & Development 2",
+  "fields": {
+   "interest_rate": "18",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.18); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Structured Mezzanine (f)(j) Real Estate Management & Development 18.0 % 7/25/30 $ 147 107 128 '"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "7.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (InvestmentBasisSpreadVariableRate 0.073); published as a SOFR spread with the reference rate guessed from the date. The page prints the coupon with no reference-rate code. Printed: 'Saluda Grade Alternative Mortgage Trust 2022-BC2, Term Loan (f)(j) Real Estate Management & Development 7.3 % 7/25/30 $ 1,313 1,313 1,316 '"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "LHOME Mortgage Trust 2024-RTL4, Real Estate Management & Development",
+  "fields": {
+   "interest_rate": "9.3",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed coupon tagged with the spread concept (0.093); published as a SOFR spread with the reference rate guessed from the date. Printed: 'LHOME Mortgage Trust 2024-RTL4 (e)(f)(j) Real Estate Management & Development 9.3 % 7/25/39 $ 7,513 7,513 7,618'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Discover Financial Services, Subordinated Loan, Financial Services 2",
+  "fields": {
+   "interest_rate": "15",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Undrawn line (netted, D-091) whose fixed coupon is tagged with the spread concept (0.15); published as a SOFR spread with the reference rate guessed from the date. Printed: 'Discover Financial Services, Subordinated Loan (h)(j)(m) Financial Services 15.0 % 9/6/34 $ 8,530 8,530 8,530'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Lennar Corp, Term Loan, Consumer Durables & Apparel 2",
+  "fields": {
+   "interest_rate": "10.8",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Undrawn line (netted, D-091) whose fixed coupon is tagged with the spread concept (0.108); published as a SOFR spread with the reference rate guessed from the date. Printed: 'Lennar Corp, Term Loan (h)(j) Consumer Durables & Apparel 10.8 % 8/30/29 $ 1,487 1,487 1,487'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Pretium Partners LLC P1, Structured Mezzanine, Equity Real Estate Investment Trusts (REITs)",
+  "fields": {
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The plain rate tag 0.028 is the cash leg, the PIK tag 0.053 sits on top; published with no rate (kind unresolved). Printed: 'Pretium Partners LLC P1, Structured Mezzanine (f)(j) Equity Real Estate Investment Trusts (REITs) 2.8 %, 5.3 % PIK ( 5.3 % Max PIK) 10/22/26 $ 20,150 19,243 20,108'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Pretium Partners LLC P1, Structured Mezzanine, Equity Real Estate Investment Trusts (REITs)",
+  "fields": {
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The plain rate tag 0.028 is the cash leg, the PIK tag 0.053 sits on top; published with no rate (kind unresolved). Printed: 'Pretium Partners LLC P1, Structured Mezzanine (f)(j) Equity Real Estate Investment Trusts (REITs) 2.8 %, 5.3 % PIK ( 5.3 % Max PIK) 10/22/26 $ 20,676 19,870 20,676'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Pretium Partners LLC P1, Structured Mezzanine, Equity Real Estate Investment Trusts (REITs)",
+  "fields": {
+   "interest_rate_kind": "cash"
+  },
+  "reason": "The plain rate tag 0.028 is the cash leg, the PIK tag 0.053 sits on top; published with no rate (kind unresolved). Printed: 'Pretium Partners LLC P1, Structured Mezzanine (f)(j) Equity Real Estate Investment Trusts (REITs) 2.8 %, 5.3 % PIK ( 5.3 % Max PIK) 10/22/26 $ 20,676 19,954 20,676'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Pretium Partners LLC P1, Structured Mezzanine",
+  "fields": {
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "The plain rate tag 0.080 is the whole coupon, of which 5.3 is PIK; published with no rate (kind unresolved). Printed: 'Pretium Partners LLC P1, Structured Mezzanine (f)(k) Equity Real Estate Investment Trusts (REITs) 8.0 % ( 5.3 % PIK / 5.3 % PIK) 10/26 $ 21,221 20,595 21,221'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Philippine Airlines 777, Term Loan, Transportation 1",
+  "fields": {
+   "pik_rate": "",
+   "interest_rate": "6.5",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "The 6.5 % coupon is tagged with the PIK concept on this one line; the page prints a plain 6.5 % with no PIK, as on the line's twin and in every later quarter. Printed: 'Philippine Airlines 777, Term Loan (f)(k) Transportation 6.5 % 10/27 $ 4,928 4,928 4,956' | Plain 6.5 % coupon (tagged with the PIK concept only); published as the coupon with no PIK part."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Gigamon Inc, Software & Services",
+  "fields": {
+   "basis_spread": "5.75"
+  },
+  "reason": "Spread printed and not tagged (the context carries the floor, par, cost and value only). Printed: 'Gigamon Inc (f) Software & Services SF+ 575 1.0 % 3/9/29 $ 831 $ 831 $ 831'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "GreenSky Holdings LLC, Term Loan 1",
+  "fields": {
+   "interest_rate": "9.3",
+   "pik_rate": "9.3",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed PIK coupon printed and not tagged in this filing (tagged in every other quarter). Printed: 'GreenSky Holdings LLC, Term Loan (f)(m) Financial Services 9.3 % PIK 03/34 $ 4,384 4,384 4,384'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "GreenSky Holdings LLC, Term Loan 2",
+  "fields": {
+   "interest_rate": "9.3",
+   "pik_rate": "9.3",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed PIK coupon printed and not tagged in this filing (undrawn line, netted). Printed: 'GreenSky Holdings LLC, Term Loan (i)(m) Financial Services 9.3 % PIK 03/34 $ 374 374 374'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Global Lending Services LLC, Bond 1",
+  "fields": {
+   "interest_rate": "12.5",
+   "pik_rate": "12.5",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed PIK coupon printed and not tagged in this filing. Printed: 'Global Lending Services LLC, Bond (f)(k) Financial Services 12.5 % PIK 12/32 $ 4,685 4,685 4,685'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Global Lending Services LLC, Bond 2",
+  "fields": {
+   "interest_rate": "12.5",
+   "pik_rate": "12.5",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Fixed PIK coupon printed and not tagged in this filing. Printed: 'Global Lending Services LLC, Bond (f)(k) Financial Services 12.5 % PIK 02/33 $ 2,504 2,504 2,504'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980",
+   "shares_held": "",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(j) Real Estate Management & Development 10/25/53 324,980 531 508' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(j) Real Estate Management & Development 10/25/53 $ 324,980 531 498'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine, Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980",
+   "shares_held": "",
+   "principal_amount_currency": "USD",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(j) Real Estate Management & Development 10/25/53 324,980 531 467' | Par printed in dollars ('$') but tagged with the share-count concept (unit 'shares') or set by row correction, so it carried no currency."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine | Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 20.3 % 10/53 $ 324,980 497 395'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine | Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 18.9 % 10/53 $ 324,980 467 377'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine | Real Estate Management & Development",
+  "fields": {
+   "principal_amount": "324980",
+   "principal_amount_usd": "324980"
+  },
+  "reason": "The par is $324,980: the 10-Qs for 2025-03-31 and 2025-06-30 print it in the thousands table as '$ 325', the other filings print the dollar figure 324,980 in the same thousands column (cost 531, value under 0.5M), so it was read as 324,980 thousand or as a unit count. Printed 2025-03-31: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450'. This filing: 'Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 18.9 % 10/53 $ 324,980 440 362'"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "TDC LLP, Preferred Equity, Financial Services 2",
+  "fields": {
+   "shares_held": "68953",
+   "principal_amount": "",
+   "principal_amount_usd": ""
+  },
+  "reason": "Unit count tagged with the principal concept x1000 (InvestmentOwnedBalancePrincipalAmount 68,953,000); the page prints 68,953 units, as the same holding in every later quarter. Printed: 'TDC LLP, Preferred Equity (h)(i) Financial Services 68,953 87 88'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Bankers Healthcare Group LLC, Term Loan, Financial Services",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "3.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.038) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Bankers Healthcare Group LLC, Term Loan (f)(k) Financial Services SF + 3.8 % 11/27 $ 771 771 777'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "EW Scripps Co/The, Revolver, Media & Entertainment 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "5.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.055) and was published as the coupon; the page prints a margin and no coupon. Printed: 'EW Scripps Co/The, Revolver (f)(k) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 8,330 8,330 8,383'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Florida Food Products LLC, Revolver, Food, Beverage & Tobacco 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Florida Food Products LLC, Revolver (f)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 4,706 4,706 4,706'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Laurel Road Prime Student Loan Trust 2017-B, ABS, Financial Services",
+  "fields": {
+   "reference_rate_type": "",
+   "reference_rate_source": ""
+  },
+  "reason": "Fixed coupon printed with no reference-rate code; PRIME was read from the issuer's name ('Prime Student Loan Trust'). Printed: 'Laurel Road Prime Student Loan Trust 2017-B, ABS (f)(k) Financial Services 6.8 % 08/42 $ 1,384 2,048 2,107'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Trinseo Materials Operating SCA / Trinseo Materials Finance Inc, Revolver, Materials 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Trinseo Materials Operating SCA / Trinseo Materials Finance Inc, Revolver (f)(k) Materials SF + 4.8 % 1.0 % 01/28 $ 15,935 15,935 16,085'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver | Pharmaceuticals, Biotechnology & Life Sciences 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "6.3",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.063) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (f)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,500 10,365 10,605'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Laurel Road Prime Student Loan Trust 2017-B, ABS | Financial Services",
+  "fields": {
+   "reference_rate_type": "",
+   "reference_rate_source": ""
+  },
+  "reason": "Fixed coupon printed with no reference-rate code; PRIME was read from the issuer's name ('Prime Student Loan Trust'). Printed: 'Laurel Road Prime Student Loan Trust 2017-B, ABS (f)(k) Financial Services 7.2 % 08/42 $ 1,384 2,048 2,180'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Laurel Road Prime Student Loan Trust 2017-B, ABS | Financial Services",
+  "fields": {
+   "reference_rate_type": "",
+   "reference_rate_source": ""
+  },
+  "reason": "Fixed coupon printed with no reference-rate code; PRIME was read from the issuer's name ('Prime Student Loan Trust'). Printed: 'Laurel Road Prime Student Loan Trust 2017-B, ABS (f)(k) Financial Services 7.2 % 08/42 $ 1,384 2,048 2,128'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Laurel Road Prime Student Loan Trust 2017-B, ABS | Financial Services",
+  "fields": {
+   "reference_rate_type": "",
+   "reference_rate_source": ""
+  },
+  "reason": "Fixed coupon printed with no reference-rate code; PRIME was read from the issuer's name ('Prime Student Loan Trust'). Printed: 'Laurel Road Prime Student Loan Trust 2017-B, ABS (f)(k) Financial Services 7.2 % 08/42 $ 1,384 1,947 1,955'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "SCRIPPS SPV LLC (FKA EW Scripps Co/The), Revolver | Media & Entertainment 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "6.3",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.063) and was published as the coupon; the page prints a margin and no coupon. Printed: 'SCRIPPS SPV LLC (FKA EW Scripps Co/The), Revolver (f)(k) Media & Entertainment SF + 6.3 % 0.8 % 03/28 $ 10,948 10,948 11,003'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "SCRIPPS SPV LLC (FKA EW Scripps Co/The), Revolver | Media & Entertainment 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "6.3",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.063) and was published as the coupon; the page prints a margin and no coupon. Printed: 'SCRIPPS SPV LLC (FKA EW Scripps Co/The), Revolver (i)(k) Media & Entertainment SF + 6.3 % 0.8 % 03/28 $ 4,850 4,850 4,874'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Sallie Mae Levered, Term Loan | Financial Services 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "2.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.028000000000000004) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Sallie Mae Levered, Term Loan (f)(k)(p) Financial Services SF + 2.8 % 11/32 $ 336 336 337'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Sallie Mae Levered, Term Loan | Financial Services 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "2.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.028000000000000004) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Sallie Mae Levered, Term Loan (i)(k)(p) Financial Services SF + 2.8 % 11/32 $ 44 44 44'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Sotheby's, Revolver | Consumer Services 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Sotheby's, Revolver (f) Consumer Services SF + 4.8 % 0.8 % 02/29 $ 10,192 10,192 10,192'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Sotheby's, Revolver | Consumer Services 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Sotheby's, Revolver (i) Consumer Services SF + 4.8 % 0.8 % 02/29 $ 15,287 15,287 15,287'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "TPSI Receivables LLC (Tropicana Products Inc), Revolver | Food, Beverage & Tobacco 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'TPSI Receivables LLC (Tropicana Products Inc), Revolver (f)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 01/29 $ 9,146 9,146 9,187'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "TPSI Receivables LLC (Tropicana Products Inc), Revolver | Food, Beverage & Tobacco 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'TPSI Receivables LLC (Tropicana Products Inc), Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 01/29 $ 2,837 2,837 2,850'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "VIB Trade Receivables DAC (FKA Vibrantz Technologies Inc) | Materials 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'VIB Trade Receivables DAC (FKA Vibrantz Technologies Inc) (f)(j)(k) Materials SF + 4.8 % 1.0 % 04/29 $ 16,297 16,163 16,297'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "VIB Trade Receivables DAC (FKA Vibrantz Technologies Inc) | Materials 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "4.8",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.048) and was published as the coupon; the page prints a margin and no coupon. Printed: 'VIB Trade Receivables DAC (FKA Vibrantz Technologies Inc) (i)(j)(k) Materials SF + 4.8 % 1.0 % 04/29 $ 7,656 7,656 7,656'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Wood Group Receivables LLC (FKA John Wood Group PLC), Revolver | Capital Goods 1",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "5.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.055) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Wood Group Receivables LLC (FKA John Wood Group PLC), Revolver (f)(k) Capital Goods SF + 5.5 % 0.8 % 10/28 $ 12,158 12,087 12,238'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Wood Group Receivables LLC (FKA John Wood Group PLC), Revolver | Capital Goods 2",
+  "fields": {
+   "interest_rate": "",
+   "basis_spread": "5.5",
+   "coupon_type": "Floating"
+  },
+  "reason": "The margin printed after the SOFR code is tagged with the plain rate concept (InvestmentInterestRate 0.055) and was published as the coupon; the page prints a margin and no coupon. Printed: 'Wood Group Receivables LLC (FKA John Wood Group PLC), Revolver (i)(k) Capital Goods SF + 5.5 % 0.8 % 10/28 $ 13,171 13,171 13,258'"
+ }
+]

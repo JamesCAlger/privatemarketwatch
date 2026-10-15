@@ -4150,3 +4150,34 @@ Compared with `spoff1`. Two rounds; the second for an orchestrator change.
 - **Page sample:** 20 rows, 0 published errors; the reader noted the 2023-09-30 filing's instrument
   text is the financing facility (150 rows, 433.2M), left as an observation.
 - Observations: 9. Tests: 686 passed in the agent's touched files; 146 in mine. Not run: full suite.
+
+### D-171 KKR FS Income Trust through the fund-clearing skill (sandbox `kfxh`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. Three rounds: an orchestrator fix, then the page sample.
+
+- **Ledger:** 47 findings, 39 outstanding (90 in the first build), all with a proposal (13 entries);
+  totals tie in 13 of 13 quarters (1.5M to 14.1M over in nine before).
+- **Fixed:** 30 positions published twice from the affiliate roll-forward note (`schedule_row_tags`);
+  two foreign loans filed in dollars but tagged with a GBP/EUR unit at 2024-09-30, converted twice
+  (`foreign_unit_values`); three undrawn commitments missed by the D-091 netting (tagged on another
+  name, or a former name) netted by row correction; equity unit counts tagged x1000 in three 2024
+  10-Qs and then replaced by the shared share-count step (22 rows); 13 equity rows published as loans
+  from units tagged as principal; 36 fixed ABS/RMBS coupons tagged as spreads; about 40 printed
+  'x % PIK' coupons (`pik_only_tag_reading`); pars tagged as share counts; names; industry from the
+  page (2025-03-31 had none on 238 of 290 rows); new highlights wrapper (net investment income
+  2026-03-31 was the per-share 0.67; 2023 income ratios). 92 row-correction specs with printed lines.
+- **Orchestrator fix (verification):** the printed-margin reader read 'SF+ 1,000' as 1 bp
+  (bca0156, test); six spread_printed findings cleared.
+- **Page sample (20 rows of `kfxg`):** the reader labelled 16 fair value / cost errors on footnote
+  (i) rows; they are the D-091 netting (relabelled as convention; the reader brief now states D-091).
+  Real errors: 4 on 3 rows. Round 3 fixed two causes at fund level: from 2025-09-30 the filer tags
+  the printed margin 'SF + x %' as the plain rate (18 rows moved to the spread; Laurel Road given
+  PRIME from its name, withdrawn); 9 dollar pars without a currency. Left as an observation: from
+  2025-06-30 the PIK range '( 0.0 % PIK / 3.0 % PIK)' is tagged only on min/max contexts of one
+  line per issuer (PIK published on 2 to 7 loans a quarter against 51 before); which figure is the
+  PIK rate is an owner question.
+- Seen, not changed: lien blank on about 95 pct of loans (printed only as the section heading);
+  instrument text mostly the industry label.
+- The agent used eight builds against the six of the brief (the eighth allowed for round 3) and
+  once ran a bare `python -`, killed by its own id.
+- Observations: 15. Tests: 687 passed in the agent's files; bridge fields 74 (mine).

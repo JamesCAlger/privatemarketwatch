@@ -1,0 +1,756 @@
+{
+ "cik": "0001930679",
+ "label": "kfxh",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 400,
+   "why": "row numbers cut off ('Avetta LLC 3', 2025-03-31 member form; 138 rows), the instrument cut off where the pipe-form member puts it in the issuer segment ('Morgan Stanley ... 2025-NQM9, ABS', 2025-12-31 on; 269 rows), 6 Lazer Logistics rows of 2024-03-31 named (member 'Lazer Logistics Inc,Transportation 1' has no space after the comma; hierarchy regex), plus the shared issuer/instrument split of D-166 (81 rows in kfxa, not aimed at)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 280,
+   "why": "the cut instrument word put in front of the member's industry segment ('ABS Insurance') by issuer_name_strip_to_instrument (270 rows incl. Railpros), 6 Lazer Logistics rows of 2024-03-31 given 'Transportation N', and the D-166 split (81 rows, not aimed at)"
+  },
+  {
+   "column": "fair_value",
+   "rows": 5,
+   "why": "2024-09-30 two foreign loans whose USD fair value was tagged with the GBP/EUR unit and converted twice (CSafe 7,013 -> 5,234 printed; Carrier 2,882 -> 2,151; foreign_unit_values reported_in_usd); three undrawn commitment rows netted by row correction (Florida Food 923 and Opendoor 4,130 at 2025-03-31 to 0; Curia 10,437 to 104 at 2025-12-31)"
+  },
+  {
+   "column": "cost",
+   "rows": 5,
+   "why": "same five rows: the two foreign loans keep their USD cost (dropped before); the three commitment rows netted to 0"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 5,
+   "why": "follows cost"
+  },
+  {
+   "column": "cost_currency",
+   "rows": 2,
+   "why": "the two 2024-09-30 foreign loans: GBP -> USD (the cost is printed in dollars)"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 5,
+   "why": "follows fair_value"
+  },
+  {
+   "column": "src_facts",
+   "rows": 5,
+   "why": "fact trail of the five value changes above"
+  },
+  {
+   "column": "shares_held",
+   "rows": 50,
+   "why": "equity unit counts tagged x1000 at 2024-03-31..2024-09-30 that the shared pow10 step had replaced with another quarter's count, set to the printed count (22 rows); equity units tagged with the principal concept set as unit count (13 rows; plus TDC preferred 2023-06-30); par of 9 loans that was tagged as a share count moved to principal (shares blank); Saluda 2023-LOC2 2024-06-30 and 2024-12-31"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 30,
+   "why": "13 equity rows lose the unit count published as principal x1000 (e.g. 1,332,761,000); 6 loans at 2024-09-30 whose par was tagged as a share count (par_tagged_as_units rows_near_cost: EFMT, FIGRE, HOMES, Rosemawr, Saluda 2022-BC2, Discover); Saluda 2022-BC2 #2 147 by row correction; Saluda 2023-LOC2 par 324,980 (was 324,980,000) in six quarters"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 100,
+   "why": "follows principal_amount, plus foreign-currency pars now converted at the Federal Reserve H.10 reference (principal_usd_reference fred_h10; about 78 rows that had no USD amount)"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 95,
+   "why": "foreign pars converted at the H.10 reference (fred_h10), and USD rate 1.0 on the pars newly filled"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 90,
+   "why": "missing_reference_fx -> reference_fx on foreign pars (fred_h10); source_usd on pars newly filled"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 9,
+   "why": "round 3: USD on 9 dollar pars that carried no currency (six read from the share-count tag at 2024-09-30, three set by row correction: Saluda 2023-LOC2 2024-06-30 and 2024-12-31, Saluda 2022-BC2 #2)"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 6,
+   "why": "the six pars read from the share-count tag (par_tagged_as_units)"
+  },
+  {
+   "column": "asset_category",
+   "rows": 13,
+   "why": "equity rows whose unit count was tagged as principal were published as loans: 2023-06-30 x3, 2024-09-30 x9, Santander 2025-09-30; set to EQUITY_COMMON by row correction"
+  },
+  {
+   "column": "index_classification",
+   "rows": 13,
+   "why": "same 13 rows, DIRECT_LENDING -> COMMON_EQUITY"
+  },
+  {
+   "column": "asset_class",
+   "rows": 13,
+   "why": "same 13 rows, PRIVATE_CREDIT -> PRIVATE_EQUITY"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 110,
+   "why": "36 fixed coupons tagged with the spread concept now published as the coupon (row corrections); about 40 loans tagged only with a PIK rate whose printed coupon is 'x % PIK' published as the coupon (pik_only_tag_reading coupon); Pretium kind (4 rows); 5 coupons printed and not tagged at 2025-03-31 (GreenSky, Global Lending) and Philippine Airlines 2025-09-30 (row corrections); round 3: the margin of 18 SF + x % rows (2025-09-30 to 2026-06-30) tagged as the plain rate withdrawn from interest_rate"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 65,
+   "why": "follows interest_rate on the row-corrected rows"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 110,
+   "why": "unresolved -> all_in on the rows above (cash on the three Pretium 2024 rows)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 10,
+   "why": "Pretium cash leg 2.8 (2024) and the PIK-coupon rows set by correction (cash 0)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 60,
+   "why": "spread withdrawn from the 36 fixed-coupon rows; Gigamon 2024-03-31 spread 5.75 printed and not tagged; round 3: the printed margin set as spread on 18 rows whose margin was tagged as the plain rate (Curia, Scripps, Sotheby's, TPSI, VIB, Wood Group, Sallie Mae, Bankers, Florida Food, Trinseo)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 45,
+   "why": "SOFR (date guess) withdrawn from the 36 fixed-coupon rows; CDOR (2024-12-31 Service Express) and CORRA (2025-12-31 Orion) from the printed 'C' code (reference_rate_codes); round 3: PRIME withdrawn from Laurel Road Prime Student Loan Trust (4 rows, fixed coupon, PRIME read from the name)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 45,
+   "why": "same rows"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 65,
+   "why": "Floating -> Fixed on the 36 fixed-coupon rows, Fixed on the PIK coupons set by correction; round 3: Floating on the 18 margin rows"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 6,
+   "why": "PIK coupons printed and not tagged at 2025-03-31 (4 rows); Philippine Airlines 2025-09-30 plain 6.5 % tagged as PIK withdrawn"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 75,
+   "why": "transform trail: interest_rate:pik_only on the PIK-coupon rows, corrected-rate trail"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 125,
+   "why": "trail of the row corrections"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 640,
+   "why": "the filer's industry column read from the page (industry_columns 'Industry'): filled where the build had none (2025-03-31 238 of 290 rows, others) and 'Beverage & Tobacco' (comma-split) -> 'Food, Beverage & Tobacco', 'Insurance 1' -> 'Insurance'"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 320,
+   "why": "follows the printed industry; no row lost a label"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 170,
+   "why": "follows gics_sub_industry (e.g. J S Held printed 'Insurance' -> Financials; TalkTalk printed 'Commercial & Professional Services' -> Industrials)"
+  },
+  {
+   "column": "position_id",
+   "rows": 300,
+   "why": "follows issuer_name and the class changes (the matcher keys on the name)"
+  }
+ ],
+ "rows_added": 476,
+ "rows_removed": 30,
+ "fixes": [
+  {
+   "what": "The affiliate roll-forward note reuses schedule members ('GreenSky Holdings LLC, ABF Equity', 'KKR Altitude II ... Partnership Interest', 'Discover Financial Services, ABF Equity', 'TDC LLP', 'Australis Maritime II'): fair value only, no cost, published as 30 duplicate positions (1.4M to 13.9M a quarter, 2023-12-31 to 2025-09-30). Existing setting source_encodings.schedule_row_tags cost_or_percent_unrounded drops them; 30 rows removed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-040140",
+     "text": "GreenSky Holdings LLC, ABF Equity $ 1,863 $ - $ - $ - $ ( 203 ) $ 1,660"
+    }
+   ]
+  },
+  {
+   "what": "2024-09-30: CSafe and Carrier foreign loans tag the USD fair value and cost with the GBP/EUR unit; converted twice (7,013 for 5,234). foreign_unit_values reported_in_usd.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047584",
+     "text": "CSafe Global (f) Transportation SA+ 575 0.8 % 12/14/28 GBP 3,868 4,886 5,234"
+    }
+   ]
+  },
+  {
+   "what": "Three undrawn commitment rows the shared netting missed (commitment tagged on Discover / Lennar members at 2025-03-31; listed under the former name Curia Global at 2025-12-31): netted by row correction as the owner ruled (D-091). With the roll-forward and FX fixes, published equals filed in all 13 quarters (was 1.5M to 14.1M over in nine).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025410",
+     "text": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923"
+    },
+    {
+     "accession": "0001628280-26-017326",
+     "text": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged x1000 (shares concept) in the 10-Qs for 2024-03-31, 2024-06-30, 2024-09-30; the shared pow10 step replaced them with another quarter's count (Australis 380,719 for 605,526; TDC 1,319,000 for 68,953). 22 row corrections to the printed count, each cost-checked against the current schedule.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930679-24-000012",
+     "text": "Australis Maritime II, ABF Equity (f)(j)(k)(m) Transportation 605,526 606 658"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged with the principal concept x1000: 13 rows published as first-lien-style loans with principals of 53M to 3.6bn (2023-06-30 x3, 2024-09-30 x9, Santander 2025-09-30), plus TDC preferred 2023-06-30. Row corrections: EQUITY_COMMON, principal blank, printed unit count.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047584",
+     "text": "Global Lending Services LLC, ABF Equity (f)(j)(k) Financial Services 2,941,919 $ 2,942 $ 3,140"
+    },
+    {
+     "accession": "0001930679-23-000006",
+     "text": "TDC LLP, Preferred Equity (h)(i) Financial Services 68,953 87 88"
+    }
+   ]
+  },
+  {
+   "what": "Fixed coupons of ABS, RMBS and structured rows tagged with the spread concept (2024-06-30 to 2024-12-31, 36 rows): published as a SOFR spread with the benchmark guessed from the date. Row corrections to Fixed with the printed coupon. Pars of 6 loans at 2024-09-30 tagged as share counts read as par (existing par_tagged_as_units rows_near_cost); Saluda 2022-BC2 147 by correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047584",
+     "text": "Bankers Healthcare Group LLC, Term Loan (f)(j) Financial Services 22.0 % 11/8/27 $ 771 771 758"
+    },
+    {
+     "accession": "0001628280-24-047584",
+     "text": "EFMT 2024-INV1, Term Loan (e)(f)(j) Real Estate Management & Development 7.6 % 3/25/69 $ 6,380 6,083 6,233"
+    }
+   ]
+  },
+  {
+   "what": "Loans tagged only with a PIK rate whose printed coupon is 'x % PIK' (Apex, GreenSky, Vehicle, Global Lending, Powin, Newday, Galaxy, Affordable Care) published no rate: existing pik_only_tag_reading ['coupon']. Philippine Airlines 2025-09-30 prints a plain 6.5 % but is tagged PIK: PIK withdrawn by correction.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930679-24-000012",
+     "text": "Vehicle Secured Funding Trust, Term Loan (f)(j) Financial Services 15.0 % PIK ( 15.0 % Max PIK) 1/25/46 $ 8,019 8,019 8,019"
+    },
+    {
+     "accession": "0001628280-25-051535",
+     "text": "Philippine Airlines 777, Term Loan (f)(k) Transportation 6.5 % 10/27 $ 4,928 4,928 4,956"
+    }
+   ]
+  },
+  {
+   "what": "Rates printed and not tagged: GreenSky term loans and Global Lending bonds at 2025-03-31 (9.3 % PIK, 12.5 % PIK), Gigamon spread 2024-03-31 (SF+ 575). Row corrections.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025410",
+     "text": "GreenSky Holdings LLC, Term Loan (f)(m) Financial Services 9.3 % PIK 03/34 $ 4,384 4,384 4,384"
+    },
+    {
+     "accession": "0001628280-24-023529",
+     "text": "Gigamon Inc (f) Software & Services SF+ 575 1.0 % 3/9/29 $ 831 $ 831 $ 831"
+    }
+   ]
+  },
+  {
+   "what": "Saluda Grade Alternative Mortgage Trust 2023-LOC2: par printed as the dollar figure 324,980 inside the thousands table in four filings (published 324,980,000 or as a unit count) and as '$ 325' in two. Row corrections to 324,980 in six quarters.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025410",
+     "text": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450"
+    },
+    {
+     "accession": "0001628280-26-056131",
+     "text": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 18.9 % 10/53 $ 324,980 440 362"
+    }
+   ]
+  },
+  {
+   "what": "Names: 2025-03-31 members 'Avetta LLC 3' (row number) and the pipe-form members of 2025-12-31 on that put the instrument in the issuer segment ('X, ABS | Industry N'): issuer_name_strip_re with issuer_name_strip_to_instrument (dry run on every distinct name: 0 shapes left). 2024-03-31 Lazer Logistics members without a space after the comma: hierarchy regexes ',\\s*'.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025410",
+     "text": "Avetta LLC (h) Software & Services SF + 4.5 % ( 0.0 % PIK / 2.3 % PIK) 0.5 % 07/31 6,557 6,496 6,552"
+    },
+    {
+     "accession": "0001628280-26-056131",
+     "text": "Morgan Stanley Residential Mortgage Loan Trust 2026-DSC1, ABS (e)(f)(k) Real Estate Management & Development 0.3 % 01/71 $ 109,643 623 667"
+    }
+   ]
+  },
+  {
+   "what": "Industry from the page's Industry column (industry_columns ['Industry']): 2025-03-31 had none on 238 of 290 rows.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025410",
+     "text": "Portfolio Company (a) Footnotes Industry Rate (b) Floor (b) Maturity Principal Amount (c) /Shares Amortized Cost Fair Value (d) Senior Secured Loans-First Lien- 108.4 %"
+    }
+   ]
+  },
+  {
+   "what": "Canadian loans printed 'C+ 475' published as SOFR by date guess: reference_rate_codes C=CDOR to 2025-09-30, C=CORRA from 2025-12-31 (the legends of the 10-Ks for 2024 and 2025).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-012549",
+     "text": "Service Express Inc (f) Commercial & Professional Services C+ 475 0.5 % 8/15/31 466 330 322"
+    }
+   ]
+  },
+  {
+   "what": "Fund level (new highlights wrapper): 2026-03-31 net investment income published 0.67 (the filer's per-share kfit concept read first) -> 37,079K (income_concept_suppress); income_yield_pct 2023-06-30, 2023-09-30, 2023-12-31 set to the printed ratios 4.60, 8.05, 9.59 (published 2.3, 3.45, 1.54). Clears income_identity 2026-03-31 and F16 2023-12-31.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-034545",
+     "text": "Net investment income (loss) $ 37,079 $ 25,046"
+    },
+    {
+     "accession": "0001930679-23-000006",
+     "text": "Ratio of net investment income to average net assets (6) 4.60 %"
+    }
+   ]
+  },
+  {
+   "what": "Foreign pars had no USD amount (FX01 x12): principal_usd_reference fred_h10.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047584",
+     "text": "CSafe Global (f) Transportation SA+ 575 0.8 % 12/14/28 GBP 3,868 4,886 5,234"
+    }
+   ]
+  },
+  {
+   "what": "Round 3 (page sample C007): on 18 SF + x % rows (2025-09-30 to 2026-06-30) the filer tagged the printed margin with the plain rate concept, and it was published as the coupon with no spread. Row corrections move it to basis_spread (coupon_type Floating). Laurel Road Prime Student Loan Trust (4 rows) prints a fixed coupon with no code; PRIME read from its name withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-017326",
+     "text": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (f)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,500 10,365 10,605"
+    },
+    {
+     "accession": "0001628280-26-056131",
+     "text": "Laurel Road Prime Student Loan Trust 2017-B, ABS (f)(k) Financial Services 7.2 % 08/42 $ 1,384 1,947 1,955"
+    }
+   ]
+  },
+  {
+   "what": "Round 3 (page sample C012): 9 dollar pars carried no currency (par tagged with the share-count concept, or set by row correction). Row corrections: USD, rate 1.0, source_usd.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047584",
+     "text": "Rosemawr Management LLC, Term Loan (f) Utilities 5.0 % 8/15/54 $ 1,102 990 1,007"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "margin-tagged-as-plain-rate-published-as-coupon",
+   "what": "From 2025-09-30 the filer tags the margin of some floating revolvers and term loans (receivables SPVs mostly) with InvestmentInterestRate; 18 rows published the margin as the coupon and no spread. Fixed by row correction. No rule flagged it: a 4.8 % coupon on a SOFR loan passes every range check.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 93.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan with a known floating reference rate whose published coupon is below the reference rate itself is a margin, not a coupon.",
+   "quote": {
+    "accession": "0001628280-26-017326",
+    "text": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (f)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,500 10,365 10,605"
+   }
+  },
+  {
+   "observation_key": "pik-range-tagged-on-min-max-axis-contexts-not-published",
+   "what": "From 2025-06-30 the filer prints PIK toggles as ( 0.0 % PIK / 3.0 % PIK) (current / maximum) and tags both figures only on srt:MinimumMember / MaximumMember contexts of one of the issuer's lines, not on each row's own context; no pik_rate is published for them. Printed cells per filing (current and comparative schedule): about 54 (2025-06-30), 70, 89, 176 and 174 (2026-06-30); published loans with a pik_rate fell from 51 at 2025-03-31 to 2 to 7 a quarter after. Left: no wrapper setting reads range-axis contexts onto sibling rows, which figure is the pik_rate (current 0.0 or maximum) is a convention question for the owner, and hundreds of row corrections would not carry forward.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 600.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A fund-quarter where the page prints % PIK on many more loan lines than carry a published pik_rate is a finding.",
+   "quote": {
+    "accession": "0001628280-26-017326",
+    "text": "Turnpoint Services Inc (i) Capital Goods SF + 5.0 % ( 0.0 % PIK / 3.0 % PIK) 0.8 % 06/30 415 415 411"
+   }
+  },
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "what": "Pars tagged with the share-count concept (unit shares) and read as par by par_tagged_as_units carry no currency; 9 rows (with the three set by row correction). Fixed by row correction; the shared step does not set the currency when it moves a count to par.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 13.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A published principal with no currency is a finding.",
+   "quote": {
+    "accession": "0001628280-24-047584",
+    "text": "Rosemawr Management LLC, Term Loan (f) Utilities 5.0 % 8/15/54 $ 1,102 990 1,007"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "Equity unit counts tagged x1000 in three 10-Qs (2024-03-31..09-30) were treated as power-of-ten outliers by the shared shares-normalisation step in unified_holdings (partition cik + issuer_name) and replaced with another quarter's count, not divided by 1000 (Australis 380,719 for 605,526; TDC 1,319,000 for 68,953; Vehicle 11,865,999 for 2,638,928). Fixed here by 22 row corrections; the step itself is unchanged and can do the same on any fund.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A share count replaced by the pow10 step must equal the tagged count divided by a power of ten; otherwise it is a finding, not a fill.",
+   "quote": {
+    "accession": "0001930679-24-000012",
+    "text": "Australis Maritime II, ABF Equity (f)(j)(k)(m) Transportation 605,526 606 658"
+   }
+  },
+  {
+   "observation_key": "affiliate-rollforward-member-published-as-position",
+   "what": "The affiliate roll-forward table reuses schedule members with fair value only; 30 duplicate positions (up to 13.9M a quarter) were published. No rule reported them as duplicates; only the totals were over. Fixed with schedule_row_tags.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 13.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Two rows of one fund-quarter with the same issuer and fair value, one of which carries no cost, are a duplicate.",
+   "quote": {
+    "accession": "0001628280-25-040140",
+    "text": "GreenSky Holdings LLC, ABF Equity $ 1,863 $ - $ - $ - $ ( 203 ) $ 1,660"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Equity unit counts tagged with the principal concept at 2023-06-30, 2024-09-30 and 2025-09-30 (Santander): the rows were classed as loans with principals up to 3.6bn. Fixed by row correction.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 42.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row whose member names 'Equity' or 'Partnership Interest' is never published as a loan.",
+   "quote": {
+    "accession": "0001628280-24-047584",
+    "text": "Global Lending Services LLC, ABF Equity (f)(j)(k) Financial Services 2,941,919 $ 2,942 $ 3,140"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "what": "36 fixed coupons of ABS/RMBS rows tagged with the spread concept were published as SOFR spreads with the benchmark guessed from the date. Fixed by row correction.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 100.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A spread above 3 on a row whose printed line has no reference-rate code is a coupon.",
+   "quote": {
+    "accession": "0001628280-24-047584",
+    "text": "Bankers Healthcare Group LLC, Term Loan (f)(j) Financial Services 22.0 % 11/8/27 $ 771 771 758"
+   }
+  },
+  {
+   "observation_key": "lien-blank-where-member-omits-lien-segment",
+   "what": "lien_position is blank on about 95 pct of loans in every quarter (e.g. 434 of 476 rows at 2026-06-30): the members carry no lien and the page prints it only as the section heading 'Senior Secured Loans-First Lien'. Left: no wrapper setting reads a lien from the section heading.",
+   "field": "lien_position",
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2400.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Lien coverage on loans below 50 pct of a fund-quarter's loan fair value is a finding.",
+   "quote": {
+    "accession": "0001628280-25-025410",
+    "text": "Portfolio Company (a) Footnotes Industry Rate (b) Floor (b) Maturity Principal Amount (c) /Shares Amortized Cost Fair Value (d) Senior Secured Loans-First Lien- 108.4 %"
+   }
+  },
+  {
+   "observation_key": "instrument-description-is-the-industry-label",
+   "what": "For most loans the member is 'Issuer, Industry N' or 'Issuer | Industry N', so instrument_description holds the industry label and a row number ('Software & Services 1'); at 2025-03-31 it is blank on 144 rows. The page prints no instrument for these loans (they sit under the first-lien section). Left.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2000.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "An instrument_description that equals a GICS industry-group label is flagged.",
+   "quote": {
+    "accession": "0001628280-25-025410",
+    "text": "Avetta LLC (h) Software & Services SF + 4.5 % ( 0.0 % PIK / 2.3 % PIK) 0.5 % 07/31 6,557 6,496 6,552"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "what": "2026-03-31 net_investment_income was 0.67: the fund-income extractor read the filer's per-share concept kfit:InvestmentCompanyDistributionToShareholderFromNetInvestmentIncome ahead of the dollar fact. Fixed for this fund (income_concept_suppress); the extractor reads any concept containing the income name.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A fund-quarter net investment income below 1,000 dollars while total investment income is above 1M is a finding.",
+   "quote": {
+    "accession": "0001628280-26-034545",
+    "text": "Net investment income (loss) $ 37,079 $ 25,046"
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+   "what": "income_yield_pct for the three 2023 quarters was 2.3, 3.45 and 1.54 against printed ratios 4.60, 8.05 and 9.59 (from 2024 the printed ratio is published). Fixed by figure_corrections.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "income_yield_pct must equal a printed income ratio of the filing.",
+   "quote": {
+    "accession": "0001930679-23-000006",
+    "text": "Ratio of net investment income to average net assets (6) 4.60 %"
+   }
+  },
+  {
+   "observation_key": "plain-rate-tagged-as-pik-published-as-pik-only",
+   "what": "Philippine Airlines 777 term loan 2025-09-30: plain 6.5 % tagged with the PIK concept (its twin and every later quarter tag the plain rate). Fixed by row correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 5.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A row tagged only with a PIK rate whose twin line of the same quarter is tagged with the plain rate is a finding.",
+   "quote": {
+    "accession": "0001628280-25-051535",
+    "text": "Philippine Airlines 777, Term Loan (f)(k) Transportation 6.5 % 10/27 $ 4,928 4,928 4,956"
+   }
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "what": "2025-03-31 GreenSky term loans and Global Lending bonds print 'x % PIK' with no rate tag; Gigamon 2024-03-31 prints 'SF+ 575' with no spread tag. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 12.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A loan with no rate and no spread whose same position carries a rate in the quarters before and after is a finding.",
+   "quote": {
+    "accession": "0001628280-25-025410",
+    "text": "GreenSky Holdings LLC, Term Loan (f)(m) Financial Services 9.3 % PIK 03/34 $ 4,384 4,384 4,384"
+   }
+  },
+  {
+   "observation_key": "par-printed-in-dollars-in-a-thousands-table",
+   "what": "Saluda 2023-LOC2 par printed '324,980' in a table in thousands in four filings and '$ 325' in two; published 324,980,000 or as a unit count. Fixed by row correction (324,980). The RMBS residual tranches of 2025-03-31 on print the pool notional as par (109,643 thousand against a cost of 623) and are left as printed.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Par above 100 times cost on a row whose other quarters print a par near cost is a finding.",
+   "quote": {
+    "accession": "0001628280-26-056131",
+    "text": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 18.9 % 10/53 $ 324,980 440 362"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "what": "The 'C' code (CDOR at 2024-12-31, CORRA at 2025-12-31 in the legends) was not in the wrapper's code list, so the two Canadian loans were published as SOFR by date guess. Fixed in the wrapper.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 2.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A printed reference-rate code not in the fund's code table is a finding.",
+   "quote": {
+    "accession": "0001628280-25-012549",
+    "text": "Service Express Inc (f) Commercial & Professional Services C+ 475 0.5 % 8/15/31 466 330 322"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py, tests/test_fund_highlights_wrapper.py, tests/test_source_encodings.py, tests/test_unfunded_commitments.py: 687 passed"
+ ],
+ "not_done": [
+  "No shared code changed by me (the printed-margin reader change bca0156 is the orchestrator's). Full test suite not run.",
+  "Interest rates are published for fixed and PIK coupons only: the page prints a spread and no coupon for floating loans (as filed, D-113).",
+  "Lien (about 95 pct blank) and instrument_description (the industry label) are left; see observations.",
+  "Reference-rate tenor, floors, maturities and percent of net assets were not read line by line; totals tie in all 13 quarters, which can hide offsetting errors.",
+  "Eight builds were used (kfxa to kfxh): two over the brief's six; kfxh is the one extra build the orchestrator allowed in round 3.",
+  "Process slip: a command line contained a bare 'python -'; it waited on stdin and was stopped by its process id (19120). No other process touched.",
+  "All findings cleared or proposed is not data correct."
+ ]
+}

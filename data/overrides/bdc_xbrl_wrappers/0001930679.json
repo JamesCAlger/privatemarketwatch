@@ -124,6 +124,8 @@
       }
     ],
     "canonical_strip_re": "(?i)^(?:Affiliated|Non-Affiliated)\\s+Issuer\\s*\\|\\s*",
+    "issuer_name_strip_re": "(?:\\s+Commercial & Professional Services)?\\s+\\d{1,2}$|,\\s*(?:ABS|Bond|ABF Equity|Structured Mezzanine|Private Equity|Preferred Equity|Common Stock|Common Equity|Partnership Interest|Equity Interest|Term Loan|Revolver|Subordinated Loan|Delayed Draw Term Loan|Senior Secured Loan|Notes?|Warrants?)$",
+    "issuer_name_strip_to_instrument": true,
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents)\\s*$"
   },
   "identifier_format": {
@@ -138,8 +140,8 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "^(.+?),\\s+.+$",
-    "hierarchy_instrument_re": "^.+?,\\s+(.+)$",
+    "hierarchy_issuer_re": "^(.+?),\\s*.+$",
+    "hierarchy_instrument_re": "^.+?,\\s*(.+)$",
     "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',')",
     "pipe_field_map": {
       "issuer_segment": 1,
@@ -283,6 +285,18 @@
     "unfunded_rows": [
       "net_of_tagged_commitment"
     ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "industry_columns": [
+      "Industry"
+    ],
     "reference_rate_columns": [
       "Rate"
     ],
@@ -290,7 +304,15 @@
       "SF=SOFR",
       "SA=SONIA",
       "E=EURIBOR",
-      "P=PRIME"
+      "P=PRIME",
+      "C=CDOR to 2025-09-30",
+      "C=CORRA from 2025-12-31"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "par_tagged_as_units": [
+      "rows_near_cost"
     ]
   }
 }

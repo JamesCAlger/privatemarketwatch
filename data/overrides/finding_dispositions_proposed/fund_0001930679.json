@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "kk1c",
+ "sandbox": "kfxh",
  "dispositions": [
   {
    "disposition_id": "PD-X06-1930679-1",
@@ -22,26 +22,69 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "Principal far above fair value on undrawn commitment rows: by the owner's ruling of 2026-10-10 ('net each loan') such a row keeps the committed amount as principal and publishes cost 0 and the mark as fair value.",
+   "reason_key": "x06-netted-undrawn-commitment-keeps-committed-par",
+   "statement": "Principal far above fair value on the undrawn commitment rows. By the owner's ruling of 2026-10-10 ('net each loan', D-091) such a row keeps the committed amount as principal and publishes cost 0 and the mark as fair value, so principal is far above fair value by construction. Every flagged row in every quarter carries the net_of_commitment event, except the residual tranches of the next entry. No fix: the row is published as the owner ruled.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Schedule: 'Sotheby's, Revolver (i) ... 31,849 31,849 31,849', footnote 'Security is an unfunded commitment', and per section 'Unfunded Loan Commitments ( 259,939 ) ( 259,939 )' (0001628280-25-040140)."
+     "accession": "0001628280-26-056131",
+     "verbatim": "Sphera Solutions Inc (i) Software & Services SF + 4.5 % 0.5 % 09/32 8,702 8,702 8,210",
+     "quote": "Sphera Solutions Inc (i) Software & Services SF + 4.5 % 0.5 % 09/32 8,702 8,702 8,210 -- an undrawn commitment row (footnote (i)) printed at the committed amount 8,702 and marked at 8,210; netted it publishes par 8,702, cost 0 and fair value 8,210 - 8,702 = -492"
     },
     {
-     "source": "query",
-     "quote": "python scripts/v05_evidence/commitment_match.py 1930679: every tagged commitment matched in ten of twelve filings (165 of 165 at 2026-03-31)."
+     "source": "filing",
+     "accession": "0001628280-26-056131",
+     "verbatim": "Total Senior Secured Loans-First Lien 2,451,592 2,422,897 Unfunded Loan Commitments ( 437,045 ) ( 437,045 )",
+     "quote": "Total Senior Secured Loans-First Lien 2,451,592 2,422,897 Unfunded Loan Commitments ( 437,045 ) ( 437,045 ) -- the section subtracts the commitments again; the filed total is net of them"
     }
    ],
-   "rerun": "see docs/investigations/v05_decision_log.md (D-091, D-113; no reader report exists for this fund)",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-113); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
   },
   {
-   "disposition_id": "PD-C103-1930679-2",
+   "disposition_id": "PD-X06-1930679-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "x06-residual-tranche-par-is-the-pool-notional",
+   "statement": "Residential mortgage securitisation residual and interest-only tranches (Morgan Stanley Residential Mortgage Loan Trust, Santander Mortgage Asset Receivable Trust) are printed with the pool notional as par and a coupon of 0.3 to 1.9 %, against a cost of 0.4M to 6.8M. The published par is the printed figure. No fix: the page prints it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-26-056131",
+     "verbatim": "Morgan Stanley Residential Mortgage Loan Trust 2026-DSC1, ABS (e)(f)(k) Real Estate Management & Development 0.3 % 01/71 $ 109,643 623 667",
+     "quote": "Morgan Stanley Residential Mortgage Loan Trust 2026-DSC1, ABS (e)(f)(k) Real Estate Management & Development 0.3 % 01/71 $ 109,643 623 667 -- par 109,643 thousand against cost 623 and value 667: a notional"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Santander Mortgage Asset Receivable Trust 2025-NQM1, ABS (e)(f)(k)(l) Real Estate Management & Development 01/65 $ 80,926 2,833 2,833",
+     "quote": "Santander Mortgage Asset Receivable Trust 2025-NQM1, ABS (e)(f)(k)(l) Real Estate Management & Development 01/65 $ 80,926 2,833 2,833 -- 2025-03-31, par 80,926 thousand against cost 2,833"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C103-1930679-3",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C103",
@@ -60,19 +103,364 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "Small negative fair values on the same netted commitment rows (the mark on an undrawn line, e.g. 1,628 - 1,679 = -51).",
+   "reason_key": "c103-netted-undrawn-commitment-mark-below-zero",
+   "statement": "Negative fair values on the undrawn commitment rows: netted as the owner ruled (D-091), the row's fair value is the mark less the commitment, negative where the line is marked below par. Every flagged row in every quarter carries the net_of_commitment event. No fix: the row is published as the owner ruled.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "Decision D-091: AGS Health commitment row cost 0, fair value -51 after netting; principal keeps the committed amount."
+     "source": "filing",
+     "accession": "0001628280-26-056131",
+     "verbatim": "Sphera Solutions Inc (i) Software & Services SF + 4.5 % 0.5 % 09/32 8,702 8,702 8,210",
+     "quote": "Sphera Solutions Inc (i) Software & Services SF + 4.5 % 0.5 % 09/32 8,702 8,702 8,210 -- an undrawn commitment row (footnote (i)) printed at the committed amount 8,702 and marked at 8,210; netted it publishes par 8,702, cost 0 and fair value 8,210 - 8,702 = -492"
+    },
+    {
+     "source": "filing",
+     "accession": "0001930679-23-000006",
+     "verbatim": "Integrity Marketing Group LLC (f)(g) Insurance SF+ 600 0.8 % 8/27/25 8,299 8,257 8,189",
+     "quote": "Integrity Marketing Group LLC (f)(g) Insurance SF+ 600 0.8 % 8/27/25 8,299 8,257 8,189 -- 2023-06-30 commitment row: cost 8,257 equals the tagged commitment; netted fair value 8,189 - 8,257 = -68"
     }
    ],
-   "rerun": "see docs/investigations/v05_decision_log.md (D-091, D-113; no reader report exists for this fund)",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-113); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F25-1930679-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F25",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "reason_key": "f25-ramp-up-fund-deploys-cash-into-investments",
+   "statement": "The fund started investing in 2023. In these two quarters it moved cash into investments: investments rose 60 and 68 pct while total assets rose 20 and 36 pct (cash 124,645 at 2023-09-30, 78,558 at 2023-12-31, 9,600 at 2024-03-31). The two growth rates differ because of that, not because of a published error; the investment totals tie to the filed totals.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023529",
+     "verbatim": "Total investments, at fair value (amortized cost-$ 439,046 and $ 260,461 , respectively) 444,376 263,930 Cash 9,600 78,558",
+     "quote": "Total investments, at fair value (amortized cost-$ 439,046 and $ 260,461 , respectively) 444,376 263,930 Cash 9,600 78,558 -- investments 263,930 to 444,376 while cash fell 78,558 to 9,600"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023529",
+     "verbatim": "Total assets $ 477,070 $ 350,736",
+     "quote": "Total assets $ 477,070 $ 350,736 -- total assets grew 36 pct"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F26-1930679-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F26",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "f26-ramp-up-fund-holds-cash-not-borrowings",
+   "statement": "At 2023-09-30 the fund held 124,645 of cash against 165,194 of investments and 243,559 of net assets: investments were below net assets, so the holdings leverage proxy is negative while the fund had borrowed 9,772. The proxies diverge because of the cash balance of a fund in its first months. No published value is wrong.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001930679-23-000010",
+     "verbatim": "Cash 124,645 465 Foreign currency (amortized cost-$ 331 and $ - , respectively) 325 -",
+     "quote": "Cash 124,645 465 Foreign currency (amortized cost-$ 331 and $ - , respectively) 325 - -- cash 124,645 at 2023-09-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001930679-23-000010",
+     "verbatim": "Total assets 292,441 7,571 Liabilities Payable for investments purchased 34,753 - Debt (1) 9,772 -",
+     "quote": "Total assets 292,441 7,571 Liabilities Payable for investments purchased 34,753 - Debt (1) 9,772 - -- debt 9,772"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1930679-7",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "The yield the check compares is the printed ratio of net investment income to average net assets (11.60 at 2024-09-30, 10.64 at 2025-09-30). The fund is levered (investments 134 and 144 pct of net assets) and the page prints no coupon on its floating loans (spread only), so the holdings average coupon rests on the fixed-rate rows. Income over net assets above that average by 2.7 and 3.0 points is the leverage, not a published error.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047584",
+     "verbatim": "Ratio of net investment income to average net assets (6) 11.60 % 9.59 %",
+     "quote": "Ratio of net investment income to average net assets (6) 11.60 % 9.59 % -- 2024-09-30 printed ratio"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047584",
+     "verbatim": "Total investments, at fair value (amortized cost-$ 815,888 and $ 260,461 , respectively) 828,092 263,930",
+     "quote": "Total investments, at fair value (amortized cost-$ 815,888 and $ 260,461 , respectively) 828,092 263,930 -- investments 828,092 against net assets 616,659"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-051535",
+     "verbatim": "Ratio of net investment income to average net assets (6) 10.64 % 11.60 %",
+     "quote": "Ratio of net investment income to average net assets (6) 10.64 % 11.60 % -- 2025-09-30 printed ratio"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-051535",
+     "verbatim": "Total shareholders equity 1,403,373 829,242",
+     "quote": "Total shareholders equity 1,403,373 829,242 -- net assets 1,403,373 against investments 2,021,711"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F33-1930679-8",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "reason_key": "start-up-quarter-no-distribution-declared",
+   "statement": "2023-06-30 is the fund's first quarter of operations; it declared no distribution on its common shares (only the preferred shares' 15). A distribution rate of 0 is the printed fact.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001930679-23-000006",
+     "verbatim": "Distributions to preferred shareholders ( 15 ) ( 15 ) Net decrease in net assets resulting from shareholder distributions ( 15 ) ( 15 )",
+     "quote": "Distributions to preferred shareholders ( 15 ) ( 15 ) Net decrease in net assets resulting from shareholder distributions ( 15 ) ( 15 ) -- no common distribution in the quarter"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C113-1930679-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C113",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "reason_key": "c113-printed-coupon-of-a-residual-tranche",
+   "statement": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, a residual mezzanine tranche, is printed with a 31.0 % coupon at 2025-06-30 (18.9 to 20.3 % in later quarters). The published rate is the printed figure. No fix.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040140",
+     "verbatim": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 31.0 % 10/53 $ 325 531 429",
+     "quote": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 31.0 % 10/53 $ 325 531 429 -- printed 31.0 %"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-fmt_interest_rate-1930679-10",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_interest_rate",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "reason_key": "c113-printed-coupon-of-a-residual-tranche",
+   "statement": "The weak rate-format check flags the same row as C113: Saluda Grade Alternative Mortgage Trust 2023-LOC2 printed at 31.0 % at 2025-06-30. The published rate is the printed figure. No fix.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040140",
+     "verbatim": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 31.0 % 10/53 $ 325 531 429",
+     "quote": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 31.0 % 10/53 $ 325 531 429 -- printed 31.0 %"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-1930679-11",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "The rows still flagged at 2025-03-31 are two Santander Mortgage Asset Receivable Trust 2025-NQM1 tranches and Saluda Grade Alternative Mortgage Trust 2023-LOC2: the page prints a maturity, par, cost and value and no rate on them, and no rate is tagged. The fixed PIK coupons printed and untagged in that filing (GreenSky, Global Lending Services) are set by row correction in this run.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Santander Mortgage Asset Receivable Trust 2025-NQM1, ABS (e)(f)(k)(l) Real Estate Management & Development 01/65 $ 80,926 2,833 2,833",
+     "quote": "Santander Mortgage Asset Receivable Trust 2025-NQM1, ABS (e)(f)(k)(l) Real Estate Management & Development 01/65 $ 80,926 2,833 2,833 -- no rate printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450",
+     "quote": "Saluda Grade Alternative Mortgage Trust 2023-LOC2, Structured Mezzanine (f)(k) Real Estate Management & Development 10/53 $ 325 531 450 -- no rate printed"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1930679-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_disagreement-1930679-13",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_scale_or_unit_candidate-1930679-14",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop kfx, sandbox kfxh); not accepted by the owner",
+   "decided_on": "2026-10-15"
   }
  ]
 }
