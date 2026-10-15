@@ -56,6 +56,9 @@ class HighlightsWrapperSpec:
     # Year-end dates of the year in which the fund began operating: the quarters before its first
     # income statement are nil, so that year-end quarter is the year less the quarters filed
     first_income_year_ends: tuple[str, ...] = ()
+    # Accession numbers whose company facts this filer dated to the wrong period (a proxy
+    # statement's price-range table): left out of the company-facts frame for this fund only
+    companyfacts_ignore_accessions: tuple[str, ...] = ()
     notes: str = ""
 
 
@@ -135,6 +138,10 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
             for concept in (concepts or []) if str(concept).strip()),
         first_income_year_ends=tuple(str(day) for day in (data.get("first_income_year_ends") or [])
                                      if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day))),
+        companyfacts_ignore_accessions=tuple(
+            str(entry.get("accession", "")) for entry in (data.get("companyfacts_ignore_accessions") or [])
+            if isinstance(entry, dict) and re.fullmatch(r"\d{10}-\d{2}-\d{6}", str(entry.get("accession", "")))
+            and str(entry.get("evidence", "")).strip()),
         notes=data.get("notes", ""),
     )
 
@@ -227,6 +234,45 @@ def first_income_year_ends() -> frozenset[tuple[str, str]]:
     """
     _ensure_cache_loaded()
     return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.first_income_year_ends)
+
+
+def companyfacts_ignored_accessions(cik: Any) -> frozenset[str]:
+    """Accession numbers whose company facts are left out for this fund (empty for every other fund).
+
+    Opt-in: ``companyfacts_ignore_accessions``. Sixth Street Specialty Lending's proxy statement
+    0001193125-26-149696 tags a NAV-per-share price-range table on contexts dated one year late
+    (16.59, the NAV of 2023-03-31, on 2024-03-31), which overwrote the 10-Q figures and added fund
+    rows dated after the last filing. Read by ``extract_companyfacts._extract_all_companyfacts``.
+    """
+    spec = load_highlights_wrapper(cik)
+    return frozenset(spec.companyfacts_ignore_accessions) if spec else frozenset()
+
+
+def drop_ignored_accessions(cik: Any, facts: dict) -> dict:
+    """The company-facts document without the facts of the accessions the fund's wrapper lists."""
+    ignored = companyfacts_ignored_accessions(cik)
+    if not ignored or not facts:
+        return facts
+    kept: dict = {**facts, "facts": {}}
+    dropped = 0
+    for taxonomy, concepts in (facts.get("facts") or {}).items():
+        if not isinstance(concepts, dict):
+            kept["facts"][taxonomy] = concepts
+            continue
+        out_concepts = {}
+        for name, body in concepts.items():
+            units = {}
+            for unit, entries in (body.get("units") or {}).items():
+                remaining = [e for e in entries if str(e.get("accn", "")) not in ignored]
+                dropped += len(entries) - len(remaining)
+                if remaining:
+                    units[unit] = remaining
+            if units:
+                out_concepts[name] = {**body, "units": units}
+        kept["facts"][taxonomy] = out_concepts
+    logger.info("Company facts %s: %d facts of %d listed accession(s) left out (wrapper)",
+                _normalize_cik(cik), dropped, len(ignored))
+    return kept
 
 
 def class_nav_ciks() -> frozenset[str]:

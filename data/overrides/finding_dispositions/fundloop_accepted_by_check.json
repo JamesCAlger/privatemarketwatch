@@ -23,6 +23,61 @@
    "rerun": "python scripts/v05_evidence/x02_page_read.py moxe 0001742313",
    "decided_by": "check passed on sandbox moxe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X06-1508655",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox ssxa for each quarter listed: 3 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py ssxa X06 3",
+   "decided_by": "check passed on sandbox ssxa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1508655",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "The percent of net assets the filer prints and tags disagrees with its own fair value over net assets (printed to one decimal, or printed on a neighbouring line). The printed figure is published as filed; the schema value, fair value over net assets, is published beside it in pct_of_net_assets_calculated.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check pct_as_filed_with_calculated passed on sandbox ssxf for each quarter listed: 4 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/pctq.py ssxf 0001508655",
+   "decided_by": "check passed on sandbox ssxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
   }
  ]
 }

@@ -153,6 +153,7 @@
         "strategy"
       ],
       "properties": {
+        "maturity_text_unspaced": {"type": "boolean", "description": "The filer's member text writes the maturity without spaces ('($2,500par,due1/2030)'). When true, staging also reads a month-year maturity written 'par,due1/2030)' (pipeline/staging_bdc.py, _text_maturity_month_raw). Sixth Street Specialty Lending CLO members, 2023-03-31 to 2024-03-31: 14 to 26 loan rows a quarter published no maturity. Evidence required: the printed row's 'due M/YYYY' and the unspaced member. Every other filer keeps the spaced pattern."},
         "strategy": {
           "type": "string",
           "enum": [

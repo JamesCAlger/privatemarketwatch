@@ -1,0 +1,830 @@
+{
+ "cik": "0001508655",
+ "label": "ssxf",
+ "before": "spoff3",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 125,
+   "why": "row corrections: structured-credit rows cut at 'Series 2020 -4A' with the section heading left in the name (about 100 rows, 2023-03-31 Octagon and 2025-09-30 to 2026-06-30), 17 members naming no issuer (Skylark, ASP Unifrax, Marcura, American Achievement, Equinox) and Madcap (byte-order mark), Rapid Data, Mach Natural Resources LP; also D-166 issuer split: none of this fund's rows changed for that reason alone beyond these"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 130,
+   "why": "the same renamed rows get the printed instrument (CLO 'Series 2020-4A Structured Credit (...)'), split-row and stale-member rows (Tango, Project P, PDI TA, TRP, Bed Bath x2, Rapid Data) get the printed par text, the JV gets 'Partnership Interest (25.00% ownership)'"
+  },
+  {
+   "column": "cost",
+   "rows": 6,
+   "why": "split rows: cost tagged on a twin member with no fair value (Tango x2, Laramie, Project P, Rapid Data, Skylark EUR 2023-09-30)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 6,
+   "why": "follows cost on the same 6 rows"
+  },
+  {
+   "column": "shares_held",
+   "rows": 17,
+   "why": "unit counts replaced by the shared share-count proxy (D-111) set to the printed count: IRGSE Class A x3, Copper Bidco, ReliaQuest x6 (2024-06-30 printed 1,824, member 824), SMA Class B x7"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 2,
+   "why": "Passport Labs warrants 2026-03-31 no longer derived_proxy (same value 17,534; issuer grouping changed with the renames)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 2,
+   "why": "the same Passport Labs row: the shares proxy transform is gone"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 70,
+   "why": "40 pars tagged with a minus sign (2023) set positive; 26 pars printed and not tagged (Dryden CLO x13, LeanTaaS, TRP x2, Murchison, 99 Cents, AA, Bed Bath x2, Mach, Sediver 2026-03-31) and split rows (Tango x2, PDI TA, Rapid Data)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 70,
+   "why": "follows principal_amount on the same rows"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 2,
+   "why": "Rapid Data 2023-09-30 EUR (par set from the page); Sediver 2026-03-31 USD"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 1,
+   "why": "Rapid Data 2023-09-30: 1.0584, the build's EUR rate for the fund's other euro pars that day"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 1,
+   "why": "Rapid Data 2023-09-30 reference_fx"
+  },
+  {
+   "column": "asset_category",
+   "rows": 40,
+   "why": "TRP Assets / RMCF partnership interests OTHER -> EQUITY_COMMON (20), Tango x2 and PDI TA OTHER -> LOAN, Dryden CLO FUND -> LOAN (13), JV OTHER -> FUND (new rows not counted)"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 15,
+   "why": "Dryden CLO tranches FUND -> CORPORATE (13) to match the fund's other structured credit rows; split rows"
+  },
+  {
+   "column": "index_classification",
+   "rows": 110,
+   "why": "structured-credit rows classed DIRECT_LENDING / PRIVATE_CREDIT_FUND -> STRUCTURED_CREDIT; American Achievement subordinated note STRUCTURED_CREDIT -> DIRECT_LENDING (14); partnership interests UNCLASSIFIED -> COMMON_EQUITY (20); Tango x2 and PDI TA UNCLASSIFIED -> DIRECT_LENDING"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 15,
+   "why": "Dryden CLO tranches FUND -> DIRECT; split rows"
+  },
+  {
+   "column": "asset_class",
+   "rows": 110,
+   "why": "follows index_classification on the same rows"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 6,
+   "why": "rate read from stale member text corrected to the printed rate (Tango x2, PDI TA, AA first lien and subordinated note 2023-09-30)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 6,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 3,
+   "why": "derived cash leg of the American Achievement rows whose rate changed"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 40,
+   "why": "33 fixed coupons whose coupon was published as the spread: spread withdrawn; stale member spreads set to the printed margin (Tango x2, PDI TA, Neuintel, Project P 2023-06-30, Marcura 2023-09-30)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 34,
+   "why": "33 fixed coupons: the SOFR guess withdrawn (page prints no reference rate); Astra 2025-12-31 PRIME (new row)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 34,
+   "why": "follows reference_rate_type"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 33,
+   "why": "the 33 fixed coupons Floating -> Fixed"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 115,
+   "why": "112 loan rows (103 CLO tranches, 9 other loans) whose member writes the maturity unspaced ('($2,500par,due1/2030)') now read it (wrapper staging.maturity_text_unspaced, 2023-03-31 to 2024-03-31); Bed Bath DIP loans 2023-09-30 (member 8/2023, page 9/2024); Rapid Data 2023-09-30"
+  },
+  {
+   "column": "maturity_date_source",
+   "rows": 112,
+   "why": "identifier_text on the 112 rows whose unspaced maturity is now read"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 113,
+   "why": "the same 112 rows plus Rapid Data: not_disclosed -> unresolved, the status every other text-read maturity of this fund carries"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 290,
+   "why": "the audit column of the corrected rows"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 37,
+   "why": "not aimed at: CLO rows renamed to the issuer ('CIFC Funding Ltd') now resolve to Financials in the GICS cache; no row lost a GICS label"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 37,
+   "why": "same rows: Asset Management & Custody Banks"
+  },
+  {
+   "column": "position_id",
+   "rows": 305,
+   "why": "not aimed at, a consequence of matching: renamed issuers (CLO, issuerless rows, Mach) and the reclassed rows join different chains; no value other than the declared ones changes on these rows"
+  }
+ ],
+ "rows_added": 212,
+ "rows_removed": 1,
+ "fixes": [
+  {
+   "what": "Totals: the Structured Credit Partners JV row (dropped by the staging bare-name filter; published at 2026-03-31 only by two duplicate row_add rules pinned to that quarter, with no accession, class or instrument) is now published from its own context in both quarters: wrapper dispatch.bare_entity_rows = positions; JV cost declared from the page (untagged_values); class FUND / PRIVATE_CREDIT_FUND and instrument by row correction; both pinned row_add rules removed. 2026-06-30 was 53.8M short of the filed total, now ties.",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Joint Venture Investments Structured Credit Partners JV, LLC (4)(6)(11) Partnership Interest ( 25.00 % ownership) 12/23/2025 14,665 14,665 1.0 %"
+    },
+    {
+     "accession": "0001193125-26-332725",
+     "text": "Joint Venture Investments Structured Credit Partners JV, LLC (4)(6)(11) Partnership Interest ( 25.00 % ownership) 12/23/2025 51,391 53,832 3.5 %"
+    }
+   ]
+  },
+  {
+   "what": "With bare names admitted, the affiliate roll-forward line 'Controlled Affiliated Investments IRGSE Holding Corp.' (the total of the four IRGSE positions, 2023-06-30 to 2025-03-31) is kept out by a new exclusion rule 1508655_exclude_irgse_controlled_affiliate_rollforward.",
+   "kind": "exclusion",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570"
+    }
+   ]
+  },
+  {
+   "what": "C110 / fmt_principal_amount(_usd): 40 pars tagged with a minus sign set to the printed positive par (each printed line read; abs(tag) = printed in every case).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "$ 71,379 par, due 5/2027 ) 5/3/2019 SOFR + 6.35 % 11.74 % 70,985 71,379 4.8 %"
+    }
+   ]
+  },
+  {
+   "what": "C115 / fmt_basis_spread: 33 fixed coupons published floating with the coupon as spread (Volante, Equinox 2L, IntelePeer note, Passport note, ASP Unifrax notes, Arrowhead, Flight Intermediate, TradingScreen AA units): spread and reference rate withdrawn, coupon Fixed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-121434",
+     "text": "$ 31,838 par, due 8/2031 ) 8/7/2024 15.00 % 15.00 % 31,530 31,838 2.0 %"
+    },
+    {
+     "accession": "0000950170-24-121434",
+     "text": "$ 2,948 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,924 3,021 0.2 %"
+    }
+   ]
+  },
+  {
+   "what": "C206: 17 members that name no issuer get the issuer printed above the line (Skylark UK DebtCo, ASP Unifrax, Marcura, American Achievement, Equinox), Madcap rows with a byte-order mark and Rapid Data split, Mach Resource -> Mach Natural Resources LP.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Skylark UK DebtCo Limited (3)(4) First-lien loan ($ 16,340 par, due 9/2030 ) 9/7/2023 SOFR + 5.75 % 11.08 % 15,926 16,299 1.0 % First-lien loan (EUR 4,851 par, due 9/2030 )"
+    }
+   ]
+  },
+  {
+   "what": "Structured credit (no rule): about 100 CLO rows whose name was cut at 'Series 2020 -4A' (instrument lost, heading left in the issuer) renamed and given the printed instrument; 65 CLO rows classed DIRECT_LENDING or PRIVATE_CREDIT_FUND classed STRUCTURED_CREDIT.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-264618",
+     "text": "CIFC Funding Ltd, Series 2020-4A (3)(4)(9) Structured Credit ($ 4,000 par, due 1/2040 ) 7/29/2025 SOFR + 4.90 % 9.22 % 4,027 4,021 0.2 %"
+    }
+   ]
+  },
+  {
+   "what": "One position tagged across two or three members (fair value on a member with stale text): cost, par, rate, spread and class from the page on the published row (Tango x2, Project P, Laramie, Rapid Data, Skylark EUR, PDI TA).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 51,233 par, due 12/2027 ) 12/1/2021 SOFR + 6.85 % 12.02 % 50,464 50,336 3.4 %"
+    }
+   ]
+  },
+  {
+   "what": "X11: 26 loan rows print a par the filer did not tag (Dryden CLO x13, LeanTaaS, TRP x2, Murchison, 99 Cents, AA, Bed Bath x2, Mach, Sediver); par set from the page; Bed Bath Roll Up / DIP maturity 9/2024 as printed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Product ($ 1,500 par, due 7/2034 ) 8/17/2022 L + 6.50 % 11.29 % 1,428 1,334 0.1 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Roll Up DIP term loan ($ 25,914 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.22 % (incl. 13.22 % PIK) 25,914 25,331 1.7 %"
+    },
+    {
+     "accession": "0001193125-26-206313",
+     "text": "First-lien note ($ 14,085 par, due 10/2031 ) 10/29/2024 SOFR + 5.00 % 8.70 % 13,866 14,049 0.9 %"
+    }
+   ]
+  },
+  {
+   "what": "F2 / F28: three fund rows dated after the last filing and the five NAV-per-share values a year stale came from the 2026 proxy statement (DEF 14A 0001193125-26-149696), whose price-range table is tagged one year late. New highlights-wrapper setting companyfacts_ignore_accessions (shared code, on for this fund only, tests added) leaves that filing's 62 facts out.",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-03-31",
+    "2026-09-30",
+    "2026-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-051235",
+     "text": "Net Asset Value Per Share $ 17.17 $ 17.04"
+    }
+   ]
+  },
+  {
+   "what": "F33 / F16: distribution per share 2022-03-31 to 2024-09-30 from the printed financial highlights (the 10-Qs tag the 'Issuance of common stock' per-share line with the distribution concept): highlights figure_corrections.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-22-020830",
+     "text": "Dividends declared from net investment income (2) ( 1.39 ) ( 2.61 )"
+    }
+   ]
+  },
+  {
+   "what": "Astra Acquisition second-lien loan at 2025-12-31, printed with '-' for fair value (cost 39.5M, non-accrual), was dropped: fair value 0 declared from the page (untagged_values); reference rate PRIME by row correction.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Astra Acquisition Corp. (3)(14) Second-lien loan ($ 40,084 par, due 10/2029 ) 10/22/2021 P + 9.88 % 16.63 % 39,489 - 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Spreads / rates read from stale member text (no rule): Neuintel, Project P 2023-06-30; Marcura, American Achievement x2 2023-09-30 set to the printed margin or rate.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Project P Intermediate 2, LLC (3) ABL FILO term loan ($ 72,188 par, due 5/2026 ) 11/8/2021 SOFR + 8.10 % 13.20 % 71,195 73,270 5.0 %"
+    }
+   ]
+  },
+  {
+   "what": "American Achievement subordinated note classed STRUCTURED_CREDIT -> DIRECT_LENDING (14 rows); TRP Assets and RMCF partnership interests UNCLASSIFIED -> COMMON_EQUITY (20 rows).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Subordinated note ($ 4,740 par, due 9/2026 ) 3/16/2021 SOFR + 1.15 % 6.45 % PIK 545 71 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-051235",
+     "text": "TRP Assets, LLC (11)(13) Partnership Interest ( 1.89 % ownership) 8/25/2022 8,761 11,718 0.7 %"
+    }
+   ]
+  },
+  {
+   "what": "Share counts replaced by another row's count (shared proxy, D-111) set to the printed count on 17 rows.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Class A Units ( 33,790,171 units) 12/21/2018 21,842 17,993 1.3 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "Page sample cards C001 and C019 (orchestrator round): CLO and other loan members of 2023-03-31 to 2024-03-31 write the maturity unspaced ('par,due1/2030)'), which the shared month-year pattern ('due 1/2030') misses; 14 to 26 loan rows a quarter published no maturity (112 rows). The filer's InvestmentDueDate (a year-month, e.g. '2030-01') sits on a separate duration context that also carries the acquisition date, not on the position's context, and InvestmentDueDate is not in the concept map. New wrapper setting staging.maturity_text_unspaced (shared code in pipeline/staging_bdc.py, on for this fund only, pattern anchored on 'par,due' and closed by ')' or ','; schema key added; 3 tests). All 112 filled dates equal the member's month; both cards read on the page.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Eaton CLO Ltd, Series 2015-1A (3)(4)(9) Structured Credit ($ 2,500 par, due 1/2030 ) 6/23/2022 SOFR + 2.76 % 8.09 % 2,252 2,394 0.2 %"
+    },
+    {
+     "accession": "0000950170-24-051235",
+     "text": "Gulf Stream Meridian, Series 2021-4A (3)(4)(9) Structured Credit ($ 1,015 par, due 7/2034 ) 6/3/2022 SOFR + 6.61 % 11.93 % 943 985 0.1 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "nonaccrual nonaccrual_flag 2025-12-31",
+   "hypotheses": [
+    "Flags follow the filer's XBRL footnote links. The non-accrual footnote ('Investment is on non-accrual status as of December 31, 2025') is linked to the facts of Bed Bath and Beyond (3 rows, 28.0M) and Varinem German BidCo (15.1M), which the page marks (15) make-whole and (3)(4): 4 false flags, 43.1M. Read with scratch/fund_runs/0001508655/fnlinks.py.",
+    "Astra Acquisition (the largest true non-accrual) was missing because its row was dropped; it is now published at fair value 0 and flagged.",
+    "Page: non-accrual fair value 20.0M, cost 68.8M = Astra 39.5 + ASP Unifrax note 1.6 + American Achievement x3 27.8. Published after the fix: 8+1 rows. No wrapper setting or correctable field covers nonaccrual_status; a fix needs a per-fund footnote-link override in shared code (not attempted this run)."
+   ]
+  },
+  {
+   "finding": "html_extract html_carry 2022-03-31, 2022-06-30",
+   "hypotheses": [
+    "The 2022 filings carry no position tags (InvestmentIdentifierAxis count 0), so no 2022 quarter is published; the HTML lane extracts 139 rows (3.43B) at 2022-03-31 and 76 rows (2.47B) at 2022-06-30 against a printed total of 2,536.4M at 2022-06-30, and its cross-quarter carry fails.",
+    "This is a gap (a printed schedule not published), not as-filed; fixing it needs per-CIK HTML template work for the 2017_8col_split_rate variant, outside this run."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "what": "33 fixed coupons (Volante 16.50% PIK, Equinox 2L 16.00% PIK, IntelePeer and Passport notes, ASP Unifrax notes, Arrowhead 15.00%, Flight Intermediate 11.50%, TradingScreen AA units) were tagged with the spread concept and published Floating / SOFR with spread = coupon.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 144.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a loan whose spread equals its rate and whose printed row has no reference-rate code",
+   "quote": {
+    "accession": "0000950170-24-121434",
+    "text": "$ 31,838 par, due 8/2031 ) 8/7/2024 15.00 % 15.00 % 31,530 31,838 2.0 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "17 equity rows carried another row's unit count (IRGSE Class A 8,800,000 for 33,790,171; ReliaQuest 16,957 for 1,667; SMA Class B 1,584 for 1,124,813). Values corrected; shares_held_source still reads derived_proxy on these rows because the proxy step labels before the corrections.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a unit count that differs from the count printed in the row's own member text",
+   "quote": {
+    "accession": "0000950170-23-018777",
+    "text": "Class A Units ( 33,790,171 units) 12/21/2018 21,842 17,993 1.3 %"
+   }
+  },
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "what": "Positions printed with '-' for fair value are dropped (no fair-value fact): Astra 2L loan at 2025-12-31 fixed; 4 to 6 rows a quarter left (Astra 2L Holdings II membership interest cost 3.3M, TherapeuticsMD, IntelePeer and Passport warrants). Totals unaffected; cost and position counts understated.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "a current context with cost or percent tags and no fair value whose printed row shows '-'",
+   "quote": {
+    "accession": "0001193125-26-048664",
+    "text": "Astra Acquisition Corp. (3)(14) Second-lien loan ($ 40,084 par, due 10/2029 ) 10/22/2021 P + 9.88 % 16.63 % 39,489 - 0.0 %"
+   }
+  },
+  {
+   "observation_key": "principal-tagged-with-minus-sign",
+   "what": "The filer tagged 40 pars with a minus sign in 2023 (2 + 36 + 2 rows), published negative.",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 1500.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a negative par on a row with a positive fair value and cost",
+   "quote": {
+    "accession": "0000950170-23-058321",
+    "text": "$ 71,379 par, due 5/2027 ) 5/3/2019 SOFR + 6.35 % 11.74 % 70,985 71,379 4.8 %"
+   }
+  },
+  {
+   "observation_key": "one-position-tagged-across-two-members",
+   "what": "Fair value on a member with the previous quarter's text, cost/par/percent on a twin member with no fair value: published row had no cost, stale rate and spread, no par, class UNCLASSIFIED (Tango 103.8M over two quarters, Project P, Laramie, Rapid Data, Skylark EUR, PDI TA).",
+   "field": "cost",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "fair_value_m": 236.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a fair-value-only context beside a no-fair-value context of the same issuer and instrument",
+   "quote": {
+    "accession": "0000950170-23-038066",
+    "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 51,233 par, due 12/2027 ) 12/1/2021 SOFR + 6.85 % 12.02 % 50,464 50,336 3.4 %"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Where a rate or spread is read from the member text (identifier_text source) and the member keeps an earlier quarter's terms, the published figure is wrong (Project P spread 6.40 for printed 8.10; Neuintel 6.25 for 7.65; Marcura 7.00 for 7.75; AA rates). 5 rows found by comparing every loan with its printed line; fixed.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 196.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a spread or rate taken from member text that differs from the printed row's",
+   "quote": {
+    "accession": "0000950170-23-038066",
+    "text": "Project P Intermediate 2, LLC (3) ABL FILO term loan ($ 72,188 par, due 5/2026 ) 11/8/2021 SOFR + 8.10 % 13.20 % 71,195 73,270 5.0 %"
+   }
+  },
+  {
+   "observation_key": "issuer-name-cut-at-series-dash",
+   "what": "CLO members written 'Series 2020 -4A' (or with an en dash) fail the leaf guard (' - ' test) and fall to the dash split: issuer keeps the section heading, instrument empty. About 30 rows a quarter from 2025-09-30, 2 a quarter in 2023. Fixed by row corrections here; the shared guard is unchanged and will cut the next quarter's rows the same way.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 80.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "an issuer name that starts with a section heading or ends in 'Series NNNN'",
+   "quote": {
+    "accession": "0001193125-25-264618",
+    "text": "CIFC Funding Ltd, Series 2020-4A (3)(4)(9) Structured Credit ($ 4,000 par, due 1/2040 ) 7/29/2025 SOFR + 4.90 % 9.22 % 4,027 4,021 0.2 %"
+   }
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "what": "CLO tranches whose name lacks 'CLO' (CIFC Funding, Madison Park Funding, RR, Gulf Stream Meridian, Octagon) were classed DIRECT_LENDING; Dryden Senior Loan Fund tranches PRIVATE_CREDIT_FUND.",
+   "field": "index_classification",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a row printed in a structured credit section not classed structured credit",
+   "quote": {
+    "accession": "0000950170-23-018777",
+    "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Product ($ 1,500 par, due 7/2034 ) 8/17/2022 L + 6.50 % 11.29 % 1,428 1,334 0.1 %"
+   }
+  },
+  {
+   "observation_key": "proxy-statement-facts-dated-a-year-late",
+   "what": "The 2026 DEF 14A tags its NAV and price-range table one year late; company facts take those facts as balance figures (NAV per share wrong in five quarters, three fund rows dated after the last filing). Any fund whose proxy carries such a table can be affected.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-09-30",
+    "2026-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a fund figure taken from a DEF 14A fact, or a fund row dated after the latest 10-Q/10-K",
+   "quote": {
+    "accession": "0000950170-24-051235",
+    "text": "Net Asset Value Per Share $ 17.17 $ 17.04"
+   }
+  },
+  {
+   "observation_key": "distribution-concept-holds-issuance-per-share",
+   "what": "The 10-Qs tag 'Issuance of common stock, net of offering costs' per share (0.02, 0.03) with InvestmentCompanyDistributionToShareholdersPerShare; distribution per share was 0.00 to 0.02 for 2022 to 2023-09 and 2.07 at 2023-12-31. Set from the printed dividends.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a quarterly distribution per share under 10 pct of net investment income per share",
+   "quote": {
+    "accession": "0000950170-22-020830",
+    "text": "Dividends declared from net investment income (2) ( 1.39 ) ( 2.61 )"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "what": "The filer's XBRL footnote links put the non-accrual footnote on Bed Bath and Beyond (3 rows) and Varinem, which the page marks (15) and (3)(4); published non-accrual 63.1M at 2025-12-31 against printed 20.0M. Same flags at 2026-03-31 and 2026-06-30.",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 43.1,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "non-accrual rows whose printed footnote marks do not include the non-accrual footnote number",
+   "quote": {
+    "accession": "0001193125-26-048664",
+    "text": "Bed Bath and Beyond Inc. (3)(15) ABL FILO term loan ($ 5,910 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 5,851 4,758 0.3 %"
+   }
+  },
+  {
+   "observation_key": "position-published-only-by-quarter-pinned-row-add",
+   "what": "The JV position was published at 2026-03-31 only by a row_add rule pinned to that quarter (two duplicate rule files), so the next quarter (53.8M) was missing; replaced by a wrapper setting and the rules removed.",
+   "field": "fair_value",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 53.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a row_add rule whose position reappears in a later quarter's source rows",
+   "quote": {
+    "accession": "0001193125-26-332725",
+    "text": "Joint Venture Investments Structured Credit Partners JV, LLC (4)(6)(11) Partnership Interest ( 25.00 % ownership) 12/23/2025 51,391 53,832 3.5 %"
+   }
+  },
+  {
+   "observation_key": "currency-in-member-differs-from-page",
+   "what": "Sediver second note: member writes 'EUR 14,085 par', page prints '$ 14,085 par' (SOFR); no par published at 2026-03-31; set to USD 14,085,000.",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 14.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "a principal currency in the member that differs from the fact's unit",
+   "quote": {
+    "accession": "0001193125-26-206313",
+    "text": "First-lien note ($ 14,085 par, due 10/2031 ) 10/29/2024 SOFR + 5.00 % 8.70 % 13,866 14,049 0.9 %"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "ReliaQuest Series A preferred 2024-06-30 prints '17.30 % PIK' and is published with no PIK rate (the other quarters carry it). Left: one row, 1.8M.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 1.8,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "a row printing 'PIK' in the rate cell with no PIK rate published",
+   "quote": {
+    "accession": "0000950170-24-088524",
+    "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "112 loan rows 2023-03-31 to 2024-03-31 (mostly CLO tranches) had no maturity because the member writes 'due1/2030' unspaced and the due-date tag sits on a separate duration context; fixed by wrapper setting. Left: Galileo Parent revolver 2024-12-31 (member text truncated 'due 5/20', page 'due 5/2030', 4.6M). Bed Bath DIP loans and Lithium 2025-03-31 print no maturity (as filed).",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 230.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a loan whose member or printed row has 'due M/YYYY' (with or without spaces) and no published maturity; or read InvestmentDueDate from the member's duration context",
+   "quote": {
+    "accession": "0000950170-23-058321",
+    "text": "Eaton CLO Ltd, Series 2015-1A (3)(4)(9) Structured Credit ($ 2,500 par, due 1/2030 ) 6/23/2022 SOFR + 2.76 % 8.09 % 2,252 2,394 0.2 %"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_fund_highlights_wrapper.py: 26 passed (2 new)",
+  "tests/test_source_encodings.py: 97 passed",
+  "tests/test_fourth_quarter_income.py, tests/test_income_ratio_duration.py, tests/test_fund_financials.py: 143 passed",
+  "both wrappers validated against their JSON schemas (scratch/fund_runs/0001508655/validate_wrappers.py)",
+  "tests/test_refactor_staging.py: 6 passed (3 new: switch on, false positive for a fund without the setting, live wrapper scope)",
+  "tests/test_source_encodings.py re-run after the schema change: 97 passed"
+ ],
+ "not_done": [
+  "Full pytest suite not run; tests of staging (bare_entity_rows path) not run beyond the builds.",
+  "Effect of companyfacts_ignore_accessions on other funds: off unless listed; not measured on the cohort (no other wrapper lists it).",
+  "Dash-fair-value rows other than Astra 2L (4 to 6 a quarter, warrants and a membership interest) not restored.",
+  "Non-accrual flags (parked); 2022 schedule (no tagged positions, HTML lane not published).",
+  "A01 gaps at 2023-09-30 (1.4M) and 2024-12-31 (6.0M) not traced to the row.",
+  "Tango revolver 2023-03-31 to 2023-09-30 (under 0.1M): sign of cost and stale spread/par not corrected.",
+  "Member text checked against the page for spread and rate on every loan (1,950 rows, about 60 unmatched); unit counts, maturities, PIK and industries only on samples.",
+  "Process: three stray 'python -' processes were started by mistake during the run (empty heredocs) and each killed by its PID (16520, 23376, 22868); nothing else was affected.",
+  "Galileo Parent revolver 2024-12-31 maturity (member truncated) not corrected: the build budget (six builds) is used.",
+  "InvestmentDueDate on duration contexts is not read by the position reader for any fund; not changed (this fund's text now carries the date)."
+ ]
+}

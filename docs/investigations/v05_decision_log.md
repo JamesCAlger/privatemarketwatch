@@ -4088,3 +4088,34 @@ First fund of the 2026-10-15 run; splitter on (D-166), Q2 2026 added (D-167), co
 - Observations: 9 recorded. Tests: fund strategy 34, source encodings and splitter 126 passed;
   the whole test_unified_holdings.py crashes in DuckDB at about 29 pct on an unchanged checkout too
   (not completed). Not run: the full suite.
+
+### D-169 Sixth Street Specialty Lending through the fund-clearing skill (sandbox `ssxf`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff3`. Two gate rounds; the second from the page sample.
+
+- **Ledger:** 117 findings, 59 outstanding (114 before), 56 with a proposal; totals tie in 14 of
+  14 quarters, including 2026-06-30, which was 53.8M short before.
+- **Fixed:** the Structured Credit Partners joint venture was dropped by the bare-company-name
+  filter and appeared at 2026-03-31 only through two add rules pinned to that quarter: the wrapper
+  now admits bare names (`bare_entity_rows`), the two pinned rules are deleted, and an exclusion
+  keeps the IRGSE affiliate roll-forward line out. Fund level: the 2026 proxy statement tags its
+  NAV table a year late (stale NAV per share in five quarters, three rows dated after the last
+  filing): new highlights-wrapper setting `companyfacts_ignore_accessions` (shared code, this fund
+  only, tests). Distribution per share 2022-03-31 to 2024-09-30 from the printed highlights (the
+  10-Qs tag the stock-issuance line with the distribution concept). Row corrections: 341 specs
+  (about 1,100 field rows, each with its printed line) for pars tagged negative, fixed coupons
+  published as floating, CLO names cut at 'Series 2020 -4A' and CLO rows classed as direct lending,
+  members naming no issuer, positions split across members, untagged pars, unit counts replaced by
+  the shared share-count step, stale member spreads.
+- **Page sample (20 rows of `ssxe`):** 2 published errors, both maturity missing on CLO rows whose
+  member reads 'due1/2030' with no space. Round 2: wrapper setting `staging.maturity_text_unspaced`
+  (shared code, this fund only, 3 tests) gives 112 loan rows their maturity (103 CLO tranches,
+  2023-03-31 to 2024-03-31, about 230M). The sample was not redrawn on `ssxf`.
+- **Parked:** non-accrual flag 2025-12-31 (the filer's footnote links attach the non-accrual note to
+  Bed Bath and Varinem, the page marks other rows: 63.1M published against 20.0M printed; no setting
+  or correctable field expresses it); the 2022 quarters (no position tags; needs HTML template work).
+- **Observations:** 15, five with shared causes (the share-count step taking another row's count;
+  the name guard cutting 'Series NNNN -NA'; CLO tranches classed as direct lending; proxy facts a
+  year late; rows printed with '-' for fair value dropped).
+- The agent ran a bare heredoc three times and killed each process by its own id.
+- Tests: refactor staging, highlights wrapper, source encodings 129 passed. Not run: full suite.

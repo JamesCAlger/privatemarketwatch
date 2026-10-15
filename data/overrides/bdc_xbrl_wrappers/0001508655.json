@@ -17,7 +17,8 @@
       "total equity investments",
       "structured credit",
       "total"
-    ]
+    ],
+    "bare_entity_rows": "positions"
   },
   "staging": {
     "strategy": "hierarchy_leaf_guard",
@@ -26,7 +27,8 @@
       "marker_re": "(?:series\\s+[a-z0-9-]+\\s+preferred\\s+(?:shares|units|stock|sotck)|preferred\\s+shares|common\\s+shares|common\\s+units|earnout\\s+interests?|trust\\s+certificates|subordinated\\s+notes?|convertible\\s+promissory\\s+note|promissory\\s+note|convertible\\s+notes?|co-invest(?:\\s+\\d+)?\\s+common\\s+units|membership\\s+interest|partnership\\s+\\(|series\\s+20\\d\\d|abl\\s+filo\\s+term\\s+loan|roll\\s+up\\s+dip\\s+term\\s+loan|super-priority\\s+dip\\s+term\\s+loan|first\\s+out\\s+term\\s+loan|first[-\\s]line|first[-\\s]lien\\s*loan|first[-\\s]lien|unsecured\\s+notes?|secured\\s+notes?|convertible\\s+preference\\s+shares|partnership\\s+units|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|class\\s+[a-z0-9-]+|(?:[\\d,]+\\s+)?series\\s+[a-z]\\s+warrants|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|structured\\s+credit|warrants?)",
       "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b",
       "issuer_trailing_strip_re": "(?:\\s+(?:Investment|\\d{1,3}(?:,\\d{3})+)|\\s*,|\\s+\\.|\\x{FEFF})+$"
-    }
+    },
+    "maturity_text_unspaced": true
   },
   "archetypes": {
     "debt": {
@@ -183,6 +185,11 @@
       "P=PRIME",
       "C=CDOR to 2024-03-31",
       "C=CORRA from 2024-06-30"
+    ],
+    "untagged_values": [
+      "0001193125-26-206313 C_c927b4cf-cde0-40cd-af8c-e6094b4a42b9 cost 14665000",
+      "0001193125-26-332725 C_339d4a22-6058-4217-add5-943822bc5b5a cost 51391000",
+      "0001193125-26-048664 C_229d1886-694c-469a-a723-bf686e986cf2 fair_value 0"
     ]
   }
 }

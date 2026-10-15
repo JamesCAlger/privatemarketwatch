@@ -449,3 +449,53 @@ class TestFigureCorrections:
             {"report_date": "2023-12-31", "field": "total_investment_income", "value": 1.0, "evidence": "not a field a wrapper may set"},
             {"report_date": "2023-12-31", "field": "distribution_rate", "value": 9.5, "evidence": "a derived ratio, never corrected"}])
         assert spec.figure_corrections == ()
+
+
+class TestCompanyfactsIgnoreAccessions:
+    """A filing whose company facts the filer dated to the wrong period (Sixth Street Specialty Lending's
+    2026 proxy statement: NAV per share of each quarter tagged one year late)."""
+
+    @staticmethod
+    def _facts():
+        def fact(end, val, accn, form):
+            return {"end": end, "val": val, "accn": accn, "form": form}
+        return {"cik": 1508655, "facts": {"us-gaap": {
+            "NetAssetValuePerShare": {"units": {"USD/shares": [
+                fact("2024-03-31", 17.17, "0000950170-24-051235", "10-Q"),
+                fact("2024-03-31", 16.59, "0001193125-26-149696", "DEF 14A"),
+                fact("2026-12-31", 16.98, "0001193125-26-149696", "DEF 14A")]}},
+            "HighestPriceOrBid": {"units": {"USD/shares": [fact("2026-12-31", 19.5, "0001193125-26-149696", "DEF 14A")]}}}}}
+
+    def _install(self, tmp_path, monkeypatch, entries):
+        from pipeline import fund_highlights_wrapper as fhw
+        path = tmp_path / "0001508655.json"
+        path.write_text(json.dumps({"schema_version": "fund-highlights-wrapper.v1", "cik": "0001508655",
+                                    "entity_name": "Sixth Street Specialty Lending, Inc.", "version": 1,
+                                    "companyfacts_ignore_accessions": entries}), encoding="utf-8")
+        spec = fhw._load_wrapper_from_path(path)
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        return fhw, spec
+
+    def test_the_listed_filing_is_left_out_and_the_10q_figure_stays(self, tmp_path, monkeypatch):
+        from pipeline.extract_companyfacts import _extract_concept_series
+        fhw, spec = self._install(tmp_path, monkeypatch, [
+            {"accession": "0001193125-26-149696", "evidence": "DEF 14A NAV per share dated one year late"}])
+        assert spec.companyfacts_ignore_accessions == ("0001193125-26-149696",)
+        facts = self._facts()
+        kept = fhw.drop_ignored_accessions("1508655", facts)
+        series = _extract_concept_series(kept, ["NetAssetValuePerShare"], unit_key="USD/shares")
+        assert series == {"2024-03-31": 17.17}  # no 16.59 over the 10-Q figure, no row dated 2026-12-31
+        assert "HighestPriceOrBid" not in kept["facts"]["us-gaap"]
+        assert len(facts["facts"]["us-gaap"]["NetAssetValuePerShare"]["units"]["USD/shares"]) == 3  # input untouched
+
+    def test_another_fund_and_an_entry_without_evidence_are_not_affected(self, tmp_path, monkeypatch):
+        fhw, spec = self._install(tmp_path, monkeypatch, [
+            {"accession": "0001193125-26-149696", "evidence": ""}, {"accession": "26-149696", "evidence": "bad number"}])
+        assert spec.companyfacts_ignore_accessions == ()
+        facts = self._facts()
+        assert fhw.drop_ignored_accessions("1508655", facts) is facts
+        # a fund with no wrapper entry keeps every fact, even one from the same accession number
+        fhw2, _ = self._install(tmp_path, monkeypatch, [
+            {"accession": "0001193125-26-149696", "evidence": "DEF 14A NAV per share dated one year late"}])
+        assert fhw2.drop_ignored_accessions("0001803498", facts) is facts

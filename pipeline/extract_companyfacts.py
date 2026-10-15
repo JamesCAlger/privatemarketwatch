@@ -576,10 +576,13 @@ def _extract_all_companyfacts(
             logger.info("Companyfacts: fetched %d new CIKs from SEC", len(uncached))
 
     # Now read everything from cache
+    from pipeline.fund_highlights_wrapper import drop_ignored_accessions
     for cik in bdc_ciks:
         facts = _load_companyfacts_cached(cik, companyfacts_cache_dir)
         if not facts:
             continue
+        # A filing whose facts the filer dated to the wrong period (wrapper opt-in, one fund)
+        facts = drop_ignored_accessions(cik, facts)
         rows = _extract_bdc_balance_sheet(cik, facts)
         all_rows.extend(rows)
 

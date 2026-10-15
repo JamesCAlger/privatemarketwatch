@@ -71,3 +71,30 @@ def test_goldman_flat_names_do_not_become_the_shared_reference_rate_label(report
         assert row.issuer_name == name
         assert row.fair_value == value and row.cost == value + 1
         assert row.asset_category == ('LOAN' if reported_credit_facts else 'OTHER')
+
+
+def _unspaced_clo_rows(cik):
+    ident = ('Equity and Other Investments Structured Credit Eaton CLO Ltd, Series 2015-1A Structured Product '
+             '($2,500par,due1/2030) Initial Acquisition Date 6/23/2022 Reference Rate and Spread SOFR+2.76% Interest Rate 8.09%')
+    return raw_rows([dict(cik=cik, report_date='2023-09-30', investment_identifier=ident, fair_value='2394000',
+                          cost='2252000', principal_amount='2500000', interest_rate='0.0809', basis_spread='0.0276',
+                          dimensions_raw='investmentidentifieraxis=' + ident, src_context_id='clo')])
+
+
+def test_unspaced_due_maturity_is_read_for_the_fund_that_declares_it(monkeypatch):
+    """Sixth Street Specialty Lending writes '($2,500par,due1/2030)'; its wrapper sets staging.maturity_text_unspaced."""
+    monkeypatch.setattr(staging_bdc, '_unspaced_due_ciks', lambda: {'0001508655'})
+    row = staging_bdc._prepare_bdc(bdc_df=_unspaced_clo_rows('0001508655')).set_index('src_context_id').loc['clo']
+    assert str(row.maturity_date)[:10] == '2030-01-31'
+    assert row.maturity_date_source == 'identifier_text'
+
+
+def test_unspaced_due_is_not_read_for_a_fund_without_the_setting(monkeypatch):
+    monkeypatch.setattr(staging_bdc, '_unspaced_due_ciks', lambda: {'0001508655'})
+    row = staging_bdc._prepare_bdc(bdc_df=_unspaced_clo_rows('0001803498')).set_index('src_context_id').loc['clo']
+    assert str(row.maturity_date or '') in ('', 'None', 'nan', 'NaT')
+
+
+def test_live_wrapper_declares_unspaced_due_for_sixth_street_specialty_only():
+    assert staging_bdc._unspaced_due_ciks() == {'0001508655'}
+    assert staging_bdc._cik_in_sql(set()) == 'FALSE'

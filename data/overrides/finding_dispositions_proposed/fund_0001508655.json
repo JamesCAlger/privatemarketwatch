@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "ss1c",
+ "sandbox": "ssxe",
  "dispositions": [
   {
    "disposition_id": "PD-blocking_source_short_plain_unresolved-1508655-1",
@@ -20,43 +20,35 @@
     "2024-12-31",
     "2025-03-31"
    ],
-   "statement": "The rows reported are the affiliate roll-forward total for IRGSE Holding Corp. ('Controlled Affiliated Investments', 'IRGSE Holding Corp'). The four IRGSE positions are published and sum to it exactly in every quarter.",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "statement": "The unpublished source row is the affiliate roll-forward line of IRGSE Holding Corp., tagged on its own member ('Controlled Affiliated Investments IRGSE Holding Corp.'). It is the total of the four IRGSE schedule rows, which are published and sum to it in every quarter (66.654M at 2023-06-30, 66.756M at 2025-03-31). Rule 1508655_exclude_irgse_controlled_affiliate_rollforward keeps it out. No fix: it is not a position.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "2025-03-31: roll-forward member 66.756M = the four published IRGSE rows 66.756M; 2026-03-31: 58.505M = 58.505M (scratch/2026-10-10_read/0001508655/f2.sql, f3.sql)."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
-  },
-  {
-   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1508655-2",
-   "class": "as_filed",
-   "engine": "source_recon",
-   "rule_name": "blocking_source_position_like_parser_mismatch",
-   "ciks": [
-    "0001508655"
-   ],
-   "quarters": [
-    "2026-03-31"
-   ],
-   "statement": "The same IRGSE affiliate roll-forward total, not a position.",
-   "basis": "read",
-   "evidence": [
+     "source": "filing",
+     "accession": "0000950170-23-038066",
+     "verbatim": "IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570",
+     "quote": "IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570 -- 2023-06-30 affiliate roll-forward line, the 66,654 total of the four IRGSE schedule rows"
+    },
     {
-     "source": "query",
-     "quote": "The four published IRGSE rows sum to the roll-forward member in every quarter (2025-03-31 66.756M; 2026-03-31 58.505M)."
+     "source": "filing",
+     "accession": "0000950170-24-051235",
+     "verbatim": "IRGSE Holding Corp. $ 59,913 $ 2,480 $ - $ ( 2,381 ) $ - $ - $ 60,012 $ 4 $ 2,230",
+     "quote": "IRGSE Holding Corp. $ 59,913 $ 2,480 $ - $ ( 2,381 ) $ - $ - $ 60,012 $ 4 $ 2,230 -- 2024-03-31 roll-forward line, 60,012 = the published IRGSE rows"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-061008",
+     "verbatim": "IRGSE Holding Corp. $ 65,095 $ 3,040 $ - $ ( 1,379 ) $ - $ - $ 66,756 $ 1 $ 2,429",
+     "quote": "IRGSE Holding Corp. $ 65,095 $ 3,040 $ - $ ( 1,379 ) $ - $ - $ 66,756 $ 1 $ 2,429 -- 2025-03-31 roll-forward line, 66,756 = the published IRGSE rows"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
   },
   {
-   "disposition_id": "PD-SRC_BDC01-1508655-3",
+   "disposition_id": "PD-SRC_BDC01-1508655-2",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
@@ -73,53 +65,35 @@
     "2024-12-31",
     "2025-03-31"
    ],
-   "statement": "The same IRGSE affiliate roll-forward total, reported by the row check. 2026-03-31 is not included: that quarter also holds the Structured Credit Partners JV row, published through a pinned add rule with fields missing.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "query",
-     "quote": "The four published IRGSE rows sum to the roll-forward member in every quarter (2025-03-31 66.756M; 2026-03-31 58.505M)."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
-  },
-  {
-   "disposition_id": "PD-pct_of_net_assets_identity-1508655-4",
-   "class": "as_filed",
-   "engine": "identity",
-   "rule_name": "pct_of_net_assets_identity",
-   "ciks": [
-    "0001508655"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31"
-   ],
-   "statement": "The filer prints percent of net assets to one decimal; one to eight rows a quarter differ from fair value over net assets by 0.11 to 0.15 points. Published is the printed figure.",
+   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
+   "statement": "The same IRGSE affiliate roll-forward total, reported by the row check. The four IRGSE positions are published and sum to it. (2026-03-31 and 2026-06-30, where the Structured Credit Partners JV row was missing, are fixed: the JV is published from its own context.)",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "0001193125-26-206313: Blazing Star printed '68,201 68,434 4.3 %'; computed 4.44."
+     "accession": "0000950170-23-038066",
+     "verbatim": "IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570",
+     "quote": "IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570 -- 2023-06-30 affiliate roll-forward line, the 66,654 total of the four IRGSE schedule rows"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-051235",
+     "verbatim": "IRGSE Holding Corp. $ 59,913 $ 2,480 $ - $ ( 2,381 ) $ - $ - $ 60,012 $ 4 $ 2,230",
+     "quote": "IRGSE Holding Corp. $ 59,913 $ 2,480 $ - $ ( 2,381 ) $ - $ - $ 60,012 $ 4 $ 2,230 -- 2024-03-31 roll-forward line, 60,012 = the published IRGSE rows"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-061008",
+     "verbatim": "IRGSE Holding Corp. $ 65,095 $ 3,040 $ - $ ( 1,379 ) $ - $ - $ 66,756 $ 1 $ 2,429",
+     "quote": "IRGSE Holding Corp. $ 65,095 $ 3,040 $ - $ ( 1,379 ) $ - $ - $ 66,756 $ 1 $ 2,429 -- 2025-03-31 roll-forward line, 66,756 = the published IRGSE rows"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
   },
   {
-   "disposition_id": "PD-B01-1508655-5",
+   "disposition_id": "PD-B01-1508655-3",
    "class": "rule_problem",
    "engine": "oracle",
    "rule_name": "B01",
@@ -130,25 +104,110 @@
     "2023-09-30",
     "2023-12-31",
     "2024-03-31",
-    "2024-06-30",
     "2024-09-30",
     "2024-12-31",
-    "2025-03-31",
     "2025-06-30",
     "2025-09-30",
     "2026-03-31"
    ],
-   "statement": "About 200 leaf contexts a quarter carry only an acquisition date (duration contexts) and no fair value; the check counts them as positions without a value.",
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "statement": "The leaves counted without a fair value are the prior year-end comparative schedule each filing prints after the current one, plus about 200 duration contexts a quarter that carry only an acquisition date. Neither is a current position. The current schedule's rows are published and total the filed investments in every quarter.",
    "basis": "read",
    "evidence": [
     {
-     "source": "query",
-     "quote": "2025-03-31: 204 rows with status excluded_no_fair_value whose only concept is InvestmentAcquisitionDate (scratch/2026-10-10_read/0001508655/b2.sql)."
+     "source": "filing",
+     "accession": "0001193125-26-206313",
+     "verbatim": "Schedule of Investments as of December 31, 2025 (Amounts in thousands, except share amounts)",
+     "quote": "Schedule of Investments as of December 31, 2025 (Amounts in thousands, except share amounts) -- the comparative schedule in the 10-Q for 2026-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-206313",
+     "verbatim": "Total Investments $ 3,324,332 $ 3,313,441 214.8 %",
+     "quote": "Total Investments $ 3,324,332 $ 3,313,441 214.8 % -- current schedule total, equal to the published 2026-03-31 rows"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer found the 376 leaves without value to be the comparative schedule leaking into the completeness denominator, not missing current fair values. That is this disposition: no published row is wrong; the check counts the comparative schedule."
+   }
+  },
+  {
+   "disposition_id": "PD-A01-1508655-4",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-03-31"
+   ],
+   "reason_key": "a01-subtotal-of-the-comparative-schedule",
+   "statement": "The subtotal the check compares with the current rows is the comparative (prior year-end) schedule's figure: 2,568,814 for debt investments at 2023-03-31 and 2023-06-30 is the 2022-12-31 column; Business Services 572,260 at 2024-03-31 is the 2023-12-31 column. The current rows tie to the filed total in every quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-018777",
+     "verbatim": "Total Debt Investments 2,579,557 2,568,814 188.1 %",
+     "quote": "Total Debt Investments 2,579,557 2,568,814 188.1 % -- the 2022-12-31 comparative total"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-018777",
+     "verbatim": "Total Debt Investments 2,702,405 2,707,407 198.6 %",
+     "quote": "Total Debt Investments 2,702,405 2,707,407 198.6 % -- the 2023-03-31 current total"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-051235",
+     "verbatim": "563,017 572,260 38.3 %",
+     "quote": "563,017 572,260 38.3 % -- Business Services subtotal of the 2023-12-31 comparative schedule"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-A01-1508655-5",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
+   "statement": "Subtotal members and row members name different headings: a row's member has a typo'd or missing heading ('DebtInvestments ... bswift', 44.8M at 2024-06-30; 'Debt Investments Mach Resource,' with no industry, 4.9M at 2023-12-31), so it sums under another heading. The published rows tie to the filed total in every quarter. 2023-09-30 (Education 148,585 printed vs 150,000 summed) and 2024-12-31 (Equity Business Services 17,819 vs 11,855) were not traced to the row.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-088524",
+     "verbatim": "bswift, LLC (3)(5) First-lien loan ($ 44,134 par, due 11/2028 ) 11/7/2022 SOFR + 6.38 % 11.67 % 43,132 44,796 2.8 %",
+     "quote": "bswift, LLC (3)(5) First-lien loan ($ 44,134 par, due 11/2028 ) 11/7/2022 SOFR + 6.38 % 11.67 % 43,132 44,796 2.8 % -- printed under Human Resource Support Services; its member is spelled 'DebtInvestments'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-015845",
+     "verbatim": "Mach Natural Resources LP (3)(4) First-lien loan ($ 5,000 par, due 12/2026 )",
+     "quote": "Mach Natural Resources LP (3)(4) First-lien loan ($ 5,000 par, due 12/2026 ) -- printed under Oil, Gas and Consumable Fuels; its member names no industry"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
   },
   {
    "disposition_id": "PD-X01-1508655-6",
@@ -164,19 +223,166 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31",
-    "2026-03-31"
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "statement": "Units that print a dividend rate: TradingScreen / TS Imagine Class AA Units, as labelled by the filer.",
+   "reason_key": "equity-row-with-printed-pik-dividend-rate",
+   "statement": "The only row X01 flags in these quarters is TradingScreen / TS Imagine 'Class AA Units (19,093 units)', which prints a 20.00% rate in the rate columns: units carrying a stated dividend. Published as printed.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "quote": "Member text: 'Class AA Units (19,093 units) ... Reference Rate and Spread 20.00% Interest Rate 20.00%' (0.04M to 0.05M)."
+     "accession": "0001193125-26-048664",
+     "verbatim": "Class AA Units ( 19,093 units) 11/1/2024 20.00 % 20.00 % 46 46 0.0 %",
+     "quote": "Class AA Units ( 19,093 units) 11/1/2024 20.00 % 20.00 % 46 46 0.0 % -- 2025-12-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-332725",
+     "verbatim": "Class AA Units ( 19,093 units) 11/1/2024 20.00 % 20.00 % 46 45 0.0 %",
+     "quote": "Class AA Units ( 19,093 units) 11/1/2024 20.00 % 20.00 % 46 45 0.0 % -- 2026-06-30"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/0001508655.md",
-   "decided_by": "PROPOSED by agent 2026-10-12 (D-110); not accepted by the owner",
-   "decided_on": "2026-10-12"
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer cited Apidos CLO Series 2015-23A as a PRIVATE_EQUITY row with rate 20.0. In this build the row X01 flags at 2025-12-31 is TS Imagine Class AA Units (printed 20.00 %); Apidos is published as structured credit at its printed 9.10 % (spread 5.20). The cited row does not carry 20.0.",
+    "2026-03-31": "The reviewer could not localise the 20 percent row. It is TS Imagine Class AA Units, which prints '20.00 % 20.00 %' in the rate columns; published as printed."
+   }
+  },
+  {
+   "disposition_id": "PD-C115-1508655-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "statement": "American Achievement's small first-lien loan prints a margin of SOFR + 15.10 % (incl. PIK). Published as printed. (The fixed-rate loans that C115 also flagged, Volante, Equinox and others, are fixed: spread withdrawn, coupon Fixed.)",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-332725",
+     "verbatim": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 %",
+     "quote": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 % -- 2026-06-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-fmt_basis_spread-1508655-8",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "statement": "The spread above 15 in these quarters is American Achievement's printed SOFR + 15.10 %. Published as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-332725",
+     "verbatim": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 %",
+     "quote": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 % -- 2026-06-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F27-1508655-9",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "Income yield is income over net assets; the fund holds about twice its net assets in investments, so the ratio sits above the holdings' average coupon plus 200bp. The printed ratio of net investment income to average net assets confirms the level.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-048664",
+     "verbatim": "Ratio of net investment income to average net assets 13.04 %",
+     "quote": "Ratio of net investment income to average net assets 13.04 % -- 2025"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-019845",
+     "verbatim": "Ratio of net investment income to average net assets 13.96 %",
+     "quote": "Ratio of net investment income to average net assets 13.96 % -- 2024"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1508655-10",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
+   "statement": "Four rows print a percent of net assets that differs from fair value over net assets by 0.07 to 0.10 points (Mitnick TA 0.3 for 0.20, Madison Park 2025-65A 0.2 for 0.27, Insight Hideaway 0.3 for 0.24, Bayshore co-invest units 0.9 for 0.80). The published percent is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-048664",
+     "verbatim": "Mitnick TA Aggregator, L.P. (11) Membership Interest ( 0.43 % ownership) 5/2/2022 5,249 3,176 0.3 %",
+     "quote": "Mitnick TA Aggregator, L.P. (11) Membership Interest ( 0.43 % ownership) 5/2/2022 5,249 3,176 0.3 % -- printed 0.3; 3,176 / 1,607,721 = 0.20"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-048664",
+     "verbatim": "Total Net Assets 1,607,721",
+     "quote": "Total Net Assets 1,607,721 -- the denominator"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop ssx); not accepted by the owner",
+   "decided_on": "2026-10-15",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found the printed percents (Mitnick 0.3, Madison Park 0.2) disagree with value over net assets. True on the page; the build publishes the printed figure unchanged, so there is no pipeline error to fix. The disagreement is the filer's own rounding or figure."
+   }
   }
  ]
 }

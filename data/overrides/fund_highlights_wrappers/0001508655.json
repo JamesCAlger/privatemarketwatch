@@ -33,7 +33,79 @@
    "field": "nav_per_share",
    "value": 17.14,
    "evidence": "0001193125-25-264618 (10-Q, 2025-09-30) balance sheet: 'Net Asset Value Per Share $ 17.14'. The published figure was the value of the same quarter one year earlier."
+  },
+  {
+   "report_date": "2022-03-31",
+   "field": "distribution_per_share",
+   "value": 0.52,
+   "evidence": "0001564590-22-017420 (10-Q 2022-03-31): 'Dividends declared from net investment income (2) (0.52 )' for the three months. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2022-06-30",
+   "field": "distribution_per_share",
+   "value": 0.45,
+   "evidence": "0000950170-22-013859 (10-Q 2022-06-30): six months '(0.97 )' less 0.52 for the first quarter. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "distribution_per_share",
+   "value": 0.42,
+   "evidence": "0000950170-22-020830 (10-Q 2022-09-30): nine months '( 1.39 )' less 0.97 for the half year. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "distribution_per_share",
+   "value": 0.45,
+   "evidence": "0000950170-23-003042 (10-K 2022): year '( 1.59 )' from net investment income and '( 0.25 )' from realized gains less 1.39 for nine months. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "distribution_per_share",
+   "value": 0.55,
+   "evidence": "0000950170-23-018777 (10-Q 2023-03-31): 'Dividends declared from net investment income (2) ( 0.55 )'. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "distribution_per_share",
+   "value": 0.5,
+   "evidence": "0000950170-23-038066 (10-Q 2023-06-30): six months '( 1.05 )' less 0.55. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "distribution_per_share",
+   "value": 0.52,
+   "evidence": "0000950170-23-058321 (10-Q 2023-09-30): nine months '( 1.57 )' less 1.05. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "distribution_per_share",
+   "value": 0.53,
+   "evidence": "0000950170-24-015845 (10-K 2023): year '( 2.10 )', no realized-gain dividend, less 1.57. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "distribution_per_share",
+   "value": 0.54,
+   "evidence": "0000950170-24-051235 (10-Q 2024-03-31): 'Dividends declared from net investment income (2) ( 0.54 )'. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "distribution_per_share",
+   "value": 0.52,
+   "evidence": "0000950170-24-088524 (10-Q 2024-06-30): six months '( 1.06 )' less 0.54. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "distribution_per_share",
+   "value": 0.52,
+   "evidence": "0000950170-24-121434 (10-Q 2024-09-30): nine months '( 1.58 )' less 1.06. The 10-Qs tag the 'Issuance of common stock' per-share line (0.02, 0.03) with the distribution concept."
   }
  ],
- "notes": "NAV per share shifted by one year in five quarters; three rows dated after the last filing (2026-06-30 to 2026-12-31) hold the true 2025 values and are not corrected here."
+ "notes": "NAV per share shifted by one year in five quarters, and three fund rows dated after the last filing: both come from the 2026 proxy statement's misdated price-range table, left out by companyfacts_ignore_accessions (the five NAV corrections stay as the printed figures). Distribution per share from the printed financial highlights, 2022 to 2024-09-30.",
+ "companyfacts_ignore_accessions": [
+  {
+   "accession": "0001193125-26-149696",
+   "evidence": "DEF 14A (2026): NetAssetValuePerShare 16.59 dated 2024-03-31, 17.14 dated 2026-09-30, 16.98 dated 2026-12-31; the 10-Qs print 'Net Asset Value Per Share $ 17.17 $ 17.04' at 2024-03-31 (0000950170-24-051235) and 16.59 is the 2023-03-31 figure. Each proxy fact is the figure of the same quarter one year earlier."
+  }
+ ]
 }

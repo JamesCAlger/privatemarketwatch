@@ -1,0 +1,31 @@
+{
+ "cik": "1508655",
+ "rule_id": "1508655_exclude_irgse_controlled_affiliate_rollforward",
+ "rule_type": "row_exclusion",
+ "action": "exclude",
+ "scope": {
+  "quarters": [
+   "all"
+  ]
+ },
+ "predicate_sql": "CAST(bdc_dimensions_raw AS VARCHAR) = 'investmentidentifieraxis=Controlled Affiliated Investments IRGSE Holding Corp.'",
+ "evidence": [
+  {
+   "source": "filing",
+   "accession": "0000950170-23-038066",
+   "quote": "Fair Value at June 30, 2023 Other Income Interest Income IRGSE Holding Corp. $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654 $ 2 $ 3,570 Total $ 70,755 $ 4,886 $ - $ ( 8,987 ) $ - $ - $ 66,654"
+  },
+  {
+   "source": "filing",
+   "accession": "0000950170-23-038066",
+   "quote": "Controlled, affiliated investments (amortized cost of $ 72,169 and $ 67,284 , respectively) 66,654 70,755"
+  },
+  {
+   "source": "query",
+   "quote": "Sandbox ssxa staging, 2023-06-30 to 2025-03-31: the member 'Controlled Affiliated Investments IRGSE Holding Corp.' carries a fair value only (66.654M at 2023-06-30, 66.756M at 2025-03-31), equal to the roll-forward line and to the sum of the four IRGSE schedule rows, which are published separately."
+  }
+ ],
+ "rationale": "The affiliate roll-forward table's IRGSE line is tagged on its own member. It is the total of the four IRGSE schedule positions, not a position. The same table's later form ('IRGSE Holding Corp') is excluded by 1508655_exclude_irgse_rollforward_summary. Needed once the wrapper declares bare company names to be positions (dispatch.bare_entity_rows), which publishes the Structured Credit Partners JV schedule row.",
+ "confidence": 0.97,
+ "measured_impact": {}
+}

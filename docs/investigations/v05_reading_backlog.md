@@ -150,3 +150,4 @@ Not reached in this run: the ten parked small funds (D-078, D-079) and Commonwea
 Senior Credit Investments 0001959568, TCW Direct Lending 0001603480, Silver Capital 0001674760,
 Manulife 0001988280.
 | 2026-10-15 | 0002031750 Ares Core Infrastructure Fund | acxb | INCOMPLETE | 38 findings, 36 outstanding, 35 proposed, 1 parked (shared income step) | D-168 |
+| 2026-10-15 | 0001508655 Sixth Street Specialty Lending | ssxf | INCOMPLETE | 117 findings, 59 outstanding, 56 proposed, 3 parked | D-169 |

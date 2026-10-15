@@ -431,6 +431,35 @@ def _bare_entity_position_ciks() -> set[str]:
     return result
 
 
+def _unspaced_due_ciks() -> set[str]:
+    """CIKs whose wrapper says the member text writes the maturity unspaced (staging.maturity_text_unspaced).
+
+    Sixth Street Specialty Lending, 2023-03-31 to 2024-03-31: CLO members read
+    'Structured Product ($2,500par,due1/2030)'; the shared pattern needs 'due 1/2030', so 14 to 26
+    loan rows a quarter published no maturity. The filer's InvestmentDueDate sits on a separate
+    duration context, which the position reader does not take.
+    """
+    result: set[str] = set()
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return result
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if (raw.get("staging") or {}).get("maturity_text_unspaced") is True:
+            result.add(str(raw["cik"]).lstrip("0").zfill(10))
+    return result
+
+
+def _cik_in_sql(ciks: set[str]) -> str:
+    """SQL boolean: the row's cik is one of these (10-digit) CIKs; FALSE for an empty set."""
+    if not ciks:
+        return "FALSE"
+    listed = ", ".join("'%s'" % c for c in sorted(ciks) if c.isdigit())
+    return ("LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') IN (%s)" % listed) if listed else "FALSE"
+
+
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
 
@@ -2512,6 +2541,11 @@ def _prepare_bdc(
     # Reads from materialized _bdc_phase_b, produces the final result.
     # =========================================================================
     _t_phase = time.time()
+    # Filers whose member text writes the maturity without a space ('($2,500par,due1/2030)'):
+    # the month-year maturity pattern then accepts 'due' followed directly by the date, closed
+    # by ')' or ','. Opt-in per wrapper (staging.maturity_text_unspaced); every other filer
+    # keeps the spaced pattern only.
+    _unspaced_due_sql = _cik_in_sql(_unspaced_due_ciks())
     sql_phase_c = f"""
     WITH
     -- CTE 6: Classify asset category
@@ -2679,7 +2713,9 @@ def _prepare_bdc(
                 NULLIF(regexp_extract(_raw_id,
                     '(?i)\\bdue\\s+(\\d{{1,2}}/\\d{{4}})', 1), ''),
                 NULLIF(regexp_extract(CAST(instrument_description AS VARCHAR),
-                    '(?i)\\b(?:due|maturity(?:\\s+date)?)\\s+(\\d{{1,2}}/\\d{{4}})', 1), '')
+                    '(?i)\\b(?:due|maturity(?:\\s+date)?)\\s+(\\d{{1,2}}/\\d{{4}})', 1), ''),
+                CASE WHEN {_unspaced_due_sql} THEN NULLIF(regexp_extract(_raw_id,
+                    '(?i)par\\s*,\\s*due\\s*(\\d{{1,2}}/\\d{{4}})\\s*[),]', 1), '') END
             ) AS _text_maturity_month_raw,
             -- Basis spread: "SOFR + 5.25%", "Prime + 6.0%", "S + 5.25%", "E + 5.75%".
             -- A value of 25 or more is written in basis points ("S+550") and is
