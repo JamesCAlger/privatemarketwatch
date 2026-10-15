@@ -1,0 +1,146 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "trxd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F33-1901164-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": ["0001901164"],
+   "quarters": ["2022-12-31", "2023-03-31", "2023-06-30"],
+   "reason_key": "start-up-quarter-no-distribution-declared",
+   "statement": "Distribution rate 0 in the fund's first three quarters. The fund commenced operations on 14 November 2022 and declared no distribution until August 2023: the 10-K for 2023 prints a dash for distributions declared in the 2022 column, and the 10-Q/A for 2023-06-30 states that none was declared in the six months to 30 June 2023. The published 0.0 is what the fund filed; the check's lower bound (rate > 0) does not fit a fund that has not yet distributed. No fix: there is no figure to correct.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001901164-24-000006",
+     "verbatim": "Distributions declared ( 1.49 ) - Impact of issuance of common stock - Class I shares - 25.00",
+     "quote": "Distributions declared ( 1.49 ) - Impact of issuance of common stock - Class I shares - 25.00 -- financial highlights of the 10-K for 2023: 1.49 for 2023, a dash for the 2022 column (2022-12-31)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901164-24-000006",
+     "verbatim": "The Company commenced operations on November 14, 2022 (commencement of operations)",
+     "quote": "The Company commenced operations on November 14, 2022 (commencement of operations) -- the 2022 quarter is the start-up quarter"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-23-028716",
+     "verbatim": "There were no distributions declared and there were no shares issued pursuant to the distribution reinvestment plan for the six months ended June 30, 2023",
+     "quote": "There were no distributions declared and there were no shares issued pursuant to the distribution reinvestment plan for the six months ended June 30, 2023 -- covers 2023-03-31 and 2023-06-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001901164/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop trx, sandbox trxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-B07-1901164-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B07",
+   "ciks": ["0001901164"],
+   "quarters": ["2023-06-30"],
+   "reason_key": "b07-original-and-amendment-filed-for-one-period",
+   "statement": "Two filings exist for 2023-06-30: the 10-Q 0001628280-23-028587 and the 10-Q/A 0001628280-23-028716, filed the next day only to add the signatures. The amendment is the one published (154 rows); both print the same schedule total, 599,708 cost and 599,929 fair value, which the published rows equal. Nothing is counted twice.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-23-028716",
+     "verbatim": "The sole purpose of this Amendment No. 1 is to add signatures to the Original Filing in accordance with the requirements of Form 10-Q.",
+     "quote": "The sole purpose of this Amendment No. 1 is to add signatures to the Original Filing in accordance with the requirements of Form 10-Q. -- the amendment's explanatory note"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-23-028587",
+     "verbatim": "Total Portfolio Investments $ 599,708 $ 599,929 198.99 %",
+     "quote": "Total Portfolio Investments $ 599,708 $ 599,929 198.99 % -- the original 10-Q's schedule total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-23-028716",
+     "verbatim": "Total Portfolio Investments $ 599,708 $ 599,929 198.99 %",
+     "quote": "Total Portfolio Investments $ 599,708 $ 599,929 198.99 % -- the same total in the amendment, the filing published"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001901164/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop trx, sandbox trxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C107-1901164-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": ["0001901164"],
+   "quarters": ["2025-12-31"],
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "statement": "The rows still flagged at 2025-12-31 (66, fair value -0.5M to 0) are undrawn revolver and delayed-draw lines that the schedule prints with a negative cost and fair value in brackets, footnote (6): negative cost and fair value result from unamortized fees. The published values are the printed ones. The row the earlier reviewer cited (Associations, Inc., cost -4,000 against a printed dash) now publishes cost 0 and fair value 0, as printed. No fix: the negatives are what the fund filed.",
+   "basis": "read",
+   "supersedes_real_error_verdict": true,
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found Associations, Inc. (7/3/2028, par 775) published with cost -4,000 against a printed dash. In the current build that row publishes cost 0 and fair value 0, as printed ('775 - - -'), so the cited error no longer stands; the finding stays only for the other undrawn lines, whose negative cost is printed."
+   },
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001901164-26-000008",
+     "verbatim": "Negative cost and fair value results from unamortized fees, which are capitalized to the investment cost",
+     "quote": "Negative cost and fair value results from unamortized fees, which are capitalized to the investment cost -- footnote (6) of the schedule"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901164-26-000008",
+     "verbatim": "National Resilience LLC (4) (5) (6) S + 8.25 % 12.12 % 11/21/2030 12,398 ( 485 ) ( 496 ) ( 0.03 )",
+     "quote": "National Resilience LLC (4) (5) (6) S + 8.25 % 12.12 % 11/21/2030 12,398 ( 485 ) ( 496 ) ( 0.03 ) -- the largest flagged row, published cost -485,000 and fair value -496,000 as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901164-26-000008",
+     "verbatim": "Associations, Inc. (4) (5) (6) S + 6.50 % 10.66 % 7/3/2028 775 - - -",
+     "quote": "Associations, Inc. (4) (5) (6) S + 6.50 % 10.66 % 7/3/2028 775 - - - -- the row of the earlier verdict; published cost 0 and fair value 0"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py trxd C107 0001901164 2025-12-31 80",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop trx, sandbox trxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C04-1901164-4",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": ["0001901164"],
+   "quarters": ["2025-03-31"],
+   "reason_key": "c04-units-cell-blank-and-untagged",
+   "statement": "The six equity rows of 2025-03-31 (Aptean, CSAT, Iconic x2, Eclipse Buyer, Cheval Blanc; 28.1M), now classed from the 'Preferred Equity' section they are printed in, carry no unit count. In this filing the 'Par Amount /Units' cell of every equity row is blank and the filing tags no principal or share-count fact for them (the filings before and after print and tag the count). No fix: there is no count on the page to declare.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001901164-25-000004",
+     "verbatim": "Maturity Date Par Amount /Units Cost (3) Fair Value % of Net Assets",
+     "quote": "Maturity Date Par Amount /Units Cost (3) Fair Value % of Net Assets -- the schedule has a units column"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901164-25-000004",
+     "verbatim": "Preferred Equity High Tech Aptean, Inc. (5) 13.50 % $ 18,612 $ 18,792 1.50",
+     "quote": "Preferred Equity High Tech Aptean, Inc. (5) 13.50 % $ 18,612 $ 18,792 1.50 -- rate, cost, fair value and percent; the units cell is empty"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901164-25-000004",
+     "verbatim": "Cheval Blanc Holdings Company (4) (5) 1,671 1,671 0.13",
+     "quote": "Cheval Blanc Holdings Company (4) (5) 1,671 1,671 0.13 -- cost, fair value and percent only"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py trxd scratch/fund_runs/0001901164/q_nolien.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund loop trx, sandbox trxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

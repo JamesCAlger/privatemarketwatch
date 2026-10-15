@@ -1,0 +1,1662 @@
+[
+ {
+  "card": "C001",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 12/29/2026; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C002",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'C (legend: CDOR) +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 8/9/2029; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C003",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 12/22/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C004",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 8/2/2030; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C005",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 9/10/2031; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C006",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 11/1/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C007",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 8/21/2031; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C008",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 2/1/2029; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C009",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 9/3/2029; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C010",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 6/3/2031; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C011",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 9/2/2031; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C012",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 6/29/2027; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C013",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 4/30/2032; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C014",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 6/30/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C015",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 2/10/2027; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C016",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 3/24/2032; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C017",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 9/24/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C018",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "wrong",
+    "tag": "right",
+    "cause": "pipeline",
+    "note": "Prints 1,552 with no currency cell (USD line); we publish 1,552,000 as CAD, the currency of the New Look line above."
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 3/31/2025; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C019",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 8/11/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ },
+ {
+  "card": "C020",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No unit count printed for this loan; none published."
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 'S +'; no reference-rate fact on this context; published value matches."
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "No PIK printed; none published."
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "Prints 12/29/2028; no maturity fact on this context; published date matches."
+   }
+  }
+ }
+]

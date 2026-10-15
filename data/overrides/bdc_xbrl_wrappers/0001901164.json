@@ -100,7 +100,8 @@
       }
     ],
     "canonical_strip_re": "(?i)(?:^\\s*investment,\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer,\\s*|\\s*\\|\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer\\s*$)",
-    "issuer_name_strip_re": "(?i)^Investment,\\s*Unaffiliated Issuer,\\s*|(?:,\\s*Debt Securities)?(?:,\\s*(?:First|Second) Lien|,\\s*Common Stock|,\\s*Preferred (?:Equity|Stock))?(?:\\s+\\d{1,2})?\\s*$"
+    "issuer_name_strip_re": "(?i)^Investment,\\s*Unaffiliated Issuer,\\s*|(?:,\\s*Debt Securities)?(?:,\\s*(?:First|Second) Lien|,\\s*Common Stock|,\\s*Preferred (?:Equity|Stock))?(?:\\s+\\d{1,2})?\\s*$",
+    "instrument_description_strip_re": "(?i)(?<=Lien Debt),\\s.*$|(?<=Backed Securities),\\s.*$|(?<=Preferred Equity),\\s.*$|(?<=Common Stocks),\\s.*$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -238,6 +239,9 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "units_tagged_as_par": [
+      "0001901164-26-000022"
     ],
     "reference_rate_columns": [
       "Reference Rate and Spread"

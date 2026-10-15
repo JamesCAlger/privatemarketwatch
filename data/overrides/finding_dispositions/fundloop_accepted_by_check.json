@@ -24,6 +24,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-C103-1901164",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001901164"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox trxa for each quarter listed: 19 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py trxa C103 3",
+   "decided_by": "check passed on sandbox trxa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-C103-1950803",
    "class": "as_filed",
    "engine": "row_validation",
@@ -65,6 +87,29 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py gsxc C107 3",
    "decided_by": "check passed on sandbox gsxc; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-C107-1901164",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001901164"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox trxd for each quarter listed: 66 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py trxd C107 3",
+   "decided_by": "check passed on sandbox trxd; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -182,6 +227,28 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py gsxc X06 3",
    "decided_by": "check passed on sandbox gsxc; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X06-1901164",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001901164"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox trxa for each quarter listed: 7 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py trxa X06 3",
+   "decided_by": "check passed on sandbox trxa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

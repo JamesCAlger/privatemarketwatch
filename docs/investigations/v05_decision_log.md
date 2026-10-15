@@ -4213,3 +4213,30 @@ Compared with `spoff2`. One round; six builds.
 - **Shared causes seen (fixed here for this fund only):** the share-count step keying on blank
   names; the 'interestexpense' substring match taking directors' fees; dash-valued rows dropped.
 - The agent twice started a bare heredoc and killed each by its own id. No tests run (no shared code).
+
+### D-173 T. Rowe Price OHA Select through the fund-clearing skill (sandbox `trxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. Two rounds; the second from the page sample. Four builds.
+
+- **Ledger:** 41 findings, 6 outstanding (15 in the first build), all proposed; totals tie in 13 of
+  13 quarters.
+- **Fixed:** equity and asset-backed rows published as direct-lending loans with their unit counts
+  as par (the member names no class): 51 row corrections; published class totals now equal the
+  printed section totals in every quarter. 2026-06-30: `units_tagged_as_par` for the filing that tags
+  every unit count as principal; the new member format put the industry into the instrument, cut by
+  `instrument_description_strip_re`.
+- **Page sample (20 rows of `trxc`):** 1 error, a dollar par published as CAD. The filer tagged 16
+  dollar pars with `unitRef="cad"` (2023-12-31 to 2026-03-31, 61.2M fair value; the page prints no
+  currency on them); the par currency is taken from the unit tag and converted without a check
+  against the printed currency cell. Round 2: 16 row corrections to USD with printed lines; position
+  chains of three issuers re-paired. Recorded as shared observation
+  `principal-currency-from-unit-tag-not-checked-against-page` (also seen at Oaktree Strategic Credit
+  in the 340-row sample: a SOFR revolver published in CNY).
+- **Proposed:** start-up quarters with no distribution; a signatures-only 10-Q/A; negative costs on
+  undrawn lines (answers the earlier C107 verdict: the cited row now publishes 0 / 0 as printed);
+  equity rows printing no unit count.
+- **Left:** 2025-09-30 lien withheld on the Second Lien section (17 loans, 126.5M) because two Crash
+  Champions loans share one member and the section tie-out fails; Vertical Bridge maturity printed
+  5/15/2024 (a typo for 2054, not substituted); fund-level figures by share class (which class to
+  publish is an owner question).
+- Observations: 8. No shared code; no tests run.

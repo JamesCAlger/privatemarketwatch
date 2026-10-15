@@ -154,3 +154,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001950803 Stepstone Private Credit Fund | spxf | INCOMPLETE | 65 findings, 42 outstanding, 40 proposed, 2 parked; 2 declared total exceptions | D-170 |
 | 2026-10-15 | 0001930679 KKR FS Income Trust | kfxh | PASS | 47 findings, 39 outstanding, 39 proposed | D-171 |
 | 2026-10-15 | 0001572694 Goldman Sachs BDC | gsxf | NEEDS_ORCHESTRATOR (request declined) | 154 findings, 88 outstanding, 88 proposed | D-172 |
+| 2026-10-15 | 0001901164 T. Rowe Price OHA Select | trxd | PASS | 41 findings, 6 outstanding, 6 proposed | D-173 |

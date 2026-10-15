@@ -108,5 +108,10 @@
                        "label":  "gsxf",
                        "accepted_on":  "2026-10-15",
                        "basis":  "D-172, gate NEEDS_ORCHESTRATOR (re-verifier request declined), every other check clean; page sample 0 published errors of 20"
+                   },
+    "0001901164":  {
+                       "label":  "trxd",
+                       "accepted_on":  "2026-10-15",
+                       "basis":  "D-173, gate PASS; page sample 1 error of 20 (par currency from the unit tag), 16 rows fixed in round 2"
                    }
 }
