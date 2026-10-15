@@ -435,7 +435,8 @@ def test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alo
     # Blue Owl Technology Income (0001869453, added 2026-10-09): 10-K 2025-12-31 prints Inovalon 'S+ 2.75 % | 2.75 %'
     # under 'Ref. Rate | Cash | PIK', the same layout, with a spread tag of 2.75 and a PIK tag of 2.75.
     # Apollo Origination II (Levered) (0002052152, added 2026-10-10): the adviser's layout, 'S+275 Cash plus 2.75% PIK'.
-    assert source_encodings.printed_margin_funds() == {OWL, '0001837532', '0001869453', '0002052152'}
+    # MidCap Financial (0001278752, added 2026-10-15, D-174): the same Apollo layout, cash plus PIK margin printed.
+    assert source_encodings.printed_margin_funds() == {OWL, '0001837532', '0001869453', '0002052152', '0001278752'}
     assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()
 
 
