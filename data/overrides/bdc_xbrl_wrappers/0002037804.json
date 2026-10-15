@@ -103,7 +103,14 @@
       }
     ],
     "canonical_strip_re": "(?i)(?:\\s*\\|\\s*(?:non-affiliated|affiliated|controlled)\\s+issuer\\s*$|^\\s*Investment,\\s*(?:Unaffiliated|Non-Affiliated|Affiliated|Controlled)\\s+Issuer,\\s*)",
-    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total)\\s*$"
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total)\\s*$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:Trust\\s+Claim|Frst\\s+lien|LP\\s+Interest|Class\\s+A-1\\s+common\\s+Stock|(?:Business\\s+Services|Software|Financial\\s+Services(?:\\s+&\\s+Technology)?|Healthcare|Education|Packaging|Specialty\\s+Chemicals\\s+&\\s+Materials|Distribution\\s+&\\s+Logistics|Manufacturing|Energy|Consumer\\s+Services|Business\\s+Products|Retail|Information\\s+Services|Media|Industrial\\s+Services)(?:\\s+\\d)?)\\s*,?\\s*$",
+    "issuer_name_strip_to_instrument": true,
+    "instrument_description_strip_re": "^\\s*(?:Business\\s+Services|Software|Financial\\s+Services(?:\\s+&\\s+Technology)?|Healthcare|Education|Packaging|Specialty\\s+Chemicals\\s+&\\s+Materials|Distribution\\s+&\\s+Logistics|Manufacturing|Energy|Consumer\\s+Services|Business\\s+Products|Retail|Information\\s+Services|Media|Industrial\\s+Services)(?:\\s+\\d)?\\s*$",
+    "instrument_description_strip_may_empty": true,
+    "lien_from_identifier": {
+      "First Lien": "(?:\\||,)\\s*(?:Business\\s+Services|Software|Financial\\s+Services(?:\\s+&\\s+Technology)?|Healthcare|Education|Packaging|Specialty\\s+Chemicals\\s+&\\s+Materials|Distribution\\s+&\\s+Logistics|Manufacturing|Energy|Consumer\\s+Services|Business\\s+Products|Retail|Information\\s+Services|Media|Industrial\\s+Services)(?:\\s+\\d)?\\s*$"
+    }
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -266,6 +273,10 @@
     ],
     "reference_rate_columns": [
       "Reference"
+    ],
+    "reference_rate_codes": [
+      "P=PRIME",
+      "BBSY=BBSY"
     ]
   }
 }

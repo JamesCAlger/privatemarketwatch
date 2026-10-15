@@ -173,5 +173,10 @@
   "label": "ngxd",
   "accepted_on": "2026-10-15",
   "basis": "D-186, gate PASS; page sample 0 published errors of 20; shared income change regression-checked on 0001869453 (rgng)"
+ },
+ "0002037804": {
+  "label": "npxd",
+  "accepted_on": "2026-10-15",
+  "basis": "D-187, gate PASS in round 2; page sample 6 errors on 2 cards of 20, causes fixed fund-wide except JV listing maturity/reference (unpublished rows)"
  }
 }

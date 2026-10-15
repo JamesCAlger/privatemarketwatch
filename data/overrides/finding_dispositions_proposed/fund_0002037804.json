@@ -1,0 +1,212 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "npxd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F23-2037804-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F23",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "statement": "F23 compares the sum of published percent of net assets with fair value over net assets. The schedule prints one percent per issuer, on the issuer's total line after its tranches, and tags it on an issuer-level context; a position row carries a percent only where the issuer has one line. Published percents cover 74 to 117 rows a quarter (sum 65.21 against fair value over net assets 152.89 at 2024-12-31; 83.74 against 191.16 at 2026-06-30). Of the published percents, all but three equal the row's fair value over net assets within 0.02: Databricks 2024-12-31 and 2025-03-31 print 1.34 % on a 12,529 loan (1.28 % of net assets 978,180; the filer's own figure, printed so), and the Ambrosia 2025-09-30 second common line carries the issuer's 0.03 % printed on the issuer total. No fix applies: the per-row percent of a multi-line issuer is not printed.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000020", "verbatim": "Beacon Pointe Harmony, LLC Financial Services First Lien(2)(3)(4) SOFR(M) + 4.75 % 8.91 % 12/2021 12/2028 6,867 6,829 6,867 First Lien(4) SOFR(M) + 4.75 % 8.91 % 12/2021 12/2028 2,693 2,682 2,693", "quote": "'Beacon Pointe Harmony, LLC ... 6,867 6,829 6,867 First Lien(4) ... 2,693 2,682 2,693': two lines of one issuer with no percent on either; the percent is printed once on the issuer total."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "Class A-1 common units (4) - - - 01/2024 - 19,197 204 90 800 351 0.03 %", "quote": "'Class A-1 common units (4) - - - 01/2024 - 19,197 204 90 800 351 0.03 %': Ambrosia's second line, then the issuer total 800 / 351 with its one percent 0.03 %."},
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "Databricks, Inc. Software First Lien SOFR (Q) + 4.50 % 8.83 % 12/2024 01/2031 12,592 12,529 12,529 1.34 %", "quote": "'Databricks, Inc. ... 12,592 12,529 12,529 1.34 %': the printed percent, published as is (12,529 over net assets 978,180 is 1.28 %)."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0002037804/pct.sql",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X02-2037804-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": ["0002037804"],
+   "quarters": ["2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "statement": "The rows the standing check does not clear are printed with dashes in the reference, spread and rate cells and carry no rate tag: the Reorganized Careismatic Brands trust claim (75, a bankruptcy trust interest, every quarter 2025-03-31 to 2026-03-31); OEConnection's undrawn line at 2025-09-30 and 2025-12-31 (the check's name search fails on the member's 'OEConnection LLC.' spelling); at 2026-06-30 the NEWCRED Senior Loan Program I unfunded US Fertility line, a joint-venture look-through row retained as underlying_schedule (not published). All other flagged rows are undrawn lines cleared by the check. No fix applies: there is no rate on the page.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "Reorganized Careismatic Brands, LLC Healthcare Trust Claim(4) - - - 06/2024 06/2029 75 75 75 0.01 %", "quote": "'Reorganized Careismatic Brands, LLC Healthcare Trust Claim(4) - - - 06/2024 06/2029 75 75 75 0.01 %': no reference, spread or rate printed; same line in every quarter."},
+    {"source": "filing", "accession": "0002037804-25-000020", "verbatim": "OEConnection LLC Software First Lien(5) - Undrawn - - - 12/2024 12/2026 $ 3,891 $ - $ 13 - %", "quote": "'OEConnection LLC Software First Lien(5) - Undrawn - - - 12/2024 12/2026 $ 3,891 $ - $ 13 - %': 2025-09-30, undrawn, no rate."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "OEConnection LLC Business Services First Lien(5) - Undrawn - - - 12/2024 12/2028 $ 2,645 $ - $ 4", "quote": "'OEConnection LLC Business Services First Lien(5) - Undrawn - - - 12/2024 12/2028 $ 2,645 $ - $ 4': 2025-12-31, undrawn, no rate."},
+    {"source": "filing", "accession": "0002037804-26-000015", "verbatim": "US Fertility Enterprises, LLC Healthcare - - - 12/2027 138 - 1 Total Unfunded Investments", "quote": "'US Fertility Enterprises, LLC Healthcare - - - 12/2027 138 - 1 Total Unfunded Investments': SLP I's unfunded line at 2026-06-30, no rate printed."}
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py <label> 0002037804",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F16-2037804-3",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-return-of-capital-distribution-in-the-quarter",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-03-31", "2024-06-30", "2024-09-30"],
+   "statement": "These quarters are the predecessor's (New Mountain Guardian III BDC, merged into the fund on 2024-12-17; figures from the comparative columns of the fund's 2025 10-Qs). GIII paid return-of-capital distributions on top of its income distributions while it wound down: 49,984 in the first quarter of 2024, 144,897 in the second and 50,557 in the third (thousands). On 114,906,527 units the published distribution per unit (0.714, 1.51, 0.657) equals income distributions plus return of capital, so the distribution rate exceeds 1.5 times the income yield. Printed so; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000007", "verbatim": "Return of capital distributions - ( 49,984 )", "quote": "'Return of capital distributions - ( 49,984 )': predecessor, quarter to 2024-03-31."},
+    {"source": "filing", "accession": "0002037804-25-000016", "verbatim": "Return of capital distributions - - ( 144,897 ) ( 194,882 )", "quote": "'Return of capital distributions - - ( 144,897 ) ( 194,882 )': predecessor, quarter and half year to 2024-06-30."},
+    {"source": "filing", "accession": "0002037804-25-000020", "verbatim": "Return of capital distributions - - ( 50,557 ) ( 245,440 )", "quote": "'Return of capital distributions - - ( 50,557 ) ( 245,440 )': predecessor, quarter and nine months to 2024-09-30."}
+   ],
+   "rerun": "grep 0002037804 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv | grep ,F16,",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F33-2037804-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "reason_key": "f16-return-of-capital-distribution-in-the-quarter",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-03-31", "2024-06-30", "2024-09-30"],
+   "statement": "Distribution rate above 30 pct (30.7, 50.0, 35.2) in the predecessor's quarters of 2024, for the same reason as F16: New Mountain Guardian III paid return-of-capital distributions of 49,984, 144,897 and 50,557 (thousands) beside its income distributions while it wound down before merging into the fund on 2024-12-17. The published per-unit figures equal the printed totals over 114,906,527 units. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000016", "verbatim": "Return of capital distributions - - ( 144,897 ) ( 194,882 )", "quote": "'Return of capital distributions - - ( 144,897 ) ( 194,882 )': predecessor, second quarter 2024 (1.26 a unit of the 1.51 published)."},
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "Distributions declared to shareholders and unitholders from return of capital - ( 2.34 ) - - - -", "quote": "'Distributions declared to shareholders and unitholders from return of capital - ( 2.34 ) - - - -': 2.34 a unit returned in the predecessor's 2024 period, none in any other year."}
+   ],
+   "rerun": "grep 0002037804 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv | grep ,F33,",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-F33-2037804-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "reason_key": "f33-no-distribution-in-a-stub-first-period",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31"],
+   "statement": "Distribution rate 0 at 2024-12-31. The fund commenced operations on 2024-12-17; its first period (15 days) declared no distribution, and the highlights print a dash for it in the successor column. The 2024-12-31 row carries the successor's share data (NAV 25.07, 39,025,005 shares). Printed so; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "Distributions declared to shareholders and unitholders from net investment income - ( 0.91 ) ( 1.20 ) ( 0.89 ) ( 0.97 ) ( 0.93 )", "quote": "'Distributions declared ... from net investment income - ( 0.91 ) ...': a dash in the successor column (2024-12-17 to 2024-12-31)."}
+   ],
+   "rerun": "grep 0002037804 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv | grep ,F33,",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-2037804-6",
+   "class": "false_alarm",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31", "2025-09-30", "2025-12-31"],
+   "statement": "The source facts reported as unpublished are the non-accrual paragraph's aggregates, tagged on a second identifier member of the issuer with only cost and fair value: KWOR first lien 2024-12-31 (c-708, cost 45,323, fair value 36,886; the schedule's two KWOR lines 32,267 + 4,573 are published), Notorious Topco 2025-09-30 (c-729, 48,700 / 30,583 = its three published lines 26,051 + 2,269 + 2,263), DCA 2025-12-31 (c-911, 13,228 / 11,695 against its four published lines 8,112 + 1,795 + 1,359 + 427 = 11,693) and ACI Parent preferred 2025-12-31 (c-913, 20,124 / 2,086 against the published preferred line 20,124 / 2,085). The fund's two exclusion rules keep them out; published fair value equals the filed total in all seven quarters. Publishing them would count the positions twice.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "As of December 31, 2024, our first lien position in Alacrity had an aggregate cost basis of $45.3 million, an aggregate fair value of $36.9 million", "quote": "'... aggregate cost basis of $45.3 million, an aggregate fair value of $36.9 million': the KWOR (Alacrity) aggregate on c-708."},
+    {"source": "filing", "accession": "0002037804-25-000020", "verbatim": "As of September 30, 2025, the Company's positions in BIG had an aggregate cost basis of $ 48,700 , and aggregate fair value of $ 30,583", "quote": "'... BIG had an aggregate cost basis of $ 48,700 , and aggregate fair value of $ 30,583': the Notorious Topco aggregate on c-729."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 13,228 , an aggregate fair value of $ 11,695", "quote": "'... positions in DCA had an aggregate cost basis of $ 13,228 , an aggregate fair value of $ 11,695': the DCA aggregate on c-911."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "our preferred shares in Affordable Care had an aggregate cost basis of $20.1, an aggregate fair value of $2.1", "quote": "'... preferred shares in Affordable Care had an aggregate cost basis of $20.1, an aggregate fair value of $2.1': the ACI Parent aggregate on c-913."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> SRC_BDC01 0002037804 <quarter>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-2037804-7",
+   "class": "false_alarm",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31", "2025-09-30", "2025-12-31"],
+   "statement": "Same facts as SRC_BDC01 in these quarters: 36.89M (KWOR, c-708), 30.58M (Notorious Topco, c-729) and 13.78M (DCA c-911 11,695 plus ACI c-913 2,086) are the non-accrual note's aggregates on second identifier members, each equal to rows already published. Published equals the filed total in all three quarters only with them out.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "As of December 31, 2024, our first lien position in Alacrity had an aggregate cost basis of $45.3 million, an aggregate fair value of $36.9 million", "quote": "'... aggregate fair value of $36.9 million': the 36.89M source-only fact at 2024-12-31."},
+    {"source": "filing", "accession": "0002037804-25-000020", "verbatim": "As of September 30, 2025, the Company's positions in BIG had an aggregate cost basis of $ 48,700 , and aggregate fair value of $ 30,583", "quote": "'... aggregate fair value of $ 30,583': the 30.58M source-only fact at 2025-09-30."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 13,228 , an aggregate fair value of $ 11,695", "quote": "'... aggregate fair value of $ 11,695': with ACI's 2,086, the 13.78M at 2025-12-31."}
+   ],
+   "rerun": "python scripts/v05_evidence/left.py <label> blocking_source_position_like_parser_mismatch",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-2037804-8",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31", "2025-12-31"],
+   "statement": "Each flagged row merges two contexts of its member, and every published value equals the row's printed line. Bonterra 2025-12-31: the loan's cost and fair value are tagged on c-263 and its par, rate and spread on c-262; published 7,326 / 7,310 / 7,308, 8.42 %, 4.75 as printed. Dealer Tire, Diligent and ACI preferred 2025-12-31: the second context carries the footnote's stated value plus unpaid dividends (principal), which is not published; units, cost and fair value are the printed line's. YLG undrawn line 2024-12-31: the second context carries a percent of 0, printed '- %'.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "Bonterra LLC Software First Lien(4) SOFR(Q) + 4.75 % 8.42 % 03/2025 03/2032 7,326 7,310 7,308", "quote": "'Bonterra LLC ... 7,326 7,310 7,308': par, cost and fair value as published."},
+    {"source": "filing", "accession": "0002037804-26-000005", "verbatim": "As of December 31, 2025, the Company's stated value of its equity investment plus unpaid compounded dividends was $ 20,249", "quote": "'... stated value of its equity investment plus unpaid compounded dividends was $ 20,249': the ACI figure on the preferred's second context, not published."},
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "YLG Holdings, Inc. Business Services First Lien(2)(4)(5) - Undrawn - - - 10/2021 12/2024 3,963 - - - %", "quote": "'YLG Holdings, Inc. ... - Undrawn ... 3,963 - - - %': commitment 3,963, no value, no percent."}
+   ],
+   "rerun": "python scripts/v05_evidence/merged.py <label> 0002037804",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-X07-2037804-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X07",
+   "reason_key": "x07-value-above-cost-as-printed",
+   "ciks": ["0002037804"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "statement": "TMK Hawk Parent's second subordinated note carries fair value 46 against cost 2 (2026-03-31) and 3 (2026-06-30), as printed (the issuer's newer first liens are also printed with cost far below par, e.g. 4,895 par at cost 2,180 at 2026-03-31). Printed so; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-26-000010", "verbatim": "Subordinated(4) Fixed(Q)* + 11.00 %/PIK 11.00 % 01/2026 12/2031 46 2 46", "quote": "'Subordinated(4) Fixed(Q)* + 11.00 %/PIK 11.00 % 01/2026 12/2031 46 2 46': par 46, cost 2, fair value 46."},
+    {"source": "filing", "accession": "0002037804-26-000015", "verbatim": "Subordinated(4) Fixed(Q)* + 11.00 %/PIK 11.00 % 12/2023 12/2031 46 3 46", "quote": "'Subordinated(4) ... 46 3 46': par 46, cost 3, fair value 46."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> X07 0002037804 <quarter>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-income_identity-2037804-10",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "reason_key": "income-identity-quarter-splices-predecessor-and-successor",
+   "ciks": ["0002037804"],
+   "quarters": ["2024-12-31"],
+   "statement": "The fourth quarter of 2024 spans two reporting entities: the predecessor New Mountain Guardian III from 2024-10-01 to 2024-12-16 and the fund from 2024-12-17 (its first period, 15 days). The 10-K prints them as separate statements. Published total investment income 34,190 is the predecessor's period figure less its nine months (196,732 - 59,466 - 55,169 - 47,907) and omits the successor's 6,353; the expense and net investment income figures are drawn from different columns, so income less expenses does not equal net investment income. No row of one entity holds the whole quarter, and no wrapper setting splits an income quarter across two entities; the fund's own quarters from 2025-03-31 tie.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "Results of Operations - NEWCRED - Period from December 17, 2024 to December 31, 2024 Revenue Period from December 17, 2024 to December 31, 2024 (in thousands) Total interest income $ 5,892 Dividend income 355 Fee income 106 Total investment income $ 6,353", "quote": "the successor's 15-day income 6,353, a statement of its own."},
+    {"source": "filing", "accession": "0002037804-25-000003", "verbatim": "Total interest income $ 186,280 $ 235,139 Dividend income 9,155 9,724 Fee income 1,297 2,176 Total investment income $ 196,732 $ 247,039", "quote": "the predecessor's 2024-01-01 to 2024-12-16 income 196,732; less its three quarters (162,542) it is the published 34,190."}
+   ],
+   "rerun": "grep 0002037804 scratch/fund_sandbox/<label>/output/bdc_fund_highlights_oracle.csv | grep 2024q4",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  },
+  {
+   "disposition_id": "PD-C04-2037804-11",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "reason_key": "c04-units-column-printed-in-thousands-or-as-face",
+   "ciks": ["0002037804"],
+   "quarters": ["2026-06-30"],
+   "statement": "At 2026-06-30 the filer changed what its 'Principal Amount, Par Value or Shares' column holds for equity: common lines print thousands of units (Ambrosia 56 and 19 for the 55,984 and 19,197 printed every quarter before; KWOR common 4 for 4,321; Firebird 1,642 for 1,641,526) and preferred lines print a dollar face in thousands (Dealer Tire 48,472 for the 30,082 shares printed before; the same 48,472,000 the filer tagged as principal on a second context at 2025-12-31). The exact unit count is not printed for these rows, so no correction can set it from the page; the rows printed unchanged (Notorious Buyer 837 units, Careismatic 68,568 warrants) are corrected. Whether a rounded count or a preferred face belongs in shares_held is the owner convention question already open for Stone Point (observation preferred-units-column-is-a-face-amount).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002037804-26-000015", "verbatim": "Ambrosia Topco, LLC (10) Distribution & Logistics Class A-1 common units (2)(4) - - - 01/2024 - 56 596 155", "quote": "'... Class A-1 common units (2)(4) - - - 01/2024 - 56 596 155': 56 for the 55,984 units printed through 2026-03-31."},
+    {"source": "filing", "accession": "0002037804-26-000015", "verbatim": "Dealer Tire Holdings, LLC(13) Distribution & Logistics Preferred Shares(4) Fixed(A)* + 7.00 %/PIK 7.00 % 09/2021 - 48,472 $ 43,761 $ 45,030 4.71 %", "quote": "'Dealer Tire ... Preferred Shares ... - 48,472 $ 43,761 $ 45,030': 48,472 for the 30,082 shares printed before."},
+    {"source": "filing", "accession": "0002037804-26-000010", "verbatim": "Dealer Tire Holdings, LLC(13) Distribution & Logistics Preferred Shares(4) Fixed(A)* + 7.00 %/PIK 7.00 % 09/2021 - $ 30,082 $ 43,761 $ 46,417 4.83 %", "quote": "the quarter before: 30,082 shares, same cost 43,761."}
+   ],
+   "rerun": "python scratch/fund_runs/0002037804/list_equity.py <label>",
+   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop, sandbox npxd); not accepted by the owner",
+   "decided_on": "2026-10-15"
+  }
+ ]
+}

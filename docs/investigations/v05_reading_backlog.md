@@ -167,3 +167,4 @@ Manulife 0001988280.
 | 2026-10-15 | 0001989817 HPS Corporate Capital Solutions | hcxe | INCOMPLETE | 37 findings, 9 outstanding, 8 proposed, 1 parked (duplicate identifier) | D-184 |
 | 2026-10-15 | 0001885968 T Series BDC | tsxd | PASS | 54 findings, 17 outstanding, 17 proposed; opt-in schedule-row test added | D-185 |
 | 2026-10-15 | 0001925531 New Mountain Guardian IV | ngxd | PASS | 57 findings, 32 outstanding, 32 proposed; short first-year income scaling (shared) | D-186 |
+| 2026-10-15 | 0002037804 New Mountain Private Credit Fund | npxd | PASS | 55 findings, 32 outstanding, 32 proposed; pinned JV exclusion pulled | D-187 |

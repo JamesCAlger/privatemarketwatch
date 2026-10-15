@@ -4638,3 +4638,46 @@ Compared with `spoff3`. One round; four builds.
   first-period income may be fixable by declaring `first_income_year_ends` (not tried).
 - The agent ran one short `python -c`, used `sed -i` on scratch files and a spec script, and ran
   read-only lookups during builds.
+
+### D-187 New Mountain Private Credit Fund through the fund-clearing skill (sandbox `npxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. Two rounds; four builds.
+
+- **Ledger:** 55 findings, 32 outstanding (50 in the first build, 41 after accepted checks), all 32
+  proposed; totals tie in 7 of 7 quarters.
+- **Pulled:** the quarter-pinned rule `exclude_newcred_lookthrough_rows` (moved to
+  `_pulled_replaced_by_underlying_schedule_2026-10-15/`): the SLP I joint venture's own schedule is
+  now kept as `underlying_schedule` (328 rows), not published; totals unchanged; clears E07 x3.
+- **Fixed (wrapper):** P=PRIME and BBSY codes (13 rows had a date-guessed SOFR); issuer strip for
+  'Trust Claim', 'Frst lien', 'LP Interest', class prefixes (10 names); on the JV rows the industry
+  text published as the instrument is blanked and the lien set (328 rows; 35 issuer names at
+  2025-09-30). New highlights wrapper: 2023 net assets and units and the 2022/2023 income yield
+  from the predecessor columns of the first 10-K (F10, balance_sheet_identity, F16).
+- **Fixed (164 specs, 301 lines):** 61 equity unit counts (tagged x1,000, as dollars, or untagged; C04
+  2025-12-31, 2026-03-31); 6 par currencies (Datheos GBP->EUR; RailPros, Legal Spend, OEConnection
+  dollar loans tagged GBP/AUD); Wealth Enhancement note on a KWOR member; Capstone fixed coupon;
+  58 dash-printed rows with a tagged 0 published as a 0.0 coupon/spread, blanked; 42 rows printing
+  the whole margin as PIK published fixed with no spread, now floating with the printed margin as
+  spread (pending owner question D-092; withdraw if ruled the other way); Kele, Safety Borrower
+  (26.0M), Tennessee Bidco, ACI spreads and PIK; 'YLG Holdings, Inc. Frst lien' carrying Databricks'
+  undrawn line renamed.
+- **Proposed:** F23 x7, X02 x6, F16 x3 and F33 x3 (predecessor return of capital, new key
+  `f16-return-of-capital-distribution-in-the-quarter`), F33 2024-12-31 (new key
+  `f33-no-distribution-in-a-stub-first-period`), SRC_BDC01 x3 and blocking_source x3 (non-accrual note
+  aggregates), merged_context_excluded x2, X07 x2, income_identity 2024-12-31 (new key
+  `income-identity-quarter-splices-predecessor-and-successor`), C04 2026-06-30 (new key
+  `c04-units-column-printed-in-thousands-or-as-face`).
+- **Page sample (`npxc`):** 6 errors on 2 cards of 20. C002 Cohnreznick (a JV schedule row,
+  unpublished): industry as instrument, 0.0 rate and spread on a dash, maturity and reference rate
+  missing. C020 Knockout preferred: PIK-only margin without spread. Round 2 fixed all but the JV
+  rows' maturity and reference rate (the page reader does not read the JV listing; 328 unpublished
+  rows; left as an observation). Not re-sampled. Twenty cards can miss a problem on under about 15
+  pct of rows.
+- **Owner question:** fund-level rows 2019-12-31 to 2024-09-30 are the predecessor New Mountain
+  Guardian III's per-unit figures (NAV 9.95 to 7.47 a unit against 25.07 a share), published under
+  this fund. Holdings start 2024-12-31 and are not affected (checked on `npxd`).
+- **Shared causes seen:** par currency from the unit tag; 'FIXED' in a reference column not read as no
+  benchmark; zero rate tags on dash-printed rows published as coupons; printed industry column not
+  read; JV listing fields not read.
+- The agent ran an empty heredoc into `python -` twice (killed by PIDs 21152, 22292) and used `sed`
+  on scratch files, the proposals file and the report. Wrapper tests 681 passed.

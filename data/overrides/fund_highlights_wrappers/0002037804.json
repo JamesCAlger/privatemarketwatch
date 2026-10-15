@@ -1,0 +1,33 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002037804",
+ "entity_name": "New Mountain Private Credit Fund",
+ "version": 1,
+ "notes": "The fund commenced operations on 2024-12-17 as successor to New Mountain Guardian III BDC, L.L.C. (GIII). Its company facts carry GIII's figures for the years before (members' capital per unit, units), printed in the successor's 10-K as predecessor columns. Corrections below take those printed predecessor figures where the facts leave a field blank or as a quarter share.",
+ "figure_corrections": [
+  {
+   "report_date": "2023-12-31",
+   "field": "net_assets",
+   "value": 1108751000,
+   "evidence": "0002037804-25-000003 (10-K, 2024-12-31) balance sheet, 2023-12-31 column: 'Total net assets 978,180 - Predecessor entity members' capital - 1,108,751 Total net assets and predecessor entity members' capital $ 978,180 $ 1,108,751' (in thousands). The predecessor's capital is tagged as members' capital; net assets were published as 0, so total assets 2,077,522 less liabilities 968,771 did not tie."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "shares_outstanding",
+   "value": 114906527,
+   "evidence": "0002037804-25-000003 (10-K, 2024-12-31) financial highlights: 'Shares or Units outstanding at end of period 39,025,005 114,906,527 114,906,527 114,906,527 91,925,222 25,379,458' (successor 2024, predecessor 2024, 2023, 2022, 2021, 2020). Units were published as 0 for 2023-12-31."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "income_yield_pct",
+   "value": 9.53,
+   "evidence": "0002037804-25-000003 (10-K, 2024-12-31) financial highlights, predecessor year 2022: 'Ratio to average net assets and Predecessor's members' capital: Net investment income(4) 8.64 % 11.94 % 12.42 % 9.53 % 10.71 % 9.59 %'. The year has no quarterly rows; the build published a quarter share (2.38) against an annualised distribution rate."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "income_yield_pct",
+   "value": 12.42,
+   "evidence": "0002037804-25-000003 (10-K, 2024-12-31) financial highlights, predecessor year 2023: 'Ratio to average net assets and Predecessor's members' capital: Net investment income(4) 8.64 % 11.94 % 12.42 % 9.53 % 10.71 % 9.59 %'. The year has no quarterly rows; the build published a quarter share (3.11) against an annualised distribution rate."
+  }
+ ]
+}
