@@ -738,12 +738,20 @@ def _apply_gics_to_holdings(
             if gics:
                 filed_gics_map[str(name)] = gics
 
-    # Apply: the name as filed first where a strip changed it (the label it had before the strip;
-    # relabelling is not the strip's job), then issuer_name, then canonical_name
+    # Apply: issuer_name, then the name as filed where the issuer has no label of its own, then
+    # canonical_name. The filed form is a fallback only, and only where every filed form of the
+    # issuer carries the same label: HPS numbers its rows ('Oil Changer Holding Corporation 1',
+    # '... 2'), and the cache holds a separate guess for each number (Oil & Gas Equipment for one,
+    # Automobile Parts for the other), which would put one company in two industries
+    # (regression build rg1, 2026-10-15).
     result = unified_df.copy()
     gics_series = result["issuer_name"].map(issuer_gics_map)
     if filed_gics_map:
-        gics_series = result["_issuer_name_filed"].map(filed_gics_map).fillna(gics_series)
+        filed_labels = result["_issuer_name_filed"].map(filed_gics_map)
+        pairs = pd.DataFrame({"issuer": result["issuer_name"], "label": filed_labels}).dropna().drop_duplicates()
+        ambiguous = set(pairs.loc[pairs.duplicated("issuer", keep=False), "issuer"])
+        filed_labels = filed_labels.where(~result["issuer_name"].isin(ambiguous))
+        gics_series = gics_series.fillna(filed_labels)
     if canon_gics_map and "canonical_name" in result.columns:
         canon_series = result["canonical_name"].map(canon_gics_map)
         gics_series = gics_series.fillna(canon_series)

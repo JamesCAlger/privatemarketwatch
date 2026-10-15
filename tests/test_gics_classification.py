@@ -463,12 +463,23 @@ class TestApplyEnrichment:
         cache = {_normalize_company_name(filed): ("Specialty Chemicals", "high", "llm")}
         result = _apply_gics_to_holdings(df, cache)
         assert result["gics_sub_industry"].tolist() == ["Specialty Chemicals", ""]
-        # where both forms have a label, the filed form's is kept: the strip does not relabel
+        # where the shortened name has a label of its own, it wins; the filed form is a fallback
         cache[_normalize_company_name("Zeta Quux Widgets, Inc.")] = ("Application Software", "high", "llm")
-        assert _apply_gics_to_holdings(df, cache)["gics_sub_industry"].tolist() == ["Specialty Chemicals", ""]
-        # with no label for the filed form, the shortened name's applies
-        del cache[_normalize_company_name(filed)]
         assert _apply_gics_to_holdings(df, cache)["gics_sub_industry"].tolist() == ["Application Software", ""]
+
+    def test_numbered_filed_forms_with_different_labels_give_no_label(self):
+        # HPS 'Oil Changer Holding Corporation 1' / '... 2': one guess per number in the cache
+        from pipeline.gics_classification import _normalize_company_name
+        from pipeline.unified_holdings import UNIFIED_COLUMNS
+
+        df = pd.DataFrame({col: ["", "", ""] for col in UNIFIED_COLUMNS})
+        df["issuer_name"] = ["Oil Quux Corporation", "Oil Quux Corporation", "Pinn Quux, Inc."]
+        df["_issuer_name_filed"] = ["Oil Quux Corporation 1", "Oil Quux Corporation 2", "Pinn Quux, Inc. 1"]
+        cache = {_normalize_company_name("Oil Quux Corporation 1"): ("Oil & Gas Equipment & Services", "high", "llm"),
+                 _normalize_company_name("Oil Quux Corporation 2"): ("Automobile Parts & Equipment", "high", "llm"),
+                 _normalize_company_name("Pinn Quux, Inc. 1"): ("Health Care Services", "high", "llm")}
+        result = _apply_gics_to_holdings(df, cache)
+        assert result["gics_sub_industry"].tolist() == ["", "", "Health Care Services"]
         # the helper column does not reach the output
         assert "_issuer_name_filed" not in result.columns
 
