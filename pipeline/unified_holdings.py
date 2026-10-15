@@ -1429,6 +1429,11 @@ def build_unified_holdings(
             combined, _promoted_corrections, _promoted_rules)
         _agent_fix_audits.extend(_plan_audits)
 
+    # A filer whose member puts the issuer in a moving segment (dispatch.issuer_from_identifier):
+    # where the name as built is a label, a rate or a heading, read the issuer from the member text.
+    from pipeline.staging_bdc import issuer_from_identifier_settings
+    combined = _issuer_from_identifier(combined, issuer_from_identifier_settings())
+
     # The name as filed, kept for the GICS cache below: its entries were made from these names, and
     # a name the strips shorten would otherwise lose its label (dropped after the cache is applied).
     combined["_issuer_name_filed"] = combined["issuer_name"]
@@ -1480,6 +1485,10 @@ def build_unified_holdings(
 
     # Apply cached lien position classifications (if cache exists on disk)
     combined = _apply_lien_cache(combined)
+    # A filer that abbreviates the lien in its member ('NCNA Debt Inv. | FLSS | ...', Stepstone
+    # 2026-06-30): dispatch.lien_from_identifier fills a blank lien from the member text.
+    from pipeline.staging_bdc import lien_from_identifier_patterns
+    combined = _lien_from_identifier(combined, lien_from_identifier_patterns())
 
     # Apply agent-reviewed unclassified reclassifications + JV flags
     combined = _apply_unclassified_cache(combined)
@@ -1949,6 +1958,64 @@ def _apply_re_fund_gics_overrides(
     )
 
     return df
+
+
+def _lien_from_identifier(combined: pd.DataFrame, patterns: dict[str, dict[str, str]]) -> pd.DataFrame:
+    """Fill a blank lien_position from the member text for one filer (dispatch.lien_from_identifier:
+    {lien value: regex}). Loan rows only; a lien already set is never changed. One fund's rows only."""
+    if not patterns or not {"lien_position", "bdc_investment_identifier", "cik"} <= set(combined.columns):
+        return combined
+    for cik, by_lien in patterns.items():
+        rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        rows &= combined["lien_position"].astype("string").fillna("").str.strip() == ""
+        if "asset_category" in combined.columns:
+            rows &= combined["asset_category"].astype("string").fillna("") == "LOAN"
+        if not rows.any():
+            continue
+        member = combined.loc[rows, "bdc_investment_identifier"].astype("string").fillna("")
+        filled = pd.Series(False, index=member.index)
+        for lien, pattern in by_lien.items():
+            hit = member.str.contains(pattern, regex=True).fillna(False) & ~filled
+            if hit.any():
+                combined.loc[hit[hit].index, "lien_position"] = lien
+                filled |= hit
+        if filled.any():
+            logger.info("  Lien read from the member text: %d rows for %s", int(filled.sum()), cik)
+    return combined
+
+
+def _issuer_from_identifier(combined: pd.DataFrame, settings: dict[str, dict]) -> pd.DataFrame:
+    """Re-read issuer_name from the member text for one filer's rows whose name is not an issuer
+    (dispatch.issuer_from_identifier). Only rows whose issuer_name matches ``when_issuer_re`` are
+    touched; the first pattern that matches the identifier with a lettered group 1 wins. A row no
+    pattern reads keeps its name. One fund's rows only.
+    """
+    if not settings or not {"issuer_name", "bdc_investment_identifier", "cik"} <= set(combined.columns):
+        return combined
+    for cik, setting in settings.items():
+        rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        if not rows.any():
+            continue
+        names = combined.loc[rows, "issuer_name"].astype("string").fillna("")
+        hit = names.str.contains(setting["when_issuer_re"], regex=True).fillna(False)
+        if not hit.any():
+            continue
+        member = combined.loc[hit[hit].index, "bdc_investment_identifier"].astype("string").fillna("")
+        found = pd.Series(pd.NA, index=member.index, dtype="string")
+        for pattern in setting["patterns"]:
+            todo = found.isna()
+            if not todo.any():
+                break
+            got = member[todo].str.extract(pattern, expand=True)[0].astype("string").str.strip()
+            # a catch that is itself a label (another moving segment) is not taken
+            got = got.where(got.str.contains("[A-Za-z]", regex=True).fillna(False)
+                            & ~got.str.contains(setting["when_issuer_re"], regex=True).fillna(False))
+            found.loc[got.dropna().index] = got.dropna()
+        found = found.dropna()
+        if len(found):
+            combined.loc[found.index, "issuer_name"] = found.values
+            logger.info("  Issuer read from the member text: %d of %d label-named rows for %s", len(found), int(hit.sum()), cik)
+    return combined
 
 
 def _strip_issuer_names(combined: pd.DataFrame, patterns: dict[str, str],

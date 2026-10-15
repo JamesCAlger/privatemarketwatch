@@ -69,6 +69,33 @@
           },
           "description": "Strings indicating non-private-market instruments (cash, money market, etc.)"
         },
+        "issuer_from_identifier": {
+          "type": "object",
+          "properties": {
+            "when_issuer_re": {"type": "string"},
+            "patterns": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+          },
+          "required": ["when_issuer_re", "patterns"],
+          "additionalProperties": false,
+          "description": "Where the issuer name as built matches when_issuer_re (a label, a rate, a heading), the first pattern whose group 1 matches the member text gives the issuer. For a filer whose member puts the issuer in a moving segment (Stepstone)."
+        },
+        "industry_from_identifier_re": {
+          "type": "string",
+          "description": "Regex whose group 1 is the filer's industry inside the member text; fills a row with no industry (Goldman Sachs BDC, D-114). Rare captures that map to no GICS label are not taken."
+        },
+        "lien_from_identifier": {
+          "type": "object",
+          "propertyNames": {"enum": ["First Lien", "Second Lien", "Unsecured"]},
+          "additionalProperties": {"type": "string"},
+          "description": "The filer's own lien abbreviation in the member text, as {lien: regex} ('FLSS' for First Lien Senior Secured, Stepstone 2026-06-30). Fills a blank lien on loan rows only."
+        },
+        "not_cash_markers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The filer's own column words that hold the bare word 'cash' on a loan row ('Cash IR / PIK Rate'). A row containing one is not taken as cash by the bare-word check; money-market and Treasury markers still apply."
+        },
         "entity_signals_re": {
           "type": "string",
           "description": "Regex for entity signals (LLC, Inc, etc.). Omit to use default."
@@ -707,8 +734,15 @@
           "type": "array",
           "minItems": 1,
           "maxItems": 1,
-          "items": {"enum": ["coupon_with_margins"]},
-          "description": "The filer tags a loan's total coupon in InvestmentInterestRate and its cash and PIK margins in InvestmentInterestRatePaidInCash and InvestmentInterestRatePaidInKind (BlackRock Private Credit Fund: 'IQN Holding ... 2.63 % Cash + 3.13 % PIK 9.45 %' tags 0.0263, 0.0313 and 0.0945). The plain tag is then the rate and the paid-in-cash tag the cash margin (basis_spread where no spread is tagged); a context with no plain tag is read as before. Evidence required: printed lines beside the three tagged facts of their contexts."
+          "items": {"enum": ["coupon_with_margins", "cash_rate_with_plain_spread"]},
+          "description": "cash_rate_with_plain_spread (Stepstone, D-112): the paid-in-cash tag is the rate and a plain tag beside it with no spread tag is the spread. coupon_with_margins: The filer tags a loan's total coupon in InvestmentInterestRate and its cash and PIK margins in InvestmentInterestRatePaidInCash and InvestmentInterestRatePaidInKind (BlackRock Private Credit Fund: 'IQN Holding ... 2.63 % Cash + 3.13 % PIK 9.45 %' tags 0.0263, 0.0313 and 0.0945). The plain tag is then the rate and the paid-in-cash tag the cash margin (basis_spread where no spread is tagged); a context with no plain tag is read as before. Evidence required: printed lines beside the three tagged facts of their contexts."
+        },
+        "untagged_pik": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "none"},
+          "description": "A rate tagged as the cash rate with no PIK tag on the context is the whole coupon (the filer's column is 'Cash Interest Rate / PIK Rate' and a PIK row prints both). Stepstone, D-112."
         },
         "schedule_row_tags": {
           "type": "array",

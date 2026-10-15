@@ -15,8 +15,17 @@
       "Non-Controlled, Non-Affiliated Private Credit Funds": "fund",
       "Non-Controlled, Non-Affiliated Private Equity Funds": "fund",
       "Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents": "cash",
-      "Total Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents": "cash"
+      "Total Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents": "cash",
+      "NCNA Debt Inv.": "debt",
+      "NCNA Equity Inv.": "equity",
+      "NCNA Private Credit Funds": "fund",
+      "NCNA Private Equity Funds": "fund"
     },
+    "not_cash_markers": [
+      "cash ir /",
+      "cash ir/"
+    ],
+    "leaf_marker_re": "(?i)\\|\\s*(?:MD|RR\\s*&?\\s*S/F|RRS\\s*/\\s*Floor|Cash\\s+IR\\s*/\\s*PIK\\s+Rate)\\s*\\|",
     "leaf_markers_by_family": {
       "debt": [
         "reference rate spread",
@@ -110,8 +119,28 @@
       }
     ],
     "category_marker_re": "(?i)(?:^|\\|\\s*|\\bl\\s+)(?:Total\\s+|Net\\s+Assets|Liabilities\\s+Less\\s+Other\\s+Assets|First\\s+Lien\\s+Senior\\s+Secured\\s*$|Second\\s+Lien\\s+Senior\\s+Secured\\s*$|Collateralized\\s+Loan\\s+Obligations\\s*$)|^\\s*(?:\\|\\s*[^|]+){0,2}\\s*$",
-    "canonical_strip_re": "\"|\\s+\\b(?:One|Two|Three|Four)\\b$|\\s*\\|\\s*Total\\s+(?:Investments?|First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds?|Private\\s+Equity\\s+Fund))\\b.*$|\\bTotal\\s+|\\s*\\|\\s*Reference\\s+Rate\\s+Spread\\s*(?:/\\s*Floor)?\\s*\\|\\s*[^|]+|\\s*\\|\\s*Cash\\s+Interest\\s+Rate\\s*/\\s*PIK\\s+Rate\\s*\\|\\s*[\\d.]+%|\\s*\\|\\s*Maturity\\s+Date\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}|\\s*\\|\\s*(?:[36]M\\s+)?SOFR\\s*\\+\\s*[\\d.]+%\\s*/\\s*[\\d.]+%\\s*\\|\\s*[\\d.]+%\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}",
-    "category_marker_before_total": true
+    "canonical_strip_re": "\"|\\s+\\b(?:One|Two|Three|Four)\\b$|\\s*\\|\\s*Total\\s+(?:Investments?|First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds?|Private\\s+Equity\\s+Fund))\\b.*$|\\bTotal\\s+|\\s*\\|\\s*(?:Reference\\s+Rate\\s+Spread\\s*(?:/\\s*Floor)?|RR\\s*&?\\s*S/F|RRS\\s*/\\s*Floor)\\s*\\|\\s*[^|]+|\\s*\\|\\s*Cash\\s+(?:Interest\\s+Rate|IR)\\s*/\\s*PIK\\s+Rate\\s*\\|\\s*[\\d.]+%|\\s*\\|\\s*(?:Maturity\\s+Date|MD)\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}|\\s*\\|\\s*(?:[36]M\\s+)?SOFR\\s*\\+\\s*[\\d.]+%\\s*/\\s*[\\d.]+%\\s*\\|\\s*[\\d.]+%\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}",
+    "category_marker_before_total": true,
+    "issuer_from_identifier": {
+      "when_issuer_re": "^\\s*(?i:Reference\\s+Rate|Spread\\s*/\\s*Floor|RRS?\\b|RR\\s*&|\\d?M?\\s*SOFR|N/A\\b|FIXED\\b|PRIME\\b)|^\\s*(?:Financials|Industrials|Insurance\\s+Brokers|Limited\\s+Partnership\\s+Interests?|Asset\\s+Management\\s+(?:&|and)\\s+Custody\\s+Banks)\\s*$|^\\s*(?:MassMutual|BMO)\\s+SPV\\b|\\sl\\s|\\sl(?=[A-Z])",
+      "patterns": [
+        "\\|\\s*([^|]+?)\\s*\\|\\s*(?:MassMutual|BMO)\\s+SPV",
+        "Warehouses\\s*\\|\\s*([^|]+?)\\s*\\|\\s*Financials\\s*$",
+        "Senior\\s+Secured\\s*\\|\\s*([^|]+?)\\s*\\|\\s*[^|]+\\|\\s*SOFR\\s*\\+",
+        "Senior\\s+Secured(?:\\s+\\d)?\\s*l\\s*[^|]*?\\s+l\\s*([A-Z0-9][^|]*?)\\s*l\\s+\\d?M?\\s*SOFR",
+        "\\|\\s*(?:Industrial\\s+Machinery\\s+&\\s+Supplies\\s+&\\s+Components|Human\\s+Resource\\s+&\\s+Employment\\s+Services|Diversified\\s+Support\\s+Services|Insurance\\s+Brokers|Diversified\\s+Real\\s+Estate\\s+Activities|Diversified\\s+Financial\\s+Services|Diversified\\s+Metals\\s+&\\s+Mining|Electronic\\s+Equipment\\s+&\\s+Instruments|Health\\s+Care\\s+Equipment)\\s*([A-Z0-9][^|]*?)\\s*\\|\\s*(?:Reference\\s+Rate|Spread\\s*/\\s*Floor|RR\\s*&?\\s*S/F|RRS\\s*/\\s*Floor|\\d?M\\s*SOFR\\s*\\+)",
+        "(?:^|\\|)\\s*([^|]*?[A-Za-z][^|]*?)\\s*\\|\\s*(?:Reference\\s+Rate|Spread\\s*/\\s*Floor|RR\\s*&?\\s*S/F|RRS\\s*/\\s*Floor)",
+        "(?:^|\\|)\\s*([^|]+?)\\s*\\|\\s*\\d?M\\s*SOFR\\s*\\+",
+        "\\|\\s*([^|]+?)\\s*\\|\\s*\\d{1,2}/\\d{1,2}/\\d{4}\\s*$",
+        "\\|\\s*([^|]+?)\\s*$"
+      ]
+    },
+    "issuer_name_strip_re": "(?:(?<=\\bLLC)|(?<=\\bL\\.L\\.C\\.)|(?<=\\bInc\\.)|(?<=\\bInc)(?!\\.)|(?<=\\bINC\\.)|(?<=\\bINC)(?!\\.)|(?<=\\bCorp\\.)|(?<=\\bCorp)(?!\\.)|(?<=\\bCorporation)|(?<=\\bL\\.P\\.)|(?<=\\bLP)|(?<=\\bLtd\\.)|(?<=\\bLtd)(?!\\.)|(?<=\\bLTD)|(?<=\\bLimited)|(?<=\\bCompany)|(?<=\\br\\.l\\.)|(?<=\\bGmbH)|(?<=\\bPBC)|(?<=\\bB\\.V\\.)|(?<=\\bP\\.C\\.)|(?<=\\bLLP)|(?<=\\bCo\\.)(?!\\s*(?:LLC|Inc|L\\.?P\\b|Ltd)))(?:[\\s_.,\\-]+|(?=[A-Z][a-z]))(?=[^|]*?(?<![A-Za-z])(?:[Ll]oan|TL[AB]?|DDTL|RC|Revolv(?:er|ing)|Notes?|Facility|Credit|Advance|Shares|Equity|Units|Draw|Fund|Tranche|Term|Incremental|Subordinated|CLO|Refinancing)\\b).*$|(?:,?\\s+|\\s*_)(?:\\d{1,2}/\\d{2}\\s+)?(?:\\d{4}(?:-\\d+)?\\s+)?(?:(?:First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Eight|Ninth|Tenth|Eleventh|Twelfth|Thirteenth|Fourteenth|Fifteenth|\\d{1,2}(?:st|nd|rd|th))\\s+(?:Amendm?ent|Amendement|Incremental|Term|Delayed|Revolv)|Amendment\\s+No\\.?|A&R\\b|A\\s+And\\s+R\\b|Incremental\\b|Initial\\b|Delayed\\s+(?:Draw|TL|Term)\\b|DDTL\\b|Revolv(?:ing|er)\\b|Closing\\s+Date\\b|Restatement\\s+Date\\b|Term\\s+(?:Loan|[A-Z][A-Z0-9-]*\\s+Loan)\\b|TL[AB]?\\b|Tranche\\b|Last\\s+Out\\b|Existing\\s+Term\\b|Sub(?:ordinated)?\\s+Notes\\b|Common\\s+Shares\\b|USD\\s+TL\\b|Refinancing\\b|(?<=_)Equity\\b).*$|(?<=[a-z])(?=(?:First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Eight|Ninth|Tenth|Eleventh|Twelfth|Thirteenth|Fourteenth|Fifteenth|\\d{1,2}(?:st|nd|rd|th))\\s+Amend).*$",
+    "lien_from_identifier": {
+      "First Lien": "(?:^|\\|)\\s*FLSS\\s*(?:\\||$)",
+      "Second Lien": "(?:^|\\|)\\s*SLSS\\s*(?:\\||$)"
+    },
+    "industry_from_identifier_re": "^\\s*\"?(?:Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Debt\\s+Investments|NCNA\\s+Debt\\s+Inv\\.)\\s*\\|\\s*(?:(?:First|Second)\\s+Lien\\s+Senior\\s+Secured|FLSS|SLSS)?\\s*\\|?\\s*((?:Industrial\\s+Machinery\\s+&\\s+Supplies\\s+&\\s+Components|Human\\s+Resource\\s+&\\s+Employment\\s+Services|Diversified\\s+Support\\s+Services|Insurance\\s+Brokers|Diversified\\s+Real\\s+Estate\\s+Activities|Diversified\\s+Financial\\s+Services|Diversified\\s+Metals\\s+&\\s+Mining|Electronic\\s+Equipment\\s+&\\s+Instruments|Health\\s+Care\\s+Equipment)(?=\\s*[A-Z0-9][^|]*\\|)|[^|]+?(?=\\s*\\|))"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -131,7 +160,7 @@
   },
   "staging": {
     "strategy": "prefix_strip",
-    "hierarchy_prefix_re": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds)\\s*(?:(?:\\||\\sl\\s)\\s*)?(?:(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Collateralized\\s+Loan\\s+Obligations|Equity|Limited\\s+Partnership\\s+Interests?)\\s*(?:(?:\\||\\sl\\s)\\s*)?)?(?:[^|]+?\\s*(?:(?:\\||\\sl\\s)\\s*))?",
+    "hierarchy_prefix_re": "(?i)^\\s*\"?(?:Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds)|NCNA\\s+(?:Debt\\s+Inv\\.|Equity\\s+Inv\\.|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds))\\s*(?:(?:\\||\\sl\\s)\\s*)?(?:(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|FLSS|SLSS|Collateralized\\s+Loan\\s+Obligations|Equity|Limited\\s+Partnership\\s+Interests?)\\s*(?:(?:\\||\\sl\\s)\\s*)?)?(?:[^|]+?\\s*(?:(?:\\||\\sl\\s)\\s*))?",
     "pipe_field_map": {
       "issuer_segment": 4,
       "industry_segment": 3,
@@ -141,7 +170,7 @@
         4
       ]
     },
-    "distinct_member_suffix_re": "(?i)(?:[\\s|]+(?:one|two|three|four|five|six|seven|eight|nine|ten|[1-9])|/(?:19|20)\\d{2}(?:one|two|three|[1-9]))\\s*$"
+    "distinct_member_suffix_re": "(?s)^.*$"
   },
   "archetypes": {
     "debt": {
@@ -299,6 +328,10 @@
     ],
     "investments_total_excludes": [
       "cash_rows"
+    ],
+    "untagged_values": [
+      "0001193125-26-128890 C_87b01fd1-66fa-4342-a869-291e18491c8b principal_amount 231000",
+      "0001193125-26-128890 C_2f9d719a-4138-47c3-8721-7bcf6579447d principal_amount 70000"
     ]
   }
 }

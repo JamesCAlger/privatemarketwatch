@@ -1,0 +1,537 @@
+{
+ "cik": "0001950803",
+ "label": "spxf",
+ "before": "spoff1",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 7788,
+   "why": "issuer and instrument split by the wrapper's issuer_name_strip_re (every row named 'Issuer Instrument'); 531 label-, rate-, heading- or facility-named rows re-read from the member (new dispatch.issuer_from_identifier); 2 rows renamed by row correction (members carrying another printed row's name)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 1,
+   "why": "row correction: REP TEC twin tagged on a Med Learning member (2025-12-31)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 2,
+   "why": "par printed and untagged on two 2025-12-31 delayed draws (Associations 231, Packaging Coordinators 70), declared in source_encodings.untagged_values"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 2,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 2,
+   "why": "follows principal_amount (USD, 1.0)"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 2,
+   "why": "follows principal_amount (source_usd)"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 2,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "asset_category",
+   "rows": 6,
+   "why": "fund interests tagged under a debt member at 2024-12-31 and 2025-06-30, row corrections to FUND"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 6,
+   "why": "same six fund rows"
+  },
+  {
+   "column": "index_classification",
+   "rows": 6,
+   "why": "same six fund rows (Fidelity PRIVATE_CREDIT_FUND; Castlelake the class it has in every other quarter)"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 6,
+   "why": "same six fund rows"
+  },
+  {
+   "column": "asset_class",
+   "rows": 4,
+   "why": "same six fund rows (two keep PRIVATE_CREDIT)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 61,
+   "why": "61 rows (2025-06-30, 2025-09-30) whose single printed coupon is tagged with the PIK concept: published spread plus coupon before, the printed coupon now (row corrections, each with its line)"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 61,
+   "why": "same 61 rows: PIK withdrawn, the page prints no PIK part"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 61,
+   "why": "same 61 rows, all_in"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 60,
+   "why": "same rows: the cash leg (the spread) withdrawn"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 52,
+   "why": "same rows, follows interest_rate"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 60,
+   "why": "same rows, transform trail of the corrected rate"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 5,
+   "why": "loans printed 'FIXED + x %' published as a SOFR spread: spread withdrawn (5 rows in spoff1's quarters, 10 in all)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 5,
+   "why": "same FIXED rows: SOFR had been guessed from the date (inferred_post_libor)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 5,
+   "why": "same FIXED rows"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 5,
+   "why": "same FIXED rows, Floating to Fixed"
+  },
+  {
+   "column": "src_facts",
+   "rows": 5,
+   "why": "the five 2026-03-31 rows tagged in thousands (D-112 row corrections); the fact trail now records the corrected values. Not aimed at in this run; no published value changed"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 73,
+   "why": "trail of the row corrections above"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 1265,
+   "why": "the filer's industry read from the member (existing dispatch.industry_from_identifier_re) where the build had none: coverage 50 pct to 100 pct from 2025-12-31"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1020,
+   "why": "follows the printed industry (printed-industry mapping replaces the name-keyed label); 2 rows of 2023-09-30 lose the label they had from the facility name 'MassMutual SPV I Facility'"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 851,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 1230,
+   "why": "follows issuer_name"
+  },
+  {
+   "column": "position_id",
+   "rows": 1617,
+   "why": "follows issuer_name and the rows added (matcher keys on the name)"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 794,
+   "why": "2025-03-31 only: net assets in the refreshed company facts (D-167) differ by about 1,000 dollars (1,069,797,999 against 1,069,797,000); not aimed at, not from this fund's settings"
+  }
+ ],
+ "rows_added": 1435,
+ "rows_removed": 1,
+ "fixes": [
+  {
+   "what": "2026-06-30 10-Q abbreviates its column labels ('NCNA Debt Inv. | FLSS | ... | Cash IR / PIK Rate | ... | MD | date'); the shared bare-word cash check read 'Cash IR' as cash and dropped 1,133 rows (3,338M). New wrapper key dispatch.not_cash_markers (shared code, off for every other fund) plus NCNA prefix rules, leaf_marker_re, widened hierarchy_prefix_re and canonical_strip_re. 2026-06-30 now ties to the filed 3,795.4M.",
+   "kind": "shared_code",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-351731",
+     "text": "Alkeme Intermediary Holdings, LLC Eleventh Amendment Delayed Draw Term Loan (3)(4)(5)(7) 3M SOFR + 5.00 % / 1.00 % 8.73 % 5/28/2027 $ 4,423 $ 4,411 $ 4,420 0.16 %"
+    }
+   ]
+  },
+  {
+   "what": "Twin lines told apart only by member text were folded as duplicates (Apex 2023-09-30 1.2M; Med Learning 2025-12-31 5.3M, which a row-add rule had put back as a bare row with no name or class; undrawn Harris, Ambient, Alkeme, Oakbridge lines 2026-06-30; seven zero-value undrawn lines 2023-09-30). staging.distinct_member_suffix_re set to the whole member: this filer carries the identifier member alone, so two members are two printed rows. 2023-09-30 and 2025-12-31 now tie; C201, C301, C303, C304 and no_provenance at 2025-12-31 cleared.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-128890",
+     "text": "Med Learning Group, LLC Initial Term Loan (3)(4)(5)(7)(13) 1M SOFR + 5.75 % / 1.00 % 9.42 % 12/30/2027 5,388 5,342 5,338 0.29 %"
+    },
+    {
+     "accession": "0001193125-26-351731",
+     "text": "Harris & Co. LLC Revolving Loan (3)(4)(5)(6)(7)(8) 3M SOFR + 0.50 % / 1.00 % 0.50 % 8/9/2030 - ( 7 ) - 0.00 %"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: every row was 'Issuer Instrument' (no separator); issuer_name_strip_re cuts the instrument (dry run on 9,241 names, 0 shapes left); 531 rows named a label ('Reference Rate Spread / Floor', 'RR & S/F'), a rate, a heading or the financing facility (all 2023-09-30 rows) are re-read from the member by new dispatch.issuer_from_identifier (shared code, this fund only).",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-224111",
+     "text": "VTC Buyer Corp. Term A Loan (3)(4)(5)(7)(12) 3M SOFR + 5.25 % / 1.00 % 8.92 % 7/15/2031 3,029 3,009 3,004 0.14 %"
+    }
+   ]
+  },
+  {
+   "what": "Lien blank on the 2026-06-30 loans (member writes 'FLSS'): new dispatch.lien_from_identifier fills First Lien on 1,378 rows (shared code, this fund only).",
+   "kind": "shared_code",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-351731",
+     "text": "Kite Midco II LTD Term Loan B1 (3)(4)(5)(7) 6M SOFR + 4.50 % / 0.00 % 8.23 % 11/19/2031 5,290 5,226 5,211 0.19 %"
+    }
+   ]
+  },
+  {
+   "what": "Industry missing on half the rows from 2025-12-31 (the member carries it; the build did not read it): the existing dispatch.industry_from_identifier_re set for this fund, including the 2026-06-30 rows where the industry is glued to the issuer. Coverage 50 pct to 100 pct; field_coverage_drop 2025-12-31 cleared.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-351731",
+     "text": "Non-Controlled, Non-Affiliated Debt Investments Insurance Brokers Alkeme Intermediary Holdings, LLC Eleventh"
+    }
+   ]
+  },
+  {
+   "what": "61 rows whose single printed coupon is tagged with the PIK concept (plain tag = spread): published rate was spread plus coupon (e.g. 16.2 for a printed 10.20 %) and the PIK share overstated. Row corrections set the printed coupon as all-in and withdraw PIK, each with its printed line.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-279957",
+     "text": "ITS Buyer, Inc. Term Loan (3)(4)(5)(7) 3M SOFR + 6.00 % / 1.00 % 10.20 % 12/31/2032 5,208 5,157 5,156 0.34 %"
+    },
+    {
+     "accession": "0001193125-25-279957",
+     "text": "CLGF Holdco 2, LLC Loan (3)(4)(5)(7) FIXED 12.50 % 4/23/2030 $ 6,670 $ 6,578 $ 6,627 0.44 %"
+    }
+   ]
+  },
+  {
+   "what": "Six fund interests tagged under a debt member at 2024-12-31 and 2025-06-30 were published as first/second lien loans: row corrections to FUND with the class each has in every other quarter.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-180931",
+     "text": "Fidelity Evergreen Private Credit Fund LP (1)(2)(6)(14)(15)(18)(21) N/A N/A 5/21/2031 19,093,825 19,093,825 22,538,842 1.80 %"
+    }
+   ]
+  },
+  {
+   "what": "Ten loans printed 'FIXED + x %' published as SOFR floating with the coupon as the spread (reference rate guessed from the date): row corrections to Fixed, no reference rate, no spread.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-351731",
+     "text": "CLGF Holdco 2, LLC Loan (3)(4)(5) FIXED + 12.50 % 12.50 % 4/23/2030 $ 6,670 $ 6,591 $ 6,630 0.24 %"
+    }
+   ]
+  },
+  {
+   "what": "Members that carry another printed row's name: REP TEC's second twin on a Med Learning member (2025-12-31) and Improving Holdco's term loan on a Guidepoint member with an empty issuer cell (2026-06-30, C201 cleared): row corrections of issuer and instrument.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-128890",
+     "text": "REP TEC Intermediate Holdings, Inc Initial Term Loan (3)(4)(5)(7)(13) 3M SOFR + 4.75 % / 1.00 % 8.60 % 5/30/2031 8,684 8,643 8,641 0.46 %"
+    },
+    {
+     "accession": "0001193125-26-351731",
+     "text": "Improving Holdco, Inc. Term Loan (Improving Enterprises) (3)(4)(5)(7)(13) 3M SOFR + 6.50 % / 1.00 % 10.35 % 7/26/2027 3,251 3,222 3,206 0.12 %"
+    }
+   ]
+  },
+  {
+   "what": "Par printed and not tagged on two 2025-12-31 delayed draws (X11 2025-12-31 cleared): declared in source_encodings.untagged_values.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-128890",
+     "text": "Associations, Inc. Special Purpose Delayed Draw Term Loan (3)(4)(5)(6)(7)(10) 3M SOFR + 6.50 % / 1.00 % 10.66 % 7/3/2028 231 231 231 0.01 %"
+    },
+    {
+     "accession": "0001193125-26-128890",
+     "text": "Packaging Coordinators Midco, Inc. Specified Interest Delayed Draw Term Loan (Tranche Out) (3)(4)(5)(6)(7) 6M SOFR + 4.75 % / 0.75 % 8.59 % 7/9/2032 70 70 70 0.00 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2024-12-31",
+   "why": "Campany Roof's second delayed draw (2,449,441) is tagged on a member that names no issuer ('... | First Lien Senior Secured Homebuilding|3M SOFR + 6.85% / 1.50%|11.21%|11/27/2028'); staging drops it as a header. No existing setting names a context whose member is an investment member (context_identifiers skips it). Published is 2.4M short of filed; parked.",
+   "quote": {
+    "accession": "0001193125-25-067163",
+    "text": "Campany Roof Maintenance, LLC Delayed Draw Term Loan (1)(2)(3)(4)(5)(7)(10) 3M SOFR + 6.85 % / 1.50 % 11.21 % 11/27/2028 2,486,742 2,445,957 2,449,441 0.27 %"
+   }
+  },
+  {
+   "quarter": "2025-09-30",
+   "why": "The page prints Puma Buyer's fair value as 3,829 for a 13,829 par loan and the filer tags 3,829,000; its own industry subtotal and percent (0.92 = 13.829 / net assets) use 13,829, as does the filed total. Published equals the printed line; the 10.0M is a misprint on the page. Owner decision whether to correct to 13,829.",
+   "quote": {
+    "accession": "0001193125-25-279957",
+    "text": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 4.25 % / 0.50 % 8.25 % 3/29/2032 $ 13,829 $ 13,728 $ 3,829 0.92 %"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "oracle A01 2024-06-30",
+   "hypotheses": [
+    "Research & Consulting subtotal printed 45,708,751; published rows whose member names that industry sum to 41,556,875 (15 rows). Tested: rows of the printed block tagged under another industry member (only Liberty Purchaser revolver, 0 value) - does not explain the 4,151,876. The quarter's total ties, so the difference sits in another industry's rows; not traced."
+   ]
+  },
+  {
+   "finding": "nonaccrual nonaccrual_flag 2025-12-31",
+   "hypotheses": [
+    "Real: Amex Holding III Corp Equity (499 thousand) is flagged non-accrual without footnote (29) ('(5)(11)(25)'); the flag is not a correctable field and no wrapper setting expresses it. The earlier verdict stands."
+   ]
+  },
+  {
+   "finding": "rows still carrying spread plus PIK as the rate (not row-corrected)",
+   "hypotheses": [
+    "About 6 rows: Cambium Learning 2025-09-30 (member 9.87 %, PIK tag 9.93), Puma Buyer 2025-09-30 (member 8.55, tag 8.25, page 8.25), W.A. Kendall Incremental 2025-09-30 (member 10.34 %, no matching printed line found), Arcticom 2024-09-30, Bamboo 2024-06-30, Pet FLavor 2025-03-31. Member and tag disagree or the printed line was not found once; left rather than guessed."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "bare-word-cash-check-drops-loans-with-abbreviated-cash-rate-label",
+   "what": "The shared is_non_private_market_identifier reads any bare 'cash' as a cash row; 'Cash IR / PIK Rate' dropped 1,133 loans (3,338M) at 2026-06-30. Fixed for this fund by a wrapper switch; any filer abbreviating its rate column this way would lose its loans silently (the source check reports them as missing).",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 3338.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A wrapper non-private exclusion that removes more than 20 pct of a fund-quarter's fair value fails the build.",
+   "quote": {
+    "accession": "0001193125-26-351731",
+    "text": "Alkeme Intermediary Holdings, LLC Eleventh Amendment Delayed Draw Term Loan (3)(4)(5)(7) 3M SOFR + 5.00 % / 1.00 % 8.73 % 5/28/2027 $ 4,423 $ 4,411 $ 4,420 0.16 %"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "The filer puts a twin's facts on a member named for another issuer (REP TEC on Med Learning 2025-12-31; Improving Holdco on Guidepoint 2026-06-30; RPM Purchaser Delayed Draw vs Effective Date 2025-09-30). Two fixed by row correction; others may remain unseen.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 11.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Two rows of one quarter with the same member text but different printed figures, or a row whose figures equal another issuer's printed line.",
+   "quote": {
+    "accession": "0001193125-26-351731",
+    "text": "Improving Holdco, Inc. Term Loan (Improving Enterprises) (3)(4)(5)(7)(13) 3M SOFR + 6.50 % / 1.00 % 10.35 % 7/26/2027 3,251 3,222 3,206 0.12 %"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-spread",
+   "what": "Loans printed 'FIXED + x %' got reference rate SOFR by date inference and the coupon as spread (10 rows); fixed by row correction. The inference step does not read 'FIXED' in the member.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 47.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A member containing 'FIXED' never takes an inferred floating reference rate.",
+   "quote": {
+    "accession": "0001193125-26-351731",
+    "text": "CLGF Holdco 2, LLC Loan (3)(4)(5) FIXED + 12.50 % 12.50 % 4/23/2030 $ 6,670 $ 6,591 $ 6,630 0.24 %"
+   }
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-private-credit-heading",
+   "what": "Castlelake III/IV, Hercules Growth Lending IV and Crayhill are published PRIVATE_EQUITY_FUND although the page prints them under 'Private Credit Funds'; the class comes from a name keyword step. Left: changing it moves every quarter and is a class question for the owner.",
+   "field": "index_classification",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A fund row under a 'Private Credit Funds' heading is not classed private equity.",
+   "quote": {
+    "accession": "0001193125-25-180931",
+    "text": "Castlelake Consumer Receivables Opportunity IV, L.P. Fund (1)(2)(6)(14)(15)(17)(21) N/A N/A 12/31/2032 7,317,214 7,340,340 7,592,741 0.60 %"
+   }
+  },
+  {
+   "observation_key": "clo-tranche-classed-direct-lending",
+   "what": "CLO warehouse and subordinated-note rows (CIFC Stone Warehouse, CIFC Funding 2024-V) are classed DIRECT_LENDING to 2024-12-31 and STRUCTURED_CREDIT later. Left.",
+   "field": "index_classification",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 29.3,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A row under a 'Collateralized Loan Obligations' heading is structured credit.",
+   "quote": {
+    "accession": "0001193125-24-138529",
+    "text": "CIFC Stone Warehouse Ltd.-Subordinated Lender (1)(3)(5)(10)(11) N/A N/A N/A - $ 29,250,000 $ 29,250,000 $ 6.83 %"
+   }
+  },
+  {
+   "observation_key": "fund-row-carries-lien-from-member-heading",
+   "what": "The six fund rows corrected to FUND at 2024-12-31 and 2025-06-30 keep lien_position First/Second Lien (read from the debt heading of their member); lien is not a correctable field.",
+   "field": "lien_position",
+   "quarters": [
+    "2024-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 66.1,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A FUND row has no lien.",
+   "quote": {
+    "accession": "0001193125-25-067163",
+    "text": "Fidelity Evergreen Private Credit Fund LP (1)(2)(6)(13)(14)(17) N/A N/A N/A - 16,551,039 18,958,915 2.07 %"
+   }
+  },
+  {
+   "observation_key": "lien-blank-where-member-omits-lien-segment",
+   "what": "64 loans at 2026-03-31 (members without the 'First Lien Senior Secured' segment) and 3 Pediatric Home Respiratory rows at 2026-06-30 have no lien; the page heading above them was not checked. Left.",
+   "field": "lien_position",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 147.3,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Lien coverage on loans falling more than 5 points quarter on quarter.",
+   "quote": {
+    "accession": "0001193125-26-224111",
+    "text": "VTC Buyer Corp. Term A Loan (3)(4)(5)(7)(12) 3M SOFR + 5.25 % / 1.00 % 8.92 % 7/15/2031 3,029 3,009 3,004 0.14 %"
+   }
+  },
+  {
+   "observation_key": "promoted-row-add-rule-superseded",
+   "what": "1950803_recover_2025q4_suffix_positions and recover_dropped_2026q1_positions are now fully covered by rows published from the filing (dup-skip guard); they are row-pinned leftovers that should be retired by the owner.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 5.3,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A row_add rule that adds nothing in a build is reported as superseded.",
+   "quote": {
+    "accession": "0001193125-26-128890",
+    "text": "Med Learning Group, LLC Initial Term Loan (3)(4)(5)(7)(12) 1M SOFR + 5.75 % / 1.00 % 9.42 % 12/30/2027 5,388 5,342 5,338 0.29 %"
+   }
+  },
+  {
+   "observation_key": "instrument-text-is-the-financing-facility-column",
+   "what": "In the 10-Q for 2023-09-30 every published row (150 rows, 433.2M) has instrument_description '<lien>, MassMutual SPV I Facility' or '... BMO SPV II Credit Facility': the member order is issuer+instrument | facility | sector, and the fixed instrument segment picks the financing-facility column. The real instrument ('Initial Term Loan', 'Delayed Draw Term B Loan') was cut off the issuer by issuer_from_identifier/issuer_name_strip_re and not kept. Found by the page sample (C016). Left: one quarter, the instrument words are in the member, and fixing it needs the strip to send the cut text to instrument_description (issuer_name_strip_to_instrument only fills a blank instrument, and these rows are not blank) or 150 row corrections; no fair value, rate or class is affected.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 433.2,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "An instrument_description that equals a financing-facility or SPV name on most rows of a fund-quarter is flagged.",
+   "quote": {
+    "accession": "0001193125-23-274736",
+    "text": "Accordion Partners LLC Initial Term Loan MassMutual SPV I Facility (1)(2)(3)(4)(5)(7) Industrials SOFR + 6.25 % 11.64 % 8/29/2029 3,682,391 3,629,798 3,629,198 1.45 %"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_issuer_from_identifier.py (8, new: issuer_from_identifier, not_cash_markers, lien_from_identifier with false-positive tests), tests/test_issuer_name_strip.py, tests/test_bdc_xbrl_wrapper.py, tests/test_source_encodings.py, tests/test_printed_industry.py: 686 passed"
+ ],
+ "not_done": [
+  "Full test suite and a cohort regression build: the three new wrapper keys are off for every other fund, but bdc_xbrl_wrapper.is_non_private_market_identifier and staging_bdc changed signature (defaults keep other funds unchanged); not rebuilt.",
+  "About 6 rows still publish spread plus PIK as the rate (see parked).",
+  "Reference-rate tenor, floors, acquisition dates and percent of net assets were not read line by line; reconciling quarters can hide offsetting errors.",
+  "2026-06-30 industry for 9 glued rows outside the listed industries and the 64 lien-less 2026-03-31 rows.",
+  "Campany Roof 2024-12-31 twin (2.4M) not published.",
+  "Process slip: one bare 'python -' heredoc was started by mistake; stopped by its task id, no process left.",
+  "All findings cleared or proposed is not data correct."
+ ]
+}

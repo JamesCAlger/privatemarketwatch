@@ -211,6 +211,8 @@ class WrapperSpec:
         "u.s. treasury",
         "us treasury",
     )
+    # The filer's own column words holding the bare word 'cash' on a loan row (dispatch.not_cash_markers).
+    not_cash_markers: tuple[str, ...] = ()
     category_marker_re: re.Pattern[str] | None = field(default=None)
     fallback_family_patterns: tuple[tuple[re.Pattern[str], str], ...] = ()
     canonical_strip_re: re.Pattern[str] | None = None
@@ -240,12 +242,16 @@ def normalize_key(value: Any) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] | None = None) -> bool:
+def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] | None = None,
+                                     not_cash_markers: tuple[str, ...] = ()) -> bool:
     """Return True for cash, money-market, Treasury, and mutual-fund rows.
 
     The cash check is intentionally bounded. Valid BDC loan rows commonly
     disclose coupon mix as "Cash + PIK"; those are position-level facts, not
-    cash equivalents.
+    cash equivalents. ``not_cash_markers`` (a filer's dispatch.not_cash_markers) are that
+    filer's own column words that hold the bare word 'cash' on a loan row (Stepstone
+    2026-06-30: '... | Cash IR / PIK Rate | 9.10% | ...'); they clear only the bare-word
+    cash check, never a money-market or Treasury marker.
     """
     raw = normalize_wrapper_identifier(identifier)
     lowered = raw.lower()
@@ -270,6 +276,8 @@ def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] |
             or "cash pay" in lowered
             or "cash (" in lowered or "cash," in lowered
             or "total coupon" in lowered or "coupon" in lowered):
+        return False
+    if any(marker and marker.lower() in lowered for marker in not_cash_markers):
         return False
     if re.search(r"\b\d+(?:\.\d+)?%\s+cash\s*/\s*\d", lowered):
         return False
@@ -324,7 +332,7 @@ def _rollup_disposition(
         suffix = suffix[len(prefix_key):].strip()
     suffix_text = identifier[len(prefix_text):] if prefix_text and identifier.startswith(prefix_text) else identifier
     lowered = identifier.lower()
-    if is_non_private_market_identifier(identifier, spec.non_private_markers):
+    if is_non_private_market_identifier(identifier, spec.non_private_markers, spec.not_cash_markers):
         return "non_private_market", _rule_id(spec, family, "NON_PRIVATE_MARKET")
     if any(marker in lowered and "commitment" in marker for marker in spec.aggregate_markers):
         return "aggregate", _rule_id(spec, family, "AGGREGATE")
@@ -467,6 +475,7 @@ def _load_specs_from_json(directory: "Path | None" = None) -> dict[str, WrapperS
             entity_signals_re=entity_signals_re,
             aggregate_markers=aggregate_markers,
             non_private_markers=non_private_markers,
+            not_cash_markers=tuple(str(m) for m in dispatch.get("not_cash_markers") or ()),
             category_marker_re=category_marker_re,
             fallback_family_patterns=tuple(fallback_patterns),
             canonical_strip_re=canonical_strip_re,

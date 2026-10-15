@@ -395,6 +395,61 @@ def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[s
     return result
 
 
+def issuer_from_identifier_settings(wrapper_dir: Path | None = None) -> dict[str, dict]:
+    """CIK -> {"when_issuer_re": str, "patterns": [str, ...]} (dispatch.issuer_from_identifier).
+
+    Stepstone's member puts the issuer in a different segment from filing to filing (after the
+    industry, glued to the industry, before a 'Reference Rate Spread / Floor' or 'RR & S/F' label,
+    before a financing-facility segment); the fixed pipe_field_map segment then publishes a label,
+    a rate or a heading as the issuer. Where the issuer name as built matches ``when_issuer_re``,
+    the first pattern whose group 1 matches the member text gives the issuer. Each pattern needs
+    one capture group.
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, dict] = {}
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        setting = raw.get("dispatch", {}).get("issuer_from_identifier")
+        if not setting:
+            continue
+        when = setting.get("when_issuer_re")
+        patterns = list(setting.get("patterns") or [])
+        if not when or not patterns:
+            raise ValueError("issuer_from_identifier needs when_issuer_re and patterns: " + str(path))
+        re.compile(when)
+        for pattern in patterns:
+            if re.compile(pattern).groups < 1:
+                raise ValueError("issuer_from_identifier pattern needs one capture group: " + str(path))
+        result[raw["cik"]] = {"when_issuer_re": when, "patterns": patterns}
+    return result
+
+
+def lien_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[str, dict[str, str]]:
+    """CIK -> {lien value: regex} (dispatch.lien_from_identifier): the filer's own lien abbreviation
+    in the member text ('NCNA Debt Inv. | FLSS | ...', Stepstone 2026-06-30), which no lien keyword reads."""
+    allowed = {"First Lien", "Second Lien", "Unsecured"}
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, dict[str, str]] = {}
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        setting = raw.get("dispatch", {}).get("lien_from_identifier")
+        if not setting:
+            continue
+        bad = set(setting) - allowed
+        if bad:
+            raise ValueError("lien_from_identifier keys must be %s: %s %s" % (sorted(allowed), sorted(bad), path))
+        for pattern in setting.values():
+            re.compile(pattern)
+        result[raw["cik"]] = dict(setting)
+    return result
+
+
 def issuer_name_strip_to_instrument_ciks(wrapper_dir: Path | None = None) -> set[str]:
     """CIKs whose wrapper sends the text removed by issuer_name_strip_re to a blank instrument_description
     (dispatch.issuer_name_strip_to_instrument: true)."""
@@ -2516,7 +2571,8 @@ def _prepare_bdc(
             _cik_norm = str(_r["cik"]).lstrip("0").zfill(10)
             _spec = get_wrapper_spec(_cik_norm)
             _markers = _spec.non_private_markers if _spec else None
-            if is_non_private_market_identifier(_r["_raw_id"], _markers):
+            _not_cash = _spec.not_cash_markers if _spec else ()
+            if is_non_private_market_identifier(_r["_raw_id"], _markers, _not_cash):
                 _wnp_row_ids.append(int(_r["_row_id"]))
         if _wnp_row_ids:
             _wnp_df = pd.DataFrame({"_row_id": _wnp_row_ids})

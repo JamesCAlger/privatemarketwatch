@@ -4119,3 +4119,34 @@ Compared with `spoff3`. Two gate rounds; the second from the page sample.
   year late; rows printed with '-' for fair value dropped).
 - The agent ran a bare heredoc three times and killed each process by its own id.
 - Tests: refactor staging, highlights wrapper, source encodings 129 passed. Not run: full suite.
+
+### D-170 Stepstone Private Credit Fund through the fund-clearing skill (sandbox `spxf`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff1`. Two rounds; the second for an orchestrator change.
+
+- **Headline:** the 10-Q for 2026-06-30 abbreviates its column labels ('Cash IR / PIK Rate'); the
+  shared cash check reads the bare word 'cash' as a cash row and dropped 1,133 loans (3,338M). New
+  wrapper setting `dispatch.not_cash_markers` (shared code, this fund only): the quarter ties to the
+  filed 3,795.4M. Any filer that abbreviates a rate column this way would lose rows silently: a
+  shared weakness, recorded as an observation.
+- **Ledger:** 65 findings, 42 outstanding (77 in the first build), 40 with a proposal; totals tie in
+  10 of 12 quarters; declared: 2024-12-31 2.4M short (Campany Roof's second loan tagged on a member
+  with no issuer name; parked), 2025-09-30 10.0M short (the page prints Puma Buyer at 3,829 for a
+  13,829 loan and the filed total uses 13,829: a printing error; owner decides whether to correct).
+- **Fixed:** two more wrapper settings in shared code, this fund only, with tests:
+  `dispatch.issuer_from_identifier` (531 rows whose name was a label, a rate, a heading or the
+  financing facility) and `dispatch.lien_from_identifier` ('FLSS' as first lien, 1,378 rows at
+  2026-06-30); twin lines told apart only by member text kept apart; name clean-up (0 shapes left);
+  industry from the member (coverage about 50 to 100 pct from 2025-12-31); 80 row corrections with
+  printed lines (61 single coupons tagged as PIK and published as spread plus coupon, 6 fund
+  interests published as loans, 10 'FIXED + x %' loans published as floating, 2 rows on another
+  company's member); 2 untagged pars declared. The wrapper schema also gained three keys already in
+  use and undeclared (`untagged_pik`, `industry_from_identifier_re`, `cash_rate_with_plain_spread`).
+- **Orchestrator fix (verification):** the provenance re-verifier re-reads a spread published from
+  the plain rate tag for a `cash_rate_with_plain_spread` fund (13d611e, test); 4 anchor_missing
+  findings cleared.
+- **Parked:** non-accrual flag on an Amex equity row 2025-12-31 (real, not correctable); A01
+  2024-06-30 (4.15M gap not traced); about 6 rows still publishing spread plus PIK as the rate.
+- **Page sample:** 20 rows, 0 published errors; the reader noted the 2023-09-30 filing's instrument
+  text is the financing facility (150 rows, 433.2M), left as an observation.
+- Observations: 9. Tests: 686 passed in the agent's touched files; 146 in mine. Not run: full suite.

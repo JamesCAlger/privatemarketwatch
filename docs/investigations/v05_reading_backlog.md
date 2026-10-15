@@ -151,3 +151,4 @@ Senior Credit Investments 0001959568, TCW Direct Lending 0001603480, Silver Capi
 Manulife 0001988280.
 | 2026-10-15 | 0002031750 Ares Core Infrastructure Fund | acxb | INCOMPLETE | 38 findings, 36 outstanding, 35 proposed, 1 parked (shared income step) | D-168 |
 | 2026-10-15 | 0001508655 Sixth Street Specialty Lending | ssxf | INCOMPLETE | 117 findings, 59 outstanding, 56 proposed, 3 parked | D-169 |
+| 2026-10-15 | 0001950803 Stepstone Private Credit Fund | spxf | INCOMPLETE | 65 findings, 42 outstanding, 40 proposed, 2 parked; 2 declared total exceptions | D-170 |
