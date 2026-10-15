@@ -95,6 +95,19 @@ def test_issuer_names_holding_an_instrument_fail_unless_declared(sandbox):
     assert not fund_gate.check_names("n2", CIK, declared)["ok"]
 
 
+def test_an_issuer_name_that_begins_with_the_funds_industry_fails(sandbox):
+    rows = [_row("i%d" % i, 1.0, source="bdc", issuer_name="Software Zendesk %d, Inc." % i, extracted_industry="Software")
+            for i in range(5)]
+    rows += [_row("c%d" % i, 1.0, source="bdc", issuer_name="Clean Co %d, Inc." % i, extracted_industry="Software")
+             for i in range(20)]
+    # a company whose name starts with a word that is not the fund's industry label is not flagged
+    rows += [_row("s", 1.0, source="bdc", issuer_name="Softwarehouse, Inc.", extracted_industry="Software")]
+    _holdings(sandbox, "ind", rows)
+    result = fund_gate.check_names("ind", CIK, {})
+    assert result["shapes"] == {"industry_in_name": 5}
+    assert not result["ok"]
+
+
 def test_every_changed_field_and_row_must_be_declared(sandbox):
     _holdings(sandbox, "old", [_row("a", 1.0), _row("b", 2.0), _row("gone", 3.0)])
     _holdings(sandbox, "new", [_row("a", 1.0, principal_amount=None, entity_id="e2"), _row("b", 2.5), _row("added", 4.0)])

@@ -23,7 +23,8 @@ decides, without judgment, whether the agent's run can be accepted:
                each entry well formed and with a printed line
   names        no more than 1 pct of the fund's published rows has an issuer name that still holds
                an instrument, a row number or a holder label (pipeline/issuer_instrument_split.py
-               shapes); more is declared in "name_shape_exceptions" with a count and a reason
+               shapes), or begins with one of the fund's own industry labels (industry_in_name);
+               more is declared in "name_shape_exceptions" with a count and a reason
   ledger       every outstanding finding of the fund is covered by a written proposal
 
 Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
@@ -247,13 +248,24 @@ def check_names(label: str, cik: str, report: dict) -> dict:
     looks at names; the 2026-10-14 page sample found them wrong on 75 pct of one fund's rows."""
     from pipeline.issuer_instrument_split import shapes
     output = (SANDBOXES / label / "output/private_markets_holdings.parquet").as_posix()
-    names = _con().execute(f"""SELECT issuer_name, count(*) FROM read_parquet('{output}')
-                               WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND source = 'bdc' GROUP BY 1""", [cik]).fetchall()
+    con = _con()
+    names = con.execute(f"""SELECT issuer_name, count(*) FROM read_parquet('{output}')
+                            WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND source = 'bdc' GROUP BY 1""", [cik]).fetchall()
+    # The fund's own industry labels: a name that begins with one carries the industry heading
+    # (MidCap Financial, 2026-10-15: 'Software Zendesk Zendesk, Inc.' on every row).
+    columns = {r[0] for r in con.execute(f"DESCRIBE SELECT * FROM read_parquet('{output}')").fetchall()}
+    industries = set() if "extracted_industry" not in columns else {str(i).strip().lower() for (i,) in con.execute(
+        f"""SELECT DISTINCT extracted_industry FROM read_parquet('{output}')
+            WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? AND length(trim(coalesce(extracted_industry, ''))) >= 4""", [cik]).fetchall()}
     total = sum(n for _name, n in names)
     counts: dict[str, int] = {}
     examples: dict[str, list[str]] = {}
     for name, n in names:
-        for shape in shapes(name):
+        found = list(shapes(name))
+        low = str(name or "").lower()
+        if any(low.startswith(i + " ") or low.startswith(i + ",") for i in industries):
+            found.append("industry_in_name")
+        for shape in found:
             counts[shape] = counts.get(shape, 0) + n
             examples.setdefault(shape, []).append(str(name)[:90])
     declared = {str(d.get("shape")): int(d.get("rows", 0)) for d in report.get("name_shape_exceptions", [])
