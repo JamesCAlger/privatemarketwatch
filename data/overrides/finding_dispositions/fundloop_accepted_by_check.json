@@ -1431,6 +1431,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1919369",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The percent of net assets the filer prints and tags disagrees with its own fair value over net assets (printed to one decimal, or printed on a neighbouring line). The printed figure is published as filed; the schema value, fair value over net assets, is published beside it in pct_of_net_assets_calculated.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check pct_as_filed_with_calculated passed on sandbox vixa for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/pctq.py vixa 0001919369",
+   "decided_by": "check passed on sandbox vixa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1950803",
    "class": "as_filed",
    "engine": "identity",

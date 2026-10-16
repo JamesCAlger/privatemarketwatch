@@ -1069,6 +1069,18 @@ if TWENTYSIX_NORTH in held and TWENTYSIX_NORTH_LOOP_FILE.exists():
         SPECS.append((TWENTYSIX_NORTH, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1950976-fundloop"))
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
+# VISTA Credit Strategic Lending through the fund-clearing skill (2026-10-16): Other Equity unit counts tagged as a principal
+# x 1,000 in the 10-Q for 2025-03-31, the 17.50 % Metropolis preferred count replaced by the shared share-count step, and
+# investment cost printed in the units cell of three LP interests (footnote 1). One spec per row, each with its printed line,
+# in row_correction_specs/0001919369.json.
+VISTA_LOOP = "0001919369"
+VISTA_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001919369.json"
+if VISTA_LOOP in held and VISTA_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(VISTA_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((VISTA_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1919369-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
 # decision D-153: two rows of the first five funds read on the page while clearing rule X11
 ARES_MURCHISON = "Murchison Oil and Gas, LLC and Murchison Holdings, LLC, First lien senior secured loan"
 APOLLO_VERSION1_EUR = ("IT Services Version 1 Investment Company 24 Bidco Limited Investment Type First Lien Secured Debt - Term Loan "

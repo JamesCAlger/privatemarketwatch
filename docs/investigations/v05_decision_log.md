@@ -5006,3 +5006,14 @@ Compared with `spoff3`. One round; three builds.
   rule is superseded (adds no second row; retirement not done); member format changes from
   2026-03-31, chains not measured.
 - No rule breaks reported. Wrapper tests 681 passed.
+
+### D-198 VISTA Credit Strategic Lending through the fund-clearing skill (sandbox `viya`, with 2026-06-30), verdict INCOMPLETE
+
+Resumed CC's unfinished vixa/vixb/vixc run; four builds total. Compared with `spoff3`.
+
+- Gate: all mechanical checks pass; 11/11 quarters tie on ex-cash basis. 23 findings, 14 outstanding, 13 proposed. The remaining ledger item is income_identity 2023-12-31: annual first-year income divided by four despite operations beginning in Q4. Parked; not dispositioned.
+- Fixed: nine member-name parsing cases; eight Other Equity rows reclassified from loan/other with unit counts no longer used as principal; nineteen row-correction specifications restore or remove unit counts from printed evidence. The final sandbox has 454 rows, including 73 added Q2 rows versus spoff3.
+- Removed the inherited unsupported global Pharmaceuticals alias and localized the broad Life Sciences heading to VISTA's existing regex settings. Shared mapping and placeholder label list match the original baseline. Versus vixc only four sector and four sub-industry values become blank; other fields and all 28 ledger IDs/states are unchanged (gate excludes five adjudicated false alarms).
+- Independent sample: 20 cards, 260 field judgments, one published error. C002 Metropolis preferred prints/tags 4.320M par; shared equity-principal nulling deliberately suppresses it. Confirmed and parked as a representation/semantics gap, not overridden or called as filed. Twenty cards can miss a problem affecting fewer than about 15 pct of rows.
+- Other shared observations remain: issuer-based unit-count proxy overwrites values; first-year income fallback; unannualised income-ratio comparison; distributions absent after share-class split; broad industry headings; fund interest classified preferred from its name. Full evidence is in the report and observations log.
+- Verification: 379 targeted tests passed; both protected-output snapshots passed. Semantic comparison stopped after ten minutes processing the large existing baseline; no semantic verdict. Full suite, cohort rebuild, export and re-attestation not run. No production outputs changed or new reasons accepted. All findings cleared would not establish data correctness.

@@ -131,9 +131,9 @@
       "Transportation, Logistics & Supply Chain",
       "Utilities & Utility Equipment"
     ],
-    "hierarchy_issuer_re": "(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b",
-    "hierarchy_instrument_re": "(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?((?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity))\\s+",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+') AND regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b')"
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Investments\\s+\\S\\s+non-contro)?\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:(?:MSD_INDUSTRY_LABELS)|Life\\s+Sciences,\\s+Biotechnology,\\s+and\\s+Pharmaceuticals)\\s+(.+?)(?:\\s*(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b|\\s*$)",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:Investments\\s+\\S\\s+non-contro)?\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?((?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity))\\s+",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Investments\\s+\\S\\s+non-contro)?\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+') AND (regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b') OR regexp_matches(_clean, '(?i)^\\s*Investments\\s+(?:\u2013\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:(?:MSD_INDUSTRY_LABELS)|Life\\s+Sciences,\\s+Biotechnology,\\s+and\\s+Pharmaceuticals)\\s+\\S'))"
   },
   "archetypes": {
     "debt": {
@@ -211,6 +211,9 @@
       "SONIA=SONIA",
       "EURIBOR=EURIBOR",
       "PRIME=PRIME"
+    ],
+    "equity_instrument_labels": [
+      "Other Equity"
     ]
   }
 }

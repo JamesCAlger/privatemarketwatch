@@ -1,0 +1,446 @@
+{
+ "cik": "0001919369",
+ "label": "viya",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 3,
+   "why": "hierarchy issuer pattern now reads members with a doubled 'Investments - non-contro' prefix (Databricks 2025-09-30), members ending at the issuer or glued to 'Maturity Date' (Cover Genius x2, Galaxy Topco x2, Metropolis preferred 2026-06-30, HPC Preferred 2026-06-30) and the 'Life Sciences, Biotechnology, and Pharmaceuticals' heading (Galaxy Buyer x2); 3 of the 9 rows exist in spoff3, the rest are 2026-06-30 or were already named there"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 2,
+   "why": "same rows: instrument now 'First-Lien Debt' / 'Other Equity' / 'Preferred Equity' from the member"
+  },
+  {
+   "column": "asset_category",
+   "rows": 8,
+   "why": "wrapper equity_instrument_labels ['Other Equity']: 5 Other Equity rows of 2024-12-31 and 2025-03-31 were LOAN (unit count tagged as a principal), 3 Other Equity rows of 2024-06-30/2024-09-30 were OTHER; all now EQUITY_COMMON"
+  },
+  {
+   "column": "index_classification",
+   "rows": 5,
+   "why": "the 5 former LOAN rows: DIRECT_LENDING to COMMON_EQUITY"
+  },
+  {
+   "column": "asset_class",
+   "rows": 5,
+   "why": "the 5 former LOAN rows: PRIVATE_CREDIT to PRIVATE_EQUITY"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 8,
+   "why": "the 8 reclassed equity rows publish no principal (the tagged figure is a unit count)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 8,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 8,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "shares_held",
+   "rows": 13,
+   "why": "Other Equity unit counts 2024-12-31 (tagged, in thousands per the 10-K footnote) and 2025-03-31 (printed, by row correction); Metropolis 17.50 % preferred 480,000 and Metropolis Other Equity 280 restored where the shared share-count step had swapped counts between the issuer's three lines (2025-12-31 to 2026-06-30); unit counts blanked on HPC GPFS, Tactical Equipment III and HPC Preferred Opportunities, whose units cell holds investment cost (footnote 1)"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 6,
+   "why": "the shared share-count step labels the restored/rescaled rows derived_proxy; the value is the printed one (label not reset by a row correction)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 7,
+   "why": "shares_held:from_principal_tag / pow10_shares on the reclassed and corrected equity rows"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 14,
+   "why": "19 row corrections of shares_held (row_correction_specs/0001919369.json); 14 of them on rows present in spoff3"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1,
+   "why": "One matched row versus spoff3 loses Biotechnology/Health Care when issuer parsing separates the literal broad filed heading. Versus vixc, four rows lose unsupported Pharmaceuticals/Health Care labels after inherited global alias removal."
+  },
+  {
+   "column": "gics_sector",
+   "rows": 1,
+   "why": "One matched row versus spoff3 loses Biotechnology/Health Care when issuer parsing separates the literal broad filed heading. Versus vixc, four rows lose unsupported Pharmaceuticals/Health Care labels after inherited global alias removal."
+  },
+  {
+   "column": "position_key",
+   "rows": 2,
+   "why": "Databricks 2025-09-30 and the renamed rows now key on the issuer, not the whole member"
+  },
+  {
+   "column": "position_id",
+   "rows": 47,
+   "why": "47 matched rows versus spoff3; same IDs as vixc. New quarter changes chain allocation and renamed issuers change pairing. Entity/name resolution occurs on this one-fund sandbox rather than spoff3's 77-fund universe."
+  }
+ ],
+ "rows_added": 73,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Issuer names from the member. The hierarchy issuer pattern required a trailing 'Reference Rate and Spread / Interest Rate / Maturity Date' clause after a space and one 'Investments' prefix; the heading 'Life Sciences, Biotechnology, and Pharmaceuticals' was not among the fund's industry labels. Wrapper staging: label added; issuer may end at end of string or run into 'Maturity Date' with no space; an optional doubled 'Investments - non-contro' prefix (the filer's own typo at 2025-09-30). Dry run on all 323 distinct identifiers: 9 change, all targeted. Clears C201 (2026-03-31, 2026-06-30) and C206 (2025-09-30). Resume: the additional Life Sciences heading is a literal alternative only in this fund's issuer/condition regexes; extra_industry_labels is restored to its pre-run list so other wrappers' shared placeholder does not change.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Preferred Equity Insurance Cover Genius Holdings, Inc. (4) (15) (23) N/A N/A 531,243 $ 34,459 $ 34,459 3.7 %"
+    },
+    {
+     "accession": "0001193125-26-339655",
+     "text": "HPC Preferred Opportunities, L.P. (23) (25) (27) 1/30/2036 7,284 7,284 7,187 0.8"
+    }
+   ]
+  },
+  {
+   "what": "Other Equity rows classed as loans. In the 10-K for 2024-12-31 and the 10-Q for 2025-03-31 the filer tags the Other Equity unit counts with the principal concept, and the field heuristic read them as loans (X02 x2, X07). Wrapper source_encodings.equity_instrument_labels ['Other Equity']: 8 rows now EQUITY_COMMON. 2024-12-31 counts publish as tagged (280,000 and 192,000: that 10-K's footnote 1 says units are in thousands); 2025-03-31 counts (tagged x1,000) set to the printed figures by row correction.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001919369-25-000009",
+     "text": "is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity."
+    },
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Rapyd Financial Network, Ltd. (4) (15) (19) 9/13/2030 80,991 2,938 2,938 0.9"
+    },
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Hotels, Restaurants & Leisure Mews Systems B.V. (4) (5) (15) (19) 9/14/2029 19,200 1,312 1,344 0.4"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts moved between Metropolis Technologies' three equity lines by the shared share-count step (17.50 % preferred published 11,082 or 280 for a printed and tagged 480,000; Other Equity published 480 or 11,082 for a printed 280), 2025-12-31 to 2026-06-30, and the 2024-12-31 Other Equity count rescaled to 280 from the tagged 280,000. Set to the printed figures by row correction (7 rows).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Metropolis Technologies, Inc. (4) (22) (26) N/A 17.50 % 5/16/2034 480,000 456 480 0.1"
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Metropolis Technologies, Inc. (4) (15) (22) (23) (27) 5/16/2034 280 20 304 0.0"
+    }
+   ]
+  },
+  {
+   "what": "Units cell holds investment cost for three LP interests (HPC GPFS Arsenal Co-Invest, Tactical Equipment III, HPC Preferred Opportunities), per footnote 1; they were published as unit counts (e.g. Tactical 30,000). Unit count blanked by row correction (9 rows, 2025-09-30 to 2026-06-30). C04 still passes in those quarters.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Unit amount is presented for Other Equity, with the exception of HPC GPFS Arsenal Co-Invest (Cayman) LP, HPC Preferred Opportunities, L.P. and Tactical Equipment III, L.P., which presents investment cost."
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Tactical Equipment III, L.P. (22) (26) 3/17/2033 30,000 29,069 29,069 3.0"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "identity income_identity 2023-12-31",
+   "hypotheses": [
+    "Real error: published total_investment_income for 2023-12-31 is 195 thousand = the year's 780 / 4. The 10-K prints 'Total investment income $ 780' for 2023 and the 10-Q for 2023-09-30 prints no income line (the fund had not begun investing), so the fourth quarter is 780. With 780 the identity holds exactly (780 - 2,170 net expenses = -1,390 published NII).",
+    "Highlights wrapper first_income_year_ends ['2023-12-31'] does not fix it: the shared quarter step (pipeline/fund_financials.py quarter_income_sql) also needs every filed quarter to carry the flow, and company facts hold no total investment income for 2023-09-30.",
+    "figure_corrections cannot set total_investment_income (not in FIGURE_FIELDS; corrections apply to the balance frame only). A fix is shared code: in a declared first income year, treat a filed quarter with no figure for a flow as nil. Not done here because it changes the three other funds that declare first_income_year_ends and only this fund can be built."
+   ]
+  },
+  {
+   "finding": "independent_sample C002 principal_amount 2025-06-30; preferred-units-column-is-a-face-amount",
+   "hypotheses": [
+    "A missing extraction fact is not the mechanism: the sample card shows InvestmentOwnedBalancePrincipalAmount = 4320000.0 and the page prints 4,320 in thousands.",
+    "Fund wrapper untagged_values cannot fix it because unified_holdings subsequently clears principal for all PREFERRED_EQUITY rows.",
+    "A late row correction would bypass the tested shared nulling contract. No change made without an explicit representation decision for preferred-equity par versus unit-count tagging errors."
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-104174",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.9 %"
+    },
+    {
+     "accession": "0000950170-25-104174",
+     "text": "The total par amount (in thousands) is presented for all debt investment and preferred equity."
+    }
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "The shared share-count step (unified_holdings, by cik and issuer name) swapped counts between Metropolis Technologies' three equity lines: the 17.50 % preferred got 11,082 (the 12.00 % line's) at 2025-12-31 and 2026-03-31 and 280 (the Other Equity line's) at 2026-06-30 for a printed and tagged 480,000; once the Other Equity rows were classed equity the step gave Other Equity 480 and 11,082. Fixed by row correction; shares_held_source stays 'derived_proxy' on corrected rows.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer whose equity lines in one quarter publish a unit count equal to another of its lines' tagged count.",
+   "quote": {
+    "accession": "0001193125-26-339655",
+    "text": "Metropolis Technologies, Inc. (4) (23) (24) N/A 17.50 % 5/16/2034 480,000 456 480 0.1"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Other Equity rows (Mews, Metropolis, Rapyd) published as LOAN / DIRECT_LENDING at 2024-12-31 and 2025-03-31 because the unit count was tagged with the principal concept. Fixed with equity_instrument_labels.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 4.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "X02 already catches it; a row whose section heading is an equity heading should not be classed a loan.",
+   "quote": {
+    "accession": "0000950170-25-066695",
+    "text": "Rapyd Financial Network, Ltd. (4) (15) (19) 9/13/2030 80,991 2,938 2,938 0.9"
+   }
+  },
+  {
+   "observation_key": "fund-interest-units-equal-contributed-capital",
+   "what": "HPC GPFS Arsenal Co-Invest, Tactical Equipment III and HPC Preferred Opportunities print investment cost in the units cell (footnote 1) and the filer tags it as a share count; published as unit counts (Tactical 30,000). Blanked by row correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 41.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Unit count equal to cost (to the thousand) on an LP or fund interest: read the units footnote.",
+   "quote": {
+    "accession": "0001193125-26-339655",
+    "text": "HPC Preferred Opportunities, L.P. (23) (25) (27) 1/30/2036 7,284 7,284 7,187 0.8"
+   }
+  },
+  {
+   "observation_key": "preferred-units-column-is-a-face-amount",
+   "what": "Independent sample C002 confirms real missing preferred-equity par at 2025-06-30: printed and tagged 4,320,000, principal_amount blank. Field exists, but shared unified_holdings SQL explicitly nulls principal_amount and principal_amount_usd for PREFERRED_EQUITY and fund/equity classes (pipeline/unified_holdings.py:1227-1242; tests/test_unified_holdings.py TestEquityPrincipalAmountNulled). Earlier wording that no field exists was imprecise. This is an information-loss gap under the current shared semantic contract, not an as-filed blank. Parked: preserving preferred face amount needs an explicit contract decision and source-backed distinction between real par and mis-tagged unit counts. A late row correction would bypass the current contract; existing untagged_values does not prevent final nulling. Do not reclassify preferred equity as debt or fill shares_held with this dollar amount.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 4.8,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Flag a preferred-equity position with printed monetary par and tagged principal but null published principal; distinguish from units before deciding remediation.",
+   "quote": {
+    "accession": "0000950170-25-104174",
+    "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.9 %"
+   }
+  },
+  {
+   "observation_key": "unit-count-basis-changes-between-filings",
+   "what": "The 10-K for 2024-12-31 says Other Equity units are in thousands (Mews 192 = 192,000 units, Metropolis 280 = 280,000); the 10-Q for 2025-03-31 and every later filing print plain units (Mews 19,200, Metropolis 280) for the same holdings at the same cost. Published as each page states, so Mews reads 192,000 then 19,200 and Metropolis 280,000 then 280. One of the two bases is the filer's error; not resolvable from the page.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 1.2,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Unit count of one equity line changing by a power of ten with unchanged cost.",
+   "quote": {
+    "accession": "0001919369-25-000009",
+    "text": "Hotels, Restaurants & Leisure Mews Systems B.V. (4) (5) (15) (19) 9/14/2029 192 1,312 1,227 0.5"
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "total_investment_income 2023-12-31 published 195 thousand = the first 10-K's annual 780 / 4; the fund earned all 780 in the fourth quarter (the 2023-09-30 10-Q prints no income line). income_yield_pct 2023-12-31 is likewise the year's (11.41) % / 4. Parked (income_identity).",
+   "field": "total_investment_income",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "income_identity already catches it.",
+   "quote": {
+    "accession": "0001628280-24-009900",
+    "text": "Net investment income (loss) ( 11.41 ) % Interest Expense and credit facility fees 2.83 %"
+   }
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annualised-distribution",
+   "what": "income_yield_pct holds one quarter's slice of the filer's year-to-date, unannualised NII ratio (2024-06-30 1.29 = 1.37 - 0.08) and F16 compares it with an annualised distribution rate. Proposed under the existing reason.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Annualise income_yield_pct before F16, or compare per-share figures.",
+   "quote": {
+    "accession": "0000950170-25-104174",
+    "text": "These ratios to average net assets have not been annualized."
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "what": "From 2025-09-30 the fund has Class I and Class S shares and prints distributions by class; distribution_per_share (and so distribution_rate) is empty in all four quarters 2025-09-30 to 2026-06-30, so F16 and F33 skip them.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a fund whose distribution_per_share goes empty while its statement of changes prints distributions.",
+   "quote": {
+    "accession": "0001193125-26-213661",
+    "text": "Shareholder distributions declared from net investment income Class I - - - ( 20,963 ) ( 20,963 ) Class S - - - ( 2,335 ) ( 2,335 )"
+   }
+  },
+  {
+   "observation_key": "value-keyed-promoted-rescale-rule",
+   "what": "QF Holdings 2025-12-31 (fair value, cost and par filed at decimals 0 in a 10-K tagged at -3) is rescaled x1,000 by three promoted rules keyed on the issuer name and the exact value (agent_investigate_rules/1919369/qf_holdings_20251231_*_rescale.json). The published values are right (33,224 / 33,242 / 33,449 thousand) and the total ties, but the rules break if the name or value changes. Left: retiring or rewriting a promoted rule is not this agent's to do, and no wrapper setting expresses an unscaled fact.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 33.2,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A value fact at decimals 0 in a filing whose other value facts are at -3, with a percent of net assets that only fits the scaled value.",
+   "quote": {
+    "accession": "0001193125-26-101986",
+    "text": "QF Holdings, Inc. (4) (8) (22) (23) SOFR + 4.50 % 8.19 % 12/15/2032 33,449 33,242 33,224 3.5"
+   }
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "what": "Angel Lux Bidco (2026-06-30, 66.9M) and other rows under 'Telecom Services & IT Hardware' publish no GICS label: the heading is not in the shared map (left unmapped on purpose under D-131 for four broad headings). The inherited vixc count was 4 of 73; viya also leaves the two Galaxy rows without a specific GICS label.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 66.9,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Share of fair value without a GICS label per fund-quarter.",
+   "quote": {
+    "accession": "0001193125-26-339655",
+    "text": "Telecom Services & IT Hardware Angel Lux Bidco SA RL (4) (5) (6) (7) (17) (22) (23) (24) (25) SOFR + 5.25 % 8.89 % 12/19/2032 67,666 67,015 66,916 7.3"
+   }
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-preferred-section",
+   "what": "HPC Preferred Opportunities, L.P. is printed under Other Equity (an LP interest, units cell = cost) but classed EQUITY_PREFERRED / PREFERRED_EQUITY from the word 'Preferred' in its name; its sibling HPC GPFS Arsenal Co-Invest is FUND. Left: no wrapper setting maps a name to a fund interest, and a row correction of asset_category alone was not tried in the build budget.",
+   "field": "asset_category",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 7.2,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "An equity row classed preferred whose printed section is not a preferred section.",
+   "quote": {
+    "accession": "0001193125-26-213661",
+    "text": "HPC Preferred Opportunities, L.P. (22) (24) (26) 1/30/2036 10,065 10,065 10,063 1.0"
+   }
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "what": "Galaxy Buyer and Galaxy Topco are filed under Life Sciences, Biotechnology, and Pharmaceuticals. Inherited run mapped all to Pharmaceuticals without narrower evidence; that shared alias is withdrawn. Retain filed heading and allow missing standard label. No shared mapping change remains.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 55.367,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Report fair value without GICS separately from precise classifications inferred from broad filing headings.",
+   "quote": {
+    "accession": "0001193125-26-339655",
+    "text": "Life Sciences, Biotechnology, and Pharmaceuticals Galaxy Buyer Inc (4) (10) (23) (24) (25) SOFR + 4.75 % 8.42 % 1/12/2033 54,256 53,696 53,729 5.8"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_gics_mapping.py tests/test_gics_classification.py tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper_oracle.py: 375 passed",
+  "Resume after alias removal: tests/test_gics_mapping.py tests/test_gics_classification.py tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper_oracle.py: 375 passed; protected-output snapshot passed.",
+  "tests/test_bdc_xbrl_wrapper.py -k vista: 4 passed, 553 deselected; protected-output snapshot passed.",
+  "holdings_field_diff viya vixc: only gics_sub_industry and gics_sector differ, four rows each; zero added/removed; 98/100 columns unchanged.",
+  "fund_gate viya against spoff3 and original snapshot: all mechanical checks pass, 11/11 quarters tie; INCOMPLETE, 14 outstanding, 13 proposals, income_identity parked.",
+  "Independent viya sample: 20 cards/260 labelled fields; one published error, C002 principal_amount missing (2025-06-30). Other published fields had no errors in this sample. Error retained; documentation-only response, no rebuild or new tests."
+ ],
+ "not_done": [
+  "Full pytest suite not run. No new shared code remains: inherited gics_mapping.py alias removed. Extra industry label localized to VISTA regex; shared placeholder label list equals pre-run list.",
+  "Rates, maturities and pars read against the page for the eight largest loans at 2026-06-30 (all matched) and the rows named above; the rest not read.",
+  "Fund-level figures read only where a finding pointed; NAV and shares at 2026-06-30 not checked.",
+  "Preferred par (4,320; 480 thousand) is printed but suppressed by the shared equity-principal nulling contract; independently confirmed C002 gap is parked, not as-filed.",
+  "All findings cleared or proposed is not data correct: 13 outstanding findings carry proposals awaiting the owner and one is parked.",
+  "Semantic backstop attempted with report redirected to scratch, stopped owned PID 19428 at 10-minute limit while processing 64,537 baseline artifacts. No semantic verdict; both pytest sessions passed protected-output checks. No published outputs rebuilt."
+ ],
+ "resume_validation": {
+  "builds_used": 4,
+  "holdings_rows": 454,
+  "ledger_rows": 28,
+  "gate_findings": 23,
+  "outstanding": 14,
+  "proposed": 13,
+  "ledger_comparison": "vixc and viya contain identical 28 fund review IDs and states. Gate count excludes five adjudicated_false_alarm rows: C107 2023-12-31 and 2024-03-31, C04 2024-06-30 and 2024-09-30, text_pathway 2026-03-31. No new live errors.",
+  "global_alias": "pipeline/gics_mapping.py SHA256 matches original snapshot exactly.",
+  "placeholder_union": "VISTA extra_industry_labels equals wrapper_before list exactly. New heading appears only in VISTA regex alternatives; no new shared placeholder effect.",
+  "sample": "20 cards, 260 labels, one published error (C002 preferred-equity par), confirmed and parked. Data remains viya; no error-free sample claim."
+ }
+}
