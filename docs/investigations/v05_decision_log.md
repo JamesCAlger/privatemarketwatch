@@ -4838,3 +4838,35 @@ Compared with `spoff3`. One round; two builds (`asxd`, `asxe`; `asxa` to `asxc` 
   `MembersEquity` not read as net assets (also D-186); the matcher chains STV Group's delayed draw
   with its revolver after the filer renumbers lines (zero fair value).
 - The agent ran read-only Python lookups between builds and one named diagnostic script.
+
+### D-193 Jefferies Credit Partners BDC through the fund-clearing skill (sandbox `jcxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; four builds.
+
+- **Ledger:** 20 findings, 7 outstanding, all 7 proposed; totals tie in 11 of 11 quarters.
+- **Fixed (new highlights wrapper):** net assets blank in all 11 quarters (tagged `us-gaap:AssetsNet`,
+  not in the shared company-facts map), declared from the balance sheets; NAV per share 3.87
+  (2025-12-31) and 1.34 (2026-03-31) were the next 10-Q's tender-offer 'percent of NAV' tagged as NAV
+  per share, now 14.43 and 14.38; NAV and shares for 2026-03-31 and 2026-06-30 (F33, F16 2025-12-31;
+  earlier real-error verdicts stand and are fixed).
+- **Fixed (wrapper):** the 2026-06-30 10-Q shortens the member prefix to 'NCNA Ptfl Cmp Invs': 314 of
+  319 issuer names carried it plus the industry; hierarchy patterns accept the short form, with a
+  backstop in `issuer_name_strip_re` (C206, D06 2026-06-30). The gate's names check had passed
+  these rows. 77 dash-valued rows declared at fair value 0 (cost was short); printed reference column
+  with the legend's C, T, SN, P codes (22 rows had a guessed SOFR).
+- **Fixed (exclusion, one quarter):** two single-row equity industry subtotals at 2025-03-31 (+1.2M)
+  published as positions, by exact identifiers.
+- **Fixed (row corrections):** C04 units Eclipse 72, Red Griffin 1,746 (earlier verdict 2024-12-31
+  stands, fixed); Hiller Companies 2024-06-30 issuer and instrument; Spruce Bidco CAD and JPY pars
+  tagged USD (converted at the build's H.10 rates); Titan Luxco dollar revolver tagged EUR; Firebird
+  L.P. interest classed as a fund from 2026-03-31, back to common equity; Foreside's second undrawn
+  line as delayed draw; two instruments the members did not separate.
+- **Proposed:** C04 x4 (`c04-share-cell-printed-as-dash`), B01 x2 (comparative-schedule dash rows),
+  F16 2024-12-31 (new key `f16-quarter-distribution-includes-catch-up-declaration`).
+- **Page sample:** 20 cards, 0 published errors. Twenty cards can miss a problem on under about 15
+  pct of rows.
+- **Shared causes seen:** `AssetsNet` not mapped (each new quarter blank again); the gate's names
+  check does not count a leading affiliation abbreviation ('NCNA Ptfl Cmp Invs'); par currency from
+  the unit tag; quarterly distribution per share split evenly from year-to-date (0.24305 published
+  at 2024-06-30 against the quarter's 0.3566, left).
+- The agent started one bare `python -` (stopped by the task tool). Wrapper tests 681 passed.

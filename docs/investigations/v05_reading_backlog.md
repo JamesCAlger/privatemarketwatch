@@ -173,3 +173,4 @@ Manulife 0001988280.
 | 2026-10-16 | 0001975736 KKR FS Income Trust Select | ksxf | INCOMPLETE (gate PASS) | 34 findings, 13 outstanding, 13 proposed; PIK range missing on 309 rows (owner question) | D-190 |
 | 2026-10-16 | 0001899017 Bain Capital Private Credit | bnxd | INCOMPLETE | 74 findings, 42 outstanding, 39 proposed, 3 parked (2022-09-30 NAV sign) | D-191 |
 | 2026-10-16 | 0002083477 APS BDC | asxe | PASS | 5 findings, 1 outstanding, 1 proposed; opt-in section_total_reading (lien on 1.9B) | D-192 |
+| 2026-10-16 | 0001959604 Jefferies Credit Partners BDC | jcxd | PASS | 20 findings, 7 outstanding, 7 proposed | D-193 |

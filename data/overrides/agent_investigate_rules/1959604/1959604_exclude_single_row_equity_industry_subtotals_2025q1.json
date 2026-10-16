@@ -1,0 +1,38 @@
+{
+  "cik": "1959604",
+  "rule_id": "1959604_exclude_single_row_equity_industry_subtotals_2025q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-03-31' AND bdc_investment_identifier IN ('Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services', 'Non-controlled-non-affiliated Portfolio company debt investments Equity Investments L.P. Interest Commercial Services & Supplies')",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0000950170-25-071600",
+      "quote": "Equity Investments Preferred Stock Professional Services Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 749 735 749 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+    },
+    {
+      "source": "filing",
+      "accession": "0000950170-25-071600",
+      "quote": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412 Total non-controlled-non-affiliated Portfolio Company equity investments 9,604 8,590 2.2 %"
+    },
+    {
+      "source": "query",
+      "quote": "jcxb 2025-03-31: the two members (no issuer, no 'Investment Type') carry cost 735,000 / fair value 749,000 and cost 434,000 / fair value 412,000, the same figures as the Eclipse Topco and Firebird Co-Invest rows published beside them; published minus filed 1,161,000 = 749,000 + 412,000."
+    }
+  ],
+  "rationale": "Each industry of the equity section holds one position at 2025-03-31, and the page prints the industry's subtotal right after it (the second pair of figures on the line). The filer tags the subtotal on a member named by the section, the class heading and the industry only, which is published as a second position. The equity section total 8,590 = 749 + 7,429 + 412 counts each once. The third subtotal (Air Freight & Logistics, 7,429) is already dropped by the build.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 2,
+      "fv": -1161000.0,
+      "residual_before": 1161000.0,
+      "residual_after": 0.0
+    }
+  }
+}

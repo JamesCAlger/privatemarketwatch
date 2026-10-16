@@ -84,9 +84,10 @@
         "family": "debt"
       }
     ],
-    "category_marker_re": "(?i)(?:^\\s*(?:Total\\s+)?Unfunded\\s+Portfolio\\s+Company\\s+Commitments\\s*$|\\bTotal\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+[Cc]ompany\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\s*$)",
+    "category_marker_re": "(?i)(?:^\\s*(?:Total\\s+)?Unfunded\\s+Portfolio\\s+Company\\s+Commitments\\s*$|\\bTotal\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+[Cc]ompany\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\s*$|\\bEquity\\s+Investments\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?)\\s+(?!.*\\bInvestment\\s+Type\\b)(?!.*\\bTotal\\b)(?!.*\\b(?:Inc\\.?|LLC|L\\.L\\.C\\.|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|Holdings?|Topco|TopCo|Co-Invest)\\b)[^|]+$)",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)^\\s*(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+|^\\s*Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+(?:debt\\s+investments\\s+)?|^\\s*Portfolio\\s+Company\\s+|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+.+?(?=\\s+Maturity\\s+Date|$)|\\s+Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
+    "issuer_name_strip_re": "(?i)^\\s*\"?(?:NCNA\\s+Ptfl\\s+Cmp\\s+Invs\\s+(?:First|Second)\\s+Lien\\s+Debt\\s+Investments|Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+(?:debt\\s+investments\\s+)?Equity\\s+Investments\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))\\s+(?:Aerospace & Defense|Air Freight & Logistics|Banking, Finance, Insurance, and Real Estate|Capital Equipment|Chemicals, Plastic, & Rubber|Chemicals|Commercial Services & Supplies|Diversified Consumer Services|Electrical Equipment|Electronic Equipment, Instruments & Components|Financial Services|Food Products|Health Care Equipment & Supplies|Health Care Providers & Services|Health Care Technology|Healthcare & Pharmaceuticals|High Tech Industries|Hotels, Restaurants & Leisure|IT Services|Insurance|Life Sciences Tools & Services|Machinery|Media|Pharmaceuticals, Biotechnology & Life Sciences|Professional Services|Real Estate Management & Development|Services: Business|Services: Consumer|Software|Trading Companies & Distributors|Transportation: Cargo|Wholesale)\\s+|(?<=Inc\\.)\\s+Preferred\\s+Stock$|\\s+One\\s+Investment\\s+Type\\s+L\\.P\\.\\s+Interest$",
+    "canonical_strip_re": "(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments|NCNA\\s+Ptfl\\s+Cmp\\s+Invs)\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+|^\\s*Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+(?:debt\\s+investments\\s+)?|^\\s*Portfolio\\s+Company\\s+|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+.+?(?=\\s+Maturity\\s+Date|$)|\\s+Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -109,9 +110,9 @@
       "Healthcare & Pharmaceuticals",
       "Services:"
     ],
-    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(.+?)\\s+Investment\\s+Type\\s+.+?(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
-    "hierarchy_instrument_re": "(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(?:.+?)\\s+Investment\\s+Type\\s+(.+?)(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)\\bInvestment\\s+Type\\b') AND (regexp_matches(_clean, '(?i)^\\s*(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+') OR regexp_matches(_clean, '(?i)^\\s*Portfolio\\s+Company\\s+') OR regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|Company|Co\\.?)\\s*(?:\\([^)]*\\))?\\s+Investment\\s+Type\\b'))"
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments|NCNA\\s+Ptfl\\s+Cmp\\s+Invs)\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(.+?)\\s+Investment\\s+Type\\s+.+?(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments|NCNA\\s+Ptfl\\s+Cmp\\s+Invs)\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(?:.+?)\\s+Investment\\s+Type\\s+(.+?)(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)\\bInvestment\\s+Type\\b') AND (regexp_matches(_clean, '(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments|NCNA\\s+Ptfl\\s+Cmp\\s+Invs)\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+') OR regexp_matches(_clean, '(?i)^\\s*Portfolio\\s+Company\\s+') OR regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|Company|Co\\.?)\\s*(?:\\([^)]*\\))?\\s+Investment\\s+Type\\b'))"
   },
   "archetypes": {
     "debt": {
@@ -207,6 +208,96 @@
     ],
     "pik_only_tag_reading": [
       "coupon"
+    ],
+    "reference_rate_columns": [
+      "Reference Rate and Spread"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "E=EURIBOR",
+      "C=CORRA",
+      "SN=SONIA",
+      "T=TONA",
+      "P=PRIME"
+    ],
+    "untagged_values": [
+      "0000950170-24-038501 C_b15628a3-5f27-4797-a6dd-bce74ab1dee5 fair_value 0",
+      "0000950170-24-126450 C_13ff032e-c635-4e2f-a6b4-bd2b94570899 fair_value 0",
+      "0000950170-24-126450 C_4c342034-b3fa-45df-9670-626759823e15 fair_value 0",
+      "0000950170-24-126450 C_93f875df-6fc6-4560-b7f4-ad615acf5ee0 fair_value 0",
+      "0000950170-25-044452 C_13515ed5-e020-4e37-8964-1faee6216ff5 fair_value 0",
+      "0000950170-25-044452 C_1525d9f8-dce3-40d5-ab90-cc5163b6010b fair_value 0",
+      "0000950170-25-044452 C_3179619d-78cc-486d-8dda-aba0b2ff4bc1 fair_value 0",
+      "0000950170-25-044452 C_4e9aa4c5-64a1-4167-be78-038273904063 fair_value 0",
+      "0000950170-25-044452 C_5bb1b4c2-0feb-4d03-b9c8-2c6b5aef3605 fair_value 0",
+      "0000950170-25-044452 C_64b6e2f1-7f41-4e51-9a89-9c5ea96c40d0 fair_value 0",
+      "0000950170-25-044452 C_98c40db2-9b31-4d12-aca4-aac5cb9eac5d fair_value 0",
+      "0000950170-25-044452 C_a520518a-162b-42da-9195-7f6c8972a281 fair_value 0",
+      "0000950170-25-044452 C_a529e9df-0655-42b2-a5d6-fc1465d64010 fair_value 0",
+      "0000950170-25-044452 C_a724448b-3301-4730-88ce-072b33dc8884 fair_value 0",
+      "0000950170-25-044452 C_b41c787f-4a56-4113-bf5e-fa968a8611de fair_value 0",
+      "0000950170-25-044452 C_b866a2c7-669b-485a-b9b0-07c7a3c96642 fair_value 0",
+      "0000950170-25-044452 C_bb3faa60-e8d4-4cd0-bb5c-f84c74265ae8 fair_value 0",
+      "0000950170-25-044452 C_c6055651-9f10-4a8d-b462-869e519902e8 fair_value 0",
+      "0000950170-25-044452 C_c92535b4-6743-4369-9e03-0fdab3664ae2 fair_value 0",
+      "0000950170-25-044452 C_c9b9f375-23e5-442e-bbf2-da106f707bca fair_value 0",
+      "0000950170-25-044452 C_de8147c6-87e7-4928-8e19-d53623927da7 fair_value 0",
+      "0000950170-25-044452 C_e17825b0-5784-457c-938c-b6b50ad2a49d fair_value 0",
+      "0000950170-25-071600 C_017cbf7a-a0ea-4f87-bf19-cf3b93de1ff2 fair_value 0",
+      "0000950170-25-071600 C_136324ab-9e27-4b06-83f1-09b1c2e6e539 fair_value 0",
+      "0000950170-25-071600 C_1a085f6d-c697-4b4e-9e81-dbe1bd6b335a fair_value 0",
+      "0000950170-25-071600 C_4ae45ddc-77cd-4c4f-b3e3-ea0f0f1f2101 fair_value 0",
+      "0000950170-25-071600 C_51c5e3c1-ae73-45a2-b0ac-e34812e9c150 fair_value 0",
+      "0000950170-25-071600 C_725eb378-60f0-4fdd-9897-f6fe50eb152b fair_value 0",
+      "0000950170-25-071600 C_78788c20-cf5c-4f37-9d30-7a7699063cc3 fair_value 0",
+      "0000950170-25-071600 C_80ddac2f-8ddb-4107-bc4b-88148b6b19e5 fair_value 0",
+      "0000950170-25-071600 C_81f56d50-dfe3-48c7-8520-b1732fa80316 fair_value 0",
+      "0000950170-25-071600 C_85c2f722-8e84-4888-a1c4-1202d6d65132 fair_value 0",
+      "0000950170-25-071600 C_a268d3df-c28d-4d15-b127-99b95762d846 fair_value 0",
+      "0000950170-25-071600 C_acea059d-ef07-4e25-b490-701412ef065f fair_value 0",
+      "0000950170-25-071600 C_ce4ef9cf-2cac-4c51-a567-8558bd860e67 fair_value 0",
+      "0000950170-25-071600 C_d0fc89e4-5114-4f28-9035-42dd18008699 fair_value 0",
+      "0000950170-25-071600 C_d744d58a-8a24-47ac-8b7b-5fab325e2535 fair_value 0",
+      "0000950170-25-071600 C_d9adc9ab-4dec-4266-83d0-7847ec1c6da4 fair_value 0",
+      "0000950170-25-071600 C_dc9cf973-f9de-4d9b-9f1f-cba508026a84 fair_value 0",
+      "0000950170-25-071600 C_e68a71ac-a9e5-4eba-b36d-1e8d52460d70 fair_value 0",
+      "0000950170-25-071600 C_ea10cbef-b4d1-4d79-83cd-8c540ecefa04 fair_value 0",
+      "0000950170-25-071600 C_eafd25a0-bc37-4182-8194-bf4cab77e57a fair_value 0",
+      "0000950170-25-071600 C_f6a738b5-49b9-48a0-bfcf-d4cc192c0578 fair_value 0",
+      "0000950170-25-071600 C_f9139194-5eec-45b3-a3ca-757136430a69 fair_value 0",
+      "0001193125-26-116342 C_38b88886-7b42-462a-9c2a-c1adb97bb886 fair_value 0",
+      "0001193125-26-116342 C_5386e956-3d31-4d95-a41b-6665a84057b9 fair_value 0",
+      "0001193125-26-116342 C_7433ec08-59fb-48bc-9782-9078ee4b3191 fair_value 0",
+      "0001193125-26-116342 C_bda155b7-8c5b-41c7-93ee-06c820d4eeaf fair_value 0",
+      "0001193125-26-116342 C_ff6bf42d-23d7-4eb6-b477-bb630b02213a fair_value 0",
+      "0001959604-25-000006 C_01bb32e4-4e23-4f0a-a027-53e7e7a1041d fair_value 0",
+      "0001959604-25-000006 C_165471ab-1899-4f6b-8279-ce23b781d72b fair_value 0",
+      "0001959604-25-000006 C_176937b9-7e6d-471b-a6e0-c30dd8ee4d6d fair_value 0",
+      "0001959604-25-000006 C_43c44f74-7208-4479-8d87-514f5da79d14 fair_value 0",
+      "0001959604-25-000006 C_4bf0f972-fa3d-4c45-bb02-beaba717d95b fair_value 0",
+      "0001959604-25-000006 C_4c5f0594-566e-4fcb-b6d8-0dd36466ec48 fair_value 0",
+      "0001959604-25-000006 C_51f15c3b-22fc-4bdc-aa86-6c9b3b03114b fair_value 0",
+      "0001959604-25-000006 C_5939cf3e-8407-4bab-a4f8-473af66be1cd fair_value 0",
+      "0001959604-25-000006 C_5a05d9bd-40f5-4742-8590-7bd9ce3971f5 fair_value 0",
+      "0001959604-25-000006 C_5d92a7e4-c17d-429e-8f14-e20e740fd892 fair_value 0",
+      "0001959604-25-000006 C_6676705e-ba7c-40b3-a06f-2569b7cd8bfb fair_value 0",
+      "0001959604-25-000006 C_743e5199-fbe0-4461-9276-563ed5deeac3 fair_value 0",
+      "0001959604-25-000006 C_7e01431c-2315-4dee-9c88-a8931293fcd1 fair_value 0",
+      "0001959604-25-000006 C_81285ab1-2198-4286-bb19-5f07971746ea fair_value 0",
+      "0001959604-25-000006 C_93910b3f-43c2-48a8-b072-a22a971ad4ba fair_value 0",
+      "0001959604-25-000006 C_9b3edafc-40cb-4256-a237-11c30740af12 fair_value 0",
+      "0001959604-25-000006 C_b2d241a0-b2d1-44d5-a9ec-11e7d8424a05 fair_value 0",
+      "0001959604-25-000006 C_b4e8541c-f0c2-41d2-8598-68ce2fb57db9 fair_value 0",
+      "0001959604-25-000006 C_c667dcc2-cbb6-4bd1-bfb9-05f100516283 fair_value 0",
+      "0001959604-25-000006 C_c7186a69-4847-43c0-a6f4-81298ccbc3b7 fair_value 0",
+      "0001959604-25-000006 C_ca3e13e6-f5ab-40ec-8d59-730dd587e794 fair_value 0",
+      "0001959604-25-000006 C_ce6c4817-bb5d-4613-b476-aff5bd5f10b6 fair_value 0",
+      "0001959604-25-000006 C_da7ef798-3b5a-451b-ac4a-a086cd3dffc7 fair_value 0",
+      "0001959604-25-000006 C_eac50d13-de56-4f29-b49e-bf779ba89fe3 fair_value 0",
+      "0001959604-25-000006 C_eeca467a-6d10-4045-aa0f-64230dfd690c fair_value 0",
+      "0001959604-25-000006 C_f4c09021-c8bb-427b-b94f-1f32dbe54708 fair_value 0",
+      "0001959604-25-000006 C_f673e332-40ca-4cae-b4d8-8639b17cf384 fair_value 0",
+      "0001959604-25-000006 C_fc85e9ad-15f5-4561-8987-057fa16d0b7e fair_value 0"
     ]
   }
 }

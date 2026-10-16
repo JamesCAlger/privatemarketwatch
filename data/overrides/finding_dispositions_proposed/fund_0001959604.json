@@ -1,0 +1,64 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "jcxc",
+ "dispositions": [
+  {
+   "disposition_id": "PD-C04-1959604-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "reason_key": "c04-share-cell-printed-as-dash",
+   "ciks": ["0001959604"],
+   "quarters": ["2025-03-31", "2025-06-30", "2025-09-30", "2026-06-30"],
+   "statement": "The fund holds three or four equity rows a quarter: Eclipse Topco preferred stock and Red Griffin TopCo common stock, which print a share count and publish it (72 or 50, and 1,746; the 2024-09-30 to 2025-03-31 counts are now set from the page by row correction), and one or two Firebird Co-Invest L.P. interests, whose 'Principal / Shares' cell the page prints as a dash and for which no unit count is tagged. The check needs 70 pct of equity rows with a count; two of three or two of four is 67 or 50 pct. No fix applies: the page prints no units for the L.P. interests, so there is no figure to publish.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-071600", "verbatim": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412 Total non-controlled-non-affiliated Portfolio Company equity investments 9,604 8,590 2.2 %", "quote": "'L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412 Total non-controlled-non-affiliated Portfolio Company equity investments 9,604 8,590 2.2 %': 2025-03-31, the share cell is a dash."},
+    {"source": "filing", "accession": "0001959604-25-000006", "verbatim": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470", "quote": "'L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470': 2025-06-30, both L.P. interest lines print a dash for shares (the same lines at 2025-09-30: '... L.P. Interest - 434 468 ... L.P. Interest - - 2 434 470')."},
+    {"source": "filing", "accession": "0001193125-25-280633", "verbatim": "Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470", "quote": "'Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470': 2025-09-30."},
+    {"source": "filing", "accession": "0001193125-26-345216", "verbatim": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590", "quote": "'L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590': 2026-06-30. The second line is now counted as equity because the row correction keeps the interest out of the fund class (it was a fund row in jcxa)."},
+    {"source": "filing", "accession": "0001193125-26-345216", "verbatim": "Eclipse Topco, Inc. Preferred Stock 50 $ 601 $ 596 601 596 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 1,746 8,435 1,125", "quote": "'Eclipse Topco, Inc. Preferred Stock 50 $ 601 $ 596 ... Red Griffin TopCo, LLC Common Stock 1,746 8,435 1,125': the two equity rows with a printed count, both published with it."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001959604/c04.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox jcxc); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-B01-1959604-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "ciks": ["0001959604"],
+   "quarters": ["2025-03-31", "2025-06-30"],
+   "statement": "The leaves B01 counts without a fair value are 18 contexts of the prior year-end (2024-12-31) comparative schedule that each 10-Q of 2025 prints after the current one: undrawn revolvers and delayed-draw lines printed '- ( 3 ) -' (par dash, bracketed cost, fair value dash). They are not positions of the quarter (they are 2024-12-31 positions, and the 2024-12-31 rows themselves are now published at fair value 0 from the 10-K's printed lines, untagged_values). Without them 2025-03-31 has 285 of 286 current leaves valued and 2025-06-30 326 of 326. The one current leaf left at 2025-03-31 is a second context of the Red Griffin TopCo common stock member that carries only the unit count (InvestmentOwnedBalancePrincipalAmount 1,746,000), not a position; the count is now on the published row. No fix applies in the fund's settings: the check's own comparative-period exclusion does not reach these leaves.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-071600", "verbatim": "Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data) Portfolio Company (13) Investment Type Reference Rate", "quote": "'Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data) Portfolio Company (13) Investment Type Reference Rate': the comparative schedule in the 10-Q for 2025-03-31."},
+    {"source": "filing", "accession": "0000950170-25-071600", "verbatim": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holding", "quote": "'The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holding': a comparative-schedule line (footnote 9 is the 2024-12-31 numbering; the current schedule prints the same line with footnote 15)."},
+    {"source": "filing", "accession": "0001959604-25-000006", "verbatim": "Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data) Portfolio Company (13) Investment Type Reference Rate", "quote": "'Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data) Portfolio Company (13) Investment Type Reference Rate': the same comparative schedule in the 10-Q for 2025-06-30."},
+    {"source": "filing", "accession": "0001959604-25-000006", "verbatim": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holding", "quote": "'The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holding': comparative line in the 10-Q for 2025-06-30 (current line: '... - ( 3 ) - 17 NRO Holdin')."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001959604/b01e.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox jcxc); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F16-1959604-3",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-quarter-distribution-includes-catch-up-declaration",
+   "ciks": ["0001959604"],
+   "quarters": ["2024-12-31"],
+   "statement": "The fourth quarter of 2024 carries three declarations, 0.5786 (31 October), 0.1693 (27 November) and 0.2141 (27 December), 0.962 a share against one declaration a quarter before (0.1295, 0.3566, 0.3644): the fund moved to monthly distributions and the October one is a catch-up. Annualised over NAV 14.60 it is 26.4 pct, above 1.5 times the income yield. The published 0.962 equals the printed year (1.8125) less the three quarters before. No fix applies: the figures are the filer's; the check annualises one irregular quarter.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-044452", "verbatim": "Date Per Share Amount March 28, 2024 March 28, 2024 April 5, 2024 $ 0.1295 $ 1,537 May 13, 2024 May 28, 2024 June 6, 2024 0.3566 4,376 August 13, 2024 August 28, 2024 September 6, 2024 0.3644 5,820 October 31, 2024 October 31, 2024 November 13, 2024 0.5786 10,932 November 27, 2024 November 29, 2024 December 12, 2024 0.1693 3,262 December 27, 2024 December 27, 2024 January 30, 2025 0.2141 4,860 $ 1.8125 $ 30,787", "quote": "The 10-K's distribution table: three declarations in the fourth quarter (0.5786 + 0.1693 + 0.2141 = 0.962), one in each quarter before, 1.8125 for the year."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001959604/ff.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox jcxc); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}

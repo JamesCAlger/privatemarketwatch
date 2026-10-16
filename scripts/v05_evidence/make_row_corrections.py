@@ -1008,6 +1008,18 @@ if APS_LOOP in held and APS_LOOP_FILE.exists():
         SPECS.append((APS_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2083477-fundloop"))
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
+# Jefferies Credit Partners, fund-clearing loop (2026-10-16): printed share counts the build did not publish (C04),
+# two members with 'Investment' for 'Investment Type' (C206), the Firebird L.P. interest classed as a fund from
+# 2026-03-31, two instruments no member word separated. One spec per row, each with its printed line, in
+# row_correction_specs/0001959604.json (exact identifiers).
+JEFFERIES_LOOP = "0001959604"
+JEFFERIES_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001959604.json"
+if JEFFERIES_LOOP in held and JEFFERIES_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(JEFFERIES_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((JEFFERIES_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1959604-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
 # decision D-153: two rows of the first five funds read on the page while clearing rule X11
 ARES_MURCHISON = "Murchison Oil and Gas, LLC and Murchison Holdings, LLC, First lien senior secured loan"
 APOLLO_VERSION1_EUR = ("IT Services Version 1 Investment Company 24 Bidco Limited Investment Type First Lien Secured Debt - Term Loan "

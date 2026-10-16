@@ -1,0 +1,107 @@
+[
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
+  "exact": true,
+  "fields": {"shares_held": "72"},
+  "reason": "C04: the share count is printed and not published (no share fact on the context). Printed: 'Eclipse Topco, Inc. Preferred Stock 72 706 706'; published as 72 from 2025-06-30, where the filer tags it."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
+  "exact": true,
+  "fields": {"shares_held": "72"},
+  "reason": "C04 (earlier reviewer's real-error verdict): the share count is printed and not published. Printed: 'Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 706'."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Investment Type Common Stock",
+  "exact": true,
+  "fields": {"shares_held": "1746"},
+  "reason": "C04 (earlier reviewer's real-error verdict): the share count is printed and not published. Printed: 'Red Griffin TopCo, LLC Common Stock 1,746 8,435 8,000'; published as 1,746 from 2025-06-30."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
+  "exact": true,
+  "fields": {"shares_held": "72"},
+  "reason": "C04: the share count is printed and not published. Printed: 'Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 749'."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "\"Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Investment Type Common Stock",
+  "exact": true,
+  "fields": {"shares_held": "1746"},
+  "reason": "C04: the share count is printed and not published (the filer tags it as InvestmentOwnedBalancePrincipalAmount 1,746,000 on a separate context with no values). Printed: 'Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429'."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Non-controlled-non-affiliated Portfolio Company Equity Investments L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. One Investment Type L.P. Interest",
+  "exact": true,
+  "fields": {"instrument_description": "L.P. Interest One"},
+  "reason": "The member puts the row word 'One' before 'Investment Type', so no instrument was read; the printed line is 'Firebird Co-Invest L.P. L.P. Interest - - 2' and the filer's member from 2025-09-30 reads '... Investment Type L.P. Interest One' (published 'L.P. Interest One')."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Preferred Stock",
+  "exact": true,
+  "fields": {"instrument_description": "Preferred Stock"},
+  "reason": "The member has no 'Investment Type' word, so no instrument was read and 'Preferred Stock' stayed in the name (cut by the wrapper's issuer strip). Printed: 'Eclipse Topco, Inc. Preferred Stock 72 831 846'."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments L.P Interests Commercial Services & Supplies Firebird Co-Invest L.P Investment Type L.P Interest",
+  "exact": true,
+  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "exposure_type": "DIRECT", "issuer_category": "CORPORATE"},
+  "reason": "The same co-investment L.P. interest is classed EQUITY_COMMON in 2025-03-31 to 2025-12-31; from 2026-03-31 the member reads 'L.P Interest' (no full stop) and the row was classed as a fund. Printed under Equity Investments: 'Firebird Co-Invest L.P. L.P. Interest - 434 537'."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments L.P Interests Commercial Services & Supplies Firebird Co-Invest L.P Investment Type L.P Interest",
+  "exact": true,
+  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "exposure_type": "DIRECT", "issuer_category": "CORPORATE"},
+  "reason": "As at 2026-03-31: member 'L.P Interest' classed as a fund; the earlier quarters class the same interest EQUITY_COMMON. Printed under Equity Investments: 'Firebird Co-Invest L.P. L.P. Interest - 434 582'."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Wholesale The Hiller Companies, LLC Investment First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.00% Maturity Date 6/20/2030",
+  "exact": true,
+  "fields": {"issuer_name": "The Hiller Companies, LLC", "instrument_description": "First Lien Delayed Draw Term Loan"},
+  "reason": "C206: the filer wrote 'Investment' for 'Investment Type' in this member, so the whole label became the issuer. Printed: 'The Hiller Companies, LLC First Lien Delayed Draw Term Loan S + 5.00 % 6/20/2030 - ( 7 ) ( 15 )'."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Wholesale The Hiller Companies, LLC Investment First Lien Revolver Reference Rate and Spread S + 5.00% Maturity Date 6/20/2030",
+  "exact": true,
+  "fields": {"issuer_name": "The Hiller Companies, LLC", "instrument_description": "First Lien Revolver"},
+  "reason": "C206: the filer wrote 'Investment' for 'Investment Type' in this member, so the whole label became the issuer. Printed: 'The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 12 8 8'."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/02/2032",
+  "exact": true,
+  "fields": {"principal_amount_currency": "JPY", "principal_amount_usd": "381455.7", "principal_fx_rate_to_usd": "0.006758126647293370", "principal_fx_status": "reference_fx"},
+  "reason": "X06: the yen par 56,444,000 is tagged with unit USD in this 10-Q only (JPY in every other filing), so 56.4M was published as the dollar par of a 382 thousand loan. Printed: 'Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382'. Dollar amount at the build's own FRED H.10 rate for 2025-09-30 (DEXJPUS 0.0067581266)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread C + 5.00% Maturity Date 2/02/2032",
+  "exact": true,
+  "fields": {"principal_amount_currency": "CAD", "principal_amount_usd": "379119.7", "principal_fx_rate_to_usd": "0.718029726430674", "principal_fx_status": "reference_fx"},
+  "reason": "The Canadian-dollar par 528,000 is tagged with unit USD in this 10-Q only (CAD in every other filing). Printed: 'Spruce Bidco II Inc. First Lien Term Loan C + 5.00 % 2/2/2032 CAD 528 $ 359 $ 379'. Dollar amount at the build's own FRED H.10 rate for 2025-09-30 (DEXCAUS 0.7180297)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Professional Services Foreside Financial Group, LLC 1 Investment Type First Lien Term Loan Reference Rate and Spread S + 5.25% Maturity Date 9/30/2027",
+  "exact": true,
+  "fields": {"instrument_description": "First Lien Delayed Draw Term Loan"},
+  "reason": "The member names this line a term loan; the page prints it as Foreside's second undrawn delayed-draw line (no par, cost (21), value (25)), and the only term loan carries par 1,051. Printed: 'Foreside Financial Group, LLC First Lien Delayed Draw Term Loan S + 5.25 % 9/30/2027 - ( 21 ) ( 25 )'."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "NCNA Ptfl Cmp Invs First Lien Debt Investments Life Sciences Tools & Services Titan Luxco I SARL Investment Type First Lien Revolver Reference Rate and Spread S + 5.00% Maturity Date 6/12/2031",
+  "exact": true,
+  "fields": {"principal_amount_currency": "USD", "principal_amount_usd": "235000", "principal_fx_rate_to_usd": "1.0", "principal_fx_status": "source_usd"},
+  "reason": "The dollar (SOFR) revolver's par 235,000 is tagged with unit EUR (cost and fair value in USD); the page prints it without a currency code, unlike the euro lines beside it. Printed: 'Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235' and 'Titan Luxco I SARL First Lien Revolver E + 5.00 % 6/12/2031 EUR 99 114 114'."
+ }
+]
