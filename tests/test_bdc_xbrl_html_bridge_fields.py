@@ -1167,6 +1167,64 @@ def test_a_lien_section_ends_at_its_total_and_is_not_inherited(tmp_path):
     assert out["printed_lien_totals"] == {"Second Lien": 150000.0}                 # scale 3; prior period ignored
 
 
+def _aps_layout(tmp_path):
+    """APS BDC 10-Q 2026-03-31: section totals print as '<section> Total', and a Level 3 inputs
+    table later prints 'Total First Lien Debt' with the Level 3 part only."""
+    ctxs = [_ix_context("c1", "Acme Co | CHS BDC 2 LLC 1"), _ix_context("c2", "Beta Co | CHS BDC 2 LLC"),
+            _ix_context("c3", "MHH Co | CHS BDC 2 LLC"), _ix_context("t", None)]
+    rows = [_heading("First Lien Debt"), _ix_row("c1", ["Acme Co", "SOFR +", "5.50 %"], "1641"),
+            _ix_total("First Lien Debt Total", "t", "1641", scale="0"),
+            _heading("Second Lien Debt"), _ix_row("c2", ["Beta Co", "SOFR +", "8.00 %"], "165"),
+            _ix_total("Second Lien Debt Total", "t", "165", scale="0"),
+            _heading("Warrants"), _ix_row("c3", ["MHH Co"], "3"),
+            _ix_total("Warrants Total", "t", "3", scale="0"),
+            _ix_total("Total First Lien Debt", "t", "1290", scale="0")]
+    return _write_ixbrl(tmp_path, ctxs, rows)
+
+
+APS_ENCODING = {"0002083477": {"section_total_reading": ["label_then_total"]}}
+
+
+def test_a_section_total_printed_after_its_label_closes_the_section_where_the_wrapper_says_so(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import _closed_section, propose_field_bridges_from_ixbrl
+    assert _closed_section(["First Lien Debt Total", "$", "1,641,801,287"], True) == "First Lien Debt"
+    assert _closed_section(["Warrants Total", "$", "3,511,673"], True) == "Warrant"
+    out = propose_field_bridges_from_ixbrl(cik="0002083477", accession_number="A", report_date="2025-12-31",
+                                           html_path=_aps_layout(tmp_path), encodings=APS_ENCODING)
+    lien = {b["raw_id_lower"]: b["lien_position"] for b in out["bridges"]}
+    assert lien["acme co | chs bdc 2 llc 1"] == "First Lien" and lien["beta co | chs bdc 2 llc"] == "Second Lien"
+    assert lien["mhh co | chs bdc 2 llc"] == ""
+    # the schedule's own totals; the Level 3 table's 'Total First Lien Debt' comes after the sections closed
+    assert out["printed_lien_totals"] == {"First Lien": 1641.0, "Second Lien": 165.0}
+
+
+def test_a_label_then_total_row_does_not_close_a_section_without_the_setting(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import _closed_section, propose_field_bridges_from_ixbrl
+    assert _closed_section(["First Lien Debt Total", "$", "1,641,801,287"]) is None
+    # a borrower whose name ends in 'Total' is not a section total either way
+    assert _closed_section(["Acme Total", "100"], True) is None
+    out = propose_field_bridges_from_ixbrl(cik="0002083477", accession_number="A", report_date="2025-12-31",
+                                           html_path=_aps_layout(tmp_path), encodings={})
+    # the old reading: the sections stay open and the Level 3 total stands as the First Lien total
+    assert out["printed_lien_totals"] == {"First Lien": 1290.0}
+
+
+def test_section_total_reading_admits_one_value():
+    import json
+    import pytest
+    from pipeline.source_encodings import load_encodings, section_total_label_first
+    assert section_total_label_first("2083477", APS_ENCODING) is True
+    assert section_total_label_first("0001803498", APS_ENCODING) is False
+    import tempfile
+    from pathlib import Path
+    with tempfile.TemporaryDirectory() as folder:
+        wrapper = {"schema_version": "bdc-xbrl-wrapper.v3", "cik": "0002083477",
+                   "source_encodings": {"section_total_reading": ["trailing"]}}
+        (Path(folder) / "0002083477.json").write_text(json.dumps(wrapper), encoding="utf-8")
+        with pytest.raises(ValueError):
+            load_encodings(folder)
+
+
 def test_filed_lien_subtotals_take_one_grain_per_fund_quarter_and_count_copies_once():
     import pandas as pd
     from pipeline.bdc_xbrl_html_bridge import filed_lien_subtotals

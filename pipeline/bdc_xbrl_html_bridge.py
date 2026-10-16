@@ -749,15 +749,20 @@ def _section_for_row(row: list[str]) -> tuple[str, str] | None:
     return None
 
 
-def _closed_section(row: list[str]) -> str | None:
+def _closed_section(row: list[str], label_then_total: bool = False) -> str | None:
     """The section a 'Total <section>' row closes, by its instrument label; None otherwise.
 
     Only the section's own grand total closes it: 'Total First Lien Debt' does,
-    'Total First Lien Debt - controlled/affiliated' (a part of the section) does not."""
+    'Total First Lien Debt - controlled/affiliated' (a part of the section) does not.
+    With ``label_then_total`` (``source_encodings.section_total_reading``) a '<section> Total'
+    row closes it too: APS BDC prints 'First Lien Debt Total $ 1,652,462,304 $ 1,641,801,287'."""
     cells = [_norm_text(cell) for cell in row if _norm_text(cell)]
     if not cells:
         return None
-    match = re.match(r"(?i)^total\s+(.+)$", _CONTINUED_RE.sub("", cells[0]))
+    first = _CONTINUED_RE.sub("", cells[0])
+    match = re.match(r"(?i)^total\s+(.+)$", first)
+    if not match and label_then_total:
+        match = re.match(r"(?i)^(.+?)\s+total$", first)
     if not match:
         return None
     for pattern, _family, instrument in _SECTION_PATTERNS:
@@ -1486,8 +1491,9 @@ def propose_field_bridges_from_ixbrl(
 
     cik_norm = normalize_cik(cik)
     filer_reading = reference_rate_reading(cik_norm, encodings, report_date)
-    from pipeline.source_encodings import industry_columns
+    from pipeline.source_encodings import industry_columns, section_total_label_first
     filer_industry_columns = industry_columns(cik_norm, encodings)
+    label_then_total = section_total_label_first(cik_norm, encodings)
     acc = _norm_text(accession_number)
     acc_nodashes = acc.replace("-", "")
     path = html_path or (BDC_HTML_CACHE_DIR / cik_norm.lstrip("0") / f"{acc_nodashes}.html")
@@ -1573,7 +1579,7 @@ def propose_field_bridges_from_ixbrl(
             from pipeline.lien_classification import classify_lien as _tier_of
             lien_sections_seen = lien_sections_seen or bool(_tier_of("", cur_lien))
             continue
-        closed = _closed_section(cells)
+        closed = _closed_section(cells, label_then_total)
         if closed is not None:
             # The section ends at its own total. A heading the reader does not know may follow;
             # its rows must not inherit this section's lien.

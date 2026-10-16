@@ -723,6 +723,13 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
           "description": "Accession numbers of filings in which the filer tags percent of net assets as a ratio above 0.50, which the shared row rule (multiply by 100 only up to 0.50) publishes unscaled (Ares Core Infrastructure Fund, 10-Q 2024-09-30: printed 224.22 %, tagged 2.2422). In a listed filing every tagged percent is multiplied by 100 (transform pct_of_net_assets:rate_x100). Evidence required: the printed percent and the tagged fact of a row, and fair value over net assets equal to the tagged ratio."
         },
+        "section_total_reading": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "label_then_total"},
+          "description": "Opt-in: the filer prints a schedule section's own total as '<section> Total' (APS BDC, 10-Q 2026-03-31: 'First Lien Debt Total $ 1,652,462,304 $ 1,641,801,287 115.91 %') rather than 'Total <section>'. The page reader then closes the section at that row and takes its tagged fair value as the section's printed total for the lien reconciliation gate. Without it the section stays open and a later 'Total First Lien Debt' line of a notes table (the Level 3 inputs table, 1,290,025,881) is taken as the section total. Evidence required: the printed section total line and its tagged fair value."
+        },
         "par_tagged_as_units": {
           "type": "array",
           "minItems": 1,

@@ -1,0 +1,34 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002083477",
+ "entity_name": "APS BDC, LLC",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2026-03-31",
+   "field": "net_assets",
+   "value": 1417228661,
+   "evidence": "0002083477-26-000003 (10-Q, 2026-03-31) balance sheet: 'Distributable earnings (accumulated losses) 528,757 Total net assets $ 1,417,228,661 Total liabilities and net assets $ 2,017,331,014'. The filer tags it us-gaap:MembersEquity, which the shared balance-sheet reader does not take; net assets were blank."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "shares_outstanding",
+   "value": 75000000,
+   "evidence": "0002083477-26-000003 (10-Q, 2026-03-31) balance sheet: 'Units of limited liability company interests, $ 0.001 par value, unlimited units authorized, 75,000,000 units issued and outstanding at March 31, 2026'. Units outstanding were blank on the quarter (the cover-page count sits on a row dated 2026-05-14)."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "net_assets",
+   "value": 1429334000,
+   "evidence": "0002083477-26-000008 (10-Q, 2026-06-30) balance sheet: 'Distributable earnings (accumulated losses) 12,634 Total net assets $ 1,429,334 Total liabilities and net assets $ 2,174,674' (in thousands). Tagged us-gaap:MembersEquity; net assets were blank."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "shares_outstanding",
+   "value": 75000000,
+   "evidence": "0002083477-26-000008 (10-Q, 2026-06-30) balance sheet: 'Units of limited liability company interests, $ 0.001 par value, unlimited units authorized, 75,000,000 units issued and outstanding at June 30, 2026'. Units outstanding were blank on the quarter (the cover-page count sits on a row dated 2026-08-10)."
+  }
+ ],
+ "income_concept_suppress": ["noninterestexpensedirectorsfees"],
+ "notes": "Fund-clearing loop 2026-10-16: net assets (tagged MembersEquity) and units outstanding declared from the printed balance sheets. us-gaap:NoninterestExpenseDirectorsFees (75,000 and 38 thousand, printed 'Directors fees') was read as interest expense by the substring 'interestexpense'; suppressed. The printed 'Interest and financing fees' (4,126,935; 7,683 thousand, tagged InterestAndDebtExpense) is not mapped by the income extractor, so interest expense is now blank, not wrong."
+}

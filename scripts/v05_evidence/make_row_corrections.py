@@ -997,6 +997,17 @@ if BAIN in held and BAIN_LOOP_FILE.exists():
         SPECS.append((BAIN, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1899017-fundloop"))
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
+# APS BDC, fund-clearing loop (2026-10-16): the MHH Healthcare warrant, printed in the Warrants section with the unit
+# count in the 'Par Amount/Units' column, published as a loan with the count as par (the member names the holding company
+# only). One spec per row, each with its printed line, in row_correction_specs/0002083477.json (exact identifiers).
+APS_LOOP = "0002083477"
+APS_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0002083477.json"
+if APS_LOOP in held and APS_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(APS_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((APS_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2083477-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
 # decision D-153: two rows of the first five funds read on the page while clearing rule X11
 ARES_MURCHISON = "Murchison Oil and Gas, LLC and Murchison Holdings, LLC, First lien senior secured loan"
 APOLLO_VERSION1_EUR = ("IT Services Version 1 Investment Company 24 Bidco Limited Investment Type First Lien Secured Debt - Term Loan "

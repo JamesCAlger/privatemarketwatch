@@ -1,0 +1,102 @@
+{
+ "cik": "0002083477",
+ "label": "asxe",
+ "before": "spoff3",
+ "shared_code": true,
+ "declared_changes": [
+  {"column": "lien_position", "rows": 126, "why": "First Lien read from the printed section heading on the 126 first-lien loans of 2026-03-31 (and 134 of 2026-06-30, new rows): the lien gate no longer compares the section with the Level 3 table's total (section_total_reading label_then_total)"},
+  {"column": "asset_category", "rows": 1, "why": "MHH Healthcare warrant LOAN -> EQUITY_COMMON (row correction; also at 2026-06-30, a new row)"},
+  {"column": "index_classification", "rows": 1, "why": "MHH warrant DIRECT_LENDING -> COMMON_EQUITY"},
+  {"column": "asset_class", "rows": 1, "why": "MHH warrant PRIVATE_CREDIT -> PRIVATE_EQUITY"},
+  {"column": "instrument_description", "rows": 1, "why": "MHH warrant 'CHS BDC 2 LLC' (the holding company) -> 'Warrants' (the printed section)"},
+  {"column": "principal_amount", "rows": 1, "why": "MHH warrant: the unit count 4,682,230 published as par withdrawn"},
+  {"column": "principal_amount_usd", "rows": 1, "why": "follows principal_amount"},
+  {"column": "shares_held", "rows": 1, "why": "MHH warrant: the printed unit count 4,682,230"},
+  {"column": "corrected_fields", "rows": 1, "why": "trail of the MHH row correction"},
+  {"column": "position_id", "rows": 65, "why": "not from any edit of this run: the same 65 rows of 2026-03-31 differ from spoff3 already in asxd (built with no change), because the added 2026-06-30 quarter chains the positions afresh. asxe against asxd: no position_id change"}
+ ],
+ "rows_added": 139,
+ "rows_removed": 0,
+ "fixes": [
+  {"what": "First Lien blank on every first-lien loan (126 rows 1,641.8M at 2026-03-31; 134 rows 1,901.0M at 2026-06-30). The schedule prints each section total as '<section> Total', which the page reader did not take as closing the section; the section stayed open and the Level 3 inputs table's 'Total First Lien Debt' (1,290,025,881, Level 3 only) became the section's printed total, so the lien gate withheld the whole tier. New wrapper setting source_encodings.section_total_reading ['label_then_total'] (shared code in pipeline/bdc_xbrl_html_bridge.py and pipeline/source_encodings.py, off for every other fund, schema key and 3 tests). The tier now reconciles to 1,641,801,287 and 1,901,046 thousand.",
+   "kind": "shared_code",
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "quotes": [
+    {"accession": "0002083477-26-000003", "text": "First Lien Debt Total $ 1,652,462,304 $ 1,641,801,287 115.91 %"},
+    {"accession": "0002083477-26-000003", "text": "Total First Lien Debt $ 1,290,025,881 Second Lien Debt $ 165,762,083"},
+    {"accession": "0002083477-26-000008", "text": "First Lien Debt Total $ 1,929,293 $ 1,901,046 133.01 %"}
+   ]},
+  {"what": "MHH Healthcare, L.P., printed in the Warrants section with its unit count in the 'Par Amount/Units' column and no rate, was published as a first-lien-style loan with the count as par (X02 in both quarters; the earlier reviewer's real-error verdict at 2026-03-31). Row correction: EQUITY_COMMON / COMMON_EQUITY / PRIVATE_EQUITY (the shared convention for warrants), instrument 'Warrants', units 4,682,230 and 4,682,000 (tagged 4,682,000 at decimals -3 in the 10-Q for 2026-06-30), no par.",
+   "kind": "row_correction",
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "quotes": [
+    {"accession": "0002083477-26-000003", "text": "Warrants Insurance MHH Healthcare, L.P. (5) CHS BDC 2 LLC 4,682,230 - 3,511,673 0.25 %"},
+    {"accession": "0002083477-26-000008", "text": "Warrants Insurance MHH Healthcare, L.P. (5) CHS BDC 2 LLC 4,682 - 3,511 0.25 %"}
+   ]},
+  {"what": "New highlights wrapper. Net assets were blank in both quarters (tagged us-gaap:MembersEquity) and units outstanding sat only on cover-date rows: declared from the balance sheets (1,417,228,661 and 1,429,334 thousand; 75,000,000 units). Interest expense was the directors' fee (NoninterestExpenseDirectorsFees 75,000 and 38 thousand, read through the substring 'interestexpense'): suppressed with income_concept_suppress, so interest expense is now blank, not wrong.",
+   "kind": "wrapper",
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "quotes": [
+    {"accession": "0002083477-26-000003", "text": "Distributable earnings (accumulated losses) 528,757 Total net assets $ 1,417,228,661"},
+    {"accession": "0002083477-26-000003", "text": "75,000,000 units issued and outstanding at March 31, 2026"},
+    {"accession": "0002083477-26-000008", "text": "Distributable earnings (accumulated losses) 12,634 Total net assets $ 1,429,334"},
+    {"accession": "0002083477-26-000003", "text": "Interest and financing fees 4,126,935 Professional fees 278,922 Directors fees 75,000"}
+   ]}
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {"observation_key": "lien-tier-withheld-section-total-printed-after-label",
+   "what": "A section total printed '<section> Total' does not close the page reader's section, so a later 'Total First Lien Debt' line of a notes table (Level 3 inputs, 1,290.0M) is taken as the section's total and the lien gate withholds the whole First Lien tier (all first-lien rows publish no lien). Fixed for this fund by wrapper setting; any other filer printing the label first loses lien the same way.",
+   "field": "lien_position", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 3542.8, "cause": "shared", "action": "fixed",
+   "suggested_check": "A fund-quarter whose page prints lien section headings and whose published first-lien share is 0 is a finding.",
+   "quote": {"accession": "0002083477-26-000003", "text": "First Lien Debt Total $ 1,652,462,304 $ 1,641,801,287 115.91 %"}},
+  {"observation_key": "interest-expense-reads-noninterest-expense",
+   "what": "interest_expense published as the directors' fee (75,000 at 2026-03-31, 38,000 at 2026-06-30): the concept maps take any concept containing 'interestexpense', so NoninterestExpenseDirectorsFees matched. Suppressed for this fund; the substring match is shared (also Goldman Sachs BDC, D-178 era).",
+   "field": "interest_expense", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
+   "suggested_check": "Interest expense below 1 pct of the debt balance, or a figure below 1, is not interest expense.",
+   "quote": {"accession": "0002083477-26-000008", "text": "Interest and financing fees 7,683 11,810 Professional fees 496 775 Directors fees 38 113"}},
+  {"observation_key": "interest-and-debt-expense-concept-not-mapped",
+   "what": "With the directors' fee suppressed, interest_expense is blank: the filer tags 'Interest and financing fees' as us-gaap:InterestAndDebtExpense (4,126,935; 7,683 thousand), which the fund-income concept map (pipeline/bdc_fund_income.py) does not list; the highlights map does. Left: the highlights figure_corrections cannot set interest_expense, and adding the concept to the shared map is a cohort change.",
+   "field": "interest_expense", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "left",
+   "suggested_check": "A fund with borrowings and a printed interest line that publishes no interest expense is a finding.",
+   "quote": {"accession": "0002083477-26-000003", "text": "Interest and financing fees 4,126,935 Professional fees 278,922 Directors fees 75,000"}},
+  {"observation_key": "net-assets-concept-not-mapped",
+   "what": "Net assets blank in both quarters: the LLC tags them us-gaap:MembersEquity, which the shared balance-sheet reader does not take (same as New Mountain Guardian IV, D-186). Declared from the page in the highlights wrapper.",
+   "field": "net_assets", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
+   "suggested_check": "A fund with investments and no net assets in a quarter is a finding.",
+   "quote": {"accession": "0002083477-26-000008", "text": "Distributable earnings (accumulated losses) 12,634 Total net assets $ 1,429,334"}},
+  {"observation_key": "ordinal-renumbered-between-quarters-mispairs-position",
+   "what": "The filer numbers each issuer's lines per holding company and renumbers them between quarters. The matcher pairs most renumbered lines correctly by size and maturity (BVI, Associations, Jensen Hughes, NRO), but STV Group's delayed-draw line of 2026-03-31 ('CHS BDC 2 LLC 1', 1,810,054, 3/20/31) shares a position_id with its revolver of 2026-06-30 ('CHS BDC 2 LLC 1', 1,267, 3/20/30): the same member text beat the maturity difference. The revolver of 2026-03-31 (1,267,038) and the delayed draw of 2026-06-30 (905) are left as separate chains. Zero fair value on all four. Left: position matching is shared.",
+   "field": "position_id", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "left",
+   "suggested_check": "Two rows chained as one position whose maturities differ by a year and whose par differs by more than 10 pct are a finding.",
+   "quote": {"accession": "0002083477-26-000003", "text": "STV Group, Incorporated (4) (5) (6) CHS BDC 2 LLC PRIME + 3.75 % 8.42 % 3/20/30 1,267,038 - - 0.00 %"}},
+  {"observation_key": "instrument-text-is-the-financing-facility-column",
+   "what": "instrument_description is the printed 'Holding Company' column plus the filer's line number ('CHS BDC 2 LLC 2', 'APS CW SPV LLC 5', 'APS BDC, LLC') on every loan: the page has no instrument column (seniority is the section heading, now in lien_position). Left: the number is what separates an issuer's lines, and cutting it re-pairs chains (D-166).",
+   "field": "instrument_description", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 3882.1, "cause": "fund", "action": "left",
+   "suggested_check": "An instrument_description that equals a financing-facility or SPV name on most rows of a fund-quarter is flagged.",
+   "quote": {"accession": "0002083477-26-000008", "text": "AVSC Holding Corp. (4) (5) (6) (8) APS BDC, LLC SOFR + 5.00 % 8.62 % 12/5/29 14,555 1,537 1,537 0.11 %"}},
+  {"observation_key": "printed-rate-inconsistent-with-benchmark",
+   "what": "STV Group's revolver at 2026-03-31 prints 'PRIME + 3.75 %' with an all-in 8.42 %, which is the SOFR rate of its sister lines (prime was about 6.75); the 2026-06-30 filing prints the same line 'SOFR + 4.75 % 8.39 %'. Published as printed (PRIME, 3.75, 8.42). Fair value 0. Left: the page is the source.",
+   "field": "reference_rate_type", "quarters": ["2026-03-31"], "fair_value_m": 0.0, "cause": "row", "action": "left",
+   "suggested_check": "",
+   "quote": {"accession": "0002083477-26-000003", "text": "STV Group, Incorporated (4) (5) (6) CHS BDC 2 LLC PRIME + 3.75 % 8.42 % 3/20/30 1,267,038 - - 0.00 %"}}
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_bdc_xbrl_html_bridge_fields.py tests/test_source_encodings.py: 174 passed (3 new: section total printed after its label, with and without the setting, and the setting's validation)",
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 681 passed",
+  "tests/test_wrapper_content_signatures.py tests/test_wrapper_v1_quality_gate.py: 44 passed",
+  "fund_gate.py check --label asxe --before spoff3 (no snapshot): every check ok but files (no snapshot); totals 2 of 2 tie; ledger 5 findings, 1 outstanding, 1 with a proposal"
+ ],
+ "not_done": [
+  "rows_added 139 are the 2026-06-30 quarter (not in spoff3); no row removed",
+  "sandbox labels asxa-asxc already belonged to another fund (0001993402, 2026-10-14); this run used asxd (base) and asxe (final)",
+  "the shared code is off for every other fund (wrapper-gated), so no cohort semantic diff was run; whether other filers print '<section> Total' was not surveyed",
+  "full pytest suite not run",
+  "interest_expense left blank (see observation); income ratios, fee ratios and unrealized figures not read against the page beyond the lines quoted",
+  "footnote flags (4)-(9) (non-accrual, unfunded marker), acquisition dates, industry/GICS labels and percent of net assets were not checked row by row; about 15 rows per quarter were compared with their printed lines on par, cost, value, rate, spread, PIK and maturity, all equal",
+  "position_id mis-pair of STV Group (zero fair value) left to the shared matcher"
+ ]
+}

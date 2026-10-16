@@ -4811,3 +4811,30 @@ Compared with `spoff3`. One round; four builds.
   BBSY/BKBM/P codes published as SOFR (not checked); -360K residual at 2025-03-31.
 - The agent ran an empty heredoc into `python -` once (stopped by its id) and staged a rename with
   `git mv`, unstaged at once. Wrapper tests 681 passed.
+
+### D-192 APS BDC through the fund-clearing skill (sandbox `asxe`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; two builds (`asxd`, `asxe`; `asxa` to `asxc` belong to 0001993402).
+
+- **Ledger:** 5 findings, 1 outstanding (3 in the first build), proposed; totals tie in 2 of 2 quarters.
+- **Shared code (opt-in):** `source_encodings.section_total_reading: ["label_then_total"]`:
+  `_closed_section` in `pipeline/bdc_xbrl_html_bridge.py` also closes a section at '<section> Total'
+  ('First Lien Debt Total'); `section_total_label_first` and its validation in
+  `pipeline/source_encodings.py`; schema key; 3 tests in `tests/test_bdc_xbrl_html_bridge_fields.py`
+  (one false positive). Without it the page reader took the Level 3 table's 'Total First Lien Debt'
+  as the section total and the lien check withheld the tier: lien blank on every first-lien loan
+  (126 rows / 1,641.8M at 2026-03-31, 134 / 1,901.0M at 2026-06-30). On for this fund only; bridge
+  and wrapper tests 758 passed. No other fund rebuilt.
+- **Fixed:** MHH Healthcare warrant published as a loan with units as par, both quarters (X02;
+  answers the earlier real-error verdict, which was right). New highlights wrapper: net assets
+  (tagged `MembersEquity`) declared from the balance sheets, units 75,000,000; interest expense was
+  the directors' fee 75,000 (the 'interestexpense' substring inside `NoninterestExpenseDirectorsFees`),
+  concept suppressed, so interest expense is blank rather than wrong.
+- **Proposed:** F28 2026-08-10 (cover-page unit count date; existing key).
+- **Page sample:** 20 cards, 0 published errors. Twenty cards can miss a problem on under about 15
+  pct of rows.
+- **Shared causes seen:** '<section> Total' not read as a section end (opt-in fix); the
+  'interestexpense' substring match; `InterestAndDebtExpense` not in the income concept map;
+  `MembersEquity` not read as net assets (also D-186); the matcher chains STV Group's delayed draw
+  with its revolver after the filer renumbers lines (zero fair value).
+- The agent ran read-only Python lookups between builds and one named diagnostic script.

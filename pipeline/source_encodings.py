@@ -32,7 +32,7 @@ def load_encodings(wrapper_directory=None):
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
-                'pct_tagged_as_ratio'}:
+                'pct_tagged_as_ratio','section_total_reading'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -95,6 +95,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('The only admitted foreign unit reading is reported_in_usd: '+str(path))
             if key=='principal_usd_reference' and values!=['fred_h10']:
                 raise ValueError('The only admitted principal FX reference is fred_h10: '+str(path))
+            if key=='section_total_reading' and values!=['label_then_total']:
+                raise ValueError('The only admitted section total reading is label_then_total: '+str(path))
         result[cik]=encoding
     return result
 
@@ -148,6 +150,14 @@ def industry_columns(cik,encodings=None):
     configured=load_encodings() if encodings is None else encodings
     encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
     return frozenset(' '.join(v.lower().split()) for v in encoding.get('industry_columns',[]))
+
+
+def section_total_label_first(cik,encodings=None):
+    """True where the wrapper sets section_total_reading label_then_total: the filer prints a section's
+    own total as '<section> Total' ('First Lien Debt Total', APS BDC), which then closes the section."""
+    configured=load_encodings() if encodings is None else encodings
+    encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
+    return encoding.get('section_total_reading')==['label_then_total']
 
 
 def printed_margin_funds(encodings=None):

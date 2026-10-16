@@ -1,0 +1,23 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "asxe",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F28-2083477-1",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "ciks": ["0002083477"],
+   "quarters": ["2026-08-10"],
+   "statement": "The fund-level row dated 2026-08-10 holds only the unit count from the cover page of the 10-Q for 2026-06-30 (dei:EntityCommonStockSharesOutstanding 75,000,000 'as of August 10, 2026'). It is not a reporting period, so no schedule exists for it; the check expects holdings for every fund-level date. The quarter rows now carry the printed units (75,000,000 at 2026-03-31 and 2026-06-30, from the balance sheets, highlights wrapper). No fix applies in the fund's settings: the row comes from the company-facts frame, which keeps every dated fact.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0002083477-26-000008", "verbatim": "The issuer had 75,000,000 Units of Limited Liability Company Interests, $0.001 par value per unit, outstanding as of August 10, 2026", "quote": "'The issuer had 75,000,000 Units of Limited Liability Company Interests, $0.001 par value per unit, outstanding as of August 10, 2026': the cover-page date that creates the row."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0002083477/q4.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox asxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}

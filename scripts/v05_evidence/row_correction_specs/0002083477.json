@@ -1,0 +1,18 @@
+[
+ {
+  "quarter": "2026-03-31",
+  "identifier": "MHH Healthcare, L.P. | CHS BDC 2 LLC",
+  "exact": true,
+  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "asset_class": "PRIVATE_EQUITY",
+             "instrument_description": "Warrants", "principal_amount": "", "principal_amount_usd": "", "shares_held": "4682230"},
+  "reason": "Printed in the Warrants section with no rate, cost '-' and the count in the 'Par Amount/Units' column; the member names the holding company only, so the row was published as a loan with the unit count as par. Printed: 'Warrants Insurance MHH Healthcare, L.P. (5) CHS BDC 2 LLC 4,682,230 - 3,511,673 0.25 %'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "MHH Healthcare, L.P. | CHS BDC 2 LLC",
+  "exact": true,
+  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "asset_class": "PRIVATE_EQUITY",
+             "instrument_description": "Warrants", "principal_amount": "", "principal_amount_usd": "", "shares_held": "4682000"},
+  "reason": "Printed in the Warrants section with no rate, cost '-' and the count in the 'Par Amount/Units' column (in thousands from this filing: 4,682 thousand units, 4,682,230 in the 10-Q for 2026-03-31); the member names the holding company only, so the row was published as a loan with the unit count as par. Printed: 'Warrants Insurance MHH Healthcare, L.P. (5) CHS BDC 2 LLC 4,682 - 3,511 0.25 %'"
+ }
+]
