@@ -4870,3 +4870,36 @@ Compared with `spoff3`. One round; four builds.
   the unit tag; quarterly distribution per share split evenly from year-to-date (0.24305 published
   at 2024-06-30 against the quarter's 0.3566, left).
 - The agent started one bare `python -` (stopped by the task tool). Wrapper tests 681 passed.
+
+### D-194 Antares Private Credit Fund through the fund-clearing skill (sandbox `atxc`, with 2026-06-30), verdict PASS
+
+Compared with `spoff2`. One round; three builds.
+
+- **Ledger:** 36 findings, 18 outstanding (37 in the first build), all 18 proposed; totals tie in 7 of 7
+  quarters (with cash).
+- **Fixed (wrapper):** `instrument_description_strip_re`: 99 pct of rows carried the whole member tail
+  ('Asset Type First Lien Term Loan Reference Rate and Spread ... Maturity Date ...'), now 'First Lien
+  Term Loan', 'Common' (5,575 rows; one value would empty and is kept); Valicor issuer (C201
+  2025-03-31); 43 dash-printed lines in the 2024-12-31 10-K declared at 0 (cost ties at 849,742; B01).
+- **Fixed (46 row corrections):** 38 equity unit counts tagged as principal x1,000 now as printed (C04
+  x4, coverage drop; earlier verdict 2025-12-31 right); 6 pars tagged EGP (4 dollar loans, Riser Interco
+  sterling; FX01 x4, earlier verdicts right); Cyan Investors name; Americhem 2025-12-31 printed Common
+  under a Preferred member.
+- **Fixed (highlights wrapper):** net expenses from the printed 'Net expenses, net of fee waivers' line
+  (income identity failed in all 6 quarters); income yield 2024-12-31 10.05 (start-up ratio divided by
+  four; F16); cost 2025-06-30 1,282,904,000; total expenses from the gross line; offering costs no longer
+  interest expense.
+- **Proposed:** commitment-table rows x13 (the unfunded table repeats the schedule's undrawn lines;
+  two earlier verdicts answered: adding them would double count), F27 x2, PCT01 (227.20 pct printed),
+  merged context (Eos Fitness), F33 2023-12-31.
+- **Page sample:** 20 cards, 0 published errors. Note: 'C' rows published CDOR per the filer's legend
+  after CDOR ceased (June 2024). Twenty cards can miss a problem on under about 15 pct of rows.
+- **Owner question (open):** unit scale: the schedule header says '(in thousands)'; if that reading
+  wins, every published unit count of this fund is 1,000 times too small (as the sister fund).
+- **Left:** interest expense is the 'Stated interest expense' component (13,179, not 14,197); total
+  expenses 2023-12-31 the eight-month figure divided by four; interest expense 2024-12-31 the year
+  divided by four (the shared start-up fallback).
+- **Shared causes seen:** par currency from the unit tag; the net-expense concept read as total
+  expenses; the 'interestexpense' substring match; start-up periods split as a year; casing voted
+  across quarters.
+- The agent ran a bare `python -` three times (each stopped by its id). Wrapper tests 681 passed.

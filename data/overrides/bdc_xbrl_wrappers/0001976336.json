@@ -77,7 +77,8 @@
     "category_marker_re": "(?i)(?:^\\s*Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*Total\\s+Investments\\s+-\\s+non-controlled/non-affiliated\\s*$|^\\s*Total\\s+Secured\\s+Debt\\s+Investments\\s*$|^\\s*(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS))?\\s*$)",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})",
-    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$"
+    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$",
+    "instrument_description_strip_re": "(?i)^\\s*Assets?\\s+Type\\s*|\\s*(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date).*$|\\s+(?:One|Two|Three|Four)\\s*$|\\s+(?:One|Two|Three|Four)(?=\\s+(?:Reference|Interest|Maturity)\\b)"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -136,8 +137,8 @@
       "Diversified Consumer Service",
       "Speciality Retail"
     ],
-    "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Debt\\s+Investments|Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:Media\\s*|(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Assets?\\s+Type|Commitment\\s+Type)\\s*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)",
-    "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s+((?:Assets?\\s+Type|Commitment\\s+Type)\\s*.*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date\\s*.*)$",
+    "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Debt\\s+Investments|Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:Media\\s*|(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s*(?:(?:Assets?\\s+Type|Commitment\\s+Type)\\s*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)",
+    "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s*((?:Assets?\\s+Type|Commitment\\s+Type)\\s*.*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date\\s*.*)$",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Assets?\\s+Type|Commitment\\s+Type|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)')"
   },
   "archetypes": {
@@ -211,6 +212,51 @@
       "P=PRIME",
       "C=CDOR to 2025-09-30",
       "C=CORRA from 2025-12-31"
+    ],
+    "untagged_values": [
+      "0000950170-25-041127 C_170bfed4-0975-4cb6-8e0a-21e0419ff619 fair_value 0",
+      "0000950170-25-041127 C_a4458641-4120-4c1d-b0b8-91376c3560c2 fair_value 0",
+      "0000950170-25-041127 C_f38f7249-903f-4dda-84b7-acbd965a36fc fair_value 0",
+      "0000950170-25-041127 C_f6a82b33-c20a-4bb6-ad19-881c80008a14 fair_value 0",
+      "0000950170-25-041127 C_250038ac-1c4d-4501-bf13-b3c2a75b2ba9 fair_value 0",
+      "0000950170-25-041127 C_a4d34075-ada6-4640-9356-8a05800a4f35 fair_value 0",
+      "0000950170-25-041127 C_b09332d3-bdff-4171-892a-d8db64d4b05c fair_value 0",
+      "0000950170-25-041127 C_36266af1-1b7e-409f-ba06-8310e3aed876 fair_value 0",
+      "0000950170-25-041127 C_176a8168-1a3b-4624-9da6-415c2fb843d9 fair_value 0",
+      "0000950170-25-041127 C_46e4a390-d9e3-444c-adee-40ed833ac115 fair_value 0",
+      "0000950170-25-041127 C_fa64dbfb-f1cc-4d07-b0b3-cfa4ba9e7cfa fair_value 0",
+      "0000950170-25-041127 C_7cd2cfd3-ba33-40ab-a437-8072f1fa42ce fair_value 0",
+      "0000950170-25-041127 C_3dfd9fff-7b32-43d4-aaf5-e87855503b91 fair_value 0",
+      "0000950170-25-041127 C_fb8a660b-fa57-496e-a371-cd8c8b9b308d fair_value 0",
+      "0000950170-25-041127 C_02750d87-f362-4b3c-823f-e721d80dc2fc fair_value 0",
+      "0000950170-25-041127 C_076b5445-091b-42b8-98f1-ece2621a878d fair_value 0",
+      "0000950170-25-041127 C_d316c86c-98d4-4a95-99fb-8a367de140e8 fair_value 0",
+      "0000950170-25-041127 C_57abb7ac-7780-4d81-888b-8db83e337b71 fair_value 0",
+      "0000950170-25-041127 C_599b3e73-8a86-4933-8296-acace442c196 fair_value 0",
+      "0000950170-25-041127 C_7f209067-907b-4516-bad4-df5b1aa3bad8 fair_value 0",
+      "0000950170-25-041127 C_cea3a894-46f0-450f-9cb7-eed6836919e1 fair_value 0",
+      "0000950170-25-041127 C_fa001a5f-4686-4ee9-803a-4dfa795dffc0 fair_value 0",
+      "0000950170-25-041127 C_00da1ff9-bba7-4515-aa39-cdb021530a5f fair_value 0",
+      "0000950170-25-041127 C_a602bc7f-0922-4935-a0b9-8dd3b6758a91 fair_value 0",
+      "0000950170-25-041127 C_b298e0a2-5384-4cc5-b318-6a5ee3084602 fair_value 0",
+      "0000950170-25-041127 C_8d171291-f64a-4cf2-95ae-cac893f128b8 fair_value 0",
+      "0000950170-25-041127 C_805f4df2-def6-4075-afca-fd5960ffc646 fair_value 0",
+      "0000950170-25-041127 C_5875f87c-feba-49ee-9757-094dd31ccfb4 fair_value 0",
+      "0000950170-25-041127 C_7976d3bd-1b44-4409-8876-9d49b37d00f3 fair_value 0",
+      "0000950170-25-041127 C_f07f3da6-c485-481f-94cd-21bc70193e36 fair_value 0",
+      "0000950170-25-041127 C_1f34cbd9-23f6-4199-b680-28a75e376016 fair_value 0",
+      "0000950170-25-041127 C_73152f3d-26f3-4e9d-a3d0-f0e0268883ce fair_value 0",
+      "0000950170-25-041127 C_4ecb69e6-a3a9-4df6-a7dc-4215e458adff fair_value 0",
+      "0000950170-25-041127 C_286fb1a0-41e5-4c6c-9fda-43a498b7c6cb fair_value 0",
+      "0000950170-25-041127 C_e2e7be7b-ad26-4466-8156-6cbd029869bc fair_value 0",
+      "0000950170-25-041127 C_6a52afc9-3516-4582-a159-2a16e2b8a2cb fair_value 0",
+      "0000950170-25-041127 C_1b6c5b31-c4c4-4666-9deb-e0e22c351948 fair_value 0",
+      "0000950170-25-041127 C_f029b636-7d98-4479-9e4b-b7acb7e7f507 fair_value 0",
+      "0000950170-25-041127 C_b116137b-a26c-4a76-a600-f816eecba731 fair_value 0",
+      "0000950170-25-041127 C_b6342cb4-7f4e-4bc0-b3bf-ae318cc3210a fair_value 0",
+      "0000950170-25-041127 C_f2fa15d0-3f1d-4c0e-a0fd-61b0d6e27615 fair_value 0",
+      "0000950170-25-041127 C_dae0775f-2c4b-4da2-a6f3-81da165b317b fair_value 0",
+      "0000950170-25-041127 C_ba084a40-4c5e-48f4-85b2-c1ac8e89241d fair_value 0"
     ]
   }
 }

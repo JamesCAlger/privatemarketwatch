@@ -2,14 +2,70 @@
  "schema_version": "fund-highlights-wrapper.v1",
  "cik": "0001976336",
  "entity_name": "Antares Private Credit Fund",
- "version": 1,
+ "version": 2,
+ "income_concept_suppress": ["investmentincomeinvestmentexpense", "noninterestexpense"],
+ "income_concept_fallback": {"total_expenses": ["operatingexpenses"]},
+ "notes": "Figure corrections: the filer files a second undimensioned fact under the investments concept at 2025-03-31, and tags the net-expense concept only on a note figure (organisation and offering costs after the adviser's reimbursement), so the printed 'Net expenses, net of fee waivers' is declared per quarter. Income concepts: the filer tags the printed 'Total expenses' (gross, before waivers) as us-gaap:OperatingExpenses and the printed 'Net expenses, net of fee waivers' as us-gaap:InvestmentIncomeInvestmentExpense, which the shared map reads as total_expenses (0000950170-25-071352: 'Total expenses 9,870 11 ... Net expenses, net of fee waivers 5,136 -'; OperatingExpenses 9,870,000, InvestmentIncomeInvestmentExpense 5,136,000). Suppressed so that total_expenses is the gross figure (D-025) from OperatingExpenses. 'noninterestexpense': us-gaap:NoninterestExpenseOfferingCost (offering costs, 505,000 at 2026-03-31) matched the 'interestexpense' substring and was published as interest expense; the printed 'Interest and debt expenses 14,197' is tagged us-gaap:InterestAndDebtExpense, which the shared map does not read, so interest expense is blank rather than wrong.",
  "figure_corrections": [
   {
    "report_date": "2025-03-31",
    "field": "investments_at_fair_value",
    "value": 1103954000,
    "evidence": "0000950170-25-071352 (10-Q, 2025-03-31) schedule: 'Total Investments - non-controlled/non-affiliated 1,107,219 1,103,954 172.84 %'. Company facts hold two undimensioned InvestmentOwnedAtFairValue values for this date, 1,103,954,000 and 39,527,000; the smaller one was taken."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "investments_at_cost",
+   "value": 1282904000,
+   "evidence": "0000950170-25-107525 (10-Q, 2025-06-30) schedule: 'Total Investments at fair value $ 1,282,904 $ 1,281,081 190.97 %' (cost, then fair value). No undimensioned cost fact for this date was published."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "income_yield_pct",
+   "value": 10.05,
+   "evidence": "0000950170-25-041127 (10-K, 2024-12-31) financial highlights: 'Net investment income to average net assets 10.05 %', footnote (5) 'Amounts are annualized', for the period from commencement on November 5, 2024. The company-facts split read the annualised stub-period ratio as a year and published a quarter of it (2.5125)."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "net_expenses",
+   "value": 1005000,
+   "evidence": "0000950170-25-041127 (10-K, 2024-12-31) statement of operations: 'Total expenses 4,144 169 ... Net expenses, net of fee waivers, before excise tax 1,005 - Excise tax expense 106 - Net investment income (loss) 10,244'; the fund began operating on November 5, 2024, so the year is the quarter. The filer tags InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement only on a note figure (organisation and offering costs after reimbursement), not on this line."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "net_expenses",
+   "value": 5136000,
+   "evidence": "0000950170-25-071352 (10-Q, 2025-03-31) statement of operations: 'Total expenses 9,870 11 ... Net expenses, net of fee waivers 5,136 - Net investment income (loss) 18,239'."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "net_expenses",
+   "value": 10266000,
+   "evidence": "0000950170-25-107525 (10-Q, 2025-06-30) statement of operations, three months: 'Total expenses 14,852 37 24,722 48 ... Net expenses, net of fee waivers 10,266 - 15,402 - Net investment income (loss) 19,198'. Published 415,000 is the note figure the filer tags with the net-expense concept."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "net_expenses",
+   "value": 14632000,
+   "evidence": "0001193125-25-280627 (10-Q, 2025-09-30) statement of operations, three months: 'Total expenses 16,815 113 41,537 161 ... Net expenses, net of fee waivers 14,632 - 30,034 - Net investment income (loss) 17,584'."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "net_expenses",
+   "value": 18727000,
+   "evidence": "0001193125-26-115260 (10-K, 2025-12-31): 'Net expenses, net of fee waivers, before excise tax 48,761 1,005' for the year, less the nine months 30,034 (0001193125-25-280627: 'Net expenses, net of fee waivers 14,632 - 30,034 -') = 18,727. No waivers in the fourth quarter (year waivers 5,009 + 5,811 + 683 equal the nine months)."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "net_expenses",
+   "value": 20691000,
+   "evidence": "0001193125-26-221684 (10-Q, 2026-03-31) statement of operations: 'Total expenses 20,691 9,870 ... Net expenses, net of fee waivers 20,691 5,136 Excise tax expense 55 - Net investment income (loss) 17,417 18,239'. Published 303,000 is OrganizationalAndOfferingCostsExpense's twin, tagged with the net-expense concept."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "net_expenses",
+   "value": 20665000,
+   "evidence": "0001193125-26-349158 (10-Q, 2026-06-30) statement of operations, three months: 'Total expenses 20,665 14,852 41,356 24,722 ... Net expenses, net of fee waivers 20,665 10,266 41,356 15,402'."
   }
- ],
- "notes": "One quarter only: the filer filed a second undimensioned fact under the investments concept."
+ ]
 }

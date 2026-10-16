@@ -1,0 +1,126 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "atxc",
+ "dispositions": [
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1976336-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "ciks": ["0001976336"],
+   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "statement": "Every source row reported as unpublished (13, 8, 7, 9, 5, 7 and 10 a quarter, fair value -0.165M to -0.370M) carries a member 'Investments-non-controlled/non-affiliated <issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date <date>': rows of the filer's separate unfunded-commitments table printed after the schedule, which ends 'Total Unfunded Commitments'. They are not positions: each undrawn line is already a schedule row whose par is the whole facility and whose fair value includes the undrawn mark (Kwol Acquisition's revolver prints '1,871 ( 5 ) ( 9 )' in the schedule and '1,871 ( 9 )' in the commitment table). Published rows equal the printed 'Total Investments at fair value' in all seven quarters without them; adding them would count the undrawn marks twice. The promoted rule exclude_commitment_fair_value_rows keeps them out. No fix applies: the rows must stay out.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer escalated five delayed-draw commitment facts (Foreside, Kwol, Rimkus, Ruppert, Sugar PPC; -165,000) for lack of HTML coordinates. On the page they are lines of the unfunded-commitments table; each loan is a schedule row whose fair value already holds the mark (Foreside delayed draw '11,639 1,616 1,589' in the schedule, '10,020 ( 25 )' in the commitment table), and published equals the printed total 1,665,503 without them. Not a missing position."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Kwol Acquisition, Inc. (7)(12)(14) First Lien Revolver S + 5.00 % 8.67 % 12/12/2029 1,871 ( 5 ) ( 9 ) -", "quote": "'Kwol Acquisition, Inc. (7)(12)(14) First Lien Revolver S + 5.00 % 8.67 % 12/12/2029 1,871 ( 5 ) ( 9 ) -': the schedule row of the revolver, fair value (9)."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Kwol Acquisition, Inc. Delayed Draw Term Loan 8/25/2027 $ 9,237 $ ( 46 ) Kwol Acquisition, Inc. Revolver 12/12/2029 1,871 ( 9 )", "quote": "'Kwol Acquisition, Inc. Delayed Draw Term Loan 8/25/2027 $ 9,237 $ ( 46 ) Kwol Acquisition, Inc. Revolver 12/12/2029 1,871 ( 9 )': the same lines in the commitment table; the revolver's (9) repeats the schedule's."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Foreside Financial Group, LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 5.25 % 9.05 % 9/30/2027 11,639 1,616 1,589 0.22", "quote": "'Foreside Financial Group, LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 5.25 % 9.05 % 9/30/2027 11,639 1,616 1,589 0.22': the delayed draw in the schedule, par 11,639 includes the unfunded 10,020."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20", "quote": "'Total Investments at fair value $ 1,666,882 $ 1,665,503': published at 2025-12-31 is 1,665,497 thousand without the commitment rows."},
+    {"source": "filing", "accession": "0001193125-26-221684", "verbatim": "Zone Climate Services, Inc. Revolver 3/9/2028 302 ( 7 ) Total Unfunded Commitments $ 367,320 $ ( 3,328 )", "quote": "'Total Unfunded Commitments $ 367,320 $ ( 3,328 )': the table's own total at 2026-03-31."},
+    {"source": "filing", "accession": "0001193125-26-349158", "verbatim": "Zone Climate Services, Inc. Revolver 3/9/2028 191 ( 4 ) Total Unfunded Commitments $ 345,540 $ ( 3,133 )", "quote": "'Total Unfunded Commitments $ 345,540 $ ( 3,133 )': the same table at 2026-06-30."},
+    {"source": "filing", "accession": "0000950170-25-041127", "verbatim": "Zone Climate Services, Inc. Delayed Draw Term Loan 11/22/2025 3,182 ( 38 ) Total Unfunded Commitments $ 290,998 $ ( 1,327 )", "quote": "'Total Unfunded Commitments $ 290,998 $ ( 1,327 )': the same table at 2024-12-31."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001976336/q3.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1976336-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "ciks": ["0001976336"],
+   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-06-30"],
+   "statement": "The same unfunded-commitments table rows as the source-reconciliation finding, reported by the row check (2026-03-31 already adjudicated a false alarm). They repeat the undrawn lines of the schedule and are outside 'Total Investments at fair value', which published rows equal in every quarter. No fix applies.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer read the five delayed-draw commitment rows (-165,000) as missing positions to add. They are the unfunded-commitments table; the loans are schedule rows whose fair value includes those marks (Kwol revolver (9) printed in both tables), and published equals the printed 1,665,503 without them, so adding them would double count. The verdict does not stand."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Kwol Acquisition, Inc. Delayed Draw Term Loan 8/25/2027 $ 9,237 $ ( 46 ) Kwol Acquisition, Inc. Revolver 12/12/2029 1,871 ( 9 )", "quote": "'Kwol Acquisition, Inc. Delayed Draw Term Loan 8/25/2027 $ 9,237 $ ( 46 )': one of the five rows the verdict cites, a commitment-table line."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Kwol Acquisition, Inc. (7)(12)(14) First Lien Revolver S + 5.00 % 8.67 % 12/12/2029 1,871 ( 5 ) ( 9 ) -", "quote": "'Kwol Acquisition, Inc. (7)(12)(14) First Lien Revolver ... 1,871 ( 5 ) ( 9 ) -': the schedule already carries the revolver's mark."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20", "quote": "'Total Investments at fair value $ 1,666,882 $ 1,665,503': published equals this without the commitment rows."},
+    {"source": "filing", "accession": "0001193125-26-349158", "verbatim": "Zone Climate Services, Inc. Revolver 3/9/2028 191 ( 4 ) Total Unfunded Commitments $ 345,540 $ ( 3,133 )", "quote": "'Total Unfunded Commitments $ 345,540 $ ( 3,133 )': 2026-06-30, the same table."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001976336/q3.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F27-1976336-3",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": ["0001976336"],
+   "quarters": ["2025-06-30", "2025-12-31"],
+   "statement": "The income yield F27 compares with the holdings' weighted coupon is the filer's printed ratio of net investment income to average NET ASSETS (11.14 % for the six months to 2025-06-30; 10.68 % for 2025, the 10-K's year figure), while the fund holds investments of about 2.2 times net assets (227.20 % at 2025-12-31). Net income over net assets of a levered fund can exceed the asset coupon by more than 200 basis points without any value being wrong. The published ratios equal the page. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-107525", "verbatim": "Expenses to average net assets gross of fee waivers 7.41 % Net expenses to average net assets net of fee waivers 4.66 % Net investment income to average net assets 11.14 %", "quote": "'Net investment income to average net assets 11.14 %': 2025-06-30, published 11.14."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Total expenses to average net assets gross of fee waivers 8.91 % 3.77 % Net expenses to average net assets net of fee waivers 7.21 % 1.23 Net investment income to average net assets 10.68 % 10.05 %", "quote": "'Net investment income to average net assets 10.68 %': 2025, published 10.68 for 2025-12-31."},
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20", "quote": "'... $ 1,665,503 227.20': investments are 227 % of net assets."}
+   ],
+   "rerun": "grep 0001976336 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv | grep F27",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1976336-4",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-row-published-equals-the-printed-line",
+   "ciks": ["0001976336"],
+   "quarters": ["2024-12-31"],
+   "statement": "Eos Fitness Opco's delayed draw at 2024-12-31 is tagged over two contexts of the same position: cost 281,000, fair value 286,000 and the rates on one, the par 929,000 on a sibling context whose member adds 'One'. The re-verifier cannot replay the merged par from the row's own context. The published row (par 929,000, cost 281,000, fair value 286,000) equals the printed line. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-041127", "verbatim": "Eos Fitness Opco Holdings, LLC (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.00 % 9.56 % 1/5/2028 929 281 286 0.04", "quote": "'Eos Fitness Opco Holdings, LLC (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.00 % 9.56 % 1/5/2028 929 281 286 0.04': par 929, cost 281, fair value 286, as published."}
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1976336 000095017025041127 xml C_4aa7b52b-eddd-4fe1-8c7d-50c7c391d88c",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-PCT01-1976336-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund",
+   "ciks": ["0001976336"],
+   "quarters": ["2025-12-31"],
+   "statement": "The percent-of-net-assets sum at 2025-12-31 is 227.2, the filer's own printed total for 'Total Investments at fair value': the fund holds investments of 2.27 times its net assets (borrowings 942.8M against net assets 733.1M). Not a duplicate or denominator error. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-115260", "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20", "quote": "'Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20': the printed percent total equals the published sum 227.2."}
+   ],
+   "rerun": "python scripts/v05_evidence/sandbox_sql.py <label> scratch/fund_runs/0001976336/q13.sql",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F33-1976336-6",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "reason_key": "fund-row-before-operations-began",
+   "ciks": ["0001976336"],
+   "quarters": ["2023-12-31"],
+   "statement": "A fund-level row before operations began: net assets of 25 thousand of seed capital, no investments, no distribution (the fund commenced operations on November 5, 2024). A distribution rate of 0 is right for that date. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0000950170-25-041127", "verbatim": "Accumulated net distributable earnings (losses) 1,710 - Total net assets $ 637,459 $ 25 Total liabilities and net assets $ 918,834 $ 194", "quote": "'Total net assets $ 637,459 $ 25': 25 thousand at 2023-12-31, the comparative column."},
+    {"source": "filing", "accession": "0000950170-25-041127", "verbatim": "The Company commenced operations on November 5, 2024.", "quote": "'The Company commenced operations on November 5, 2024.': nothing to distribute at 2023-12-31."}
+   ],
+   "rerun": "grep 0001976336 scratch/fund_sandbox/<label>/output/fund_financials_validation_current.csv | grep F33",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox atxb); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}
