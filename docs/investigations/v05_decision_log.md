@@ -4738,7 +4738,7 @@ Compared with `spoff2`. Two rounds; six builds (the limit).
   print a dash), C117 x3 and fmt_pik_rate x3 (`pik-rate-above-20-as-printed`), A01 x2, X07, D06.
 - **Page sample (`abxd`):** 3 errors of 20 (Versaterm floor as PIK; PDI TA and MyKaarma dash as 0.0),
   causes fixed fund-wide in round 2. **Second sample (`abxf`, seed 20261016, `samples/0001634452_r2`):**
-  1 error of 20: GlobalWebIndex 2023-12-31 warrants on preferred units published as EQUITY_PREFERRED
+  2 field errors on 1 card of 20: GlobalWebIndex 2023-12-31 warrants on preferred units published as EQUITY_PREFERRED
   (shared classifier; same cause as D-180), expiry on another context. Left: one card, builds used up.
   Twenty cards can miss a problem on under about 15 pct of rows.
 - **Left:** fund-level net investment income holds total income or a cash-flow line in 7 quarters
