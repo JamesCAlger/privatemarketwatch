@@ -482,9 +482,11 @@ NPORT_EXCLUDE_CIKS: set[str] = {
 # Manual scale overrides for fund_financials when automatic detection fails.
 # Maps CIK (zero-padded) to multiplier applied to total_assets/total_liabilities/net_assets.
 # Used for CIKs with too few rows for MEDIAN-based scale detection.
-FUND_FINANCIALS_SCALE_OVERRIDES: dict[str, int] = {
-    "0002012139": 1000,  # Owl Rock Core Income Corp: 2025-06-30 reported in raw dollars
-}
+# 0002012139 (Fortress Private Lending Fund, not Owl Rock) was listed with x1000 until 2026-10-16;
+# its 2025-06-30 facts were right (net assets 1,004,000 printed '1,004' in thousands, a seed
+# quarter) and the override published 1,004,000,000. That date is now exempt from the TA/NA scale
+# fix through its highlights wrapper (scale_fix_exempt_dates) instead.
+FUND_FINANCIALS_SCALE_OVERRIDES: dict[str, int] = {}
 
 # Optional audited exceptions for BDC aggregate/header row filtering.
 # Rows are matched by CIK plus substring match_text, with optional report_date

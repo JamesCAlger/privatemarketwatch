@@ -1,0 +1,211 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "foxd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-SEED-F21-2012139",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F21",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter: shares were not yet issued, so the 10-Q for 2025-06-30 prints net assets of 1,004 thousand against investments of 335,387 thousand, financed by debt and amounts due to affiliates. Holdings over net assets is 334 as printed (the check bounds it at 2.5). Net assets were published 1,004,000,000 until this run (a wrong scale override in pipeline/config.py, removed); now 1,004,000, as printed. No fix applies: both figures are the page's.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Net Assets 1,004 - Total Liabilities and Net Assets $", "quote": "'Total Net Assets 1,004 - Total Liabilities and Net Assets $': net assets 1,004 thousand at 2025-06-30."},
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': fair value 335,387 thousand, printed as 33,392 pct of net assets."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-F22-2012139",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F22",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): the sum of percent of net assets is 33,392, the filer's printed total; the check bounds it at 400. Before this run the published percents were 100 times small (tagged as a ratio, 24.28 for a printed 2,428) and the check passed by accident; the filing is now listed under pct_tagged_as_ratio and every row publishes the printed percent.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': printed total percent of net assets 33,392."},
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,675,382 24,435 24,384 2,428': a single loan printed at 2,428 pct of net assets."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-A07-2012139",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): the published percents of net assets sum to 33,392, which is the printed 'Total Investments' percent. The oracle's bound assumes a fund with equity; this quarter has almost none.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': printed total percent 33,392."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-PCT01-2012139",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): percent of net assets sums to the printed 33,392 and single loans print 2,428 and similar. Published now equals the page (pct_tagged_as_ratio for this filing).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': printed total percent 33,392."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-X09-2012139",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X09",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): 32 rows print a percent of net assets above 100 (Steele Solutions 2,428). Published equals the page.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,435 24,384 2,428': one loan printed at 2,428 pct of net assets."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> X09 0002012139 2025-06-30",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-FMTPCT-2012139",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pct_of_net_assets",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): percents of net assets in the hundreds and thousands are the printed figures (Steele Solutions 2,428; total 33,392).",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,384 2,428': printed percent 2,428."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SEED-CONC-2012139",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "reason_key": "seed-quarter-holdings-hundreds-of-times-net-assets",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-06-30"],
+   "statement": "Seed quarter (net assets 1,004 thousand): every loan is a large multiple of net assets as printed; the concentration metric reads the printed percents.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': investments 334 times net assets."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-X02-2012139-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-12-31", "2026-03-31"],
+   "statement": "The one row flagged each quarter is Daintree Bidco's first-lien term loan, printed with no reference rate, spread or interest rate; footnote 16 says the deal was unsettled and no contract information was available. The filing tags no rate. No fix applies: there is no figure to publish. From 2026-06-30 the row prints a rate and is not flagged.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found the row has no rate in either column and called the missing rate a real defect. The reading of the page stands, but it is the filing's own blank (footnote 16, deal unsettled), not an extraction error: nothing can be published.",
+    "2026-03-31": "The reviewer cited the footnote (18) local-currency table rows (Albion, Jupiter, Ruby, Urban Gym) beside their schedule lines and the Daintree row. The footnote rows are not published (excluded by the fund's rule as non-position rows) and their schedule rows carry rates; the only flagged row is Daintree, printed without a rate under footnote 16."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-128496", "verbatim": "Daintree Bidco Pty Limited (6) (20) First Lien - Term Loan (16) 11/25/2032 9,000,000 8,865 8,933 1.0", "quote": "'Daintree Bidco Pty Limited (6) (20) First Lien - Term Loan (16) 11/25/2032 9,000,000 8,865 8,933 1.0': no rate printed (2025-12-31)."},
+    {"source": "filing", "accession": "0001193125-26-128496", "verbatim": "As of December 31, 2025 , the deal was unsettled globally and as such no contract info", "quote": "'As of December 31, 2025 , the deal was unsettled globally and as such no contract info': footnote 16."},
+    {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "Daintree Bidco Pty Limited (6) (7) (16) (20) First Lien - Term Loan 11/25/2032 9,000,000 8,865 8,827 0.9", "quote": "'... First Lien - Term Loan 11/25/2032 9,000,000 8,865 8,827 0.9': no rate printed (2026-03-31)."},
+    {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "As of March 31, 2026 , the deal was unsettled globally and as such no contract info", "quote": "'As of March 31, 2026 , the deal was unsettled globally and as such no contract info': footnote 16."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> X02 0002012139 2026-03-31",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-X11-2012139-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "ciks": ["0002012139"],
+   "quarters": ["2026-03-31", "2026-06-30"],
+   "statement": "The one flagged row each quarter is PMI (US) Bidco's undrawn delayed-draw line, printed with a dash for par and cost and a fair value of 2 thousand; no principal is tagged. Published fair value 2,000 and no par, as printed. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "PMI US BIDCO INC (10) (20) First Lien - Delayed Draw Term Loan SOFR + 325 6.9 3/16/2028 - - 2 -", "quote": "'... 3/16/2028 - - 2 -': par and cost dashes, fair value 2 (2026-03-31)."},
+    {"source": "filing", "accession": "0001193125-26-344953", "verbatim": "PMI (US) Bidco, Inc. (10) (19) First Lien - Delayed Draw Term Loan SOFR+ 325 7.0 3/16/2033 - - 2 -", "quote": "'... 3/16/2033 - - 2 -': the same at 2026-06-30."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> X11 0002012139 2026-06-30",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-C107-2012139-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "reason_key": "c107-negative-cost-undrawn",
+   "ciks": ["0002012139"],
+   "quarters": ["2026-03-31"],
+   "statement": "The 18 rows with a negative cost are undrawn delayed-draw and revolving lines printed with a dash for par and a bracketed cost and value (unamortised fees), as tagged. Example: Xponential Fitness revolver, printed cost (29) and value (39); published cost -29,000 and fair value -39,000.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer read the Xponential revolver as cost (29), value (39) and said the stored cost was -39,000. The published row has cost -29,000 and fair value -39,000, equal to the page and to the tags (InvestmentOwnedAtCost -29000, InvestmentOwnedAtFairValue -39000); the cited error is not in the published data."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "Xponential Fitness LLC (6) (9) (20) First Lien - Revolving Credit Facility SOFR + 675 10.4 12/9/2030 - ( 29 ) ( 39 ) -", "quote": "'... 12/9/2030 - ( 29 ) ( 39 ) -': cost (29), value (39), par a dash."}
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> C107 0002012139 2026-03-31",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F16-2012139-1",
+   "class": "rule_problem",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-income-ratio-printed-not-annualised",
+   "ciks": ["0002012139"],
+   "quarters": ["2025-12-31", "2026-06-30"],
+   "statement": "The filer prints its ratio of net investment income to average net assets without annualising ('Income and expenses have not been annualized in calculating these ratios'): 2.3 for the three months to 2026-06-30, 4.6 for six months; 8.5 for 2025 on the five months since shares were issued. income_yield_pct holds one quarter's unannualised ratio (2.14, 2.20, 2.30), while distribution_rate is annualised (7.95, 8.50, 8.77 from 0.49 to 0.53 a share a quarter on NAV near 24.5). Four times the quarter's ratio times 1.5 is above the distribution rate in every quarter, so on one basis the check would not fire. The fix is the field's basis across funds, a shared decision.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found the distribution rate published at 40.3 pct, the five-month distribution of 0.81 annualised as one month. That no longer stands: the build now publishes 7.95 pct (0.49 a share in the quarter, annualised on NAV 24.64). The check still fires only because the income ratio it compares is the unannualised quarter split (2.14)."
+   },
+   "evidence": [
+    {"source": "filing", "accession": "0001193125-26-344953", "verbatim": "Ratios of net investment income (loss) to average net assets 2.3 643.6 4.6 1,208.9", "quote": "'Ratios of net investment income (loss) to average net assets 2.3 643.6 4.6 1,208.9': three months 2.3, six months 4.6 (2026 columns)."},
+    {"source": "filing", "accession": "0001193125-26-344953", "verbatim": "Income and expenses have not been annualized in calculating these ratios.", "quote": "'Income and expenses have not been annualized in calculating these ratios.': the ratios are not annualised."},
+    {"source": "filing", "accession": "0001193125-26-128496", "verbatim": "Ratios of net investment income (loss) to average net assets 8.5 Portf", "quote": "'Ratios of net investment income (loss) to average net assets 8.5': 2025, from the August share issuance, not annualised."}
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}

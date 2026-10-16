@@ -59,6 +59,9 @@ class HighlightsWrapperSpec:
     # Accession numbers whose company facts this filer dated to the wrong period (a proxy
     # statement's price-range table): left out of the company-facts frame for this fund only
     companyfacts_ignore_accessions: tuple[str, ...] = ()
+    # Report dates whose balance sheet is printed as filed with total assets far from net assets (a
+    # seed quarter): the TA/NA power-of-ten scale fix in fund_financials leaves them alone
+    scale_fix_exempt_dates: tuple[str, ...] = ()
     notes: str = ""
 
 
@@ -141,6 +144,10 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
         companyfacts_ignore_accessions=tuple(
             str(entry.get("accession", "")) for entry in (data.get("companyfacts_ignore_accessions") or [])
             if isinstance(entry, dict) and re.fullmatch(r"\d{10}-\d{2}-\d{6}", str(entry.get("accession", "")))
+            and str(entry.get("evidence", "")).strip()),
+        scale_fix_exempt_dates=tuple(
+            str(entry.get("report_date", "")) for entry in (data.get("scale_fix_exempt_dates") or [])
+            if isinstance(entry, dict) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(entry.get("report_date", "")))
             and str(entry.get("evidence", "")).strip()),
         notes=data.get("notes", ""),
     )
@@ -239,6 +246,17 @@ def first_income_year_ends() -> frozenset[tuple[str, str]]:
     """
     _ensure_cache_loaded()
     return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.first_income_year_ends)
+
+
+def scale_fix_exempt_pairs() -> frozenset[tuple[str, str]]:
+    """(cik, report date) pairs the TA/NA scale fix in fund_financials must leave as filed.
+
+    Opt-in: ``scale_fix_exempt_dates``. Fortress Private Lending Fund 2025-06-30 (seed quarter):
+    the balance sheet prints total assets 346,971 and net assets 1,004 (thousands), a ratio of 346
+    against about 1.8 in later quarters; the scale fix would divide total assets by about 190.
+    """
+    _ensure_cache_loaded()
+    return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.scale_fix_exempt_dates)
 
 
 def companyfacts_ignored_accessions(cik: Any) -> frozenset[str]:

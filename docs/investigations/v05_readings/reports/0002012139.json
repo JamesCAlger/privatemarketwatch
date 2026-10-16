@@ -1,0 +1,363 @@
+{
+ "cik": "0002012139",
+ "label": "foxd",
+ "before": "spoff3",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 14,
+   "why": "hierarchy prefixes the issuer regex did not cut (Identifier [Axis], industry words not in the label list, 'Investment' after the industry, no 'Investment' word before 'First Lien') plus Sweet Oak row correction 2026-03-31"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 7,
+   "why": "issuer text left in front of 'First Lien' removed (instrument_description_strip_re; Vibrant 2025-09-30, NADC 'Trusts (REITs) ...'); Sweet Oak correction"
+  },
+  {
+   "column": "cost",
+   "rows": 1,
+   "why": "North America Data Center 2025-12-31 cost 12,596 declared from the page (untagged_values; was a fair-value proxy 12,632)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 1,
+   "why": "same row as cost"
+  },
+  {
+   "column": "pct_of_net_assets",
+   "rows": 52,
+   "why": "2025-06-30 filing tags percent as a ratio (24.28 for printed 2,428): pct_tagged_as_ratio, x100"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 54,
+   "why": "2025-06-30 net assets now 1,004,000 (was 1,004,000,000)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 4,
+   "why": "warrant counts tagged as principal, 2025-06-30 and 2025-09-30, set from the page (row corrections)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 5,
+   "why": "row corrections on existing rows (4 warrants, Sweet Oak)"
+  },
+  {
+   "column": "asset_class",
+   "rows": 3,
+   "why": "North America Data Center first-lien loan REAL_ESTATE -> PRIVATE_CREDIT once the issuer name no longer carries 'REITs'"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 2,
+   "why": "NADC and EagleView label from the cleaned name"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 2,
+   "why": "with gics_sub_industry"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 53,
+   "why": "pct_of_net_assets:rate_x100 on 2025-06-30 rows; NADC cost declared"
+  },
+  {
+   "column": "src_facts",
+   "rows": 1,
+   "why": "NADC 2025-12-31 declared cost"
+  },
+  {
+   "column": "position_key",
+   "rows": 21,
+   "why": "canonical_strip_re now removes the new hierarchy prefixes, so the key starts at the issuer"
+  },
+  {
+   "column": "position_id",
+   "rows": 99,
+   "why": "follows position_key and the new 2026-06-30 quarter"
+  }
+ ],
+ "rows_added": 157,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "2026-06-30 10-Q prints par in thousands and tags the printed figure at decimals 0: principal x1,000 on all 121 loan rows with a par (principal_amount_usd at the build's own H.10 rate for EUR/GBP/CAD)",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(2) The total par amount is presented in thousands for debt investments"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Blue Raven Solutions, LLC, Triman Industries, Inc. and Crestwood Technology Group, LLC (9) First Lien - Term Loan SOFR + 600 9.7 1/16/2032 $ 70,521 69,319 69,36"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30 members naming another issuer: SonicWall US Holdings (3 rows under 'Olo Parent, Inc. Investment SOFR+500'), Superior Intermediate (4 rows under 'Vomela Purchaser LLC and Vibrant Canada'), Discovery Global (date where the industry belongs)",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "SonicWall US Holdings Inc. (10) First Lien - Term Loan SOFR + 500 8.7 4/26/2030 23,887 9,3"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Superior Intermediate LLC (9) First Lien - Delayed Draw Term Loan SOFR + 550 9.2 12/18/2030 3,620 3,563 3,553"
+    }
+   ]
+  },
+  {
+   "what": "Sweet Oak Parent 2026-03-31: member names the industry and no issuer",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Sweet Oak Parent LLC (10) First Lien - Term Loan SOFR + 575 9.4 8/5/2030 18,307,688 18,121 18,115 1.8"
+    }
+   ]
+  },
+  {
+   "what": "warrant unit counts tagged with the principal concept (C04 x2)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Riser Fitness, LLC Warrants N/A N/A N/A $ 91,098"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Riser Fitness, LLC (18) Warrants N/A N/A N/A $ 194,344"
+    }
+   ]
+  },
+  {
+   "what": "issuer/instrument split for the changed member prefixes (C201 x2, 2026-06-30 'NCNA Inv. Debt Inv.' and 'Non-controlled, Non-affiliated Debt Investments' forms, Telecommunication Services, Specialized REITs, Identifier [Axis]); canonical_strip_re aligned",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "le Corporation, Grand Circle LLC and The Grand Circle River Cruise Lines LLC (9) First Lien - Term Loan SOFR + 536 9.0 9/19/2030 63,017 62,617 61,950 5.8"
+    }
+   ]
+  },
+  {
+   "what": "2025-06-30 percent of net assets tagged as a ratio (PCT identity, F23)",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428"
+    }
+   ]
+  },
+  {
+   "what": "dash-valued rows with a cost tag and no fair value published at 0 (Olo revolver 2025-12-31, Iris 2026-03-31); NADC 2025-12-31 cost on a second member declared (cost ties)",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Olo Parent, Inc. (20) First Lien - Revolving Credit Facility SOFR + 450 (10) 8.2 9/13/2032 - ( 13 ) - -"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Iris Holding, Inc. (7) (10) (20) First Lien - Term Loan SOFR + 485 8.5 6/28/2028 - 24 - -"
+    }
+   ]
+  },
+  {
+   "what": "2025-06-30 net assets published 1,004,000,000 by a mislabelled scale override (pipeline/config.py, 'Owl Rock'); override removed, the seed balance sheet exempted from the TA/NA scale fix by a new highlights-wrapper key scale_fix_exempt_dates (opt-in, schema key, 3 tests). Net assets 1,004,000 and total assets 346,971,000 now as printed",
+   "kind": "shared_code",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "par-printed-in-thousands-tagged-unscaled",
+   "what": "From the 10-Q for 2026-06-30 the filer prints par in thousands and tags the printed figure at decimals 0; every loan's principal was 1,000 times small and no rule fired (FX01, X11 do not test par against value). Fixed by row corrections for this quarter; the next quarter will need the same unless a wrapper setting exists.",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1890.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a quarter whose median principal / fair value is below 0.01 when the fund's other quarters are near 1.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "(2) The total par amount is presented in thousands for debt investments"
+   }
+  },
+  {
+   "observation_key": "fund-scale-override-multiplies-a-correct-figure",
+   "what": "pipeline/config.py FUND_FINANCIALS_SCALE_OVERRIDES listed this CIK (commented 'Owl Rock Core Income Corp') with x1000; the companyfacts figures for 2025-06-30 were right, so net assets were published 1,000 times too large. Removed; the dict is now empty (the empty-CASE path is tested).",
+   "field": "net_assets",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 335.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Any hard-coded scale override must carry the printed figure it reproduces; fail the build when the overridden value differs from the page.",
+   "quote": {
+    "accession": "0001193125-25-203968",
+    "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "2026-06-30 members name the wrong issuer for SonicWall (under Olo Parent) and Superior Intermediate (under Vomela/Vibrant); the values were the other issuer's. Fixed by row corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 35.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a member whose maturity or spread matches no other quarter's line of the named issuer but matches another issuer's.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Superior Intermediate LLC (9) First Lien - Delayed Draw Term Loan SOFR + 550 9.2 12/18/2030 3,620 3,563 3,553"
+   }
+  },
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "what": "The 2026-06-30 10-Q changes the member prefix ('Investments NCNA Inv. Debt Inv.', 'Non-controlled, Non-affiliated Debt Investments', 'Investments Non-controlled,Non-affiliated'); about 20 issuer names carried the hierarchy. The names gate counted 9 rows (1.6 pct) only through industry_in_name; the prefix form itself was not counted.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 320.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Count issuer names that start with an affiliation word ('Investments', 'Non-controlled', 'NCNA') in the names gate.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Blue Raven Solutions, LLC, Triman Industries, Inc. and Crestwood Technology Group, LLC (9) First Lien - Term Loan SOFR + 600 9.7 1/16/2032 $ 70,521 69,319 69,36"
+   }
+  },
+  {
+   "observation_key": "asset-class-from-industry-text-in-issuer-name",
+   "what": "North America Data Center's first-lien loan was classed REAL_ESTATE while its issuer name carried 'Specialized REITs' / 'Trusts (REITs)'; now PRIVATE_CREDIT. Its instrument still reads 'First Lien - Team Loan' (the member's typo; printed 'Term Loan'): left, cosmetic.",
+   "field": "asset_class",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Do not let industry words left in a name set the asset class of a row in the fund's debt section.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Equity Real Estate Investment Trusts (REITs) North America Data Center Acquisition LLC (12) First Lien - Term Loan SOFR + 500 8.7 5/8/2030 $ 12,681 $ 12,605 $ 12,618"
+   }
+  },
+  {
+   "observation_key": "unit-count-printed-not-published",
+   "what": "Ducky's Class A units: printed 5,857 units at 2026-06-30 (issuer printed 'Ducky's Holdco, LLC', now under controlled affiliates); published issuer 'Ducky's Opco, LLC' and no unit count, every quarter. Left: no share tag found in the time available.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 6.8,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "C04 should count an equity row whose printed units cell holds a number and whose published count is blank.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+   }
+  },
+  {
+   "observation_key": "instrument-text-mojibake-from-en-dash-entity",
+   "what": "Members written with '&#x2013;' (en dash) publish the instrument with a replacement character ('First Lien ? Revolving Credit Facility'): Jupiter Refuel Canada revolver, Vomela term loan and revolver, Superior revolver. Left: shared decoding step.",
+   "field": "instrument_description",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 56.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Fail any published text field holding U+FFFD.",
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Jupiter Refuel Canada Buyer, Inc. (6) (13) (17) First Lien - Revolving Credit Facility CORRA + 525 7.5 6/30/2031 768 525 529 0.1"
+   }
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annual",
+   "what": "income_yield_pct 2025-12-31 is 2.14, a quarter split of the year's printed 8.5, which is itself unannualised and computed on five months of net assets. Left; proposed under F16.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Store whether a printed ratio is annualised with the figure.",
+   "quote": {
+    "accession": "0001193125-26-128496",
+    "text": "Ratios of net investment income (loss) to average net assets 8.5 Portf"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_fund_financials.py + tests/test_fund_highlights_wrapper.py + tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py: 811 passed (final state, 3 new tests in test_fund_financials.py)"
+ ],
+ "not_done": [
+  "Regression build of other funds for the shared change (config override removal affects only this CIK; scale_fix_exempt_dates is opt-in and set for this fund only)",
+  "Ducky's unit count and affiliation change not fixed",
+  "Neighbour sampling limited to about 30 rows (top 25 at 2026-06-30 and the rows of the findings)",
+  "Full pytest suite not run"
+ ]
+}

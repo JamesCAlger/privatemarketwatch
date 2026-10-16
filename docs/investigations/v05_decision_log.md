@@ -4903,3 +4903,42 @@ Compared with `spoff2`. One round; three builds.
   expenses; the 'interestexpense' substring match; start-up periods split as a year; casing voted
   across quarters.
 - The agent ran a bare `python -` three times (each stopped by its id). Wrapper tests 681 passed.
+
+### D-195 Fortress Private Lending Fund through the fund-clearing skill (sandbox `foxd`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; four builds (`foxc` stopped: a lookahead in a wrapper pattern, which
+RE2 does not support).
+
+- **Untouched reading (`foxa`):** 24 findings, 17 outstanding (spoff3: 21 and 14); the 3 new are at
+  2026-06-30 (C107, F16, X11); carry-forward cleared none; C107 accepted by check.
+- **Ledger (`foxd`):** 19 findings, 14 outstanding, all 14 proposed; totals tie in 5 of 5 quarters.
+- **Shared code:** `pipeline/config.py` `FUND_FINANCIALS_SCALE_OVERRIDES` held one entry, this fund,
+  labelled 'Owl Rock', x1,000: it published 2025-06-30 net assets as 1,004,000,000 against the
+  printed 1,004 thousand (a seed quarter). Removed; the empty case made safe
+  (`WHEN FALSE THEN 1`). New opt-in highlights key `scale_fix_exempt_dates`
+  (`pipeline/fund_highlights_wrapper.py`, `pipeline/fund_financials.py`, schema, 3 tests, one false
+  positive) keeps the TA/NA scale fix off that seed quarter (total assets 346,971 against net assets
+  1,004). Regression: 0001869453 rebuilt alone (`rgfo`): fund_financials identical to `rgng`;
+  holdings moved only in GICS columns, as in D-186 (build composition). Tests 811 passed (agent).
+- **Fixed:** par in the 2026-06-30 10-Q 1,000 times too small on all 121 loan rows (printed in
+  thousands, tagged unscaled; no rule caught it), by row correction, foreign pars at the build's
+  rate; the next 10-Q will need the same unless a wrapper setting is added. Percent of net assets
+  2025-06-30 tagged as a ratio (`pct_tagged_as_ratio`). Issuer and instrument patterns for the
+  2026-06-30 prefixes ('NCNA Inv. Debt Inv.'), 'Identifier [Axis]' and missing industries (C201).
+  Members naming another issuer (SonicWall x3, Superior Intermediate x4, Discovery Global, Sweet
+  Oak). C04 warrant units. Declared: two dash rows at 0, North America Data Center cost 12,596.
+- **Proposed:** new key `seed-quarter-holdings-hundreds-of-times-net-assets` (F21, F22, A07, PCT01, X09,
+  fmt_pct_of_net_assets, pct_position_concentration at 2025-06-30; investments 334 times net assets,
+  total percent 33,392, as printed): one owner ruling. X02 x2 (Daintree unsettled, footnote 16), X11
+  (PMI undrawn par a dash), C107 (earlier verdict wrong: -29,000 / -39,000 as printed), F16 (the
+  printed income ratio is not annualised).
+- **Page sample:** 20 cards; scored 1 published error (C005 LeadVenture 2025-06-30 percent 66.0,
+  cause 'page'), which is a reader misreading: the position is 661 thousand against net assets of
+  1,004 thousand in the seed quarter, so 66 pct is right. 0 real published errors. Twenty cards can
+  miss a problem on under about 15 pct of rows.
+- **Left:** Ducky's 5,857 Class A units printed, not published; en-dash in some members becomes a
+  replacement character; 'Team Loan' is the filer's typo.
+- **Shared causes seen:** par printed in thousands but tagged unscaled; hierarchy prefixes the gate's
+  names check under-counts (9 of about 20 rows; also D-193); class REAL_ESTATE from 'REITs' left in a
+  name.
+- The agent ran an empty heredoc into `python -` once (stopped by its id).

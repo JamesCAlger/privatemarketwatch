@@ -1146,6 +1146,44 @@ class TestBdcCleaning:
         row0 = result[result["report_date"] == "2023-03-31"].iloc[0]
         assert float(row0["total_assets"]) == 2_000_000.0
 
+    @staticmethod
+    def _seed_quarter_frame(cik: str) -> pd.DataFrame:
+        # Fortress Private Lending Fund shape: seed quarter TA 346,971k on NA 1,004k, then ~1.8x
+        rows = [("2025-06-30", 346_971_000.0, 345_967_000.0, 1_004_000.0),
+                ("2025-09-30", 1_060_974_000.0, 296_620_000.0, 764_354_000.0),
+                ("2025-12-31", 1_611_097_000.0, 751_242_000.0, 859_855_000.0),
+                ("2026-03-31", 1_764_592_000.0, 744_462_000.0, 1_020_130_000.0)]
+        return pd.DataFrame([{"cik": cik, "report_date": d, "total_assets": ta, "total_liabilities": tl,
+                              "net_assets": na, "nav_per_share": None, "shares_outstanding": None,
+                              "borrowings": None} for d, ta, tl, na in rows])
+
+    def test_scale_fix_exempt_date_keeps_printed_seed_balance_sheet(self, monkeypatch):
+        """A date a highlights wrapper exempts (scale_fix_exempt_dates) publishes TA and TL as filed."""
+        import pipeline.fund_highlights_wrapper as fhw
+        monkeypatch.setattr(fhw, "scale_fix_exempt_pairs", lambda: frozenset({("0000000997", "2025-06-30")}))
+        result = _prepare_bdc(self._seed_quarter_frame("0000000997"), pd.DataFrame())
+        seed = result[result["report_date"] == "2025-06-30"].iloc[0]
+        assert float(seed["total_assets"]) == pytest.approx(346_971_000.0)
+        assert float(seed["total_liabilities"]) == pytest.approx(345_967_000.0)
+        assert float(seed["net_assets"]) == pytest.approx(1_004_000.0)
+
+    def test_scale_fix_exempt_date_does_not_reach_other_funds(self, monkeypatch):
+        """The same shape without the exemption (another fund) is still rescaled, as before."""
+        import pipeline.fund_highlights_wrapper as fhw
+        monkeypatch.setattr(fhw, "scale_fix_exempt_pairs", lambda: frozenset({("0000000997", "2025-06-30")}))
+        result = _prepare_bdc(self._seed_quarter_frame("0000000996"), pd.DataFrame())
+        seed = result[result["report_date"] == "2025-06-30"].iloc[0]
+        assert float(seed["total_assets"]) < 10_000_000
+
+    def test_empty_scale_overrides_build(self, monkeypatch):
+        """With no manual override the cleaning SQL still runs (an empty CASE is a syntax error)."""
+        import pipeline.config as config
+        monkeypatch.setattr(config, "FUND_FINANCIALS_SCALE_OVERRIDES", {})
+        import pipeline.fund_financials as ff
+        monkeypatch.setattr(ff, "FUND_FINANCIALS_SCALE_OVERRIDES", {})
+        result = _prepare_bdc(self._seed_quarter_frame("0000000995"), pd.DataFrame())
+        assert len(result) == 4
+
     def test_manual_scale_override(self):
         """Manual scale override for CIK with too few rows for MEDIAN detection."""
         import pipeline.config as config

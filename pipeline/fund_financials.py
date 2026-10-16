@@ -1242,10 +1242,19 @@ def _prepare_bdc(
     _override_cik_sql = ", ".join(
         f"'{c}'" for c in FUND_FINANCIALS_SCALE_OVERRIDES
     ) if FUND_FINANCIALS_SCALE_OVERRIDES else "'__none__'"
+    # An empty CASE is a syntax error: with no override the branch never fires anyway.
     _override_mult_sql = " ".join(
         f"WHEN b.cik = '{c}' THEN {m}"
         for c, m in FUND_FINANCIALS_SCALE_OVERRIDES.items()
-    )
+    ) or "WHEN FALSE THEN 1"
+    # (cik, date) pairs a highlights wrapper declares exempt from the TA/NA scale fix
+    # (scale_fix_exempt_dates: a seed-quarter balance sheet printed with TA hundreds of times NA).
+    from pipeline.fund_highlights_wrapper import scale_fix_exempt_pairs
+    _exempt_pairs = sorted(scale_fix_exempt_pairs())
+    _scale_exempt_sql = (
+        "(LPAD(CAST(cik AS VARCHAR), 10, '0'), CAST(report_date AS VARCHAR)[:10]) IN ("
+        + ", ".join(f"('{c}', '{d}')" for c, d in _exempt_pairs) + ")"
+    ) if _exempt_pairs else "FALSE"
 
     # ----- Data cleaning CTEs -----
     clean_sql = f"""
@@ -1288,14 +1297,16 @@ def _prepare_bdc(
         SELECT *,
             MEDIAN(ABS(total_assets / NULLIF(net_assets, 0)))
                 OVER (PARTITION BY cik) AS _med_ratio,
-            ABS(total_assets / NULLIF(net_assets, 0)) AS _this_ratio
+            ABS(total_assets / NULLIF(net_assets, 0)) AS _this_ratio,
+            {_scale_exempt_sql} AS _scale_exempt
         FROM manual_scaled
     ),
     scaled AS (
         SELECT * EXCLUDE (total_assets, total_liabilities,
-                          _med_ratio, _this_ratio),
+                          _med_ratio, _this_ratio, _scale_exempt),
             CASE
-                WHEN _med_ratio IS NOT NULL
+                WHEN NOT _scale_exempt
+                    AND _med_ratio IS NOT NULL
                     AND _this_ratio IS NOT NULL
                     AND _med_ratio > 0
                     AND _this_ratio > 0
@@ -1304,7 +1315,8 @@ def _prepare_bdc(
                 ELSE total_assets
             END AS total_assets,
             CASE
-                WHEN _med_ratio IS NOT NULL
+                WHEN NOT _scale_exempt
+                    AND _med_ratio IS NOT NULL
                     AND _this_ratio IS NOT NULL
                     AND _med_ratio > 0
                     AND _this_ratio > 0

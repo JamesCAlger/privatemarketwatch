@@ -1,0 +1,11 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002012139",
+ "entity_name": "Fortress Private Lending Fund",
+ "version": 1,
+ "scale_fix_exempt_dates": [
+  {"report_date": "2025-06-30",
+   "evidence": "0001193125-25-203968 (10-Q, 2025-06-30, seed quarter, $ in thousands) balance sheet: 'Other assets 141 - Total assets $ 346,971 $ - Liabilities Debt' and 'Net Assets Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971'. Company facts carry the same figures (Assets 346,971,000; StockholdersEquity 1,004,000; Liabilities 345,967,000). Total assets are 346 times net assets because shares were not yet issued; the TA/NA scale fix would divide them by about 190."}
+ ],
+ "notes": "Fund-clearing loop 2026-10-16 (fox): 2025-06-30 net assets were published 1,004,000,000 by a wrong pipeline/config.py scale override (x1000, removed) and total assets blank; the seed-quarter balance sheet is exempt from the TA/NA scale fix so the printed figures publish."
+}

@@ -75,7 +75,8 @@
         "family": "debt"
       }
     ],
-    "canonical_strip_re": "(?i)(?:^\\s*Investments\\s+Non-controlled,\\s+(?:Non-affiliated\\s+Investments|non-affiliated\\s+investments|Affiliated\\s+investments)\\s+(?:Debt|Equity)\\s+investments\\s+(?:Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Automobilers\\s+&\\s+Components|Building\\s+Products|Capital\\s+Goods|Capital\\s+Markets|Chemicals|Commercial\\s+&\\s+Professional\\s+Services|Commercial\\s+Services\\s+&\\s+Supplies|Construction\\s+&\\s+Engineering|Consumer\\s+Discretionary\\s+Distribution\\s+&\\s+Retail|Consumer\\s+Durables\\s+&\\s+Apparel|Consumer\\s+Services|Containers\\s+&\\s+Packaging|Diversified\\s+Telecommunication\\s+Services|Energy|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Food,\\s+Beverage\\s+&\\s+Tobacco|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Healthcare|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+&\\s+Personal\\s+Products|Household\\s+Products|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|Insurance|IT\\s+Services|Leisure\\s+Products|Machinery|Materials|Oil,\\s+Gas\\s+&\\s+Consumable\\s+Fuels|Pharmaceuticals,\\s+Biotechnology\\s+&\\s+Life\\s+Sciences|Software\\s+&\\s+Services|Software|Specialty\\s+Retail|Transportation|Utilities)\\s+|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?)",
+    "instrument_description_strip_re": "^.+?\\s+(?=(?:First|Second)\\s+Lien\\b)",
+    "canonical_strip_re": "(?i)(?:^\\s*(?:Identifier\\s+\\[Axis\\]\\s+)?(?:Investments\\s+)?(?:Non-controlled,?\\s*(?:Non-affiliated|Affiliated)(?:\\s+Investments)?|NCNA(?:\\s+Inv\\.)?)\\s+(?:(?:Debt|Equity)(?:\\s+(?:Investments?|Inv\\.))?\\s+)?(?:(?:Telecommunication\\s+Services|Professional\\s+Services|Specialized\\s+REITs|Health\\s+Care\\s+Equipment\\s*&\\s*Services|Automobiles\\s+&\\s+Components|Real\\s+Estate\\s+Management\\s+&\\s+Development|Distributors|Communications\\s+Equipment|Diversified\\s+Consumer\\s+Services|Health\\s+Care\\s+Providers\\s+&\\s+Services|Pharmaceuticals|Technology\\s+Hardware\\s+&\\s+Equipment|Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Automobilers\\s+&\\s+Components|Building\\s+Products|Capital\\s+Goods|Capital\\s+Markets|Chemicals|Commercial\\s+&\\s+Professional\\s+Services|Commercial\\s+Services\\s+&\\s+Supplies|Construction\\s+&\\s+Engineering|Consumer\\s+Discretionary\\s+Distribution\\s+&\\s+Retail|Consumer\\s+Durables\\s+&\\s+Apparel|Consumer\\s+Services|Containers\\s+&\\s+Packaging|Diversified\\s+Telecommunication\\s+Services|Energy|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Food,\\s+Beverage\\s+&\\s+Tobacco|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Healthcare|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+&\\s+Personal\\s+Products|Household\\s+Products|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|Insurance|IT\\s+Services|Leisure\\s+Products|Machinery|Materials|Oil,\\s+Gas\\s+&\\s+Consumable\\s+Fuels|Pharmaceuticals,\\s+Biotechnology\\s+&\\s+Life\\s+Sciences|Software\\s+&\\s+Services|Software|Specialty\\s+Retail|Transportation|Utilities)\\s+(?:Investment\\s+)?)?|\\s+Interest\\s+Rate\\s*\\d+(?:\\.\\d+)?%?|\\s+IR\\s+\\d+(?:\\.\\d+)?%?)",
     "category_marker_re": "(?i)^\\s*(?:total\\s+)?(?:investments|debt\\s+investments|equity\\s+investments|subtotal|sub-total|investments\\s+(?:after|before)\\s+cash\\s+equivalents)\\s*$"
   },
   "identifier_format": {
@@ -95,8 +96,8 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Investments\\s+Non-controlled,\\s+(?:Non-affiliated\\s+Investments|non-affiliated\\s+investments|Affiliated\\s+investments)\\s+(?:Debt|Equity)\\s+investments\\s+(?:(?:MSD_INDUSTRY_LABELS)\\s+)?)?)(.+?)\\s+Investment(?:\\s+Type)?\\s+",
-    "hierarchy_instrument_re": "(?i)\\s+Investment(?:\\s+Type)?\\s+(.+?)(?:\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+|\\s+Interest\\s+Rate\\s+|\\s+Maturity\\s+Date\\s+|$)",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Identifier\\s+\\[Axis\\]\\s+)?(?:(?:Investments\\s+)?(?:Non-controlled,?\\s*(?:Non-affiliated|Affiliated)(?:\\s+Investments)?|NCNA(?:\\s+Inv\\.)?)\\s+(?:(?:Debt|Equity)(?:\\s+(?:Investments?|Inv\\.))?\\s+)?(?:(?:(?:MSD_INDUSTRY_LABELS)|Telecommunication\\s+Services|Professional\\s+Services|Specialized\\s+REITs|Health\\s+Care\\s+Equipment\\s*&\\s*Services)\\s+(?:Investment\\s+)?)?)?((?:[^IF]|I[^n]|In[^v]|Inv[^e]|F[^i]|Fi[^r]|Fir[^s]).*?)(?:\\s+Investment(?:\\s+Type)?\\s+|\\s+First\\s+Lien\\b)",
+    "hierarchy_instrument_re": "(?i)^(?:.*?Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)\\s+)?(?:.*?\\s+Investment(?:\\s+Type)?\\s+|.*?\\s(?:Inc\\.|LLC)\\s+)(.+?)(?:\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+|\\s+Interest\\s+Rate\\s+|\\s+Maturity\\s+Date\\s+|$)",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:^\\s*Investments\\s+Non-controlled,\\s+(?:Non-affiliated|non-affiliated|Affiliated)|\\s+Investment\\s+Type\\s+|\\s+Investment\\s+(?:First\\s+Lien|Class\\s+A|Warrants?))')",
     "extra_industry_labels": [
       "Aerospace & Defense",
@@ -244,6 +245,14 @@
     ],
     "principal_usd_reference": [
       "fred_h10"
+    ],
+    "pct_tagged_as_ratio": [
+      "0001193125-25-203968"
+    ],
+    "untagged_values": [
+      "0001193125-26-128496 C_7c1f7a5c-2499-4235-a7a6-5c5be305c88e fair_value 0",
+      "0001193125-26-128496 C_1bbfa584-4ab6-4411-aac6-e627ac4a1220 cost 12596000",
+      "0001193125-26-224353 C_5b72b00a-b05f-47b8-8821-81d782c82102 fair_value 0"
     ],
     "reference_rate_columns": [
       "Reference Rate and Spread"

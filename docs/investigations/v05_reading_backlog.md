@@ -175,3 +175,4 @@ Manulife 0001988280.
 | 2026-10-16 | 0002083477 APS BDC | asxe | PASS | 5 findings, 1 outstanding, 1 proposed; opt-in section_total_reading (lien on 1.9B) | D-192 |
 | 2026-10-16 | 0001959604 Jefferies Credit Partners BDC | jcxd | PASS | 20 findings, 7 outstanding, 7 proposed | D-193 |
 | 2026-10-16 | 0001976336 Antares Private Credit Fund | atxc | PASS | 36 findings, 18 outstanding, 18 proposed; unit scale owner question | D-194 |
+| 2026-10-16 | 0002012139 Fortress Private Lending Fund | foxd | PASS | 19 findings, 14 outstanding, 14 proposed; wrong config scale override removed | D-195 |
